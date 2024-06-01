@@ -1,0 +1,11 @@
+target
+xcuserdata
+.build/
+xcuserdata/
+DerivedData/
+.swiftpm/config/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+.DS_Store
+*~
+Packages/Gemstone/

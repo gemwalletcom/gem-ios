@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+	<dict>
+		<key>CFBundleURLTypes</key>
+		<array>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>CFBundleURLName</key>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>gem</string>
+				</array>
+			</dict>
+			<dict>
+				<key>CFBundleTypeRole</key>
+				<string>Viewer</string>
+				<key>CFBundleURLName</key>
+				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>gemwallet</string>
+				</array>
+			</dict>
+
+		</array>
+		<key>ITSAppUsesNonExemptEncryption</key>
+		<false/>
+		<key>NSCameraUsageDescription</key>
+		<string>Gem Wallet needs access to your Camera to scan QR Codes.</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Enabling Face ID helps Gem Wallet keep your assets secure.</string>
+	</dict>
+</plist>

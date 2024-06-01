@@ -1,0 +1,80 @@
+{
+  "configurations" : [
+    {
+      "id" : "F565290A-B4C6-4D29-867A-D1DF2DDDD360",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Blockchain",
+        "identifier" : "BlockchainTests",
+        "name" : "BlockchainTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Components",
+        "identifier" : "ComponentsTests",
+        "name" : "ComponentsTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Keystore",
+        "identifier" : "KeystoreTests",
+        "name" : "KeystoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Primitives",
+        "identifier" : "PrimitivesTests",
+        "name" : "PrimitivesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Store",
+        "identifier" : "StoreTests",
+        "name" : "StoreTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Style",
+        "identifier" : "StyleTests",
+        "name" : "StyleTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/QRScanner",
+        "identifier" : "QRScannerTests",
+        "name" : "QRScannerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Signer",
+        "identifier" : "SignerTests",
+        "name" : "SignerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/GemstoneSwift",
+        "identifier" : "GemstoneSwiftTests",
+        "name" : "GemstoneSwiftTests"
+      }
+    }
+  ],
+  "version" : 1
+}

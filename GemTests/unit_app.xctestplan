@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "E70C6DC7-7842-436E-858F-D28890FEDD6E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:Gem.xcodeproj",
+        "identifier" : "C30952C0299C39D80004C0F9",
+        "name" : "GemTests"
+      }
+    }
+  ],
+  "version" : 1
+}

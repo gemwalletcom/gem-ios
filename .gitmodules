@@ -1,0 +1,4 @@
+[submodule "core"]
+	path = core
+	url = https://github.com/gemwalletcom/core
+	branch = main

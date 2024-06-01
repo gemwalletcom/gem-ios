@@ -1,0 +1,24 @@
+name: iOS Unit Tests
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  unit_test:
+    name: Build and Test iPhone simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Build Core
+        run: make generate
+
+      - name: Unit Tests
+        run: make test
