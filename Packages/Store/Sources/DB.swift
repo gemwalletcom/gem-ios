@@ -36,7 +36,8 @@ public class DB: ObservableObject {
         path: String,
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
-        dbPath = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, path))
+
+        dbPath = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
         dbQueue = try! DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
         
         try! migrations.run(dbQueue: dbQueue)
