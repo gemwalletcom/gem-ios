@@ -6,6 +6,10 @@
 
 The app is developed using SwiftUI. The codebase also includes a [Core](https://github.com/gemwalletcom/core) library implemented in Rust, providing efficient and secure cryptographic operations for enhanced data protection.
 
+📲️ [iOS Available on the App Store.](https://apps.apple.com/app/apple-store/id6448712670?ct=github&mt=8)
+
+🤖 [Android available on the Google Play Store](https://play.google.com/store/apps/details?id=com.gemwallet.android&utm_campaign=github&utm_source=referral&utm_medium=github)
+
 <div align="left">
     <a href="https://github.com/gemwalletcom/gem-ios/blob/main/LICENSE">
         <img src="https://badgen.net/github/license/gemwalletcom/gem-ios" alt="License">
