@@ -66,6 +66,16 @@ public struct AssetFull: Codable {
 	}
 }
 
+public struct AssetMarketPrice: Codable {
+	public let price: Price?
+	public let market: AssetMarket?
+
+	public init(price: Price?, market: AssetMarket?) {
+		self.price = price
+		self.market = market
+	}
+}
+
 public struct AssetDetailsInfo: Codable {
 	public let details: AssetDetails
 	public let market: AssetMarket

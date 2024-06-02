@@ -20,7 +20,11 @@ core-upgrade:
 	git submodule update --recursive --remote
 
 test:
-	cd xcodebuild -scheme Gem -destination 'platform=iOS Simulator,name=iPhone 14' test | xcbeautify
+	@set -o pipefail && xcodebuild -project Gem.xcodeproj \
+	-scheme Gem \
+	-sdk iphonesimulator \
+	-destination "platform=iOS Simulator,name=iPhone 15" \
+	test | xcbeautify
 
 localize:
 	@sh core/scripts/localize.sh ios Assets

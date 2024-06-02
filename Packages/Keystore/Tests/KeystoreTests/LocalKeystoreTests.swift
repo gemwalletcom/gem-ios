@@ -157,7 +157,7 @@ extension LocalKeystore {
         let id = NSUUID().uuidString
         return LocalKeystore(
             folder: id,
-            walletStore: WalletStore(db: DB(path: "\(id)..sqlite")),
+            walletStore: WalletStore(db: DB(path: "\(id).sqlite")),
             preferences: preferences,
             keystorePassword: keystorePassword
         )

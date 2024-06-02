@@ -9,3 +9,4 @@ DerivedData/
 .DS_Store
 *~
 Packages/Gemstone/
+.vscode/settings.json
