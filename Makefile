@@ -20,7 +20,7 @@ core-upgrade:
 	git submodule update --recursive --remote
 
 test:
-	@xcodebuild -project Gem.xcodeproj \
+	@set -o pipefail && xcodebuild -project Gem.xcodeproj \
 	-scheme Gem \
 	-sdk iphonesimulator \
 	-destination "platform=iOS Simulator,name=iPhone 15" \
