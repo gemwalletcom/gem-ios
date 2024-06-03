@@ -37,26 +37,28 @@ struct ConnectionsScene: View {
     var body: some View {
         List {
             Section {
-                Button(Localized.Common.paste) {
-                    guard let content = UIPasteboard.general.string else {
-                        return
-                    }
-                    Task {
-                        await connectURI(uri: content)
-                    }
-                }
-                
-                Button(Localized.Wallet.scan) {
-                    isPresentingScanner = true
-                }
+                ButtonListItem(
+                    title: Localized.Wallet.scanQrCode,
+                    image: Image(systemName: SystemImage.qrCode),
+                    action: onScan
+                )
+                ButtonListItem(
+                    title: Localized.Common.paste,
+                    image: Image(systemName: SystemImage.paste),
+                    action: onPaste
+                )
             }
-            ForEach(headers, id: \.self) { header in
-                Section(
-                    header: Text(header.name)
-                ) {
-                    ForEach(groupedByWallet[header]!) { connection in
-                        NavigationLink(value: connection) {
-                            ConnectionView(model: WalletConnectionViewModel(connection: connection))
+            if headers.isEmpty {
+                StateEmptyView(message: Localized.WalletConnect.noActiveConnections)
+            } else {
+                ForEach(headers, id: \.self) { header in
+                    Section(
+                        header: Text(header.name)
+                    ) {
+                        ForEach(groupedByWallet[header]!) { connection in
+                            NavigationLink(value: connection) {
+                                ConnectionView(model: WalletConnectionViewModel(connection: connection))
+                            }
                         }
                     }
                 }
@@ -81,7 +83,7 @@ struct ConnectionsScene: View {
         }
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
-                handleScan(value: $0)
+                onHandleScan(value: $0)
             }
         }
         .toolbar {
@@ -99,20 +101,36 @@ struct ConnectionsScene: View {
         .navigationTitle(Localized.WalletConnect.title)
     }
     
-    private func handleScan(value: String) {
-        NSLog("handle scan value: \(value)")
-        
-        Task {
-            await connectURI(uri: value)
-        }
-    }
-    
     func connectURI(uri: String) async {
         do {
             try await model.addConnectionURI(uri: uri, wallet: keystore.currentWallet!)
         } catch {
             isPresentingErrorMessage = error.localizedDescription
             NSLog("connectURI error: \(error)")
+        }
+    }
+}
+
+// MARK: Actions
+
+private extension ConnectionsScene {
+    private func onHandleScan(value: String) {
+        Task {
+            await connectURI(uri: value)
+        }
+    }
+    
+    private func onScan() {
+        isPresentingScanner = true
+    }
+    
+    private func onPaste() {
+        guard let content = UIPasteboard.general.string else {
+            return
+        }
+        
+        Task {
+            await connectURI(uri: content)
         }
     }
 }

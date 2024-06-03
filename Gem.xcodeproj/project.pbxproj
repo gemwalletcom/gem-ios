@@ -201,6 +201,7 @@
 		D8A1F87F2B17F23500B15F54 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F87E2B17F23500B15F54 /* SnapshotHelper.swift */; };
 		D8A1F8822B17F88100B15F54 /* PaymentURLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8812B17F88100B15F54 /* PaymentURLDecoder.swift */; };
 		D8A1F8862B17F8FB00B15F54 /* PaymentURLDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8852B17F8FB00B15F54 /* PaymentURLDecoderTests.swift */; };
+		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */; };
 		D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */; };
 		D8B27CDD2B64402200E04154 /* GemstoneSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D8B27CDC2B64402200E04154 /* GemstoneSwift */; };
@@ -455,6 +456,7 @@
 		D8A1F87E2B17F23500B15F54 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
 		D8A1F8812B17F88100B15F54 /* PaymentURLDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentURLDecoder.swift; sourceTree = "<group>"; };
 		D8A1F8852B17F8FB00B15F54 /* PaymentURLDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentURLDecoderTests.swift; sourceTree = "<group>"; };
+		D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonListItem.swift; sourceTree = "<group>"; };
 		D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailScene.swift; sourceTree = "<group>"; };
 		D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailViewModel.swift; sourceTree = "<group>"; };
 		D8B977FD2AA95435009933B5 /* DeviceService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceService.swift; sourceTree = "<group>"; };
@@ -1205,6 +1207,7 @@
 			children = (
 				D8148C2A2BF54BA30066586A /* AddressListItem.swift */,
 				D8148C2C2BF54FB80066586A /* MemoListItem.swift */,
+				D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1844,6 +1847,7 @@
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				D848B5932AE3024200814FB4 /* ConnectionsService.swift in Sources */,
 				C3B6F09429E7C32900C3B746 /* ConfirmTransferViewModel.swift in Sources */,
+				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				D8BAC95D2BD1A3E2001608BC /* AddAssetViewModel.swift in Sources */,
 				D801814A2B46209200F4D22B /* StakeValidatorsScene.swift in Sources */,
 				D80700522BBB6AEC00ED770B /* ImportWalletNavigationStack.swift in Sources */,
