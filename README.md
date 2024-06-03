@@ -67,7 +67,7 @@ If you want to contribute, you can use our [developers telegram](https://t.me/ge
 ### iOS Development
 
 1. Setup [Xcode](https://developer.apple.com/xcode)
-2. Run `make boostrap-ios` to install all nessesary tools.
+2. Run `make boostrap` to install all nessesary tools.
 
 ## 👨‍👧‍👦 Contributors
 
@@ -75,7 +75,7 @@ We love contributors! Feel free to contribute to this project but please read th
 
 ## 🌍 Localization
 
-Join us in making our app accessible worldwide! Contribute to localization efforts by visiting our [Lokalise project](https://app.lokalise.com/public/94865410644ee707546334.60736699)
+Join us in making our app accessible worldwide! Contribute to localization efforts by visiting our [Lokalise project](https://app.lokalise.com/public/94865410644ee707546334.60736699/)
 
 ## ⚖️ License
 
