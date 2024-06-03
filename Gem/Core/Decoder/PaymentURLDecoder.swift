@@ -10,7 +10,6 @@ struct Payment: Equatable {
     let memo: String?
     var network: String?
 }
-
 struct PaymentURLDecoder {
     private let chainSchemes = Chain.allCases.map({ $0.rawValue })
 

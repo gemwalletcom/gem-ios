@@ -9,13 +9,13 @@ final class PaymentURLDecoderTests: XCTestCase {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
 
-        func testAddress() {
-            XCTAssertThrowsError(try PaymentURLDecoder().decode(""))
-            XCTAssertEqual(
-                try! PaymentURLDecoder().decode("0x1f9090aaE28b8a3dCeaDf281B0F12828e676c326"),
-                Payment(address: "0x1f9090aaE28b8a3dCeaDf281B0F12828e676c326", amount: .none, memo: .none, network: .none)
-            )
-        }
+    func testAddress() {
+        XCTAssertThrowsError(try PaymentURLDecoder().decode(""))
+        XCTAssertEqual(
+            try! PaymentURLDecoder().decode("0x1f9090aaE28b8a3dCeaDf281B0F12828e676c326"),
+            Payment(address: "0x1f9090aaE28b8a3dCeaDf281B0F12828e676c326", amount: .none, memo: .none, network: .none)
+        )
+    }
 
     func testAddressWithNetwork() {
         XCTAssertEqual(
