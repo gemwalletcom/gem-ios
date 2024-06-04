@@ -6,26 +6,26 @@ import Components
 import Store
 
 class CurrencySceneViewModel: ObservableObject {
-    
+
     let preferences: Preferences
-    
+
     @Published var currency: String {
         didSet {
             preferences.currency = currency
         }
     }
-    
+
     init(
         preferences: Preferences = .standard
     ) {
         self.currency = preferences.currency
         self.preferences = preferences
     }
-    
+
     var title: String {
         return Localized.Settings.currency
     }
-    
+
     var defaultCurrencies: [String] {
         return [
             Currency.usd.rawValue,
@@ -38,14 +38,14 @@ class CurrencySceneViewModel: ObservableObject {
             currency,
         ]
     }
-    
+
     var recommendedCurrencies: [Locale.Currency] {
         let values = defaultCurrencies.map {
             Locale.Currency($0)
         }
         return ([Locale.current.currency] + values).compactMap { $0 }.unique()
     }
-    
+
     var list: [ListItemValueSection<String>] {
         return [
             ListItemValueSection(
@@ -66,6 +66,59 @@ class CurrencySceneViewModel: ObservableObject {
 
 extension Locale.Currency {
     var title: String {
-        return String(format: "%@ - %@", identifier, Locale.current.localizedString(forCurrencyCode: identifier) ?? .empty)
+        return String(format: "%@ %@ - %@", emojiFlag, identifier, Locale.current.localizedString(forCurrencyCode: identifier) ?? .empty)
+    }
+
+    static private let emojiFlags: [String: String] = [
+        "MXN": "🇲🇽",
+        "CHF": "🇨🇭",
+        "CNY": "🇨🇳",
+        "THB": "🇹🇭",
+        "HUF": "🇭🇺",
+        "AUD": "🇦🇺",
+        "IDR": "🇮🇩",
+        "RUB": "🇷🇺",
+        "ZAR": "🇿🇦",
+        "EUR": "🇪🇺",
+        "NZD": "🇳🇿",
+        "SAR": "🇸🇦",
+        "SGD": "🇸🇬",
+        "BMD": "🇧🇲",
+        "KWD": "🇰🇼",
+        "HKD": "🇭🇰",
+        "JPY": "🇯🇵",
+        "GBP": "🇬🇧",
+        "DKK": "🇩🇰",
+        "KRW": "🇰🇷",
+        "PHP": "🇵🇭",
+        "CLP": "🇨🇱",
+        "TWD": "🇹🇼",
+        "PKR": "🇵🇰",
+        "BRL": "🇧🇷",
+        "CAD": "🇨🇦",
+        "BHD": "🇧🇭",
+        "MMK": "🇲🇲",
+        "VEF": "🇻🇪",
+        "VND": "🇻🇳",
+        "CZK": "🇨🇿",
+        "TRY": "🇹🇷",
+        "INR": "🇮🇳",
+        "ARS": "🇦🇷",
+        "BDT": "🇧🇩",
+        "NOK": "🇳🇴",
+        "USD": "🇺🇸",
+        "LKR": "🇱🇰",
+        "ILS": "🇮🇱",
+        "PLN": "🇵🇱",
+        "NGN": "🇳🇬",
+        "UAH": "🇺🇦",
+        "XDR": "🏳️",
+        "MYR": "🇲🇾",
+        "AED": "🇦🇪",
+        "SEK": "🇸🇪"
+    ]
+
+    private var emojiFlag: String {
+        return Locale.Currency.emojiFlags[self.identifier] ?? ""
     }
 }

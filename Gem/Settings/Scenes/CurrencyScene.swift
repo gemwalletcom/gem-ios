@@ -36,8 +36,6 @@ struct CurrencyScene: View {
     }
 }
 
-//struct CurrencyScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        CurrencyScene()
-//    }
-//}
+#Preview {
+    CurrencyScene(model: .init())
+}
