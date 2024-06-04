@@ -26,6 +26,10 @@ class CurrencySceneViewModel: ObservableObject {
         return Localized.Settings.currency
     }
 
+    var emojiFlag: String? {
+        Locale.Currency.flag(for: currency)
+    }
+
     var defaultCurrencies: [String] {
         return [
             Currency.usd.rawValue,
@@ -66,10 +70,25 @@ class CurrencySceneViewModel: ObservableObject {
 
 extension Locale.Currency {
     var title: String {
-        return String(format: "%@ %@ - %@", emojiFlag, identifier, Locale.current.localizedString(forCurrencyCode: identifier) ?? .empty)
+        let localizedCurrencyId = Locale.current.localizedString(forCurrencyCode: identifier) ?? .empty
+        let currencyIdenifier = identifier
+
+        if let emojiFlag = emojiFlag {
+            return "\(emojiFlag) \(currencyIdenifier) - \(localizedCurrencyId)"
+        } else {
+            return "\(currencyIdenifier) - \(localizedCurrencyId)"
+        }
     }
 
-    static private let emojiFlags: [String: String] = [
+    private var emojiFlag: String? {
+        return Self.flag(for: identifier)
+    }
+
+    fileprivate static func flag(for identifier: String) -> String? {
+        return Self.emojiFlags[identifier] ?? ""
+    }
+
+    fileprivate static let emojiFlags: [String: String] = [
         "MXN": "🇲🇽",
         "CHF": "🇨🇭",
         "CNY": "🇨🇳",
@@ -117,8 +136,4 @@ extension Locale.Currency {
         "AED": "🇦🇪",
         "SEK": "🇸🇪"
     ]
-
-    private var emojiFlag: String {
-        return Locale.Currency.emojiFlags[self.identifier] ?? ""
-    }
 }

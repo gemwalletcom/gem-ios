@@ -41,7 +41,7 @@ struct SettingsScene: View {
                     ListItemView(title: Localized.Settings.Notifications.title, image: Image(.settingsNotifications))
                 }
                 NavigationLink(value: Scenes.Currency()) {
-                    ListItemView(title: Localized.Settings.currency, subtitle: model.currencyModel.currency, image: Image(.settingsCurrency))
+                    ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
                 }
                 NavigationLink(value: Scenes.Chains()) {
                     ListItemView(title: Localized.Settings.Networks.title, image: Image(.settingsNetworks))
