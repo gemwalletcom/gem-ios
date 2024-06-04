@@ -10,6 +10,7 @@
 		481152C22B54F46800377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C12B54F46800377C75 /* Gemstone */; };
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
 		487A27EB2B633FED00BEEADB /* GemstoneSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 487A27EA2B633FED00BEEADB /* GemstoneSwift */; };
+		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C30952B8299C39D80004C0F9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952C5299C39D80004C0F9 /* walletTests.swift */; };
@@ -217,7 +218,6 @@
 		D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */; };
 		D8BAC9612BDC82F7001608BC /* WordSuggestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */; };
 		D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */; };
-		D8D203B32ACC7C9600261CA2 /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203B22ACC7C9600261CA2 /* ChartScene.swift */; };
 		D8D203B82ACC84BA00261CA2 /* ChartsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */; };
 		D8D203BB2ACC878200261CA2 /* ChartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203BA2ACC878200261CA2 /* ChartService.swift */; };
 		D8D203BE2ACDFB4800261CA2 /* ChartValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203BD2ACDFB4800261CA2 /* ChartValues.swift */; };
@@ -250,6 +250,7 @@
 
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -469,7 +470,6 @@
 		D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestionView.swift; sourceTree = "<group>"; };
 		D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestor.swift; sourceTree = "<group>"; };
 		D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeViewModel.swift; sourceTree = "<group>"; };
-		D8D203B22ACC7C9600261CA2 /* ChartScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ChartScene.swift; path = ../Views/ChartScene.swift; sourceTree = "<group>"; };
 		D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewModel.swift; sourceTree = "<group>"; };
 		D8D203BA2ACC878200261CA2 /* ChartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartService.swift; sourceTree = "<group>"; };
 		D8D203BD2ACDFB4800261CA2 /* ChartValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartValues.swift; sourceTree = "<group>"; };
@@ -531,6 +531,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		832553962C0F27D300C9CA0C /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				832553972C0F27F000C9CA0C /* ChartScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
 		C30952A7299C39D70004C0F9 = {
 			isa = PBXGroup;
 			children = (
@@ -1009,7 +1017,6 @@
 		C3D1C4FF2A43AAD1006E8EEA /* Transactions */ = {
 			isa = PBXGroup;
 			children = (
-				D89D69072A9FBFC300EA74EE /* Types */,
 				C3E99BB82A707387005DF35F /* Views */,
 				C3D1C5012A43AADD006E8EEA /* ViewModels */,
 				C3D1C5002A43AAD7006E8EEA /* Scenes */,
@@ -1332,7 +1339,6 @@
 			isa = PBXGroup;
 			children = (
 				D8148C292BF54B9C0066586A /* Views */,
-				D8A1F8802B17F86600B15F54 /* Decoder */,
 				D847E34D2AAFAC1100A56F07 /* Formatters */,
 				D85620292AAB89B600D65D81 /* Types */,
 			);
@@ -1356,17 +1362,9 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
-		D89D69072A9FBFC300EA74EE /* Types */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Types;
-			sourceTree = "<group>";
-		};
 		D89D69082A9FBFCA00EA74EE /* Transaction */ = {
 			isa = PBXGroup;
 			children = (
-				D8EFE3DF2BA001A700608363 /* Views */,
 				D89D690C2A9FBFE700EA74EE /* Scenes */,
 				D89D69092A9FBFCF00EA74EE /* Types */,
 			);
@@ -1397,13 +1395,6 @@
 				D8041FA12B193A2C002DC071 /* Screenshots.xctestplan */,
 			);
 			path = Screenshots;
-			sourceTree = "<group>";
-		};
-		D8A1F8802B17F86600B15F54 /* Decoder */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Decoder;
 			sourceTree = "<group>";
 		};
 		D8A1F8832B17F8E900B15F54 /* Core */ = {
@@ -1446,7 +1437,7 @@
 		D8D203B42ACC849A00261CA2 /* Charts */ = {
 			isa = PBXGroup;
 			children = (
-				D8D203C12ACF19EE00261CA2 /* Scenes */,
+				832553962C0F27D300C9CA0C /* Scenes */,
 				D8D203BC2ACDFB4200261CA2 /* Types */,
 				D8D203B92ACC877800261CA2 /* Services */,
 				D8D203B62ACC84A300261CA2 /* Views */,
@@ -1489,21 +1480,6 @@
 				D8148C252BEEDD5A0066586A /* ChartDateFormatter.swift */,
 			);
 			path = Types;
-			sourceTree = "<group>";
-		};
-		D8D203C12ACF19EE00261CA2 /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-				D8D203B22ACC7C9600261CA2 /* ChartScene.swift */,
-			);
-			path = Scenes;
-			sourceTree = "<group>";
-		};
-		D8EFE3DF2BA001A700608363 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -1695,7 +1671,6 @@
 				C3E99BC52A73186E005DF35F /* TransactionDetailViewModel.swift in Sources */,
 				D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */,
 				D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */,
-				D8D203B32ACC7C9600261CA2 /* ChartScene.swift in Sources */,
 				C3340B722A4A292100884D48 /* ChainServiceFactory.swift in Sources */,
 				C3A7CB8629CD331400431341 /* WalletSceneViewModel.swift in Sources */,
 				C3B6F09229E7C31500C3B746 /* ConfirmTransferScene.swift in Sources */,
@@ -1864,6 +1839,7 @@
 				C3D1C4FC2A3CD5EA006E8EEA /* DiscoverAssetsService.swift in Sources */,
 				D8D203C02ACE058200261CA2 /* ChartValuesViewModel.swift in Sources */,
 				D8148C2D2BF54FB80066586A /* MemoListItem.swift in Sources */,
+				832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */,
 				C3D1C4FE2A421842006E8EEA /* NodeService.swift in Sources */,
 				C3CF3BCB29B8041700E96586 /* RecipientViewModel.swift in Sources */,
 				D810F3782AF1AB770006D9C6 /* SwapScene.swift in Sources */,
