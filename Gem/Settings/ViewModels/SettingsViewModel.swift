@@ -41,7 +41,16 @@ class SettingsViewModel: ObservableObject {
     var walletsText: String {
         "\(keystore.wallets.count)"
     }
-    
+
+    var currencyValue: String {
+        let currentCurrency = currencyModel.currency
+
+        if let currentFlag = currencyModel.emojiFlag {
+            return "\(currentFlag) \(currentCurrency)"
+        }
+        return currentCurrency
+    }
+
     var versionText: String {
         return String(format: "%@ (%d)", Bundle.main.releaseVersionNumber, Bundle.main.buildVersionNumber)
     }
