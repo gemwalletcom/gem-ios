@@ -199,8 +199,6 @@
 		D89D690B2A9FBFD400EA74EE /* TransactionSceneInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89D690A2A9FBFD400EA74EE /* TransactionSceneInput.swift */; };
 		D8A1F8782B17F21E00B15F54 /* ScreenshotsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */; };
 		D8A1F87F2B17F23500B15F54 /* SnapshotHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F87E2B17F23500B15F54 /* SnapshotHelper.swift */; };
-		D8A1F8822B17F88100B15F54 /* PaymentURLDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8812B17F88100B15F54 /* PaymentURLDecoder.swift */; };
-		D8A1F8862B17F8FB00B15F54 /* PaymentURLDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8A1F8852B17F8FB00B15F54 /* PaymentURLDecoderTests.swift */; };
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */; };
 		D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */; };
@@ -454,8 +452,6 @@
 		D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Screenshots.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotsLaunchTests.swift; sourceTree = "<group>"; };
 		D8A1F87E2B17F23500B15F54 /* SnapshotHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SnapshotHelper.swift; sourceTree = "<group>"; };
-		D8A1F8812B17F88100B15F54 /* PaymentURLDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentURLDecoder.swift; sourceTree = "<group>"; };
-		D8A1F8852B17F8FB00B15F54 /* PaymentURLDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentURLDecoderTests.swift; sourceTree = "<group>"; };
 		D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonListItem.swift; sourceTree = "<group>"; };
 		D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailScene.swift; sourceTree = "<group>"; };
 		D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailViewModel.swift; sourceTree = "<group>"; };
@@ -1406,7 +1402,6 @@
 		D8A1F8802B17F86600B15F54 /* Decoder */ = {
 			isa = PBXGroup;
 			children = (
-				D8A1F8812B17F88100B15F54 /* PaymentURLDecoder.swift */,
 			);
 			path = Decoder;
 			sourceTree = "<group>";
@@ -1422,7 +1417,6 @@
 		D8A1F8842B17F8EE00B15F54 /* Decoder */ = {
 			isa = PBXGroup;
 			children = (
-				D8A1F8852B17F8FB00B15F54 /* PaymentURLDecoderTests.swift */,
 			);
 			path = Decoder;
 			sourceTree = "<group>";
@@ -1713,7 +1707,6 @@
 				C3FB448C2A7AE38A0056F124 /* NameResolveView.swift in Sources */,
 				C34C7CF529FC9B1C009EEC21 /* SettingsViewModel.swift in Sources */,
 				D89D690B2A9FBFD400EA74EE /* TransactionSceneInput.swift in Sources */,
-				D8A1F8822B17F88100B15F54 /* PaymentURLDecoder.swift in Sources */,
 				D8BAC9612BDC82F7001608BC /* WordSuggestor.swift in Sources */,
 				D8BAC9562BD0C0C5001608BC /* NetworkSelectorNavigationStack.swift in Sources */,
 				C3CF3BCD29B80B1B00E96586 /* SelectAssetViewModel.swift in Sources */,
@@ -1886,7 +1879,6 @@
 				C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */,
 				C3A7CB9929D35EC200431341 /* WalletSceneViewModelTests.swift in Sources */,
 				C3A7CB9729D3569C00431341 /* PriceViewModelTests.swift in Sources */,
-				D8A1F8862B17F8FB00B15F54 /* PaymentURLDecoderTests.swift in Sources */,
 				C3549B3529C4396A00B4BE01 /* AssetViewModelTests.swift in Sources */,
 				C3549B3129C42E8F00B4BE01 /* AssetListViewModelTests.swift in Sources */,
 			);

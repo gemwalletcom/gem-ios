@@ -3,6 +3,7 @@ import Gemstone
 import XCTest
 
 final class GemstoneSwiftTests: XCTestCase {
+
     func testExplorerService() throws {
         XCTAssertNotNil(Gemstone.libVersion())
         XCTAssertEqual(ExplorerService.hostName(url: URL(string: "https://www.mintscan.io/")!), "MintScan")

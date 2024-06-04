@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "GemstoneSwift",
-    platforms: [.iOS(.v16), .macOS(.v12)],
+    platforms: [.iOS(.v17), .macOS(.v12)],
     products: [
         .library(
             name: "GemstoneSwift",

@@ -2,6 +2,7 @@ import Foundation
 import Primitives
 import Keystore
 import Blockchain
+import GemstoneSwift
 
 enum RecipientAddressType {
     case wallets
@@ -88,7 +89,7 @@ struct RecipientViewModel {
     
     //TODO: Add unit tests
     func getTransferDataFromScan(string: String) throws -> ScanRecipientResult {
-        let payment = try PaymentURLDecoder().decode(string)
+        let payment = try PaymentURLDecoder.decode(string)
         
         if payment.amount == .none {
             return .address(address: payment.address, memo: payment.memo)

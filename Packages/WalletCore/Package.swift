@@ -3,7 +3,7 @@ import PackageDescription
 
 let package = Package(
     name: "WalletCore",
-    platforms: [.iOS(.v16)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(name: "WalletCore", targets: ["WalletCore"]),
         .library(name: "SwiftProtobuf", targets: ["SwiftProtobuf"])
