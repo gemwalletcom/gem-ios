@@ -547,6 +547,8 @@
 				832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */,
 			);
 			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		832553962C0F27D300C9CA0C /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
