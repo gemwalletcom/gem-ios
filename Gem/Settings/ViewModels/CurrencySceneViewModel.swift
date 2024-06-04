@@ -85,7 +85,7 @@ extension Locale.Currency {
     }
 
     fileprivate static func flag(for identifier: String) -> String? {
-        return Self.emojiFlags[identifier] ?? ""
+        return Self.emojiFlags[identifier]
     }
 
     fileprivate static let emojiFlags: [String: String] = [
@@ -134,6 +134,7 @@ extension Locale.Currency {
         "XDR": "🏳️",
         "MYR": "🇲🇾",
         "AED": "🇦🇪",
-        "SEK": "🇸🇪"
+        "SEK": "🇸🇪",
+        "BTC": "₿"
     ]
 }

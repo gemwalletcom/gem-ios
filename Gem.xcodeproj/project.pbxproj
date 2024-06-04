@@ -10,6 +10,7 @@
 		481152C22B54F46800377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C12B54F46800377C75 /* Gemstone */; };
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
 		487A27EB2B633FED00BEEADB /* GemstoneSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 487A27EA2B633FED00BEEADB /* GemstoneSwift */; };
+		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C30952B8299C39D80004C0F9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952C5299C39D80004C0F9 /* walletTests.swift */; };
@@ -250,6 +251,7 @@
 
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -531,6 +533,22 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8325539B2C0FB22000C9CA0C /* Settings */ = {
+			isa = PBXGroup;
+			children = (
+				8325539C2C0FB23500C9CA0C /* ViewModels */,
+			);
+			path = Settings;
+			sourceTree = "<group>";
+		};
+		8325539C2C0FB23500C9CA0C /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		C30952A7299C39D70004C0F9 = {
 			isa = PBXGroup;
 			children = (
@@ -586,6 +604,7 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
+				8325539B2C0FB22000C9CA0C /* Settings */,
 				D8A1F8832B17F8E900B15F54 /* Core */,
 				C3549B3229C4395B00B4BE01 /* Assets */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
@@ -1879,6 +1898,7 @@
 				C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */,
 				C3A7CB9929D35EC200431341 /* WalletSceneViewModelTests.swift in Sources */,
 				C3A7CB9729D3569C00431341 /* PriceViewModelTests.swift in Sources */,
+				8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */,
 				C3549B3529C4396A00B4BE01 /* AssetViewModelTests.swift in Sources */,
 				C3549B3129C42E8F00B4BE01 /* AssetListViewModelTests.swift in Sources */,
 			);
