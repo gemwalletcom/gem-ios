@@ -125,7 +125,7 @@ struct AmountScene: View {
                                 AnyView(
                                     HStack {
                                         Button(Localized.Transfer.max, action: useMax)
-                                            .buttonStyle(ColorButton.lightGray(paddingHorizontal: 16, paddingVertical: 8))
+                                            .buttonStyle(ColorButton.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
                                             .fixedSize()
                                     }
                                 )
