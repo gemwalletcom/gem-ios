@@ -7,11 +7,11 @@ import Components
 import Primitives
 
 struct AmountScene: View {
-    
+
     @StateObject var model: AmounViewModel
-    
+
     @Environment(\.nodeService) private var nodeService
-    
+
     @State var amount: String = ""
     @State private var isPresentingErrorMessage: String?
 
@@ -21,14 +21,14 @@ struct AmountScene: View {
         var id: String { String(rawValue) }
     }
     @FocusState private var focusedField: Field?
-    
+
     // next scene
     @State var transferData: TransferData?
     @State var delegation: DelegationValidator?
-    
+
     var body: some View {
         UITextField.appearance().clearButtonMode = .never
-        
+
         return VStack {
             List {
                 Section { } header: {
@@ -48,7 +48,7 @@ struct AmountScene: View {
                                 .padding(.trailing, 8)
                                 .fixedSize(horizontal: true, vertical: false)
                                 .disabled(model.isInputDisabled)
-                            
+
                             Text(model.assetSymbol)
                                 .font(.system(size: 52))
                                 .fontWeight(.semibold)
@@ -56,7 +56,7 @@ struct AmountScene: View {
                                 .foregroundColor(Colors.black)
                                 .fixedSize()
                         }
-                        
+
                         ZStack {
                             Text(model.fiatAmount(amount: amount))
                                 .font(Font.system(size: 16))
@@ -72,13 +72,15 @@ struct AmountScene: View {
                 .textCase(nil)
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets())
-                
+
                 if let validator = model.currentValidator  {
                     Section(Localized.Stake.validator) {
                         //TODO: Use this, other option does not work for some reason
-//                        NavigationLink(value: Scenes.Validators()) {
-//                            ListItemView(title: validator.name, subtitle: .none)
-//                        }
+                        /*
+                        NavigationLink(value: Scenes.Validators()) {
+                            ListItemView(title: validator.name, subtitle: .none)
+                        }
+                         */
                         if model.isSelectValidatorEnabled {
                             NavigationCustomLink(with:
                                 HStack {
@@ -104,7 +106,7 @@ struct AmountScene: View {
                 }
                 if model.isBalanceViewEnabled {
                     Section {
-                        VStack(alignment: .center) {
+                        VStack {
                             AssetListItemView {
                                 AssetImageView(assetImage: model.assetImage)
                             } primary: {
@@ -121,19 +123,21 @@ struct AmountScene: View {
                                 )
                             } secondary: {
                                 AnyView(
-                                    Button(Localized.Transfer.max, action: useMax)
-                                        .buttonStyle(ColorButton.lightGray(paddingHorizontal: 16, paddingVertical: 8))
-                                        .fixedSize()
+                                    HStack {
+                                        Button(Localized.Transfer.max, action: useMax)
+                                            .buttonStyle(ColorButton.lightGray(paddingHorizontal: 16, paddingVertical: 8))
+                                            .fixedSize()
+                                    }
                                 )
                             }
                         }
-                        .frame(maxWidth: Spacing.scene.button.maxWidth)
+                        .frame(maxWidth: .infinity)
                     }
                 }
             }
-            
+
             Spacer()
-            
+
             Button(Localized.Common.continue, action: {
                 Task { await next() }
             })
@@ -183,10 +187,10 @@ struct AmountScene: View {
             Alert(title: Text(""), message: Text($0))
         }
     }
-    
+
     func next() async {
         //TODO: Move validation per field on demand
-        
+
         do {
             let value = try model.isValidAmount(amount: amount)
             let transfer = try model.getTransferData(value: value)
@@ -195,10 +199,10 @@ struct AmountScene: View {
             isPresentingErrorMessage = error.localizedDescription
         }
     }
-    
+
     func useMax() {
         amount = model.maxBalance
-        
+
         focusedField = .none
     }
 }
