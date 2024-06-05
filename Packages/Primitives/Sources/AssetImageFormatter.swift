@@ -1,11 +1,15 @@
+
 import Foundation
+import Gemstone
 
 public struct AssetImageFormatter {
+    
+    public static let defaultEndpoint = URL(string: Config().getPublicUrl(item: .assets))!
     
     let endpoint: URL
     
     public init(
-        endpoint: URL
+        endpoint: URL = Self.defaultEndpoint
     ) {
         self.endpoint = endpoint
     }

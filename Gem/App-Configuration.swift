@@ -8,14 +8,6 @@ import BigInt
 import WalletConnector
 import GemstoneSwift
 
-extension AssetImageFormatter {
-    static let main = AssetImageFormatter(endpoint: PublicConstants.url(.assets))
-}
-
-extension Chain {
-    static let main = Asset.main.chain
-}
-
 extension Asset {
     static let main = Asset.bitcoin
     static let ethereum = Asset(id: Chain.ethereum.assetId, name: "Ethereum", symbol: "ETH", decimals: 18, type: .native)

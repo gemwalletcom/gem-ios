@@ -7,7 +7,7 @@ import Primitives
 struct ValidatorImageView: View {
     
     let validator: DelegationValidator
-    private let formatter = AssetImageFormatter.main
+    private let formatter = AssetImageFormatter()
     
     var body: some View {
         AsyncImageView(

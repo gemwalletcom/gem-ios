@@ -11,7 +11,7 @@ struct AssetIdViewModel {
 
     init(
         assetId: AssetId,
-        assetFormatter: AssetImageFormatter = .main
+        assetFormatter: AssetImageFormatter = AssetImageFormatter()
     ) {
         self.assetId = assetId
         self.assetFormatter = assetFormatter
