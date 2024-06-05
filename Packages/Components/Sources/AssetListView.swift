@@ -82,7 +82,7 @@ public struct AssetListItemView: View {
     public var body: some View {
         HStack {
             imageView
-            HStack(alignment: .center) {
+            HStack {
                 primary
                 Spacer(minLength: 2)
                 secondary
@@ -180,7 +180,7 @@ public struct AssetListView: View {
                 }
             )
         }
-        .onChange(of: toggleValue) { newValue in
+        .onChange(of: toggleValue) { _, newValue in
             model.action?(.enabled(newValue))
         }
     }
