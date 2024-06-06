@@ -28,4 +28,5 @@ public struct SystemImage {
     public static let plus = "plus"
     public static let eye = "eye.fill"
     public static let infoCircle = "info.circle"
+    public static let searchNoResults = "exclamationmark.magnifyingglass"
 }
