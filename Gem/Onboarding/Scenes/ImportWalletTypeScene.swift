@@ -29,7 +29,7 @@ struct ImportWalletTypeScene: View {
                 .accessibilityIdentifier("multicoin")
             }
             if model.items(for: searchQuery).isEmpty {
-                StateEmptyView(title: Localized.Settings.Networks.noChainsFound)
+                StateEmptyView(title: Localized.Common.noResultsFound)
             } else {
                 Section {
                     ForEach(model.items(for: searchQuery)) { chain in
