@@ -3,6 +3,12 @@
 import SwiftUI
 import Style
 
+public enum TitleTagType {
+    case none
+    case progressView
+    case image(Image)
+}
+
 public struct ListItemView: View {
 
     public let title: String?
@@ -383,10 +389,3 @@ public struct ListItemValueSection<T> {
 extension ListItemValueSection: Identifiable {
     public var id: String { section }
 }
-
-public enum TitleTagType {
-    case none
-    case progressView
-    case image(Image)
-}
-
