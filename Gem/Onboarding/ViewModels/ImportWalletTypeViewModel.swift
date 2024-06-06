@@ -21,13 +21,13 @@ struct ImportWalletTypeViewModel {
     }
     
     func items(for searchText: String) -> [Chain] {
-        if searchText.isEmpty {
+        guard !searchText.isEmpty else {
             return chains
-        } else {
-            return chains.filter {
-                $0.asset.name.localizedCaseInsensitiveContains(searchText) ||
-                $0.asset.symbol.localizedCaseInsensitiveContains(searchText)
-            }
+        }
+        return chains.filter {
+            $0.asset.name.localizedCaseInsensitiveContains(searchText) ||
+            $0.asset.symbol.localizedCaseInsensitiveContains(searchText) ||
+            $0.rawValue.localizedCaseInsensitiveContains(searchText)
         }
     }
 }

@@ -15,8 +15,13 @@ struct NetworkSelectorNavigationStack: View {
     var action: ((String) -> Void)?
 
     var filteredChains: [Chain] {
-        chains.filter { chain in
-            searchQuery.isEmpty || chain.rawValue.lowercased().contains(searchQuery.lowercased())
+        guard !searchQuery.isEmpty else {
+            return chains
+        }
+        return chains.filter {
+            $0.asset.name.localizedCaseInsensitiveContains(searchQuery) ||
+            $0.asset.symbol.localizedCaseInsensitiveContains(searchQuery) ||
+            $0.rawValue.localizedCaseInsensitiveContains(searchQuery)
         }
     }
 

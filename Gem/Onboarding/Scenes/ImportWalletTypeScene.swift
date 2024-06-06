@@ -5,16 +5,16 @@ import Primitives
 import Style
 
 struct ImportWalletTypeScene: View {
-    
+
     let model: ImportWalletTypeViewModel
-    @State private var searchText = ""
-    
+    @State private var searchQuery = ""
+
     init(
         model: ImportWalletTypeViewModel
     ) {
         self.model = model
     }
-    
+
     var body: some View {
         List {
             Section {
@@ -29,7 +29,7 @@ struct ImportWalletTypeScene: View {
                 .accessibilityIdentifier("multicoin")
             }
             Section {
-                ForEach(model.items(for: searchText) ) { chain in
+                ForEach(model.items(for: searchQuery) ) { chain in
                     NavigationLink(value: ImportWalletType.chain(chain)) {
                         ListItemView(
                             title: Asset(chain).name,
@@ -41,14 +41,19 @@ struct ImportWalletTypeScene: View {
                 }
             }
         }
-        //TODO: Enable later, but to make sure it does not jump
-        //.searchable(text: $searchText, placement: .navigationBarDrawer(displayMode: .always))
         .navigationBarTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
+        .searchable(
+            text: $searchQuery,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
+        .autocorrectionDisabled(true)
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 
-//struct ImportWalletTypeScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ImportWalletTypeScene(model: ImportWalletTypeViewModel(keystore: .main))
-//    }
-//}
+// MARK: - Previews
+
+#Preview {
+    ImportWalletTypeScene(model: .init(keystore: LocalKeystore.main))
+}
