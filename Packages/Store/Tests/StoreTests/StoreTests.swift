@@ -1,11 +1,11 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import XCTest
 @testable import Store
+import StoreTestKit
 
 final class StoreTests: XCTestCase {
     func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct
-        // results.
-        //XCTAssertEqual(Store().text, "Hello, World!")
+        XCTAssertNotNil(PreferencesStore.mock())
     }
 }
