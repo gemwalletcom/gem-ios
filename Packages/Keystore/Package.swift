@@ -35,6 +35,9 @@ let package = Package(
         ),
         .testTarget(
             name: "KeystoreTests",
-            dependencies: ["Keystore"]),
+            dependencies: [
+                "Keystore",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]),
     ]
 )

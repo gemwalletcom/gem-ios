@@ -12,6 +12,9 @@ let package = Package(
             name: "Store",
             targets: ["Store"]
         ),
+        .library(
+            name: "StoreTestKit",
+            targets: ["StoreTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -32,9 +35,20 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "StoreTestKit",
+            dependencies: [
+                "Store",
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "StoreTests",
-            dependencies: ["Store"]
+            dependencies: [
+                "Store",
+                "StoreTestKit",
+                //.product(name: "StoreKit", package: "Store"),
+            ]
         ),
     ]
 )
