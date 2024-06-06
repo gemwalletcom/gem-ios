@@ -5,28 +5,38 @@ import SwiftUI
 import Style
 
 public struct StateEmptyView: View {
-    let title: String
-    let messageTextStyle: TextStyle
-
-    let description: String?
-    let descriptionTextStyle: TextStyle
+    var titleValue: TextValueView
+    let descriptionValue: TextValueView?
 
     let image: Image?
 
     public init(
         title: String,
-        messageTextStyle: TextStyle = TextStyle(font: .headline, color: .primary),
+        titleTextStyle: TextStyle = TextStyle(font: .headline, color: Colors.black),
         description: String? = nil,
         descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: .secondary),
         image: Image? = nil
     ) {
-        self.title = title
-        self.messageTextStyle = messageTextStyle
-        self.description = description
-        self.descriptionTextStyle = descriptionTextStyle
-        self.image = image
+        var titleValue = TextValueView(text: title, style: titleTextStyle)
+        var descriptionValue: TextValueView?
+        if let description = description {
+            descriptionValue = TextValueView(text: description, style: descriptionTextStyle)
+        } else {
+            // set regular font if we have only title
+            titleValue = TextValueView(text: titleValue.text, style: TextStyle(font: .footnote, color: titleValue.style.color))
+        }
+        self.init(titleValue: titleValue, descriptionValue: descriptionValue, image: image)
     }
 
+    public init(
+        titleValue: TextValueView,
+        descriptionValue: TextValueView? = nil,
+        image: Image? = nil
+    ) {
+        self.titleValue = titleValue
+        self.descriptionValue = descriptionValue
+        self.image = image
+    }
 
      public var body: some View {
          VStack(spacing: Spacing.medium) {
@@ -34,18 +44,19 @@ public struct StateEmptyView: View {
                  .resizable()
                  .aspectRatio(contentMode: .fit)
                  .frame(width: Sizing.image.chain, height: Sizing.image.chain, alignment: .center)
+                 .foregroundStyle(Colors.gray)
 
-             VStack(spacing: description == nil ? 0 : Spacing.tiny) {
-                 Text(title)
-                     .font(messageTextStyle.font)
+             VStack(spacing: descriptionValue == nil ? 0 : Spacing.tiny) {
+                 Text(titleValue.text)
+                     .font(titleValue.style.font)
                      .multilineTextAlignment(.center)
-                     .foregroundStyle(messageTextStyle.color)
+                     .foregroundStyle(titleValue.style.color)
 
-                 if let description = description {
-                     Text(description)
-                         .font(descriptionTextStyle.font)
+                 if let description = descriptionValue {
+                     Text(description.text)
+                         .font(description.style.font)
                          .multilineTextAlignment(.center)
-                         .foregroundStyle(descriptionTextStyle.color)
+                         .foregroundStyle(description.style.color)
                  }
              }
          }
@@ -75,7 +86,7 @@ public struct StateEmptyView: View {
         // Custom Colors and Styles
         StateEmptyView(
             title: "No Results Found",
-            messageTextStyle: TextStyle(font: .title, color: .red),
+            titleTextStyle: TextStyle(font: .title, color: .red),
             description: "Try adjusting your search or filter to find what you're looking for.",
             descriptionTextStyle: TextStyle(font: .body, color: .gray),
             image: Image(systemName: SystemImage.searchNoResults)
