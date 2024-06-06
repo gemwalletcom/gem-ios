@@ -191,3 +191,4 @@
 "transfer.minimum_amount" = "Минимальная сумма %@";
 "wallet_connect.no_active_connections" = "Нет активных подключений";
 "stake.minimum_amount" = "Минимальная сумма";
+"settings.networks.no_chains_found" = "No chains found";

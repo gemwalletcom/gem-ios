@@ -191,3 +191,4 @@
 "transfer.minimum_amount" = "最低金额为%@";
 "wallet_connect.no_active_connections" = "No active connections";
 "stake.minimum_amount" = "最低金额";
+"settings.networks.no_chains_found" = "No chains found";

@@ -191,3 +191,4 @@
 "transfer.minimum_amount" = "O valor mínimo é %@";
 "wallet_connect.no_active_connections" = "No active connections";
 "stake.minimum_amount" = "Quantidade mínima";
+"settings.networks.no_chains_found" = "No chains found";

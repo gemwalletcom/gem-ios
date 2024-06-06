@@ -257,6 +257,8 @@ internal enum Localized {
     internal enum Networks {
       /// Explorer
       internal static let explorer = Localized.tr("Localizable", "settings.networks.explorer", fallback: "Explorer")
+      /// No chains found
+      internal static let noChainsFound = Localized.tr("Localizable", "settings.networks.no_chains_found", fallback: "No chains found")
       /// Source
       internal static let source = Localized.tr("Localizable", "settings.networks.source", fallback: "Source")
       /// Networks
