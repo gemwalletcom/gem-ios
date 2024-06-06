@@ -834,7 +834,6 @@
 			children = (
 				D8DC1AF52C11391100697D0A /* Navigation */,
 				C3E99BC72A76BF85005DF35F /* Services */,
-				C3D1C4E62A2D517F006E8EEA /* Views */,
 				C3FA949229D7EEE700BFC23D /* Types */,
 				C3CF3BDF29BE477000E96586 /* ViewModels */,
 				C3CF3B7F29AAF86700E96586 /* Scenes */,
@@ -964,13 +963,6 @@
 				C3D1C4F92A3BDAC8006E8EEA /* PriceService.swift */,
 			);
 			path = Services;
-			sourceTree = "<group>";
-		};
-		C3D1C4E62A2D517F006E8EEA /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
 			sourceTree = "<group>";
 		};
 		C3D1C4FF2A43AAD1006E8EEA /* Transactions */ = {
@@ -1506,16 +1498,8 @@
 			isa = PBXGroup;
 			children = (
 				D8DC1AFA2C1139C200697D0A /* ViewModels */,
-				D8DC1AF92C1139BD00697D0A /* Scenes */,
 			);
 			path = Receive;
-			sourceTree = "<group>";
-		};
-		D8DC1AF92C1139BD00697D0A /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Scenes;
 			sourceTree = "<group>";
 		};
 		D8DC1AFA2C1139C200697D0A /* ViewModels */ = {
