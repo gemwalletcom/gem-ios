@@ -27,19 +27,16 @@ struct NetworkSelectorNavigationStack: View {
 
     var body: some View {
         NavigationStack {
-            Group {
-                if !filteredChains.isEmpty {
-                    List {
-                        ForEach(filteredChains) { chain in
-                            NavigationCustomLink(with: ChainView(chain: chain)) {
-                                onSelect(chain: chain)
-                            }
-                        }
+            List {
+                ForEach(filteredChains) { chain in
+                    NavigationCustomLink(with: ChainView(chain: chain)) {
+                        onSelect(chain: chain)
                     }
-                } else {
-                    ContentUnavailableView {
-                        Text("No data")
-                    }
+                }
+            }
+            .overlay {
+                if filteredChains.isEmpty {
+                    StateEmptyView(message: "No chains found", image: Image(systemName: SystemImage.searchNoResults))
                 }
             }
             .navigationTitle(Localized.Settings.Networks.title)
