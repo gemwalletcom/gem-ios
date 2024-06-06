@@ -133,6 +133,8 @@ internal enum Localized {
     internal static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
     internal static let next = Localized.tr("Localizable", "common.next", fallback: "Next")
+    /// No Results found
+    internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results found")
     /// Not Available
     internal static let notAvailable = Localized.tr("Localizable", "common.not_available", fallback: "Not Available")
     /// Paste
@@ -257,8 +259,6 @@ internal enum Localized {
     internal enum Networks {
       /// Explorer
       internal static let explorer = Localized.tr("Localizable", "settings.networks.explorer", fallback: "Explorer")
-      /// No chains found
-      internal static let noChainsFound = Localized.tr("Localizable", "settings.networks.no_chains_found", fallback: "No chains found")
       /// Source
       internal static let source = Localized.tr("Localizable", "settings.networks.source", fallback: "Source")
       /// Networks

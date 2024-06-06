@@ -36,7 +36,7 @@ struct NetworkSelectorNavigationStack: View {
             }
             .overlay {
                 if filteredChains.isEmpty {
-                    StateEmptyView(title: Localized.Settings.Networks.noChainsFound,
+                    StateEmptyView(title: Localized.Common.noResultsFound,
                                    image: Image(systemName: SystemImage.searchNoResults))
                 }
             }
