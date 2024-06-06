@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Settings
 import Primitives
 import Components
 
@@ -66,4 +67,14 @@ extension NetworkSelectorNavigationStack {
     private func onCancel() {
         $isPresenting.wrappedValue = false
     }
+}
+
+// MARK: - Previews
+
+#Preview {
+    var mockChains = AssetConfiguration.supportedChainsWithTokens
+    @State var selectedChain: Chain = .smartChain
+    @State var isPresenting: Bool = false
+
+    return NetworkSelectorNavigationStack(chains: mockChains, selectedChain: $selectedChain, isPresenting: $isPresenting)
 }
