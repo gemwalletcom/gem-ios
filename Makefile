@@ -27,7 +27,7 @@ test:
 	test | xcbeautify
 
 localize:
-	@sh core/scripts/localize.sh ios Assets
+	@sh core/scripts/localize.sh ios Gem/Resources
 	@make generate-model
 	@make generate-swiftgen
 
