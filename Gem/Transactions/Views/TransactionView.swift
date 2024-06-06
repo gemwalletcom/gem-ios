@@ -58,7 +58,14 @@ struct TransactionView: View {
         metadata: nil,
         createdAt: Date()
     )
-    let pendingTransactionExtendedMock = TransactionExtended(transaction: pendingTransactionMock, asset: .bitcoin, feeAsset: .bitcoin, price: nil, feePrice: nil, assets: [])
+    let pendingTransactionExtendedMock = TransactionExtended(
+        transaction: pendingTransactionMock,
+        asset: .bitcoin,
+        feeAsset: .bitcoin,
+        price: nil,
+        feePrice: nil,
+        assets: []
+    )
 
     let transactionVMMock = TransactionViewModel(transaction: pendingTransactionExtendedMock, formatter: .short)
 

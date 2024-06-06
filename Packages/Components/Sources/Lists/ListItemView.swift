@@ -154,6 +154,7 @@ extension ListItemView {
                     .font(titleTagStyle.font)
                     .foregroundStyle(titleTagStyle.color)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.8)
 
                 switch titleTagType {
                 case .none:
