@@ -599,10 +599,9 @@
 				C3CF3B8229AB189700E96586 /* Assets */,
 				C3CF3B7E29AAF86400E96586 /* Settings */,
 				D8DC1AFC2C113AA600697D0A /* Resources */,
-				C3FA949529DD50E200BFC23D /* Info.plist */,
 				C30952B3299C39D70004C0F9 /* App.swift */,
 				C3CF3BB429B6917600E96586 /* App-Configuration.swift */,
-				C30952B9299C39D80004C0F9 /* Gem.entitlements */,
+				C3FA949529DD50E200BFC23D /* Info.plist */,
 				C3866B602A803B19004FB60C /* Launch Screen.storyboard */,
 				DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */,
 			);
@@ -615,7 +614,6 @@
 				8325539B2C0FB22000C9CA0C /* Settings */,
 				C3549B3229C4395B00B4BE01 /* Assets */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
-				C30952C5299C39D80004C0F9 /* walletTests.swift */,
 				C36679082A0B1E4200F1D74D /* unit_app.xctestplan */,
 				C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */,
 			);
@@ -665,6 +663,7 @@
 		C3549B2E29C42E6C00B4BE01 /* Wallet */ = {
 			isa = PBXGroup;
 			children = (
+				C30952C5299C39D80004C0F9 /* walletTests.swift */,
 				C3549B2F29C42E7100B4BE01 /* ViewModels */,
 			);
 			path = Wallet;
@@ -1530,6 +1529,7 @@
 		D8DC1AFC2C113AA600697D0A /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				C30952B9299C39D80004C0F9 /* Gem.entitlements */,
 				C34C7D0629FF5817009EEC21 /* Localized.swift */,
 				C34C7CFF29FF2A07009EEC21 /* Localizable.strings */,
 				C34C7D0929FF58CB009EEC21 /* Colors.xcassets */,
@@ -2111,7 +2111,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Gem/Gem.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Gem/Resources/Gem.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = YES;
@@ -2160,7 +2160,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
-				CODE_SIGN_ENTITLEMENTS = Gem/Gem.entitlements;
+				CODE_SIGN_ENTITLEMENTS = Gem/Resources/Gem.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
