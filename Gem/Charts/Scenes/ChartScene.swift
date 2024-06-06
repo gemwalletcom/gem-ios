@@ -35,7 +35,7 @@ struct ChartScene: View {
                     VStack {
                         switch model.state {
                         case .noData:
-                            StateEmptyView(message: Localized.Common.notAvailable)
+                            StateEmptyView(title: Localized.Common.notAvailable)
                         case .loading:
                             StateLoadingView()
                         case .loaded(let model):

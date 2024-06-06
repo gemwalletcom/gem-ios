@@ -49,7 +49,7 @@ struct ConnectionsScene: View {
                 )
             }
             if headers.isEmpty {
-                StateEmptyView(message: Localized.WalletConnect.noActiveConnections)
+                StateEmptyView(title: Localized.WalletConnect.noActiveConnections)
             } else {
                 ForEach(headers, id: \.self) { header in
                     Section(

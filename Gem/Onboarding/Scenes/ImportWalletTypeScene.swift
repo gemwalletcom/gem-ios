@@ -28,15 +28,19 @@ struct ImportWalletTypeScene: View {
                 }
                 .accessibilityIdentifier("multicoin")
             }
-            Section {
-                ForEach(model.items(for: searchQuery) ) { chain in
-                    NavigationLink(value: ImportWalletType.chain(chain)) {
-                        ListItemView(
-                            title: Asset(chain).name,
-                            image: Image(chain.rawValue),
-                            imageSize: Sizing.image.chain,
-                            cornerRadius: Sizing.image.chain/2
-                        )
+            if model.items(for: searchQuery).isEmpty {
+                StateEmptyView(title: Localized.Settings.Networks.noChainsFound)
+            } else {
+                Section {
+                    ForEach(model.items(for: searchQuery)) { chain in
+                        NavigationLink(value: ImportWalletType.chain(chain)) {
+                            ListItemView(
+                                title: Asset(chain).name,
+                                image: Image(chain.rawValue),
+                                imageSize: Sizing.image.chain,
+                                cornerRadius: Sizing.image.chain/2
+                            )
+                        }
                     }
                 }
             }

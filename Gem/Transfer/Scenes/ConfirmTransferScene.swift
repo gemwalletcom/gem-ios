@@ -20,7 +20,7 @@ struct ConfirmTransferScene: View {
             case .loading:
                 StateLoadingView()
             case .noData:
-                StateEmptyView(message: "")
+                StateEmptyView(title: "")
             case .error(let error):
                 StateErrorView(error: error, message: Localized.Common.tryAgain) {
                     Task { try await model.fetch() }

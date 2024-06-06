@@ -5,7 +5,7 @@ import SwiftUI
 import Style
 
 public struct StateEmptyView: View {
-    let message: String
+    let title: String
     let messageTextStyle: TextStyle
 
     let description: String?
@@ -14,13 +14,13 @@ public struct StateEmptyView: View {
     let image: Image?
 
     public init(
-        message: String,
+        title: String,
         messageTextStyle: TextStyle = TextStyle(font: .headline, color: .primary),
         description: String? = nil,
         descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: .secondary),
         image: Image? = nil
     ) {
-        self.message = message
+        self.title = title
         self.messageTextStyle = messageTextStyle
         self.description = description
         self.descriptionTextStyle = descriptionTextStyle
@@ -36,7 +36,7 @@ public struct StateEmptyView: View {
                  .frame(width: Sizing.image.chain, height: Sizing.image.chain, alignment: .center)
 
              VStack(spacing: description == nil ? 0 : Spacing.tiny) {
-                 Text(message)
+                 Text(title)
                      .font(messageTextStyle.font)
                      .multilineTextAlignment(.center)
                      .foregroundStyle(messageTextStyle.color)
@@ -59,7 +59,7 @@ public struct StateEmptyView: View {
     VStack {
         // Default State
         StateEmptyView(
-            message: "No Results Found",
+            title: "No Results Found",
             description: "Try adjusting your search or filter to find what you're looking for.",
             image: Image(systemName: SystemImage.searchNoResults)
         )
@@ -67,14 +67,14 @@ public struct StateEmptyView: View {
 
         // Without Description
         StateEmptyView(
-            message: "No Results Found",
+            title: "No Results Found",
             image: Image(systemName: SystemImage.searchNoResults)
         )
         Divider()
 
         // Custom Colors and Styles
         StateEmptyView(
-            message: "No Results Found",
+            title: "No Results Found",
             messageTextStyle: TextStyle(font: .title, color: .red),
             description: "Try adjusting your search or filter to find what you're looking for.",
             descriptionTextStyle: TextStyle(font: .body, color: .gray),
@@ -84,14 +84,14 @@ public struct StateEmptyView: View {
 
         // No Image
         StateEmptyView(
-            message: "No Results Found",
+            title: "No Results Found",
             description: "Try adjusting your search or filter to find what you're looking for."
         )
         Divider()
 
         // Only Message
         StateEmptyView(
-            message: "No Results Found"
+            title: "No Results Found"
         )
         Divider()
     }
