@@ -221,7 +221,6 @@ extension ListItemView {
     let tagTextStyleBlue = TextStyle(font: Font.system(.footnote), color: .blue, background: .blue.opacity(0.2))
 
     return List {
-        // Basic States
         Section("Basic States") {
             ListItemView(
                 title: defaultTitle,
@@ -243,7 +242,6 @@ extension ListItemView {
             )
         }
 
-        // Long Text States
         Section("Long Text States") {
             ListItemView(
                 title: longTitle,
@@ -269,7 +267,6 @@ extension ListItemView {
             )
         }
 
-        // Tag States
         Section("Tag States") {
             ListItemView(
                 title: defaultTitle,
@@ -297,7 +294,6 @@ extension ListItemView {
             )
         }
 
-        // Image States
         Section("Image States") {
             ListItemView(
                 title: defaultTitle,
@@ -320,7 +316,6 @@ extension ListItemView {
             )
         }
 
-        // Combined States
         Section("Combined States") {
             ListItemView(
                 title: defaultTitle,
@@ -343,7 +338,6 @@ extension ListItemView {
             )
         }
 
-        // Additional Scenarios
         Section("Additional Scenarios") {
             ListItemView(
                 title: "Large Title with No Subtitle, Tag, or Extra",
@@ -357,36 +351,4 @@ extension ListItemView {
             )
         }
     }.listStyle(.insetGrouped)
-}
-
-// TODO: - disscuss and maybe move this later somewhere
-
-public struct ListItemValue<T> {
-    public let title: String?
-    public let subtitle: String?
-    public let value: T
-
-    public init(title: String? = .none, subtitle: String? = .none, value: T) {
-        self.title = title
-        self.subtitle = subtitle
-        self.value = value
-    }
-}
-
-extension ListItemValue: Identifiable {
-    public var id: String { title ?? subtitle ?? ""}
-}
-
-public struct ListItemValueSection<T> {
-    public let section: String
-    public let values: [ListItemValue<T>]
-
-    public init(section: String, values: [ListItemValue<T>]) {
-        self.section = section
-        self.values = values
-    }
-}
-
-extension ListItemValueSection: Identifiable {
-    public var id: String { section }
 }
