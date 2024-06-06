@@ -5,19 +5,34 @@ import Primitives
 import Components
 
 struct NetworkSelectorNavigationStack: View {
-    
     let chains: [Chain]
-    @State var selectedChain: Binding<Chain>
-    @State var isPresenting: Binding<Bool>
+    @Binding var selectedChain: Chain
+    @Binding var isPresenting: Bool
+
+    @State private var searchQuery = ""
+
     var action: ((String) -> Void)?
+
+    var filteredChains: [Chain] {
+        chains.filter { chain in
+            searchQuery.isEmpty || chain.rawValue.lowercased().contains(searchQuery.lowercased())
+        }
+    }
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(chains) { chain in
-                    NavigationCustomLink(with: ChainView(chain: chain)) {
-                        selectedChain.wrappedValue = chain
-                        isPresenting.wrappedValue = false
+            Group {
+                if !filteredChains.isEmpty {
+                    List {
+                        ForEach(filteredChains) { chain in
+                            NavigationCustomLink(with: ChainView(chain: chain)) {
+                                onSelect(chain: chain)
+                            }
+                        }
+                    }
+                } else {
+                    ContentUnavailableView {
+                        Text("No data")
                     }
                 }
             }
@@ -26,10 +41,29 @@ struct NetworkSelectorNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {
-                        isPresenting.wrappedValue = false
+                        onCancel()
                     }
                 }
             }
+            .searchable(
+                text: $searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
+            .autocorrectionDisabled(true)
+            .scrollDismissesKeyboard(.interactively)
         }
+    }
+}
+
+// MARK: - Actions
+
+extension NetworkSelectorNavigationStack {
+    private func onSelect(chain: Chain) {
+        selectedChain = chain
+        $isPresenting.wrappedValue = false
+    }
+
+    private func onCancel() {
+        $isPresenting.wrappedValue = false
     }
 }
