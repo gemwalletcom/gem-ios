@@ -14,16 +14,18 @@ public struct StateEmptyView: View {
         title: String,
         titleTextStyle: TextStyle = TextStyle(font: .headline, color: Colors.black),
         description: String? = nil,
-        descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: .secondary),
+        descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: Colors.secondaryText),
         image: Image? = nil
     ) {
         var titleValue = TextValueView(text: title, style: titleTextStyle)
         var descriptionValue: TextValueView?
         if let description = description {
             descriptionValue = TextValueView(text: description, style: descriptionTextStyle)
-        } else {
+        }
+
+        if image == nil && description == nil {
             // set regular font if we have only title
-            titleValue = TextValueView(text: titleValue.text, style: TextStyle(font: .footnote, color: titleValue.style.color))
+            titleValue = TextValueView(text: titleValue.text, style: TextStyle(font: .body, color: titleValue.style.color))
         }
         self.init(titleValue: titleValue, descriptionValue: descriptionValue, image: image)
     }
