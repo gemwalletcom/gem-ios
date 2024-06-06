@@ -51,14 +51,6 @@ public struct StateEmptyView: View {
          }
          .tint(Colors.black)
      }
-
-
-//    public var body: some View {
-//        VStack {
-//            Text(message)
-//        }
-//        .tint(Colors.black)
-//    }
 }
 
 // MARK: - Previews
