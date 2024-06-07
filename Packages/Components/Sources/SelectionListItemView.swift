@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Style
 import SwiftUI
 
 public struct SelectionListItemView: View {

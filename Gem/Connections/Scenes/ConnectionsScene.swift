@@ -6,6 +6,7 @@ import Store
 import Primitives
 import Components
 import QRScanner
+import Style
 
 struct ConnectionsScene: View {
     

@@ -55,7 +55,7 @@ struct WalletHeaderView: View {
                     Button {
                         UIApplication.shared.open(Docs.url(.whatIsWatchWallet))
                     } label: {
-                        Image(systemName: SystemImage.infoCircle)
+                        Image(systemName: SystemImage.info)
                             .tint(Colors.black)
                     }
                 }
