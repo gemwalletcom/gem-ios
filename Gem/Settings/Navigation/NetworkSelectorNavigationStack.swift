@@ -4,6 +4,7 @@ import SwiftUI
 import Settings
 import Primitives
 import Components
+import Style
 
 struct NetworkSelectorNavigationStack: View {
     let chains: [Chain]

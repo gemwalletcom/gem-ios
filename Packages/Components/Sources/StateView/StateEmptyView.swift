@@ -85,9 +85,9 @@ public struct StateEmptyView: View {
 
         StateEmptyView(
             title: "No Results Found",
-            titleTextStyle: TextStyle(font: .title, color: .red),
+            titleTextStyle: .title,
             description: "Try adjusting your search or filter to find what you're looking for.",
-            descriptionTextStyle: TextStyle(font: .body, color: .gray),
+            descriptionTextStyle: .body,
             image: Image(systemName: SystemImage.searchNoResults)
         )
         Divider()
