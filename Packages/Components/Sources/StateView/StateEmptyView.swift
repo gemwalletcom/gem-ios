@@ -12,9 +12,9 @@ public struct StateEmptyView: View {
 
     public init(
         title: String,
-        titleTextStyle: TextStyle = TextStyle(font: .headline, color: Colors.black),
+        titleTextStyle: TextStyle = .headline,
         description: String? = nil,
-        descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: Colors.secondaryText),
+        descriptionTextStyle: TextStyle = .footnote,
         image: Image? = nil
     ) {
         // set regular font if we have only title
