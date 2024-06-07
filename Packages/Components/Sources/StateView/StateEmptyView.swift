@@ -70,7 +70,6 @@ public struct StateEmptyView: View {
 
 #Preview {
     VStack {
-        // Default State
         StateEmptyView(
             title: "No Results Found",
             description: "Try adjusting your search or filter to find what you're looking for.",
@@ -78,14 +77,12 @@ public struct StateEmptyView: View {
         )
         Divider()
 
-        // Without Description
         StateEmptyView(
             title: "No Results Found",
             image: Image(systemName: SystemImage.searchNoResults)
         )
         Divider()
 
-        // Custom Colors and Styles
         StateEmptyView(
             title: "No Results Found",
             titleTextStyle: TextStyle(font: .title, color: .red),
@@ -95,7 +92,6 @@ public struct StateEmptyView: View {
         )
         Divider()
 
-        // No Image
         StateEmptyView(
             title: "No Results Found",
             description: "Try adjusting your search or filter to find what you're looking for."
