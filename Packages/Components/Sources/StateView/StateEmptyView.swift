@@ -5,8 +5,8 @@ import SwiftUI
 import Style
 
 public struct StateEmptyView: View {
-    var titleValue: TextValueView
-    let descriptionValue: TextValueView?
+    var titleValue: TextValue
+    let descriptionValue: TextValue?
 
     let image: Image?
 
@@ -17,22 +17,22 @@ public struct StateEmptyView: View {
         descriptionTextStyle: TextStyle = TextStyle(font: .footnote, color: Colors.secondaryText),
         image: Image? = nil
     ) {
-        var titleValue = TextValueView(text: title, style: titleTextStyle)
-        var descriptionValue: TextValueView?
+        var titleValue = TextValue(text: title, style: titleTextStyle)
+        var descriptionValue: TextValue?
         if let description = description {
-            descriptionValue = TextValueView(text: description, style: descriptionTextStyle)
+            descriptionValue = TextValue(text: description, style: descriptionTextStyle)
         }
 
         if image == nil && description == nil {
             // set regular font if we have only title
-            titleValue = TextValueView(text: titleValue.text, style: TextStyle(font: .body, color: titleValue.style.color))
+            titleValue = TextValue(text: titleValue.text, style: TextStyle(font: .body, color: titleValue.style.color))
         }
         self.init(titleValue: titleValue, descriptionValue: descriptionValue, image: image)
     }
 
     public init(
-        titleValue: TextValueView,
-        descriptionValue: TextValueView? = nil,
+        titleValue: TextValue,
+        descriptionValue: TextValue? = nil,
         image: Image? = nil
     ) {
         self.titleValue = titleValue

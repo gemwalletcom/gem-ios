@@ -88,7 +88,7 @@ public struct SystemImage {
         (SystemImage.eyeglasses, "eyeglasses"),
         (SystemImage.lockOpen, "lockOpen"),
         (SystemImage.plus, "plus"),
-        (SystemImage.eye, "eye")
+        (SystemImage.eye, "eye"),
         (SystemImage.searchNoResults, "no results")
     ]
 
