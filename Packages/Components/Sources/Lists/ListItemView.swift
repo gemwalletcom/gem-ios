@@ -10,14 +10,14 @@ public enum TitleTagType {
 }
 
 public struct ListItemView: View {
-    public let title: TextValueView?
-    public let titleExtra: TextValueView?
+    public let title: TextValue?
+    public let titleExtra: TextValue?
 
-    public let titleTag: TextValueView?
+    public let titleTag: TextValue?
     public let titleTagType: TitleTagType
 
-    public let subtitle: TextValueView?
-    public let subtitleExtra: TextValueView?
+    public let subtitle: TextValue?
+    public let subtitleExtra: TextValue?
 
     public let image: Image?
     public let imageSize: CGFloat
@@ -39,41 +39,41 @@ public struct ListItemView: View {
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0
     ) {
-        var titleValue: TextValueView?
+        var titleValue: TextValue?
         if let title {
-            titleValue = TextValueView(text: title, style: titleStyle)
+            titleValue = TextValue(text: title, style: titleStyle)
         }
 
-        var titleExtraValue: TextValueView?
+        var titleExtraValue: TextValue?
         if let titleExtra {
-            titleExtraValue = TextValueView(text: titleExtra, style: titleStyleExtra)
+            titleExtraValue = TextValue(text: titleExtra, style: titleStyleExtra)
         }
 
-        var titleTagValue: TextValueView?
+        var titleTagValue: TextValue?
         if let titleTag {
-            titleTagValue = TextValueView(text: titleTag, style: titleTagStyle)
+            titleTagValue = TextValue(text: titleTag, style: titleTagStyle)
         }
 
-        var subtitleValue: TextValueView?
+        var subtitleValue: TextValue?
         if let subtitle {
-            subtitleValue = TextValueView(text: subtitle, style: subtitleStyle)
+            subtitleValue = TextValue(text: subtitle, style: subtitleStyle)
         }
 
-        var subtitleExtraValue: TextValueView?
+        var subtitleExtraValue: TextValue?
         if let subtitleExtra {
-            subtitleExtraValue = TextValueView(text: subtitleExtra, style: subtitleStyleExtra)
+            subtitleExtraValue = TextValue(text: subtitleExtra, style: subtitleStyleExtra)
         }
 
         self.init(title: titleValue, titleExtra: titleExtraValue, titleTag: titleTagValue, titleTagType: titleTagType, subtitle: subtitleValue, subtitleExtra: subtitleExtraValue)
     }
 
     public init(
-        title: TextValueView?,
-        titleExtra: TextValueView?,
-        titleTag: TextValueView?,
+        title: TextValue?,
+        titleExtra: TextValue?,
+        titleTag: TextValue?,
         titleTagType: TitleTagType,
-        subtitle: TextValueView?,
-        subtitleExtra: TextValueView?,
+        subtitle: TextValue?,
+        subtitleExtra: TextValue?,
         image: Image? = .none,
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0)
@@ -132,9 +132,9 @@ extension ListItemView {
 
 extension ListItemView {
     struct TitleView: View {
-        public let title: TextValueView
-        public let titleExtra: TextValueView?
-        public let titleTag: TextValueView?
+        public let title: TextValue
+        public let titleExtra: TextValue?
+        public let titleTag: TextValue?
         public let titleTagType: TitleTagType
 
         var body: some View {
@@ -168,7 +168,7 @@ extension ListItemView {
 
 extension ListItemView {
     struct TitleTagView: View {
-        let titleTag: TextValueView
+        let titleTag: TextValue
         let titleTagType: TitleTagType
 
         var body: some View {
@@ -199,8 +199,8 @@ extension ListItemView {
 
 extension ListItemView {
     struct SubtitleView: View {
-        public let subtitle: TextValueView
-        public let subtitleExtra: TextValueView?
+        public let subtitle: TextValue
+        public let subtitleExtra: TextValue?
 
         var body: some View {
             VStack(alignment: .trailing, spacing: Spacing.tiny) {

@@ -139,14 +139,14 @@ class AssetSceneViewModel: ObservableObject {
         return AssetIdViewModel(assetId: assetModel.asset.chain.assetId).assetImage
     }
     
-    var priceView: TextValueView {
-        return TextValueView(
+    var priceView: TextValue {
+        return TextValue(
             text: assetDataModel.priceAmountText,
             style: .calloutSecondary)
     }
     
-    var priceChangeView: TextValueView {
-        return TextValueView(
+    var priceChangeView: TextValue {
+        return TextValue(
             text: assetDataModel.priceChangeText,
             style: TextStyle(
                 font: .callout,

@@ -2,7 +2,7 @@
 
 import Style
 
-public struct TextValueView {
+public struct TextValue {
     public let text: String
     public let style: TextStyle
     

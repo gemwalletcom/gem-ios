@@ -49,11 +49,11 @@ struct AssetListViewModel: AssetListViewable {
         switch type {
         case .wallet:
             return .price(
-                price: TextValueView(
+                price: TextValue(
                     text: assetDataModel.priceAmountText,
                     style: TextStyle(font: .system(size: 14), color: Colors.gray)
                 ),
-                priceChangePercentage24h: TextValueView(
+                priceChangePercentage24h: TextValue(
                     text: assetDataModel.priceChangeText,
                     style: TextStyle(font: .system(size: 14), color: assetDataModel.priceChangeTextColor)
                 )
@@ -64,7 +64,7 @@ struct AssetListViewModel: AssetListViewable {
                 return .none
             case .token:
                 return .type(
-                    TextValueView(
+                    TextValue(
                         text: assetDataModel.asset.chain.asset.name,
                         style: .calloutSecondary
                     )
@@ -77,11 +77,11 @@ struct AssetListViewModel: AssetListViewable {
         switch type {
         case .wallet, .view:
             return .balance(
-                balance: TextValueView(
+                balance: TextValue(
                     text: assetDataModel.totalBalanceTextWithSymbol,
                     style: TextStyle(font: .system(size: 16, weight: .semibold), color: assetDataModel.balanceTextColor)
                 ),
-                totalFiat: TextValueView(
+                totalFiat: TextValue(
                     text: assetDataModel.fiatBalanceText,
                     style: TextStyle(font: .system(size: 14), color: Colors.gray)
                 )
