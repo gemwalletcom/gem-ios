@@ -79,7 +79,7 @@ struct StakeDelegationViewModel {
     }
     
     var balanceTextStyle: TextStyle {
-        TextStyle(font: Font.system(.body), color: .primary)
+        .body
     }
     
     var validatorText: String {

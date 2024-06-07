@@ -6,6 +6,7 @@ import BigInt
 import Components
 import Signer
 import GemstoneSwift
+import Style
 
 class ConfirmTransferViewModel: ObservableObject {
     

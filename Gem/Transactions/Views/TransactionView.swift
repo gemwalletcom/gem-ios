@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Primitives
+import Style
 
 struct TransactionView: View {
     let model: TransactionViewModel

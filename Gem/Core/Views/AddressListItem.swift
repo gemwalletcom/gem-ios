@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import GemstoneSwift
 import Components
+import Style
 
 struct SimpleAccount {
     let name: String?
