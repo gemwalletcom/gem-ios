@@ -1,6 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
+import Style
 
 public struct TextValueView {
     public let text: String

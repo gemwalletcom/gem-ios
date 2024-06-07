@@ -4,6 +4,7 @@ import GemstoneSwift
 import SwiftUI
 import Components
 import Store
+import Style
 
 class AssetSceneViewModel: ObservableObject {
     
