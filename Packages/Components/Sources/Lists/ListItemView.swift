@@ -24,47 +24,38 @@ public struct ListItemView: View {
     public let cornerRadius: CGFloat
 
     public init(
-        title: String?,
+        title: String? = nil,
         titleStyle: TextStyle = TextStyle.body,
-        titleTag: String? = .none,
+        titleTag: String? = nil,
         titleTagStyle: TextStyle = TextStyle.body,
         titleTagType: TitleTagType = .none,
-        titleExtra: String? = .none,
+        titleExtra: String? = nil,
         titleStyleExtra: TextStyle = TextStyle.footnote,
-        subtitle: String? = .none,
+        subtitle: String? = nil,
         subtitleStyle: TextStyle = TextStyle.calloutSecondary,
-        subtitleExtra: String? = .none,
+        subtitleExtra: String? = nil,
         subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
-        image: Image? = .none,
+        image: Image? = nil,
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0
     ) {
-        var titleValue: TextValue?
-        if let title {
-            titleValue = TextValue(text: title, style: titleStyle)
-        }
+        let titleValue = title.map { TextValue(text: $0, style: titleStyle) }
+        let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra) }
+        let titleTagValue = titleTag.map { TextValue(text: $0, style: titleTagStyle) }
+        let subtitleValue = subtitle.map { TextValue(text: $0, style: subtitleStyle) }
+        let subtitleExtraValue = subtitleExtra.map { TextValue(text: $0, style: subtitleStyleExtra) }
 
-        var titleExtraValue: TextValue?
-        if let titleExtra {
-            titleExtraValue = TextValue(text: titleExtra, style: titleStyleExtra)
-        }
-
-        var titleTagValue: TextValue?
-        if let titleTag {
-            titleTagValue = TextValue(text: titleTag, style: titleTagStyle)
-        }
-
-        var subtitleValue: TextValue?
-        if let subtitle {
-            subtitleValue = TextValue(text: subtitle, style: subtitleStyle)
-        }
-
-        var subtitleExtraValue: TextValue?
-        if let subtitleExtra {
-            subtitleExtraValue = TextValue(text: subtitleExtra, style: subtitleStyleExtra)
-        }
-
-        self.init(title: titleValue, titleExtra: titleExtraValue, titleTag: titleTagValue, titleTagType: titleTagType, subtitle: subtitleValue, subtitleExtra: subtitleExtraValue)
+        self.init(
+            title: titleValue,
+            titleExtra: titleExtraValue,
+            titleTag: titleTagValue,
+            titleTagType: titleTagType,
+            subtitle: subtitleValue,
+            subtitleExtra: subtitleExtraValue,
+            image: image,
+            imageSize: imageSize,
+            cornerRadius: cornerRadius
+        )
     }
 
     public init(
@@ -74,10 +65,10 @@ public struct ListItemView: View {
         titleTagType: TitleTagType,
         subtitle: TextValue?,
         subtitleExtra: TextValue?,
-        image: Image? = .none,
+        image: Image? = nil,
         imageSize: CGFloat = 28.0,
-        cornerRadius: CGFloat = 0)
-    {
+        cornerRadius: CGFloat = 0
+    ) {
         self.title = title
         self.titleExtra = titleExtra
         self.titleTag = titleTag
