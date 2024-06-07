@@ -5,8 +5,8 @@ import SwiftUI
 import Style
 
 public struct StateEmptyView: View {
-    var titleValue: TextValue
-    let descriptionValue: TextValue?
+    var title: TextValue
+    let description: TextValue?
 
     let image: Image?
 
@@ -35,8 +35,8 @@ public struct StateEmptyView: View {
         descriptionValue: TextValue? = nil,
         image: Image? = nil
     ) {
-        self.titleValue = titleValue
-        self.descriptionValue = descriptionValue
+        self.title = titleValue
+        self.description = descriptionValue
         self.image = image
     }
 
@@ -48,17 +48,15 @@ public struct StateEmptyView: View {
                  .frame(width: Sizing.image.chain, height: Sizing.image.chain, alignment: .center)
                  .foregroundStyle(Colors.gray)
 
-             VStack(spacing: descriptionValue == nil ? 0 : Spacing.tiny) {
-                 Text(titleValue.text)
-                     .font(titleValue.style.font)
+             VStack(spacing: description == nil ? 0 : Spacing.tiny) {
+                 Text(title.text)
+                     .textStyle(title.style)
                      .multilineTextAlignment(.center)
-                     .foregroundStyle(titleValue.style.color)
 
-                 if let description = descriptionValue {
+                 if let description = description {
                      Text(description.text)
-                         .font(description.style.font)
+                         .textStyle(description.style)
                          .multilineTextAlignment(.center)
-                         .foregroundStyle(description.style.color)
                  }
              }
          }
