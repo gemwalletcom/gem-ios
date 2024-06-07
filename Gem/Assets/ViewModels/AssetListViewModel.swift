@@ -66,7 +66,7 @@ struct AssetListViewModel: AssetListViewable {
                 return .type(
                     TextValueView(
                         text: assetDataModel.asset.chain.asset.name,
-                        style: TextStyle(font: Font.system(.callout), color: .secondary)
+                        style: .calloutSecondary
                     )
                 )
             }

@@ -142,11 +142,7 @@ class AssetSceneViewModel: ObservableObject {
     var priceView: TextValueView {
         return TextValueView(
             text: assetDataModel.priceAmountText,
-            style: TextStyle(
-                font: .callout,
-                color: .secondary
-            )
-        )
+            style: .calloutSecondary)
     }
     
     var priceChangeView: TextValueView {

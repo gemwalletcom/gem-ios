@@ -63,7 +63,7 @@ struct StakeScene: View {
                             titleStyleExtra: TextStyle(font: .footnote, color: delegation.stateTextColor),
                             subtitle: delegation.balanceText,
                             subtitleExtra: delegation.completionDateText,
-                            subtitleStyleExtra: TextStyle(font: .footnote, color: .secondary)
+                            subtitleStyleExtra: .footnote
                         )
                     }
                 }
