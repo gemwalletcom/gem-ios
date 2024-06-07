@@ -31,7 +31,7 @@ extension AssetId {
     static let main = Self.ethereum
     static let ethereum = AssetId(id: "ethereum")!
     static let bitcoin = AssetId(id: "bitcoin")!
-    static let binance = AssetId(id: "binance")!
+    static let binance = AssetId(id: "smartchain")!
 }
 
 extension AssetData  {
