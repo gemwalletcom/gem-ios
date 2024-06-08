@@ -70,13 +70,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/GemstoneSwift",
-        "identifier" : "GemstoneSwiftTests",
-        "name" : "GemstoneSwiftTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Packages\/GemAPI",
         "identifier" : "GemAPITests",
         "name" : "GemAPITests"
@@ -94,6 +87,13 @@
         "containerPath" : "container:Packages\/WalletCorePrimitives",
         "identifier" : "WalletCorePrimitivesTests",
         "name" : "WalletCorePrimitivesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/GemstonePrimitives",
+        "identifier" : "GemstonePrimitivesTests",
+        "name" : "GemstonePrimitivesTests"
       }
     }
   ],
