@@ -191,4 +191,4 @@
 "transfer.minimum_amount" = "最小金額は%@です";
 "wallet_connect.no_active_connections" = "No active connections";
 "stake.minimum_amount" = "最小額";
-"common.no_results_found" = "No Results found";
+"common.no_results_found" = "結果が見つかりません";
