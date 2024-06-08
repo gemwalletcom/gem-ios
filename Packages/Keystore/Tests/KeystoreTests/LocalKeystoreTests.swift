@@ -2,6 +2,7 @@ import XCTest
 @testable import Keystore
 import Store
 import Primitives
+import KeystoreTestKit
 
 final class LocalKeystoreTests: XCTestCase {
 
@@ -124,42 +125,3 @@ final class LocalKeystoreTests: XCTestCase {
     }
 }
 
-class MockKeystorePassword: KeystorePassword {
-    
-    var memoryPassword: String = ""
-    
-    func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
-        self.memoryPassword = password
-    }
-    
-    func getPassword() throws -> String {
-        memoryPassword
-    }
-    
-    func getAuthentication() throws -> KeystoreAuthentication {
-        return .none
-    }
-    
-    func getAvailableAuthentication() throws -> KeystoreAuthentication {
-        return .none
-    }
-    
-    func remove() throws {
-        memoryPassword = ""
-    }
-}
-
-extension LocalKeystore {
-    static func make(
-        preferences: Preferences = Preferences(),
-        keystorePassword: KeystorePassword = MockKeystorePassword()
-    ) -> LocalKeystore {
-        let id = NSUUID().uuidString
-        return LocalKeystore(
-            folder: id,
-            walletStore: WalletStore(db: DB(path: "\(id).sqlite")),
-            preferences: preferences,
-            keystorePassword: keystorePassword
-        )
-    }
-}

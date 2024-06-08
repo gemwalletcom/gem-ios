@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "Keystore",
             targets: ["Keystore"]),
+        .library(
+            name: "KeystoreTestKit",
+            targets: ["KeystoreTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -19,8 +22,6 @@ let package = Package(
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
     ],
     targets: [
-        // Targets are the basic building blocks of a package. A target can define a module or a test suite.
-        // Targets can depend on other targets in this package, and on products in packages this package depends on.
         .target(
             name: "Keystore",
             dependencies: [
@@ -33,10 +34,18 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "KeystoreTestKit",
+            dependencies: [
+                "Keystore",
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "KeystoreTests",
             dependencies: [
                 "Keystore",
+                "KeystoreTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ]),
     ]
