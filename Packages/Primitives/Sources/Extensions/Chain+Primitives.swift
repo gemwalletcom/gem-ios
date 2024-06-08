@@ -1,20 +1,9 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import BigInt
-import Gemstone
 
 extension Chain {
-    public var asset: Asset {
-        //TODO: Force unwrap for now, until move Asset to Gemstone
-        let assetWrapper = Gemstone.assetWrapper(chain: id)
-        return Asset(
-            id: AssetId(id: assetWrapper.id)!,
-            name: assetWrapper.name,
-            symbol: assetWrapper.symbol,
-            decimals: assetWrapper.decimals,
-            type: AssetType(rawValue: assetWrapper.assetType)!
-        )
-    }
-    
     public var assetId: AssetId {
         return AssetId(chain: self, tokenId: .none)
     }
@@ -71,4 +60,10 @@ extension Chain {
 
 extension Chain: Identifiable {
     public var id: String { rawValue }
+}
+
+extension Chain {
+    public var stakeChain: StakeChain? {
+        StakeChain(rawValue: rawValue)
+    }
 }

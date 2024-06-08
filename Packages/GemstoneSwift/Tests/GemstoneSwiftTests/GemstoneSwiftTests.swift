@@ -1,6 +1,8 @@
-import Gemstone
-@testable import GemstoneSwift
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import XCTest
+@testable import GemstoneSwift
+import Gemstone
 
 final class GemstoneSwiftTests: XCTestCase {
 

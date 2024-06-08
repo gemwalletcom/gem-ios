@@ -53,7 +53,7 @@ public struct AssetRequest: Queryable {
 extension AssetData {
     static let empty: AssetData = {
         return AssetData(
-            asset: Asset(.bitcoin),
+            asset: Asset(id: .init(chain: .bitcoin, tokenId: .none), name: "", symbol: "", decimals: 0, type: .native),
             balance: Balance.zero,
             account: Account(chain: .bitcoin, address: "", derivationPath: "", extendedPublicKey: .none),
             price: .none,

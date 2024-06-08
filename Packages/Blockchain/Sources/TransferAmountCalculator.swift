@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import BigInt
+import GemstoneSwift
 
 public enum TranferAmountResult {
     case amount(TranferAmount)
