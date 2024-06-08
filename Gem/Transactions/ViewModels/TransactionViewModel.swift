@@ -5,7 +5,7 @@ import Primitives
 import Components
 import SwiftUI
 import Style
-import GemstoneSwift
+import GemstonePrimitives
 import BigInt
 
 struct TransactionViewModel {

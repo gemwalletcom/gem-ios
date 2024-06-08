@@ -3,7 +3,7 @@
 import Foundation
 import Settings
 import Keystore
-import GemstoneSwift
+import GemstonePrimitives
 
 struct WelcomeViewModel {
     

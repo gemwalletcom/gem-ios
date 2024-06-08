@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import Gemstone
-import GemstoneSwift
+import GemstonePrimitives
 
 public struct SuiService {
     

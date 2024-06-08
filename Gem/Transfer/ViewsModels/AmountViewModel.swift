@@ -7,7 +7,7 @@ import BigInt
 import Components
 import Store
 import SwiftUI
-import GemstoneSwift
+import GemstonePrimitives
 
 enum AmountType: Equatable, Hashable {
     case transfer

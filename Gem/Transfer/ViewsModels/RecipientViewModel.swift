@@ -2,7 +2,7 @@ import Foundation
 import Primitives
 import Keystore
 import Blockchain
-import GemstoneSwift
+import GemstonePrimitives
 
 enum RecipientAddressType {
     case wallets

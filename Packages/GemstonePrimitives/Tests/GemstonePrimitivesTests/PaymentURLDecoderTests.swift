@@ -2,7 +2,7 @@
 
 import XCTest
 import Gemstone
-@testable import GemstoneSwift
+@testable import GemstonePrimitives
 
 final class PaymentURLDecoderTests: XCTestCase {
 

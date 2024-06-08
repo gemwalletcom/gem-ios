@@ -6,7 +6,7 @@ import Components
 import Store
 import BigInt
 import WalletConnector
-import GemstoneSwift
+import GemstonePrimitives
 
 extension Asset {
     static let main = Asset.bitcoin

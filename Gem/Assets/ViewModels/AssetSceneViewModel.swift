@@ -1,6 +1,6 @@
 import Foundation
 import Primitives
-import GemstoneSwift
+import GemstonePrimitives
 import SwiftUI
 import Components
 import Store

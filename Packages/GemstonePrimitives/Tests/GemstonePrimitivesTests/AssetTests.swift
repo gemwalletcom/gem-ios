@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import XCTest
-@testable import GemstoneSwift
+@testable import GemstonePrimitives
 import Primitives
 
 final class AssetTests: XCTestCase {

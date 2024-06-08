@@ -4,7 +4,7 @@ import Foundation
 import Blockchain
 import BigInt
 import Primitives
-import GemstoneSwift
+import GemstonePrimitives
 
 struct TransactionInputViewModel {
     
