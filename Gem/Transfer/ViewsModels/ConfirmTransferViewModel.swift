@@ -7,6 +7,7 @@ import Components
 import Signer
 import GemstoneSwift
 import Style
+import GemstonePrimitives
 
 class ConfirmTransferViewModel: ObservableObject {
     

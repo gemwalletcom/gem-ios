@@ -2,6 +2,7 @@
 
 import Foundation
 import Gemstone
+import Primitives
 
 extension Config {
     public static let shared = Config()
@@ -22,5 +23,11 @@ public struct Social {
 public struct PublicConstants {
     public static func url(_ item: Gemstone.PublicUrl) -> URL {
         return URL(string: Config.shared.getPublicUrl(item: item))!
+    }
+}
+
+public struct StakeConfig {
+    public static func config(chain: StakeChain) -> Gemstone.StakeChainConfig {
+        Config.shared.getStakeConfig(chain: chain.rawValue)
     }
 }

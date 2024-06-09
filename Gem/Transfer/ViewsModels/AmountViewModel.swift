@@ -7,7 +7,7 @@ import BigInt
 import Components
 import Store
 import SwiftUI
-import Gemstone
+import GemstonePrimitives
 
 enum AmountType: Equatable, Hashable {
     case transfer
@@ -158,13 +158,14 @@ class AmounViewModel: ObservableObject {
     
     var minimumValue: BigInt {
         let stakeChain = amountRecipientData.data.asset.chain.stakeChain
+        
         switch amountRecipientData.type {
         case .stake:
-            return BigInt(Config().getMinStakeAmount(chain: amountRecipientData.data.asset.chain.rawValue))
+            return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
         case .redelegate:
             switch stakeChain {
             case .smartChain:
-                return BigInt(Config().getMinStakeAmount(chain: amountRecipientData.data.asset.chain.rawValue))
+                return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
             default:
                 break
             }

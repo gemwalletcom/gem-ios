@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Primitives
+import GemstonePrimitives
 
 struct ValidatorImageView: View {
     

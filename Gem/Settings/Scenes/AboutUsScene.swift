@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 import Settings
 import Components
-import GemstoneSwift
+import GemstonePrimitives
 
 struct AboutUsScene: View {
 

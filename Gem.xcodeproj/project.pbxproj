@@ -3,13 +3,12 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
 		481152C22B54F46800377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C12B54F46800377C75 /* Gemstone */; };
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
-		487A27EB2B633FED00BEEADB /* GemstoneSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 487A27EA2B633FED00BEEADB /* GemstoneSwift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
@@ -203,7 +202,6 @@
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */; };
 		D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */; };
-		D8B27CDD2B64402200E04154 /* GemstoneSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D8B27CDC2B64402200E04154 /* GemstoneSwift */; };
 		D8B977FE2AA95435009933B5 /* DeviceService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B977FD2AA95435009933B5 /* DeviceService.swift */; };
 		D8B978002AAA4B97009933B5 /* NotificationsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B977FF2AAA4B97009933B5 /* NotificationsScene.swift */; };
 		D8B978022AAA4C28009933B5 /* NotificationsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B978012AAA4C28009933B5 /* NotificationsViewModel.swift */; };
@@ -230,6 +228,7 @@
 		D8EFE3E52BA2318A00608363 /* TransactionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E42BA2318A00608363 /* TransactionHeaderView.swift */; };
 		D8EFE3E82BA2318E00608363 /* SwapAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
+		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -482,7 +481,7 @@
 		D8DC1B012C113C6000697D0A /* WalletDetailAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetailAddress.swift; sourceTree = "<group>"; };
 		D8EFE3E42BA2318A00608363 /* TransactionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHeaderView.swift; sourceTree = "<group>"; };
 		D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAmountView.swift; sourceTree = "<group>"; };
-		D8EFE3EA2BAB580300608363 /* GemstoneSwift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstoneSwift; sourceTree = "<group>"; };
+		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -495,12 +494,11 @@
 				C3A7CB8429CBA9E700431341 /* GRDBQuery in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
 				C37482022A86F401008A5F0E /* BigInt in Frameworks */,
-				487A27EB2B633FED00BEEADB /* GemstoneSwift in Frameworks */,
 				C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
-				D8B27CDD2B64402200E04154 /* GemstoneSwift in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
 				D8D203D02AE078BE00261CA2 /* WalletConnector in Frameworks */,
+				DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */,
 				C3CF3BA729B5317300E96586 /* Keystore in Frameworks */,
 				C366791D2A18623800F1D74D /* QRScanner in Frameworks */,
 				481152C22B54F46800377C75 /* Gemstone in Frameworks */,
@@ -790,7 +788,7 @@
 			isa = PBXGroup;
 			children = (
 				487A27E82B632CCE00BEEADB /* Gemstone */,
-				D8EFE3EA2BAB580300608363 /* GemstoneSwift */,
+				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,
 				D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */,
 				D8D203CE2AE0786800261CA2 /* WalletConnector */,
 				C370289B2A9C3B0E009AE123 /* Settings */,
@@ -1583,8 +1581,7 @@
 				D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */,
 				481152C12B54F46800377C75 /* Gemstone */,
 				481152C72B566AC200377C75 /* Gemstone */,
-				487A27EA2B633FED00BEEADB /* GemstoneSwift */,
-				D8B27CDC2B64402200E04154 /* GemstoneSwift */,
+				DF8421ED2C1526ED003F558C /* GemstonePrimitives */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1675,7 +1672,6 @@
 				C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */,
-				D8B27CDB2B64402200E04154 /* XCLocalSwiftPackageReference "Packages/GemstoneSwift" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -2326,13 +2322,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCLocalSwiftPackageReference section */
-		D8B27CDB2B64402200E04154 /* XCLocalSwiftPackageReference "Packages/GemstoneSwift" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/GemstoneSwift;
-		};
-/* End XCLocalSwiftPackageReference section */
-
 /* Begin XCRemoteSwiftPackageReference section */
 		C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -2368,10 +2357,6 @@
 		481152C72B566AC200377C75 /* Gemstone */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Gemstone;
-		};
-		487A27EA2B633FED00BEEADB /* GemstoneSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GemstoneSwift;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2442,10 +2427,6 @@
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletCorePrimitives;
 		};
-		D8B27CDC2B64402200E04154 /* GemstoneSwift */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = GemstoneSwift;
-		};
 		D8D203CF2AE078BE00261CA2 /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletConnector;
@@ -2453,6 +2434,10 @@
 		D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftHTTPClient;
+		};
+		DF8421ED2C1526ED003F558C /* GemstonePrimitives */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = GemstonePrimitives;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
