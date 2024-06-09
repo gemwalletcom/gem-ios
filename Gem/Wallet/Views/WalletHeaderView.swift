@@ -4,7 +4,7 @@ import SwiftUI
 import Store
 import Style
 import Components
-import GemstoneSwift
+import GemstonePrimitives
 
 protocol HeaderViewModel {
     var isWatchWallet: Bool { get }

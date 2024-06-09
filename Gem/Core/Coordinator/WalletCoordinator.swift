@@ -8,7 +8,7 @@ import Primitives
 import WalletConnector
 import Components
 import Style
-import GemstoneSwift
+import GemstonePrimitives
 
 struct WalletCoordinator: View {
     

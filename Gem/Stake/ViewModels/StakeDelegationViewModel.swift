@@ -6,7 +6,7 @@ import BigInt
 import Components
 import SwiftUI
 import Style
-import GemstoneSwift
+import GemstonePrimitives
 
 struct StakeDelegationViewModel {
     let delegation: Delegation

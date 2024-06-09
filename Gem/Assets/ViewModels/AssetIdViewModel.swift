@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Components
 import SwiftUI
-import GemstoneSwift
+import GemstonePrimitives
 
 struct AssetIdViewModel {
     let assetId: AssetId

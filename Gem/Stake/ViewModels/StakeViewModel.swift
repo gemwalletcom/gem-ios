@@ -6,7 +6,7 @@ import Blockchain
 import Store
 import Components
 import BigInt
-import GemstoneSwift
+import GemstonePrimitives
 
 struct StakeViewModel {
     let wallet: Wallet

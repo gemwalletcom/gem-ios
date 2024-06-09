@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 import Store
 import Keystore
-import GemstoneSwift
+import GemstonePrimitives
 
 struct CommunityLink {
     let name: String
