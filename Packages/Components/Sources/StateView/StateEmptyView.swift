@@ -48,7 +48,7 @@ public struct StateEmptyView: View {
                      .textStyle(title.style)
                      .multilineTextAlignment(.center)
 
-                 if let description = description {
+                 if let description {
                      Text(description.text)
                          .textStyle(description.style)
                          .multilineTextAlignment(.center)
