@@ -76,7 +76,7 @@ extension NetworkSelectorNavigationStack {
 // MARK: - Previews
 
 #Preview {
-    var mockChains = AssetConfiguration.supportedChainsWithTokens
+    var mockChains = Chain.allCases
     @State var selectedChain: Chain = .smartChain
     @State var isPresenting: Bool = false
 
