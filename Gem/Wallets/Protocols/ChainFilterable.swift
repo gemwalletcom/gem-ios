@@ -9,10 +9,6 @@ protocol ChainFilterable {
 }
 
 extension ChainFilterable {
-    var chains: [Chain] {
-        AssetConfiguration.allChains
-    }
-
     func filter(_ chain: Chain, query: String) -> Bool {
         chain.asset.name.localizedCaseInsensitiveContains(query) ||
         chain.asset.symbol.localizedCaseInsensitiveContains(query) ||

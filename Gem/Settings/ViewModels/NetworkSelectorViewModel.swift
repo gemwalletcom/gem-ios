@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-struct NetworkSelectorViewModel: ChainFilterable {
+struct NetworkSelectorViewModel {
     var title: String {
         Localized.Settings.Networks.title
     }
@@ -16,3 +16,7 @@ struct NetworkSelectorViewModel: ChainFilterable {
         self.selectedChain = selectedChain
     }
 }
+
+// MARK: - ChainFilterable
+
+extension NetworkSelectorViewModel: ChainFilterable { }
