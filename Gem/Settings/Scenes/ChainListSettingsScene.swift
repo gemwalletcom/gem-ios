@@ -9,7 +9,7 @@ import Style
 struct ChainListSettingsScene: View {
     @Environment(\.nodeService) private var nodeService
 
-    var model = ChainListSettingsViewModel()
+    let model = ChainListSettingsViewModel()
 
     var body: some View {
         SearchableListView(

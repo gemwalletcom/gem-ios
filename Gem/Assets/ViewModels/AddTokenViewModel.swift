@@ -25,15 +25,15 @@ class AddTokenViewModel: ObservableObject {
         self.address = address
         self.chain = chain
     }
-    
+
     var title: String {
         Localized.Wallet.AddToken.title
     }
-    
+
     var defaultChain: Chain? {
         chains.first
     }
-    
+
     var chains: [Chain] {
         AssetConfiguration.supportedChainsWithTokens
             .asSet()
@@ -45,7 +45,7 @@ class AddTokenViewModel: ObservableObject {
     }
 }
 
-// MARK: - 
+// MARK: - State Logic
 
 extension AddTokenViewModel {
     func fetch(tokenId: String) async throws {
