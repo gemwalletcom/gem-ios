@@ -8,7 +8,7 @@ install-rust:
 
 install-typeshare:
 	@echo Install typeshare-cli
-	@cargo install typeshare-cli --version 1.7.0
+	@cargo install typeshare-cli --version 1.9.2
 
 install-toolchains:
 	@echo Install toolchains for uniffi
