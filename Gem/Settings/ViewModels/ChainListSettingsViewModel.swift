@@ -5,23 +5,15 @@ import Primitives
 import Settings
 
 struct ChainListSettingsViewModel {
-    
+    var chains: [Chain] = AssetConfiguration.allChains
+
     var title: String {
         return Localized.Settings.Networks.title
     }
 
-    var chains: [Chain] {
-        return AssetConfiguration.allChains
-    }
-
-    func items(for searchText: String) -> [Chain] {
-        guard !searchText.isEmpty else {
-            return chains
-        }
-        return chains.filter {
-            $0.asset.name.localizedCaseInsensitiveContains(searchText) ||
-            $0.asset.symbol.localizedCaseInsensitiveContains(searchText) ||
-            $0.rawValue.localizedCaseInsensitiveContains(searchText)
-        }
+    func filter(_ chain: Chain, query: String) -> Bool {
+        chain.asset.name.localizedCaseInsensitiveContains(query) ||
+        chain.asset.symbol.localizedCaseInsensitiveContains(query) ||
+        chain.rawValue.localizedCaseInsensitiveContains(query)
     }
 }

@@ -2,15 +2,27 @@
 
 import SwiftUI
 
-struct SearchableListView<Item: Identifiable, Content: View, EmptyContent: View>: View {
+public struct SearchableListView<Item: Identifiable, Content: View, EmptyContent: View>: View {
     let items: [Item]
     let filter: (Item, String) -> Bool
     let content: (Item) -> Content
-    let emptyContent: EmptyContent
+    let emptyContent: () -> EmptyContent
 
     @State private var searchQuery = ""
 
-    var body: some View {
+    public init(
+        items: [Item],
+        filter: @escaping (Item, String) -> Bool,
+        @ViewBuilder content: @escaping (Item) -> Content,
+        @ViewBuilder emptyContent: @escaping () -> EmptyContent
+    ) {
+        self.items = items
+        self.filter = filter
+        self.content = content
+        self.emptyContent = emptyContent
+    }
+
+    public var body: some View {
         VStack {
             List {
                 ForEach(filteredItems) { item in
@@ -19,7 +31,7 @@ struct SearchableListView<Item: Identifiable, Content: View, EmptyContent: View>
             }
             .overlay {
                 if filteredItems.isEmpty {
-                    emptyContent
+                    emptyContent()
                 }
             }
             .searchable(
