@@ -26,9 +26,7 @@ struct AddTokenScene: View {
             List {
                 if let chain = model.chain {
                     Section(Localized.Transfer.network) {
-                        NavigationCustomLink(with: ChainView(chain: chain)) {
-                            isPresentingSelectNetwork = true
-                        }
+                        NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
                     }
                 }
                 Section {
@@ -40,9 +38,7 @@ struct AddTokenScene: View {
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
                                 .submitLabel(.search)
-                                .onSubmit {
-                                    onSubmitAddress()
-                                }
+                                .onSubmit(onSubmitAddress)
                             Spacer()
                             HStack(spacing: Spacing.medium) {
                                 ListButton(image: Image(systemName: SystemImage.paste), action: onSelectPaste)
@@ -88,22 +84,18 @@ struct AddTokenScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
-                onScanFinished($0)
-            }
+            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner, action: onScanFinished(_:))
         }
         .sheet(isPresented: $isPresentingSelectNetwork) {
             if let chain = model.chain {
                 NetworkSelectorNavigationStack(
                     model: NetworkSelectorViewModel(chains: model.chains, selectedChain: chain),
-                    isPresenting: $isPresentingSelectNetwork) { chain in
-                        onSelectNewChain(chain)
-                    }
+                    isPresenting: $isPresentingSelectNetwork,
+                    onSelectChain: onSelectNewChain(_:)
+                )
             }
         }
-        .taskOnce {
-            onTaskOnce()
-        }
+        .taskOnce(onTaskOnce)
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
@@ -124,6 +116,10 @@ extension AddTokenScene {
         default:
             break
         }
+    }
+
+    private func onSelectChain() {
+        isPresentingSelectNetwork = true
     }
 
     private func onSelectScan() {
@@ -157,7 +153,7 @@ extension AddTokenScene {
     }
 }
 
-// MARK: -
+// MARK: - Data Fetching
 
 extension AddTokenScene {
     private func addToken(tokenId: String) async throws {
@@ -165,7 +161,7 @@ extension AddTokenScene {
     }
 }
 
-// MARK: -
+// MARK: - LocalizedError
 
 extension TokenValidationError: LocalizedError {
     public var errorDescription: String? {
