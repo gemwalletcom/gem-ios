@@ -8,14 +8,13 @@ import Blockchain
 import Style
 
 struct AddTokenScene: View {
-    
     @StateObject var model: AddTokenViewModel
-    @State var chain: Chain = .ethereum
-    @State private var address: String = ""
+
     @State private var isPresentingScanner = false
     @State private var isPresentingSelectNetwork = false
     @State private var isPresentingErrorMessage: String?
     @FocusState private var focusedField: Field?
+
     var action: ((Asset) -> Void)?
     
     enum Field: Int, Hashable {
@@ -25,27 +24,29 @@ struct AddTokenScene: View {
     var body: some View {
         VStack {
             List {
-                Section(Localized.Transfer.network) {
-                    NavigationCustomLink(with: ChainView(chain: chain)) {
-                        isPresentingSelectNetwork = true
+                if let chain = model.chain {
+                    Section(Localized.Transfer.network) {
+                        NavigationCustomLink(with: ChainView(chain: chain)) {
+                            isPresentingSelectNetwork = true
+                        }
                     }
                 }
                 Section {
                     VStack {
                         HStack {
-                            FloatTextField(Localized.Wallet.Import.contractAddressField, text: $address)
+                            FloatTextField(Localized.Wallet.Import.contractAddressField, text: $model.address)
                                 .textFieldStyle(.plain)
                                 .focused($focusedField, equals: .address)
                                 .textInputAutocapitalization(.never)
                                 .autocorrectionDisabled()
                                 .submitLabel(.search)
                                 .onSubmit {
-                                    Task { try await addToken(tokenId: address) }
+                                    onSubmitAddress()
                                 }
                             Spacer()
                             HStack(spacing: Spacing.medium) {
-                                ListButton(image: Image(systemName: SystemImage.paste), action: paste)
-                                ListButton(image: Image(systemName: SystemImage.qrCode), action: scan)
+                                ListButton(image: Image(systemName: SystemImage.paste), action: onSelectPaste)
+                                ListButton(image: Image(systemName: SystemImage.qrCode), action: onSelectScan)
                             }
                         }
                     }
@@ -78,7 +79,7 @@ struct AddTokenScene: View {
                 }
             }
             Spacer()
-            Button(Localized.Wallet.Import.action, action: importToken)
+            Button(Localized.Wallet.Import.action, action: onSelectImportToken)
                 .disabled(model.state.isLoading)
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
                 .buttonStyle(BlueButton())
@@ -88,42 +89,35 @@ struct AddTokenScene: View {
         .navigationTitle(model.title)
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
-                scanResult($0)
+                onScanFinished($0)
             }
         }
         .sheet(isPresented: $isPresentingSelectNetwork) {
-            NetworkSelectorNavigationStack(chains: model.chains, selectedChain: $chain, isPresenting: $isPresentingSelectNetwork) { _ in
-                
+            if let chain = model.chain {
+                NetworkSelectorNavigationStack(
+                    model: NetworkSelectorViewModel(chains: model.chains, selectedChain: chain),
+                    isPresenting: $isPresentingSelectNetwork) { chain in
+                        onSelectNewChain(chain)
+                    }
             }
         }
         .taskOnce {
-            //This is a hack, in the future observer from model.chain
-            self.chain = model.defaultChain
+            onTaskOnce()
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
     }
-    
-    func paste() {
-        guard let content = UIPasteboard.general.string else {
-            return
-        }
-        address = content
-        Task {
-            try await addToken(tokenId: content)
-        }
+}
+
+// MARK: - Actions
+
+extension AddTokenScene {
+    private func onTaskOnce() {
+        model.chain = model.defaultChain
     }
-    
-    func scan() {
-        isPresentingScanner = true
-    }
-    
-    func addToken(tokenId: String) async throws {
-        try await model.fetch(chain: chain, tokenId: tokenId)
-    }
-    
-    func importToken() {
+
+    private func onSelectImportToken() {
         switch model.state {
         case .loaded(let asset):
             action?(asset.asset)
@@ -131,13 +125,47 @@ struct AddTokenScene: View {
             break
         }
     }
-    
-    func scanResult(_ result: String) {
+
+    private func onSelectScan() {
+        isPresentingScanner = true
+    }
+
+    private func onSubmitAddress() {
+        Task {
+            try await addToken(tokenId: model.address)
+        }
+    }
+
+    private func onSelectPaste() {
+        guard let content = UIPasteboard.general.string else {
+            return
+        }
+        model.address = content
+        Task {
+            try await addToken(tokenId: content)
+        }
+    }
+
+    private func onScanFinished(_ result: String) {
         Task {
             try await addToken(tokenId: result)
         }
     }
+
+    private func onSelectNewChain(_ chain: Chain) {
+        model.chain = chain
+    }
 }
+
+// MARK: -
+
+extension AddTokenScene {
+    private func addToken(tokenId: String) async throws {
+        try await model.fetch(tokenId: tokenId)
+    }
+}
+
+// MARK: -
 
 extension TokenValidationError: LocalizedError {
     public var errorDescription: String? {

@@ -7,40 +7,29 @@ import Components
 import Style
 
 struct NetworkSelectorNavigationStack: View {
-    let chains: [Chain]
-    @Binding var selectedChain: Chain
+    let model: NetworkSelectorViewModel
+
     @Binding var isPresenting: Bool
 
-    @State private var searchQuery = ""
-
-    var action: ((String) -> Void)?
-
-    var filteredChains: [Chain] {
-        guard !searchQuery.isEmpty else {
-            return chains
-        }
-        return chains.filter {
-            $0.asset.name.localizedCaseInsensitiveContains(searchQuery) ||
-            $0.asset.symbol.localizedCaseInsensitiveContains(searchQuery) ||
-            $0.rawValue.localizedCaseInsensitiveContains(searchQuery)
-        }
-    }
+    var onSelectChain: (Chain) -> Void
 
     var body: some View {
         NavigationStack {
-            List {
-                ForEach(filteredChains) { chain in
+            SearchableListView(
+                items: model.chains,
+                filter: model.filter(_:query:),
+                content: { chain in
                     NavigationCustomLink(with: ChainView(chain: chain)) {
                         onSelect(chain: chain)
                     }
+                },
+                emptyContent: {
+                    StateEmptyView(
+                        title: Localized.Common.noResultsFound,
+                        image: Image(systemName: SystemImage.searchNoResults)
+                    )
                 }
-            }
-            .overlay {
-                if filteredChains.isEmpty {
-                    StateEmptyView(title: Localized.Common.noResultsFound,
-                                   image: Image(systemName: SystemImage.searchNoResults))
-                }
-            }
+            )
             .navigationTitle(Localized.Settings.Networks.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -50,12 +39,6 @@ struct NetworkSelectorNavigationStack: View {
                     }
                 }
             }
-            .searchable(
-                text: $searchQuery,
-                placement: .navigationBarDrawer(displayMode: .always)
-            )
-            .autocorrectionDisabled(true)
-            .scrollDismissesKeyboard(.interactively)
         }
     }
 }
@@ -64,7 +47,7 @@ struct NetworkSelectorNavigationStack: View {
 
 extension NetworkSelectorNavigationStack {
     private func onSelect(chain: Chain) {
-        selectedChain = chain
+        onSelectChain(chain)
         $isPresenting.wrappedValue = false
     }
 
@@ -80,5 +63,7 @@ extension NetworkSelectorNavigationStack {
     @State var selectedChain: Chain = .smartChain
     @State var isPresenting: Bool = false
 
-    return NetworkSelectorNavigationStack(chains: mockChains, selectedChain: $selectedChain, isPresenting: $isPresenting)
+    return NetworkSelectorNavigationStack(model: .init(chains: mockChains, selectedChain: .ethereum), isPresenting: $isPresenting) { _ in
+        
+    }
 }

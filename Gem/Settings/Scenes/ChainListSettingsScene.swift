@@ -14,9 +14,7 @@ struct ChainListSettingsScene: View {
     var body: some View {
         SearchableListView(
             items: model.chains,
-            filter: { chain, query in
-                model.filter(chain, query: query)
-            },
+            filter: model.filter(_:query:),
             content: { chain in
                 NavigationLink(value: chain) {
                     ChainView(chain: chain)

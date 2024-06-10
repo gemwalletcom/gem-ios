@@ -4,8 +4,8 @@ import Settings
 import Keystore
 import SwiftUI
 
-struct ImportWalletTypeViewModel {
-    
+struct ImportWalletTypeViewModel: ChainFilterable {
+
     let keystore: any Keystore
     
     init(keystore: any Keystore) {
@@ -16,19 +16,8 @@ struct ImportWalletTypeViewModel {
         return Localized.Wallet.Import.title
     }
 
-    var chains: [Chain] {
-        return AssetConfiguration.allChains
-    }
-    
     func items(for searchText: String) -> [Chain] {
-        guard !searchText.isEmpty else {
-            return chains
-        }
-        return chains.filter {
-            $0.asset.name.localizedCaseInsensitiveContains(searchText) ||
-            $0.asset.symbol.localizedCaseInsensitiveContains(searchText) ||
-            $0.rawValue.localizedCaseInsensitiveContains(searchText)
-        }
+        filterChains(for: searchText)
     }
 }
 

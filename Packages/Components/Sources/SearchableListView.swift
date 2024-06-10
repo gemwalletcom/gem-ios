@@ -23,24 +23,22 @@ public struct SearchableListView<Item: Identifiable, Content: View, EmptyContent
     }
 
     public var body: some View {
-        VStack {
-            List {
-                ForEach(filteredItems) { item in
-                    content(item)
-                }
+        List {
+            ForEach(filteredItems) { item in
+                content(item)
             }
-            .overlay {
-                if filteredItems.isEmpty {
-                    emptyContent()
-                }
-            }
-            .searchable(
-                text: $searchQuery,
-                placement: .navigationBarDrawer(displayMode: .always)
-            )
-            .autocorrectionDisabled(true)
-            .scrollDismissesKeyboard(.interactively)
         }
+        .overlay {
+            if filteredItems.isEmpty {
+                emptyContent()
+            }
+        }
+        .searchable(
+            text: $searchQuery,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
+        .autocorrectionDisabled(true)
+        .scrollDismissesKeyboard(.interactively)
     }
 }
 
@@ -51,4 +49,26 @@ extension SearchableListView {
         guard !searchQuery.isEmpty else { return items }
         return items.filter { filter($0, searchQuery) }
     }
+}
+
+// MARK: - Previews
+
+#Preview {
+    enum Fruit: String, Identifiable, CaseIterable {
+        var id: Self { self }
+        
+        case grape
+        case honeydew
+        case kiwi
+        case lemon
+        case mango
+    }
+    return SearchableListView(
+        items: Fruit.allCases) { fruit, query in
+            fruit.rawValue.localizedCaseInsensitiveContains(query)
+        } content: { name in
+            Text(name.rawValue.uppercased())
+        } emptyContent: {
+            Text("No fruis found")
+        }
 }
