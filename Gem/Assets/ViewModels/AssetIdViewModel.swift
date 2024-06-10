@@ -18,7 +18,7 @@ struct AssetIdViewModel {
         self.assetFormatter = assetFormatter
     }
     
-    private var imageURL: URL {
+    private var imageURL: URL? {
         assetFormatter.getURL(for: assetId)
     }
     

@@ -8,8 +8,8 @@ public struct AssetImageFormatter {
     
     public init() {}
     
-    public func getURL(for assetId: AssetId) -> URL {
-        URL(string: Config.shared.imageFormatterAssetUrl(id: assetId.identifier))!
+    public func getURL(for assetId: AssetId) -> URL? {
+        URL(string: Config.shared.imageFormatterAssetUrl(id: assetId.identifier))
     }
     
     public func getValidatorUrl(chain: Chain, id: String) -> URL {
