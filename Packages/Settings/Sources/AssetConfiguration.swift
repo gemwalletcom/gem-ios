@@ -54,9 +54,9 @@ public struct AssetConfiguration {
     
     
     public static var enabledByDefault: [AssetId] =  [
-        Asset(.bitcoin).id,
-        Asset(.ethereum).id,
-        Asset(.solana).id,
-        Asset(.smartChain).id,
+        AssetId(chain: .bitcoin, tokenId: .none),
+        AssetId(chain: .ethereum, tokenId: .none),
+        AssetId(chain: .solana, tokenId: .none),
+        AssetId(chain: .smartChain, tokenId: .none),
     ]
 }

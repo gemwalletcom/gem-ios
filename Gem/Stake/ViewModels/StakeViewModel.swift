@@ -6,7 +6,7 @@ import Blockchain
 import Store
 import Components
 import BigInt
-import Gemstone
+import GemstonePrimitives
 
 struct StakeViewModel {
     let wallet: Wallet
@@ -42,7 +42,7 @@ struct StakeViewModel {
     }
     
     private var lockTime: TimeInterval {
-        Double(Config().getStakeLocktime(chain: chain.rawValue))
+        Double(StakeConfig.config(chain: chain.stakeChain!).timeLock)
     }
     
     var lockTimeText: String {
@@ -52,7 +52,7 @@ struct StakeViewModel {
     }
 
     private var minAmount: BigInt {
-        BigInt(Config().getMinStakeAmount(chain: chain.rawValue))
+        BigInt(StakeConfig.config(chain: chain.stakeChain!).minAmount)
     }
 
     var minAmountText: String? {

@@ -16,13 +16,11 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/gemwalletcom/BigInt.git", exact: Version(5, 3, 0)),
-        .package(name: "Gemstone", path: "../Gemstone"),
     ],
     targets: [
         .target(
             name: "Primitives",
             dependencies: [
-                "Gemstone",
                 .product(name: "BigInt", package: "BigInt"),
             ],
             path: "Sources"

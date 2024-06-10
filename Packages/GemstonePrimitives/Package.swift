@@ -2,12 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "GemstoneSwift",
+    name: "GemstonePrimitives",
     platforms: [.iOS(.v17), .macOS(.v12)],
     products: [
         .library(
-            name: "GemstoneSwift",
-            targets: ["GemstoneSwift"]
+            name: "GemstonePrimitives",
+            targets: ["GemstonePrimitives"]
         ),
     ],
     dependencies: [
@@ -17,7 +17,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "GemstoneSwift",
+            name: "GemstonePrimitives",
             dependencies: [
                 "Gemstone",
                 "Primitives",
@@ -25,8 +25,8 @@ let package = Package(
             ]
         ),
         .testTarget(
-            name: "GemstoneSwiftTests",
-            dependencies: ["GemstoneSwift"]
+            name: "GemstonePrimitivesTests",
+            dependencies: ["GemstonePrimitives"]
         ),
     ]
 )

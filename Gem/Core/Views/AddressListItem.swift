@@ -2,7 +2,7 @@
 
 import SwiftUI
 import Primitives
-import GemstoneSwift
+import GemstonePrimitives
 import Components
 import Style
 

@@ -5,7 +5,7 @@ import SwiftUI
 import Primitives
 import Settings
 import Components
-import GemstoneSwift
+import GemstonePrimitives
 
 struct ChainSettingsScene: View {
     

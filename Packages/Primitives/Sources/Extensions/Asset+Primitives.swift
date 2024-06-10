@@ -13,16 +13,6 @@ extension Asset: Hashable {
 extension Asset: Identifiable {}
 
 extension Asset {
-    public init(_ chain: Chain) {
-        let asset = chain.asset
-        self.init(
-            id: AssetId(chain: chain, tokenId: .none),
-            name: asset.name,
-            symbol: asset.symbol,
-            decimals: asset.decimals,
-            type: asset.type
-        )
-    }
     
     public var chain: Chain {
         return id.chain
@@ -32,12 +22,12 @@ extension Asset {
         return id.tokenId
     }
     
-    public var feeAsset: Asset {
+    public var feeAssetId: AssetId {
         switch id.type {
         case .native:
-            return self
+            return self.id
         case .token:
-            return id.chain.asset
+            return id.chain.assetId
         }
     }
     
