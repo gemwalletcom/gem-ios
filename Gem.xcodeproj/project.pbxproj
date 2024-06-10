@@ -16,8 +16,8 @@
 		C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952C5299C39D80004C0F9 /* walletTests.swift */; };
 		C313D2EC2A8356C2004520BB /* ChainNodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313D2EB2A8356C2004520BB /* ChainNodeViewModel.swift */; };
 		C3340B722A4A292100884D48 /* ChainServiceFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B712A4A292100884D48 /* ChainServiceFactory.swift */; };
-		C3340B742A4A920100884D48 /* ChainListSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B732A4A920100884D48 /* ChainListSettings.swift */; };
-		C3340B762A4A92B000884D48 /* ChainSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B752A4A92B000884D48 /* ChainSettings.swift */; };
+		C3340B742A4A920100884D48 /* ChainListSettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B732A4A920100884D48 /* ChainListSettingsScene.swift */; };
+		C3340B762A4A92B000884D48 /* ChainSettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B752A4A92B000884D48 /* ChainSettingsScene.swift */; };
 		C3340B782A4A985000884D48 /* ChainSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B772A4A985000884D48 /* ChainSettingsViewModel.swift */; };
 		C3340B7A2A4A989E00884D48 /* ChainListSettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B792A4A989E00884D48 /* ChainListSettingsViewModel.swift */; };
 		C34C7CF329FC920D009EEC21 /* DeveloperScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C34C7CF229FC920D009EEC21 /* DeveloperScene.swift */; };
@@ -260,8 +260,8 @@
 		C30952C5299C39D80004C0F9 /* walletTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = walletTests.swift; sourceTree = "<group>"; };
 		C313D2EB2A8356C2004520BB /* ChainNodeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainNodeViewModel.swift; sourceTree = "<group>"; };
 		C3340B712A4A292100884D48 /* ChainServiceFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainServiceFactory.swift; sourceTree = "<group>"; };
-		C3340B732A4A920100884D48 /* ChainListSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainListSettings.swift; sourceTree = "<group>"; };
-		C3340B752A4A92B000884D48 /* ChainSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainSettings.swift; sourceTree = "<group>"; };
+		C3340B732A4A920100884D48 /* ChainListSettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainListSettingsScene.swift; sourceTree = "<group>"; };
+		C3340B752A4A92B000884D48 /* ChainSettingsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainSettingsScene.swift; sourceTree = "<group>"; };
 		C3340B772A4A985000884D48 /* ChainSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainSettingsViewModel.swift; sourceTree = "<group>"; };
 		C3340B792A4A989E00884D48 /* ChainListSettingsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainListSettingsViewModel.swift; sourceTree = "<group>"; };
 		C34C7CF229FC920D009EEC21 /* DeveloperScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperScene.swift; sourceTree = "<group>"; };
@@ -845,8 +845,8 @@
 				C3CF3B8029AAF87400E96586 /* SettingsScene.swift */,
 				C34C7CF229FC920D009EEC21 /* DeveloperScene.swift */,
 				C3D1C4DC2A295AEB006E8EEA /* AboutUsScene.swift */,
-				C3340B732A4A920100884D48 /* ChainListSettings.swift */,
-				C3340B752A4A92B000884D48 /* ChainSettings.swift */,
+				C3340B732A4A920100884D48 /* ChainListSettingsScene.swift */,
+				C3340B752A4A92B000884D48 /* ChainSettingsScene.swift */,
 				C3E99BCA2A76C8E8005DF35F /* CurrencyScene.swift */,
 				C3E99BD22A7A1D2E005DF35F /* SecurityScene.swift */,
 				D8B977FF2AAA4B97009933B5 /* NotificationsScene.swift */,
@@ -1811,7 +1811,7 @@
 				C3D1C4E52A2D4EEF006E8EEA /* ShowSecretPhraseViewModel.swift in Sources */,
 				C3FB44892A7AD98B0056F124 /* NameService.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
-				C3340B742A4A920100884D48 /* ChainListSettings.swift in Sources */,
+				C3340B742A4A920100884D48 /* ChainListSettingsScene.swift in Sources */,
 				D8148C192BE2C65E0066586A /* VerifyPhraseWalletScene.swift in Sources */,
 				D848B59C2AE5CDF700814FB4 /* ConnectionView.swift in Sources */,
 				C3FA949429D7EEF000BFC23D /* WalletType.swift in Sources */,
@@ -1871,7 +1871,7 @@
 				D848B59A2AE5CDD700814FB4 /* WalletConnectionViewModel.swift in Sources */,
 				C3340B782A4A985000884D48 /* ChainSettingsViewModel.swift in Sources */,
 				C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */,
-				C3340B762A4A92B000884D48 /* ChainSettings.swift in Sources */,
+				C3340B762A4A92B000884D48 /* ChainSettingsScene.swift in Sources */,
 				C3D1C5072A43AB11006E8EEA /* TransactionsViewModel.swift in Sources */,
 				C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */,
 				D848B5932AE3024200814FB4 /* ConnectionsService.swift in Sources */,
