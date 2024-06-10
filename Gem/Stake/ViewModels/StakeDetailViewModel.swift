@@ -40,7 +40,7 @@ struct StakeDetailViewModel {
         if stakeApr > 0 {
             return TextStyle(font: .callout, color: Colors.green)
         }
-        return TextStyle(font: .callout, color: .secondary)
+        return .callout
     }
     
     var validatorText: String {

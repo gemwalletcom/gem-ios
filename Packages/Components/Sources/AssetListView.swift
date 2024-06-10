@@ -2,14 +2,14 @@ import SwiftUI
 import Style
 
 public enum AssetListRightView {
-    case balance(balance: TextValueView, totalFiat: TextValueView)
+    case balance(balance: TextValue, totalFiat: TextValue)
     case toggle(Bool)
     case copy
 }
 
 public enum AssetListSubtitleView {
-    case price(price: TextValueView, priceChangePercentage24h: TextValueView)
-    case type(TextValueView)
+    case price(price: TextValue, priceChangePercentage24h: TextValue)
+    case type(TextValue)
     case none
 }
 
@@ -201,8 +201,8 @@ struct AssetListView_Previews: PreviewProvider {
                     ),
                     subtitleView: .none,
                     rightView: .balance(
-                        balance: TextValueView(text: "test", style: TextStyle(font: .title, color: .accentColor)), 
-                        totalFiat: TextValueView(text: "test2", style: TextStyle(font: .title, color: .accentColor))
+                        balance: TextValue(text: "test", style: TextStyle(font: .title, color: .accentColor)), 
+                        totalFiat: TextValue(text: "test2", style: TextStyle(font: .title, color: .accentColor))
                     )
                 )
             )

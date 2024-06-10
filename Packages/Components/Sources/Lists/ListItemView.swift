@@ -10,51 +10,71 @@ public enum TitleTagType {
 }
 
 public struct ListItemView: View {
+    public let title: TextValue?
+    public let titleExtra: TextValue?
 
-    public let title: String?
-    public let titleStyle: TextStyle
-    public let titleExtra: String?
-    public let titleStyleExtra: TextStyle
-    public let titleTag: String?
-    public let titleTagStyle: TextStyle
+    public let titleTag: TextValue?
     public let titleTagType: TitleTagType
 
-    public let subtitle: String?
-    public let subtitleStyle: TextStyle
-    public let subtitleExtra: String?
-    public let subtitleStyleExtra: TextStyle
+    public let subtitle: TextValue?
+    public let subtitleExtra: TextValue?
 
     public let image: Image?
     public let imageSize: CGFloat
     public let cornerRadius: CGFloat
 
     public init(
-        title: String?,
-        titleStyle: TextStyle = TextStyle(font: Font.system(.body), color: .primary),
-        titleTag: String? = .none,
-        titleTagStyle: TextStyle = TextStyle(font: Font.system(.body), color: .primary),
+        title: String? = nil,
+        titleStyle: TextStyle = TextStyle.body,
+        titleTag: String? = nil,
+        titleTagStyle: TextStyle = TextStyle.body,
         titleTagType: TitleTagType = .none,
-        titleExtra: String? = .none,
-        titleStyleExtra: TextStyle = TextStyle(font: Font.system(.footnote), color: .secondary),
-        subtitle: String? = .none,
-        subtitleStyle: TextStyle = TextStyle(font: Font.system(.callout), color: .secondary),
-        subtitleExtra: String? = .none,
-        subtitleStyleExtra: TextStyle = TextStyle(font: Font.system(.callout), color: .secondary),
-        image: Image? = .none,
+        titleExtra: String? = nil,
+        titleStyleExtra: TextStyle = TextStyle.footnote,
+        subtitle: String? = nil,
+        subtitleStyle: TextStyle = TextStyle.calloutSecondary,
+        subtitleExtra: String? = nil,
+        subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
+        image: Image? = nil,
+        imageSize: CGFloat = 28.0,
+        cornerRadius: CGFloat = 0
+    ) {
+        let titleValue = title.map { TextValue(text: $0, style: titleStyle) }
+        let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra) }
+        let titleTagValue = titleTag.map { TextValue(text: $0, style: titleTagStyle) }
+        let subtitleValue = subtitle.map { TextValue(text: $0, style: subtitleStyle) }
+        let subtitleExtraValue = subtitleExtra.map { TextValue(text: $0, style: subtitleStyleExtra) }
+
+        self.init(
+            title: titleValue,
+            titleExtra: titleExtraValue,
+            titleTag: titleTagValue,
+            titleTagType: titleTagType,
+            subtitle: subtitleValue,
+            subtitleExtra: subtitleExtraValue,
+            image: image,
+            imageSize: imageSize,
+            cornerRadius: cornerRadius
+        )
+    }
+
+    public init(
+        title: TextValue?,
+        titleExtra: TextValue?,
+        titleTag: TextValue?,
+        titleTagType: TitleTagType,
+        subtitle: TextValue?,
+        subtitleExtra: TextValue?,
+        image: Image? = nil,
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0
     ) {
         self.title = title
-        self.titleStyle = titleStyle
-        self.titleTag = titleTag
-        self.titleTagStyle = titleTagStyle
-        self.titleTagType = titleTagType
         self.titleExtra = titleExtra
-        self.titleStyleExtra = titleStyleExtra
+        self.titleTag = titleTag
+        self.titleTagType = titleTagType
         self.subtitle = subtitle
-        self.subtitleStyle = subtitleStyle
         self.subtitleExtra = subtitleExtra
-        self.subtitleStyleExtra = subtitleStyleExtra
         self.image = image
         self.imageSize = imageSize
         self.cornerRadius = cornerRadius
@@ -66,11 +86,11 @@ public struct ListItemView: View {
                 ImageView(image: image, imageSize: imageSize, cornerRadius: cornerRadius)
             }
             if let title = title {
-                TitleView(title: title, titleStyle: titleStyle, titleTag: titleTag, titleTagStyle: titleTagStyle, titleTagType: titleTagType, titleExtra: titleExtra, titleStyleExtra: titleStyleExtra)
+                TitleView(title: title, titleExtra: titleExtra, titleTag: titleTag, titleTagType: titleTagType)
             }
             if let subtitle = subtitle {
                 Spacer(minLength: Spacing.extraSmall)
-                SubtitleView(subtitle: subtitle, subtitleStyle: subtitleStyle, subtitleExtra: subtitleExtra, subtitleStyleExtra: subtitleStyleExtra)
+                SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
             }
         }
     }
@@ -103,33 +123,28 @@ extension ListItemView {
 
 extension ListItemView {
     struct TitleView: View {
-        let title: String
-        let titleStyle: TextStyle
-        let titleTag: String?
-        let titleTagStyle: TextStyle
-        let titleTagType: TitleTagType
-        let titleExtra: String?
-        let titleStyleExtra: TextStyle
+        public let title: TextValue
+        public let titleExtra: TextValue?
+        public let titleTag: TextValue?
+        public let titleTagType: TitleTagType
 
         var body: some View {
             VStack(alignment: .leading, spacing: Spacing.tiny) {
                 HStack(spacing: Spacing.tiny) {
-                    Text(title)
-                        .font(titleStyle.font)
-                        .foregroundStyle(titleStyle.color)
+                    Text(title.text)
+                        .textStyle(title.style)
                         .lineLimit(1)
                         .truncationMode(.middle)
 
                     if let tag = titleTag {
-                        TitleTagView(titleTag: tag, titleTagStyle: titleTagStyle, titleTagType: titleTagType)
+                        TitleTagView(titleTag: tag, titleTagType: titleTagType)
                     }
                 }
                 .padding(.trailing, Spacing.small)
 
                 if let extra = titleExtra {
-                    Text(extra)
-                        .font(titleStyleExtra.font)
-                        .foregroundStyle(titleStyleExtra.color)
+                    Text(extra.text)
+                        .textStyle(extra.style)
                         .lineLimit(1)
                         .truncationMode(.middle)
                         .padding(.trailing, Spacing.medium)
@@ -144,15 +159,13 @@ extension ListItemView {
 
 extension ListItemView {
     struct TitleTagView: View {
-        let titleTag: String
-        let titleTagStyle: TextStyle
+        let titleTag: TextValue
         let titleTagType: TitleTagType
 
         var body: some View {
             HStack(spacing: Spacing.tiny) {
-                Text(titleTag)
-                    .font(titleTagStyle.font)
-                    .foregroundStyle(titleTagStyle.color)
+                Text(titleTag.text)
+                    .textStyle(titleTag.style)
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
 
@@ -160,14 +173,14 @@ extension ListItemView {
                 case .none:
                     EmptyView()
                 case .progressView:
-                    ListItemProgressView(size: .small, tint: titleTagStyle.color)
+                    ListItemProgressView(size: .small, tint: titleTag.style.color)
                 case .image(let image):
                     image
                 }
             }
             .padding(.horizontal, Spacing.tiny)
             .padding(.vertical, Spacing.extraSmall)
-            .background(titleTagStyle.background)
+            .background(titleTag.style.background)
             .cornerRadius(6)
         }
     }
@@ -177,24 +190,20 @@ extension ListItemView {
 
 extension ListItemView {
     struct SubtitleView: View {
-        let subtitle: String
-        let subtitleStyle: TextStyle
-        let subtitleExtra: String?
-        let subtitleStyleExtra: TextStyle
+        public let subtitle: TextValue
+        public let subtitleExtra: TextValue?
 
         var body: some View {
             VStack(alignment: .trailing, spacing: Spacing.tiny) {
-                Text(subtitle)
-                    .font(subtitleStyle.font)
-                    .foregroundStyle(subtitleStyle.color)
+                Text(subtitle.text)
+                    .textStyle(subtitle.style)
                     .multilineTextAlignment(.trailing)
                     .lineLimit(1)
                     .truncationMode(.middle)
 
                 if let extra = subtitleExtra {
-                    Text(extra)
-                        .font(subtitleStyleExtra.font)
-                        .foregroundStyle(subtitleStyleExtra.color)
+                    Text(extra.text)
+                        .textStyle(extra.style)
                         .multilineTextAlignment(.trailing)
                         .lineLimit(1)
                         .truncationMode(.middle)
@@ -215,9 +224,9 @@ extension ListItemView {
     let longTitleExtra = "Long Title Extra Long Title Extra Long Title Extra Long Title Extra"
     let longSubtitleExtra = "Long Subtitle Extra Long Subtitle Extra Long Subtitle Extra"
 
-    let defaultTextStyle = TextStyle(font: Font.system(.body), color: .primary)
-    let extraTextStyle = TextStyle(font: Font.system(.footnote), color: .secondary)
-    let tagTextStyleWhite = TextStyle(font: Font.system(.footnote), color: .white, background: .gray)
+    let defaultTextStyle = TextStyle.Preview.body
+    let extraTextStyle = TextStyle.Preview.footnote
+    let tagTextStyleWhite = TextStyle(font: .footnote, color: .white, background: .gray)
     let tagTextStyleBlue = TextStyle(font: Font.system(.footnote), color: .blue, background: .blue.opacity(0.2))
 
     return List {

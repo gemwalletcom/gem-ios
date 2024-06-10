@@ -251,7 +251,7 @@ struct TransactionViewModel {
     }
     
     var subtitleExtraStyle: TextStyle {
-        TextStyle(font: Font.system(.footnote), color: .secondary)
+        .footnote
     }
     
     var participant: String {

@@ -5,6 +5,7 @@ import Blockchain
 import BigInt
 import Components
 import Signer
+import Style
 import GemstonePrimitives
 
 class ConfirmTransferViewModel: ObservableObject {
