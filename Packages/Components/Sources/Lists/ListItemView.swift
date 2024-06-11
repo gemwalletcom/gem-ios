@@ -224,8 +224,8 @@ extension ListItemView {
     let longTitleExtra = "Long Title Extra Long Title Extra Long Title Extra Long Title Extra"
     let longSubtitleExtra = "Long Subtitle Extra Long Subtitle Extra Long Subtitle Extra"
 
-    let defaultTextStyle = TextStyle.Preview.body
-    let extraTextStyle = TextStyle.Preview.footnote
+    let defaultTextStyle = TextStyle.body
+    let extraTextStyle = TextStyle.footnote
     let tagTextStyleWhite = TextStyle(font: .footnote, color: .white, background: .gray)
     let tagTextStyleBlue = TextStyle(font: Font.system(.footnote), color: .blue, background: .blue.opacity(0.2))
 
