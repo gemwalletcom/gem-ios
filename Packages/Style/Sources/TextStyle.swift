@@ -19,11 +19,9 @@ public struct TextStyle {
     }
 }
 
-// MARK: - 
+// MARK: - TextStyle Static
 
 extension TextStyle {
-    // if you extend this and want to check previews in packages, please also
-    // add same apple color value in /Previews/TextStyle+Preview
     public static let title = TextStyle(font: .title, color: Colors.black)
     public static let headline = TextStyle(font: .headline, color: Colors.black)
     public static let subheadline = TextStyle(font: .subheadline, color: Colors.secondaryText)
