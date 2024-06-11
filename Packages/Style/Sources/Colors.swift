@@ -1,4 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 
 public struct Colors {
@@ -19,4 +20,50 @@ public struct Colors {
     public static let grayLight = Color("grayLight", bundle: .style)
     public static let grayVeryLight = Color("grayVeryLight", bundle: .style)
     public static let secondaryText = Color("secondaryText", bundle: .style)
+}
+
+// MARK: - Previews
+
+#Preview {
+    let colors: [(name: String, color: Color)] = [
+        ("White", Colors.white),
+        ("White Solid", Colors.whiteSolid),
+        ("Black", Colors.black),
+        ("Blue", Colors.blue),
+        ("Blue Dark", Colors.blueDark),
+        ("Red", Colors.red),
+        ("Red Light", Colors.redLight),
+        ("Green", Colors.green),
+        ("Orange", Colors.orange),
+        ("Orange Light", Colors.orangeLight),
+        ("Green Light", Colors.greenLight),
+        ("Gray", Colors.gray),
+        ("Gray Background", Colors.grayBackground),
+        ("Gray Dark Background", Colors.grayDarkBackground),
+        ("Gray Light", Colors.grayLight),
+        ("Gray Very Light", Colors.grayVeryLight),
+        ("Secondary Text", Colors.secondaryText)
+    ]
+
+    return ScrollView {
+        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 16) {
+            ForEach(colors, id: \.name) { color in
+                VStack {
+                    Rectangle()
+                        .fill(color.color)
+                        .frame(height: 100)
+                        .cornerRadius(8)
+                    Text(color.name)
+                        .font(.caption)
+                        .multilineTextAlignment(.center)
+                        .padding(.top, 8)
+                }
+                .padding()
+                .background(Color(.systemBackground))
+                .cornerRadius(12)
+                .shadow(radius: 4)
+            }
+        }
+        .padding()
+    }
 }
