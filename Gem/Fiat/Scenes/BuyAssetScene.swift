@@ -61,7 +61,7 @@ extension BuyAssetScene {
             .disabled(!model.state.isNoData || model.state.isLoading)
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
     }
 
     @ViewBuilder
@@ -108,7 +108,7 @@ extension BuyAssetScene {
                                     Button("$\(Int(amount))") {
                                         onSelectNew(amount: amount)
                                     }
-                                    .buttonStyle(BlueButton(paddingHorizontal: 12, paddingVertical: 12))
+                                    .buttonStyle(.blue(paddingHorizontal: 12, paddingVertical: 12))
                                     .font(.callout)
                                 }
                             }

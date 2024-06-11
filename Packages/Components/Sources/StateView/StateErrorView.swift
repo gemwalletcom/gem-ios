@@ -27,7 +27,7 @@ public struct StateErrorView: View {
                 Button(message) {
                     action?()
                 }
-                .buttonStyle(BlueButton())
+                .buttonStyle(.blue())
                 .frame(width: 180)
             }
         }

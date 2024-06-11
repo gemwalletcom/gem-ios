@@ -125,7 +125,7 @@ struct AmountScene: View {
                                 AnyView(
                                     HStack {
                                         Button(Localized.Transfer.max, action: useMax)
-                                            .buttonStyle(ColorButton.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                            .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
                                             .fixedSize()
                                     }
                                 )
@@ -143,7 +143,7 @@ struct AmountScene: View {
             })
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
         }
         .background(Colors.grayBackground)
         .navigationTitle(model.title)

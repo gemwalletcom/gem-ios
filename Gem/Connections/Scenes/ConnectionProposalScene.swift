@@ -37,7 +37,7 @@ struct ConnectionProposalScene: View {
                     Text(model.buttonTitle)
                 }
             }
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             
