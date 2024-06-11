@@ -27,6 +27,7 @@ public struct SystemImage {
     public static let lockOpen = "lock.open"
     public static let plus = "plus"
     public static let eye = "eye.fill"
+    public static let searchNoResults = "exclamationmark.magnifyingglass"
 }
 
 // MARK: - Previews
@@ -87,7 +88,8 @@ public struct SystemImage {
         (SystemImage.eyeglasses, "eyeglasses"),
         (SystemImage.lockOpen, "lockOpen"),
         (SystemImage.plus, "plus"),
-        (SystemImage.eye, "eye")
+        (SystemImage.eye, "eye"),
+        (SystemImage.searchNoResults, "no results")
     ]
 
     return ScrollView {

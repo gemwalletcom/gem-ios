@@ -5,7 +5,7 @@ import Keystore
 import SwiftUI
 
 struct ImportWalletTypeViewModel {
-    
+
     let keystore: any Keystore
     
     init(keystore: any Keystore) {
@@ -16,21 +16,12 @@ struct ImportWalletTypeViewModel {
         return Localized.Wallet.Import.title
     }
 
-    var chains: [Chain] {
-        return AssetConfiguration.allChains
-    }
-    
     func items(for searchText: String) -> [Chain] {
-        if searchText.isEmpty {
-            return chains
-        } else {
-            return chains.filter {
-                $0.asset.name.localizedCaseInsensitiveContains(searchText) ||
-                $0.asset.symbol.localizedCaseInsensitiveContains(searchText)
-            }
-        }
+        filterChains(for: searchText)
     }
 }
+
+// MARK: - Equatable
 
 extension ImportWalletTypeViewModel: Equatable {
     static func == (lhs: ImportWalletTypeViewModel, rhs: ImportWalletTypeViewModel) -> Bool {
@@ -38,8 +29,18 @@ extension ImportWalletTypeViewModel: Equatable {
     }
 }
 
+// MARK: - Hashable
+
 extension ImportWalletTypeViewModel: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(chains)
+    }
+}
+
+// MARK: - ChainFilterable
+
+extension ImportWalletTypeViewModel: ChainFilterable {
+    var chains: [Chain] {
+        AssetConfiguration.allChains
     }
 }

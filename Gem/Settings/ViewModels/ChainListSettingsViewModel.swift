@@ -5,12 +5,16 @@ import Primitives
 import Settings
 
 struct ChainListSettingsViewModel {
-    
     var title: String {
         return Localized.Settings.Networks.title
     }
-    
+}
+
+// MARK: - ChainFilterable
+
+extension ChainListSettingsViewModel: ChainFilterable {
     var chains: [Chain] {
-        return AssetConfiguration.allChains
+        AssetConfiguration.allChains
     }
 }
+

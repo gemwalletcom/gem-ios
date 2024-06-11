@@ -2,7 +2,7 @@ import Foundation
 import Primitives
 
 public struct AssetConfiguration {
-    
+
     public static var supportedChainsWithTokens: [Chain] = [
         [
             .solana,
@@ -50,9 +50,7 @@ public struct AssetConfiguration {
         //.celo, not ready yet
         .near,
     ]
-    
-    
-    
+
     public static var enabledByDefault: [AssetId] =  [
         AssetId(chain: .bitcoin, tokenId: .none),
         AssetId(chain: .ethereum, tokenId: .none),

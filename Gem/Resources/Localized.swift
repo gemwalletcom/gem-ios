@@ -133,6 +133,8 @@ internal enum Localized {
     internal static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
     internal static let next = Localized.tr("Localizable", "common.next", fallback: "Next")
+    /// No Results Found
+    internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results Found")
     /// Not Available
     internal static let notAvailable = Localized.tr("Localizable", "common.not_available", fallback: "Not Available")
     /// Paste

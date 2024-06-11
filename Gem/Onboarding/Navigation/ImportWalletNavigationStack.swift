@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Primitives
 
 struct ImportWalletNavigationStack: View {
     
@@ -26,4 +27,11 @@ struct ImportWalletNavigationStack: View {
                 }
         }
     }
+}
+
+// MARK: - Previews
+
+#Preview {
+    @State var isPresenting: Bool = false
+    return ImportWalletNavigationStack(isPresenting: $isPresenting)
 }

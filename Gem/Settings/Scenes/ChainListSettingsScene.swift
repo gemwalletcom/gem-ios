@@ -7,31 +7,41 @@ import Components
 import Style
 
 struct ChainListSettingsScene: View {
-
     @Environment(\.nodeService) private var nodeService
+
     let model = ChainListSettingsViewModel()
-    
+
     var body: some View {
-        List {
-            ForEach(model.chains) { chain in
+        SearchableListView(
+            items: model.chains,
+            filter: model.filter(_:query:),
+            content: { chain in
                 NavigationLink(value: chain) {
                     ChainView(chain: chain)
                 }
+            },
+            emptyContent: {
+                StateEmptyView(
+                    title: Localized.Common.noResultsFound,
+                    image: Image(systemName: SystemImage.searchNoResults)
+                )
             }
-        }
+        )
         .navigationDestination(for: Chain.self) { chain in
             ChainSettingsScene(
                 model: ChainSettingsViewModel(chain: chain, nodeService: nodeService)
             )
         }
         .navigationTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
+// MARK: -
+
 struct ChainView: View {
-    
     let chain: Chain
-    
+
     var body: some View {
         ListItemView(
             title: Asset(chain).name,
@@ -39,5 +49,13 @@ struct ChainView: View {
             imageSize: Sizing.image.chain,
             cornerRadius: Sizing.image.chain/2
         )
+    }
+}
+
+// MARK: - Previews
+
+#Preview {
+    NavigationStack {
+        ChainListSettingsScene()
     }
 }

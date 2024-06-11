@@ -191,3 +191,4 @@
 "transfer.minimum_amount" = "Mindestbetrag ist %@";
 "wallet_connect.no_active_connections" = "No active connections";
 "stake.minimum_amount" = "Mindestbetrag";
+"common.no_results_found" = "Keine Ergebnisse gefunden";

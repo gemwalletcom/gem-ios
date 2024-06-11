@@ -25,7 +25,7 @@ struct TransactionsScene: View {
     var body: some View {
         VStack {
             if transactions.isEmpty {
-                StateEmptyView(message: Localized.Activity.EmptyState.message)
+                StateEmptyView(title: Localized.Activity.EmptyState.message)
             } else {
                 List {
                     TransactionsList(transactions)
