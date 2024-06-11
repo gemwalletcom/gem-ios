@@ -4,12 +4,11 @@ import Foundation
 import Primitives
 
 struct FiatProvidersViewModel {
-    let currentQuote: FiatQuote
+    let buyAssetInput: BuyAssetInputViewModel
     let asset: Asset
-    let quotes: [FiatQuote]
+
     var selectQuote: ((FiatQuote) -> Void)?
-    
     var quotesViewModel: [FiatQuoteViewModel] {
-        return quotes.map { FiatQuoteViewModel(asset: asset, quote: $0) }
+        return buyAssetInput.quotes.map { FiatQuoteViewModel(asset: asset, quote: $0) }
     }
 }

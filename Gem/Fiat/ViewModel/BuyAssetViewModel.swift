@@ -2,67 +2,72 @@ import Foundation
 import Primitives
 import SwiftUI
 import GemAPI
+import Components
 
 class BuyAssetViewModel: ObservableObject {
-    
     private let assetAddress: AssetAddress
-    private let fiatService: GemAPIFiatService = GemAPIService()
+    private let fiatService: GemAPIFiatService
 
-    @Published var amount: Double = 0
-    @Published var quote: FiatQuote?
-    @Published var quotes: [FiatQuote] = []
-    @Published var quoteLoading: Bool = false
-    @Published var quoteError: Error?
+    @Published var input: BuyAssetInputViewModel
+    @Published var state: StateViewType<Bool> = .loading
 
     init(
-        assetAddress: AssetAddress
+        assetAddress: AssetAddress,
+        fiatService: GemAPIFiatService = GemAPIService(),
+        input: BuyAssetInputViewModel
     ) {
         self.assetAddress = assetAddress
+        self.fiatService = fiatService
+        self.input = input
     }
-    
+
     var asset: Asset {
         assetAddress.asset
     }
-    
+
     var address: String {
         assetAddress.address
     }
-    
+
     var title: String {
         return Localized.Buy.title(asset.name)
     }
-    
-    var defaultaAmount: Int {
-        return 50
+
+    var amounts: [[Double]] {
+        BuyAssetInputViewModel.availableDefaultAmounts
     }
-    
-    var amounts: [[Int]] {
-        return [
-            [50, 100, 200],
-            [250, 500, 1000]
-        ]
-    }
-    
-    func cryptoAmountText(quote: FiatQuote?) -> String {
-        if let quote = quote {
-            return "~\(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
+
+    var amount: Double {
+        get {
+            input.amount
+        } 
+        set {
+            input.amount = newValue
         }
-        return " "
     }
-    
-    func rateText(quote: FiatQuote) -> String {
-        return "1 \(asset.symbol) ~ $\((quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2))"
+}
+
+// MARK: - Business Logic
+
+extension BuyAssetViewModel {
+    func cryptoAmountText(for quote: FiatQuote?) -> String {
+        guard let quote = quote else { return " " }
+        return "~\(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
     }
-    
-    func getQuotes(asset: Asset, amount: Double) async {
-        //TODO: Refactor to use state managment
-        DispatchQueue.main.async {
-            self.amount = amount
-            self.quoteLoading = true
-            self.quote = nil
-            self.quoteError = nil
+
+    func rateText(for quote: FiatQuote) -> String {
+        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
+        return "1 \(asset.symbol) ~ $\(rate)"
+    }
+
+    func getQuotes(for asset: Asset, amount: Double) async {
+        await MainActor.run {
+            self.input.amount = amount
+            self.input.quote = nil
+            self.input.quotes = []
+            self.state = .loading
         }
-        
+
         do {
             let quotes = try await fiatService.getQuotes(
                 asset: asset,
@@ -73,20 +78,20 @@ class BuyAssetViewModel: ObservableObject {
                     walletAddress: address
                 )
             )
-            DispatchQueue.main.async {
-                self.quotes = quotes
-                self.quote = quotes.first
+
+            await MainActor.run {
+                if !quotes.isEmpty {
+                    let inputViewModel = BuyAssetInputViewModel(amount: amount, quote: quotes.first, quotes: quotes)
+                    self.input = inputViewModel
+                    self.state = .loaded(true)
+                } else {
+                    self.state = .noData
+                }
             }
-            
         } catch {
-            NSLog("getQuotes error: \(error)")
-            DispatchQueue.main.async {
-                self.quoteError = error
+            await MainActor.run {
+                self.state = .error(error)
             }
-        }
-        
-        DispatchQueue.main.async {
-            self.quoteLoading = false
         }
     }
 }

@@ -13,6 +13,7 @@
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
 		83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824032C176A0D0023CA0C /* ChainFilterable.swift */; };
+		83A704272C17CA78005B77F4 /* BuyAssetInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C30952B8299C39D80004C0F9 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952C5299C39D80004C0F9 /* walletTests.swift */; };
@@ -256,6 +257,7 @@
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824032C176A0D0023CA0C /* ChainFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainFilterable.swift; sourceTree = "<group>"; };
+		83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputViewModel.swift; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -1025,6 +1027,7 @@
 			isa = PBXGroup;
 			children = (
 				C3CF3BC629B7CB4900E96586 /* BuyAssetViewModel.swift */,
+				83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */,
 				C3D1C50B2A44FD2B006E8EEA /* FiatQuoteViewModel.swift */,
 				C36679122A0E249100F1D74D /* FiatProvidersViewModel.swift */,
 			);
@@ -1846,6 +1849,7 @@
 				C3549B3B29C5167100B4BE01 /* WalletDetailScene.swift in Sources */,
 				D8D203BB2ACC878200261CA2 /* ChartService.swift in Sources */,
 				D810F3742AF1AB520006D9C6 /* StakeScene.swift in Sources */,
+				83A704272C17CA78005B77F4 /* BuyAssetInputViewModel.swift in Sources */,
 				C3E99BBA2A70739D005DF35F /* TransactionView.swift in Sources */,
 				C34C7D132A006E9F009EEC21 /* SecretPhraseViewableModel.swift in Sources */,
 				C3A7CB8829CD8D3100431341 /* WalletService.swift in Sources */,
