@@ -31,3 +31,9 @@ public struct StakeConfig {
         Config.shared.getStakeConfig(chain: chain.rawValue)
     }
 }
+
+public struct WalletConnectConfig {
+    public static func config() -> Gemstone.WalletConnectConfig {
+        Config.shared.getWalletConnectConfig()
+    }
+}

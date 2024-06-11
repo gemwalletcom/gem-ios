@@ -6,8 +6,9 @@ import Keystore
 import Store
 import Primitives
 import BigInt
+import Gemstone
 
-public class WalletConnectorSigner: WalletConnectorSignable {    
+public class WalletConnectorSigner: WalletConnectorSignable {
     let store: ConnectionsStore
     let keystore: any Keystore
     var walletConnectorInteractor: WalletConnectorInteractable
@@ -31,21 +32,7 @@ public class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     public func getChains() -> [Primitives.Chain] {
-        let chains = [
-            Chain.ethereum,
-            Chain.smartChain,
-            Chain.opBNB,
-            Chain.base,
-            Chain.avalancheC,
-            Chain.polygon,
-            Chain.arbitrum,
-            Chain.optimism,
-            Chain.fantom,
-            Chain.gnosis,
-            Chain.solana,
-            Chain.manta,
-            Chain.blast,
-        ]
+        let chains = Config.shared.getWalletConnectConfig().chains.compactMap { Chain(rawValue: $0) }
         return currentWallet.accounts.map { $0.chain }.asSet().intersection(chains).asArray()
     }
     
