@@ -37,10 +37,10 @@ extension EthereumService: ChainFeeCalculateable {
                 return try? StakeHub().encodeStake(type: stakeType, amount: input.value)
             case .ethereum:
                 do {
+                    // empty signature for gas estimation
                     let signature = Data(repeating: 0, count: 65)
                     return try LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signature)
-                } catch let error {
-                    print(error)
+                } catch {
                     return nil
                 }
             default:

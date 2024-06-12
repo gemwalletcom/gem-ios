@@ -7,10 +7,14 @@ import BigInt
 import Gemstone
 
 public struct LidoContract {
+    // static constants
     public static let address = "0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84"    // stETH token
     public static let withdrawal = "0x889edC2eDab5f40e902b864aD4d7AdE8E412F9B1" // WithdrawalQueueERC721
-    public static let withdrawLimit = 300_000 // one unstETH
-    
+    public static let withdrawLimit = 300_000                                   // one unstETH
+    public static let withdrawDeadline: Double = 4 * 24 * 60 * 60                       // will expire in 4 days
+    public static let eip712DomainName = "Liquid staked Ether 2.0"
+    public static let eip712DomainVersion = "2"
+
     public static func encodeStake(type: StakeType, sender: String, amount: BigInt, signature: Data) throws -> Data {
         switch type {
         case .stake:
@@ -64,7 +68,7 @@ public struct LidoContract {
 
     public static func permitDeadline(date: Date) -> UInt64 {
         let date = Calendar(identifier: .gregorian).startOfDay(for: date)
-        let timestamp = date.addingTimeInterval(4 * 24 * 60 * 60)
+        let timestamp = date.addingTimeInterval(withdrawDeadline)
         return UInt64(timestamp.timeIntervalSince1970)
     }
 }

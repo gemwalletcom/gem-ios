@@ -24,13 +24,6 @@ public let PermitTypes = [
     EIP712Type(name: "deadline", type: "uint256")
 ]
 
-public let LidoDomain = EIP712Domain(
-    name: "Liquid staked Ether 2.0",
-    version: "2",
-    chainId: 1,
-    verifyingContract: LidoContract.address
-)
-
 public struct EIP712Type: Codable {
     public let name: String
     public let type: String
@@ -68,13 +61,18 @@ public struct ERC2612PermitMessage: Codable {
     public let domain: EIP712Domain
     public let message: Permit
 
-    public init(message: Permit) {
+    public init(message: Permit, chainId: Int) {
         self.types = Types(
             eip712Domain: EIP712DomainTypes,
             permit: PermitTypes
         )
         self.primaryType = "Permit"
-        self.domain = LidoDomain
+        self.domain = EIP712Domain(
+            name: LidoContract.eip712DomainName,
+            version: LidoContract.eip712DomainVersion,
+            chainId: chainId,
+            verifyingContract: LidoContract.address
+        )
         self.message = message
     }
 }

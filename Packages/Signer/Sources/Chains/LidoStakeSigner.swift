@@ -31,13 +31,15 @@ public class LidoStakeSigner: EthereumSigner {
                     throw AnyError("Permit nonce is missing!")
                 }
                 let key = PrivateKey(data: privateKey)!
-                let permit = ERC2612PermitMessage(message: ERC2612PermitMessage.Permit(
-                    owner: input.senderAddress,
-                    spender: LidoContract.withdrawal,
-                    value: input.value.description,
-                    nonce: permitNonce,
-                    deadline: "\(LidoContract.permitDeadline(date: Date()))"
-                ))
+                let permit = ERC2612PermitMessage(
+                    message: ERC2612PermitMessage.Permit(
+                        owner: input.senderAddress,
+                        spender: LidoContract.withdrawal,
+                        value: input.value.description,
+                        nonce: permitNonce,
+                        deadline: "\(LidoContract.permitDeadline(date: Date()))"
+                    ), 
+                    chainId: Int(input.chainId)!)
                 let jsonString = String(data: try JSONEncoder().encode(permit), encoding: .utf8)!
                 let signature = EthereumMessageSigner.signTypedMessage(privateKey: key, messageJson: jsonString)
                 return Data(hexString: signature) ?? Data()

@@ -20,7 +20,7 @@ public struct EthereumStakeService {
         case .ethereum:
             switch type {
             case .unstake:
-                // avoding expose private key here to sign the permit
+                // Avoid siging permit at preload stage, withdrawLimit is pretty a constant for 1 amount
                 return BigInt(LidoContract.withdrawLimit)
             default:
                 break
