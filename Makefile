@@ -14,7 +14,10 @@ install-toolchains:
 	@echo Install toolchains for uniffi
 	@cd core/gemstone && make prepare-apple
 
-bootstrap: install generate
+bootstrap: install generate setup-git
+
+setup-git:
+	@git config submodule.recurse true
 
 core-upgrade:
 	git submodule update --recursive --remote
