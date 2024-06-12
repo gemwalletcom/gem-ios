@@ -329,6 +329,10 @@ extension SolanaService: ChainStakable {
             )
         }
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension SolanaService: ChainTokenable {

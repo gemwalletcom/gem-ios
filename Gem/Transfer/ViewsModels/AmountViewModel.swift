@@ -7,6 +7,7 @@ import BigInt
 import Components
 import Store
 import SwiftUI
+import Gemstone
 import GemstonePrimitives
 
 enum AmountType: Equatable, Hashable {
@@ -158,7 +159,6 @@ class AmounViewModel: ObservableObject {
     
     var minimumValue: BigInt {
         let stakeChain = amountRecipientData.data.asset.chain.stakeChain
-        
         switch amountRecipientData.type {
         case .stake:
             return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
@@ -205,7 +205,7 @@ class AmounViewModel: ObservableObject {
     }
     
     func getTransferData(value: BigInt) throws -> TransferData {
-        let recipientAddress = stakeService.getRecipientAddress(chain: amountRecipientData.data.asset.chain.stakeChain, validatorId: currentValidator?.id)
+        let recipientAddress = stakeService.getRecipientAddress(chain: amountRecipientData.data.asset.chain.stakeChain, type: amountRecipientData.type, validatorId: currentValidator?.id)
 
         // make sure validator address is correct
         // FIXME. Refactor and add tests

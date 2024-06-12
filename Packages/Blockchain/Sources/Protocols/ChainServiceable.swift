@@ -39,6 +39,7 @@ public protocol ChainSyncable {
 public protocol ChainStakable {
     func getValidators(apr: Double) async throws -> [DelegationValidator]
     func getStakeDelegations(address: String) async throws -> [DelegationBase]
+    func getStakeBalance(address: String) async throws -> AssetBalance
 }
 
 public protocol ChainTokenable {

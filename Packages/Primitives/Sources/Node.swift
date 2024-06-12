@@ -50,3 +50,10 @@ public struct NodesResponse: Codable {
 		self.nodes = nodes
 	}
 }
+
+public enum NodePriority: String, Codable, CaseIterable, Equatable {
+	case high
+	case medium
+	case low
+	case inactive
+}

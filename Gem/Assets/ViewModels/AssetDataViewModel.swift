@@ -122,7 +122,8 @@ struct AssetDataViewModel {
             Chain.celestia.assetId,
             Chain.solana.assetId,
             Chain.sui.assetId,
-            Chain.smartChain.assetId
+            Chain.smartChain.assetId,
+            Chain.ethereum.assetId
         ].contains(asset.id) {
             return true
         }

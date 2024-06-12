@@ -340,6 +340,10 @@ extension CosmosService: ChainStakable {
         ]
         .flatMap{ $0 }
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension CosmosService: ChainTokenable {

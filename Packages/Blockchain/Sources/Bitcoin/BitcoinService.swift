@@ -152,6 +152,10 @@ extension BitcoinService: ChainStakable {
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         fatalError()
     }
+    
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension BitcoinService: ChainTokenable {
