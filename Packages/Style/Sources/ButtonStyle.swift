@@ -31,10 +31,18 @@ public struct ColorButtonStyle: ButtonStyle {
             .frame(minWidth: 0, maxWidth: .infinity)
             .padding(.vertical, paddingVertical)
             .padding(.horizontal, paddingHorizontal)
-            .foregroundStyle(configuration.isPressed ? foregroundStylePressed : foregroundStyle)
-            .background(configuration.isPressed ? backgroundPressed : background)
-            .cornerRadius(12)
+            .foregroundStyle(foregroundStyle(configuration: configuration))
+            .background(background(configuration: configuration))
             .fontWeight(.semibold)
+    }
+
+    private func background(configuration: Configuration) -> some View {
+        return RoundedRectangle(cornerRadius: 12)
+            .fill(configuration.isPressed ? backgroundPressed : background)
+    }
+
+    private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
+        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
     }
 }
 
@@ -58,54 +66,54 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func blueGrayPressed(
         paddingHorizontal: CGFloat = Spacing.medium,
         paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-        return ColorButtonStyle(
-            paddingHorizontal: paddingHorizontal,
-            paddingVertical: paddingVertical,
-            foregroundStyle: Colors.whiteSolid,
-            foregroundStylePressed: Colors.whiteSolid,
-            background: Colors.blue,
-            backgroundPressed: Colors.gray
-        )
-    }
+            return ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.whiteSolid,
+                foregroundStylePressed: Colors.whiteSolid,
+                background: Colors.blue,
+                backgroundPressed: Colors.gray
+            )
+        }
 
     public static func gray(
         paddingHorizontal: CGFloat = Spacing.medium,
         paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-        return ColorButtonStyle(
-            paddingHorizontal: paddingHorizontal,
-            paddingVertical: paddingVertical,
-            foregroundStyle: Colors.whiteSolid,
-            foregroundStylePressed: Colors.whiteSolid,
-            background: Colors.grayLight,
-            backgroundPressed: Colors.gray
-        )
-    }
+            return ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.whiteSolid,
+                foregroundStylePressed: Colors.whiteSolid,
+                background: Colors.grayLight,
+                backgroundPressed: Colors.gray
+            )
+        }
 
     public static func lightGray(
         paddingHorizontal: CGFloat = Spacing.medium,
         paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-        return ColorButtonStyle(
-            paddingHorizontal: paddingHorizontal,
-            paddingVertical: paddingVertical,
-            foregroundStyle: Colors.whiteSolid,
-            foregroundStylePressed: Colors.whiteSolid,
-            background: Colors.grayVeryLight,
-            backgroundPressed: Colors.grayLight
-        )
-    }
+            return ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.whiteSolid,
+                foregroundStylePressed: Colors.whiteSolid,
+                background: Colors.grayVeryLight,
+                backgroundPressed: Colors.grayLight
+            )
+        }
 
     public static func white(
         paddingHorizontal: CGFloat = Spacing.medium,
         paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-        return ColorButtonStyle(
-            paddingHorizontal: paddingHorizontal,
-            paddingVertical: paddingVertical,
-            foregroundStyle: Colors.whiteSolid,
-            foregroundStylePressed: Colors.whiteSolid,
-            background: Colors.white,
-            backgroundPressed: Colors.grayVeryLight
-        )
-    }
+            return ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.whiteSolid,
+                foregroundStylePressed: Colors.whiteSolid,
+                background: Colors.white,
+                backgroundPressed: Colors.grayVeryLight
+            )
+        }
 }
 
 public struct ClearButtonStyle: ButtonStyle {
@@ -124,39 +132,176 @@ extension ButtonStyle where Self == ClearButtonStyle {
     public static var clear: ClearButtonStyle { ClearButtonStyle() }
 }
 
+public struct StatefulButtonStyle: ButtonStyle {
+    @Environment(\.isEnabled) private var isEnabled: Bool
+    public static let maxButtonHeight: CGFloat = 50
+
+    public enum State {
+        case normal, loading, disabled
+    }
+
+    var state: State
+    let foregroundStyle: Color
+    let foregroundStylePressed: Color
+    let background: Color
+    let backgroundPressed: Color
+    let backgroundDisabled: Color
+
+    private var isGrayBackgroundSate: Bool {
+        state == .disabled || state == .loading || !isEnabled
+    }
+
+    public init(
+        state: State,
+        foregroundStyle: Color,
+        foregroundStylePressed: Color,
+        background: Color,
+        backgroundPressed: Color,
+        backgroundDisabled: Color
+    ) {
+        self.foregroundStyle = foregroundStyle
+        self.foregroundStylePressed = foregroundStylePressed
+        self.background = background
+        self.backgroundPressed = backgroundPressed
+        self.state = state
+        self.backgroundDisabled = backgroundDisabled
+    }
+
+    public func makeBody(configuration: Configuration) -> some View {
+        ZStack {
+            backgorundView
+                .frame(height: StatefulButtonStyle.maxButtonHeight)
+            switch state {
+            case .normal, .disabled:
+                configuration.label
+                    .lineLimit(1)
+                    .foregroundStyle(foregroundStyle(configuration: configuration))
+                    .padding(.horizontal, Spacing.medium)
+                    .frame(minWidth: 0, maxWidth: .infinity)
+                    .frame(height: StatefulButtonStyle.maxButtonHeight)
+                    .background(labelBackground(configuration: configuration))
+            case .loading:
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .disabled(isGrayBackgroundSate)
+    }
+
+    private var backgorundView: some View {
+        RoundedRectangle(cornerRadius: 12)
+            .fill(isGrayBackgroundSate ? backgroundDisabled : background)
+    }
+
+    private func backgorundPressedView(configuration: Configuration) -> some View {
+        RoundedRectangle(cornerRadius: 12)
+            .fill(configuration.isPressed ? backgroundPressed : background)
+    }
+
+    private func labelBackground(configuration: Configuration) -> some View {
+        Group {
+            if !isGrayBackgroundSate {
+                backgorundPressedView(configuration: configuration)
+            } else {
+                backgorundView
+            }
+        }
+    }
+
+    private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
+        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
+    }
+}
+
+// MARK: - StatefulButtonStyle Static
+
+extension ButtonStyle where Self == StatefulButtonStyle {
+    public static func statefullBlue(state: StatefulButtonStyle.State) -> StatefulButtonStyle {
+        StatefulButtonStyle(
+            state: state,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.blue,
+            backgroundPressed: Colors.blueDark,
+            backgroundDisabled: Colors.gray
+        )
+    }
+}
+
+
 // MARK: - Previews
 
 #Preview {
-    VStack(spacing: 16) {
-        Button(action: {}) {
-            Text("Blue Button")
-        }
-        .buttonStyle(.blue())
+    struct StatefulButtonPreviewWrapper: View {
+        let text: String
+        @State var state: StatefulButtonStyle.State
 
-        Button(action: {}) {
-            Text("Blue Gray Pressed Button")
+        var body: some View {
+            Button(action: {
+                state = .loading
+                Task {
+                    try await Task.sleep(nanoseconds: 1000000000 * 3)
+                    state = .normal
+                }
+            }) {
+                Text(text)
+            }
+            .buttonStyle(.statefullBlue(state: state))
         }
-        .buttonStyle(.blueGrayPressed())
+    }
 
-        Button(action: {}) {
-            Text("Gray Button")
-        }
-        .buttonStyle(.gray())
+    return List {
+        Section(header: Text("Regular Buttons")) {
+            Button(action: {}) {
+                Text("Blue Button")
+            }
+            .buttonStyle(.blue())
 
-        Button(action: {}) {
-            Text("Light Gray Button")
-        }
-        .buttonStyle(.lightGray())
+            Button(action: {}) {
+                Text("Blue BIG TEXT TEXT Button Blue BIG TEXT TEXT Button Blue BIG TEXT TEXT Button")
+            }
+            .buttonStyle(.blue())
 
-        Button(action: {}) {
-            Text("White Button")
-        }
-        .buttonStyle(.white())
+            Button(action: {}) {
+                Text("Blue Gray Pressed Button")
+            }
+            .buttonStyle(.blueGrayPressed())
 
-        Button(action: {}) {
-            Text("Clear Button")
+            Button(action: {}) {
+                Text("Gray Button")
+            }
+            .buttonStyle(.gray())
+
+            Button(action: {}) {
+                Text("Light Gray Button")
+            }
+            .buttonStyle(.lightGray())
+
+            Button(action: {}) {
+                Text("White Button")
+            }
+            .buttonStyle(.white())
+
+            Button(action: {}) {
+                Text("Clear Button")
+            }
+            .buttonStyle(.clear)
+            .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
-        .buttonStyle(.clear)
+
+        Section(header: Text("Stateful Buttons")) {
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .normal)
+
+            StatefulButtonPreviewWrapper(text: "BIG TEXT Disabled Button BIG TEXT Disabled Button", state: .normal)
+                .disabled(true)
+
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .disabled)
+                .disabled(true)
+
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading)
+                .disabled(true)
+        }
     }
     .padding()
 }

@@ -44,9 +44,15 @@ public struct StateEmptyView: View {
                  .foregroundStyle(Colors.gray)
 
              VStack(spacing: description == nil ? 0 : Spacing.tiny) {
-                 Text(title.text)
-                     .textStyle(title.style)
-                     .multilineTextAlignment(.center)
+                 HStack(spacing: 0.0) {
+                     Text(title.text)
+                         .textStyle(title.style)
+                         .multilineTextAlignment(.center)
+                     if description == nil && image == nil {
+                         Spacer()
+                     }
+                 }
+                 .frame(maxWidth: .infinity)
 
                  if let description {
                      Text(description.text)
@@ -62,40 +68,44 @@ public struct StateEmptyView: View {
 // MARK: - Previews
 
 #Preview {
-    VStack {
-        StateEmptyView(
-            title: "No Results Found",
-            description: "Try adjusting your search or filter to find what you're looking for.",
-            image: Image(systemName: SystemImage.searchNoResults)
-        )
-        Divider()
+    List {
+        Section(header: Text("Full View with Title, Description, and Image")) {
+            StateEmptyView(
+                title: "No Results Found",
+                description: "Try adjusting your search or filter to find what you're looking for.",
+                image: Image(systemName: SystemImage.searchNoResults)
+            )
+        }
 
-        StateEmptyView(
-            title: "No Results Found",
-            image: Image(systemName: SystemImage.searchNoResults)
-        )
-        Divider()
+        Section(header: Text("View with Title and Image")) {
+            StateEmptyView(
+                title: "No Results Found",
+                image: Image(systemName: SystemImage.searchNoResults)
+            )
+        }
 
-        StateEmptyView(
-            title: "No Results Found",
-            titleTextStyle: .title,
-            description: "Try adjusting your search or filter to find what you're looking for.",
-            descriptionTextStyle: .body,
-            image: Image(systemName: SystemImage.searchNoResults)
-        )
-        Divider()
+        Section(header: Text("View with Custom Title and Description Styles")) {
+            StateEmptyView(
+                title: "No Results Found",
+                titleTextStyle: .title,
+                description: "Try adjusting your search or filter to find what you're looking for.",
+                descriptionTextStyle: .body,
+                image: Image(systemName: SystemImage.searchNoResults)
+            )
+        }
 
-        StateEmptyView(
-            title: "No Results Found",
-            description: "Try adjusting your search or filter to find what you're looking for."
-        )
-        Divider()
+        Section(header: Text("View with Title and Description")) {
+            StateEmptyView(
+                title: "No Results Found",
+                description: "Try adjusting your search or filter to find what you're looking for."
+            )
+        }
 
-        // Only Message
-        StateEmptyView(
-            title: "No Results Found"
-        )
-        Divider()
+        Section(header: Text("View with Only Title")) {
+            StateEmptyView(
+                title: "No Results Found"
+            )
+        }
     }
     .padding()
 }

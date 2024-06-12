@@ -10,13 +10,20 @@ struct BuyAssetScene: View {
         VStack {
             List {
                 amountSelectorSection
-                contentSection
+                providerSection
             }
             Spacer()
-            continueButton
+            StatefullButton(
+                text: Localized.Common.continue,
+                viewState: model.state,
+                action: openBuyUrl
+            )
+            .disabled(model.shouldDisalbeContinueButton)
+            .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .task {
             await onTask()
@@ -30,7 +37,6 @@ struct BuyAssetScene: View {
                 )
             )
         }
-        .frame(maxWidth: .infinity)
     }
 }
 
@@ -50,22 +56,24 @@ extension BuyAssetScene {
     }
 
     @ViewBuilder
-    private var contentSection: some View {
+    private var providerSection: some View {
         Section {
-            contentView
+            if !model.state.isLoading {
+                providerView
+            }
+        } header: {
+            VStack {
+                if model.state.isLoading {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                }
+            }
+            .frame(maxWidth: .infinity)
         }
     }
 
-    private var continueButton: some View {
-        Button(Localized.Common.continue, action: openBuyUrl)
-            .disabled(!model.state.isNoData || model.state.isLoading)
-            .padding(.bottom, Spacing.scene.bottom)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(.blue())
-    }
-
     @ViewBuilder
-    private var contentView: some View {
+    private var providerView: some View {
         switch model.state {
         case .noData:
             Text(Localized.Buy.noResults)
@@ -143,7 +151,7 @@ extension BuyAssetScene {
     }
 }
 
-// MARK: -
+// MARK: - Effects
 
 extension BuyAssetScene {
     private func getQuotes(amount: Double) {

@@ -3,6 +3,7 @@ import Primitives
 import SwiftUI
 import GemAPI
 import Components
+import Style
 
 class BuyAssetViewModel: ObservableObject {
     private let assetAddress: AssetAddress
@@ -30,7 +31,7 @@ class BuyAssetViewModel: ObservableObject {
     }
 
     var title: String {
-        return Localized.Buy.title(asset.name)
+        Localized.Buy.title(asset.name)
     }
 
     var amounts: [[Double]] {
@@ -38,12 +39,11 @@ class BuyAssetViewModel: ObservableObject {
     }
 
     var amount: Double {
-        get {
-            input.amount
-        } 
-        set {
-            input.amount = newValue
-        }
+        input.amount
+    }
+
+    var shouldDisalbeContinueButton: Bool {
+        state.isLoading || state.isNoData
     }
 }
 

@@ -45,25 +45,15 @@ public struct Colors {
         ("Secondary Text", Colors.secondaryText)
     ]
 
-    return ScrollView {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 16) {
-            ForEach(colors, id: \.name) { color in
-                VStack {
-                    Rectangle()
-                        .fill(color.color)
-                        .frame(height: 100)
-                        .cornerRadius(8)
-                    Text(color.name)
-                        .font(.caption)
-                        .multilineTextAlignment(.center)
-                        .padding(.top, 8)
-                }
-                .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(radius: 4)
+    return List {
+        ForEach(colors, id: \.name) { color in
+            Section(header: Text(color.name)) {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(color.color)
+                    .shadow(color: Colors.black, radius: 1)
+                    .padding(Spacing.extraSmall)
             }
         }
-        .padding()
     }
+    .listStyle(InsetGroupedListStyle())
 }
