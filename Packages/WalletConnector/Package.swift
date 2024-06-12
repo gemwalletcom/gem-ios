@@ -16,6 +16,7 @@ let package = Package(
         .package(url: "https://github.com/WalletConnect/WalletConnectSwiftV2", .exactItem(Version(stringLiteral: "1.18.8"))),
         .package(url: "https://github.com/daltoniam/Starscream.git", .exactItem(Version(stringLiteral: "3.1.2"))),
         .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -23,6 +24,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Gemstone",
+                "GemstonePrimitives",
                 .product(
                     name: "WalletConnect",
                     package: "WalletConnectSwiftV2"
