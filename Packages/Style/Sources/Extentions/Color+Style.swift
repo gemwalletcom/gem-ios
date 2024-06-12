@@ -1,7 +1,14 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import SwiftUI
 
 extension Color {
+    
+    public var uiColor: UIColor {
+        return UIColor(self)
+    }
+    
     public init(hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
@@ -27,7 +34,13 @@ extension Color {
         )
     }
     
-    public var uiColor: UIColor {
-        return UIColor(self)
+    // hex values
+    static func dynamicColor(_ light: String, dark: String? = .none) -> Color {
+        let lightColor = Color(hex: light)
+        let darkColor: Color? = switch dark {
+        case .some(let color): Color(color)
+        case .none: .none
+        }
+        return UIColor.dynamicColor(lightColor, dark: darkColor)
     }
 }
