@@ -6,7 +6,9 @@ import Style
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
-    
+
+    @Environment(\.dismiss) private var dismiss
+
     @State private var name: String
     @State private var words: [String]? = nil
 
@@ -107,6 +109,7 @@ extension WalletDetailScene {
     private func onDeleteWallet()  {
         do {
             try model.delete()
+            dismiss()
         } catch {
             isPresentingErrorMessage = error.localizedDescription
         }
