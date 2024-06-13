@@ -32,6 +32,12 @@ public struct StakeConfig {
     }
 }
 
+public struct ChainConfig {
+    public static func config(chain: Chain) -> Gemstone.ChainConfig {
+        Config.shared.getChainConfig(chain: chain.rawValue)
+    }
+}
+
 public struct WalletConnectConfig {
     public static func config() -> Gemstone.WalletConnectConfig {
         Config.shared.getWalletConnectConfig()

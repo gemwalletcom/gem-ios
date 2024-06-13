@@ -38,7 +38,7 @@ class TransactionService {
                     NSLog("pending transactions request: chain \(transaction.assetId.chain.rawValue), for: (\(transaction.hash))")
                     try await updateState(for: transaction)
                 } catch {
-                    let timeout = Gemstone.chainTransactionTimeoutSeconds(chain: transaction.assetId.chain.rawValue)
+                    let timeout = Config.shared.getChainConfig(chain: transaction.assetId.chain.rawValue).transactionTimeout
                     let interval = Date.now.timeIntervalSince(transaction.createdAt)
                     if interval > timeout {
                         let _ = try transactionStore.updateState(id: transaction.id, state: .failed)
