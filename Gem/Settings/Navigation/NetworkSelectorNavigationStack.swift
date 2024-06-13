@@ -59,7 +59,7 @@ extension NetworkSelectorNavigationStack {
 // MARK: - Previews
 
 #Preview {
-    var mockChains = Chain.allCases
+    let mockChains = Chain.allCases
     @State var selectedChain: Chain = .smartChain
     @State var isPresenting: Bool = false
 
