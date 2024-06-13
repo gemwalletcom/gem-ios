@@ -4,7 +4,6 @@ import Foundation
 import SwiftUI
 
 extension Color {
-    
     public var uiColor: UIColor {
         return UIColor(self)
     }
@@ -32,15 +31,5 @@ extension Color {
             blue:  Double(b) / 255,
             opacity: Double(a) / 255
         )
-    }
-    
-    // hex values
-    static func dynamicColor(_ light: String, dark: String? = .none) -> Color {
-        let lightColor = Color(hex: light)
-        let darkColor: Color? = switch dark {
-        case .some(let color): Color(color)
-        case .none: .none
-        }
-        return UIColor.dynamicColor(lightColor, dark: darkColor)
     }
 }
