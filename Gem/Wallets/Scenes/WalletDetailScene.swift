@@ -121,6 +121,6 @@ extension WalletDetailScene {
 #Preview {
     NavigationStack {
         WalletDetailScene(model: .init(wallet: .main, keystore: LocalKeystore.main))
-            .toolbarTitleDisplayMode(.inline)
+            .navigationBarTitleDisplayMode(.inline)
     }
 }

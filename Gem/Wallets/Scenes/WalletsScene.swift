@@ -21,7 +21,8 @@ struct WalletsScene: View {
     var wallets: [Wallet]
     
     @State var walletEdit: Wallet? = .none
-    
+    @State var walletDelete: Wallet? = .none
+
     init(
         model: WalletsViewModel
     ) {
@@ -88,7 +89,7 @@ struct WalletsScene: View {
                             edit(wallet: wallet.wallet)
                         }
                         ContextMenuDelete {
-                            deleteWallet(wallet.wallet)
+                            walletDelete = wallet.wallet
                         }
                     }
                     .swipeActions {
@@ -98,7 +99,7 @@ struct WalletsScene: View {
                         .tint(Colors.gray)
                         
                         Button(Localized.Common.delete, role: .destructive) {
-                            deleteWallet(wallet.wallet)
+                            walletDelete = wallet.wallet
                         }
                         .tint(Colors.red)
                     }
@@ -119,6 +120,15 @@ struct WalletsScene: View {
         .sheet(isPresented: $isPresentingImportWalletSheet) {
             ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
         }
+        .confirmationDialog(
+            Localized.Wallet.deleteWalletConfirmation(walletDelete?.name ?? ""),
+            presenting: $walletDelete,
+            sensoryFeedback: .warning,
+            actions: { wallet in
+                Button(Localized.Common.delete, role: .destructive, action: {
+                    deleteWallet(wallet)
+                })
+            })
         .navigationBarTitle(model.title)
     }
     
@@ -140,6 +150,10 @@ struct WalletsScene: View {
     
     func edit(wallet: Wallet) {
         self.walletEdit = wallet
+    }
+
+    func delete(wallet: Wallet) {
+        self.walletDelete = wallet
     }
 }
 
