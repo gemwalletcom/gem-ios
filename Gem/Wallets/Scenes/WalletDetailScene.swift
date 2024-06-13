@@ -17,7 +17,7 @@ struct WalletDetailScene: View {
 
     init(model: WalletDetailViewModel) {
         self.model = model
-        self.name = model.name
+        _name = State(initialValue: self.model.name)
     }
     
     var body: some View {
