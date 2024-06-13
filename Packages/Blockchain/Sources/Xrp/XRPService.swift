@@ -124,3 +124,11 @@ extension XRPService: ChainTokenable {
         false
     }
 }
+
+// MARK: - ChainIDFetchable
+ 
+extension XRPService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}

@@ -154,6 +154,14 @@ extension NearService: ChainTokenable {
     }
 }
 
+// MARK: - ChainIDFetchable
+ 
+extension NearService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}
+
 extension NearRPCError: LocalizedError {
     public var errorDescription: String? {
         if let data = error.data{

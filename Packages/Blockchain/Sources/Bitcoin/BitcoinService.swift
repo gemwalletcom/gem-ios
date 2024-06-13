@@ -164,6 +164,14 @@ extension BitcoinService: ChainTokenable {
     }
 }
 
+// MARK: - ChainIDFetchable
+ 
+extension BitcoinService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}
+
 public extension UTXO {
     func mapToUnspendTransaction(address: String, coinType: CoinType) -> BitcoinUnspentTransaction {
         BitcoinUnspentTransaction.with {

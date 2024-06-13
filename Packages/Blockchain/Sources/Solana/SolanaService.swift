@@ -361,3 +361,11 @@ extension SolanaService: ChainTokenable {
         tokenId.count.isBetween(40, and: 60) && Base58.decodeNoCheck(string: tokenId) != nil
     }
 }
+
+// MARK: - ChainIDFetchable
+ 
+extension SolanaService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}

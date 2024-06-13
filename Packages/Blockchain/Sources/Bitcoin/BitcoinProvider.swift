@@ -9,6 +9,7 @@ public enum BitcoinProvider: TargetType {
     case nodeInfo
     case utxo(address: String)
     case fee(priority: Int)
+    case block(block: Int)
     case broadcast(data: String)
     
     public var baseUrl: URL {
@@ -27,6 +28,8 @@ public enum BitcoinProvider: TargetType {
             return "/api/v2/utxo/\(address)"
         case .fee(let priority):
             return "/api/v2/estimatefee/\(priority)"
+        case .block(let block):
+            return "/api/v2/block/\(block)"
         case .broadcast:
             return "/api/v2/sendtx/"
         }
@@ -38,7 +41,8 @@ public enum BitcoinProvider: TargetType {
             .transaction,
             .nodeInfo,
             .utxo,
-            .fee:
+            .fee,
+            .block:
             return .GET
         case .broadcast:
             return .POST
@@ -51,7 +55,8 @@ public enum BitcoinProvider: TargetType {
             .transaction,
             .nodeInfo,
             .utxo,
-            .fee:
+            .fee,
+            .block:
             return .plain
         case .broadcast(let data):
             return .data(Data(data.utf8))

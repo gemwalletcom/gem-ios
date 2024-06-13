@@ -395,6 +395,14 @@ extension SuiService: ChainStakable {
     }
 }
 
+// MARK: - ChainIDFetchable
+ 
+extension SuiService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}
+
 extension SuiSystemState {
     var epochStartDate: Date {
         Date(timeIntervalSince1970: (TimeInterval(epochStartTimestampMs) ?? 0) / 1000)

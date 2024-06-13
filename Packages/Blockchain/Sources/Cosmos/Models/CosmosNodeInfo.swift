@@ -27,3 +27,19 @@ public struct CosmosBlockResponse: Codable {
 		self.block = block
 	}
 }
+
+public struct CosmosNodeInfo: Codable {
+	public let network: String
+
+	public init(network: String) {
+		self.network = network
+	}
+}
+
+public struct CosmosNodeInfoResponse: Codable {
+	public let default_node_info: CosmosNodeInfo
+
+	public init(default_node_info: CosmosNodeInfo) {
+		self.default_node_info = default_node_info
+	}
+}
