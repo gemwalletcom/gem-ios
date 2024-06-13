@@ -126,3 +126,9 @@ extension ChainService: ChainTokenable {
     }
 }
 
+extension ChainService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        return try await Self.service(chain: chain, with: url)
+            .getChainID()
+    }
+}

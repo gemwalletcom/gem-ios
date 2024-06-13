@@ -238,6 +238,14 @@ extension TonService: ChainTokenable {
     }
 }
 
+// MARK: - ChainIDFetchable
+ 
+extension TonService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}
+
 struct RunGetMethod: Codable {
     let stack: [[StackItem]]
 }

@@ -117,3 +117,11 @@ extension AptosService: ChainTokenable {
         false
     }
 }
+
+// MARK: - ChainIDFetchable
+ 
+extension AptosService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}

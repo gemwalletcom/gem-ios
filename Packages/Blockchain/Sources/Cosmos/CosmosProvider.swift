@@ -14,6 +14,7 @@ public enum CosmosProvider: TargetType {
     case broadcast(data: String)
     case transaction(id: String)
     case syncing
+    case nodeInfo
     
     public var baseUrl: URL {
         return URL(string: "")!
@@ -29,7 +30,8 @@ public enum CosmosProvider: TargetType {
             .delegations,
             .undelegations,
             .rewards,
-            .validators:
+            .validators,
+            .nodeInfo:
             return .GET
         case .broadcast:
             return .POST
@@ -58,6 +60,8 @@ public enum CosmosProvider: TargetType {
             return "/cosmos/tx/v1beta1/txs/\(id)"
         case .syncing:
             return "/cosmos/base/tendermint/v1beta1/syncing"
+        case .nodeInfo:
+            return "/cosmos/base/tendermint/v1beta1/node_info"
         }
     }
     
@@ -71,7 +75,8 @@ public enum CosmosProvider: TargetType {
             .validators,
             .block,
             .transaction,
-            .syncing:
+            .syncing,
+            .nodeInfo:
             return .plain
         case .broadcast(let data):
             return .data(Data(data.utf8))

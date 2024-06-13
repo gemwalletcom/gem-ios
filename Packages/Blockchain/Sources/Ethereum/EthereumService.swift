@@ -280,6 +280,8 @@ extension EthereumService: ChainStakable {
     }
 }
 
+// MARK: - ChainTokenable
+
 extension EthereumService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         guard let address = WalletCore.AnyAddress(string: tokenId, coin: chain.chain.coinType)?.description else {
@@ -304,5 +306,15 @@ extension EthereumService: ChainTokenable {
 
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.hasPrefix("0x") && Data(fromHex: tokenId) != nil && tokenId.count == 42
+    }
+}
+
+// MARK: - ChainIDFetchable
+
+extension EthereumService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        return try await provider
+            .request(.chainId)
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value.description
     }
 }

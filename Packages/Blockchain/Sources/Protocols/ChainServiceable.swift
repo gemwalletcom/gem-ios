@@ -9,7 +9,8 @@ public typealias ChainServiceable = ChainBalanceable &
     ChainTransactionStateFetchable &
     ChainSyncable &
     ChainStakable &
-    ChainTokenable
+    ChainTokenable &
+    ChainIDFetchable
 
 public protocol ChainBalanceable {
     func coinBalance(for address: String) async throws -> AssetBalance
@@ -34,6 +35,10 @@ public protocol ChainTransactionStateFetchable {
 
 public protocol ChainSyncable {
     func getInSync() async throws -> Bool
+}
+
+public protocol ChainIDFetchable {
+    func getChainID() async throws -> String
 }
 
 public protocol ChainStakable {

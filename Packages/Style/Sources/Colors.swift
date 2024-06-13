@@ -1,21 +1,63 @@
 import SwiftUI
 
 public struct Colors {
-    public static let white = Color("white", bundle: .main)
-    public static let whiteSolid = Color("whiteSolid", bundle: .main)
-    public static let black = Color("black", bundle: .main)
-    public static let blue = Color("blue", bundle: .main)
-    public static let blueDark = Color("blueDark", bundle: .main)
-    public static let red = Color("red", bundle: .main)
-    public static let redLight = Color("redLight", bundle: .main)
-    public static let green = Color("green", bundle: .main)
-    public static let orange = Color("orange", bundle: .main)
-    public static let orangeLight = Color("orangeLight", bundle: .main)
-    public static let greenLight = Color("greenLight", bundle: .main)
-    public static let gray = Color("gray", bundle: .main)
-    public static let grayBackground = Color("grayBackground", bundle: .main)
-    public static let grayDarkBackground = Color("grayDarkBackground", bundle: .main)
-    public static let grayLight = Color("grayLight", bundle: .main)
-    public static let grayVeryLight = Color("grayVeryLight", bundle: .main)
-    public static let secondaryText = Color("secondaryText", bundle: .main)
+    public static let white = Color.dynamicColor("#FFFFFF", dark: "#222222")
+    public static let whiteSolid = Color.dynamicColor("FFFFFF")
+    public static let black = Color.dynamicColor("#222222", dark: "FFFFFF")
+    public static let blue = Color.dynamicColor("#2D5BE6")
+    public static let blueDark = Color.dynamicColor("#1742C5")
+    public static let red = Color.dynamicColor("#F84E4E")
+    public static let redLight = Color.dynamicColor("#FFF1F1", dark: "#462D30")
+    public static let green = Color.dynamicColor("#1B9A6C")
+    public static let greenLight = Color.dynamicColor("EAFAF5", dark: "27423C")
+    public static let orange = Color.dynamicColor("#FF9314")
+    public static let gray = Color.dynamicColor("#818181")
+    public static let grayLight = Color.dynamicColor("#969996")
+    public static let grayVeryLight = Color.dynamicColor("#F4F4F4", dark: "#333333")
+    public static let grayBackground = Color.dynamicColor("#F2F2F7", dark: "#1C1C1E")
+    public static let grayDarkBackground = Color.dynamicColor("#E6E6F0", dark: "#1C1C1E")
+    public static let secondaryText = Color.dynamicColor("#818181")
 }
+
+#Preview {
+    let colors: [(name: String, color: Color)] = [
+        ("White", Colors.white),
+        ("White Solid", Colors.whiteSolid),
+        ("Black", Colors.black),
+        ("Blue", Colors.blue),
+        ("Blue Dark", Colors.blueDark),
+        ("Red", Colors.red),
+        ("Red Light", Colors.redLight),
+        ("Green", Colors.green),
+        ("Green Light", Colors.greenLight),
+        ("Orange", Colors.orange),
+        ("Gray", Colors.gray),
+        ("Gray Light", Colors.grayLight),
+        ("Gray Very Light", Colors.grayVeryLight),
+        ("Gray Background", Colors.grayBackground),
+        ("Gray Dark Background", Colors.grayDarkBackground),
+        ("Secondary Text", Colors.secondaryText),
+    ]
+    return List {
+        ForEach(colors, id: \.name) { color in
+            HStack {
+                Text(color.name)
+                    .multilineTextAlignment(.leading)
+                    .frame(width: 174)
+                
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(color.color)
+                    .padding(Spacing.extraSmall)
+                    .colorScheme(.light)
+                
+                RoundedRectangle(cornerRadius: 4)
+                    .fill(color.color)
+                    .padding(Spacing.extraSmall)
+                    .colorScheme(.dark)
+            }
+            .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0))
+        }
+    }
+    .listStyle(InsetGroupedListStyle())
+}
+

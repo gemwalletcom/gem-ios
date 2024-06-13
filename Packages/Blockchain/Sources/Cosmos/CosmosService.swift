@@ -355,3 +355,13 @@ extension CosmosService: ChainTokenable {
         false
     }
 }
+
+// MARK: - ChainIDFetchable
+ 
+extension CosmosService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        return try await provider
+            .request(.nodeInfo)
+            .map(as: CosmosNodeInfoResponse.self).default_node_info.network
+    }
+}

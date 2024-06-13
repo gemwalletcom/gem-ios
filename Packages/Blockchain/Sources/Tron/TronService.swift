@@ -297,6 +297,14 @@ extension TronService: ChainStakable {
     }
 }
 
+// MARK: - ChainIDFetchable
+ 
+extension TronService: ChainIDFetchable {
+    public func getChainID() async throws -> String {
+        fatalError()
+    }
+}
+
 extension TronService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         guard let address = WalletCore.AnyAddress(string: tokenId, coin: chain.coinType)?.description else {
