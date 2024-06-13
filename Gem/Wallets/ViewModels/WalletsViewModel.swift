@@ -4,7 +4,6 @@ import Primitives
 import SwiftUI
 
 struct WalletsViewModel {
-    
     let keystore: any Keystore
     
     init(
@@ -20,14 +19,18 @@ struct WalletsViewModel {
     var currentWallet: Wallet {
         keystore.currentWallet!
     }
-    
-    func setCurrentWallet(_ wallet: Wallet) {
+}
+
+// MARK: - Business Logic
+
+extension WalletsViewModel {
+    func setCurrent(_ wallet: Wallet) {
         keystore.setCurrentWallet(wallet: wallet)
     }
-    
-    func deleteWallet(_ wallet: Wallet) throws {
+
+    func delete(_ wallet: Wallet) throws {
         try keystore.deleteWallet(for: wallet)
-        
+
         if keystore.wallets.isEmpty {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
