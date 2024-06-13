@@ -33,71 +33,45 @@ public struct SystemImage {
 // MARK: - Previews
 
 #Preview {
-    struct SystemImageView: View {
-        let imageName: String
-        let symbolName: String
-
-        var body: some View {
-            VStack {
-                if !imageName.isEmpty {
-                    Image(systemName: imageName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 50, height: 50)
-                        .padding()
-                } else {
-                    Rectangle()
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(width: 50, height: 50)
-                        .overlay(
-                            Text("None")
-                                .font(.caption)
-                                .foregroundColor(.gray)
-                        )
-                }
-                Text(symbolName)
-                    .font(.caption)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 4)
-            }
-            .padding()
-        }
-    }
-
     let symbols = [
-        (SystemImage.settings, "settings"),
-        (SystemImage.qrCode, "qrCode"),
-        (SystemImage.paste, "paste"),
-        (SystemImage.copy, "copy"),
-        (SystemImage.chevronDown, "chevronDown"),
-        (SystemImage.checklist, "checklist"),
-        (SystemImage.clear, "clear"),
-        (SystemImage.hide, "hide"),
-        (SystemImage.list, "list"),
-        (SystemImage.faceid, "faceid"),
-        (SystemImage.touchid, "touchid"),
-        (SystemImage.network, "network"),
-        (SystemImage.globe, "globe"),
-        (SystemImage.share, "share"),
-        (SystemImage.lock, "lock"),
-        (SystemImage.none, "none"),
-        (SystemImage.delete, "delete"),
-        (SystemImage.checkmark, "checkmark"),
-        (SystemImage.ellipsis, "ellipsis"),
-        (SystemImage.info, "info"),
-        (SystemImage.eyeglasses, "eyeglasses"),
-        (SystemImage.lockOpen, "lockOpen"),
-        (SystemImage.plus, "plus"),
-        (SystemImage.eye, "eye"),
-        (SystemImage.searchNoResults, "no results")
+        (SystemImage.settings, "Settings"),
+        (SystemImage.qrCode, "QR Code"),
+        (SystemImage.paste, "Paste"),
+        (SystemImage.copy, "Copy"),
+        (SystemImage.chevronDown, "Chevron Down"),
+        (SystemImage.checklist, "Checklist"),
+        (SystemImage.clear, "Clear"),
+        (SystemImage.hide, "Hide"),
+        (SystemImage.list, "List"),
+        (SystemImage.faceid, "Face ID"),
+        (SystemImage.touchid, "Touch ID"),
+        (SystemImage.network, "Network"),
+        (SystemImage.globe, "Globe"),
+        (SystemImage.share, "Share"),
+        (SystemImage.lock, "Lock"),
+        (SystemImage.none, "None"),
+        (SystemImage.delete, "Delete"),
+        (SystemImage.checkmark, "Checkmark"),
+        (SystemImage.ellipsis, "Ellipsis"),
+        (SystemImage.info, "Info"),
+        (SystemImage.eyeglasses, "Eyeglasses"),
+        (SystemImage.lockOpen, "Lock Open"),
+        (SystemImage.plus, "Plus"),
+        (SystemImage.eye, "Eye"),
+        (SystemImage.searchNoResults, "No Results")
     ]
 
-    return ScrollView {
-        LazyVGrid(columns: [GridItem(.adaptive(minimum: 100))], spacing: 20) {
-            ForEach(symbols, id: \.1) { symbol in
-                SystemImageView(imageName: symbol.0, symbolName: symbol.1)
+    return List {
+        ForEach(symbols, id: \.1) { symbol in
+            Section(header: Text(symbol.1)) {
+                Image(systemName: symbol.0)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: Sizing.list.image, height: Sizing.list.image)
+                    .padding(Spacing.extraSmall)
             }
         }
-        .padding()
     }
+    .listStyle(InsetGroupedListStyle())
+    .padding()
 }

@@ -170,7 +170,10 @@ struct WalletScene: View {
                     }
                 case .buy:
                     BuyAssetScene(
-                        model: BuyAssetViewModel(assetAddress: selectType.assetAddress)
+                        model: BuyAssetViewModel(
+                            assetAddress: selectType.assetAddress,
+                            input: .default
+                        )
                     )
                     .navigationBarTitleDisplayMode(.inline)
                     .toolbar {

@@ -24,7 +24,7 @@ struct SwapFooterView: View {
                     Button(action: action) {
                         Text(Localized.Wallet.swap)
                     }
-                    .buttonStyle(BlueButton())
+                    .buttonStyle(.blue())
                 case false:
                     Text(Localized.Swap.approveTokenPermission(tokenName))
                         .font(.system(size: 12))
@@ -36,7 +36,7 @@ struct SwapFooterView: View {
                             Text(Localized.Swap.approveToken(tokenName))
                         }
                     }
-                    .buttonStyle(BlueButton())
+                    .buttonStyle(.blue())
                 }
             case .error(let error):
                 StateErrorView(error: error, message: "")

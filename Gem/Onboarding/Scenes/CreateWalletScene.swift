@@ -23,7 +23,7 @@ struct CreateWalletScene: View {
             }
             Spacer()
             Button(Localized.Common.continue, action: continueAction)
-                .buttonStyle(BlueButton())
+                .buttonStyle(.blue())
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)

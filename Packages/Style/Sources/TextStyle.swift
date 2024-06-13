@@ -19,11 +19,9 @@ public struct TextStyle {
     }
 }
 
-// MARK: - 
+// MARK: - TextStyle Static
 
 extension TextStyle {
-    // if you extend this and want to check previews in packages, please also
-    // add same apple color value in /Previews/TextStyle+Preview
     public static let title = TextStyle(font: .title, color: Colors.black)
     public static let headline = TextStyle(font: .headline, color: Colors.black)
     public static let subheadline = TextStyle(font: .subheadline, color: Colors.secondaryText)
@@ -62,25 +60,25 @@ extension Text {
 #Preview {
     VStack(spacing: 16) {
         Text("Title")
-            .textStyle(TextStyle.Preview.title)
+            .textStyle(.title)
         Text("Headline")
-            .textStyle(TextStyle.Preview.headline)
+            .textStyle(.headline)
         Text("Subheadline")
-            .textStyle(TextStyle.Preview.subheadline)
+            .textStyle(.subheadline)
         Text("Body text that provides additional information.")
-            .textStyle(TextStyle.Preview.body)
+            .textStyle(.body)
         Text("Callout")
-            .textStyle(TextStyle.Preview.callout)
+            .textStyle(.callout)
         Text("Footnote")
-            .textStyle(TextStyle.Preview.footnote)
+            .textStyle(.footnote)
         Text("Caption")
-            .textStyle(TextStyle.Preview.caption)
+            .textStyle(.caption)
         Text("Large Title")
-            .textStyle(TextStyle.Preview.largeTitle)
+            .textStyle(.largeTitle)
         Text("Bold Title")
-            .textStyle(TextStyle.Preview.boldTitle)
+            .textStyle(.boldTitle)
         Text("Highlighted Text")
-            .textStyle(TextStyle.Preview.highlighted)
+            .textStyle(.highlighted)
     }
     .padding()
 }

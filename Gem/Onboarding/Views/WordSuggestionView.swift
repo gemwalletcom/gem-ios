@@ -20,9 +20,7 @@ struct WordSuggestionView: View {
                             Button(word) {
                                 selectWord?(word)
                             }
-                            .buttonStyle(
-                                ColorButton.blue(paddingHorizontal: 10, paddingVertical: 6)
-                            )
+                            .buttonStyle(.blue(paddingHorizontal: 10, paddingVertical: 6))
                             .fixedSize(horizontal: true, vertical: false)
                         }
                     }

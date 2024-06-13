@@ -33,12 +33,12 @@ struct WelcomeScene: View {
                 Button(Localized.Wallet.createNewWallet) {
                     isPresentingCreateWalletSheet.toggle()
                 }
-                .buttonStyle(BlueButton())
+                .buttonStyle(.blue())
                 .accessibilityIdentifier("welcome_create")
                 Button(Localized.Wallet.importExistingWallet) {
                     isPresentingImportWalletSheet.toggle()
                 }
-                .buttonStyle(ClearButton())
+                .buttonStyle(.blue())
                 .accessibilityIdentifier("welcome_import")
             }
             .frame(maxWidth: Spacing.scene.button.maxWidth)

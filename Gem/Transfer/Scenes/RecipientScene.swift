@@ -101,7 +101,7 @@ struct RecipientScene: View {
             Button(Localized.Common.continue, action: {
                 Task { next() }
             })
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }

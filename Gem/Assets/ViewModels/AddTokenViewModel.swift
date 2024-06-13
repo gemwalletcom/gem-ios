@@ -6,6 +6,7 @@ import SwiftUI
 import Settings
 import Components
 
+// TODO: - SelectAssetSceneNavigationStack, inject chain & address in SelectAssetSceneNavigationStack
 class AddTokenViewModel: ObservableObject {
     let wallet: Wallet
     let service: AddTokenService

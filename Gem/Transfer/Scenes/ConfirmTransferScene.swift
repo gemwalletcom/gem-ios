@@ -76,7 +76,7 @@ struct ConfirmTransferScene: View {
                             Text(model.buttonTitle)
                         }
                     }
-                    .buttonStyle(BlueButton())
+                    .buttonStyle(.blue())
                     .padding(.bottom, Spacing.scene.bottom)
                     .frame(maxWidth: Spacing.scene.button.maxWidth)
                 case .error(_, let error):
@@ -91,7 +91,7 @@ struct ConfirmTransferScene: View {
                     Button(role: .none) {} label: {
                         Text(title)
                     }
-                    .buttonStyle(ColorButton.gray())
+                    .buttonStyle(.gray())
                     .padding(.bottom, Spacing.scene.bottom)
                     .frame(maxWidth: Spacing.scene.button.maxWidth)
                 }
