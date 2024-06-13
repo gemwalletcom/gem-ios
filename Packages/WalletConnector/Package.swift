@@ -13,8 +13,8 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/WalletConnect/WalletConnectSwiftV2", .exactItem(Version(stringLiteral: "1.18.8"))),
-        .package(url: "https://github.com/daltoniam/Starscream.git", .exactItem(Version(stringLiteral: "3.1.2"))),
+        .package(url: "https://github.com/WalletConnect/WalletConnectSwiftV2", exact: Version(stringLiteral: "1.18.8")),
+        .package(url: "https://github.com/daltoniam/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
     ],
