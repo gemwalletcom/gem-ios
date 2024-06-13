@@ -8,15 +8,15 @@ extension UIColor {
     public var color: Color {
         Color(self)
     }
-    
+
     public class func dynamicColor(_ light: Color, dark: Color?) -> Color {
-        return UIColor {
-            switch $0.userInterfaceStyle {
+        return UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
             case .dark:
                 return dark?.uiColor ?? light.uiColor
             default:
                 return light.uiColor
             }
         }.color
-   }
+    }
 }
