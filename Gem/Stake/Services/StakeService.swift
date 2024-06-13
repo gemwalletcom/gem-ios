@@ -41,7 +41,7 @@ struct StakeService {
             return id
         case .smartChain:
             return StakeHub.address
-        case .none:
+        case .ethereum, .none:
             fatalError()
         }
     }
