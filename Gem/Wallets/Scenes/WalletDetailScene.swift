@@ -17,7 +17,7 @@ struct WalletDetailScene: View {
 
     init(model: WalletDetailViewModel) {
         self.model = model
-        self.name = model.name
+        _name = State(initialValue: self.model.name)
     }
     
     var body: some View {
@@ -49,10 +49,8 @@ struct WalletDetailScene: View {
                 }
             }
             Spacer()
-            Button(
-                Localized.Common.delete,
-                role: .destructive,
-                action: onSelectDelete)
+            Button(Localized.Common.delete, action: onSelectDelete)
+                .buttonStyle(.delete())
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
