@@ -83,15 +83,6 @@ struct WalletsScene: View {
                                 }
                             )
                             .buttonStyle(.borderless)
-
-//                            Button(role: .none) {
-//                                onSelectEdit(wallet: wallet.wallet)
-//                            } label: {
-//                                Image(.editIcon)
-//                                    .padding(.vertical, 8)
-//                                    .padding(.leading, Spacing.small)
-//                            }
-//                            .buttonStyle(.borderless)
                         }
                     }
                     .contextMenu {
@@ -113,17 +104,10 @@ struct WalletsScene: View {
                             }
                         )
                         .tint(Colors.gray)
-
-//                        Button(role: .none) { onSelectEdit(wallet: wallet.wallet) } label: {
-//                            Label("", systemImage: SystemImage.settings)
-//                        }
-//                        .tint(Colors.gray)
-
                         Button(
                             Localized.Common.delete,
                             role: .destructive,
                             action: { onSelectDelete(wallet: wallet.wallet) }
-//                            walletDelete = wallet.wallet
                         )
                         .tint(Colors.red)
                     }
