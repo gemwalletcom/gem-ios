@@ -106,7 +106,6 @@ struct WalletsScene: View {
                         .tint(Colors.gray)
                         Button(
                             Localized.Common.delete,
-                            role: .destructive,
                             action: { onSelectDelete(wallet: wallet.wallet) }
                         )
                         .tint(Colors.red)
@@ -152,7 +151,7 @@ extension WalletsScene {
     }
 
     private func onSelectImportWallet() {
-        isPresentingCreateWalletSheet.toggle()
+        isPresentingImportWalletSheet.toggle()
     }
 
     private func onSelectDelete(wallet: Wallet) {

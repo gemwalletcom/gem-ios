@@ -124,7 +124,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
                 foregroundStyle: Colors.red,
                 foregroundStylePressed: Colors.red,
                 background: Colors.whiteGrayBackground,
-                backgroundPressed: Colors.whiteGrayBackground
+                backgroundPressed: Colors.whiteGrayPressedBackground
             )
         }
 }
