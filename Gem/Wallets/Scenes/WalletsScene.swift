@@ -7,21 +7,23 @@ import Store
 import Style
 
 struct WalletsScene: View {
-    
-    var model: WalletsViewModel
     @Environment(\.dismiss) private var dismiss
     @Environment(\.db) private var DB
+
     @State private var isPresentingErrorMessage: String?
     @State private var showingDeleteAlert = false
     
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
-    
+
+    @State var walletEdit: Wallet? = .none
+    @State var walletDelete: Wallet? = .none
+
+    var model: WalletsViewModel
+
     @Query<WalletsRequest>
     var wallets: [Wallet]
-    
-    @State var walletEdit: Wallet? = .none
-    
+
     init(
         model: WalletsViewModel
     ) {
@@ -32,22 +34,24 @@ struct WalletsScene: View {
     var body: some View {
         List {
             Section {
-                Button {
-                    isPresentingCreateWalletSheet.toggle()
-                } label: {
-                    HStack {
-                        Image(.createWallet)
-                        Text(Localized.Wallet.createNewWallet)
+                Button(
+                    action: onSelectCreateWallet,
+                    label: {
+                        HStack {
+                            Image(.createWallet)
+                            Text(Localized.Wallet.createNewWallet)
+                        }
                     }
-                }
-                Button {
-                    isPresentingImportWalletSheet.toggle()
-                } label: {
-                    HStack {
-                        Image(.importWallet)
-                        Text(Localized.Wallet.importExistingWallet)
+                )
+                Button(
+                    action: onSelectImportWallet,
+                    label: {
+                        HStack {
+                            Image(.importWallet)
+                            Text(Localized.Wallet.importExistingWallet)
+                        }
                     }
-                }
+                )
             }
             Section {
                 ForEach(wallets.map { WalletViewModel(wallet: $0) }) { wallet in
@@ -56,7 +60,7 @@ struct WalletsScene: View {
                     ZStack {
                         NavigationCustomLink(
                             with: EmptyView(),
-                            action: { selectWallet(wallet.wallet) }
+                            action: { onSelect(wallet: wallet.wallet) }
                         )
                         .opacity(0)
 
@@ -69,14 +73,15 @@ struct WalletsScene: View {
                             if model.currentWallet == wallet.wallet {
                                 Image(.walletSelected)
                             }
-                            
-                            Button(role: .none) {
-                                edit(wallet: wallet.wallet)
-                            } label: {
-                                Image(.editIcon)
-                                    .padding(.vertical, 8)
-                                    .padding(.leading, Spacing.small)
-                            }
+
+                            Button(
+                                action: { onSelectEdit(wallet: wallet.wallet) },
+                                label: {
+                                    Image(.editIcon)
+                                        .padding(.vertical, 8)
+                                        .padding(.leading, Spacing.small)
+                                }
+                            )
                             .buttonStyle(.borderless)
                         }
                     }
@@ -85,21 +90,25 @@ struct WalletsScene: View {
                             title: Localized.Common.wallet,
                             image: SystemImage.settings
                         ) {
-                            edit(wallet: wallet.wallet)
+                            onSelectEdit(wallet: wallet.wallet)
                         }
                         ContextMenuDelete {
-                            deleteWallet(wallet.wallet)
+                            walletDelete = wallet.wallet
                         }
                     }
                     .swipeActions {
-                        Button(role: .none) { edit(wallet: wallet.wallet) } label: {
-                            Label("", systemImage: SystemImage.settings)
-                        }
+                        Button(
+                            action: { onSelectEdit(wallet: wallet.wallet) },
+                            label: {
+                                Label("", systemImage: SystemImage.settings)
+                            }
+                        )
                         .tint(Colors.gray)
-                        
-                        Button(Localized.Common.delete, role: .destructive) {
-                            deleteWallet(wallet.wallet)
-                        }
+                        Button(
+                            Localized.Common.delete,
+                            role: .destructive,
+                            action: { onSelectDelete(wallet: wallet.wallet) }
+                        )
                         .tint(Colors.red)
                     }
                 }
@@ -119,32 +128,66 @@ struct WalletsScene: View {
         .sheet(isPresented: $isPresentingImportWalletSheet) {
             ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
         }
+        .confirmationDialog(
+            Localized.Wallet.deleteWalletConfirmation(walletDelete?.name ?? ""),
+            presenting: $walletDelete,
+            sensoryFeedback: .warning,
+            actions: { wallet in
+                Button(
+                    Localized.Common.delete,
+                    role: .destructive,
+                    action: { delete(wallet: wallet) }
+                )
+            })
         .navigationBarTitle(model.title)
     }
-    
-    func selectWallet(_ wallet: Wallet) {
-        model.setCurrentWallet(wallet)
-        dismiss()
+}
+
+
+// MARK: - Actions
+
+extension WalletsScene {
+    private func onSelectCreateWallet() {
+        isPresentingCreateWalletSheet.toggle()
+    }
+
+    private func onSelectImportWallet() {
+        isPresentingCreateWalletSheet.toggle()
+    }
+
+    private func onSelectDelete(wallet: Wallet) {
+        walletDelete = wallet
+    }
+
+    private func onSelectEdit(wallet: Wallet) {
+        walletEdit = wallet
+    }
+
+    private func onSelect(wallet: Wallet) {
+        model.setCurrent(wallet)
         dismiss()
     }
-    
-    func deleteWallet(_ wallet: Wallet) {
+}
+
+// MARK: - Effects
+
+extension WalletsScene {
+    private func delete(wallet: Wallet) {
         Task {
             do {
-                let _ = try model.deleteWallet(wallet)
+                try model.delete(wallet)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }
         }
     }
-    
-    func edit(wallet: Wallet) {
-        self.walletEdit = wallet
-    }
 }
 
-//struct WalletsScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        WalletsScene(model: WalletsViewModel(keystore: .main))
-//    }
-//}
+// MARK: - Previews
+
+#Preview {
+    NavigationStack {
+        WalletsScene(model: .init(keystore: LocalKeystore.main))
+            .navigationBarTitleDisplayMode(.inline)
+    }
+}

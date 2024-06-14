@@ -21,4 +21,11 @@ public enum StateViewType<T> {
         default: false
         }
     }
+
+    public var value: T? {
+        guard case .loaded(let t) = self else {
+            return nil
+        }
+        return t
+    }
 }

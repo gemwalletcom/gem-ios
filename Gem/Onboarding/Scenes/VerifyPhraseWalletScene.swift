@@ -30,7 +30,7 @@ struct VerifyPhraseWalletScene: View {
                                     Button { } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(ColorButton.lightGray(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
+                                    .buttonStyle(.lightGray(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
                                     .disabled(true)
                                     .fixedSize()
                                 } else {
@@ -39,7 +39,7 @@ struct VerifyPhraseWalletScene: View {
                                     } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(ColorButton.blue(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
+                                    .buttonStyle(.blueGrayPressed(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
                                     .fixedSize()
                                 }
                             }
@@ -51,7 +51,7 @@ struct VerifyPhraseWalletScene: View {
                 Spacer()
                 Button(Localized.Common.continue, action: importWallet)
                     .disabled(model.isContinueDisabled)
-                    .buttonStyle(BlueButton())
+                    .buttonStyle(.blue())
                     .frame(maxWidth: Spacing.scene.button.maxWidth)
             }
             .frame(maxWidth: Spacing.scene.content.maxWidth)

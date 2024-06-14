@@ -119,7 +119,11 @@ struct SelectAssetScene: View {
                     )
                 )
             case .buy:
-                BuyAssetScene(model: BuyAssetViewModel(assetAddress: input.assetAddress))
+                BuyAssetScene(
+                    model: BuyAssetViewModel(
+                        assetAddress: input.assetAddress,
+                        input: .default)
+                    )
             case .swap:
                 SwapScene(model: SwapViewModel(
                     wallet: model.wallet,

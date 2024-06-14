@@ -34,7 +34,7 @@ struct ReceiveScene: View {
                         .frame(maxWidth: .infinity)
                     Spacer()
                     Button(Localized.Common.copy, action: copyAddress)
-                        .buttonStyle(BlueButton(paddingHorizontal: 8, paddingVertical: 6))
+                        .buttonStyle(.blue(paddingHorizontal: 8, paddingVertical: 6))
                         .fixedSize()
                 }.padding(8)
             }
@@ -49,7 +49,7 @@ struct ReceiveScene: View {
             }) {
                 Text(Localized.Common.share)
             }
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }

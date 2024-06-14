@@ -78,7 +78,7 @@ struct AddTokenScene: View {
             Button(Localized.Wallet.Import.action, action: onSelectImportToken)
                 .disabled(model.state.isLoading)
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
-                .buttonStyle(BlueButton())
+                .buttonStyle(.blue())
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)

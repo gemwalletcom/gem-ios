@@ -114,7 +114,7 @@ struct ImportWalletScene: View {
             }
             .accessibilityIdentifier("import_wallet")
             .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(BlueButton())
+            .buttonStyle(.blue())
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
