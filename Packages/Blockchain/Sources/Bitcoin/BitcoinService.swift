@@ -84,6 +84,10 @@ extension BitcoinService: ChainBalanceable {
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         return []
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension BitcoinService: ChainFeeCalculateable {
@@ -150,10 +154,6 @@ extension BitcoinService: ChainStakable {
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-    
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
         fatalError()
     }
 }

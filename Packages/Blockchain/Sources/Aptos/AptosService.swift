@@ -31,6 +31,10 @@ extension AptosService: ChainBalanceable {
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         []
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension AptosService: ChainFeeCalculateable {
@@ -100,10 +104,6 @@ extension AptosService: ChainStakable {
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
         fatalError()
     }
 }

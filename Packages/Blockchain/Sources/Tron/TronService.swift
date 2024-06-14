@@ -171,6 +171,10 @@ extension TronService: ChainBalanceable {
         
         return result
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension TronService: ChainFeeCalculateable {
@@ -289,10 +293,6 @@ extension TronService: ChainStakable {
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
         fatalError()
     }
 }

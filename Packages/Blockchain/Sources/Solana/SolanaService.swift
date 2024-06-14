@@ -121,23 +121,30 @@ public struct SolanaService {
 extension SolanaService: ChainBalanceable {    
     public func coinBalance(for address: String) async throws -> AssetBalance {
         async let getBalance = getCoinBalance(address: address)
-        async let getDelegationsBalance = getDelegations(address: address)
-            .map { $0.account.lamports }
-            .reduce(0, +)
 
-        let (available, staked) = try await (getBalance, getDelegationsBalance)
-        
+        let (available, staked) = try await (getBalance, getStakeBalance(address: address))
+
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: available,
-                staked: BigInt(staked)
-            )
+                available: available
+            ).merge(staked.balance)
         )
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         return try await getTokenBalances(tokenIds: tokenIds, address: address)
+    }
+
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        let staked = try await getDelegations(address: address)
+            .map { $0.account.lamports }
+            .reduce(0, +)
+        return AssetBalance(
+            assetId: chain.assetId,
+            balance: Balance(available: .zero, staked: BigInt(staked))
+        )
     }
 }
 
@@ -328,10 +335,6 @@ extension SolanaService: ChainStakable {
                 validatorId: info.stake.delegation.voter
             )
         }
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
     }
 }
 

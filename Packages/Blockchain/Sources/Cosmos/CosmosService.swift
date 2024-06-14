@@ -126,45 +126,19 @@ extension CosmosService: ChainBalanceable {
             .noble:
 
             async let getBalance = getBalance(address: address)
-            async let getDelegations = getDelegations(address: address)
-            async let getUnboundingDelegations = getUnboundingDelegations(address: address)
-            async let getRewards = getRewards(address: address)
-            
-            let (balances, delegations, unboundingDelegations, rewards) = try await (
+            async let getStakeBalance = getStakeBalance(address: address)
+
+            let (balances, stakeBalance) = try await (
                 getBalance,
-                getDelegations,
-                getUnboundingDelegations,
-                getRewards
+                getStakeBalance
             )
             
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
-            
-            let delegationsBalance = delegations
-                .filter { $0.balance.denom == denom.rawValue }
-                .compactMap { BigInt($0.balance.amount) }
-                .reduce(0, +)
-            
-            let unboundingDelegationsBalance = unboundingDelegations.compactMap {
-                    $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
-            }.reduce(0, +)
-            
-            let rewardsBalance = rewards
-                .map {
-                    $0.reward
-                    .filter { $0.denom == denom.rawValue }
-                    .compactMap { BigInt($0.amount) }
-                    .reduce(0, +)
-                }
-                .reduce(0, +)
-                
-            return Primitives.AssetBalance(
+            return AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
-                    available: balance,
-                    staked: delegationsBalance,
-                    pending: unboundingDelegationsBalance,
-                    rewards: rewardsBalance
-                )
+                    available: balance
+                ).merge(stakeBalance.balance)
             )
         }
     }
@@ -175,6 +149,43 @@ extension CosmosService: ChainBalanceable {
             let balance = balances.balances.filter ({ $0.denom == assetId.tokenId }).first?.amount ?? .zero
             return AssetBalance(assetId: assetId, balance: Balance(available: BigInt(stringLiteral: balance)))
         }
+    }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        let denom = chain.denom
+        async let getDelegations = getDelegations(address: address)
+        async let getUnboundingDelegations = getUnboundingDelegations(address: address)
+        async let getRewards = getRewards(address: address)
+
+        let (delegations, unboundingDelegations, rewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
+
+        let delegationsBalance = delegations
+            .filter { $0.balance.denom == denom.rawValue }
+            .compactMap { BigInt($0.balance.amount) }
+            .reduce(0, +)
+
+        let unboundingDelegationsBalance = unboundingDelegations.compactMap {
+            $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
+        }.reduce(0, +)
+
+        let rewardsBalance = rewards
+            .map {
+                $0.reward
+                    .filter { $0.denom == denom.rawValue }
+                    .compactMap { BigInt($0.amount) }
+                    .reduce(0, +)
+            }
+            .reduce(0, +)
+
+        return AssetBalance(
+            assetId: chain.chain.assetId,
+            balance: Balance(
+                available: .zero, // will be merged into
+                staked: delegationsBalance,
+                pending: unboundingDelegationsBalance,
+                rewards: rewardsBalance
+            )
+        )
     }
 }
 
@@ -339,10 +350,6 @@ extension CosmosService: ChainStakable {
             baseUnbondingDelegations,
         ]
         .flatMap{ $0 }
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
     }
 }
 

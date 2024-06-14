@@ -15,6 +15,7 @@ public typealias ChainServiceable = ChainBalanceable &
 public protocol ChainBalanceable {
     func coinBalance(for address: String) async throws -> AssetBalance
     func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance]
+    func getStakeBalance(address: String) async throws -> AssetBalance
 }
 
 public protocol ChainFeeCalculateable {
@@ -44,7 +45,6 @@ public protocol ChainIDFetchable {
 public protocol ChainStakable {
     func getValidators(apr: Double) async throws -> [DelegationValidator]
     func getStakeDelegations(address: String) async throws -> [DelegationBase]
-    func getStakeBalance(address: String) async throws -> AssetBalance
 }
 
 public protocol ChainTokenable {

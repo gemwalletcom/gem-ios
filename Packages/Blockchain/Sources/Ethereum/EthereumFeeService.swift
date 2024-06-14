@@ -36,13 +36,13 @@ extension EthereumService: ChainFeeCalculateable {
             case .smartChain:
                 return try? StakeHub().encodeStake(type: stakeType, amount: input.value)
             case .ethereum:
-                do {
-                    // empty signature for gas estimation
-                    let signature = Data(repeating: 0, count: 65)
-                    return try LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signature)
-                } catch {
-                    return nil
+                if stakeType.validatorId != DelegationValidator.lido.id {
+                    // refactor later to support everstake and others
+                    fatalError()
                 }
+                // empty signature for gas estimation
+                let signature = Data(repeating: 0, count: 65)
+                return try? LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signature)
             default:
                 fatalError()
             }

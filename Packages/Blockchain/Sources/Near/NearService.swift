@@ -70,6 +70,10 @@ extension NearService: ChainBalanceable {
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         []
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 extension NearService: ChainFeeCalculateable {
@@ -128,9 +132,6 @@ extension NearService: ChainTransactionStateFetchable {
 extension NearService: ChainSyncable {
     public func getInSync() async throws -> Bool {
         fatalError()
-//        return try await provider
-//            .request(.health)
-//            .map(as: JSONRPCResponse<String>.self).result == "ok"
     }
 }
 
@@ -140,10 +141,6 @@ extension NearService: ChainStakable {
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        fatalError()
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
         fatalError()
     }
 }
