@@ -142,12 +142,16 @@ class ConfirmTransferViewModel: ObservableObject {
         return try! wallet.account(for: data.recipientData.asset.chain).address
     }
     
+    private var senderLink: BlockExplorerLink {
+        ExplorerService.main.addressUrl(chain: data.recipientData.asset.chain, address: senderAddress)
+    }
+    
     var senderAddressExplorerUrl: URL {
-        return ExplorerService.addressUrl(chain: data.recipientData.asset.chain, address: senderAddress)
+        return senderLink.url
     }
     
     var senderExplorerText: String {
-        return Localized.Transaction.viewOn(ExplorerService.hostName(url: senderAddressExplorerUrl))
+        return Localized.Transaction.viewOn(senderLink.url)
     }
     
     var broadcastOptions: BroadcastOptions {

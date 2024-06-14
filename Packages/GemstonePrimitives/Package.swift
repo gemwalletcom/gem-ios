@@ -26,7 +26,10 @@ let package = Package(
         ),
         .testTarget(
             name: "GemstonePrimitivesTests",
-            dependencies: ["GemstonePrimitives"]
+            dependencies: [
+                "GemstonePrimitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]
         ),
     ]
 )

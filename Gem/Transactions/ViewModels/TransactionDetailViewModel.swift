@@ -205,7 +205,7 @@ struct TransactionDetailViewModel {
     }
     
     var transactionExplorerText: String {
-        return Localized.Transaction.viewOn(ExplorerService.hostName(url: transactionExplorerUrl))
+        return model.viewOnTransactionExplorerText
     }
 }
 

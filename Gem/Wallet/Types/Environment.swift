@@ -5,6 +5,7 @@ import SwiftUI
 import GRDB
 import Store
 import Keystore
+import GemstonePrimitives
 
 struct DatabaseQueueKey: EnvironmentKey {
     static var defaultValue: DB { DB.main }
@@ -12,6 +13,10 @@ struct DatabaseQueueKey: EnvironmentKey {
 
 struct NodeServiceKey: EnvironmentKey {
     static var defaultValue: NodeService { NodeService.main }
+}
+
+struct ExplorerServiceKey: EnvironmentKey {
+    static var defaultValue: ExplorerService { ExplorerService.main }
 }
 
 struct KeystoreKey: EnvironmentKey {
@@ -103,6 +108,11 @@ extension EnvironmentValues {
     var connectionsService: ConnectionsService {
         get { self[ConnectionsServiceKey.self] }
         set { self[ConnectionsServiceKey.self] = newValue }
+    }
+    
+    var explorerService: ExplorerService {
+        get { self[ExplorerServiceKey.self] }
+        set { self[ExplorerServiceKey.self] = newValue }
     }
     
     var isWalletsPresented: Binding<Bool> {

@@ -6,44 +6,56 @@ import Primitives
 import WalletCore
 import WalletCorePrimitives
 
-public enum ExplorerService {
+public struct ExplorerService {
     
-    public static func transactionUrl(chain: Chain, hash: String) -> URL {
-        let url = URL(string: Gemstone.Explorer().getTransactionUrl(chain: chain.id, transactionId: hash))!
-        return url.appendTag()
+    private let storage: ExplorerStorable
+    
+    public init(storage: ExplorerStorable) {
+        self.storage = storage
+    }
+    
+    private func explorerNameOrDefault(chain: Chain) -> String {
+        let name = storage.get(chain: chain)
+        let explorers = Self.explorers(chain: chain)
+        return explorers.first(where: { $0 == name }) ?? explorers.first!
+    }
+    
+    public static func explorers(chain: Chain) -> [String] {
+        Gemstone.Config.shared.getBlockExplorers(chain: chain.id)
+    }
+    
+    public func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        let url = URL(string: explorer.getTransactionUrl(explorerName: name, transactionId: hash))!
+        return BlockExplorerLink(name: name, link: url.absoluteString)
     }
 
-    public static func addressUrl(chain: Chain, address: String) -> URL {
-        let url = URL(string: Gemstone.Explorer().getAddressUrl(chain: chain.id, address: address))!
-        return url.appendTag()
+    public func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        let url = URL(string: explorer.getAddressUrl(explorerName: name, address: address))!
+        return BlockExplorerLink(name: name, link: url.absoluteString)
     }
     
-    public static func tokenUrl(chain: Chain, address: String) -> URL? {
-        if let url = Gemstone.Explorer().getTokenUrl(chain: chain.id, address: address) {
-            return URL(string: url)
+    public func tokenUrl(chain: Chain, address: String) -> BlockExplorerLink? {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        if let tokenUrl = explorer.getTokenUrl(explorerName: name, address: address), let url = URL(string: tokenUrl) {
+            return BlockExplorerLink(name: name, link: url.absoluteString)
         }
         return .none
     }
-
-    public static func hostName(url: URL) -> String {
-        guard let host = url.host else {
-            return url.absoluteString
-        }
-        return Gemstone.Explorer().getNameByHost(host: host) ?? host
-    }
 }
 
-extension URL {
-    static let prefix = [
-        "blockchair.com": [URLQueryItem(name: "from", value: "gemwallet")],
-    ]
+// MARK: - ExplorerStorable
 
-    public func appendTag() -> URL {
-        if let host = host, let value = Self.prefix[host] {
-            var newUrl = self
-            newUrl.append(queryItems: value)
-            return newUrl
-        }
-        return self
+extension ExplorerService: ExplorerStorable {
+    public func set(chain: Primitives.Chain, name: String) {
+        storage.set(chain: chain, name: name)
+    }
+    
+    public func get(chain: Primitives.Chain) -> String? {
+        storage.get(chain: chain)
     }
 }

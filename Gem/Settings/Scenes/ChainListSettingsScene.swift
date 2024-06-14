@@ -8,6 +8,7 @@ import Style
 
 struct ChainListSettingsScene: View {
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.explorerService) private var explorerService
 
     let model = ChainListSettingsViewModel()
 
@@ -29,7 +30,7 @@ struct ChainListSettingsScene: View {
         )
         .navigationDestination(for: Chain.self) { chain in
             ChainSettingsScene(
-                model: ChainSettingsViewModel(chain: chain, nodeService: nodeService)
+                model: ChainSettingsViewModel(chain: chain, nodeService: nodeService, explorerService: explorerService)
             )
         }
         .navigationTitle(model.title)

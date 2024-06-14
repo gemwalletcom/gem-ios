@@ -33,11 +33,9 @@ struct AddressListItem: View {
         return account.name ?? account.address
     }
     
-    var addressExplorerText: String {
-        return Localized.Transaction.viewOn(ExplorerService.hostName(url: addressExplorerUrl))
+    private var addressLink: BlockExplorerLink {
+        ExplorerService.main.addressUrl(chain: account.chain, address: account.address)
     }
-    
-    var addressExplorerUrl: URL {
-        ExplorerService.addressUrl(chain: account.chain, address: account.address)
-    }
+    var addressExplorerText: String { Localized.Transaction.viewOn(addressLink.name) }
+    var addressExplorerUrl: URL { addressLink.url }
 }

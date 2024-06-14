@@ -279,3 +279,11 @@ extension CurrencyFormatter {
         return CurrencyFormatter(type: .percent, currencyCode: Preferences.standard.currency)
     }
 }
+
+extension ExplorerStorage {
+    static let main = ExplorerStorage(preferences: .main)
+}
+
+extension ExplorerService {
+    static let main = ExplorerService(storage: ExplorerStorage.main)
+}

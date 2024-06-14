@@ -54,30 +54,35 @@ class AssetSceneViewModel: ObservableObject {
         )
     }
     
-    var viewAddressOnTitle: String {
-        return Localized.Asset.viewAddressOn(ExplorerService.hostName(url: addressExplorerUrl))
+    private var addressLink: BlockExplorerLink {
+        ExplorerService.main.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
     }
     
-    var viewTokenOnTitle: String? {
-        if let url = tokenExplorerUrl {
-            return Localized.Asset.viewTokenOn(ExplorerService.hostName(url: url))
+    var addressExplorerUrl: URL {
+        return addressLink.url
+    }
+    
+    var viewAddressOnTitle: String {
+        return Localized.Asset.viewAddressOn(addressLink.name)
+    }
+    
+    private var tokenLink: BlockExplorerLink? {
+        guard let tokenId = assetModel.asset.tokenId else {
+            return .none
+        }
+        return ExplorerService.main.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
+    }
+    
+    var tokenExplorerUrl: URL? {
+        if let link = tokenLink {
+            return link.url
         }
         return .none
     }
     
-    var addressExplorerUrl: URL {
-        return ExplorerService.addressUrl(
-            chain: assetModel.asset.chain,
-            address: assetDataModel.address
-        )
-    }
-    
-    var tokenExplorerUrl: URL? {
-        if let tokenId = assetModel.asset.tokenId {
-            return ExplorerService.tokenUrl(
-                chain: assetModel.asset.chain,
-                address: tokenId
-            )
+    var viewTokenOnTitle: String? {
+        if let link = tokenLink {
+            return Localized.Asset.viewTokenOn(link.name)
         }
         return .none
     }
