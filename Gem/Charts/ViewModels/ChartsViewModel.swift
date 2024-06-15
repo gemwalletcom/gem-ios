@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Components
 import Store
+import  Gemstone
 
 class ChartsViewModel: ObservableObject {
     
@@ -100,5 +101,25 @@ class ChartsViewModel: ObservableObject {
         } catch {
             NSLog("charts scene: updateAsset error \(error)")
         }
+    }
+}
+
+extension AssetDetailsInfo {
+    var socialUrls: [CommunityLink] {
+        let links = details.links
+        let values: [Gemstone.SocialUrl: String] = [
+            .x: links.twitter,
+            .discord: links.discord,
+            .gitHub: links.github,
+            .telegram: links.telegram,
+            .youTube: links.youtube,
+        ].compactMapValues { $0 }
+
+        return values.compactMap { key, value in
+            if let url = URL(string: value) {
+                return CommunityLink(type: key, url: url)
+            }
+            return .none
+        }.sorted()
     }
 }

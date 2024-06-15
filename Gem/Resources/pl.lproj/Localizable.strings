@@ -192,3 +192,12 @@
 "wallet_connect.no_active_connections" = "No active connections";
 "stake.minimum_amount" = "Stawka minimalna";
 "common.no_results_found" = "Nie znaleziono wyników";
+"social.x" = "X (formerly Twitter)";
+"social.discord" = "Discord";
+"social.reddit" = "Reddit";
+"social.telegram" = "Telegram";
+"social.github" = "GitHub";
+"social.youtube" = "YouTube";
+"social.links" = "Links";
+"social.homepage" = "Homepage";
+"social.facebook" = "Facebook";

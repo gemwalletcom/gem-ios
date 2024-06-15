@@ -172,6 +172,8 @@
 		D820CB522B51ED220063D70C /* ValidatorImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820CB512B51ED220063D70C /* ValidatorImageView.swift */; };
 		D820CB542B55B07F0063D70C /* StakeRecommendedValidators.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820CB532B55B07F0063D70C /* StakeRecommendedValidators.swift */; };
 		D82E9EDA2B26698100DB06C8 /* StakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82E9ED92B26698100DB06C8 /* StakeService.swift */; };
+		D82EF8D02C1E0FA000EC1C92 /* ImportNodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8CF2C1E0FA000EC1C92 /* ImportNodeService.swift */; };
+		D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */; };
 		D8385CE02AFEBBFB00F784C7 /* WalletConnectorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */; };
 		D8385CE32AFEBC1F00F784C7 /* WalletConnectorInteractable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */; };
 		D8385CE72B017A9100F784C7 /* SwapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE62B017A9100F784C7 /* SwapService.swift */; };
@@ -425,6 +427,8 @@
 		D820CB512B51ED220063D70C /* ValidatorImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorImageView.swift; sourceTree = "<group>"; };
 		D820CB532B55B07F0063D70C /* StakeRecommendedValidators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeRecommendedValidators.swift; sourceTree = "<group>"; };
 		D82E9ED92B26698100DB06C8 /* StakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeService.swift; sourceTree = "<group>"; };
+		D82EF8CF2C1E0FA000EC1C92 /* ImportNodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportNodeService.swift; sourceTree = "<group>"; };
+		D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityLink.swift; sourceTree = "<group>"; };
 		D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractor.swift; sourceTree = "<group>"; };
 		D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractable.swift; sourceTree = "<group>"; };
 		D8385CE62B017A9100F784C7 /* SwapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapService.swift; sourceTree = "<group>"; };
@@ -600,6 +604,7 @@
 				C3D1C4FF2A43AAD1006E8EEA /* Transactions */,
 				C3CF3B8229AB189700E96586 /* Assets */,
 				C3CF3B7E29AAF86400E96586 /* Settings */,
+				D82EF8C92C1E03DF00EC1C92 /* Nodes */,
 				D8DC1AFC2C113AA600697D0A /* Resources */,
 				C30952B3299C39D70004C0F9 /* App.swift */,
 				C3CF3BB429B6917600E96586 /* App-Configuration.swift */,
@@ -1058,6 +1063,7 @@
 				D848B5A62AE85C7D00814FB4 /* WalletImportType.swift */,
 				D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */,
 				D8148C272BF191AB0066586A /* WalletNameGenerator.swift */,
+				D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1192,6 +1198,39 @@
 			isa = PBXGroup;
 			children = (
 				D82E9ED92B26698100DB06C8 /* StakeService.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		D82EF8C92C1E03DF00EC1C92 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				D82EF8CB2C1E03EE00EC1C92 /* Scenes */,
+				D82EF8CA2C1E03EB00EC1C92 /* Views */,
+				D82EF8CC2C1E03F300EC1C92 /* Services */,
+			);
+			path = Nodes;
+			sourceTree = "<group>";
+		};
+		D82EF8CA2C1E03EB00EC1C92 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D82EF8CB2C1E03EE00EC1C92 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		D82EF8CC2C1E03F300EC1C92 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				C3D1C4FD2A421842006E8EEA /* NodeService.swift */,
+				D82EF8CF2C1E0FA000EC1C92 /* ImportNodeService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1441,7 +1480,6 @@
 				D8B977FD2AA95435009933B5 /* DeviceService.swift */,
 				D85620242AAA71FA00D65D81 /* SubscriptionService.swift */,
 				C3FB44882A7AD98B0056F124 /* NameService.swift */,
-				C3D1C4FD2A421842006E8EEA /* NodeService.swift */,
 				C3340B712A4A292100884D48 /* ChainServiceFactory.swift */,
 			);
 			path = Services;
@@ -1866,12 +1904,14 @@
 				D848B59E2AE5D0FA00814FB4 /* ConnectionScene.swift in Sources */,
 				C3CF3BE329BE4C3200E96586 /* WalletsViewModel.swift in Sources */,
 				D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */,
+				D82EF8D02C1E0FA000EC1C92 /* ImportNodeService.swift in Sources */,
 				C3FB44902A7C21BB0056F124 /* ContextMenu.swift in Sources */,
 				D80181432B361AAE00F4D22B /* AssetSceneInput.swift in Sources */,
 				C3CF3B9D29AED8C400E96586 /* HeaderButtonType.swift in Sources */,
 				C37028962A99D179009AE123 /* ChartView.swift in Sources */,
 				C3A7CB8C29CEA2BE00431341 /* WalletHeaderViewModel.swift in Sources */,
 				D848B5952AE3025300814FB4 /* ConnectionsViewModel.swift in Sources */,
+				D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */,
 				C34C7CFA29FF19A3009EEC21 /* WelcomeViewModel.swift in Sources */,
 				C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */,
 				D848B59A2AE5CDD700814FB4 /* WalletConnectionViewModel.swift in Sources */,

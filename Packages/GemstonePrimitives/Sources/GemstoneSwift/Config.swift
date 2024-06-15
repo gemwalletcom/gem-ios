@@ -15,8 +15,11 @@ public struct Docs {
 }
 
 public struct Social {
-    public static func url(_ item: Gemstone.SocialUrl) -> URL {
-        return URL(string: Config.shared.getSocialUrl(item: item))!
+    public static func url(_ item: Gemstone.SocialUrl) -> URL? {
+        if let socialUrl = Config.shared.getSocialUrl(item: item), let url = URL(string: socialUrl) {
+            return url
+        }
+        return .none
     }
 }
 

@@ -5,16 +5,7 @@ import SwiftUI
 import Store
 import Keystore
 import GemstonePrimitives
-
-struct CommunityLink {
-    let name: String
-    let image: Image?
-    let url: URL
-}
-
-extension CommunityLink: Identifiable {
-    var id: String { name }
-}
+import Gemstone
 
 class SettingsViewModel: ObservableObject {
     
@@ -56,37 +47,14 @@ class SettingsViewModel: ObservableObject {
     }
     
     var community: [CommunityLink] {
-        return [
-            CommunityLink(
-                name: "X",
-                image: Image(.x),
-                url: Social.url(.x)
-            ),
-            CommunityLink(
-                name: "Discord",
-                image: Image(.discord),
-                url: Social.url(.discord)
-            ),
-            CommunityLink(
-                name: "Reddit",
-                image: Image(.reddit),
-                url: Social.url(.reddit)
-            ),
-            CommunityLink(
-                name: "Telegram",
-                image: Image(.telegram),
-                url: Social.url(.telegram)
-            ),
-            CommunityLink(
-                name: "Github",
-                image: Image(.github),
-                url: Social.url(.gitHub)
-            ),
-            CommunityLink(
-                name: "YouTube",
-                image: Image(.youtube),
-                url: Social.url(.youTube)
-            )
-        ]
+        let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
+        
+        return links.compactMap {
+            if let url = Social.url($0) {
+                return CommunityLink(type: $0, url: url)
+            }
+            return .none
+        }
     }
 }
+
