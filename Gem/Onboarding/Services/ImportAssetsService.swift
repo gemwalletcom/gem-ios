@@ -60,9 +60,4 @@ struct ImportAssetsService {
     
         preferences.swapAssetsVersion = Int(assets.version)
     }
-    
-    func updateNodes() async throws {
-        let version = try await nodeService.updateNodes()
-        preferences.nodesVersion = version
-    }
 }

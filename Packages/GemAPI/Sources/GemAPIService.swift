@@ -8,10 +8,6 @@ public protocol GemAPIConfigService {
     func getConfig() async throws -> ConfigResponse
 }
 
-public protocol GemAPINodesService {
-    func getNodes() async throws -> NodesResponse
-}
-
 public protocol GemAPIFiatService {
     func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
 }
@@ -86,14 +82,6 @@ extension GemAPIService: GemAPIConfigService {
         return try await provider
             .request(.getConfig)
             .map(as: ConfigResponse.self)
-    }
-}
-
-extension GemAPIService: GemAPINodesService {
-    public func getNodes() async throws -> NodesResponse {
-        return try await provider
-            .request(.getNodes)
-            .map(as: NodesResponse.self)
     }
 }
 

@@ -9,6 +9,7 @@ import Primitives
 class OnstartAsyncService {
     
     let assetStore: AssetStore
+    let nodeStore: NodeStore
     let keystore: any Keystore
     let preferences: Preferences
     let configService: GemAPIConfigService = GemAPIService()
@@ -29,6 +30,7 @@ class OnstartAsyncService {
         updateVersionAction: StringAction = .none
     ) {
         self.assetStore = assetStore
+        self.nodeStore = nodeStore
         self.keystore = keystore
         self.preferences = preferences
         self.service = ImportAssetsService(
@@ -44,6 +46,9 @@ class OnstartAsyncService {
     
     func migrations() async {
         do {
+            // import nodes
+            try ImportNodeService(nodeStore: nodeStore).importNodes()
+            
             let config = try await configService.getConfig()
             let versions = config.versions
             if versions.fiatAssets > preferences.fiatAssetsVersion {
@@ -68,16 +73,6 @@ class OnstartAsyncService {
                 }
             }
             
-            if versions.nodes > preferences.nodesVersion {
-                Task {
-                    do {
-                        try await service.updateNodes()
-                        NSLog("Update nodes version: \(versions.nodes)")
-                    } catch {
-                        NSLog("Update nodes error: \(error)")
-                    }
-                }
-            }
             let newVersion = config.app.ios.version.production
             if VersionCheck.isVersionHigher(new: newVersion, current: Bundle.main.releaseVersionNumber) {
                 NSLog("Newer version available")

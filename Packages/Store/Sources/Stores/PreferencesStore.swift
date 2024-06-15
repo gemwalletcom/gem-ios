@@ -37,9 +37,6 @@ public class PreferencesStore {
     @UserDefault(defaults: .standard, key: "local_assets_version", defaultValue: 0)
     public var localAssetsVersion: Int
     
-    @UserDefault(defaults: .standard, key: "nodes_version", defaultValue: 0)
-    public var nodesVersion: Int
-    
     @UserDefault(defaults: .standard, key: "fiat_assets_version", defaultValue: 0)
     public var fiatAssetsVersion: Int
     

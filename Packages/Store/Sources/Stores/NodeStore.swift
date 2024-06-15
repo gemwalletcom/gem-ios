@@ -26,6 +26,14 @@ public struct NodeStore {
         }
     }
     
+    public func nodes() throws -> [ChainNode] {
+        try db.read { db in
+            try NodeRecord
+                .fetchAll(db)
+        }
+        .map { $0.mapToChainNode() }
+    }
+    
     public func nodes(chain: Chain) throws -> [ChainNode] {
         return try nodeRecords(chain: chain)
             .map { $0.mapToChainNode() }
