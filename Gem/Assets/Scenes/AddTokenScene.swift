@@ -61,9 +61,9 @@ struct AddTokenScene: View {
                         ListItemView(title: Localized.Asset.decimals, subtitle: asset.decimals)
                         ListItemView(title: Localized.Common.type, subtitle: asset.type)
                     }
-                    if let url = asset.url {
+                    if let url = asset.explorerUrl {
                         Section {
-                            NavigationCustomLink(with: ListItemView(title: Localized.Transaction.viewOn("Block explorer"))) {
+                            NavigationCustomLink(with: ListItemView(title: asset.explorerText)) {
                                 UIApplication.shared.open(url)
                             }
                         }

@@ -12,10 +12,16 @@ struct AddAssetViewModel {
     var symbol: String { asset.symbol }
     var decimals: String { asset.decimals.asString }
     var type: String { asset.id.assetType?.rawValue ?? "" }
-    var url: URL? {
-        guard let explorerUrl = ExplorerService.main.tokenUrl(chain: asset.chain, address: asset.tokenId ?? "") else {
-            return .none
-        }
-        return explorerUrl.url
+    
+    private var tokenLink: BlockExplorerLink? {
+        ExplorerService.main.tokenUrl(chain: asset.chain, address: asset.tokenId ?? "")
+    }
+    
+    var explorerUrl: URL? {
+        tokenLink?.url
+    }
+    
+    var explorerText: String? {
+        Localized.Transaction.viewOn(name)
     }
 }
