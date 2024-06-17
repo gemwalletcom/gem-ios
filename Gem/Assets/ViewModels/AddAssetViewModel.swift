@@ -2,7 +2,8 @@
 
 import Foundation
 import Primitives
-import Gemstone
+//import Gemstone
+import GemstonePrimitives
 
 struct AddAssetViewModel {
     let asset: Asset
@@ -11,12 +12,16 @@ struct AddAssetViewModel {
     var symbol: String { asset.symbol }
     var decimals: String { asset.decimals.asString }
     var type: String { asset.id.assetType?.rawValue ?? "" }
-    var url: URL? {
-        guard 
-            let explorerUrl = Gemstone.Explorer().getTokenUrl(chain: asset.chain.rawValue, address: asset.tokenId ?? ""),
-            let url = URL(string: explorerUrl)  else {
-                return .none
-        }
-        return url
+    
+    private var tokenLink: BlockExplorerLink? {
+        ExplorerService.main.tokenUrl(chain: asset.chain, address: asset.tokenId ?? "")
+    }
+    
+    var explorerUrl: URL? {
+        tokenLink?.url
+    }
+    
+    var explorerText: String? {
+        Localized.Transaction.viewOn(name)
     }
 }

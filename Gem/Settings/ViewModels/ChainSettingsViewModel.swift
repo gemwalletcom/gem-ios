@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import GemstonePrimitives
 
 class ChainSettingsViewModel: ObservableObject {
     
@@ -15,20 +16,33 @@ class ChainSettingsViewModel: ObservableObject {
     }
     @Published var nodes: [ChainNode] = []
     
+    @Published var selectedExplorer: String? = .none
+    var explorers: [String]
+    let explorerService: ExplorerService
+    
     init(
         chain: Chain,
-        nodeService: NodeService
+        nodeService: NodeService,
+        explorerService: ExplorerService
     ) {
         self.chain = chain
         self.nodeService = nodeService
+        self.explorerService = explorerService
         self.chainNode = nodeService.getNodeSelected(chain: chain)
+        self.explorers = ExplorerService.explorers(chain: chain)
+        self.selectedExplorer = explorerService.get(chain: chain) ?? explorers.first
     }
     
     var title: String {
-        return Asset(chain).name
+        Asset(chain).name
     }
     
     func getNodes() throws -> [ChainNode] {
-        return try nodeService.nodes(for: chain)
+        try nodeService.nodes(for: chain)
+    }
+    
+    func selectExplorer(name: String) {
+        selectedExplorer = name
+        explorerService.set(chain: chain, name: name)
     }
 }

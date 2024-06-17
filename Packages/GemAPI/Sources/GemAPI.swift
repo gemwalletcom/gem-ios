@@ -11,7 +11,6 @@ public enum GemAPI: TargetType {
     case getFiatOnRampAssets
     case getSwapAssets
     case getConfig
-    case getNodes
     case getNameRecord(name: String, chain: String)
     case getCharts(AssetId, currency: String, period: String)
     
@@ -43,7 +42,6 @@ public enum GemAPI: TargetType {
             .getFiatOnRampAssets,
             .getSwapAssets,
             .getConfig,
-            .getNodes,
             .getNameRecord,
             .getCharts,
             .getSubscriptions,
@@ -81,8 +79,6 @@ public enum GemAPI: TargetType {
             return "/v1/swap/assets"
         case .getConfig:
             return "/v1/config"
-        case .getNodes:
-            return "/v1/nodes"
         case .getNameRecord(let name, let chain):
             return "/v1/name/resolve/\(name)?chain=\(chain)"
         case .getCharts(let assetId, _, _):
@@ -120,7 +116,6 @@ public enum GemAPI: TargetType {
             .getFiatOnRampAssets,
             .getSwapAssets,
             .getConfig,
-            .getNodes,
             .getNameRecord,
             .getSubscriptions,
             .getDevice,

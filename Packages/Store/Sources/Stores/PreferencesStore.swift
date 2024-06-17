@@ -9,6 +9,10 @@ public class PreferencesStore {
     
     private let defaults: UserDefaults
     
+    public struct Keys {
+        static let explorerName = "explorer_name"
+    }
+    
     public static let standard = Preferences()
     
     public init(
@@ -32,9 +36,6 @@ public class PreferencesStore {
     
     @UserDefault(defaults: .standard, key: "local_assets_version", defaultValue: 0)
     public var localAssetsVersion: Int
-    
-    @UserDefault(defaults: .standard, key: "nodes_version", defaultValue: 0)
-    public var nodesVersion: Int
     
     @UserDefault(defaults: .standard, key: "fiat_assets_version", defaultValue: 0)
     public var fiatAssetsVersion: Int
@@ -65,6 +66,14 @@ public class PreferencesStore {
     
     public func incrementLaunchesCount() {
         launchesCount = launchesCount + 1
+    }
+    
+    public func setExplorerName(chain: Chain, name: String) {
+        return defaults.setValue(name, forKey: "\(Keys.explorerName)_\(chain.rawValue)")
+    }
+    
+    public func explorerName(chain: Chain) -> String? {
+        return defaults.string(forKey: "\(Keys.explorerName)_\(chain.rawValue)")
     }
     
     public func clear() {

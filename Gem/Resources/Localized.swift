@@ -279,6 +279,26 @@ internal enum Localized {
     /// Sign Message
     internal static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
   }
+  internal enum Social {
+    /// Discord
+    internal static let discord = Localized.tr("Localizable", "social.discord", fallback: "Discord")
+    /// Facebook
+    internal static let facebook = Localized.tr("Localizable", "social.facebook", fallback: "Facebook")
+    /// GitHub
+    internal static let github = Localized.tr("Localizable", "social.github", fallback: "GitHub")
+    /// Homepage
+    internal static let homepage = Localized.tr("Localizable", "social.homepage", fallback: "Homepage")
+    /// Links
+    internal static let links = Localized.tr("Localizable", "social.links", fallback: "Links")
+    /// Reddit
+    internal static let reddit = Localized.tr("Localizable", "social.reddit", fallback: "Reddit")
+    /// Telegram
+    internal static let telegram = Localized.tr("Localizable", "social.telegram", fallback: "Telegram")
+    /// X (formerly Twitter)
+    internal static let x = Localized.tr("Localizable", "social.x", fallback: "X (formerly Twitter)")
+    /// YouTube
+    internal static let youtube = Localized.tr("Localizable", "social.youtube", fallback: "YouTube")
+  }
   internal enum Stake {
     /// Activating
     internal static let activating = Localized.tr("Localizable", "stake.activating", fallback: "Activating")

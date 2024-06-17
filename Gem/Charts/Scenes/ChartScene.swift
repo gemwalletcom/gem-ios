@@ -96,6 +96,16 @@ struct ChartScene: View {
                         }
                     }
                 }
+                if !details.socialUrls.isEmpty {
+                    Section(Localized.Social.links) {
+                        ForEach(details.socialUrls) { link in
+                            NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
+                                UIApplication.shared.open(link.url)
+                            }
+                        }
+                    }
+                }
+                
             }
         }
         .refreshable {

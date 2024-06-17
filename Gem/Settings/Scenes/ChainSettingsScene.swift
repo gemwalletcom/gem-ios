@@ -32,7 +32,11 @@ struct ChainSettingsScene: View {
                 }
             }
             Section(Localized.Settings.Networks.explorer) {
-                ListItemView(title: ExplorerService.hostName(url: ExplorerService.transactionUrl(chain: model.chain, hash: "")))
+                ForEach(model.explorers) { explorer in
+                    SelectionListItemView(title: explorer, subtitle: .none, value: explorer, selection: model.selectedExplorer) { _ in
+                        onExplorerSelect(name: explorer)
+                    }
+                }
             }
         }
         .navigationTitle(model.title)
@@ -41,5 +45,13 @@ struct ChainSettingsScene: View {
                 try model.nodes = model.getNodes()
             }
         }
+    }
+}
+
+// MARK: - Actions
+
+extension ChainSettingsScene {
+    private func onExplorerSelect(name: String) {
+        model.selectExplorer(name: name)
     }
 }

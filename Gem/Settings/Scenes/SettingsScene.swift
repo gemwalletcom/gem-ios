@@ -54,7 +54,7 @@ struct SettingsScene: View {
             }
             Section {
                 ForEach(model.community) { item in
-                    NavigationCustomLink(with: ListItemView(title: item.name, image: item.image)) {
+                    NavigationCustomLink(with: ListItemView(title: item.type.name, image: item.type.image)) {
                         UIApplication.shared.open(item.url)
                     }
                 }

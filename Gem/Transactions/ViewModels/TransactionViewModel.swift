@@ -263,22 +263,27 @@ struct TransactionViewModel {
         }
     }
     
-    var viewOnAddressExplorerText: String {
-        return Localized.Transaction.viewOn(ExplorerService.hostName(url: addressExplorerUrl))
+    private var addressLink: BlockExplorerLink {
+        ExplorerService.main.addressUrl(chain: transaction.transaction.assetId.chain, address: participant)
     }
-
+    
+    var viewOnAddressExplorerText: String {
+        return Localized.Transaction.viewOn(addressLink.name)
+    }
+    
     var addressExplorerUrl: URL {
-        return ExplorerService.addressUrl(chain: transaction.transaction.assetId.chain, address: participant)
+        return addressLink.url
+    }
+    
+    private var transactionLink: BlockExplorerLink {
+        ExplorerService.main.transactionUrl(chain: transaction.transaction.assetId.chain, hash: transaction.transaction.hash)
     }
     
     var viewOnTransactionExplorerText: String {
-        return Localized.Transaction.viewOn(ExplorerService.hostName(url: transactionExplorerUrl))
+        return Localized.Transaction.viewOn(transactionLink.name)
     }
     
     var transactionExplorerUrl: URL {
-        return ExplorerService.transactionUrl(
-            chain: transaction.transaction.assetId.chain,
-            hash: transaction.transaction.hash
-        )
+        return transactionLink.url
     }
 }

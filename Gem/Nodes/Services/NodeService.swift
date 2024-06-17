@@ -8,15 +8,12 @@ import Blockchain
 
 public class NodeService {
 
-    let provider: GemAPINodesService
     let nodeStore: NodeStore
     var requestedChains = Set<Chain>()
     
     init(
-        provider: GemAPINodesService = GemAPIService(),
         nodeStore: NodeStore
     ) {
-        self.provider = provider
         self.nodeStore = nodeStore
     }
     
@@ -40,12 +37,6 @@ public class NodeService {
     func nodes(for chain: Chain) throws -> [ChainNode] {
         let nodes = try nodeStore.nodes(chain: chain)
         return ([chain.defaultChainNode] + nodes).unique()
-    }
-    
-    func updateNodes() async throws -> Int {
-        let nodes = try await provider.getNodes()
-        try nodeStore.addNodes(chainNodes: nodes.nodes)
-        return Int(nodes.version)
     }
     
     func update(chain: Chain, force: Bool = false) throws {
