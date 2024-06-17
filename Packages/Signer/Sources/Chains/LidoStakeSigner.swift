@@ -32,14 +32,14 @@ public class LidoStakeSigner: EthereumSigner {
                 }
                 let key = PrivateKey(data: privateKey)!
                 let permit = ERC2612PermitMessage(
-                    message: ERC2612PermitMessage.Permit(
+                    message: ERC2612Permit(
                         owner: input.senderAddress,
                         spender: LidoContract.withdrawal,
                         value: input.value.description,
                         nonce: permitNonce,
                         deadline: "\(LidoContract.permitDeadline(date: Date()))"
                     ), 
-                    chainId: Int(input.chainId)!)
+                    chainId: UInt32(input.chainId)!)
                 let jsonString = String(data: try JSONEncoder().encode(permit), encoding: .utf8)!
                 let signature = EthereumMessageSigner.signTypedMessage(privateKey: key, messageJson: jsonString)
                 return Data(hexString: signature) ?? Data()
@@ -47,7 +47,6 @@ public class LidoStakeSigner: EthereumSigner {
                 return Data()
             }
         }()
-
 
         let callData = try LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signatureData)
         let data = try sign(coinType: input.coinType, input: buildBaseInput(

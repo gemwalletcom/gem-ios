@@ -1,13 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-
-public struct EIP712Domain: Codable {
-    public let name: String
-    public let version: String
-    public let chainId: Int
-    public let verifyingContract: String
-}
+import Primitives
 
 public let EIP712DomainTypes = [
     EIP712Type(name: "name", type: "string"),
@@ -24,55 +18,22 @@ public let PermitTypes = [
     EIP712Type(name: "deadline", type: "uint256")
 ]
 
-public struct EIP712Type: Codable {
-    public let name: String
-    public let type: String
-}
 
-public struct ERC2612PermitMessage: Codable {
-    public struct Permit: Codable {
-        public let owner: String
-        public let spender: String
-        public let value: String
-        public let nonce: String
-        public let deadline: String
-
-        public init(owner: String, spender: String, value: String, nonce: String, deadline: String) {
-            self.owner = owner
-            self.spender = spender
-            self.value = value
-            self.nonce = nonce
-            self.deadline = deadline
-        }
-    }
-
-    public struct Types: Codable {
-        public let eip712Domain: [EIP712Type]
-        public let permit: [EIP712Type]
-
-        enum CodingKeys: String, CodingKey {
-            case eip712Domain = "EIP712Domain"
-            case permit = "Permit"
-        }
-    }
-
-    public let types: Types
-    public let primaryType: String
-    public let domain: EIP712Domain
-    public let message: Permit
-
-    public init(message: Permit, chainId: Int) {
-        self.types = Types(
-            eip712Domain: EIP712DomainTypes,
-            permit: PermitTypes
+public extension ERC2612PermitMessage {
+    init(message: ERC2612Permit, chainId: UInt32) {
+        self.init(
+            types: ERC2612Types(
+                EIP712Domain: EIP712DomainTypes,
+                Permit: PermitTypes
+            ),
+            primaryType: "Permit",
+            domain: EIP712Domain(
+                name: LidoContract.eip712DomainName,
+                version: LidoContract.eip712DomainVersion,
+                chainId: chainId,
+                verifyingContract: LidoContract.address
+            ),
+            message: message
         )
-        self.primaryType = "Permit"
-        self.domain = EIP712Domain(
-            name: LidoContract.eip712DomainName,
-            version: LidoContract.eip712DomainVersion,
-            chainId: chainId,
-            verifyingContract: LidoContract.address
-        )
-        self.message = message
     }
 }
