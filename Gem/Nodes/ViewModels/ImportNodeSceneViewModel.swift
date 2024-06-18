@@ -24,7 +24,7 @@ class ImportNodeSceneViewModel: ObservableObject {
     }
 
     var shouldDisableImportButton: Bool {
-        return state.isLoading || state.isNoData || state.isError
+        return state.isLoading || state.isNoData || state.isError || !isInSync
     }
 
     var title: String {
