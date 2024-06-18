@@ -47,11 +47,17 @@ struct WalletDetailScene: View {
                         EmptyView()
                     }
                 }
+                Section {
+                    HStack {
+                        Spacer()
+                        Button(role: .destructive, action: onSelectDelete) {
+                            Text(Localized.Common.delete)
+                                .foregroundStyle(Colors.red)
+                        }
+                        Spacer()
+                    }
+                }
             }
-            Spacer()
-            Button(Localized.Common.delete, action: onSelectDelete)
-                .buttonStyle(.delete())
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
