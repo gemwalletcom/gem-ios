@@ -141,7 +141,8 @@ public class BalanceService: BalancerUpdater {
         return balances.compactMap { (balance: AssetBalance) in
             guard
                 let asset = assets[balance.assetId.identifier],
-                let total = try? formatter.double(from: balance.balance.total, decimals: asset.decimals.asInt) else {
+                let total = try? formatter.double(from: balance.balance.total(asset.chain.includeStakedBalance), decimals: asset.decimals.asInt)
+            else {
                 return nil
             }
             let price = prices[balance.assetId.identifier]

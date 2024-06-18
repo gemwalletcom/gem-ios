@@ -258,8 +258,9 @@ extension EthereumService: ChainStakable {
         case .ethereum:
             return try await LidoService(provider: provider).getBalance(address: address)
         default:
-            return AssetBalance.make(for: chain.chain.assetId)
+            break
         }
+        return AssetBalance.make(for: chain.chain.assetId)
     }
 
     public func getPreloadExtra(chain: Chain, type: TransferDataType, address: String) async throws -> SigningdExtra? {
