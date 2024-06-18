@@ -18,13 +18,19 @@ public struct XRPService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func account(address: String) async throws -> XRPAccountResult {
+}
+
+// MARK: - Business Logic
+
+extension XRPService {
+    private func account(address: String) async throws -> XRPAccountResult {
         return try await provider
             .request(.account(address: address))
             .map(as: XRPResult<XRPAccountResult>.self).result
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension XRPService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -45,6 +51,8 @@ extension XRPService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension XRPService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         let medianFee = try await provider
@@ -60,6 +68,8 @@ extension XRPService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension XRPService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = account(address: input.senderAddress)
@@ -71,6 +81,8 @@ extension XRPService: ChainTransactionPreloadable {
         )
     }
 }
+
+// MARK: - ChainBroadcastable
 
 extension XRPService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
@@ -89,6 +101,8 @@ extension XRPService: ChainBroadcastable {
     }
 }
 
+// MARK: - ChainTransactionStateFetchable
+
 extension XRPService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
         let status = try await provider
@@ -99,11 +113,15 @@ extension XRPService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension XRPService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainStakable
 
 extension XRPService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -114,6 +132,8 @@ extension XRPService: ChainStakable {
         fatalError()
     }
 }
+
+// MARK: - ChainTokenable
 
 extension XRPService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -129,6 +149,15 @@ extension XRPService: ChainTokenable {
  
 extension XRPService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension XRPService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String? {
+        throw AnyError("Not Implemented")
+    }
+}
+

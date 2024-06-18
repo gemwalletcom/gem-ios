@@ -10,7 +10,10 @@ public typealias ChainServiceable = ChainBalanceable &
     ChainSyncable &
     ChainStakable &
     ChainTokenable &
-    ChainIDFetchable
+    ChainIDFetchable &
+    ChainLatestBlockFetchable
+
+// MARK: - Protocols
 
 public protocol ChainBalanceable {
     func coinBalance(for address: String) async throws -> AssetBalance
@@ -51,8 +54,6 @@ public protocol ChainTokenable {
     func getIsTokenAddress(tokenId: String) -> Bool
 }
 
-extension ChainTokenable {
-    public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
-    }
+public protocol ChainLatestBlockFetchable {
+    func getLatestBlock() async throws -> String?
 }

@@ -16,7 +16,11 @@ public struct ChainService {
         self.chain = chain
         self.url = url
     }
-    
+}
+
+// MARK: - Factory
+
+extension ChainService {
     public static func service(chain: Chain, with url: URL) -> ChainServiceable {
         switch chain.type {
         case .solana:
@@ -49,6 +53,8 @@ public struct ChainService {
     }
 }
 
+// MARK: - ChainBalanceable
+
 extension ChainService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         return try await Self.service(chain: chain, with: url)
@@ -61,12 +67,16 @@ extension ChainService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension ChainService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         return try await Self.service(chain: chain, with: url)
             .fee(input: input)
     }
 }
+
+// MARK: - ChainTransactionPreloadable
 
 extension ChainService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
@@ -75,6 +85,8 @@ extension ChainService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension ChainService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await Self.service(chain: chain, with: url)
@@ -82,12 +94,16 @@ extension ChainService: ChainBroadcastable {
     }
 }
 
+// MARK: - ChainTransactionStateFetchable
+
 extension ChainService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
         return try await Self.service(chain: chain, with: url)
             .transactionState(for: id, senderAddress: senderAddress)
     }
 }
+
+// MARK: - ChainStakable
 
 extension ChainService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -100,6 +116,8 @@ extension ChainService: ChainStakable {
             .getStakeDelegations(address: address)
     }
 }
+
+// MARK: - ChainTokenable
 
 extension ChainService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -122,9 +140,21 @@ extension ChainService: ChainTokenable {
     }
 }
 
+// MARK: - ChainIDFetchable
+
 extension ChainService: ChainIDFetchable {
     public func getChainID() async throws -> String {
         return try await Self.service(chain: chain, with: url)
             .getChainID()
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension ChainService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String? {
+        return try await Self.service(chain: chain, with: url)
+            .getLatestBlock()
+    }
+}
+

@@ -19,6 +19,8 @@ public struct AptosService {
     }
 }
 
+// MARK: - ChainBalanceable
+
 extension AptosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         let resource = try await provider.request(.balance(address: address))
@@ -32,6 +34,8 @@ extension AptosService: ChainBalanceable {
         []
     }
 }
+
+// MARK: - ChainFeeCalculateable
 
 extension AptosService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
@@ -55,6 +59,8 @@ extension AptosService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = provider.request(.account(address: input.senderAddress))
@@ -68,6 +74,8 @@ extension AptosService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension AptosService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await provider
@@ -75,6 +83,8 @@ extension AptosService: ChainBroadcastable {
             .map(as: AptosTransactionBroacast.self).hash
     }
 }
+
+// MARK: - ChainTransactionStateFetchable
 
 extension AptosService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -88,11 +98,15 @@ extension AptosService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension AptosService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainStakable
 
 extension AptosService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -103,6 +117,8 @@ extension AptosService: ChainStakable {
         fatalError()
     }
 }
+
+// MARK: - ChainTokenable
 
 extension AptosService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -118,6 +134,14 @@ extension AptosService: ChainTokenable {
  
 extension AptosService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - ChainLatestBlockFetchable
+
+extension AptosService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String? {
+        throw AnyError("Not Implemented")
     }
 }
