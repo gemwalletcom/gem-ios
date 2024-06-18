@@ -322,7 +322,7 @@ extension TronService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension TronService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

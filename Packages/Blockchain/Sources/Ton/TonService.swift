@@ -265,7 +265,7 @@ extension TonService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension TonService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

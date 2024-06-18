@@ -210,6 +210,20 @@ internal enum Localized {
       }
     }
   }
+  internal enum Nodes {
+    internal enum ImportNode {
+      /// Chain ID
+      internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
+      /// In Sync
+      internal static let inSync = Localized.tr("Localizable", "nodes.import_node.in_sync", fallback: "In Sync")
+      /// Latest Block
+      internal static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
+      /// RPC Address
+      internal static let rpcAddress = Localized.tr("Localizable", "nodes.import_node.rpc_address", fallback: "RPC Address")
+      /// Add node
+      internal static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
+    }
+  }
   internal enum Receive {
     /// Receive %s
     internal static func title(_ p1: UnsafePointer<CChar>) -> String {
@@ -269,18 +283,6 @@ internal enum Localized {
       internal static let source = Localized.tr("Localizable", "settings.networks.source", fallback: "Source")
       /// Networks
       internal static let title = Localized.tr("Localizable", "settings.networks.title", fallback: "Networks")
-      internal enum ImportNode {
-        /// Chain ID
-        internal static let chainId = Localized.tr("Localizable", "settings.networks.import_node.chain_id", fallback: "Chain ID")
-        /// In Sync
-        internal static let inSync = Localized.tr("Localizable", "settings.networks.import_node.in_sync", fallback: "In Sync")
-        /// Latest Block
-        internal static let latestBlock = Localized.tr("Localizable", "settings.networks.import_node.latest_block", fallback: "Latest Block")
-        /// RPC Address
-        internal static let rpcAddress = Localized.tr("Localizable", "settings.networks.import_node.rpc_address", fallback: "RPC Address")
-        /// Add node
-        internal static let title = Localized.tr("Localizable", "settings.networks.import_node.title", fallback: "Add node")
-      }
     }
     internal enum Notifications {
       /// Notifications

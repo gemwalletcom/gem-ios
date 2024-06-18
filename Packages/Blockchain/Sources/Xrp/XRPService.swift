@@ -156,7 +156,7 @@ extension XRPService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension XRPService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

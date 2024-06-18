@@ -55,5 +55,5 @@ public protocol ChainTokenable {
 }
 
 public protocol ChainLatestBlockFetchable {
-    func getLatestBlock() async throws -> String?
+    func getLatestBlock() async throws -> String
 }

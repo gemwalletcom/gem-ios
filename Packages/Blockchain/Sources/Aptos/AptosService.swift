@@ -141,7 +141,7 @@ extension AptosService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension AptosService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

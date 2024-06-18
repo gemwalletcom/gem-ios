@@ -185,7 +185,7 @@ extension NearService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension NearService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

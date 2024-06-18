@@ -393,7 +393,7 @@ extension SolanaService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension SolanaService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

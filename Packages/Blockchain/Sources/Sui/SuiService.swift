@@ -423,7 +423,7 @@ extension SuiService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension SuiService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

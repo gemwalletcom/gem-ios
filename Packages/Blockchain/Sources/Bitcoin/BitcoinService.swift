@@ -195,7 +195,7 @@ extension BitcoinService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension BitcoinService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

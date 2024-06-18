@@ -384,7 +384,7 @@ extension CosmosService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension CosmosService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         throw AnyError("Not Implemented")
     }
 }

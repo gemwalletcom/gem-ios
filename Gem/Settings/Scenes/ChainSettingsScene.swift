@@ -6,6 +6,7 @@ import Primitives
 import Settings
 import Components
 import GemstonePrimitives
+import Style
 
 struct ChainSettingsScene: View {
     @Environment(\.nodeService) private var nodeService
@@ -44,7 +45,7 @@ struct ChainSettingsScene: View {
             $0.toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: onSelectImportNode) {
-                        Image(systemName: "plus")
+                        Image(systemName: SystemImage.plus)
                             .font(.body.weight(.semibold))
                     }
                 }
@@ -53,7 +54,10 @@ struct ChainSettingsScene: View {
                 NavigationStack {
                     ImportNodeScene(
                         model: ImportNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
-                        onDismiss: onTaskOnce
+                        onDismiss: {
+                            isPresentingImportNode = false
+                            onTaskOnce()
+                        }
                     )
                 }
             }

@@ -152,7 +152,7 @@ extension ChainService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension ChainService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         return try await Self.service(chain: chain, with: url)
             .getLatestBlock()
     }

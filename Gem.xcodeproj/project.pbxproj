@@ -11,6 +11,7 @@
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
 		830FDA382C204E07003DA605 /* ImportNodeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA372C204E07003DA605 /* ImportNodeScene.swift */; };
 		830FDA3B2C20955D003DA605 /* ImportNodeSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3A2C20955D003DA605 /* ImportNodeSceneViewModel.swift */; };
+		830FDA3F2C2209AF003DA605 /* ImportNodeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		83A704272C17CA78005B77F4 /* BuyAssetInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */; };
@@ -258,6 +259,7 @@
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
 		830FDA372C204E07003DA605 /* ImportNodeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportNodeScene.swift; path = Gem/Nodes/Scenes/ImportNodeScene.swift; sourceTree = SOURCE_ROOT; };
 		830FDA3A2C20955D003DA605 /* ImportNodeSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportNodeSceneViewModel.swift; sourceTree = "<group>"; };
+		830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportNodeResult.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputViewModel.swift; sourceTree = "<group>"; };
@@ -564,6 +566,14 @@
 				830FDA372C204E07003DA605 /* ImportNodeScene.swift */,
 			);
 			path = Scenes;
+			sourceTree = "<group>";
+		};
+		830FDA3D2C220997003DA605 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 		832553962C0F27D300C9CA0C /* Scenes */ = {
@@ -1232,6 +1242,7 @@
 		D82EF8C92C1E03DF00EC1C92 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
+				830FDA3D2C220997003DA605 /* Types */,
 				830FDA392C20954E003DA605 /* ViewModels */,
 				830FDA3C2C21CD98003DA605 /* Scenes */,
 				830FDA362C204DF7003DA605 /* Views */,
@@ -1947,6 +1958,7 @@
 				C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */,
 				D8385CE72B017A9100F784C7 /* SwapService.swift in Sources */,
 				C3CF3B8529AB18AD00E96586 /* SelectAssetScene.swift in Sources */,
+				830FDA3F2C2209AF003DA605 /* ImportNodeResult.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,
 				C3549B3D29C5170000B4BE01 /* WalletIDetailViewModel.swift in Sources */,

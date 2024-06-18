@@ -201,11 +201,11 @@
 "social.links" = "Links";
 "social.homepage" = "Homepage";
 "social.facebook" = "Facebook";
-"settings.networks.import_node.title" = "Add node";
-"settings.networks.import_node.rpc_address" = "RPC Address";
-"settings.networks.import_node.chain_id" = "Chain ID";
-"settings.networks.import_node.in_sync" = "In Sync";
-"settings.networks.import_node.latest_block" = "Latest Block";
+"nodes.import_node.title" = "Add node";
+"nodes.import_node.rpc_address" = "RPC Address";
+"nodes.import_node.chain_id" = "Chain ID";
+"nodes.import_node.in_sync" = "In Sync";
+"nodes.import_node.latest_block" = "Latest Block";
 "errors.invalid_url" = "Invalid URL";
 "common.yes" = "Yes";
 "common.no" = "No";

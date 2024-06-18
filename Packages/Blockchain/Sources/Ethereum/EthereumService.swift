@@ -311,7 +311,7 @@ extension EthereumService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension EthereumService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String? {
+    public func getLatestBlock() async throws -> String {
         return try await provider
             .request(.latestBlock)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value.description
