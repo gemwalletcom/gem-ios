@@ -133,6 +133,8 @@ internal enum Localized {
     internal static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
     internal static let next = Localized.tr("Localizable", "common.next", fallback: "Next")
+    /// No
+    internal static let no = Localized.tr("Localizable", "common.no", fallback: "No")
     /// No Results Found
     internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results Found")
     /// Not Available
@@ -163,6 +165,8 @@ internal enum Localized {
     internal static let type = Localized.tr("Localizable", "common.type", fallback: "Type")
     /// Wallet
     internal static let wallet = Localized.tr("Localizable", "common.wallet", fallback: "Wallet")
+    /// Yes
+    internal static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
   }
   internal enum Date {
     /// Today
@@ -177,6 +181,8 @@ internal enum Localized {
     }
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid URL
+    internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
@@ -263,6 +269,18 @@ internal enum Localized {
       internal static let source = Localized.tr("Localizable", "settings.networks.source", fallback: "Source")
       /// Networks
       internal static let title = Localized.tr("Localizable", "settings.networks.title", fallback: "Networks")
+      internal enum ImportNode {
+        /// Chain ID
+        internal static let chainId = Localized.tr("Localizable", "settings.networks.import_node.chain_id", fallback: "Chain ID")
+        /// In Sync
+        internal static let inSync = Localized.tr("Localizable", "settings.networks.import_node.in_sync", fallback: "In Sync")
+        /// Latest Block
+        internal static let latestBlock = Localized.tr("Localizable", "settings.networks.import_node.latest_block", fallback: "Latest Block")
+        /// RPC Address
+        internal static let rpcAddress = Localized.tr("Localizable", "settings.networks.import_node.rpc_address", fallback: "RPC Address")
+        /// Add node
+        internal static let title = Localized.tr("Localizable", "settings.networks.import_node.title", fallback: "Add node")
+      }
     }
     internal enum Notifications {
       /// Notifications

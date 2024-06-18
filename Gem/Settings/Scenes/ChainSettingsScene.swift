@@ -8,9 +8,10 @@ import Components
 import GemstonePrimitives
 
 struct ChainSettingsScene: View {
-    
+    @Environment(\.nodeService) private var nodeService
     @ObservedObject var model: ChainSettingsViewModel
-    
+    @State private var isPresentingImportNode: Bool = false
+
     init(
         model: ChainSettingsViewModel
     ) {
@@ -39,11 +40,27 @@ struct ChainSettingsScene: View {
                 }
             }
         }
+        .if(model.isSupportedAddingCustomNode) {
+            $0.toolbar {
+                ToolbarItem(placement: .primaryAction) {
+                    Button(action: onSelectImportNode) {
+                        Image(systemName: "plus")
+                            .font(.body.weight(.semibold))
+                    }
+                }
+            }
+            .sheet(isPresented: $isPresentingImportNode) {
+                NavigationStack {
+                    ImportNodeScene(
+                        model: ImportNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
+                        onDismiss: onTaskOnce
+                    )
+                }
+            }
+        }
         .navigationTitle(model.title)
         .taskOnce {
-            Task {
-                try model.nodes = model.getNodes()
-            }
+            onTaskOnce()
         }
     }
 }
@@ -53,5 +70,23 @@ struct ChainSettingsScene: View {
 extension ChainSettingsScene {
     private func onExplorerSelect(name: String) {
         model.selectExplorer(name: name)
+    }
+
+    private func onSelectImportNode() {
+        isPresentingImportNode = true
+    }
+
+    private func onTaskOnce() {
+        Task {
+            try refreshNodes()
+        }
+    }
+}
+
+// MARK: - Effects
+
+extension ChainSettingsScene {
+    private func refreshNodes() throws {
+        try model.nodes = model.getNodes()
     }
 }
