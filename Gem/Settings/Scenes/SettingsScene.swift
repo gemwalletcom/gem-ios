@@ -36,6 +36,8 @@ struct SettingsScene: View {
                     ListItemView(title: Localized.Settings.security, subtitle: .none, image: Image(.settingsSecurity))
                 }
             }
+            .id(TabScrollToTopId.settings)
+
             Section {
                 NavigationLink(value: Scenes.Notifications()) {
                     ListItemView(title: Localized.Settings.Notifications.title, image: Image(.settingsNotifications))

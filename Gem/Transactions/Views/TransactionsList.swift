@@ -8,6 +8,8 @@ struct TransactionsList: View {
     let transactions: [Primitives.TransactionExtended]
     let showSections: Bool
 
+    private let tabScrollToTopId: TabScrollToTopId?
+
     var groupedByDate: [Date: [Primitives.TransactionExtended]] {
         Dictionary(grouping: transactions, by: {
             Calendar.current.startOfDay(for: $0.transaction.createdAt)
@@ -20,10 +22,12 @@ struct TransactionsList: View {
     
     init(
         _ transactions: [Primitives.TransactionExtended],
-        showSections: Bool = true
+        showSections: Bool = true,
+        tabScrollToTopId: TabScrollToTopId? = nil
     ) {
         self.transactions = transactions
         self.showSections = showSections
+        self.tabScrollToTopId = tabScrollToTopId
     }
     
     var body: some View {
@@ -32,22 +36,41 @@ struct TransactionsList: View {
                 Section(
                     header: Text(TransactionDateFormatter(date: header).section)
                 ) {
-                    TransactionsListView(transactions: groupedByDate[header]!)
+                    TransactionsListView(
+                        transactions: groupedByDate[header]!,
+                        tabScrollToTopId: tabScrollToTopId
+                    )
                 }
             }
         } else {
-            TransactionsListView(transactions: transactions)
+            TransactionsListView(
+                transactions: transactions,
+                tabScrollToTopId: tabScrollToTopId
+            )
         }
     }
 }
 
 private struct TransactionsListView: View {
     let transactions: [Primitives.TransactionExtended]
-    
+    private let tabScrollToTopId: TabScrollToTopId?
+
+    init(
+        transactions: [Primitives.TransactionExtended],
+        tabScrollToTopId: TabScrollToTopId?
+    ) {
+        self.transactions = transactions
+        self.tabScrollToTopId = tabScrollToTopId
+    }
+
     var body: some View {
-        ForEach(transactions, id: \.self) { transaction in
+        ForEach(0..<transactions.count, id: \.self) { index in
+            let transaction = transactions[0]
             NavigationLink(value: transaction) {
                 TransactionView(model: .init(transaction: transaction, formatter: .short))
+            }
+            .if(tabScrollToTopId != nil && index == 0) {
+                $0.id(tabScrollToTopId)
             }
         }
     }
