@@ -137,7 +137,7 @@ struct WalletCoordinator: View {
             walletService: walletService
         ))
 
-        self.navigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
+        _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
     
     var body: some View {
