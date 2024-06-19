@@ -23,8 +23,12 @@ public struct NearService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func account(for address: String) async throws -> NearAccount {
+}
+
+// MARK: - Business Logic
+
+extension NearService {
+    private func account(for address: String) async throws -> NearAccount {
         return try await provider
             .request(.account(address: address))
             .mapOrError(
@@ -32,8 +36,8 @@ public struct NearService {
                 asError: NearRPCError.self
             ).result
     }
-    
-    func accountAccessKey(for address: String) async throws -> NearAccountAccessKey {
+
+    private func accountAccessKey(for address: String) async throws -> NearAccountAccessKey {
         let publicKey = "ed25519:" + Base58.encodeNoCheck(data: Data(hexString: address)!)
         return try await provider
             .request(.accountAccessKey(address: address, publicKey: publicKey))
@@ -42,14 +46,14 @@ public struct NearService {
                 asError: NearRPCError.self
             ).result
     }
-    
-    func latestBlock() async throws -> NearBlock {
+
+    private func latestBlock() async throws -> NearBlock {
         return try await provider
             .request(.latestBlock)
             .map(as: JSONRPCResponse<NearBlock>.self).result
     }
-    
-    func gasPrice() async throws -> BigInt {
+
+    private func gasPrice() async throws -> BigInt {
         let result = try await provider
             .request(.gasPrice)
             .map(as: JSONRPCResponse<NearGasPrice>.self)
@@ -57,6 +61,8 @@ public struct NearService {
         return BigInt(stringLiteral: result.gas_price)
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension NearService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -76,6 +82,8 @@ extension NearService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension NearService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         fatalError()
@@ -84,6 +92,8 @@ extension NearService: ChainFeeCalculateable {
         //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
     }
 }
+
+// MARK: - ChainTransactionPreloadable
 
 extension NearService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
@@ -103,6 +113,8 @@ extension NearService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension NearService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await provider
@@ -113,6 +125,8 @@ extension NearService: ChainBroadcastable {
             ).result.transaction.hash
     }
 }
+
+// MARK: - ChainTransactionStateFetchable
 
 extension NearService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -129,11 +143,18 @@ extension NearService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension NearService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
+//        return try await provider
+//            .request(.health)
+//            .map(as: JSONRPCResponse<String>.self).result == "ok"
     }
 }
+
+// MARK: - ChainStakable
 
 extension NearService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -144,6 +165,8 @@ extension NearService: ChainStakable {
         fatalError()
     }
 }
+
+// MARK: - ChainTokenable
 
 extension NearService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -159,9 +182,19 @@ extension NearService: ChainTokenable {
  
 extension NearService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension NearService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - Models extensions
 
 extension NearRPCError: LocalizedError {
     public var errorDescription: String? {
@@ -171,4 +204,3 @@ extension NearRPCError: LocalizedError {
         return error.message
     }
 }
-

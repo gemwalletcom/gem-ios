@@ -17,8 +17,12 @@ public struct CosmosService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func getAccount(address: String) async throws -> CosmosAccount {
+}
+
+// MARK: - Business Logic
+
+extension CosmosService {
+    private func getAccount(address: String) async throws -> CosmosAccount {
         switch chain {
         case .cosmos,
             .osmosis,
@@ -35,47 +39,47 @@ public struct CosmosService {
                 .map(as: CosmosAccountResponse<CosmosInjectiveAccount>.self).account.base_account
         }
     }
-    
-    func getLatestBlock() async throws -> CosmosBlock {
+
+    private func getLatestCosmosBlock() async throws -> CosmosBlock {
         return try await provider
             .request(.block("latest"))
             .map(as: CosmosBlockResponse.self).block
     }
-    
-    func getBalance(address: String) async throws -> CosmosBalances {
+
+    private func getBalance(address: String) async throws -> CosmosBalances {
         try await provider
             .request(.balance(address: address))
             .map(as: CosmosBalances.self)
     }
-    
-    func getDelegations(address: String) async throws  -> [CosmosDelegation] {
+
+    private func getDelegations(address: String) async throws  -> [CosmosDelegation] {
         try await provider
             .request(.delegations(address: address))
             .map(as: CosmosDelegations.self)
             .delegation_responses
     }
-    
-    func getUnboundingDelegations(address: String) async throws  -> [CosmosUnboundingDelegation] {
+
+    private func getUnboundingDelegations(address: String) async throws  -> [CosmosUnboundingDelegation] {
         try await provider
             .request(.undelegations(address: address))
             .map(as: CosmosUnboundingDelegations.self)
             .unbonding_responses
     }
-    
-    func getRewards(address: String) async throws -> [CosmosReward] {
+
+    private func getRewards(address: String) async throws -> [CosmosReward] {
         try await provider
             .request(.rewards(address: address))
             .map(as: CosmosRewards.self)
             .rewards
     }
-    
-    func getValidatorsList() async throws -> [CosmosValidator] {
+
+    private func getValidatorsList() async throws -> [CosmosValidator] {
         try await provider
             .request(.validators)
             .map(as: CosmosValidators.self).validators
     }
-    
-    func getFee(chain: CosmosChain, type: TransferDataType) -> BigInt {
+
+    private func getFee(chain: CosmosChain, type: TransferDataType) -> BigInt {
         switch chain {
         case .thorchain: BigInt(4_000_000)
         case .cosmos: switch type {
@@ -102,6 +106,8 @@ public struct CosmosService {
         }
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension CosmosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -189,6 +195,8 @@ extension CosmosService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension CosmosService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         //TODO: Estimate it
@@ -213,10 +221,12 @@ extension CosmosService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension CosmosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = getAccount(address: input.senderAddress)
-        async let block = getLatestBlock()
+        async let block = getLatestCosmosBlock()
         async let fee = fee(input: input.feeInput)
 
         return try await TransactionPreload(
@@ -227,6 +237,8 @@ extension CosmosService: ChainTransactionPreloadable {
         )
     }
 }
+
+// MARK: - ChainBroadcastable
 
 extension CosmosService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
@@ -242,6 +254,7 @@ extension CosmosService: ChainBroadcastable {
     }
 }
 
+// MARK: - ChainTransactionStateFetchable
 
 extension CosmosService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -256,6 +269,8 @@ extension CosmosService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension CosmosService: ChainSyncable {
     public func getInSync() async throws -> Bool {
         return try await provider
@@ -263,6 +278,8 @@ extension CosmosService: ChainSyncable {
             .map(as: CosmosSyncing.self).syncing.inverted
     }
 }
+
+// MARK: - ChainStakable
 
 extension CosmosService: ChainStakable {
     
@@ -353,6 +370,8 @@ extension CosmosService: ChainStakable {
     }
 }
 
+// MARK: - ChainTokenable
+
 extension CosmosService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         throw AnyError("Not Implemented")
@@ -370,5 +389,13 @@ extension CosmosService: ChainIDFetchable {
         return try await provider
             .request(.nodeInfo)
             .map(as: CosmosNodeInfoResponse.self).default_node_info.network
+    }
+}
+
+// MARK: - ChainLatestBlockFetchable
+
+extension CosmosService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
     }
 }

@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		481152C22B54F46800377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C12B54F46800377C75 /* Gemstone */; };
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
+		830FDA382C204E07003DA605 /* ImportNodeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA372C204E07003DA605 /* ImportNodeScene.swift */; };
+		830FDA3B2C20955D003DA605 /* ImportNodeSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3A2C20955D003DA605 /* ImportNodeSceneViewModel.swift */; };
+		830FDA3F2C2209AF003DA605 /* ImportNodeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		83A704272C17CA78005B77F4 /* BuyAssetInputViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */; };
@@ -254,6 +257,9 @@
 
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		830FDA372C204E07003DA605 /* ImportNodeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ImportNodeScene.swift; path = Gem/Nodes/Scenes/ImportNodeScene.swift; sourceTree = SOURCE_ROOT; };
+		830FDA3A2C20955D003DA605 /* ImportNodeSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportNodeSceneViewModel.swift; sourceTree = "<group>"; };
+		830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportNodeResult.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		83A704262C17CA78005B77F4 /* BuyAssetInputViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputViewModel.swift; sourceTree = "<group>"; };
@@ -539,6 +545,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		830FDA362C204DF7003DA605 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		830FDA392C20954E003DA605 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				830FDA3A2C20955D003DA605 /* ImportNodeSceneViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		830FDA3C2C21CD98003DA605 /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				830FDA372C204E07003DA605 /* ImportNodeScene.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		830FDA3D2C220997003DA605 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				830FDA3E2C2209AF003DA605 /* ImportNodeResult.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		832553962C0F27D300C9CA0C /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
@@ -1205,25 +1242,13 @@
 		D82EF8C92C1E03DF00EC1C92 /* Nodes */ = {
 			isa = PBXGroup;
 			children = (
-				D82EF8CB2C1E03EE00EC1C92 /* Scenes */,
-				D82EF8CA2C1E03EB00EC1C92 /* Views */,
+				830FDA3D2C220997003DA605 /* Types */,
+				830FDA392C20954E003DA605 /* ViewModels */,
+				830FDA3C2C21CD98003DA605 /* Scenes */,
+				830FDA362C204DF7003DA605 /* Views */,
 				D82EF8CC2C1E03F300EC1C92 /* Services */,
 			);
 			path = Nodes;
-			sourceTree = "<group>";
-		};
-		D82EF8CA2C1E03EB00EC1C92 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Views;
-			sourceTree = "<group>";
-		};
-		D82EF8CB2C1E03EE00EC1C92 /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Scenes;
 			sourceTree = "<group>";
 		};
 		D82EF8CC2C1E03F300EC1C92 /* Services */ = {
@@ -1771,6 +1796,7 @@
 				C3AD581C299C5E26006BC902 /* WalletScene.swift in Sources */,
 				C3CF3BBA29B6D44A00E96586 /* CreateWalletScene.swift in Sources */,
 				D80700542BBCB2C300ED770B /* TabIndex.swift in Sources */,
+				830FDA3B2C20955D003DA605 /* ImportNodeSceneViewModel.swift in Sources */,
 				D88A2A8E2B0C0EEE0060009B /* WalletAssetsList.swift in Sources */,
 				C3E99BC52A73186E005DF35F /* TransactionDetailViewModel.swift in Sources */,
 				D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */,
@@ -1869,6 +1895,7 @@
 				C3CF3BD829BA790400E96586 /* WalletCoordinator.swift in Sources */,
 				C3CF3BAE29B68E6C00E96586 /* AssetsService.swift in Sources */,
 				D810F3702AEB29C00006D9C6 /* ConnectionProposalViewModel.swift in Sources */,
+				830FDA382C204E07003DA605 /* ImportNodeScene.swift in Sources */,
 				C3E99BC12A72DF67005DF35F /* AssetIdViewModel.swift in Sources */,
 				C3CF3BDE29BE3FF400E96586 /* ImportWalletTypeScene.swift in Sources */,
 				C3CF3BA129B2FFF600E96586 /* WalletsScene.swift in Sources */,
@@ -1931,6 +1958,7 @@
 				C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */,
 				D8385CE72B017A9100F784C7 /* SwapService.swift in Sources */,
 				C3CF3B8529AB18AD00E96586 /* SelectAssetScene.swift in Sources */,
+				830FDA3F2C2209AF003DA605 /* ImportNodeResult.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,
 				C3549B3D29C5170000B4BE01 /* WalletIDetailViewModel.swift in Sources */,

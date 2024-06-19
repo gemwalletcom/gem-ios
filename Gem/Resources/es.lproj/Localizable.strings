@@ -201,3 +201,10 @@
 "social.links" = "Links";
 "social.homepage" = "Homepage";
 "social.facebook" = "Facebook";
+"nodes.import_node.title" = "Add node";
+"nodes.import_node.chain_id" = "Chain ID";
+"nodes.import_node.in_sync" = "In Sync";
+"nodes.import_node.latest_block" = "Latest Block";
+"errors.invalid_url" = "Invalid URL";
+"common.yes" = "Yes";
+"common.no" = "No";

@@ -19,6 +19,10 @@ struct ImportNodeService {
         
         try nodeStore.addNodes(chainNodes: configNodes)
     }
+
+    func importNode(_ node: ChainNodes) throws {
+        try nodeStore.addNodes(chainNodes: [node])
+    }
 }
 
 extension Gemstone.Node {

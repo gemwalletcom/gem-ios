@@ -20,27 +20,31 @@ public struct TonService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func walletInformation(address: String) async throws -> TonWalletInfo {
+}
+
+// MARK: - Business Logic
+
+extension TonService {
+    private func walletInformation(address: String) async throws -> TonWalletInfo {
         return try await provider
             .request(.walletInformation(address: address))
             .map(as: TonResult<TonWalletInfo>.self).result
     }
-    
-    func tokenBalance(address: String) async throws -> BigInt {
+
+    private func tokenBalance(address: String) async throws -> BigInt {
         let balance = try await provider
             .request(.tokenData(id: address))
             .map(as: TonResult<TonJettonBalance>.self).result.balance
         return BigInt(balance)
     }
-    
-    func addressState(address: String) async throws -> Bool {
+
+    private func addressState(address: String) async throws -> Bool {
         try await provider
             .request(.addressState(address: address))
             .map(as: TonResult<String>.self).result == "active"
     }
-    
-    func jettonAddress(tokenId: String, address: String) async throws -> String {
+
+    private func jettonAddress(tokenId: String, address: String) async throws -> String {
         let data = try Gemstone.tonEncodeGetWalletAddress(address: address)
         let responce = try await provider
             .request(.runGetMethod(
@@ -51,7 +55,7 @@ public struct TonService {
                 ]
             ))
             .map(as: TonResult<RunGetMethod>.self).result
-        
+
         guard
             let value = responce.stack.first?.last,
             case let .cell(cell) = value else {
@@ -60,6 +64,8 @@ public struct TonService {
         return try Gemstone.tonDecodeJettonAddress(base64Data: cell.object.data.b64, len: cell.object.data.len.asUInt64)
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension TonService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -103,6 +109,8 @@ extension TonService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension TonService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
@@ -138,6 +146,8 @@ extension TonService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension TonService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         switch input.asset.id.type {
@@ -165,6 +175,8 @@ extension TonService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension TonService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await provider
@@ -172,6 +184,8 @@ extension TonService: ChainBroadcastable {
             .map(as: TonResult<TonBroadcastTransaction>.self).result.hash
     }
 }
+
+// MARK: - ChainTransactionStateFetchable
 
 extension TonService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -197,11 +211,15 @@ extension TonService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension TonService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainStakable
 
 extension TonService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -212,6 +230,8 @@ extension TonService: ChainStakable {
         fatalError()
     }
 }
+
+// MARK: - ChainTokenable
 
 extension TonService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -242,9 +262,19 @@ extension TonService: ChainTokenable {
  
 extension TonService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension TonService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - Models
 
 struct RunGetMethod: Codable {
     let stack: [[StackItem]]

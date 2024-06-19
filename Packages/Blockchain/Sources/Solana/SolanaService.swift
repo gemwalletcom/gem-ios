@@ -23,14 +23,18 @@ public struct SolanaService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
+}
+
+// MARK: - Business Logic
+
+extension SolanaService {
+    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
         return try await provider
             .request(.getTokenAccountsByOwner(owner: owner, token: token))
             .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>.self).result.value
     }
-    
-    func getTokenTransferType(
+
+    private func getTokenTransferType(
         tokenId: String,
         senderAddress: String,
         destinationAddress: String
@@ -38,11 +42,11 @@ public struct SolanaService {
         async let getSenderTokenAccounts = getAccounts(token: tokenId, owner: senderAddress)
         async let getRecipientTokenAccounts = getAccounts(token: tokenId, owner: destinationAddress)
         let (senderTokenAccounts, recipientTokenAccounts) = try await (getSenderTokenAccounts, getRecipientTokenAccounts)
-        
+
         guard let senderTokenAddress = senderTokenAccounts.first?.pubkey else {
             throw AnyError("Sender token address is empty")
         }
-        
+
         if let recipientTokenAddress = recipientTokenAccounts.first?.pubkey {
             return SignerInputToken(
                 senderTokenAddress: senderTokenAddress,
@@ -54,8 +58,8 @@ public struct SolanaService {
             recipientTokenAddress: .none
         )
     }
-    
-    func getTokenBalance(token: String, owner: String) async throws -> BigInt {
+
+    private func getTokenBalance(token: String, owner: String) async throws -> BigInt {
         let accounts = try await getAccounts(token: token, owner: owner)
         guard let account = accounts.first else {
             return .zero
@@ -63,11 +67,11 @@ public struct SolanaService {
         let balance = try await provider
             .request(.getTokenAccountBalance(token: account.pubkey))
             .map(as: JSONRPCResponse<SolanaValue<SolanaBalanceValue>>.self).result.value.amount
-        
+
         return BigInt(balance) ?? .zero
     }
-    
-    func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
+
+    private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
         var result: [Primitives.AssetBalance] = []
         for tokenId in tokenIds {
             guard let token = tokenId.tokenId else { break }
@@ -78,45 +82,47 @@ public struct SolanaService {
         }
         return result
     }
-    
-    func getPrioritizationFee() async throws -> BigInt {
+
+    private func getPrioritizationFee() async throws -> BigInt {
         let fees = try await provider
             .request(.fees)
             .map(as: JSONRPCResponse<[SolanaPrioritizationFee]>.self)
             .result
-        
+
         return BigInt(fees.map { $0.prioritizationFee }.reduce(0, { $0 + Int($1) }) / fees.count)
     }
-    
-    func getCoinBalance(address: String) async throws -> BigInt {
+
+    private func getCoinBalance(address: String) async throws -> BigInt {
         try await provider
             .request(.balance(address: address))
             .map(as: JSONRPCResponse<SolanaBalance>.self).result.value.asBigInt
     }
-    
-    func getEpoch() async throws -> SolanaEpoch {
+
+    private func getEpoch() async throws -> SolanaEpoch {
         try await provider
             .request(.epoch)
             .map(as: JSONRPCResponse<SolanaEpoch>.self).result
     }
-    
-    func getDelegations(address: String) async throws -> [SolanaTokenAccountResult<SolanaStakeAccount>] {
+
+    private func getDelegations(address: String) async throws -> [SolanaTokenAccountResult<SolanaStakeAccount>] {
         try await provider
             .request(.stakeDelegations(address: address))
             .map(as: JSONRPCResponse<[SolanaTokenAccountResult<SolanaStakeAccount>]>.self).result
     }
-    
-    func getRentExemption(size: Int) async throws -> BigInt {
+
+    private func getRentExemption(size: Int) async throws -> BigInt {
         try await provider
             .request(.rentExemption(size: size))
             .map(as: JSONRPCResponse<Int>.self).result.asBigInt
     }
-    
-    func getBaseFee() async throws -> BigInt {
+
+    private func getBaseFee() async throws -> BigInt {
         let priorityFee = try await getPrioritizationFee()
         return staticBaseFee + (priorityFee * BigInt(priorityFeeMultipler))
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension SolanaService: ChainBalanceable {    
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -147,6 +153,8 @@ extension SolanaService: ChainBalanceable {
         )
     }
 }
+
+// MARK: - ChainFeeCalculateable
 
 extension SolanaService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
@@ -195,6 +203,8 @@ extension SolanaService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension SolanaService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let blockhash = provider
@@ -233,6 +243,8 @@ extension SolanaService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension SolanaService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await provider
@@ -247,6 +259,8 @@ extension SolanaService: ChainBroadcastable {
             .result
     }
 }
+
+// MARK: - ChainTransactionStateFetchable
 
 extension SolanaService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -264,6 +278,8 @@ extension SolanaService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension SolanaService: ChainSyncable {
     public func getInSync() async throws -> Bool {
         return try await provider
@@ -271,6 +287,8 @@ extension SolanaService: ChainSyncable {
             .map(as: JSONRPCResponse<String>.self).result == "ok"
     }
 }
+
+// MARK: - ChainStakable
 
 extension SolanaService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -338,6 +356,8 @@ extension SolanaService: ChainStakable {
     }
 }
 
+// MARK: - ChainTokenable
+
 extension SolanaService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         let metadataKey = try Gemstone.solanaDeriveMetadataPda(mint: tokenId)
@@ -373,6 +393,14 @@ extension SolanaService: ChainTokenable {
  
 extension SolanaService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - ChainLatestBlockFetchable
+
+extension SolanaService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
     }
 }

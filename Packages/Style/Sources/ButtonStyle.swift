@@ -114,19 +114,6 @@ extension ButtonStyle where Self == ColorButtonStyle {
                 backgroundPressed: Colors.grayVeryLight
             )
         }
-
-    public static func delete(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-            return ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.red,
-                foregroundStylePressed: Colors.red,
-                background: Colors.whiteGrayBackground,
-                backgroundPressed: Colors.whiteGrayPressedBackground
-            )
-        }
 }
 
 public struct ClearButtonStyle: ButtonStyle {
@@ -295,11 +282,6 @@ extension ButtonStyle where Self == StatefulButtonStyle {
                 Text("White Button")
             }
             .buttonStyle(.white())
-
-            Button(action: {}) {
-                Text("Delete Button")
-            }
-            .buttonStyle(.delete())
 
             Button(action: {}) {
                 Text("Clear Button")

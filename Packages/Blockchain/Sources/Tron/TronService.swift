@@ -18,26 +18,30 @@ public struct TronService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func latestBlock() async throws -> TronBlock {
+}
+
+// MARK: - Business Logic
+
+extension TronService {
+    private func latestBlock() async throws -> TronBlock {
         return try await provider
             .request(.latestBlock)
             .map(as: TronBlock.self)
     }
-    
-    func account(address: String) async throws -> TronAccount {
+
+    private func account(address: String) async throws -> TronAccount {
         return try await provider
             .request(.account(address: address))
             .map(as: TronAccount.self)
     }
-    
-    func accountUsage(address: String) async throws -> TronAccountUsage {
+
+    private func accountUsage(address: String) async throws -> TronAccountUsage {
         return try await provider
             .request(.accountUsage(address: address))
             .map(as: TronAccountUsage.self)
     }
-    
-    func tokenBalance(ownerAddress: String, contractAddress: String) async throws -> BigInt {
+
+    private func tokenBalance(ownerAddress: String, contractAddress: String) async throws -> BigInt {
         let call = TronSmartContractCall(
             contract_address: contractAddress,
             function_selector: "balanceOf(address)",
@@ -51,22 +55,22 @@ public struct TronService {
         let result = try await provider
             .request(.triggerSmartContract(call))
             .map(as: TronSmartContractResult.self)
-        
+
         guard let constantResult = result.constant_result.first else {
             return .zero
         }
         return try BigInt.fromHex(constantResult)
     }
-    
-    func addressHex(address: String) throws -> String {
+
+    private func addressHex(address: String) throws -> String {
         guard let address = Base58.decode(string: address)?.hexString else {
             throw AnyError("Invalid address")
         }
         return String(address.dropFirst(2))
     }
-    
+
     // https://developers.tron.network/docs/set-feelimit#how-to-estimate-energy-consumption
-    func estimateTRC20Transfer(ownerAddress: String, recipientAddress: String, contractAddress: String, value: BigInt) async throws -> BigInt {
+    private func estimateTRC20Transfer(ownerAddress: String, recipientAddress: String, contractAddress: String, value: BigInt) async throws -> BigInt {
         let address = try addressHex(address: recipientAddress)
         let parameter = [address, value.hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
         let call = TronSmartContractCall(
@@ -81,27 +85,27 @@ public struct TronService {
         let result = try await provider
             .request(.triggerSmartContract(call))
             .map(as: TronSmartContractResult.self)
-        
+
         if let message = result.result.message {
             throw AnyError(message)
         }
-        
+
         return BigInt(result.energy_used)
     }
-    
-    func parameters() async throws -> [TronChainParameter] {
+
+    private func parameters() async throws -> [TronChainParameter] {
         return try await provider
             .request(.chainParams)
             .map(as: TronChainParameters.self).chainParameter
     }
-    
-    func isNewAccount(address: String) async throws -> Bool {
+
+    private func isNewAccount(address: String) async throws -> Bool {
         return try await provider
             .request(.account(address: address))
             .map(as: TronEmptyAccount.self).address?.isEmpty ?? true
     }
-    
-    func smartContractCallFunction(contract: String, function: String) async throws -> String {
+
+    private func smartContractCallFunction(contract: String, function: String) async throws -> String {
         let contract = "41" + (try addressHex(address: contract))
         let call = TronSmartContractCall(
             contract_address: contract,
@@ -115,36 +119,38 @@ public struct TronService {
         let result = try await provider
             .request(.triggerSmartContract(call))
             .map(as: TronSmartContractResult.self)
-        
+
         guard
             let constantResult = result.constant_result.first  else {
                 throw AnyError("Invalid value")
         }
         return constantResult
     }
-    
-    func tokenString(contract: String, function: String) async throws -> String {
+
+    private func tokenString(contract: String, function: String) async throws -> String {
         let result = try await smartContractCallFunction(contract: contract, function: function)
         guard let value = EthereumService.decodeABI(hexString: result) else {
             throw AnyError("Invalid value")
         }
         return value
     }
-    
-    func tokenName(contract: String) async throws -> String {
+
+    private func tokenName(contract: String) async throws -> String {
         try await tokenString(contract: contract, function: "name()")
     }
-    
-    func tokenSymbol(contract: String) async throws -> String {
+
+    private func tokenSymbol(contract: String) async throws -> String {
         try await tokenString(contract: contract, function: "symbol()")
     }
-    
-    func tokenDecimals(contract: String) async throws -> BigInt {
+
+    private func tokenDecimals(contract: String) async throws -> BigInt {
         let result = try await smartContractCallFunction(contract: contract, function: "decimals()")
         let decimals = try BigInt.fromHex(result)
         return decimals
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension TronService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -176,6 +182,8 @@ extension TronService: ChainBalanceable {
         fatalError()
     }
 }
+
+// MARK: - ChainFeeCalculateable
 
 extension TronService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
@@ -226,6 +234,8 @@ extension TronService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension TronService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let block = latestBlock().block_header.raw_data
@@ -245,6 +255,8 @@ extension TronService: ChainTransactionPreloadable {
     }
 }
 
+// MARK: - ChainBroadcastable
+
 extension TronService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         return try await provider
@@ -255,6 +267,8 @@ extension TronService: ChainBroadcastable {
             ).txid
     }
 }
+
+// MARK: - ChainTransactionStateFetchable
 
 extension TronService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
@@ -281,11 +295,15 @@ extension TronService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension TronService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainStakable
 
 extension TronService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -301,9 +319,19 @@ extension TronService: ChainStakable {
  
 extension TronService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension TronService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - ChainTokenable
 
 extension TronService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -331,6 +359,8 @@ extension TronService: ChainTokenable {
         tokenId.hasPrefix("T") && tokenId.count.isBetween(30, and: 50)
     }
 }
+
+// MARK: - LocalizedError
 
 extension TronTransactionBroadcastError: LocalizedError {
     public var errorDescription: String? {
