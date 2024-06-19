@@ -22,6 +22,13 @@ public enum StateViewType<T> {
         }
     }
 
+    public var isError: Bool {
+        switch self {
+        case .error: true
+        default: false
+        }
+    }
+
     public var value: T? {
         guard case .loaded(let t) = self else {
             return nil

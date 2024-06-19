@@ -19,30 +19,34 @@ public struct BitcoinService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func fee() async throws  -> BigInt {
+}
+
+// MARK: - Business Logic
+
+extension BitcoinService {
+    private func fee() async throws  -> BigInt {
         let fee = try await provider
             .request(.fee(priority: chain.defaultFeePriority))
             .map(as: BitcoinFeeResult.self)
         let byteFee = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
-        
+
         return byteFee
     }
-    
-    func utxo(address: String) async throws -> [UTXO] {
+
+    private func utxo(address: String) async throws -> [UTXO] {
         return try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
             .map { $0.mapToUTXO() }
     }
-    
-    func calculateFee(byteFee: BigInt, feeInput: FeeInput, utxos: [UTXO]) async throws -> Fee {
+
+    private func calculateFee(byteFee: BigInt, feeInput: FeeInput, utxos: [UTXO]) async throws -> Fee {
         let coinType = chain.chain.coinType
         let gasPrice = max(byteFee.int / 1000, chain.minimumByteFee)
         let utxo = utxos.map {
             $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType)
         }
-        
+
         let input = BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -54,13 +58,13 @@ public struct BitcoinService {
             $0.scripts = utxo.mapToScripts(address: feeInput.senderAddress, coinType: coinType)
             $0.useMaxAmount = feeInput.isMaxAmount
         }
-        
+
         let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
 
         if plan.error != CommonSigningError.ok {
             throw AnyError("unable to estimate byte fee")
         }
-        
+
         return Fee(
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
@@ -68,6 +72,8 @@ public struct BitcoinService {
         )
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension BitcoinService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -86,6 +92,8 @@ extension BitcoinService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension BitcoinService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         let utxos = try await utxo(address: input.senderAddress)
@@ -93,6 +101,8 @@ extension BitcoinService: ChainFeeCalculateable {
         return try await calculateFee(byteFee: byteFee, feeInput: input, utxos: utxos)
     }
 }
+
+// MARK: - ChainTransactionPreloadable
 
 extension BitcoinService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
@@ -107,6 +117,8 @@ extension BitcoinService: ChainTransactionPreloadable {
         )
     }
 }
+
+// MARK: - ChainBroadcastable
 
 extension BitcoinService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
@@ -125,6 +137,8 @@ extension BitcoinService: ChainBroadcastable {
     }
 }
 
+// MARK: - ChainTransactionStateFetchable
+
 extension BitcoinService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
         let transaction = try await provider
@@ -136,6 +150,8 @@ extension BitcoinService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension BitcoinService: ChainSyncable {
     public func getInSync() async throws -> Bool {
         return try await provider
@@ -143,6 +159,8 @@ extension BitcoinService: ChainSyncable {
             .map(as: BitcoinNodeInfo.self).blockbook.inSync
     }
 }
+
+// MARK: - ChainStakable
 
 extension BitcoinService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -153,6 +171,8 @@ extension BitcoinService: ChainStakable {
         fatalError()
     }
 }
+
+// MARK: - ChainTokenable
 
 extension BitcoinService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -168,9 +188,19 @@ extension BitcoinService: ChainTokenable {
  
 extension BitcoinService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainLatestBlockFetchable
+
+extension BitcoinService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
+    }
+}
+
+// MARK: - Models extensions
 
 public extension UTXO {
     func mapToUnspendTransaction(address: String, coinType: CoinType) -> BitcoinUnspentTransaction {

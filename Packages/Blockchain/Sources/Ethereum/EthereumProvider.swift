@@ -16,7 +16,8 @@ public enum EthereumProvider: TargetType {
     case feeHistory(blocks: Int, rewardPercentiles: [Int])
     case maxPriorityFeePerGas
     case syncing
-    
+    case latestBlock
+
     public var baseUrl: URL {
         return URL(string: "")!
     }
@@ -47,6 +48,8 @@ public enum EthereumProvider: TargetType {
             return "eth_maxPriorityFeePerGas"
         case .syncing:
             return "eth_syncing"
+        case .latestBlock:
+            return "eth_blockNumber"
         }
     }
     
@@ -63,7 +66,8 @@ public enum EthereumProvider: TargetType {
         case .chainId,
             .gasPrice,
             .maxPriorityFeePerGas,
-            .syncing:
+            .syncing,
+            .latestBlock:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
             )

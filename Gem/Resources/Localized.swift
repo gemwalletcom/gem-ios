@@ -133,6 +133,8 @@ internal enum Localized {
     internal static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
     internal static let next = Localized.tr("Localizable", "common.next", fallback: "Next")
+    /// No
+    internal static let no = Localized.tr("Localizable", "common.no", fallback: "No")
     /// No Results Found
     internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results Found")
     /// Not Available
@@ -163,6 +165,8 @@ internal enum Localized {
     internal static let type = Localized.tr("Localizable", "common.type", fallback: "Type")
     /// Wallet
     internal static let wallet = Localized.tr("Localizable", "common.wallet", fallback: "Wallet")
+    /// Yes
+    internal static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
   }
   internal enum Date {
     /// Today
@@ -177,6 +181,8 @@ internal enum Localized {
     }
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid URL
+    internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
@@ -202,6 +208,18 @@ internal enum Localized {
       internal static func unableFetchTokenInformation(_ p1: Any) -> String {
         return Localized.tr("Localizable", "errors.token.unable_fetch_token_information", String(describing: p1), fallback: "Unable to fetch token information: %@")
       }
+    }
+  }
+  internal enum Nodes {
+    internal enum ImportNode {
+      /// Chain ID
+      internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
+      /// In Sync
+      internal static let inSync = Localized.tr("Localizable", "nodes.import_node.in_sync", fallback: "In Sync")
+      /// Latest Block
+      internal static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
+      /// Add node
+      internal static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
     }
   }
   internal enum Receive {

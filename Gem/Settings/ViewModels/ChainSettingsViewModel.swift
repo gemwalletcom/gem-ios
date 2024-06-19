@@ -36,11 +36,19 @@ class ChainSettingsViewModel: ObservableObject {
     var title: String {
         Asset(chain).name
     }
-    
+
+    var isSupportedAddingCustomNode: Bool {
+        chain.type == .ethereum
+    }
+}
+
+// MARK: - Business logic
+
+extension ChainSettingsViewModel {
     func getNodes() throws -> [ChainNode] {
         try nodeService.nodes(for: chain)
     }
-    
+
     func selectExplorer(name: String) {
         selectedExplorer = name
         explorerService.set(chain: chain, name: name)

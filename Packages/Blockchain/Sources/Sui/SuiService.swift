@@ -21,37 +21,41 @@ public struct SuiService {
         self.chain = chain
         self.provider = provider
     }
-    
-    func getBalance(address: String) async throws -> SuiCoinBalance {
+}
+
+// MARK: - Business Logic
+
+extension SuiService {
+    private func getBalance(address: String) async throws -> SuiCoinBalance {
         try await provider.request(.balance(address: address))
             .map(as: JSONRPCResponse<SuiCoinBalance>.self).result
     }
-    
-    func getSystemState() async throws -> SuiSystemState {
+
+    private func getSystemState() async throws -> SuiSystemState {
         try await provider
             .request(.systemState)
             .map(as: JSONRPCResponse<SuiSystemState>.self).result
     }
-    
-    func getDelegations(address: String) async throws -> [SuiStakeDelegation] {
+
+    private func getDelegations(address: String) async throws -> [SuiStakeDelegation] {
         try await provider
             .request(.stakeDelegations(address: address))
             .map(as: JSONRPCResponse<[SuiStakeDelegation]>.self).result
     }
-    
-    func getGasPrice() async throws -> BigInt {
+
+    private func getGasPrice() async throws -> BigInt {
         return try await provider
             .request(.gasPrice)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
-    
-    func getCoins(senderAddress: String, coinType: String) async throws -> [SuiCoin] {
+
+    private func getCoins(senderAddress: String, coinType: String) async throws -> [SuiCoin] {
         return try await provider
             .request(.coins(address: senderAddress, coinType: coinType))
             .map(as: JSONRPCResponse<SuiData<[SuiCoin]>>.self).result.data
     }
-    
-    func getData(input: FeeInput) async throws -> String {
+
+    private func getData(input: FeeInput) async throws -> String {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
@@ -72,7 +76,7 @@ public struct SuiService {
                     value: input.value
                 ).data
             }
-            
+
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake(let validator):
@@ -106,21 +110,21 @@ public struct SuiService {
             fatalError()
         }
     }
-    
-    func gasBudget(coinType: String) -> BigInt {
+
+    private func gasBudget(coinType: String) -> BigInt {
         BigInt(25_000_000)
     }
-    
-    func fetcGasPrice() async throws -> UInt64 {
+
+    private func fetcGasPrice() async throws -> UInt64 {
         let price = try await provider.request(.gasPrice).map(as: JSONRPCResponse<String>.self).result
         return UInt64(price) ?? 750
     }
-    
-    func fetchObject(id: String) async throws -> SuiObject {
+
+    private func fetchObject(id: String) async throws -> SuiObject {
         return try await provider.request(.getObject(id: id)).map(as: JSONRPCResponse<SuiObject>.self).result
     }
 
-    func encodeTransfer(
+    private func encodeTransfer(
         sender: String,
         recipient: String,
         coinType: String,
@@ -131,7 +135,7 @@ public struct SuiService {
             getCoins(senderAddress: sender, coinType: coinType),
             fetcGasPrice()
         )
-        
+
         let suiCoins = coins.map { $0.toGemstone() }
         let input = SuiTransferInput(
             sender: sender,
@@ -147,8 +151,8 @@ public struct SuiService {
         let output = try suiEncodeTransfer(input: input)
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
-    
-    func encodeTokenTransfer(
+
+    private func encodeTokenTransfer(
         sender: String,
         recipient: String,
         coinType: String,
@@ -177,7 +181,7 @@ public struct SuiService {
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
 
-    func encodeStake(
+    private func encodeStake(
         senderAddress: String,
         validatorAddress: String,
         coinType: String,
@@ -187,7 +191,6 @@ public struct SuiService {
             getCoins(senderAddress: senderAddress, coinType: coinType),
             self.fetcGasPrice()
         )
-        
         let suiCoins = coins.map { $0.toGemstone() }
         let stakeInput = SuiStakeInput(
             sender: senderAddress,
@@ -203,7 +206,7 @@ public struct SuiService {
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
 
-    func encodeUnstake(
+    private func encodeUnstake(
         sender: String,
         stakedId: String,
         coinType: String
@@ -228,12 +231,14 @@ public struct SuiService {
         let output = try suiEncodeUnstake(input: input)
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
-    
-    func getCoinMetadata(id: String) async throws -> SuiCoinMetadata {
+
+    private func getCoinMetadata(id: String) async throws -> SuiCoinMetadata {
         try await provider.request(.coinMetadata(id: id))
             .map(as: JSONRPCResponse<SuiCoinMetadata>.self).result
     }
 }
+
+// MARK: - ChainBalanceable
 
 extension SuiService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
@@ -274,6 +279,8 @@ extension SuiService: ChainBalanceable {
     }
 }
 
+// MARK: - ChainFeeCalculateable
+
 extension SuiService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])
@@ -298,6 +305,8 @@ extension SuiService: ChainFeeCalculateable {
     }
 }
 
+// MARK: - ChainTransactionPreloadable
+
 extension SuiService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         let data: String = try await getData(input: input.feeInput)
@@ -309,6 +318,8 @@ extension SuiService: ChainTransactionPreloadable {
         )
     }
 }
+
+// MARK: - ChainBroadcastable
 
 extension SuiService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
@@ -326,6 +337,8 @@ extension SuiService: ChainBroadcastable {
     }
 }
 
+// MARK: - ChainTransactionStateFetchable
+
 extension SuiService: ChainTransactionStateFetchable {
     public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
         let transaction = try await provider
@@ -340,14 +353,18 @@ extension SuiService: ChainTransactionStateFetchable {
     }
 }
 
+// MARK: - ChainSyncable
+
 extension SuiService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        fatalError()
+        throw AnyError("Not Implemented")
 //        return try await provider
 //            .request(.health)
 //            .map(as: JSONRPCResponse<String>.self).result == "ok"
     }
 }
+
+// MARK: - ChainStakable
 
 extension SuiService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
@@ -399,19 +416,19 @@ extension SuiService: ChainStakable {
  
 extension SuiService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        fatalError()
+        throw AnyError("Not Implemented")
     }
 }
 
-extension SuiSystemState {
-    var epochStartDate: Date {
-        Date(timeIntervalSince1970: (TimeInterval(epochStartTimestampMs) ?? 0) / 1000)
-    }
-    
-    var epochDuration: TimeInterval {
-        (TimeInterval(epochDurationMs) ?? 0) / 1000
+// MARK: - ChainLatestBlockFetchable
+
+extension SuiService: ChainLatestBlockFetchable {
+    public func getLatestBlock() async throws -> String {
+        throw AnyError("Not Implemented")
     }
 }
+
+// MARK: - ChainTokenable
 
 extension SuiService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
@@ -432,6 +449,8 @@ extension SuiService: ChainTokenable {
     }
 }
 
+// MARK: - Models extensions
+
 extension SuiStake {
     var state: DelegationState {
         switch status {
@@ -446,7 +465,18 @@ extension SuiStake {
     }
 }
 
-// FIXME update uniffi to latest to extension Codable
+extension SuiSystemState {
+    var epochStartDate: Date {
+        Date(timeIntervalSince1970: (TimeInterval(epochStartTimestampMs) ?? 0) / 1000)
+    }
+
+    var epochDuration: TimeInterval {
+        (TimeInterval(epochDurationMs) ?? 0) / 1000
+    }
+}
+
+// FIXME: - update uniffi to latest to extension Codable
+
 extension Blockchain.SuiCoin {
     func toGemstone() -> Gemstone.SuiCoin {
         Gemstone.SuiCoin(
