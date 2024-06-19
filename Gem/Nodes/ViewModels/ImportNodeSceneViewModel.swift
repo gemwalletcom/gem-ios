@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Components
 import GemstonePrimitives
+import BigInt
 
 class ImportNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
@@ -12,6 +13,10 @@ class ImportNodeSceneViewModel: ObservableObject {
     @Published private var chain: Chain
     @Published var urlString: String = ""
     @Published var state: StateViewType<ImportNodeResult> = .noData
+    
+    private lazy var valueFormatter: ValueFormatter = {
+        ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
+    }()
 
     init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
@@ -68,7 +73,11 @@ extension ImportNodeSceneViewModel {
             }
 
             await MainActor.run { [self] in
-                let result = ImportNodeResult(chainID: networkId, blockNumber: blockNumber, isInSync: isSynced)
+                var blockNumberFormatted = blockNumber
+                if let blockNumberBigInt = BigInt(blockNumber) {
+                    blockNumberFormatted = valueFormatter.string(blockNumberBigInt, decimals: 0)
+                }
+                let result = ImportNodeResult(chainID: networkId, blockNumber: blockNumberFormatted, isInSync: isSynced)
                 self.state = .loaded(result)
             }
         } catch {

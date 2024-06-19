@@ -66,7 +66,7 @@ extension ImportNodeScene {
     private var inputSection: some View {
         Section {
             HStack {
-                FloatTextField(Localized.Nodes.ImportNode.rpcAddress, text: $model.urlString)
+                FloatTextField("URL", text: $model.urlString)
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)

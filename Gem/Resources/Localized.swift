@@ -218,8 +218,6 @@ internal enum Localized {
       internal static let inSync = Localized.tr("Localizable", "nodes.import_node.in_sync", fallback: "In Sync")
       /// Latest Block
       internal static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
-      /// RPC Address
-      internal static let rpcAddress = Localized.tr("Localizable", "nodes.import_node.rpc_address", fallback: "RPC Address")
       /// Add node
       internal static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
     }
