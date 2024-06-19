@@ -31,7 +31,7 @@ struct StakeService {
             .filter { $0.isActive && !$0.name.isEmpty }
     }
 
-    func getRecipientAddress(chain: StakeChain?, validatorId: String?) -> String? {
+    func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
 
         guard let id = validatorId else {
             return nil
@@ -41,7 +41,17 @@ struct StakeService {
             return id
         case .smartChain:
             return StakeHub.address
-        case .ethereum, .none:
+        case .ethereum:
+            // for Lido, it's stETH token address or withdrawal queue
+            switch type {
+            case .stake:
+                return LidoContract.address
+            case .unstake, .withdraw:
+                return LidoContract.withdrawal
+            default:
+                fatalError()
+            }
+        case .none:
             fatalError()
         }
     }

@@ -29,3 +29,17 @@ public struct Balance: Codable {
         self.reserved = reserved
     }
 }
+
+public extension Balance {
+    func merge(_ balance: Balance) -> Balance {
+        return Self(
+            available: self.available + balance.available,
+            frozen: self.frozen + balance.frozen,
+            locked: self.locked + balance.locked,
+            staked: self.staked + balance.staked,
+            pending: self.pending + balance.pending,
+            rewards: self.rewards + balance.rewards,
+            reserved: self.reserved + balance.reserved
+        )
+    }
+}

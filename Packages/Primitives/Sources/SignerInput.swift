@@ -20,7 +20,8 @@ public struct SignerInput {
     public let token: SignerInputToken
     public let utxos: [UTXO]
     public let messageBytes: String
-    
+    public let extra: SigningdExtra?
+
     public init(
         type: TransferDataType,
         asset: Asset,
@@ -36,7 +37,8 @@ public struct SignerInput {
         block: SignerInputBlock,
         token: SignerInputToken,
         utxos: [UTXO],
-        messageBytes: String
+        messageBytes: String,
+        extra: SigningdExtra? = nil
     ) {
         self.type = type
         self.asset = asset
@@ -53,5 +55,6 @@ public struct SignerInput {
         self.token = token
         self.utxos = utxos
         self.messageBytes = messageBytes
+        self.extra = extra
     }
 }
