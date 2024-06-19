@@ -95,7 +95,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
             return ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
-                foregroundStyle: Colors.whiteSolid,
+                foregroundStyle: Colors.gray,
                 foregroundStylePressed: Colors.whiteSolid,
                 background: Colors.grayVeryLight,
                 backgroundPressed: Colors.grayLight
