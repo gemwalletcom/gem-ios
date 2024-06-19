@@ -123,7 +123,7 @@ struct AssetDataViewModel {
             Chain.solana.assetId,
             Chain.sui.assetId,
             Chain.smartChain.assetId,
-            Chain.ethereum.assetId
+//            Chain.ethereum.assetId disabled
         ].contains(asset.id) {
             return true
         }
