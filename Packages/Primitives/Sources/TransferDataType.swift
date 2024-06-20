@@ -11,6 +11,23 @@ public enum StakeType: Hashable, Equatable {
     case withdraw(delegation: Delegation)
 }
 
+extension StakeType {
+    public var validatorId: String {
+        return switch self {
+        case .stake(let validator):
+            validator.id
+        case .unstake(let delegation):
+            delegation.validator.id
+        case .redelegate(let delegation, _):
+            delegation.validator.id
+        case .rewards(let validators):
+            validators.first?.id ?? ""
+        case .withdraw(let delegation):
+            delegation.validator.id
+        }
+    }
+}
+
 public enum TransferDataType: Hashable, Equatable {
     case transfer(Asset)
     case swap(Asset, Asset, SwapAction)

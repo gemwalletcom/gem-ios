@@ -2,6 +2,10 @@
 
 import Foundation
 
+public enum SigningdExtra {
+    case lidoPermitNonce(String) // dapp specific extra data
+}
+
 public struct TransactionPreload {
     public let accountNumber: Int
     public let sequence: Int
@@ -12,7 +16,8 @@ public struct TransactionPreload {
     public var fee: Fee
     public let utxos: [UTXO]
     public let messageBytes: String
-    
+    public let extra: SigningdExtra?
+
     public init(
         accountNumber: Int = 0,
         sequence: Int = 0,
@@ -21,7 +26,8 @@ public struct TransactionPreload {
         chainId: String = "",
         fee: Fee,
         utxos: [UTXO] = [],
-        messageBytes: String = ""
+        messageBytes: String = "",
+        extra: SigningdExtra? = nil
     ) {
         self.accountNumber = accountNumber
         self.sequence = sequence
@@ -31,6 +37,7 @@ public struct TransactionPreload {
         self.fee = fee
         self.utxos = utxos
         self.messageBytes = messageBytes
+        self.extra = extra
     }
 }
 

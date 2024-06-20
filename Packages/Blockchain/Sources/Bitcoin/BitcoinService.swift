@@ -90,6 +90,10 @@ extension BitcoinService: ChainBalanceable {
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         return []
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 // MARK: - ChainFeeCalculateable

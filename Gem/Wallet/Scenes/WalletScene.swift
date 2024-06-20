@@ -61,9 +61,7 @@ struct WalletScene: View {
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            
-            TransactionsList(transactions)
-            
+
             Section {
                 WalletAssetsList(
                     assets: assets,

@@ -150,18 +150,14 @@ extension EthereumService {
 
 extension EthereumService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        // add a proper protocol later
-        if chain == .smartChain {
-            return try await SmartChainService(provider: provider).coinBalance(for: address)
-        }
-
-        let balance = try await provider
-            .request(.balance(address: address))
-            .mapResult(BigIntable.self).value
+        async let balanceCall = try provider.request(.balance(address: address))
+                    .mapResult(BigIntable.self).value
+        async let stakeCall = try getStakeBalance(address: address)
+        let (balance, stakeBalance) = try await(balanceCall, stakeCall)
 
         return AssetBalance(
-                assetId: chain.chain.assetId,
-                balance: Balance(available: balance)
+            assetId: chain.chain.assetId,
+            balance: Balance(available: balance).merge(stakeBalance.balance)
         )
     }
 
@@ -182,11 +178,12 @@ extension EthereumService: ChainTransactionPreloadable {
         async let fee = fee(input: input.feeInput)
         async let sequence = getNonce(senderAddress: input.senderAddress)
         async let chainId = getChainId()
-
+        async let extra = getPreloadExtra(chain: input.asset.chain, type: input.type, address: input.senderAddress)
         return try await TransactionPreload(
             sequence: sequence,
             chainId: chainId.asString,
-            fee: fee
+            fee: fee,
+            extra: extra
         )
     }
 }
@@ -253,6 +250,10 @@ extension EthereumService: ChainStakable {
         switch chain {
         case .smartChain:
             return try await SmartChainService(provider: provider).getValidators(apr: 0)
+        case .ethereum:
+            return [
+                DelegationValidator.lido
+            ]
         default:
             return []
         }
@@ -262,8 +263,39 @@ extension EthereumService: ChainStakable {
         switch chain {
         case .smartChain:
             return try await SmartChainService(provider: provider).getStakeDelegations(address: address)
+        case .ethereum:
+            return try await LidoService(provider: provider).getStakeDelegations(address: address)
         default:
             return []
+        }
+    }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        switch chain {
+        case .smartChain:
+            return try await SmartChainService(provider: provider).getStakeBalance(address: address)
+        case .ethereum:
+            return try await LidoService(provider: provider).getBalance(address: address)
+        default:
+            break
+        }
+        return AssetBalance.make(for: chain.chain.assetId)
+    }
+
+    public func getPreloadExtra(chain: Chain, type: TransferDataType, address: String) async throws -> SigningdExtra? {
+        guard let stakeChain = chain.stakeChain else {
+            return .none
+        }
+        guard let stakeType = type.stakeType else {
+            return .none
+        }
+        switch (stakeChain, stakeType) {
+        case(.ethereum, .unstake):
+            return .lidoPermitNonce(
+                try await LidoService(provider: provider).getPermitNonce(address: address)
+            )
+        default:
+            return .none
         }
     }
 }

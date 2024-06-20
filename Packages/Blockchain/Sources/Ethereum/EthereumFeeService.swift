@@ -35,6 +35,14 @@ extension EthereumService: ChainFeeCalculateable {
             switch input.chain {
             case .smartChain:
                 return try? StakeHub().encodeStake(type: stakeType, amount: input.value)
+            case .ethereum:
+                if stakeType.validatorId != DelegationValidator.lido.id {
+                    // refactor later to support everstake and others
+                    fatalError()
+                }
+                // empty signature for gas estimation
+                let signature = Data(repeating: 0, count: 65)
+                return try? LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signature)
             default:
                 fatalError()
             }
@@ -58,6 +66,8 @@ extension EthereumService: ChainFeeCalculateable {
             switch input.chain {
             case .smartChain:
                 return StakeHub.address
+            case .ethereum:
+                return input.destinationAddress
             default:
                 fatalError()
             }
@@ -89,7 +99,8 @@ extension EthereumService: ChainFeeCalculateable {
             return input.value
         case .stake(_, let type):
             switch input.chain {
-            case .smartChain:
+            case .smartChain,
+                    .ethereum:
                 switch type {
                 case .stake:
                     return input.value
@@ -115,15 +126,29 @@ extension EthereumService: ChainFeeCalculateable {
         let to = getTo(input: input)
         let value = getValue(input: input)
         
-        async let getGasLimit = getGasLimit(
-            from: input.senderAddress,
-            to: to,
-            value: value?.hexString.append0x,
-            data: data?.hexString.append0x
-        )
+        let gasLimit: BigInt
+        if case .stake(_, let stakeType) = input.type {
+            gasLimit = try await EthereumStakeService(service: self)
+                .getGasLimit(
+                    chain: chain,
+                    type: stakeType,
+                    stakeValue: input.value, // original value
+                    from: input.senderAddress,
+                    to: to,
+                    value: value,
+                    data: data
+                )
+        } else {
+            gasLimit = try await getGasLimit(
+                from: input.senderAddress,
+                to: to,
+                value: value?.hexString.append0x,
+                data: data?.hexString.append0x
+            )
+        }
         
         async let getGasPrice = getBasePriorityFee(rewardPercentiles: Self.rewardPercentiles)
-        let (basePriorityFee, gasLimit) = try await (getGasPrice, getGasLimit)
+        let basePriorityFee = try await getGasPrice
 
         let gasPrice = basePriorityFee.baseFee + basePriorityFee.priorityFee
         let minerFee = {
