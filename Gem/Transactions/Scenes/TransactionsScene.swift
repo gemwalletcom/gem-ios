@@ -28,7 +28,7 @@ struct TransactionsScene: View {
                 StateEmptyView(title: Localized.Activity.EmptyState.message)
             } else {
                 List {
-                    TransactionsList(transactions, tabScrollToTopId: .activity)
+                    TransactionsList(transactions)
                 }
             }
         }

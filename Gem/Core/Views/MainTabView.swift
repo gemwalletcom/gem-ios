@@ -9,20 +9,27 @@ struct MainTabView: View {
     let walletModel: WalletSceneViewModel
     let keystore: LocalKeystore
 
+    // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
+    // ref: - https://forums.swift.org/t/using-observation-in-a-protocol-throws-compiler-error/69090/6 if object explicity conforms protocol
+    // inject a protocol, by now swift can't process it
     @Binding var navigationStateManager: NavigationStateManagable
 
+    private var tabViewSelection: Binding<TabItem> {
+        return Binding(
+            get: {
+                navigationStateManager.selectedTab
+            },
+            set: {
+                onSelect(tab: $0)
+            }
+        )
+    }
+
     var body: some View {
-        ScrollViewReader { proxy in
-            TabView(selection: navigationStateManager.tabViewSelection) {
-                walletTabItemView
-                transactionsTabItemView
-                settingTabItemView
-            }
-            .onChange(of: navigationStateManager.scrollToTop) { oldValue, newValue in
-                if oldValue != newValue {
-                    onPerofrmScroll(proxy: proxy)
-                }
-            }
+        TabView(selection: tabViewSelection) {
+            walletTabItemView
+            transactionsTabItemView
+            settingTabItemView
         }
         .onChange(of: keystore.currentWallet) {
             navigationStateManager.selectedTab = .wallet
@@ -37,7 +44,7 @@ extension MainTabView {
         WalletNavigationStack(
             wallet: wallet,
             walletModel: walletModel,
-            navigationPath: $navigationStateManager.walletNavigationPath
+            navigationPath: $navigationStateManager.wallet
         )
         .tabItem {
             tabItem(
@@ -51,7 +58,7 @@ extension MainTabView {
     private var transactionsTabItemView: some View {
         TransactionsNavigationStack(
             wallet: wallet,
-            navigationPath: $navigationStateManager.activityNavigationPath
+            navigationPath: $navigationStateManager.activity
         )
         .tabItem {
             tabItem(
@@ -65,7 +72,7 @@ extension MainTabView {
     private var settingTabItemView: some View {
         SettingsNavigationStack(
             wallet: wallet,
-            navigationPath: $navigationStateManager.settingsNavigationPath,
+            navigationPath: $navigationStateManager.settings,
             currencyModel: CurrencySceneViewModel(),
             securityModel: SecurityViewModel()
         )
@@ -93,13 +100,8 @@ extension MainTabView {
 // MARK: - Actions
 
 extension MainTabView {
-    @MainActor
-    private func onPerofrmScroll(proxy: ScrollViewProxy) {
-        guard navigationStateManager.scrollToTop else { return }
-        withAnimation {
-            proxy.scrollTo(navigationStateManager.selectedTab, anchor: .top)
-            navigationStateManager.scrollToTop = false
-        }
+    private func onSelect(tab: TabItem) {
+        navigationStateManager.select(tab: tab)
     }
 }
 

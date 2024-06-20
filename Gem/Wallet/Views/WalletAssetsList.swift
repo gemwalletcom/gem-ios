@@ -12,23 +12,18 @@ struct WalletAssetsList: View {
     let copyAssetAddress: StringAction
     let hideAsset: AssetIdAction
 
-    private let tabScrollToTopId: TabScrollToTopId?
-
     init(
         assets: [AssetData],
         copyAssetAddress: StringAction,
-        hideAsset: AssetIdAction,
-        tabScrollToTopId: TabScrollToTopId? = nil
+        hideAsset: AssetIdAction
     ) {
         self.assets = assets
         self.copyAssetAddress = copyAssetAddress
         self.hideAsset = hideAsset
-        self.tabScrollToTopId = tabScrollToTopId
     }
 
     var body: some View {
-        ForEach(0..<assets.count, id: \.self) { index in
-            let asset = assets[index]
+        ForEach(assets) { asset in
             NavigationLink(value: asset) {
                 AssetListView.make(assetData: asset, formatter: .short)
                     .contextMenu {
@@ -51,9 +46,6 @@ struct WalletAssetsList: View {
                         }
                         .tint(Colors.gray)
                     }
-            }
-            .if(tabScrollToTopId != nil && index == 0) {
-                $0.id(tabScrollToTopId)
             }
         }
     }

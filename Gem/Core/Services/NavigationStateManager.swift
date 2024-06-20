@@ -2,85 +2,65 @@
 
 import SwiftUI
 
-typealias TabScrollToTopId = TabItem
+protocol NavigationStateManagable: Observation.Observable, AnyObject {
+    var wallet: NavigationPath { get set }
+    var activity: NavigationPath { get set }
+    var settings: NavigationPath { get set }
 
-protocol NavigationStateManagable: Observable {
-    var walletNavigationPath: NavigationPath { get set }
-    var activityNavigationPath: NavigationPath { get set }
-    var settingsNavigationPath: NavigationPath { get set }
-
-    var tabViewSelection: Binding<TabItem> { get }
-    var scrollToTop: Bool { get set }
     var selectedTab: TabItem { get set }
+    var previousSelectedTab: TabItem { get set }
 
     init(initialSelecedTab: TabItem)
+
+    func select(tab: TabItem)
+    func backToRoot(tab: TabItem)
 }
+
+// MARK: - NavigationStateManagable
 
 @Observable
 final class NavigationStateManager: NavigationStateManagable {
-    var walletNavigationPath = NavigationPath()
-    var activityNavigationPath = NavigationPath()
-    var settingsNavigationPath = NavigationPath()
+    var wallet = NavigationPath()
+    var activity = NavigationPath()
+    var settings = NavigationPath()
 
-    var scrollToTop: Bool
     var selectedTab: TabItem
-    private var previousSelectedTab: TabItem
+    var previousSelectedTab: TabItem
 
-    var tabViewSelection: Binding<TabItem> {
-        return Binding(
-            get: { [self] in
-                self.selectedTab
-            },
-            set: { [self] in
-                self.selectedTab = $0
-                onSelectNewTab()
-            }
-        )
-    }
-
-    init(initialSelecedTab: TabItem) {
+    required init(initialSelecedTab: TabItem) {
         self.selectedTab = initialSelecedTab
         self.previousSelectedTab = initialSelecedTab
-        self.scrollToTop = false
     }
 }
 
-// MARK: - Actions
+// MARK: - Business Logic
 
 extension NavigationStateManager {
-    private func onSelectNewTab() {
-        // back to root if selected same tab, if some routes already push
-        guard selectedTab != previousSelectedTab else {
-            handleSelection(for: selectedTab)
+    func select(tab: TabItem) {
+        selectedTab = tab
+        // back to root if selected same tab, if some routes already in stack
+        guard tab != previousSelectedTab else {
+            backToRoot(tab: tab)
             return
         }
         previousSelectedTab = selectedTab
     }
-}
 
-// MARK: - Effects
-
-extension NavigationStateManager {
-    private func handleSelection(for tab: TabItem) {
+    func backToRoot(tab: TabItem) {
         switch tab {
         case .wallet:
-            guard !walletNavigationPath.isEmpty else {
-                scrollToTop.toggle()
-                return
-            }
-            walletNavigationPath.removeLast(walletNavigationPath.count)
+            guard !wallet.isEmpty else { return }
+            wallet.removeLast(wallet.count)
         case .activity:
-            guard !activityNavigationPath.isEmpty else {
-                scrollToTop.toggle()
+            guard !activity.isEmpty else {
                 return
             }
-            activityNavigationPath.removeLast(activityNavigationPath.count)
+            activity.removeLast(activity.count)
         case .settings:
-            guard !settingsNavigationPath.isEmpty else {
-                scrollToTop.toggle()
+            guard !settings.isEmpty else {
                 return
             }
-            settingsNavigationPath.removeLast(settingsNavigationPath.count)
+            settings.removeLast(settings.count)
         }
     }
 }

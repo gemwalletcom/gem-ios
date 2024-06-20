@@ -62,8 +62,6 @@ struct WalletScene: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
 
-            TransactionsList(transactions, tabScrollToTopId: .wallet)
-
             Section {
                 WalletAssetsList(
                     assets: assets,
@@ -72,8 +70,7 @@ struct WalletScene: View {
                     },
                     hideAsset: { assetId in
                         Task { try model.hideAsset(for: wallet, assetId) }
-                    },
-                    tabScrollToTopId: transactions.isEmpty ? .wallet : nil
+                    }
                 )
             }
             footer: {
