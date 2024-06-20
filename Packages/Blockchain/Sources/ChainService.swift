@@ -107,13 +107,17 @@ extension ChainService: ChainTransactionStateFetchable {
 
 extension ChainService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return try await Self.service(chain: chain, with: url)
+        try await Self.service(chain: chain, with: url)
             .getValidators(apr: apr)
     }
     
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        return try await Self.service(chain: chain, with: url)
+        try await Self.service(chain: chain, with: url)
             .getStakeDelegations(address: address)
+    }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        try await Self.service(chain: chain, with: url).getStakeBalance(address: address)
     }
 }
 

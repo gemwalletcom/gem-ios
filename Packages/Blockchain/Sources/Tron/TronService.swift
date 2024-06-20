@@ -177,6 +177,10 @@ extension TronService: ChainBalanceable {
         
         return result
     }
+
+    public func getStakeBalance(address: String) async throws -> AssetBalance {
+        fatalError()
+    }
 }
 
 // MARK: - ChainFeeCalculateable

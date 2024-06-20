@@ -195,7 +195,8 @@ class ConfirmTransferViewModel: ObservableObject {
             block: input.block,
             token: input.token,
             utxos: input.utxos,
-            messageBytes: input.messageBytes
+            messageBytes: input.messageBytes,
+            extra: input.extra
         )
         return try signer.sign(input: input)
     }
