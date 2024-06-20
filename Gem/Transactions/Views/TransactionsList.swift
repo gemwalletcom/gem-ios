@@ -43,9 +43,13 @@ struct TransactionsList: View {
 
 private struct TransactionsListView: View {
     let transactions: [Primitives.TransactionExtended]
-    
+
+    init(transactions: [Primitives.TransactionExtended]) {
+        self.transactions = transactions
+    }
+
     var body: some View {
-        ForEach(transactions, id: \.self) { transaction in
+        ForEach(transactions) { transaction in
             NavigationLink(value: transaction) {
                 TransactionView(model: .init(transaction: transaction, formatter: .short))
             }

@@ -14,11 +14,9 @@ struct WalletCoordinator: View {
     
     @Environment(\.scenePhase) var scenePhase
     
-    @State private var selectedTab = TabIndex.wallet
-    @State private var previousSelectedTab: TabIndex = TabIndex.wallet
-    
     let db: DB
-    //@State var keystore = LocalKeystore.main
+
+    @State var navigationStateManager: NavigationStateManagable
     @ObservedObject var keystore: LocalKeystore = .main
     
     let assetStore: AssetStore
@@ -50,16 +48,12 @@ struct WalletCoordinator: View {
     
     let transactionsTimer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
-    
+
     @State private var updateAvailableAlertSheetMessage: String? = .none
     @State var isPresentingError: String? = .none
     @State var walletModel: WalletSceneViewModel
     @State var isPresentingWalletConnectBar: Bool = false
-    
-    @State private var walletNavigationPath = NavigationPath()
-    @State private var activityNavigationPath = NavigationPath()
-    @State private var settingsNavigationPath = NavigationPath()
-    
+
     @State var transferData: TransferDataCallback<TransferData>? // wallet connector
     @State var signMessage: TransferDataCallback<SignMessagePayload>? // wallet connector
     @State var connectionProposal: TransferDataCallback<WalletConnectionSessionProposal>? // wallet connector
@@ -133,7 +127,7 @@ struct WalletCoordinator: View {
             keystore: _keystore.wrappedValue,
             nodeStore: nodeStore,
             preferences: preferences,
-            assetsService: assetsService,
+                assetsService: assetsService,
             deviceService: deviceService,
             subscriptionService: subscriptionService
         )
@@ -142,55 +136,19 @@ struct WalletCoordinator: View {
             assetsService: assetsService,
             walletService: walletService
         ))
+
+        _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
     
     var body: some View {
         VStack {
             if let wallet = keystore.currentWallet {
-//                switch lockStateService.state {
-//                case .locked:
-//                    LockScreenScene(lockStateService: lockStateService)
-//                case .unlocked:
-//
-//                }
-                
-                TabView(selection: $selectedTab.onUpdate(handleTab)) {
-                    WalletNavigationStack(
-                        wallet: wallet,
-                        walletModel: walletModel,
-                        navigationPath: $walletNavigationPath
-                    ).tabItem {
-                        Label {
-                            Text(Localized.Wallet.title)
-                        } icon: {
-                            Image(.tabWallet)
-                        }
-                    }
-                    .tag(TabIndex.wallet)
-                    
-                    TransactionsNavigationStack(
-                        wallet: wallet,
-                        navigationPath: $activityNavigationPath
-                    ).tabItem {
-                        Text(Localized.Activity.title)
-                        Image(.tabActivity)
-                    }
-                    .tag(TabIndex.activity)
-                    
-                    SettingsNavigationStack(
-                        wallet: wallet,
-                        navigationPath: $settingsNavigationPath,
-                        currencyModel: CurrencySceneViewModel(),
-                        securityModel: SecurityViewModel()
-                    ).tabItem {
-                        Text(Localized.Settings.title)
-                        Image(.tabSettings)
-                    }
-                    .tag(TabIndex.settings)
-                }
-                .onChange(of: keystore.currentWallet) {
-                    selectedTab = TabIndex.wallet
-                }
+                MainTabView(
+                    wallet: wallet,
+                    walletModel: walletModel,
+                    keystore: keystore,
+                    navigationStateManager: $navigationStateManager
+                )
                 .tint(Colors.black)
                 .alert(Localized.UpdateApp.title, isPresented: $updateAvailableAlertSheetMessage.mappedToBool()) {
                     Button(Localized.Common.cancel, role: .cancel) { }
@@ -358,28 +316,6 @@ struct WalletCoordinator: View {
             try await walletService.updatePrices()
         }
     }
-    
-    
-    func handleTab() {
-        if selectedTab == previousSelectedTab {
-            switch selectedTab {
-            case .wallet:
-                if !walletNavigationPath.isEmpty {
-                    walletNavigationPath.removeLast(walletNavigationPath.count)
-                }
-            case .activity:
-                if !activityNavigationPath.isEmpty {
-                    activityNavigationPath.removeLast(activityNavigationPath.count)
-                }
-            case .settings:
-                if !settingsNavigationPath.isEmpty {
-                    settingsNavigationPath.removeLast(settingsNavigationPath.count)
-                }
-            }
-        }
-    
-        previousSelectedTab = selectedTab
-    }
 
     func handleUrl(url: URL) async {
         do {
@@ -400,16 +336,5 @@ struct WalletCoordinator: View {
             
             isPresentingError = error.localizedDescription
         }
-    }
-}
-
-extension Binding {
-    func onUpdate(_ closure: @escaping () -> Void) -> Binding<Value> {
-        Binding(get: {
-            wrappedValue
-        }, set: { newValue in
-            wrappedValue = newValue
-            closure()
-        })
     }
 }

@@ -7,13 +7,23 @@ import Components
 import Style
 
 struct WalletAssetsList: View {
-    
+
     let assets: [AssetData]
     let copyAssetAddress: StringAction
     let hideAsset: AssetIdAction
-    
+
+    init(
+        assets: [AssetData],
+        copyAssetAddress: StringAction,
+        hideAsset: AssetIdAction
+    ) {
+        self.assets = assets
+        self.copyAssetAddress = copyAssetAddress
+        self.hideAsset = hideAsset
+    }
+
     var body: some View {
-        ForEach(assets, id: \.self) { asset in
+        ForEach(assets) { asset in
             NavigationLink(value: asset) {
                 AssetListView.make(assetData: asset, formatter: .short)
                     .contextMenu {
