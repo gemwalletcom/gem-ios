@@ -43,7 +43,7 @@ class BuyAssetViewModel: ObservableObject {
     }
 
     var shouldDisalbeContinueButton: Bool {
-        state.isLoading || state.isNoData
+        state.isNoData
     }
 }
 
@@ -61,7 +61,7 @@ extension BuyAssetViewModel {
     }
 
     func getQuotes(for asset: Asset, amount: Double) async {
-        await MainActor.run {
+        await MainActor.run { [self] in
             self.input.amount = amount
             self.input.quote = nil
             self.input.quotes = []
@@ -78,8 +78,7 @@ extension BuyAssetViewModel {
                     walletAddress: address
                 )
             )
-
-            await MainActor.run {
+            await MainActor.run { [self] in
                 if !quotes.isEmpty {
                     let inputViewModel = BuyAssetInputViewModel(amount: amount, quote: quotes.first, quotes: quotes)
                     self.input = inputViewModel
@@ -89,7 +88,7 @@ extension BuyAssetViewModel {
                 }
             }
         } catch {
-            await MainActor.run {
+            await MainActor.run { [self] in
                 self.state = .error(error)
             }
         }

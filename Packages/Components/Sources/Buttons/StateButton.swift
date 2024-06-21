@@ -8,6 +8,7 @@ public struct StatefullButton: View {
 
     public let textValue: TextValue
     public var styleState: StatefulButtonStyle.State
+    public var isDisabled: Bool
 
     private let action: () -> Void
 
@@ -40,6 +41,7 @@ public struct StatefullButton: View {
         self.textValue = TextValue(text: text, style: textStyle)
         self.styleState = styleState
         self.action = action
+        self.isDisabled = styleState == .disabled
     }
 
     public init(
@@ -50,6 +52,7 @@ public struct StatefullButton: View {
         self.textValue = textValue
         self.styleState = styleState
         self.action = action
+        self.isDisabled = styleState == .disabled
     }
 
     public var body: some View {
@@ -61,6 +64,7 @@ public struct StatefullButton: View {
             }
         )
         .buttonStyle(.statefullBlue(state: styleState))
+        .disabled(isDisabled || styleState == .loading)
     }
 }
 

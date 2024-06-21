@@ -147,8 +147,14 @@ public struct StatefulButtonStyle: ButtonStyle {
     let backgroundPressed: Color
     let backgroundDisabled: Color
 
-    private var isGrayBackgroundSate: Bool {
+    private var shouldDisableInteractions: Bool {
+        // The button is non-interactive if it is in the disabled state, the loading state, or if the isEnabled environment value is false.
         state == .disabled || state == .loading || !isEnabled
+    }
+
+    private var isGrayBackgroundState: Bool {
+        // The background is gray if the button is in the disabled state, or if the button is not enabled and not in the loading state.
+        state == .disabled || (!isEnabled && state != .loading)
     }
 
     public init(
@@ -169,7 +175,7 @@ public struct StatefulButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            backgorundView
+            backgroundView
                 .frame(height: StatefulButtonStyle.maxButtonHeight)
             switch state {
             case .normal, .disabled:
@@ -186,31 +192,31 @@ public struct StatefulButtonStyle: ButtonStyle {
             }
         }
         .frame(maxWidth: .infinity)
-        .disabled(isGrayBackgroundSate)
+        .disabled(shouldDisableInteractions)
     }
 
-    private var backgorundView: some View {
+    private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
+        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
+    }
+
+    private var backgroundView: some View {
         RoundedRectangle(cornerRadius: 12)
-            .fill(isGrayBackgroundSate ? backgroundDisabled : background)
+            .fill(isGrayBackgroundState ? backgroundDisabled : background)
     }
 
-    private func backgorundPressedView(configuration: Configuration) -> some View {
+    private func backgroundPressedView(configuration: Configuration) -> some View {
         RoundedRectangle(cornerRadius: 12)
             .fill(configuration.isPressed ? backgroundPressed : background)
     }
 
     private func labelBackground(configuration: Configuration) -> some View {
         Group {
-            if !isGrayBackgroundSate {
-                backgorundPressedView(configuration: configuration)
+            if !isGrayBackgroundState && state != .loading {
+                backgroundPressedView(configuration: configuration)
             } else {
-                backgorundView
+                backgroundView
             }
         }
-    }
-
-    private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
     }
 }
 
@@ -300,7 +306,7 @@ extension ButtonStyle where Self == StatefulButtonStyle {
                 .disabled(true)
 
             StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading)
-                .disabled(true)
+                .disabled(false)
         }
     }
     .padding()

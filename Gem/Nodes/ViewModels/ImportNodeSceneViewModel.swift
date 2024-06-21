@@ -13,7 +13,7 @@ class ImportNodeSceneViewModel: ObservableObject {
     @Published private var chain: Chain
     @Published var urlString: String = ""
     @Published var state: StateViewType<ImportNodeResult> = .noData
-    
+
     private lazy var valueFormatter: ValueFormatter = {
         ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
     }()
@@ -25,7 +25,9 @@ class ImportNodeSceneViewModel: ObservableObject {
     }
 
     var shouldDisableImportButton: Bool {
-        guard let value = state.value else { return true }
+        guard let value = state.value else {
+            return state.isNoData || state.isError
+        }
         return !value.isInSync
     }
 
@@ -38,6 +40,7 @@ class ImportNodeSceneViewModel: ObservableObject {
 
 extension ImportNodeSceneViewModel {
     func importFoundNode() throws {
+        // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
         let node = Node(url: urlString, status: .active, priority: 5)
         try importNodeService.importNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
