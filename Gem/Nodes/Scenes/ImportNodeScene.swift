@@ -44,12 +44,6 @@ struct ImportNodeScene: View {
                 Button(Localized.Common.done, action: onSelectDone)
                     .bold()
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: onSelectScan) {
-                    Image(systemName: SystemImage.qrCode)
-                }
-                .bold()
-            }
         }
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner, action: onScanFinished(_:))
