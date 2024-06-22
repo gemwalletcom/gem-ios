@@ -64,6 +64,11 @@ public enum BitcoinProvider: TargetType {
     }
     
     public var contentType: String {
-        return ContentType.json.rawValue
+        switch self {
+        case .broadcast:
+            return ContentType.plainText.rawValue
+        default:
+            return ContentType.json.rawValue
+        }
     }
 }
