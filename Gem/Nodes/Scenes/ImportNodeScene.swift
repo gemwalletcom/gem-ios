@@ -22,6 +22,7 @@ struct ImportNodeScene: View {
     var body: some View {
         VStack {
             List {
+                networkSection
                 inputSection
                 nodeInfoView
             }
@@ -57,10 +58,17 @@ struct ImportNodeScene: View {
 // MARK: - UI Components
 
 extension ImportNodeScene {
+    
+    private var networkSection: some View {
+        Section(Localized.Transfer.network) {
+            ChainView(chain: model.chain)
+        }
+    }
+    
     private var inputSection: some View {
         Section {
             HStack {
-                FloatTextField("URL", text: $model.urlString)
+                FloatTextField(Localized.Common.url, text: $model.urlString)
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)

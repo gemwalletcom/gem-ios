@@ -208,3 +208,4 @@
 "errors.invalid_url" = "Invalid URL";
 "common.yes" = "Yes";
 "common.no" = "No";
+"common.url" = "URL";

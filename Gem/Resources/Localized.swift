@@ -163,6 +163,8 @@ internal enum Localized {
     internal static let tryAgain = Localized.tr("Localizable", "common.try_again", fallback: "Try Again")
     /// Type
     internal static let type = Localized.tr("Localizable", "common.type", fallback: "Type")
+    /// URL
+    internal static let url = Localized.tr("Localizable", "common.url", fallback: "URL")
     /// Wallet
     internal static let wallet = Localized.tr("Localizable", "common.wallet", fallback: "Wallet")
     /// Yes
