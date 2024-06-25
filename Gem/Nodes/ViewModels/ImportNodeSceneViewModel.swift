@@ -10,7 +10,7 @@ class ImportNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
     private let importNodeService: ImportNodeService
 
-    @Published private var chain: Chain
+    let chain: Chain
     @Published var urlString: String = ""
     @Published var state: StateViewType<ImportNodeResult> = .noData
 

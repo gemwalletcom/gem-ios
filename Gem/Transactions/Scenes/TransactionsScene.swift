@@ -5,27 +5,30 @@ import Components
 import Primitives
 import GRDBQuery
 import Store
+import Style
 
 struct TransactionsScene: View {
-    
+
     @Query<TransactionsRequest>
     var transactions: [TransactionExtended]
-    
+
     @Environment(\.db) private var DB
 
     let model: TransactionsViewModel
-    
+
     init(
         model: TransactionsViewModel
     ) {
         self.model = model
         _transactions = Query(constant: model.request, in: \.db.dbQueue)
     }
-    
+
     var body: some View {
         VStack {
             if transactions.isEmpty {
-                StateEmptyView(title: Localized.Activity.EmptyState.message)
+                // TODO: - migrate to StateEmptyView + Overlay, when we will have image
+                Text(Localized.Activity.EmptyState.message)
+                    .textStyle(.body)
             } else {
                 List {
                     TransactionsList(transactions)
