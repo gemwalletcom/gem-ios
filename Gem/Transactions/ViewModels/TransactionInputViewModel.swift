@@ -36,7 +36,7 @@ struct TransactionInputViewModel {
         data.recipientData.asset.feeAsset
     }
     
-    var value: BigInt? {
+    var value: BigInt {
         switch transferAmountResult {
         case .amount(let amount):
             return amount.value
@@ -111,13 +111,11 @@ struct TransactionInputViewModel {
     }
     
     var amountText: String {
-        let amountValue = value ?? data.value
-        return valueFormatter.string(amountValue, decimals: asset.decimals.asInt, currency: asset.symbol)
+        return valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
     var amountSecondText: String {
-        let amountSecondValue = value ?? data.value
-        return fiatAmountText(price: metaData?.assetPrice, value: amountSecondValue, decimals: asset.decimals.asInt) ?? ""
+        return fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
     }
     
     var networkFeeText: String {
