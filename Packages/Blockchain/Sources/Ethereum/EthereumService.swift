@@ -9,7 +9,6 @@ import WalletCore
 public struct EthereumService {
 
     static let gasLimitPercent = 50.0
-    static let defaultPriorityFee = BigInt(10000000) // 0.01 gwei
     static let rewardPercentiles = [25]
 
     let chain: EVMChain
@@ -85,13 +84,22 @@ extension EthereumService {
             throw AnyError( "Unable to priority fee")
         }
 
-        // in some cases reward is 0, use base fee
-        let priorityFee = lastReward == .zero ? Self.defaultPriorityFee : lastReward
+        // use min value if last reward is 0
+        let priorityFee = max(self.defaultPriorityFee(), lastReward)
 
         return (baseFee, priorityFee)
     }
 
     // MARK: - Private
+
+    internal func defaultPriorityFee() -> BigInt {
+        switch chain {
+        case .smartChain:
+            BigInt(1000000000) // 1 gwei
+        default:
+            BigInt(10000000)   // 0.01 gwei
+        }
+    }
 
     private func getMaxPriorityFeePerGas() async throws -> BigInt {
         return try await provider
