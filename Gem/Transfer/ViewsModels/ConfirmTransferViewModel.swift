@@ -117,6 +117,17 @@ class ConfirmTransferViewModel: ObservableObject {
         return simpleAccount
     }
 
+    var shouldShowRecipientField: Bool {
+        switch data.type {
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .stake, .unstake, .redelegate, .withdraw: true
+            case .rewards: false
+            }
+        default: true
+        }
+    }
+
     var networkTitle: String { Localized.Transfer.network }
     var networkValue: String {
         if let value = state.value {
@@ -380,18 +391,6 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
-    // not in use
-    private var showRecipientField: Bool {
-        switch data.type {
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake, .unstake, .redelegate, .withdraw: true
-            case .rewards: false
-            }
-        default: true
-        }
-    }
-
     private var senderLink: BlockExplorerLink {
         ExplorerService.main.addressUrl(chain: data.recipientData.asset.chain, address: senderAddress)
     }

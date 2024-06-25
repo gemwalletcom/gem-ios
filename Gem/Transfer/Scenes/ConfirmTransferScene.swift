@@ -81,7 +81,9 @@ extension ConfirmTransferScene {
                     ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
                 }
 
-            AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+            if model.shouldShowRecipientField {
+                AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+            }
 
             if model.shouldShowMemo {
                 MemoListItem(memo: model.memo)
