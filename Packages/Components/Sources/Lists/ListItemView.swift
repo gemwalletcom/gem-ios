@@ -9,6 +9,13 @@ public enum TitleTagType {
     case image(Image)
 }
 
+public enum ListItemViewPlaceholderType: Identifiable, CaseIterable {
+    // items supports placeholder progress view
+    case subtitle // right corner of cell
+
+    public var id: Self { self }
+}
+
 public struct ListItemView: View {
     public let title: TextValue?
     public let titleExtra: TextValue?
@@ -22,6 +29,8 @@ public struct ListItemView: View {
     public let image: Image?
     public let imageSize: CGFloat
     public let cornerRadius: CGFloat
+
+    public let placeholders: [ListItemViewPlaceholderType]
 
     public init(
         title: String? = nil,
@@ -37,7 +46,8 @@ public struct ListItemView: View {
         subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
         image: Image? = nil,
         imageSize: CGFloat = 28.0,
-        cornerRadius: CGFloat = 0
+        cornerRadius: CGFloat = 0,
+        placeholders: [ListItemViewPlaceholderType] = []
     ) {
         let titleValue = title.map { TextValue(text: $0, style: titleStyle) }
         let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra) }
@@ -54,7 +64,8 @@ public struct ListItemView: View {
             subtitleExtra: subtitleExtraValue,
             image: image,
             imageSize: imageSize,
-            cornerRadius: cornerRadius
+            cornerRadius: cornerRadius,
+            placeholders: placeholders
         )
     }
 
@@ -67,7 +78,8 @@ public struct ListItemView: View {
         subtitleExtra: TextValue?,
         image: Image? = nil,
         imageSize: CGFloat = 28.0,
-        cornerRadius: CGFloat = 0
+        cornerRadius: CGFloat = 0,
+        placeholders: [ListItemViewPlaceholderType]
     ) {
         self.title = title
         self.titleExtra = titleExtra
@@ -78,6 +90,7 @@ public struct ListItemView: View {
         self.image = image
         self.imageSize = imageSize
         self.cornerRadius = cornerRadius
+        self.placeholders = placeholders
     }
 
     public var body: some View {
@@ -88,7 +101,12 @@ public struct ListItemView: View {
             if let title = title {
                 TitleView(title: title, titleExtra: titleExtra, titleTag: titleTag, titleTagType: titleTagType)
             }
-            if let subtitle = subtitle {
+
+            if showPlaceholderProgress(for: .subtitle, value: subtitle) {
+                Spacer()
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: subtitle?.style.color ?? Colors.gray))
+            } else if let subtitle = subtitle {
                 Spacer(minLength: Spacing.extraSmall)
                 SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
             }
@@ -96,7 +114,17 @@ public struct ListItemView: View {
     }
 }
 
-// MARK: -
+// MARK: - Private
+
+extension ListItemView {
+    private func showPlaceholderProgress(for type: ListItemViewPlaceholderType, value: Any?) -> Bool {
+        placeholders.contains(type) && value == nil
+    }
+}
+
+// MARK: - UI Components
+
+// MARK: - Image
 
 extension ListItemView {
     struct ImageView: View {
@@ -119,7 +147,7 @@ extension ListItemView {
     }
 }
 
-// MARK: -
+// MARK: - TitleView
 
 extension ListItemView {
     struct TitleView: View {
@@ -155,7 +183,7 @@ extension ListItemView {
     }
 }
 
-// MARK: -
+// MARK: - TitleTagView
 
 extension ListItemView {
     struct TitleTagView: View {
@@ -186,7 +214,7 @@ extension ListItemView {
     }
 }
 
-// MARK: -
+// MARK: - ListItemView
 
 extension ListItemView {
     struct SubtitleView: View {
@@ -212,6 +240,7 @@ extension ListItemView {
         }
     }
 }
+
 
 // MARK: - Previews
 
@@ -344,6 +373,14 @@ extension ListItemView {
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: longSubtitleExtra,
                 subtitleStyleExtra: extraTextStyle
+            )
+        }
+
+        Section("Loadable States") {
+            ListItemView(
+                title: defaultTitle,
+                titleStyle: defaultTextStyle,
+                placeholders: [.subtitle]
             )
         }
 

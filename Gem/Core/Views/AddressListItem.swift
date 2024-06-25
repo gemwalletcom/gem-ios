@@ -17,7 +17,7 @@ struct AddressListItem: View {
     let title: String
     let style: AddressFormatter.Style
     let account: SimpleAccount
-    
+
     var body: some View {
         ListItemView(title: title, subtitle: subtitle)
             .contextMenu {
