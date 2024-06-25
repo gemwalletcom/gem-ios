@@ -129,7 +129,7 @@ struct TransactionInputViewModel {
         if let feeValue {
             return fiatAmountText(price: metaData?.feePrice, value: feeValue, decimals: feeAsset.decimals.asInt)
         }
-        return ""
+        return nil
     }
     
     private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {
