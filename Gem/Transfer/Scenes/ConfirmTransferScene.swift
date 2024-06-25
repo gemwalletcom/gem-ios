@@ -102,7 +102,7 @@ extension ConfirmTransferScene {
         } header: {
             HStack {
                 Spacer(minLength: 0)
-                TransactionHeaderView(type: value?.headerType ?? model.headerType)
+                TransactionHeaderView(type: model.headerType)
                     .padding(.bottom, 16)
                 Spacer(minLength: 0)
             }
