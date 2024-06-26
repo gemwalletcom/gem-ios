@@ -34,7 +34,7 @@ struct TransactionsScene: View {
             }
         }
         .refreshable {
-            onDataRefresh()
+            fetch()
         }
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
@@ -43,27 +43,15 @@ struct TransactionsScene: View {
             )
         }
         .onAppear {
-            onAppear()
+            fetch()
         }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionsScene {
-    private func onAppear() {
-        refreshAcitities()
-    }
-
-    private func onDataRefresh() {
-        refreshAcitities()
     }
 }
 
 // MARK: - Effects
 
 extension TransactionsScene {
-    private func refreshAcitities() {
+    private func fetch() {
         Task {
             await model.fetch()
         }
