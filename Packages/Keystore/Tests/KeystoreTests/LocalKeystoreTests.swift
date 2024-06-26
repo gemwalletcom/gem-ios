@@ -1,6 +1,7 @@
 import XCTest
 @testable import Keystore
 import Store
+import WalletCore
 import Primitives
 import KeystoreTestKit
 
@@ -45,7 +46,32 @@ final class LocalKeystoreTests: XCTestCase {
             Account(chain: $0, address: "0x8f348F300873Fd5DA36950B2aC75a26584584feE", derivationPath: "m/44\'/60\'/0\'/0/0", extendedPublicKey: "")
         })
     }
-    
+
+    func testImportSolanaWalletByKey() throws {
+        let text = "4ha2npeRkDXipjgGJ3L5LhZ9TK9dRjP2yktydkFBhAzXj3N8ytpYyTS24kxcYGEefy4WKWRcog2zSPvpPZoGmxCC"
+        let key = try WalletKeyStore.decodeKey(text, chain: .solana)
+        let address = CoinType.solana.deriveAddress(privateKey: key)
+
+        XCTAssertEqual(address, "JSTURBrew3zGaJjtk7qcvd7gapeExX3GC7DiQBaCKzU")
+
+        let text2 = "0x30df0ffc2b43717f4653c2a1e827e9dfb3d9364e019cc60092496cd4997d5d6e"
+        let key2 = try WalletKeyStore.decodeKey(text2, chain: .ethereum)
+        let address2 = CoinType.ethereum.deriveAddress(privateKey: key2)
+
+        XCTAssertEqual(address2, "0x4ce31c0b2114abe61Ac123E1E6254E961C18D10B")
+    }
+
+    func testImportWIF() throws {
+        let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
+        let decoded = Base58.decode(string: wif)!
+
+        XCTAssertEqual(decoded.count, 34)
+
+        let key = decoded[1...32] // skip prefix / compression flag
+
+        XCTAssertTrue(PrivateKey.isValid(data: key, curve: .secp256k1))
+    }
+
     func testDeriveAddress() {
         let id = NSUUID().uuidString
         let keystore = LocalKeystore(

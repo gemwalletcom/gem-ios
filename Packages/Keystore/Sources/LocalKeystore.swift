@@ -70,6 +70,8 @@ public final class LocalKeystore: Keystore {
             result = try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: password)
         case .single(let words, let chain):
             result = try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: password)
+        case .privateKey(let text, let chain):
+            result = try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password)
         case .address(let chain, let address):
             result = Wallet.makeView(name: name, chain: chain, address: address)
         }
@@ -126,7 +128,7 @@ public final class LocalKeystore: Keystore {
             } catch let error as KeystoreError {
                 //in some cases wallet already deleted, just ignore
                 switch error {
-                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList:
+                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey:
                     break
                 }
             }

@@ -48,7 +48,10 @@ struct ImportWalletViewModel {
         case .multicoin:
             return [.phrase]
         case .chain:
-            return [.phrase, .address]
+            if chain?.keyEncodingTypes.isEmpty ?? true {
+                return [.phrase, .address]
+            }
+            return [.phrase, .privateKey, .address]
         }
     }
     
