@@ -8,9 +8,10 @@ typealias ConfirmTransferDelegate = (Result<String, Error>) -> Void
 typealias ConfirmMessageDelegate = (Result<String, Error>) -> Void
 
 struct ConfirmTransferScene: View {
-
     @Environment(\.dismiss) private var dismiss
+
     @StateObject var model: ConfirmTransferViewModel
+
     @State private var isPresentingErrorMessage: String?
     @State private var isLoading: Bool = false
 
@@ -38,7 +39,7 @@ struct ConfirmTransferScene: View {
         }
         .modifier(activityIndicator(isLoading: isLoading))
         .taskOnce {
-            Task { await fetchModel() }
+            fetch()
         }
     }
 }
@@ -128,22 +129,18 @@ extension ConfirmTransferScene {
     }
 
     private func onSelectTryAgain() {
-        Task {
-            await fetchModel()
-        }
+        fetch()
     }
 }
 
 // MARK: - Effects
 
 extension ConfirmTransferScene {
-    private func fetchModel() async {
-         do {
-             try await model.fetch()
-         } catch {
-             NSLog("confirm transfer error \(error)")
-         }
-     }
+    private func fetch() {
+        Task {
+            await model.fetch()
+        }
+    }
 
     @MainActor
     private func processNext(input: TransactionPreload, amount: TranferAmount) async {

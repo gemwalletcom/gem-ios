@@ -99,7 +99,7 @@ struct TransactionInputViewModel {
     }
     
     var recipientAccount: SimpleAccount {
-        return SimpleAccount(
+        SimpleAccount(
             name: recipient,
             chain: data.recipientData.asset.chain,
             address: data.recipientData.recipient.address
@@ -107,15 +107,15 @@ struct TransactionInputViewModel {
     }
     
     var network: String {
-        return data.recipientData.asset.chain.asset.name
+        data.recipientData.asset.chain.asset.name
     }
     
     var amountText: String {
-        return valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
+        valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
     var amountSecondText: String {
-        return fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
+        fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
     }
     
     var networkFeeText: String {

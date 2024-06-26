@@ -256,19 +256,19 @@ class ConfirmTransferViewModel: ObservableObject {
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
-    func fetch() async throws {
+    func fetch() async {
         await MainActor.run { [self] in
             self.state = .loading
         }
 
         let asset = data.recipientData.asset
-        let senderAddress = try wallet.account(for: asset.chain).address
         let destinationAddress = data.recipientData.recipient.address
         let value = data.value
         let recipientMemo = data.recipientData.recipient.memo
         let memo = recipientMemo == .empty ? .none : recipientMemo
 
         do {
+            let senderAddress = try wallet.account(for: asset.chain).address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: asset, assetsIds: data.type.assetIds)
             let transactionInput = TransactionInput(
                 type: data.type,
