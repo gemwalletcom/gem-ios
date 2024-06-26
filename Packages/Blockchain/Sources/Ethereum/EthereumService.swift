@@ -94,10 +94,48 @@ extension EthereumService {
 
     internal func defaultPriorityFee() -> BigInt {
         switch chain {
+        case .ethereum:
+            // https://etherscan.io/gastracker
+            BigInt(1000000000)  // 1 gwei
         case .smartChain:
-            BigInt(1000000000) // 1 gwei
-        default:
-            BigInt(10000000)   // 0.01 gwei
+            BigInt(1000000000)  // 1 gwei
+        case .opBNB:
+            // https://opbnbscan.com/statistics
+            BigInt(1000000)     // 0.001 gwei
+        case .polygon:
+            // https://polygonscan.com/gastracker
+            BigInt(30000000000) // 30 gwei
+        case .optimism:
+            // https://optimistic.etherscan.io/chart/gasprice
+            BigInt(10000000)    // 0.01 gwei
+        case .arbitrum:
+            // https://arbiscan.io/address/0x000000000000000000000000000000000000006C#readContract getMinimumGasPrice
+            BigInt(10000000)
+        case .base:
+            // https://basescan.org/chart/gasprice
+            BigInt(100000000)  // 0.1 gwei
+        case .avalancheC:
+            // https://snowscan.xyz/gastracker
+            BigInt(25000000000) // 25 nAVAX
+        case .fantom:
+            // https://ftmscan.com/gastracker
+            BigInt(3500000000) // 3.5 gwei
+        case .gnosis:
+            // https://gnosisscan.io/gastracker
+            BigInt(3000000000) // 3 gwei
+        case .blast:
+            // https://blastscan.io/chart/gasprice
+            BigInt(200000000) // 0.2 gwei
+        case .zkSync:
+            // https://era.zksync.network/chart/gasprice
+            BigInt(20000000) // 0.02 gwei
+        case .linea:
+            // https://lineascan.build/gastracker
+            BigInt(50000000) // 0.05 gwei
+        case .mantle,
+            .celo,
+            .manta:
+            BigInt(10000000) // 0.01 gwei
         }
     }
 
