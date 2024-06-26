@@ -209,3 +209,5 @@
 "common.yes" = "Yes";
 "common.no" = "No";
 "common.url" = "URL";
+"errors.error_occured" = "An error occurred!";
+"settings.language" = "Language";
