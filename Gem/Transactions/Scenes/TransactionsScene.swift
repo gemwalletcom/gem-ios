@@ -8,13 +8,12 @@ import Store
 import Style
 
 struct TransactionsScene: View {
-
-    @Query<TransactionsRequest>
-    var transactions: [TransactionExtended]
-
     @Environment(\.db) private var DB
 
-    let model: TransactionsViewModel
+    @Query<TransactionsRequest>
+    private var transactions: [TransactionExtended]
+
+    private let model: TransactionsViewModel
 
     init(
         model: TransactionsViewModel
@@ -24,22 +23,18 @@ struct TransactionsScene: View {
     }
 
     var body: some View {
-        VStack {
+        List {
+            TransactionsList(transactions)
+        }
+        .overlay {
+            // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {
-                // TODO: - migrate to StateEmptyView + Overlay, when we will have image
                 Text(Localized.Activity.EmptyState.message)
                     .textStyle(.body)
-            } else {
-                List {
-                    TransactionsList(transactions)
-                }
             }
         }
         .refreshable {
-            NSLog("TransactionsScene refreshable")
-            Task {
-                await model.fetch()
-            }
+            onDataRefresh()
         }
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
@@ -48,15 +43,35 @@ struct TransactionsScene: View {
             )
         }
         .onAppear {
-            Task {
-                await model.fetch()
-            }
+            onAppear()
         }
     }
 }
 
-struct TransactionsScene_Previews: PreviewProvider {
-    static var previews: some View {
-        TransactionsScene(model: .init(wallet: .main, type: .all, service: .main))
+// MARK: - Actions
+
+extension TransactionsScene {
+    private func onAppear() {
+        refreshAcitities()
     }
+
+    private func onDataRefresh() {
+        refreshAcitities()
+    }
+}
+
+// MARK: - Effects
+
+extension TransactionsScene {
+    private func refreshAcitities() {
+        Task {
+            await model.fetch()
+        }
+    }
+}
+
+// MARK: - Previews
+
+#Preview {
+    TransactionsScene(model: .init(wallet: .main, type: .all, service: .main))
 }
