@@ -209,5 +209,5 @@
 "common.yes" = "Yes";
 "common.no" = "No";
 "common.url" = "URL-адрес";
-"errors.error_occured" = "An error occurred!";
-"settings.language" = "Language";
+"errors.error_occured" = "Произошла ошибка!";
+"settings.language" = "Язык";
