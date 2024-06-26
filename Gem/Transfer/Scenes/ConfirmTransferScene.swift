@@ -17,13 +17,7 @@ struct ConfirmTransferScene: View {
     var body: some View {
         VStack {
             List {
-                if case let .error(error) = model.state {
-                    Section {
-                        StateErrorView(error: error, message: Localized.Common.tryAgain)
-                    }
-                } else {
-                    transactionSection(value: model.state.value)
-                }
+                transactionSection(value: model.state.value)
             }
             Spacer()
             StatefullButton(
@@ -109,6 +103,10 @@ extension ConfirmTransferScene {
                 Spacer(minLength: 0)
             }
             .headerProminence(.increased)
+        } footer: {
+            if case let .error(error) = model.state {
+                ListItemErrorView(errorTitle: Localized.Errors.oopsErrorOccured, error: error)
+            }
         }
     }
 

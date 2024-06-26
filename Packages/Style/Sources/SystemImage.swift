@@ -28,6 +28,7 @@ public struct SystemImage {
     public static let plus = "plus"
     public static let eye = "eye.fill"
     public static let searchNoResults = "exclamationmark.magnifyingglass"
+    public static let errorOccurred = "exclamationmark.triangle.fill"
 }
 
 // MARK: - Previews
@@ -58,7 +59,8 @@ public struct SystemImage {
         (SystemImage.lockOpen, "Lock Open"),
         (SystemImage.plus, "Plus"),
         (SystemImage.eye, "Eye"),
-        (SystemImage.searchNoResults, "No Results")
+        (SystemImage.searchNoResults, "No Results"),
+        (SystemImage.errorOccurred, "Error Ocurred")
     ]
 
     return List {

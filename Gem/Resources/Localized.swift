@@ -185,6 +185,8 @@ internal enum Localized {
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
+    /// Oops, an error occurred!
+    internal static let oopsErrorOccured = Localized.tr("Localizable", "errors.oops_error_occured", fallback: "Oops, an error occurred!")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")

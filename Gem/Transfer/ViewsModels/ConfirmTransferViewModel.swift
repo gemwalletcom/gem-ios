@@ -141,10 +141,16 @@ class ConfirmTransferViewModel: ObservableObject {
 
     var networkFeeTitle: String { Localized.Transfer.networkFee }
     var networkFeeValue: String? {
-        state.value?.networkFeeText
+        if state.isError {
+            return "-"
+        }
+        return state.value?.networkFeeText
     }
     var networkFeeFiatValue: String? {
-        state.value?.networkFeeFiatText
+        if state.isError {
+            return nil
+        }
+        return state.value?.networkFeeFiatText
     }
 
     var buttonTitle: String {
