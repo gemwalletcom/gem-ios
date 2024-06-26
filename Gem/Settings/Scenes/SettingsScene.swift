@@ -196,21 +196,6 @@ extension SettingsScene {
     }
 }
 
-// MARK: - Effects
-
-extension SettingsScene {
-    var value: String? {
-        guard let code = Locale.current.language.languageCode?.identifier else {
-            return nil
-        }
-        return Locale.current.localizedString(forLanguageCode: code)?.capitalized//localizedString(for: code)
-    }
-
-    private func onOpenURL(url: URL) {
-        
-    }
-}
-
 // MARK: - Previews
 
 #Preview {
