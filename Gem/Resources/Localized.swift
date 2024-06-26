@@ -181,12 +181,12 @@ internal enum Localized {
     internal static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
     }
+    /// An error occurred!
+    internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
-    /// Oops, an error occurred!
-    internal static let oopsErrorOccured = Localized.tr("Localizable", "errors.oops_error_occured", fallback: "Oops, an error occurred!")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")

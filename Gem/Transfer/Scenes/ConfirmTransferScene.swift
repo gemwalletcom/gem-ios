@@ -105,7 +105,7 @@ extension ConfirmTransferScene {
             .headerProminence(.increased)
         } footer: {
             if case let .error(error) = model.state {
-                ListItemErrorView(errorTitle: Localized.Errors.oopsErrorOccured, error: error)
+                ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
     }
