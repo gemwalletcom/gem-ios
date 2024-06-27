@@ -7,6 +7,8 @@ import Keystore
 import GemstonePrimitives
 import Gemstone
 
+// TODO: - think about to create some builder for List sections
+
 class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
@@ -59,6 +61,7 @@ class SettingsViewModel: ObservableObject {
         }
         return Locale.current.localizedString(forLanguageCode: code)?.capitalized ?? ""
     }
+    // TODO: - Change an image there before merging to main
     var lanugageImage: Image { Image(.settingsNetworks) }
 
     var chainsTitle: String { Localized.Settings.Networks.title }
