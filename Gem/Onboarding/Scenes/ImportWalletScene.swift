@@ -67,9 +67,9 @@ struct ImportWalletScene: View {
                                 }
                                 .padding(.top, 8)
                         case .privateKey:
-                            if !(model.chain?.keyEncodingTypes.isEmpty ?? true) {
-                                // FIXME: Add PriviateKey l10n key
-                                TextField("Hex or Base58 encoding key", text: $privateKey, axis: .vertical)
+                            if let types = model.chain?.keyEncodingTypes, !types.isEmpty {
+                                let placeholder = types.map { $0.rawValue }.joined(separator: " / ")
+                                TextField(Localized.Wallet.Import.privateKey(placeholder), text: $privateKey, axis: .vertical)
                                     .textInputAutocapitalization(.never)
                                     .lineLimit(8)
                                     .keyboardType(.alphabet)

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum EncodingType {
-    case hex
-    case base58
+public enum EncodingType: String {
+    case hex = "Hex"
+    case base58 = "Base58"
 }
