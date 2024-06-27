@@ -14,14 +14,8 @@ struct SettingsScene: View {
 
     @ObservedObject private var model: SettingsViewModel
 
-    private var onChange: VoidAction = .none
-
-    init(
-        model: SettingsViewModel,
-        onChange: VoidAction = .none
-    ) {
+    init(model: SettingsViewModel) {
         self.model = model
-        self.onChange = onChange
     }
 
     var body: some View {
@@ -32,18 +26,34 @@ struct SettingsScene: View {
             communitySection
             aboutSection
         }
+        .sheet(
+            presenting: $model.isCurrencyScenePresented,
+            sensoryFeedback: .success,
+            content: { _ in
+                NavigationStack {
+                    CurrencyScene(model: model.currencyModel)
+                        .navigationBarTitleDisplayMode(.inline)
+                        .toolbar {
+                            ToolbarItem(placement: .navigationBarLeading) {
+                                Button(Localized.Common.done) {
+                                    model.isCurrencyScenePresented = nil
+                                }
+                                .bold()
+                            }
+                        }
+                        .navigationBarTitleDisplayMode(.inline)
+                }
+            }
+        )
+        .onChange(of: model.currencyValue, onCurrencyChange(_:_:))
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
-        .onChange(of: model.currencyModel.currency) { _, _ in
-            onChange?()
-        }
     }
 }
 
 // MARK: - UI Components
 
 extension SettingsScene {
-
     private var walletsSection: some View {
         Section {
             NavigationCustomLink(
@@ -71,18 +81,21 @@ extension SettingsScene {
                 )
             }
 
-            NavigationLink(value: Scenes.Currency()) {
-                ListItemView(
+            NavigationCustomLink(
+                with: ListItemView(
                     title: model.currencyTitle,
                     subtitle: model.currencyValue,
-                    image: model.currencyImage)
-            }
+                    image: model.currencyImage
+                ),
+                action: onSelectCurrencyScene
+            )
 
             NavigationCustomLink(
                 with: ListItemView(
                     title: model.lanugageTitle,
                     subtitle: model.lanugageValue,
-                    image: model.lanugageImage),
+                    image: model.lanugageImage
+                ),
                 action: onSelectLanguages
             )
 
@@ -194,16 +207,44 @@ extension SettingsScene {
     private func onOpenWallets() {
         isWalletsPresented.wrappedValue.toggle()
     }
+
+    @MainActor
+    private func onSelectCurrencyScene() {
+        model.isCurrencyScenePresented = true
+    }
+
+    private func onCurrencyChange(_ oldValue: String, _ newValue: String) {
+        guard oldValue != newValue else { return }
+        fetch()
+    }
+}
+
+// MARK: - Effects
+
+extension SettingsScene {
+    private func fetch() {
+        Task {
+            do {
+                try await model.fetch()
+            } catch {
+                // TODO: - handle error on updating wallet currency
+                print(error)
+            }
+        }
+    }
 }
 
 // MARK: - Previews
 
 #Preview {
-    let vm: SettingsViewModel = .init(keystore: LocalKeystore.main, currencyModel: .init(), securityModel: .init())
+    let vm: SettingsViewModel = .init(keystore: LocalKeystore.main,
+                                      walletService: .main,
+                                      wallet: .main,
+                                      currencyModel: .init(),
+                                      securityModel: .init())
     return NavigationStack {
         SettingsScene(
-            model: vm,
-            onChange: .none
+            model: vm
         )
         .navigationBarTitleDisplayMode(.inline)
     }

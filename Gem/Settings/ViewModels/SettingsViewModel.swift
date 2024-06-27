@@ -6,29 +6,37 @@ import Store
 import Keystore
 import GemstonePrimitives
 import Gemstone
+import Primitives
 
-// TODO: - think about to create some builder for List sections
-
+// TODO: - #1 think about to create some builder for List sections
+// TODO: - #2 review observation migrate to @Observable
 class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
 
+    @Published var isCurrencyScenePresented: Bool?
     @Published var isDeveloperEnabled: Bool {
         didSet { preferences.isDeveloperEnabled = isDeveloperEnabled }
     }
 
+    private let wallet: Wallet
+    private let walletService: WalletService
     private let preferences = Preferences.main
     private let keystore: any Keystore
 
     init(
         keystore: any Keystore,
+        walletService: WalletService,
+        wallet: Wallet,
         currencyModel: CurrencySceneViewModel,
         securityModel: SecurityViewModel
     ) {
         self.keystore = keystore
+        self.walletService = walletService
         self.currencyModel = currencyModel
         self.securityModel = securityModel
         self.isDeveloperEnabled = preferences.isDeveloperEnabled
+        self.wallet = wallet
     }
 
     var title: String { Localized.Settings.title }
@@ -104,3 +112,10 @@ class SettingsViewModel: ObservableObject {
 
 }
 
+// MARK: - Business Logic
+
+extension SettingsViewModel {
+    func fetch() async throws {
+        try await walletService.changeCurrency(wallet: wallet)
+    }
+}
