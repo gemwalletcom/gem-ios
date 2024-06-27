@@ -4,6 +4,8 @@ import Foundation
 import SwiftUI
 import Style
 
+// TODO: - review where we using StateErrorView and migrate to ListItemErrorView if possible
+@available(*, deprecated, message: "Use ListItemErrorView for consistent list error styling across the app")
 public struct StateErrorView: View {
 
     let error: Error
