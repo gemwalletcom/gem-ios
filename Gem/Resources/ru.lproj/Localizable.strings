@@ -209,3 +209,4 @@
 "common.yes" = "Yes";
 "common.no" = "No";
 "common.url" = "URL-адрес";
+"errors.error_occured" = "An error occurred!";

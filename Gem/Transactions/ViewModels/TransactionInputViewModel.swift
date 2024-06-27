@@ -8,19 +8,19 @@ import GemstonePrimitives
 
 struct TransactionInputViewModel {
     
-    let input: TransactionPreload
     let data: TransferData
-    let metaData: TransferDataMetadata
-    
-    let transferAmountResult: TranferAmountResult
+    let input: TransactionPreload?
+    let metaData: TransferDataMetadata?
+    let transferAmountResult: TranferAmountResult?
+
     private let valueFormatter = ValueFormatter(style: .full)
     private let networkFeeFormatter = ValueFormatter(style: .medium)
 
     init(
-        input: TransactionPreload,
         data: TransferData,
-        metaData: TransferDataMetadata,
-        transferAmountResult: TranferAmountResult
+        input: TransactionPreload?,
+        metaData: TransferDataMetadata?,
+        transferAmountResult: TranferAmountResult?
     ) {
         self.input = input
         self.data = data
@@ -42,15 +42,19 @@ struct TransactionInputViewModel {
             return amount.value
         case .error(let amount, _):
             return amount.value
+        case .none:
+            return data.value
         }
     }
     
-    var feeValue: BigInt {
+    var feeValue: BigInt? {
         switch transferAmountResult {
         case .amount(let amount):
             return amount.networkFee
         case .error(let amount, _):
             return amount.networkFee
+        case .none:
+            return nil
         }
     }
     
@@ -95,7 +99,7 @@ struct TransactionInputViewModel {
     }
     
     var recipientAccount: SimpleAccount {
-        return SimpleAccount(
+        SimpleAccount(
             name: recipient,
             chain: data.recipientData.asset.chain,
             address: data.recipientData.recipient.address
@@ -103,7 +107,7 @@ struct TransactionInputViewModel {
     }
     
     var network: String {
-        return data.recipientData.asset.chain.asset.name
+        data.recipientData.asset.chain.asset.name
     }
     
     var amountText: String {
@@ -111,15 +115,21 @@ struct TransactionInputViewModel {
     }
     
     var amountSecondText: String {
-        fiatAmountText(price: metaData.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
+        fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
     }
     
     var networkFeeText: String {
-        networkFeeFormatter.string(feeValue, decimals: feeAsset.decimals.asInt, currency: feeAsset.symbol)
+        if let feeValue {
+            return networkFeeFormatter.string(feeValue, decimals: feeAsset.decimals.asInt, currency: feeAsset.symbol)
+        }
+        return ""
     }
     
     var networkFeeFiatText: String? {
-        fiatAmountText(price: metaData.feePrice, value: feeValue, decimals: feeAsset.decimals.asInt)
+        if let feeValue {
+            return fiatAmountText(price: metaData?.feePrice, value: feeValue, decimals: feeAsset.decimals.asInt)
+        }
+        return nil
     }
     
     private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {
@@ -144,8 +154,8 @@ struct TransactionInputViewModel {
                 let fromValue = BigInt(stringLiteral: swapData.quote.fromAmount)
                 let toValue = BigInt(stringLiteral: swapData.quote.toAmount)
                 
-                let fromPrice = metaData.assetPrices[fromAsset.id.identifier]
-                let toPrice = metaData.assetPrices[toAsset.id.identifier]
+                let fromPrice = metaData?.assetPrices[fromAsset.id.identifier]
+                let toPrice = metaData?.assetPrices[toAsset.id.identifier]
                 
                 let from = SwapAmountField(
                     assetImage: AssetIdViewModel(assetId: fromAsset.id).assetImage,
