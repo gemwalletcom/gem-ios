@@ -143,7 +143,7 @@ public final class LocalKeystore: Keystore {
     
     public func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
-        return try walletKeyStore.getPrivateKey(id: wallet.id, chain: chain, password: password)
+        return try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
     }
     
     public func getMnemonic(wallet: Wallet) throws -> [String] {

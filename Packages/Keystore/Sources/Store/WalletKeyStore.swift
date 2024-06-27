@@ -118,17 +118,24 @@ struct WalletKeyStore {
         try keyStore.delete(wallet: wallet, password: password)
     }
     
-    func getPrivateKey(id: String, chain: Chain, password: String) throws -> Data {
+    func getPrivateKey(id: String, type: Primitives.WalletType, chain: Chain, password: String) throws -> Data {
         let wallet = try getWallet(id: id)
-        guard
-            let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
-            throw KeystoreError.unknownWalletInWalletCore
-        }
-        switch chain {
-        case .solana:
-            return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
-        default:
-            return hdwallet.getKeyForCoin(coin: chain.coinType).data
+        switch type {
+        case .multicoin:
+            guard
+                let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
+                throw KeystoreError.unknownWalletInWalletCore
+            }
+            switch chain {
+            case .solana:
+                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
+            default:
+                return hdwallet.getKeyForCoin(coin: chain.coinType).data
+            }
+        case .single:
+            return try wallet.privateKey(password: password, coin: chain.coinType).data
+        case .view:
+            throw KeystoreError.invalidPrivateKey
         }
     }
     
