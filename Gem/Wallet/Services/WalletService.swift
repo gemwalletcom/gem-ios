@@ -66,10 +66,13 @@ class WalletService {
     
     func changeCurrency(wallet: Wallet) async throws {
         // TODO: - here need a cancel logic if updatePrices & updateBalance in progress, but someone changes in one more time
+        // updates prices
         try priceService.clear()
         let assetIds = try assetsService.getAssets().assetIds
         try await updatePrices(assetIds: assetIds)
-        try await updateBalance(for: wallet, assetIds: assetIds)
+        // update balances
+        let enabledAssetIds = try assetsService.getEnabledAssets()
+        try await updateBalance(for: wallet, assetIds: enabledAssetIds)
     }
     
     func update(wallet: Wallet) async throws {
