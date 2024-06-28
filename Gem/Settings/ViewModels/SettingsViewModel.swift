@@ -61,8 +61,7 @@ class SettingsViewModel: ObservableObject {
         }
         return Locale.current.localizedString(forLanguageCode: code)?.capitalized ?? ""
     }
-    // TODO: - Change an image there before merging to main
-    var lanugageImage: Image { Image(.settingsNetworks) }
+    var lanugageImage: Image { Image(.settingsLanguage) }
 
     var chainsTitle: String { Localized.Settings.Networks.title }
     var chainsImage: Image { Image(.settingsNetworks) }
