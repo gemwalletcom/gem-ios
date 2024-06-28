@@ -39,14 +39,14 @@ struct ConnectionsScene: View {
         List {
             Section {
                 ButtonListItem(
-                    title: Localized.Wallet.scanQrCode,
-                    image: Image(systemName: SystemImage.qrCode),
-                    action: onScan
-                )
-                ButtonListItem(
                     title: Localized.Common.paste,
                     image: Image(systemName: SystemImage.paste),
                     action: onPaste
+                )
+                ButtonListItem(
+                    title: Localized.Wallet.scanQrCode,
+                    image: Image(systemName: SystemImage.qrCode),
+                    action: onScan
                 )
             }
             if headers.isEmpty {
