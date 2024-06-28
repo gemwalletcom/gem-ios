@@ -3,8 +3,6 @@
 import SwiftUI
 import Primitives
 
-// TODO: - move wallet sheet to the settingscene .sheet(isPresented: $isWalletsPresented)
-
 struct SettingsNavigationStack: View {
     let wallet: Wallet
 
@@ -70,6 +68,9 @@ struct SettingsNavigationStack: View {
                     )
                 )
             }
+            .navigationDestination(for: Scenes.Currency.self) { _ in
+                CurrencyScene(model: currencyModel)
+            }
             .sheet(isPresented: $isWalletsPresented) {
                 NavigationStack {
                     WalletsScene(model: WalletsViewModel(keystore: keystore))
@@ -84,6 +85,9 @@ struct SettingsNavigationStack: View {
                         .navigationBarTitleDisplayMode(.inline)
                 }
             }
+        }
+        .onChange(of: currencyModel.currency) { oldValue, newValue in
+            navigationPath.removeLast()
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)
     }

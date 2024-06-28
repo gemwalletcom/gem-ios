@@ -26,26 +26,7 @@ struct SettingsScene: View {
             communitySection
             aboutSection
         }
-        .sheet(
-            presenting: $model.isCurrencyScenePresented,
-            sensoryFeedback: .success,
-            content: { _ in
-                NavigationStack {
-                    CurrencyScene(model: model.currencyModel)
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    model.isCurrencyScenePresented = nil
-                                }
-                                .bold()
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                }
-            }
-        )
-        .onChange(of: model.currencyValue, onCurrencyChange(_:_:))
+        .onChange(of: model.currencyValue, onCurrencyChange)
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
     }
@@ -81,14 +62,9 @@ extension SettingsScene {
                 )
             }
 
-            NavigationCustomLink(
-                with: ListItemView(
-                    title: model.currencyTitle,
-                    subtitle: model.currencyValue,
-                    image: model.currencyImage
-                ),
-                action: onSelectCurrencyScene
-            )
+            NavigationLink(value: Scenes.Currency()) {
+                ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
+            }
 
             NavigationCustomLink(
                 with: ListItemView(
@@ -208,43 +184,25 @@ extension SettingsScene {
         isWalletsPresented.wrappedValue.toggle()
     }
 
-    @MainActor
-    private func onSelectCurrencyScene() {
-        model.isCurrencyScenePresented = true
-    }
-
-    private func onCurrencyChange(_ oldValue: String, _ newValue: String) {
-        guard oldValue != newValue else { return }
-        fetch()
-    }
-}
-
-// MARK: - Effects
-
-extension SettingsScene {
-    private func fetch() {
+    private func onCurrencyChange() {
         Task {
-            do {
-                try await model.fetch()
-            } catch {
-                // TODO: - handle error on updating wallet currency
-                print(error)
-            }
+            try await model.fetch()
         }
     }
 }
-
 // MARK: - Previews
 
 #Preview {
-    let vm: SettingsViewModel = .init(keystore: LocalKeystore.main,
-                                      walletService: .main,
-                                      wallet: .main,
-                                      currencyModel: .init(),
-                                      securityModel: .init())
+    let model: SettingsViewModel = .init(
+        keystore: LocalKeystore.main,
+        walletService: .main,
+        wallet: .main,
+        currencyModel: .init(),
+        securityModel: .init()
+    )
     return NavigationStack {
         SettingsScene(
-            model: vm
+            model: model
         )
         .navigationBarTitleDisplayMode(.inline)
     }

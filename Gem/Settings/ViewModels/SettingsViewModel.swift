@@ -14,7 +14,6 @@ class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
 
-    @Published var isCurrencyScenePresented: Bool?
     @Published var isDeveloperEnabled: Bool {
         didSet { preferences.isDeveloperEnabled = isDeveloperEnabled }
     }
@@ -52,7 +51,7 @@ class SettingsViewModel: ObservableObject {
     var notificationsImage: Image { Image(.settingsNotifications) }
 
     var currencyTitle: String { Localized.Settings.currency }
-    var currencyValue: String { 
+    var currencyValue: String {
         let currentCurrency = currencyModel.currency
 
         if let currentFlag = currencyModel.emojiFlag {
