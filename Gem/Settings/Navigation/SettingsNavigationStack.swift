@@ -3,13 +3,11 @@
 import SwiftUI
 import Primitives
 
-// TODO: - move wallet sheet to the settingscene .sheet(isPresented: $isWalletsPresented)
-
 struct SettingsNavigationStack: View {
+    
     let wallet: Wallet
 
     @State private var isWalletsPresented = false
-
     @Binding var navigationPath: NavigationPath
 
     @ObservedObject var currencyModel: CurrencySceneViewModel
@@ -29,15 +27,21 @@ struct SettingsNavigationStack: View {
             SettingsScene(
                 model: SettingsViewModel(
                     keystore: keystore,
-                    walletService: walletService,
-                    wallet: wallet,
                     currencyModel: currencyModel,
                     securityModel: securityModel
-                )
+                ),
+                onChange: {
+                    Task {
+                        try await walletService.changeCurrency(wallet: wallet)
+                    }
+                }
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
                 SecurityScene(model: securityModel)
+            }
+            .navigationDestination(for: Scenes.Currency.self) { _ in
+                CurrencyScene(model: currencyModel)
             }
             .navigationDestination(for: Scenes.Notifications.self) { _ in
                 NotificationsScene(
@@ -70,6 +74,9 @@ struct SettingsNavigationStack: View {
                     )
                 )
             }
+//            .navigationDestination(for: Scenes.Wallets.self) { _ in
+//                WalletsScene(model: WalletsViewModel(keystore: keystore))
+//            }
             .sheet(isPresented: $isWalletsPresented) {
                 NavigationStack {
                     WalletsScene(model: WalletsViewModel(keystore: keystore))
