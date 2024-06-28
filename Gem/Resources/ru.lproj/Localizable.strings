@@ -209,4 +209,6 @@
 "common.yes" = "Yes";
 "common.no" = "No";
 "common.url" = "URL-адрес";
-"errors.error_occured" = "An error occurred!";
+"errors.error_occured" = "Произошла ошибка!";
+"settings.language" = "Язык";
+"wallet.import.private_key" = "%s encoded private key";
