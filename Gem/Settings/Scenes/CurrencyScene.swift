@@ -5,8 +5,6 @@ import Components
 import Primitives
 
 struct CurrencyScene: View {
-    
-    @Environment(\.dismiss) private var dismiss
     @ObservedObject var model: CurrencySceneViewModel
     
     init(
@@ -26,7 +24,7 @@ struct CurrencyScene: View {
                             value: currency.value,
                             selection: model.currency
                         ) {
-                            model.currency = $0
+                            onSelect(currency: $0)
                         }
                     }
                 }
@@ -36,6 +34,19 @@ struct CurrencyScene: View {
     }
 }
 
+// MARK: - Actions
+
+extension CurrencyScene {
+    private func onSelect(currency: String) {
+        model.currency = currency
+    }
+}
+
+// MARK: - Previews
+
 #Preview {
-    CurrencyScene(model: .init())
+    NavigationStack {
+        CurrencyScene(model: .init())
+            .navigationBarTitleDisplayMode(.inline)
+    }
 }
