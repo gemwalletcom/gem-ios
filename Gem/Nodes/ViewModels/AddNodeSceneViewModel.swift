@@ -52,7 +52,7 @@ extension AddNodeSceneViewModel {
 
     func getNetworkInfo() async throws  {
         guard let url = URL(string: urlString) else {
-            await updateStateWithError()
+            await updateStateWithError(error: AddNodeError.invalidNetworkId)
             return
         }
 
@@ -70,11 +70,8 @@ extension AddNodeSceneViewModel {
         do {
             let (isSynced, networkId, blockNumber) = try await (isNodeSync, chainId, blockNumber)
 
-            guard validate(networkId: networkId) else {
-                await updateStateWithError()
-                return
-            }
-
+            try validate(networkId: networkId)
+            
             await MainActor.run { [self] in
                 let blockNumber = valueFormatter.string(blockNumber, decimals: 0)
                 let result = AddNodeResult(
@@ -84,8 +81,10 @@ extension AddNodeSceneViewModel {
                 )
                 self.state = .loaded(result)
             }
+        } catch let error as AddNodeError {
+            await updateStateWithError(error: error)
         } catch {
-            await updateStateWithError()
+            await updateStateWithError(error: AddNodeError.invalidNetworkId)
         }
     }
 }
@@ -93,20 +92,22 @@ extension AddNodeSceneViewModel {
 // MARK: - Private
 
 extension AddNodeSceneViewModel {
-    private func updateStateWithError() async {
+    private func updateStateWithError(error: LocalizedError) async {
         await MainActor.run { [self] in
-            self.state = .error(AnyError(Localized.Errors.invalidUrl))
+            self.state = .error(error)
         }
     }
 
-    private func validate(networkId: String?) -> Bool {
+    private func validate(networkId: String?) throws {
         // if networkId in ChainConfig optional or from the service, proceed with valid id
         guard
             let networkId,
             let configNetworkId = ChainConfig.config(chain: chain).networkId else {
-            return true
+            return
         }
-        return configNetworkId == networkId
+        if configNetworkId != networkId {
+            throw AddNodeError.invalidNetworkId
+        }
     }
 }
 

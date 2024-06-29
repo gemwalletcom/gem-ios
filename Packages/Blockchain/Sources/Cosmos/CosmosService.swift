@@ -396,6 +396,6 @@ extension CosmosService: ChainIDFetchable {
 
 extension CosmosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        BigInt(stringLiteral: try await getLatestCosmosBlock().header.height)
     }
 }

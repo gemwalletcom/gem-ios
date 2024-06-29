@@ -57,4 +57,10 @@ public struct AssetConfiguration {
         AssetId(chain: .solana, tokenId: .none),
         AssetId(chain: .smartChain, tokenId: .none),
     ]
+    
+    public static var addCustomNodeChains: [ChainType] = [
+        .ethereum,
+        .solana,
+        .cosmos,
+    ]
 }

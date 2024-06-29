@@ -179,6 +179,7 @@
 		D82E9EDA2B26698100DB06C8 /* StakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82E9ED92B26698100DB06C8 /* StakeService.swift */; };
 		D82EF8D02C1E0FA000EC1C92 /* AddNodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */; };
 		D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */; };
+		D82EF8D52C2F8B7400EC1C92 /* AddNodeError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8D42C2F8B7400EC1C92 /* AddNodeError.swift */; };
 		D8385CE02AFEBBFB00F784C7 /* WalletConnectorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */; };
 		D8385CE32AFEBC1F00F784C7 /* WalletConnectorInteractable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */; };
 		D8385CE72B017A9100F784C7 /* SwapService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE62B017A9100F784C7 /* SwapService.swift */; };
@@ -439,6 +440,7 @@
 		D82E9ED92B26698100DB06C8 /* StakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeService.swift; sourceTree = "<group>"; };
 		D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeService.swift; sourceTree = "<group>"; };
 		D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityLink.swift; sourceTree = "<group>"; };
+		D82EF8D42C2F8B7400EC1C92 /* AddNodeError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeError.swift; sourceTree = "<group>"; };
 		D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractor.swift; sourceTree = "<group>"; };
 		D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractable.swift; sourceTree = "<group>"; };
 		D8385CE62B017A9100F784C7 /* SwapService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapService.swift; sourceTree = "<group>"; };
@@ -576,6 +578,7 @@
 			isa = PBXGroup;
 			children = (
 				830FDA3E2C2209AF003DA605 /* AddNodeResult.swift */,
+				D82EF8D42C2F8B7400EC1C92 /* AddNodeError.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1907,6 +1910,7 @@
 				C3E99BC12A72DF67005DF35F /* AssetIdViewModel.swift in Sources */,
 				C3CF3BDE29BE3FF400E96586 /* ImportWalletTypeScene.swift in Sources */,
 				C3CF3BA129B2FFF600E96586 /* WalletsScene.swift in Sources */,
+				D82EF8D52C2F8B7400EC1C92 /* AddNodeError.swift in Sources */,
 				C3CF3BEA29BF93BF00E96586 /* CreteWalletViewModel.swift in Sources */,
 				C3CF3BB529B6917600E96586 /* App-Configuration.swift in Sources */,
 				C3340B7A2A4A989E00884D48 /* ChainListSettingsViewModel.swift in Sources */,

@@ -185,6 +185,8 @@ internal enum Localized {
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid Network ID
+    internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
     /// Transfer Error: %s

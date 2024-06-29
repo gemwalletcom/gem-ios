@@ -212,3 +212,4 @@
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Language";
 "wallet.import.private_key" = "%s encoded private key";
+"errors.invalid_network_id" = "Invalid Network ID";
