@@ -1,0 +1,9 @@
+appId: com.gemwallet.ios
+---
+- launchApp
+- tapOn: "Import an Existing Wallet"
+- tapOn: "Multi-Coin"
+- tapOn: "Secret Recovery Phrase"
+- inputText: "brief cinnamon future black note potato green thrive race theory addict bone"
+- tapOn: "Import"
+- tapOn: "Solana"

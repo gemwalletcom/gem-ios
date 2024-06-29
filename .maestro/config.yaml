@@ -1,0 +1,8 @@
+executionOrder:
+  continueOnFailure: false # default is true
+  flowsOrder:
+    - settings
+    - onboarding
+
+local:
+  deterministicOrder: true
