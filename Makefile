@@ -58,7 +58,7 @@ build:
 	build
 
 test-ui:
-	# maestro start-device --platform=ios --os-version=17
+	#maestro start-device --platform=ios --os-version=17
 	maestro test .maestro
 
 .PHONY: build

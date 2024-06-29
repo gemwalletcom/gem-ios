@@ -3,6 +3,3 @@ executionOrder:
   flowsOrder:
     - settings
     - onboarding
-
-local:
-  deterministicOrder: true

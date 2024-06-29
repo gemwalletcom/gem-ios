@@ -40,11 +40,17 @@ jobs:
           make install-typeshare && make install-toolchains
           brew install swiftgen xcbeautify
 
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+
       - name: Build Core
         run: make generate-stone
 
       - name: Build
         run: make build
 
-      - name: Unit Tests
+      - name: UI Tests
         run: make test-ui
