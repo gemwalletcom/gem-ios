@@ -2,15 +2,6 @@
   "object": {
     "pins": [
       {
-        "package": "AlertToast",
-        "repositoryURL": "https://github.com/gemwalletcom/AlertToast.git",
-        "state": {
-          "branch": null,
-          "revision": "b39252eacd159904afd7d718bba0afabb87f2f2f",
-          "version": "1.3.9"
-        }
-      },
-      {
         "package": "BigInt",
         "repositoryURL": "https://github.com/gemwalletcom/BigInt.git",
         "state": {

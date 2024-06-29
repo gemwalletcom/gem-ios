@@ -13,14 +13,12 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Style", path: "../Style"),
-        .package(url: "https://github.com/gemwalletcom/AlertToast.git", exact: Version(1, 3, 9))
     ],
     targets: [
         .target(
             name: "Components",
             dependencies: [
                 "Style",
-                .product(name: "AlertToast", package: "AlertToast")
             ],
             path: "Sources"
         ),
