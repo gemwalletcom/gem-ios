@@ -18,7 +18,7 @@ enum KeystoreError: LocalizedError {
         case .unknownWalletInWalletCore:
             "Unknown wallet in Wallet core"
         case .invalidPrivateKey:
-            "Invalid priviate key"
+            "Invalid private key"
         }
     }
 }

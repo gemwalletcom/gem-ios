@@ -54,7 +54,15 @@ struct ImportWalletViewModel {
             return [.phrase, .privateKey, .address]
         }
     }
-    
+
+    var keyEncodingTypes: [EncodingType] {
+        chain?.keyEncodingTypes ?? []
+    }
+
+    var importPrivateKeyPlaceholder: String {
+        keyEncodingTypes.map { $0.rawValue }.joined(separator: " / ")
+    }
+
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
         try keystore.importWallet(name: name, type: keystoreType)
     }

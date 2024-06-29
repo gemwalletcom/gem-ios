@@ -65,19 +65,17 @@ struct ImportWalletScene: View {
                                         WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
                                     }
                                 }
-                                .padding(.top, 8)
+                                .padding(.top, Spacing.small)
                         case .privateKey:
-                            if let types = model.chain?.keyEncodingTypes, !types.isEmpty {
-                                let placeholder = types.map { $0.rawValue }.joined(separator: " / ")
-                                TextField(Localized.Wallet.Import.privateKey(placeholder), text: $privateKey, axis: .vertical)
+                            if !model.keyEncodingTypes.isEmpty {
+                                TextField(Localized.Wallet.Import.privateKey(model.importPrivateKeyPlaceholder), text: $privateKey, axis: .vertical)
                                     .textInputAutocapitalization(.never)
                                     .lineLimit(8)
-                                    .keyboardType(.alphabet)
+                                    .keyboardType(.default)
                                     .autocorrectionDisabled(true)
                                     .frame(minHeight: 80, alignment: .top)
                                     .focused($focusedField, equals: .privateKey)
-                                    .accessibilityIdentifier("private key")
-                                    .padding(.top, 8)
+                                    .padding(.top, Spacing.small)
                             }
                         case .address:
                             if let chain = model.chain {
@@ -88,7 +86,7 @@ struct ImportWalletScene: View {
                                         .focused($focusedField, equals: .address)
                                         .frame(minHeight: 80, alignment: .top)
                                         .accessibilityIdentifier("address")
-                                        .padding(.top, 8)
+                                        .padding(.top, Spacing.small)
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
                                         state: $nameResolveState,
