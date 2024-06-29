@@ -76,11 +76,12 @@ extension ImportNodeSceneViewModel {
             }
 
             await MainActor.run { [self] in
-                var blockNumberFormatted = blockNumber
-                if let blockNumberBigInt = BigInt(blockNumber) {
-                    blockNumberFormatted = valueFormatter.string(blockNumberBigInt, decimals: 0)
-                }
-                let result = ImportNodeResult(chainID: networkId, blockNumber: blockNumberFormatted, isInSync: isSynced)
+                let blockNumber = valueFormatter.string(blockNumber, decimals: 0)
+                let result = ImportNodeResult(
+                    chainID: networkId,
+                    blockNumber: blockNumber,
+                    isInSync: isSynced
+                )
                 self.state = .loaded(result)
             }
         } catch {
@@ -98,10 +99,14 @@ extension ImportNodeSceneViewModel {
         }
     }
 
-    private func validate(networkId: String) -> Bool {
-        // if networkId in ChainConfig optional, proceed with valid id
-        guard let id = ChainConfig.config(chain: chain).networkId else { return true }
-        return id == networkId
+    private func validate(networkId: String?) -> Bool {
+        // if networkId in ChainConfig optional or from the service, proceed with valid id
+        guard
+            let networkId,
+            let configNetworkId = ChainConfig.config(chain: chain).networkId else {
+            return true
+        }
+        return configNetworkId == networkId
     }
 }
 

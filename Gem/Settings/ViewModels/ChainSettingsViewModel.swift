@@ -38,7 +38,10 @@ class ChainSettingsViewModel: ObservableObject {
     }
 
     var isSupportedAddingCustomNode: Bool {
-        chain.type == .ethereum
+        [
+            .ethereum,
+            .solana,
+        ].contains(chain.type)
     }
 }
 

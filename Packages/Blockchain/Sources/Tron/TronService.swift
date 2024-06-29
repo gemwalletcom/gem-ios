@@ -318,7 +318,7 @@ extension TronService: ChainStakable {
 // MARK: - ChainIDFetchable
  
 extension TronService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
+    public func getChainID() async throws -> String? {
         throw AnyError("Not Implemented")
     }
 }
@@ -326,7 +326,7 @@ extension TronService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension TronService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
+    public func getLatestBlock() async throws -> BigInt {
         throw AnyError("Not Implemented")
     }
 }

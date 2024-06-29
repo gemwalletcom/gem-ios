@@ -91,12 +91,14 @@ extension ImportNodeScene {
             EmptyView()
         case let .loaded(result):
             Section {
-                ListItemView(
-                    title: Localized.Nodes.ImportNode.chainId,
-                    titleStyle: .body,
-                    subtitle: result.chainID,
-                    subtitleStyle: .calloutSecondary
-                )
+                if let chainId = result.chainID {
+                    ListItemView(
+                        title: Localized.Nodes.ImportNode.chainId,
+                        titleStyle: .body,
+                        subtitle: chainId,
+                        subtitleStyle: .calloutSecondary
+                    )
+                }
                 ListItemView(
                     title: Localized.Nodes.ImportNode.inSync,
                     titleStyle: .body,
