@@ -50,12 +50,14 @@ generate-stone:
 	@rm -rf Packages/Gemstone
 	@cp -Rf core/gemstone/target/spm Packages/Gemstone
 
+# output file: build/Build/Products/Debug-iphonesimulator/Gem.app
 build:
 	@set -o pipefail && xcodebuild -project Gem.xcodeproj \
 	-scheme Gem \
+	-configuration Debug \
 	-sdk iphonesimulator \
-	-destination "platform=iOS Simulator,name=iPhone 15" \
-	build
+	-derivedDataPath ./build \
+	-destination "platform=iOS Simulator,name=iPhone 15" build | xcbeautify
 
 test-ui:
 	#maestro start-device --platform=ios --os-version=17
