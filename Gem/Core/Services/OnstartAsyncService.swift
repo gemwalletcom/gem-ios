@@ -47,7 +47,7 @@ class OnstartAsyncService {
     func migrations() async {
         do {
             // import nodes
-            try ImportNodeService(nodeStore: nodeStore).importNodes()
+            try AddNodeService(nodeStore: nodeStore).addNodes()
             
             let config = try await configService.getConfig()
             let versions = config.versions

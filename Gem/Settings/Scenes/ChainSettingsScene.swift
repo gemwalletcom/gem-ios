@@ -52,8 +52,8 @@ struct ChainSettingsScene: View {
             }
             .sheet(isPresented: $isPresentingImportNode) {
                 NavigationStack {
-                    ImportNodeScene(
-                        model: ImportNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
+                    AddNodeScene(
+                        model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
                         onDismiss: {
                             isPresentingImportNode = false
                             onTaskOnce()

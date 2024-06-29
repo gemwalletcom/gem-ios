@@ -6,13 +6,13 @@ import Components
 import GemstonePrimitives
 import BigInt
 
-class ImportNodeSceneViewModel: ObservableObject {
+class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
-    private let importNodeService: ImportNodeService
+    private let addNodeService: AddNodeService
 
     let chain: Chain
     @Published var urlString: String = ""
-    @Published var state: StateViewType<ImportNodeResult> = .noData
+    @Published var state: StateViewType<AddNodeResult> = .noData
 
     private lazy var valueFormatter: ValueFormatter = {
         ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
@@ -21,7 +21,7 @@ class ImportNodeSceneViewModel: ObservableObject {
     init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
         self.nodeService = nodeService
-        self.importNodeService = ImportNodeService(nodeStore: nodeService.nodeStore)
+        self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
     var shouldDisableImportButton: Bool {
@@ -38,11 +38,11 @@ class ImportNodeSceneViewModel: ObservableObject {
 
 // MARK: - Business Logic
 
-extension ImportNodeSceneViewModel {
+extension AddNodeSceneViewModel {
     func importFoundNode() throws {
         // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
         let node = Node(url: urlString, status: .active, priority: 5)
-        try importNodeService.importNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
+        try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
         // TODO: - impement correct way of selection node 
         /*
@@ -77,7 +77,7 @@ extension ImportNodeSceneViewModel {
 
             await MainActor.run { [self] in
                 let blockNumber = valueFormatter.string(blockNumber, decimals: 0)
-                let result = ImportNodeResult(
+                let result = AddNodeResult(
                     chainID: networkId,
                     blockNumber: blockNumber,
                     isInSync: isSynced
@@ -92,7 +92,7 @@ extension ImportNodeSceneViewModel {
 
 // MARK: - Private
 
-extension ImportNodeSceneViewModel {
+extension AddNodeSceneViewModel {
     private func updateStateWithError() async {
         await MainActor.run { [self] in
             self.state = .error(AnyError(Localized.Errors.invalidUrl))
@@ -112,7 +112,7 @@ extension ImportNodeSceneViewModel {
 
 // MARK: - NodeURLFetchable
 
-extension ImportNodeSceneViewModel {
+extension AddNodeSceneViewModel {
     struct CustomNodeULRFetchable: NodeURLFetchable {
         let url: URL
 

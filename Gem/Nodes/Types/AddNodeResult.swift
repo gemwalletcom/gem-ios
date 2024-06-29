@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct ImportNodeResult {
+struct AddNodeResult {
     let chainID: String?
     let blockNumber: String
     let isInSync: Bool

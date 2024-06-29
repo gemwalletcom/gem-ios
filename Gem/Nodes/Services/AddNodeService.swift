@@ -6,11 +6,11 @@ import GemstonePrimitives
 import Store
 import Primitives
 
-struct ImportNodeService {
+struct AddNodeService {
 
     let nodeStore: NodeStore
     
-    func importNodes() throws {
+    func addNodes() throws {
         let configNodes = Config.shared.getNodes().map { (key, values) in
             ChainNodes(chain: key, nodes: values.map{ $0.node })
         }
@@ -20,7 +20,7 @@ struct ImportNodeService {
         try nodeStore.addNodes(chainNodes: configNodes)
     }
 
-    func importNode(_ node: ChainNodes) throws {
+    func addNode(_ node: ChainNodes) throws {
         try nodeStore.addNodes(chainNodes: [node])
     }
 }
