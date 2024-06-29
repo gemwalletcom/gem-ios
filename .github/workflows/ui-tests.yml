@@ -15,8 +15,8 @@ env:
   RUSTC_WRAPPER: "sccache"
 
 jobs:
-  unit_test:
-    name: Build and Run UI Tests on iPhone Simulator
+  test:
+    name: Run UI Tests on iPhone Simulator
     runs-on: macos-latest
 
     steps:
