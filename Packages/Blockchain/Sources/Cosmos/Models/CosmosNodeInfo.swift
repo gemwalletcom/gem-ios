@@ -6,9 +6,11 @@ import Foundation
 
 public struct CosmosHeader: Codable {
 	public let chain_id: String
+	public let height: String
 
-	public init(chain_id: String) {
+	public init(chain_id: String, height: String) {
 		self.chain_id = chain_id
+		self.height = height
 	}
 }
 

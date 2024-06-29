@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import SwiftHTTPClient
+import BigInt
 
 public struct ChainService {
     
@@ -147,7 +148,7 @@ extension ChainService: ChainTokenable {
 // MARK: - ChainIDFetchable
 
 extension ChainService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
+    public func getChainID() async throws -> String? {
         return try await Self.service(chain: chain, with: url)
             .getChainID()
     }
@@ -156,7 +157,7 @@ extension ChainService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension ChainService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
+    public func getLatestBlock() async throws -> BigInt {
         return try await Self.service(chain: chain, with: url)
             .getLatestBlock()
     }

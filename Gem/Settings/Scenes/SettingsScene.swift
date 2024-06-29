@@ -6,90 +6,209 @@ import Settings
 import Style
 import Primitives
 import Store
+import Keystore
 
 struct SettingsScene: View {
-    
-    @ObservedObject var model: SettingsViewModel
-    
     @Environment(\.isWalletsPresented) private var isWalletsPresented
+    @Environment(\.openURL) private var openURL
 
-    var onChange: VoidAction = .none
-    
-    init(
-        model: SettingsViewModel,
-        onChange: VoidAction = .none
-    ) {
+    @ObservedObject private var model: SettingsViewModel
+
+    init(model: SettingsViewModel) {
         self.model = model
-        self.onChange = onChange
     }
-    
+
     var body: some View {
         List {
-            Section {
-//                NavigationLink(value: Scenes.Wallets()) {
-//                    ListItemView(title: Localized.Wallets.title, subtitle: model.walletsText, image: Image(.settingsWallets))
-//                }
-                NavigationCustomLink(with: ListItemView(title: Localized.Wallets.title, subtitle: model.walletsText, image: Image(.settingsWallets))) {
-                    self.isWalletsPresented.wrappedValue = true
-                }
-                NavigationLink(value: Scenes.Security()) {
-                    ListItemView(title: Localized.Settings.security, subtitle: .none, image: Image(.settingsSecurity))
+            walletsSection
+            deviceSection
+            walletConnectSection
+            communitySection
+            aboutSection
+        }
+        .onChange(of: model.currencyValue, onCurrencyChange)
+        .listStyle(.insetGrouped)
+        .navigationTitle(model.title)
+    }
+}
+
+// MARK: - UI Components
+
+extension SettingsScene {
+    private var walletsSection: some View {
+        Section {
+            NavigationCustomLink(
+                with: ListItemView(
+                    title: model.walletsTitle,
+                    subtitle: model.walletsValue,
+                    image: model.walletsImage),
+                action: onOpenWallets)
+
+            NavigationLink(value: Scenes.Security()) {
+                ListItemView(
+                    title: model.securityTitle,
+                    image: model.securityImage
+                )
+            }
+        }
+    }
+
+    private var deviceSection: some View {
+        Section {
+            NavigationLink(value: Scenes.Notifications()) {
+                ListItemView(
+                    title: model.notificationsTitle,
+                    image: model.notificationsImage
+                )
+            }
+
+            NavigationLink(value: Scenes.Currency()) {
+                ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
+            }
+
+            NavigationCustomLink(
+                with: ListItemView(
+                    title: model.lanugageTitle,
+                    subtitle: model.lanugageValue,
+                    image: model.lanugageImage
+                ),
+                action: onSelectLanguages
+            )
+
+            NavigationLink(value: Scenes.Chains()) {
+                ListItemView(
+                    title: model.chainsTitle,
+                    image: model.chainsImage
+                )
+            }
+        }
+    }
+
+    private var walletConnectSection: some View {
+        Section {
+            NavigationLink(value: Scenes.WalletConnect()) {
+                ListItemView(
+                    title: model.walletConnectTitle,
+                    image: model.walletConnectImage
+                )
+            }
+        }
+    }
+
+    private var communitySection: some View {
+        Section(model.commutinyTitle) {
+            ForEach(model.communityLinks) { link in
+                NavigationCustomLink(
+                    with: ListItemView(
+                        title: link.type.name,
+                        image: link.type.image
+                    ),
+                    action: { onSelectCommutity(link: link) }
+                )
+            }
+        }
+    }
+
+    private var aboutSection: some View {
+        Section {
+            NavigationLink(value: Scenes.AboutUs()) {
+                ListItemView(
+                    title: model.aboutUsTitle,
+                    image: model.aboutUsImage
+                )
+            }
+
+            NavigationCustomLink(
+                with: ListItemView(
+                    title: model.rateAppTitle,
+                    image: model.rateAppImage
+                ),
+                action: onSelectRateApp
+            )
+
+            if model.isDeveloperEnabled {
+                NavigationLink(value: Scenes.Developer()) {
+                    ListItemView(
+                        title: model.developerModeTitle,
+                        image: model.developerModeImage
+                    )
                 }
             }
 
-            Section {
-                NavigationLink(value: Scenes.Notifications()) {
-                    ListItemView(title: Localized.Settings.Notifications.title, image: Image(.settingsNotifications))
-                }
-                NavigationLink(value: Scenes.Currency()) {
-                    ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
-                }
-                NavigationLink(value: Scenes.Chains()) {
-                    ListItemView(title: Localized.Settings.Networks.title, image: Image(.settingsNetworks))
-                }
+            ListItemView(
+                title: model.versionTextTitle,
+                subtitle: model.versionTextValue,
+                image: model.versionTextImage
+            )
+            .contextMenu {
+                ContextMenuCopy(
+                    title: model.contextCopyTitle,
+                    value: model.versionTextValue
+                )
+                ContextMenuItem(
+                    title: model.contextDevTitle,
+                    image: SystemImage.info,
+                    action: onEnableDevSettings
+                )
             }
-            Section {
-                NavigationLink(value: Scenes.WalletConnect()) {
-                    ListItemView(title: Localized.WalletConnect.title, image: Image(.walletConnect))
-                }
-            }
-            Section {
-                ForEach(model.community) { item in
-                    NavigationCustomLink(with: ListItemView(title: item.type.name, image: item.type.image)) {
-                        UIApplication.shared.open(item.url)
-                    }
-                }
-            } header: {
-                Text(Localized.Settings.community)
-            }
-            Section {
-                NavigationLink(value: Scenes.AboutUs()) {
-                    ListItemView(title: Localized.Settings.aboutus, image: Image(.settingsGem))
-                }
-                NavigationCustomLink(with: ListItemView(title: Localized.Settings.rateApp, image: Image(.settingsRate))) {
-                    RateService().rate()
-                }
-                if model.isDeveloperEnabled {
-                    NavigationLink(value: Scenes.Developer()) {
-                        ListItemView(title: Localized.Settings.developer, image: Image(.settingsDeveloper))
-                    }
-                }
-                ListItemView(title: Localized.Settings.version, subtitle: model.versionText, image: Image(.settingsVersion))
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: model.versionText)
-                        ContextMenuItem(title: Localized.Settings.enableValue(Localized.Settings.developer), image: SystemImage.info) {
-                            model.isDeveloperEnabled.toggle()
-                        }
-                    }
-            }
-        }
-        .listStyle(.insetGrouped)
-        .navigationTitle(Localized.Settings.title)
-        .onChange(of: model.currencyModel.currency) {
-            self.onChange?()
         }
     }
 }
+
+// MARK: - Actions
+
+extension SettingsScene {
+    @MainActor
+    private func onEnableDevSettings() {
+        model.isDeveloperEnabled.toggle()
+    }
+
+    @MainActor
+    private func onSelectRateApp() {
+        RateService().rate()
+    }
+
+    @MainActor
+    private func onSelectCommutity(link: CommunityLink) {
+        openURL(link.url)
+    }
+
+    @MainActor
+    private func onSelectLanguages() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(settingsURL)
+    }
+
+    @MainActor
+    private func onOpenWallets() {
+        isWalletsPresented.wrappedValue.toggle()
+    }
+
+    private func onCurrencyChange() {
+        Task {
+            try await model.fetch()
+        }
+    }
+}
+// MARK: - Previews
+
+#Preview {
+    let model: SettingsViewModel = .init(
+        keystore: LocalKeystore.main,
+        walletService: .main,
+        wallet: .main,
+        currencyModel: .init(),
+        securityModel: .init()
+    )
+    return NavigationStack {
+        SettingsScene(
+            model: model
+        )
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - Bundle extensions
 
 extension Bundle {
     var releaseVersionNumber: String {
@@ -99,9 +218,3 @@ extension Bundle {
         return Int((infoDictionary?["CFBundleVersion"] as? String ?? "")) ?? 0
     }
 }
-
-//struct SettingsScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SettingsScene(model: SettingsViewModel(keystore: .main))
-//    }
-//}

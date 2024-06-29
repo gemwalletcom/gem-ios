@@ -6,13 +6,13 @@ import Components
 import GemstonePrimitives
 import BigInt
 
-class ImportNodeSceneViewModel: ObservableObject {
+class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
-    private let importNodeService: ImportNodeService
+    private let addNodeService: AddNodeService
 
     let chain: Chain
     @Published var urlString: String = ""
-    @Published var state: StateViewType<ImportNodeResult> = .noData
+    @Published var state: StateViewType<AddNodeResult> = .noData
 
     private lazy var valueFormatter: ValueFormatter = {
         ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
@@ -21,7 +21,7 @@ class ImportNodeSceneViewModel: ObservableObject {
     init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
         self.nodeService = nodeService
-        self.importNodeService = ImportNodeService(nodeStore: nodeService.nodeStore)
+        self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
     var shouldDisableImportButton: Bool {
@@ -38,11 +38,11 @@ class ImportNodeSceneViewModel: ObservableObject {
 
 // MARK: - Business Logic
 
-extension ImportNodeSceneViewModel {
+extension AddNodeSceneViewModel {
     func importFoundNode() throws {
         // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
         let node = Node(url: urlString, status: .active, priority: 5)
-        try importNodeService.importNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
+        try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
         // TODO: - impement correct way of selection node 
         /*
@@ -52,7 +52,7 @@ extension ImportNodeSceneViewModel {
 
     func getNetworkInfo() async throws  {
         guard let url = URL(string: urlString) else {
-            await updateStateWithError()
+            await updateStateWithError(error: AddNodeError.invalidNetworkId)
             return
         }
 
@@ -70,44 +70,50 @@ extension ImportNodeSceneViewModel {
         do {
             let (isSynced, networkId, blockNumber) = try await (isNodeSync, chainId, blockNumber)
 
-            guard validate(networkId: networkId) else {
-                await updateStateWithError()
-                return
-            }
-
+            try validate(networkId: networkId)
+            
             await MainActor.run { [self] in
-                var blockNumberFormatted = blockNumber
-                if let blockNumberBigInt = BigInt(blockNumber) {
-                    blockNumberFormatted = valueFormatter.string(blockNumberBigInt, decimals: 0)
-                }
-                let result = ImportNodeResult(chainID: networkId, blockNumber: blockNumberFormatted, isInSync: isSynced)
+                let blockNumber = valueFormatter.string(blockNumber, decimals: 0)
+                let result = AddNodeResult(
+                    chainID: networkId,
+                    blockNumber: blockNumber,
+                    isInSync: isSynced
+                )
                 self.state = .loaded(result)
             }
+        } catch let error as AddNodeError {
+            await updateStateWithError(error: error)
         } catch {
-            await updateStateWithError()
+            await updateStateWithError(error: AddNodeError.invalidNetworkId)
         }
     }
 }
 
 // MARK: - Private
 
-extension ImportNodeSceneViewModel {
-    private func updateStateWithError() async {
+extension AddNodeSceneViewModel {
+    private func updateStateWithError(error: LocalizedError) async {
         await MainActor.run { [self] in
-            self.state = .error(AnyError(Localized.Errors.invalidUrl))
+            self.state = .error(error)
         }
     }
 
-    private func validate(networkId: String) -> Bool {
-        // if networkId in ChainConfig optional, proceed with valid id
-        guard let id = ChainConfig.config(chain: chain).networkId else { return true }
-        return id == networkId
+    private func validate(networkId: String?) throws {
+        // if networkId in ChainConfig optional or from the service, proceed with valid id
+        guard
+            let networkId,
+            let configNetworkId = ChainConfig.config(chain: chain).networkId else {
+            return
+        }
+        if configNetworkId != networkId {
+            throw AddNodeError.invalidNetworkId
+        }
     }
 }
 
 // MARK: - NodeURLFetchable
 
-extension ImportNodeSceneViewModel {
+extension AddNodeSceneViewModel {
     struct CustomNodeULRFetchable: NodeURLFetchable {
         let url: URL
 

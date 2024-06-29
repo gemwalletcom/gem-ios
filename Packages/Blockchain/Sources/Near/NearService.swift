@@ -181,7 +181,7 @@ extension NearService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension NearService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
+    public func getChainID() async throws -> String? {
         throw AnyError("Not Implemented")
     }
 }
@@ -189,7 +189,7 @@ extension NearService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension NearService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
+    public func getLatestBlock() async throws -> BigInt {
         throw AnyError("Not Implemented")
     }
 }

@@ -14,6 +14,7 @@ public enum SolanaProvider: TargetType {
     case getTokenAccountBalance(token: String)
     case latestBlockhash
     case fees
+    case slot
     case rentExemption(size: Int)
     case broadcast(data: String, options: Options?)
     case transaction(id: String)
@@ -39,6 +40,8 @@ public enum SolanaProvider: TargetType {
             return "getLatestBlockhash"
         case .fees:
             return "getRecentPrioritizationFees"
+        case .slot:
+            return "getSlot"
         case .rentExemption:
             return "getMinimumBalanceForRentExemption"
         case .broadcast:
@@ -70,6 +73,7 @@ public enum SolanaProvider: TargetType {
         switch self {
         case .latestBlockhash,
             .fees,
+            .slot,
             .epoch,
             .health:
             return .encodable(

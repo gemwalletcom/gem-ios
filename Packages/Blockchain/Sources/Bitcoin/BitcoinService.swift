@@ -191,7 +191,7 @@ extension BitcoinService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension BitcoinService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
+    public func getChainID() async throws -> String? {
         throw AnyError("Not Implemented")
     }
 }
@@ -199,7 +199,7 @@ extension BitcoinService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension BitcoinService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
+    public func getLatestBlock() async throws -> BigInt {
         throw AnyError("Not Implemented")
     }
 }

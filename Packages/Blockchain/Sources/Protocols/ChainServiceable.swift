@@ -42,7 +42,7 @@ public protocol ChainSyncable {
 }
 
 public protocol ChainIDFetchable {
-    func getChainID() async throws -> String
+    func getChainID() async throws -> String?
 }
 
 public protocol ChainStakable {
@@ -56,5 +56,5 @@ public protocol ChainTokenable {
 }
 
 public protocol ChainLatestBlockFetchable {
-    func getLatestBlock() async throws -> String
+    func getLatestBlock() async throws -> BigInt
 }

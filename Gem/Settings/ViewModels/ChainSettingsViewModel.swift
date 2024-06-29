@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import GemstonePrimitives
+import Settings
 
 class ChainSettingsViewModel: ObservableObject {
     
@@ -38,7 +39,7 @@ class ChainSettingsViewModel: ObservableObject {
     }
 
     var isSupportedAddingCustomNode: Bool {
-        chain.type == .ethereum
+        AssetConfiguration.addCustomNodeChains.contains(chain.type)
     }
 }
 

@@ -152,7 +152,7 @@ extension XRPService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension XRPService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
+    public func getChainID() async throws -> String? {
         throw AnyError("Not Implemented")
     }
 }
@@ -160,7 +160,7 @@ extension XRPService: ChainIDFetchable {
 // MARK: - ChainLatestBlockFetchable
 
 extension XRPService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
+    public func getLatestBlock() async throws -> BigInt {
         throw AnyError("Not Implemented")
     }
 }

@@ -41,7 +41,7 @@ jobs:
           brew install swiftgen xcbeautify
 
       - name: Build Core
-        run: make generate
+        run: make generate-stone
 
       - name: Unit Tests
         run: make test

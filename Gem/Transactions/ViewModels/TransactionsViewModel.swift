@@ -8,12 +8,18 @@ import GRDB
 import GRDBQuery
 
 struct TransactionsViewModel {
-    
     let wallet: Wallet
-    let type: TransactionsRequestType
-    let preferences: SecurePreferences = .standard
-    let service: TransactionsService
-    
+
+    private let type: TransactionsRequestType
+    private let preferences: SecurePreferences = .standard
+    private let service: TransactionsService
+
+    init(wallet: Wallet, type: TransactionsRequestType, service: TransactionsService) {
+        self.wallet = wallet
+        self.type = type
+        self.service = service
+    }
+
     var title: String {
         //TODO: Change Title based on the type
         return Localized.Activity.title
@@ -22,7 +28,11 @@ struct TransactionsViewModel {
     var request: TransactionsRequest {
         return TransactionsRequest(walletId: wallet.id, type: type)
     }
-    
+}
+
+// MARK: - Business Logic
+
+extension TransactionsViewModel {
     func fetch() async {
         do {
             guard let deviceId = try preferences.get(key: .deviceId) else {

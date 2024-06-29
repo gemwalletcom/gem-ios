@@ -120,6 +120,12 @@ extension SolanaService {
         let priorityFee = try await getPrioritizationFee()
         return staticBaseFee + (priorityFee * BigInt(priorityFeeMultipler))
     }
+    
+    private func getSlot() async throws -> BigInt {
+        try await provider
+            .request(.slot)
+            .map(as: JSONRPCResponse<Int>.self).result.asBigInt
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -392,15 +398,15 @@ extension SolanaService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension SolanaService: ChainIDFetchable {
-    public func getChainID() async throws -> String {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String? {
+        .none
     }
 }
 
 // MARK: - ChainLatestBlockFetchable
 
 extension SolanaService: ChainLatestBlockFetchable {
-    public func getLatestBlock() async throws -> String {
-        throw AnyError("Not Implemented")
+    public func getLatestBlock() async throws -> BigInt {
+        try await getSlot()
     }
 }

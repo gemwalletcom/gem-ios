@@ -4,10 +4,10 @@ import SwiftUI
 import Components
 import Style
 
-struct ImportNodeScene: View {
+struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var model: ImportNodeSceneViewModel
+    @StateObject var model: AddNodeSceneViewModel
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorAlert: String?
 
@@ -57,7 +57,7 @@ struct ImportNodeScene: View {
 
 // MARK: - UI Components
 
-extension ImportNodeScene {
+extension AddNodeScene {
     
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
@@ -91,12 +91,14 @@ extension ImportNodeScene {
             EmptyView()
         case let .loaded(result):
             Section {
-                ListItemView(
-                    title: Localized.Nodes.ImportNode.chainId,
-                    titleStyle: .body,
-                    subtitle: result.chainID,
-                    subtitleStyle: .calloutSecondary
-                )
+                if let chainId = result.chainID {
+                    ListItemView(
+                        title: Localized.Nodes.ImportNode.chainId,
+                        titleStyle: .body,
+                        subtitle: chainId,
+                        subtitleStyle: .calloutSecondary
+                    )
+                }
                 ListItemView(
                     title: Localized.Nodes.ImportNode.inSync,
                     titleStyle: .body,
@@ -120,7 +122,7 @@ extension ImportNodeScene {
 
 // MARK: - Actions
 
-extension ImportNodeScene {
+extension AddNodeScene {
     private func onSelectDone() {
         dismiss()
     }
@@ -158,7 +160,7 @@ extension ImportNodeScene {
 
 // MARK: - Logic
 
-extension ImportNodeScene {
+extension AddNodeScene {
     private func getNetwrokInfoAsync() {
         Task {
             try await model.getNetworkInfo()
@@ -168,6 +170,6 @@ extension ImportNodeScene {
 
 #Preview {
     return NavigationStack {
-        ImportNodeScene(model: .init(chain: .ethereum, nodeService: .main)) { }
+        AddNodeScene(model: .init(chain: .ethereum, nodeService: .main)) { }
     }
 }
