@@ -7,13 +7,13 @@ enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
     
     case phrase = "Phrase"
     case address = "Address"
-    
+    case privateKey = "Private Key"
+
     var field: ImportWalletScene.Field {
         switch self {
-        case .phrase:
-            return .phrase
-        case .address:
-            return .address
+        case .phrase: .phrase
+        case .address: .address
+        case .privateKey: .privateKey
         }
     }
 }

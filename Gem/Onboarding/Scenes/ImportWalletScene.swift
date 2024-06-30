@@ -9,7 +9,7 @@ import Settings
 struct ImportWalletScene: View {
     
     enum Field: Int, Hashable {
-        case name, phrase, address
+        case name, phrase, address, privateKey
     }
     @Environment(\.isWalletsPresented) private var isWalletsPresented
     
@@ -18,6 +18,7 @@ struct ImportWalletScene: View {
 
     @State private var importType: WalletImportType = .address
     @State private var secretPhrase: String = ""
+    @State private var privateKey: String = ""
     @State private var address: String = ""
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingScanner = false
@@ -64,7 +65,18 @@ struct ImportWalletScene: View {
                                         WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
                                     }
                                 }
-                                .padding(.top, 8)
+                                .padding(.top, Spacing.small)
+                        case .privateKey:
+                            if !model.keyEncodingTypes.isEmpty {
+                                TextField(Localized.Wallet.Import.privateKey(model.importPrivateKeyPlaceholder), text: $privateKey, axis: .vertical)
+                                    .textInputAutocapitalization(.never)
+                                    .lineLimit(8)
+                                    .keyboardType(.default)
+                                    .autocorrectionDisabled(true)
+                                    .frame(minHeight: 80, alignment: .top)
+                                    .focused($focusedField, equals: .privateKey)
+                                    .padding(.top, Spacing.small)
+                            }
                         case .address:
                             if let chain = model.chain {
                                 HStack {
@@ -74,7 +86,7 @@ struct ImportWalletScene: View {
                                         .focused($focusedField, equals: .address)
                                         .frame(minHeight: 80, alignment: .top)
                                         .accessibilityIdentifier("address")
-                                        .padding(.top, 8)
+                                        .padding(.top, Spacing.small)
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
                                         state: $nameResolveState,
@@ -145,28 +157,25 @@ struct ImportWalletScene: View {
     
     func scanResult(_ result: String) {
         switch importType {
-        case .phrase:
-            secretPhrase = result
-        case .address:
-            address = result
+        case .phrase: secretPhrase = result
+        case .address: address = result
+        case .privateKey: privateKey = result
         }
     }
 
     func importWallet() throws {
-        let words = secretPhrase.split(separator: " ").map{String($0)}
-        
         let recipient: RecipientImport = {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
             }
             return RecipientImport(name: name, address: address)
         }()
-        
-        guard try validateForm(type: importType, address: recipient.address, words: words) else {
-            return
-        }
         switch importType {
         case .phrase:
+            let words = secretPhrase.split(separator: " ").map{String($0)}
+            guard try validateForm(type: importType, address: recipient.address, words: words) else {
+                return
+            }
             switch model.type {
             case .multicoin:
                 try model.importWallet(
@@ -179,7 +188,13 @@ struct ImportWalletScene: View {
                     keystoreType: .single(words: words, chain: chain)
                 )
             }
+        case .privateKey:
+            guard try validateForm(type: importType, address: recipient.address, words: [privateKey]) else {
+                return
+            }
+            try model.importWallet(name: recipient.name, keystoreType: .privateKey(text: privateKey, chain: model.chain!))
         case .address:
+
             try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
         }
         
@@ -200,6 +215,8 @@ struct ImportWalletScene: View {
             guard Mnemonic.isValidWords(words) else {
                 throw WalletImportError.invalidSecretPhrase
             }
+        case .privateKey:
+            return !words.joined().isEmpty
         case .address:
             guard model.chain!.isValidAddress(address) else {
                 throw WalletImportError.invalidAddress
@@ -216,6 +233,8 @@ struct ImportWalletScene: View {
         switch importType {
         case .phrase:
             secretPhrase = string.trim()
+        case .privateKey:
+            privateKey = string.trim()
         case .address:
             address = string.trim()
         }

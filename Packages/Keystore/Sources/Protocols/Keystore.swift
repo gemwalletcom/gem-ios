@@ -24,5 +24,6 @@ public protocol Keystore: ObservableObject {
 public enum KeystoreImportType {
     case phrase(words: [String], chains: [Chain])
     case single(words: [String], chain: Chain)
+    case privateKey(text: String, chain: Chain)
     case address(chain: Chain, address: String)
 }

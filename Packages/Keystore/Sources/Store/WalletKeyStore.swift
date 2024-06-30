@@ -25,7 +25,53 @@ struct WalletKeyStore {
         )
         return try addCoins(wallet: wallet, chains: chains, password: password)
     }
-    
+
+    static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
+        var data: Data?
+        for encoding in chain.keyEncodingTypes {
+            if data != nil {
+                break
+            }
+            switch encoding {
+            case .base58:
+                if let decoded = Base58.decodeNoCheck(string: key), decoded.count % 32 == 0 {
+                    data = decoded.prefix(32)
+                }
+            case .hex:
+                data = Data(hexString: key)
+            }
+        }
+
+        guard
+            let data = data,
+            PrivateKey.isValid(data: data, curve: chain.coinType.curve) == true,
+            let key = PrivateKey(data: data)
+        else {
+            throw AnyError("Invalid private key format")
+        }
+        return key
+    }
+
+    func importPrivateKey(name: String, key: String, chain: Chain, password: String) throws -> Primitives.Wallet {
+        let privateKey = try Self.decodeKey(key, chain: chain)
+        let wallet = try keyStore.import(privateKey: privateKey, name: name, password: password, coin: chain.coinType)
+
+        let account = Primitives.Account(
+            chain: chain,
+            address: chain.coinType.deriveAddress(privateKey: privateKey),
+            derivationPath: chain.coinType.derivationPath(), // not applicable
+            extendedPublicKey: nil
+        )
+
+        return Primitives.Wallet(
+            id: wallet.id,
+            name: wallet.key.name,
+            index: 0, 
+            type: .single,
+            accounts: [account]
+        )
+    }
+
     func addCoins(wallet: WalletCore.Wallet, chains: [Chain], password: String) throws -> Primitives.Wallet {
         let exclude = [Chain.solana]
         let coins = chains.filter { !exclude.contains($0) } .map { $0.coinType }.asSet().asArray()
@@ -72,17 +118,24 @@ struct WalletKeyStore {
         try keyStore.delete(wallet: wallet, password: password)
     }
     
-    func getPrivateKey(id: String, chain: Chain, password: String) throws -> Data {
+    func getPrivateKey(id: String, type: Primitives.WalletType, chain: Chain, password: String) throws -> Data {
         let wallet = try getWallet(id: id)
-        guard
-            let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
-            throw KeystoreError.unknownWalletInWalletCore
-        }
-        switch chain {
-        case .solana:
-            return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
-        default:
-            return hdwallet.getKeyForCoin(coin: chain.coinType).data
+        switch type {
+        case .multicoin:
+            guard
+                let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
+                throw KeystoreError.unknownWalletInWalletCore
+            }
+            switch chain {
+            case .solana:
+                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
+            default:
+                return hdwallet.getKeyForCoin(coin: chain.coinType).data
+            }
+        case .single:
+            return try wallet.privateKey(password: password, coin: chain.coinType).data
+        case .view:
+            throw KeystoreError.invalidPrivateKey
         }
     }
     
