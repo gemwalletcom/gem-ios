@@ -147,8 +147,10 @@ class SwapViewModel: ObservableObject {
             DispatchQueue.main.async {
                 self.allowanceState = .loading
             }
+
             let address = try wallet.account(for: fromAsset.chain).address
-            let allowance = try await service.getAllowance(chain: fromAsset.chain, contract: fromAsset.tokenId!,owner: address, spender: SwapService.oneinch)
+            let spender = try SwapService.getRouter(chain: fromAsset.chain)
+            let allowance = try await service.getAllowance(chain: fromAsset.chain, contract: fromAsset.tokenId!,owner: address, spender: spender)
             DispatchQueue.main.async {
                 self.allowanceState = .loaded(!allowance.isZero)
             }
@@ -158,12 +160,13 @@ class SwapViewModel: ObservableObject {
         }
     }
     
-    func getAllowanceData(fromAsset: Asset, toAsset: Asset) -> TransferData {
+    func getAllowanceData(fromAsset: Asset, toAsset: Asset) throws -> TransferData {
+        let spender = try SwapService.getRouter(chain: fromAsset.chain)
         return TransferData(
             type: .swap(
                 fromAsset,
                 toAsset,
-                SwapAction.approval(spender: SwapService.oneinch, allowance: .MAX_256)
+                SwapAction.approval(spender: spender, allowance: .MAX_256)
             ),
             recipientData: RecipientData(
                 asset: fromAsset,
