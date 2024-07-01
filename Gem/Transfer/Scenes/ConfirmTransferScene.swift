@@ -95,6 +95,7 @@ extension ConfirmTransferScene {
                 subtitleExtra: model.networkFeeFiatValue,
                 placeholders: [.subtitle]
             )
+            .frame(height: 38)
             .id(UUID())
         } header: {
             HStack {
