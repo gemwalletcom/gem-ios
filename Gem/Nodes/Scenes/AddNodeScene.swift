@@ -28,7 +28,7 @@ struct AddNodeScene: View {
             }
             Spacer()
             StatefullButton(
-                text: Localized.Wallet.Import.action,
+                text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectImport
             )
@@ -42,7 +42,7 @@ struct AddNodeScene: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(Localized.Common.done, action: onSelectDone)
+                Button(model.doneButtonTitle, action: onSelectDone)
                     .bold()
             }
         }
@@ -68,7 +68,7 @@ extension AddNodeScene {
     private var inputSection: some View {
         Section {
             HStack {
-                FloatTextField(Localized.Common.url, text: $model.urlString)
+                FloatTextField(model.inputFieldTitle, text: $model.inputFieldValue)
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)
@@ -81,40 +81,43 @@ extension AddNodeScene {
                     ListButton(image: Image(systemName: SystemImage.qrCode), action: onSelectScan)
                 }
             }
+        } footer: {
+            if case let .error(error) = model.state {
+                ListItemErrorView(
+                    errorTitle: model.errorTitle,
+                    error: error,
+                    retryTitle: model.errorRetryTitle,
+                    retryAction: onSelectRetry
+                )
+            }
         }
     }
 
     @ViewBuilder
     private var nodeInfoView: some View {
         switch model.state {
-        case .noData, .loading:
+        case .noData, .loading, .error:
             EmptyView()
         case let .loaded(result):
             Section {
                 if let chainId = result.chainID {
                     ListItemView(
-                        title: Localized.Nodes.ImportNode.chainId,
-                        titleStyle: .body,
-                        subtitle: chainId,
-                        subtitleStyle: .calloutSecondary
+                        title: model.chainIdTitle,
+                        subtitle: chainId
                     )
                 }
                 ListItemView(
-                    title: Localized.Nodes.ImportNode.inSync,
-                    titleStyle: .body,
-                    subtitle: result.isInSync ? "✅" : "❌",
-                    subtitleStyle: .calloutSecondary
+                    title: model.inSyncTitle,
+                    subtitle: result.isInSync ? "✅" : "❌"
                 )
                 ListItemView(
-                    title: Localized.Nodes.ImportNode.latestBlock,
-                    titleStyle: .body,
-                    subtitle: result.blockNumber,
-                    subtitleStyle: .calloutSecondary
+                    title: model.latestBlockTitle,
+                    subtitle: result.blockNumber
                 )
-            }
-        case .error(let error):
-            Section {
-                StateErrorView(error: error, message: error.localizedDescription)
+                ListItemView(
+                    title: model.latencyTitle,
+                    subtitle: result.latency.formattedValue
+                )
             }
         }
     }
@@ -128,15 +131,15 @@ extension AddNodeScene {
     }
 
     private func onSubmitUrl() {
-        getNetwrokInfoAsync()
+        fetch()
     }
 
     private func onSelectPaste() {
         guard let content = UIPasteboard.general.string else {
             return
         }
-        model.urlString = content.trim()
-        getNetwrokInfoAsync()
+        model.inputFieldValue = content.trim()
+        fetch()
     }
 
     private func onSelectImport() {
@@ -149,21 +152,25 @@ extension AddNodeScene {
     }
 
     private func onScanFinished(_ result: String) {
-        model.urlString = result
-        getNetwrokInfoAsync()
+        model.inputFieldValue = result
+        fetch()
     }
 
     private func onSelectScan() {
         isPresentingScanner = true
     }
+
+    private func onSelectRetry() {
+        fetch()
+    }
 }
 
-// MARK: - Logic
+// MARK: - Effects
 
 extension AddNodeScene {
-    private func getNetwrokInfoAsync() {
+    private func fetch() {
         Task {
-            try await model.getNetworkInfo()
+            await model.fetch()
         }
     }
 }
