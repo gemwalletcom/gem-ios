@@ -136,6 +136,7 @@
 "swap.approve_token" = "Затвердити %@ для обміну";
 "swap.approve_token_permission" = "Підтвердити токен %@ для доступу до свопу.";
 "swap.provider" = "Провайдер";
+"common.phrase" = "Фраза";
 "stake.active" = "Активний";
 "stake.pending" = "В Очікуванні";
 "stake.rewards" = "Нагороди";
@@ -210,6 +211,7 @@
 "common.no" = "Немає";
 "common.url" = "URL-адреса";
 "errors.error_occured" = "An error occurred!";
-"settings.language" = "Language";
+"settings.language" = "Мова";
 "wallet.import.private_key" = "%s encoded private key";
 "errors.invalid_network_id" = "Invalid Network ID";
+"common.private_key" = "Private Key";

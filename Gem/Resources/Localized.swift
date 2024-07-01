@@ -141,6 +141,10 @@ internal enum Localized {
     internal static let notAvailable = Localized.tr("Localizable", "common.not_available", fallback: "Not Available")
     /// Paste
     internal static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
+    /// Phrase
+    internal static let phrase = Localized.tr("Localizable", "common.phrase", fallback: "Phrase")
+    /// Private Key
+    internal static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
     internal static let provider = Localized.tr("Localizable", "common.provider", fallback: "Provider")
     /// Recommended

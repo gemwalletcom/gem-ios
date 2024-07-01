@@ -136,6 +136,7 @@
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
 "swap.provider" = "プロバイダー";
+"common.phrase" = "フレーズ";
 "stake.active" = "アクティブ";
 "stake.pending" = "Pending";
 "stake.rewards" = "Rewards";
@@ -210,6 +211,7 @@
 "common.no" = "いいえ";
 "common.url" = "メールアドレス";
 "errors.error_occured" = "An error occurred!";
-"settings.language" = "Language";
+"settings.language" = "言語";
 "wallet.import.private_key" = "%s encoded private key";
 "errors.invalid_network_id" = "Invalid Network ID";
+"common.private_key" = "Private Key";
