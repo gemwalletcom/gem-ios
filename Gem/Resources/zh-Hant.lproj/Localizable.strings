@@ -216,4 +216,4 @@
 "errors.invalid_network_id" = "無效的網路ID";
 "common.private_key" = "私鑰";
 "nodes.import_node.latency" = "Latency";
-"common.ms" = "ms";
+"common.latency_in_ms" = "%d ms";

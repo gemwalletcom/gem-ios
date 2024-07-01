@@ -216,4 +216,4 @@
 "errors.invalid_network_id" = "网络 ID 无效";
 "common.private_key" = "私钥";
 "nodes.import_node.latency" = "Latency";
-"common.ms" = "ms";
+"common.latency_in_ms" = "%d ms";

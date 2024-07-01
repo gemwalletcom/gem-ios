@@ -127,12 +127,14 @@ internal enum Localized {
     internal static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Hide
     internal static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
+    /// %d ms
+    internal static func latencyInMs(_ p1: Int) -> String {
+      return Localized.tr("Localizable", "common.latency_in_ms", p1, fallback: "%d ms")
+    }
     /// Loading
     internal static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
     /// Manage
     internal static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
-    /// ms
-    internal static let ms = Localized.tr("Localizable", "common.ms", fallback: "ms")
     /// Next
     internal static let next = Localized.tr("Localizable", "common.next", fallback: "Next")
     /// No

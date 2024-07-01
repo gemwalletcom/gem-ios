@@ -58,9 +58,7 @@ class AddNodeSceneViewModel: ObservableObject {
     var latecyValue: String? {
         guard let value = state.value else { return nil }
         let latency = value.latency
-
-        let ms = Localized.Common.ms
-        return "\(latency.value) \(ms) \(latency.colorEmoji)"
+        return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
     }
 
 }

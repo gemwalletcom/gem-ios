@@ -216,4 +216,4 @@
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
-"common.ms" = "ms";
+"common.latency_in_ms" = "%d мс";
