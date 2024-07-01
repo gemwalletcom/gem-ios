@@ -8,13 +8,10 @@ struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @StateObject var model: AddNodeSceneViewModel
-    @State private var isPresentingScanner: Bool = false
-    @State private var isPresentingErrorAlert: String?
-
-    @FocusState private var focusedField: Field?
 
     var onDismiss: (() -> Void)
 
+    @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
     }
@@ -46,10 +43,10 @@ struct AddNodeScene: View {
                     .bold()
             }
         }
-        .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner, action: onScanFinished(_:))
+        .sheet(isPresented: $model.isPresentingScanner) {
+            ScanQRCodeNavigationStack(isPresenting: $model.isPresentingScanner, action: onScanFinished(_:))
         }
-        .alert(item: $isPresentingErrorAlert) {
+        .alert(item: $model.isPresentingErrorAlert) {
             Alert(title: Text(""), message: Text($0))
         }
     }
@@ -58,7 +55,6 @@ struct AddNodeScene: View {
 // MARK: - UI Components
 
 extension AddNodeScene {
-    
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
             ChainView(chain: model.chain)
@@ -68,7 +64,7 @@ extension AddNodeScene {
     private var inputSection: some View {
         Section {
             HStack {
-                FloatTextField(model.inputFieldTitle, text: $model.inputFieldValue)
+                FloatTextField(model.inputFieldTitle, text: $model.urlInput)
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)
@@ -85,9 +81,7 @@ extension AddNodeScene {
             if case let .error(error) = model.state {
                 ListItemErrorView(
                     errorTitle: model.errorTitle,
-                    error: error,
-                    retryTitle: model.errorRetryTitle,
-                    retryAction: onSelectRetry
+                    error: error
                 )
             }
         }
@@ -101,23 +95,11 @@ extension AddNodeScene {
         case let .loaded(result):
             Section {
                 if let chainId = result.chainID {
-                    ListItemView(
-                        title: model.chainIdTitle,
-                        subtitle: chainId
-                    )
+                    ListItemView(title: model.chainIdTitle, subtitle: chainId)
                 }
-                ListItemView(
-                    title: model.inSyncTitle,
-                    subtitle: result.isInSync ? "✅" : "❌"
-                )
-                ListItemView(
-                    title: model.latestBlockTitle,
-                    subtitle: result.blockNumber
-                )
-                ListItemView(
-                    title: model.latencyTitle,
-                    subtitle: result.latency.formattedValue
-                )
+                ListItemView(title: model.inSyncTitle, subtitle: model.inSyncValue)
+                ListItemView(title: model.latestBlockTitle, subtitle: result.blockNumber)
+                ListItemView(title: model.latencyTitle, subtitle: model.latecyValue)
             }
         }
     }
@@ -138,7 +120,7 @@ extension AddNodeScene {
         guard let content = UIPasteboard.general.string else {
             return
         }
-        model.inputFieldValue = content.trim()
+        model.urlInput = content.trim()
         fetch()
     }
 
@@ -147,21 +129,17 @@ extension AddNodeScene {
             try model.importFoundNode()
             onDismiss()
         } catch {
-            isPresentingErrorAlert = error.localizedDescription
+            model.isPresentingErrorAlert = error.localizedDescription
         }
     }
 
     private func onScanFinished(_ result: String) {
-        model.inputFieldValue = result
+        model.urlInput = result
         fetch()
     }
 
     private func onSelectScan() {
-        isPresentingScanner = true
-    }
-
-    private func onSelectRetry() {
-        fetch()
+        model.isPresentingScanner = true
     }
 }
 

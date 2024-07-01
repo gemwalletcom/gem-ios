@@ -19,7 +19,7 @@ struct LatencyMeasureService {
             }
         }
 
-        private var colorEmoji: String {
+        var colorEmoji: String {
             switch self {
             case .fast: return "🟢"
             case .normal: return "🟠"
@@ -28,21 +28,10 @@ struct LatencyMeasureService {
         }
 
         var value: Int {
-            let value: Double
             switch self {
-            case .fast(let double):
-                value = double
-            case .normal(let double):
-                value = double
-            case .slow(let double):
-                value = double
+            case .fast(let double), .normal(let double), .slow(let double):
+                return Int(double)
             }
-            return Int(value)
-        }
-
-        var formattedValue: String {
-            let ms = Localized.Common.ms
-            return "\(value) \(ms) \(colorEmoji)"
         }
     }
 

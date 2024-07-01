@@ -12,9 +12,12 @@ class AddNodeSceneViewModel: ObservableObject {
     private let addNodeService: AddNodeService
     
     let chain: Chain
-    @Published var inputFieldValue: String = ""
+
+    @Published var urlInput: String = ""
     @Published var state: StateViewType<AddNodeResult> = .noData
-    
+    @Published var isPresentingScanner: Bool = false
+    @Published var isPresentingErrorAlert: String?
+
     private lazy var valueFormatter: ValueFormatter = {
         ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
     }()
@@ -39,12 +42,26 @@ class AddNodeSceneViewModel: ObservableObject {
     var inputFieldTitle: String { Localized.Common.url }
     
     var errorTitle: String { Localized.Errors.errorOccured }
-    var errorRetryTitle: String { Localized.Common.tryAgain }
     
     var chainIdTitle: String { Localized.Nodes.ImportNode.chainId }
+    var chainIdValue: String? { state.value?.chainID }
+
     var inSyncTitle: String { Localized.Nodes.ImportNode.inSync }
+    var inSyncValue: String? {
+        guard let value = state.value else { return nil }
+        return value.isInSync ? "✅" : "❌"
+    }
+
     var latestBlockTitle: String { Localized.Nodes.ImportNode.latestBlock }
+
     var latencyTitle: String { Localized.Nodes.ImportNode.latency }
+    var latecyValue: String? {
+        guard let value = state.value else { return nil }
+        let latency = value.latency
+
+        let ms = Localized.Common.ms
+        return "\(latency.value) \(ms) \(latency.colorEmoji)"
+    }
 
 }
 
@@ -53,7 +70,7 @@ class AddNodeSceneViewModel: ObservableObject {
 extension AddNodeSceneViewModel {
     func importFoundNode() throws {
         // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
-        let node = Node(url: inputFieldValue, status: .active, priority: 5)
+        let node = Node(url: urlInput, status: .active, priority: 5)
         try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
         // TODO: - impement correct way of selection node 
@@ -63,7 +80,7 @@ extension AddNodeSceneViewModel {
     }
 
     func fetch() async  {
-        guard let url = URL(string: inputFieldValue) else {
+        guard let url = URL(string: urlInput) else {
             await updateStateWithError(error: AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
