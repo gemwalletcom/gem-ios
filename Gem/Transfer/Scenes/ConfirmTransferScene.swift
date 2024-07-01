@@ -15,6 +15,8 @@ struct ConfirmTransferScene: View {
     @State private var isPresentingErrorMessage: String?
     @State private var isLoading: Bool = false
 
+    private static let networkFeeItemHeight: CGFloat = 38.0
+
     var body: some View {
         VStack {
             List {
@@ -95,6 +97,7 @@ extension ConfirmTransferScene {
                 subtitleExtra: model.networkFeeFiatValue,
                 placeholders: [.subtitle]
             )
+            .frame(height: ConfirmTransferScene.networkFeeItemHeight)
             .id(UUID())
         } header: {
             HStack {
