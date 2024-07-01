@@ -134,7 +134,7 @@ struct SwapScene: View {
                 if allowance {
                     self.transferData = try await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset, amount: model.fromValue)
                 } else {
-                    self.transferData = model.getAllowanceData(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+                    self.transferData = try model.getAllowanceData(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
                 }
                 focusedField = .none
             } catch {

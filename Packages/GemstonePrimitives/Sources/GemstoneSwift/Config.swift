@@ -6,6 +6,10 @@ import Primitives
 
 extension Config {
     public static let shared = Config()
+
+    public func config(for evmChain: EVMChain) -> EvmChainConfig {
+        getEvmChainConfig(chain: evmChain.rawValue)
+    }
 }
 
 public struct Docs {

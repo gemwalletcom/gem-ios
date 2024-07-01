@@ -5,14 +5,24 @@ import GemAPI
 import Primitives
 import BigInt
 import Blockchain
+import Gemstone
+import GemstonePrimitives
 
 class SwapService {
     
     let provider: GemAPISwapService
-    //let ethereumSwapService: EthereumSwapService
     
-    static let oneinch = "0x1111111254EEB25477B68fb85Ed929f73A960582"
-    
+    static func getRouter(chain: Chain) throws -> String {
+        guard let evmChain = EVMChain(rawValue: chain.rawValue) else {
+            throw AnyError("Not EVM compatible chain!")
+        }
+
+        guard let router = Config.shared.config(for: evmChain).oneinch.first else {
+            throw AnyError("Doesn't support \(evmChain.rawValue) chain yet!")
+        }
+        return router
+    }
+
     init(
         provider: GemAPISwapService = GemAPIService()
     ) {
