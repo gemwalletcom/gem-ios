@@ -61,6 +61,6 @@ build:
 
 test-ui:
 	#maestro start-device --platform=ios --os-version=17
-	maestro test .maestro
+	$HOME/.maestro/bin/maestro test .maestro
 
 .PHONY: build
