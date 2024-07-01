@@ -136,6 +136,7 @@
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
 "swap.provider" = "Provider";
+"common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
 "stake.rewards" = "Rewards";
@@ -213,3 +214,4 @@
 "settings.language" = "Language";
 "wallet.import.private_key" = "%s encoded private key";
 "errors.invalid_network_id" = "Invalid Network ID";
+"common.private_key" = "Private Key";

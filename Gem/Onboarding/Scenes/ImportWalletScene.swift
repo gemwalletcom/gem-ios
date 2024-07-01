@@ -45,7 +45,7 @@ struct ImportWalletScene: View {
                         if model.showImportTypes {
                             Picker("", selection: $importType) {
                                 ForEach(model.importTypes) { type in
-                                    Text(type.rawValue).tag(type)
+                                    Text(type.localized).tag(type)
                                 }
                             }
                             .pickerStyle(.segmented)

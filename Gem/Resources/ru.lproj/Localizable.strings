@@ -136,6 +136,7 @@
 "swap.approve_token" = "Одобрить %@ на обмен";
 "swap.approve_token_permission" = "Одобрите токен %@ для доступа к свопу.";
 "swap.provider" = "Провайдер";
+"common.phrase" = "Фраза";
 "stake.active" = "Active";
 "stake.pending" = "В ожидании";
 "stake.rewards" = "Награды";
@@ -213,3 +214,4 @@
 "settings.language" = "Язык";
 "wallet.import.private_key" = "%s encoded private key";
 "errors.invalid_network_id" = "Invalid Network ID";
+"common.private_key" = "Private Key";
