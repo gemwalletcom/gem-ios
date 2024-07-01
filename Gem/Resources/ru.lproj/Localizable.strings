@@ -215,3 +215,5 @@
 "wallet.import.private_key" = "%s encoded private key";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
+"nodes.import_node.latency" = "Задержка";
+"common.latency_in_ms" = "%d мс";

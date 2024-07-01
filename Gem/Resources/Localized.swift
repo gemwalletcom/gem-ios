@@ -127,6 +127,10 @@ internal enum Localized {
     internal static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Hide
     internal static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
+    /// %d ms
+    internal static func latencyInMs(_ p1: Int) -> String {
+      return Localized.tr("Localizable", "common.latency_in_ms", p1, fallback: "%d ms")
+    }
     /// Loading
     internal static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
     /// Manage
@@ -226,6 +230,8 @@ internal enum Localized {
       internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
       /// In Sync
       internal static let inSync = Localized.tr("Localizable", "nodes.import_node.in_sync", fallback: "In Sync")
+      /// Latency
+      internal static let latency = Localized.tr("Localizable", "nodes.import_node.latency", fallback: "Latency")
       /// Latest Block
       internal static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
       /// Add node

@@ -215,3 +215,5 @@
 "wallet.import.private_key" = "%s 编码的私钥";
 "errors.invalid_network_id" = "网络 ID 无效";
 "common.private_key" = "私钥";
+"nodes.import_node.latency" = "Latency";
+"common.latency_in_ms" = "%d ms";

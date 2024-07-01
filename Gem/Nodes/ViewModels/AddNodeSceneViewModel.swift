@@ -5,14 +5,18 @@ import Primitives
 import Components
 import GemstonePrimitives
 import BigInt
+import Blockchain
 
 class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
-
+    
     let chain: Chain
-    @Published var urlString: String = ""
+
+    @Published var urlInput: String = ""
     @Published var state: StateViewType<AddNodeResult> = .noData
+    @Published var isPresentingScanner: Bool = false
+    @Published var isPresentingErrorAlert: String?
 
     private lazy var valueFormatter: ValueFormatter = {
         ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
@@ -23,17 +27,40 @@ class AddNodeSceneViewModel: ObservableObject {
         self.nodeService = nodeService
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
-
+    
     var shouldDisableImportButton: Bool {
         guard let value = state.value else {
             return state.isNoData || state.isError
         }
         return !value.isInSync
     }
+    
+    var title: String { Localized.Nodes.ImportNode.title }
+    
+    var actionButtonTitle: String { Localized.Wallet.Import.action }
+    var doneButtonTitle: String { Localized.Common.done }
+    var inputFieldTitle: String { Localized.Common.url }
+    
+    var errorTitle: String { Localized.Errors.errorOccured }
+    
+    var chainIdTitle: String { Localized.Nodes.ImportNode.chainId }
+    var chainIdValue: String? { state.value?.chainID }
 
-    var title: String {
-        Localized.Nodes.ImportNode.title
+    var inSyncTitle: String { Localized.Nodes.ImportNode.inSync }
+    var inSyncValue: String? {
+        guard let value = state.value else { return nil }
+        return value.isInSync ? "✅" : "❌"
     }
+
+    var latestBlockTitle: String { Localized.Nodes.ImportNode.latestBlock }
+
+    var latencyTitle: String { Localized.Nodes.ImportNode.latency }
+    var latecyValue: String? {
+        guard let value = state.value else { return nil }
+        let latency = value.latency
+        return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+    }
+
 }
 
 // MARK: - Business Logic
@@ -41,7 +68,7 @@ class AddNodeSceneViewModel: ObservableObject {
 extension AddNodeSceneViewModel {
     func importFoundNode() throws {
         // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
-        let node = Node(url: urlString, status: .active, priority: 5)
+        let node = Node(url: urlInput, status: .active, priority: 5)
         try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
         // TODO: - impement correct way of selection node 
@@ -50,9 +77,9 @@ extension AddNodeSceneViewModel {
          */
     }
 
-    func getNetworkInfo() async throws  {
-        guard let url = URL(string: urlString) else {
-            await updateStateWithError(error: AddNodeError.invalidNetworkId)
+    func fetch() async  {
+        guard let url = URL(string: urlInput) else {
+            await updateStateWithError(error: AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
 
@@ -63,28 +90,24 @@ extension AddNodeSceneViewModel {
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
-        async let isNodeSync = service.getInSync()
-        async let chainId = service.getChainID()
-        async let blockNumber = service.getLatestBlock()
-
         do {
-            let (isSynced, networkId, blockNumber) = try await (isNodeSync, chainId, blockNumber)
+            let (latency, chainId) = try await fetchChainID(service: service)
+            let nodeInfo = try await fetchAdditionalNodeInfo(service: service)
 
-            try validate(networkId: networkId)
-            
+            let result = AddNodeResult(
+                chainID: chainId,
+                blockNumber: nodeInfo.formattedBlockNumber,
+                isInSync: nodeInfo.isNodeInSync,
+                latency: latency
+            )
+
             await MainActor.run { [self] in
-                let blockNumber = valueFormatter.string(blockNumber, decimals: 0)
-                let result = AddNodeResult(
-                    chainID: networkId,
-                    blockNumber: blockNumber,
-                    isInSync: isSynced
-                )
                 self.state = .loaded(result)
             }
         } catch let error as AddNodeError {
-            await updateStateWithError(error: error)
+            await updateStateWithError(error: AnyError(error.errorDescription ?? ""))
         } catch {
-            await updateStateWithError(error: AddNodeError.invalidNetworkId)
+            await updateStateWithError(error: error)
         }
     }
 }
@@ -92,10 +115,10 @@ extension AddNodeSceneViewModel {
 // MARK: - Private
 
 extension AddNodeSceneViewModel {
-    private func updateStateWithError(error: LocalizedError) async {
-        await MainActor.run { [self] in
-            self.state = .error(error)
-        }
+    private func fetchChainID(service: ChainIDFetchable) async throws -> (latency: LatencyMeasureService.Latency, value: String?) {
+        let result = try await LatencyMeasureService.measure(for: service.getChainID)
+        try validate(networkId: result.value)
+        return result
     }
 
     private func validate(networkId: String?) throws {
@@ -107,6 +130,22 @@ extension AddNodeSceneViewModel {
         }
         if configNetworkId != networkId {
             throw AddNodeError.invalidNetworkId
+        }
+    }
+
+    private func fetchAdditionalNodeInfo(service: ChainSyncable & ChainLatestBlockFetchable) async throws -> (isNodeInSync: Bool, formattedBlockNumber: String) {
+        async let isNodeSync = service.getInSync()
+        async let latestBlock = service.getLatestBlock()
+
+        let (isNodeInSync, blockNumber) = try await (isNodeSync, latestBlock)
+        let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
+
+        return (isNodeInSync: isNodeInSync, formattedBlockNumber: formattedBlockNumber)
+    }
+
+    private func updateStateWithError(error: Error) async {
+        await MainActor.run { [self] in
+            self.state = .error(error)
         }
     }
 }
