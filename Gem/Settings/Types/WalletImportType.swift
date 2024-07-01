@@ -19,7 +19,7 @@ enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
 }
 
 extension WalletImportType {
-    public var localized: String {
+    public var title: String {
         switch self {
         case .phrase:
             Localized.Common.phrase
