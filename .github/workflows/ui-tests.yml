@@ -52,10 +52,10 @@ jobs:
       - name: Build
         run: make build
 
-      # - name: UI Tests
-      #   run: make test-ui
+      - name: UI Tests
+        run: make test-ui
 
-      - uses: mobile-dev-inc/action-maestro-cloud@v1
-        with:
-          api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
-          app-file: build/Build/Products/Debug-iphonesimulator/Gem.app
+      # - uses: mobile-dev-inc/action-maestro-cloud@v1
+      #   with:
+      #     api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+      #     app-file: build/Build/Products/Debug-iphonesimulator/Gem.app
