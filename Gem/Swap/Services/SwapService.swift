@@ -17,8 +17,7 @@ class SwapService {
             throw AnyError("Not EVM compatible chain!")
         }
 
-        let router = Config.shared.config(for: evmChain).oneinch
-        if router.isEmpty {
+        guard let router = Config.shared.config(for: evmChain).oneinch.first else {
             throw AnyError("Doesn't support \(evmChain.rawValue) chain yet!")
         }
         return router
