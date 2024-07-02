@@ -133,7 +133,7 @@ class ConfirmTransferViewModel: ObservableObject {
         if let value = state.value {
             return value.network
         }
-        return data.recipientData.asset.name
+        return data.recipientData.asset.chain.asset.name
     }
     var networkAssetImage: AssetImage {
         return AssetIdViewModel(assetId: data.recipientData.asset.chain.assetId).assetImage
