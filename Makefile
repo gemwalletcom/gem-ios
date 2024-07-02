@@ -60,7 +60,7 @@ build:
 	-destination "platform=iOS Simulator,name=iPhone 15" build | xcbeautify
 
 test-ui:
-	maestro start-device --platform=ios --os-version=17
+	~/.maestro/bin/maestro start-device --platform=ios --os-version=17
 	~/.maestro/bin/maestro test .maestro
 
 .PHONY: build
