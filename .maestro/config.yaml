@@ -1,5 +1,5 @@
 executionOrder:
   continueOnFailure: false # default is true
   flowsOrder:
-    - settings
     - onboarding
+    - settings
