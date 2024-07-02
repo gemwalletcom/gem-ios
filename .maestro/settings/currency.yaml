@@ -1,0 +1,5 @@
+appId: com.gemwallet.ios
+---
+- launchApp
+- tapOn: "Settings"
+- tapOn: "Currency"

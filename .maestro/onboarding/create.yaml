@@ -1,0 +1,5 @@
+appId: com.gemwallet.ios
+---
+- launchApp
+- tapOn: "Create a New Wallet"
+- tapOn: "Continue"
