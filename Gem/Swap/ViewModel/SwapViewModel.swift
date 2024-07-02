@@ -22,8 +22,8 @@ class SwapViewModel: ObservableObject {
     @Published var tokenApprovalsRequest: TransactionsRequest
     
     private let quoteTaskDebounceTimeout = Duration.milliseconds(300)
-    private var quoteTask: Task<BigInt, Error>?
-    
+    internal var quoteTask: Task<SwapQuote, Error>?
+
     @Published var fromValue: String = ""
     @Published var toValue: String = ""
     
@@ -117,8 +117,8 @@ class SwapViewModel: ObservableObject {
                     return try await self.quote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
                 }
                 quoteTask = task
-                let value = try await task.value
-                
+                let value = try await task.value.toAmountBigInt
+
                 DispatchQueue.main.async {
                     self.toValue = self.formatter.string(value, decimals: toAsset.decimals.asInt)
                     self.quoteState = .loaded(())
@@ -149,7 +149,7 @@ class SwapViewModel: ObservableObject {
             }
 
             let address = try wallet.account(for: fromAsset.chain).address
-            let spender = try SwapService.getRouter(chain: fromAsset.chain)
+            let spender = try await SwapService.getSpender(chain: fromAsset.chain, quote: quoteTask?.value)
             let allowance = try await service.getAllowance(chain: fromAsset.chain, contract: fromAsset.tokenId!,owner: address, spender: spender)
             DispatchQueue.main.async {
                 self.allowanceState = .loaded(!allowance.isZero)
@@ -160,8 +160,7 @@ class SwapViewModel: ObservableObject {
         }
     }
     
-    func getAllowanceData(fromAsset: Asset, toAsset: Asset) throws -> TransferData {
-        let spender = try SwapService.getRouter(chain: fromAsset.chain)
+    func getAllowanceData(fromAsset: Asset, toAsset: Asset, spender: String) throws -> TransferData {
         return TransferData(
             type: .swap(
                 fromAsset,
@@ -177,10 +176,9 @@ class SwapViewModel: ObservableObject {
     }
     
     // used to fetch quote estimates. without any data
-    func quote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> BigInt {
+    func quote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
         let request = try self.request(fromAsset, toAsset, amount, includeData: false)
-        let quote = try await service.getQuote(request: request).quote
-        return BigInt(stringLiteral: quote.toAmount)
+        return try await service.getQuote(request: request).quote
     }
 
     // used to fetch quote data for swaps

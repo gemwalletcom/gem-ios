@@ -12,15 +12,21 @@ class SwapService {
     
     let provider: GemAPISwapService
     
-    static func getRouter(chain: Chain) throws -> String {
+    static func getSpender(chain: Chain, quote: SwapQuote?) throws -> String {
+
+        guard let spender = quote?.approval?.spender else {
+            throw AnyError("Approval data is nil!")
+        }
+
         guard let evmChain = EVMChain(rawValue: chain.rawValue) else {
             throw AnyError("Not EVM compatible chain!")
         }
-
-        guard let router = Config.shared.config(for: evmChain).oneinch.first else {
-            throw AnyError("Doesn't support \(evmChain.rawValue) chain yet!")
+        
+        let contracts = Config.shared.config(for: evmChain).oneinch
+        guard contracts.contains(spender) else {
+            throw AnyError("Not whitelisted spender \(spender)")
         }
-        return router
+        return spender
     }
 
     init(
