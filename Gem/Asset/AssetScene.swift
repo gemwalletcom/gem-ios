@@ -29,6 +29,7 @@ struct AssetScene: View {
 
     private var model: AssetSceneViewModel {
         return AssetSceneViewModel(
+            walletService: walletService,
             assetsService: assetsService,
             transactionsService: transactionsService,
             stakeService: stakeService,
@@ -201,17 +202,7 @@ extension AssetScene {
 extension AssetScene {
     private func fetch() {
         Task {
-            do {
-                async let updateAsset: () = try walletService.updateAsset(
-                    wallet: model.walletModel.wallet,
-                    assetId: model.assetModel.asset.id
-                )
-                async let updateTransactions: () = try model.fetchTransactions()
-                let _ = try await [updateAsset, updateTransactions]
-            } catch {
-                // TODO: - handle fetch error
-                print(error)
-            }
+            await model.updateWallet()
         }
     }
 }
