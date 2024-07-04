@@ -159,32 +159,4 @@ extension AssetSceneViewModel {
             print("asset scene: fetchTransactions error \(error)")
         }
     }
-
-    // currently not in use
-    private var assetRequest: AssetRequest {
-        AssetRequest(walletId: walletModel.wallet.id, assetId: assetModel.asset.id.identifier)
-    }
-
-    // currently not in use
-    private var transactionsRequest: TransactionsRequest {
-        TransactionsRequest(walletId: walletModel.wallet.id, type: .asset(assetId: assetModel.asset.id), limit: transactionsLimit)
-    }
-
-    // currently not in use
-    private var headerTitleView: AssetTitleViewViewModel {
-        switch assetModel.asset.id.type {
-        case .native:
-            return AssetTitleViewViewModel(
-                name: assetModel.name,
-                chainName: .none,
-                tokenTypeName: .none
-            )
-        case .token:
-            return AssetTitleViewViewModel(
-                name: assetModel.name,
-                chainName: AssetViewModel(asset: assetModel.asset.chain.asset).name,
-                tokenTypeName: assetModel.asset.chain.asset.id.assetType?.rawValue
-            )
-        }
-    }
 }
