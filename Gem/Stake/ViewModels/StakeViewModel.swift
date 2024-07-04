@@ -28,9 +28,8 @@ class StakeViewModel {
         self.stakeService = stakeService
     }
 
-    // TODO: - Localize?
-    static let stakeMemo = "Stake via Gem Wallet"
-    
+    static let stakeMemo = Localized.Stake.viagem
+
     var title: String { Localized.Transfer.Stake.title }
 
     var request: StakeDelegationsRequest { StakeDelegationsRequest(walletId: wallet.id, assetId: chain.id) }
@@ -61,7 +60,7 @@ class StakeViewModel {
 
     var delegationsErrorTitle: String { Localized.Errors.errorOccured }
     var delegationsRetryTitle: String { Localized.Common.tryAgain }
-    var emptyDelegationsTitle: String { "No Active Staking" } // TODO: - Localize
+    var emptyDelegationsTitle: String { Localized.Stake.noActiveStaking }
 
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
