@@ -8,13 +8,10 @@ struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @StateObject var model: AddNodeSceneViewModel
-    @State private var isPresentingScanner: Bool = false
-    @State private var isPresentingErrorAlert: String?
-
-    @FocusState private var focusedField: Field?
 
     var onDismiss: (() -> Void)
 
+    @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
     }
@@ -28,7 +25,7 @@ struct AddNodeScene: View {
             }
             Spacer()
             StatefullButton(
-                text: Localized.Wallet.Import.action,
+                text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectImport
             )
@@ -42,14 +39,14 @@ struct AddNodeScene: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(Localized.Common.done, action: onSelectDone)
+                Button(model.doneButtonTitle, action: onSelectDone)
                     .bold()
             }
         }
-        .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner, action: onScanFinished(_:))
+        .sheet(isPresented: $model.isPresentingScanner) {
+            ScanQRCodeNavigationStack(isPresenting: $model.isPresentingScanner, action: onScanFinished(_:))
         }
-        .alert(item: $isPresentingErrorAlert) {
+        .alert(item: $model.isPresentingErrorAlert) {
             Alert(title: Text(""), message: Text($0))
         }
     }
@@ -58,7 +55,6 @@ struct AddNodeScene: View {
 // MARK: - UI Components
 
 extension AddNodeScene {
-    
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
             ChainView(chain: model.chain)
@@ -68,7 +64,7 @@ extension AddNodeScene {
     private var inputSection: some View {
         Section {
             HStack {
-                FloatTextField(Localized.Common.url, text: $model.urlString)
+                FloatTextField(model.inputFieldTitle, text: $model.urlInput)
                     .textFieldStyle(.plain)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)
@@ -81,40 +77,29 @@ extension AddNodeScene {
                     ListButton(image: Image(systemName: SystemImage.qrCode), action: onSelectScan)
                 }
             }
+        } footer: {
+            if case let .error(error) = model.state {
+                ListItemErrorView(
+                    errorTitle: model.errorTitle,
+                    error: error
+                )
+            }
         }
     }
 
     @ViewBuilder
     private var nodeInfoView: some View {
         switch model.state {
-        case .noData, .loading:
+        case .noData, .loading, .error:
             EmptyView()
         case let .loaded(result):
             Section {
                 if let chainId = result.chainID {
-                    ListItemView(
-                        title: Localized.Nodes.ImportNode.chainId,
-                        titleStyle: .body,
-                        subtitle: chainId,
-                        subtitleStyle: .calloutSecondary
-                    )
+                    ListItemView(title: model.chainIdTitle, subtitle: chainId)
                 }
-                ListItemView(
-                    title: Localized.Nodes.ImportNode.inSync,
-                    titleStyle: .body,
-                    subtitle: result.isInSync ? "✅" : "❌",
-                    subtitleStyle: .calloutSecondary
-                )
-                ListItemView(
-                    title: Localized.Nodes.ImportNode.latestBlock,
-                    titleStyle: .body,
-                    subtitle: result.blockNumber,
-                    subtitleStyle: .calloutSecondary
-                )
-            }
-        case .error(let error):
-            Section {
-                StateErrorView(error: error, message: error.localizedDescription)
+                ListItemView(title: model.inSyncTitle, subtitle: model.inSyncValue)
+                ListItemView(title: model.latestBlockTitle, subtitle: result.blockNumber)
+                ListItemView(title: model.latencyTitle, subtitle: model.latecyValue)
             }
         }
     }
@@ -128,15 +113,15 @@ extension AddNodeScene {
     }
 
     private func onSubmitUrl() {
-        getNetwrokInfoAsync()
+        fetch()
     }
 
     private func onSelectPaste() {
         guard let content = UIPasteboard.general.string else {
             return
         }
-        model.urlString = content.trim()
-        getNetwrokInfoAsync()
+        model.urlInput = content.trim()
+        fetch()
     }
 
     private func onSelectImport() {
@@ -144,26 +129,26 @@ extension AddNodeScene {
             try model.importFoundNode()
             onDismiss()
         } catch {
-            isPresentingErrorAlert = error.localizedDescription
+            model.isPresentingErrorAlert = error.localizedDescription
         }
     }
 
     private func onScanFinished(_ result: String) {
-        model.urlString = result
-        getNetwrokInfoAsync()
+        model.urlInput = result
+        fetch()
     }
 
     private func onSelectScan() {
-        isPresentingScanner = true
+        model.isPresentingScanner = true
     }
 }
 
-// MARK: - Logic
+// MARK: - Effects
 
 extension AddNodeScene {
-    private func getNetwrokInfoAsync() {
+    private func fetch() {
         Task {
-            try await model.getNetworkInfo()
+            await model.fetch()
         }
     }
 }
