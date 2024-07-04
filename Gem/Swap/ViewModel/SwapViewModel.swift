@@ -117,7 +117,7 @@ class SwapViewModel: ObservableObject {
                     return try await self.quote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
                 }
                 quoteTask = task
-                let value = try await task.value.toAmountBigInt
+                let value = try await task.value.toValue
 
                 DispatchQueue.main.async {
                     self.toValue = self.formatter.string(value, decimals: toAsset.decimals.asInt)

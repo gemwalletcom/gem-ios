@@ -4,7 +4,7 @@ import Foundation
 import BigInt
 
 public extension SwapQuote {
-    var toAmountBigInt: BigInt {
+    var toValue: BigInt {
         BigInt(stringLiteral: self.toAmount)
     }
 }
