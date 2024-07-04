@@ -135,7 +135,7 @@ struct SelectAssetScene: View {
                 StakeScene(model: StakeViewModel(
                     wallet: model.wallet,
                     chain: input.asset.id.chain,
-                    service: walletService.stakeService)
+                    stakeService: walletService.stakeService)
                 )
             case .manage, .hidden:
                 EmptyView()
