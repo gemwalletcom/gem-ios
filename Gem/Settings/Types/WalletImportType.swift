@@ -18,6 +18,20 @@ enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
     }
 }
 
+extension WalletImportType {
+    public var title: String {
+        switch self {
+        case .phrase:
+            Localized.Common.phrase
+        case .privateKey:
+            Localized.Common.privateKey
+        case .address:
+            Localized.Common.address
+        }
+    }
+}
+
+
 extension WalletImportType: Equatable {
     public static func == (lhs: WalletImportType, rhs: WalletImportType) -> Bool {
         lhs.id == rhs.id
