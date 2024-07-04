@@ -66,15 +66,14 @@ public struct ListItemErrorView: View {
             }
             if let retry = retryAction, let retryTitle = retryTitle {
                 Button(retryTitle, action: retry)
-                    .buttonStyle(.clear)
+                    .buttonStyle(.clearBlue)
             }
         }
         .padding()
         .background(listStyleColor)
         .cornerRadius(8)
         .frame(maxWidth: .infinity)
-        .padding([.top, .bottom], Spacing.small)
-        .listRowInsets(EdgeInsets()) // ensures it aligned with list item same width
+        .listRowInsets(EdgeInsets())
     }
 }
 

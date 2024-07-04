@@ -17,9 +17,7 @@ struct ConfirmTransferScene: View {
 
     var body: some View {
         VStack {
-            List {
-                transactionSection(value: model.state.value)
-            }
+            transactionsList(value: model.state.value)
             Spacer()
             StatefullButton(
                 text: model.buttonTitle,
@@ -55,56 +53,58 @@ extension ConfirmTransferScene {
         return nil
     }
 
-    private func transactionSection(value: TransactionInputViewModel?) -> some View {
-        Section {
-            if let appValue = model.appValue {
-                ListItemView(title: model.appTitle, subtitle: appValue)
-            }
-
-            if let websiteValue = model.websiteValue {
-                ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                    .contextMenu {
-                        if let websiteURL = model.websiteURL {
-                            ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
-                        }
-                    }
-            }
-
-            ListItemView(title: model.senderTitle, subtitle: model.senderValue)
-                .contextMenu {
-                    ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
-                    ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
+    @ViewBuilder
+    private func transactionsList(value: TransactionInputViewModel?) -> some View {
+        List {
+            Section {
+                if let appValue = model.appValue {
+                    ListItemView(title: model.appTitle, subtitle: appValue)
                 }
 
-            if model.shouldShowRecipientField {
-                AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
-            }
+                if let websiteValue = model.websiteValue {
+                    ListItemView(title: model.websiteTitle, subtitle: websiteValue)
+                        .contextMenu {
+                            if let websiteURL = model.websiteURL {
+                                ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
+                            }
+                        }
+                }
 
-            if model.shouldShowMemo {
-                MemoListItem(memo: model.memo)
-            }
+                ListItemView(title: model.senderTitle, subtitle: model.senderValue)
+                    .contextMenu {
+                        ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
+                        ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
+                    }
 
-            HStack {
-                ListItemView(title: model.networkTitle, subtitle: model.networkValue)
-                AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
-            }
+                if model.shouldShowRecipientField {
+                    AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+                }
 
-            ListItemView(
-                title: model.networkFeeTitle,
-                subtitle: model.networkFeeValue,
-                subtitleExtra: model.networkFeeFiatValue,
-                placeholders: [.subtitle]
-            )
-            .id(UUID())
-        } header: {
-            HStack {
-                Spacer(minLength: 0)
-                TransactionHeaderView(type: model.headerType)
-                    .padding(.bottom, 16)
-                Spacer(minLength: 0)
+                if model.shouldShowMemo {
+                    MemoListItem(memo: model.memo)
+                }
+
+                HStack {
+                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
+                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                }
+
+                ListItemView(
+                    title: model.networkFeeTitle,
+                    subtitle: model.networkFeeValue,
+                    subtitleExtra: model.networkFeeFiatValue,
+                    placeholders: [.subtitle]
+                )
+                .id(UUID())
+            } header: {
+                HStack {
+                    Spacer(minLength: 0)
+                    TransactionHeaderView(type: model.headerType)
+                        .padding(.bottom, 16)
+                    Spacer(minLength: 0)
+                }
+                .headerProminence(.increased)
             }
-            .headerProminence(.increased)
-        } footer: {
             if case let .error(error) = model.state {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }

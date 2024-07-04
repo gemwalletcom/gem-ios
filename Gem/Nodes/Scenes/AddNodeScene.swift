@@ -20,7 +20,7 @@ struct AddNodeScene: View {
         VStack {
             List {
                 networkSection
-                inputSection
+                inputView
                 nodeInfoView
             }
             Spacer()
@@ -61,7 +61,8 @@ extension AddNodeScene {
         }
     }
     
-    private var inputSection: some View {
+    @ViewBuilder
+    private var inputView: some View {
         Section {
             HStack {
                 FloatTextField(model.inputFieldTitle, text: $model.urlInput)
@@ -77,13 +78,9 @@ extension AddNodeScene {
                     ListButton(image: Image(systemName: SystemImage.qrCode), action: onSelectScan)
                 }
             }
-        } footer: {
-            if case let .error(error) = model.state {
-                ListItemErrorView(
-                    errorTitle: model.errorTitle,
-                    error: error
-                )
-            }
+        }
+        if case let .error(error) = model.state {
+            ListItemErrorView(errorTitle: model.errorTitle,error: error)
         }
     }
 
