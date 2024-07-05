@@ -160,7 +160,7 @@ class SwapViewModel: ObservableObject {
         }
     }
     
-    func getAllowanceData(fromAsset: Asset, toAsset: Asset, spender: String) throws -> TransferData {
+    func getAllowanceData(fromAsset: Asset, toAsset: Asset, spender: String, spenderName: String) throws -> TransferData {
         return TransferData(
             type: .swap(
                 fromAsset,
@@ -169,7 +169,7 @@ class SwapViewModel: ObservableObject {
             ),
             recipientData: RecipientData(
                 asset: fromAsset,
-                recipient: Recipient(name: "1inch", address: fromAsset.tokenId!, memo: .none) // support others in the future
+                recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none)
             ),
             value: BigInt.zero
         )
