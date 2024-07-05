@@ -10,17 +10,15 @@ import GemstonePrimitives
 
 class SwapService {
     
-    let provider: GemAPISwapService
+    private let provider: GemAPISwapService
+    private let nodeProvider: NodeURLFetchable
     
     static func getSpender(chain: Chain, quote: SwapQuote?) throws -> String {
 
         guard let spender = quote?.approval?.spender else {
             throw AnyError("Approval data is nil!")
         }
-
-        guard let evmChain = EVMChain(rawValue: chain.rawValue) else {
-            throw AnyError("Not EVM compatible chain!")
-        }
+        let evmChain = try EVMChain(from: chain)
         
         let contracts = Config.shared.config(for: evmChain).oneinch
         guard contracts.contains(spender) else {
@@ -30,9 +28,11 @@ class SwapService {
     }
 
     init(
-        provider: GemAPISwapService = GemAPIService()
+        provider: GemAPISwapService = GemAPIService(),
+        nodeProvider: NodeURLFetchable
     ) {
         self.provider = provider
+        self.nodeProvider = nodeProvider
     }
     
     func getQuote(request: SwapQuoteRequest) async throws -> SwapQuoteResult {
@@ -40,8 +40,10 @@ class SwapService {
     }
     
     func getAllowance(chain: Chain, contract: String, owner: String, spender: String) async throws -> BigInt {
-        let evmChain = EVMChain(rawValue: chain.rawValue)!
-        let service = EthereumSwapService(chain: evmChain, provider: ProviderFactory.create(with: evmChain.chain.defaultBaseUrl))
+        let service = EthereumSwapService(
+            chain: try EVMChain(from: chain),
+            provider: ProviderEvmFactory.create(with: nodeProvider.node(for: chain))
+        )
         return try await service.getAllowance(contract: contract, owner: owner, spender: spender)
     }
 }
