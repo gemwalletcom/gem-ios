@@ -18,9 +18,7 @@ class AddNodeSceneViewModel: ObservableObject {
     @Published var isPresentingScanner: Bool = false
     @Published var isPresentingErrorAlert: String?
 
-    private lazy var valueFormatter: ValueFormatter = {
-        ValueFormatter(locale: Locale(identifier: "en_US"), style: .full)
-    }()
+    private let valueFormatter = ValueFormatter.full_US
 
     init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
@@ -104,8 +102,6 @@ extension AddNodeSceneViewModel {
             await MainActor.run { [self] in
                 self.state = .loaded(result)
             }
-        } catch let error as AddNodeError {
-            await updateStateWithError(error: AnyError(error.errorDescription ?? ""))
         } catch {
             await updateStateWithError(error: error)
         }
