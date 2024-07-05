@@ -5,14 +5,30 @@ import GemAPI
 import Primitives
 import BigInt
 import Blockchain
+import Gemstone
+import GemstonePrimitives
 
 class SwapService {
     
     let provider: GemAPISwapService
-    //let ethereumSwapService: EthereumSwapService
     
-    static let oneinch = "0x1111111254EEB25477B68fb85Ed929f73A960582"
-    
+    static func getSpender(chain: Chain, quote: SwapQuote?) throws -> String {
+
+        guard let spender = quote?.approval?.spender else {
+            throw AnyError("Approval data is nil!")
+        }
+
+        guard let evmChain = EVMChain(rawValue: chain.rawValue) else {
+            throw AnyError("Not EVM compatible chain!")
+        }
+        
+        let contracts = Config.shared.config(for: evmChain).oneinch
+        guard contracts.contains(spender) else {
+            throw AnyError("Not whitelisted spender \(spender)")
+        }
+        return spender
+    }
+
     init(
         provider: GemAPISwapService = GemAPIService()
     ) {
