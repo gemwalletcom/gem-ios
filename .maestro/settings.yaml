@@ -1,0 +1,6 @@
+appId: com.gemwallet.ios
+---
+- launchApp:
+    clearState: true
+- runFlow: onboarding/import.yaml
+- runFlow: settings/currency.yaml

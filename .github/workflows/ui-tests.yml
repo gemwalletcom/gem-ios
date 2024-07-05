@@ -1,0 +1,61 @@
+name: UI Tests
+
+on:
+  # push:
+  #   branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
+jobs:
+  test:
+    name: Run UI Tests on iPhone Simulator
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+      - uses: actions/cache@v3
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.3
+
+      - name: Install dependencies
+        run: |
+          make install-typeshare && make install-toolchains
+          brew install swiftgen xcbeautify
+
+      - name: Install Maestro
+        run: |
+          curl -Ls "https://get.maestro.mobile.dev" | bash
+          brew tap facebook/fb
+          brew install facebook/fb/idb-companion
+
+      - name: Build Core
+        run: make generate-stone
+
+      - name: Build
+        run: make build
+
+      - name: UI Tests
+        run: make test-ui
+
+      # - uses: mobile-dev-inc/action-maestro-cloud@v1
+      #   with:
+      #     api-key: ${{ secrets.MAESTRO_CLOUD_API_KEY }}
+      #     app-file: build/Build/Products/Debug-iphonesimulator/Gem.app
