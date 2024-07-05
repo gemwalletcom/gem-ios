@@ -125,9 +125,7 @@ extension StakeScene {
             case .error(let error):
                 ListItemErrorView(
                     errorTitle: Localized.Errors.errorOccured,
-                    error: error,
-                    retryTitle: Localized.Common.tryAgain,
-                    retryAction: fetch)
+                    error: error)
             }
         } header: {
             if state.isLoading {
