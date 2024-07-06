@@ -46,6 +46,6 @@ generate-swiftgen:
 
 generate-stone:
 	@echo "Generate Gemstone lib"
-	@cd core/gemstone && make apple BUILD_MODE=$(BUILD_MODE) IPHONEOS_DEPLOYMENT_TARGET=17.0
+	@cd core/gemstone && make apple BUILD_MODE=$(BUILD_MODE) IPHONEOS_DEPLOYMENT_TARGET=$(shell /usr/libexec/PlistBuddy -c "Print" Gem.xcodeproj/project.pbxproj | grep IPHONEOS_DEPLOYMENT_TARGET | awk -F ' = ' '{print $$2}' | uniq)
 	@rm -rf Packages/Gemstone
 	@cp -Rf core/gemstone/target/spm Packages/Gemstone
