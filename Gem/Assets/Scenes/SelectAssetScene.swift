@@ -11,6 +11,7 @@ struct SelectAssetScene: View {
     @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.walletService) private var walletService
+    @Environment(\.nodeService) private var nodeService
 
     @State var isPresentingAddToken: Binding<Bool>
     @State private var isPresentingCopyMessage: Bool = false
@@ -125,11 +126,14 @@ struct SelectAssetScene: View {
                         input: .default)
                     )
             case .swap:
-                SwapScene(model: SwapViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    walletService: walletService,
-                    assetId: input.asset.id)
+                SwapScene(model: 
+                    SwapViewModel(
+                        wallet: model.wallet,
+                        keystore: keystore,
+                        walletService: walletService,
+                        assetId: input.asset.id,
+                        service: SwapService(nodeProvider: nodeService)
+                    )
                 )
             case .stake:
                 StakeScene(model: StakeViewModel(

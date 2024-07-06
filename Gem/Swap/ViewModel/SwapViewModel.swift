@@ -37,7 +37,7 @@ class SwapViewModel: ObservableObject {
         keystore: any Keystore,
         walletService: WalletService,
         assetId: AssetId,
-        service: SwapService = SwapService()
+        service: SwapService
     ) {
         self.wallet = wallet
         self.keystore = keystore
@@ -150,7 +150,7 @@ class SwapViewModel: ObservableObject {
 
             let address = try wallet.account(for: fromAsset.chain).address
             let spender = try await SwapService.getSpender(chain: fromAsset.chain, quote: quoteTask?.value)
-            let allowance = try await service.getAllowance(chain: fromAsset.chain, contract: fromAsset.tokenId!,owner: address, spender: spender)
+            let allowance = try await service.getAllowance(chain: fromAsset.chain, contract: try fromAsset.getTokenId(), owner: address, spender: spender)
             DispatchQueue.main.async {
                 self.allowanceState = .loaded(!allowance.isZero)
             }
@@ -160,7 +160,7 @@ class SwapViewModel: ObservableObject {
         }
     }
     
-    func getAllowanceData(fromAsset: Asset, toAsset: Asset, spender: String) throws -> TransferData {
+    func getAllowanceData(fromAsset: Asset, toAsset: Asset, spender: String, spenderName: String) throws -> TransferData {
         return TransferData(
             type: .swap(
                 fromAsset,
@@ -169,7 +169,7 @@ class SwapViewModel: ObservableObject {
             ),
             recipientData: RecipientData(
                 asset: fromAsset,
-                recipient: Recipient(name: "1inch", address: fromAsset.tokenId!, memo: .none) // support others in the future
+                recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none)
             ),
             value: BigInt.zero
         )
