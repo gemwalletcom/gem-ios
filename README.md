@@ -67,7 +67,7 @@ If you want to contribute, you can use our [developers telegram](https://t.me/ge
 ### iOS Development
 
 1. Setup [Xcode](https://developer.apple.com/xcode)
-2. Run `make boostrap` to install all nessesary tools.
+2. Run `make bootstrap` to install all nessesary tools.
 
 ## 👨‍👧‍👦 Contributors
 
