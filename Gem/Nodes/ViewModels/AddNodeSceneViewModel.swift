@@ -10,7 +10,7 @@ import Blockchain
 class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
-    
+
     let chain: Chain
 
     @Published var urlInput: String = ""
@@ -25,22 +25,22 @@ class AddNodeSceneViewModel: ObservableObject {
         self.nodeService = nodeService
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
-    
+
     var shouldDisableImportButton: Bool {
         guard let value = state.value else {
             return state.isNoData || state.isError
         }
         return !value.isInSync
     }
-    
+
     var title: String { Localized.Nodes.ImportNode.title }
-    
+
     var actionButtonTitle: String { Localized.Wallet.Import.action }
     var doneButtonTitle: String { Localized.Common.done }
     var inputFieldTitle: String { Localized.Common.url }
-    
+
     var errorTitle: String { Localized.Errors.errorOccured }
-    
+
     var chainIdTitle: String { Localized.Nodes.ImportNode.chainId }
     var chainIdValue: String? { state.value?.chainID }
 
@@ -51,6 +51,10 @@ class AddNodeSceneViewModel: ObservableObject {
     }
 
     var latestBlockTitle: String { Localized.Nodes.ImportNode.latestBlock }
+    var latestBlockValue: String? {
+        guard let value = state.value else { return nil }
+        return valueFormatter.string(value.blockNumber, decimals: 0)
+    }
 
     var latencyTitle: String { Localized.Nodes.ImportNode.latency }
     var latecyValue: String? {
@@ -69,7 +73,7 @@ extension AddNodeSceneViewModel {
         let node = Node(url: urlInput, status: .active, priority: 5)
         try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
-        // TODO: - impement correct way of selection node 
+        // TODO: - impement correct way of selection node
         /*
         try nodeService.setNodeSelected(chain: chain, node: node)
          */
@@ -89,13 +93,16 @@ extension AddNodeSceneViewModel {
         let service = provider.service(for: chain)
 
         do {
-            let (latency, chainId) = try await fetchChainID(service: service)
-            let nodeInfo = try await fetchAdditionalNodeInfo(service: service)
+            async let (requestLatency, netowkId) = fetchChainID(service: service)
+            async let inSync = service.getInSync()
+            async let latestBlock = service.getLatestBlock()
+
+            let (latency, chainId, isNodeInSync, blockNumber) = try await (requestLatency, netowkId, inSync, latestBlock)
 
             let result = AddNodeResult(
                 chainID: chainId,
-                blockNumber: nodeInfo.formattedBlockNumber,
-                isInSync: nodeInfo.isNodeInSync,
+                blockNumber: blockNumber,
+                isInSync: isNodeInSync,
                 latency: latency
             )
 
@@ -127,16 +134,6 @@ extension AddNodeSceneViewModel {
         if configNetworkId != networkId {
             throw AddNodeError.invalidNetworkId
         }
-    }
-
-    private func fetchAdditionalNodeInfo(service: ChainSyncable & ChainLatestBlockFetchable) async throws -> (isNodeInSync: Bool, formattedBlockNumber: String) {
-        async let isNodeSync = service.getInSync()
-        async let latestBlock = service.getLatestBlock()
-
-        let (isNodeInSync, blockNumber) = try await (isNodeSync, latestBlock)
-        let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
-
-        return (isNodeInSync: isNodeInSync, formattedBlockNumber: formattedBlockNumber)
     }
 
     private func updateStateWithError(error: Error) async {

@@ -98,7 +98,7 @@ extension AddNodeScene {
                     ListItemView(title: model.chainIdTitle, subtitle: chainId)
                 }
                 ListItemView(title: model.inSyncTitle, subtitle: model.inSyncValue)
-                ListItemView(title: model.latestBlockTitle, subtitle: result.blockNumber)
+                ListItemView(title: model.latestBlockTitle, subtitle: model.latestBlockValue)
                 ListItemView(title: model.latencyTitle, subtitle: model.latecyValue)
             }
         }
