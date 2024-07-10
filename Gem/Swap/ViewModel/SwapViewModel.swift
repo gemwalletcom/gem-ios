@@ -123,6 +123,7 @@ class SwapViewModel: ObservableObject {
                     self.toValue = self.formatter.string(value, decimals: toAsset.decimals.asInt)
                     self.quoteState = .loaded(())
                 }
+                try await updateAllowance(fromAsset: fromAsset)
             } catch {
                 if error.isCancelled {
                     return
