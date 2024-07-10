@@ -123,6 +123,10 @@ internal enum Localized {
     internal static let copy = Localized.tr("Localizable", "common.copy", fallback: "Copy")
     /// Delete
     internal static let delete = Localized.tr("Localizable", "common.delete", fallback: "Delete")
+    /// Are sure you want to delete %s?
+    internal static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
+    }
     /// Done
     internal static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Hide
@@ -189,6 +193,8 @@ internal enum Localized {
     internal static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
     }
+    /// Error
+    internal static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
@@ -358,6 +364,8 @@ internal enum Localized {
     internal static let lockTime = Localized.tr("Localizable", "stake.lock_time", fallback: "Lock Time")
     /// Minimum amount
     internal static let minimumAmount = Localized.tr("Localizable", "stake.minimum_amount", fallback: "Minimum amount")
+    /// No Active Staking
+    internal static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No Active Staking")
     /// Pending
     internal static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
     /// Rewards
@@ -366,6 +374,8 @@ internal enum Localized {
     internal static let validator = Localized.tr("Localizable", "stake.validator", fallback: "Validator")
     /// Validators
     internal static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
+    /// Stake via Gem Wallet
+    internal static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
   }
   internal enum Swap {
     /// Approve %@ to Swap
@@ -519,10 +529,6 @@ internal enum Localized {
     /// %@ Wallet #%d
     internal static func defaultNameChain(_ p1: Any, _ p2: Int) -> String {
       return Localized.tr("Localizable", "wallet.default_name_chain", String(describing: p1), p2, fallback: "%@ Wallet #%d")
-    }
-    /// Are sure you want to delete %s?
-    internal static func deleteWalletConfirmation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "wallet.delete_wallet_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
     /// Import an Existing Wallet
     internal static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")

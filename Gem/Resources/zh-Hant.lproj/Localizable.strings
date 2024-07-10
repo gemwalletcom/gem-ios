@@ -54,7 +54,7 @@
 "common.paste" = "粘貼";
 "transfer.max" = "最大值";
 "common.delete" = "刪除";
-"wallet.delete_wallet_confirmation" = "確定要刪除%s嗎？";
+"common.delete_confirmation" = "確定要刪除%s嗎？";
 "settings.community" = "社區";
 "common.hide" = "隱藏";
 "wallet.scan" = "掃描";
@@ -217,3 +217,6 @@
 "common.private_key" = "私鑰";
 "nodes.import_node.latency" = "Latency";
 "common.latency_in_ms" = "%d ms";
+"stake.viagem" = "Stake via Gem Wallet";
+"stake.no_active_staking" = "No Active Staking";
+"errors.error" = "Error";

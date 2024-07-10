@@ -54,7 +54,7 @@
 "common.paste" = "ペースト";
 "transfer.max" = "マックス";
 "common.delete" = "消去";
-"wallet.delete_wallet_confirmation" = "本当に%s削除してもよろしいですか?";
+"common.delete_confirmation" = "本当に%s削除してもよろしいですか?";
 "settings.community" = "コミュニティ";
 "common.hide" = "隠れる";
 "wallet.scan" = "スキャン";
@@ -217,3 +217,6 @@
 "common.private_key" = "プライベートキー";
 "nodes.import_node.latency" = "Latency";
 "common.latency_in_ms" = "%d ms";
+"stake.viagem" = "Stake via Gem Wallet";
+"stake.no_active_staking" = "No Active Staking";
+"errors.error" = "Error";

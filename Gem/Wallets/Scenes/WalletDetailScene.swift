@@ -65,7 +65,7 @@ struct WalletDetailScene: View {
         .onChange(of: name, onChangeWalletName)
         .navigationTitle(model.title)
         .confirmationDialog(
-            Localized.Wallet.deleteWalletConfirmation(model.name),
+            Localized.Common.deleteConfirmation(model.name),
             presenting: $isPresentingDeleteConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in

@@ -20,7 +20,9 @@ struct CurrencyScene: View {
                     ForEach(section.values) { currency in
                         SelectionListItemView(
                             title: currency.title,
+                            titleExtra: .none,
                             subtitle: .none,
+                            subtitleExtra: .none,
                             value: currency.value,
                             selection: model.currency
                         ) {

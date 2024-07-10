@@ -33,7 +33,11 @@ public class NodeService {
         }
         try nodeStore.setNodeSelected(node: recordNode)
     }
-    
+
+    func delete(node: Node, chain: Chain) throws {
+        try nodeStore.deleteNode(url: node.url, chain: chain.rawValue)
+    }
+
     func nodes(for chain: Chain) throws -> [ChainNode] {
         let nodes = try nodeStore.nodes(chain: chain)
         return ([chain.defaultChainNode] + nodes).unique()
