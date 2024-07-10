@@ -82,6 +82,11 @@ struct WalletDetailScene: View {
         .navigationDestination(for: $words) { words in
             ShowSecretPhraseScene(model: ShowSecretPhraseViewModel(words: words))
         }
+        .onDisappear {
+            if model.wallet.name != name {
+                model.refreshWallet()
+            }
+        }
     }
 }
 

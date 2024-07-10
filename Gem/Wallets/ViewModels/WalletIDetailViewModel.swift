@@ -38,6 +38,11 @@ extension WalletDetailViewModel {
         try keystore.renameWallet(wallet: wallet, newName: name)
     }
 
+    func refreshWallet() {
+        guard wallet == keystore.currentWallet else { return }
+        keystore.setCurrentWallet(wallet: keystore.currentWallet)
+    }
+
     func getMnemonicWords() async throws ->  [String] {
         try keystore.getMnemonic(wallet: wallet)
     }
