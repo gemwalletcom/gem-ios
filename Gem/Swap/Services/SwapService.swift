@@ -20,7 +20,7 @@ class SwapService {
         }
         let evmChain = try EVMChain(from: chain)
         
-        let contracts = Config.shared.config(for: evmChain).oneinch
+        let contracts = Config.shared.config(for: evmChain).swapWhitelistContracts
         guard contracts.contains(spender) else {
             throw AnyError("Not whitelisted spender \(spender)")
         }
