@@ -34,8 +34,8 @@ public class NodeService {
         try nodeStore.setNodeSelected(node: recordNode)
     }
 
-    func delete(node: Node, chain: Chain) throws {
-        try nodeStore.deleteNode(url: node.url, chain: chain.rawValue)
+    func delete(chain: Chain, node: Node) throws {
+        try nodeStore.deleteNode(chain: chain.rawValue, url: node.url)
     }
 
     func nodes(for chain: Chain) throws -> [ChainNode] {

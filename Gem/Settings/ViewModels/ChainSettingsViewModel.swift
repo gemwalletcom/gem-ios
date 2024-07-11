@@ -9,8 +9,6 @@ import BigInt
 
 @Observable
 class ChainSettingsViewModel {
-    private typealias ChainFetchData = (chainNode: ChainNode, latency: LatencyMeasureService.Latency?, blockNumber: BigInt?, error: Error?)
-
     let explorerService: ExplorerService
     let nodeService: NodeService
 
@@ -19,13 +17,15 @@ class ChainSettingsViewModel {
     var isPresentingImportNode: Bool = false
 
     var selectedExplorer: String?
-    var explorers: [String]
-
     var selectedNode: ChainNode
     var nodeDelete: ChainNode?
 
+    var explorers: [String]
+
     private var nodes: [ChainNode] = []
-    private var nodesChainIdData: [String: ChainFetchData] = [:]
+    private var nodeMetricsByChainId: [String: NodeMetrics] = [:]
+
+    private static let nodeValueFormatter = ValueFormatter.full_US
 
     init(
         nodeService: NodeService,
@@ -37,7 +37,6 @@ class ChainSettingsViewModel {
 
         self.chain = chain
         self.selectedNode = nodeService.getNodeSelected(chain: chain)
-
         self.explorers = ExplorerService.explorers(chain: chain)
         self.selectedExplorer = explorerService.get(chain: chain) ?? explorers.first
     }
@@ -47,12 +46,10 @@ class ChainSettingsViewModel {
     var nodesTitle: String { Localized.Settings.Networks.source }
     var nodesModels: [ChainNodeViewModel] {
         nodes.map { node in
-            let chainData = nodesChainIdData[node.id]
-            return ChainNodeViewModel(
+            ChainNodeViewModel(
                 chainNode: node,
-                blockNumber: chainData?.blockNumber ?? .none,
-                latency: chainData?.latency ?? .none,
-                blockNumberError: chainData?.error
+                nodeMetrics: nodeMetricsByChainId[node.id],
+                valueFormatter: Self.nodeValueFormatter
             )
         }
     }
@@ -62,21 +59,30 @@ class ChainSettingsViewModel {
     var isSupportedAddingCustomNode: Bool {
         AssetConfiguration.addCustomNodeChains.contains(chain.type)
     }
-
-    func canDelete(chainNode: ChainNode) -> Bool {
-        guard nodes.count > 1 else { return false }
-        return !chainNode.isGemNode
-    }
 }
 
 // MARK: - Business logic
 
 extension ChainSettingsViewModel {
-    func fetch() async throws {
-        try await MainActor.run { [self] in
-            nodes = try nodeService.nodes(for: chain)
+    func fetchNodes() throws {
+        nodes = try nodeService.nodes(for: chain)
+    }
+
+    func fetchNodesMetrics() async {
+        await withTaskGroup(of: (ChainNode, NodeMetrics?).self) { group in
+            for node in nodes {
+                group.addTask { [self] in
+                    let data = await fetchMetrics(for: node)
+                    return (node, data)
+                }
+            }
+
+            for await (node, data) in group {
+                await MainActor.run {
+                    nodeMetricsByChainId[node.id] = data
+                }
+            }
         }
-        await fetchAvailableChainIds()
     }
 
     func selectNode(node: ChainNode) throws {
@@ -86,13 +92,14 @@ extension ChainSettingsViewModel {
 
     func deleteNode() throws {
         guard let nodeDelete else { return }
-        let shouldReselectNode = nodeDelete == selectedNode
-        try nodeService.delete(node: nodeDelete.node, chain: chain)
-        if shouldReselectNode {
-            if let nodeToSelect = nodes.first(where: { $0.isGemNode }) ?? nodes.first(where: { $0 != nodeDelete }) {
-                try nodeService.setNodeSelected(chain: chain, node: nodeToSelect.node)
-                selectedNode = nodeService.getNodeSelected(chain: chain)
-            }
+        try nodeService.delete(chain: chain, node: nodeDelete.node)
+        nodes.removeAll { $0.id == nodeDelete.id }
+    }
+
+    func reselectNode() throws {
+        if let nodeToSelect = nodes.first(where: { $0.isGemNode }) {
+            try nodeService.setNodeSelected(chain: chain, node: nodeToSelect.node)
+            selectedNode = nodeService.getNodeSelected(chain: chain)
         }
         nodes = try nodeService.nodes(for: chain)
     }
@@ -106,35 +113,18 @@ extension ChainSettingsViewModel {
 // MARK: - Private
 
 extension ChainSettingsViewModel {
-    private func fetchAvailableChainIds() async {
-        guard !nodes.isEmpty else { return }
-        await withTaskGroup(of: (ChainFetchData).self) { [self] group in
-            for node in nodes {
-                group.addTask { [self] in
-                    await fetchChainId(for: node)
-                }
-            }
-
-            for await (chainFetchData) in group {
-                await MainActor.run { [self] in
-                    self.nodesChainIdData[chainFetchData.chainNode.id] = chainFetchData
-                }
-            }
-        }
-    }
-
-    private func fetchChainId(for node: ChainNode) async -> (ChainFetchData) {
+    private func fetchMetrics(for node: ChainNode) async -> (NodeMetrics?) {
         guard let url = URL(string: node.node.url) else {
-            return (ChainFetchData(node, .none, .none, .none))
+            return nil
         }
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
         do {
             let chainResult = try await LatencyMeasureService.measure(for: service.getLatestBlock)
-            return (ChainFetchData(node, chainResult.latency, chainResult.value, .none))
+            return NodeMetrics(latency: chainResult.latency, blockNumber: chainResult.value, error: nil)
         } catch {
-            return (ChainFetchData(node, .none, .none, error))
+            return NodeMetrics(latency: nil, blockNumber: nil, error: error)
         }
     }
 }

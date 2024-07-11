@@ -4,21 +4,17 @@ import Foundation
 import Primitives
 import BigInt
 import Components
+import Style
 
 struct ChainNodeViewModel {
     let chainNode: ChainNode
+    let nodeMetrics: NodeMetrics?
+    let valueFormatter: ValueFormatter
 
-    private let blockNumber: BigInt?
-    private let latency: LatencyMeasureService.Latency?
-    private let blockNumberError: Error?
-
-    private static let valueFormatter = ValueFormatter.full_US
-
-    init(chainNode: ChainNode, blockNumber: BigInt?, latency: LatencyMeasureService.Latency?, blockNumberError: Error?) {
+    init(chainNode: ChainNode, nodeMetrics: NodeMetrics?, valueFormatter: ValueFormatter) {
         self.chainNode = chainNode
-        self.blockNumber = blockNumber
-        self.latency = latency
-        self.blockNumberError = blockNumberError
+        self.nodeMetrics = nodeMetrics
+        self.valueFormatter = valueFormatter
     }
 
     var title: String {
@@ -27,46 +23,20 @@ struct ChainNodeViewModel {
     }
 
     var titleExtra: String? {
-        let title = Localized.Nodes.ImportNode.latestBlock
-        let emptyTitle = "\(title): -"
-        if let blockNumberError {
-            return Self.isNotImplemented(error: blockNumberError) ? nil  : emptyTitle
-        }
-
-        if let blockNumber {
-            let formattedBlockNumber = ChainNodeViewModel.valueFormatter.string(blockNumber, decimals: 0)
-            return "\(title): \(formattedBlockNumber)"
-        }
-
-        return emptyTitle
+        NodeMetricsFormatter(metrics: nodeMetrics)
+            .latestBlockFormatted(
+                latestBlockTitle: Localized.Nodes.ImportNode.latestBlock,
+                valueFormatter: valueFormatter
+            )
     }
 
     var subtitle: String? {
-        if let blockNumberError {
-            return Self.isNotImplemented(error: blockNumberError) ? nil  : "\(Localized.Errors.error) 🔴"
-        }
-        if let latency {
-            return "\(Localized.Common.latencyInMs(latency.value)) \((latency.colorEmoji))"
-        }
-        return nil
-    }
-
-    var sortValue: (isGemNode: Bool, latency: Int?) {
-        let isGemNode = chainNode.isGemNode
-        let latencyValue = latency?.value
-        return (isGemNode, latencyValue)
+        NodeMetricsFormatter(metrics: nodeMetrics)
+            .latencyFormatted
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        blockNumberError != nil ? [] : [.subtitle]
-    }
-}
-
-// MARK: - Private
-
-extension ChainNodeViewModel {
-    private static func isNotImplemented(error: Error) -> Bool {
-        return error.localizedDescription == "Not Implemented"
+        nodeMetrics?.error != nil ? [] : [.subtitle]
     }
 }
 
@@ -85,5 +55,40 @@ extension ChainNode {
 
     var isGemNode: Bool {
         host?.contains("gemnodes.com") ?? false
+    }
+}
+
+// MARK: - Formatter
+
+struct NodeMetricsFormatter {
+    let metrics: NodeMetrics?
+
+    func latestBlockFormatted(latestBlockTitle: String, valueFormatter: ValueFormatter) -> String? {
+        if let error = metrics?.error {
+            return Self.isNotImplemented(error: error) ? nil : "\(latestBlockTitle): -"
+        }
+
+        if let blockNumber = metrics?.blockNumber {
+            let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
+            return "\(latestBlockTitle): \(formattedBlockNumber)"
+        }
+
+        return "\(latestBlockTitle): -"
+    }
+
+    var latencyFormatted: String? {
+        if let error = metrics?.error {
+            return Self.isNotImplemented(error: error) ? nil : "\(Localized.Errors.error) \(Emoji.redCircle)"
+        }
+
+        if let latency = metrics?.latency {
+            return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+        }
+
+        return nil
+    }
+
+    private static func isNotImplemented(error: Error) -> Bool {
+        return error.localizedDescription == "Not Implemented"
     }
 }
