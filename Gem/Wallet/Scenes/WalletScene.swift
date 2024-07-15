@@ -18,6 +18,7 @@ struct WalletScene: View {
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletService) private var walletService
     @Environment(\.isWalletsPresented) private var isWalletsPresented
+    @Environment(\.nodeService) private var nodeService
     
     @Query<TotalValueRequest>
     var fiatValue: WalletFiatValue
@@ -182,15 +183,23 @@ struct WalletScene: View {
                         }
                     }
                 case .swap:
-                    SwapScene(model: SwapViewModel(wallet: wallet, keystore: keystore, walletService: walletService, assetId: selectType.asset.id))
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isPresentingAssetSelectType = nil
-                                }.bold()
-                            }
+                    SwapScene(
+                        model: SwapViewModel(
+                            wallet: wallet,
+                            keystore: keystore,
+                            walletService: walletService,
+                            assetId: selectType.asset.id,
+                            service: SwapService(nodeProvider: nodeService)
+                        )
+                    )
+                    .navigationBarTitleDisplayMode(.inline)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(Localized.Common.done) {
+                                isPresentingAssetSelectType = nil
+                            }.bold()
                         }
+                    }
                 case .stake:
                     StakeScene(model: StakeViewModel(wallet: wallet, chain: selectType.asset.id.chain, stakeService: walletService.stakeService))
                         .navigationBarTitleDisplayMode(.inline)

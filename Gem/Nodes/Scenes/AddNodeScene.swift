@@ -91,12 +91,12 @@ extension AddNodeScene {
             EmptyView()
         case let .loaded(result):
             Section {
-                if let chainId = result.chainID {
-                    ListItemView(title: model.chainIdTitle, subtitle: chainId)
+                if let chainId = result.chainIdValue {
+                    ListItemView(title: result.chainIdTitle, subtitle: chainId)
                 }
-                ListItemView(title: model.inSyncTitle, subtitle: model.inSyncValue)
-                ListItemView(title: model.latestBlockTitle, subtitle: result.blockNumber)
-                ListItemView(title: model.latencyTitle, subtitle: model.latecyValue)
+                ListItemView(title: result.inSyncTitle, subtitle: result.inSyncValue)
+                ListItemView(title: result.latestBlockTitle, subtitle: result.latestBlockValue)
+                ListItemView(title: result.latencyTitle, subtitle: result.latecyValue)
             }
         }
     }
