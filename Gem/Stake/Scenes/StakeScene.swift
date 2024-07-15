@@ -90,7 +90,7 @@ extension StakeScene {
                 NavigationCustomLink(
                     with: ListItemView(
                         title: model.claimRewardsTitle,
-                        subtitle: model.claimRewardsValue(delegations: delegations)
+                        subtitle: model.claimRewardsText(delegations: delegations)
                     ),
                     action: onSelectDelegations
                 )

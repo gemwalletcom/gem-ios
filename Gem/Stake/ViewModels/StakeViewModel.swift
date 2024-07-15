@@ -82,7 +82,7 @@ class StakeViewModel {
         value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain)
     }
     
-    func claimRewardsValue(delegations: [Delegation]) -> String {
+    func claimRewardsText(delegations: [Delegation]) -> String {
         formatter.string(value(delegations: delegations), decimals: asset.decimals.asInt, currency: asset.symbol)
     }
 
