@@ -23,7 +23,7 @@ struct ChainNodeViewModel {
     }
 
     var titleExtra: String? {
-        NodeStatusFormatter(statusInfo: nodeStatusInfo)
+        NodeStatusViewModel(statusInfo: nodeStatusInfo)
             .latestBlockText(
                 latestBlockTitle: Localized.Nodes.ImportNode.latestBlock,
                 valueFormatter: valueFormatter
@@ -31,12 +31,15 @@ struct ChainNodeViewModel {
     }
 
     var subtitle: String? {
-        NodeStatusFormatter(statusInfo: nodeStatusInfo)
+        NodeStatusViewModel(statusInfo: nodeStatusInfo)
             .latencyText
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        nodeStatusInfo?.error != nil ? [] : [.subtitle]
+        guard let nodeStatusInfo = nodeStatusInfo else {
+            return [.subtitle]
+        }
+        return []
     }
 }
 
@@ -58,37 +61,3 @@ extension ChainNode {
     }
 }
 
-// MARK: - Formatter
-
-struct NodeStatusFormatter {
-    let statusInfo: NodeStatusInfo?
-
-    func latestBlockText(latestBlockTitle: String, valueFormatter: ValueFormatter) -> String? {
-        if let error = statusInfo?.error {
-            return Self.isNotImplemented(error: error) ? nil : "\(latestBlockTitle): -"
-        }
-
-        if let blockNumber = statusInfo?.result?.blockNumber {
-            let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
-            return "\(latestBlockTitle): \(formattedBlockNumber)"
-        }
-
-        return "\(latestBlockTitle): -"
-    }
-
-    var latencyText: String? {
-        if let error = statusInfo?.error {
-            return Self.isNotImplemented(error: error) ? nil : "\(Localized.Errors.error) \(Emoji.redCircle)"
-        }
-
-        if let latency = statusInfo?.result?.latency {
-            return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
-        }
-
-        return nil
-    }
-
-    private static func isNotImplemented(error: Error) -> Bool {
-        return error.localizedDescription == "Not Implemented"
-    }
-}

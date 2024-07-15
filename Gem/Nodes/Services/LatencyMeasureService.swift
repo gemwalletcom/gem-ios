@@ -36,7 +36,7 @@ struct LatencyMeasureService {
         }
     }
 
-    static func measure<T>(for asyncFunction: @escaping () async throws -> T?) async throws -> (latency: Latency, value: T?) {
+    static func measure<T>(for asyncFunction: @escaping () async throws -> T) async throws -> (latency: Latency, value: T) {
         let start = Date()
         let value = try await asyncFunction()
         let end = Date()
