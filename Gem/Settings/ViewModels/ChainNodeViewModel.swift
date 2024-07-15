@@ -8,35 +8,35 @@ import Style
 
 struct ChainNodeViewModel {
     let chainNode: ChainNode
-    let nodeMetrics: NodeMetrics?
+    let nodeStatusInfo: NodeStatusInfo?
     let valueFormatter: ValueFormatter
 
-    init(chainNode: ChainNode, nodeMetrics: NodeMetrics?, valueFormatter: ValueFormatter) {
+    init(chainNode: ChainNode, nodeStatusInfo: NodeStatusInfo?, valueFormatter: ValueFormatter) {
         self.chainNode = chainNode
-        self.nodeMetrics = nodeMetrics
+        self.nodeStatusInfo = nodeStatusInfo
         self.valueFormatter = valueFormatter
     }
 
     var title: String {
         guard let host = chainNode.host else { return "" }
-        return chainNode.isGemNode ? "Gem Wallet Node" : host
+        return chainNode.isGemNode ? Localized.Nodes.gemWalletNode : host
     }
 
     var titleExtra: String? {
-        NodeMetricsFormatter(metrics: nodeMetrics)
-            .latestBlockFormatted(
+        NodeStatusFormatter(statusInfo: nodeStatusInfo)
+            .latestBlockText(
                 latestBlockTitle: Localized.Nodes.ImportNode.latestBlock,
                 valueFormatter: valueFormatter
             )
     }
 
     var subtitle: String? {
-        NodeMetricsFormatter(metrics: nodeMetrics)
-            .latencyFormatted
+        NodeStatusFormatter(statusInfo: nodeStatusInfo)
+            .latencyText
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        nodeMetrics?.error != nil ? [] : [.subtitle]
+        nodeStatusInfo?.error != nil ? [] : [.subtitle]
     }
 }
 
@@ -60,15 +60,15 @@ extension ChainNode {
 
 // MARK: - Formatter
 
-struct NodeMetricsFormatter {
-    let metrics: NodeMetrics?
+struct NodeStatusFormatter {
+    let statusInfo: NodeStatusInfo?
 
-    func latestBlockFormatted(latestBlockTitle: String, valueFormatter: ValueFormatter) -> String? {
-        if let error = metrics?.error {
+    func latestBlockText(latestBlockTitle: String, valueFormatter: ValueFormatter) -> String? {
+        if let error = statusInfo?.error {
             return Self.isNotImplemented(error: error) ? nil : "\(latestBlockTitle): -"
         }
 
-        if let blockNumber = metrics?.blockNumber {
+        if let blockNumber = statusInfo?.result?.blockNumber {
             let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
             return "\(latestBlockTitle): \(formattedBlockNumber)"
         }
@@ -76,12 +76,12 @@ struct NodeMetricsFormatter {
         return "\(latestBlockTitle): -"
     }
 
-    var latencyFormatted: String? {
-        if let error = metrics?.error {
+    var latencyText: String? {
+        if let error = statusInfo?.error {
             return Self.isNotImplemented(error: error) ? nil : "\(Localized.Errors.error) \(Emoji.redCircle)"
         }
 
-        if let latency = metrics?.latency {
+        if let latency = statusInfo?.result?.latency {
             return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
         }
 

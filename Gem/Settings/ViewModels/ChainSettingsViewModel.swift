@@ -22,8 +22,9 @@ class ChainSettingsViewModel {
 
     var explorers: [String]
 
+    private let defaultNodes: [ChainNode]
     private var nodes: [ChainNode] = []
-    private var nodeMetricsByChainId: [String: NodeMetrics] = [:]
+    private var nodeInfoByChainId: [String: NodeStatusInfo] = [:]
 
     private static let nodeValueFormatter = ValueFormatter.full_US
 
@@ -36,6 +37,8 @@ class ChainSettingsViewModel {
         self.explorerService = explorerService
 
         self.chain = chain
+
+        self.defaultNodes = NodeService.defaultNodes(chain: chain)
         self.selectedNode = nodeService.getNodeSelected(chain: chain)
         self.explorers = ExplorerService.explorers(chain: chain)
         self.selectedExplorer = explorerService.get(chain: chain) ?? explorers.first
@@ -48,16 +51,21 @@ class ChainSettingsViewModel {
         nodes.map { node in
             ChainNodeViewModel(
                 chainNode: node,
-                nodeMetrics: nodeMetricsByChainId[node.id],
+                nodeStatusInfo: nodeInfoByChainId[node.id],
                 valueFormatter: Self.nodeValueFormatter
             )
         }
+        .sorted(by: { !canDelete(node: $0.chainNode) && canDelete(node: $1.chainNode) })
     }
 
     var explorerTitle: String { Localized.Settings.Networks.explorer }
 
     var isSupportedAddingCustomNode: Bool {
         AssetConfiguration.addCustomNodeChains.contains(chain.type)
+    }
+
+    func canDelete(node: ChainNode) -> Bool {
+        !node.isGemNode && !defaultNodes.contains(where: { $0 == node })
     }
 }
 
@@ -68,40 +76,37 @@ extension ChainSettingsViewModel {
         nodes = try nodeService.nodes(for: chain)
     }
 
-    func fetchNodesMetrics() async {
-        await withTaskGroup(of: (ChainNode, NodeMetrics?).self) { group in
+    func fetchNodesStatusInfo() async {
+        await withTaskGroup(of: (ChainNode, NodeStatusInfo?).self) { group in
             for node in nodes {
                 group.addTask { [self] in
-                    let data = await fetchMetrics(for: node)
+                    let data = await fetchNodeStatusInfo(for: node)
                     return (node, data)
                 }
             }
 
             for await (node, data) in group {
                 await MainActor.run {
-                    nodeMetricsByChainId[node.id] = data
+                    nodeInfoByChainId[node.id] = data
                 }
             }
         }
     }
 
-    func selectNode(node: ChainNode) throws {
+    func select(node: ChainNode) throws {
         selectedNode = node
         try nodeService.setNodeSelected(chain: chain, node: selectedNode.node)
     }
 
-    func deleteNode() throws {
+    func delete() throws {
         guard let nodeDelete else { return }
         try nodeService.delete(chain: chain, node: nodeDelete.node)
-        nodes.removeAll { $0.id == nodeDelete.id }
-    }
 
-    func reselectNode() throws {
-        if let nodeToSelect = nodes.first(where: { $0.isGemNode }) {
-            try nodeService.setNodeSelected(chain: chain, node: nodeToSelect.node)
+        // select default, if selected node deleted
+        if nodeDelete == selectedNode {
             selectedNode = nodeService.getNodeSelected(chain: chain)
         }
-        nodes = try nodeService.nodes(for: chain)
+        try fetchNodes()
     }
 
     func selectExplorer(name: String) {
@@ -113,18 +118,16 @@ extension ChainSettingsViewModel {
 // MARK: - Private
 
 extension ChainSettingsViewModel {
-    private func fetchMetrics(for node: ChainNode) async -> (NodeMetrics?) {
-        guard let url = URL(string: node.node.url) else {
-            return nil
-        }
+    private func fetchNodeStatusInfo(for node: ChainNode) async -> (NodeStatusInfo?) {
+        guard let url = URL(string: node.node.url) else { return nil }
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
         do {
             let chainResult = try await LatencyMeasureService.measure(for: service.getLatestBlock)
-            return NodeMetrics(latency: chainResult.latency, blockNumber: chainResult.value, error: nil)
+            return .result(blockNumber: chainResult.value, latency: chainResult.latency)
         } catch {
-            return NodeMetrics(latency: nil, blockNumber: nil, error: error)
+            return .error(error: error)
         }
     }
 }

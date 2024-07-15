@@ -36,7 +36,7 @@ struct ChainSettingsScene: View {
                     .contextMenu {
                         ContextMenuCopy(title: Localized.Common.copy, value: nodeModel.chainNode.node.url)
                     }
-                    .if(!nodeModel.chainNode.isGemNode) {
+                    .if(model.canDelete(node: nodeModel.chainNode)) {
                         $0.swipeActions(edge: .trailing) {
                             Button(Localized.Common.delete) {
                                 onSelectDelete(nodeModel.chainNode)
@@ -60,6 +60,9 @@ struct ChainSettingsScene: View {
                 }
             }
         }
+        .refreshable {
+            fetch()
+        }
         .confirmationDialog(
             Localized.Common.deleteConfirmation(model.nodeDelete?.host ?? ""),
             presenting: $model.nodeDelete,
@@ -68,13 +71,10 @@ struct ChainSettingsScene: View {
                 Button(
                     Localized.Common.delete,
                     role: .destructive,
-                    action: deleteNode
+                    action: onDeleteNode
                 )
             }
         )
-        .refreshable {
-            fetch()
-        }
         .if(model.isSupportedAddingCustomNode) {
             $0.toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -103,7 +103,7 @@ struct ChainSettingsScene: View {
 extension ChainSettingsScene {
     private func onSelectNode(_ node: ChainNode) {
         do {
-            try model.selectNode(node: node)
+            try model.select(node: node)
         } catch {
             // TODO: - handle error
             print("chain settings scene: on chain select error \(error)")
@@ -126,6 +126,15 @@ extension ChainSettingsScene {
         model.isPresentingImportNode = false
         fetch()
     }
+
+    private func onDeleteNode() {
+        do {
+            try model.delete()
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: on delete error \(error)")
+        }
+    }
 }
 
 // MARK: - Effects
@@ -136,25 +145,12 @@ extension ChainSettingsScene {
             try model.fetchNodes()
             if !model.nodesModels.isEmpty {
                 Task {
-                    await model.fetchNodesMetrics()
+                    await model.fetchNodesStatusInfo()
                 }
             }
         } catch {
             // TODO: - handle error
             print("chain settings scene: fetch error \(error)")
-        }
-    }
-
-    private func deleteNode() {
-        do {
-            let shouldReselectAfterDelete = model.nodeDelete == model.selectedNode
-            try model.deleteNode()
-            if shouldReselectAfterDelete {
-                try model.reselectNode()
-            }
-        } catch {
-            // TODO: - handle error
-            print("chain settings scene: on delete error \(error)")
         }
     }
 }

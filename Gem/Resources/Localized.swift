@@ -231,6 +231,8 @@ internal enum Localized {
     }
   }
   internal enum Nodes {
+    /// Gem Wallet Node
+    internal static let gemWalletNode = Localized.tr("Localizable", "nodes.gem_wallet_node", fallback: "Gem Wallet Node")
     internal enum ImportNode {
       /// Chain ID
       internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
