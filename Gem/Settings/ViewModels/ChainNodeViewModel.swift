@@ -36,7 +36,7 @@ struct ChainNodeViewModel {
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        guard let nodeStatus = nodeStatus else {
+        guard nodeStatus != nil else {
             return [.subtitle]
         }
         return []
