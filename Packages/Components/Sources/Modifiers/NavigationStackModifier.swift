@@ -1,25 +1,20 @@
 import Foundation
 import SwiftUI
 
-struct NavigationStackModifier<Item, Destination: View>: ViewModifier {
+// TODO: - Remove modifier and use native navigationDestination(item: )
+struct NavigationStackModifier<Item: Hashable, Destination: View>: ViewModifier {
     let item: Binding<Item?>
     let destination: (Item) -> Destination
 
     func body(content: Content) -> some View {
-        content.background(NavigationLink(isActive: item.mappedToBool()) {
-            if let item = item.wrappedValue {
-                destination(item)
-            } else {
-                EmptyView()
-            }
-        } label: {
-            EmptyView()
-        })
+        content.navigationDestination(item: item) { scene in
+            destination(scene)
+        }
     }
 }
 
 public extension View {
-    func navigationDestination<Item, Destination: View>(
+    func navigationDestination<Item: Hashable, Destination: View>(
         for binding: Binding<Item?>,
         @ViewBuilder destination: @escaping (Item) -> Destination
     ) -> some View {
@@ -44,6 +39,7 @@ public extension Binding where Value == Bool {
     }
 }
 
+// TODO: - move Binding extension somewhere to SwiftUI extensions
 extension Binding {
     public func mappedToBool<Wrapped>() -> Binding<Bool> where Value == Wrapped? {
         return Binding<Bool>(bindingOptional: self)
