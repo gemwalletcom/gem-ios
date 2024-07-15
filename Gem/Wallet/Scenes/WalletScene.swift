@@ -201,7 +201,7 @@ struct WalletScene: View {
                         }
                     }
                 case .stake:
-                    StakeScene(model: StakeViewModel(wallet: wallet, chain: selectType.asset.id.chain, service: walletService.stakeService))
+                    StakeScene(model: StakeViewModel(wallet: wallet, chain: selectType.asset.id.chain, stakeService: walletService.stakeService))
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {

@@ -15,12 +15,14 @@ class SwapService {
     
     static func getSpender(chain: Chain, quote: SwapQuote?) throws -> String {
 
-        guard let spender = quote?.approval?.spender else {
-            throw AnyError("Approval data is nil!")
+        guard let swapQuote = quote else {
+            throw AnyError("Quote is nil!")
+        }
+        guard let spender = swapQuote.approval?.spender else {
+            throw AnyError("approval spender is nil!")
         }
         let evmChain = try EVMChain(from: chain)
-        
-        let contracts = Config.shared.config(for: evmChain).oneinch
+        let contracts = Config.shared.config(for: evmChain).swapWhitelistContracts
         guard contracts.contains(spender) else {
             throw AnyError("Not whitelisted spender \(spender)")
         }
