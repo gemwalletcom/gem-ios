@@ -24,7 +24,7 @@ class ChainSettingsViewModel {
 
     private let defaultNodes: [ChainNode]
     private var nodes: [ChainNode] = []
-    private var nodeInfoByChainId: [String: NodeStatusInfo] = [:]
+    private var nodeStatusByChainId: [String: NodeStatus] = [:]
 
     private static let nodeValueFormatter = ValueFormatter.full_US
 
@@ -51,7 +51,7 @@ class ChainSettingsViewModel {
         nodes.map { node in
             ChainNodeViewModel(
                 chainNode: node,
-                nodeStatusInfo: nodeInfoByChainId[node.id],
+                nodeStatus: nodeStatusByChainId[node.id],
                 valueFormatter: Self.nodeValueFormatter
             )
         }
@@ -77,7 +77,7 @@ extension ChainSettingsViewModel {
     }
 
     func fetchNodesStatusInfo() async {
-        await withTaskGroup(of: (ChainNode, NodeStatusInfo?).self) { group in
+        await withTaskGroup(of: (ChainNode, NodeStatus?).self) { group in
             for node in nodes {
                 group.addTask { [self] in
                     let data = await fetchNodeStatusInfo(for: node)
@@ -87,7 +87,7 @@ extension ChainSettingsViewModel {
 
             for await (node, data) in group {
                 await MainActor.run {
-                    nodeInfoByChainId[node.id] = data
+                    nodeStatusByChainId[node.id] = data
                 }
             }
         }
@@ -118,7 +118,7 @@ extension ChainSettingsViewModel {
 // MARK: - Private
 
 extension ChainSettingsViewModel {
-    private func fetchNodeStatusInfo(for node: ChainNode) async -> (NodeStatusInfo?) {
+    private func fetchNodeStatusInfo(for node: ChainNode) async -> (NodeStatus?) {
         guard let url = URL(string: node.node.url) else { return nil }
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)

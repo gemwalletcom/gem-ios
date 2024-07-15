@@ -41,7 +41,7 @@ extension NodeRecord {
     func mapToNode() -> Node {
         return Node(
             url: url,
-            status: NodeStatus(rawValue: status) ?? .inactive,
+            status: NodeState(rawValue: status) ?? .inactive,
             priority: priority.asInt32
         )
     }

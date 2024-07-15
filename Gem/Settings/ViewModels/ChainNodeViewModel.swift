@@ -8,12 +8,12 @@ import Style
 
 struct ChainNodeViewModel {
     let chainNode: ChainNode
-    let nodeStatusInfo: NodeStatusInfo?
+    let nodeStatus: NodeStatus?
     let valueFormatter: ValueFormatter
 
-    init(chainNode: ChainNode, nodeStatusInfo: NodeStatusInfo?, valueFormatter: ValueFormatter) {
+    init(chainNode: ChainNode, nodeStatus: NodeStatus?, valueFormatter: ValueFormatter) {
         self.chainNode = chainNode
-        self.nodeStatusInfo = nodeStatusInfo
+        self.nodeStatus = nodeStatus
         self.valueFormatter = valueFormatter
     }
 
@@ -23,7 +23,7 @@ struct ChainNodeViewModel {
     }
 
     var titleExtra: String? {
-        NodeStatusViewModel(statusInfo: nodeStatusInfo)
+        NodeStatusViewModel(nodeStatus: nodeStatus)
             .latestBlockText(
                 latestBlockTitle: Localized.Nodes.ImportNode.latestBlock,
                 valueFormatter: valueFormatter
@@ -31,12 +31,12 @@ struct ChainNodeViewModel {
     }
 
     var subtitle: String? {
-        NodeStatusViewModel(statusInfo: nodeStatusInfo)
+        NodeStatusViewModel(nodeStatus: nodeStatus)
             .latencyText
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        guard let nodeStatusInfo = nodeStatusInfo else {
+        guard let nodeStatus = nodeStatus else {
             return [.subtitle]
         }
         return []

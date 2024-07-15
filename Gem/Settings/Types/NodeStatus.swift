@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-enum NodeStatusInfo {
+enum NodeStatus {
     case result(blockNumber: BigInt, latency: LatencyMeasureService.Latency)
     case error(error: Error)
 }
