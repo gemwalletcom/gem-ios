@@ -4,17 +4,17 @@
 
 import Foundation
 
-public enum NodeStatus: String, Codable, CaseIterable, Equatable {
+public enum NodeState: String, Codable, CaseIterable, Equatable {
 	case active
 	case inactive
 }
 
 public struct Node: Codable {
 	public let url: String
-	public let status: NodeStatus
+	public let status: NodeState
 	public let priority: Int32
 
-	public init(url: String, status: NodeStatus, priority: Int32) {
+	public init(url: String, status: NodeState, priority: Int32) {
 		self.url = url
 		self.status = status
 		self.priority = priority

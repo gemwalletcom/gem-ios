@@ -33,7 +33,7 @@ extension Gemstone.Node {
         case .low: 1
         case .inactive: -1
         }
-        let status: NodeStatus = priority > 0 ? .active : .inactive
+        let status: NodeState = priority > 0 ? .active : .inactive
         
         return Primitives.Node(
             url: url,

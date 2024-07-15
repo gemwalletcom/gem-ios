@@ -128,7 +128,7 @@ struct WalletsScene: View {
             ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
         }
         .confirmationDialog(
-            Localized.Wallet.deleteWalletConfirmation(walletDelete?.name ?? ""),
+            Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
             presenting: $walletDelete,
             sensoryFeedback: .warning,
             actions: { wallet in

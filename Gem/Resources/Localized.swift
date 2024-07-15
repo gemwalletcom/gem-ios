@@ -123,6 +123,10 @@ internal enum Localized {
     internal static let copy = Localized.tr("Localizable", "common.copy", fallback: "Copy")
     /// Delete
     internal static let delete = Localized.tr("Localizable", "common.delete", fallback: "Delete")
+    /// Are sure you want to delete %s?
+    internal static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
+    }
     /// Done
     internal static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Hide
@@ -189,6 +193,8 @@ internal enum Localized {
     internal static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
     }
+    /// Error
+    internal static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
@@ -225,6 +231,8 @@ internal enum Localized {
     }
   }
   internal enum Nodes {
+    /// Gem Wallet Node
+    internal static let gemWalletNode = Localized.tr("Localizable", "nodes.gem_wallet_node", fallback: "Gem Wallet Node")
     internal enum ImportNode {
       /// Chain ID
       internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
@@ -523,10 +531,6 @@ internal enum Localized {
     /// %@ Wallet #%d
     internal static func defaultNameChain(_ p1: Any, _ p2: Int) -> String {
       return Localized.tr("Localizable", "wallet.default_name_chain", String(describing: p1), p2, fallback: "%@ Wallet #%d")
-    }
-    /// Are sure you want to delete %s?
-    internal static func deleteWalletConfirmation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "wallet.delete_wallet_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
     /// Import an Existing Wallet
     internal static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")

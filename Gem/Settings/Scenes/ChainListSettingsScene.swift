@@ -30,7 +30,7 @@ struct ChainListSettingsScene: View {
         )
         .navigationDestination(for: Chain.self) { chain in
             ChainSettingsScene(
-                model: ChainSettingsViewModel(chain: chain, nodeService: nodeService, explorerService: explorerService)
+                model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: chain)
             )
         }
         .navigationTitle(model.title)

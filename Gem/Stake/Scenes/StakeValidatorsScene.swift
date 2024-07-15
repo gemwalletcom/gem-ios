@@ -20,7 +20,9 @@ struct StakeValidatorsScene: View {
                             ValidatorImageView(validator: value.value)
                             SelectionListItemView(
                                 title: value.title,
+                                titleExtra: .none,
                                 subtitle: value.subtitle,
+                                subtitleExtra: .none,
                                 value: value.value.id,
                                 selection: model.currentValidator?.id
                             ) { _ in

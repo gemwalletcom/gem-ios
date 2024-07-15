@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Style
 
 struct LatencyMeasureService {
     enum Latency {
@@ -21,9 +22,9 @@ struct LatencyMeasureService {
 
         var colorEmoji: String {
             switch self {
-            case .fast: return "🟢"
-            case .normal: return "🟠"
-            case .slow: return "🔴"
+            case .fast: return Emoji.greenCircle
+            case .normal: return Emoji.orangeCircle
+            case .slow: return Emoji.redCircle
             }
         }
 
@@ -35,7 +36,7 @@ struct LatencyMeasureService {
         }
     }
 
-    static func measure<T>(for asyncFunction: @escaping () async throws -> T?) async throws -> (latency: Latency, value: T?) {
+    static func measure<T>(for asyncFunction: @escaping () async throws -> T) async throws -> (latency: Latency, value: T) {
         let start = Date()
         let value = try await asyncFunction()
         let end = Date()
