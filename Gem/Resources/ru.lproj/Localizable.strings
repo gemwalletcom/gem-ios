@@ -217,3 +217,5 @@
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Задержка";
 "common.latency_in_ms" = "%d мс";
+"stake.viagem" = "Stake via Gem Wallet";
+"stake.no_active_staking" = "No Active Staking";

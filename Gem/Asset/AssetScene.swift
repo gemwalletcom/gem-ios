@@ -147,7 +147,7 @@ struct AssetScene: View {
                     model: StakeViewModel(
                         wallet: model.walletModel.wallet,
                         chain: model.assetModel.asset.chain,
-                        service: stakeService
+                        stakeService: stakeService
                     )
                 )
                 .toolbar {

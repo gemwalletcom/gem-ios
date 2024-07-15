@@ -358,6 +358,8 @@ internal enum Localized {
     internal static let lockTime = Localized.tr("Localizable", "stake.lock_time", fallback: "Lock Time")
     /// Minimum amount
     internal static let minimumAmount = Localized.tr("Localizable", "stake.minimum_amount", fallback: "Minimum amount")
+    /// No Active Staking
+    internal static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No Active Staking")
     /// Pending
     internal static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
     /// Rewards
@@ -366,6 +368,8 @@ internal enum Localized {
     internal static let validator = Localized.tr("Localizable", "stake.validator", fallback: "Validator")
     /// Validators
     internal static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
+    /// Stake via Gem Wallet
+    internal static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
   }
   internal enum Swap {
     /// Approve %@ to Swap
