@@ -1,24 +1,26 @@
 install: install-rust install-typeshare install-toolchains
-	@echo "Install swiftgen"
+	@echo "==> Install SwiftGen"
 	@brew install swiftgen
 
 install-rust:
-	@echo Install Rust
+	@echo "==> Install Rust"
 	@curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 	@# in case cargo is not in PATH in the current shell
 	@. ~/.cargo/env
 
 install-typeshare:
-	@echo Install typeshare-cli
+	@echo "==> Install typeshare-cli"
 	@cargo install typeshare-cli --version 1.9.2
 
 install-toolchains:
-	@echo Install toolchains for uniffi
+	@echo "==> Install toolchains for uniffi"
 	@cd core/gemstone && make prepare-apple
 
 bootstrap: setup-git install generate
+	@echo "<== Bootstrap done."
 
 setup-git:
+	@echo "==> Setup git submodules"
 	@git submodule update --init --recursive
 	@git config submodule.recurse true
 
@@ -40,11 +42,11 @@ localize:
 generate: generate-model generate-stone generate-swiftgen
 
 generate-model:
-	@echo "Generate typeshare for iOS"
+	@echo "==> Generate typeshare for iOS"
 	@cd core && cargo run --package generate --bin generate ios ../Packages
 
 generate-swiftgen:
-	@echo "Run swiftgen"
+	@echo "==> SwiftGen assets and Localizable.strings"
 	@swiftgen config run --quiet
 
 generate-stone:
