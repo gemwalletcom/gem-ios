@@ -4,7 +4,9 @@ install: install-rust install-typeshare install-toolchains
 
 install-rust:
 	@echo Install Rust
-	@curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+	@curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+	@# in case cargo is not in PATH in the current shell
+	@. ~/.cargo/env
 
 install-typeshare:
 	@echo Install typeshare-cli
@@ -14,9 +16,10 @@ install-toolchains:
 	@echo Install toolchains for uniffi
 	@cd core/gemstone && make prepare-apple
 
-bootstrap: install generate setup-git
+bootstrap: setup-git install generate
 
 setup-git:
+	@git submodule update --init --recursive
 	@git config submodule.recurse true
 
 core-upgrade:
