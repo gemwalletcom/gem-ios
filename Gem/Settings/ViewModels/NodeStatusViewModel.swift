@@ -12,16 +12,17 @@ struct NodeStatusViewModel {
         case let .result(blockNumber, _):
             let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
             return "\(latestBlockTitle): \(formattedBlockNumber)"
-        case .error(let error):
+        case .error:
             return "\(latestBlockTitle): -"
-        }    }
+        }
+    }
 
     var latencyText: String? {
         guard let nodeStatus = nodeStatus else { return nil }
         switch nodeStatus {
-        case .result(let blockNumber, let latency):
+        case .result(_, let latency):
             return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
-        case .error(let error):
+        case .error:
             return "\(Localized.Errors.error) \(Emoji.redCircle)"
         }
     }
