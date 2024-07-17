@@ -299,7 +299,8 @@ extension TronService: ChainTransactionStateFetchable {
 
 extension TronService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -319,7 +320,8 @@ extension TronService: ChainStakable {
  
 extension TronService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        //TODO: Add getChainID check later
+        .none
     }
 }
 
@@ -327,7 +329,7 @@ extension TronService: ChainIDFetchable {
 
 extension TronService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock().block_header.raw_data.number.asBigInt
     }
 }
 

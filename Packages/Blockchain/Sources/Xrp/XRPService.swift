@@ -28,6 +28,12 @@ extension XRPService {
             .request(.account(address: address))
             .map(as: XRPResult<XRPAccountResult>.self).result
     }
+    
+    private func latestBlock() async throws -> BigInt {
+        return try await provider
+            .request(.latestBlock)
+            .map(as: XRPResult<XRPLatestBlock>.self).result.ledger_current_index.asBigInt
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -121,7 +127,8 @@ extension XRPService: ChainTransactionStateFetchable {
 
 extension XRPService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -153,7 +160,8 @@ extension XRPService: ChainTokenable {
  
 extension XRPService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        //TODO: Add getChainID check later
+        .none
     }
 }
 
@@ -161,7 +169,7 @@ extension XRPService: ChainIDFetchable {
 
 extension XRPService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock()
     }
 }
 

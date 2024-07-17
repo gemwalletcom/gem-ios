@@ -63,6 +63,12 @@ extension TonService {
         }
         return try Gemstone.tonDecodeJettonAddress(base64Data: cell.object.data.b64, len: cell.object.data.len.asUInt64)
     }
+    
+    private func masterChainInfo() async throws -> TonMasterchainInfo {
+        try await provider
+            .request(.masterChainInfo)
+            .map(as: TonResult<TonMasterchainInfo>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -215,7 +221,8 @@ extension TonService: ChainTransactionStateFetchable {
 
 extension TonService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -262,7 +269,9 @@ extension TonService: ChainTokenable {
  
 extension TonService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        //TODO: Add getChainID check later
+        .none
+        //try await masterChainInfo().`init`.root_hash
     }
 }
 
@@ -270,7 +279,7 @@ extension TonService: ChainIDFetchable {
 
 extension TonService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await masterChainInfo().last.seqno.asInt.asBigInt
     }
 }
 

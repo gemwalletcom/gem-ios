@@ -126,6 +126,12 @@ extension SolanaService {
             .request(.slot)
             .map(as: JSONRPCResponse<Int>.self).result.asBigInt
     }
+    
+    private func getGenesisHash() async throws -> String {
+        try await provider
+            .request(.genesisHash)
+            .map(as: JSONRPCResponse<String>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -399,7 +405,7 @@ extension SolanaService: ChainTokenable {
  
 extension SolanaService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        .none
+        try await getGenesisHash()
     }
 }
 

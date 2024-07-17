@@ -60,10 +60,6 @@ class ChainSettingsViewModel {
 
     var explorerTitle: String { Localized.Settings.Networks.explorer }
 
-    var isSupportedAddingCustomNode: Bool {
-        AssetConfiguration.addCustomNodeChains.contains(chain.type)
-    }
-
     func canDelete(node: ChainNode) -> Bool {
         !node.isGemNode && !defaultNodes.contains(where: { $0 == node })
     }

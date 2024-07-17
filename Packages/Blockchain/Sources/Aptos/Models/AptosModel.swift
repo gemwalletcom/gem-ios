@@ -63,3 +63,13 @@ public struct AptosGasFee: Codable {
 		self.prioritized_gas_estimate = prioritized_gas_estimate
 	}
 }
+
+public struct AptosLedger: Codable {
+	public let chain_id: Int32
+	public let ledger_version: String
+
+	public init(chain_id: Int32, ledger_version: String) {
+		self.chain_id = chain_id
+		self.ledger_version = ledger_version
+	}
+}

@@ -75,22 +75,20 @@ struct ChainSettingsScene: View {
                 )
             }
         )
-        .if(model.isSupportedAddingCustomNode) {
-            $0.toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: onSelectImportNode) {
-                        Image(systemName: SystemImage.plus)
-                            .font(.body.weight(.semibold))
-                    }
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: onSelectImportNode) {
+                    Image(systemName: SystemImage.plus)
+                        .font(.body.weight(.semibold))
                 }
             }
-            .sheet(isPresented: $model.isPresentingImportNode) {
-                NavigationStack {
-                    AddNodeScene(
-                        model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
-                        onDismiss: onDismissAddCustomNode
-                    )
-                }
+        }
+        .sheet(isPresented: $model.isPresentingImportNode) {
+            NavigationStack {
+                AddNodeScene(
+                    model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
+                    onDismiss: onDismissAddCustomNode
+                )
             }
         }
         .navigationTitle(model.title)

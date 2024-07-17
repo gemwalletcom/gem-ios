@@ -236,6 +236,12 @@ extension SuiService {
         try await provider.request(.coinMetadata(id: id))
             .map(as: JSONRPCResponse<SuiCoinMetadata>.self).result
     }
+    
+    private func getLatestCheckpoint() async throws -> BigInt {
+        try await provider
+            .request(.latestCheckpoint)
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -367,10 +373,8 @@ extension SuiService: ChainTransactionStateFetchable {
 
 extension SuiService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
-//        return try await provider
-//            .request(.health)
-//            .map(as: JSONRPCResponse<String>.self).result == "ok"
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -426,7 +430,9 @@ extension SuiService: ChainStakable {
  
 extension SuiService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        try await provider
+            .request(.chainID)
+            .map(as: JSONRPCResponse<String>.self).result
     }
 }
 
@@ -434,7 +440,7 @@ extension SuiService: ChainIDFetchable {
 
 extension SuiService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await getLatestCheckpoint()
     }
 }
 
