@@ -8,13 +8,13 @@ import Style
 
 struct ChainNodeViewModel {
     let chainNode: ChainNode
-    let nodeStatus: NodeStatus?
-    let valueFormatter: ValueFormatter
+    let nodeStatus: NodeStatus
+    let formatter: ValueFormatter
 
-    init(chainNode: ChainNode, nodeStatus: NodeStatus?, valueFormatter: ValueFormatter) {
+    init(chainNode: ChainNode, nodeStatus: NodeStatus, formatter: ValueFormatter) {
         self.chainNode = chainNode
         self.nodeStatus = nodeStatus
-        self.valueFormatter = valueFormatter
+        self.formatter = formatter
     }
 
     var title: String {
@@ -25,21 +25,20 @@ struct ChainNodeViewModel {
     var titleExtra: String? {
         NodeStatusViewModel(nodeStatus: nodeStatus)
             .latestBlockText(
-                latestBlockTitle: Localized.Nodes.ImportNode.latestBlock,
-                valueFormatter: valueFormatter
+                title: Localized.Nodes.ImportNode.latestBlock,
+                formatter: formatter
             )
     }
 
     var subtitle: String? {
-        NodeStatusViewModel(nodeStatus: nodeStatus)
-            .latencyText
+        NodeStatusViewModel(nodeStatus: nodeStatus).latencyText
     }
 
     var placeholders: [ListItemViewPlaceholderType] {
-        guard nodeStatus != nil else {
-            return [.subtitle]
+        switch nodeStatus {
+        case .result, .error: []
+        case .none: [.subtitle]
         }
-        return []
     }
 }
 

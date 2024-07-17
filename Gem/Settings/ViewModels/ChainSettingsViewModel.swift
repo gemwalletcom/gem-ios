@@ -24,9 +24,9 @@ class ChainSettingsViewModel {
 
     private let defaultNodes: [ChainNode]
     private var nodes: [ChainNode] = []
-    private var nodeStatusByChainId: [String: NodeStatus] = [:]
+    private var nodeStatusByNodeId: [String: NodeStatus] = [:]
 
-    private static let nodeValueFormatter = ValueFormatter.full_US
+    private static let formatter = ValueFormatter.full_US
 
     init(
         nodeService: NodeService,
@@ -51,8 +51,8 @@ class ChainSettingsViewModel {
         nodes.map { node in
             ChainNodeViewModel(
                 chainNode: node,
-                nodeStatus: nodeStatusByChainId[node.id],
-                valueFormatter: Self.nodeValueFormatter
+                nodeStatus: nodeStatusByNodeId[node.id] ?? .none,
+                formatter: Self.formatter
             )
         }
         .sorted(by: { !canDelete(node: $0.chainNode) && canDelete(node: $1.chainNode) })
@@ -71,19 +71,22 @@ extension ChainSettingsViewModel {
     func fetchNodes() throws {
         nodes = try nodeService.nodes(for: chain)
     }
+    
+    func clear() {
+        nodeStatusByNodeId = [:]
+    }
 
     func fetchNodesStatusInfo() async {
         await withTaskGroup(of: (ChainNode, NodeStatus?).self) { group in
             for node in nodes {
                 group.addTask { [self] in
-                    let data = await fetchNodeStatusInfo(for: node)
-                    return (node, data)
+                    return (node, await fetchNodeStatusInfo(for: node))
                 }
             }
 
             for await (node, data) in group {
                 await MainActor.run {
-                    nodeStatusByChainId[node.id] = data
+                    nodeStatusByNodeId[node.id] = data
                 }
             }
         }
@@ -114,14 +117,14 @@ extension ChainSettingsViewModel {
 // MARK: - Private
 
 extension ChainSettingsViewModel {
-    private func fetchNodeStatusInfo(for node: ChainNode) async -> (NodeStatus?) {
+    private func fetchNodeStatusInfo(for node: ChainNode) async -> NodeStatus? {
         guard let url = URL(string: node.node.url) else { return nil }
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
         do {
-            let chainResult = try await LatencyMeasureService.measure(for: service.getLatestBlock)
-            return .result(blockNumber: chainResult.value, latency: chainResult.latency)
+            let measure = try await LatencyMeasureService.measure(for: service.getLatestBlock)
+            return .result(blockNumber: measure.value, latency: measure.latency)
         } catch {
             return .error(error: error)
         }

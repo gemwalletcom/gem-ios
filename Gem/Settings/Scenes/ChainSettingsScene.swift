@@ -140,11 +140,10 @@ extension ChainSettingsScene {
 extension ChainSettingsScene {
     private func fetch() {
         do {
+            model.clear()
             try model.fetchNodes()
-            if !model.nodesModels.isEmpty {
-                Task {
-                    await model.fetchNodesStatusInfo()
-                }
+            Task {
+                await model.fetchNodesStatusInfo()
             }
         } catch {
             // TODO: - handle error

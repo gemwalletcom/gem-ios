@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import Style
 
 struct AddNodeResultViewModel {
     static var valueFormatter = ValueFormatter.full_US
@@ -17,7 +18,7 @@ struct AddNodeResultViewModel {
 
     var isInSync: Bool { addNodeResult.isInSync }
     var inSyncTitle: String { Localized.Nodes.ImportNode.inSync }
-    var inSyncValue: String? { isInSync ? "✅" : "❌" }
+    var inSyncValue: String? { isInSync ? Emoji.checkmark : Emoji.reject }
 
     var latestBlockTitle: String { Localized.Nodes.ImportNode.latestBlock }
     var latestBlockValue: String? {

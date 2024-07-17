@@ -4,26 +4,31 @@ import Primitives
 import Style
 
 struct NodeStatusViewModel {
-    let nodeStatus: NodeStatus?
+    let nodeStatus: NodeStatus
 
-    func latestBlockText(latestBlockTitle: String, valueFormatter: ValueFormatter) -> String? {
-        guard let nodeStatus = nodeStatus else { return "\(latestBlockTitle): -" }
-        switch nodeStatus {
-        case let .result(blockNumber, _):
-            let formattedBlockNumber = valueFormatter.string(blockNumber, decimals: 0)
-            return "\(latestBlockTitle): \(formattedBlockNumber)"
-        case .error:
-            return "\(latestBlockTitle): -"
+    func latestBlockText(title: String, formatter: ValueFormatter) -> String {
+        let value = switch nodeStatus {
+        case .result(let blockNumber, _): formatter.string(blockNumber, decimals: 0)
+        case .error, .none: "-"
         }
+        return "\(title): \(value)"
+    }
+    
+    private var errorText: String {
+        "\(Localized.Errors.error) \(Emoji.redCircle)"
     }
 
     var latencyText: String? {
-        guard let nodeStatus = nodeStatus else { return nil }
         switch nodeStatus {
-        case .result(_, let latency):
-            return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+        case .result(let block, let latency):
+            if block > 0 {
+                return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+            }
+            return errorText
         case .error:
-            return "\(Localized.Errors.error) \(Emoji.redCircle)"
+            return errorText
+        case .none:
+            return .none
         }
     }
 }

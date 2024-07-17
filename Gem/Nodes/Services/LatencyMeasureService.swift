@@ -13,7 +13,7 @@ struct LatencyMeasureService {
             switch latency {
             case ..<420:
                 self = .fast(latency)
-            case 420..<840:
+            case ..<1024:
                 self = .normal(latency)
             default:
                 self = .slow(latency)
