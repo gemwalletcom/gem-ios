@@ -69,9 +69,7 @@ struct AddTokenScene: View {
                         }
                     }
                 case .error(let error):
-                    Section {
-                        StateErrorView(error: error, message: error.localizedDescription)
-                    }
+                    ListItemErrorView(errorTitle: model.errorTitle, errorSystemNameImage: SystemImage.errorOccurred, error: error)
                 }
             }
             Spacer()

@@ -27,13 +27,10 @@ class AddTokenViewModel: ObservableObject {
         self.chain = chain
     }
 
-    var title: String {
-        Localized.Wallet.AddToken.title
-    }
+    var title: String { Localized.Wallet.AddToken.title }
+    var errorTitle: String { Localized.Errors.errorOccured }
 
-    var defaultChain: Chain? {
-        chains.first
-    }
+    var defaultChain: Chain? { chains.first }
 
     var chains: [Chain] {
         AssetConfiguration.supportedChainsWithTokens

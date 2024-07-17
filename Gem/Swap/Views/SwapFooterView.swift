@@ -5,6 +5,7 @@ import SwiftUI
 import Components
 import Style
 
+// TODO: - remove after merge of https://github.com/gemwalletcom/gem-ios/issues/89
 struct SwapFooterView: View {
     
     let state: StateViewType<Bool>

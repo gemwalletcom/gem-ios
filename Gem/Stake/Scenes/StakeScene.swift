@@ -123,9 +123,7 @@ extension StakeScene {
                     }
                 }
             case .error(let error):
-                ListItemErrorView(
-                    errorTitle: Localized.Errors.errorOccured,
-                    error: error)
+                ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         } header: {
             if state.isLoading {
