@@ -4,7 +4,8 @@ import Foundation
 import Primitives
 import Components
 import Store
-import  Gemstone
+import Gemstone
+import Style
 
 class ChartsViewModel: ObservableObject {
     
@@ -34,15 +35,16 @@ class ChartsViewModel: ObservableObject {
     private let preferences: Preferences = .standard
 
     var assetRequest: AssetRequest {
-        return AssetRequest(walletId: walletModel.wallet.id, assetId: assetModel.asset.id.identifier)
+        AssetRequest(walletId: walletModel.wallet.id, assetId: assetModel.asset.id.identifier)
     }
     
-    var title: String {
-        return assetModel.title
-    }
-    
+    var title: String { assetModel.title }
+
+    var emptyTitle: String { Localized.Common.notAvailable }
+    var errorTitle: String { Localized.Errors.errorOccured }
+
     var headerTitleView: WalletBarViewViewModel {
-        return WalletBarViewViewModel(
+        WalletBarViewViewModel(
             name: assetModel.name,
             image: assetModel.assetImage,
             showChevron: false

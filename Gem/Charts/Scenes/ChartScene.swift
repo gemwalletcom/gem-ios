@@ -35,17 +35,21 @@ struct ChartScene: View {
                     VStack {
                         switch model.state {
                         case .noData:
-                            StateEmptyView(title: Localized.Common.notAvailable)
+                            StateEmptyView(title: model.emptyTitle)
                         case .loading:
                             StateLoadingView()
                         case .loaded(let model):
                             ChartView(model: model)
                         case .error(let error):
-                            StateErrorView(error: error, message: Localized.Common.tryAgain)
+                            StateEmptyView(
+                                title: model.errorTitle,
+                                description: error.localizedDescription,
+                                image: Image(systemName: SystemImage.errorOccurred)
+                            )
                         }
                     }
                     .frame(height: 320)
-                    
+
                     HStack(alignment: .center, spacing: 10) {
                         ForEach(model.periods, id: \.period) { period in
                             Button {
