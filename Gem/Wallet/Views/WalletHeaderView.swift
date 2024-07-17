@@ -20,7 +20,7 @@ struct WalletHeaderView: View {
     var action: HeaderButtonAction?
     
     var body: some View {
-        VStack(spacing: Spacing.halfLarge) {
+        VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
