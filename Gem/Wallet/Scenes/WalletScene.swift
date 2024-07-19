@@ -61,7 +61,7 @@ struct WalletScene: View {
                 ) {
                     isPresentingSelectType = $0.selectType
                 }
-                .padding(.top, 8)
+                .padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -89,7 +89,7 @@ struct WalletScene: View {
                     }
                 )
                 .accessibilityIdentifier("manage")
-                .padding(16)
+                .padding(Spacing.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
