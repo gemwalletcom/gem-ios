@@ -29,9 +29,13 @@ struct WalletScene: View {
     @Query<TransactionsRequest>
     var transactions: [Primitives.TransactionExtended]
     
+    @Query<WalletRequest>
+    var dbWallet: Wallet?
+    
     @State private var isPresentingSelectType: SelectAssetType? = nil
     @State private var isPresentingAssetSelectType: SelectAssetInput? = nil
     
+    //Replace with WalletId. Once done rename dbWallet => wallet
     @State var wallet: Wallet
     let model: WalletSceneViewModel
     
@@ -46,6 +50,7 @@ struct WalletScene: View {
         _assets = Query(constant: AssetsRequest(walletID: wallet.id, chains: [], filters: [.enabled]), in: \.db.dbQueue)
         _fiatValue = Query(constant: TotalValueRequest(walletID: wallet.id), in: \.db.dbQueue)
         _transactions = Query(constant: TransactionsRequest(walletId: wallet.id, type: .pending, limit: 3), in: \.db.dbQueue)
+        _dbWallet = Query(constant: WalletRequest(walletId: wallet.id), in: \.db.dbQueue)
     }
     
     var body: some View {
@@ -108,15 +113,13 @@ struct WalletScene: View {
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                HStack {
-                    WalletBarView(
-                        model: WalletBarViewViewModel(
-                            name: WalletViewModel(wallet: wallet).name,
-                            image: WalletViewModel(wallet: wallet).assetImage,
-                            showChevron: true
-                        )
-                    ) {
-                        isWalletsPresented.wrappedValue.toggle()
+                if let wallet = dbWallet {
+                    HStack {
+                        WalletBarView(
+                            model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)
+                        ) {
+                            isWalletsPresented.wrappedValue.toggle()
+                        }
                     }
                 }
             }
