@@ -203,8 +203,6 @@ internal enum Localized {
     internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
-    /// No Quote data
-    internal static let swapNoQuoteData = Localized.tr("Localizable", "errors.swap_no_quote_data", fallback: "No Quote data")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
@@ -224,6 +222,10 @@ internal enum Localized {
       internal static func invalidSecretPhraseWord(_ p1: Any) -> String {
         return Localized.tr("Localizable", "errors.import.invalid_secret_phrase_word", String(describing: p1), fallback: "Invalid Secret Phrase word: %@")
       }
+    }
+    internal enum Swap {
+      /// No Quote data
+      internal static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No Quote data")
     }
     internal enum Token {
       /// Invalid Token ID

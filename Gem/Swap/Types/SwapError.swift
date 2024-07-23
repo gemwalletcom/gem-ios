@@ -8,7 +8,7 @@ enum SwapError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .noQuoteData:
-            return "No Quote data"
+            return Localized.Errors.Swap.noQuoteData
         }
     }
 }
