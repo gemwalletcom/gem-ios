@@ -211,6 +211,10 @@ internal enum Localized {
     internal static func validation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
     }
+    internal enum Connections {
+      /// User cancelled
+      internal static let userCancelled = Localized.tr("Localizable", "errors.connections.user_cancelled", fallback: "User cancelled")
+    }
     internal enum Import {
       /// Invalid Secret Phrase
       internal static let invalidSecretPhrase = Localized.tr("Localizable", "errors.import.invalid_secret_phrase", fallback: "Invalid Secret Phrase")
@@ -218,6 +222,10 @@ internal enum Localized {
       internal static func invalidSecretPhraseWord(_ p1: Any) -> String {
         return Localized.tr("Localizable", "errors.import.invalid_secret_phrase_word", String(describing: p1), fallback: "Invalid Secret Phrase word: %@")
       }
+    }
+    internal enum Swap {
+      /// No Quote data
+      internal static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No Quote data")
     }
     internal enum Token {
       /// Invalid Token ID
