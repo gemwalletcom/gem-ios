@@ -188,11 +188,11 @@ struct WalletScene: View {
                 case .swap:
                     SwapScene(
                         model: SwapViewModel(
-                            wallet: wallet,
-                            keystore: keystore,
                             walletService: walletService,
-                            assetId: selectType.asset.id,
-                            service: SwapService(nodeProvider: nodeService)
+                            swapService: SwapService(nodeProvider: nodeService),
+                            keystore: keystore,
+                            wallet: wallet,
+                            assetId: selectType.asset.id
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)

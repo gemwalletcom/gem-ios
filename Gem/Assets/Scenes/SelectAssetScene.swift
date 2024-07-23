@@ -127,13 +127,13 @@ struct SelectAssetScene: View {
                     )
             case .swap:
                 SwapScene(model: 
-                    SwapViewModel(
-                        wallet: model.wallet,
-                        keystore: keystore,
-                        walletService: walletService,
-                        assetId: input.asset.id,
-                        service: SwapService(nodeProvider: nodeService)
-                    )
+                            SwapViewModel(
+                                walletService: walletService,
+                                swapService: SwapService(nodeProvider: nodeService),
+                                keystore: keystore,
+                                wallet: model.wallet,
+                                assetId: input.asset.id
+                            )
                 )
             case .stake:
                 StakeScene(model: StakeViewModel(
