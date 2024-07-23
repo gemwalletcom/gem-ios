@@ -17,6 +17,8 @@ public enum SuiProvider: TargetType {
     case broadcast(data: String, signature: String)
     case getObject(id: String)
     case coinMetadata(id: String)
+    case latestCheckpoint
+    case chainID
     case systemState
     
     public var baseUrl: URL {
@@ -38,6 +40,8 @@ public enum SuiProvider: TargetType {
         case .broadcast: "sui_executeTransactionBlock"
         case .getObject: "sui_getObject"
         case .coinMetadata: "suix_getCoinMetadata"
+        case .latestCheckpoint: "sui_getLatestCheckpointSequenceNumber"
+        case .chainID: "sui_getChainIdentifier"
         case .systemState: "suix_getLatestSuiSystemState"
         }
     }
@@ -129,7 +133,9 @@ public enum SuiProvider: TargetType {
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [id], id: 1)
             )
-        case .systemState:
+        case .systemState,
+            .latestCheckpoint,
+            .chainID:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
             )

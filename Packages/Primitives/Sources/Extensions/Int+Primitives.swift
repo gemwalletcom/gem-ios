@@ -39,3 +39,9 @@ extension Int {
         BigInt(self)
     }
 }
+
+extension UInt64 {
+    public var asBigInt: BigInt {
+        BigInt(self)
+    }
+}

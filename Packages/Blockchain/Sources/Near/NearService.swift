@@ -147,10 +147,8 @@ extension NearService: ChainTransactionStateFetchable {
 
 extension NearService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
-//        return try await provider
-//            .request(.health)
-//            .map(as: JSONRPCResponse<String>.self).result == "ok"
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -182,7 +180,8 @@ extension NearService: ChainTokenable {
  
 extension NearService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        //TODO: Add getChainID check later
+        .none
     }
 }
 
@@ -190,7 +189,7 @@ extension NearService: ChainIDFetchable {
 
 extension NearService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock().header.height.asBigInt
     }
 }
 

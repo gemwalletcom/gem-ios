@@ -23,6 +23,7 @@ public enum SolanaProvider: TargetType {
     case epoch
     case health
     case getAccountInfo(account: String)
+    case genesisHash
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -30,34 +31,21 @@ public enum SolanaProvider: TargetType {
     
     public var rpc_method: String {
         switch self {
-        case .balance:
-            return "getBalance"
-        case .getTokenAccountsByOwner:
-            return "getTokenAccountsByOwner"
-        case .getTokenAccountBalance:
-            return "getTokenAccountBalance"
-        case .latestBlockhash:
-            return "getLatestBlockhash"
-        case .fees:
-            return "getRecentPrioritizationFees"
-        case .slot:
-            return "getSlot"
-        case .rentExemption:
-            return "getMinimumBalanceForRentExemption"
-        case .broadcast:
-            return "sendTransaction"
-        case .transaction:
-            return "getTransaction"
-        case .stakeDelegations:
-            return "getProgramAccounts"
-        case .stakeValidators:
-            return "getVoteAccounts"
-        case .epoch:
-            return "getEpochInfo"
-        case .health:
-            return "getHealth"
-        case .getAccountInfo:
-            return "getAccountInfo"
+        case .balance: "getBalance"
+        case .getTokenAccountsByOwner: "getTokenAccountsByOwner"
+        case .getTokenAccountBalance: "getTokenAccountBalance"
+        case .latestBlockhash: "getLatestBlockhash"
+        case .fees: "getRecentPrioritizationFees"
+        case .slot: "getSlot"
+        case .rentExemption: "getMinimumBalanceForRentExemption"
+        case .broadcast: "sendTransaction"
+        case .transaction: "getTransaction"
+        case .stakeDelegations: "getProgramAccounts"
+        case .stakeValidators: "getVoteAccounts"
+        case .epoch: "getEpochInfo"
+        case .health: "getHealth"
+        case .getAccountInfo: "getAccountInfo"
+        case .genesisHash: "getGenesisHash"
         }
     }
     
@@ -75,7 +63,8 @@ public enum SolanaProvider: TargetType {
             .fees,
             .slot,
             .epoch,
-            .health:
+            .health,
+            .genesisHash:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
             )

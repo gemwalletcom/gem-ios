@@ -17,6 +17,11 @@ public struct AptosService {
         self.chain = chain
         self.provider = provider
     }
+    
+    func getLedger() async throws -> AptosLedger {
+        try await provider.request(.ledger)
+            .map(as: AptosLedger.self)
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -106,7 +111,8 @@ extension AptosService: ChainTransactionStateFetchable {
 
 extension AptosService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -138,7 +144,7 @@ extension AptosService: ChainTokenable {
  
 extension AptosService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        try await getLedger().chain_id.asString
     }
 }
 
@@ -146,6 +152,7 @@ extension AptosService: ChainIDFetchable {
 
 extension AptosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        let ledger = try await getLedger()
+        return BigInt(stringLiteral: ledger.ledger_version)
     }
 }

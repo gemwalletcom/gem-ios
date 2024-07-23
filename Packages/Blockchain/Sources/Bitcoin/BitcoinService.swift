@@ -71,6 +71,18 @@ extension BitcoinService {
             gasLimit: 1
         )
     }
+    
+    private func latestBlock() async throws -> BigInt {
+        return try await provider
+            .request(.nodeInfo)
+            .map(as: BitcoinNodeInfo.self).blockbook.bestHeight.asBigInt
+    }
+    
+    private func block(block: Int) async throws -> BitcoinBlock {
+        return try await provider
+            .request(.block(block: block))
+            .map(as: BitcoinBlock.self)
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -192,7 +204,11 @@ extension BitcoinService: ChainTokenable {
  
 extension BitcoinService: ChainIDFetchable {
     public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+        let block = try await block(block: 1)
+        guard let hash = block.previousBlockHash else {
+            throw AnyError("Unable to get block hash")
+        }
+        return hash
     }
 }
 
@@ -200,7 +216,7 @@ extension BitcoinService: ChainIDFetchable {
 
 extension BitcoinService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock()
     }
 }
 

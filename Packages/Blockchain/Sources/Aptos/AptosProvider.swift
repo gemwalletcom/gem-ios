@@ -4,6 +4,7 @@ import Foundation
 import SwiftHTTPClient
 
 public enum AptosProvider: TargetType {
+    case ledger
     case account(address: String)
     case balance(address: String)
     case transaction(id: String)
@@ -17,7 +18,8 @@ public enum AptosProvider: TargetType {
     
     public var method: HTTPMethod {
         switch self {
-        case .account,
+        case .ledger,
+            .account,
             .balance,
             .transaction,
             .gasPrice:
@@ -30,24 +32,20 @@ public enum AptosProvider: TargetType {
     
     public var path: String {
         switch self {
-        case .account(let address):
-            return "/v1/accounts/\(address)"
-        case .balance(let address):
-            return "/v1/accounts/\(address)/resource/0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
-        case .transaction(let id):
-            return "/v1/transactions/by_hash/\(id)"
-        case .gasPrice:
-            return "/v1/estimate_gas_price"
-        case .estimateFee:
-            return "/v1/transactions/simulate?estimate_max_gas_amount=true&estimate_gas_unit_price=true&estimate_prioritized_gas_unit_price=false"
-        case .broadcast:
-            return "/v1/transactions"
+        case .ledger: "/v1"
+        case .account(let address): "/v1/accounts/\(address)"
+        case .balance(let address): "/v1/accounts/\(address)/resource/0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
+        case .transaction(let id): "/v1/transactions/by_hash/\(id)"
+        case .gasPrice: "/v1/estimate_gas_price"
+        case .estimateFee: "/v1/transactions/simulate?estimate_max_gas_amount=true&estimate_gas_unit_price=true&estimate_prioritized_gas_unit_price=false"
+        case .broadcast: "/v1/transactions"
         }
     }
     
     public var task: Task {
         switch self {
-        case .account,
+        case .ledger,
+            .account,
             .balance,
             .transaction,
             .gasPrice:
