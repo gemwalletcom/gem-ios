@@ -80,7 +80,7 @@ extension AddNodeScene {
             }
         }
         if case let .error(error) = model.state {
-            ListItemErrorView(errorTitle: model.errorTitle,error: error)
+            ListItemErrorView(errorTitle: model.errorTitle, error: error)
         }
     }
 
