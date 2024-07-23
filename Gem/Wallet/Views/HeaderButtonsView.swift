@@ -7,7 +7,6 @@ import Components
 typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
 
 struct HeaderButtonsView: View {
-    
     let buttons: [HeaderButton]
     var action: HeaderButtonAction?
     
@@ -25,5 +24,17 @@ struct HeaderButtonsView: View {
                 .disabled(button.isDisabled)
             }
         }
+        .frame(maxWidth: .infinity)
+    }
+}
+
+// MARK: - Previews
+
+#Preview {
+    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0, isDisabled: false) })
+    return VStack {
+        Spacer()
+        HeaderButtonsView(buttons: buttons, action: nil)
+        Spacer()
     }
 }

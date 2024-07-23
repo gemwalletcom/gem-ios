@@ -20,7 +20,7 @@ struct WalletHeaderView: View {
     var action: HeaderButtonAction?
     
     var body: some View {
-        VStack(spacing: 12) {
+        VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
@@ -65,8 +65,16 @@ struct WalletHeaderView: View {
                 .padding(.top, Spacing.medium)
             case false:
                 HeaderButtonsView(buttons: model.buttons, action: action)
-                    .padding(.top, 8)
+                    .padding(.top, Spacing.small)
             }
         }
     }
+}
+
+// MARK: - Previews
+
+#Preview {
+    let model = AssetHeaderViewModel(assetDataModel: .init(assetData: .main, formatter: .full_US),
+                                     walletModel: .init(wallet: .main))
+    return WalletHeaderView(model: model, action: nil)
 }
