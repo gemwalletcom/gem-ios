@@ -61,7 +61,7 @@ struct SwapScene: View {
             )
         }
         .debounce(value: $model.fromValue,
-                  debounceInterval: SwapViewModel.quoteTaskDebounceTimeout,
+                  interval: SwapViewModel.quoteTaskDebounceTimeout,
                   action: onChangeFromValue)
         .onChange(of: fromAsset, onChangeAssetsSwapDirection)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)

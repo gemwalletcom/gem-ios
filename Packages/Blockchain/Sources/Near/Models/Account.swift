@@ -40,9 +40,11 @@ public struct NearRPCError: Codable {
 
 public struct NearBlockHeader: Codable {
 	public let hash: String
+	public let height: Int
 
-	public init(hash: String) {
+	public init(hash: String, height: Int) {
 		self.hash = hash
+		self.height = height
 	}
 }
 

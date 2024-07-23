@@ -202,7 +202,7 @@ extension SwapViewModel {
     private func getSwapData(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> TransferData {
         let quote = try await self.quote(fromAsset: fromAsset, toAsset: toAsset, amount: amount, includeData: true)
         guard let data = quote.data else {
-            throw AnyError("No Quote data")
+            throw SwapError.noQuoteData
         }
 
         let amount = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))

@@ -2,11 +2,11 @@
 
 import SwiftUI
 
-struct DebouncingModifier<T: Hashable>: ViewModifier {
+struct DebounceModifier<T: Hashable>: ViewModifier {
     @State private var debounceTask: Task<Void, Never>?
     @Binding var value: T
 
-    let debounceInterval: Duration
+    let interval: Duration
     let action: (T) -> Void
 
     func body(content: Content) -> some View {
@@ -14,7 +14,7 @@ struct DebouncingModifier<T: Hashable>: ViewModifier {
             .onChange(of: value) { _, newValue in
                 debounceTask?.cancel()
                 debounceTask = Task {
-                    try? await Task.sleep(for: debounceInterval)
+                    try? await Task.sleep(for: interval)
                     // Check if the task is not cancelled before performing the action.
                     guard !Task.isCancelled else { return }
                     Task { @MainActor in
@@ -26,7 +26,7 @@ struct DebouncingModifier<T: Hashable>: ViewModifier {
 }
 
 public extension View {
-    func debounce<T: Hashable>(value: Binding<T>, debounceInterval: Duration, action: @escaping (T) -> Void) -> some View {
-        modifier(DebouncingModifier(value: value, debounceInterval: debounceInterval, action: action))
+    func debounce<T: Hashable>(value: Binding<T>, interval: Duration, action: @escaping (T) -> Void) -> some View {
+        modifier(DebounceModifier(value: value, interval: interval, action: action))
     }
 }
