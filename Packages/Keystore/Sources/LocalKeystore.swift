@@ -1,6 +1,7 @@
 import Foundation
 import Primitives
 import Store
+import WalletCore
 
 public final class LocalKeystore: Keystore {
     public let directory: URL
@@ -113,11 +114,11 @@ public final class LocalKeystore: Keystore {
         }
     }
 
-    public func renameWallet(wallet: Wallet, newName: String) throws {
+    public func renameWallet(wallet: Primitives.Wallet, newName: String) throws {
         return try walletStore.renameWallet(wallet.id, name: newName)
     }
     
-    public func deleteWallet(for wallet: Wallet) throws {
+    public func deleteWallet(for wallet: Primitives.Wallet) throws {
         switch wallet.type {
         case .view:
             break
@@ -141,12 +142,22 @@ public final class LocalKeystore: Keystore {
         try walletStore.nextWalletIndex()
     }
     
-    public func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
     }
-    
-    public func getMnemonic(wallet: Wallet) throws -> [String] {
+
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType?) throws -> String {
+        let data = try getPrivateKey(wallet: wallet, chain: chain)
+        switch encoding {
+        case .base58:
+            return Base58.encodeNoCheck(data: data)
+        case .hex, .none:
+            return data.hexString
+        }
+    }
+
+    public func getMnemonic(wallet: Primitives.Wallet) throws -> [String] {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.getMnemonic(wallet: wallet, password: password)
     }
@@ -155,7 +166,7 @@ public final class LocalKeystore: Keystore {
         return try keystorePassword.getAuthentication()
     }
     
-    public func sign(wallet: Wallet, message: SignMessage, chain: Chain) throws -> Data {
+    public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.sign(message: message, walletId: wallet.id, password: password, chain: chain)
     }

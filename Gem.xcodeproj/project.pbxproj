@@ -244,6 +244,9 @@
 		D8EFE3E82BA2318E00608363 /* SwapAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
+		DF8868872C50F1B400005AEA /* ShowPrivateKeyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8868862C50F1B400005AEA /* ShowPrivateKeyScene.swift */; };
+		DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8868882C50F1EB00005AEA /* CalloutView.swift */; };
+		DF88688B2C50F27D00005AEA /* ShowPrivateKeyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF88688A2C50F27D00005AEA /* ShowPrivateKeyModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -513,6 +516,9 @@
 		D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAmountView.swift; sourceTree = "<group>"; };
 		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		DF8868862C50F1B400005AEA /* ShowPrivateKeyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyScene.swift; sourceTree = "<group>"; };
+		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
+		DF88688A2C50F27D00005AEA /* ShowPrivateKeyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1513,6 +1519,7 @@
 				C3CF3BA029B2FFF600E96586 /* WalletsScene.swift */,
 				C3549B3A29C5167100B4BE01 /* WalletDetailScene.swift */,
 				C3D1C4E92A2D5223006E8EEA /* ShowSecretPhraseScene.swift */,
+				DF8868862C50F1B400005AEA /* ShowPrivateKeyScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1520,6 +1527,7 @@
 		D8DC1AED2C1137AB00697D0A /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				DF88688A2C50F27D00005AEA /* ShowPrivateKeyModel.swift */,
 				C3D1C4E42A2D4EEF006E8EEA /* ShowSecretPhraseViewModel.swift */,
 				C3CF3BE229BE4C3200E96586 /* WalletsViewModel.swift */,
 				C3549B3C29C5170000B4BE01 /* WalletIDetailViewModel.swift */,
@@ -1582,6 +1590,7 @@
 			isa = PBXGroup;
 			children = (
 				C3D1C4E72A2D519D006E8EEA /* SecretPhraseGridView.swift */,
+				DF8868882C50F1EB00005AEA /* CalloutView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1897,6 +1906,7 @@
 				D8385CEA2B017F4500F784C7 /* SwapViewModel.swift in Sources */,
 				C3D1C4D12A2401F0006E8EEA /* TransactionInputViewModel.swift in Sources */,
 				D85620252AAA71FA00D65D81 /* SubscriptionService.swift in Sources */,
+				DF8868872C50F1B400005AEA /* ShowPrivateKeyScene.swift in Sources */,
 				D8D203B82ACC84BA00261CA2 /* ChartsViewModel.swift in Sources */,
 				C3CF3BE129BE478000E96586 /* ImportWalletViewModel.swift in Sources */,
 				D8385CE32AFEBC1F00F784C7 /* WalletConnectorInteractable.swift in Sources */,
@@ -1996,7 +2006,9 @@
 				C3D1C4F82A3BD6FA006E8EEA /* BalanceService.swift in Sources */,
 				C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */,
 				D8385CE72B017A9100F784C7 /* SwapService.swift in Sources */,
+				DF88688B2C50F27D00005AEA /* ShowPrivateKeyModel.swift in Sources */,
 				C3CF3B8529AB18AD00E96586 /* SelectAssetScene.swift in Sources */,
+				DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */,
 				830FDA3F2C2209AF003DA605 /* AddNodeResult.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,

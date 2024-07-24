@@ -38,8 +38,13 @@ extension WalletDetailViewModel {
         try keystore.renameWallet(wallet: wallet, newName: name)
     }
 
-    func getMnemonicWords() async throws ->  [String] {
+    func getMnemonicWords() async throws -> [String] {
         try keystore.getMnemonic(wallet: wallet)
+    }
+
+    func getPrivateKey(chain: Chain) async throws -> String {
+        let encoding = chain.keyEncodingTypes.first
+        return try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 
     func delete() throws {

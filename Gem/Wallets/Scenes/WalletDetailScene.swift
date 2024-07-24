@@ -11,6 +11,7 @@ struct WalletDetailScene: View {
 
     @State private var name: String
     @State private var words: [String]? = nil
+    @State private var text: String? = nil
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
@@ -27,7 +28,7 @@ struct WalletDetailScene: View {
                     FloatTextField(Localized.Wallet.name, text: $name)
                 }
                 switch model.wallet.type {
-                case .multicoin, .single:
+                case .multicoin:
                     Section {
                         NavigationCustomLink(
                             with: ListItemView(title: Localized.Common.show(Localized.Common.secretPhrase)),
@@ -35,6 +36,15 @@ struct WalletDetailScene: View {
                         )
                     } header: {
                         Text(Localized.Common.secretPhrase)
+                    }
+                case .single:
+                    Section {
+                        NavigationCustomLink(
+                            with: ListItemView(title: Localized.Common.show(Localized.Common.privateKey)),
+                            action: onShowPrivateKey
+                        )
+                    } header: {
+                        Text(Localized.Common.privateKey)
                     }
                 case .view:
                     EmptyView()
@@ -82,6 +92,9 @@ struct WalletDetailScene: View {
         .navigationDestination(for: $words) { words in
             ShowSecretPhraseScene(model: ShowSecretPhraseViewModel(words: words))
         }
+        .navigationDestination(for: $text) { text in
+            ShowPrivateKeyScene(model: ShowPrivateKeyModel(text: text, encoding: model.wallet.accounts[0].chain.keyEncodingTypes.first))
+        }
     }
 }
 
@@ -100,6 +113,18 @@ extension WalletDetailScene {
         Task {
             do {
                 words = try await model.getMnemonicWords()
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func onShowPrivateKey() {
+        Task {
+            do {
+                text = try await model.getPrivateKey(
+                    chain: model.wallet.accounts[0].chain
+                )
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }

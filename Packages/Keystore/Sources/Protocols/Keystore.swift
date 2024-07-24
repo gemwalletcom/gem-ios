@@ -15,6 +15,7 @@ public protocol Keystore: ObservableObject {
     func deleteWallet(for wallet: Wallet) throws
     func getNextWalletIndex() throws -> Int
     func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data
+    func getPrivateKey(wallet: Wallet, chain: Chain, encoding: EncodingType?) throws -> String
     func getMnemonic(wallet: Wallet) throws -> [String]
     func getPasswordAuthentication() throws -> KeystoreAuthentication
     func sign(wallet: Wallet, message: SignMessage, chain: Chain) throws -> Data
