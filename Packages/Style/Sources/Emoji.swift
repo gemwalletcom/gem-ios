@@ -8,7 +8,7 @@ public struct Emoji {
     public static let redCircle = "🔴"
     public static let checkmark = "✅"
     public static let reject = "❌"
-    
+    public static let random = "🎲"
 }
 
 // MARK: - Previews
@@ -20,6 +20,7 @@ public struct Emoji {
         (Emoji.redCircle, "Red Circle"),
         (Emoji.checkmark, "Checkmark"),
         (Emoji.reject, "Reject"),
+        (Emoji.random, "Random")
     ]
 
     return List {
