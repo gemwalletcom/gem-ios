@@ -153,7 +153,7 @@ public final class LocalKeystore: Keystore {
         case .base58:
             return Base58.encodeNoCheck(data: data)
         case .hex, .none:
-            return data.hexString
+            return data.hexString.append0x
         }
     }
 
