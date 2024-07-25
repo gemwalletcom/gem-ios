@@ -48,17 +48,37 @@ final class LocalKeystoreTests: XCTestCase {
     }
 
     func testImportSolanaWalletByKey() throws {
-        let text = "4ha2npeRkDXipjgGJ3L5LhZ9TK9dRjP2yktydkFBhAzXj3N8ytpYyTS24kxcYGEefy4WKWRcog2zSPvpPZoGmxCC"
-        let key = try WalletKeyStore.decodeKey(text, chain: .solana)
+        let phantom = "4ha2npeRkDXipjgGJ3L5LhZ9TK9dRjP2yktydkFBhAzXj3N8ytpYyTS24kxcYGEefy4WKWRcog2zSPvpPZoGmxCC"
+        let base58 = "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV"
+        let key = try WalletKeyStore.decodeKey(phantom, chain: .solana)
         let address = CoinType.solana.deriveAddress(privateKey: key)
 
         XCTAssertEqual(address, "JSTURBrew3zGaJjtk7qcvd7gapeExX3GC7DiQBaCKzU")
+        XCTAssertEqual(Base58.encodeNoCheck(data: key.data), base58)
 
-        let text2 = "0x30df0ffc2b43717f4653c2a1e827e9dfb3d9364e019cc60092496cd4997d5d6e"
-        let key2 = try WalletKeyStore.decodeKey(text2, chain: .ethereum)
+        let hex = "0x30df0ffc2b43717f4653c2a1e827e9dfb3d9364e019cc60092496cd4997d5d6e"
+        let key2 = try WalletKeyStore.decodeKey(hex, chain: .ethereum)
         let address2 = CoinType.ethereum.deriveAddress(privateKey: key2)
 
         XCTAssertEqual(address2, "0x4ce31c0b2114abe61Ac123E1E6254E961C18D10B")
+    }
+
+    func testExportSolanaPrivateKey() throws {
+        let keystore = LocalKeystore.make()
+        let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
+        let wallet = try keystore.importWallet(name: "Test Solana", type: .privateKey(text: hex, chain: .solana))
+
+        let exportedHex = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
+        let exportedBase58 = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .base58)
+
+        XCTAssertEqual(exportedHex, hex)
+        XCTAssertEqual(exportedBase58, "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
+
+        let keystore2 = LocalKeystore.make()
+        let wallet2 = try keystore2.importWallet(name: "Test Solana 2", type: .privateKey(text: exportedBase58, chain: .solana))
+        let exportedKey = try keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
+
+        XCTAssertEqual(Base58.encodeNoCheck(data: exportedKey), exportedBase58)
     }
 
     func testImportWIF() throws {
