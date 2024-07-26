@@ -82,7 +82,7 @@ struct AddTokenScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner, action: onScanFinished(_:))
+            ScanQRCodeNavigationStack(action: onScanFinished(_:))
         }
         .sheet(isPresented: $isPresentingSelectNetwork) {
             if let chain = model.chain {

@@ -44,7 +44,7 @@ struct AddNodeScene: View {
             }
         }
         .sheet(isPresented: $model.isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $model.isPresentingScanner, action: onScanFinished(_:))
+            ScanQRCodeNavigationStack(action: onScanFinished(_:))
         }
         .alert(item: $model.isPresentingErrorAlert) {
             Alert(title: Text(""), message: Text($0))

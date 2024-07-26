@@ -134,7 +134,7 @@ struct ImportWalletScene: View {
             Alert(title: Text(Localized.Errors.validation("")), message: Text($0))
         }
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
+            ScanQRCodeNavigationStack() {
                 scanResult($0)
             }
         }

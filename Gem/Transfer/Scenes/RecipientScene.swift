@@ -107,7 +107,7 @@ struct RecipientScene: View {
         }
         .background(Colors.grayBackground)
         .sheet(item: $isPresentingScanner) { value in
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner.mappedToBool()) {
+            ScanQRCodeNavigationStack() {
                 processScan(field: value, value: $0)
             }
         }

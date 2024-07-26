@@ -83,7 +83,7 @@ struct ConnectionsScene: View {
             )
         }
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
+            ScanQRCodeNavigationStack() {
                 onHandleScan(value: $0)
             }
         }
