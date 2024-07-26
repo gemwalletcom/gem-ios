@@ -51,7 +51,7 @@ struct SelectAssetSceneNavigationStack: View {
     
     func addAsset(_ asset: Asset) {
         Task {
-            try model.assetsService.addAsset(walletId: model.wallet.id, asset: asset)
+            try model.assetsService.addAsset(walletId: model.wallet.walletId, asset: asset)
         }
         dismiss()
     }

@@ -10,6 +10,10 @@ public extension Wallet {
     var isMultiCoins: Bool {
         return type == .multicoin
     }
+
+    var walletId: WalletId {
+        WalletId(id: id)
+    }
 }
 
 extension Wallet: Hashable {

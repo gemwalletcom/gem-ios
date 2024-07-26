@@ -5,9 +5,11 @@ import Store
 import GemAPI
 import Combine
 import Settings
+import Keystore
 
 class WalletService {
     
+    let keystore: any Keystore
     let assetsService: AssetsService
     let balanceService: BalanceService
     let stakeService: StakeService
@@ -23,6 +25,7 @@ class WalletService {
     private var balanceErrorsObserver: AnyCancellable?
     
     init(
+        keystore: any Keystore,
         priceStore: PriceStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
@@ -33,6 +36,7 @@ class WalletService {
         nodeService: NodeService,
         connectionsService: ConnectionsService
     ) {
+        self.keystore = keystore
         self.assetsService = assetsService
         self.balanceService = balanceService
         self.stakeService = stakeService
@@ -53,7 +57,7 @@ class WalletService {
                 NSLog("discover assets: \(update.wallet.name): \(update.assets)")
                 
                 do {
-                    try self.addNewAssets(wallet: update.wallet, assetIds: update.assets.compactMap { AssetId(id: $0) })
+                    try self.addNewAssets(walletId: update.wallet.walletId, assetIds: update.assets.compactMap { AssetId(id: $0) })
                 } catch {
                     NSLog("newAssetUpdate error: \(error)")
                 }
@@ -64,7 +68,7 @@ class WalletService {
         }
     }
     
-    func changeCurrency(wallet: Wallet) async throws {
+    func changeCurrency(walletId: WalletId) async throws {
         // TODO: - here need a cancel logic if updatePrices & updateBalance in progress, but someone changes in one more time
         // updates prices
         try priceService.clear()
@@ -72,33 +76,35 @@ class WalletService {
         try await updatePrices(assetIds: assetIds)
         // update balances
         let enabledAssetIds = try assetsService.getEnabledAssets()
-        try await updateBalance(for: wallet, assetIds: enabledAssetIds)
+        try await updateBalance(for: walletId, assetIds: enabledAssetIds)
     }
     
-    func update(wallet: Wallet) async throws {
+    func update(walletId: WalletId) async throws {
         let assetIds = try assetsService
-            .getAssets(walletID: wallet.id, filters: [.enabled])
+            .getAssets(walletID: walletId.id, filters: [.enabled])
             .map { $0.asset.id }
-        try await fetch(wallet: wallet, assetIds: assetIds)
+        try await fetch(walletId: walletId, assetIds: assetIds)
     }
     
-    func updateAsset(wallet: Wallet, assetId: AssetId) async throws {
-        async let getBalance: () = try updateBalance(for: wallet, assetIds: [assetId])
+    func updateAsset(walletId: WalletId, assetId: AssetId) async throws {
+        async let getBalance: () = try updateBalance(for: walletId, assetIds: [assetId])
         async let getPrice: () = try updatePrices(assetIds: [assetId])
         
         let (_, _) =  try await (getBalance, getPrice)
     }
     
-    func fetch(wallet: Wallet, assetIds: [AssetId]) async throws {
-        async let balances: () = try updateBalance(for: wallet, assetIds: assetIds)
+    func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
+        let wallet = try keystore.getWallet(walletId)
+        async let balances: () = try updateBalance(for: walletId, assetIds: assetIds)
         async let prices: () = try updatePrices(assetIds: assetIds)
         async let newAssets: () = try getNewAssets(for: wallet)
         let _ = try await [balances, prices, newAssets]
     }
 
-    func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async throws {
+    func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         NSLog("fetch balances: \(assetIds.count)")
         
+        let wallet = try keystore.getWallet(walletId)
         balanceService.updateBalance(for: wallet, assetIds: assetIds)
     }
     
@@ -164,33 +170,33 @@ class WalletService {
     }
     
     // add fresh new asset: fetch asset and then activate balance
-    func addNewAssets(wallet: Wallet, assetIds: [AssetId]) throws {
+    func addNewAssets(walletId: WalletId, assetIds: [AssetId]) throws {
         let assets = try assetsService.getAssets(for: assetIds)
         let missingIds = assetIds.asSet().subtracting(assets.map { $0.id }.asSet())
         
         // enable that already exist in db
         if !assets.isEmpty {
-            enableAssetId(wallet: wallet, assets: assets.assetIds, enabled: true)
+            enableAssetId(walletId: walletId, assets: assets.assetIds, enabled: true)
         }
         
         // fetch and enable
         for assetId in missingIds {
             Task {
                 try await assetsService.updateAsset(assetId: assetId)
-                enableAssetId(wallet: wallet, assets: [assetId], enabled: true)
+                enableAssetId(walletId: walletId, assets: [assetId], enabled: true)
             }
         }
     }
     
-    func enableAssetId(wallet: Wallet, assets: [AssetId], enabled: Bool) {
+    func enableAssetId(walletId: WalletId, assets: [AssetId], enabled: Bool) {
         do {
             for assetId in assets {
-                try assetsService.addBalanceIfMissing(walletId: wallet.id, assetId: assetId)
-                try assetsService.updateEnabled(walletId: wallet.id, assetId: assetId, enabled: enabled)
+                try assetsService.addBalanceIfMissing(walletId: walletId, assetId: assetId)
+                try assetsService.updateEnabled(walletId: walletId, assetId: assetId, enabled: enabled)
             }
             if enabled {
                 Task {
-                    try await updateBalance(for: wallet, assetIds: assets)
+                    try await updateBalance(for: walletId, assetIds: assets)
                 }
                 Task {
                     try await updatePrices(assetIds: assets)
@@ -201,8 +207,8 @@ class WalletService {
         }
     }
     
-    func hideAsset(wallet: Wallet, assetId: AssetId) throws {
-        try balanceService.hideAsset(wallet: wallet, assetId: assetId)
+    func hideAsset(walletId: WalletId, assetId: AssetId) throws {
+        try balanceService.hideAsset(walletId: walletId, assetId: assetId)
     }
     
     // transactions
@@ -219,6 +225,20 @@ class WalletService {
     
     func updateNode(chain: Chain) throws {
         try nodeService.update(chain: chain)
+    }
+
+    //
+
+    func setupWallet(_ wallet: Wallet) throws {
+        let chains = wallet.accounts.map { $0.chain }.asSet()
+            .intersection(AssetConfiguration.allChains)
+            .map { $0 }
+
+        try enableAssetBalances(wallet: wallet, chains: chains)
+    }
+
+    func enableAssetBalances(wallet: Wallet, chains: [Chain]) throws {
+        try addAssetsBalancesIfMissing(assetIds: chains.ids, wallet: wallet)
     }
 }
 

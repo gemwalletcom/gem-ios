@@ -24,7 +24,7 @@ class AssetsService {
     }
     
     // Used to add new custom assets
-    public func addAsset(walletId: String, asset: Asset) throws {
+    public func addAsset(walletId: WalletId, asset: Asset) throws {
         try addAssets(assets: [
             AssetFull(asset: asset, details: .none, price: .none, market: .none, score: AssetScore(rank: 10))
         ])
@@ -52,22 +52,22 @@ class AssetsService {
         try assetStore.getAssetsData(for: walletID, filters: filters)
     }
     
-    func addBalancesIfMissing(walletId: String, assetIds: [AssetId]) throws {
+    func addBalancesIfMissing(walletId: WalletId, assetIds: [AssetId]) throws {
         for assetId in assetIds {
             try addBalanceIfMissing(walletId: walletId, assetId: assetId)
         }
     }
     
-    func addBalanceIfMissing(walletId: String, assetId: AssetId) throws {
-        let exist = try balanceStore.isBalanceExist(walletId: walletId, assetId: assetId.identifier)
+    func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
+        let exist = try balanceStore.isBalanceExist(walletId: walletId.id, assetId: assetId.identifier)
         if !exist {
             let balance = AddBalance(assetId: assetId.identifier, isEnabled: false)
-            try balanceStore.addBalance([balance], for: walletId)
+            try balanceStore.addBalance([balance], for: walletId.id)
         }
     }
     
-    func updateEnabled(walletId: String, assetId: AssetId, enabled: Bool) throws {
-        try balanceStore.setIsEnabled(walletId: walletId, assetIds: [assetId.identifier], value: enabled)
+    func updateEnabled(walletId: WalletId, assetId: AssetId, enabled: Bool) throws {
+        try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: [assetId.identifier], value: enabled)
     }
     
     func updateAsset(assetId: AssetId) async throws {

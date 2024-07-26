@@ -21,43 +21,40 @@ struct WalletScene: View {
     @Environment(\.nodeService) private var nodeService
     
     @Query<TotalValueRequest>
-    var fiatValue: WalletFiatValue
-    
+    private var fiatValue: WalletFiatValue
+
     @Query<AssetsRequest>
-    var assets: [AssetData]
-    
+    private var assets: [AssetData]
+
     @Query<TransactionsRequest>
-    var transactions: [Primitives.TransactionExtended]
-    
+    private var transactions: [Primitives.TransactionExtended]
+
     @Query<WalletRequest>
     var dbWallet: Wallet?
-    
+
     @State private var isPresentingSelectType: SelectAssetType? = nil
     @State private var isPresentingAssetSelectType: SelectAssetInput? = nil
     
-    //Replace with WalletId. Once done rename dbWallet => wallet
-    @State var wallet: Wallet
     let model: WalletSceneViewModel
-    
+
     public init(
-        wallet: Wallet,
         model: WalletSceneViewModel
     ) {
-        self.wallet = wallet
         self.model = model
-        try? model.setupWallet(wallet)
-        
-        _assets = Query(constant: AssetsRequest(walletID: wallet.id, chains: [], filters: [.enabled]), in: \.db.dbQueue)
-        _fiatValue = Query(constant: TotalValueRequest(walletID: wallet.id), in: \.db.dbQueue)
-        _transactions = Query(constant: TransactionsRequest(walletId: wallet.id, type: .pending, limit: 3), in: \.db.dbQueue)
-        _dbWallet = Query(constant: WalletRequest(walletId: wallet.id), in: \.db.dbQueue)
+
+        try? model.setupWallet()
+
+        _assets = Query(constant: model.assetsRequest, in: \.db.dbQueue)
+        _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
+        _transactions = Query(constant: model.recentTransactionsRequest, in: \.db.dbQueue)
+        _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
     }
     
     var body: some View {
         List {
             Section { } header: {
                 WalletHeaderView(
-                    model: WalletHeaderViewModel(walletModel: WalletViewModel(wallet: wallet), value: fiatValue)
+                    model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
                 ) {
                     isPresentingSelectType = $0.selectType
                 }
@@ -75,11 +72,10 @@ struct WalletScene: View {
                         model.copyAssetAddress(for: address)
                     },
                     hideAsset: { assetId in
-                        Task { try model.hideAsset(for: wallet, assetId) }
+                        Task { try model.hideAsset(assetId) }
                     }
                 )
-            }
-            footer: {
+            } footer: {
                 ListButton(
                     title: Localized.Wallet.manageTokenList,
                     //image: Image(systemName: SystemImage.checklist),
@@ -93,21 +89,15 @@ struct WalletScene: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
-        .refreshable {
-            NSLog("wallet refreshable \(wallet.name)")
-            Task {
-                await fetch(for: wallet)
-            }
-        }
         .sheet(item: $isPresentingSelectType) { value in
             SelectAssetSceneNavigationStack(
                 model: SelectAssetViewModel(
-                    wallet: wallet,
+                    wallet: model.wallet,
                     keystore: keystore,
                     selectType: value,
                     assetsService: assetsService,
                     walletService: walletService
-                ), 
+                ),
                 isPresenting: $isPresentingSelectType
             )
         }
@@ -127,7 +117,6 @@ struct WalletScene: View {
                 Button {
                     isPresentingSelectType = .manage
                 } label: {
-                    //Image(systemName: SystemImage.checklist)
                     Image(.manageAssets)
                 }
             }
@@ -138,7 +127,7 @@ struct WalletScene: View {
                 case .send:
                     RecipientScene(
                         model: RecipientViewModel(
-                            wallet: wallet,
+                            wallet: model.wallet,
                             keystore: keystore,
                             walletService: walletService,
                             assetModel: AssetViewModel(asset: selectType.asset)
@@ -157,7 +146,7 @@ struct WalletScene: View {
                     ReceiveScene(
                         model: ReceiveViewModel(
                             assetModel: AssetViewModel(asset: selectType.asset),
-                            wallet: wallet,
+                            walletId: model.wallet.walletId,
                             address: selectType.address,
                             walletService: walletService
                         )
@@ -188,11 +177,11 @@ struct WalletScene: View {
                 case .swap:
                     SwapScene(
                         model: SwapViewModel(
+                            wallet: model.wallet,
+                            assetId: selectType.asset.id,
                             walletService: walletService,
                             swapService: SwapService(nodeProvider: nodeService),
-                            keystore: keystore,
-                            wallet: wallet,
-                            assetId: selectType.asset.id
+                            keystore: keystore
                         )
                     )
                     .navigationBarTitleDisplayMode(.inline)
@@ -204,7 +193,7 @@ struct WalletScene: View {
                         }
                     }
                 case .stake:
-                    StakeScene(model: StakeViewModel(wallet: wallet, chain: selectType.asset.id.chain, stakeService: walletService.stakeService))
+                    StakeScene(model: StakeViewModel(wallet: model.wallet, chain: selectType.asset.id.chain, stakeService: walletService.stakeService))
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
@@ -220,39 +209,39 @@ struct WalletScene: View {
         }
         .navigationDestination(for: TransactionExtended.self) { transaction in
             TransactionScene(
-                input: TransactionSceneInput(transactionId: transaction.id, wallet: wallet)
+                input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
             )
         }
         .navigationDestination(for: AssetData.self) { assetData in
             AssetScene(
-                input: AssetSceneInput(assetId: assetData.asset.id, wallet: wallet),
+                wallet: model.wallet,
+                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: assetData.asset.id),
                 isPresentingAssetSelectType: $isPresentingAssetSelectType
             )
         }
         .navigationBarTitleDisplayMode(.inline)
-        .onChange(of: wallet) {
-            Task {
-                await fetch(for: wallet)
-            }
+        .refreshable {
+            await refreshable()
         }
-        .onChange(of: keystore.currentWallet) {
-            if let newValue = keystore.currentWallet {
-                wallet = newValue
-            }
-        }.taskOnce {
+        .onChange(of: model.wallet, fetch)
+        .taskOnce(fetch)
+    }
+    
+    func refreshable() async {
+        if let walletId = keystore.currentWalletId {
             Task {
-                await fetch(for: wallet)
+                try await model.fetch(walletId: walletId, assets: assets)
             }
         }
     }
-    
-    func fetch(for wallet: Wallet) async  {
-        NSLog("fetch for: \(wallet.name)")
-        do {
-            let assetIds = assets.map { $0.asset.id }
-            try await model.fetch(for: wallet, assetIds: assetIds)
-        } catch {
-            NSLog("fetch error: \(error)")
+
+    func fetch() {
+        Task {
+            do {
+                try await model.fetch(assets: assets)
+            } catch {
+                NSLog("fetch error: \(error)")
+            }
         }
     }
 }

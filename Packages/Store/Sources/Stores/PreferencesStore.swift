@@ -50,7 +50,7 @@ public class PreferencesStore {
     public var subscriptionsVersion: Int
     
     @UserDefault(defaults: .standard, key: "currentWallet", defaultValue: .none)
-    public var currentWallet: String?
+    public var currentWalletId: String?
     
     @UserDefault(defaults: .standard, key: "is_push_notifications_enabled", defaultValue: false)
     public var isPushNotificationsEnabled: Bool

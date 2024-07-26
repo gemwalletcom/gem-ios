@@ -25,3 +25,11 @@ public struct Wallet: Codable, Equatable {
 		self.accounts = accounts
 	}
 }
+
+public struct WalletId: Codable, Equatable {
+	public let id: String
+
+	public init(id: String) {
+		self.id = id
+	}
+}

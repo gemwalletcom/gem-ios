@@ -122,7 +122,7 @@ extension AssetSceneViewModel {
     func updateWallet() async {
         do {
             async let updateAsset: () = try walletService.updateAsset(
-                wallet: walletModel.wallet,
+                walletId: walletModel.wallet.walletId,
                 assetId: assetModel.asset.id
             )
             async let updateTransactions: () = try fetchTransactions()

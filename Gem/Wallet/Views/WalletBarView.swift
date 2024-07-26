@@ -10,7 +10,7 @@ struct WalletBarViewViewModel {
 }
 
 extension WalletBarViewViewModel {
-    static func from(wallet: Wallet, showChevron: Bool) -> WalletBarViewViewModel {
+    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
         let model = WalletViewModel(wallet: wallet)
         return WalletBarViewViewModel(
             name: model.name,

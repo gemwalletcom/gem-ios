@@ -89,7 +89,7 @@ struct ReceiveScene_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ReceiveScene(
-                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), wallet: .main, address: "", walletService: .main)
+                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), walletId: .main, address: "", walletService: .main)
             )
             .navigationBarTitleDisplayMode(.inline)
         }
