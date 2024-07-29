@@ -147,6 +147,8 @@ internal enum Localized {
     internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results Found")
     /// Not Available
     internal static let notAvailable = Localized.tr("Localizable", "common.not_available", fallback: "Not Available")
+    /// Open settings
+    internal static let openSettings = Localized.tr("Localizable", "common.open_settings", fallback: "Open settings")
     /// Paste
     internal static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
     /// Phrase
@@ -189,10 +191,16 @@ internal enum Localized {
     internal static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
   }
   internal enum Errors {
+    /// Camera permission not granted. Please enable camera access in settings to scan QR code.
+    internal static let cameraPermissionsNotGranted = Localized.tr("Localizable", "errors.camera_permissions_not_granted", fallback: "Camera permission not granted. Please enable camera access in settings to scan QR code.")
     /// Create Wallet Error: %s
     internal static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
     }
+    /// Decoding Error
+    internal static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
+    /// Failed to decode the QR code. Please try again with a different QR code.
+    internal static let decodingQr = Localized.tr("Localizable", "errors.decoding_qr", fallback: "Failed to decode the QR code. Please try again with a different QR code.")
     /// Error
     internal static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
@@ -203,10 +211,20 @@ internal enum Localized {
     internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
+    /// Not Supported
+    internal static let notSupported = Localized.tr("Localizable", "errors.not_supported", fallback: "Not Supported")
+    /// This device does not support QR code scanning. You can only select QR code image from library.
+    internal static let notSupportedQr = Localized.tr("Localizable", "errors.not_supported_qr", fallback: "This device does not support QR code scanning. You can only select QR code image from library.")
+    /// Permissions Not Granted
+    internal static let permissionsNotGranted = Localized.tr("Localizable", "errors.permissions_not_granted", fallback: "Permissions Not Granted")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
     }
+    /// Unexpected
+    internal static let unexpected = Localized.tr("Localizable", "errors.unexpected", fallback: "Unexpected")
+    /// An unexpected error occurred. Please try again.
+    internal static let unexpectedTryAgain = Localized.tr("Localizable", "errors.unexpected_try_again", fallback: "An unexpected error occurred. Please try again.")
     /// Validation Error: %s
     internal static func validation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
@@ -237,6 +255,10 @@ internal enum Localized {
         return Localized.tr("Localizable", "errors.token.unable_fetch_token_information", String(describing: p1), fallback: "Unable to fetch token information: %@")
       }
     }
+  }
+  internal enum Library {
+    /// Select from photos
+    internal static let selectFromPhotos = Localized.tr("Localizable", "library.select_from_photos", fallback: "Select from photos")
   }
   internal enum Nodes {
     /// Gem Wallet Node

@@ -3,47 +3,25 @@
 import SwiftUI
 import PhotosUI
 
-enum QRScannerState {
-    case idle
-    case failure(error: QRScannerError)
-    case scanning
-}
-
-enum ImageState: Equatable {
-    case empty
-    case success(UIImage)
-    case failure(Error)
-
-    static func == (lhs: ImageState, rhs: ImageState) -> Bool {
-        switch (lhs, rhs) {
-        case (.empty, .empty):
-            return true
-        case (.success(let lhsImage), .success(let rhsImage)):
-            return lhsImage.hashValue == rhsImage.hashValue
-        case (.failure(let lhsError), .failure(let rhsError)):
-            return lhsError.localizedDescription == rhsError.localizedDescription
-        default:
-            return false
-        }
-    }
-}
-
 @Observable
 @MainActor
-class QRScanner {
+class QRScannerViewModel {
     var scannerState: QRScannerState
     var imageState: ImageState
     var selectedPhoto: PhotosPickerItem?
 
-    init(scannerState: QRScannerState, imageState: ImageState) {
+    let resources: QRScannerResourcesProviding
+
+    init(scannerState: QRScannerState, imageState: ImageState, resources: QRScannerResourcesProviding) {
         self.scannerState = scannerState
         self.imageState = imageState
+        self.resources = resources
     }
 }
 
 // MARK: - Business Logic
 
-extension QRScanner {
+extension QRScannerViewModel {
     func refreshScannerState() {
         do {
             try QRScannerViewWrapper.checkDeviceQRScanningSupport()
@@ -75,7 +53,7 @@ extension QRScanner {
         }
     }
 
-    func retriveQR(image: UIImage) throws -> String {
+    func retrieveQRCode(image: UIImage) throws -> String {
         try QRImageDecoder.process(image)
     }
 }

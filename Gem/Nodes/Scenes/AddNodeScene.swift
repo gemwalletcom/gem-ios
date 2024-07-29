@@ -44,7 +44,7 @@ struct AddNodeScene: View {
             }
         }
         .sheet(isPresented: $model.isPresentingScanner) {
-            ScanQRCodeNavigationStack(action: onScanFinished(_:))
+            ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .alert(item: $model.isPresentingErrorAlert) {
             Alert(title: Text(""), message: Text($0))
@@ -130,7 +130,7 @@ extension AddNodeScene {
         }
     }
 
-    private func onScanFinished(_ result: String) {
+    private func onHandleScan(_ result: String) {
         model.urlInput = result
         fetch()
     }

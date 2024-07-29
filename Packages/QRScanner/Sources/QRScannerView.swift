@@ -8,19 +8,13 @@ public struct QRScannerView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
 
-    @State private var model: QRScanner
+    @State private var model: QRScannerViewModel
 
-    private let textProvider: QRScannerTextProviding
     private let action: ((String) -> Void)
 
-    public init(action: @escaping ((String) -> Void)) {
-        self.init(action: action, textProvider: QRScannerTextProvider())
-    }
-
-    public init(action: @escaping ((String) -> Void), textProvider: QRScannerTextProviding) {
+    public init(resources: QRScannerResourcesProviding, action: @escaping ((String) -> Void)) {
         self.action = action
-        self.textProvider = textProvider
-        _model = State(initialValue: QRScanner(scannerState: .idle, imageState: .empty))
+        _model = State(initialValue: QRScannerViewModel(scannerState: .idle, imageState: .empty, resources: resources))
     }
 
     public var body: some View {
@@ -34,30 +28,23 @@ public struct QRScannerView: View {
             case .failure(let error):
                 ContentUnavailableView(
                     label: {
-                        switch error {
-                        case .notSupported:
-                            Label(textProvider.errorNotSupportedTitle, systemImage: "xmark.circle.fill")
-                        case .permissionsNotGranted:
-                            Label(textProvider.errorPermissionsNotGrantedTitle, systemImage: "lock.fill")
-                        case .decoding:
-                            Label(textProvider.errorDecodingTitle, systemImage: "exclamationmark.triangle.fill")
-                        case .unexpected:
-                            Label(textProvider.errorUnexpectedTitle, systemImage: "exclamationmark.triangle.fill")
+                        if let localizedError = error as? LocalizedQRError, let titleImage = localizedError.titleImage {
+                            Label(titleImage.title, systemImage: titleImage.systemImage)
                         }
                     },
                     description: {
-                        Text(error.localizedDescription(using: textProvider))
+                        Text(error.localizedDescription)
                     },
                     actions: {
                         switch error {
                         case .notSupported:
                             photosPicker {
-                                Text(textProvider.selectFromPhotos)
+                                Text(model.resources.selectFromPhotos)
                             }
                         case .permissionsNotGranted:
-                            Button(textProvider.openSettings, action: onSelectOpenSettings)
+                            Button(model.resources.openSettings, action: onSelectOpenSettings)
                         case .decoding, .unexpected:
-                            Button(textProvider.retry, action: onRefreshScanner)
+                            Button(model.resources.tryAgain, action: onRefreshScanner)
                         }
                     }
                 )
@@ -66,7 +53,7 @@ public struct QRScannerView: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 photosPicker {
-                    Image(systemName: "photo.artframe")
+                    Image(systemName: model.resources.gallerySystemImage)
                         .bold()
                 }
             }
@@ -74,7 +61,7 @@ public struct QRScannerView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "chevron.down")
+                    Image(systemName: model.resources.dismissSystemImage)
                         .bold()
                 }
             }
@@ -120,7 +107,7 @@ extension QRScannerView {
         guard case .success(let uIImage) = newValue else { return }
 
         do {
-            let code = try model.retriveQR(image: uIImage)
+            let code = try model.retrieveQRCode(image: uIImage)
             onHandleScanResult(.success(code))
         } catch {
             model.refreshScannerState(error: error)

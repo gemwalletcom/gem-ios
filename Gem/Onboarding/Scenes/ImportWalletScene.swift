@@ -134,9 +134,7 @@ struct ImportWalletScene: View {
             Alert(title: Text(Localized.Errors.validation("")), message: Text($0))
         }
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack() {
-                scanResult($0)
-            }
+            ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .onChange(of: secretPhrase) { oldValue, newValue in
             wordSuggestion = model.wordSuggestionCalculate(value: newValue)
@@ -155,7 +153,7 @@ struct ImportWalletScene: View {
         secretPhrase = model.selectWordCalculate(input: secretPhrase, word: word)
     }
     
-    func scanResult(_ result: String) {
+    func onHandleScan(_ result: String) {
         switch importType {
         case .phrase: secretPhrase = result
         case .address: address = result
