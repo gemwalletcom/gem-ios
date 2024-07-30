@@ -6,16 +6,21 @@ import Components
 import Store
 import GRDB
 import GRDBQuery
+import Keystore
 
 struct TransactionsViewModel {
-    let wallet: Wallet
+    let walletId: WalletId
 
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
     private let service: TransactionsService
 
-    init(wallet: Wallet, type: TransactionsRequestType, service: TransactionsService) {
-        self.wallet = wallet
+    init(
+        walletId: WalletId,
+        type: TransactionsRequestType,
+        service: TransactionsService
+    ) {
+        self.walletId = walletId
         self.type = type
         self.service = service
     }
@@ -25,7 +30,7 @@ struct TransactionsViewModel {
     }
     
     var request: TransactionsRequest {
-        TransactionsRequest(walletId: wallet.walletId.id, type: type)
+        TransactionsRequest(walletId: walletId.id, type: type)
     }
 }
 
@@ -37,7 +42,7 @@ extension TransactionsViewModel {
             guard let deviceId = try preferences.get(key: .deviceId) else {
                 throw AnyError("deviceId is null")
             }
-            try await service.updateAll(deviceId: deviceId, wallet: wallet)
+            try await service.updateAll(deviceId: deviceId, walletId: walletId)
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }

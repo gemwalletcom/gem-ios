@@ -100,7 +100,6 @@ struct SelectAssetScene: View {
                 await model.searchQuery(query: query)
             }
         }
-        
         .navigationDestination(for: SelectAssetInput.self) { input in
             switch input.type {
             case .send:

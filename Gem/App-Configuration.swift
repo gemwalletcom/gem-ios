@@ -120,7 +120,7 @@ extension WalletService {
 }
 
 extension TransactionsService {
-    static let main = TransactionsService(transactionStore: .main, assetsService: .main)
+    static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
 }
 
 extension AssetStore {

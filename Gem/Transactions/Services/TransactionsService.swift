@@ -4,24 +4,29 @@ import Foundation
 import GemAPI
 import Primitives
 import Store
+import Keystore
 
 class TransactionsService {
-    
+
     let provider: GemAPITransactionService
     let transactionStore: TransactionStore
     let assetsService: AssetsService
-    
+    let keystore: any Keystore
+
     init(
         provider: GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
-        assetsService: AssetsService
+        assetsService: AssetsService,
+        keystore: any Keystore
     ) {
         self.provider = provider
         self.transactionStore = transactionStore
         self.assetsService = assetsService
+        self.keystore = keystore
     }
     
-    func updateAll(deviceId: String, wallet: Wallet) async throws {
+    func updateAll(deviceId: String, walletId: WalletId) async throws {
+        let wallet = try keystore.getWallet(walletId)
         let store = WalletPreferencesStore(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         

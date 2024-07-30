@@ -93,7 +93,8 @@ struct WalletCoordinator: View {
         )
         self.transactionsService = TransactionsService(
             transactionStore: transactionStore,
-            assetsService: assetsService
+            assetsService: assetsService,
+            keystore: _keystore.wrappedValue
         )
         self.walletConnectorInteractor = WalletConnectorInteractor()
         self.walletConnectorSigner = WalletConnectorSigner(
@@ -140,8 +141,7 @@ struct WalletCoordinator: View {
         VStack {
             if let currentWallet = keystore.currentWallet {
                 MainTabView(
-                    model: WalletSceneViewModel(wallet: currentWallet, walletService: walletService),
-                    keystore: keystore,
+                    model: .init(wallet: currentWallet),
                     navigationStateManager: $navigationStateManager
                 )
                 .tint(Colors.black)
