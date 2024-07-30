@@ -5,7 +5,6 @@ import SwiftUI
 
 struct HeaderButton: Identifiable {
     let type: HeaderButtonType
-    let isDisabled: Bool
     
     var id: String { type.rawValue }
     

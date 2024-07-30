@@ -51,7 +51,6 @@ struct WalletCoordinator: View {
 
     @State private var updateAvailableAlertSheetMessage: String? = .none
     @State var isPresentingError: String? = .none
-    @State var walletModel: WalletSceneViewModel
     @State var isPresentingWalletConnectBar: Bool = false
 
     @State var transferData: TransferDataCallback<TransferData>? // wallet connector
@@ -107,6 +106,7 @@ struct WalletCoordinator: View {
             signer: walletConnectorSigner
         )
         self.walletService = WalletService(
+            keystore: _keystore.wrappedValue,
             priceStore: priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
@@ -132,20 +132,15 @@ struct WalletCoordinator: View {
             subscriptionService: subscriptionService
         )
         self.deviceService.observer()
-        _walletModel = State(wrappedValue: WalletSceneViewModel(
-            assetsService: assetsService,
-            walletService: walletService
-        ))
 
         _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
     
     var body: some View {
         VStack {
-            if let wallet = keystore.currentWallet {
+            if let currentWallet = keystore.currentWallet {
                 MainTabView(
-                    wallet: wallet,
-                    walletModel: walletModel,
+                    model: WalletSceneViewModel(wallet: currentWallet, walletService: walletService),
                     keystore: keystore,
                     navigationStateManager: $navigationStateManager
                 )
@@ -256,7 +251,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            connectionProposal?.delegate(.failure(AnyError("User cancelled")))
+                            connectionProposal?.delegate(.failure(ConnectionsError.userCancelled))
                             connectionProposal = nil
                         }
                         .bold()
@@ -324,8 +319,10 @@ struct WalletCoordinator: View {
             switch url {
             case .walletConnect(let uri):
                 isPresentingWalletConnectBar = true
-                try await connectionsService.addConnectionURI(uri: uri, wallet: keystore.currentWallet!)
-
+                try await connectionsService.addConnectionURI(
+                    uri: uri,
+                    wallet: try keystore.getCurrentWallet()
+                )
             case .walletConnectRequest:
                 isPresentingWalletConnectBar = true
                 break

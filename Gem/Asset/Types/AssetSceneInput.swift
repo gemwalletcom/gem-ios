@@ -5,16 +5,17 @@ import Primitives
 import Store
 
 struct AssetSceneInput {
+
+    let walletId: WalletId
     let assetId: AssetId
-    let wallet: Wallet
-    
-    static let transactionsLimit = 10
-    
+
+    static let transactionsLimit = 25
+
     var assetRequest: AssetRequest {
-        return AssetRequest(walletId: wallet.id, assetId: assetId.identifier)
+        return AssetRequest(walletId: walletId.id, assetId: assetId.identifier)
     }
     
     var transactionsRequest: TransactionsRequest {
-        return TransactionsRequest(walletId: wallet.id, type: .asset(assetId: assetId), limit: Self.transactionsLimit)
+        return TransactionsRequest(walletId: walletId.id, type: .asset(assetId: assetId), limit: Self.transactionsLimit)
     }
 }

@@ -186,7 +186,7 @@ public class BalanceService: BalancerUpdater {
         )
     }
     
-    func hideAsset(wallet: Wallet, assetId: AssetId) throws {
-        try balanceStore.setIsEnabled(walletId: wallet.id, assetIds: [assetId.identifier], value: false)
+    func hideAsset(walletId: WalletId, assetId: AssetId) throws {
+        try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: [assetId.identifier], value: false)
     }
 }

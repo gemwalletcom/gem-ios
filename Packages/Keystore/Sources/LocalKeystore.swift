@@ -12,6 +12,7 @@ public final class LocalKeystore: Keystore {
     
     let keystorePassword: KeystorePassword
     
+    @Published public var currentWalletId: Primitives.WalletId? = .none
     @Published public var currentWallet: Primitives.Wallet? = .none
     
     public init(
@@ -26,7 +27,11 @@ public final class LocalKeystore: Keystore {
         self.preferences = preferences
         self.walletStore = walletStore
         self.keystorePassword = keystorePassword
-        self.currentWallet = getCurrentWallet(id: preferences.currentWallet ?? "")
+        self.currentWalletId = switch preferences.currentWalletId {
+        case .some(let value): WalletId(id: value)
+        case .none: .none
+        }
+        self.currentWallet = getWalletById(id: preferences.currentWalletId ?? "")
     }
     
     public var wallets: [Primitives.Wallet] {
@@ -40,17 +45,33 @@ public final class LocalKeystore: Keystore {
     public func createWallet() -> [String] {
         return walletKeyStore.createWallet()
     }
-    
-    public func setCurrentWallet(wallet: Primitives.Wallet?) {
-        preferences.currentWallet = wallet?.id
-        guard let wallet = wallet else {
-            currentWallet = nil
-            return
+
+    public func getCurrentWallet() throws -> Wallet {
+        if let currentWalletId {
+            return try getWallet(currentWalletId)
         }
-        currentWallet = getCurrentWallet(id: wallet.id)
+        throw KeystoreError.noWalletId
     }
 
-    private func getCurrentWallet(id: String) -> Primitives.Wallet? {
+    public func getWallet(_ walletId: WalletId) throws -> Wallet {
+        if let wallet = getWalletById(id: walletId.id) {
+            return wallet
+        }
+        throw KeystoreError.noWallet
+    }
+
+    public func setCurrentWalletId(_ walletId: Primitives.WalletId?) {
+        preferences.currentWalletId = walletId?.id
+        guard let walletId = walletId else {
+            currentWallet = nil
+            currentWalletId = nil
+            return
+        }
+        currentWalletId = walletId
+        currentWallet = getWalletById(id: walletId.id)
+    }
+
+    private func getWalletById(id: String) -> Primitives.Wallet? {
         return wallets.filter({ $0.id == id  }).first ?? wallets.first
     }
 
@@ -76,7 +97,7 @@ public final class LocalKeystore: Keystore {
             result = Wallet.makeView(name: name, chain: chain, address: address)
         }
         try walletStore.addWallet(result)
-        setCurrentWallet(wallet: result)
+        setCurrentWalletId(result.walletId)
         return result
     }
     
@@ -128,13 +149,13 @@ public final class LocalKeystore: Keystore {
             } catch let error as KeystoreError {
                 //in some cases wallet already deleted, just ignore
                 switch error {
-                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey:
+                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey, .noWallet, .noWalletId:
                     break
                 }
             }
         }
         try walletStore.deleteWallet(for: wallet.id)
-        setCurrentWallet(wallet: wallets.first)
+        setCurrentWalletId(wallets.first?.walletId)
     }
     
     public func getNextWalletIndex() throws -> Int {

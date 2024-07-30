@@ -9,7 +9,7 @@ import Style
 
 class ChartsViewModel: ObservableObject {
     
-    let walletModel: WalletViewModel
+    let walletId: WalletId
     let service: ChartService
     let priceService: PriceService
     let assetModel: AssetViewModel
@@ -35,9 +35,9 @@ class ChartsViewModel: ObservableObject {
     private let preferences: Preferences = .standard
 
     var assetRequest: AssetRequest {
-        AssetRequest(walletId: walletModel.wallet.id, assetId: assetModel.asset.id.identifier)
+        return AssetRequest(walletId: walletId.id, assetId: assetModel.asset.id.identifier)
     }
-    
+
     var title: String { assetModel.title }
 
     var emptyTitle: String { Localized.Common.notAvailable }
@@ -52,14 +52,14 @@ class ChartsViewModel: ObservableObject {
     }
     
     init(
-        walletModel: WalletViewModel,
+        walletId: WalletId,
         service: ChartService = ChartService(),
         priceService: PriceService,
         assetsService: AssetsService,
         assetModel: AssetViewModel,
         currentPeriod: ChartPeriod = ChartPeriod.day
     ) {
-        self.walletModel = walletModel
+        self.walletId = walletId
         self.service = service
         self.priceService = priceService
         self.assetsService = assetsService

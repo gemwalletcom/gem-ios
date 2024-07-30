@@ -106,6 +106,7 @@ extension NameService {
 
 extension WalletService {
     static let main = WalletService(
+        keystore: LocalKeystore.main,
         priceStore: .main,
         assetsService: .main,
         balanceService: .main,
@@ -177,6 +178,10 @@ extension DB {
 extension Wallet {
     static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main])
     static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main])
+}
+
+extension WalletId {
+    static let main = Wallet.main.walletId
 }
 
 extension Account {

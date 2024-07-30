@@ -21,12 +21,11 @@ struct TransactionsViewModel {
     }
 
     var title: String {
-        //TODO: Change Title based on the type
-        return Localized.Activity.title
+        Localized.Activity.title
     }
     
     var request: TransactionsRequest {
-        return TransactionsRequest(walletId: wallet.id, type: type)
+        TransactionsRequest(walletId: wallet.walletId.id, type: type)
     }
 }
 

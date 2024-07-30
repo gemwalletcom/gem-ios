@@ -5,8 +5,7 @@ import Primitives
 import Keystore
 
 struct MainTabView: View {
-    let wallet: Wallet
-    let walletModel: WalletSceneViewModel
+    let model: WalletSceneViewModel
     let keystore: LocalKeystore
 
     // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
@@ -31,7 +30,7 @@ struct MainTabView: View {
             transactionsTabItemView
             settingTabItemView
         }
-        .onChange(of: keystore.currentWallet) {
+        .onChange(of: keystore.currentWalletId) {
             navigationStateManager.selectedTab = .wallet
         }
     }
@@ -42,8 +41,7 @@ struct MainTabView: View {
 extension MainTabView {
     private var walletTabItemView: some View {
         WalletNavigationStack(
-            wallet: wallet,
-            walletModel: walletModel,
+            model: model,
             navigationPath: $navigationStateManager.wallet
         )
         .tabItem {
@@ -57,7 +55,7 @@ extension MainTabView {
 
     private var transactionsTabItemView: some View {
         TransactionsNavigationStack(
-            wallet: wallet,
+            wallet: model.wallet,
             navigationPath: $navigationStateManager.activity
         )
         .tabItem {
@@ -71,7 +69,7 @@ extension MainTabView {
 
     private var settingTabItemView: some View {
         SettingsNavigationStack(
-            wallet: wallet,
+            walletId: model.wallet.walletId,
             navigationPath: $navigationStateManager.settings,
             currencyModel: CurrencySceneViewModel(),
             securityModel: SecurityViewModel()
@@ -110,8 +108,7 @@ extension MainTabView {
 #Preview {
     @State var navigationStateManager: NavigationStateManagable = NavigationStateManager(initialSelecedTab: .wallet)
     return MainTabView(
-        wallet: .main,
-        walletModel: .init(assetsService: .main, walletService: .main),
+        model: .init(wallet: .main, walletService: .main),
         keystore: .main,
         navigationStateManager: $navigationStateManager)
 }

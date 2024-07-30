@@ -23,21 +23,17 @@ public class WalletConnectorSigner: WalletConnectorSignable {
         self.walletConnectorInteractor = walletConnectorInteractor
     }
     
-    var currentWallet: Wallet {
-        return keystore.currentWallet!
-    }
-    
     public func getWallet() throws -> Wallet {
-        return currentWallet
+        return try keystore.getCurrentWallet()
     }
 
-    public func getChains() -> [Primitives.Chain] {
+    public func getChains() throws -> [Primitives.Chain] {
         let chains = Config.shared.getWalletConnectConfig().chains.compactMap { Chain(rawValue: $0) }
-        return currentWallet.accounts.map { $0.chain }.asSet().intersection(chains).asArray()
+        return try getWallet().accounts.map { $0.chain }.asSet().intersection(chains).asArray()
     }
     
     public func getAccounts() throws -> [Primitives.Account] {
-        return currentWallet.accounts
+        return try getWallet().accounts
     }
     
     public func getEvents() throws -> [WalletConnectionEvents] {
