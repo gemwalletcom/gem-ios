@@ -18,7 +18,7 @@ class SettingsViewModel: ObservableObject {
         didSet { preferences.isDeveloperEnabled = isDeveloperEnabled }
     }
 
-    private let wallet: Wallet
+    private let walletId: WalletId
     private let walletService: WalletService
     private let preferences = Preferences.main
     private let keystore: any Keystore
@@ -26,7 +26,7 @@ class SettingsViewModel: ObservableObject {
     init(
         keystore: any Keystore,
         walletService: WalletService,
-        wallet: Wallet,
+        walletId: WalletId,
         currencyModel: CurrencySceneViewModel,
         securityModel: SecurityViewModel
     ) {
@@ -35,7 +35,7 @@ class SettingsViewModel: ObservableObject {
         self.currencyModel = currencyModel
         self.securityModel = securityModel
         self.isDeveloperEnabled = preferences.isDeveloperEnabled
-        self.wallet = wallet
+        self.walletId = walletId
     }
 
     var title: String { Localized.Settings.title }
@@ -115,6 +115,6 @@ class SettingsViewModel: ObservableObject {
 
 extension SettingsViewModel {
     func fetch() async throws {
-        try await walletService.changeCurrency(wallet: wallet)
+        try await walletService.changeCurrency(walletId: walletId)
     }
 }

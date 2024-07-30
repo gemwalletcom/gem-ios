@@ -25,6 +25,7 @@ struct AssetScene: View {
     @Query<AssetRequest>
     private var assetData: AssetData
 
+    private let wallet: Wallet
     private let input: AssetSceneInput
 
     private var model: AssetSceneViewModel {
@@ -34,14 +35,16 @@ struct AssetScene: View {
             transactionsService: transactionsService,
             stakeService: stakeService,
             assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-            walletModel: WalletViewModel(wallet: input.wallet)
+            walletModel: WalletViewModel(wallet: wallet)
         )
     }
 
     init(
+        wallet: Wallet,
         input: AssetSceneInput,
         isPresentingAssetSelectType: Binding<SelectAssetInput?>
     ) {
+        self.wallet = wallet
         self.input = input
         _isPresentingAssetSelectType = isPresentingAssetSelectType
         _assetData = Query(constant: input.assetRequest, in: \.db.dbQueue)
@@ -134,7 +137,7 @@ struct AssetScene: View {
         }
         .navigationDestination(for: Asset.self) { asset in
             ChartScene(model: ChartsViewModel(
-                    walletModel: model.walletModel,
+                    walletId: input.walletId,
                     priceService: walletService.priceService,
                     assetsService: walletService.assetsService,
                     assetModel: AssetViewModel(asset: asset)
@@ -145,7 +148,7 @@ struct AssetScene: View {
             NavigationStack {
                 StakeScene(
                     model: StakeViewModel(
-                        wallet: model.walletModel.wallet,
+                        wallet: wallet,
                         chain: model.assetModel.asset.chain,
                         stakeService: stakeService
                     )

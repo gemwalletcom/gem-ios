@@ -48,17 +48,6 @@ struct WalletViewModel {
     }
 }
 
-extension WalletViewModel {
-    func isButtonDisabled(type: HeaderButtonType) -> Bool {
-        switch type {
-        case .send, .swap:
-            return wallet.isViewOnly
-        case .buy, .receive:
-            return false
-        }
-    }
-}
-
 extension WalletViewModel: Identifiable {
     var id: String { wallet.id }
 }

@@ -39,7 +39,7 @@ struct TransactionsScene: View {
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
             TransactionScene(
-                input: TransactionSceneInput(transactionId: transaction.id, wallet: model.wallet)
+                input: TransactionSceneInput(transactionId: transaction.id, walletId: model.walletId)
             )
         }
         .onAppear {
@@ -73,5 +73,5 @@ extension TransactionsScene {
 // MARK: - Previews
 
 #Preview {
-    TransactionsScene(model: .init(wallet: .main, type: .all, service: .main))
+    TransactionsScene(model: .init(walletId: .main, type: .all, service: .main))
 }

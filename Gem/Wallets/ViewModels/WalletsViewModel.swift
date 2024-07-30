@@ -24,8 +24,8 @@ struct WalletsViewModel {
 // MARK: - Business Logic
 
 extension WalletsViewModel {
-    func setCurrent(_ wallet: Wallet) {
-        keystore.setCurrentWallet(wallet: wallet)
+    func setCurrent(_ walletId: WalletId) {
+        keystore.setCurrentWalletId(walletId)
     }
 
     func delete(_ wallet: Wallet) throws {

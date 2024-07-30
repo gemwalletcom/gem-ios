@@ -1,15 +1,16 @@
 {
   "configurations" : [
     {
-      "id" : "E70C6DC7-7842-436E-858F-D28890FEDD6E",
-      "name" : "Configuration 1",
+      "id" : "D85544DD-3036-48C8-AE04-E011CF15C0E6",
+      "name" : "Test Configuration",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
-
+    "language" : "en",
+    "region" : "US"
   },
   "testTargets" : [
     {

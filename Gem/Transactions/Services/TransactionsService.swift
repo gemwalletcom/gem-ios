@@ -4,24 +4,29 @@ import Foundation
 import GemAPI
 import Primitives
 import Store
+import Keystore
 
 class TransactionsService {
-    
+
     let provider: GemAPITransactionService
     let transactionStore: TransactionStore
     let assetsService: AssetsService
-    
+    let keystore: any Keystore
+
     init(
         provider: GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
-        assetsService: AssetsService
+        assetsService: AssetsService,
+        keystore: any Keystore
     ) {
         self.provider = provider
         self.transactionStore = transactionStore
         self.assetsService = assetsService
+        self.keystore = keystore
     }
     
-    func updateAll(deviceId: String, wallet: Wallet) async throws {
+    func updateAll(deviceId: String, walletId: WalletId) async throws {
+        let wallet = try keystore.getWallet(walletId)
         let store = WalletPreferencesStore(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
@@ -30,7 +35,7 @@ class TransactionsService {
             walletIndex: wallet.index.asInt,
             fromTimestamp: store.transactionsTimestamp
         )
-        try await prefetchAssets(wallet: wallet, transactions: transactions)
+        try await prefetchAssets(walletId: wallet.walletId, transactions: transactions)
         try transactionStore.addTransactions(walletId: wallet.id, transactions: transactions)
         
         store.transactionsTimestamp = newTimestamp
@@ -49,19 +54,19 @@ class TransactionsService {
         if transactions.isEmpty {
             return
         }
-        try await prefetchAssets(wallet: wallet, transactions: transactions)
-        
+        try await prefetchAssets(walletId: wallet.walletId, transactions: transactions)
+
         try transactionStore.addTransactions(walletId: wallet.id, transactions: transactions)
         
         store.setTransactionsForAssetTimestamp(assetId: assetId.identifier, value: newTimestamp)
     }
     
-    private func prefetchAssets(wallet: Wallet, transactions: [Transaction]) async throws {
+    private func prefetchAssets(walletId: WalletId, transactions: [Transaction]) async throws {
         let assetIds = transactions.map { $0.assetIds }.flatMap { $0 }
         if assetIds.isEmpty {
             return
         }
         let newAssets = try await assetsService.prefetchAssets(assetIds: assetIds)
-        try assetsService.addBalancesIfMissing(walletId: wallet.id, assetIds: newAssets)
+        try assetsService.addBalancesIfMissing(walletId: walletId, assetIds: newAssets)
     }
 }

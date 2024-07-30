@@ -104,7 +104,10 @@ struct ConnectionsScene: View {
     
     func connectURI(uri: String) async {
         do {
-            try await model.addConnectionURI(uri: uri, wallet: keystore.currentWallet!)
+            try await model.addConnectionURI(
+                uri: uri,
+                wallet: try keystore.getCurrentWallet()
+            )
         } catch {
             isPresentingErrorMessage = error.localizedDescription
             NSLog("connectURI error: \(error)")
