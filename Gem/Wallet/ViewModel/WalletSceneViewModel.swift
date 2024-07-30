@@ -39,9 +39,6 @@ struct WalletSceneViewModel {
     }
 
     func fetch(walletId: WalletId, assets: [AssetData]) async throws {
-        NSLog("wallet fetch for: \(walletId.id)")
-        NSLog("wallet fetch for: \(wallet.id), \(wallet.name)")
-
         try await walletService.fetch(
             walletId: walletId,
             assetIds: assets.map { $0.asset.id }
@@ -49,8 +46,6 @@ struct WalletSceneViewModel {
     }
 
     func fetch(assets: [AssetData]) async throws {
-        NSLog("wallet fetch for: \(wallet.name)")
-
         do {
             try await fetch(walletId: wallet.walletId, assets: assets)
         } catch {
