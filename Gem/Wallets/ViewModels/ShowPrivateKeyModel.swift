@@ -6,9 +6,9 @@ import Primitives
 class ShowPrivateKeyModel {
 
     let text: String
-    let encoding: EncodingType?
+    let encoding: EncodingType
 
-    init(text: String, encoding: EncodingType?) {
+    init(text: String, encoding: EncodingType) {
         self.text = text
         self.encoding = encoding
     }

@@ -11,7 +11,7 @@ struct ShowPrivateKeyScene: View {
     @State private var showCopyMessage = false
 
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: Spacing.medium) {
             // FIXME add localize strings
             CalloutView.error(
                 title: Localized.SecretPhrase.DoNotShare.title,
@@ -20,19 +20,15 @@ struct ShowPrivateKeyScene: View {
             .padding(.top, Spacing.scene.top)
             
             // FIXME fix the UI design
-            Section(
-                model.encoding?.rawValue ?? "Hex", content: {
-                    Text(
-                        model.text
-                    )
-                    .font(.footnote)
-                    .padding(Spacing.scene.top)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(Color.gray, lineWidth: 1)
-                    )
-                }
-            )
+            //In the future add selector to show base58/hex value
+
+            Section(model.encoding.rawValue) {
+                Text(
+                    model.text
+                )
+                .font(.footnote)
+                .padding(Spacing.scene.top)
+            }
 
             Button {
                 showCopyMessage = true
@@ -44,7 +40,7 @@ struct ShowPrivateKeyScene: View {
         }
         .modifier(ToastModifier(
             isPresenting: $showCopyMessage,
-            value: CopyTypeViewModel(type: .secretPhrase).message,
+            value: CopyTypeViewModel(type: .privateKey).message,
             systemImage: SystemImage.copy
         ))
         .frame(maxWidth: Spacing.scene.content.maxWidth)
@@ -54,7 +50,8 @@ struct ShowPrivateKeyScene: View {
 
 struct ShowPrivateKeyScene_Preview: PreviewProvider {
     static var previews: some View {
-        ShowPrivateKeyScene(model: ShowPrivateKeyModel(text: "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz", encoding: .base58)
+        ShowPrivateKeyScene(
+            model: ShowPrivateKeyModel(text: "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz", encoding: .base58)
         )
     }
 }

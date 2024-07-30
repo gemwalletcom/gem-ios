@@ -18,7 +18,7 @@ struct WalletDetailViewModel {
         switch wallet.type {
         case .multicoin:
             return .none
-        case .single, .view:
+        case .single, .view, .privateKey:
             guard let account = wallet.accounts.first else { return .none }
             return WalletDetailAddress.account(
                 SimpleAccount(
@@ -37,14 +37,18 @@ extension WalletDetailViewModel {
     func rename(name: String) throws {
         try keystore.renameWallet(wallet: wallet, newName: name)
     }
-
-    func getMnemonicWords() async throws -> [String] {
+    
+    func getMnemonicWords() throws -> [String] {
         try keystore.getMnemonic(wallet: wallet)
     }
-
-    func getPrivateKey(chain: Chain) async throws -> String {
-        let encoding = chain.keyEncodingTypes.first
+    
+    func getPrivateKey(for chain: Chain) throws -> String {
+        let encoding = getEncodingType(for: chain)
         return try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+    }
+    
+    func getEncodingType(for chain: Chain) -> EncodingType {
+        return chain.defaultKeyEncodingType
     }
 
     func delete() throws {

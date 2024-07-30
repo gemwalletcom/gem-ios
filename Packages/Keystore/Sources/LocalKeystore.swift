@@ -47,14 +47,14 @@ public final class LocalKeystore: Keystore {
         return walletKeyStore.createWallet()
     }
 
-    public func getCurrentWallet() throws -> Wallet {
+    public func getCurrentWallet() throws -> Primitives.Wallet {
         if let currentWalletId {
             return try getWallet(currentWalletId)
         }
         throw KeystoreError.noWalletId
     }
 
-    public func getWallet(_ walletId: WalletId) throws -> Wallet {
+    public func getWallet(_ walletId: WalletId) throws -> Primitives.Wallet {
         if let wallet = getWalletById(id: walletId.id) {
             return wallet
         }
@@ -127,7 +127,7 @@ public final class LocalKeystore: Keystore {
             case .multicoin:
                 let result = try walletKeyStore.addChains(chains: chains, wallet: wallet, password: password)
                 try walletStore.addWallet(result)
-            case .single:
+            case .single, .privateKey:
                 fatalError()
             case .view:
                 break
@@ -143,7 +143,7 @@ public final class LocalKeystore: Keystore {
         switch wallet.type {
         case .view:
             break
-        case .multicoin, .single:
+        case .multicoin, .single, .privateKey:
             let password = try keystorePassword.getPassword()
             do {
                 try walletKeyStore.deleteWallet(id: wallet.id, password: password)
@@ -168,12 +168,12 @@ public final class LocalKeystore: Keystore {
         return try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
     }
 
-    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType?) throws -> String {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
         let data = try getPrivateKey(wallet: wallet, chain: chain)
         switch encoding {
         case .base58:
             return Base58.encodeNoCheck(data: data)
-        case .hex, .none:
+        case .hex:
             return data.hexString.append0x
         }
     }
