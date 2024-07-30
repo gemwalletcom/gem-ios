@@ -8,11 +8,14 @@ import Primitives
 
 final class WalletKeyStoreTests: XCTestCase {
 
+    // phantom
+    private let testBase58Key = "4ha2npeRkDXipjgGJ3L5LhZ9TK9dRjP2yktydkFBhAzXj3N8ytpYyTS24kxcYGEefy4WKWRcog2zSPvpPZoGmxCC"
+
     func testImportPrivateKey() throws {
         let store = WalletKeyStore.make()
         let wallet = try store.importPrivateKey(
             name: "test",
-            key: "1111111111111111111111111111111PPm2a2NNZH2EFJ5UkEjkH9Fcxn8cvjTmZDKQQisyLDmA",
+            key: testBase58Key,
             chain: .solana,
             password: "test"
         )
@@ -21,7 +24,7 @@ final class WalletKeyStoreTests: XCTestCase {
         XCTAssertEqual(wallet.accounts, [
             Primitives.Account(
                 chain: .solana,
-                address: "6ASf5EcmmEHTgDJ4X4ZT5vT6iHVJBXPg5AN5YoTCpGWt",
+                address: "JSTURBrew3zGaJjtk7qcvd7gapeExX3GC7DiQBaCKzU",
                 derivationPath: "m/44\'/501\'/0\'",
                 extendedPublicKey: .none
             )
@@ -29,9 +32,8 @@ final class WalletKeyStoreTests: XCTestCase {
     }
 
     func testImportSolanaWalletByKey() throws {
-        let phantom = "4ha2npeRkDXipjgGJ3L5LhZ9TK9dRjP2yktydkFBhAzXj3N8ytpYyTS24kxcYGEefy4WKWRcog2zSPvpPZoGmxCC"
         let base58 = "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV"
-        let key = try WalletKeyStore.decodeKey(phantom, chain: .solana)
+        let key = try WalletKeyStore.decodeKey(testBase58Key, chain: .solana)
         let address = CoinType.solana.deriveAddress(privateKey: key)
 
         XCTAssertEqual(address, "JSTURBrew3zGaJjtk7qcvd7gapeExX3GC7DiQBaCKzU")
