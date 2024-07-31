@@ -17,16 +17,8 @@ struct ShowSecretDataScene: View {
                 subtitle: Localized.SecretPhrase.DoNotShare.description
             )
             .padding(.top, Spacing.scene.top)
-            
 
-            switch model.type {
-            case .words(let rows):
-                SecretPhraseGridView(rows: rows)
-                    .padding(.top, Spacing.scene.top)
-            case .privateKey(let key):
-                Text(key)
-                    .padding(.top, Spacing.scene.top)
-            }
+            SecretDataTypeView(type: model.type)
 
             Button {
                 showCopyMessage = true
