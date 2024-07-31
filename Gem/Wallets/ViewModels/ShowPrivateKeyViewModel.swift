@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-class ShowPrivateKeyViewModel {
+struct ShowPrivateKeyViewModel {
 
     let text: String
     let encoding: EncodingType
