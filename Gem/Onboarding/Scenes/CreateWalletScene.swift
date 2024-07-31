@@ -15,9 +15,14 @@ struct CreateWalletScene: View {
             
             OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
             
-            SecretPhraseGridView(rows: model.rows)
-                .padding(.top, Spacing.small)
-            
+            switch model.type {
+            case .words(let rows):
+                SecretPhraseGridView(rows: rows)
+                    .padding(.top, Spacing.small)
+            case .privateKey(let key):
+                Text("PK")
+            }
+
             Button(action: copy) {
                 Text(Localized.Common.copy)
             }

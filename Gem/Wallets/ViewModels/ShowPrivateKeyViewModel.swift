@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-class ShowPrivateKeyModel {
+class ShowPrivateKeyViewModel {
 
     let text: String
     let encoding: EncodingType
@@ -12,12 +12,26 @@ class ShowPrivateKeyModel {
         self.text = text
         self.encoding = encoding
     }
-    
+}
+
+extension ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     var title: String {
         return Localized.Common.privateKey
     }
-    
+
     var presentWarning: Bool {
         return true
+    }
+
+    var type: SecretPhraseDataType {
+        .privateKey(key: text)
+    }
+
+    var copyValue: String {
+        text
+    }
+
+    var copyType: CopyType {
+        .privateKey
     }
 }

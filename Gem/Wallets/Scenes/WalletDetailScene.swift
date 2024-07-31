@@ -93,10 +93,10 @@ struct WalletDetailScene: View {
             Alert(title: Text(Localized.Errors.transfer("")), message: Text($0))
         }
         .navigationDestination(for: $words) { words in
-            ShowSecretPhraseScene(model: ShowSecretPhraseViewModel(words: words))
+            ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: words))
         }
         .navigationDestination(for: $privateKey) {
-            ShowPrivateKeyScene(model: ShowPrivateKeyModel(text: $0.key, encoding: model.getEncodingType(for: $0.chain)))
+            ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: $0.key, encoding: model.getEncodingType(for: $0.chain)))
         }
     }
 }
