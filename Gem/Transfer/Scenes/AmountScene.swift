@@ -145,6 +145,7 @@ struct AmountScene: View {
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .buttonStyle(.blue())
         }
+        .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .navigationDestination(for: $transferData) {
