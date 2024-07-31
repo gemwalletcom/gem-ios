@@ -33,11 +33,11 @@ class SwapViewModel {
     private let formatter = ValueFormatter(style: .full)
 
     init(
+        wallet: Wallet,
+        assetId: AssetId,
         walletService: WalletService,
         swapService: SwapService,
-        keystore: any Keystore,
-        wallet: Wallet,
-        assetId: AssetId
+        keystore: any Keystore
     ) {
         self.wallet = wallet
         self.keystore = keystore
@@ -55,10 +55,10 @@ class SwapViewModel {
             toId = assetId
         }
 
-        fromAssetRequest = AssetRequest(walletId: wallet.id, assetId: fromId.identifier)
-        toAssetRequest = AssetRequest(walletId: wallet.id, assetId: toId.identifier)
+        fromAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: fromId.identifier)
+        toAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: toId.identifier)
         tokenApprovalsRequest = TransactionsRequest(
-            walletId: wallet.id,
+            walletId: wallet.walletId.id,
             type: .assetsTransactionType(assetIds: [fromId, toId], type: .tokenApproval, states: [.pending]),
             limit: 2
         )
@@ -155,7 +155,7 @@ extension SwapViewModel {
 
     func updateAssets(assetIds: [AssetId]) async throws {
         async let prices: () = try walletService.updatePrices(assetIds: assetIds)
-        async let balances: () = try walletService.updateBalance(for: wallet, assetIds: assetIds)
+        async let balances: () = try walletService.updateBalance(for: wallet.walletId, assetIds: assetIds)
         let _ = try await [prices, balances]
     }
 

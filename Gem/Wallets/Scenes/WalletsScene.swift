@@ -163,7 +163,7 @@ extension WalletsScene {
     }
 
     private func onSelect(wallet: Wallet) {
-        model.setCurrent(wallet)
+        model.setCurrent(wallet.walletId)
         dismiss()
     }
 }

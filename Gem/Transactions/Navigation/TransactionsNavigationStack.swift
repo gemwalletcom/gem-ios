@@ -5,20 +5,12 @@ import Primitives
 
 struct TransactionsNavigationStack: View {
     
-    let wallet: Wallet
+    let model: TransactionsViewModel
     @Binding var navigationPath: NavigationPath
-    
-    @Environment(\.transactionsService) private var transactionsService
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            TransactionsScene(
-                model: TransactionsViewModel(
-                    wallet: wallet,
-                    type: .all,
-                    service: transactionsService
-                )
-            )
+            TransactionsScene(model: model)
             .navigationBarTitleDisplayMode(.inline)
         }
     }

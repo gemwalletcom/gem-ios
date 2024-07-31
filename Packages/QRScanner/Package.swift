@@ -5,21 +5,15 @@ import PackageDescription
 
 let package = Package(
     name: "QRScanner",
-    platforms: [.iOS(.v17), .macOS(.v12)],
+    platforms: [.iOS(.v17)],
     products: [
         .library(
             name: "QRScanner",
             targets: ["QRScanner"]),
     ],
-    dependencies: [
-        .package(url: "https://github.com/gemwalletcom/CodeScanner", exact: Version(2, 3, 2)),
-    ],
     targets: [
         .target(
             name: "QRScanner",
-            dependencies: [
-                .product(name: "CodeScanner", package: "CodeScanner"),
-            ],
             path: "Sources"
         ),
         .testTarget(

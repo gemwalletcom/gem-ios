@@ -4,7 +4,7 @@ import SwiftUI
 import Primitives
 
 struct SettingsNavigationStack: View {
-    let wallet: Wallet
+    let walletId: WalletId
 
     @State private var isWalletsPresented = false
 
@@ -28,7 +28,7 @@ struct SettingsNavigationStack: View {
                 model: SettingsViewModel(
                     keystore: keystore,
                     walletService: walletService,
-                    wallet: wallet,
+                    walletId: walletId,
                     currencyModel: currencyModel,
                     securityModel: securityModel
                 )

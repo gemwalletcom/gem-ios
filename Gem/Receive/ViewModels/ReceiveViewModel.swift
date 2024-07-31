@@ -4,7 +4,7 @@ import Primitives
 struct ReceiveViewModel {
     
     let assetModel: AssetViewModel
-    let wallet: Wallet
+    let walletId: WalletId
     let address: String
     let walletService: WalletService
     
@@ -25,6 +25,6 @@ struct ReceiveViewModel {
     }
     
     func enableAsset() {
-        walletService.enableAssetId(wallet: wallet, assets: [assetModel.asset.id], enabled: true)
+        walletService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
     }
 }

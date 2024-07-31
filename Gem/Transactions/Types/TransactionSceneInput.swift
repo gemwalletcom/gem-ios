@@ -6,11 +6,11 @@ import Store
 
 struct TransactionSceneInput {
     let transactionId: String
-    let wallet: Wallet
-    
+    let walletId: WalletId
+
     var transactionRequest: TransactionsRequest {
         TransactionsRequest(
-            walletId: wallet.id,
+            walletId: walletId.id,
             type: .transaction(id: transactionId),
             limit: 1
         )

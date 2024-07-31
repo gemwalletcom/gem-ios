@@ -5,9 +5,12 @@ import Primitives
 import Keystore
 
 struct MainTabView: View {
-    let wallet: Wallet
-    let walletModel: WalletSceneViewModel
-    let keystore: LocalKeystore
+
+    let model: MainTabViewModel
+
+    @Environment(\.keystore) private var keystore
+    @Environment(\.walletService) private var walletService
+    @Environment(\.transactionsService) private var transactionsService
 
     // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
     // ref: - https://forums.swift.org/t/using-observation-in-a-protocol-throws-compiler-error/69090/6 if object explicity conforms protocol
@@ -27,11 +30,40 @@ struct MainTabView: View {
 
     var body: some View {
         TabView(selection: tabViewSelection) {
-            walletTabItemView
-            transactionsTabItemView
-            settingTabItemView
+            WalletNavigationStack(
+                model: .init(wallet: model.wallet, walletService: walletService),
+                navigationPath: $navigationStateManager.wallet
+            )
+            .tabItem {
+                tabItem(Localized.Wallet.title, Image(.tabWallet))
+            }
+            .tag(TabItem.wallet)
+
+            TransactionsNavigationStack(
+                model: .init(
+                    walletId: model.walletId,
+                    type: .all,
+                    service: transactionsService
+                ),
+                navigationPath: $navigationStateManager.activity
+            )
+            .tabItem {
+                tabItem(Localized.Activity.title, Image(.tabActivity) )
+            }
+            .tag(TabItem.activity)
+
+            SettingsNavigationStack(
+                walletId: model.wallet.walletId,
+                navigationPath: $navigationStateManager.settings,
+                currencyModel: CurrencySceneViewModel(),
+                securityModel: SecurityViewModel()
+            )
+            .tabItem {
+                tabItem(Localized.Settings.title, Image(.tabSettings))
+            }
+            .tag(TabItem.settings)
         }
-        .onChange(of: keystore.currentWallet) {
+        .onChange(of: keystore.currentWalletId) {
             navigationStateManager.selectedTab = .wallet
         }
     }
@@ -40,55 +72,10 @@ struct MainTabView: View {
 // MARK: - UI Components
 
 extension MainTabView {
-    private var walletTabItemView: some View {
-        WalletNavigationStack(
-            wallet: wallet,
-            walletModel: walletModel,
-            navigationPath: $navigationStateManager.wallet
-        )
-        .tabItem {
-            tabItem(
-                title: Localized.Wallet.title,
-                image: Image(.tabWallet)
-            )
-        }
-        .tag(TabItem.wallet)
-    }
-
-    private var transactionsTabItemView: some View {
-        TransactionsNavigationStack(
-            wallet: wallet,
-            navigationPath: $navigationStateManager.activity
-        )
-        .tabItem {
-            tabItem(
-                title: Localized.Activity.title,
-                image: Image(.tabActivity)
-            )
-        }
-        .tag(TabItem.activity)
-    }
-
-    private var settingTabItemView: some View {
-        SettingsNavigationStack(
-            wallet: wallet,
-            navigationPath: $navigationStateManager.settings,
-            currencyModel: CurrencySceneViewModel(),
-            securityModel: SecurityViewModel()
-        )
-        .tabItem {
-            tabItem(
-                title: Localized.Settings.title,
-                image: Image(.tabSettings)
-            )
-        }
-        .tag(TabItem.settings)
-    }
-
     @ViewBuilder
     private func tabItem(
-        title: String,
-        image: Image
+        _ title: String,
+        _ image: Image
     ) -> Label<Text, Image> {
         Label(
             title: { Text(title) },
@@ -110,8 +97,6 @@ extension MainTabView {
 #Preview {
     @State var navigationStateManager: NavigationStateManagable = NavigationStateManager(initialSelecedTab: .wallet)
     return MainTabView(
-        wallet: .main,
-        walletModel: .init(assetsService: .main, walletService: .main),
-        keystore: .main,
+        model: MainTabViewModel(wallet: .main),
         navigationStateManager: $navigationStateManager)
 }

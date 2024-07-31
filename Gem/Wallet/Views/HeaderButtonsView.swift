@@ -21,7 +21,6 @@ struct HeaderButtonsView: View {
                     action?(button.type)
                 }
                 .frame(maxWidth: maxWidth)
-                .disabled(button.isDisabled)
             }
         }
         .frame(maxWidth: .infinity)
@@ -31,7 +30,7 @@ struct HeaderButtonsView: View {
 // MARK: - Previews
 
 #Preview {
-    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0, isDisabled: false) })
+    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0) })
     return VStack {
         Spacer()
         HeaderButtonsView(buttons: buttons, action: nil)
