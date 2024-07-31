@@ -89,6 +89,9 @@ struct WalletScene: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
+        .refreshable {
+            await refreshable()
+        }
         .sheet(item: $isPresentingSelectType) { value in
             SelectAssetSceneNavigationStack(
                 model: SelectAssetViewModel(
@@ -220,9 +223,6 @@ struct WalletScene: View {
             )
         }
         .navigationBarTitleDisplayMode(.inline)
-        .refreshable {
-            await refreshable()
-        }
         .onChange(of: model.wallet, fetch)
         .taskOnce(fetch)
     }
