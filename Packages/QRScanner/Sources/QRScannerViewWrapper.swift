@@ -47,7 +47,7 @@ extension QRScannerViewWrapper: UIViewControllerRepresentable {
         do {
             try uiViewController.startScanning()
         } catch {
-            context.coordinator.parent.scanResult(.failure(QRScannerError.unexpected(error)))
+            context.coordinator.parent.scanResult(.failure(QRScannerError.unknown(error)))
         }
     }
 

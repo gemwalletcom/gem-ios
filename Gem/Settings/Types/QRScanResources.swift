@@ -3,7 +3,7 @@
 import QRScanner
 import Style
 
-struct QRScannerResources: QRScannerResourcesProviding {
+struct QRScanResources: QRScannerResources {
     var selectFromPhotos: String { Localized.Library.selectFromPhotos }
     var openSettings: String { Localized.Common.openSettings }
     var tryAgain: String { Localized.Common.tryAgain }

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol QRScannerResourcesProviding {
+public protocol QRScannerResources {
     var selectFromPhotos: String { get }
     var openSettings: String { get }
     var tryAgain: String { get }

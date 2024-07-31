@@ -10,9 +10,9 @@ class QRScannerViewModel {
     var imageState: ImageState
     var selectedPhoto: PhotosPickerItem?
 
-    let resources: QRScannerResourcesProviding
+    let resources: QRScannerResources
 
-    init(scannerState: QRScannerState, imageState: ImageState, resources: QRScannerResourcesProviding) {
+    init(scannerState: QRScannerState, imageState: ImageState, resources: QRScannerResources) {
         self.scannerState = scannerState
         self.imageState = imageState
         self.resources = resources
@@ -35,7 +35,7 @@ extension QRScannerViewModel {
         if let error = error as? QRScannerError {
             scannerState = .failure(error: error)
         } else {
-            scannerState = .failure(error: .unexpected(error))
+            scannerState = .failure(error: .unknown(error))
         }
     }
 

@@ -221,10 +221,10 @@ internal enum Localized {
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
     }
-    /// Unexpected
-    internal static let unexpected = Localized.tr("Localizable", "errors.unexpected", fallback: "Unexpected")
-    /// An unexpected error occurred. Please try again.
-    internal static let unexpectedTryAgain = Localized.tr("Localizable", "errors.unexpected_try_again", fallback: "An unexpected error occurred. Please try again.")
+    /// Unknown
+    internal static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
+    /// An unknown error occurred. Please try again.
+    internal static let unknownTryAgain = Localized.tr("Localizable", "errors.unknown_try_again", fallback: "An unknown error occurred. Please try again.")
     /// Validation Error: %s
     internal static func validation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")

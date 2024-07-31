@@ -12,7 +12,7 @@ public struct QRScannerView: View {
 
     private let action: ((String) -> Void)
 
-    public init(resources: QRScannerResourcesProviding, action: @escaping ((String) -> Void)) {
+    public init(resources: QRScannerResources, action: @escaping ((String) -> Void)) {
         self.action = action
         _model = State(initialValue: QRScannerViewModel(scannerState: .idle, imageState: .empty, resources: resources))
     }
@@ -28,7 +28,7 @@ public struct QRScannerView: View {
             case .failure(let error):
                 ContentUnavailableView(
                     label: {
-                        if let localizedError = error as? LocalizedQRError, let titleImage = localizedError.titleImage {
+                        if let localizedError = error as? LocalizedQRCodeError, let titleImage = localizedError.titleImage {
                             Label(titleImage.title, systemImage: titleImage.systemImage)
                         }
                     },
@@ -43,7 +43,7 @@ public struct QRScannerView: View {
                             }
                         case .permissionsNotGranted:
                             Button(model.resources.openSettings, action: onSelectOpenSettings)
-                        case .decoding, .unexpected:
+                        case .decoding, .unknown:
                             Button(model.resources.tryAgain, action: onRefreshScanner)
                         }
                     }

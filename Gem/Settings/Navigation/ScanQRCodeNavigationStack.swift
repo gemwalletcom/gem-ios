@@ -6,7 +6,7 @@ import Style
 
 struct ScanQRCodeNavigationStack: View {
     var action: ((String) -> Void)
-    private let resources = QRScannerResources()
+    private let resources: QRScannerResources = QRScanResources()
 
     var body: some View {
         NavigationStack {
@@ -17,19 +17,19 @@ struct ScanQRCodeNavigationStack: View {
     }
 }
 
-// MARK: - LocalizedQRError
+// MARK: - LocalizedQRCodeError
 
-extension QRScannerError: LocalizedQRError {
-    public var titleImage: (title: String, systemImage: String)? {
+extension QRScannerError: LocalizedQRCodeError {
+    public var titleImage: ErrorTitleImage? {
         switch self {
         case .notSupported:
-            (Localized.Errors.notSupported, SystemImage.clear)
+            ErrorTitleImage(title: Localized.Errors.notSupported, systemImage: SystemImage.clear)
         case .permissionsNotGranted:
-            (Localized.Errors.permissionsNotGranted, SystemImage.lock)
+            ErrorTitleImage(title: Localized.Errors.permissionsNotGranted, systemImage: SystemImage.lock)
         case .decoding:
-            (Localized.Errors.decoding, SystemImage.errorOccurred)
-        case .unexpected:
-            (Localized.Errors.unexpected, SystemImage.errorOccurred)
+            ErrorTitleImage(title: Localized.Errors.decoding, systemImage: SystemImage.errorOccurred)
+        case .unknown:
+            ErrorTitleImage(title: Localized.Errors.unknown, systemImage: SystemImage.errorOccurred)
         }
     }
 
@@ -41,8 +41,8 @@ extension QRScannerError: LocalizedQRError {
             Localized.Errors.cameraPermissionsNotGranted
         case .decoding:
             Localized.Errors.decodingQr
-        case .unexpected:
-            Localized.Errors.unexpectedTryAgain
+        case .unknown:
+            Localized.Errors.unknown
         }
     }
 }

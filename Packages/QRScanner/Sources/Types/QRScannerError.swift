@@ -6,5 +6,5 @@ public enum QRScannerError: Error {
     case notSupported
     case permissionsNotGranted
     case decoding
-    case unexpected(Error)
+    case unknown(Error)
 }

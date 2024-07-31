@@ -226,10 +226,10 @@
 "errors.not_supported" = "Not Supported";
 "errors.permissions_not_granted" = "Permissions Not Granted";
 "errors.decoding" = "Decoding Error";
-"errors.unexpected" = "Unexpected";
+"errors.unknown" = "Unknown";
 "errors.not_supported_qr" = "This device does not support QR code scanning. You can only select QR code image from library.";
 "errors.camera_permissions_not_granted" = "Camera permission not granted. Please enable camera access in settings to scan QR code.";
 "errors.decoding_qr" = "Failed to decode the QR code. Please try again with a different QR code.";
-"errors.unexpected_try_again" = "An unexpected error occurred. Please try again.";
+"errors.unknown_try_again" = "An unknown error occurred. Please try again.";
 "library.select_from_photos" = "Select from photos";
 "common.open_settings" = "Open settings";
