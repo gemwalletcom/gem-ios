@@ -22,7 +22,7 @@ public struct TextStyle {
     }
 
     public func weight(_ weight: Font.Weight) -> TextStyle {
-        return TextStyle(
+        TextStyle(
             font: font,
             color: color,
             fontWeight: weight,
