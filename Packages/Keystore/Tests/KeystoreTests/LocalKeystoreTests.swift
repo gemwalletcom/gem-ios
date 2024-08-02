@@ -123,7 +123,7 @@ final class LocalKeystoreTests: XCTestCase {
             case .osmosis:
                 assertAddress(chain, "osmo142j9u5eaduzd7faumygud6ruhdwme98qclefqp", account.address)
             case .ton:
-                assertAddress(chain, "EQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUfk9", account.address)
+                assertAddress(chain, "UQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUaT4", account.address)
             case .tron:
                 assertAddress(chain, "TQ5NMqJjhpQGK7YJbESKtNCo86PJ89ujio", account.address)
             case .doge:
