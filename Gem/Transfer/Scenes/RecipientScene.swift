@@ -107,8 +107,8 @@ struct RecipientScene: View {
         }
         .background(Colors.grayBackground)
         .sheet(item: $isPresentingScanner) { value in
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner.mappedToBool()) {
-                processScan(field: value, value: $0)
+            ScanQRCodeNavigationStack() {
+                onHandleScan($0, for: value)
             }
         }
         .navigationDestination(for: $transferData) {
@@ -140,11 +140,11 @@ struct RecipientScene: View {
         .navigationTitle(model.tittle)
     }
     
-    private func processScan(field: RecipientScene.Field, value: String) {
+    private func onHandleScan(_ result: String, for field: RecipientScene.Field) {
         switch field {
         case .address:
             do {
-                let result = try model.getTransferDataFromScan(string: value)
+                let result = try model.getTransferDataFromScan(string: result)
                 switch result {
                 case .address(let address, let memo):
                     self.address = address
@@ -163,7 +163,7 @@ struct RecipientScene: View {
                 NSLog("getTransferDataFromScan error: \(error)")
             }
         case .memo:
-            memo = value
+            memo = result
         }
         
         if !model.showMemo {

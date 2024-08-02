@@ -11,15 +11,6 @@
         }
       },
       {
-        "package": "CodeScanner",
-        "repositoryURL": "https://github.com/gemwalletcom/CodeScanner",
-        "state": {
-          "branch": null,
-          "revision": "4b2f9c57d03bfe94e6b45572e0c908c1433c32b2",
-          "version": "2.3.2"
-        }
-      },
-      {
         "package": "GRDB",
         "repositoryURL": "https://github.com/groue/GRDB.swift.git",
         "state": {

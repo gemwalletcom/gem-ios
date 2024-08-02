@@ -15,6 +15,7 @@
 		830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA412C2236B6003DA605 /* MainTabView.swift */; };
 		830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA442C224316003DA605 /* NavigationStateManager.swift */; };
 		830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA472C22EEC4003DA605 /* TabItem.swift */; };
+		8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835644FC2C501C2200C6B4DB /* SwapError.swift */; };
@@ -279,6 +280,7 @@
 		830FDA412C2236B6003DA605 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
+		8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanResources.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		835644FC2C501C2200C6B4DB /* SwapError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapError.swift; sourceTree = "<group>"; };
@@ -1140,6 +1142,7 @@
 		C3FA949229D7EEE700BFC23D /* Types */ = {
 			isa = PBXGroup;
 			children = (
+				8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */,
 				D848B5A62AE85C7D00814FB4 /* WalletImportType.swift */,
 				D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */,
 				D8148C272BF191AB0066586A /* WalletNameGenerator.swift */,
@@ -1913,6 +1916,7 @@
 				D810F36C2AEA1A910006D9C6 /* SignMessageSceneViewModel.swift in Sources */,
 				D89D69032A9EF9BC00EA74EE /* TransactionViewModel.swift in Sources */,
 				D85620272AAAAD9A00D65D81 /* DeveloperViewModel.swift in Sources */,
+				8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */,
 				C3CF3BC729B7CB4900E96586 /* BuyAssetViewModel.swift in Sources */,
 				D82E9EDA2B26698100DB06C8 /* StakeService.swift in Sources */,
 				C3CF3BB029B68F0D00E96586 /* AssetScene.swift in Sources */,

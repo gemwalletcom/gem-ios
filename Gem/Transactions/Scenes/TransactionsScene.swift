@@ -26,15 +26,15 @@ struct TransactionsScene: View {
         List {
             TransactionsList(transactions)
         }
+        .refreshable {
+            onRefresh()
+        }
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {
                 Text(Localized.Activity.EmptyState.message)
                     .textStyle(.body)
             }
-        }
-        .refreshable {
-            onRefresh()
         }
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
