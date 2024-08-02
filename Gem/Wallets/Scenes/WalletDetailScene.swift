@@ -41,14 +41,16 @@ struct WalletDetailScene: View {
                         Text(Localized.Common.secretPhrase)
                     }
                 case .privateKey:
-                    Section {
-                        NavigationCustomLink(
-                            with: ListItemView(title: Localized.Common.show(Localized.Common.privateKey)),
-                            action: onShowPrivateKey
-                        )
-                    } header: {
-                        Text(Localized.Common.privateKey)
-                    }
+                    EmptyView()
+                    //TODO: Enable once private key import works
+//                    Section {
+//                        NavigationCustomLink(
+//                            with: ListItemView(title: Localized.Common.show(Localized.Common.privateKey)),
+//                            action: onShowPrivateKey
+//                        )
+//                    } header: {
+//                        Text(Localized.Common.privateKey)
+//                    }
                 case .view:
                     EmptyView()
                 }
