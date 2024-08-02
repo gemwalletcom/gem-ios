@@ -47,7 +47,7 @@ class SelectAssetViewModel: ObservableObject {
         switch wallet.type {
         case .multicoin:
             return []
-        case .view, .single:
+        case .view, .single, .privateKey:
             guard let chain = wallet.accounts.first?.chain else {
                 return []
             }
@@ -102,7 +102,7 @@ class SelectAssetViewModel: ObservableObject {
     
     private func chains(for type: WalletType) -> [Chain] {
         switch wallet.type {
-        case .single, .view: [wallet.accounts.first?.chain].compactMap { $0 }
+        case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
         case .multicoin: []
         }
     }

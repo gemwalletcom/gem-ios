@@ -5,6 +5,10 @@ import WalletCorePrimitives
 
 public extension Chain {
 
+    var defaultKeyEncodingType: EncodingType {
+        keyEncodingTypes.first!
+    }
+
     var keyEncodingTypes: [EncodingType] {
         switch self.type {
         case .solana:
@@ -16,10 +20,9 @@ public extension Chain {
             .aptos,
             .sui,
             .xrp,
-            .near:
+            .near,
+            .bitcoin:
             [.hex]
-        case .bitcoin:
-            []
         }
     }
 
