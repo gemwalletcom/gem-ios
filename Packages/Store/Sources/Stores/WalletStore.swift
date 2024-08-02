@@ -46,8 +46,8 @@ public struct WalletStore {
                 .filter(Columns.Wallet.id == walletId)
                 .including(all: WalletRecord.accounts)
                 .asRequest(of: WalletRecordInfo.self)
-                .fetchOne(db)
-                .map { $0.mapToWallet() }
+                .fetchOne(db)?
+                .mapToWallet()
         }
     }
     
@@ -57,7 +57,7 @@ public struct WalletStore {
                 .including(all: WalletRecord.accounts)
                 .asRequest(of: WalletRecordInfo.self)
                 .fetchAll(db)
-                .map { $0.mapToWallet() }
+                .compactMap { $0.mapToWallet() }
         }
     }
     
