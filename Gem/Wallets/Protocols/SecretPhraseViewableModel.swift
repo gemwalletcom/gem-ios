@@ -4,27 +4,9 @@ import Foundation
 
 protocol SecretPhraseViewableModel {
     var title: String { get }
-    var words: [String] { get }
-    var rows: [[WordIndex]] { get }
+    var type: SecretPhraseDataType { get }
+    var copyValue: String { get }
+    var copyType: CopyType { get }
     var presentWarning: Bool { get }
 }
 
-extension SecretPhraseViewableModel {
-    var rows: [[WordIndex]] {
-        return words
-            .enumerated()
-            .map {
-                WordIndex(index: $0.offset, word: $0.element)
-            }
-            .splitInSubArrays(into: words.count / 2)
-    }
-}
-
-struct WordIndex: Hashable {
-    let index: Int
-    let word: String
-}
-
-extension WordIndex: Identifiable {
-    var id: String { String(index) }
-}

@@ -2,7 +2,7 @@ import Foundation
 import WalletCore
 import Primitives
 
-struct WalletKeyStore {
+public struct WalletKeyStore {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
     
@@ -11,12 +11,12 @@ struct WalletKeyStore {
         return wallet.mnemonic.split(separator: " ").map{String($0)}
     }
     
-    init(directory: URL) {
+    public init(directory: URL) {
         self.directory = directory
         self.keyStore = try! WalletCore.KeyStore(keyDirectory: directory)
     }
     
-    func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
+    public func importWallet(name: String, words: [String], chains: [Chain], password: String) throws -> Primitives.Wallet {
         let wallet = try keyStore.import(
             mnemonic: MnemonicFormatter.fromArray(words: words),
             name: name,
@@ -26,7 +26,7 @@ struct WalletKeyStore {
         return try addCoins(wallet: wallet, chains: chains, password: password)
     }
 
-    static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
+    public static func decodeKey(_ key: String, chain: Chain) throws -> PrivateKey {
         var data: Data?
         for encoding in chain.keyEncodingTypes {
             if data != nil {
@@ -52,7 +52,7 @@ struct WalletKeyStore {
         return key
     }
 
-    func importPrivateKey(name: String, key: String, chain: Chain, password: String) throws -> Primitives.Wallet {
+    public func importPrivateKey(name: String, key: String, chain: Chain, password: String) throws -> Primitives.Wallet {
         let privateKey = try Self.decodeKey(key, chain: chain)
         let wallet = try keyStore.import(privateKey: privateKey, name: name, password: password, coin: chain.coinType)
 
@@ -67,7 +67,7 @@ struct WalletKeyStore {
             id: wallet.id,
             name: wallet.key.name,
             index: 0, 
-            type: .single,
+            type: .privateKey,
             accounts: [account]
         )
     }
@@ -80,12 +80,18 @@ struct WalletKeyStore {
         let _ = try keyStore.removeAccounts(wallet: wallet, coins: [.ethereum] + exclude.map { $0.coinType }, password: password)
         if chains.contains(.solana) {
             // By default solana derived a wrong derivation path, need to adjust use a new one
-            let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solanaSolana)
+            let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solana)
         }
         
         let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
-        
-        let type: Primitives.WalletType = wallet.accounts.count == 1 ? .single : .multicoin
+
+        let type: Primitives.WalletType = {
+            if wallet.key.isMnemonic {
+                return wallet.accounts.count == 1 ? .single : .multicoin
+            }
+            return .privateKey
+        }()
+
         let accounts = chains.compactMap { chain in
             if let account = wallet.accounts.filter({ $0.coin == chain.coinType }).first {
                 return account.mapToAccount(chain: chain)
@@ -121,18 +127,18 @@ struct WalletKeyStore {
     func getPrivateKey(id: String, type: Primitives.WalletType, chain: Chain, password: String) throws -> Data {
         let wallet = try getWallet(id: id)
         switch type {
-        case .multicoin:
+        case .multicoin, .single:
             guard
                 let hdwallet = wallet.key.wallet(password: Data(password.utf8)) else {
                 throw KeystoreError.unknownWalletInWalletCore
             }
             switch chain {
             case .solana:
-                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
+                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solana).data
             default:
                 return hdwallet.getKeyForCoin(coin: chain.coinType).data
             }
-        case .single:
+        case .privateKey:
             return try wallet.privateKey(password: password, coin: chain.coinType).data
         case .view:
             throw KeystoreError.invalidPrivateKey

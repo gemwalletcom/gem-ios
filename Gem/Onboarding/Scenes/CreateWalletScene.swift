@@ -14,10 +14,9 @@ struct CreateWalletScene: View {
         VStack(spacing: Spacing.medium) {
             
             OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
-            
-            SecretPhraseGridView(rows: model.rows)
-                .padding(.top, Spacing.small)
-            
+
+            SecretDataTypeView(type: model.type)
+
             Button(action: copy) {
                 Text(Localized.Common.copy)
             }

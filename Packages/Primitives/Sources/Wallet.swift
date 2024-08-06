@@ -7,6 +7,7 @@ import Foundation
 public enum WalletType: String, Codable, Equatable, Hashable {
 	case multicoin
 	case single
+	case privateKey
 	case view
 }
 

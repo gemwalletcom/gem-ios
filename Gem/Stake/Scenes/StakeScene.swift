@@ -34,10 +34,10 @@ struct StakeScene: View {
             delegationsSection
             stakeInfoSection
         }
-        .navigationTitle(model.title)
         .refreshable {
             fetch()
         }
+        .navigationTitle(model.title)
         .navigationDestination(for: $model.transferData) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(

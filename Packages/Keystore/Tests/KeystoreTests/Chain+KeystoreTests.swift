@@ -13,4 +13,11 @@ final class Chain_KeystoreTests: XCTestCase {
         XCTAssertFalse(Chain.mock(.ethereum).isValidAddress("0x123"))
         XCTAssertFalse(Chain.mock(.ethereum).isValidAddress("0x123"))
     }
+
+    func testHasEncodingTypes() {
+        for chain in Chain.allCases {
+            XCTAssertNotNil(chain.defaultKeyEncodingType)
+            XCTAssertFalse(chain.keyEncodingTypes.isEmpty)
+        }
+    }
 }
