@@ -5,17 +5,29 @@ import SwiftUI
 
 public struct TextStyle {
     public let font: Font
+    public let fontWeight: Font.Weight?
     public let color: Color
     public let background: Color
     
     public init(
         font: Font,
         color: Color,
+        fontWeight: Font.Weight? = nil,
         background: Color = Colors.black
     ) {
         self.font = font
         self.color = color
+        self.fontWeight = fontWeight
         self.background = background
+    }
+
+    public func weight(_ weight: Font.Weight) -> TextStyle {
+        TextStyle(
+            font: font,
+            color: color,
+            fontWeight: weight,
+            background: background
+        )
     }
 }
 
@@ -43,6 +55,7 @@ struct TextStyleModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .font(style.font)
+            .fontWeight(style.fontWeight)
             .foregroundStyle(style.color)
     }
 }
