@@ -216,9 +216,13 @@ extension CosmosService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
-            gasLimit: gasLimit
+            gasLimit: gasLimit,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func getFeeRates() async throws -> [FeeRate] { [] }
 }
 
 // MARK: - ChainTransactionPreloadable

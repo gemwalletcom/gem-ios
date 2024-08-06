@@ -7,6 +7,8 @@ import Primitives
 
 extension EthereumService: ChainFeeCalculateable {
 
+    public func getFeeRates() async throws -> [FeeRate] { [] }
+
     public func getData(input: FeeInput) -> Data? {
         switch input.type {
         case .transfer(let asset):
@@ -166,7 +168,9 @@ extension EthereumService: ChainFeeCalculateable {
                 gasPrice: gasPrice,
                 minerFee: minerFee
             ),
-            gasLimit: gasLimit
+            gasLimit: gasLimit,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
 }

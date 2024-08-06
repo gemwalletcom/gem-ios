@@ -221,6 +221,8 @@ internal enum Localized {
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
     }
+    /// Transfer Error
+    internal static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
     /// Unknown
     internal static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
     /// An unknown error occurred. Please try again.
@@ -255,6 +257,16 @@ internal enum Localized {
         return Localized.tr("Localizable", "errors.token.unable_fetch_token_information", String(describing: p1), fallback: "Unable to fetch token information: %@")
       }
     }
+  }
+  internal enum FeeRates {
+    /// Fast
+    internal static let fast = Localized.tr("Localizable", "fee_rates.fast", fallback: "Fast")
+    /// Speed of transaction is determined by network fee paid to the network miners.
+    internal static let info = Localized.tr("Localizable", "fee_rates.info", fallback: "Speed of transaction is determined by network fee paid to the network miners.")
+    /// Normal
+    internal static let normal = Localized.tr("Localizable", "fee_rates.normal", fallback: "Normal")
+    /// Slow
+    internal static let slow = Localized.tr("Localizable", "fee_rates.slow", fallback: "Slow")
   }
   internal enum Library {
     /// Select from photos
@@ -396,8 +408,8 @@ internal enum Localized {
     internal static let lockTime = Localized.tr("Localizable", "stake.lock_time", fallback: "Lock Time")
     /// Minimum amount
     internal static let minimumAmount = Localized.tr("Localizable", "stake.minimum_amount", fallback: "Minimum amount")
-    /// No Active Staking
-    internal static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No Active Staking")
+    /// No active staking yet.
+    internal static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No active staking yet.")
     /// Pending
     internal static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
     /// Rewards

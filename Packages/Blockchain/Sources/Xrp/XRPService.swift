@@ -73,9 +73,13 @@ extension XRPService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
+            gasLimit: 1,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+    
+    public func getFeeRates() async throws -> [FeeRate] { [] }
 }
 
 // MARK: - ChainTransactionPreloadable

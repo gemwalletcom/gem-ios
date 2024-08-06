@@ -91,6 +91,8 @@ extension NearService: ChainFeeCalculateable {
         //let fee = gasPrice
         //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
     }
+
+    public func getFeeRates() async throws -> [FeeRate] { [] }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -108,7 +110,7 @@ extension NearService: ChainTransactionPreloadable {
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
+            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [], selectedFeeRate: nil)
         )
     }
 }
