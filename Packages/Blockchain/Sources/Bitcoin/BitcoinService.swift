@@ -25,13 +25,19 @@ public struct BitcoinService {
 
 extension BitcoinService {
     private func block(block: Int) async throws -> BitcoinBlock {
-        return try await provider
+        try await provider
             .request(.block(block: block))
             .map(as: BitcoinBlock.self)
     }
 
+    private func latestBlock() async throws -> BigInt {
+        try await provider
+            .request(.nodeInfo)
+            .map(as: BitcoinNodeInfo.self).blockbook.bestHeight.asBigInt
+    }
+
     func getUtxos(address: String) async throws -> [UTXO] {
-        return try await provider
+        try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
             .map { $0.mapToUTXO() }
@@ -53,7 +59,7 @@ extension BitcoinService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        return []
+        []
     }
 
     public func getStakeBalance(address: String) async throws -> AssetBalance {
@@ -109,7 +115,7 @@ extension BitcoinService: ChainTransactionStateFetchable {
 
 extension BitcoinService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        return try await provider
+        try await provider
             .request(.nodeInfo)
             .map(as: BitcoinNodeInfo.self).blockbook.inSync
     }
@@ -119,7 +125,7 @@ extension BitcoinService: ChainSyncable {
 
 extension BitcoinService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
+        []
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
