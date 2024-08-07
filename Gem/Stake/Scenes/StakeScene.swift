@@ -134,7 +134,7 @@ extension StakeScene {
                     StateLoadingView()
                     Spacer()
                 }
-                .id(UUID())
+                .id(UUID()) // TODO: - review this 
             }
         }
     }

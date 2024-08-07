@@ -10,15 +10,14 @@ extension BitcoinChain {
         case .doge: return .doge
         }
     }
-    
-    public var defaultFeePriority: Int {
+
+    public var feeUnitType: FeeUnitType? {
         switch self {
-        case .bitcoin: return 5
-        case .litecoin: return 1
-        case .doge: return 1
+        case .bitcoin: .satVb
+        case .litecoin, .doge: .satB
         }
     }
-    
+
     public var minimumByteFee: Int {
         switch self {
         case .bitcoin: return 1

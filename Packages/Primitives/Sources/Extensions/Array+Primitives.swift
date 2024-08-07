@@ -10,7 +10,14 @@ public extension Array {
             result[key] = element
         }
     }
-    
+
+    func toMap<Key: Hashable>(_ transform: (Element) throws -> Key) rethrows -> [Key: Element] {
+         return try reduce(into: [:]) { result, element in
+             let key = try transform(element)
+             result[key] = element
+         }
+     }
+
     func toMapArray<Key: Hashable>(_ transform: (Element) -> Key) -> [Key: [Element]] {
         return reduce(into: [:]) { result, element in
             let key = transform(element)
