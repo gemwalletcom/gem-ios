@@ -53,4 +53,6 @@ public struct Fee {
     }
 }
 
+// MARK: - Equatable
+
 extension Fee: Equatable { }
