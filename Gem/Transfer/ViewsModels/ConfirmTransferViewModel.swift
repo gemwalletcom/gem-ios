@@ -184,8 +184,8 @@ class ConfirmTransferViewModel {
         !feeRates.isEmpty && isSupportedFeeRateSelection
     }
 
-    var feeRatesModel: FeeRatesSelectorViewModel {
-        FeeRatesSelectorViewModel(
+    var feeRatesModel: NetworkFeeViewModel {
+        NetworkFeeViewModel(
             feeRates: state.value?.input?.fee.feeRates ?? feeRates,
             selectedFeeRate: selectedFeeRate,
             chain: dataModel.chain,

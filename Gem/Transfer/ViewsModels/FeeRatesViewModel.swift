@@ -3,7 +3,7 @@
 import SwiftUI
 import Primitives
 
-struct FeeRatesSelectorViewModel {
+struct NetworkFeeViewModel {
     let feeRates: [FeeRate]
     let selectedFeeRate: FeeRate?
 

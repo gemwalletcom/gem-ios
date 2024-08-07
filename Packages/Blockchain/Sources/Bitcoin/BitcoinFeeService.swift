@@ -19,7 +19,7 @@ extension BitcoinService: ChainFeeCalculateable {
     }
 
     public func feeRates() async -> [FeeRate] {
-        await Task.concurrentResults(for: FeePriority.allCases) { rate in
+        await ConcurrentTask.results(for: FeePriority.allCases) { rate in
             try await getFeeRate(priority: rate)
         }
     }
@@ -32,6 +32,8 @@ extension BitcoinService: ChainFeeCalculateable {
         let rate = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
         return FeeRate(priority: priority, rate: rate)
     }
+
+    
 }
 
 // MARK: - Models extensions
@@ -55,42 +57,9 @@ extension FeePriority {
     }
 }
 
-extension Task {
-    static func concurrentResults<T: Sendable, R: Sendable>(
-        for items: [T],
-        _ task: @Sendable @escaping (T) async throws -> R
-    ) async -> [R] {
-        await withTaskGroup(of: R?.self) { group in
-            for item in items {
-                group.addTask {
-                    do {
-                        return try await task(item)
-                    } catch {
-                        return nil
-                    }
-                }
-            }
-
-            var results: [R] = []
-            for await result in group {
-                if let value = result {
-                    results.append(value)
-                }
-            }
-            return results
-        }
-    }
-}
-
 // MARK: - Models
 
 extension BitcoinService {
-    enum BitcoinFeeCalculatorError: LocalizedError {
-        case feeRateMissed
-        case cantEstimateFee
-        case incorrectAmount
-    }
-
     struct BitcoinFeeCalculator {
         static func calculate(chain: BitcoinChain, feeInput: FeeInput, feeRates: [FeeRate], utxos: [UTXO]) throws -> Fee {
             try Self.calculate(

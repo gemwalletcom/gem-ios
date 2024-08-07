@@ -4,14 +4,14 @@ import SwiftUI
 import Components
 import Primitives
 
-struct FeeRatesSelectorScene: View {
+struct NetworkFeeScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    private var model: FeeRatesSelectorViewModel
+    private var model: NetworkFeeViewModel
 
     var action: ((FeePriority) -> Void)
 
-    init(model: FeeRatesSelectorViewModel, action: @escaping ((FeePriority) -> Void)) {
+    init(model: NetworkFeeViewModel, action: @escaping ((FeePriority) -> Void)) {
         self.model = model
         self.action = action
     }
@@ -60,7 +60,7 @@ struct FeeRatesSelectorScene: View {
 // MARK: - Previews
 
 #Preview {
-    FeeRatesSelectorScene(
+    NetworkFeeScene(
         model: .init(
             feeRates: [.init(priority: .fast,
                              rate: 4004.asBigInt)],

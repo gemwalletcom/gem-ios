@@ -2,6 +2,7 @@
 
 import Primitives
 import Foundation
+import Style
 
 struct FeeRateViewModel: Identifiable {
     let feeRate: FeeRate
@@ -16,9 +17,9 @@ struct FeeRateViewModel: Identifiable {
 
     var title: String {
         switch feeRate.priority {
-        case .fast: return Localized.FeeRates.fast
-        case .normal: return Localized.FeeRates.normal
-        case .slow: return Localized.FeeRates.slow
+        case .slow: String(format: "%@  %@", Emoji.turle, Localized.FeeRates.slow)
+        case .normal: String(format: "%@  %@", Emoji.gem, Localized.FeeRates.normal)
+        case .fast: String(format: "%@  %@", Emoji.rocket, Localized.FeeRates.fast)
         }
     }
 

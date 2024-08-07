@@ -29,7 +29,7 @@
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
 		83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824032C176A0D0023CA0C /* ChainFilterable.swift */; };
 		83D854482C59B34F00D4078C /* FeeRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854472C59B34F00D4078C /* FeeRateViewModel.swift */; };
-		83D8544A2C5A97D600D4078C /* FeeRatesSelectorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854492C5A97D600D4078C /* FeeRatesSelectorScene.swift */; };
+		83D8544A2C5A97D600D4078C /* NetworkFeeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854492C5A97D600D4078C /* NetworkFeeScene.swift */; };
 		83D8544C2C5A9F2200D4078C /* FeeRatesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8544B2C5A9F2200D4078C /* FeeRatesViewModel.swift */; };
 		83D854502C5D221200D4078C /* TransferDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D8544F2C5D221200D4078C /* TransferDataViewModel.swift */; };
 		83DF762F2C45989F001239E7 /* NodeStatusViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DF762E2C45989F001239E7 /* NodeStatusViewModel.swift */; };
@@ -303,7 +303,7 @@
 		83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824032C176A0D0023CA0C /* ChainFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainFilterable.swift; sourceTree = "<group>"; };
 		83D854472C59B34F00D4078C /* FeeRateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeRateViewModel.swift; sourceTree = "<group>"; };
-		83D854492C5A97D600D4078C /* FeeRatesSelectorScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeRatesSelectorScene.swift; sourceTree = "<group>"; };
+		83D854492C5A97D600D4078C /* NetworkFeeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkFeeScene.swift; sourceTree = "<group>"; };
 		83D8544B2C5A9F2200D4078C /* FeeRatesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeRatesViewModel.swift; sourceTree = "<group>"; };
 		83D8544F2C5D221200D4078C /* TransferDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferDataViewModel.swift; sourceTree = "<group>"; };
 		83DF762E2C45989F001239E7 /* NodeStatusViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeStatusViewModel.swift; sourceTree = "<group>"; };
@@ -741,7 +741,7 @@
 		C3340B7C2A4D03DA00884D48 /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
-				83D854492C5A97D600D4078C /* FeeRatesSelectorScene.swift */,
+				83D854492C5A97D600D4078C /* NetworkFeeScene.swift */,
 				C3CF3BC829B803F900E96586 /* RecipientScene.swift */,
 				C3B6F09129E7C31500C3B746 /* ConfirmTransferScene.swift */,
 				C3D1C4EB2A2EA647006E8EEA /* AmountScene.swift */,
@@ -2047,7 +2047,7 @@
 				D801814E2B4621ED00F4D22B /* Scenes.swift in Sources */,
 				C3D1C4EC2A2EA647006E8EEA /* AmountScene.swift in Sources */,
 				D8148C262BEEDD5A0066586A /* ChartDateFormatter.swift in Sources */,
-				83D8544A2C5A97D600D4078C /* FeeRatesSelectorScene.swift in Sources */,
+				83D8544A2C5A97D600D4078C /* NetworkFeeScene.swift in Sources */,
 				D810F3682AE9DBCA0006D9C6 /* WalletCoordinator+WalletConnector.swift in Sources */,
 				C3549B4B29C80B3C00B4BE01 /* WalletBarView.swift in Sources */,
 				D8EFE3E52BA2318A00608363 /* TransactionHeaderView.swift in Sources */,

@@ -33,7 +33,7 @@ public enum NearProvider: TargetType {
         return "/"
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .gasPrice:
             let params: [JSON<String>] = [.null]

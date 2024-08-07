@@ -48,7 +48,7 @@ public enum TonProvider: TargetType {
         }
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .balance(let address),
             .walletInformation(let address):

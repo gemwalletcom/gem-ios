@@ -31,13 +31,15 @@ struct ConfirmTransferScene: View {
         .frame(maxWidth: .infinity)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
-        .debounce(value: $model.feePriority,
-                  interval: SwapViewModel.quoteTaskDebounceTimeout,
-                  action: onChangeFeePriority)
+        .debounce(
+            value: $model.feePriority,
+            interval: Duration.milliseconds(1),
+            action: onChangeFeePriority
+        )
         .taskOnce { fetch() }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
-                FeeRatesSelectorScene(
+                NetworkFeeScene(
                     model: model.feeRatesModel,
                     action: onSelectFeePriority
                 )
