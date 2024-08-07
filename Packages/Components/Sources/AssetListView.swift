@@ -168,7 +168,7 @@ public struct AssetListView: View {
                     case .copy:
                         ListButton(
                             image: Image(systemName: SystemImage.copy),
-                            padding: 10,
+                            padding: Spacing.small,
                             action: {
                                 model.action?(.copy)
                             }

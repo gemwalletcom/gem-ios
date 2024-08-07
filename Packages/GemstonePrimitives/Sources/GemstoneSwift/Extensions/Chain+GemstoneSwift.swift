@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 import Gemstone
-
+import BigInt
 public extension Chain {
     var asset: Asset {
         //TODO: Force unwrap for now, until move Asset to Gemstone
@@ -33,5 +33,9 @@ public extension Chain {
             // stETH duplicate portfolio
             false
         }
+    }
+
+    var accountActivationFee: Int32? {
+        ChainConfig.config(chain: self).accountActivationFee
     }
 }
