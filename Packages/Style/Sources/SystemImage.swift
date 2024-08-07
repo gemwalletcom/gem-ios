@@ -30,6 +30,7 @@ public struct SystemImage {
     public static let searchNoResults = "exclamationmark.magnifyingglass"
     public static let errorOccurred = "exclamationmark.triangle.fill"
     public static let gallery = "photo.artframe"
+    public static let xmark = "xmark.circle.fill"
 }
 
 // MARK: - Previews
@@ -63,6 +64,7 @@ public struct SystemImage {
         (SystemImage.searchNoResults, "No Results"),
         (SystemImage.errorOccurred, "Error Ocurred"),
         (SystemImage.gallery, "Gallery"),
+        (SystemImage.xmark, "X Mark"),
     ]
 
     return List {

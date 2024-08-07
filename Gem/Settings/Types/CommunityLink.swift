@@ -30,6 +30,7 @@ extension SocialUrl {
         case .reddit: Localized.Social.reddit
         case .facebook: Localized.Social.facebook
         case .homepage: Localized.Social.homepage
+        case .coingecko: Localized.Social.coingecko
         }
     }
     
@@ -43,11 +44,13 @@ extension SocialUrl {
         case .reddit: Image(.reddit)
         case .facebook: Image("facebook")
         case .homepage: Image("homepage")
+        case .coingecko: Image(.coingecko)
         }
     }
     
     var order: Int {
         switch self {
+        case .coingecko: 110
         case .x: 100
         case .discord: 60
         case .telegram: 90

@@ -182,6 +182,10 @@ public struct Migrations {
             })
         }
 
+        migrator.registerMigration("Create \(BannerRecord.databaseTableName)") { db in
+            try BannerRecord.create(db: db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

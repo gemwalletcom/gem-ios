@@ -50,6 +50,10 @@ extension WalletStore {
     static let main = WalletStore(db: .main)
 }
 
+extension BannerStore {
+    static let main = BannerStore(db: .main)
+}
+
 extension AssetsService {
     static let main = AssetsService(
         assetStore: .main,

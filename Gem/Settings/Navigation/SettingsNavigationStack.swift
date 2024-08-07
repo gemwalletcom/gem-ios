@@ -19,6 +19,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletService) private var walletService
     
@@ -58,7 +59,8 @@ struct SettingsNavigationStack: View {
                 DeveloperScene(model: DeveloperViewModel(
                     transactionsService: transactionsService,
                     assetService: assetsService,
-                    stakeService: stakeService
+                    stakeService: stakeService,
+                    bannerService: bannerService
                 ))
             }
             .navigationDestination(for: Scenes.WalletConnections.self) { _ in

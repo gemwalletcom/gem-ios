@@ -46,6 +46,10 @@ struct DeveloperScene: View {
                     with: ListItemView(title: "Clear Validators"),
                     action: model.clearValidators
                 )
+                NavigationCustomLink(
+                    with: ListItemView(title: "Clear Banners"),
+                    action: model.clearBanners
+                )
             }
             
             Section("Preferences") {

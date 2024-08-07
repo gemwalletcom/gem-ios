@@ -35,7 +35,7 @@ struct StakeScene: View {
             stakeInfoSection
         }
         .refreshable {
-            fetch()
+            await model.fetch()
         }
         .navigationTitle(model.title)
         .navigationDestination(for: $model.transferData) {
@@ -70,7 +70,9 @@ struct StakeScene: View {
             )
         }
         .taskOnce {
-            fetch()
+            Task {
+                await fetch()
+            }
         }
     }
 }
@@ -163,10 +165,8 @@ extension StakeScene {
 // MARK: - Effects
 
 extension StakeScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
+    private func fetch() async {
+        await model.fetch()
     }
 }
 

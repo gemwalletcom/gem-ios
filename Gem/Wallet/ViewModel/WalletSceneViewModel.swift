@@ -34,6 +34,10 @@ struct WalletSceneViewModel {
         WalletRequest(walletId: wallet.id)
     }
 
+    var bannersRequest: BannersRequest {
+        BannersRequest(assetId: .none)
+    }
+
     func setupWallet() throws {
         try walletService.setupWallet(wallet)
     }

@@ -18,4 +18,8 @@ struct AssetSceneInput {
     var transactionsRequest: TransactionsRequest {
         return TransactionsRequest(walletId: walletId.id, type: .asset(assetId: assetId), limit: Self.transactionsLimit)
     }
+
+    var bannersRequest: BannersRequest {
+        return BannersRequest(assetId: assetId.identifier)
+    }
 }
