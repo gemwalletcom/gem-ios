@@ -46,12 +46,15 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             utxos: utxos
         )
 
-        // amount: 105198
-        // available_amount: 105910 => AnySigner.plan(input: input, coin: coinType).fee == 712
-        XCTAssertEqual(fee.fee, BigInt(712))
-        XCTAssertEqual(fee.gasPriceType, .regular(gasPrice: BigInt(4))) // Adjusted gasPrice to match the mock input
-        XCTAssertEqual(fee.gasLimit, 1)
-        XCTAssertEqual(fee.selectedFeeRate, feeRates[2]) // Assuming the selected fee rate is the one with normal priority
+        let targetFee = Fee(
+              fee: BigInt(712), // amount: 105198, available_amount: 105910 => AnySigner.plan(input: input, coin: coinType).fee == 712
+              gasPriceType: .regular(gasPrice: BigInt(4)), // Adjusted gasPrice to match the mock input
+              gasLimit: 1,
+              feeRates: feeRates,
+              selectedFeeRate: feeRates[2] // Assuming the selected fee rate is the one with normal priority
+          )
+
+        XCTAssertEqual(fee, targetFee)
     }
 
     func testCalculateFeeMissingFeeRate() throws {

@@ -52,3 +52,5 @@ public struct Fee {
         )
     }
 }
+
+extension Fee: Equatable { }
