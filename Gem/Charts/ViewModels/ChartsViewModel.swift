@@ -115,6 +115,7 @@ extension AssetDetailsInfo {
             .gitHub: links.github,
             .telegram: links.telegram,
             .youTube: links.youtube,
+            .coingecko: links.coingecko
         ].compactMapValues { $0 }
 
         return values.compactMap { key, value in

@@ -93,23 +93,13 @@ struct ChartScene: View {
                         )
                     }
                 }
-                Section {
-                    if let coingecko = details.details.links.coingecko, let url = URL(string: coingecko) {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transaction.viewOn("CoinGecko"))) {
-                            UIApplication.shared.open(url)
+                Section(Localized.Social.links) {
+                    ForEach(details.socialUrls) { link in
+                        NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
+                            UIApplication.shared.open(link.url)
                         }
                     }
                 }
-                if !details.socialUrls.isEmpty {
-                    Section(Localized.Social.links) {
-                        ForEach(details.socialUrls) { link in
-                            NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
-                                UIApplication.shared.open(link.url)
-                            }
-                        }
-                    }
-                }
-                
             }
         }
         .refreshable {
