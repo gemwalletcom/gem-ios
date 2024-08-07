@@ -23,29 +23,12 @@ struct FeeRateViewModel: Identifiable {
     }
 
     var feeUnitModel: FeeUnitViewModel? {
-        guard let type = FeeUnitType.unit(chain: chain) else { return nil }
+        guard let type = chain.type.feeUnitType else { return nil }
         let unit = FeeUnit(type: type, value: feeRate.value)
         return FeeUnitViewModel(unit: unit)
     }
 
     var value: String? {
         feeUnitModel?.value
-    }
-}
-
-// MARK: - Models extension
-
-extension FeeUnitType {
-    static func unit(chain: Chain) -> FeeUnitType? {
-        switch chain.type {
-        case .bitcoin:
-            switch BitcoinChain(rawValue: chain.rawValue) {
-            case .bitcoin: return .satVb
-            case .litecoin, .doge: return .satB
-            case .none: return .none
-            }
-        case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
-            return nil
-        }
     }
 }
