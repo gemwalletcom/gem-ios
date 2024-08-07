@@ -9,3 +9,8 @@ public enum FeePriority: String, Codable, CaseIterable, Equatable {
 	case normal
 	case fast
 }
+
+public enum FeeUnitType: String, Codable, CaseIterable, Equatable {
+	case satVb
+	case satB
+}

@@ -1,13 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import BigInt
-
-enum FeeUnitType {
-    case satVb
-    case satB
-}
+import Primitives
 
 struct FeeUnit {
-    let unitType: FeeUnitType
+    let type: FeeUnitType
     let value: BigInt
 }

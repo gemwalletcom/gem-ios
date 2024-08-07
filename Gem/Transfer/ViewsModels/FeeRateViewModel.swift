@@ -24,7 +24,7 @@ struct FeeRateViewModel: Identifiable {
 
     var feeUnitModel: FeeUnitViewModel? {
         guard let type = FeeUnitType.unit(chain: chain) else { return nil }
-        let unitValue = FeeUnit(unitType: type, value: feeRate.value)
+        let unitValue = FeeUnit(type: type, value: feeRate.value)
         return FeeUnitViewModel(feetUnit: unitValue)
     }
 

@@ -7,7 +7,7 @@ struct FeeUnitViewModel {
 
     var value: String? {
         guard let unitValue else { return nil }
-        switch feetUnit.unitType {
+        switch feetUnit.type {
         case .satVb:
             return Localized.FeeRate.satvB(unitValue)
         case .satB:
@@ -17,7 +17,7 @@ struct FeeUnitViewModel {
 
     private var unitValue: Int? {
         let value = Double(feetUnit.value.int)
-        switch feetUnit.unitType {
+        switch feetUnit.type {
         case .satVb:
             return Int(round(value / 1000))
         case .satB:
