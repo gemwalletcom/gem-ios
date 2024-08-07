@@ -50,7 +50,7 @@ struct NetworkFeeScene: View {
                 Button {
                     dismiss()
                 } label: {
-                    Text(Localized.Common.cancel)
+                    Text(Localized.Common.done)
                 }
             }
         }
