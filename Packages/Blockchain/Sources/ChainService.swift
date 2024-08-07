@@ -76,9 +76,9 @@ extension ChainService: ChainFeeCalculateable {
             .fee(input: input)
     }
 
-    public func getFeeRates() async throws -> [FeeRate] {
+    public func feeRates() async throws -> [FeeRate] {
         try await Self.service(chain: chain, with: url)
-            .getFeeRates()
+            .feeRates()
     }
 }
 

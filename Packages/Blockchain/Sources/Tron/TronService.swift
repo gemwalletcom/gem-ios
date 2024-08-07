@@ -235,7 +235,7 @@ extension TronService: ChainFeeCalculateable {
         )
     }
 
-    public func getFeeRates() async throws -> [FeeRate] { [] }
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable

@@ -64,10 +64,6 @@ public struct TransferAmountCalculator {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
         
-        NSLog("input.value: \(input.value)")
-        NSLog("input.availableValue: \(input.availableValue)")
-        NSLog("input.assetBalance.available: \(input.assetBalance.available)")
-        
         //TODO: Check for input.value + input.fee
         
         if input.availableValue < input.value  {

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		481152C22B54F46800377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C12B54F46800377C75 /* Gemstone */; };
 		481152C82B566AC200377C75 /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = 481152C72B566AC200377C75 /* Gemstone */; };
+		830ED2342C63AE2000B9877C /* FeeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2332C63AE2000B9877C /* FeeUnit.swift */; };
+		830ED2362C63AE4D00B9877C /* FeeUnitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */; };
 		830FDA382C204E07003DA605 /* AddNodeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA372C204E07003DA605 /* AddNodeScene.swift */; };
 		830FDA3B2C20955D003DA605 /* AddNodeSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3A2C20955D003DA605 /* AddNodeSceneViewModel.swift */; };
 		830FDA3F2C2209AF003DA605 /* AddNodeResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3E2C2209AF003DA605 /* AddNodeResult.swift */; };
@@ -278,6 +280,8 @@
 
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		830ED2332C63AE2000B9877C /* FeeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnit.swift; sourceTree = "<group>"; };
+		830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnitViewModel.swift; sourceTree = "<group>"; };
 		830FDA372C204E07003DA605 /* AddNodeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddNodeScene.swift; path = Gem/Nodes/Scenes/AddNodeScene.swift; sourceTree = SOURCE_ROOT; };
 		830FDA3A2C20955D003DA605 /* AddNodeSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeSceneViewModel.swift; sourceTree = "<group>"; };
 		830FDA3E2C2209AF003DA605 /* AddNodeResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeResult.swift; sourceTree = "<group>"; };
@@ -749,6 +753,7 @@
 				83D854472C59B34F00D4078C /* FeeRateViewModel.swift */,
 				83D8544B2C5A9F2200D4078C /* FeeRatesViewModel.swift */,
 				83D8544F2C5D221200D4078C /* TransferDataViewModel.swift */,
+				830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */,
 			);
 			path = ViewsModels;
 			sourceTree = "<group>";
@@ -1176,6 +1181,7 @@
 			isa = PBXGroup;
 			children = (
 				D80181452B3CF84A00F4D22B /* ScanRecipientResult.swift */,
+				830ED2332C63AE2000B9877C /* FeeUnit.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1953,6 +1959,7 @@
 				C3D1C5052A43AB04006E8EEA /* TransactionsScene.swift in Sources */,
 				D820CB522B51ED220063D70C /* ValidatorImageView.swift in Sources */,
 				D8385CEA2B017F4500F784C7 /* SwapViewModel.swift in Sources */,
+				830ED2362C63AE4D00B9877C /* FeeUnitViewModel.swift in Sources */,
 				C3D1C4D12A2401F0006E8EEA /* TransactionInputViewModel.swift in Sources */,
 				D85620252AAA71FA00D65D81 /* SubscriptionService.swift in Sources */,
 				D8D203B82ACC84BA00261CA2 /* ChartsViewModel.swift in Sources */,
@@ -1961,6 +1968,7 @@
 				D8B738D12C4AF286004EF083 /* ConnectionsError.swift in Sources */,
 				C3CF3BC529B7CB3600E96586 /* BuyAssetScene.swift in Sources */,
 				D8148C2B2BF54BA30066586A /* AddressListItem.swift in Sources */,
+				830ED2342C63AE2000B9877C /* FeeUnit.swift in Sources */,
 				D8385CEE2B029DAE00F784C7 /* SwapTokenViewModel.swift in Sources */,
 				C374820A2A8ACA5A008A5F0E /* LockState.swift in Sources */,
 				C3CF3BED29C00CFD00E96586 /* AssetListViewModel.swift in Sources */,

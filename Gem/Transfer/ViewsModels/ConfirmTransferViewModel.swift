@@ -57,19 +57,6 @@ class ConfirmTransferViewModel {
         self.metadata = metadata
     }
 
-    var feeRatesModel: FeeRatesSelectorViewModel {
-        FeeRatesSelectorViewModel(
-            feeRates: state.value?.input?.fee.feeRates ?? feeRates,
-            selectedFeeRate: feeRates.first(where: { $0.priority == feePriority }),
-            chain: dataModel.chain,
-            networkFeeValue: networkFeeValue,
-            networkFeeFiatValue: networkFeeFiatValue)
-    }
-
-    var dataModel: TransferDataViewModel {
-        TransferDataViewModel(data: data)
-    }
-
     var title: String { dataModel.title }
 
     var appTitle: String { Localized.WalletConnect.app }
@@ -192,9 +179,26 @@ class ConfirmTransferViewModel {
         }
     }
 
-    var hudTitle: String { Localized.Common.loading }
+    var progressMessage: String { Localized.Common.loading }
     var shouldShowFeeRatesSelector: Bool {
         !feeRates.isEmpty && isSupportedFeeRateSelection
+    }
+
+    var feeRatesModel: FeeRatesSelectorViewModel {
+        FeeRatesSelectorViewModel(
+            feeRates: state.value?.input?.fee.feeRates ?? feeRates,
+            selectedFeeRate: selectedFeeRate,
+            chain: dataModel.chain,
+            networkFeeValue: networkFeeValue,
+            networkFeeFiatValue: networkFeeFiatValue)
+    }
+
+    var selectedFeeRate: FeeRate? {
+        feeRates.first(where: { $0.priority == feePriority })
+    }
+
+    var dataModel: TransferDataViewModel {
+        TransferDataViewModel(data: data)
     }
 }
 

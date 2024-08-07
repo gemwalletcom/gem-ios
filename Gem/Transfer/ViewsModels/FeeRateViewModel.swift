@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
+import Foundation
 
 struct FeeRateViewModel: Identifiable {
     let feeRate: FeeRate
@@ -21,74 +22,30 @@ struct FeeRateViewModel: Identifiable {
         }
     }
 
-    var value: String {
-        switch chain {
+    var feeUnitModel: FeeUnitViewModel? {
+        guard let type = FeeUnitType.unit(chain: chain) else { return nil }
+        let unitValue = FeeUnit(unitType: type, value: feeRate.value)
+        return FeeUnitViewModel(feetUnit: unitValue)
+    }
+
+    var value: String? {
+        feeUnitModel?.value
+    }
+}
+
+// MARK: - Models extension
+
+extension FeeUnitType {
+    static func unit(chain: Chain) -> FeeUnitType? {
+        switch chain.type {
         case .bitcoin:
-            let gasPrice = feeRate.value.int / 1000
-            return "\(gasPrice) sat/vB"
-        case .litecoin , .doge:
-            let gasPrice = feeRate.value.int / 100
-            return "\(gasPrice) sat/B"
-        case .ethereum:
-            return ""
-        case .smartChain:
-            return ""
-        case .solana:
-            return ""
-        case .polygon:
-            return ""
-        case .thorchain:
-            return ""
-        case .cosmos:
-            return ""
-        case .osmosis:
-            return ""
-        case .arbitrum:
-            return ""
-        case .ton:
-            return ""
-        case .tron:
-            return ""
-        case .optimism:
-            return ""
-        case .aptos:
-            return ""
-        case .base:
-            return ""
-        case .avalancheC:
-            return ""
-        case .sui:
-            return ""
-        case .xrp:
-            return ""
-        case .opBNB:
-            return ""
-        case .fantom:
-            return ""
-        case .gnosis:
-            return ""
-        case .celestia:
-            return ""
-        case .injective:
-            return ""
-        case .sei:
-            return ""
-        case .manta:
-            return ""
-        case .blast:
-            return ""
-        case .noble:
-            return ""
-        case .zkSync:
-            return ""
-        case .linea:
-            return ""
-        case .mantle:
-            return ""
-        case .celo:
-            return ""
-        case .near:
-            return ""
+            switch chain {
+            case .bitcoin: return .satVb
+            case .litecoin, .doge: return .satB
+            default: return nil
+            }
+        case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
+            return nil
         }
     }
 }

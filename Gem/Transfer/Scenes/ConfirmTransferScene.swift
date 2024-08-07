@@ -29,7 +29,7 @@ struct ConfirmTransferScene: View {
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.hudTitle)
+        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
         .debounce(value: $model.feePriority,
                   interval: SwapViewModel.quoteTaskDebounceTimeout,
@@ -130,7 +130,6 @@ extension ConfirmTransferScene {
             subtitleExtra: model.networkFeeFiatValue,
             placeholders: [.subtitle]
         )
-        .id(UUID())
     }
 }
 

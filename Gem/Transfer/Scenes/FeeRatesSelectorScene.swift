@@ -42,7 +42,6 @@ struct FeeRatesSelectorScene: View {
                 subtitleExtra: model.networkFeeFiatValue,
                 placeholders: [.subtitle]
             )
-            .id(UUID())
         }
         .navigationTitle(Localized.Transfer.networkFee)
         .navigationBarTitleDisplayMode(.inline)

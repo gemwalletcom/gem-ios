@@ -238,3 +238,5 @@
 "fee_rates.fast" = "Fast";
 "fee_rates.normal" = "Normal";
 "errors.transfer_error" = "Transfer Error";
+"fee_rate.satvB" = "%@ sat/vB";
+"fee_rate.satB" = "%@ sat/B";

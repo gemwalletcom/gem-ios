@@ -298,7 +298,7 @@ extension SuiService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension SuiService: ChainFeeCalculateable {
-    public func getFeeRates() async throws -> [FeeRate] { [] }
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     
     public func fee(input: FeeInput) async throws -> Fee {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])

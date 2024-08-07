@@ -11,19 +11,17 @@ import WalletCorePrimitives
 
 extension BitcoinService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
-        async let getRates = getFeeRates()
+        async let getRates = feeRates()
         async let getUtxos = getUtxos(address: input.senderAddress)
 
         let (rates, utxos) = try await (getRates, getUtxos)
         return try BitcoinFeeCalculator.calculate(chain: chain, feeInput: input, feeRates: rates, utxos: utxos)
     }
 
-    public func getFeeRates() async -> [FeeRate] {
+    public func feeRates() async -> [FeeRate] {
         await Task.concurrentResults(for: FeePriority.allCases) { rate in
             try await getFeeRate(priority: rate)
         }
-        // TODO: - review such cases
-        .filter({ $0.value > 0 })  // added filtering on positive types, since some on nodes returned negative values
     }
 
     private func getFeeRate(priority: FeePriority) async throws -> FeeRate {
@@ -41,36 +39,18 @@ extension BitcoinService: ChainFeeCalculateable {
 extension FeePriority {
     func blocks(chain: BitcoinChain) -> Int {
         switch chain {
-        case .bitcoin: bitcoin
-        case .doge: doge
-        case .litecoin: litecoin
-        }
-    }
-
-    var bitcoin: Int {
-        // Block Time: Approximately 10 minute
-        switch self {
-        case .slow: 12 // 6-12 blocks (60-120 minutes)
-        case .normal: 6 // 3-6 blocks (30-60 minutes)
-        case .fast: 1 // 1 block (10 minutes)
-        }
-    }
-
-    var doge: Int {
-        // Block Time: Approximately 1 minute
-        switch self {
-        case .slow: 24 // 12-24 blocks (12-24 minutes)
-        case .normal: 12 // 6-12 blocks (6-12 minutes)
-        case .fast: 1 // 1 block (1 minute)
-        }
-    }
-
-    var litecoin: Int {
-        // Block Time: Approximately 2.5 minutes
-        switch self {
-        case .slow: 12 // 6-12 blocks (15-30 minutes)
-        case .normal: 6 // 3-6 blocks (7.5-15 minutes)
-        case .fast: 1 // 1 block (2.5 minutes)
+        case .bitcoin, .litecoin:
+            switch self {
+            case .fast: 1
+            case .normal: 6
+            case .slow: 12
+            }
+        case .doge:
+            switch self {
+            case .fast: 2
+            case .normal: 12
+            case .slow: 24
+            }
         }
     }
 }

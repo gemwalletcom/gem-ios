@@ -258,6 +258,16 @@ internal enum Localized {
       }
     }
   }
+  internal enum FeeRate {
+    /// %@ sat/B
+    internal static func satB(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "fee_rate.satB", String(describing: p1), fallback: "%@ sat/B")
+    }
+    /// %@ sat/vB
+    internal static func satvB(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "fee_rate.satvB", String(describing: p1), fallback: "%@ sat/vB")
+    }
+  }
   internal enum FeeRates {
     /// Fast
     internal static let fast = Localized.tr("Localizable", "fee_rates.fast", fallback: "Fast")

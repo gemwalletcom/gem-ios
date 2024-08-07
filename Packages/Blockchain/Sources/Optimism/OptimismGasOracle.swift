@@ -46,7 +46,7 @@ public struct OptimismGasOracle {
 }
 
 extension OptimismGasOracle: ChainFeeCalculateable {
-    public func getFeeRates() async throws -> [FeeRate] { [] }
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230

@@ -169,7 +169,7 @@ extension SolanaService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension SolanaService: ChainFeeCalculateable {
-    public func getFeeRates() async throws -> [FeeRate] { [] }
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     public func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
