@@ -39,10 +39,10 @@ extension FeeUnitType {
     static func unit(chain: Chain) -> FeeUnitType? {
         switch chain.type {
         case .bitcoin:
-            switch chain {
+            switch BitcoinChain(rawValue: chain.rawValue) {
             case .bitcoin: return .satVb
             case .litecoin, .doge: return .satB
-            default: return nil
+            case .none: return .none
             }
         case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
             return nil
