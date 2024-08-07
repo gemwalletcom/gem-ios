@@ -27,7 +27,7 @@ struct TransactionsScene: View {
             TransactionsList(transactions)
         }
         .refreshable {
-            onRefresh()
+            await fetch()
         }
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
@@ -52,21 +52,17 @@ struct TransactionsScene: View {
 
 extension TransactionsScene {
     private func onAppear() {
-        fetch()
-    }
-
-    private func onRefresh() {
-        fetch()
+        Task {
+            await fetch()
+        }
     }
 }
 
 // MARK: - Effects
 
 extension TransactionsScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
+    private func fetch() async {
+        await model.fetch()
     }
 }
 

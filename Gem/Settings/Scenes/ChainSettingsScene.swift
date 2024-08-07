@@ -61,7 +61,7 @@ struct ChainSettingsScene: View {
             }
         }
         .refreshable {
-            fetch()
+            await fetch()
         }
         .confirmationDialog(
             Localized.Common.deleteConfirmation(model.nodeDelete?.host ?? ""),
@@ -92,7 +92,9 @@ struct ChainSettingsScene: View {
             }
         }
         .navigationTitle(model.title)
-        .taskOnce(fetch)
+        .taskOnce {
+            Task { await fetch()}
+        }
     }
 }
 
@@ -122,7 +124,9 @@ extension ChainSettingsScene {
 
     private func onDismissAddCustomNode() {
         model.isPresentingImportNode = false
-        fetch()
+        Task {
+            await fetch()
+        }
     }
 
     private func onDeleteNode() {
@@ -138,13 +142,11 @@ extension ChainSettingsScene {
 // MARK: - Effects
 
 extension ChainSettingsScene {
-    private func fetch() {
+    private func fetch() async {
         do {
             model.clear()
             try model.fetchNodes()
-            Task {
-                await model.fetchNodesStatusInfo()
-            }
+            await model.fetchNodesStatusInfo()
         } catch {
             // TODO: - handle error
             print("chain settings scene: fetch error \(error)")

@@ -113,10 +113,7 @@ struct ChartScene: View {
             }
         }
         .refreshable {
-            NSLog("refresh chart asset \(model.assetModel.asset.name)")
-            Task {
-                await fetch()
-            }
+            await fetch()
         }
         .taskOnce {
             Task { await model.updateAsset() }
