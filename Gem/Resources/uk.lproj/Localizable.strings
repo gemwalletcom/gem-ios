@@ -240,3 +240,4 @@
 "errors.transfer_error" = "Transfer Error";
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
+"social.coingecko" = "CoinGecko";

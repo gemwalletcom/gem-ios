@@ -376,6 +376,8 @@ internal enum Localized {
     internal static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
   }
   internal enum Social {
+    /// CoinGecko
+    internal static let coingecko = Localized.tr("Localizable", "social.coingecko", fallback: "CoinGecko")
     /// Discord
     internal static let discord = Localized.tr("Localizable", "social.discord", fallback: "Discord")
     /// Facebook
