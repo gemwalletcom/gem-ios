@@ -80,7 +80,7 @@ public struct WalletKeyStore {
         let _ = try keyStore.removeAccounts(wallet: wallet, coins: [.ethereum] + exclude.map { $0.coinType }, password: password)
         if chains.contains(.solana) {
             // By default solana derived a wrong derivation path, need to adjust use a new one
-            let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solana)
+            let _ = try wallet.getAccount(password: password, coin: .solana, derivation: .solanaSolana)
         }
         
         let _ = try keyStore.addAccounts(wallet: wallet, coins: coins, password: password)
@@ -134,7 +134,7 @@ public struct WalletKeyStore {
             }
             switch chain {
             case .solana:
-                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solana).data
+                return hdwallet.getKeyDerivation(coin: chain.coinType, derivation: .solanaSolana).data
             default:
                 return hdwallet.getKeyForCoin(coin: chain.coinType).data
             }
