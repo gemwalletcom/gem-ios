@@ -46,7 +46,7 @@ struct NetworkFeeScene: View {
         .navigationTitle(Localized.Transfer.networkFee)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .primaryAction) {
+            ToolbarItem(placement: .cancellationAction) {
                 Button {
                     dismiss()
                 } label: {
