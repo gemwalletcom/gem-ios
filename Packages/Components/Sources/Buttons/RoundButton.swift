@@ -5,9 +5,15 @@ import Style
 
 public struct RoundButton: View {
     @Environment(\.isEnabled) private var isEnabled
+    @Environment(\.dynamicTypeSize) private var dynamicTypeSize
+
+    @ScaledMetric(relativeTo: .body) private var backgroundSize: CGFloat = 48
+    @ScaledMetric(relativeTo: .body) private var baseFontSize: CGFloat = 16
+
+    @State private var sceneWidth: CGFloat = 0.0
+
     let title: String
     let image: Image
-
     var action: (() -> Void)?
 
     public init(
@@ -18,30 +24,49 @@ public struct RoundButton: View {
         self.action = action
         self.image = image
         self.title = title
+
+        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
+            let sceneWidth = windowScene.screen.bounds.width
+            _sceneWidth = State(initialValue: sceneWidth)
+        }
     }
-    
+
     public var body: some View {
         Button {
             action?()
         } label: {
-            VStack(alignment: .center) {
-                image
-                    .frame(width: 48, height: 48)
-                    .background(Colors.blue)
-                    .cornerRadius(24)
-                    .opacity(isEnabled ? 1 : 0.6)
+            VStack(alignment: .center, spacing: Spacing.tiny) {
+                ZStack {
+                    Circle()
+                        .fill(Colors.blue)
+                        .frame(width: imageSize, height: imageSize)
+                    image
+                }
                 Text(title)
-                    .minimumScaleFactor(0.8)
-                    .foregroundStyle(Colors.secondaryText)
-                    .font(.system(size: 16).weight(.medium))
+                    .font(.system(size: titleFontSize).weight(.medium))
+                    .foregroundColor(isEnabled ? Colors.secondaryText : Colors.secondaryText.opacity(0.6))
                     .lineLimit(1)
-                    .padding(.horizontal, 4)
+                    .truncationMode(.tail)
             }
+            .padding(.horizontal, Spacing.tiny)
         }
         .disabled(!isEnabled)
         .buttonStyle(.borderless)
+        .frame(maxWidth: .infinity)
+    }
+
+    private var imageSize: CGFloat {
+        min(50, backgroundSize)
+    }
+
+    private var titleFontSize: CGFloat {
+        let isSmallScreen = sceneWidth <= 375
+        let isAccessibilitySize = dynamicTypeSize.isAccessibilitySize
+
+        return min(18, isSmallScreen || isAccessibilitySize ? baseFontSize * 0.71 : baseFontSize)
     }
 }
+
 struct RoundButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack {

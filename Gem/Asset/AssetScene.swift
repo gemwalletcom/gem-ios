@@ -59,14 +59,10 @@ struct AssetScene: View {
 
     var body: some View {
         List {
-            Section { } header: {
-                WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
-                    .padding(.top, Spacing.small)
-            }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
+            WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
             .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
 
             Section {
                 BannerView(banners: banners) { banner in
@@ -131,6 +127,7 @@ struct AssetScene: View {
                 }
             }
         }
+        .contentMargins(.top, Spacing.small)
         .refreshable {
             await fetch()
         }

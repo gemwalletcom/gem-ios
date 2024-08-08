@@ -57,19 +57,14 @@ struct WalletScene: View {
     
     var body: some View {
         List {
-
-           Section { } header: {
-                WalletHeaderView(
-                    model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
-                ) {
-                    isPresentingSelectType = $0.selectType
-                }
-                .padding(.top, Spacing.small)
+            WalletHeaderView(
+                model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
+            ) {
+                isPresentingSelectType = $0.selectType
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.clear)
 
             Section {
                 BannerView(banners: banners) { banner in
@@ -100,20 +95,9 @@ struct WalletScene: View {
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
+        .contentMargins(.top, .zero)
         .refreshable {
             await refreshable()
-        }
-        .sheet(item: $isPresentingSelectType) { value in
-            SelectAssetSceneNavigationStack(
-                model: SelectAssetViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    selectType: value,
-                    assetsService: assetsService,
-                    walletService: walletService
-                ),
-                isPresenting: $isPresentingSelectType
-            )
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
@@ -134,6 +118,18 @@ struct WalletScene: View {
                     Image(.manageAssets)
                 }
             }
+        }
+        .sheet(item: $isPresentingSelectType) { value in
+            SelectAssetSceneNavigationStack(
+                model: SelectAssetViewModel(
+                    wallet: model.wallet,
+                    keystore: keystore,
+                    selectType: value,
+                    assetsService: assetsService,
+                    walletService: walletService
+                ),
+                isPresenting: $isPresentingSelectType
+            )
         }
         .sheet(item: $isPresentingAssetSelectType) { selectType in
             NavigationStack {
