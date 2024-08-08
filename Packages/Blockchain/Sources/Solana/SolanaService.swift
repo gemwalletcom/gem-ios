@@ -169,6 +169,7 @@ extension SolanaService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension SolanaService: ChainFeeCalculateable {
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     public func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
@@ -178,7 +179,9 @@ extension SolanaService: ChainFeeCalculateable {
                 return Fee(
                     fee: fee,
                     gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1
+                    gasLimit: 1,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             case .token:
                 async let getBaseFee = getBaseFee()
@@ -199,7 +202,9 @@ extension SolanaService: ChainFeeCalculateable {
                     fee: fee,
                     gasPriceType: .regular(gasPrice: fee),
                     gasLimit: 1,
-                    options: options
+                    options: options,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             }
         case .swap, .stake:
@@ -207,7 +212,9 @@ extension SolanaService: ChainFeeCalculateable {
             return Fee(
                 fee: fee,
                 gasPriceType: .regular(gasPrice: fee),
-                gasLimit: 1
+                gasLimit: 1,
+                feeRates: [],
+                selectedFeeRate: nil
             )
         case .generic:
             fatalError()
@@ -416,3 +423,4 @@ extension SolanaService: ChainLatestBlockFetchable {
         try await getSlot()
     }
 }
+

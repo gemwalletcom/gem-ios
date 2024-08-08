@@ -13,6 +13,7 @@ struct AssetScene: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.bannerService) private var bannerService
 
     @State private var isPresentingStaking: Bool = false
     @State private var showingOptions = false
@@ -24,6 +25,10 @@ struct AssetScene: View {
 
     @Query<AssetRequest>
     private var assetData: AssetData
+
+    @Query<BannersRequest>
+    private var banners: [Primitives.Banner]
+
 
     private let wallet: Wallet
     private let input: AssetSceneInput
@@ -49,6 +54,7 @@ struct AssetScene: View {
         _isPresentingAssetSelectType = isPresentingAssetSelectType
         _assetData = Query(constant: input.assetRequest, in: \.db.dbQueue)
         _transactions = Query(constant: input.transactionsRequest, in: \.db.dbQueue)
+        _banners = Query(constant: input.bannersRequest, in: \.db.dbQueue)
     }
 
     var body: some View {
@@ -57,6 +63,12 @@ struct AssetScene: View {
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
             .listRowBackground(Color.red)
+
+            Section {
+                BannerView(banners: banners) { banner in
+                    Task { try bannerService.closeBanner(banner: banner) }
+                }
+            }
 
             Section {
                 if model.showPriceView {
@@ -117,7 +129,7 @@ struct AssetScene: View {
         }
         .contentMargins(.top, Spacing.small)
         .refreshable {
-            fetch()
+            await fetch()
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -192,17 +204,19 @@ extension AssetScene {
     }
 
     private func onTaskOnce() {
-        fetch()
-        Task { await model.updateAsset() }
+        Task {
+            await fetch()
+        }
+        Task {
+            await model.updateAsset()
+        }
     }
 }
 
 // MARK: - Effects
 
 extension AssetScene {
-    private func fetch() {
-        Task {
-            await model.updateWallet()
-        }
+    private func fetch() async {
+        await model.updateWallet()
     }
 }

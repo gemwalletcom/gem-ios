@@ -63,9 +63,13 @@ extension AptosService: ChainFeeCalculateable {
         return Fee(
             fee: BigInt(gasPrice * gasLimit),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2)
+            gasLimit: BigInt(gasLimit * 2),
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable

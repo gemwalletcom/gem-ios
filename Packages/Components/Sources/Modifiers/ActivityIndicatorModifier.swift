@@ -54,3 +54,11 @@ public struct ActivityIndicatorModifier: AnimatableModifier {
         }
     }
 }
+
+// MARK: - View Modifier
+
+public extension View {
+    func activityIndicator(isLoading: Bool, message: String) -> some View {
+        self.modifier(ActivityIndicatorModifier(message: message, isLoading: isLoading))
+    }
+}

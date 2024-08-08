@@ -98,4 +98,11 @@ struct Columns {
         static let id = Column("id")
         static let sessionId = Column("sessionId")
     }
+
+    struct Banner {
+        static let id = Column("id")
+        static let state = Column("state")
+        static let assetId = Column("assetId")
+        static let walletId = Column("walletId")
+    }
 }

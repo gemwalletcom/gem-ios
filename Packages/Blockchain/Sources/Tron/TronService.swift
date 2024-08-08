@@ -229,9 +229,13 @@ extension TronService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
+            gasLimit: 1,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable

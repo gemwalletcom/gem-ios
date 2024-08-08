@@ -127,7 +127,9 @@ extension TonService: ChainFeeCalculateable {
                 return Fee(
                     fee: baseFee,
                     gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1
+                    gasLimit: 1,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             case .token:
                 let tokenId = try asset.getTokenId()
@@ -143,13 +145,17 @@ extension TonService: ChainFeeCalculateable {
                     fee: baseFee,
                     gasPriceType: .regular(gasPrice: baseFee),
                     gasLimit: 1,
-                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
+                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)],
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             }
         case .swap, .generic, .stake:
             fatalError()
         }
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable

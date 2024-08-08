@@ -4,7 +4,7 @@ public protocol TargetType {
     var baseUrl: URL { get }
     var method: HTTPMethod { get }
     var path: String { get }
-    var task: Task { get }
+    var data: RequestData { get }
     var contentType: String { get }
     var cachePolicy: URLRequest.CachePolicy { get }
 }

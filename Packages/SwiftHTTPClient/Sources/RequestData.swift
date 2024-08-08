@@ -1,6 +1,6 @@
 import Foundation
 
-public enum Task {
+public enum RequestData {
     case plain
     case params([String: Any])
     case encodable(Encodable)
