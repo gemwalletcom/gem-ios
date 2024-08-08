@@ -13,14 +13,12 @@ protocol HeaderViewModel {
     var subtitle: String? { get }
     var buttons: [HeaderButton] { get }
 }
-
 struct WalletHeaderView: View {
-    
     let model: HeaderViewModel
     var action: HeaderButtonAction?
-    
+
     var body: some View {
-        VStack(spacing: Spacing.large/2) {
+        VStack(spacing: Spacing.large / 2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
@@ -28,30 +26,36 @@ struct WalletHeaderView: View {
                     overlayImageSize: 26
                 )
             }
-            
+
             Text(model.title)
-                .minimumScaleFactor(0.5)
-                .font(.system(size: 42))
-                .fontWeight(.semibold)
-                .foregroundColor(Colors.black)
+                .textStyle(
+                    TextStyle(
+                        font: .system(size: 42, weight: .semibold),
+                        color: Colors.black
+                    )
+                )
                 .lineLimit(1)
-                
+                .minimumScaleFactor(0.5)
+
             if let subtitle = model.subtitle {
                 Text(subtitle)
-                    .font(.system(size: 18))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Colors.gray)
+                    .textStyle(
+                        TextStyle(
+                            font: .system(size: 18, weight: .semibold),
+                            color: Colors.gray
+                        )
+                    )
             }
-            
+
             switch model.isWatchWallet {
             case true:
                 HStack {
                     Image(systemName: SystemImage.eye)
-                    
+
                     Text(Localized.Wallet.Watch.Tooltip.title)
                         .foregroundColor(Colors.black)
                         .font(.callout)
-                    
+
                     Button {
                         UIApplication.shared.open(Docs.url(.whatIsWatchWallet))
                     } label: {
@@ -64,8 +68,11 @@ struct WalletHeaderView: View {
                 .cornerRadius(Spacing.medium)
                 .padding(.top, Spacing.medium)
             case false:
-                HeaderButtonsView(buttons: model.buttons, action: action)
-                    .padding(.top, Spacing.small)
+                HStack {
+                    Spacer()
+                    HeaderButtonsView(buttons: model.buttons, action: action)
+                    Spacer()
+                }
             }
         }
     }
@@ -76,5 +83,8 @@ struct WalletHeaderView: View {
 #Preview {
     let model = AssetHeaderViewModel(assetDataModel: .init(assetData: .main, formatter: .full_US),
                                      walletModel: .init(wallet: .main))
-    return WalletHeaderView(model: model, action: nil)
+
+    return List {
+        WalletHeaderView(model: model, action: nil)
+    }
 }
