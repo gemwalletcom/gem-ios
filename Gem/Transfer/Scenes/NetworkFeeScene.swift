@@ -9,7 +9,7 @@ struct NetworkFeeScene: View {
 
     private var model: NetworkFeeViewModel
 
-    var action: ((FeePriority) -> Void)
+    private var action: ((FeePriority) -> Void)
 
     init(model: NetworkFeeViewModel, action: @escaping ((FeePriority) -> Void)) {
         self.model = model
@@ -46,11 +46,11 @@ struct NetworkFeeScene: View {
         .navigationTitle(Localized.Transfer.networkFee)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
+            ToolbarItem(placement: .primaryAction) {
                 Button {
                     dismiss()
                 } label: {
-                    Text(Localized.Common.cancel)
+                    Text(Localized.Common.done)
                 }
             }
         }
