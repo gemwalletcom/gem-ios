@@ -21,7 +21,6 @@ struct HeaderButtonsView: View {
                     action?(button.type)
                 }
                 .frame(maxWidth: .infinity)
-                .background(Color.yellow)
             }
         }
         .frame(maxWidth: Spacing.scene.content.maxWidth)

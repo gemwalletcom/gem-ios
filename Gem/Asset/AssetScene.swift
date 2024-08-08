@@ -62,7 +62,7 @@ struct AssetScene: View {
             WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
             .listRowInsets(EdgeInsets())
             .listRowSeparator(.hidden)
-            .listRowBackground(Color.red)
+            .listRowBackground(Color.clear)
 
             Section {
                 BannerView(banners: banners) { banner in
