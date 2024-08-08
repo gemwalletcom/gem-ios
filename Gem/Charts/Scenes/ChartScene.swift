@@ -9,11 +9,6 @@ import GRDB
 import GRDBQuery
 import Store
 
-struct ChartSelection {
-    let period: ChartPeriod
-    let title: String
-}
-
 struct ChartScene: View {
     
     @StateObject var model: ChartsViewModel
