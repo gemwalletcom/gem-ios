@@ -46,13 +46,34 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             utxos: utxos
         )
 
+        let selectedFeeRate = feeRates[2]
+        let coinType = chain.chain.coinType
+        let byteFee = Int(round(Double(selectedFeeRate.value.int) / 1000.0))
+        let gasPrice = max(byteFee, chain.minimumByteFee)
+
+        let utxo = utxos.map { $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType) }
+        let scripts = utxo.mapToScripts(address: feeInput.senderAddress, coinType: coinType)
+        let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
+        let input = BitcoinSigningInput.with {
+            $0.coinType = coinType.rawValue
+            $0.hashType = hashType
+            $0.amount = feeInput.value.int64
+            $0.byteFee = Int64(gasPrice)
+            $0.toAddress = feeInput.destinationAddress
+            $0.changeAddress = feeInput.senderAddress
+            $0.utxo = utxo
+            $0.scripts = scripts
+            $0.useMaxAmount = feeInput.isMaxAmount
+        }
+        let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
+
         let targetFee = Fee(
-              fee: BigInt(712), // amount: 105198, available_amount: 105910 => AnySigner.plan(input: input, coin: coinType).fee == 712
-              gasPriceType: .regular(gasPrice: BigInt(4)), // Adjusted gasPrice to match the mock input
-              gasLimit: 1,
-              feeRates: feeRates,
-              selectedFeeRate: feeRates[2] // Assuming the selected fee rate is the one with normal priority
-          )
+            fee: BigInt(plan.fee),
+            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
+            gasLimit: 1,
+            feeRates: feeRates,
+            selectedFeeRate: selectedFeeRate
+        )
 
         XCTAssertEqual(fee, targetFee)
     }
@@ -70,7 +91,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: utxos
         )) { error in
-            XCTAssertEqual(error as? BitcoinService.BitcoinFeeCalculatorError, .feeRateMissed)
+            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .feeRateMissed)
         }
     }
 
@@ -96,7 +117,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: utxos
         )) { error in
-            XCTAssertEqual(error as? BitcoinService.BitcoinFeeCalculatorError, .incorrectAmount)
+            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .incorrectAmount)
         }
     }
 
@@ -111,7 +132,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: [] // set empty utxo for such case
         )) { error in
-            XCTAssertEqual(error as? BitcoinService.BitcoinFeeCalculatorError, .cantEstimateFee)
+            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .cantEstimateFee)
         }
     }
 }
