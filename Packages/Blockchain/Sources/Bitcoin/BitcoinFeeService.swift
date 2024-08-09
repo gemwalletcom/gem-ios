@@ -32,8 +32,6 @@ extension BitcoinService: ChainFeeCalculateable {
         let rate = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
         return FeeRate(priority: priority, rate: rate)
     }
-
-    
 }
 
 // MARK: - Models extensions
@@ -41,9 +39,15 @@ extension BitcoinService: ChainFeeCalculateable {
 extension FeePriority {
     func blocks(chain: BitcoinChain) -> Int {
         switch chain {
-        case .bitcoin, .litecoin:
+        case .bitcoin:
             switch self {
             case .fast: 1
+            case .normal: 6
+            case .slow: 12
+            }
+        case .litecoin:
+            switch self {
+            case .fast: 2
             case .normal: 6
             case .slow: 12
             }
@@ -93,8 +97,9 @@ extension BitcoinService {
             }
 
             let coinType = chain.chain.coinType
-            let byteFee = feeRate.value
-            let gasPrice = max(byteFee.int / 1000, chain.minimumByteFee)
+            let byteFee = Int(round(Double(feeRate.value.int) / 1000))
+
+            let gasPrice = max(byteFee, chain.minimumByteFee)
             let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
             let scripts = utxo.mapToScripts(address: senderAddress, coinType: coinType)
             let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
