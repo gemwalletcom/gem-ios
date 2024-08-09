@@ -9,7 +9,7 @@ struct NetworkFeeScene: View {
 
     private var model: NetworkFeeViewModel
 
-    var action: ((FeePriority) -> Void)
+    private var action: ((FeePriority) -> Void)
 
     init(model: NetworkFeeViewModel, action: @escaping ((FeePriority) -> Void)) {
         self.model = model
