@@ -21,7 +21,7 @@ public enum GemAPIStatic: TargetType {
         }
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .getValidators:
             return .plain

@@ -19,7 +19,8 @@ struct WalletScene: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.isWalletsPresented) private var isWalletsPresented
     @Environment(\.nodeService) private var nodeService
-    
+    @Environment(\.bannerService) private var bannerService
+
     @Query<TotalValueRequest>
     private var fiatValue: WalletFiatValue
 
@@ -28,6 +29,9 @@ struct WalletScene: View {
 
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
+
+    @Query<BannersRequest>
+    private var banners: [Primitives.Banner]
 
     @Query<WalletRequest>
     var dbWallet: Wallet?
@@ -48,11 +52,13 @@ struct WalletScene: View {
         _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
         _transactions = Query(constant: model.recentTransactionsRequest, in: \.db.dbQueue)
         _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
+        _banners = Query(constant: model.bannersRequest, in: \.db.dbQueue)
     }
     
     var body: some View {
         List {
-            Section { } header: {
+
+           Section { } header: {
                 WalletHeaderView(
                     model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
                 ) {
@@ -64,6 +70,12 @@ struct WalletScene: View {
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
+
+            Section {
+                BannerView(banners: banners) { banner in
+                    Task { try bannerService.closeBanner(banner: banner) }
+                }
+            }
 
             Section {
                 WalletAssetsList(
@@ -78,7 +90,6 @@ struct WalletScene: View {
             } footer: {
                 ListButton(
                     title: Localized.Wallet.manageTokenList,
-                    //image: Image(systemName: SystemImage.checklist),
                     image: Image(.manageAssets),
                     action: {
                         isPresentingSelectType = .manage
@@ -88,6 +99,9 @@ struct WalletScene: View {
                 .padding(Spacing.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
+        }
+        .refreshable {
+            await refreshable()
         }
         .sheet(item: $isPresentingSelectType) { value in
             SelectAssetSceneNavigationStack(
@@ -220,9 +234,6 @@ struct WalletScene: View {
             )
         }
         .navigationBarTitleDisplayMode(.inline)
-        .refreshable {
-            await refreshable()
-        }
         .onChange(of: model.wallet, fetch)
         .taskOnce(fetch)
     }

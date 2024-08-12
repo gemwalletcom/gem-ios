@@ -27,7 +27,8 @@ struct WalletCoordinator: View {
     let walletStore: WalletStore
     let stakeStore: StakeStore
     let connectionsStore: ConnectionsStore
-    
+    let bannerStore: BannerStore
+
     let assetsService: AssetsService
     let balanceService: BalanceService
     let stakeService: StakeService
@@ -40,6 +41,7 @@ struct WalletCoordinator: View {
     let deviceService: DeviceService
     let transactionsService: TransactionsService
     let connectionsService: ConnectionsService
+    let bannerService: BannerService
     let walletConnectorSigner: WalletConnectorSigner
     let walletConnectorInteractor: WalletConnectorInteractor
     
@@ -69,6 +71,7 @@ struct WalletCoordinator: View {
         self.walletStore = WalletStore(db: db)
         self.connectionsStore = ConnectionsStore(db: db)
         self.stakeStore = StakeStore(db: db)
+        self.bannerStore = BannerStore(db: db)
         self.nodeService = NodeService(nodeStore: nodeStore)
         self.chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
         self.assetsService = AssetsService(
@@ -106,6 +109,7 @@ struct WalletCoordinator: View {
             store: connectionsStore,
             signer: walletConnectorSigner
         )
+        self.bannerService = BannerService(store: bannerStore)
         self.walletService = WalletService(
             keystore: _keystore.wrappedValue,
             priceStore: priceStore,
@@ -133,6 +137,8 @@ struct WalletCoordinator: View {
             subscriptionService: subscriptionService
         )
         self.deviceService.observer()
+
+        bannerService.setup()
 
         _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
@@ -162,6 +168,7 @@ struct WalletCoordinator: View {
                 .environment(\.transactionsService, transactionsService)
                 .environment(\.assetsService, assetsService)
                 .environment(\.stakeService, stakeService)
+                .environment(\.bannerService, bannerService)
                 .environment(\.chainServiceFactory, chainServiceFactory)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))

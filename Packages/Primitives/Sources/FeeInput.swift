@@ -9,13 +9,16 @@ public struct FeeInput {
     public let destinationAddress: String
     public let value: BigInt
     public let balance: BigInt
+    public let feePriority: FeePriority
     public let memo: String?
+
     public init(
         type: TransferDataType,
         senderAddress: String,
         destinationAddress: String,
         value: BigInt,
         balance: BigInt,
+        feePriority: FeePriority,
         memo: String?
     ) {
         self.type = type
@@ -23,6 +26,7 @@ public struct FeeInput {
         self.destinationAddress = destinationAddress
         self.value = value
         self.balance = balance
+        self.feePriority = feePriority
         self.memo = memo
     }
     

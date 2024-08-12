@@ -6,7 +6,6 @@ import BigInt
 import Primitives
 
 extension EthereumService: ChainFeeCalculateable {
-
     public func getData(input: FeeInput) -> Data? {
         switch input.type {
         case .transfer(let asset):
@@ -114,7 +113,9 @@ extension EthereumService: ChainFeeCalculateable {
             }
         }
     }
-    
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
+
     public func fee(input: FeeInput) async throws -> Fee {
         
         if chain.isOpStack {
@@ -166,7 +167,9 @@ extension EthereumService: ChainFeeCalculateable {
                 gasPrice: gasPrice,
                 minerFee: minerFee
             ),
-            gasLimit: gasLimit
+            gasLimit: gasLimit,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
 }

@@ -28,7 +28,7 @@ public struct WalletRequest: Queryable {
             .including(all: WalletRecord.accounts)
             .asRequest(of: WalletRecordInfo.self)
             .filter(Columns.Wallet.id == walletId)
-            .fetchOne(db)
-            .map { $0.mapToWallet() }
+            .fetchOne(db)?
+            .mapToWallet()
     }
 }

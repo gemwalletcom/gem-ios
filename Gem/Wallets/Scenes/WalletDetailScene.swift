@@ -1,8 +1,11 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Keystore
 import SwiftUI
 import Components
 import Style
+import Primitives
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -11,6 +14,7 @@ struct WalletDetailScene: View {
 
     @State private var name: String
     @State private var words: [String]? = nil
+    @State private var privateKey: ExportPrivateKey? = nil
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
@@ -35,6 +39,15 @@ struct WalletDetailScene: View {
                         )
                     } header: {
                         Text(Localized.Common.secretPhrase)
+                    }
+                case .privateKey:
+                    Section {
+                        NavigationCustomLink(
+                            with: ListItemView(title: Localized.Common.show(Localized.Common.privateKey)),
+                            action: onShowPrivateKey
+                        )
+                    } header: {
+                        Text(Localized.Common.privateKey)
                     }
                 case .view:
                     EmptyView()
@@ -80,7 +93,10 @@ struct WalletDetailScene: View {
             Alert(title: Text(Localized.Errors.transfer("")), message: Text($0))
         }
         .navigationDestination(for: $words) { words in
-            ShowSecretPhraseScene(model: ShowSecretPhraseViewModel(words: words))
+            ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: words))
+        }
+        .navigationDestination(for: $privateKey) {
+            ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: $0.key, encoding: model.getEncodingType(for: $0.chain)))
         }
     }
 }
@@ -99,7 +115,22 @@ extension WalletDetailScene {
     private func onShowSecretPhrase() {
         Task {
             do {
-                words = try await model.getMnemonicWords()
+                words = try model.getMnemonicWords()
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+            }
+        }
+    }
+
+    private func onShowPrivateKey() {
+        Task {
+            do {
+                //In the future it should allow to export PK for multichain wallet and specify the chain
+                let chain = model.wallet.accounts[0].chain
+                privateKey = ExportPrivateKey(
+                    chain: chain,
+                    key: try model.getPrivateKey(for: chain)
+                )
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }

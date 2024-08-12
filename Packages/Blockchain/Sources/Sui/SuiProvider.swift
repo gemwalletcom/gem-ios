@@ -54,7 +54,7 @@ public enum SuiProvider: TargetType {
         return "/"
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .coins(let address, let coinType):
             return .encodable(

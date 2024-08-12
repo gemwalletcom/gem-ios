@@ -110,7 +110,7 @@ public enum GemAPI: TargetType {
         }
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .getIpAddress,
             .getFiatOnRampAssets,

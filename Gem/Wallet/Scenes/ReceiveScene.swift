@@ -53,6 +53,15 @@ struct ReceiveScene: View {
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showShareSheet.toggle()
+                } label: {
+                    Image(systemName: SystemImage.share)
+                }
+            }
+        }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [model.sharableText])
         }

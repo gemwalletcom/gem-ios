@@ -25,6 +25,6 @@ public struct WalletsRequest: Queryable {
             .including(all: WalletRecord.accounts)
             .asRequest(of: WalletRecordInfo.self)
             .fetchAll(db)
-            .map { $0.mapToWallet() }
+            .compactMap { $0.mapToWallet() }
     }
 }

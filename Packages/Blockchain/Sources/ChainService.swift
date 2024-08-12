@@ -75,6 +75,11 @@ extension ChainService: ChainFeeCalculateable {
         return try await Self.service(chain: chain, with: url)
             .fee(input: input)
     }
+
+    public func feeRates() async throws -> [FeeRate] {
+        try await Self.service(chain: chain, with: url)
+            .feeRates()
+    }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -162,4 +167,3 @@ extension ChainService: ChainLatestBlockFetchable {
             .getLatestBlock()
     }
 }
-

@@ -30,7 +30,7 @@ public extension TargetType {
     func request(for baseURL: URL) -> URLRequest {
         let string: String
         var httpBody: Data? = .none
-        switch task {
+        switch data {
         case .params(let params):
             if method == .GET {
                 let query = params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&")

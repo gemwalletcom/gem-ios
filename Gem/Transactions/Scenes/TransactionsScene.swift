@@ -26,15 +26,15 @@ struct TransactionsScene: View {
         List {
             TransactionsList(transactions)
         }
+        .refreshable {
+            await fetch()
+        }
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {
                 Text(Localized.Activity.EmptyState.message)
                     .textStyle(.body)
             }
-        }
-        .refreshable {
-            onRefresh()
         }
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
@@ -52,21 +52,17 @@ struct TransactionsScene: View {
 
 extension TransactionsScene {
     private func onAppear() {
-        fetch()
-    }
-
-    private func onRefresh() {
-        fetch()
+        Task {
+            await fetch()
+        }
     }
 }
 
 // MARK: - Effects
 
 extension TransactionsScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
+    private func fetch() async {
+        await model.fetch()
     }
 }
 

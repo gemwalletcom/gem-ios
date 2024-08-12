@@ -61,7 +61,7 @@ public enum EthereumProvider: TargetType {
         return "/"
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .chainId,
             .gasPrice,

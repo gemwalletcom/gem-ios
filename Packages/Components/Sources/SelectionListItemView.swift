@@ -1,10 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Style
 import SwiftUI
+import Style
 
-public struct SelectionListItemView: View {
+public struct SelectionListItemView<T: Hashable>: View {
     public enum SelectionImageDirection: Identifiable {
         case left
         case right
@@ -16,9 +15,9 @@ public struct SelectionListItemView: View {
     let titleExtra: String?
     let subtitle: String?
     let subtitleExtra: String?
-    let value: String?
-    let selection: String?
-    let action: ((String) -> Void)?
+    let value: T?
+    let selection: T?
+    let action: ((T) -> Void)?
 
     let placeholders: [ListItemViewPlaceholderType]
     let selectionDirection: SelectionImageDirection
@@ -30,9 +29,9 @@ public struct SelectionListItemView: View {
         subtitleExtra: String?,
         placeholders: [ListItemViewPlaceholderType] = [],
         selectionDirection: SelectionImageDirection = .right,
-        value: String?,
-        selection: String?,
-        action: ((String) -> Void)?
+        value: T,
+        selection: T?,
+        action: ((T) -> Void)?
     ) {
         self.title = title
         self.titleExtra = titleExtra
