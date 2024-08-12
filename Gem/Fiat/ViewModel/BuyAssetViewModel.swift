@@ -63,6 +63,10 @@ class BuyAssetViewModel {
         return "1 \(asset.symbol) ≈ \(currencySymbol)\(rate)"
     }
 
+    func buttonTitle(amount: Double) -> String {
+        "\(currencySymbol)\(Int(amount))"
+    }
+
     private var address: String {
         assetAddress.address
     }
@@ -76,7 +80,6 @@ class BuyAssetViewModel {
 
 extension BuyAssetViewModel {
     func fetch() async {
-        print("fetch")
         await MainActor.run { [self] in
             self.input.quote = nil
             self.state = .loading
@@ -93,7 +96,6 @@ extension BuyAssetViewModel {
                 )
             )
             await MainActor.run { [self] in
-                print("fetched")
                 if !quotes.isEmpty {
                     self.input.quote = quotes.first
                     self.state = .loaded(quotes)
@@ -102,7 +104,6 @@ extension BuyAssetViewModel {
                 }
             }
         } catch {
-            print("fetched with error")
             await MainActor.run { [self] in
                 self.state = .error(error)
             }

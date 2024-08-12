@@ -90,7 +90,7 @@ extension BuyAssetScene {
 
                 HStack(spacing: Spacing.small) {
                     ForEach(model.suggestedAmounts, id: \.self) { amount in
-                        Button("\(model.currencySymbol)\(Int(amount))") {
+                        Button(model.buttonTitle(amount: amount)) {
                             onSelect(amount: amount)
                         }
                         .foregroundStyle(Colors.black)
