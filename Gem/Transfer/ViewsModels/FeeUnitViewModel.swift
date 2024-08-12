@@ -21,7 +21,7 @@ struct FeeUnitViewModel {
         case .satVb:
             return Int(round(value / 1000))
         case .satB:
-            return Int(round(value / 100))
+            return Int(round((value / 1000)) * 4)
         }
     }
 }

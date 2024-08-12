@@ -12,17 +12,14 @@ extension BitcoinChain {
     }
 
     public var feeUnitType: FeeUnitType? {
-        switch self {
-        case .bitcoin: .satVb
-        case .litecoin, .doge: .satB
-        }
+        .satVb
     }
 
     public var minimumByteFee: Int {
         switch self {
-        case .bitcoin: return 1
-        case .litecoin: return 5
-        case .doge: return 1_000
+        case .bitcoin: 1 // 1 satoshi per byte for Bitcoin
+        case .litecoin: 5 //  0.001 LTC per kB, converted to litoshis per byte
+        case .doge: 1_000 // 1 DOGE per kB, converted to dogetoshis per byte
         }
     }
 }
