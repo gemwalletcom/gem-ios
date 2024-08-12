@@ -169,7 +169,7 @@ extension BuyAssetScene {
 extension BuyAssetScene {
     private func onTask() async {
         guard model.input.quote == nil else { return }
-        fetch()
+        await model.fetch()
     }
 
     private func onSelectContinue() {
@@ -190,18 +190,8 @@ extension BuyAssetScene {
         model.input.quote = quote
     }
 
-    private func onChangeAmount(_ amount: Double) {
-        fetch()
-    }
-}
-
-// MARK: - Effects
-
-extension BuyAssetScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
+    private func onChangeAmount(_ amount: Double) async {
+        await model.fetch()
     }
 }
 

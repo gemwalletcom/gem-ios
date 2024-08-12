@@ -147,9 +147,9 @@ extension SwapScene {
     }
 
     @MainActor
-    private func onChangeFromValue(_ value: String) {
+    private func onChangeFromValue(_ value: String) async {
         model.toValue = ""
-        fetch()
+        await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
     }
 
     @MainActor

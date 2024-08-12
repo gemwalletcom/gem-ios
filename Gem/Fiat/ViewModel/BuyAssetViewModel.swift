@@ -105,7 +105,10 @@ extension BuyAssetViewModel {
             }
         } catch {
             await MainActor.run { [self] in
-                self.state = .error(error)
+                if !error.isCancelled {
+                    self.state = .error(error)
+                    NSLog("get quotes error: \(error)")
+                }
             }
         }
     }
