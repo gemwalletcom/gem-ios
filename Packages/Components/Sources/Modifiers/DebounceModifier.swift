@@ -6,27 +6,26 @@ struct DebounceModifier<T: Hashable>: ViewModifier {
     @State private var debounceTask: Task<Void, Never>?
     @Binding var value: T
 
-    let interval: Duration
-    let action: (T) -> Void
+    let interval: Duration?
+    let action: (T) async -> Void
 
     func body(content: Content) -> some View {
         content
             .onChange(of: value) { _, newValue in
                 debounceTask?.cancel()
                 debounceTask = Task {
-                    try? await Task.sleep(for: interval)
-                    // Check if the task is not cancelled before performing the action.
-                    guard !Task.isCancelled else { return }
-                    Task { @MainActor in
-                        action(newValue)
+                    if let interval {
+                        try? await Task.sleep(for: interval)
                     }
+                    guard !Task.isCancelled else { return }
+                    await action(newValue)
                 }
             }
     }
 }
 
 public extension View {
-    func debounce<T: Hashable>(value: Binding<T>, interval: Duration, action: @escaping (T) -> Void) -> some View {
+    func debounce<T: Hashable>(value: Binding<T>, interval: Duration?, action: @escaping (T) async -> Void) -> some View {
         modifier(DebounceModifier(value: value, interval: interval, action: action))
     }
 }
