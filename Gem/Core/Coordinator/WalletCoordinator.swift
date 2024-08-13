@@ -174,6 +174,8 @@ struct WalletCoordinator: View {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
             }
         }
+        .environment(\.deviceLayoutState, .shared)
+        .observeDeviceLayout()
         .onOpenURL(perform: { url in
             Task {
                 await handleUrl(url: url)

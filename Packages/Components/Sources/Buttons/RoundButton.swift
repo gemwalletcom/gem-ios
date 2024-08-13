@@ -10,25 +10,22 @@ public struct RoundButton: View {
     @ScaledMetric(relativeTo: .body) private var backgroundSize: CGFloat = 48
     @ScaledMetric(relativeTo: .body) private var baseFontSize: CGFloat = 16
 
-    @State private var sceneWidth: CGFloat = 0.0
-
     let title: String
     let image: Image
+    let screenWidth: CGFloat
+
     var action: (() -> Void)?
 
     public init(
         title: String,
         image: Image,
+        screenWidth: CGFloat,
         action: (() -> Void)? = nil
     ) {
-        self.action = action
         self.image = image
         self.title = title
-
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
-            let sceneWidth = windowScene.screen.bounds.width
-            _sceneWidth = State(initialValue: sceneWidth)
-        }
+        self.screenWidth = screenWidth
+        self.action = action
     }
 
     public var body: some View {
@@ -60,7 +57,7 @@ public struct RoundButton: View {
     }
 
     private var titleFontSize: CGFloat {
-        let isSmallScreen = sceneWidth <= 375
+        let isSmallScreen = screenWidth <= 375
         let isAccessibilitySize = dynamicTypeSize.isAccessibilitySize
 
         return min(18, isSmallScreen || isAccessibilitySize ? baseFontSize * 0.71 : baseFontSize)
@@ -70,8 +67,8 @@ public struct RoundButton: View {
 struct RoundButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RoundButton(title: "Buy", image: Image(systemName: SystemImage.eyeglasses))
-            RoundButton(title: "Swap", image: Image(systemName: SystemImage.share))
+            RoundButton(title: "Buy", image: Image(systemName: SystemImage.eyeglasses), screenWidth: 375.0)
+            RoundButton(title: "Swap", image: Image(systemName: SystemImage.share), screenWidth: 375.0)
         }
     }
 }

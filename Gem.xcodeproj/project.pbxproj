@@ -17,8 +17,11 @@
 		830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA412C2236B6003DA605 /* MainTabView.swift */; };
 		830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA442C224316003DA605 /* NavigationStateManager.swift */; };
 		830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA472C22EEC4003DA605 /* TabItem.swift */; };
-		831B491F2C512FB6006DCDD1 /* BuyAssetInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */; };
+		831479F12C6BC84C007D8800 /* DeviceLayoutState+Observering.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831479EE2C6BC829007D8800 /* DeviceLayoutState+Observering.swift */; };
+		831479F22C6BC84C007D8800 /* DeviceLayoutState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831479ED2C6BC829007D8800 /* DeviceLayoutState.swift */; };
+		831479F32C6BC84C007D8800 /* DeviceLayoutState+Types.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831479EF2C6BC829007D8800 /* DeviceLayoutState+Types.swift */; };
 		8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */; };
+		831B491F2C512FB6006DCDD1 /* BuyAssetInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835644FC2C501C2200C6B4DB /* SwapError.swift */; };
@@ -293,8 +296,11 @@
 		830FDA412C2236B6003DA605 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
-		831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputField.swift; sourceTree = "<group>"; };
+		831479ED2C6BC829007D8800 /* DeviceLayoutState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceLayoutState.swift; sourceTree = "<group>"; };
+		831479EE2C6BC829007D8800 /* DeviceLayoutState+Observering.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceLayoutState+Observering.swift"; sourceTree = "<group>"; };
+		831479EF2C6BC829007D8800 /* DeviceLayoutState+Types.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeviceLayoutState+Types.swift"; sourceTree = "<group>"; };
 		8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanResources.swift; sourceTree = "<group>"; };
+		831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputField.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		835644FC2C501C2200C6B4DB /* SwapError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapError.swift; sourceTree = "<group>"; };
@@ -632,6 +638,16 @@
 				D82EF8D42C2F8B7400EC1C92 /* AddNodeError.swift */,
 			);
 			path = Types;
+			sourceTree = "<group>";
+		};
+		831479F02C6BC829007D8800 /* DeviceLayoutState */ = {
+			isa = PBXGroup;
+			children = (
+				831479ED2C6BC829007D8800 /* DeviceLayoutState.swift */,
+				831479EE2C6BC829007D8800 /* DeviceLayoutState+Observering.swift */,
+				831479EF2C6BC829007D8800 /* DeviceLayoutState+Types.swift */,
+			);
+			path = DeviceLayoutState;
 			sourceTree = "<group>";
 		};
 		831B491C2C512E46006DCDD1 /* Types */ = {
@@ -1616,6 +1632,7 @@
 		D8DC1AF12C11384F00697D0A /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				831479F02C6BC829007D8800 /* DeviceLayoutState */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 				C3E99BC82A76BF8B005DF35F /* CleanUpService.swift */,
 				C36679192A17507500F1D74D /* OnstartService.swift */,
@@ -1923,6 +1940,9 @@
 				830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */,
 				D88A2A8E2B0C0EEE0060009B /* WalletAssetsList.swift in Sources */,
 				830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */,
+				831479F12C6BC84C007D8800 /* DeviceLayoutState+Observering.swift in Sources */,
+				831479F22C6BC84C007D8800 /* DeviceLayoutState.swift in Sources */,
+				831479F32C6BC84C007D8800 /* DeviceLayoutState+Types.swift in Sources */,
 				C3E99BC52A73186E005DF35F /* TransactionDetailViewModel.swift in Sources */,
 				83D8544C2C5A9F2200D4078C /* FeeRatesViewModel.swift in Sources */,
 				D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */,

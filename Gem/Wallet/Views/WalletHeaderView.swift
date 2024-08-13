@@ -13,7 +13,10 @@ protocol HeaderViewModel {
     var subtitle: String? { get }
     var buttons: [HeaderButton] { get }
 }
+
 struct WalletHeaderView: View {
+    @Environment(\.deviceLayoutState) var layoutState
+
     let model: HeaderViewModel
     var action: HeaderButtonAction?
 
@@ -70,7 +73,7 @@ struct WalletHeaderView: View {
             case false:
                 HStack {
                     Spacer()
-                    HeaderButtonsView(buttons: model.buttons, action: action)
+                    HeaderButtonsView(buttons: model.buttons, action: action, screenWidth: layoutState.layout.size.width)
                     Spacer()
                 }
             }

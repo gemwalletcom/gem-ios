@@ -10,6 +10,7 @@ typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
 struct HeaderButtonsView: View {
     let buttons: [HeaderButton]
     var action: HeaderButtonAction?
+    let screenWidth: CGFloat
 
     private let maxButtonWidth: CGFloat = Spacing.scene.button.maxWidth
     private let buttonSpacing: CGFloat = Spacing.small
@@ -17,7 +18,7 @@ struct HeaderButtonsView: View {
     var body: some View {
         HStack(alignment: .center, spacing: Spacing.extraSmall) {
             ForEach(buttons) { button in
-                RoundButton(title: button.title, image: button.image) {
+                RoundButton(title: button.title, image: button.image, screenWidth: screenWidth) {
                     action?(button.type)
                 }
                 .frame(maxWidth: .infinity)
@@ -33,7 +34,7 @@ struct HeaderButtonsView: View {
     let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0) })
     return VStack {
         Spacer()
-        HeaderButtonsView(buttons: buttons, action: nil)
+        HeaderButtonsView(buttons: buttons, action: nil, screenWidth: 375.0)
         Spacer()
     }
 }
