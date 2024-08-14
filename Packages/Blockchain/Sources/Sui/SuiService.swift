@@ -433,7 +433,7 @@ extension SuiService: ChainStakable {
 // MARK: - ChainIDFetchable
  
 extension SuiService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         try await provider
             .request(.chainID)
             .map(as: JSONRPCResponse<String>.self).result

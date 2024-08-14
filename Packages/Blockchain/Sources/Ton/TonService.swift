@@ -274,7 +274,7 @@ extension TonService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension TonService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         try await masterChainInfo().initial.root_hash
     }
 }

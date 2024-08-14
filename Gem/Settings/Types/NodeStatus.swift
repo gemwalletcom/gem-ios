@@ -4,7 +4,7 @@ import Foundation
 import BigInt
 
 enum NodeStatus {
-    case result(blockNumber: BigInt, latency: LatencyMeasureService.Latency)
+    case result(blockNumber: BigInt, latency: Latency)
     case error(error: Error)
     case none
 }

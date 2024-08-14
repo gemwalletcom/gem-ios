@@ -89,19 +89,14 @@ extension AddNodeSceneViewModel {
 // MARK: - Private
 
 extension AddNodeSceneViewModel {
-    private func fetchChainID(service: ChainIDFetchable) async throws -> (latency: LatencyMeasureService.Latency, value: String?) {
+    private func fetchChainID(service: ChainIDFetchable) async throws -> (latency: Latency, value: String) {
         let result = try await LatencyMeasureService.measure(for: service.getChainID)
         try validate(networkId: result.value)
-        return result
+        return (latency: .from(duration: result.duration), value: result.value)
     }
 
-    private func validate(networkId: String?) throws {
-        // if networkId in ChainConfig optional or from the service, proceed with valid id
-        guard
-            let networkId,
-            let configNetworkId = ChainConfig.config(chain: chain).networkId else {
-            return
-        }
+    private func validate(networkId: String) throws {
+        let configNetworkId = ChainConfig.config(chain: chain).networkId
         if configNetworkId != networkId {
             throw AddNodeError.invalidNetworkId
         }
