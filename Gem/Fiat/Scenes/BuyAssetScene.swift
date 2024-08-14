@@ -65,7 +65,7 @@ extension BuyAssetScene {
     private var amountInputView: some View {
         VStack(alignment: .center, spacing: 0) {
             BuyAssetInputField(
-                value: $model.input.amount,
+                text: $model.amountText,
                 currencySymbol: model.currencySymbol,
                 focusedField: $focusedField
             )

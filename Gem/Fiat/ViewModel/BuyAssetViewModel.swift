@@ -67,6 +67,15 @@ class BuyAssetViewModel {
         "\(currencySymbol)\(Int(amount))"
     }
 
+    var amountText: String {
+        get {
+            String(format: "%.0f", input.amount)
+        }
+        set {
+            input.amount = Double(newValue) ?? 0
+        }
+    }
+
     private var address: String {
         assetAddress.address
     }
