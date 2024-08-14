@@ -71,6 +71,8 @@ internal enum Localized {
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
   }
   internal enum Buy {
+    /// Please enter amount to buy
+    internal static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")
     /// No quotes available
     internal static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate

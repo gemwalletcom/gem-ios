@@ -243,3 +243,4 @@
 "social.coingecko" = "CoinGecko";
 "errors.unable_estimate_network_fee" = "В настоящее время мы не можем рассчитать комиссию сети.";
 "errors.invalid_asset_address" = "Неверный адрес %@";
+"buy.empty_amount" = "Пожалуйста, введите сумму для покупки";
