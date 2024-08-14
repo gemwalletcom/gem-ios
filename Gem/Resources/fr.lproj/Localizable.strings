@@ -7,7 +7,7 @@
 "wallet.receive" = "Receive";
 "wallet.buy" = "Buy";
 "wallet.swap" = "Swap";
-"wallets.title" = "Wallets";
+"wallets.title" = "Portefeuilles";
 "wallet.import.title" = "Importer un portefeuille";
 "wallet.new.title" = "Nouveau portefeuille";
 "receive.title" = "Receive %s";
@@ -164,7 +164,7 @@
 "sign_message.message" = "Message";
 "stake.awaiting_withdrawal" = "Awaiting Withdrawal";
 "errors.invalid_address_name" = "Adresse ou nom invalide";
-"amount.error.invalid_amount" = "Invalid amount";
+"errors.invalid_amount" = "Invalid amount";
 "common.required_field" = "%@ est requis";
 "asset.view_token_on" = "View token on %@";
 "asset.view_address_on" = "View address on %@";
@@ -241,3 +241,5 @@
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
 "social.coingecko" = "CoinGecko";
+"errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
+"errors.invalid_asset_address" = "Invalid %@ address";

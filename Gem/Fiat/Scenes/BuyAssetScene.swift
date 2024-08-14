@@ -34,7 +34,7 @@ struct BuyAssetScene: View {
         .navigationTitle(model.title)
         .debounce(
             value: $model.input.amount,
-            interval: BuyAssetViewModel.quoteTaskDebounceTimeout,
+            interval: .none,
             action: onChangeAmount
         )
         .task {

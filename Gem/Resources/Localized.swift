@@ -18,12 +18,6 @@ internal enum Localized {
       internal static let message = Localized.tr("Localizable", "activity.empty_state.message", fallback: "No activity yet.")
     }
   }
-  internal enum Amount {
-    internal enum Error {
-      /// Invalid amount
-      internal static let invalidAmount = Localized.tr("Localizable", "amount.error.invalid_amount", fallback: "Invalid amount")
-    }
-  }
   internal enum App {
     /// Gem
     internal static let name = Localized.tr("Localizable", "app.name", fallback: "Gem")
@@ -207,6 +201,12 @@ internal enum Localized {
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid amount
+    internal static let invalidAmount = Localized.tr("Localizable", "errors.invalid_amount", fallback: "Invalid amount")
+    /// Invalid %@ address
+    internal static func invalidAssetAddress(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.invalid_asset_address", String(describing: p1), fallback: "Invalid %@ address")
+    }
     /// Invalid Network ID
     internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
@@ -223,6 +223,8 @@ internal enum Localized {
     }
     /// Transfer Error
     internal static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
+    /// We are currently unable to calculate the network fee.
+    internal static let unableEstimateNetworkFee = Localized.tr("Localizable", "errors.unable_estimate_network_fee", fallback: "We are currently unable to calculate the network fee.")
     /// Unknown
     internal static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
     /// An unknown error occurred. Please try again.

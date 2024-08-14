@@ -7,7 +7,7 @@
 "wallet.receive" = "Receive";
 "wallet.buy" = "Buy";
 "wallet.swap" = "Swap";
-"wallets.title" = "Wallets";
+"wallets.title" = "지갑";
 "wallet.import.title" = "지갑 가져오기";
 "wallet.new.title" = "새로운 지갑";
 "receive.title" = "Receive %s";
@@ -164,7 +164,7 @@
 "sign_message.message" = "메시지";
 "stake.awaiting_withdrawal" = "Awaiting Withdrawal";
 "errors.invalid_address_name" = "잘못된 주소 또는 이름";
-"amount.error.invalid_amount" = "Invalid amount";
+"errors.invalid_amount" = "Invalid amount";
 "common.required_field" = "%@ 이(가) 필요합니다";
 "asset.view_token_on" = "View token on %@";
 "asset.view_address_on" = "View address on %@";
@@ -241,3 +241,5 @@
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
 "social.coingecko" = "CoinGecko";
+"errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
+"errors.invalid_asset_address" = "Invalid %@ address";
