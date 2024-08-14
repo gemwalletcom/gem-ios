@@ -42,20 +42,20 @@ extension FeePriority {
         case .bitcoin:
             switch self {
             case .fast: 1
-            case .normal: 6
-            case .slow: 12
+            case .normal: 3
+            case .slow: 6
             }
         case .litecoin:
             switch self {
-            case .fast: 2
-            case .normal: 6
-            case .slow: 12
+            case .fast: 1
+            case .normal: 3
+            case .slow: 6
             }
         case .doge:
             switch self {
             case .fast: 2
-            case .normal: 12
-            case .slow: 24
+            case .normal: 4
+            case .slow: 8
             }
         }
     }
