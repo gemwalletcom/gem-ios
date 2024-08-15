@@ -145,7 +145,11 @@ extension StakeScene {
                 ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
             }
             ListItemView(title: model.stakeAprTitle, subtitle: model.stakeAprValue)
-            ListItemView(title: model.lockTimeTitle, subtitle: model.lockTimeValue)
+            ListItemView(
+                title: model.lockTimeTitle,
+                subtitle: model.lockTimeValue,
+                infoAction: onOpenInfoURL
+            )
         }
     }
 }
@@ -159,6 +163,14 @@ extension StakeScene {
 
     private func onSelectDelegations() {
         model.transferData = model.claimRewardsTransferData(delegations: delegations)
+    }
+
+    private func onOpenInfoURL() {
+        // TODO: - use new @Environment(\.openURL) var openURL, insead use UIKit UIApplication
+        // currently impossible to use due memory leaks when you inject @Environment(\.openURL) private var openURL
+        // impossible to select stake section
+        guard let url = model.lockTimeInfoURL else { return }
+        UIApplication.shared.open(url)
     }
 }
 
