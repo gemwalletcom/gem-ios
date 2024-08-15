@@ -16,10 +16,14 @@ struct BuyAssetInputField: View {
     private var textBinding: Binding<String> {
         Binding<String>(
             get: {
-                String(format: "%.0f", value)
+                value == 0 ? "" : String(format: "%.0f", value)
             },
             set: {
-                value = Double($0) ?? 0
+                if let newValue = Double($0), !newValue.isNaN {
+                    value = newValue
+                } else if $0.isEmpty {
+                    value = 0
+                }
             }
         )
     }
@@ -33,12 +37,12 @@ struct BuyAssetInputField: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: Spacing.tiny) {
+        HStack(alignment: .center, spacing: 0) {
             Text(currencySymbol)
                 .font(.system(size: 52).weight(.semibold))
                 .foregroundStyle(Colors.black)
                 .lineLimit(1)
-                .padding(.trailing, Spacing.small)
+                .padding(.trailing, Spacing.tiny)
                 .fixedSize(horizontal: true, vertical: false)
 
             TextField(String.zero, text: textBinding)

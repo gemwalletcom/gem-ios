@@ -246,3 +246,8 @@
 "buy.empty_amount" = "Пожалуйста, введите сумму для покупки";
 "transaction.title.received" = "Получено";
 "transaction.title.sent" = "Отправлено";
+"notification_sent_title" = "💸 Отправлено: %@";
+"notification_sent_description" = "На %@";
+"notification_received_title" = "💰 Получено: %@";
+"notification_received_description" = "От %@";
+"notification_test" = "Test {$name}";

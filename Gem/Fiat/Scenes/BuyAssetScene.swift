@@ -88,7 +88,7 @@ extension BuyAssetScene {
 
                 Spacer()
 
-                HStack(spacing: Spacing.small) {
+                HStack(spacing: Spacing.medium) {
                     ForEach(model.suggestedAmounts, id: \.self) { amount in
                         Button(model.buttonTitle(amount: amount)) {
                             onSelect(amount: amount)
@@ -132,7 +132,7 @@ extension BuyAssetScene {
             if !model.state.isLoading {
                 switch model.state {
                 case .noData:
-                    StateEmptyView(title: model.emptyQuotesTitle)
+                    StateEmptyView(title: model.emptyTitle)
                 case .loading:
                     EmptyView()
                 case .loaded(let quotes):
