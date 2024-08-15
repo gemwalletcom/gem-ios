@@ -246,8 +246,4 @@
 "buy.empty_amount" = "Please enter amount to buy";
 "transaction.title.received" = "Received";
 "transaction.title.sent" = "Sent";
-"notification_sent_title" = "💸 Sent: %@";
-"notification_sent_description" = "To %@";
-"notification_received_title" = "💰 Received: %@";
-"notification_received_description" = "From %@";
-"notification_test" = "Test {$name}";
+"stake.stake" = "Stake";
