@@ -33,7 +33,7 @@ struct ConfirmTransferScene: View {
         .navigationTitle(model.title)
         .debounce(
             value: $model.feePriority,
-            interval: Duration.milliseconds(1),
+            interval: nil,
             action: onChangeFeePriority
         )
         .taskOnce { fetch() }
@@ -154,8 +154,8 @@ extension ConfirmTransferScene {
         model.isPresentedNetworkFeePicker.toggle()
     }
 
-    private func onChangeFeePriority(_ priority: FeePriority) {
-        fetch()
+    private func onChangeFeePriority(_ priority: FeePriority) async {
+        await model.fetch()
     }
 
     private func onSelectTryAgain() {

@@ -147,7 +147,7 @@ extension AptosService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension AptosService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         try await getLedger().chain_id.asString
     }
 }

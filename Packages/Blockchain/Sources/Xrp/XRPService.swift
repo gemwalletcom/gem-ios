@@ -163,9 +163,9 @@ extension XRPService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension XRPService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         //TODO: Add getChainID check later
-        .none
+        return ""
     }
 }
 

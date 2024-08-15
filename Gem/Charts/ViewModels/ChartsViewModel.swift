@@ -57,7 +57,7 @@ class ChartsViewModel: ObservableObject {
         priceService: PriceService,
         assetsService: AssetsService,
         assetModel: AssetViewModel,
-        currentPeriod: ChartPeriod = ChartPeriod.day
+        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
     ) {
         self.walletId = walletId
         self.service = service
@@ -66,7 +66,7 @@ class ChartsViewModel: ObservableObject {
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
     }
-    
+
     func updateCharts() async {
         DispatchQueue.main.async {
             self.state = .loading

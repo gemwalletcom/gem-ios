@@ -18,12 +18,6 @@ internal enum Localized {
       internal static let message = Localized.tr("Localizable", "activity.empty_state.message", fallback: "No activity yet.")
     }
   }
-  internal enum Amount {
-    internal enum Error {
-      /// Invalid amount
-      internal static let invalidAmount = Localized.tr("Localizable", "amount.error.invalid_amount", fallback: "Invalid amount")
-    }
-  }
   internal enum App {
     /// Gem
     internal static let name = Localized.tr("Localizable", "app.name", fallback: "Gem")
@@ -77,6 +71,8 @@ internal enum Localized {
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
   }
   internal enum Buy {
+    /// Please enter amount to buy
+    internal static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")
     /// No quotes available
     internal static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
@@ -207,6 +203,12 @@ internal enum Localized {
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid amount
+    internal static let invalidAmount = Localized.tr("Localizable", "errors.invalid_amount", fallback: "Invalid amount")
+    /// Invalid %@ address
+    internal static func invalidAssetAddress(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.invalid_asset_address", String(describing: p1), fallback: "Invalid %@ address")
+    }
     /// Invalid Network ID
     internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
@@ -223,6 +225,8 @@ internal enum Localized {
     }
     /// Transfer Error
     internal static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
+    /// We are currently unable to calculate the network fee.
+    internal static let unableEstimateNetworkFee = Localized.tr("Localizable", "errors.unable_estimate_network_fee", fallback: "We are currently unable to calculate the network fee.")
     /// Unknown
     internal static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
     /// An unknown error occurred. Please try again.
@@ -471,6 +475,12 @@ internal enum Localized {
       internal static let pending = Localized.tr("Localizable", "transaction.status.pending", fallback: "Pending")
       /// Reverted
       internal static let reverted = Localized.tr("Localizable", "transaction.status.reverted", fallback: "Reverted")
+    }
+    internal enum Title {
+      /// Received
+      internal static let received = Localized.tr("Localizable", "transaction.title.received", fallback: "Received")
+      /// Sent
+      internal static let sent = Localized.tr("Localizable", "transaction.title.sent", fallback: "Sent")
     }
   }
   internal enum Transfer {

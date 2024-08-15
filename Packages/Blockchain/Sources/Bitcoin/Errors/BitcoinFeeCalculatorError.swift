@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum BitcoinFeeCalculatorError: LocalizedError {
+public enum BitcoinFeeCalculatorError: Error {
     case feeRateMissed
     case cantEstimateFee
     case incorrectAmount

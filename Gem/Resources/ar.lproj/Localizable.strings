@@ -7,7 +7,7 @@
 "wallet.receive" = "Receive";
 "wallet.buy" = "Buy";
 "wallet.swap" = "Swap";
-"wallets.title" = "Wallets";
+"wallets.title" = "المحافظ";
 "wallet.import.title" = "استيراد المحفظة";
 "wallet.new.title" = "محفظة جديدة";
 "receive.title" = "Receive %s";
@@ -164,7 +164,7 @@
 "sign_message.message" = "رسالة";
 "stake.awaiting_withdrawal" = "Awaiting Withdrawal";
 "errors.invalid_address_name" = "العنوان أو الاسم غير صالح";
-"amount.error.invalid_amount" = "Invalid amount";
+"errors.invalid_amount" = "Invalid amount";
 "common.required_field" = "المبلغ المطلوب";
 "asset.view_token_on" = "View token on %@";
 "asset.view_address_on" = "View address on %@";
@@ -241,3 +241,8 @@
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
 "social.coingecko" = "CoinGecko";
+"errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
+"errors.invalid_asset_address" = "Invalid %@ address";
+"buy.empty_amount" = "Please enter amount to buy";
+"transaction.title.received" = "Received";
+"transaction.title.sent" = "Sent";

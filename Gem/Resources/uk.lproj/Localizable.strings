@@ -164,7 +164,7 @@
 "sign_message.message" = "Повідомлення";
 "stake.awaiting_withdrawal" = "Awaiting Withdrawal";
 "errors.invalid_address_name" = "Недійсна адреса або ім'я";
-"amount.error.invalid_amount" = "Неправильна сума";
+"errors.invalid_amount" = "Неправильна сума";
 "common.required_field" = "%@ є обов'язковим";
 "asset.view_token_on" = "View token on %@";
 "asset.view_address_on" = "View address on %@";
@@ -241,3 +241,8 @@
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
 "social.coingecko" = "CoinGecko";
+"errors.unable_estimate_network_fee" = "Наразі ми не можемо розрахувати мережеву плату.";
+"errors.invalid_asset_address" = "Недійсна адреса %@";
+"buy.empty_amount" = "Будь ласка, введіть суму для купівлі";
+"transaction.title.received" = "Отримано";
+"transaction.title.sent" = "Надіслано";

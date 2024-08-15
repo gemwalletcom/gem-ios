@@ -253,9 +253,11 @@ extension ConfirmTransferViewModel {
 
         } catch {
             await MainActor.run { [self] in
-                self.state = .error(error)
+                if !error.isCancelled {
+                    self.state = .error(error)
+                    NSLog("preload transaction error: \(error)")
+                }
             }
-            NSLog("preload transaction error: \(error)")
         }
     }
 

@@ -20,7 +20,9 @@ struct ChartView: View {
         }
     }
 
-    init(model: ChartValuesViewModel) {
+    init(
+        model: ChartValuesViewModel
+    ) {
         self.model = model
     }
     
@@ -73,10 +75,14 @@ struct ChartView: View {
                         DragGesture(minimumDistance: 0)
                             .onChanged { value in
                                 if let element = findElement(location: value.location, proxy: proxy, geometry: geometry) {
-                                    let basePrice = model.values.firstValue
-                                    let priceChange = (element.value - basePrice) / basePrice * 100
-                                    
-                                    selectedValue = ChartPriceModel(period: model.period, date: element.date, price: element.value, priceChange: priceChange)
+                                    let change = model.values.priceChange(base: model.values.firstValue, price: element.value)
+
+                                    selectedValue = ChartPriceModel(
+                                        period: model.period,
+                                        date: element.date,
+                                        price: change.price,
+                                        priceChange: change.priceChange
+                                    )
                                 }
                             }.onEnded { _ in
                                 selectedValue = .none
@@ -91,8 +97,8 @@ struct ChartView: View {
         .chartBackground { proxy in
             ZStack(alignment: .topLeading) {
                 GeometryReader { geo in
-                    let maxWidth = 64.0
-                    
+                    let maxWidth = 78.0
+
                     // lower
                     if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate), let lowerBoundY1 = proxy.position(forY: model.values.lowerBoundValue) {
                         let x = calculateX(x: lowerBoundX, maxWidth: maxWidth, geoWidth: geo.size.width)

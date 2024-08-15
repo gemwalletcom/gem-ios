@@ -7,6 +7,7 @@ import Store
 import BigInt
 import WalletConnector
 import GemstonePrimitives
+import Blockchain
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -297,4 +298,13 @@ extension ExplorerStorage {
 
 extension ExplorerService {
     static let main = ExplorerService(storage: ExplorerStorage.main)
+}
+
+extension BitcoinFeeCalculatorError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee
+        case .incorrectAmount: Localized.Errors.invalidAmount
+        }
+    }
 }

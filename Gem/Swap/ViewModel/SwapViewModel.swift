@@ -148,7 +148,10 @@ extension SwapViewModel {
             }
         } catch {
             await MainActor.run { [self] in
-                swapAvailabilityState = .error(error)
+                if !error.isCancelled {
+                    self.swapAvailabilityState = .error(error)
+                    NSLog("fetch asset data error: \(error)")
+                }
             }
         }
     }

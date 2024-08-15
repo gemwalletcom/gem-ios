@@ -10,6 +10,10 @@ extension Config {
     public func config(for evmChain: EVMChain) -> EvmChainConfig {
         getEvmChainConfig(chain: evmChain.rawValue)
     }
+
+    public func config(for bitcoinChain: BitcoinChain) -> BitcoinChainConfig {
+        getBitcoinChainConfig(chain: bitcoinChain.rawValue)
+    }
 }
 
 public struct Docs {

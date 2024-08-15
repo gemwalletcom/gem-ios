@@ -45,7 +45,7 @@
 "wallet.manage_token_list" = "Управление списком токенов";
 "wallet.scan_qr_code" = "Сканировать QR-код";
 "buy.providers.title" = "Провайдеры";
-"buy.rate" = "Тариф";
+"buy.rate" = "Курс";
 "common.try_again" = "Повторить";
 "transfer.confirm" = "Подтвердить";
 "transfer.from" = "От";
@@ -164,7 +164,7 @@
 "sign_message.message" = "Сообщение";
 "stake.awaiting_withdrawal" = "Ожидание вывода средств";
 "errors.invalid_address_name" = "Неправильный адрес или имя";
-"amount.error.invalid_amount" = "Недопустимая сумма";
+"errors.invalid_amount" = "Недопустимая сумма";
 "common.required_field" = "%@ является обязательным";
 "asset.view_token_on" = "Посмотреть токен на %@";
 "asset.view_address_on" = "Посмотреть адрес на %@";
@@ -241,3 +241,8 @@
 "fee_rate.satvB" = "%@ sat/vB";
 "fee_rate.satB" = "%@ sat/B";
 "social.coingecko" = "CoinGecko";
+"errors.unable_estimate_network_fee" = "В настоящее время мы не можем рассчитать комиссию сети.";
+"errors.invalid_asset_address" = "Неверный адрес %@";
+"buy.empty_amount" = "Пожалуйста, введите сумму для покупки";
+"transaction.title.received" = "Получено";
+"transaction.title.sent" = "Отправлено";

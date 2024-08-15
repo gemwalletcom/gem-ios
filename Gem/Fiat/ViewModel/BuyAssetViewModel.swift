@@ -5,66 +5,83 @@ import GemAPI
 import Components
 import Style
 
-class BuyAssetViewModel: ObservableObject {
-    private let assetAddress: AssetAddress
-    private let fiatService: GemAPIFiatService
+@Observable
+class BuyAssetViewModel {
+    static let quoteTaskDebounceTimeout = Duration.milliseconds(300)
 
-    @Published var input: BuyAssetInputViewModel
-    @Published var state: StateViewType<Bool> = .loading
+    private let fiatService: GemAPIFiatService
+    private let assetAddress: AssetAddress
+
+    var input: BuyAssetInput
+    var state: StateViewType<[FiatQuote]> = .loading
 
     init(
-        assetAddress: AssetAddress,
         fiatService: GemAPIFiatService = GemAPIService(),
-        input: BuyAssetInputViewModel
+        assetAddress: AssetAddress,
+        input: BuyAssetInput
     ) {
         self.assetAddress = assetAddress
         self.fiatService = fiatService
         self.input = input
     }
 
+    var title: String { Localized.Buy.title(asset.name) }
+    var actionButtonTitle: String { Localized.Common.continue }
+    var providerTitle: String { Localized.Common.provider }
+    var rateTitle: String { Localized.Buy.rate }
+    var errorTitle: String { Localized.Errors.errorOccured }
+    var emptyQuotesTitle: String { Localized.Buy.noResults }
+    var currencySymbol: String { "$" }
+
     var asset: Asset {
         assetAddress.asset
     }
 
-    var address: String {
+    var randomAmount: Double? {
+        BuyAssetInput.randomAmount(current: input.amount)
+    }
+
+    var suggestedAmounts: [Double] {
+        BuyAssetInput.suggestedAmounts
+    }
+
+    var assetImage: AssetImage {
+        AssetIdViewModel(assetId: asset.id).assetImage
+    }
+
+    var shouldDisableContinueButton: Bool {
+        state.isNoData || state.isError
+    }
+
+    var cryptoAmountValue: String {
+        guard let quote = input.quote else { return "" }
+        return "≈ \(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
+    }
+
+    func rateValue(for quote: FiatQuote) -> String {
+        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
+        return "1 \(asset.symbol) ≈ \(currencySymbol)\(rate)"
+    }
+
+    func buttonTitle(amount: Double) -> String {
+        "\(currencySymbol)\(Int(amount))"
+    }
+
+    private var address: String {
         assetAddress.address
     }
 
-    var title: String {
-        Localized.Buy.title(asset.name)
-    }
-
-    var amounts: [[Double]] {
-        BuyAssetInputViewModel.availableDefaultAmounts
-    }
-
-    var amount: Double {
+    private var amount: Double {
         input.amount
-    }
-
-    var shouldDisalbeContinueButton: Bool {
-        state.isNoData
     }
 }
 
 // MARK: - Business Logic
 
 extension BuyAssetViewModel {
-    func cryptoAmountText(for quote: FiatQuote?) -> String {
-        guard let quote = quote else { return " " }
-        return "~\(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
-    }
-
-    func rateText(for quote: FiatQuote) -> String {
-        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
-        return "1 \(asset.symbol) ~ $\(rate)"
-    }
-
-    func getQuotes(for asset: Asset, amount: Double) async {
+    func fetch() async {
         await MainActor.run { [self] in
-            self.input.amount = amount
             self.input.quote = nil
-            self.input.quotes = []
             self.state = .loading
         }
 
@@ -80,16 +97,18 @@ extension BuyAssetViewModel {
             )
             await MainActor.run { [self] in
                 if !quotes.isEmpty {
-                    let inputViewModel = BuyAssetInputViewModel(amount: amount, quote: quotes.first, quotes: quotes)
-                    self.input = inputViewModel
-                    self.state = .loaded(true)
+                    self.input.quote = quotes.first
+                    self.state = .loaded(quotes)
                 } else {
                     self.state = .noData
                 }
             }
         } catch {
             await MainActor.run { [self] in
-                self.state = .error(error)
+                if !error.isCancelled {
+                    self.state = .error(error)
+                    NSLog("get quotes error: \(error)")
+                }
             }
         }
     }

@@ -9,11 +9,11 @@ enum TransferError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .invalidAmount:
-            return Localized.Amount.Error.invalidAmount
+            return Localized.Errors.invalidAmount
         case .minimumAmount(let string):
             return Localized.Transfer.minimumAmount(string)
         case .invalidAddress(let asset):
-            return "Invalid \(asset.name) Address"
+            return Localized.Errors.invalidAssetAddress(asset.name)
         }
     }
 }
