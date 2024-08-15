@@ -21,12 +21,12 @@ struct BuyAssetInputField: View {
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: Spacing.tiny) {
+        HStack(alignment: .center, spacing: 0) {
             Text(currencySymbol)
                 .font(.system(size: 52).weight(.semibold))
                 .foregroundStyle(Colors.black)
                 .lineLimit(1)
-                .padding(.trailing, Spacing.small)
+                .padding(.trailing, Spacing.tiny)
                 .fixedSize(horizontal: true, vertical: false)
 
             TextField(String.zero, text: $text)
