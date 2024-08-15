@@ -22,7 +22,7 @@ struct NodeStatusViewModel {
         switch nodeStatus {
         case .result(let block, let latency):
             if block > 0 {
-                return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+                return LatencyViewModel(latency: latency).title
             }
             return errorText
         case .error:

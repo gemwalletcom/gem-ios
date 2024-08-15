@@ -71,6 +71,8 @@ internal enum Localized {
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
   }
   internal enum Buy {
+    /// Please enter amount to buy
+    internal static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")
     /// No quotes available
     internal static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
@@ -473,6 +475,12 @@ internal enum Localized {
       internal static let pending = Localized.tr("Localizable", "transaction.status.pending", fallback: "Pending")
       /// Reverted
       internal static let reverted = Localized.tr("Localizable", "transaction.status.reverted", fallback: "Reverted")
+    }
+    internal enum Title {
+      /// Received
+      internal static let received = Localized.tr("Localizable", "transaction.title.received", fallback: "Received")
+      /// Sent
+      internal static let sent = Localized.tr("Localizable", "transaction.title.sent", fallback: "Sent")
     }
   }
   internal enum Transfer {

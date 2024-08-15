@@ -243,3 +243,6 @@
 "social.coingecko" = "CoinGecko";
 "errors.unable_estimate_network_fee" = "Наразі ми не можемо розрахувати мережеву плату.";
 "errors.invalid_asset_address" = "Недійсна адреса %@";
+"buy.empty_amount" = "Будь ласка, введіть суму для купівлі";
+"transaction.title.received" = "Отримано";
+"transaction.title.sent" = "Надіслано";

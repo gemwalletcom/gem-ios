@@ -124,7 +124,7 @@ extension ChainSettingsViewModel {
 
         do {
             let measure = try await LatencyMeasureService.measure(for: service.getLatestBlock)
-            return .result(blockNumber: measure.value, latency: measure.latency)
+            return .result(blockNumber: measure.value, latency: .from(duration: measure.duration))
         } catch {
             return .error(error: error)
         }

@@ -323,9 +323,9 @@ extension TronService: ChainStakable {
 // MARK: - ChainIDFetchable
  
 extension TronService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         //TODO: Add getChainID check later
-        .none
+        return ""
     }
 }
 

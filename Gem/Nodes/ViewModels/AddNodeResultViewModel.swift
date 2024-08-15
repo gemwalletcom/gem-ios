@@ -14,7 +14,7 @@ struct AddNodeResultViewModel {
     }
 
     var chainIdTitle: String { Localized.Nodes.ImportNode.chainId }
-    var chainIdValue: String? { addNodeResult.chainID }
+    var chainIdValue: String { addNodeResult.chainID }
 
     var isInSync: Bool { addNodeResult.isInSync }
     var inSyncTitle: String { Localized.Nodes.ImportNode.inSync }
@@ -27,7 +27,6 @@ struct AddNodeResultViewModel {
 
     var latencyTitle: String { Localized.Nodes.ImportNode.latency }
     var latecyValue: String? {
-        let latency = addNodeResult.latency
-        return "\(Localized.Common.latencyInMs(latency.value)) \(latency.colorEmoji)"
+        LatencyViewModel(latency: addNodeResult.latency).title
     }
 }

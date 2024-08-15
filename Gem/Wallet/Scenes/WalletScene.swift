@@ -57,7 +57,6 @@ struct WalletScene: View {
     
     var body: some View {
         List {
-
            Section { } header: {
                 WalletHeaderView(
                     model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
@@ -66,10 +65,10 @@ struct WalletScene: View {
                 }
                 .padding(.top, Spacing.small)
             }
-            .frame(maxWidth: .infinity)
+            .frame(maxWidth: .infinity, alignment: .center)
             .textCase(nil)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
+            .listRowInsets(.zero)
 
             Section {
                 BannerView(banners: banners) { banner in

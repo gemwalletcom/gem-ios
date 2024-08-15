@@ -60,6 +60,12 @@ extension NearService {
             .result
         return BigInt(stringLiteral: result.gas_price)
     }
+
+    private func genesisConfig() async throws -> NearGenesisConfig {
+        return try await provider
+            .request(.genesisConfig)
+            .map(as: JSONRPCResponse<NearGenesisConfig>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -181,9 +187,8 @@ extension NearService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension NearService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        //TODO: Add getChainID check later
-        .none
+    public func getChainID() async throws -> String {
+        try await genesisConfig().chain_id
     }
 }
 

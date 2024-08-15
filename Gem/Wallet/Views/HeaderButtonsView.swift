@@ -11,7 +11,7 @@ struct HeaderButtonsView: View {
     var action: HeaderButtonAction?
     
     var maxWidth: CGFloat {
-        buttons.count > 3 ? 78 : 88
+        buttons.count > 3 ? 84 : 94
     }
     
     var body: some View {
@@ -20,10 +20,9 @@ struct HeaderButtonsView: View {
                 RoundButton(title: button.title, image: button.image) {
                     action?(button.type)
                 }
-                .frame(maxWidth: maxWidth)
+                .frame(maxWidth: maxWidth, alignment: .center)
             }
         }
-        .frame(maxWidth: .infinity)
     }
 }
 

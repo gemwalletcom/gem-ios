@@ -56,7 +56,15 @@ struct TransactionViewModel {
 
     var title: String {
         switch transaction.transaction.type {
-        case .transfer: Localized.Transfer.title
+        case .transfer:
+            switch transaction.transaction.state {
+            case .confirmed: switch transaction.transaction.direction {
+            case .incoming: Localized.Transaction.Title.received
+            case .outgoing, .selfTransfer: Localized.Transaction.Title.sent
+            }
+            case .failed, .pending, .reverted:
+                Localized.Transfer.title
+            }
         case .swap: Localized.Wallet.swap
         case .tokenApproval: Localized.Transfer.Approve.title
         case .stakeDelegate: Localized.Transfer.Stake.title

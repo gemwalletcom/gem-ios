@@ -6,6 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 import WalletCorePrimitives
+import Gemstone
 
 // MARK: - ChainFeeCalculateable
 
@@ -25,39 +26,19 @@ extension BitcoinService: ChainFeeCalculateable {
     }
 
     private func getFeeRate(priority: FeePriority) async throws -> FeeRate {
-        let targetBlocks = priority.blocks(chain: chain)
+        let blocksFeePriority = Config.shared.config(for: chain).blocksFeePriority
+
+        let feePriority = switch priority {
+        case .slow: blocksFeePriority.slow
+        case .normal: blocksFeePriority.normal
+        case .fast: blocksFeePriority.fast
+        }
+
         let fee = try await provider
-            .request(.fee(priority: targetBlocks))
+            .request(.fee(priority: feePriority.asInt))
             .map(as: BitcoinFeeResult.self)
         let rate = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
         return FeeRate(priority: priority, rate: rate)
-    }
-}
-
-// MARK: - Models extensions
-
-extension FeePriority {
-    func blocks(chain: BitcoinChain) -> Int {
-        switch chain {
-        case .bitcoin:
-            switch self {
-            case .fast: 1
-            case .normal: 3
-            case .slow: 6
-            }
-        case .litecoin:
-            switch self {
-            case .fast: 1
-            case .normal: 3
-            case .slow: 6
-            }
-        case .doge:
-            switch self {
-            case .fast: 2
-            case .normal: 4
-            case .slow: 8
-            }
-        }
     }
 }
 

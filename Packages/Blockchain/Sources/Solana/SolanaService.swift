@@ -411,7 +411,7 @@ extension SolanaService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension SolanaService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         try await getGenesisHash()
     }
 }
