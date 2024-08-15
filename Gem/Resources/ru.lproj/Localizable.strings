@@ -45,7 +45,7 @@
 "wallet.manage_token_list" = "Управление списком токенов";
 "wallet.scan_qr_code" = "Сканировать QR-код";
 "buy.providers.title" = "Провайдеры";
-"buy.rate" = "Тариф";
+"buy.rate" = "Курс";
 "common.try_again" = "Повторить";
 "transfer.confirm" = "Подтвердить";
 "transfer.from" = "От";
@@ -244,3 +244,10 @@
 "errors.unable_estimate_network_fee" = "В настоящее время мы не можем рассчитать комиссию сети.";
 "errors.invalid_asset_address" = "Неверный адрес %@";
 "buy.empty_amount" = "Пожалуйста, введите сумму для покупки";
+"transaction.title.received" = "Получено";
+"transaction.title.sent" = "Отправлено";
+"notification_sent_title" = "💸 Отправлено: %@";
+"notification_sent_description" = "На %@";
+"notification_received_title" = "💰 Получено: %@";
+"notification_received_description" = "От %@";
+"notification_test" = "Test {$name}";

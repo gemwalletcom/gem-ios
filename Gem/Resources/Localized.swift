@@ -10,6 +10,24 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 internal enum Localized {
+  /// From %@
+  internal static func notificationReceivedDescription(_ p1: Any) -> String {
+    return Localized.tr("Localizable", "notification_received_description", String(describing: p1), fallback: "From %@")
+  }
+  /// 💰 Received: %@
+  internal static func notificationReceivedTitle(_ p1: Any) -> String {
+    return Localized.tr("Localizable", "notification_received_title", String(describing: p1), fallback: "💰 Received: %@")
+  }
+  /// To %@
+  internal static func notificationSentDescription(_ p1: Any) -> String {
+    return Localized.tr("Localizable", "notification_sent_description", String(describing: p1), fallback: "To %@")
+  }
+  /// 💸 Sent: %@
+  internal static func notificationSentTitle(_ p1: Any) -> String {
+    return Localized.tr("Localizable", "notification_sent_title", String(describing: p1), fallback: "💸 Sent: %@")
+  }
+  /// Test {$name}
+  internal static let notificationTest = Localized.tr("Localizable", "notification_test", fallback: "Test {$name}")
   internal enum Activity {
     /// Activity
     internal static let title = Localized.tr("Localizable", "activity.title", fallback: "Activity")
@@ -475,6 +493,12 @@ internal enum Localized {
       internal static let pending = Localized.tr("Localizable", "transaction.status.pending", fallback: "Pending")
       /// Reverted
       internal static let reverted = Localized.tr("Localizable", "transaction.status.reverted", fallback: "Reverted")
+    }
+    internal enum Title {
+      /// Received
+      internal static let received = Localized.tr("Localizable", "transaction.title.received", fallback: "Received")
+      /// Sent
+      internal static let sent = Localized.tr("Localizable", "transaction.title.sent", fallback: "Sent")
     }
   }
   internal enum Transfer {

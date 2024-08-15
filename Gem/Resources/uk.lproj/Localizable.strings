@@ -244,3 +244,10 @@
 "errors.unable_estimate_network_fee" = "Наразі ми не можемо розрахувати мережеву плату.";
 "errors.invalid_asset_address" = "Недійсна адреса %@";
 "buy.empty_amount" = "Будь ласка, введіть суму для купівлі";
+"transaction.title.received" = "Отримано";
+"transaction.title.sent" = "Надіслано";
+"notification_sent_title" = "💸 Надіслано: %@";
+"notification_sent_description" = "На %@";
+"notification_received_title" = "💰 Отримано: %@";
+"notification_received_description" = "От %@";
+"notification_test" = "Test {$name}";
