@@ -145,7 +145,11 @@ extension StakeScene {
                 ListItemView(title: model.minAmountTitle, subtitle: minAmountValue)
             }
             ListItemView(title: model.stakeAprTitle, subtitle: model.stakeAprValue)
-            ListItemView(title: model.lockTimeTitle, subtitle: model.lockTimeValue)
+            ListItemView(
+                title: model.lockTimeTitle,
+                subtitle: model.lockTimeValue,
+                infoAction: onOpenLockTimeURL
+            )
         }
     }
 }
@@ -159,6 +163,10 @@ extension StakeScene {
 
     private func onSelectDelegations() {
         model.transferData = model.claimRewardsTransferData(delegations: delegations)
+    }
+
+    private func onOpenLockTimeURL() {
+        UIApplication.shared.open(model.lockTimeInfoURL)
     }
 }
 
