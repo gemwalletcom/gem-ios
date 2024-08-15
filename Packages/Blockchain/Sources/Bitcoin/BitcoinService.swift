@@ -148,7 +148,7 @@ extension BitcoinService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension BitcoinService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         let block = try await block(block: 1)
         guard let hash = block.previousBlockHash else {
             throw AnyError("Unable to get block hash")

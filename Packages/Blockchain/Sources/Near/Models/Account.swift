@@ -81,3 +81,11 @@ public struct NearBroadcastResult: Codable {
 		self.transaction = transaction
 	}
 }
+
+public struct NearGenesisConfig: Codable {
+	public let chain_id: String
+
+	public init(chain_id: String) {
+		self.chain_id = chain_id
+	}
+}

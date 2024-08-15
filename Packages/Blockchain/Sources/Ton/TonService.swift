@@ -64,10 +64,10 @@ extension TonService {
         return try Gemstone.tonDecodeJettonAddress(base64Data: cell.object.data.b64, len: cell.object.data.len.asUInt64)
     }
     
-    private func masterChainInfo() async throws -> TonMasterchainInfo {
+    private func masterChainInfo() async throws -> TonMasterChainBlock {
         try await provider
             .request(.masterChainInfo)
-            .map(as: TonResult<TonMasterchainInfo>.self).result
+            .map(as: TonResult<TonMasterChainBlock>.self).result
     }
 }
 
@@ -274,10 +274,8 @@ extension TonService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension TonService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        //TODO: Add getChainID check later
-        .none
-        //try await masterChainInfo().`init`.root_hash
+    public func getChainID() async throws -> String {
+        try await masterChainInfo().initial.root_hash
     }
 }
 
@@ -290,6 +288,16 @@ extension TonService: ChainLatestBlockFetchable {
 }
 
 // MARK: - Models
+
+public struct TonMasterChainBlock: Codable {
+    public var last: TonBlock
+    public var initial: TonBlock
+
+    enum CodingKeys: String, CodingKey {
+        case last
+        case initial = "init"
+    }
+}
 
 struct RunGetMethod: Codable {
     let stack: [[StackItem]]
@@ -348,3 +356,4 @@ extension TonWalletInfo {
         Int(seqno ?? 0)
     }
 }
+

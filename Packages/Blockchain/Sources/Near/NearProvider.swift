@@ -9,6 +9,7 @@ public enum NearProvider: TargetType {
     case accountAccessKey(address: String, publicKey: String)
     case latestBlock
     case transaction(id: String, senderAddress: String)
+    case genesisConfig
     case broadcast(data: String)
     
     public var baseUrl: URL {
@@ -21,6 +22,7 @@ public enum NearProvider: TargetType {
         case .account, .accountAccessKey: "query"
         case .latestBlock: "block"
         case .transaction: "tx"
+        case .genesisConfig: "EXPERIMENTAL_genesis_config"
         case .broadcast: "send_tx"
         }
     }
@@ -70,6 +72,10 @@ public enum NearProvider: TargetType {
                     "sender_account_id": senderAddress,
                     "wait_until": "EXECUTED"
                 ], id: 1)
+            )
+        case .genesisConfig:
+            return .encodable(
+                JSONRPCRequest(method: rpc_method, params: [:] as [String:String], id: 1)
             )
         case .broadcast(let data):
             return .encodable(

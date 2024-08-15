@@ -378,7 +378,7 @@ extension EthereumService: ChainTokenable {
 // MARK: - ChainIDFetchable
 
 extension EthereumService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         return try await provider
             .request(.chainId)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value.description

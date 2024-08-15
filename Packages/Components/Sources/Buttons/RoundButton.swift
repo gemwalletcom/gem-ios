@@ -31,11 +31,11 @@ public struct RoundButton: View {
                     .cornerRadius(24)
                     .opacity(isEnabled ? 1 : 0.6)
                 Text(title)
-                    .minimumScaleFactor(0.8)
+                    .allowsTightening(true)
+                    .truncationMode(.tail)
                     .foregroundStyle(Colors.secondaryText)
                     .font(.system(size: 16).weight(.medium))
                     .lineLimit(1)
-                    .padding(.horizontal, 4)
             }
         }
         .disabled(!isEnabled)
