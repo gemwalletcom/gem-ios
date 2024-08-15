@@ -3,11 +3,11 @@ import Style
 
 public struct NavigationCustomLink<Content: View>: View {
     private let content: Content
-    private let action: (() -> Void)
+    private let action: (@MainActor () -> Void)
 
     public init(
         with content: Content,
-        action: @escaping () -> Void
+        action: @escaping @MainActor () -> Void
     ) {
         self.content = content
         self.action = action

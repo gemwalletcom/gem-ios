@@ -9,7 +9,7 @@ public extension String {
     static let empty = ""
     
     var remove0x: String {
-        if self.count > 2 && starts(with: "0x") {
+        if self.count >= 2 && starts(with: "0x") {
             return String(self.dropFirst(2))
         }
         return self

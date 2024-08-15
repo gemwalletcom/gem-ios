@@ -4,7 +4,7 @@ import SwiftUI
 import Style
 
 struct BuyAssetInputField: View {
-    @Binding private var value: Double
+    @Binding private var text: String
 
     enum FiatField: Int, Hashable, Identifiable {
         case fiat
@@ -12,26 +12,10 @@ struct BuyAssetInputField: View {
     }
 
     private var focusedFieldBinding: FocusState<FiatField?>.Binding
-
-    private var textBinding: Binding<String> {
-        Binding<String>(
-            get: {
-                value == 0 ? "" : String(format: "%.0f", value)
-            },
-            set: {
-                if let newValue = Double($0), !newValue.isNaN {
-                    value = newValue
-                } else if $0.isEmpty {
-                    value = 0
-                }
-            }
-        )
-    }
-
     private let currencySymbol: String
 
-    init(value: Binding<Double>, currencySymbol: String, focusedField: FocusState<FiatField?>.Binding) {
-        _value = value
+    init(text: Binding<String>, currencySymbol: String, focusedField: FocusState<FiatField?>.Binding) {
+        _text = text
         focusedFieldBinding = focusedField
         self.currencySymbol = currencySymbol
     }
@@ -45,7 +29,7 @@ struct BuyAssetInputField: View {
                 .padding(.trailing, Spacing.tiny)
                 .fixedSize(horizontal: true, vertical: false)
 
-            TextField(String.zero, text: textBinding)
+            TextField(String.zero, text: $text)
                 .keyboardType(.numberPad)
                 .foregroundStyle(Colors.black)
                 .font(.system(size: 52))
@@ -61,7 +45,7 @@ struct BuyAssetInputField: View {
 }
 
 #Preview {
-    @State var value: Double = 10
+    @State var text: String = "10"
     @FocusState var focusedField: BuyAssetInputField.FiatField?
-    return BuyAssetInputField(value: $value, currencySymbol: "$", focusedField: $focusedField)
+    return BuyAssetInputField(text: $text, currencySymbol: "$", focusedField: $focusedField)
 }

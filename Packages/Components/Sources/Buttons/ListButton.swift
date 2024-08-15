@@ -5,7 +5,7 @@ import Style
 
 public struct ListButton: View {
     
-    var action: (() -> Void)?
+    var action: (@MainActor () -> Void)?
     let title: String?
     let image: Image
     let padding: CGFloat
@@ -14,7 +14,7 @@ public struct ListButton: View {
         title: String? = .none,
         image: Image,
         padding: CGFloat = 0,
-        action:  (() -> Void)? = nil
+        action: (@MainActor () -> Void)? = nil
     ) {
         self.action = action
         self.image = image
