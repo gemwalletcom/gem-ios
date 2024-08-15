@@ -260,6 +260,8 @@
 		D8D203CB2ADDFB9600261CA2 /* TransactionDateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203CA2ADDFB9600261CA2 /* TransactionDateFormatter.swift */; };
 		D8D203D02AE078BE00261CA2 /* WalletConnector in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203CF2AE078BE00261CA2 /* WalletConnector */; };
 		D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */ = {isa = PBXBuildFile; productRef = D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */; };
+		D8D726B72C6DBE9200A6B559 /* TransactionViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D726B62C6DBE9200A6B559 /* TransactionViewModelTests.swift */; };
+		D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */; };
 		D8DC1B022C113C6000697D0A /* WalletDetailAddress.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8DC1B012C113C6000697D0A /* WalletDetailAddress.swift */; };
 		D8EFE3E52BA2318A00608363 /* TransactionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E42BA2318A00608363 /* TransactionHeaderView.swift */; };
 		D8EFE3E82BA2318E00608363 /* SwapAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */; };
@@ -552,6 +554,7 @@
 		D8D203CA2ADDFB9600261CA2 /* TransactionDateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransactionDateFormatter.swift; sourceTree = "<group>"; };
 		D8D203CE2AE0786800261CA2 /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = SwiftHTTPClient; sourceTree = "<group>"; };
+		D8D726B62C6DBE9200A6B559 /* TransactionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModelTests.swift; sourceTree = "<group>"; };
 		D8DC1B012C113C6000697D0A /* WalletDetailAddress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletDetailAddress.swift; sourceTree = "<group>"; };
 		D8EFE3E42BA2318A00608363 /* TransactionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionHeaderView.swift; sourceTree = "<group>"; };
 		D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAmountView.swift; sourceTree = "<group>"; };
@@ -594,6 +597,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */,
+				D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -747,6 +751,7 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
+				D8D726B42C6DBE7B00A6B559 /* Transactions */,
 				8325539B2C0FB22000C9CA0C /* Settings */,
 				C3549B3229C4395B00B4BE01 /* Assets */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
@@ -1589,6 +1594,22 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
+		D8D726B42C6DBE7B00A6B559 /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				D8D726B52C6DBE8100A6B559 /* ViewModels */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		D8D726B52C6DBE8100A6B559 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D8D726B62C6DBE9200A6B559 /* TransactionViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		D8DC1AEB2C11376000697D0A /* Wallets */ = {
 			isa = PBXGroup;
 			children = (
@@ -1805,6 +1826,7 @@
 			name = GemTests;
 			packageProductDependencies = (
 				C3A7CB9429D140DB00431341 /* CSQLite */,
+				D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */,
 			);
 			productName = walletTests;
 			productReference = C30952C1299C39D80004C0F9 /* GemTests.xctest */;
@@ -2159,6 +2181,7 @@
 				8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */,
 				C3549B3529C4396A00B4BE01 /* AssetViewModelTests.swift in Sources */,
 				C3549B3129C42E8F00B4BE01 /* AssetListViewModelTests.swift in Sources */,
+				D8D726B72C6DBE9200A6B559 /* TransactionViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2674,6 +2697,10 @@
 		D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SwiftHTTPClient;
+		};
+		D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = PrimitivesTestKit;
 		};
 		DF8421ED2C1526ED003F558C /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;
