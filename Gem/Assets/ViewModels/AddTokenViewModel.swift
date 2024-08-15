@@ -20,7 +20,12 @@ class AddTokenViewModel {
 
     init(wallet: Wallet, service: AddTokenService) {
         self.service = service
-        self.input = AddTokenInput(wallet: wallet)
+
+        let availableChains = AssetConfiguration.supportedChainsWithTokens.asSet()
+            .intersection(wallet.accounts.map { $0.chain }.asSet())
+            .asArray()
+            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
+        self.input = AddTokenInput(availableChains: availableChains)
     }
 
     var title: String { Localized.Wallet.AddToken.title }
