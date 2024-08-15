@@ -67,17 +67,15 @@ class StakeViewModel {
         return try? stakeService.store.getValidator(assetId: asset.id, validatorId: validatorId)
     }
 
-    func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<Bool> {
+    func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
         switch delegatitonsState {
-        case .loaded:
-            return delegationModels.isEmpty ? .noData : delegatitonsState
-        case .loading:
-            return delegationModels.isEmpty ? delegatitonsState : .loaded(true)
-        default:
-            return delegatitonsState
+        case .noData: return .noData
+        case .loading: return .loading
+        case .loaded: return delegationModels.isEmpty ? .noData : .loaded(delegationModels)
+        case .error(let error): return .error(error)
         }
     }
-
+    
     func showClaimRewards(delegations: [Delegation]) -> Bool {
         value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain)
     }

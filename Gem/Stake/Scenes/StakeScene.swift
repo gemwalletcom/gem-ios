@@ -30,9 +30,9 @@ struct StakeScene: View {
     
     var body: some View {
         List {
+            stakeInfoSection
             stakeSection
             delegationsSection
-            stakeInfoSection
         }
         .refreshable {
             await model.fetch()
@@ -107,9 +107,18 @@ extension StakeScene {
             case .noData:
                 StateEmptyView(title: model.emptyDelegationsTitle)
             case .loading:
-                EmptyView()
-            case .loaded:
-                ForEach(delegationsModel) { delegation in
+                VStack {
+                    ProgressView()
+                        .progressViewStyle(.circular)
+                        .foregroundStyle(Colors.gray)
+                }
+                .id(UUID()) // TODO: - review fix
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .frame(maxWidth: .infinity)
+            case .loaded(let delegations):
+                ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.delegation) {
                         HStack {
                             ValidatorImageView(validator: delegation.delegation.validator)
@@ -126,15 +135,6 @@ extension StakeScene {
                 }
             case .error(let error):
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
-            }
-        } header: {
-            if state.isLoading {
-                HStack {
-                    Spacer()
-                    StateLoadingView()
-                    Spacer()
-                }
-                .id(UUID()) // TODO: - review this 
             }
         }
     }
