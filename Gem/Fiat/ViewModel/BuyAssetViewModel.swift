@@ -30,7 +30,8 @@ class BuyAssetViewModel {
     var providerTitle: String { Localized.Common.provider }
     var rateTitle: String { Localized.Buy.rate }
     var errorTitle: String { Localized.Errors.errorOccured }
-    var emptyQuotesTitle: String { Localized.Buy.noResults }
+    var emptyTitle: String { input.amount == 0 ? emptyAmountTitle : emptyQuotesTitle}
+
     var currencySymbol: String { "$" }
 
     var asset: Asset {
@@ -67,13 +68,11 @@ class BuyAssetViewModel {
         "\(currencySymbol)\(Int(amount))"
     }
 
-    private var address: String {
-        assetAddress.address
-    }
+    private var address: String { assetAddress.address }
+    private var amount: Double { input.amount }
 
-    private var amount: Double {
-        input.amount
-    }
+    private var emptyQuotesTitle: String { Localized.Buy.noResults }
+    private var emptyAmountTitle: String { Localized.Buy.emptyAmount }
 }
 
 // MARK: - Business Logic
@@ -82,6 +81,10 @@ extension BuyAssetViewModel {
     func fetch() async {
         await MainActor.run { [self] in
             self.input.quote = nil
+            if self.input.amount == 0 {
+                self.state = .noData
+                return
+            }
             self.state = .loading
         }
 
