@@ -4,7 +4,7 @@ import SwiftUI
 import Style
 
 struct BuyAssetInputField: View {
-    @Binding private var value: Double
+    @Binding private var text: String
 
     enum FiatField: Int, Hashable, Identifiable {
         case fiat
@@ -12,36 +12,24 @@ struct BuyAssetInputField: View {
     }
 
     private var focusedFieldBinding: FocusState<FiatField?>.Binding
-
-    private var textBinding: Binding<String> {
-        Binding<String>(
-            get: {
-                String(format: "%.0f", value)
-            },
-            set: {
-                value = Double($0) ?? 0
-            }
-        )
-    }
-
     private let currencySymbol: String
 
-    init(value: Binding<Double>, currencySymbol: String, focusedField: FocusState<FiatField?>.Binding) {
-        _value = value
+    init(text: Binding<String>, currencySymbol: String, focusedField: FocusState<FiatField?>.Binding) {
+        _text = text
         focusedFieldBinding = focusedField
         self.currencySymbol = currencySymbol
     }
 
     var body: some View {
-        HStack(alignment: .center, spacing: Spacing.tiny) {
+        HStack(alignment: .center, spacing: 0) {
             Text(currencySymbol)
                 .font(.system(size: 52).weight(.semibold))
                 .foregroundStyle(Colors.black)
                 .lineLimit(1)
-                .padding(.trailing, Spacing.small)
+                .padding(.trailing, Spacing.tiny)
                 .fixedSize(horizontal: true, vertical: false)
 
-            TextField(String.zero, text: textBinding)
+            TextField(String.zero, text: $text)
                 .keyboardType(.numberPad)
                 .foregroundStyle(Colors.black)
                 .font(.system(size: 52))
@@ -57,7 +45,7 @@ struct BuyAssetInputField: View {
 }
 
 #Preview {
-    @State var value: Double = 10
+    @State var text: String = "10"
     @FocusState var focusedField: BuyAssetInputField.FiatField?
-    return BuyAssetInputField(value: $value, currencySymbol: "$", focusedField: $focusedField)
+    return BuyAssetInputField(text: $text, currencySymbol: "$", focusedField: $focusedField)
 }

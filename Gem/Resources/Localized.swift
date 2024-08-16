@@ -430,6 +430,8 @@ internal enum Localized {
     internal static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
     /// Rewards
     internal static let rewards = Localized.tr("Localizable", "stake.rewards", fallback: "Rewards")
+    /// Stake
+    internal static let stake = Localized.tr("Localizable", "stake.stake", fallback: "Stake")
     /// Validator
     internal static let validator = Localized.tr("Localizable", "stake.validator", fallback: "Validator")
     /// Validators

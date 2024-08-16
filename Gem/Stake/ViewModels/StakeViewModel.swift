@@ -51,6 +51,9 @@ class StakeViewModel {
         let date = now.addingTimeInterval(lockTime)
         return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
     }
+    var lockTimeInfoURL: URL {
+        Docs.url(.stakingLockTime)
+    }
 
     var minAmountTitle: String { Localized.Stake.minimumAmount }
     var minAmountValue: String? {

@@ -124,7 +124,7 @@ final class ValueFormatterTests: XCTestCase {
     }
     
     func testFromInputBR() {
-        let formatter = ValueFormatter(locale: .BR, style: .full)
+        let formatter = ValueFormatter(locale: .PT_BR, style: .full)
         
         XCTAssertEqual(try formatter.inputNumber(from: "0,12317", decimals: 8), 12317000)
         XCTAssertEqual(try formatter.inputNumber(from: "0.12317", decimals: 8), 12317000)

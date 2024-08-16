@@ -246,3 +246,4 @@
 "buy.empty_amount" = "Пожалуйста, введите сумму для покупки";
 "transaction.title.received" = "Получено";
 "transaction.title.sent" = "Отправлено";
+"stake.stake" = "Стейкнути";

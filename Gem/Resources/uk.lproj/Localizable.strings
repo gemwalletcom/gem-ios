@@ -141,7 +141,7 @@
 "stake.pending" = "В Очікуванні";
 "stake.rewards" = "Нагороди";
 "assets.no_assets_found" = "Активи не знайдено";
-"transfer.stake.title" = "Стейкнути";
+"transfer.stake.title" = "Стейкінг";
 "transfer.claim_rewards.title" = "Отримати Винагороду";
 "transfer.unstake.title" = "Скасувати Стейкінг";
 "buy.no_results" = "Немає доступних місць";
@@ -246,3 +246,4 @@
 "buy.empty_amount" = "Будь ласка, введіть суму для купівлі";
 "transaction.title.received" = "Отримано";
 "transaction.title.sent" = "Надіслано";
+"stake.stake" = "Стейкнути";
