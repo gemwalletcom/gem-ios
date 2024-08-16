@@ -86,7 +86,7 @@ class ConfirmTransferViewModel {
 
     var networkTitle: String { Localized.Transfer.network }
     var networkValue: String {
-        state.value?.network ?? dataModel.chainAsset.name
+        dataModel.chainAsset.name
     }
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: dataModel.chainAsset.id).assetImage

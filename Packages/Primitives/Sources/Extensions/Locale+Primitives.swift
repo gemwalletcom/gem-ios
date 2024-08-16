@@ -20,7 +20,7 @@ extension Locale {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
-        if language.maximalIdentifier == Locale.PT_BR.language.maximalIdentifier {
+        if language == Locale.PT_BR.language {
             return Locale.PT_BR.identifier
         }
         if let script = language.script, languageCode.identifier == Locale.ZH_Simplifier.language.languageCode?.identifier {
