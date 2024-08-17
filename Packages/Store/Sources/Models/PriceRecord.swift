@@ -15,12 +15,12 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
 
 extension PriceRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column("assetId", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column("assetId", .text)
                 .primaryKey()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            t.column("price", .numeric)
-            t.column("priceChangePercentage24h", .numeric)
+            $0.column("price", .numeric)
+            $0.column("priceChangePercentage24h", .numeric)
         }
     }
 }

@@ -39,31 +39,31 @@ extension AssetDetailsRecord: Identifiable {
 
 extension AssetDetailsRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column("assetId", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column("assetId", .text)
                 .primaryKey()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
             
-            t.column("homepage", .text)
-            t.column("explorer", .text)
-            t.column("twitter", .text)
-            t.column("telegram", .text)
-            t.column("github", .text)
-            t.column("youtube", .text)
-            t.column("facebook", .text)
-            t.column("reddit", .text)
-            t.column("coingecko", .text)
-            t.column("coinmarketcap", .text)
-            t.column("discord", .text)
+            $0.column("homepage", .text)
+            $0.column("explorer", .text)
+            $0.column("twitter", .text)
+            $0.column("telegram", .text)
+            $0.column("github", .text)
+            $0.column("youtube", .text)
+            $0.column("facebook", .text)
+            $0.column("reddit", .text)
+            $0.column("coingecko", .text)
+            $0.column("coinmarketcap", .text)
+            $0.column("discord", .text)
             
-            t.column("marketCap", .double)
-            t.column("marketCapRank", .integer)
-            t.column("totalVolume", .double)
-            t.column("circulatingSupply", .double)
-            t.column("totalSupply", .double)
-            t.column("maxSupply", .double)
+            $0.column("marketCap", .double)
+            $0.column("marketCapRank", .integer)
+            $0.column("totalVolume", .double)
+            $0.column("circulatingSupply", .double)
+            $0.column("totalSupply", .double)
+            $0.column("maxSupply", .double)
             
-            t.column("stakingApr", .double)
+            $0.column("stakingApr", .double)
         }
     }
 }
