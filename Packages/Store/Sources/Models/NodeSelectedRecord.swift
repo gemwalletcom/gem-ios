@@ -22,14 +22,14 @@ public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, T
 
 extension NodeSelectedRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName, ifNotExists: true) { t in
-            t.column("nodeId", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column("nodeId", .text)
                 .notNull()
                 .indexed()
                 .references(NodeRecord.databaseTableName, onDelete: .cascade)
-            t.column("chain", .text)
+            $0.column("chain", .text)
                 .primaryKey()
-            t.column("auto", .boolean)
+            $0.column("auto", .boolean)
         }
     }
 }

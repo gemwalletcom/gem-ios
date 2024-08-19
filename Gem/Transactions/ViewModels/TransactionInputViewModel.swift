@@ -63,7 +63,6 @@ struct TransactionInputViewModel {
 
     var showMemoField: Bool { dataModel.shouldShowMemo }
     var memo: String? { dataModel.memo }
-    var network: String { dataModel.asset.name }
 
     var amountText: String {
         valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
@@ -73,18 +72,18 @@ struct TransactionInputViewModel {
         fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
     }
     
-    var networkFeeText: String {
+    var networkFeeText: String? {
         if let feeValue {
             return networkFeeFormatter.string(feeValue, decimals: feeAsset.decimals.asInt, currency: feeAsset.symbol)
         }
-        return ""
+        return .none
     }
     
     var networkFeeFiatText: String? {
         if let feeValue {
             return fiatAmountText(price: metaData?.feePrice, value: feeValue, decimals: feeAsset.decimals.asInt)
         }
-        return nil
+        return .none
     }
     
     private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {

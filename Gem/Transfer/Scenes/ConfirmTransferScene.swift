@@ -21,7 +21,7 @@ struct ConfirmTransferScene: View {
                 text: model.buttonTitle,
                 viewState: model.state,
                 image: statefullButtonImage,
-                action: model.state.isError ? onSelectTryAgain : onSelectConfirmTransfer
+                action: onAction
             )
             .disabled(model.shouldDisalbeButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
@@ -158,8 +158,12 @@ extension ConfirmTransferScene {
         await model.fetch()
     }
 
-    private func onSelectTryAgain() {
-        fetch()
+    private func onAction() {
+        if model.state.isError {
+            fetch()
+        } else {
+            onSelectConfirmTransfer()
+        }
     }
 }
 

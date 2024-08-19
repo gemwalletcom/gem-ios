@@ -9,7 +9,7 @@ public class DB: ObservableObject {
 
     public static var defaultConfiguration: GRDB.Configuration = {
         var config = GRDB.Configuration()
-#if DEBUG
+        #if DEBUG
         config.publicStatementArguments = true
         config.prepareDatabase { db in
             db.trace { //sql in
@@ -26,23 +26,27 @@ public class DB: ObservableObject {
                 }
             }
         }
-#endif
+        #endif
         return config
     }()
-    let dbPath: URL
-    var migrations = Migrations()
+
+    private let dbPath: URL
+    private var migrations = Migrations()
 
     public init(
         path: String,
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
-        dbPath = try! FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
-        dbQueue = try! DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
-
-        try! migrations.run(dbQueue: dbQueue)
-    }
-
-    public func destroy() throws {
-        try FileManager.default.removeItem(at: dbPath)
+        do {
+            dbPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
+            dbQueue = try DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
+        } catch {
+            fatalError("db initialization error: \(error)")
+        }
+        do {
+            try migrations.run(dbQueue: dbQueue)
+        } catch {
+            fatalError("db migrations error: \(error)")
+        }
     }
 }

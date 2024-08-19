@@ -19,20 +19,20 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 
 extension BannerRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.primaryKey("id", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.primaryKey("id", .text)
                 .notNull()
                 .indexed()
-            t.column("walletId", .text)
+            $0.column("walletId", .text)
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            t.column("assetId", .text)
+            $0.column("assetId", .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            t.column("event", .text)
+            $0.column("event", .text)
                 .notNull()
-            t.column("state", .text)
+            $0.column("state", .text)
                 .notNull()
-            t.uniqueKey(["walletId", "assetId", "event"])
+            $0.uniqueKey(["walletId", "assetId", "event"])
         }
     }
 }
