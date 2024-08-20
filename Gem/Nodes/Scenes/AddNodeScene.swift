@@ -29,7 +29,6 @@ struct AddNodeScene: View {
                 viewState: model.state,
                 action: onSelectImport
             )
-            .disabled(model.shouldDisableImportButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)

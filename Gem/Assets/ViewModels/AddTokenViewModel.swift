@@ -38,10 +38,6 @@ class AddTokenViewModel {
     var qrImage: Image { Image(systemName: SystemImage.qrCode) }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
-    var shouldDisableActionButton: Bool {
-        state.isError || state.isNoData
-    }
-
     var chains: [Chain] { input.availableChains }
 
     var addressBinding: Binding<String> {
