@@ -30,6 +30,16 @@ public protocol AssetListViewable {
     var action: ((AssetListAction) -> Void)? { get set }
 }
 
+extension AssetListViewable {
+    var isAssetEnabled: Bool {
+        switch rightView {
+        case .balance,
+            .copy: return false
+        case .toggle(let value): return value
+        }
+    }
+}
+
 public struct AssetImage {
     public let type: String
     public let imageURL: URL?
@@ -53,28 +63,17 @@ public struct AssetImage {
     }
 }
 
-extension AssetListViewable {
-    var isAssetEnabled: Bool {
-        switch rightView {
-        case .balance,
-            .copy: return false
-        case .toggle(let value): return value
-        }
-    }
-}
-
-public struct AssetListItemView: View {
-    
+public struct AssetListItemView<PrimaryView: View, SecondaryView: View>: View {
     let imageView: AssetImageView
-    let primary: AnyView
-    let secondary: AnyView
-        
+    let primary: PrimaryView
+    let secondary: SecondaryView
+
     public init(
-        @ViewBuilder imageView: () -> AssetImageView,
-        @ViewBuilder primary: () -> AnyView,
-        @ViewBuilder secondary: () -> AnyView
+        imageView: AssetImageView,
+        @ViewBuilder primary: () -> PrimaryView,
+        @ViewBuilder secondary: () -> SecondaryView
     ) {
-        self.imageView = imageView()
+        self.imageView = imageView
         self.primary = primary()
         self.secondary = secondary()
     }
@@ -84,7 +83,7 @@ public struct AssetListItemView: View {
             imageView
             HStack {
                 primary
-                Spacer(minLength: 2)
+                Spacer(minLength: Spacing.extraSmall)
                 secondary
             }
         }
@@ -92,72 +91,57 @@ public struct AssetListItemView: View {
 }
 
 public struct AssetListView: View {
-    
     let model: AssetListViewable
-    @State public  var toggleValue: Bool
-    
+    @State private var toggleValue: Bool
+
     public init(model: AssetListViewable) {
         self.model = model
         _toggleValue = State(wrappedValue: model.isAssetEnabled)
     }
-    
+
     public var body: some View {
-        AssetListItemView {
-            AssetImageView(
-                assetImage: model.assetImage
-            )
-        } primary: {
-            AnyView(
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(spacing: 4) {
+        AssetListItemView(
+            imageView: AssetImageView(assetImage: model.assetImage),
+            primary: {
+                VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+                    HStack(spacing: Spacing.tiny) {
                         Text(model.name)
-                            .font(.system(size: 16))
-                            .fontWeight(.semibold)
+                            .textStyle(
+                                TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                            )
                         if let symbol = model.symbol {
                             Text(symbol)
-                                .font(.callout)
-                                .fontWeight(.regular)
-                                .foregroundColor(.secondary)
+                                .textStyle(.calloutSecondary)
                         }
                     }
+
                     switch model.subtitleView {
-                    case .type(let value):
-                        Text(value.text)
-                            .font(.system(size: 13))
-                            .fontWeight(.regular)
-                            .font(value.style.font)
-                            .foregroundColor(value.style.color)
                     case .price(let price, let priceChangePercentage24h):
-                        if !price.text.isEmpty {
-                            HStack(spacing: 2) {
-                                Text(price.text)
-                                    .font(price.style.font)
-                                    .foregroundColor(price.style.color)
-                                Text(priceChangePercentage24h.text)
-                                    .font(priceChangePercentage24h.style.font)
-                                    .foregroundColor(priceChangePercentage24h.style.color)
-                            }
-                            .lineLimit(1)
+                        HStack(spacing: Spacing.extraSmall) {
+                            Text(price.text)
+                                .textStyle(price.style)
+                            Text(priceChangePercentage24h.text)
+                                .textStyle(priceChangePercentage24h.style)
                         }
+                    case .type(let textValue):
+                        Text(textValue.text)
+                            .textStyle(textValue.style)
                     case .none:
                         EmptyView()
                     }
                 }
-            )
-        } secondary: {
-            AnyView(
+            },
+            secondary: {
                 ZStack {
                     switch model.rightView {
                     case .balance(let balance, let totalFiat):
-                        VStack(alignment: .trailing, spacing: 2) {
+                        VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
                             Text(balance.text)
-                                .font(balance.style.font)
-                                .foregroundColor(balance.style.color)
-                                
+                                .textStyle(balance.style)
+
                             if !totalFiat.text.isEmpty {
                                 Text(totalFiat.text)
-                                    .font(totalFiat.style.font)
-                                    .foregroundColor(totalFiat.style.color)
+                                    .textStyle(totalFiat.style)
                             }
                         }
                         .lineLimit(1)
@@ -174,47 +158,45 @@ public struct AssetListView: View {
                             }
                         )
                         .background(Colors.grayVeryLight)
-                        .foregroundColor(Colors.gray)
-                        .cornerRadius(24)
+                        .foregroundStyle(Colors.gray)
+                        .clipShape(RoundedRectangle(cornerRadius: 24))
                     }
                 }
-            )
-        }
+            }
+        )
         .onChange(of: toggleValue) { _, newValue in
             model.action?(.enabled(newValue))
         }
     }
 }
 
-struct AssetListView_Previews: PreviewProvider {
-    static var previews: some View {
-        List {
-            AssetListView(
-                model: AssetListViewPreviewable(
-                    name: "Bitcoin",
-                    symbol: "BTC",
-                    assetImage: AssetImage(
-                        type: "ERC20",
-                        imageURL: URL(string: "https://assets.gemwallet.com/blockchains/bitcoin/info/logo.png")!,
-                        placeholder: .none,
-                        chainPlaceholder: .none
-                    ),
-                    subtitleView: .none,
-                    rightView: .balance(
-                        balance: TextValue(text: "test", style: TextStyle(font: .title, color: .accentColor)), 
-                        totalFiat: TextValue(text: "test2", style: TextStyle(font: .title, color: .accentColor))
-                    )
+#Preview {
+    struct AssetListViewPreviewable: AssetListViewable {
+        let name: String
+        let symbol: String?
+        let assetImage: AssetImage
+        let subtitleView: AssetListSubtitleView
+        let rightView: AssetListRightView
+        var action: ((AssetListAction) -> Void)?
+    }
+
+    return List {
+        AssetListView(
+            model: AssetListViewPreviewable(
+                name: "Bitcoin",
+                symbol: "BTC",
+                assetImage: AssetImage(
+                    type: "ERC20",
+                    imageURL: URL(string: "https://assets.gemwallet.com/blockchains/bitcoin/info/logo.png")!,
+                    placeholder: .none,
+                    chainPlaceholder: .none
+                ),
+                subtitleView: .none,
+                rightView: .balance(
+                    balance: TextValue(text: "test", style: TextStyle(font: .title, color: .accentColor)),
+                    totalFiat: TextValue(text: "test2", style: TextStyle(font: .title, color: .accentColor))
                 )
             )
-        }
+        )
     }
-}
-
-struct AssetListViewPreviewable: AssetListViewable {
-    let name: String
-    let symbol: String?
-    let assetImage: AssetImage
-    let subtitleView: AssetListSubtitleView
-    let rightView: AssetListRightView
-    var action: ((AssetListAction) -> Void)?
 }

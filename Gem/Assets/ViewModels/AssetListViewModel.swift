@@ -51,11 +51,11 @@ struct AssetListViewModel: AssetListViewable {
             return .price(
                 price: TextValue(
                     text: assetDataModel.priceAmountText,
-                    style: TextStyle(font: .system(size: 14), color: Colors.gray)
+                    style: TextStyle(font: .caption, color: Colors.gray)
                 ),
                 priceChangePercentage24h: TextValue(
                     text: assetDataModel.priceChangeText,
-                    style: TextStyle(font: .system(size: 14), color: assetDataModel.priceChangeTextColor)
+                    style: TextStyle(font: .caption, color: assetDataModel.priceChangeTextColor)
                 )
             )
         case .manage, .view, .copy:
@@ -79,11 +79,11 @@ struct AssetListViewModel: AssetListViewable {
             return .balance(
                 balance: TextValue(
                     text: assetDataModel.totalBalanceTextWithSymbol,
-                    style: TextStyle(font: .system(size: 16, weight: .semibold), color: assetDataModel.balanceTextColor)
+                    style: TextStyle(font: .footnote, color: assetDataModel.balanceTextColor, fontWeight: .semibold)
                 ),
                 totalFiat: TextValue(
                     text: assetDataModel.fiatBalanceText,
-                    style: TextStyle(font: .system(size: 14), color: Colors.gray)
+                    style: TextStyle(font: .caption, color: Colors.gray)
                 )
             )
         case .manage:
