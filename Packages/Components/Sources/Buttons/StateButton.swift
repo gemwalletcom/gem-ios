@@ -3,44 +3,51 @@
 import SwiftUI
 import Style
 
-public struct StatefullButton: View {
+public struct StateButton: View {
     public static let defaultTextStyle = TextStyle(font: .body.weight(.semibold), color: Colors.whiteSolid)
 
     public let textValue: TextValue
     public let image: Image?
     public let infoTextValue: TextValue?
-    public var styleState: StatefulButtonStyle.State
-    public var isDisabled: Bool
+    public let styleState: StateButtonStyle.State
 
     private let action: () -> Void
 
     public init<T>(
         text: String,
-        textStyle: TextStyle = StatefullButton.defaultTextStyle,
+        textStyle: TextStyle = StateButton.defaultTextStyle,
         viewState: StateViewType<T>,
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
+        disabledRule: Bool? = nil,
         action: @escaping () -> Void
     ) {
 
-        let styleState: StatefulButtonStyle.State
-        switch viewState {
-        case .noData:
-            styleState = .disabled
-        case .loaded, .error:
-            styleState = .normal
-        case .loading:
-            styleState = .loading
-        }
+        let styleState: StateButtonStyle.State = {
+            switch viewState {
+            case .noData:
+                return .disabled
+            case .loading:
+                return .loading
+            case .loaded:
+                return .normal
+            case .error:
+                if let disabledRule {
+                    return disabledRule ? .disabled : .normal
+                } else {
+                    return .disabled
+                }
+            }
+        }()
 
         self.init(text: text, textStyle: textStyle, styleState: styleState, image: image, infoTitle: infoTitle, infoTitleStyle: infoTitleStyle, action: action)
     }
 
     public init(
         text: String,
-        textStyle: TextStyle = StatefullButton.defaultTextStyle,
-        styleState: StatefulButtonStyle.State,
+        textStyle: TextStyle = StateButton.defaultTextStyle,
+        styleState: StateButtonStyle.State,
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
@@ -55,12 +62,11 @@ public struct StatefullButton: View {
         }
         self.action = action
         self.image = image
-        self.isDisabled = styleState == .disabled
     }
 
     public init(
         textValue: TextValue,
-        styleState: StatefulButtonStyle.State,
+        styleState: StateButtonStyle.State,
         infoTextValue: TextValue? = nil,
         image: Image? = nil,
         action: @escaping () -> Void
@@ -70,7 +76,6 @@ public struct StatefullButton: View {
         self.infoTextValue = infoTextValue
         self.action = action
         self.image = image
-        self.isDisabled = styleState == .disabled
     }
 
     public var body: some View {
@@ -95,7 +100,6 @@ public struct StatefullButton: View {
                 }
             )
             .buttonStyle(.statefullBlue(state: styleState))
-            .disabled(isDisabled || styleState == .loading)
         }
     }
 }
@@ -105,24 +109,24 @@ public struct StatefullButton: View {
 #Preview {
     List {
         Section(header: Text("Normal State")) {
-            StatefullButton(text: "Submit", styleState: .normal, action: {})
-            StatefullButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .normal, action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
         }
 
         Section(header: Text("Normal State with info")) {
-            StatefullButton(text: "Submit", styleState: .normal, infoTitle: "Approve token", action: {})
-            StatefullButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
+            StateButton(text: "Submit", styleState: .normal, infoTitle: "Approve token", action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
         }
 
         Section(header: Text("Loading State")) {
-            StatefullButton(text: "Submit", styleState: .loading, image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .loading, image: Image(systemName: SystemImage.faceid), action: {})
         }
 
         Section(header: Text("Disabled State")) {
-            StatefullButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
                 .disabled(true)
 
-            StatefullButton(text: "Submit", styleState: .disabled, action: {})
+            StateButton(text: "Submit", styleState: .disabled, action: {})
         }
     }
     .padding()

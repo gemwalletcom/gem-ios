@@ -21,7 +21,7 @@ struct ChainSettingsScene: View {
         List {
             Section(model.nodesTitle) {
                 ForEach(model.nodesModels) { nodeModel in
-                    SelectionListItemView(
+                    ListItemSelectionView(
                         title: nodeModel.title,
                         titleExtra: nodeModel.titleExtra,
                         subtitle: nodeModel.subtitle,
@@ -48,7 +48,7 @@ struct ChainSettingsScene: View {
             }
             Section(model.explorerTitle) {
                 ForEach(model.explorers) { explorer in
-                    SelectionListItemView(
+                    ListItemSelectionView(
                         title: explorer,
                         titleExtra: .none,
                         subtitle: .none,

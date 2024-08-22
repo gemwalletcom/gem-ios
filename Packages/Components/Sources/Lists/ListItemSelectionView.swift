@@ -3,7 +3,7 @@
 import SwiftUI
 import Style
 
-public struct SelectionListItemView<T: Hashable>: View {
+public struct ListItemSelectionView<T: Hashable>: View {
     public enum SelectionImageDirection: Identifiable {
         case left
         case right

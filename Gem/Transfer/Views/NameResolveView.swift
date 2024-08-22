@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Primitives
+import Components
 
 enum NameRecordState {
     case none
@@ -39,7 +40,7 @@ struct NameRecordView: View {
             case .error:
                 Image(.nameResolveError)
             case .loading:
-                ProgressView()
+                LoadingView()
             case .complete:
                 Image(.nameResolveSuccess)
             }

@@ -24,13 +24,6 @@ class AddNodeSceneViewModel: ObservableObject {
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
-    var shouldDisableImportButton: Bool {
-        guard let value = state.value else {
-            return state.isNoData || state.isError
-        }
-        return !value.isInSync
-    }
-
     var title: String { Localized.Nodes.ImportNode.title }
 
     var actionButtonTitle: String { Localized.Wallet.Import.action }

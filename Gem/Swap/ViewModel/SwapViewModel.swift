@@ -96,7 +96,7 @@ class SwapViewModel {
     }
 
     func shouldDisableActionButton(fromAssetData: AssetData, isApprovalProcessInProgress: Bool) -> Bool {
-        !isValidFromValue(assetData: fromAssetData) || swapAvailabilityState.isLoading || swapAvailabilityState.isNoData || isApprovalProcessInProgress
+        !isValidFromValue(assetData: fromAssetData) || isApprovalProcessInProgress
     }
 
     func swapTokenModel(from assetData: AssetData) -> SwapTokenViewModel {

@@ -49,7 +49,7 @@ struct TransactionScene: View {
                         case .none:
                             EmptyView()
                         case .progressView:
-                            ListItemProgressView(size: .regular, tint: Colors.orange)
+                            LoadingView(tint: Colors.orange)
                         case .image(let image):
                             image
                         }

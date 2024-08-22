@@ -11,22 +11,27 @@ enum AssetListType {
     case copy
 }
 
-struct AssetListViewModel: AssetListViewable {
-    
+struct ListAssetItemViewModel: ListAssetItemViewable {
+
     let assetDataModel: AssetDataViewModel
     let type: AssetListType
-    var action: ((AssetListAction) -> Void)?
-    
+    var action: ((ListAssetItemAction) -> Void)?
+
     init(
         assetDataModel: AssetDataViewModel,
         type: AssetListType = .wallet,
-        action: (((AssetListAction)) -> Void)? = nil
+        action: (((ListAssetItemAction)) -> Void)? = nil
     ) {
         self.assetDataModel = assetDataModel
         self.type = type
         self.action = action
     }
-    
+
+    init(assetData: AssetData, formatter: ValueFormatter) {
+        let model = AssetDataViewModel(assetData: assetData, formatter: formatter)
+        self.init(assetDataModel: model, type: .wallet, action: nil)
+    }
+
     var name: String {
         assetDataModel.name
     }
@@ -45,17 +50,17 @@ struct AssetListViewModel: AssetListViewable {
         }
     }
     
-    var subtitleView: AssetListSubtitleView {
+    var subtitleView: ListAssetItemSubtitleView {
         switch type {
         case .wallet:
             return .price(
                 price: TextValue(
                     text: assetDataModel.priceAmountText,
-                    style: TextStyle(font: .system(size: 14), color: Colors.gray)
+                    style: TextStyle(font: .caption, color: Colors.gray)
                 ),
                 priceChangePercentage24h: TextValue(
                     text: assetDataModel.priceChangeText,
-                    style: TextStyle(font: .system(size: 14), color: assetDataModel.priceChangeTextColor)
+                    style: TextStyle(font: .caption, color: assetDataModel.priceChangeTextColor)
                 )
             )
         case .manage, .view, .copy:
@@ -73,17 +78,17 @@ struct AssetListViewModel: AssetListViewable {
         }
     }
     
-    var rightView: AssetListRightView {
+    var rightView: ListAssetItemRightView {
         switch type {
         case .wallet, .view:
             return .balance(
                 balance: TextValue(
                     text: assetDataModel.totalBalanceTextWithSymbol,
-                    style: TextStyle(font: .system(size: 16, weight: .semibold), color: assetDataModel.balanceTextColor)
+                    style: TextStyle(font: .footnote, color: assetDataModel.balanceTextColor, fontWeight: .semibold)
                 ),
                 totalFiat: TextValue(
                     text: assetDataModel.fiatBalanceText,
-                    style: TextStyle(font: .system(size: 14), color: Colors.gray)
+                    style: TextStyle(font: .caption, color: Colors.gray)
                 )
             )
         case .manage:

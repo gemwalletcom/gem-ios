@@ -24,12 +24,11 @@ struct AddNodeScene: View {
                 nodeInfoView
             }
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectImport
             )
-            .disabled(model.shouldDisableImportButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)

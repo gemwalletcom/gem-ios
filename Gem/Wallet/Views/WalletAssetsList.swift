@@ -25,7 +25,7 @@ struct WalletAssetsList: View {
     var body: some View {
         ForEach(assets) { asset in
             NavigationLink(value: asset) {
-                AssetListView.make(assetData: asset, formatter: .short)
+                ListAssetItemView(model: ListAssetItemViewModel(assetData: asset, formatter: .short))
                     .contextMenu {
                         ContextMenuItem(
                             title: Localized.Wallet.copyAddress,

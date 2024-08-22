@@ -40,7 +40,7 @@ struct SwapTokenView: View {
                         .disabled(disabledTextField)
                         .multilineTextAlignment(.trailing)
                     if showLoading {
-                        ProgressView()
+                        LoadingView()
                     }
                 }
             }.padding(.bottom, 2)

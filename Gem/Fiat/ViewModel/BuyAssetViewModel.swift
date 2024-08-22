@@ -50,10 +50,6 @@ class BuyAssetViewModel {
         AssetIdViewModel(assetId: asset.id).assetImage
     }
 
-    var shouldDisableContinueButton: Bool {
-        state.isNoData || state.isError
-    }
-
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
         return "≈ \(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
