@@ -146,7 +146,7 @@ class ConfirmTransferViewModel {
         }
     }
 
-    var shouldDisalbeButton: Bool {
+    var shouldDisableButton: Bool {
         if let result = state.value?.transferAmountResult, case .error = result {
             return true
         }

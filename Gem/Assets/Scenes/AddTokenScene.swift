@@ -20,7 +20,7 @@ struct AddTokenScene: View {
         VStack {
             addTokenList
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.actionButtonTitlte,
                 viewState: model.state,
                 action: onSelectImportToken
