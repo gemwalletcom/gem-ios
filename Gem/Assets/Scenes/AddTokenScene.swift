@@ -78,16 +78,8 @@ extension AddTokenScene {
             case .noData:
                 EmptyView()
             case .loading:
-                VStack {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .foregroundStyle(Color.gray)
-                }
-                .listRowInsets(EdgeInsets())
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.clear)
-                .frame(maxWidth: .infinity)
-                .id(UUID()) // TODO: - review ProgressView hidden after state reloading
+                ListItemLoadingView()
+                    .id(UUID())
             case .loaded(let asset):
                 Section {
                     ListItemView(title: asset.nameTitle, subtitle: asset.name)

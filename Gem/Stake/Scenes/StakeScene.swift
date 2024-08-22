@@ -107,16 +107,8 @@ extension StakeScene {
             case .noData:
                 StateEmptyView(title: model.emptyDelegationsTitle)
             case .loading:
-                VStack {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                        .foregroundStyle(Colors.gray)
-                }
-                .id(UUID()) // TODO: - review fix
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .frame(maxWidth: .infinity)
+                ListItemLoadingView()
+                    .id(UUID())
             case .loaded(let delegations):
                 ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.delegation) {

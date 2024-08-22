@@ -71,8 +71,7 @@ struct SelectAssetScene: View {
                 VStack {
                     if model.isLoading {
                         HStack {
-                            ProgressView()
-                                .progressViewStyle(.circular)
+                            LoadingView()
                         }
                     } else if assets.isEmpty {
                         Text(Localized.Assets.noAssetsFound)

@@ -32,7 +32,7 @@ struct ChartScene: View {
                         case .noData:
                             StateEmptyView(title: model.emptyTitle)
                         case .loading:
-                            StateLoadingView()
+                            LoadingView()
                         case .loaded(let model):
                             ChartView(model: model)
                         case .error(let error):

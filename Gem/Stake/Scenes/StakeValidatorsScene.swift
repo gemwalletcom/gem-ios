@@ -18,7 +18,7 @@ struct StakeValidatorsScene: View {
                     ForEach(section.values) { value in
                         HStack {
                             ValidatorImageView(validator: value.value)
-                            SelectionListItemView(
+                            ListItemSelectionView(
                                 title: value.title,
                                 titleExtra: .none,
                                 subtitle: value.subtitle,

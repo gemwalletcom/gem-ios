@@ -128,37 +128,28 @@ extension BuyAssetScene {
     @ViewBuilder
     private var providerSection: some View {
         Section {
-            if !model.state.isLoading {
-                switch model.state {
-                case .noData:
-                    StateEmptyView(title: model.emptyTitle)
-                case .loading:
-                    EmptyView()
-                case .loaded(let quotes):
-                    if let quote = model.input.quote {
-                        if quotes.count > 1 {
-                            NavigationLink(value: Scenes.FiatProviders()) {
-                                ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
-                            }
-                        } else {
+            switch model.state {
+            case .noData:
+                StateEmptyView(title: model.emptyTitle)
+            case .loading:
+                ListItemLoadingView()
+                    .id(UUID())
+            case .loaded(let quotes):
+                if let quote = model.input.quote {
+                    if quotes.count > 1 {
+                        NavigationLink(value: Scenes.FiatProviders()) {
                             ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                         }
-                        ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
                     } else {
-                        EmptyView()
+                        ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                     }
-                case .error(let error):
-                    ListItemErrorView(errorTitle: model.errorTitle, error: error)
+                    ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
+                } else {
+                    EmptyView()
                 }
+            case .error(let error):
+                ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
-        } header: {
-            VStack {
-                if model.state.isLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                }
-            }
-            .frame(maxWidth: .infinity)
         }
     }
 }
