@@ -20,7 +20,7 @@ struct NetworkFeeScene: View {
         List {
             Section {
                 ForEach(model.feeRatesViewModels) { feeRate in
-                    SelectionListItemView(
+                    ListItemSelectionView(
                         title: feeRate.title,
                         titleExtra: .none,
                         subtitle: feeRate.value,

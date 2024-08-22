@@ -18,7 +18,7 @@ struct CurrencyScene: View {
             ForEach(model.list) { section in
                 Section(section.section) {
                     ForEach(section.values) { currency in
-                        SelectionListItemView(
+                        ListItemSelectionView(
                             title: currency.title,
                             titleExtra: .none,
                             subtitle: .none,

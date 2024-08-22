@@ -117,8 +117,7 @@ public struct ListItemView: View {
 
             if showPlaceholderProgress(for: .subtitle, value: subtitle) {
                 Spacer()
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: subtitle?.style.color ?? Colors.gray))
+                LoadingView(tint: subtitle?.style.color ?? Colors.gray)
             } else if let subtitle = subtitle {
                 Spacer(minLength: Spacing.extraSmall)
                 SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
@@ -224,7 +223,7 @@ extension ListItemView {
                 case .none:
                     EmptyView()
                 case .progressView:
-                    ListItemProgressView(size: .small, tint: titleTag.style.color)
+                    LoadingView(size: .small, tint: titleTag.style.color)
                 case .image(let image):
                     image
                 }
