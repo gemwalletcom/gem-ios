@@ -17,7 +17,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Store", path: "../Store"),
-        .package(name: "WalletCore", path: "../WalletCore"),
+        .package(url: "https://github.com/gemwalletcom/wallet-core-release", exact: Version(stringLiteral: "4.1.5")),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
     ],
@@ -27,9 +27,9 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
-                .product(name: "WalletCore", package: "WalletCore"),
                 "WalletCorePrimitives",
-                .product(name: "SwiftProtobuf", package: "WalletCore"),
+                .product(name: "WalletCore", package: "wallet-core-release"),
+                .product(name: "SwiftProtobuf", package: "wallet-core-release"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
             path: "Sources"
