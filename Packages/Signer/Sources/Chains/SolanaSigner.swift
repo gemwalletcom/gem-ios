@@ -28,7 +28,7 @@ public struct SolanaSigner: Signable {
         let tokenId = try input.asset.getTokenId()
         let amount = input.value.UInt
         let destinationAddress = input.destinationAddress
-        let tokenProgram: SolanaTokenProgramId = switch input.token.tokenProgram {
+        let tokenProgram: WalletCore.SolanaTokenProgramId = switch input.token.tokenProgram {
         case .token: .tokenProgram
         case .token2022: .token2022Program
         }
