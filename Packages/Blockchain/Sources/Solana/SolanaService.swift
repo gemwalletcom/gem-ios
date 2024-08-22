@@ -408,12 +408,14 @@ extension SolanaService: ChainTokenable {
 
     public func getTokenProgram(tokenId: String) async throws -> SolanaTokenProgram {
         do {
-            let program = try await provider.request(.getAccountInfo(account: tokenId))
-                .map(as: JSONRPCResponse<SolanaSplTokenProgram>.self)
-                .result.value.data.program
-            return switch program {
-            case SplToken2022: .token2022
-            default: .token
+            let owner = try await provider.request(.getAccountInfo(account: tokenId))
+                .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
+                .result.value.owner
+            return switch owner {
+            case SplTokenProgram2022: .token2022
+            case SplTokenProgram: .token
+            default:
+                throw AnyError("Unknow token program")
             }
         } catch {
             return .token

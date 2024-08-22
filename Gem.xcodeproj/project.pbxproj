@@ -563,6 +563,7 @@
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyViewModel.swift; sourceTree = "<group>"; };
+		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -937,6 +938,7 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				487A27E82B632CCE00BEEADB /* Gemstone */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,
 				D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */,
@@ -1897,7 +1899,6 @@
 				C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */,
-				DFBDD9AD2C7722F2002A1706 /* XCRemoteSwiftPackageReference "wallet-core-release" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -2611,14 +2612,6 @@
 			requirement = {
 				kind = exactVersion;
 				version = 0.7.0;
-			};
-		};
-		DFBDD9AD2C7722F2002A1706 /* XCRemoteSwiftPackageReference "wallet-core-release" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gemwalletcom/wallet-core-release";
-			requirement = {
-				kind = exactVersion;
-				version = 4.1.5;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

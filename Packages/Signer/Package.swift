@@ -15,7 +15,7 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Blockchain", path: "../Blockchain"),
-        .package(url: "https://github.com/gemwalletcom/wallet-core-release", exact: Version(stringLiteral: "4.1.5")),
+        .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
     ],
     targets: [
@@ -25,8 +25,8 @@ let package = Package(
                 "Primitives",
                 "Keystore",
                 "Blockchain",
-                .product(name: "WalletCore", package: "wallet-core-release"),
-                .product(name: "SwiftProtobuf", package: "wallet-core-release"),
+                .product(name: "WalletCore", package: "WalletCore"),
+                .product(name: "SwiftProtobuf", package: "WalletCore"),
                 "WalletCorePrimitives",
             ],
             path: "Sources"

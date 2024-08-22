@@ -42,11 +42,13 @@ public struct SolanaParsedSplTokenInfo: Codable {
     public let decimals: Int32
 }
 
-public struct SolanaDataProgram: Codable {
-    public let program: String
+public struct SolanaTokenOwner: Codable {
+    public let owner: String
 }
 
 typealias SolanaSplTokenInfo = SolanaValue<SolanaParsedData<SolanaInfo<SolanaParsedSplTokenInfo>>>
 typealias SolanaMplRawData = SolanaValue<SolanaArrayData<String>>
-typealias SolanaSplTokenProgram = SolanaValue<SolanaData<SolanaDataProgram>>
-public let SplToken2022 = "spl-token-2022"
+typealias SolanaSplTokenOwner = SolanaValue<SolanaTokenOwner>
+
+public let SplTokenProgram2022 = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
+public let SplTokenProgram     = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"

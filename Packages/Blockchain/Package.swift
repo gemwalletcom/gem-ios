@@ -14,7 +14,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "SwiftHTTPClient", path: "../SwiftHTTPClient"),
-        .package(url: "https://github.com/gemwalletcom/wallet-core-release", exact: Version(stringLiteral: "4.1.5")),
+        .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
@@ -25,8 +25,8 @@ let package = Package(
             dependencies: [
                 "SwiftHTTPClient",
                 "Primitives",
-                .product(name: "WalletCore", package: "wallet-core-release"),
-                .product(name: "SwiftProtobuf", package: "wallet-core-release"),
+                .product(name: "WalletCore", package: "WalletCore"),
+                .product(name: "SwiftProtobuf", package: "WalletCore"),
                 "WalletCorePrimitives",
                 "Gemstone",
                 "GemstonePrimitives",
