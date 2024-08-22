@@ -139,8 +139,7 @@ extension ButtonStyle where Self == ClearButtonStyle {
     public static var clearBlue: ClearButtonStyle { ClearButtonStyle(foregroundStyle: Colors.blue, foregroundStylePressed: Colors.blueDark) }
 }
 
-public struct StatefulButtonStyle: ButtonStyle {
-    @Environment(\.isEnabled) private var isEnabled: Bool
+public struct StateButtonStyle: ButtonStyle {
     public static let maxButtonHeight: CGFloat = 50
 
     public enum State {
@@ -155,13 +154,11 @@ public struct StatefulButtonStyle: ButtonStyle {
     let backgroundDisabled: Color
 
     private var shouldDisableInteractions: Bool {
-        // The button is non-interactive if it is in the disabled state, the loading state, or if the isEnabled environment value is false.
-        state == .disabled || state == .loading || !isEnabled
+        isGrayBackgroundState || state == .loading
     }
 
     private var isGrayBackgroundState: Bool {
-        // The background is gray if the button is in the disabled state, or if the button is not enabled and not in the loading state.
-        state == .disabled || (!isEnabled && state != .loading)
+        state == .disabled
     }
 
     public init(
@@ -183,7 +180,7 @@ public struct StatefulButtonStyle: ButtonStyle {
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
             backgroundView
-                .frame(height: StatefulButtonStyle.maxButtonHeight)
+                .frame(height: StateButtonStyle.maxButtonHeight)
             switch state {
             case .normal, .disabled:
                 configuration.label
@@ -191,7 +188,7 @@ public struct StatefulButtonStyle: ButtonStyle {
                     .foregroundStyle(foregroundStyle(configuration: configuration))
                     .padding(.horizontal, Spacing.medium)
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: StatefulButtonStyle.maxButtonHeight)
+                    .frame(height: StateButtonStyle.maxButtonHeight)
                     .background(labelBackground(configuration: configuration))
             case .loading:
                 ProgressView()
@@ -229,9 +226,9 @@ public struct StatefulButtonStyle: ButtonStyle {
 
 // MARK: - StatefulButtonStyle Static
 
-extension ButtonStyle where Self == StatefulButtonStyle {
-    public static func statefullBlue(state: StatefulButtonStyle.State) -> StatefulButtonStyle {
-        StatefulButtonStyle(
+extension ButtonStyle where Self == StateButtonStyle {
+    public static func statefullBlue(state: StateButtonStyle.State) -> StateButtonStyle {
+        StateButtonStyle(
             state: state,
             foregroundStyle: Colors.whiteSolid,
             foregroundStylePressed: Colors.whiteSolid,
@@ -248,7 +245,7 @@ extension ButtonStyle where Self == StatefulButtonStyle {
 #Preview {
     struct StatefulButtonPreviewWrapper: View {
         let text: String
-        @State var state: StatefulButtonStyle.State
+        @State var state: StateButtonStyle.State
 
         var body: some View {
             Button(action: {

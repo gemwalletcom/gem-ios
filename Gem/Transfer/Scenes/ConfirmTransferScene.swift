@@ -17,13 +17,13 @@ struct ConfirmTransferScene: View {
         VStack {
             transactionsList(value: model.state.value)
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.buttonTitle,
                 viewState: model.state,
                 image: statefullButtonImage,
+                disabledRule: model.shouldDisableButton,
                 action: onAction
             )
-            .disabled(model.shouldDisalbeButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)

@@ -24,7 +24,7 @@ struct AddNodeScene: View {
                 nodeInfoView
             }
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectImport

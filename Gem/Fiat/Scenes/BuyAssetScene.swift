@@ -19,7 +19,7 @@ struct BuyAssetScene: View {
                 providerSection
             }
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectContinue

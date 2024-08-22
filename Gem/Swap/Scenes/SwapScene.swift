@@ -35,13 +35,13 @@ struct SwapScene: View {
             swapList
             Spacer()
             VStack {
-                StatefullButton(text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                StateButton(text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                     viewState: model.swapAvailabilityState,
                     image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                     infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                    disabledRule: model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                     action: onSelectActionButton
                 )
-                .disabled(model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty))
             }
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
