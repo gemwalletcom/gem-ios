@@ -24,7 +24,6 @@ struct BuyAssetScene: View {
                 viewState: model.state,
                 action: onSelectContinue
             )
-            .disabled(model.shouldDisableContinueButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .listStyle(.insetGrouped)

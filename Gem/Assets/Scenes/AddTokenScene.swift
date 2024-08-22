@@ -25,7 +25,6 @@ struct AddTokenScene: View {
                 viewState: model.state,
                 action: onSelectImportToken
             )
-            .disabled(model.shouldDisableActionButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .onChange(of: model.input.address, onAddressClean)

@@ -26,9 +26,9 @@ public struct StatefullButton: View {
 
         let styleState: StatefulButtonStyle.State
         switch viewState {
-        case .noData:
+        case .noData, .error:
             styleState = .disabled
-        case .loaded, .error:
+        case .loaded:
             styleState = .normal
         case .loading:
             styleState = .loading

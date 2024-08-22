@@ -217,15 +217,6 @@ extension Transaction {
     )
 }
 
-extension AssetListView {
-    static func make(assetData: AssetData, formatter: ValueFormatter) -> AssetListView {
-        return AssetListView(
-            model: AssetListViewModel(
-                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: formatter)
-            )
-        )
-    }
-}
 extension Recipient {
     static let main = Recipient(name: "", address: "", memo: .none)
 }

@@ -61,10 +61,10 @@ struct SelectAssetScene: View {
                     switch model.selectType {
                     case .buy, .receive, .send, .swap, .stake:
                         NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                            SelectAssetListView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
                         }
                     case .manage, .hidden:
-                        SelectAssetListView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
                     }
                 }
             } footer: {
@@ -144,7 +144,7 @@ struct SelectAssetScene: View {
         }
     }
     
-    func assetAction(_ action: AssetListAction, assetData: AssetData) {
+    func assetAction(_ action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
         case .enabled(let enabled):
@@ -160,15 +160,14 @@ struct SelectAssetScene: View {
     }
 }
 
-private struct SelectAssetListView: View {
-    
+private struct ListAssetItemSelectionView: View {
     let assetData: AssetData
     let type: AssetListType
-    let action: (AssetListAction, AssetData) -> Void
+    let action: (ListAssetItemAction, AssetData) -> Void
     
     var body: some View {
-        AssetListView(
-            model: AssetListViewModel(
+        ListAssetItemView(
+            model: ListAssetItemViewModel(
                 assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .short),
                 type: type,
                 action: {
