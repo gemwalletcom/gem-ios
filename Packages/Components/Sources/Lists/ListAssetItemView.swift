@@ -1,107 +1,20 @@
 import SwiftUI
 import Style
 
-public enum AssetListRightView {
-    case balance(balance: TextValue, totalFiat: TextValue)
-    case toggle(Bool)
-    case copy
-}
-
-public enum AssetListSubtitleView {
-    case price(price: TextValue, priceChangePercentage24h: TextValue)
-    case type(TextValue)
-    case none
-}
-
-public enum AssetListAction {
-    case enabled(Bool)
-    case copy
-}
-
-public protocol AssetListViewable {
-    var name: String { get }
-    var symbol: String? { get }
-
-    var assetImage: AssetImage { get }
-
-    var subtitleView: AssetListSubtitleView { get }
-    var rightView: AssetListRightView { get }
-    
-    var action: ((AssetListAction) -> Void)? { get set }
-}
-
-extension AssetListViewable {
-    var isAssetEnabled: Bool {
-        switch rightView {
-        case .balance,
-            .copy: return false
-        case .toggle(let value): return value
-        }
-    }
-}
-
-public struct AssetImage {
-    public let type: String
-    public let imageURL: URL?
-    public let placeholder: Image?
-    public let chainPlaceholder: Image?
-    
-    public init(type: String, imageURL: URL?, placeholder: Image?, chainPlaceholder: Image?) {
-        self.type = type
-        self.imageURL = imageURL
-        self.placeholder = placeholder
-        self.chainPlaceholder = chainPlaceholder
-    }
-    
-    public static func resourceImage(image: String) -> AssetImage {
-        return AssetImage(
-            type: "",
-            imageURL: .none,
-            placeholder: Image(image),
-            chainPlaceholder: .none
-        )
-    }
-}
-
-public struct AssetListItemView<PrimaryView: View, SecondaryView: View>: View {
-    let imageView: AssetImageView
-    let primary: PrimaryView
-    let secondary: SecondaryView
-
-    public init(
-        imageView: AssetImageView,
-        @ViewBuilder primary: () -> PrimaryView,
-        @ViewBuilder secondary: () -> SecondaryView
-    ) {
-        self.imageView = imageView
-        self.primary = primary()
-        self.secondary = secondary()
-    }
-    
-    public var body: some View {
-        HStack {
-            imageView
-            HStack {
-                primary
-                Spacer(minLength: Spacing.extraSmall)
-                secondary
-            }
-        }
-    }
-}
-
-public struct AssetListView: View {
-    let model: AssetListViewable
+public struct ListAssetItemView: View {
+    let model: ListAssetItemViewable
     @State private var toggleValue: Bool
 
-    public init(model: AssetListViewable) {
+    public init(model: ListAssetItemViewable) {
         self.model = model
         _toggleValue = State(wrappedValue: model.isAssetEnabled)
     }
 
     public var body: some View {
-        AssetListItemView(
-            imageView: AssetImageView(assetImage: model.assetImage),
+        ListItemFlexibleView(
+            left: {
+                AssetImageView(assetImage: model.assetImage)
+            },
             primary: {
                 VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                     HStack(spacing: Spacing.tiny) {
@@ -170,18 +83,20 @@ public struct AssetListView: View {
     }
 }
 
+// MARK: - Previews
+
 #Preview {
-    struct AssetListViewPreviewable: AssetListViewable {
+    struct AssetListViewPreviewable: ListAssetItemViewable {
         let name: String
         let symbol: String?
         let assetImage: AssetImage
-        let subtitleView: AssetListSubtitleView
-        let rightView: AssetListRightView
-        var action: ((AssetListAction) -> Void)?
+        let subtitleView: ListAssetItemSubtitleView
+        let rightView: ListAssetItemRightView
+        var action: ((ListAssetItemAction) -> Void)?
     }
 
     return List {
-        AssetListView(
+        ListAssetItemView(
             model: AssetListViewPreviewable(
                 name: "Bitcoin",
                 symbol: "BTC",

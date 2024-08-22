@@ -107,8 +107,10 @@ struct AmountScene: View {
                 if model.isBalanceViewEnabled {
                     Section {
                         VStack {
-                            AssetListItemView(
-                                imageView: AssetImageView(assetImage: model.assetImage),
+                            ListItemFlexibleView(
+                                left: {
+                                    AssetImageView(assetImage: model.assetImage)
+                                },
                                 primary: {
                                     VStack(alignment: .leading, spacing: Spacing.tiny) {
                                         Text(model.assetName)
