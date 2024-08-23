@@ -406,7 +406,7 @@ extension SolanaService: ChainTokenable {
         )
     }
 
-    public func getTokenProgram(tokenId: String) async throws -> SolanaTokenProgram {
+    public func getTokenProgram(tokenId: String) async throws -> Primitives.SolanaTokenProgramId {
         do {
             let owner = try await provider.request(.getAccountInfo(account: tokenId))
                 .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)

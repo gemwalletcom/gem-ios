@@ -45,12 +45,12 @@ public struct TransactionPreload {
 public struct SignerInputToken {
     public let senderTokenAddress: String
     public let recipientTokenAddress: String?
-    public let tokenProgram: SolanaTokenProgram
+    public let tokenProgram: SolanaTokenProgramId
 
     public init(
         senderTokenAddress: String = "",
         recipientTokenAddress: String? = .none,
-        tokenProgram: SolanaTokenProgram = .token
+        tokenProgram: SolanaTokenProgramId = .token
     ) {
         self.senderTokenAddress = senderTokenAddress
         self.recipientTokenAddress = recipientTokenAddress
