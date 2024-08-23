@@ -51,3 +51,5 @@ generate-swiftgen:
 
 generate-stone:
 	@./scripts/generate-stone.sh $(BUILD_MODE)
+
+.PHONY: screenshots

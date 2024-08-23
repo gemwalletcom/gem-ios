@@ -13,7 +13,7 @@
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <TestPlanReference
-               reference = "container:Screenshots/Screenshots.xctestplan">
+               reference = "container:GemTests/screenshots.xctestplan">
             </TestPlanReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -39,7 +39,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:Screenshots/Screenshots.xctestplan"
+            reference = "container:GemTests/screenshots.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>
@@ -77,6 +77,16 @@
          <EnvironmentVariable
             key = "SKIP_ANIMATIONS"
             value = "YES"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "SCREENSHOTS_SECRET_PHRASE"
+            value = "$(SCREENSHOTS_SECRET_PHRASE)"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "SCREENSHOTS_PATH"
+            value = "${SCREENSHOTS_PATH}"
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
