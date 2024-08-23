@@ -29,6 +29,7 @@ extension Locale {
         return languageCode.identifier
     }
 
+    // https://github.com/fastlane/fastlane/blob/e1ab951b63aeb7a669b415708ffbe0e1346c0f59/fastlane_core/lib/fastlane_core/languages.rb#L14
     public func appstoreLanguageIdentifier() -> String {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
@@ -46,6 +47,7 @@ extension Locale {
         case .vietnamese: "vi"
         case .italian: "it"
         case .portuguese: "pt-BR"
+        case .chinese: usageLanguageIdentifier()
         default: fatalError()
         }
     }

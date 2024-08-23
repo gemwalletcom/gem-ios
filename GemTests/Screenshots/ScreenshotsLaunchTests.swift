@@ -39,6 +39,12 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         snapshoter.snap("2_Private")
 
+        collectionViewsQuery.buttons.element(matching: .button, identifier: "buy").tap()
+
+        snapshoter.snap("8_Buy")
+
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+
         collectionViewsQuery.buttons.element(matching: .button, identifier: "price").tap()
 
         snapshoter.snap("4_Market")
@@ -47,7 +53,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "stake").tap()
         
-        sleep(10)
+        sleep(12)
 
         snapshoter.snap("7_Earn")
 
