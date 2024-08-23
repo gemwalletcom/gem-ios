@@ -84,7 +84,7 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
             return .balance(
                 balance: TextValue(
                     text: assetDataModel.totalBalanceTextWithSymbol,
-                    style: TextStyle(font: .footnote, color: assetDataModel.balanceTextColor, fontWeight: .semibold)
+                    style: TextStyle(font: .callout, color: assetDataModel.balanceTextColor, fontWeight: .semibold)
                 ),
                 totalFiat: TextValue(
                     text: assetDataModel.fiatBalanceText,
