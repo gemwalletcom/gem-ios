@@ -77,8 +77,7 @@ extension WalletHeaderViewModel: HeaderViewModel {
         let values: [(type: HeaderButtonType, isShown: Bool)] = [
             (.send, true),
             (.receive, true),
-            (.buy, Preferences.standard.isPushNotificationsEnabled),
-            (.swap, Preferences.standard.isPushNotificationsEnabled),
+            (.buy, true),
         ]
         return values.compactMap {
             if $0.isShown {

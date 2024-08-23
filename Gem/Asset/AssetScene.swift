@@ -107,6 +107,7 @@ struct AssetScene: View {
                             with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
                             action: onToggleStacking
                         )
+                        .accessibilityIdentifier("stake")
                     }
 
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
@@ -121,6 +122,7 @@ struct AssetScene: View {
                     with: ListItemView(title: Localized.Transfer.Stake.title, subtitle: model.stakeAprText),
                     action: onToggleStacking
                 )
+                .accessibilityIdentifier("stake")
             }
 
             if transactions.count > 0 {

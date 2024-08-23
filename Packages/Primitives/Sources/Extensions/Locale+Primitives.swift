@@ -28,4 +28,25 @@ extension Locale {
         }
         return languageCode.identifier
     }
+
+    public func appstoreLanguageIdentifier() -> String {
+        guard let languageCode = language.languageCode else {
+            return Locale.US.language.minimalIdentifier
+        }
+        return switch languageCode {
+        case .english: "en-US"
+        case .german: "de-DE"
+        case .spanish: "es-ES"
+        case .french: "fr-FR"
+        case .japanese: "ja"
+        case .korean: "ko"
+        case .russian: "ru"
+        case .turkish: "tr"
+        case .ukrainian: "uk"
+        case .vietnamese: "vi"
+        case .italian: "it"
+        case .portuguese: "pt-BR"
+        default: fatalError()
+        }
+    }
 }
