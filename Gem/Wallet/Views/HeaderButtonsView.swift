@@ -20,6 +20,7 @@ struct HeaderButtonsView: View {
                 RoundButton(title: button.title, image: button.image) {
                     action?(button.type)
                 }
+                .accessibilityIdentifier(button.id)
                 .frame(maxWidth: maxWidth, alignment: .center)
             }
         }

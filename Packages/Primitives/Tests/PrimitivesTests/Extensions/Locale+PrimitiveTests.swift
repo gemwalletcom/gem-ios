@@ -21,6 +21,8 @@ final class Locale_PrimitivesTests: XCTestCase {
         XCTAssertEqual(Locale.US.appstoreLanguageIdentifier(), "en-US")
         XCTAssertEqual(Locale.UK.appstoreLanguageIdentifier(), "en-US")
         XCTAssertEqual(Locale.FR.appstoreLanguageIdentifier(), "fr-FR")
-        XCTAssertEqual(Locale.IT.appstoreLanguageIdentifier(), "it-IT")
+        XCTAssertEqual(Locale.IT.appstoreLanguageIdentifier(), "it")
+        XCTAssertEqual(Locale.ZH_Simplifier.appstoreLanguageIdentifier(), "zh-Hans")
+        XCTAssertEqual(Locale.ZH_Traditional.appstoreLanguageIdentifier(), "zh-Hant")
     }
 }
