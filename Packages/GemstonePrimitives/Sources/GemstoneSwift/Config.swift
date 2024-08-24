@@ -56,7 +56,7 @@ public struct WalletConnectConfig {
 }
 
 public struct SolanaConfig {
-    public static func programId(owner: String) -> Optional<SolanaTokenProgramId> {
+    public static func tokenProgramId(owner: String) -> Optional<SolanaTokenProgramId> {
         guard
             let rawId = Config.shared.getSolanaTokenProgramId(address: owner),
             let id = SolanaTokenProgramId(rawValue: rawId)

@@ -413,7 +413,7 @@ extension SolanaService: ChainTokenable {
                 .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
                 .result.value.owner
 
-            guard let id = SolanaConfig.programId(owner: owner) else {
+            guard let id = SolanaConfig.tokenProgramId(owner: owner) else {
                 throw AnyError("Unknow token program id")
             }
             return id
