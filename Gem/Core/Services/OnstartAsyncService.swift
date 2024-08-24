@@ -16,7 +16,8 @@ class OnstartAsyncService {
     let service: ImportAssetsService
     let subscriptionService: SubscriptionService
     let deviceService: DeviceService
-    
+    let bannerSetupService: BannerSetupService
+
     var updateVersionAction: StringAction = .none
     
     init(
@@ -27,6 +28,7 @@ class OnstartAsyncService {
         assetsService: AssetsService,
         deviceService: DeviceService,
         subscriptionService: SubscriptionService,
+        bannerSetupService: BannerSetupService,
         updateVersionAction: StringAction = .none
     ) {
         self.assetStore = assetStore
@@ -41,14 +43,30 @@ class OnstartAsyncService {
         )
         self.subscriptionService = subscriptionService
         self.deviceService = deviceService
+        self.bannerSetupService = bannerSetupService
         self.updateVersionAction = updateVersionAction
     }
-    
+
+    func setup() {
+        Task {
+            await migrations()
+        }
+        Task {
+            try bannerSetupService.setup()
+        }
+    }
+
+    func setup(wallet: Wallet) {
+        Task {
+            try bannerSetupService.setupWallet(wallet: wallet)
+        }
+    }
+
     func migrations() async {
         do {
             // import nodes
             try AddNodeService(nodeStore: nodeStore).addNodes()
-            
+
             let config = try await configService.getConfig()
             let versions = config.versions
             if versions.fiatAssets > preferences.fiatAssetsVersion {

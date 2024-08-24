@@ -5,6 +5,7 @@ import Primitives
 import Store
 import Blockchain
 import Gemstone
+import Combine
 
 class TransactionService {
     
@@ -13,6 +14,9 @@ class TransactionService {
     let balanceUpdater: BalancerUpdater
     let stakeService: StakeService
     
+    private var cancellables = Set<AnyCancellable>()
+    private let timer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
+
     init(
         transactionStore: TransactionStore,
         stakeService: StakeService,
@@ -23,8 +27,20 @@ class TransactionService {
         self.stakeService = stakeService
         self.chainServiceFactory = chainServiceFactory
         self.balanceUpdater = balanceUpdater
+        
+        timer.sink { _ in self.runPendingTransactions() }.store(in: &cancellables)
     }
-    
+
+    func setup() {
+        runPendingTransactions()
+    }
+
+    func runPendingTransactions() {
+        Task {
+            try await updatePendingTransactions()
+        }
+    }
+
     func addTransaction(walletId: String, transaction: Transaction) throws {
         try transactionStore.addTransactions(walletId: walletId, transactions: [transaction])
     }

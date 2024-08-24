@@ -3,6 +3,9 @@
 import SwiftUI
 import Primitives
 import Keystore
+import GRDB
+import GRDBQuery
+import Store
 
 struct MainTabView: View {
 
@@ -17,6 +20,9 @@ struct MainTabView: View {
     // inject a protocol, by now swift can't process it
     @Binding var navigationStateManager: NavigationStateManagable
 
+    @Query<TransactionsCountRequest>
+    private var transactions: Int
+
     private var tabViewSelection: Binding<TabItem> {
         return Binding(
             get: {
@@ -26,6 +32,15 @@ struct MainTabView: View {
                 onSelect(tab: $0)
             }
         )
+    }
+
+    init(
+        model: MainTabViewModel,
+        navigationStateManager: Binding<NavigationStateManagable>
+    ) {
+        self.model = model
+        _transactions = Query(constant: model.transactionsCountRequest, in: \.db.dbQueue)
+        _navigationStateManager = navigationStateManager
     }
 
     var body: some View {
@@ -50,6 +65,7 @@ struct MainTabView: View {
             .tabItem {
                 tabItem(Localized.Activity.title, Image(.tabActivity) )
             }
+            .badge(transactions)
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
@@ -73,10 +89,7 @@ struct MainTabView: View {
 
 extension MainTabView {
     @ViewBuilder
-    private func tabItem(
-        _ title: String,
-        _ image: Image
-    ) -> Label<Text, Image> {
+    private func tabItem(_ title: String, _ image: Image) -> Label<Text, Image> {
         Label(
             title: { Text(title) },
             icon: { image }

@@ -26,7 +26,13 @@ class ConnectionsService {
         )
     }
     
-    func setup() async {
+    func setup() {
+        Task {
+            await configure()
+        }
+    }
+
+    private func configure() async {
         connector.configure()
         connector.setup()
         

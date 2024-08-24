@@ -70,6 +70,28 @@ internal enum Localized {
     /// No assets found
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
   }
+  internal enum Banner {
+    internal enum AccountActivation {
+      /// The %@ network requires a one time fee of %@.
+      internal static func description(_ p1: Any, _ p2: Any) -> String {
+        return Localized.tr("Localizable", "banner.account_activation.description", String(describing: p1), String(describing: p2), fallback: "The %@ network requires a one time fee of %@.")
+      }
+      /// %@ Account Activation Fee
+      internal static func title(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "banner.account_activation.title", String(describing: p1), fallback: "%@ Account Activation Fee")
+      }
+    }
+    internal enum Staking {
+      /// Earn %@ rewards on your stake while you sleep.
+      internal static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "banner.staking.description", String(describing: p1), fallback: "Earn %@ rewards on your stake while you sleep.")
+      }
+      /// Start staking %@
+      internal static func title(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "banner.staking.title", String(describing: p1), fallback: "Start staking %@")
+      }
+    }
+  }
   internal enum Buy {
     /// Please enter amount to buy
     internal static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")

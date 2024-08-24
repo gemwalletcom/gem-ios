@@ -15,6 +15,7 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
     public var state: BannerState
 
     static let asset = belongsTo(AssetRecord.self).forKey("asset")
+    static let wallet = belongsTo(WalletRecord.self).forKey("wallet")
 }
 
 extension BannerRecord: CreateTable {

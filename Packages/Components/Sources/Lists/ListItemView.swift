@@ -195,8 +195,6 @@ extension ListItemView {
                 if let extra = titleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
                         .padding(.trailing, Spacing.medium)
 
                 }

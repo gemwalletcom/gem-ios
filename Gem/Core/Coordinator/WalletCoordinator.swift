@@ -39,6 +39,7 @@ struct WalletCoordinator: View {
     let nodeService: NodeService
     let subscriptionService: SubscriptionService
     let deviceService: DeviceService
+    let bannerSetupService: BannerSetupService
     let transactionsService: TransactionsService
     let connectionsService: ConnectionsService
     let bannerService: BannerService
@@ -47,8 +48,7 @@ struct WalletCoordinator: View {
     
     let preferences = Preferences()
     let onstartService: OnstartAsyncService
-    
-    let transactionsTimer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
+
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @State private var updateAvailableAlertSheetMessage: String? = .none
@@ -127,6 +127,7 @@ struct WalletCoordinator: View {
         )
         self.subscriptionService = SubscriptionService(walletStore: walletStore)
         self.deviceService = DeviceService(subscriptionsService: subscriptionService, walletStore: walletStore)
+        self.bannerSetupService = BannerSetupService(store: bannerStore)
         self.onstartService = OnstartAsyncService(
             assetStore: assetStore,
             keystore: _keystore.wrappedValue,
@@ -134,11 +135,10 @@ struct WalletCoordinator: View {
             preferences: preferences,
                 assetsService: assetsService,
             deviceService: deviceService,
-            subscriptionService: subscriptionService
+            subscriptionService: subscriptionService,
+            bannerSetupService: bannerSetupService
         )
         self.deviceService.observer()
-
-        bannerService.setup()
 
         _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
@@ -280,16 +280,19 @@ struct WalletCoordinator: View {
             onstartService.updateVersionAction = {
                 updateAvailableAlertSheetMessage = $0
             }
-            runMigrations()
-            runPendingTransactions()
-            Task {
-                await connectionsService.setup()
+            onstartService.setup()
+            transactionService.setup()
+            connectionsService.setup()
+
+            if let wallet = keystore.currentWallet {
+                onstartService.setup(wallet: wallet)
             }
-            
             self.walletConnectorSigner.walletConnectorInteractor = self
         }
-        .onReceive(transactionsTimer) { time in
-            runPendingTransactions()
+        .onChange(of: keystore.currentWallet) { _, newValue in
+            if let newValue {
+                onstartService.setup(wallet: newValue)
+            }
         }
         .onReceive(pricesTimer) { time in
             runUpdatePrices()
@@ -297,19 +300,6 @@ struct WalletCoordinator: View {
         .modifier(
             ToastModifier(isPresenting: $isPresentingWalletConnectBar, value: "\(Localized.WalletConnect.brandName)...", systemImage: SystemImage.network)
         )
-    }
-    
-    func runMigrations() {
-        Task {
-            await onstartService.migrations()
-        }
-    }
-    
-    func runPendingTransactions() {
-        //NSLog("pending transactions: run")
-        Task {
-            try await walletService.updatePendingTransactions()
-        }
     }
     
     func runUpdatePrices() {

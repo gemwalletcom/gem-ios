@@ -91,7 +91,7 @@
 "transaction.status" = "Статус";
 "transaction.status.confirmed" = "Успешный";
 "transaction.status.pending" = "В ожидании";
-"transaction.status.failed" = "Неуспешный";
+"transaction.status.failed" = "Ошибка";
 "transaction.status.reverted" = "Отменено";
 "settings.security" = "Безопасность";
 "settings.enable_value" = "Включить %@";
@@ -247,3 +247,7 @@
 "transaction.title.received" = "Получено";
 "transaction.title.sent" = "Отправлено";
 "stake.stake" = "Стейкнути";
+"banner.account_activation.title" = "%@ Плата за активацию аккаунта";
+"banner.account_activation.description" = "Сеть %@ требует единовременную плату в размере %@.";
+"banner.staking.title" = "Начинайте стейкинг %@";
+"banner.staking.description" = "Зарабатывайте %@ наград за свою стейк, пока спите.";

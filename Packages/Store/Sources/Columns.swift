@@ -102,6 +102,7 @@ struct Columns {
     struct Banner {
         static let id = Column("id")
         static let state = Column("state")
+        static let event = Column("event")
         static let assetId = Column("assetId")
         static let walletId = Column("walletId")
     }

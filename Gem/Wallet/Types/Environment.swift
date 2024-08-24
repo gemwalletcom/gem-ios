@@ -39,6 +39,11 @@ struct BannerServiceKey: EnvironmentKey {
     static var defaultValue: BannerService { BannerService(store: .main) }
 }
 
+struct BannerSetupServiceKey: EnvironmentKey {
+    static var defaultValue: BannerSetupService { BannerSetupService(store: .main) }
+}
+
+
 struct TransactionsServiceKey: EnvironmentKey {
     static var defaultValue: TransactionsService { TransactionsService.main }
 }
@@ -97,6 +102,11 @@ extension EnvironmentValues {
     var bannerService: BannerService {
         get { self[BannerServiceKey.self] }
         set { self[BannerServiceKey.self] = newValue }
+    }
+
+    var bannerSetupService: BannerSetupService {
+        get { self[BannerSetupServiceKey.self] }
+        set { self[BannerSetupServiceKey.self] = newValue }
     }
 
     var transactionsService: TransactionsService {

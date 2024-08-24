@@ -110,7 +110,7 @@
 "charts.day" = "1D";
 "charts.hour" = "1H";
 "charts.week" = "1W";
-"charts.month" = "1 milyon";
+"charts.month" = "1M";
 "charts.year" = "1Y";
 "charts.all" = "Tüm";
 "asset.price" = "Fiyat";
@@ -244,6 +244,10 @@
 "errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
 "errors.invalid_asset_address" = "Invalid %@ address";
 "buy.empty_amount" = "Please enter amount to buy";
-"transaction.title.received" = "Received";
-"transaction.title.sent" = "Sent";
+"transaction.title.received" = "Kabul edilmiş";
+"transaction.title.sent" = "Gönderilmiş";
 "stake.stake" = "Stake";
+"banner.account_activation.title" = "%@ Account Activation Fee";
+"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.staking.title" = "Start staking %@";
+"banner.staking.description" = "Earn %@ rewards on your stake while you sleep.";

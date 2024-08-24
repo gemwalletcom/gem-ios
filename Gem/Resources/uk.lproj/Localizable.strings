@@ -142,7 +142,7 @@
 "stake.rewards" = "Нагороди";
 "assets.no_assets_found" = "Активи не знайдено";
 "transfer.stake.title" = "Стейкінг";
-"transfer.claim_rewards.title" = "Отримати Винагороду";
+"transfer.claim_rewards.title" = "Отримати винагороду";
 "transfer.unstake.title" = "Скасувати Стейкінг";
 "buy.no_results" = "Немає доступних місць";
 "stake.validator" = "Валідатор";
@@ -247,3 +247,7 @@
 "transaction.title.received" = "Отримано";
 "transaction.title.sent" = "Надіслано";
 "stake.stake" = "Стейкнути";
+"banner.account_activation.title" = "%@ Плата за активацію рахунку";
+"banner.account_activation.description" = "Мережа %@ вимагає одноразової оплати в розмірі %@.";
+"banner.staking.title" = "Почніть стейкінг %@";
+"banner.staking.description" = "Заробляйте %@ винагороди на свїй стейк, поки ви спите.";

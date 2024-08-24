@@ -108,9 +108,9 @@
 "settings.notifications.title" = "通知";
 "wallet.watch.tooltip.title" = "正在監視此錢包。";
 "charts.day" = "1天";
-"charts.hour" = "1小時";
+"charts.hour" = "1 時";
 "charts.week" = "1週";
-"charts.month" = "1M";
+"charts.month" = "1月";
 "charts.year" = "1年";
 "charts.all" = "全部";
 "asset.price" = "價格";
@@ -244,6 +244,10 @@
 "errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
 "errors.invalid_asset_address" = "Invalid %@ address";
 "buy.empty_amount" = "Please enter amount to buy";
-"transaction.title.received" = "Received";
-"transaction.title.sent" = "Sent";
+"transaction.title.received" = "已收到";
+"transaction.title.sent" = "傳送";
 "stake.stake" = "Stake";
+"banner.account_activation.title" = "%@ Account Activation Fee";
+"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.staking.title" = "Start staking %@";
+"banner.staking.description" = "Earn %@ rewards on your stake while you sleep.";

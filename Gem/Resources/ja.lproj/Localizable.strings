@@ -110,7 +110,7 @@
 "charts.day" = "1D";
 "charts.hour" = "1H";
 "charts.week" = "1W";
-"charts.month" = "100万";
+"charts.month" = "1月";
 "charts.year" = "1年";
 "charts.all" = "全て";
 "asset.price" = "価格";
@@ -244,6 +244,10 @@
 "errors.unable_estimate_network_fee" = "We are currently unable to calculate the network fee.";
 "errors.invalid_asset_address" = "Invalid %@ address";
 "buy.empty_amount" = "Please enter amount to buy";
-"transaction.title.received" = "Received";
-"transaction.title.sent" = "Sent";
+"transaction.title.received" = "受け取った";
+"transaction.title.sent" = "送信済み";
 "stake.stake" = "Stake";
+"banner.account_activation.title" = "%@ Account Activation Fee";
+"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.staking.title" = "Start staking %@";
+"banner.staking.description" = "Earn %@ rewards on your stake while you sleep.";

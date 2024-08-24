@@ -247,3 +247,7 @@
 "transaction.title.received" = "Received";
 "transaction.title.sent" = "Sent";
 "stake.stake" = "Stake";
+"banner.account_activation.title" = "%@ Account Activation Fee";
+"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.staking.title" = "Start staking %@";
+"banner.staking.description" = "Earn %@ rewards on your stake while you sleep.";

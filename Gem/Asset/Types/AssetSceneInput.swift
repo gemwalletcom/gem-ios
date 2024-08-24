@@ -20,6 +20,10 @@ struct AssetSceneInput {
     }
 
     var bannersRequest: BannersRequest {
-        return BannersRequest(assetId: assetId.identifier)
+        return BannersRequest(
+            walletId: walletId.id,
+            assetId: assetId.identifier,
+            events: BannerEvent.allCases
+        )
     }
 }

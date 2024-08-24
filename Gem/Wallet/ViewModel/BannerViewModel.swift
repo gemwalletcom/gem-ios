@@ -9,18 +9,23 @@ struct BannerViewModel {
 
     let banner: Banner
 
-    var image: Image {
-        //TODO: Fix images
+    var image: Image? {
         switch banner.event {
-        case .stake: Image(.aptos)
-        case .accountActivation: Image(.aptos)
+        case .stake, .accountActivation:
+            guard let asset = banner.asset else {
+                return .none
+            }
+            return Image(uiImage: UIImage(imageLiteralResourceName: asset.chain.rawValue))
         }
     }
 
     var title: String? {
-        switch banner.event {
-        case .stake: "Start Staking"
-        case .accountActivation: "Test"
+        guard let asset = banner.asset else {
+            return .none
+        }
+        return switch banner.event {
+        case .stake: Localized.Banner.Staking.title(asset.name)
+        case .accountActivation: Localized.Banner.AccountActivation.title(asset.name)
         }
     }
 
@@ -28,20 +33,24 @@ struct BannerViewModel {
         guard let asset = banner.asset else {
             return .none
         }
-        //TODO: Add string to localize
         switch banner.event {
         case .stake:
-            return String(format: "Start earning on your %@", asset.name)
+            return Localized.Banner.Staking.description(asset.symbol)
         case .accountActivation:
             guard let fee = asset.chain.accountActivationFee else {
                 return .none
             }
-            let amount = ValueFormatter(style: .full).string(fee.asInt.asBigInt, decimals: asset.decimals.asInt)
-            return String(format: "The %@ network requires a one time fee of %@ %@", asset.name, amount, asset.symbol)
+            let amount = ValueFormatter(style: .full)
+                .string(fee.asInt.asBigInt, decimals: asset.decimals.asInt, currency: asset.symbol)
+            return Localized.Banner.AccountActivation.description(asset.name, amount)
         }
     }
 
     var canClose: Bool {
         banner.state != .alwaysActive
     }
+}
+
+extension BannerViewModel: Identifiable {
+    var id: String { banner.id }
 }

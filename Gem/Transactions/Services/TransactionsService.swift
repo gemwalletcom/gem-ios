@@ -5,6 +5,7 @@ import GemAPI
 import Primitives
 import Store
 import Keystore
+import Combine
 
 class TransactionsService {
 
@@ -24,7 +25,7 @@ class TransactionsService {
         self.assetsService = assetsService
         self.keystore = keystore
     }
-    
+
     func updateAll(deviceId: String, walletId: WalletId) async throws {
         let wallet = try keystore.getWallet(walletId)
         let store = WalletPreferencesStore(walletId: wallet.id)

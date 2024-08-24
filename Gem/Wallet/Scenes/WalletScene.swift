@@ -27,9 +27,6 @@ struct WalletScene: View {
     @Query<AssetsRequest>
     private var assets: [AssetData]
 
-    @Query<TransactionsRequest>
-    private var transactions: [Primitives.TransactionExtended]
-
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
 
@@ -50,7 +47,6 @@ struct WalletScene: View {
 
         _assets = Query(constant: model.assetsRequest, in: \.db.dbQueue)
         _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
-        _transactions = Query(constant: model.recentTransactionsRequest, in: \.db.dbQueue)
         _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
         _banners = Query(constant: model.bannersRequest, in: \.db.dbQueue)
     }

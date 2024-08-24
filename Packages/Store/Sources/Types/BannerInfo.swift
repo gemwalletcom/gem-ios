@@ -7,12 +7,13 @@ import Primitives
 public struct BannerInfo: Codable, FetchableRecord {
     public let banner: BannerRecord
     public let asset: AssetRecord?
+    public let wallet: WalletRecord?
 }
 
 extension BannerInfo {
     func mapToBanner() -> Banner {
         Banner(
-            wallet: .none, //FIXME
+            wallet: wallet?.mapToWallet(),
             asset: asset?.mapToAsset(),
             event: banner.event,
             state: banner.state
