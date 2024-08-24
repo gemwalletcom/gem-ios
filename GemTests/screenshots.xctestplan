@@ -87,6 +87,30 @@
         "language" : "pt-BR",
         "region" : "BR"
       }
+    },
+    {
+      "id" : "8524A5B9-2F09-461E-8A21-DA5D3778DE45",
+      "name" : "Chinese Simplified | zh-Hans",
+      "options" : {
+        "language" : "zh-Hans",
+        "region" : "CN"
+      }
+    },
+    {
+      "id" : "C05DAAD5-1E53-42F2-88E7-744B1B36825C",
+      "name" : "Chinese Traditional | zh-Hant",
+      "options" : {
+        "language" : "zh-Hant",
+        "region" : "CN"
+      }
+    },
+    {
+      "id" : "D70F8E48-04C4-41E9-B8BB-2B0D0110F380",
+      "name" : "Italy | it",
+      "options" : {
+        "language" : "it",
+        "region" : "IT"
+      }
     }
   ],
   "defaultOptions" : {
@@ -104,7 +128,8 @@
       "containerPath" : "container:Gem.xcodeproj",
       "identifier" : "D8A1F8722B17F21E00B15F54",
       "name" : "Screenshots"
-    }
+    },
+    "testTimeoutsEnabled" : true
   },
   "testTargets" : [
     {

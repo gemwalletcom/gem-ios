@@ -33,21 +33,23 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         sleep(4)
 
-        snapshoter.snap("1_Secure")
+        snapshoter.snap("0_secure")
 
         collectionViewsQuery.staticTexts["Solana"].tap()
 
-        snapshoter.snap("2_Private")
+        snapshoter.snap("1_private")
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "buy").tap()
 
-        snapshoter.snap("8_Buy")
+        sleep(2)
+
+        snapshoter.snap("7_buy")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "price").tap()
 
-        snapshoter.snap("4_Market")
+        snapshoter.snap("3_market")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
@@ -55,14 +57,14 @@ final class ScreenshotsLaunchTests: XCTestCase {
         
         sleep(12)
 
-        snapshoter.snap("7_Earn")
+        snapshoter.snap("6_earn")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "manage").tap()
 
-        snapshoter.snap("3_Powerful")
+        snapshoter.snap("2_powerful")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
@@ -70,11 +72,11 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         app.tabBars.buttons.element(boundBy: 1).tap()
 
-        snapshoter.snap("5_Transactions")
+        snapshoter.snap("4_transactions")
 
         app.tabBars.buttons.element(boundBy: 2).tap()
 
-        snapshoter.snap("6_Settings")
+        snapshoter.snap("5_settings")
     }
 }
 
@@ -89,9 +91,9 @@ struct Snapshoter {
         let screenshotData = app.windows.firstMatch.screenshot().pngRepresentation
 
         let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"]!
-        let model = ProcessInfo.processInfo.environment["SIMULATOR_MODEL_IDENTIFIER"]!
         let directoryPath = "\(path)/\(Locale.current.appstoreLanguageIdentifier())"
-        let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(model)-\(name).png")
+        
+        let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(UIDevice.current.model.lowercased())_\(name).png")
 
         // Create the directory if it doesn't exist
         let fileManager = FileManager.default
