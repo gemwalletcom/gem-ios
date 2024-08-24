@@ -99,15 +99,7 @@ struct StakeService {
         }
         let updateDelegations = delegations.filter { validatorsIds.contains($0.validatorId) }
         
-        // Making sure validator already exist
-        try store.updateDelegations(
-            walletId: walletId,
-            delegations: updateDelegations
-        )
-        
-        if !deleteDelegationsIds.isEmpty {
-            try store.deleteDelegations(walletId: walletId, ids: deleteDelegationsIds)
-        }
+        try store.updateAndDelete(walletId: walletId, delegations: updateDelegations, deleteIds: deleteDelegationsIds)
     }
     
     private func getDelegations(chain: Chain, address: String) async throws -> [DelegationBase] {

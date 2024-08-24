@@ -28,7 +28,7 @@ struct ChartValues {
     var firstValue: Double {
         return charts.first?.value ?? 0
     }
-    
+
     static func from(charts: [ChartDateValue]) throws -> ChartValues {
         let values = charts.map { $0.value }
         let dates = charts.map { $0.date }
@@ -46,5 +46,9 @@ struct ChartValues {
             lowerBoundDate: dates[lowerBoundDateIndex],
             upperBoundDate: dates[upperBoundDateIndex]
         )
+    }
+
+    func priceChange(base: Double, price: Double) -> (price: Double, priceChange: Double) {
+        return (price, (price - base) / base * 100)
     }
 }

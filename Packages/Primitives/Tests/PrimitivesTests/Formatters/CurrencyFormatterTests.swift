@@ -1,5 +1,7 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import XCTest
-import Primitives
+@testable import Primitives
 
 final class CurrencyFormatterTests: XCTestCase {
     
@@ -71,16 +73,4 @@ final class CurrencyFormatterTests: XCTestCase {
         XCTAssertEqual(cryptoFormatter.string(decimal: Decimal(11)), "11.00")
         XCTAssertEqual(cryptoFormatter.string(decimal: Decimal(12000123)), "12,000,123.00")
     }
-}
-
-
-extension Locale {
-    static let US = Locale(identifier: "en_US")
-    static let UK = Locale(identifier: "en_UK")
-    static let UA = Locale(identifier: "ru_UA")
-    static let IT = Locale(identifier: "it_IT")
-    static let BR = Locale(identifier: "pt-BR")
-    static let FR = Locale(identifier: "fr-CA")
-    static let EN_CH = Locale(identifier: "en_CH")
-    static let DE_CH = Locale(identifier: "de_CH")
 }

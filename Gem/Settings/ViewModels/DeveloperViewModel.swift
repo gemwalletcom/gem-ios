@@ -8,7 +8,8 @@ struct DeveloperViewModel {
     let transactionsService: TransactionsService
     let assetService: AssetsService
     let stakeService: StakeService
-    
+    let bannerService: BannerService
+
     var title: String {
         return Localized.Settings.developer
     }
@@ -77,6 +78,11 @@ struct DeveloperViewModel {
         } catch { }
     }
     
+
+    func clearBanners() {
+        let _ = try? bannerService.store.clear()
+    }
+
     // preferences
     
     func clearAssetsVersion() {

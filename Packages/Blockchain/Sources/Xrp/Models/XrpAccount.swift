@@ -73,3 +73,11 @@ public struct XRPTransactionStatus: Codable {
 		self.status = status
 	}
 }
+
+public struct XRPLatestBlock: Codable {
+	public let ledger_current_index: Int
+
+	public init(ledger_current_index: Int) {
+		self.ledger_current_index = ledger_current_index
+	}
+}

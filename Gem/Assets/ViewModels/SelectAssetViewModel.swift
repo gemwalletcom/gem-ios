@@ -47,7 +47,7 @@ class SelectAssetViewModel: ObservableObject {
         switch wallet.type {
         case .multicoin:
             return []
-        case .view, .single:
+        case .view, .single, .privateKey:
             guard let chain = wallet.accounts.first?.chain else {
                 return []
             }
@@ -83,11 +83,11 @@ class SelectAssetViewModel: ObservableObject {
     }
     
     var assetsInfoRequest: AssetsInfoRequest {
-        return AssetsInfoRequest(walletId: wallet.id)
+        return AssetsInfoRequest(walletId: wallet.walletId.id)
     }
     
     func enableAsset(assetId: AssetId, enabled: Bool) {
-        walletService.enableAssetId(wallet: wallet, assets: [assetId], enabled: enabled)
+        walletService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
     }
     
     func searchQuery(query: String) async {
@@ -102,7 +102,7 @@ class SelectAssetViewModel: ObservableObject {
     
     private func chains(for type: WalletType) -> [Chain] {
         switch wallet.type {
-        case .single, .view: [wallet.accounts.first?.chain].compactMap { $0 }
+        case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
         case .multicoin: []
         }
     }
@@ -131,7 +131,7 @@ class SelectAssetViewModel: ObservableObject {
                 searchAssetsTask = task
                 let assets = try await task.value
                 try assetsService.addAssets(assets: assets)
-                try assetsService.addBalancesIfMissing(walletId: wallet.id, assetIds: assets.map { $0.asset.id })
+                try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
                 
                 NSLog("searchAssets assets count: \(assets.count)")
                 

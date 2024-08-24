@@ -10,6 +10,8 @@ struct ChartValuesViewModel {
     let values: ChartValues
     let formatter = CurrencyFormatter.currency()
     
+    static let defaultPeriod = ChartPeriod.day
+
     init(
         period: ChartPeriod,
         price: Price?,
@@ -34,16 +36,18 @@ struct ChartValuesViewModel {
     
     var chartPriceModel: ChartPriceModel? {
         if let price {
-            return ChartPriceModel(period: period, date: .none, price: price.price, priceChange: price.priceChangePercentage24h)
+            if period == Self.defaultPeriod {
+                return ChartPriceModel(
+                    period: period,
+                    date: .none,
+                    price: price.price,
+                    priceChange: price.priceChangePercentage24h
+                )
+            } else {
+                let change = values.priceChange(base: values.firstValue, price: price.price)
+                return ChartPriceModel(period: period, date: .none, price: change.price, priceChange: change.priceChange)
+            }
         }
         return .none
-    }
-    
-    var currentPrice: Double {
-        return price?.price ?? 0
-    }
-    
-    var currentPriceChangeText: String? {
-        return price?.priceChangePercentage24h.description
     }
 }

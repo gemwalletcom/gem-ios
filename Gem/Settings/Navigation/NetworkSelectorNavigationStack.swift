@@ -7,9 +7,9 @@ import Components
 import Style
 
 struct NetworkSelectorNavigationStack: View {
-    let model: NetworkSelectorViewModel
+    @Environment (\.dismiss) var dismiss
 
-    @Binding var isPresenting: Bool
+    let model: NetworkSelectorViewModel
 
     var onSelectChain: (Chain) -> Void
 
@@ -48,11 +48,11 @@ struct NetworkSelectorNavigationStack: View {
 extension NetworkSelectorNavigationStack {
     private func onSelect(chain: Chain) {
         onSelectChain(chain)
-        $isPresenting.wrappedValue = false
+        dismiss()
     }
 
     private func onCancel() {
-        $isPresenting.wrappedValue = false
+        dismiss()
     }
 }
 
@@ -63,7 +63,7 @@ extension NetworkSelectorNavigationStack {
     @State var selectedChain: Chain = .smartChain
     @State var isPresenting: Bool = false
 
-    return NetworkSelectorNavigationStack(model: .init(chains: mockChains, selectedChain: .ethereum), isPresenting: $isPresenting) { _ in
+    return NetworkSelectorNavigationStack(model: .init(chains: mockChains, selectedChain: .ethereum)) { _ in
         
     }
 }

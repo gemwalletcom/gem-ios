@@ -7,6 +7,7 @@ import Store
 import BigInt
 import WalletConnector
 import GemstonePrimitives
+import Blockchain
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -48,6 +49,10 @@ extension LocalKeystore {
 
 extension WalletStore {
     static let main = WalletStore(db: .main)
+}
+
+extension BannerStore {
+    static let main = BannerStore(db: .main)
 }
 
 extension AssetsService {
@@ -106,6 +111,7 @@ extension NameService {
 
 extension WalletService {
     static let main = WalletService(
+        keystore: LocalKeystore.main,
         priceStore: .main,
         assetsService: .main,
         balanceService: .main,
@@ -119,7 +125,7 @@ extension WalletService {
 }
 
 extension TransactionsService {
-    static let main = TransactionsService(transactionStore: .main, assetsService: .main)
+    static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
 }
 
 extension AssetStore {
@@ -179,6 +185,10 @@ extension Wallet {
     static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main])
 }
 
+extension WalletId {
+    static let main = Wallet.main.walletId
+}
+
 extension Account {
     static let main = Account(chain: .bitcoin, address: "btc123123", derivationPath: "", extendedPublicKey: "")
 }
@@ -207,15 +217,6 @@ extension Transaction {
     )
 }
 
-extension AssetListView {
-    static func make(assetData: AssetData, formatter: ValueFormatter) -> AssetListView {
-        return AssetListView(
-            model: AssetListViewModel(
-                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: formatter)
-            )
-        )
-    }
-}
 extension Recipient {
     static let main = Recipient(name: "", address: "", memo: .none)
 }
@@ -268,6 +269,8 @@ extension ValueFormatter {
     static let short = ValueFormatter(style: .short)
     static let medium = ValueFormatter(style: .medium)
     static let full = ValueFormatter(style: .full)
+    
+    static let full_US = ValueFormatter(locale: Locale.US, style: .full)
 }
 
 extension CurrencyFormatter {
@@ -286,4 +289,13 @@ extension ExplorerStorage {
 
 extension ExplorerService {
     static let main = ExplorerService(storage: ExplorerStorage.main)
+}
+
+extension BitcoinFeeCalculatorError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee
+        case .incorrectAmount: Localized.Errors.invalidAmount
+        }
+    }
 }

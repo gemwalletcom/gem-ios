@@ -11,6 +11,7 @@ public enum TonProvider: TargetType {
     case addressState(address: String)
     case tokenData(id: String)
     case runGetMethod(address: String, method: String, stack: [String])
+    case masterChainInfo
     case broadcast(data: String)
     
     public var baseUrl: URL {
@@ -26,6 +27,7 @@ public enum TonProvider: TargetType {
         case .addressState: "/api/v2/getAddressState"
         case .tokenData: "/api/v2/getTokenData"
         case .runGetMethod: "/api/v2/jsonRPC"
+        case .masterChainInfo: "/api/v2/getMasterchainInfo"
         case .broadcast: "/api/v2/sendBocReturnHash"
         }
     }
@@ -36,7 +38,8 @@ public enum TonProvider: TargetType {
             .walletInformation,
             .transaction,
             .tokenData,
-            .addressState:
+            .addressState,
+            .masterChainInfo:
             return .GET
         case .estimateFee,
             .runGetMethod,
@@ -45,7 +48,7 @@ public enum TonProvider: TargetType {
         }
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .balance(let address),
             .walletInformation(let address):
@@ -76,6 +79,8 @@ public enum TonProvider: TargetType {
                     "stack": stack,
                 ]), id: 1)
             )
+        case .masterChainInfo:
+            return .plain
         case .broadcast(let data):
             return .encodable(["boc": data])
         }

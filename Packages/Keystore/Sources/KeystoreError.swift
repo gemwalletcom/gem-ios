@@ -5,6 +5,9 @@ enum KeystoreError: LocalizedError {
     case unknownWalletIdInWalletCore
     case unknownWalletInWalletCoreList
     case unknownWalletInWalletCore
+    case invalidPrivateKey
+    case noWallet
+    case noWalletId
 
     var errorDescription: String? {
         switch self {
@@ -16,6 +19,12 @@ enum KeystoreError: LocalizedError {
             "Unknown wallet in Wallet core list"
         case .unknownWalletInWalletCore:
             "Unknown wallet in Wallet core"
+        case .invalidPrivateKey:
+            "Invalid private key"
+        case .noWallet:
+            "No wallet found"
+        case .noWalletId:
+            "No wallet id"
         }
     }
 }

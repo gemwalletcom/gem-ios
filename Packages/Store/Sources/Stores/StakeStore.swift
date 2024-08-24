@@ -28,7 +28,20 @@ public struct StakeStore {
             }
         }
     }
-    
+
+    public func updateAndDelete(walletId: String, delegations: [DelegationBase], deleteIds: [String]) throws {
+        try db.write { db in
+            for delegation in delegations {
+                try delegation.record(walletId: walletId).upsert(db)
+            }
+
+            try StakeDelegationRecord
+                .filter(Columns.StakeDelegation.walletId == walletId)
+                .filter(deleteIds.contains(Columns.StakeDelegation.id))
+                .deleteAll(db)
+        }
+    }
+
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try db.read { db in
             try StakeValidatorRecord

@@ -60,6 +60,12 @@ extension NearService {
             .result
         return BigInt(stringLiteral: result.gas_price)
     }
+
+    private func genesisConfig() async throws -> NearGenesisConfig {
+        return try await provider
+            .request(.genesisConfig)
+            .map(as: JSONRPCResponse<NearGenesisConfig>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -91,6 +97,8 @@ extension NearService: ChainFeeCalculateable {
         //let fee = gasPrice
         //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -108,7 +116,7 @@ extension NearService: ChainTransactionPreloadable {
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
+            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [], selectedFeeRate: nil)
         )
     }
 }
@@ -147,10 +155,8 @@ extension NearService: ChainTransactionStateFetchable {
 
 extension NearService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
-//        return try await provider
-//            .request(.health)
-//            .map(as: JSONRPCResponse<String>.self).result == "ok"
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -181,8 +187,8 @@ extension NearService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension NearService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        try await genesisConfig().chain_id
     }
 }
 
@@ -190,7 +196,7 @@ extension NearService: ChainIDFetchable {
 
 extension NearService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock().header.height.asBigInt
     }
 }
 

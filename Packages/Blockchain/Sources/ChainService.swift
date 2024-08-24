@@ -75,6 +75,11 @@ extension ChainService: ChainFeeCalculateable {
         return try await Self.service(chain: chain, with: url)
             .fee(input: input)
     }
+
+    public func feeRates() async throws -> [FeeRate] {
+        try await Self.service(chain: chain, with: url)
+            .feeRates()
+    }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -148,7 +153,7 @@ extension ChainService: ChainTokenable {
 // MARK: - ChainIDFetchable
 
 extension ChainService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         return try await Self.service(chain: chain, with: url)
             .getChainID()
     }
@@ -162,4 +167,3 @@ extension ChainService: ChainLatestBlockFetchable {
             .getLatestBlock()
     }
 }
-

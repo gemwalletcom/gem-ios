@@ -229,9 +229,13 @@ extension TronService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
+            gasLimit: 1,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -299,7 +303,8 @@ extension TronService: ChainTransactionStateFetchable {
 
 extension TronService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -318,8 +323,9 @@ extension TronService: ChainStakable {
 // MARK: - ChainIDFetchable
  
 extension TronService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        //TODO: Add getChainID check later
+        return ""
     }
 }
 
@@ -327,7 +333,7 @@ extension TronService: ChainIDFetchable {
 
 extension TronService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock().block_header.raw_data.number.asBigInt
     }
 }
 

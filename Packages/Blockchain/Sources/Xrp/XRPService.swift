@@ -28,6 +28,12 @@ extension XRPService {
             .request(.account(address: address))
             .map(as: XRPResult<XRPAccountResult>.self).result
     }
+    
+    private func latestBlock() async throws -> BigInt {
+        return try await provider
+            .request(.latestBlock)
+            .map(as: XRPResult<XRPLatestBlock>.self).result.ledger_current_index.asBigInt
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -67,9 +73,13 @@ extension XRPService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
+            gasLimit: 1,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+    
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -121,7 +131,8 @@ extension XRPService: ChainTransactionStateFetchable {
 
 extension XRPService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -152,8 +163,9 @@ extension XRPService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension XRPService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        //TODO: Add getChainID check later
+        return ""
     }
 }
 
@@ -161,7 +173,7 @@ extension XRPService: ChainIDFetchable {
 
 extension XRPService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock()
     }
 }
 

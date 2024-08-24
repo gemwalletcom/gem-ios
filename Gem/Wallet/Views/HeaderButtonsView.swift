@@ -7,12 +7,11 @@ import Components
 typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
 
 struct HeaderButtonsView: View {
-    
     let buttons: [HeaderButton]
     var action: HeaderButtonAction?
     
     var maxWidth: CGFloat {
-        buttons.count > 3 ? 78 : 88
+        buttons.count > 3 ? 84 : 94
     }
     
     var body: some View {
@@ -21,9 +20,20 @@ struct HeaderButtonsView: View {
                 RoundButton(title: button.title, image: button.image) {
                     action?(button.type)
                 }
-                .frame(maxWidth: maxWidth)
-                .disabled(button.isDisabled)
+                .accessibilityIdentifier(button.id)
+                .frame(maxWidth: maxWidth, alignment: .center)
             }
         }
+    }
+}
+
+// MARK: - Previews
+
+#Preview {
+    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0) })
+    return VStack {
+        Spacer()
+        HeaderButtonsView(buttons: buttons, action: nil)
+        Spacer()
     }
 }

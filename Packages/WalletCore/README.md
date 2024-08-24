@@ -1,3 +1,3 @@
 # WalletCore
 
-A description of this package.
+Local reference for WalletCore package

@@ -3,6 +3,7 @@ import Components
 import Style
 import Blockchain
 import Primitives
+import Keystore
 
 typealias ConfirmTransferDelegate = (Result<String, Error>) -> Void
 typealias ConfirmMessageDelegate = (Result<String, Error>) -> Void
@@ -10,36 +11,42 @@ typealias ConfirmMessageDelegate = (Result<String, Error>) -> Void
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var model: ConfirmTransferViewModel
-
-    @State private var isPresentingErrorMessage: String?
-    @State private var isLoading: Bool = false
+    @State var model: ConfirmTransferViewModel
 
     var body: some View {
         VStack {
-            List {
-                transactionSection(value: model.state.value)
-            }
+            transactionsList(value: model.state.value)
             Spacer()
-            StatefullButton(
+            StateButton(
                 text: model.buttonTitle,
                 viewState: model.state,
                 image: statefullButtonImage,
-                action: model.state.isError ? onSelectTryAgain : onSelectConfirmTransfer
+                disabledRule: model.shouldDisableButton,
+                action: onAction
             )
-            .disabled(model.shouldDisalbeButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
+        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text("Transfer Error"), message: Text($0))
+        .debounce(
+            value: $model.feePriority,
+            interval: nil,
+            action: onChangeFeePriority
+        )
+        .taskOnce { fetch() }
+        .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
+            NavigationStack {
+                NetworkFeeScene(
+                    model: model.feeRatesModel,
+                    action: onSelectFeePriority
+                )
+            }
         }
-        .modifier(activityIndicator(isLoading: isLoading))
-        .taskOnce {
-            fetch()
+        .alert(item: $model.confirmingErrorMessage) {
+            Alert(title: Text(Localized.Errors.transferError), message: Text($0))
         }
     }
 }
@@ -55,64 +62,76 @@ extension ConfirmTransferScene {
         return nil
     }
 
-    private func transactionSection(value: TransactionInputViewModel?) -> some View {
-        Section {
-            if let appValue = model.appValue {
-                ListItemView(title: model.appTitle, subtitle: appValue)
-            }
-
-            if let websiteValue = model.websiteValue {
-                ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                    .contextMenu {
-                        if let websiteURL = model.websiteURL {
-                            ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
-                        }
-                    }
-            }
-
-            ListItemView(title: model.senderTitle, subtitle: model.senderValue)
-                .contextMenu {
-                    ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
-                    ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
+    @ViewBuilder
+    private func transactionsList(value: TransactionInputViewModel?) -> some View {
+        List {
+            Section {
+                if let appValue = model.appValue {
+                    ListItemView(title: model.appTitle, subtitle: appValue)
                 }
 
-            if model.shouldShowRecipientField {
-                AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+                if let websiteValue = model.websiteValue {
+                    ListItemView(title: model.websiteTitle, subtitle: websiteValue)
+                        .contextMenu {
+                            if let websiteURL = model.websiteURL {
+                                ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
+                            }
+                        }
+                }
+
+                ListItemView(title: model.senderTitle, subtitle: model.senderValue)
+                    .contextMenu {
+                        ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
+                        ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
+                    }
+
+                if model.shouldShowRecipientField {
+                    AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+                }
+
+                if model.shouldShowMemo {
+                    MemoListItem(memo: model.memo)
+                }
+
+                HStack {
+                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
+                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                }
+
+            } header: {
+                HStack {
+                    Spacer(minLength: 0)
+                    TransactionHeaderView(type: model.headerType)
+                        .padding(.bottom, Spacing.medium)
+                    Spacer(minLength: 0)
+                }
+                .headerProminence(.increased)
             }
 
-            if model.shouldShowMemo {
-                MemoListItem(memo: model.memo)
+            Section {
+                if model.shouldShowFeeRatesSelector {
+                    NavigationCustomLink(
+                        with: networkFeeView,
+                        action: onSelectFeePicker
+                    )
+                } else {
+                    networkFeeView
+                }
             }
 
-            HStack {
-                ListItemView(title: model.networkTitle, subtitle: model.networkValue)
-                AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
-            }
-
-            ListItemView(
-                title: model.networkFeeTitle,
-                subtitle: model.networkFeeValue,
-                subtitleExtra: model.networkFeeFiatValue,
-                placeholders: [.subtitle]
-            )
-            .id(UUID())
-        } header: {
-            HStack {
-                Spacer(minLength: 0)
-                TransactionHeaderView(type: model.headerType)
-                    .padding(.bottom, 16)
-                Spacer(minLength: 0)
-            }
-            .headerProminence(.increased)
-        } footer: {
             if case let .error(error) = model.state {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
     }
 
-    private func activityIndicator(isLoading: Bool) -> some ViewModifier {
-        ActivityIndicatorModifier(message: Localized.Common.loading, isLoading: isLoading)
+    private var networkFeeView: some  View {
+        ListItemView(
+            title: model.networkFeeTitle,
+            subtitle: model.networkFeeValue,
+            subtitleExtra: model.networkFeeFiatValue,
+            placeholders: [.subtitle]
+        )
     }
 }
 
@@ -121,15 +140,30 @@ extension ConfirmTransferScene {
 extension ConfirmTransferScene {
     private func onSelectConfirmTransfer() {
         guard let value = model.state.value,
-              case .amount(let amount) = value.transferAmountResult,
-        let input = value.input else { return }
-        Task {
-            await processNext(input: input, amount: amount)
-        }
+              let input = value.input,
+              case .amount(let amount) = value.transferAmountResult else { return }
+        process(input: input, amount: amount)
     }
 
-    private func onSelectTryAgain() {
-        fetch()
+    @MainActor
+    private func onSelectFeePriority(_ priority: FeePriority) {
+        model.feePriority = priority
+    }
+
+    private func onSelectFeePicker() {
+        model.isPresentedNetworkFeePicker.toggle()
+    }
+
+    private func onChangeFeePriority(_ priority: FeePriority) async {
+        await model.fetch()
+    }
+
+    private func onAction() {
+        if model.state.isError {
+            fetch()
+        } else {
+            onSelectConfirmTransfer()
+        }
     }
 }
 
@@ -142,24 +176,29 @@ extension ConfirmTransferScene {
         }
     }
 
-    @MainActor
-    private func processNext(input: TransactionPreload, amount: TranferAmount) async {
-        isLoading = true
-        do {
-            let data = try await model.sign(transferData: model.data, input: input, amount: amount)
-            let hash = try await model.broadcast(data: data, options: model.broadcastOptions)
-            let transaction = try model.getTransaction(input: input, amount: amount, hash: hash)
-
-            try model.addTransaction(transaction: transaction)
-            isLoading = false
-            // TODO: - that's crazy, TODO for later
-            for _ in 0..<model.dismissAmount {
-                dismiss()
+    private func process(input: TransactionPreload, amount: TransferAmount) {
+        Task {
+            await model.process(input: input, amount: amount)
+            await MainActor.run {
+                if case .loaded(_) = model.confirmingState {
+                    // TODO: - that's crazy, TODO for later
+                    for _ in 0..<model.dismissAmount {
+                        dismiss()
+                    }
+                }
             }
-        } catch {
-            isLoading = false
-            isPresentingErrorMessage = error.localizedDescription
-            NSLog("confirm transaction error \(error)")
         }
     }
+}
+
+// MARK: - Previews
+
+#Preview {
+    ConfirmTransferScene(model:
+            .init(wallet: .main,
+                  keystore: LocalKeystore.main,
+                  data: .main,
+                  service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
+                  walletService: .main)
+    )
 }

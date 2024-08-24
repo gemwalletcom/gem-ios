@@ -4,35 +4,53 @@ import Style
 import Components
 
 struct BuyAssetScene: View {
-    @StateObject var model: BuyAssetViewModel
+    @State private var model: BuyAssetViewModel
+    @FocusState private var focusedField: BuyAssetInputField.FiatField?
+
+    init(model: BuyAssetViewModel) {
+        _model = State(initialValue: model)
+    }
 
     var body: some View {
         VStack {
             List {
+                amountInputView
                 amountSelectorSection
                 providerSection
             }
             Spacer()
-            StatefullButton(
-                text: Localized.Common.continue,
+            StateButton(
+                text: model.actionButtonTitle,
                 viewState: model.state,
-                action: openBuyUrl
+                action: onSelectContinue
             )
-            .disabled(model.shouldDisalbeContinueButton)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .listStyle(.insetGrouped)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
+        .debounce(
+            value: $model.input.amount,
+            interval: .none,
+            action: onChangeAmount
+        )
         .task {
             await onTask()
         }
-        .navigationDestination(for: Scenes.FiatProviders.self) {_ in
+        .onAppear {
+            UITextField.appearance().clearButtonMode = .never
+            focusedField = .fiat
+        }
+        .onChange(of: model.input.amount) { _, _ in
+            focusedField = .fiat
+        }
+        .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
                 model: FiatProvidersViewModel(
-                    buyAssetInput: model.input,
                     asset: model.asset,
+                    quotes: model.state.value ?? [],
                     selectQuote: onSelectQuote(_:)
                 )
             )
@@ -43,89 +61,95 @@ struct BuyAssetScene: View {
 // MARK: - UI Components
 
 extension BuyAssetScene {
+    private var amountInputView: some View {
+        VStack(alignment: .center, spacing: 0) {
+            BuyAssetInputField(
+                text: $model.amountText,
+                currencySymbol: model.currencySymbol,
+                focusedField: $focusedField
+            )
+            Text(model.cryptoAmountValue)
+                .textStyle(.calloutSecondary.weight(.medium))
+                .frame(minHeight: Sizing.list.image)
+        }
+        .frame(maxWidth: .infinity)
+        .background(Colors.grayBackground)
+        .listRowInsets(EdgeInsets())
+    }
+
     private var amountSelectorSection: some View {
         Section {
+            HStack(spacing: Spacing.small) {
+                AssetImageView(assetImage: model.assetImage)
 
-        } header: {
-            amountSelectorView
-                .padding(.top, 20)
+                Text(model.asset.symbol)
+                    .textStyle(.headline.weight(.semibold))
+
+                Spacer()
+
+                HStack(spacing: Spacing.medium) {
+                    ForEach(model.suggestedAmounts, id: \.self) { amount in
+                        Button(model.buttonTitle(amount: amount)) {
+                            onSelect(amount: amount)
+                        }
+                        .foregroundStyle(Colors.black)
+                        .font(.subheadline.weight(.semibold))
+                        .buttonStyle(.bordered)
+                    }
+
+                    Button(Emoji.random) {
+                        onSelect(amount: model.randomAmount)
+                    }
+                    .buttonStyle(.plain)
+                    .foregroundStyle(Colors.black)
+                    .font(.title.weight(.semibold))
+                    .padding(.all, Spacing.tiny)
+                    .background {
+                        RoundedRectangle(cornerRadius: 16)
+                            .strokeBorder(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color(hex: "#2A32FF"),
+                                        Color(hex: "#6CB8FF"),
+                                        Color(hex: "#F213F6"),
+                                        Color(hex: "FFF963")
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                lineWidth: 3
+                            )
+                    }
+                }
+            }
         }
-        .textCase(nil)
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets())
     }
 
     @ViewBuilder
     private var providerSection: some View {
         Section {
-            if !model.state.isLoading {
-                providerView
-            }
-        } header: {
-            VStack {
-                if model.state.isLoading {
-                    ProgressView()
-                        .progressViewStyle(.circular)
-                }
-            }
-            .frame(maxWidth: .infinity)
-        }
-    }
-
-    @ViewBuilder
-    private var providerView: some View {
-        switch model.state {
-        case .noData:
-            Text(Localized.Buy.noResults)
-                .multilineTextAlignment(.center)
-        case .loading:
-            EmptyView()
-        case .loaded:
-            if let quote = model.input.quote {
-                if model.input.quotes.count > 1 {
-                    NavigationLink(value: Scenes.FiatProviders()) {
-                        ListItemView(title: Localized.Common.provider, subtitle: quote.provider.name)
-                    }
-                } else {
-                    ListItemView(title: Localized.Common.provider, subtitle: quote.provider.name)
-                }
-                ListItemView(title: Localized.Buy.rate, subtitle: model.rateText(for: quote))
-            } else {
-                EmptyView()
-            }
-        case .error(let error):
-            Text(error.localizedDescription)
-                .multilineTextAlignment(.center)
-        }
-    }
-
-    @ViewBuilder
-    private var amountSelectorView: some View {
-        VStack(alignment: .center) {
-            AmountView(
-                title: "$\(Int(model.amount))",
-                subtitle: model.cryptoAmountText(for: model.input.quote)
-            )
-
-            ZStack(alignment: .center) {
-                Grid(alignment: .center) {
-                    ForEach(model.amounts, id: \.self) { amounts in
-                        GridRow(alignment: .center) {
-                            ForEach(amounts, id: \.self) { amount in
-                                VStack(alignment: .center) {
-                                    Button("$\(Int(amount))") {
-                                        onSelectNew(amount: amount)
-                                    }
-                                    .buttonStyle(.blue(paddingHorizontal: 12, paddingVertical: 12))
-                                    .font(.callout)
-                                }
-                            }
+            switch model.state {
+            case .noData:
+                StateEmptyView(title: model.emptyTitle)
+            case .loading:
+                ListItemLoadingView()
+                    .id(UUID())
+            case .loaded(let quotes):
+                if let quote = model.input.quote {
+                    if quotes.count > 1 {
+                        NavigationLink(value: Scenes.FiatProviders()) {
+                            ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                         }
-                        .padding(.all, 4)
+                    } else {
+                        ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                     }
+                    ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
+                } else {
+                    EmptyView()
                 }
+            case .error(let error):
+                ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
-            .padding(.top, 8)
         }
     }
 }
@@ -135,49 +159,36 @@ extension BuyAssetScene {
 extension BuyAssetScene {
     private func onTask() async {
         guard model.input.quote == nil else { return }
-        await getQuotesAsync(amount: model.amount)
+        await model.fetch()
     }
 
     private func onSelectContinue() {
-        openBuyUrl()
+        guard let quote = model.input.quote,
+              let url = URL(string: quote.redirectUrl) else { return }
+
+        // TODO: - use new @Environment(\.openURL) var openURL, insead use UIKit UIApplication
+        // currently impossible to use due navigation issues in nav stack
+        UIApplication.shared.open(url, options: [:])
     }
 
-    private func onSelectNew(amount: Double) {
-        getQuotes(amount: amount)
+    private func onSelect(amount: Double?) {
+        guard let amount = amount else { return }
+        model.input.amount = amount
     }
 
     private func onSelectQuote(_ quote: FiatQuote) {
         model.input.quote = quote
     }
-}
 
-// MARK: - Effects
-
-extension BuyAssetScene {
-    private func getQuotes(amount: Double) {
-        Task {
-            await getQuotesAsync(amount: amount)
-        }
-    }
-
-    private func getQuotesAsync(amount: Double) async {
-        await model.getQuotes(for: model.asset, amount: amount)
-    }
-
-    private func openBuyUrl() {
-        guard let quote = model.input.quote,
-              let url = URL(string: quote.redirectUrl) else { return }
-
-        // TODO: - use new @Environment(\.openURL) var openURL, insead use UIKit UIApplication
-        UIApplication.shared.open(url, options: [:])
+    private func onChangeAmount(_ amount: Double) async {
+        await model.fetch()
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    @StateObject var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
-
+    @State var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
     return NavigationStack {
         BuyAssetScene(model: model)
             .navigationBarTitleDisplayMode(.inline)

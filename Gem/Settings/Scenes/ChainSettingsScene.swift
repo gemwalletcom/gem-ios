@@ -10,61 +10,90 @@ import Style
 
 struct ChainSettingsScene: View {
     @Environment(\.nodeService) private var nodeService
-    @ObservedObject var model: ChainSettingsViewModel
-    @State private var isPresentingImportNode: Bool = false
 
-    init(
-        model: ChainSettingsViewModel
-    ) {
-        self.model = model
+    @State private var model: ChainSettingsViewModel
+
+    init(model: ChainSettingsViewModel) {
+        _model = State(initialValue: model)
     }
-    
+
     var body: some View {
         List {
-            Section(Localized.Settings.Networks.source) {
-                ForEach(model.nodes.map { ChainNodeViewModel(chainNode: $0) }, id: \.chainNode.id) { chainNode in
-                    SelectionListItemView(
-                        title: chainNode.title,
-                        subtitle: .none,
-                        value: chainNode.chainNode.host,
-                        selection: model.chainNode.host
+            Section(model.nodesTitle) {
+                ForEach(model.nodesModels) { nodeModel in
+                    ListItemSelectionView(
+                        title: nodeModel.title,
+                        titleExtra: nodeModel.titleExtra,
+                        subtitle: nodeModel.subtitle,
+                        subtitleExtra: .none,
+                        placeholders: nodeModel.placeholders,
+                        selectionDirection: .left,
+                        value: nodeModel.chainNode.host,
+                        selection: model.selectedNode.host
                     ) { _ in
-                        model.chainNode = chainNode.chainNode
+                        onSelectNode(nodeModel.chainNode)
                     }
-                }
-            }
-            Section(Localized.Settings.Networks.explorer) {
-                ForEach(model.explorers) { explorer in
-                    SelectionListItemView(title: explorer, subtitle: .none, value: explorer, selection: model.selectedExplorer) { _ in
-                        onExplorerSelect(name: explorer)
+                    .contextMenu {
+                        ContextMenuCopy(title: Localized.Common.copy, value: nodeModel.chainNode.node.url)
                     }
-                }
-            }
-        }
-        .if(model.isSupportedAddingCustomNode) {
-            $0.toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: onSelectImportNode) {
-                        Image(systemName: SystemImage.plus)
-                            .font(.body.weight(.semibold))
-                    }
-                }
-            }
-            .sheet(isPresented: $isPresentingImportNode) {
-                NavigationStack {
-                    AddNodeScene(
-                        model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
-                        onDismiss: {
-                            isPresentingImportNode = false
-                            onTaskOnce()
+                    .if(model.canDelete(node: nodeModel.chainNode)) {
+                        $0.swipeActions(edge: .trailing) {
+                            Button(Localized.Common.delete) {
+                                onSelectDelete(nodeModel.chainNode)
+                            }
+                            .tint(Colors.red)
                         }
+                    }
+                }
+            }
+            Section(model.explorerTitle) {
+                ForEach(model.explorers) { explorer in
+                    ListItemSelectionView(
+                        title: explorer,
+                        titleExtra: .none,
+                        subtitle: .none,
+                        subtitleExtra: .none,
+                        value: explorer,
+                        selection: model.selectedExplorer,
+                        action: onSelectExplorer(name:)
                     )
                 }
             }
         }
+        .refreshable {
+            await fetch()
+        }
+        .confirmationDialog(
+            Localized.Common.deleteConfirmation(model.nodeDelete?.host ?? ""),
+            presenting: $model.nodeDelete,
+            sensoryFeedback: .warning,
+            actions: { chainNode in
+                Button(
+                    Localized.Common.delete,
+                    role: .destructive,
+                    action: onDeleteNode
+                )
+            }
+        )
+        .toolbar {
+            ToolbarItem(placement: .primaryAction) {
+                Button(action: onSelectImportNode) {
+                    Image(systemName: SystemImage.plus)
+                        .font(.body.weight(.semibold))
+                }
+            }
+        }
+        .sheet(isPresented: $model.isPresentingImportNode) {
+            NavigationStack {
+                AddNodeScene(
+                    model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
+                    onDismiss: onDismissAddCustomNode
+                )
+            }
+        }
         .navigationTitle(model.title)
         .taskOnce {
-            onTaskOnce()
+            Task { await fetch()}
         }
     }
 }
@@ -72,17 +101,40 @@ struct ChainSettingsScene: View {
 // MARK: - Actions
 
 extension ChainSettingsScene {
-    private func onExplorerSelect(name: String) {
+    private func onSelectNode(_ node: ChainNode) {
+        do {
+            try model.select(node: node)
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: on chain select error \(error)")
+        }
+    }
+
+    private func onSelectDelete(_ chainNode: ChainNode) {
+        model.nodeDelete = chainNode
+    }
+
+    private func onSelectExplorer(name: String) {
         model.selectExplorer(name: name)
     }
 
     private func onSelectImportNode() {
-        isPresentingImportNode = true
+        model.isPresentingImportNode = true
     }
 
-    private func onTaskOnce() {
+    private func onDismissAddCustomNode() {
+        model.isPresentingImportNode = false
         Task {
-            try refreshNodes()
+            await fetch()
+        }
+    }
+
+    private func onDeleteNode() {
+        do {
+            try model.delete()
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: on delete error \(error)")
         }
     }
 }
@@ -90,7 +142,14 @@ extension ChainSettingsScene {
 // MARK: - Effects
 
 extension ChainSettingsScene {
-    private func refreshNodes() throws {
-        try model.nodes = model.getNodes()
+    private func fetch() async {
+        do {
+            model.clear()
+            try model.fetchNodes()
+            await model.fetchNodesStatusInfo()
+        } catch {
+            // TODO: - handle error
+            print("chain settings scene: fetch error \(error)")
+        }
     }
 }

@@ -24,52 +24,23 @@ public struct BitcoinService {
 // MARK: - Business Logic
 
 extension BitcoinService {
-    private func fee() async throws  -> BigInt {
-        let fee = try await provider
-            .request(.fee(priority: chain.defaultFeePriority))
-            .map(as: BitcoinFeeResult.self)
-        let byteFee = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
-
-        return byteFee
+    private func block(block: Int) async throws -> BitcoinBlock {
+        try await provider
+            .request(.block(block: block))
+            .map(as: BitcoinBlock.self)
     }
 
-    private func utxo(address: String) async throws -> [UTXO] {
-        return try await provider
+    private func latestBlock() async throws -> BigInt {
+        try await provider
+            .request(.nodeInfo)
+            .map(as: BitcoinNodeInfo.self).blockbook.bestHeight.asBigInt
+    }
+
+    func getUtxos(address: String) async throws -> [UTXO] {
+        try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
             .map { $0.mapToUTXO() }
-    }
-
-    private func calculateFee(byteFee: BigInt, feeInput: FeeInput, utxos: [UTXO]) async throws -> Fee {
-        let coinType = chain.chain.coinType
-        let gasPrice = max(byteFee.int / 1000, chain.minimumByteFee)
-        let utxo = utxos.map {
-            $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType)
-        }
-
-        let input = BitcoinSigningInput.with {
-            $0.coinType = coinType.rawValue
-            $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
-            $0.amount = feeInput.value.int64
-            $0.byteFee = Int64(gasPrice)
-            $0.toAddress = feeInput.destinationAddress
-            $0.changeAddress = feeInput.senderAddress
-            $0.utxo = utxo
-            $0.scripts = utxo.mapToScripts(address: feeInput.senderAddress, coinType: coinType)
-            $0.useMaxAmount = feeInput.isMaxAmount
-        }
-
-        let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
-
-        if plan.error != CommonSigningError.ok {
-            throw AnyError("unable to estimate byte fee")
-        }
-
-        return Fee(
-            fee: BigInt(plan.fee),
-            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: 1
-        )
     }
 }
 
@@ -88,7 +59,7 @@ extension BitcoinService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        return []
+        []
     }
 
     public func getStakeBalance(address: String) async throws -> AssetBalance {
@@ -96,29 +67,15 @@ extension BitcoinService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension BitcoinService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        let utxos = try await utxo(address: input.senderAddress)
-        let byteFee = try await fee()
-        return try await calculateFee(byteFee: byteFee, feeInput: input, utxos: utxos)
-    }
-}
-
 // MARK: - ChainTransactionPreloadable
 
 extension BitcoinService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let getUtxos = utxo(address: input.senderAddress)
-        async let getByteFee = fee()
-        let (utxos, byteFee) = try await (getUtxos, getByteFee)
-        let fee = try await calculateFee(byteFee: byteFee, feeInput: input.feeInput, utxos: utxos)
-        
-        return TransactionPreload(
-            fee: fee,
-            utxos: utxos
-        )
+        async let fee = fee(input: input.feeInput)
+        async let utxos = getUtxos(address: input.senderAddress)
+        let input = try await (fee: fee, utxos: utxos)
+
+        return TransactionPreload(fee: input.fee, utxos: input.utxos)
     }
 }
 
@@ -158,7 +115,7 @@ extension BitcoinService: ChainTransactionStateFetchable {
 
 extension BitcoinService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        return try await provider
+        try await provider
             .request(.nodeInfo)
             .map(as: BitcoinNodeInfo.self).blockbook.inSync
     }
@@ -168,7 +125,7 @@ extension BitcoinService: ChainSyncable {
 
 extension BitcoinService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        return []
+        []
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
@@ -191,8 +148,12 @@ extension BitcoinService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension BitcoinService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        let block = try await block(block: 1)
+        guard let hash = block.previousBlockHash else {
+            throw AnyError("Unable to get block hash")
+        }
+        return hash
     }
 }
 
@@ -200,7 +161,7 @@ extension BitcoinService: ChainIDFetchable {
 
 extension BitcoinService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await latestBlock()
     }
 }
 

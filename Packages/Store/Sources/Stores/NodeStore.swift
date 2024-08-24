@@ -73,7 +73,15 @@ public struct NodeStore {
                 .deleteAll(db)
         }
     }
-    
+
+    public func deleteNode(chain: String, url: String) throws {
+        return try db.write { (db: Database) in
+            try NodeRecord
+                .filter(Columns.Node.chain == chain && Columns.Node.url == url)
+                .deleteAll(db)
+        }
+    }
+
     public func selectedNodes() throws -> [ChainNode] {
         try db.read { db in
             try NodeSelectedRecord

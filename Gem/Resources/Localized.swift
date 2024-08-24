@@ -18,12 +18,6 @@ internal enum Localized {
       internal static let message = Localized.tr("Localizable", "activity.empty_state.message", fallback: "No activity yet.")
     }
   }
-  internal enum Amount {
-    internal enum Error {
-      /// Invalid amount
-      internal static let invalidAmount = Localized.tr("Localizable", "amount.error.invalid_amount", fallback: "Invalid amount")
-    }
-  }
   internal enum App {
     /// Gem
     internal static let name = Localized.tr("Localizable", "app.name", fallback: "Gem")
@@ -77,6 +71,8 @@ internal enum Localized {
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
   }
   internal enum Buy {
+    /// Please enter amount to buy
+    internal static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")
     /// No quotes available
     internal static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
@@ -123,10 +119,18 @@ internal enum Localized {
     internal static let copy = Localized.tr("Localizable", "common.copy", fallback: "Copy")
     /// Delete
     internal static let delete = Localized.tr("Localizable", "common.delete", fallback: "Delete")
+    /// Are sure you want to delete %s?
+    internal static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
+    }
     /// Done
     internal static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Hide
     internal static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
+    /// %d ms
+    internal static func latencyInMs(_ p1: Int) -> String {
+      return Localized.tr("Localizable", "common.latency_in_ms", p1, fallback: "%d ms")
+    }
     /// Loading
     internal static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
     /// Manage
@@ -139,8 +143,14 @@ internal enum Localized {
     internal static let noResultsFound = Localized.tr("Localizable", "common.no_results_found", fallback: "No Results Found")
     /// Not Available
     internal static let notAvailable = Localized.tr("Localizable", "common.not_available", fallback: "Not Available")
+    /// Open settings
+    internal static let openSettings = Localized.tr("Localizable", "common.open_settings", fallback: "Open settings")
     /// Paste
     internal static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
+    /// Phrase
+    internal static let phrase = Localized.tr("Localizable", "common.phrase", fallback: "Phrase")
+    /// Private Key
+    internal static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
     internal static let provider = Localized.tr("Localizable", "common.provider", fallback: "Provider")
     /// Recommended
@@ -177,25 +187,57 @@ internal enum Localized {
     internal static let yesterday = Localized.tr("Localizable", "date.yesterday", fallback: "Yesterday")
   }
   internal enum Errors {
+    /// Camera permission not granted. Please enable camera access in settings to scan QR code.
+    internal static let cameraPermissionsNotGranted = Localized.tr("Localizable", "errors.camera_permissions_not_granted", fallback: "Camera permission not granted. Please enable camera access in settings to scan QR code.")
     /// Create Wallet Error: %s
     internal static func createWallet(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.create_wallet", p1, fallback: "Create Wallet Error: %s")
     }
+    /// Decoding Error
+    internal static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
+    /// Failed to decode the QR code. Please try again with a different QR code.
+    internal static let decodingQr = Localized.tr("Localizable", "errors.decoding_qr", fallback: "Failed to decode the QR code. Please try again with a different QR code.")
+    /// Error
+    internal static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
     internal static let errorOccured = Localized.tr("Localizable", "errors.error_occured", fallback: "An error occurred!")
     /// Invalid address or name
     internal static let invalidAddressName = Localized.tr("Localizable", "errors.invalid_address_name", fallback: "Invalid address or name")
+    /// Invalid amount
+    internal static let invalidAmount = Localized.tr("Localizable", "errors.invalid_amount", fallback: "Invalid amount")
+    /// Invalid %@ address
+    internal static func invalidAssetAddress(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.invalid_asset_address", String(describing: p1), fallback: "Invalid %@ address")
+    }
     /// Invalid Network ID
     internal static let invalidNetworkId = Localized.tr("Localizable", "errors.invalid_network_id", fallback: "Invalid Network ID")
     /// Invalid URL
     internal static let invalidUrl = Localized.tr("Localizable", "errors.invalid_url", fallback: "Invalid URL")
+    /// Not Supported
+    internal static let notSupported = Localized.tr("Localizable", "errors.not_supported", fallback: "Not Supported")
+    /// This device does not support QR code scanning. You can only select QR code image from library.
+    internal static let notSupportedQr = Localized.tr("Localizable", "errors.not_supported_qr", fallback: "This device does not support QR code scanning. You can only select QR code image from library.")
+    /// Permissions Not Granted
+    internal static let permissionsNotGranted = Localized.tr("Localizable", "errors.permissions_not_granted", fallback: "Permissions Not Granted")
     /// Transfer Error: %s
     internal static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")
     }
+    /// Transfer Error
+    internal static let transferError = Localized.tr("Localizable", "errors.transfer_error", fallback: "Transfer Error")
+    /// We are currently unable to calculate the network fee.
+    internal static let unableEstimateNetworkFee = Localized.tr("Localizable", "errors.unable_estimate_network_fee", fallback: "We are currently unable to calculate the network fee.")
+    /// Unknown
+    internal static let unknown = Localized.tr("Localizable", "errors.unknown", fallback: "Unknown")
+    /// An unknown error occurred. Please try again.
+    internal static let unknownTryAgain = Localized.tr("Localizable", "errors.unknown_try_again", fallback: "An unknown error occurred. Please try again.")
     /// Validation Error: %s
     internal static func validation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
+    }
+    internal enum Connections {
+      /// User cancelled
+      internal static let userCancelled = Localized.tr("Localizable", "errors.connections.user_cancelled", fallback: "User cancelled")
     }
     internal enum Import {
       /// Invalid Secret Phrase
@@ -204,6 +246,10 @@ internal enum Localized {
       internal static func invalidSecretPhraseWord(_ p1: Any) -> String {
         return Localized.tr("Localizable", "errors.import.invalid_secret_phrase_word", String(describing: p1), fallback: "Invalid Secret Phrase word: %@")
       }
+    }
+    internal enum Swap {
+      /// No Quote data
+      internal static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No Quote data")
     }
     internal enum Token {
       /// Invalid Token ID
@@ -216,12 +262,40 @@ internal enum Localized {
       }
     }
   }
+  internal enum FeeRate {
+    /// %@ sat/B
+    internal static func satB(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "fee_rate.satB", String(describing: p1), fallback: "%@ sat/B")
+    }
+    /// %@ sat/vB
+    internal static func satvB(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "fee_rate.satvB", String(describing: p1), fallback: "%@ sat/vB")
+    }
+  }
+  internal enum FeeRates {
+    /// Fast
+    internal static let fast = Localized.tr("Localizable", "fee_rates.fast", fallback: "Fast")
+    /// Speed of transaction is determined by network fee paid to the network miners.
+    internal static let info = Localized.tr("Localizable", "fee_rates.info", fallback: "Speed of transaction is determined by network fee paid to the network miners.")
+    /// Normal
+    internal static let normal = Localized.tr("Localizable", "fee_rates.normal", fallback: "Normal")
+    /// Slow
+    internal static let slow = Localized.tr("Localizable", "fee_rates.slow", fallback: "Slow")
+  }
+  internal enum Library {
+    /// Select from photos
+    internal static let selectFromPhotos = Localized.tr("Localizable", "library.select_from_photos", fallback: "Select from photos")
+  }
   internal enum Nodes {
+    /// Gem Wallet Node
+    internal static let gemWalletNode = Localized.tr("Localizable", "nodes.gem_wallet_node", fallback: "Gem Wallet Node")
     internal enum ImportNode {
       /// Chain ID
       internal static let chainId = Localized.tr("Localizable", "nodes.import_node.chain_id", fallback: "Chain ID")
       /// In Sync
       internal static let inSync = Localized.tr("Localizable", "nodes.import_node.in_sync", fallback: "In Sync")
+      /// Latency
+      internal static let latency = Localized.tr("Localizable", "nodes.import_node.latency", fallback: "Latency")
       /// Latest Block
       internal static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
       /// Add node
@@ -306,6 +380,8 @@ internal enum Localized {
     internal static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
   }
   internal enum Social {
+    /// CoinGecko
+    internal static let coingecko = Localized.tr("Localizable", "social.coingecko", fallback: "CoinGecko")
     /// Discord
     internal static let discord = Localized.tr("Localizable", "social.discord", fallback: "Discord")
     /// Facebook
@@ -348,14 +424,20 @@ internal enum Localized {
     internal static let lockTime = Localized.tr("Localizable", "stake.lock_time", fallback: "Lock Time")
     /// Minimum amount
     internal static let minimumAmount = Localized.tr("Localizable", "stake.minimum_amount", fallback: "Minimum amount")
+    /// No active staking yet.
+    internal static let noActiveStaking = Localized.tr("Localizable", "stake.no_active_staking", fallback: "No active staking yet.")
     /// Pending
     internal static let pending = Localized.tr("Localizable", "stake.pending", fallback: "Pending")
     /// Rewards
     internal static let rewards = Localized.tr("Localizable", "stake.rewards", fallback: "Rewards")
+    /// Stake
+    internal static let stake = Localized.tr("Localizable", "stake.stake", fallback: "Stake")
     /// Validator
     internal static let validator = Localized.tr("Localizable", "stake.validator", fallback: "Validator")
     /// Validators
     internal static let validators = Localized.tr("Localizable", "stake.validators", fallback: "Validators")
+    /// Stake via Gem Wallet
+    internal static let viagem = Localized.tr("Localizable", "stake.viagem", fallback: "Stake via Gem Wallet")
   }
   internal enum Swap {
     /// Approve %@ to Swap
@@ -395,6 +477,12 @@ internal enum Localized {
       internal static let pending = Localized.tr("Localizable", "transaction.status.pending", fallback: "Pending")
       /// Reverted
       internal static let reverted = Localized.tr("Localizable", "transaction.status.reverted", fallback: "Reverted")
+    }
+    internal enum Title {
+      /// Received
+      internal static let received = Localized.tr("Localizable", "transaction.title.received", fallback: "Received")
+      /// Sent
+      internal static let sent = Localized.tr("Localizable", "transaction.title.sent", fallback: "Sent")
     }
   }
   internal enum Transfer {
@@ -509,10 +597,6 @@ internal enum Localized {
     /// %@ Wallet #%d
     internal static func defaultNameChain(_ p1: Any, _ p2: Int) -> String {
       return Localized.tr("Localizable", "wallet.default_name_chain", String(describing: p1), p2, fallback: "%@ Wallet #%d")
-    }
-    /// Are sure you want to delete %s?
-    internal static func deleteWalletConfirmation(_ p1: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "wallet.delete_wallet_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
     /// Import an Existing Wallet
     internal static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")

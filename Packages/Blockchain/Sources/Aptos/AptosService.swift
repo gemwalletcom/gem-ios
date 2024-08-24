@@ -17,6 +17,11 @@ public struct AptosService {
         self.chain = chain
         self.provider = provider
     }
+    
+    func getLedger() async throws -> AptosLedger {
+        try await provider.request(.ledger)
+            .map(as: AptosLedger.self)
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -58,9 +63,13 @@ extension AptosService: ChainFeeCalculateable {
         return Fee(
             fee: BigInt(gasPrice * gasLimit),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2)
+            gasLimit: BigInt(gasLimit * 2),
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -106,7 +115,8 @@ extension AptosService: ChainTransactionStateFetchable {
 
 extension AptosService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -137,8 +147,8 @@ extension AptosService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension AptosService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        try await getLedger().chain_id.asString
     }
 }
 
@@ -146,6 +156,7 @@ extension AptosService: ChainIDFetchable {
 
 extension AptosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        let ledger = try await getLedger()
+        return BigInt(stringLiteral: ledger.ledger_version)
     }
 }

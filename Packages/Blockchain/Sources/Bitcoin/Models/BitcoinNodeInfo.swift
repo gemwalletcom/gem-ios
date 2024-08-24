@@ -6,11 +6,13 @@ import Foundation
 
 public struct BitcoinBlockbook: Codable {
 	public let inSync: Bool
-	public let lastBlockTime: Bool
+	public let lastBlockTime: String
+	public let bestHeight: Int
 
-	public init(inSync: Bool, lastBlockTime: Bool) {
+	public init(inSync: Bool, lastBlockTime: String, bestHeight: Int) {
 		self.inSync = inSync
 		self.lastBlockTime = lastBlockTime
+		self.bestHeight = bestHeight
 	}
 }
 

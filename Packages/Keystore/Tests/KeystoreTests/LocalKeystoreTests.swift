@@ -1,6 +1,7 @@
 import XCTest
 @testable import Keystore
 import Store
+import WalletCore
 import Primitives
 import KeystoreTestKit
 
@@ -45,7 +46,36 @@ final class LocalKeystoreTests: XCTestCase {
             Account(chain: $0, address: "0x8f348F300873Fd5DA36950B2aC75a26584584feE", derivationPath: "m/44\'/60\'/0\'/0/0", extendedPublicKey: "")
         })
     }
-    
+
+    func testExportSolanaPrivateKey() throws {
+        let keystore = LocalKeystore.make()
+        let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
+        let wallet = try keystore.importWallet(name: "Test Solana", type: .privateKey(text: hex, chain: .solana))
+
+        let exportedHex = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
+        let exportedBase58 = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .base58)
+
+        XCTAssertEqual(exportedHex, hex)
+        XCTAssertEqual(exportedBase58, "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
+
+        let keystore2 = LocalKeystore.make()
+        let wallet2 = try keystore2.importWallet(name: "Test Solana 2", type: .privateKey(text: exportedBase58, chain: .solana))
+        let exportedKey = try keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
+
+        XCTAssertEqual(Base58.encodeNoCheck(data: exportedKey), exportedBase58)
+    }
+
+    func testImportWIF() throws {
+        let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
+        let decoded = Base58.decode(string: wif)!
+
+        XCTAssertEqual(decoded.count, 34)
+
+        let key = decoded[1...32] // skip prefix / compression flag
+
+        XCTAssertTrue(PrivateKey.isValid(data: key, curve: .secp256k1))
+    }
+
     func testDeriveAddress() {
         let id = NSUUID().uuidString
         let keystore = LocalKeystore(
@@ -93,7 +123,7 @@ final class LocalKeystoreTests: XCTestCase {
             case .osmosis:
                 assertAddress(chain, "osmo142j9u5eaduzd7faumygud6ruhdwme98qclefqp", account.address)
             case .ton:
-                assertAddress(chain, "EQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUfk9", account.address)
+                assertAddress(chain, "UQDgEMqToTacHic7SnvnPFmvceG5auFkCcAw0mSCvzvKUaT4", account.address)
             case .tron:
                 assertAddress(chain, "TQ5NMqJjhpQGK7YJbESKtNCo86PJ89ujio", account.address)
             case .doge:

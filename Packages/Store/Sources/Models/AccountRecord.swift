@@ -18,23 +18,23 @@ public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
 
 extension AccountRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column("walletId", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column("walletId", .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            t.column("chain", .text)
+            $0.column("chain", .text)
                 .notNull()
-            t.column("address", .text)
+            $0.column("address", .text)
                 .notNull()
-            t.column("extendedPublicKey", .text)
+            $0.column("extendedPublicKey", .text)
                 .notNull()
-            t.column("index", .numeric)
+            $0.column("index", .numeric)
                 .defaults(to: 0)
                 .notNull()
-            t.column("derivationPath", .text)
+            $0.column("derivationPath", .text)
                 .notNull()
-            t.uniqueKey(["walletId", "chain", "derivationPath", "address"])
+            $0.uniqueKey(["walletId", "chain", "derivationPath", "address"])
         }
     }
 }

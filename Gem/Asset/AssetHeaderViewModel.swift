@@ -31,15 +31,15 @@ extension AssetHeaderViewModel: HeaderViewModel {
     }
     
     var buttons: [HeaderButton] {
-        let values: [(type: HeaderButtonType, isDisabled: Bool, isShown: Bool)] = [
-            (HeaderButtonType.send, walletModel.isButtonDisabled(type: .send), true),
-            (HeaderButtonType.receive, walletModel.isButtonDisabled(type: .receive), true),
-            (HeaderButtonType.buy, walletModel.isButtonDisabled(type: .buy), assetDataModel.isBuyEnabled),
-            (HeaderButtonType.swap, walletModel.isButtonDisabled(type: .swap), assetDataModel.isSwapEnabled),
+        let values: [(type: HeaderButtonType, isShown: Bool)] = [
+            (HeaderButtonType.send, true),
+            (HeaderButtonType.receive, true),
+            (HeaderButtonType.buy, assetDataModel.isBuyEnabled),
+            (HeaderButtonType.swap, assetDataModel.isSwapEnabled),
         ]
         return values.compactMap {
             if $0.isShown {
-                return HeaderButton(type: $0.type, isDisabled: $0.isDisabled)
+                return HeaderButton(type: $0.type)
             }
             return .none
         }

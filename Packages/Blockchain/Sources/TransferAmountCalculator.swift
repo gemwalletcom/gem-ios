@@ -5,9 +5,9 @@ import Primitives
 import BigInt
 import GemstonePrimitives
 
-public enum TranferAmountResult {
-    case amount(TranferAmount)
-    case error(TranferAmount, TransferAmountCalculatorError)
+public enum TransferAmountResult {
+    case amount(TransferAmount)
+    case error(TransferAmount, Error)
 }
 
 public struct TranferAmountInput {
@@ -44,27 +44,25 @@ public struct TranferAmountInput {
 }
 
 public struct TransferAmountCalculator {
-
     public init() {}
-    
-    public func calculateResult(input: TranferAmountInput) -> TranferAmountResult {
+
+    public func calculateResult(input: TranferAmountInput) -> TransferAmountResult {
         do {
             let amount = try calculate(input: input)
             return .amount(amount)
+        } catch let error as TransferAmountCalculatorError {
+            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+            return .error(amount, error)
         } catch {
-            let amount = TranferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
-            return .error(amount, error as! TransferAmountCalculatorError)
+            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+            return .error(amount, error)
         }
     }
-    
-    public func calculate(input: TranferAmountInput) throws -> TranferAmount {
+
+    public func calculate(input: TranferAmountInput) throws -> TransferAmount {
         if input.assetBalance.available == 0 {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
-        
-        NSLog("input.value: \(input.value)")
-        NSLog("input.availableValue: \(input.availableValue)")
-        NSLog("input.assetBalance.available: \(input.assetBalance.available)")
         
         //TODO: Check for input.value + input.fee
         
@@ -79,11 +77,11 @@ public struct TransferAmountCalculator {
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset {
-                return TranferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, useMaxAmount: true)
+                return TransferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, useMaxAmount: true)
             }
-            return TranferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
+            return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
         }
         
-        return TranferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
     }
 }

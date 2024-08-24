@@ -17,15 +17,15 @@ public struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
 
 extension NodeRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.autoIncrementedPrimaryKey("id")
-            t.column("url", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.autoIncrementedPrimaryKey("id")
+            $0.column("url", .text)
                 .unique()
-            t.column("chain", .text)
+            $0.column("chain", .text)
                 .notNull()
                 .indexed()
-            t.column("status", .text)
-            t.column("priority", .integer)
+            $0.column("status", .text)
+            $0.column("priority", .integer)
         }
     }
 }
@@ -41,7 +41,7 @@ extension NodeRecord {
     func mapToNode() -> Node {
         return Node(
             url: url,
-            status: NodeStatus(rawValue: status) ?? .inactive,
+            status: NodeState(rawValue: status) ?? .inactive,
             priority: priority.asInt32
         )
     }

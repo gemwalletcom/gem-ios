@@ -90,7 +90,7 @@ class DeviceService {
         ignoreSubscriptionsVersion: Bool = false
     ) throws -> Device {
         let deviceToken = try securePreferences.get(key: .deviceToken) ?? .empty
-        let locale = Locale.current.language.languageCode?.identifier ?? .empty
+        let locale = Locale.current.usageLanguageIdentifier()
         return Device(
             id: deviceId,
             platform: .ios,

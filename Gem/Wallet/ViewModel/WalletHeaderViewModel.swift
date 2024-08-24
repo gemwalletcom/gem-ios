@@ -9,15 +9,16 @@ import Style
 import Components
 
 struct WalletHeaderViewModel {
-    let walletModel: WalletViewModel
+    //Remove WalletType from here
+    let walletType: WalletType
     let value: WalletFiatValue
     let currencyFormatter = CurrencyFormatter.currency()
     
     public init(
-        walletModel: WalletViewModel,
+        walletType: WalletType,
         value: WalletFiatValue
     ) {
-        self.walletModel = walletModel
+        self.walletType = walletType
         self.value = value
     }
     
@@ -57,7 +58,7 @@ struct WalletHeaderViewModel {
 extension WalletHeaderViewModel: HeaderViewModel {
     
     var isWatchWallet: Bool {
-        walletModel.wallet.type == .view
+        walletType == .view
     }
     
     var assetImage: AssetImage? {
@@ -73,15 +74,14 @@ extension WalletHeaderViewModel: HeaderViewModel {
     }
     
     var buttons: [HeaderButton] {
-        let values: [(type: HeaderButtonType, isDisabled: Bool, isShown: Bool)] = [
-            (.send, walletModel.isButtonDisabled(type: .send), true),
-            (.receive, walletModel.isButtonDisabled(type: .receive), true),
-            (.buy, walletModel.isButtonDisabled(type: .buy), Preferences.standard.isPushNotificationsEnabled),
-            (.swap, walletModel.isButtonDisabled(type: .swap), Preferences.standard.isPushNotificationsEnabled),
+        let values: [(type: HeaderButtonType, isShown: Bool)] = [
+            (.send, true),
+            (.receive, true),
+            (.buy, true),
         ]
         return values.compactMap {
             if $0.isShown {
-                return HeaderButton(type: $0.type, isDisabled: $0.isDisabled)
+                return HeaderButton(type: $0.type)
             }
             return .none
         }

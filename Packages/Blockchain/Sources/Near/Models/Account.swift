@@ -40,9 +40,11 @@ public struct NearRPCError: Codable {
 
 public struct NearBlockHeader: Codable {
 	public let hash: String
+	public let height: Int
 
-	public init(hash: String) {
+	public init(hash: String, height: Int) {
 		self.hash = hash
+		self.height = height
 	}
 }
 
@@ -77,5 +79,13 @@ public struct NearBroadcastResult: Codable {
 	public init(final_execution_status: String, transaction: NearBroadcastTransaction) {
 		self.final_execution_status = final_execution_status
 		self.transaction = transaction
+	}
+}
+
+public struct NearGenesisConfig: Codable {
+	public let chain_id: String
+
+	public init(chain_id: String) {
+		self.chain_id = chain_id
 	}
 }

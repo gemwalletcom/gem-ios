@@ -30,7 +30,7 @@ public class WalletConnector {
             description: "Gem Web3 Wallet",
             url: "https://gemwallet.com",
             icons: ["https://gemwallet.com/images/gem-logo-256x256.png"], 
-            redirect: AppMetadata.Redirect(
+            redirect: try! AppMetadata.Redirect(
                 native: "gem://",
                 universal: nil
             )

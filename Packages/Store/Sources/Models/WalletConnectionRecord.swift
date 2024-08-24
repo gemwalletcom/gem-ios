@@ -27,34 +27,34 @@ public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecor
 
 extension WalletConnectionRecord: CreateTable {
     static func create(db: Database) throws {
-        try db.create(table: Self.databaseTableName) { t in
-            t.column("id", .text)
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column("id", .text)
                 .primaryKey()
                 .notNull()
-            t.column("sessionId", .text)
+            $0.column("sessionId", .text)
                 .notNull()
-            t.column("walletId", .text)
+            $0.column("walletId", .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            t.column("state", .text)
+            $0.column("state", .text)
                 .notNull()
-            t.column("chains", .jsonText)
-            t.column("createdAt", .date)
+            $0.column("chains", .jsonText)
+            $0.column("createdAt", .date)
                 .notNull()
-            t.column("expireAt", .date)
+            $0.column("expireAt", .date)
                 .notNull()
             
-            t.column("appName", .text)
+            $0.column("appName", .text)
                 .notNull()
-            t.column("appDescription", .text)
+            $0.column("appDescription", .text)
                 .notNull()
-            t.column("appLink", .text)
+            $0.column("appLink", .text)
                 .notNull()
-            t.column("appIcon", .text)
+            $0.column("appIcon", .text)
                 .notNull()
-            t.column("redirectNative", .text)
-            t.column("redirectUniversal", .text)
+            $0.column("redirectNative", .text)
+            $0.column("redirectUniversal", .text)
         }
     }
 }

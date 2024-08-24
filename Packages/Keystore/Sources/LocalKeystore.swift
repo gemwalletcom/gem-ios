@@ -1,6 +1,7 @@
 import Foundation
 import Primitives
 import Store
+import WalletCore
 
 public final class LocalKeystore: Keystore {
     public let directory: URL
@@ -12,6 +13,7 @@ public final class LocalKeystore: Keystore {
     
     let keystorePassword: KeystorePassword
     
+    @Published public var currentWalletId: Primitives.WalletId? = .none
     @Published public var currentWallet: Primitives.Wallet? = .none
     
     public init(
@@ -26,7 +28,11 @@ public final class LocalKeystore: Keystore {
         self.preferences = preferences
         self.walletStore = walletStore
         self.keystorePassword = keystorePassword
-        self.currentWallet = getCurrentWallet(id: preferences.currentWallet ?? "")
+        self.currentWalletId = switch preferences.currentWalletId {
+        case .some(let value): WalletId(id: value)
+        case .none: .none
+        }
+        self.currentWallet = getWalletById(id: preferences.currentWalletId ?? "")
     }
     
     public var wallets: [Primitives.Wallet] {
@@ -40,17 +46,33 @@ public final class LocalKeystore: Keystore {
     public func createWallet() -> [String] {
         return walletKeyStore.createWallet()
     }
-    
-    public func setCurrentWallet(wallet: Primitives.Wallet?) {
-        preferences.currentWallet = wallet?.id
-        guard let wallet = wallet else {
-            currentWallet = nil
-            return
+
+    public func getCurrentWallet() throws -> Primitives.Wallet {
+        if let currentWalletId {
+            return try getWallet(currentWalletId)
         }
-        currentWallet = getCurrentWallet(id: wallet.id)
+        throw KeystoreError.noWalletId
     }
 
-    private func getCurrentWallet(id: String) -> Primitives.Wallet? {
+    public func getWallet(_ walletId: WalletId) throws -> Primitives.Wallet {
+        if let wallet = getWalletById(id: walletId.id) {
+            return wallet
+        }
+        throw KeystoreError.noWallet
+    }
+
+    public func setCurrentWalletId(_ walletId: Primitives.WalletId?) {
+        preferences.currentWalletId = walletId?.id
+        guard let walletId = walletId else {
+            currentWallet = nil
+            currentWalletId = nil
+            return
+        }
+        currentWalletId = walletId
+        currentWallet = getWalletById(id: walletId.id)
+    }
+
+    private func getWalletById(id: String) -> Primitives.Wallet? {
         return wallets.filter({ $0.id == id  }).first ?? wallets.first
     }
 
@@ -70,11 +92,13 @@ public final class LocalKeystore: Keystore {
             result = try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: password)
         case .single(let words, let chain):
             result = try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: password)
+        case .privateKey(let text, let chain):
+            result = try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password)
         case .address(let chain, let address):
             result = Wallet.makeView(name: name, chain: chain, address: address)
         }
         try walletStore.addWallet(result)
-        setCurrentWallet(wallet: result)
+        setCurrentWalletId(result.walletId)
         return result
     }
     
@@ -103,7 +127,7 @@ public final class LocalKeystore: Keystore {
             case .multicoin:
                 let result = try walletKeyStore.addChains(chains: chains, wallet: wallet, password: password)
                 try walletStore.addWallet(result)
-            case .single:
+            case .single, .privateKey:
                 fatalError()
             case .view:
                 break
@@ -111,40 +135,50 @@ public final class LocalKeystore: Keystore {
         }
     }
 
-    public func renameWallet(wallet: Wallet, newName: String) throws {
+    public func renameWallet(wallet: Primitives.Wallet, newName: String) throws {
         return try walletStore.renameWallet(wallet.id, name: newName)
     }
     
-    public func deleteWallet(for wallet: Wallet) throws {
+    public func deleteWallet(for wallet: Primitives.Wallet) throws {
         switch wallet.type {
         case .view:
             break
-        case .multicoin, .single:
+        case .multicoin, .single, .privateKey:
             let password = try keystorePassword.getPassword()
             do {
                 try walletKeyStore.deleteWallet(id: wallet.id, password: password)
             } catch let error as KeystoreError {
                 //in some cases wallet already deleted, just ignore
                 switch error {
-                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList:
+                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey, .noWallet, .noWalletId:
                     break
                 }
             }
         }
         try walletStore.deleteWallet(for: wallet.id)
-        setCurrentWallet(wallet: wallets.first)
+        setCurrentWalletId(wallets.first?.walletId)
     }
     
     public func getNextWalletIndex() throws -> Int {
         try walletStore.nextWalletIndex()
     }
     
-    public func getPrivateKey(wallet: Wallet, chain: Chain) throws -> Data {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
-        return try walletKeyStore.getPrivateKey(id: wallet.id, chain: chain, password: password)
+        return try walletKeyStore.getPrivateKey(id: wallet.id, type: wallet.type, chain: chain, password: password)
     }
-    
-    public func getMnemonic(wallet: Wallet) throws -> [String] {
+
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
+        let data = try getPrivateKey(wallet: wallet, chain: chain)
+        switch encoding {
+        case .base58:
+            return Base58.encodeNoCheck(data: data)
+        case .hex:
+            return data.hexString.append0x
+        }
+    }
+
+    public func getMnemonic(wallet: Primitives.Wallet) throws -> [String] {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.getMnemonic(wallet: wallet, password: password)
     }
@@ -153,7 +187,7 @@ public final class LocalKeystore: Keystore {
         return try keystorePassword.getAuthentication()
     }
     
-    public func sign(wallet: Wallet, message: SignMessage, chain: Chain) throws -> Data {
+    public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
         return try walletKeyStore.sign(message: message, walletId: wallet.id, password: password, chain: chain)
     }

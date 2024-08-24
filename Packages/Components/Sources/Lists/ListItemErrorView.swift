@@ -41,24 +41,13 @@ public struct ListItemErrorView: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: Spacing.small) {
-            if let errorTitle = errorTitle {
-                HStack(spacing: Spacing.small) {
-                    Image(systemName: errorSystemNameImage)
-                        .foregroundColor(Colors.red)
-                        .frame(width: Sizing.list.image, height: Sizing.list.image)
-                    Text(errorTitle)
-                        .textStyle(.headline)
-                    Spacer()
-                }
-            } else {
-                HStack(spacing: Spacing.small) {
-                    Image(systemName: errorSystemNameImage)
-                        .foregroundColor(Colors.red)
-                        .frame(width: Sizing.list.image, height: Sizing.list.image)
-                    Text(error.localizedDescription)
-                        .textStyle(.subheadline)
-                    Spacer()
-                }
+            HStack(spacing: Spacing.small) {
+                Image(systemName: errorSystemNameImage)
+                    .foregroundColor(Colors.red)
+                    .frame(width: Sizing.list.image, height: Sizing.list.image)
+                Text(errorTitle ?? error.localizedDescription)
+                    .textStyle(.headline)
+                Spacer()
             }
             if errorTitle != nil {
                 Text(error.localizedDescription)
@@ -66,15 +55,14 @@ public struct ListItemErrorView: View {
             }
             if let retry = retryAction, let retryTitle = retryTitle {
                 Button(retryTitle, action: retry)
-                    .buttonStyle(.clear)
+                    .buttonStyle(.clearBlue)
             }
         }
         .padding()
         .background(listStyleColor)
         .cornerRadius(8)
         .frame(maxWidth: .infinity)
-        .padding([.top, .bottom], Spacing.small)
-        .listRowInsets(EdgeInsets()) // ensures it aligned with list item same width
+        .listRowInsets(EdgeInsets())
     }
 }
 
@@ -104,6 +92,16 @@ public struct ListItemErrorView: View {
             ListItemErrorView(
                 errorTitle: "Operation Error",
                 error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to complete the operation. Please try again later."]),
+                retryTitle: "Retry",
+                retryAction: nil
+            )
+        }
+
+        Section(header: Text("Missing Error Title")) {
+            ListItemErrorView(
+                errorTitle: nil,
+                errorSystemNameImage: SystemImage.errorOccurred,
+                error: NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "An error without a specific title."]),
                 retryTitle: "Retry",
                 retryAction: nil
             )

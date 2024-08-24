@@ -18,7 +18,19 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     var title: String {
         return Localized.Wallet.New.title
     }
-    
+
+    var type: SecretPhraseDataType {
+        .words(words: WordIndex.rows(for: words))
+    }
+
+    var copyValue: String {
+        MnemonicFormatter.fromArray(words: words)
+    }
+
+    var copyType: CopyType {
+        .secretPhrase
+    }
+
     func generateWords() -> [String] {
         return keystore.createWallet()
     }

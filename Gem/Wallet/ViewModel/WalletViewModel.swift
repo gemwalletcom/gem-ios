@@ -11,12 +11,12 @@ struct WalletViewModel {
         return wallet.name
     }
     
-    var subType: String {
+    var subType: String? {
         switch wallet.type {
         case .multicoin:
             return Localized.Wallet.multicoin
-        case .view, .single:
-            guard let account = wallet.accounts.first else { return "" }
+        case .view, .single, .privateKey:
+            guard let account = wallet.accounts.first else { return .none }
             return AddressFormatter(style: .extra(1), address: account.address, chain: account.chain).value()
         }
     }
@@ -25,7 +25,7 @@ struct WalletViewModel {
         switch wallet.type {
         case .multicoin:
             return Image(.multicoin)
-        case .view, .single:
+        case .view, .single, .privateKey:
             let name = wallet.accounts.first?.chain.rawValue ?? ""
             return Image(name)
         }
@@ -33,7 +33,7 @@ struct WalletViewModel {
     
     var subImage: Image? {
         switch wallet.type {
-        case .multicoin, .single: .none
+        case .multicoin, .single, .privateKey: .none
         case .view: Image(.glassesRound)
         }
     }
@@ -45,17 +45,6 @@ struct WalletViewModel {
             placeholder: image,
             chainPlaceholder: subImage
         )
-    }
-}
-
-extension WalletViewModel {
-    func isButtonDisabled(type: HeaderButtonType) -> Bool {
-        switch type {
-        case .send, .swap:
-            return wallet.isViewOnly
-        case .buy, .receive:
-            return false
-        }
     }
 }
 

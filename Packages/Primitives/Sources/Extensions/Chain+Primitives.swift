@@ -66,4 +66,13 @@ extension Chain {
     public var stakeChain: StakeChain? {
         StakeChain(rawValue: rawValue)
     }
+
+    public var feeUnitType: FeeUnitType? {
+        switch self.type {
+        case .bitcoin:
+            BitcoinChain(rawValue: rawValue)?.feeUnitType
+        case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
+            nil
+        }
+    }
 }

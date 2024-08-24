@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import AlertToast
 import Style
 
 public struct ToastModifier: ViewModifier {

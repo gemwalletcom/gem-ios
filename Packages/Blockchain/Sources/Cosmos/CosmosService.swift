@@ -216,9 +216,13 @@ extension CosmosService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
-            gasLimit: gasLimit
+            gasLimit: gasLimit,
+            feeRates: [],
+            selectedFeeRate: nil
         )
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -385,7 +389,7 @@ extension CosmosService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension CosmosService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
+    public func getChainID() async throws -> String {
         return try await provider
             .request(.nodeInfo)
             .map(as: CosmosNodeInfoResponse.self).default_node_info.network

@@ -1,15 +1,16 @@
 {
   "configurations" : [
     {
-      "id" : "F565290A-B4C6-4D29-867A-D1DF2DDDD360",
-      "name" : "Test Scheme Action",
+      "id" : "D2F20471-D631-45B5-A92D-5118E9879DC4",
+      "name" : "Test Configuration",
       "options" : {
 
       }
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false
+    "language" : "en",
+    "region" : "US"
   },
   "testTargets" : [
     {

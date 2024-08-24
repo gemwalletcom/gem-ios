@@ -83,9 +83,7 @@ struct ConnectionsScene: View {
             )
         }
         .sheet(isPresented: $isPresentingScanner) {
-            ScanQRCodeNavigationStack(isPresenting: $isPresentingScanner) {
-                onHandleScan(value: $0)
-            }
+            ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -104,7 +102,10 @@ struct ConnectionsScene: View {
     
     func connectURI(uri: String) async {
         do {
-            try await model.addConnectionURI(uri: uri, wallet: keystore.currentWallet!)
+            try await model.addConnectionURI(
+                uri: uri,
+                wallet: try keystore.getCurrentWallet()
+            )
         } catch {
             isPresentingErrorMessage = error.localizedDescription
             NSLog("connectURI error: \(error)")
@@ -115,9 +116,9 @@ struct ConnectionsScene: View {
 // MARK: Actions
 
 private extension ConnectionsScene {
-    private func onHandleScan(value: String) {
+    private func onHandleScan(_ result: String) {
         Task {
-            await connectURI(uri: value)
+            await connectURI(uri: result)
         }
     }
     

@@ -1,0 +1,145 @@
+{
+  "configurations" : [
+    {
+      "id" : "1B6394DA-52A9-4E96-89AC-DF6231EF7709",
+      "name" : "English | en_US",
+      "options" : {
+        "language" : "en",
+        "region" : "US"
+      }
+    },
+    {
+      "id" : "ED27FE35-7B68-4FB2-A54F-E213CA95A8D7",
+      "name" : "Germany | de-DE",
+      "options" : {
+        "language" : "de",
+        "region" : "DE"
+      }
+    },
+    {
+      "id" : "5FA0C39C-F730-4323-BAA5-2849D272E023",
+      "name" : "Spain | es-ES",
+      "options" : {
+        "language" : "es",
+        "region" : "ES"
+      }
+    },
+    {
+      "id" : "B4137A2E-98E4-43E2-8830-6782F8CEE35F",
+      "name" : "France | fr-FR",
+      "options" : {
+        "language" : "fr",
+        "region" : "FR"
+      }
+    },
+    {
+      "id" : "B43704D1-F19B-4859-8E7D-23F301EAA626",
+      "name" : "Japan | ja",
+      "options" : {
+        "language" : "ja",
+        "region" : "JP"
+      }
+    },
+    {
+      "id" : "C39FC699-F235-4DD0-83C3-49FA20DA632C",
+      "name" : "Korea | ko",
+      "options" : {
+        "language" : "ko",
+        "region" : "KR"
+      }
+    },
+    {
+      "id" : "0F5B236A-2207-4912-AD54-C6130F18F556",
+      "name" : "Russian | ru-RU",
+      "options" : {
+        "language" : "ru",
+        "region" : "RU"
+      }
+    },
+    {
+      "id" : "AD334C7E-EA0A-4FB3-B35B-7D9C80743297",
+      "name" : "Turkey | tr",
+      "options" : {
+        "language" : "tr",
+        "region" : "TR"
+      }
+    },
+    {
+      "id" : "248584BB-3553-478A-8D5F-E02CA6022533",
+      "name" : "Ukraine | uk",
+      "options" : {
+        "language" : "uk",
+        "region" : "UA"
+      }
+    },
+    {
+      "id" : "E93AF177-9AFD-4845-A648-C082B8C25BA6",
+      "name" : "Vietnam | vi",
+      "options" : {
+        "language" : "vi",
+        "region" : "VN"
+      }
+    },
+    {
+      "id" : "497C5D5B-4FDD-4343-B31D-E75D889C3E91",
+      "name" : "Brazil | pt-BR",
+      "options" : {
+        "language" : "pt-BR",
+        "region" : "BR"
+      }
+    },
+    {
+      "id" : "8524A5B9-2F09-461E-8A21-DA5D3778DE45",
+      "name" : "Chinese Simplified | zh-Hans",
+      "options" : {
+        "language" : "zh-Hans",
+        "region" : "CN"
+      }
+    },
+    {
+      "id" : "C05DAAD5-1E53-42F2-88E7-744B1B36825C",
+      "name" : "Chinese Traditional | zh-Hant",
+      "options" : {
+        "language" : "zh-Hant",
+        "region" : "CN"
+      }
+    },
+    {
+      "id" : "D70F8E48-04C4-41E9-B8BB-2B0D0110F380",
+      "name" : "Italy | it",
+      "options" : {
+        "language" : "it",
+        "region" : "IT"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "SCREENSHOTS_PATH",
+        "value" : "${SCREENSHOTS_PATH}"
+      },
+      {
+        "key" : "SCREENSHOTS_SECRET_PHRASE",
+        "value" : "$(SCREENSHOTS_SECRET_PHRASE)"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Gem.xcodeproj",
+      "identifier" : "D8A1F8722B17F21E00B15F54",
+      "name" : "Screenshots"
+    },
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Gem.xcodeproj",
+        "identifier" : "D8A1F8722B17F21E00B15F54",
+        "name" : "Screenshots"
+      }
+    }
+  ],
+  "version" : 1
+}

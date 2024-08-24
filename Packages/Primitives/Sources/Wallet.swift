@@ -7,6 +7,7 @@ import Foundation
 public enum WalletType: String, Codable, Equatable, Hashable {
 	case multicoin
 	case single
+	case privateKey
 	case view
 }
 
@@ -23,5 +24,13 @@ public struct Wallet: Codable, Equatable {
 		self.index = index
 		self.type = type
 		self.accounts = accounts
+	}
+}
+
+public struct WalletId: Codable, Equatable {
+	public let id: String
+
+	public init(id: String) {
+		self.id = id
 	}
 }

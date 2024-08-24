@@ -6,6 +6,14 @@ import Primitives
 
 extension Config {
     public static let shared = Config()
+
+    public func config(for evmChain: EVMChain) -> EvmChainConfig {
+        getEvmChainConfig(chain: evmChain.rawValue)
+    }
+
+    public func config(for bitcoinChain: BitcoinChain) -> BitcoinChainConfig {
+        getBitcoinChainConfig(chain: bitcoinChain.rawValue)
+    }
 }
 
 public struct Docs {
@@ -44,5 +52,17 @@ public struct ChainConfig {
 public struct WalletConnectConfig {
     public static func config() -> Gemstone.WalletConnectConfig {
         Config.shared.getWalletConnectConfig()
+    }
+}
+
+public struct SolanaConfig {
+    public static func tokenProgramId(owner: String) -> Optional<SolanaTokenProgramId> {
+        guard
+            let rawId = Config.shared.getSolanaTokenProgramId(address: owner),
+            let id = SolanaTokenProgramId(rawValue: rawId)
+        else {
+            return .none
+        }
+        return id
     }
 }

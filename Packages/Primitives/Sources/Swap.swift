@@ -42,6 +42,14 @@ public struct SwapQuoteData: Codable, Equatable, Hashable {
 	}
 }
 
+public struct SwapApprovalData: Codable, Equatable, Hashable {
+	public let spender: String
+
+	public init(spender: String) {
+		self.spender = spender
+	}
+}
+
 public struct SwapQuote: Codable, Equatable, Hashable {
 	public let chainType: ChainType
 	public let fromAmount: String
@@ -49,14 +57,16 @@ public struct SwapQuote: Codable, Equatable, Hashable {
 	public let feePercent: Float
 	public let provider: SwapProvider
 	public let data: SwapQuoteData?
+	public let approval: SwapApprovalData?
 
-	public init(chainType: ChainType, fromAmount: String, toAmount: String, feePercent: Float, provider: SwapProvider, data: SwapQuoteData?) {
+	public init(chainType: ChainType, fromAmount: String, toAmount: String, feePercent: Float, provider: SwapProvider, data: SwapQuoteData?, approval: SwapApprovalData?) {
 		self.chainType = chainType
 		self.fromAmount = fromAmount
 		self.toAmount = toAmount
 		self.feePercent = feePercent
 		self.provider = provider
 		self.data = data
+		self.approval = approval
 	}
 }
 

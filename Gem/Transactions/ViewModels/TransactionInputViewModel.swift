@@ -7,11 +7,10 @@ import Primitives
 import GemstonePrimitives
 
 struct TransactionInputViewModel {
-    
     let data: TransferData
     let input: TransactionPreload?
     let metaData: TransferDataMetadata?
-    let transferAmountResult: TranferAmountResult?
+    let transferAmountResult: TransferAmountResult?
 
     private let valueFormatter = ValueFormatter(style: .full)
     private let networkFeeFormatter = ValueFormatter(style: .medium)
@@ -20,20 +19,24 @@ struct TransactionInputViewModel {
         data: TransferData,
         input: TransactionPreload?,
         metaData: TransferDataMetadata?,
-        transferAmountResult: TranferAmountResult?
+        transferAmountResult: TransferAmountResult?
     ) {
         self.input = input
         self.data = data
         self.metaData = metaData
         self.transferAmountResult = transferAmountResult
     }
-    
+
+    var dataModel: TransferDataViewModel {
+        TransferDataViewModel(data: data)
+    }
+
     var asset: Asset {
-        data.recipientData.asset
+        dataModel.asset
     }
     
     var feeAsset: Asset {
-        data.recipientData.asset.feeAsset
+        dataModel.asset.feeAsset
     }
     
     var value: BigInt {
@@ -57,59 +60,10 @@ struct TransactionInputViewModel {
             return nil
         }
     }
-    
-    var address: String {
-        if let name = data.recipientData.recipient.name {
-            return name
-        }
-        return data.recipientData.recipient.address
-    }
-    
-    var showMemoField: Bool {
-        switch data.type {
-        case .transfer:
-            return AssetViewModel(asset: data.recipientData.asset).supportMemo
-        case .swap, .generic, .stake:
-            return false
-        }
-    }
-    
-    var memo: String? { data.recipientData.recipient.memo }
-    
-    var recipient: String? {
-        switch data.type {
-        case .transfer,
-            .swap,
-            .generic:
-            address
-        case .stake(_, let stakeType):
-            switch stakeType {
-            case .stake(let validator):
-                validator.name
-            case .unstake(let delegation):
-                delegation.validator.name
-            case .redelegate(_, let toValidator):
-                toValidator.name
-            case .withdraw(let delegation):
-                delegation.validator.name
-            case .rewards:
-                .none
-            }
-        }
-    }
-    
-    var recipientAccount: SimpleAccount {
-        SimpleAccount(
-            name: recipient,
-            chain: data.recipientData.asset.chain,
-            address: data.recipientData.recipient.address
-        )
-    }
-    
-    var network: String {
-        data.recipientData.asset.chain.asset.name
-    }
-    
+
+    var showMemoField: Bool { dataModel.shouldShowMemo }
+    var memo: String? { dataModel.memo }
+
     var amountText: String {
         valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
@@ -118,18 +72,18 @@ struct TransactionInputViewModel {
         fiatAmountText(price: metaData?.assetPrice, value: value, decimals: asset.decimals.asInt) ?? ""
     }
     
-    var networkFeeText: String {
+    var networkFeeText: String? {
         if let feeValue {
             return networkFeeFormatter.string(feeValue, decimals: feeAsset.decimals.asInt, currency: feeAsset.symbol)
         }
-        return ""
+        return .none
     }
     
     var networkFeeFiatText: String? {
         if let feeValue {
             return fiatAmountText(price: metaData?.feePrice, value: feeValue, decimals: feeAsset.decimals.asInt)
         }
-        return nil
+        return .none
     }
     
     private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {

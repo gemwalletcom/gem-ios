@@ -11,6 +11,7 @@ struct SelectAssetScene: View {
     @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.walletService) private var walletService
+    @Environment(\.nodeService) private var nodeService
 
     @State var isPresentingAddToken: Binding<Bool>
     @State private var isPresentingCopyMessage: Bool = false
@@ -60,18 +61,17 @@ struct SelectAssetScene: View {
                     switch model.selectType {
                     case .buy, .receive, .send, .swap, .stake:
                         NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                            SelectAssetListView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
                         }
                     case .manage, .hidden:
-                        SelectAssetListView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
                     }
                 }
             } footer: {
                 VStack {
                     if model.isLoading {
                         HStack {
-                            ProgressView()
-                                .progressViewStyle(.circular)
+                            LoadingView()
                         }
                     } else if assets.isEmpty {
                         Text(Localized.Assets.noAssetsFound)
@@ -99,7 +99,6 @@ struct SelectAssetScene: View {
                 await model.searchQuery(query: query)
             }
         }
-        
         .navigationDestination(for: SelectAssetInput.self) { input in
             switch input.type {
             case .send:
@@ -113,7 +112,7 @@ struct SelectAssetScene: View {
                 ReceiveScene(
                     model: ReceiveViewModel(
                         assetModel: AssetViewModel(asset: input.asset),
-                        wallet: model.wallet,
+                        walletId: model.wallet.walletId,
                         address: input.assetAddress.address,
                         walletService: walletService
                     )
@@ -126,16 +125,18 @@ struct SelectAssetScene: View {
                     )
             case .swap:
                 SwapScene(model: SwapViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    walletService: walletService,
-                    assetId: input.asset.id)
+                        wallet: model.wallet,
+                        assetId: input.asset.id,
+                        walletService: walletService,
+                        swapService: SwapService(nodeProvider: nodeService),
+                        keystore: keystore
+                    )
                 )
             case .stake:
                 StakeScene(model: StakeViewModel(
                     wallet: model.wallet,
                     chain: input.asset.id.chain,
-                    service: walletService.stakeService)
+                    stakeService: walletService.stakeService)
                 )
             case .manage, .hidden:
                 EmptyView()
@@ -143,7 +144,7 @@ struct SelectAssetScene: View {
         }
     }
     
-    func assetAction(_ action: AssetListAction, assetData: AssetData) {
+    func assetAction(_ action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
         case .enabled(let enabled):
@@ -159,15 +160,14 @@ struct SelectAssetScene: View {
     }
 }
 
-private struct SelectAssetListView: View {
-    
+private struct ListAssetItemSelectionView: View {
     let assetData: AssetData
     let type: AssetListType
-    let action: (AssetListAction, AssetData) -> Void
+    let action: (ListAssetItemAction, AssetData) -> Void
     
     var body: some View {
-        AssetListView(
-            model: AssetListViewModel(
+        ListAssetItemView(
+            model: ListAssetItemViewModel(
                 assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .short),
                 type: type,
                 action: {

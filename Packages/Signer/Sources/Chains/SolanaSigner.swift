@@ -28,6 +28,10 @@ public struct SolanaSigner: Signable {
         let tokenId = try input.asset.getTokenId()
         let amount = input.value.UInt
         let destinationAddress = input.destinationAddress
+        let tokenProgram: WalletCore.SolanaTokenProgramId = switch input.token.tokenProgram {
+        case .token: .tokenProgram
+        case .token2022: .token2022Program
+        }
         let input = SolanaSigningInput.with {
             switch input.token.recipientTokenAddress {
             case .some(let recipientTokenAddress):
@@ -38,6 +42,7 @@ public struct SolanaSigner: Signable {
                     $0.senderTokenAddress = input.token.senderTokenAddress
                     $0.recipientTokenAddress = recipientTokenAddress
                     $0.memo = input.memo.valueOrEmpty
+                    $0.tokenProgramID = tokenProgram
                 }
             case .none:
                 let recipientTokenAddress = SolanaAddress(string: destinationAddress)!.defaultTokenAddress(tokenMintAddress: tokenId)!
@@ -49,6 +54,7 @@ public struct SolanaSigner: Signable {
                     $0.senderTokenAddress = input.token.senderTokenAddress
                     $0.recipientTokenAddress = recipientTokenAddress
                     $0.memo = input.memo.valueOrEmpty
+                    $0.tokenProgramID = tokenProgram
                 }
             }
             $0.recentBlockhash = input.block.hash

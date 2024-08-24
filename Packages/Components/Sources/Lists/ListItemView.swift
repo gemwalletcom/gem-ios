@@ -30,6 +30,8 @@ public struct ListItemView: View {
     public let imageSize: CGFloat
     public let cornerRadius: CGFloat
 
+    public var infoAction: (() -> Void)?
+
     public let placeholders: [ListItemViewPlaceholderType]
 
     public init(
@@ -47,7 +49,8 @@ public struct ListItemView: View {
         image: Image? = nil,
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0,
-        placeholders: [ListItemViewPlaceholderType] = []
+        placeholders: [ListItemViewPlaceholderType] = [],
+        infoAction: (() -> Void)? = nil
     ) {
         let titleValue = title.map { TextValue(text: $0, style: titleStyle) }
         let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra) }
@@ -65,7 +68,8 @@ public struct ListItemView: View {
             image: image,
             imageSize: imageSize,
             cornerRadius: cornerRadius,
-            placeholders: placeholders
+            placeholders: placeholders,
+            infoAction: infoAction
         )
     }
 
@@ -79,7 +83,9 @@ public struct ListItemView: View {
         image: Image? = nil,
         imageSize: CGFloat = 28.0,
         cornerRadius: CGFloat = 0,
-        placeholders: [ListItemViewPlaceholderType]
+        showInfo: Bool = false,
+        placeholders: [ListItemViewPlaceholderType],
+        infoAction: (() -> Void)? = nil
     ) {
         self.title = title
         self.titleExtra = titleExtra
@@ -91,6 +97,7 @@ public struct ListItemView: View {
         self.imageSize = imageSize
         self.cornerRadius = cornerRadius
         self.placeholders = placeholders
+        self.infoAction = infoAction
     }
 
     public var body: some View {
@@ -99,13 +106,18 @@ public struct ListItemView: View {
                 ImageView(image: image, imageSize: imageSize, cornerRadius: cornerRadius)
             }
             if let title = title {
-                TitleView(title: title, titleExtra: titleExtra, titleTag: titleTag, titleTagType: titleTagType)
+                TitleView(
+                    title: title,
+                    titleExtra: titleExtra,
+                    titleTag: titleTag,
+                    titleTagType: titleTagType,
+                    infoAction: infoAction
+                )
             }
 
             if showPlaceholderProgress(for: .subtitle, value: subtitle) {
                 Spacer()
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: subtitle?.style.color ?? Colors.gray))
+                LoadingView(tint: subtitle?.style.color ?? Colors.gray)
             } else if let subtitle = subtitle {
                 Spacer(minLength: Spacing.extraSmall)
                 SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
@@ -155,6 +167,7 @@ extension ListItemView {
         public let titleExtra: TextValue?
         public let titleTag: TextValue?
         public let titleTagType: TitleTagType
+        public let infoAction: (() -> Void)?
 
         var body: some View {
             VStack(alignment: .leading, spacing: Spacing.tiny) {
@@ -163,6 +176,15 @@ extension ListItemView {
                         .textStyle(title.style)
                         .lineLimit(1)
                         .truncationMode(.middle)
+
+                    if let infoAction {
+                        Button(action: infoAction) {
+                            Image(systemName: SystemImage.info)
+                                .font(title.style.font)
+                                .foregroundStyle(Colors.gray)
+                        }
+                        .buttonStyle(.plain)
+                    }
 
                     if let tag = titleTag {
                         TitleTagView(titleTag: tag, titleTagType: titleTagType)
@@ -201,7 +223,7 @@ extension ListItemView {
                 case .none:
                     EmptyView()
                 case .progressView:
-                    ListItemProgressView(size: .small, tint: titleTag.style.color)
+                    LoadingView(size: .small, tint: titleTag.style.color)
                 case .image(let image):
                     image
                 }

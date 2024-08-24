@@ -1,11 +1,23 @@
 import SwiftUI
 import Style
 import Components
+import Primitives
 
 struct WalletBarViewViewModel {
     let name: String
     let image: AssetImage?
     let showChevron: Bool
+}
+
+extension WalletBarViewViewModel {
+    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
+        let model = WalletViewModel(wallet: wallet)
+        return WalletBarViewViewModel(
+            name: model.name,
+            image: model.assetImage,
+            showChevron: showChevron
+        )
+    }
 }
 
 struct WalletBarView: View {

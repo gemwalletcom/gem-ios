@@ -26,6 +26,9 @@ struct TransactionsScene: View {
         List {
             TransactionsList(transactions)
         }
+        .refreshable {
+            await fetch()
+        }
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {
@@ -33,13 +36,10 @@ struct TransactionsScene: View {
                     .textStyle(.body)
             }
         }
-        .refreshable {
-            onRefresh()
-        }
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
             TransactionScene(
-                input: TransactionSceneInput(transactionId: transaction.id, wallet: model.wallet)
+                input: TransactionSceneInput(transactionId: transaction.id, walletId: model.walletId)
             )
         }
         .onAppear {
@@ -52,26 +52,22 @@ struct TransactionsScene: View {
 
 extension TransactionsScene {
     private func onAppear() {
-        fetch()
-    }
-
-    private func onRefresh() {
-        fetch()
+        Task {
+            await fetch()
+        }
     }
 }
 
 // MARK: - Effects
 
 extension TransactionsScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
+    private func fetch() async {
+        await model.fetch()
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    TransactionsScene(model: .init(wallet: .main, type: .all, service: .main))
+    TransactionsScene(model: .init(walletId: .main, type: .all, service: .main))
 }

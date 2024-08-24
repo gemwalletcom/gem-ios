@@ -9,11 +9,6 @@ import GRDB
 import GRDBQuery
 import Store
 
-struct ChartSelection {
-    let period: ChartPeriod
-    let title: String
-}
-
 struct ChartScene: View {
     
     @StateObject var model: ChartsViewModel
@@ -35,17 +30,21 @@ struct ChartScene: View {
                     VStack {
                         switch model.state {
                         case .noData:
-                            StateEmptyView(title: Localized.Common.notAvailable)
+                            StateEmptyView(title: model.emptyTitle)
                         case .loading:
-                            StateLoadingView()
+                            LoadingView()
                         case .loaded(let model):
                             ChartView(model: model)
                         case .error(let error):
-                            StateErrorView(error: error, message: Localized.Common.tryAgain)
+                            StateEmptyView(
+                                title: model.errorTitle,
+                                description: error.localizedDescription,
+                                image: Image(systemName: SystemImage.errorOccurred)
+                            )
                         }
                     }
                     .frame(height: 320)
-                    
+
                     HStack(alignment: .center, spacing: 10) {
                         ForEach(model.periods, id: \.period) { period in
                             Button {
@@ -89,30 +88,17 @@ struct ChartScene: View {
                         )
                     }
                 }
-                Section {
-                    if let coingecko = details.details.links.coingecko, let url = URL(string: coingecko) {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transaction.viewOn("CoinGecko"))) {
-                            UIApplication.shared.open(url)
+                Section(Localized.Social.links) {
+                    ForEach(details.socialUrls) { link in
+                        NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
+                            UIApplication.shared.open(link.url)
                         }
                     }
                 }
-                if !details.socialUrls.isEmpty {
-                    Section(Localized.Social.links) {
-                        ForEach(details.socialUrls) { link in
-                            NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
-                                UIApplication.shared.open(link.url)
-                            }
-                        }
-                    }
-                }
-                
             }
         }
         .refreshable {
-            NSLog("refresh chart asset \(model.assetModel.asset.name)")
-            Task {
-                await fetch()
-            }
+            await fetch()
         }
         .taskOnce {
             Task { await model.updateAsset() }

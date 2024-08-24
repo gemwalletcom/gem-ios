@@ -9,58 +9,71 @@ import Store
 import Style
 
 struct AssetScene: View {
-    
-    private let input: AssetSceneInput
-    var action: HeaderButtonAction?
-    @Binding var isPresentingAssetSelectType: SelectAssetInput?
-    @State var isPresentingStaking: Bool = false
-    
-    private var model: AssetSceneViewModel {
-        return AssetSceneViewModel(
-            assetsService: assetsService,
-            transactionsService: transactionsService,
-            stakeService: stakeService,
-            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-            walletModel: WalletViewModel(wallet: input.wallet)
-        )
-    }
-    
-    @State private var showingOptions = false
-    
     @Environment(\.walletService) private var walletService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.stakeService) private var stakeService
-    
+    @Environment(\.bannerService) private var bannerService
+
+    @State private var isPresentingStaking: Bool = false
+    @State private var showingOptions = false
+
+    @Binding private var isPresentingAssetSelectType: SelectAssetInput?
+
     @Query<TransactionsRequest>
-    var transactions: [TransactionExtended]
-    
+    private var transactions: [TransactionExtended]
+
     @Query<AssetRequest>
-    var assetData: AssetData
-    
+    private var assetData: AssetData
+
+    @Query<BannersRequest>
+    private var banners: [Primitives.Banner]
+
+
+    private let wallet: Wallet
+    private let input: AssetSceneInput
+
+    private var model: AssetSceneViewModel {
+        return AssetSceneViewModel(
+            walletService: walletService,
+            assetsService: assetsService,
+            transactionsService: transactionsService,
+            stakeService: stakeService,
+            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            walletModel: WalletViewModel(wallet: wallet)
+        )
+    }
+
     init(
+        wallet: Wallet,
         input: AssetSceneInput,
         isPresentingAssetSelectType: Binding<SelectAssetInput?>
     ) {
+        self.wallet = wallet
         self.input = input
         _isPresentingAssetSelectType = isPresentingAssetSelectType
         _assetData = Query(constant: input.assetRequest, in: \.db.dbQueue)
         _transactions = Query(constant: input.transactionsRequest, in: \.db.dbQueue)
+        _banners = Query(constant: input.bannersRequest, in: \.db.dbQueue)
     }
-    
+
     var body: some View {
         List {
             Section { } header: {
-                WalletHeaderView(model: model.headerViewModel) {
-                    isPresentingAssetSelectType = SelectAssetInput(type: $0.selectType, assetAddress: assetData.assetAddress)
-                }
-                .padding(.top, 8)
+                WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
+                    .padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            
+
+            Section {
+                BannerView(banners: banners) { banner in
+                    Task { try bannerService.closeBanner(banner: banner) }
+                }
+            }
+
             Section {
                 if model.showPriceView {
                     NavigationLink(value: model.assetModel.asset) {
@@ -68,13 +81,11 @@ struct AssetScene: View {
                             ListItemView(title: Localized.Asset.price)
                                 .accessibilityIdentifier("price")
                             Spacer()
-                            HStack(spacing: 4) {
+                            HStack(spacing: Spacing.tiny) {
                                 Text(model.priceView.text)
-                                    .font(model.priceView.style.font)
-                                    .foregroundColor(model.priceView.style.color)
+                                    .textStyle(model.priceView.style)
                                 Text(model.priceChangeView.text)
-                                    .font(model.priceChangeView.style.font)
-                                    .foregroundColor(model.priceChangeView.style.color)
+                                    .textStyle(model.priceChangeView.style)
                             }
                         }
                     }
@@ -86,71 +97,61 @@ struct AssetScene: View {
                     }
                 }
             }
-            
+
             if model.showBalances {
                 Section(Localized.Asset.balances) {
                     ListItemView(title: Localized.Asset.Balances.available, subtitle: model.assetDataModel.availableBalanceTextWithSymbol)
+
                     if model.showStakedBalance {
                         NavigationCustomLink(
-                            with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)) {
-                                isPresentingStaking.toggle()
-                            }
+                            with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
+                            action: onToggleStacking
+                        )
+                        .accessibilityIdentifier("stake")
                     }
+
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Asset.Balances.reserved, subtitle: model.assetDataModel.reservedBalanceTextWithSymbol)) {
-                            UIApplication.shared.open(url)
-                        }
+                        NavigationCustomLink(
+                            with: ListItemView(title: Localized.Asset.Balances.reserved, subtitle: model.assetDataModel.reservedBalanceTextWithSymbol),
+                            action: { onOpenLink(url) }
+                        )
                     }
                 }
             } else if model.assetDataModel.isStakeEnabled {
                 NavigationCustomLink(
-                    with: ListItemView(title: Localized.Transfer.Stake.title, subtitle: model.stakeAprText)) {
-                        isPresentingStaking.toggle()
-                    }
+                    with: ListItemView(title: Localized.Transfer.Stake.title, subtitle: model.stakeAprText),
+                    action: onToggleStacking
+                )
+                .accessibilityIdentifier("stake")
             }
-            
+
             if transactions.count > 0 {
                 TransactionsList(transactions)
-            }
-        }
-//        .toolbar {
-//            ToolbarItem(placement: .principal) {
-//                HStack {
-//                    AssetTitleView(model: model.headerTitleView)
-//                }
-//            }
-//        }
-        .refreshable {
-            NSLog("refresh asset \(model.assetModel.asset.name)")
-            Task {
-                do {
-                    try await fetch()
-                } catch {
-                    NSLog("refresh asset \(model.assetModel.asset.name) failed")
+            } else {
+                Section {
+                    StateEmptyView(title: Localized.Activity.EmptyState.message)
                 }
             }
         }
+        .refreshable {
+            await fetch()
+        }
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showingOptions = true
-                } label: {
+                Button(action: onSelectOptions) {
                     Image(systemName: SystemImage.ellipsis)
-                }.confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
-                    Button(model.viewAddressOnTitle) {
-                        UIApplication.shared.open(model.addressExplorerUrl)
-                    }
+                }
+                .confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
+                    Button(model.viewAddressOnTitle) { onOpenLink(model.addressExplorerUrl )}
                     if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
-                        Button(title) {
-                            UIApplication.shared.open(url)
-                        }
+                        Button(title) { onOpenLink(url) }
                     }
                 }
             }
         }
         .navigationDestination(for: Asset.self) { asset in
             ChartScene(model: ChartsViewModel(
-                    walletModel: model.walletModel,
+                    walletId: input.walletId,
                     priceService: walletService.priceService,
                     assetsService: walletService.assetsService,
                     assetModel: AssetViewModel(asset: asset)
@@ -161,43 +162,66 @@ struct AssetScene: View {
             NavigationStack {
                 StakeScene(
                     model: StakeViewModel(
-                        wallet: model.walletModel.wallet,
+                        wallet: wallet,
                         chain: model.assetModel.asset.chain,
-                        service: stakeService
+                        stakeService: stakeService
                     )
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingStaking.toggle()
-                        }
+                        Button(Localized.Common.done, action: onToggleStacking)
                         .bold()
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .taskOnce {
-            Task { try await fetch() }
-            Task { await model.updateAsset() }
-        }
+        .taskOnce(onTaskOnce)
         .navigationTitle(model.title)
-    }
-    
-    func fetch() async throws {
-        async let updateAsset: () = try walletService.updateAsset(
-            wallet: model.walletModel.wallet,
-            assetId: model.assetModel.asset.id
-        )
-        async let updateTransactions: () = try model.fetchTransactions()
-        let _ = try await [updateAsset, updateTransactions]
     }
 }
 
-//struct AssetScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        AssetScene(
-//            model: .from(walletModel: WalletViewModel(wallet: .main), assetData: .main)
-//        )
-//    }
-//}
+// MARK: - Actions
+
+extension AssetScene {
+    @MainActor
+    private func onSelectHeader(_ buttonType: HeaderButtonType) {
+        isPresentingAssetSelectType = SelectAssetInput(type: buttonType.selectType, assetAddress: assetData.assetAddress)
+    }
+
+    @MainActor
+    private func onToggleStacking() {
+        isPresentingStaking.toggle()
+    }
+
+    @MainActor
+    private func onOpenLink(_ url: URL) {
+        // TODO: - find issue why we can't use @Environment(\.openURL) private var openURL here
+        // once we add native env url openning, we go to recursion on NavigationLink(value: model.assetModel.asset) { }
+        // AssetSceneViewModel recreates infinitly
+        guard UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
+    }
+
+    @MainActor
+    private func onSelectOptions() {
+        showingOptions = true
+    }
+
+    private func onTaskOnce() {
+        Task {
+            await fetch()
+        }
+        Task {
+            await model.updateAsset()
+        }
+    }
+}
+
+// MARK: - Effects
+
+extension AssetScene {
+    private func fetch() async {
+        await model.updateWallet()
+    }
+}

@@ -7,6 +7,7 @@ public enum XRPProvider: TargetType {
     case account(address: String)
     case fee
     case transaction(id: String)
+    case latestBlock
     case broadcast(data: String)
     
     public var baseUrl: URL {
@@ -15,14 +16,11 @@ public enum XRPProvider: TargetType {
     
     public var rpc_method: String {
         switch self {
-        case .account:
-            return "account_info"
-        case .fee:
-            return "fee"
-        case .transaction:
-            return "tx"
-        case .broadcast:
-            return "submit"
+        case .account: "account_info"
+        case .fee: "fee"
+        case .transaction: "tx"
+        case .latestBlock: "ledger_current"
+        case .broadcast: "submit"
         }
     }
     
@@ -34,7 +32,7 @@ public enum XRPProvider: TargetType {
         return ""
     }
     
-    public var task: Task {
+    public var data: RequestData {
         switch self {
         case .account(let address):
             return .encodable(
@@ -43,7 +41,8 @@ public enum XRPProvider: TargetType {
                     "ledger_index": "current",
                 ]], id: 1)
             )
-        case .fee:
+        case .fee,
+            .latestBlock:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [JSON<String>.dictionary([:])], id: 1)
             )

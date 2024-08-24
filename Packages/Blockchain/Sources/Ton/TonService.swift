@@ -63,6 +63,12 @@ extension TonService {
         }
         return try Gemstone.tonDecodeJettonAddress(base64Data: cell.object.data.b64, len: cell.object.data.len.asUInt64)
     }
+    
+    private func masterChainInfo() async throws -> TonMasterChainBlock {
+        try await provider
+            .request(.masterChainInfo)
+            .map(as: TonResult<TonMasterChainBlock>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -121,7 +127,9 @@ extension TonService: ChainFeeCalculateable {
                 return Fee(
                     fee: baseFee,
                     gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1
+                    gasLimit: 1,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             case .token:
                 let tokenId = try asset.getTokenId()
@@ -137,13 +145,17 @@ extension TonService: ChainFeeCalculateable {
                     fee: baseFee,
                     gasPriceType: .regular(gasPrice: baseFee),
                     gasLimit: 1,
-                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
+                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)],
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             }
         case .swap, .generic, .stake:
             fatalError()
         }
     }
+
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -215,7 +227,8 @@ extension TonService: ChainTransactionStateFetchable {
 
 extension TonService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        throw AnyError("Not Implemented")
+        //TODO: Add getInSync check later
+        true
     }
 }
 
@@ -261,8 +274,8 @@ extension TonService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension TonService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        throw AnyError("Not Implemented")
+    public func getChainID() async throws -> String {
+        try await masterChainInfo().initial.root_hash
     }
 }
 
@@ -270,11 +283,21 @@ extension TonService: ChainIDFetchable {
 
 extension TonService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
-        throw AnyError("Not Implemented")
+        try await masterChainInfo().last.seqno.asInt.asBigInt
     }
 }
 
 // MARK: - Models
+
+public struct TonMasterChainBlock: Codable {
+    public var last: TonBlock
+    public var initial: TonBlock
+
+    enum CodingKeys: String, CodingKey {
+        case last
+        case initial = "init"
+    }
+}
 
 struct RunGetMethod: Codable {
     let stack: [[StackItem]]
@@ -333,3 +356,4 @@ extension TonWalletInfo {
         Int(seqno ?? 0)
     }
 }
+

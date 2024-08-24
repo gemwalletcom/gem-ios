@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import Gemstone
+import GemstonePrimitives
 import WalletCore
 
 public struct SolanaService {
@@ -41,7 +42,8 @@ extension SolanaService {
     ) async throws -> SignerInputToken {
         async let getSenderTokenAccounts = getAccounts(token: tokenId, owner: senderAddress)
         async let getRecipientTokenAccounts = getAccounts(token: tokenId, owner: destinationAddress)
-        let (senderTokenAccounts, recipientTokenAccounts) = try await (getSenderTokenAccounts, getRecipientTokenAccounts)
+        async let getSplProgram = getTokenProgram(tokenId: tokenId)
+        let (senderTokenAccounts, recipientTokenAccounts, splProgram) = try await (getSenderTokenAccounts, getRecipientTokenAccounts, getSplProgram)
 
         guard let senderTokenAddress = senderTokenAccounts.first?.pubkey else {
             throw AnyError("Sender token address is empty")
@@ -50,12 +52,14 @@ extension SolanaService {
         if let recipientTokenAddress = recipientTokenAccounts.first?.pubkey {
             return SignerInputToken(
                 senderTokenAddress: senderTokenAddress,
-                recipientTokenAddress: recipientTokenAddress
+                recipientTokenAddress: recipientTokenAddress,
+                tokenProgram: splProgram
             )
         }
         return SignerInputToken(
             senderTokenAddress: senderTokenAddress,
-            recipientTokenAddress: .none
+            recipientTokenAddress: .none,
+            tokenProgram: splProgram
         )
     }
 
@@ -126,6 +130,12 @@ extension SolanaService {
             .request(.slot)
             .map(as: JSONRPCResponse<Int>.self).result.asBigInt
     }
+    
+    private func getGenesisHash() async throws -> String {
+        try await provider
+            .request(.genesisHash)
+            .map(as: JSONRPCResponse<String>.self).result
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -163,6 +173,7 @@ extension SolanaService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension SolanaService: ChainFeeCalculateable {
+    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     public func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
@@ -172,7 +183,9 @@ extension SolanaService: ChainFeeCalculateable {
                 return Fee(
                     fee: fee,
                     gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1
+                    gasLimit: 1,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             case .token:
                 async let getBaseFee = getBaseFee()
@@ -193,7 +206,9 @@ extension SolanaService: ChainFeeCalculateable {
                     fee: fee,
                     gasPriceType: .regular(gasPrice: fee),
                     gasLimit: 1,
-                    options: options
+                    options: options,
+                    feeRates: [],
+                    selectedFeeRate: nil
                 )
             }
         case .swap, .stake:
@@ -201,7 +216,9 @@ extension SolanaService: ChainFeeCalculateable {
             return Fee(
                 fee: fee,
                 gasPriceType: .regular(gasPrice: fee),
-                gasLimit: 1
+                gasLimit: 1,
+                feeRates: [],
+                selectedFeeRate: nil
             )
         case .generic:
             fatalError()
@@ -389,7 +406,22 @@ extension SolanaService: ChainTokenable {
             type: .spl
         )
     }
-    
+
+    public func getTokenProgram(tokenId: String) async throws -> Primitives.SolanaTokenProgramId {
+        do {
+            let owner = try await provider.request(.getAccountInfo(account: tokenId))
+                .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
+                .result.value.owner
+
+            guard let id = SolanaConfig.tokenProgramId(owner: owner) else {
+                throw AnyError("Unknow token program id")
+            }
+            return id
+        } catch {
+            return .token
+        }
+    }
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.count.isBetween(40, and: 60) && Base58.decodeNoCheck(string: tokenId) != nil
     }
@@ -398,8 +430,8 @@ extension SolanaService: ChainTokenable {
 // MARK: - ChainIDFetchable
  
 extension SolanaService: ChainIDFetchable {
-    public func getChainID() async throws -> String? {
-        .none
+    public func getChainID() async throws -> String {
+        try await getGenesisHash()
     }
 }
 
@@ -410,3 +442,4 @@ extension SolanaService: ChainLatestBlockFetchable {
         try await getSlot()
     }
 }
+

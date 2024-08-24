@@ -53,6 +53,15 @@ struct ReceiveScene: View {
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    showShareSheet.toggle()
+                } label: {
+                    Image(systemName: SystemImage.share)
+                }
+            }
+        }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [model.sharableText])
         }
@@ -89,7 +98,7 @@ struct ReceiveScene_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ReceiveScene(
-                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), wallet: .main, address: "", walletService: .main)
+                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), walletId: .main, address: "", walletService: .main)
             )
             .navigationBarTitleDisplayMode(.inline)
         }

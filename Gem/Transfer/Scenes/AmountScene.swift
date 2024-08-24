@@ -107,29 +107,26 @@ struct AmountScene: View {
                 if model.isBalanceViewEnabled {
                     Section {
                         VStack {
-                            AssetListItemView {
-                                AssetImageView(assetImage: model.assetImage)
-                            } primary: {
-                                AnyView(
-                                    VStack(alignment: .leading, spacing: 4) {
+                            ListItemFlexibleView(
+                                left: {
+                                    AssetImageView(assetImage: model.assetImage)
+                                },
+                                primary: {
+                                    VStack(alignment: .leading, spacing: Spacing.tiny) {
                                         Text(model.assetName)
-                                            .font(.system(size: 16))
-                                            .fontWeight(.semibold)
+                                            .textStyle(
+                                                TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                                            )
                                         Text(model.balanceText)
-                                            .font(.system(size: 13))
-                                            .fontWeight(.medium)
-                                            .foregroundColor(Colors.gray)
+                                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
                                     }
-                                )
-                            } secondary: {
-                                AnyView(
-                                    HStack {
-                                        Button(Localized.Transfer.max, action: useMax)
-                                            .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
-                                            .fixedSize()
-                                    }
-                                )
-                            }
+                                },
+                                secondary: {
+                                    Button(Localized.Transfer.max, action: useMax)
+                                        .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                        .fixedSize()
+                                }
+                            )
                         }
                         .frame(maxWidth: .infinity)
                     }
@@ -145,6 +142,7 @@ struct AmountScene: View {
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .buttonStyle(.blue())
         }
+        .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .navigationDestination(for: $transferData) {

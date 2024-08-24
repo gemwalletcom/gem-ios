@@ -4,11 +4,12 @@ import Foundation
 import Primitives
 import Components
 import Store
-import  Gemstone
+import Gemstone
+import Style
 
 class ChartsViewModel: ObservableObject {
     
-    let walletModel: WalletViewModel
+    let walletId: WalletId
     let service: ChartService
     let priceService: PriceService
     let assetModel: AssetViewModel
@@ -34,15 +35,16 @@ class ChartsViewModel: ObservableObject {
     private let preferences: Preferences = .standard
 
     var assetRequest: AssetRequest {
-        return AssetRequest(walletId: walletModel.wallet.id, assetId: assetModel.asset.id.identifier)
+        return AssetRequest(walletId: walletId.id, assetId: assetModel.asset.id.identifier)
     }
-    
-    var title: String {
-        return assetModel.title
-    }
-    
+
+    var title: String { assetModel.title }
+
+    var emptyTitle: String { Localized.Common.notAvailable }
+    var errorTitle: String { Localized.Errors.errorOccured }
+
     var headerTitleView: WalletBarViewViewModel {
-        return WalletBarViewViewModel(
+        WalletBarViewViewModel(
             name: assetModel.name,
             image: assetModel.assetImage,
             showChevron: false
@@ -50,21 +52,21 @@ class ChartsViewModel: ObservableObject {
     }
     
     init(
-        walletModel: WalletViewModel,
+        walletId: WalletId,
         service: ChartService = ChartService(),
         priceService: PriceService,
         assetsService: AssetsService,
         assetModel: AssetViewModel,
-        currentPeriod: ChartPeriod = ChartPeriod.day
+        currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
     ) {
-        self.walletModel = walletModel
+        self.walletId = walletId
         self.service = service
         self.priceService = priceService
         self.assetsService = assetsService
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
     }
-    
+
     func updateCharts() async {
         DispatchQueue.main.async {
             self.state = .loading
@@ -113,6 +115,7 @@ extension AssetDetailsInfo {
             .gitHub: links.github,
             .telegram: links.telegram,
             .youTube: links.youtube,
+            .coingecko: links.coingecko
         ].compactMapValues { $0 }
 
         return values.compactMap { key, value in

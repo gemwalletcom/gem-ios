@@ -4,17 +4,16 @@ import SwiftUI
 import Style
 
 public struct RoundButton: View {
-    
-    var action: (() -> Void)?
+    @Environment(\.isEnabled) private var isEnabled
     let title: String
     let image: Image
-    
-    @Environment(\.isEnabled) private var isEnabled
-    
+
+    var action: (() -> Void)?
+
     public init(
         title: String,
         image: Image,
-        action:  (() -> Void)? = nil
+        action: (() -> Void)? = nil
     ) {
         self.action = action
         self.image = image
@@ -32,10 +31,10 @@ public struct RoundButton: View {
                     .cornerRadius(24)
                     .opacity(isEnabled ? 1 : 0.6)
                 Text(title)
-                    .minimumScaleFactor(1)
-                    .foregroundColor(Colors.secondaryText)
-                    .font(.system(size: 16))
-                    .fontWeight(.medium)
+                    .allowsTightening(true)
+                    .truncationMode(.tail)
+                    .foregroundStyle(Colors.secondaryText)
+                    .font(.system(size: 16).weight(.medium))
                     .lineLimit(1)
             }
         }
@@ -46,8 +45,8 @@ public struct RoundButton: View {
 struct RoundButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RoundButton(title: "Buy", image: Image(systemName: "purchased.circle.fill"))
-            RoundButton(title: "Swap", image: Image(systemName: "arrow.triangle.swap"))
+            RoundButton(title: "Buy", image: Image(systemName: SystemImage.eyeglasses))
+            RoundButton(title: "Swap", image: Image(systemName: SystemImage.share))
         }
     }
 }
