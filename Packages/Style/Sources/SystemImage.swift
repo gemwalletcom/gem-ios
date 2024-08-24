@@ -31,6 +31,7 @@ public struct SystemImage {
     public static let errorOccurred = "exclamationmark.triangle.fill"
     public static let gallery = "photo.artframe"
     public static let xmark = "xmark.circle.fill"
+    public static let bell = "bell"
 }
 
 // MARK: - Previews

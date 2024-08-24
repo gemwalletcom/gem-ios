@@ -24,7 +24,11 @@ public struct IntegerFormatter {
         integerFormatter.string(from: NSNumber(value: number))!
     }
     
-    public func string(_ number: Double) -> String {
-        integerFormatter.string(from: NSNumber(value: Int(number)))!
+    public func string(_ number: Double, symbol: String? = .none) -> String {
+        let result = integerFormatter.string(from: NSNumber(value: Int(number)))!
+        if let symbol {
+            return "\(result) \(symbol)"
+        }
+        return result
     }
 }

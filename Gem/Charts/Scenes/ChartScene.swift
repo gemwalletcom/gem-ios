@@ -68,24 +68,10 @@ struct ChartScene: View {
             .listRowInsets(EdgeInsets())
             
             if let details = assetData.details {
+                let model = AssetDetailsInfoViewModel(asset: assetData.asset, details: details)
                 Section {
-                    if let marketCap = details.market.marketCap {
-                        ListItemView(
-                            title: Localized.Asset.marketCap,
-                            subtitle: CurrencyFormatter.currency().string(marketCap)
-                        )
-                    }
-                    if let circulatingSupply = details.market.circulatingSupply {
-                        ListItemView(
-                            title: Localized.Asset.circulatingSupply,
-                            subtitle: IntegerFormatter.standard.string(circulatingSupply)
-                        )
-                    }
-                    if let totalSupply = details.market.totalSupply {
-                        ListItemView(
-                            title: Localized.Asset.totalSupply,
-                            subtitle: IntegerFormatter.standard.string(totalSupply)
-                        )
+                    ForEach(model.marketValues, id: \.title) {
+                        ListItemView(title: $0.title, subtitle: $0.subtitle)
                     }
                 }
                 Section(Localized.Social.links) {

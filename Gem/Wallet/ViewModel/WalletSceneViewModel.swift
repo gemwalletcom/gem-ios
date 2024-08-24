@@ -35,7 +35,7 @@ struct WalletSceneViewModel {
     }
 
     var bannersRequest: BannersRequest {
-        BannersRequest(walletId: wallet.walletId.id, assetId: .none, events: [])
+        BannersRequest(walletId: wallet.walletId.id, assetId: .none, events: [.enableNotifications])
     }
 
     func setupWallet() throws {

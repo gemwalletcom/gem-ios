@@ -231,7 +231,7 @@
 "errors.camera_permissions_not_granted" = "Camera permission not granted. Please enable camera access in settings to scan QR code.";
 "errors.decoding_qr" = "Failed to decode the QR code. Please try again with a different QR code.";
 "errors.unknown_try_again" = "An unknown error occurred. Please try again.";
-"library.select_from_photos" = "从照片中选取";
+"library.select_from_photo_library" = "从照片中选取";
 "common.open_settings" = "打开设置";
 "fee_rates.info" = "Speed of transaction is determined by network fee paid to the network miners.";
 "fee_rates.slow" = "缓慢";
@@ -249,5 +249,7 @@
 "stake.stake" = "质押";
 "banner.account_activation.title" = "%@ Account Activation Fee";
 "banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
-"banner.staking.title" = "Start staking %@";
-"banner.staking.description" = "Earn %@ rewards on your stake while you sleep.";
+"banner.stake.title" = "Start staking %@";
+"banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
+"banner.enable_notifications.title" = "启用通知";
+"banner.enable_notifications.description" = "密切关注你的钱包活动。";

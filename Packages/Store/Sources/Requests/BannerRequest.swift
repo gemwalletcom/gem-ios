@@ -36,7 +36,7 @@ public struct BannersRequest: Queryable {
             .including(optional: BannerRecord.asset)
             .including(optional: BannerRecord.wallet)
             .filter(Columns.Banner.walletId == walletId || Columns.Banner.walletId == nil)
-            .filter(Columns.Banner.assetId == assetId || Columns.Banner.assetId == nil)
+            .filter(Columns.Banner.assetId == assetId)
             .filter(events.map { $0.rawValue }.contains(Columns.Banner.event))
             .filter(Columns.Banner.state != BannerState.cancelled.rawValue)
             .asRequest(of: BannerInfo.self)

@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import SwiftUI
 import GemstonePrimitives
+import Style
 
 struct BannerViewModel {
 
@@ -16,33 +17,44 @@ struct BannerViewModel {
                 return .none
             }
             return Image(uiImage: UIImage(imageLiteralResourceName: asset.chain.rawValue))
+        case .enableNotifications:
+            return Image(systemName: SystemImage.bell)
         }
     }
 
     var title: String? {
-        guard let asset = banner.asset else {
-            return .none
-        }
-        return switch banner.event {
-        case .stake: Localized.Banner.Staking.title(asset.name)
-        case .accountActivation: Localized.Banner.AccountActivation.title(asset.name)
+        switch banner.event {
+        case .stake:
+            guard let asset = banner.asset else {
+                return .none
+            }
+            return Localized.Banner.Stake.title(asset.name)
+        case .accountActivation:
+            guard let asset = banner.asset else {
+                return .none
+            }
+            return Localized.Banner.AccountActivation.title(asset.name)
+        case .enableNotifications: 
+            return Localized.Banner.EnableNotifications.title
         }
     }
 
     var description: String? {
-        guard let asset = banner.asset else {
-            return .none
-        }
         switch banner.event {
         case .stake:
-            return Localized.Banner.Staking.description(asset.symbol)
+            guard let asset = banner.asset else {
+                return .none
+            }
+            return Localized.Banner.Stake.description(asset.symbol)
         case .accountActivation:
-            guard let fee = asset.chain.accountActivationFee else {
+            guard let asset = banner.asset, let fee = asset.chain.accountActivationFee else {
                 return .none
             }
             let amount = ValueFormatter(style: .full)
                 .string(fee.asInt.asBigInt, decimals: asset.decimals.asInt, currency: asset.symbol)
             return Localized.Banner.AccountActivation.description(asset.name, amount)
+        case .enableNotifications: 
+            return Localized.Banner.EnableNotifications.description
         }
     }
 

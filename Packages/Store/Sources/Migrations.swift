@@ -42,6 +42,7 @@ public struct Migrations {
             try BannerRecord.create(db: db)
         }
 
+        // delete later (after Oct 2024, as it's part of start tables)
         migrator.registerMigration("Create \(BannerRecord.databaseTableName)") { db in
             try BannerRecord.create(db: db)
         }

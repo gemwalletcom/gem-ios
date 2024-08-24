@@ -267,6 +267,7 @@
 		D8EFE3E52BA2318A00608363 /* TransactionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E42BA2318A00608363 /* TransactionHeaderView.swift */; };
 		D8EFE3E82BA2318E00608363 /* SwapAmountView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */; };
 		D8FB43112C7A392C002B94B1 /* BannerSetupService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FB43102C7A392C002B94B1 /* BannerSetupService.swift */; };
+		D8FB43132C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8868882C50F1EB00005AEA /* CalloutView.swift */; };
@@ -561,6 +562,7 @@
 		D8EFE3E72BA2318E00608363 /* SwapAmountView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAmountView.swift; sourceTree = "<group>"; };
 		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
 		D8FB43102C7A392C002B94B1 /* BannerSetupService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerSetupService.swift; sourceTree = "<group>"; };
+		D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailsInfoViewModel.swift; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyViewModel.swift; sourceTree = "<group>"; };
@@ -1567,6 +1569,7 @@
 				D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */,
 				D8D203BF2ACE058200261CA2 /* ChartValuesViewModel.swift */,
 				D8148C232BED76A80066586A /* ChartPriceModel.swift */,
+				D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2162,6 +2165,7 @@
 				D8B738D62C598BEC004EF083 /* ExportPrivateKey.swift in Sources */,
 				830FDA3F2C2209AF003DA605 /* AddNodeResult.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
+				D8FB43132C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,
 				C3549B3D29C5170000B4BE01 /* WalletIDetailViewModel.swift in Sources */,
 				C34C7D0829FF5818009EEC21 /* Localized.swift in Sources */,

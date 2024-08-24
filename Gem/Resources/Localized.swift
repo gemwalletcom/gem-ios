@@ -81,14 +81,20 @@ internal enum Localized {
         return Localized.tr("Localizable", "banner.account_activation.title", String(describing: p1), fallback: "%@ Account Activation Fee")
       }
     }
-    internal enum Staking {
+    internal enum EnableNotifications {
+      /// Stay on top of your wallet activity.
+      internal static let description = Localized.tr("Localizable", "banner.enable_notifications.description", fallback: "Stay on top of your wallet activity.")
+      /// Enable Notifications
+      internal static let title = Localized.tr("Localizable", "banner.enable_notifications.title", fallback: "Enable Notifications")
+    }
+    internal enum Stake {
       /// Earn %@ rewards on your stake while you sleep.
       internal static func description(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "banner.staking.description", String(describing: p1), fallback: "Earn %@ rewards on your stake while you sleep.")
+        return Localized.tr("Localizable", "banner.stake.description", String(describing: p1), fallback: "Earn %@ rewards on your stake while you sleep.")
       }
       /// Start staking %@
       internal static func title(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "banner.staking.title", String(describing: p1), fallback: "Start staking %@")
+        return Localized.tr("Localizable", "banner.stake.title", String(describing: p1), fallback: "Start staking %@")
       }
     }
   }
@@ -270,8 +276,8 @@ internal enum Localized {
       }
     }
     internal enum Swap {
-      /// No Quote data
-      internal static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No Quote data")
+      /// No quote data
+      internal static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No quote data")
     }
     internal enum Token {
       /// Invalid Token ID
@@ -305,8 +311,8 @@ internal enum Localized {
     internal static let slow = Localized.tr("Localizable", "fee_rates.slow", fallback: "Slow")
   }
   internal enum Library {
-    /// Select from photos
-    internal static let selectFromPhotos = Localized.tr("Localizable", "library.select_from_photos", fallback: "Select from photos")
+    /// Select from Photo Library
+    internal static let selectFromPhotoLibrary = Localized.tr("Localizable", "library.select_from_photo_library", fallback: "Select from Photo Library")
   }
   internal enum Nodes {
     /// Gem Wallet Node
