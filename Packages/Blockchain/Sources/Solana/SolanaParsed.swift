@@ -49,6 +49,3 @@ public struct SolanaTokenOwner: Codable {
 typealias SolanaSplTokenInfo = SolanaValue<SolanaParsedData<SolanaInfo<SolanaParsedSplTokenInfo>>>
 typealias SolanaMplRawData = SolanaValue<SolanaArrayData<String>>
 typealias SolanaSplTokenOwner = SolanaValue<SolanaTokenOwner>
-
-public let SplTokenProgram2022 = "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"
-public let SplTokenProgram     = "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"

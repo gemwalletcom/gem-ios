@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum SolanaTokenProgramId: String, Codable, Equatable, Hashable {
-	case token = "Token"
-	case token2022 = "Token2022"
+public enum SolanaTokenProgramId: String, Codable, CaseIterable, Equatable {
+	case token
+	case token2022
 }

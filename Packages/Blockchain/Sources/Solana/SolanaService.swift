@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import Gemstone
+import GemstonePrimitives
 import WalletCore
 
 public struct SolanaService {
@@ -411,12 +412,11 @@ extension SolanaService: ChainTokenable {
             let owner = try await provider.request(.getAccountInfo(account: tokenId))
                 .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
                 .result.value.owner
-            return switch owner {
-            case SplTokenProgram2022: .token2022
-            case SplTokenProgram: .token
-            default:
-                throw AnyError("Unknow token program")
+
+            guard let id = SolanaConfig.programId(owner: owner) else {
+                throw AnyError("Unknow token program id")
             }
+            return id
         } catch {
             return .token
         }
