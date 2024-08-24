@@ -27,8 +27,8 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
-                .product(name: "WalletCore", package: "WalletCore"),
                 "WalletCorePrimitives",
+                .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "SwiftProtobuf", package: "WalletCore"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],

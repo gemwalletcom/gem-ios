@@ -35,6 +35,9 @@ let package = Package(
         ),
         .testTarget(
             name: "BlockchainTests",
-            dependencies: ["Blockchain"]),
+            dependencies: [
+                "Blockchain",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]),
     ]
 )

@@ -390,7 +390,6 @@
 		C3CF3B9629AD955300E96586 /* WalletHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletHeaderView.swift; sourceTree = "<group>"; };
 		C3CF3B9C29AED8C400E96586 /* HeaderButtonType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderButtonType.swift; sourceTree = "<group>"; };
 		C3CF3BA029B2FFF600E96586 /* WalletsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsScene.swift; sourceTree = "<group>"; };
-		C3CF3BA229B3F29C00E96586 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 		C3CF3BA529B5262100E96586 /* Keystore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Keystore; sourceTree = "<group>"; };
 		C3CF3BAD29B68E6C00E96586 /* AssetsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsService.swift; sourceTree = "<group>"; };
 		C3CF3BAF29B68F0D00E96586 /* AssetScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetScene.swift; sourceTree = "<group>"; };
@@ -563,6 +562,7 @@
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyViewModel.swift; sourceTree = "<group>"; };
+		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -940,6 +940,7 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				487A27E82B632CCE00BEEADB /* Gemstone */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,
 				D8D203D12AE0813E00261CA2 /* SwiftHTTPClient */,
@@ -950,7 +951,6 @@
 				C36679142A0FF81000F1D74D /* GemAPI */,
 				C3549B4C29CA3A9000B4BE01 /* Store */,
 				C3CF3BA529B5262100E96586 /* Keystore */,
-				C3CF3BA229B3F29C00E96586 /* WalletCore */,
 				C3CF3B7329A98C3400E96586 /* Blockchain */,
 				C3CF3B7529A98C5D00E96586 /* Primitives */,
 				C3CF3BD929BBE40300E96586 /* Style */,

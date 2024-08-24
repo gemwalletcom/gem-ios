@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import Gemstone
+import GemstonePrimitives
 import WalletCore
 
 public struct SolanaService {
@@ -41,7 +42,8 @@ extension SolanaService {
     ) async throws -> SignerInputToken {
         async let getSenderTokenAccounts = getAccounts(token: tokenId, owner: senderAddress)
         async let getRecipientTokenAccounts = getAccounts(token: tokenId, owner: destinationAddress)
-        let (senderTokenAccounts, recipientTokenAccounts) = try await (getSenderTokenAccounts, getRecipientTokenAccounts)
+        async let getSplProgram = getTokenProgram(tokenId: tokenId)
+        let (senderTokenAccounts, recipientTokenAccounts, splProgram) = try await (getSenderTokenAccounts, getRecipientTokenAccounts, getSplProgram)
 
         guard let senderTokenAddress = senderTokenAccounts.first?.pubkey else {
             throw AnyError("Sender token address is empty")
@@ -50,12 +52,14 @@ extension SolanaService {
         if let recipientTokenAddress = recipientTokenAccounts.first?.pubkey {
             return SignerInputToken(
                 senderTokenAddress: senderTokenAddress,
-                recipientTokenAddress: recipientTokenAddress
+                recipientTokenAddress: recipientTokenAddress,
+                tokenProgram: splProgram
             )
         }
         return SignerInputToken(
             senderTokenAddress: senderTokenAddress,
-            recipientTokenAddress: .none
+            recipientTokenAddress: .none,
+            tokenProgram: splProgram
         )
     }
 
@@ -402,7 +406,22 @@ extension SolanaService: ChainTokenable {
             type: .spl
         )
     }
-    
+
+    public func getTokenProgram(tokenId: String) async throws -> Primitives.SolanaTokenProgramId {
+        do {
+            let owner = try await provider.request(.getAccountInfo(account: tokenId))
+                .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
+                .result.value.owner
+
+            guard let id = SolanaConfig.tokenProgramId(owner: owner) else {
+                throw AnyError("Unknow token program id")
+            }
+            return id
+        } catch {
+            return .token
+        }
+    }
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.count.isBetween(40, and: 60) && Base58.decodeNoCheck(string: tokenId) != nil
     }
