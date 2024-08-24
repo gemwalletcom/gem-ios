@@ -78,8 +78,8 @@
         "repositoryURL": "https://github.com/WalletConnect/WalletConnectSwiftV2",
         "state": {
           "branch": null,
-          "revision": "d819f76df8664a7550e31c03e9c4e68e990d7e91",
-          "version": "1.18.8"
+          "revision": "1427dcb1514e5d6f167ee7a41478ea1d6a6d8cc5",
+          "version": "1.19.6"
         }
       }
     ]
