@@ -1,0 +1,32 @@
+{
+  "configurations" : [
+    {
+      "id" : "2D2D8D29-B00E-4CD7-A786-44D6A30C0837",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "environmentVariableEntries" : [
+
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:Gem.xcodeproj",
+      "identifier" : "D8FB43182C7AA716002B94B1",
+      "name" : "GemUITests"
+    }
+  },
+  "testTargets" : [
+    {
+      "parallelizable" : true,
+      "target" : {
+        "containerPath" : "container:Gem.xcodeproj",
+        "identifier" : "D8FB43182C7AA716002B94B1",
+        "name" : "GemUITests"
+      }
+    }
+  ],
+  "version" : 1
+}

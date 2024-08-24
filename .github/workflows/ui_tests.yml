@@ -1,4 +1,4 @@
-name: UI Tests
+name: Unit Tests
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
 
 jobs:
   unit_test:
-    name: Build and Test UI iPhone simulator
+    name: Build and Test iPhone simulator
     runs-on: macos-latest
 
     steps:
@@ -43,5 +43,5 @@ jobs:
       - name: Build Core
         run: make generate-stone
 
-      - name: UI Tests
-        run: make test_ui
+      - name: Unit Tests
+        run: make test
