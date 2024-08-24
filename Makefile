@@ -50,7 +50,6 @@ generate-swiftgen:
 	@swiftgen config run --quiet
 
 generate-stone:
-	@echo "Generate Gemstone lib"
 	@./scripts/generate-stone.sh $(BUILD_MODE)
 
 # output file: build/Build/Products/Debug-iphonesimulator/Gem.app
