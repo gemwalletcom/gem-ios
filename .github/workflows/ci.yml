@@ -1,4 +1,4 @@
-name: UI Tests
+name: Unit Tests
 
 on:
   push:
@@ -16,7 +16,7 @@ env:
 
 jobs:
   unit_test:
-    name: Build and Test UI iPhone simulator
+    name: Build and Run Unit Test
     runs-on: macos-latest
 
     steps:

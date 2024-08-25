@@ -1,4 +1,4 @@
-name: Unit Tests
+name: UI Tests
 
 on:
   push:
@@ -15,8 +15,8 @@ env:
   RUSTC_WRAPPER: "sccache"
 
 jobs:
-  unit_test:
-    name: Build and Test iPhone simulator
+  ui_test:
+    name: Build and Run UI Tests
     runs-on: macos-latest
 
     steps:
@@ -43,5 +43,5 @@ jobs:
       - name: Build Core
         run: make generate-stone
 
-      - name: Unit Tests
-        run: make test
+      - name: UI Tests Tests
+        run: make test_ui
