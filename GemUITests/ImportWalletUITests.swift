@@ -4,24 +4,24 @@ import XCTest
 
 final class ImportWalletUITests: XCTestCase {
 
-    var app: XCUIApplication!
-
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-
-        app = XCUIApplication()
-        if app.state == .runningForeground {
-            app.terminate()
-        }
-        app.launch()
-    }
-
-    override func tearDown() {
-        app.terminate()
-
-        super.tearDown()
-    }
+//    var app: XCUIApplication!
+//
+//    override func setUp() {
+//        super.setUp()
+//        continueAfterFailure = false
+//
+//        app = XCUIApplication()
+//        if app.state == .runningForeground {
+//            app.terminate()
+//        }
+//        app.launch()
+//    }
+//
+//    override func tearDown() {
+//        app.terminate()
+//
+//        super.tearDown()
+//    }
 
 
     func testImportWallet() throws {
