@@ -6,11 +6,9 @@ import Components
 import Style
 
 struct SelectAssetSceneNavigationStack: View {
-    
     @Environment(\.dismiss) private var dismiss
     
     let model: SelectAssetViewModel
-    @State var isPresenting: Binding<SelectAssetType?>
     @State private var isPresentingAddToken: Bool = false
 
     @Environment(\.keystore) private var keystore
@@ -23,7 +21,7 @@ struct SelectAssetSceneNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.done) {
-                        isPresenting.wrappedValue = nil
+                        dismiss()
                     }
                     .bold()
                     .accessibilityIdentifier("cancel")

@@ -106,8 +106,7 @@ struct WalletScene: View {
                     selectType: value,
                     assetsService: assetsService,
                     walletService: walletService
-                ),
-                isPresenting: $isPresentingSelectType
+                )
             )
         }
         .toolbar {
