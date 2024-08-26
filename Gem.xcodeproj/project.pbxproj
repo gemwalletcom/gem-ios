@@ -779,14 +779,12 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
-				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				D8D726B42C6DBE7B00A6B559 /* Transactions */,
 				8325539B2C0FB22000C9CA0C /* Settings */,
 				C3549B3229C4395B00B4BE01 /* Assets */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
 				C36679082A0B1E4200F1D74D /* unit_app.xctestplan */,
 				C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */,
-				D8041FA12B193A2C002DC071 /* screenshots.xctestplan */,
 			);
 			path = GemTests;
 			sourceTree = "<group>";
@@ -1802,9 +1800,11 @@
 		D8FB431A2C7AA716002B94B1 /* GemUITests */ = {
 			isa = PBXGroup;
 			children = (
+				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				D8FB431B2C7AA716002B94B1 /* CreateWalletUITests.swift */,
 				D8FB43262C7AA99A002B94B1 /* ImportWalletUITests.swift */,
 				D8FB43282C7AAA02002B94B1 /* ui_tests.xctestplan */,
+				D8041FA12B193A2C002DC071 /* screenshots.xctestplan */,
 			);
 			path = GemUITests;
 			sourceTree = "<group>";
