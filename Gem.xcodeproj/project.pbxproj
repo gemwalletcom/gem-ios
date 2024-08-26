@@ -708,7 +708,6 @@
 				C3CF3B6E29A98BFD00E96586 /* Packages */,
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
-				D8A1F8742B17F21E00B15F54 /* Screenshots */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
 			);
@@ -1504,13 +1503,6 @@
 				D80181422B361AAE00F4D22B /* AssetSceneInput.swift */,
 			);
 			path = Types;
-			sourceTree = "<group>";
-		};
-		D8A1F8742B17F21E00B15F54 /* Screenshots */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Screenshots;
 			sourceTree = "<group>";
 		};
 		D8B738CF2C4AF278004EF083 /* Types */ = {
@@ -2620,7 +2612,7 @@
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
 			requirement = {
 				kind = exactVersion;
-				version = 6.20.1;
+				version = 6.29.2;
 			};
 		};
 		C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
@@ -2628,7 +2620,7 @@
 			repositoryURL = "https://github.com/groue/GRDBQuery.git";
 			requirement = {
 				kind = exactVersion;
-				version = 0.7.0;
+				version = 0.9.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
