@@ -253,3 +253,6 @@
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
 "banner.enable_notifications.title" = "تمكين الإشعارات";
 "banner.enable_notifications.description" = "ابق على اطلاع بنشاط محفظتك.";
+"common.pin" = "Pin";
+"common.pinned" = "Pinned";
+"common.unpin" = "Unpin";

@@ -253,3 +253,6 @@
 "banner.stake.description" = "Заробляйте %@ винагороди на свїй стейк, поки ви спите.";
 "banner.enable_notifications.title" = "Увімкнути сповіщення";
 "banner.enable_notifications.description" = "Будьте в курсі активності гаманця.";
+"common.pin" = "Закріпити";
+"common.pinned" = "Закріплені";
+"common.unpin" = "Відкріпити";

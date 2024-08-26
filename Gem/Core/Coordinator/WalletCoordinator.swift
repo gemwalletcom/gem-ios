@@ -34,6 +34,7 @@ struct WalletCoordinator: View {
     let stakeService: StakeService
     let priceService: PriceService
     let transactionService: TransactionService
+    let walletService: WalletService
     let walletsService: WalletsService
     let chainServiceFactory: ChainServiceFactory
     let nodeService: NodeService
@@ -110,6 +111,7 @@ struct WalletCoordinator: View {
             signer: walletConnectorSigner
         )
         self.bannerService = BannerService(store: bannerStore)
+        self.walletService = WalletService(keystore: _keystore.wrappedValue, walletStore: walletStore)
         self.walletsService = WalletsService(
             keystore: _keystore.wrappedValue,
             priceStore: priceStore,
@@ -162,6 +164,7 @@ struct WalletCoordinator: View {
                 .environment(\.db, db)
                 .environment(\.nodeService, nodeService)
                 .environment(\.keystore, keystore)
+                .environment(\.walletService, walletService)
                 .environment(\.walletsService, walletsService)
                 .environment(\.deviceService, deviceService)
                 .environment(\.subscriptionService, subscriptionService)

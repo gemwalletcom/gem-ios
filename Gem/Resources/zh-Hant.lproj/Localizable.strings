@@ -253,3 +253,6 @@
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
 "banner.enable_notifications.title" = "啟用通知";
 "banner.enable_notifications.description" = "掌控您的錢包活動。";
+"common.pin" = "Pin";
+"common.pinned" = "Pinned";
+"common.unpin" = "Unpin";

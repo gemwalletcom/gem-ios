@@ -20,7 +20,7 @@ extension ListItemValue: Identifiable {
 
 // MARK: - 
 
-public struct ListItemValueSection<T> {
+public struct ListItemValueSection<T: Identifiable> {
     public let section: String
     public let values: [ListItemValue<T>]
 

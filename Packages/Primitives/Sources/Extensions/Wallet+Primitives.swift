@@ -41,7 +41,9 @@ public extension Wallet {
                     derivationPath: "",
                     extendedPublicKey: ""
                 )
-            ]
+            ],
+            order: 0,
+            isPinned: false
         )
     }
 }

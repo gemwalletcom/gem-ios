@@ -44,12 +44,12 @@ public struct Migrations {
 
         // delete later (after Oct 2024, as it's part of start tables)
         migrator.registerMigration("Create \(BannerRecord.databaseTableName)") { db in
-            try BannerRecord.create(db: db)
+            try? BannerRecord.create(db: db)
         }
 
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
-            try? db.alter(table: WalletRecord.databaseTableName) { t in
-                t.add(column: "isPinned", .boolean).defaults(to: false)
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: "isPinned", .boolean).defaults(to: false)
             }
         }
 

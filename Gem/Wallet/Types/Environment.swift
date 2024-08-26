@@ -27,6 +27,10 @@ struct WalletsServiceKey: EnvironmentKey {
     static var defaultValue: WalletsService { WalletsService.main }
 }
 
+struct WalletServiceKey: EnvironmentKey {
+    static var defaultValue: WalletService { WalletService.main }
+}
+
 struct SubscriptionServiceKey: EnvironmentKey {
     static var defaultValue: SubscriptionService { SubscriptionService.main }
 }
@@ -83,7 +87,12 @@ extension EnvironmentValues {
         get { self[KeystoreKey.self] }
         set { self[KeystoreKey.self] = newValue }
     }
-    
+
+    var walletService: WalletService {
+        get { self[WalletServiceKey.self] }
+        set { self[WalletServiceKey.self] = newValue }
+    }
+
     var walletsService: WalletsService {
         get { self[WalletsServiceKey.self] }
         set { self[WalletsServiceKey.self] = newValue }
