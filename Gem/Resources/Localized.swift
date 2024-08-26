@@ -177,6 +177,10 @@ internal enum Localized {
     internal static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
     /// Phrase
     internal static let phrase = Localized.tr("Localizable", "common.phrase", fallback: "Phrase")
+    /// Pin
+    internal static let pin = Localized.tr("Localizable", "common.pin", fallback: "Pin")
+    /// Pinned
+    internal static let pinned = Localized.tr("Localizable", "common.pinned", fallback: "Pinned")
     /// Private Key
     internal static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
@@ -201,6 +205,8 @@ internal enum Localized {
     internal static let tryAgain = Localized.tr("Localizable", "common.try_again", fallback: "Try Again")
     /// Type
     internal static let type = Localized.tr("Localizable", "common.type", fallback: "Type")
+    /// Unpin
+    internal static let unpin = Localized.tr("Localizable", "common.unpin", fallback: "Unpin")
     /// URL
     internal static let url = Localized.tr("Localizable", "common.url", fallback: "URL")
     /// Wallet

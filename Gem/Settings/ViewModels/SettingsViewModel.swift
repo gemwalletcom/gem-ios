@@ -21,27 +21,24 @@ class SettingsViewModel: ObservableObject {
     private let walletId: WalletId
     private let walletsService: WalletsService
     private let preferences = Preferences.main
-    private let keystore: any Keystore
 
     init(
-        keystore: any Keystore,
-        walletsService: WalletsService,
         walletId: WalletId,
+        walletsService: WalletsService,
         currencyModel: CurrencySceneViewModel,
         securityModel: SecurityViewModel
     ) {
-        self.keystore = keystore
+        self.walletId = walletId
         self.walletsService = walletsService
         self.currencyModel = currencyModel
         self.securityModel = securityModel
         self.isDeveloperEnabled = preferences.isDeveloperEnabled
-        self.walletId = walletId
     }
 
     var title: String { Localized.Settings.title }
 
     var walletsTitle: String { Localized.Wallets.title }
-    var walletsValue: String { "\(keystore.wallets.count)" }
+    var walletsValue: String { "\(walletsService.keystore.wallets.count)" }
     var walletsImage: Image { Image(.settingsWallets) }
 
     var securityTitle: String { Localized.Settings.security }

@@ -33,6 +33,7 @@ public struct SystemImage {
     public static let xmark = "xmark.circle.fill"
     public static let bell = "bell"
     public static let pin = "pin"
+    public static let unpin = "pin.slash"
 }
 
 // MARK: - Previews
@@ -69,6 +70,7 @@ public struct SystemImage {
         (SystemImage.xmark, "X Mark"),
         (SystemImage.bell, "Bell"),
         (SystemImage.pin, "Pin"),
+        (SystemImage.unpin, "Unpin"),
     ]
 
     return List {

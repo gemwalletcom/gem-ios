@@ -50,12 +50,21 @@ struct ContextMenuDelete: View {
 
 struct ContextMenuPin: View {
 
+    let isPinned: Bool
     let action: VoidAction
 
     var body: some View {
         Button { action?() } label: {
-            Label("Pin", systemImage: SystemImage.pin)
+            Label(label, systemImage: image)
         }
+    }
+
+    private var label: String {
+        isPinned ? Localized.Common.unpin : Localized.Common.pin
+    }
+
+    private var image: String {
+        isPinned ? SystemImage.unpin : SystemImage.pin
     }
 }
 

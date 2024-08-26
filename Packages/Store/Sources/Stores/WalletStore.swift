@@ -80,7 +80,15 @@ public struct WalletStore {
             return true
         }
     }
-    
+
+    public func pinWallet(_ walletId: String, value: Bool) throws {
+        let _ = try db.write { db in
+            return try WalletRecord
+                .filter(Columns.Wallet.id == walletId)
+                .updateAll(db, Columns.Wallet.isPinned.set(to: value))
+        }
+    }
+
     public func observer() -> SubscriptionsObserver {
         return SubscriptionsObserver(dbQueue: db)
     }
@@ -93,7 +101,9 @@ extension WalletRecord {
             name: name,
             index: index.asInt32,
             type: WalletType(rawValue: type)!,
-            accounts: []
+            accounts: [],
+            order: order.asInt32,
+            isPinned: isPinned
         )
     }
 }

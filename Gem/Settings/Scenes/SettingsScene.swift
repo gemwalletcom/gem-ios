@@ -194,9 +194,8 @@ extension SettingsScene {
 
 #Preview {
     let model: SettingsViewModel = .init(
-        keystore: LocalKeystore.main,
-        walletsService: .main,
         walletId: .main,
+        walletsService: .main,
         currencyModel: .init(),
         securityModel: .init()
     )

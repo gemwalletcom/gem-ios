@@ -13,7 +13,6 @@ struct SettingsNavigationStack: View {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
     
-    @Environment(\.keystore) private var keystore
     @Environment(\.deviceService) private var deviceService
     @Environment(\.subscriptionService) private var subscriptionService
     @Environment(\.transactionsService) private var transactionsService
@@ -22,14 +21,14 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
-    
+    @Environment(\.walletService) private var walletService
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SettingsScene(
                 model: SettingsViewModel(
-                    keystore: keystore,
-                    walletsService: walletsService,
                     walletId: walletId,
+                    walletsService: walletsService,
                     currencyModel: currencyModel,
                     securityModel: securityModel
                 )
@@ -75,7 +74,7 @@ struct SettingsNavigationStack: View {
             }
             .sheet(isPresented: $isWalletsPresented) {
                 NavigationStack {
-                    WalletsScene(model: WalletsViewModel(keystore: keystore))
+                    WalletsScene(model: WalletsViewModel(walletService: walletService))
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
                                 Button(Localized.Common.done) {
