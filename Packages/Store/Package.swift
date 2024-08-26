@@ -17,8 +17,8 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 20, 1)),
-        .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 7, 0)),
+        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 29, 2)),
+        .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 9, 0)),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
     ],
     targets: [
