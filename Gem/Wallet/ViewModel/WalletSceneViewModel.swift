@@ -8,14 +8,14 @@ import UIKit
 struct WalletSceneViewModel {
 
     let wallet: Wallet
-    private let walletService: WalletService
+    private let walletsService: WalletsService
     
     init(
         wallet: Wallet,
-        walletService: WalletService
+        walletsService: WalletsService
     ) {
         self.wallet = wallet
-        self.walletService = walletService
+        self.walletsService = walletsService
     }
 
     var assetsRequest: AssetsRequest {
@@ -39,11 +39,11 @@ struct WalletSceneViewModel {
     }
 
     func setupWallet() throws {
-        try walletService.setupWallet(wallet)
+        try walletsService.setupWallet(wallet)
     }
 
     func fetch(walletId: WalletId, assets: [AssetData]) async throws {
-        try await walletService.fetch(
+        try await walletsService.fetch(
             walletId: walletId,
             assetIds: assets.map { $0.asset.id }
         )
@@ -58,7 +58,7 @@ struct WalletSceneViewModel {
     }
 
     func hideAsset(_ assetId: AssetId) throws {
-        try walletService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+        try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
     }
 
     func copyAssetAddress(for address: String) {

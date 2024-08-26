@@ -21,14 +21,14 @@ struct SettingsNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SettingsScene(
                 model: SettingsViewModel(
                     keystore: keystore,
-                    walletService: walletService,
+                    walletsService: walletsService,
                     walletId: walletId,
                     currencyModel: currencyModel,
                     securityModel: securityModel

@@ -7,7 +7,7 @@ import Combine
 import Settings
 import Keystore
 
-class WalletService {
+class WalletsService {
     
     let keystore: any Keystore
     let assetsService: AssetsService

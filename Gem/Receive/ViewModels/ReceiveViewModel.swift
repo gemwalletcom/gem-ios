@@ -6,7 +6,7 @@ struct ReceiveViewModel {
     let assetModel: AssetViewModel
     let walletId: WalletId
     let address: String
-    let walletService: WalletService
+    let walletsService: WalletsService
     
     var title: String {
         Localized.Receive.title(assetModel.symbol)
@@ -25,6 +25,6 @@ struct ReceiveViewModel {
     }
     
     func enableAsset() {
-        walletService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
+        walletsService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
     }
 }

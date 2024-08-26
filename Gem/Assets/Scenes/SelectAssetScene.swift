@@ -10,7 +10,7 @@ struct SelectAssetScene: View {
 
     @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
 
     @State var isPresentingAddToken: Binding<Bool>
@@ -46,7 +46,7 @@ struct SelectAssetScene: View {
                                 keystore: model.keystore,
                                 selectType: .hidden,
                                 assetsService: model.assetsService,
-                                walletService: model.walletService
+                                walletsService: model.walletsService
                             ),
                             isPresentingAddToken: isPresentingAddToken
                         )
@@ -105,7 +105,7 @@ struct SelectAssetScene: View {
                 RecipientScene(model: RecipientViewModel(
                     wallet: model.wallet,
                     keystore: keystore,
-                    walletService: walletService,
+                    walletsService: walletsService,
                     assetModel: AssetViewModel(asset: input.asset))
                 )
             case .receive:
@@ -114,7 +114,7 @@ struct SelectAssetScene: View {
                         assetModel: AssetViewModel(asset: input.asset),
                         walletId: model.wallet.walletId,
                         address: input.assetAddress.address,
-                        walletService: walletService
+                        walletsService: walletsService
                     )
                 )
             case .buy:
@@ -127,7 +127,7 @@ struct SelectAssetScene: View {
                 SwapScene(model: SwapViewModel(
                         wallet: model.wallet,
                         assetId: input.asset.id,
-                        walletService: walletService,
+                        walletsService: walletsService,
                         swapService: SwapService(nodeProvider: nodeService),
                         keystore: keystore
                     )
@@ -136,7 +136,7 @@ struct SelectAssetScene: View {
                 StakeScene(model: StakeViewModel(
                     wallet: model.wallet,
                     chain: input.asset.id.chain,
-                    stakeService: walletService.stakeService)
+                    stakeService: walletsService.stakeService)
                 )
             case .manage, .hidden:
                 EmptyView()
@@ -186,7 +186,7 @@ private struct ListAssetItemSelectionView: View {
 //                keystore: .main,
 //                selectType: .receive,
 //                assetsService: .main,
-//                walletService: .main
+//                walletsService: .main
 //            )
 //        )
 //    }

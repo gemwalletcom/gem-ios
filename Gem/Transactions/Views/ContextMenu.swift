@@ -38,12 +38,23 @@ struct ContextMenuViewURL: View {
 }
 
 struct ContextMenuDelete: View {
-    
+
     let action: VoidAction
     
     var body: some View {
         Button(role: .destructive) { action?() } label: {
             Label(Localized.Common.delete, systemImage: SystemImage.delete)
+        }
+    }
+}
+
+struct ContextMenuPin: View {
+
+    let action: VoidAction
+
+    var body: some View {
+        Button { action?() } label: {
+            Label("Pin", systemImage: SystemImage.pin)
         }
     }
 }

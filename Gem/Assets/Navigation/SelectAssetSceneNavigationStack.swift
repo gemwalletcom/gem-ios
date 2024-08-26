@@ -15,7 +15,7 @@ struct SelectAssetSceneNavigationStack: View {
 
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     
     var body: some View {
         NavigationStack {

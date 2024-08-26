@@ -34,7 +34,7 @@ class ConfirmTransferViewModel {
     private let keystore: any Keystore
     private let service: ChainServiceable
 
-    private let walletService: WalletService
+    private let walletsService: WalletsService
     private let confirmTransferDelegate: ConfirmTransferDelegate?
 
     init(
@@ -42,14 +42,14 @@ class ConfirmTransferViewModel {
         keystore: any Keystore,
         data: TransferData,
         service: ChainServiceable,
-        walletService: WalletService,
+        walletsService: WalletsService,
         confirmTransferDelegate: ConfirmTransferDelegate? = .none
     ) {
         self.wallet = wallet
         self.keystore = keystore
         self.data = data
         self.service = service
-        self.walletService = walletService
+        self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
 
         // prefetch asset metadata from local storage
@@ -327,12 +327,12 @@ extension ConfirmTransferViewModel {
     private var availableValue: BigInt {
         switch dataModel.type {
         case .transfer(let asset), .swap(let asset, _, _), .generic(let asset, _, _):
-            guard let balance = try? walletService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .stake(let asset, let stakeType):
             switch stakeType {
             case .stake:
-                guard let balance = try? walletService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+                guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
                 return balance.available
             case .unstake(let delegation):
                 return delegation.base.balanceValue
@@ -350,13 +350,13 @@ extension ConfirmTransferViewModel {
         let assetId = asset.id
         let feeAssetId = asset.feeAsset.id
 
-        guard let assetBalance = try walletService.balanceService.getBalance(walletId: walletId, assetId: assetId.identifier),
-              let assetFeeBalance = try walletService.balanceService.getBalance(walletId: walletId, assetId: feeAssetId.identifier) else {
+        guard let assetBalance = try walletsService.balanceService.getBalance(walletId: walletId, assetId: assetId.identifier),
+              let assetFeeBalance = try walletsService.balanceService.getBalance(walletId: walletId, assetId: feeAssetId.identifier) else {
             throw AssetMetadataError.missingBalance
         }
 
         let assetPricesIds: [AssetId] = [assetId, feeAssetId] + assetsIds
-        let assetPrices = try walletService.priceService.getPrices(for: assetPricesIds).toMap { price in
+        let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds).toMap { price in
             guard let assetId = AssetId(id: price.assetId) else {
                 throw AssetMetadataError.invalidAssetId
             }
@@ -399,7 +399,7 @@ extension ConfirmTransferViewModel {
 
     private func addTransaction(transaction: Transaction) throws {
         NSLog("transaction \(transaction)")
-        try walletService.addTransaction(walletId: wallet.id, transaction: transaction)
+        try walletsService.addTransaction(walletId: wallet.id, transaction: transaction)
     }
 
     private func getTransaction(

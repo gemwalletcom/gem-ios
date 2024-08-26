@@ -47,6 +47,12 @@ public struct Migrations {
             try BannerRecord.create(db: db)
         }
 
+        migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) { t in
+                t.add(column: "isPinned", .boolean).defaults(to: false)
+            }
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

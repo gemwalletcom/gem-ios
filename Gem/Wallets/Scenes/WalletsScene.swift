@@ -92,8 +92,11 @@ struct WalletsScene: View {
                         ) {
                             onSelectEdit(wallet: wallet.wallet)
                         }
+                        ContextMenuPin {
+                            onPin(wallet: wallet.wallet)
+                        }
                         ContextMenuDelete {
-                            walletDelete = wallet.wallet
+                            onSelectDelete(wallet: wallet.wallet)
                         }
                     }
                     .swipeActions {
@@ -165,6 +168,10 @@ extension WalletsScene {
     private func onSelect(wallet: Wallet) {
         model.setCurrent(wallet.walletId)
         dismiss()
+    }
+
+    private func onPin(wallet: Wallet) {
+        //walletEdit = wallet
     }
 }
 

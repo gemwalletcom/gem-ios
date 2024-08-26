@@ -34,7 +34,7 @@ struct WalletCoordinator: View {
     let stakeService: StakeService
     let priceService: PriceService
     let transactionService: TransactionService
-    let walletService: WalletService
+    let walletsService: WalletsService
     let chainServiceFactory: ChainServiceFactory
     let nodeService: NodeService
     let subscriptionService: SubscriptionService
@@ -110,7 +110,7 @@ struct WalletCoordinator: View {
             signer: walletConnectorSigner
         )
         self.bannerService = BannerService(store: bannerStore)
-        self.walletService = WalletService(
+        self.walletsService = WalletsService(
             keystore: _keystore.wrappedValue,
             priceStore: priceStore,
             assetsService: assetsService,
@@ -162,7 +162,7 @@ struct WalletCoordinator: View {
                 .environment(\.db, db)
                 .environment(\.nodeService, nodeService)
                 .environment(\.keystore, keystore)
-                .environment(\.walletService, walletService)
+                .environment(\.walletsService, walletsService)
                 .environment(\.deviceService, deviceService)
                 .environment(\.subscriptionService, subscriptionService)
                 .environment(\.transactionsService, transactionsService)
@@ -207,7 +207,7 @@ struct WalletCoordinator: View {
                         data: data.payload,
                         service: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.payload.recipientData.asset.chain),
-                        walletService: walletService,
+                        walletsService: walletsService,
                         confirmTransferDelegate: data.delegate
                     )
                 )
@@ -305,7 +305,7 @@ struct WalletCoordinator: View {
     func runUpdatePrices() {
         NSLog("runUpdatePrices")
         Task {
-            try await walletService.updatePrices()
+            try await walletsService.updatePrices()
         }
     }
 

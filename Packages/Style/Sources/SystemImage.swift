@@ -32,6 +32,7 @@ public struct SystemImage {
     public static let gallery = "photo.artframe"
     public static let xmark = "xmark.circle.fill"
     public static let bell = "bell"
+    public static let pin = "pin"
 }
 
 // MARK: - Previews
@@ -66,6 +67,8 @@ public struct SystemImage {
         (SystemImage.errorOccurred, "Error Ocurred"),
         (SystemImage.gallery, "Gallery"),
         (SystemImage.xmark, "X Mark"),
+        (SystemImage.bell, "Bell"),
+        (SystemImage.pin, "Pin"),
     ]
 
     return List {

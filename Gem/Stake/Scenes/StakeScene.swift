@@ -12,7 +12,7 @@ struct StakeScene: View {
     @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
 
     @State private var model: StakeViewModel
@@ -46,7 +46,7 @@ struct StakeScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
-                    walletService: walletService
+                    walletsService: walletsService
                 )
             )
         }
@@ -56,7 +56,7 @@ struct StakeScene: View {
                     amountRecipientData: $0,
                     wallet: model.wallet,
                     keystore: keystore,
-                    walletService: walletService,
+                    walletsService: walletsService,
                     stakeService: stakeService,
                     currentValidator: model.recommendedCurrentValidator
                 )

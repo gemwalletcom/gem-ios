@@ -19,19 +19,19 @@ class SettingsViewModel: ObservableObject {
     }
 
     private let walletId: WalletId
-    private let walletService: WalletService
+    private let walletsService: WalletsService
     private let preferences = Preferences.main
     private let keystore: any Keystore
 
     init(
         keystore: any Keystore,
-        walletService: WalletService,
+        walletsService: WalletsService,
         walletId: WalletId,
         currencyModel: CurrencySceneViewModel,
         securityModel: SecurityViewModel
     ) {
         self.keystore = keystore
-        self.walletService = walletService
+        self.walletsService = walletsService
         self.currencyModel = currencyModel
         self.securityModel = securityModel
         self.isDeveloperEnabled = preferences.isDeveloperEnabled
@@ -115,6 +115,6 @@ class SettingsViewModel: ObservableObject {
 
 extension SettingsViewModel {
     func fetch() async throws {
-        try await walletService.changeCurrency(walletId: walletId)
+        try await walletsService.changeCurrency(walletId: walletId)
     }
 }

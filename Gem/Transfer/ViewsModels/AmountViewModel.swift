@@ -22,21 +22,21 @@ class AmounViewModel: ObservableObject {
     let amountRecipientData: AmountRecipientData
     let wallet: Wallet
     let keystore: any Keystore
-    let walletService: WalletService
+    let walletsService: WalletsService
     let stakeService: StakeService
 
     public init(
         amountRecipientData: AmountRecipientData,
         wallet: Wallet,
         keystore: any Keystore,
-        walletService: WalletService,
+        walletsService: WalletsService,
         stakeService: StakeService,
         currentValidator: DelegationValidator? = .none
     ) {
         self.amountRecipientData = amountRecipientData
         self.wallet = wallet
         self.keystore = keystore
-        self.walletService = walletService
+        self.walletsService = walletsService
         self.stakeService = stakeService
         
         if let validator = currentValidator {
@@ -101,7 +101,7 @@ class AmounViewModel: ObservableObject {
     var availableValue: BigInt {
         switch amountRecipientData.type {
         case .transfer, .stake:
-            guard let balance = try? walletService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .unstake(let delegation):
             return delegation.base.balanceValue
@@ -242,7 +242,7 @@ class AmounViewModel: ObservableObject {
         guard
             let value = try? value(for: amount),
             let fiatValue = try? formatter.double(from: value, decimals: asset.decimals.asInt),
-            let assetPrice = try? walletService.priceService.getPrice(for: asset.id) else {
+            let assetPrice = try? walletsService.priceService.getPrice(for: asset.id) else {
             return .empty
         }
         return currencyFormatter.string(fiatValue * assetPrice.price)

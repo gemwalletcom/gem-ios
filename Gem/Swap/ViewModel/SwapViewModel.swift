@@ -15,7 +15,7 @@ class SwapViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(300)
 
     let keystore: any Keystore
-    let walletService: WalletService
+    let walletsService: WalletsService
 
     let wallet: Wallet
 
@@ -35,13 +35,13 @@ class SwapViewModel {
     init(
         wallet: Wallet,
         assetId: AssetId,
-        walletService: WalletService,
+        walletsService: WalletsService,
         swapService: SwapService,
         keystore: any Keystore
     ) {
         self.wallet = wallet
         self.keystore = keystore
-        self.walletService = walletService
+        self.walletsService = walletsService
         self.swapService = swapService
 
         // temp code
@@ -157,8 +157,8 @@ extension SwapViewModel {
     }
 
     func updateAssets(assetIds: [AssetId]) async throws {
-        async let prices: () = try walletService.updatePrices(assetIds: assetIds)
-        async let balances: () = try walletService.updateBalance(for: wallet.walletId, assetIds: assetIds)
+        async let prices: () = try walletsService.updatePrices(assetIds: assetIds)
+        async let balances: () = try walletsService.updateBalance(for: wallet.walletId, assetIds: assetIds)
         let _ = try await [prices, balances]
     }
 
