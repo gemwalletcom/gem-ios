@@ -43,12 +43,10 @@ public struct ConfigApp: Codable {
 }
 
 public struct ConfigVersions: Codable {
-	public let nodes: Int32
 	public let fiatAssets: Int32
 	public let swapAssets: Int32
 
-	public init(nodes: Int32, fiatAssets: Int32, swapAssets: Int32) {
-		self.nodes = nodes
+	public init(fiatAssets: Int32, swapAssets: Int32) {
 		self.fiatAssets = fiatAssets
 		self.swapAssets = swapAssets
 	}
