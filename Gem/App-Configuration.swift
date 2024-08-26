@@ -109,8 +109,8 @@ extension NameService {
     static let main = NameService()
 }
 
-extension WalletService {
-    static let main = WalletService(
+extension WalletsService {
+    static let main = WalletsService(
         keystore: LocalKeystore.main,
         priceStore: .main,
         assetsService: .main,

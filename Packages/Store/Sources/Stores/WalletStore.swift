@@ -105,7 +105,8 @@ extension Wallet {
             name: name,
             type: type.rawValue, 
             index: index.asInt,
-            order: 0
+            order: 0,
+            isPinned: false
         )
     }
 }

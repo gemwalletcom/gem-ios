@@ -84,7 +84,7 @@ struct ReceiveScene: View {
             }
             model.enableAsset()
             
-            try? model.walletService.updateNode(chain: model.assetModel.asset.chain)
+            try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
         }
     }
     
@@ -98,7 +98,7 @@ struct ReceiveScene_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             ReceiveScene(
-                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), walletId: .main, address: "", walletService: .main)
+                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), walletId: .main, address: "", walletsService: .main)
             )
             .navigationBarTitleDisplayMode(.inline)
         }

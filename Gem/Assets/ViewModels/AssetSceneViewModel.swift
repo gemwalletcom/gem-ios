@@ -7,7 +7,7 @@ import Store
 import Style
 
 class AssetSceneViewModel: ObservableObject {
-    private let walletService: WalletService
+    private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
     private let stakeService: StakeService
@@ -19,13 +19,15 @@ class AssetSceneViewModel: ObservableObject {
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
 
-    init(walletService: WalletService,
-         assetsService: AssetsService,
-         transactionsService: TransactionsService,
-         stakeService: StakeService,
-         assetDataModel: AssetDataViewModel,
-         walletModel: WalletViewModel) {
-        self.walletService = walletService
+    init(
+        walletsService: WalletsService,
+        assetsService: AssetsService,
+        transactionsService: TransactionsService,
+        stakeService: StakeService,
+        assetDataModel: AssetDataViewModel,
+        walletModel: WalletViewModel
+    ) {
+        self.walletsService = walletsService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
         self.stakeService = stakeService
@@ -121,7 +123,7 @@ extension AssetSceneViewModel {
 
     func updateWallet() async {
         do {
-            async let updateAsset: () = try walletService.updateAsset(
+            async let updateAsset: () = try walletsService.updateAsset(
                 walletId: walletModel.wallet.walletId,
                 assetId: assetModel.asset.id
             )

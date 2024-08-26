@@ -56,7 +56,7 @@ struct SwapScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
-                    walletService: model.walletService
+                    walletsService: model.walletsService
                 )
             )
         }

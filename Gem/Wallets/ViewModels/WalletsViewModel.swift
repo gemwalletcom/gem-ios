@@ -4,8 +4,9 @@ import Primitives
 import SwiftUI
 
 struct WalletsViewModel {
+
     let keystore: any Keystore
-    
+
     init(
         keystore: any Keystore
     ) {
@@ -34,5 +35,9 @@ extension WalletsViewModel {
         if keystore.wallets.isEmpty {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
+    }
+
+    func pin(_ wallet: Wallet) throws {
+        //wallet
     }
 }

@@ -10,7 +10,7 @@ class SelectAssetViewModel: ObservableObject {
     let keystore: any Keystore
     let selectType: SelectAssetType
     let assetsService: AssetsService
-    let walletService: WalletService
+    let walletsService: WalletsService
     
     private let searchAssetsTaskDebounceTimeout = Duration.milliseconds(250)
     private var searchAssetsTask: Task<[AssetFull], Error>?
@@ -22,13 +22,13 @@ class SelectAssetViewModel: ObservableObject {
         keystore: any Keystore,
         selectType: SelectAssetType,
         assetsService: AssetsService,
-        walletService: WalletService
+        walletsService: WalletsService
     ) {
         self.wallet = wallet
         self.keystore = keystore
         self.selectType = selectType
         self.assetsService = assetsService
-        self.walletService = walletService
+        self.walletsService = walletsService
     }
     
     var title: String {
@@ -87,7 +87,7 @@ class SelectAssetViewModel: ObservableObject {
     }
     
     func enableAsset(assetId: AssetId, enabled: Bool) {
-        walletService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
+        walletsService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
     }
     
     func searchQuery(query: String) async {

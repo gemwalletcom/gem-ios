@@ -199,6 +199,6 @@ extension ConfirmTransferScene {
                   keystore: LocalKeystore.main,
                   data: .main,
                   service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
-                  walletService: .main)
+                  walletsService: .main)
     )
 }
