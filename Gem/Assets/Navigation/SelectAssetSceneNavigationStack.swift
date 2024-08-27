@@ -7,15 +7,17 @@ import Style
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
-    
-    let model: SelectAssetViewModel
-    @State private var isPresentingAddToken: Bool = false
-
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
     @Environment(\.walletService) private var walletService
-    
+
+    @State private var isPresentingAddToken: Bool = false
+    @State private var isPresentingFilteringView: Bool = false
+
+    let model: SelectAssetViewModel
+
     var body: some View {
+        @Bindable var model = model
         NavigationStack {
             SelectAssetScene(model: model, isPresentingAddToken: $isPresentingAddToken)
             .toolbar {
@@ -27,6 +29,14 @@ struct SelectAssetSceneNavigationStack: View {
                     .accessibilityIdentifier("cancel")
                 }
                 if model.showAddToken {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresentingFilteringView = true
+                        } label: {
+                            Image(systemName: "line.horizontal.3.decrease")
+                        }
+                    }
+
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             isPresentingAddToken = true
@@ -44,6 +54,13 @@ struct SelectAssetSceneNavigationStack: View {
                 isPresenting: $isPresentingAddToken,
                 action: addAsset
             )
+        }
+        .sheet(isPresented: $isPresentingFilteringView) {
+            NavigationStack {
+                AssetsFilterScene(model: $model.filterModel)
+            }
+            .presentationDetents([.height(200)])
+            .presentationDragIndicator(.visible)
         }
     }
     

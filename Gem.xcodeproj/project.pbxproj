@@ -28,6 +28,8 @@
 		838F143A2C3F4D670049A8D2 /* NodeStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F14392C3F4D670049A8D2 /* NodeStatus.swift */; };
 		83A681922C46F1EA00A3636B /* SwapAvailabilityResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A681912C46F1EA00A3636B /* SwapAvailabilityResult.swift */; };
 		83A704272C17CA78005B77F4 /* BuyAssetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A704262C17CA78005B77F4 /* BuyAssetInput.swift */; };
+		83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */; };
+		83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */; };
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
 		83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824032C176A0D0023CA0C /* ChainFilterable.swift */; };
 		83D854482C59B34F00D4078C /* FeeRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854472C59B34F00D4078C /* FeeRateViewModel.swift */; };
@@ -312,6 +314,8 @@
 		838F14392C3F4D670049A8D2 /* NodeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeStatus.swift; sourceTree = "<group>"; };
 		83A681912C46F1EA00A3636B /* SwapAvailabilityResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAvailabilityResult.swift; sourceTree = "<group>"; };
 		83A704262C17CA78005B77F4 /* BuyAssetInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInput.swift; sourceTree = "<group>"; };
+		83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterScene.swift; sourceTree = "<group>"; };
+		83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterViewModel.swift; sourceTree = "<group>"; };
 		83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824032C176A0D0023CA0C /* ChainFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainFilterable.swift; sourceTree = "<group>"; };
 		83D854472C59B34F00D4078C /* FeeRateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeRateViewModel.swift; sourceTree = "<group>"; };
@@ -1030,6 +1034,7 @@
 			children = (
 				C3CF3B8429AB18AD00E96586 /* SelectAssetScene.swift */,
 				D8BAC94D2BCF6A81001608BC /* AddTokenScene.swift */,
+				83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1068,6 +1073,7 @@
 				C3E99BC02A72DF67005DF35F /* AssetIdViewModel.swift */,
 				D8BAC94F2BCF6B50001608BC /* AddTokenViewModel.swift */,
 				D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */,
+				83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1968,6 +1974,7 @@
 				D801814C2B4620A600F4D22B /* StakeValidatorsViewModel.swift in Sources */,
 				D848118D2B28E95C00DE7E45 /* StakeDelegationViewModel.swift in Sources */,
 				C3AD581C299C5E26006BC902 /* WalletScene.swift in Sources */,
+				83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */,
 				C3CF3BBA29B6D44A00E96586 /* CreateWalletScene.swift in Sources */,
 				830FDA3B2C20955D003DA605 /* AddNodeSceneViewModel.swift in Sources */,
 				830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */,
@@ -2006,6 +2013,7 @@
 				D8B978022AAA4C28009933B5 /* NotificationsViewModel.swift in Sources */,
 				C3FB448E2A7AE4070056F124 /* NameResolveViewModel.swift in Sources */,
 				D8B978002AAA4B97009933B5 /* NotificationsScene.swift in Sources */,
+				83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */,
 				D80700502BBB6ABA00ED770B /* CreateWalletNavigationStack.swift in Sources */,
 				83D854482C59B34F00D4078C /* FeeRateViewModel.swift in Sources */,
 				C36678FA2A09791C00F1D74D /* ImportAssetsService.swift in Sources */,

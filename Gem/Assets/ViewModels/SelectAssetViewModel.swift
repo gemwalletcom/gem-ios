@@ -3,20 +3,19 @@ import Keystore
 import Primitives
 import Store
 import Settings
+import Components
 
-class SelectAssetViewModel: ObservableObject {
-    
+@Observable
+class SelectAssetViewModel {
     let wallet: Wallet
     let keystore: any Keystore
     let selectType: SelectAssetType
     let assetsService: AssetsService
     let walletService: WalletService
-    
-    private let searchAssetsTaskDebounceTimeout = Duration.milliseconds(250)
-    private var searchAssetsTask: Task<[AssetFull], Error>?
-    
-    @Published var isLoading: Bool = false
-    
+
+    var state: StateViewType<[AssetFull]> = .noData
+    var filterModel: AssetsFilterViewModel
+
     init(
         wallet: Wallet,
         keystore: any Keystore,
@@ -29,8 +28,30 @@ class SelectAssetViewModel: ObservableObject {
         self.selectType = selectType
         self.assetsService = assetsService
         self.walletService = walletService
+
+        filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)//, chains: <#T##[String]#>, filters: <#T##[AssetsRequestFilter]#>)
+
+//        let filterChains = wallet.type == .multicoin ? [] : [wallet.accounts.first?.chain].compactMap { $0?.rawValue }
+//        let reqeust = AssetsRequest(
+//            walletID: wallet.id,
+//            chains: filterChains,
+//            filters: Self.defaultFilters(type: selectType)
+//        )
+//        self.assetsRequest = reqeust
     }
-    
+
+    static func defaultFilters(type: SelectAssetType) -> [AssetsRequestFilter] {
+        switch type {
+        case .send: [.hasBalance]
+        case .receive: [.includeNewAssets]
+        case .buy: [.buyable, .includeNewAssets]
+        case .swap: [.swappable]
+        case .stake: [.stakeable]
+        case .manage: [.includeNewAssets]
+        case .hidden: [.hidden]
+        }
+    }
+
     var title: String {
         switch selectType {
         case .send: Localized.Wallet.send
@@ -42,38 +63,11 @@ class SelectAssetViewModel: ObservableObject {
         case .hidden: Localized.Assets.hidden
         }
     }
-    
-    var filterChains: [String] {
-        switch wallet.type {
-        case .multicoin:
-            return []
-        case .view, .single, .privateKey:
-            guard let chain = wallet.accounts.first?.chain else {
-                return []
-            }
-            return [chain.rawValue]
-        }
+
+    var assetsInfoRequest: AssetsInfoRequest {
+        AssetsInfoRequest(walletId: wallet.walletId.id)
     }
-    
-    var assetRequest: AssetsRequest {
-        switch selectType {
-        case .send:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.hasBalance])
-        case .receive:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.includeNewAssets])
-        case .buy:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.buyable, .includeNewAssets])
-        case .swap:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.swappable])
-        case .stake:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.stakeable])
-        case .manage:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.includeNewAssets])
-        case .hidden:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.hidden])
-        }
-    }
-    
+
     var showAssetsInfo: Bool {
         selectType == .manage
     }
@@ -81,16 +75,12 @@ class SelectAssetViewModel: ObservableObject {
     var showAddToken: Bool {
         selectType == .manage && wallet.accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
     }
-    
-    var assetsInfoRequest: AssetsInfoRequest {
-        return AssetsInfoRequest(walletId: wallet.walletId.id)
-    }
-    
-    func enableAsset(assetId: AssetId, enabled: Bool) {
-        walletService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
-    }
-    
-    func searchQuery(query: String) async {
+}
+
+// MARK: - Business Logic
+
+extension SelectAssetViewModel {
+    func search(query: String) async {
         let query = query.trim()
         switch selectType {
         case .manage, .receive, .buy:
@@ -99,57 +89,54 @@ class SelectAssetViewModel: ObservableObject {
             break
         }
     }
-    
+
+    func enableAsset(assetId: AssetId, enabled: Bool) {
+        walletService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
+    }
+}
+
+// MARK: - Private
+
+extension SelectAssetViewModel {
     private func chains(for type: WalletType) -> [Chain] {
         switch wallet.type {
         case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
         case .multicoin: []
         }
     }
-    
+
     private func searchAssets(query: String) async {
-        let chains: [Chain] = chains(for: wallet.type)
-        
-        searchAssetsTask?.cancel()
-        
-        DispatchQueue.main.async {
-            self.isLoading = true
-        }
-        
-        if query.isEmpty {
-            DispatchQueue.main.async {
-                self.isLoading = false
+        await MainActor.run { [self] in
+            self.state = .loading
+
+            if query.isEmpty {
+                self.state = .noData
+                return
             }
-            return
         }
-        Task {
-            do {
-                let task = Task.detached {
-                    try await Task.sleep(for: self.searchAssetsTaskDebounceTimeout)
-                    return try await self.assetsService.searchAssets(query: query, chains: chains)
+
+        let chains: [Chain] = chains(for: wallet.type)
+
+        do {
+            let assets = try await assetsService.searchAssets(query: query, chains: chains)
+            try assetsService.addAssets(assets: assets)
+            try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
+
+            await MainActor.run { [self] in
+                self.state = .loaded(assets)
+            }
+        } catch {
+            await MainActor.run { [self] in
+                if !error.isCancelled {
+                    self.state = .error(error)
+                    NSLog("SelectAssetScene scene search assests error: \(error)")
                 }
-                searchAssetsTask = task
-                let assets = try await task.value
-                try assetsService.addAssets(assets: assets)
-                try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
-                
-                NSLog("searchAssets assets count: \(assets.count)")
-                
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                }
-            } catch {
-                if error.isCancelled {
-                    return
-                }
-                DispatchQueue.main.async {
-                    self.isLoading = false
-                }
-                NSLog("searchAssets assets error: \(error)")
             }
         }
     }
 }
+
+// MARK: - Models extensions
 
 extension SelectAssetType {
     var listType: AssetListType {
