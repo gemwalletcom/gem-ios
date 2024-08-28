@@ -62,7 +62,8 @@ extension AssetData {
                 isEnabled: false,
                 isBuyEnabled: false,
                 isSwapEnabled: false,
-                isStakeEnabled: false
+                isStakeEnabled: false,
+                isPinned: false
             )
         )
     }()

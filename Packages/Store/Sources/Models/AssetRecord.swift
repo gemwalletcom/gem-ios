@@ -105,7 +105,8 @@ extension AssetRecord {
                 isEnabled: false,
                 isBuyEnabled: isBuyable,
                 isSwapEnabled: isSwappable,
-                isStakeEnabled: isStakeable
+                isStakeEnabled: isStakeable,
+                isPinned: false
             )
         )
     }
@@ -128,7 +129,8 @@ extension AssetRecordInfo {
             isEnabled: balance.isEnabled,
             isBuyEnabled: asset.isBuyable,
             isSwapEnabled: asset.isSwappable,
-            isStakeEnabled: asset.isStakeable
+            isStakeEnabled: asset.isStakeable,
+            isPinned: balance.isPinned
         )
     }
 }

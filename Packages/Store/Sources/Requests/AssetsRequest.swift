@@ -102,43 +102,48 @@ public struct AssetsRequest: Queryable {
         case .hasFiatValue:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName, true) )
+                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .hasBalance:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName, true) )
+                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .buyable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName))
                 )
         case .swappable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isSwappable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isSwappable == true", AssetRecord.databaseTableName))
                 )
         case .stakeable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isStakeable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isStakeable == true", AssetRecord.databaseTableName))
                 )
         case .enabled:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isEnabled == true", AssetBalanceRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isEnabled == true", AssetBalanceRecord.databaseTableName))
                 )
         case .hidden:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isHidden == true", AssetBalanceRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isHidden == true", AssetBalanceRecord.databaseTableName))
                 )
         case .chains(let chains):
             if chains.isEmpty {
                 return request
             }
             return request.filter(chains.contains(Columns.Asset.chain))
+        case .includePinned(let value):
+            return request
+                .filter(
+                    SQL(stringLiteral:  String(format: "%@.isPinned == %d", AssetBalanceRecord.databaseTableName, value))
+                )
         case .includeNewAssets:
             return request
         }

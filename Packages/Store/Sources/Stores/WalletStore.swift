@@ -30,8 +30,10 @@ public struct WalletStore {
     }
     
     public func addWallet(_ wallet: Wallet) throws {
+        let index = try nextWalletIndex()
         var record = wallet.record
-        record.index = try nextWalletIndex()
+        record.index = index
+        record.order = index
         try db.write { db in
             try record.insert(db, onConflict: .ignore)
             for account in wallet.accounts {

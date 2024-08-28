@@ -25,7 +25,11 @@ struct WalletScene: View {
     private var fiatValue: WalletFiatValue
 
     @Query<AssetsRequest>
+    private var assetsPinned: [AssetData]
+
+    @Query<AssetsRequest>
     private var assets: [AssetData]
+
 
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
@@ -46,6 +50,7 @@ struct WalletScene: View {
         try? model.setupWallet()
 
         _assets = Query(constant: model.assetsRequest, in: \.db.dbQueue)
+        _assetsPinned = Query(constant: model.assetsPinnedRequest, in: \.db.dbQueue)
         _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
         _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
         _banners = Query(constant: model.bannersRequest, in: \.db.dbQueue)
@@ -72,14 +77,35 @@ struct WalletScene: View {
                 }
             }
 
+            if !assetsPinned.isEmpty {
+                Section {
+                    WalletAssetsList(
+                        assets: assetsPinned,
+                        copyAssetAddress: { model.copyAssetAddress(for: $0) },
+                        hideAsset: { try? model.hideAsset($0) },
+                        pinAsset: { (assetId, value) in
+                            try? model.pinAsset(assetId, value: value)
+                        }
+                    )
+                } header: {
+                    HStack {
+                        Image(systemName: SystemImage.pin)
+                        Text(Localized.Common.pinned)
+                    }
+                }
+            }
+
             Section {
                 WalletAssetsList(
                     assets: assets,
                     copyAssetAddress: { address in
                         model.copyAssetAddress(for: address)
                     },
-                    hideAsset: { assetId in
-                        Task { try model.hideAsset(assetId) }
+                    hideAsset: {
+                        try? model.hideAsset($0)
+                    },
+                    pinAsset: { (assetId, value) in
+                        try? model.pinAsset(assetId, value: value)
                     }
                 )
             } footer: {
