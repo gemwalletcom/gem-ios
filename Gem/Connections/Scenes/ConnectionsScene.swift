@@ -32,7 +32,7 @@ struct ConnectionsScene: View {
         model: ConnectionsViewModel
     ) {
         self.model = model
-        _connections = Query(ConnectionsRequest(), in: \.db.dbQueue)
+        _connections = Query(ConnectionsRequest())
     }
     
     var body: some View {
