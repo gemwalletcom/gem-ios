@@ -21,7 +21,6 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.walletService) private var walletService
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -73,18 +72,7 @@ struct SettingsNavigationStack: View {
                 CurrencyScene(model: currencyModel)
             }
             .sheet(isPresented: $isWalletsPresented) {
-                NavigationStack {
-                    WalletsScene(model: WalletsViewModel(walletService: walletService))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isWalletsPresented.toggle()
-                                }
-                                .bold()
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                }
+                WalletsNavigationStack()
             }
         }
         .onChange(of: currencyModel.currency) { oldValue, newValue in

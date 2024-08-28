@@ -17,7 +17,6 @@ struct WalletsScene: View {
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
 
-    @State var walletEdit: Wallet? = .none
     @State var walletDelete: Wallet? = .none
 
     var model: WalletsViewModel
@@ -93,11 +92,6 @@ struct WalletsScene: View {
                 .onMove(perform: onMove)
             }
         }
-        .navigationDestination(for: $walletEdit) { wallet in
-            WalletDetailScene(
-                model: WalletDetailViewModel(wallet: wallet, keystore: keystore)
-            )
-        }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
@@ -139,7 +133,7 @@ extension WalletsScene {
     }
 
     private func onEdit(wallet: Wallet) {
-        walletEdit = wallet
+        model.onEdit(wallet: wallet)
     }
 
     private func onSelect(wallet: Wallet) {
@@ -221,7 +215,12 @@ extension WalletsScene {
 
 #Preview {
     NavigationStack {
-        WalletsScene(model: .init(walletService: .main))
-            .navigationBarTitleDisplayMode(.inline)
+        WalletsScene(
+            model: .init(
+                navigationPath: Binding.constant(NavigationPath()),
+                walletService: .main
+            )
+        )
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

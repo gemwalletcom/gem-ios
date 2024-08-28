@@ -2,14 +2,19 @@ import Foundation
 import Keystore
 import Primitives
 import Settings
+import SwiftUI
 
 class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     
+    @Binding private var navigationPath: NavigationPath
+
     let keystore: any Keystore
 
     init(
+        navigationPath: Binding<NavigationPath>,
         keystore: any Keystore
     ) {
+        _navigationPath = navigationPath
         self.keystore = keystore
     }
     
@@ -37,5 +42,9 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     
     var presentWarning: Bool {
         return true
+    }
+
+    func continueAction() {
+        navigationPath.append(Scenes.VerifyPhrase(words: words))
     }
 }
