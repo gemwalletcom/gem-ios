@@ -40,4 +40,8 @@ extension WalletsViewModel {
             try walletService.pin(wallet: wallet)
         }
     }
+
+    func swapOrder(from: WalletId, to: WalletId) throws {
+        try walletService.swapOrder(from: from, to: to)
+    }
 }

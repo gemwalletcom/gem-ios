@@ -41,4 +41,8 @@ public struct WalletService {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
     }
+
+    func swapOrder(from: WalletId, to: WalletId) throws {
+        try walletStore.swapOrder(from: from, to: to)
+    }
 }

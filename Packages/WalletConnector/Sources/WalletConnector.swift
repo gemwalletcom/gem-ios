@@ -49,8 +49,8 @@ public class WalletConnector {
         try await Web3Wallet.instance.disconnect(topic: sessionId)
     }
     
-    public func disconnectPairing(pairingId: String) async throws {
-        try await Web3Wallet.instance.disconnectPairing(topic: pairingId)
+    public func disconnectPairing(pairingId: String) async {
+        await Web3Wallet.instance.disconnectPairing(topic: pairingId)
     }
     
     public func disconnect(topic: String) async throws {
@@ -64,7 +64,7 @@ public class WalletConnector {
         
         for session in sessions {
             try? await Web3Wallet.instance.disconnect(topic: session.topic)
-            try? await Web3Wallet.instance.disconnectPairing(topic: session.pairingTopic)
+            await Web3Wallet.instance.disconnectPairing(topic: session.pairingTopic)
         }
         
         let pairings = Pair.instance.getPairings()

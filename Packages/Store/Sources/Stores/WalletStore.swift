@@ -89,6 +89,23 @@ public struct WalletStore {
         }
     }
 
+    public func swapOrder(from: WalletId, to: WalletId) throws {
+        guard 
+            let fromWallet = try getWallet(id: from.id),
+            let toWallet = try getWallet(id: to.id) else {
+            throw AnyError("Unable to locate wallets to swap order")
+        }
+        return try db.write { db in
+            try WalletRecord
+                .filter(Columns.Wallet.id == fromWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: toWallet.order))
+
+            try WalletRecord
+                .filter(Columns.Wallet.id == toWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: fromWallet.order))
+        }
+    }
+
     public func observer() -> SubscriptionsObserver {
         return SubscriptionsObserver(dbQueue: db)
     }

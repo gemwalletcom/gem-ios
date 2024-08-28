@@ -70,7 +70,7 @@ struct WalletsScene: View {
                             onDelete: onDelete
                         )
                     }
-                    //.onMove(perform: onMovePinned)
+                    .onMove(perform: onMovePinned)
                 } header: {
                     HStack {
                         Image(systemName: SystemImage.pin)
@@ -90,7 +90,7 @@ struct WalletsScene: View {
                         onDelete: onDelete
                     )
                 }
-                //.onMove(perform: onMove)
+                .onMove(perform: onMove)
             }
         }
         .navigationDestination(for: $walletEdit) { wallet in
@@ -156,11 +156,50 @@ extension WalletsScene {
     }
 
     private func onMovePinned(from source: IndexSet, to destination: Int) {
-        //NSLog("source \(source.first), destination: \(destination)")
+        guard let source = source.first else { return }
+        do {
+            try swapOrder(wallets: pinnedWallets, source: source, destination: destination)
+        } catch {
+            NSLog("onMovePinned error: \(error)")
+        }
     }
 
     private func onMove(from source: IndexSet, to destination: Int) {
-        //NSLog("source \(source.first), destination: \(destination)")
+        guard let source = source.first else { return }
+        do {
+            try swapOrder(wallets: wallets, source: source, destination: destination)
+        } catch {
+            NSLog("onMove error: \(error)")
+        }
+    }
+
+    private func swapOrder(wallets: [Wallet], source: Int, destination: Int) throws {
+        NSLog("swapOrder source: \(source) destination: \(destination)")
+
+        let from = try wallets.getElement(safe: source)
+        if source - destination == 1 { // if next to each other, swap
+            let to = try wallets.getElement(safe: destination)
+            try model.swapOrder(
+                from: from.walletId,
+                to: to.walletId
+            )
+        } else if source == 0 || wallets.count == destination  { // moving to last position
+            for i in source..<destination-1 {
+                let to = try wallets.getElement(safe: i+1)
+                try model.swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
+        } else if source == wallets.count-1 { // moving to the first position
+            for i in stride(from: wallets.count-1, through: destination+1, by: -1) {
+                let to = try wallets.getElement(safe: i-1)
+                try model.swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
+        }
     }
 }
 

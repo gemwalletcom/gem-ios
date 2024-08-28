@@ -28,6 +28,7 @@ struct Columns {
         static let name = Column("name")
         static let index = Column("index")
         static let type = Column("type")
+        static let order = Column("order")
         static let isPinned = Column("isPinned")
     }
     
