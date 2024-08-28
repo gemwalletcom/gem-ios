@@ -9,18 +9,15 @@ public struct AssetsRequest: Queryable {
     
     public var walletID: String
     public var searchBy: String
-    public var chains: [String]
     public var filters: [AssetsRequestFilter]
     
     public init(
         walletID: String,
         searchBy: String = "",
-        chains: [String],
         filters: [AssetsRequestFilter] = []
     ) {
         self.walletID = walletID
         self.searchBy = searchBy
-        self.chains = chains
         self.filters = filters
     }
     
@@ -45,7 +42,6 @@ public struct AssetsRequest: Queryable {
         return try Self.fetchAssetsSearch(
             walletId: walletID,
             searchBy: searchBy,
-            chains: chains,
             filters: filters,
             excludeAssetIds: excludeAssetIds
         )
@@ -152,7 +148,6 @@ public struct AssetsRequest: Queryable {
     static func fetchAssetsSearch(
         walletId: String,
         searchBy: String,
-        chains: [String],
         filters: [AssetsRequestFilter],
         excludeAssetIds: [String]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
@@ -168,15 +163,24 @@ public struct AssetsRequest: Queryable {
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
-        
-        if !chains.isEmpty {
-            request = Self.applyFilter(request: request, .chains(chains))
-        }
-        if filters.contains(.buyable) {
-            request = Self.applyFilter(request: request, .buyable)
-        }
-        if filters.contains(.swappable) {
-            request = Self.applyFilter(request: request, .swappable)
+
+        //Ignoring some filters as they only applied to balances table
+        filters.forEach {
+            switch $0 {
+            case .buyable,
+                .swappable,
+                .stakeable,
+                .chains:
+                request = Self.applyFilter(request: request, $0)
+            case .hasFiatValue,
+                .hasBalance,
+                .enabled,
+                .hidden,
+                .includePinned,
+                .includeNewAssets,
+                .search:
+                break
+            }
         }
 
         return request.asRequest(of: AssetRecordInfo.self)
