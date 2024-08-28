@@ -7,7 +7,7 @@ import Primitives
 import Style
 
 struct AddTokenScene: View {
-    @State var model: AddTokenViewModel
+    @State private var model: AddTokenViewModel
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {

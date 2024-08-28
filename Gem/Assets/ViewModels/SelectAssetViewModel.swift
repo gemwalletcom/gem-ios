@@ -29,27 +29,7 @@ class SelectAssetViewModel {
         self.assetsService = assetsService
         self.walletService = walletService
 
-        filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)//, chains: <#T##[String]#>, filters: <#T##[AssetsRequestFilter]#>)
-
-//        let filterChains = wallet.type == .multicoin ? [] : [wallet.accounts.first?.chain].compactMap { $0?.rawValue }
-//        let reqeust = AssetsRequest(
-//            walletID: wallet.id,
-//            chains: filterChains,
-//            filters: Self.defaultFilters(type: selectType)
-//        )
-//        self.assetsRequest = reqeust
-    }
-
-    static func defaultFilters(type: SelectAssetType) -> [AssetsRequestFilter] {
-        switch type {
-        case .send: [.hasBalance]
-        case .receive: [.includeNewAssets]
-        case .buy: [.buyable, .includeNewAssets]
-        case .swap: [.swappable]
-        case .stake: [.stakeable]
-        case .manage: [.includeNewAssets]
-        case .hidden: [.hidden]
-        }
+        self.filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)
     }
 
     var title: String {

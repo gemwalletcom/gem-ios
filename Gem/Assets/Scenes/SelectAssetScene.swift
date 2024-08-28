@@ -23,7 +23,7 @@ struct SelectAssetScene: View {
     @Query<AssetsInfoRequest>
     var assetInfo: AssetsInfo
 
-    @State var model: SelectAssetViewModel
+    @State private var model: SelectAssetViewModel
 
     init(
         model: SelectAssetViewModel,

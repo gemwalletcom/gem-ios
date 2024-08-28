@@ -20,33 +20,33 @@ struct SelectAssetSceneNavigationStack: View {
         @Bindable var model = model
         NavigationStack {
             SelectAssetScene(model: model, isPresentingAddToken: $isPresentingAddToken)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
-                        dismiss()
-                    }
-                    .bold()
-                    .accessibilityIdentifier("cancel")
-                }
-                if model.showAddToken {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingFilteringView = true
-                        } label: {
-                            Image(systemName: "line.horizontal.3.decrease")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(Localized.Common.done) {
+                            dismiss()
                         }
+                        .bold()
+                        .accessibilityIdentifier("cancel")
                     }
+                    if model.showAddToken {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isPresentingFilteringView = true
+                            } label: {
+                                Image(systemName: "line.horizontal.3.decrease")
+                            }
+                        }
 
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingAddToken = true
-                        } label: {
-                            Image(systemName: SystemImage.plus)
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isPresentingAddToken = true
+                            } label: {
+                                Image(systemName: SystemImage.plus)
+                            }
                         }
                     }
                 }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
         }
         .sheet(isPresented: $isPresentingAddToken) {
             AddTokenNavigationStack(
@@ -63,7 +63,7 @@ struct SelectAssetSceneNavigationStack: View {
             .presentationDragIndicator(.visible)
         }
     }
-    
+
     func addAsset(_ asset: Asset) {
         Task {
             try model.assetsService.addAsset(walletId: model.wallet.walletId, asset: asset)
