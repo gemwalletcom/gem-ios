@@ -43,6 +43,7 @@ public struct AssetsRequest: Queryable {
     
     func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
         return try Self.fetchAssetsSearch(
+            walletId: walletID,
             searchBy: searchBy,
             chains: chains,
             filters: filters,
@@ -69,7 +70,6 @@ public struct AssetsRequest: Queryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
-            //.joining(optional: AssetBalanceRecord.filter(Columns.Balance.assetId == assetId.identifier)))
             .filter(literal:
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AssetBalanceRecord.databaseTableName, walletID))
             )
@@ -150,14 +150,19 @@ public struct AssetsRequest: Queryable {
     }
     
     static func fetchAssetsSearch(
+        walletId: String,
         searchBy: String,
         chains: [String],
         filters: [AssetsRequestFilter],
         excludeAssetIds: [String]
-    )-> QueryInterfaceRequest<AssetRecord>  {
+    )-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
+            .including(optional: AssetRecord.account)
             .filter(!excludeAssetIds.contains(Columns.Asset.id))
-            .order(Columns.Asset.rank.desc)
+            .filter(literal:
+                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
+            )
+            .order(Columns.Asset.rank.asc)
             .limit(50)
         
         if !searchBy.isEmpty {
@@ -167,11 +172,13 @@ public struct AssetsRequest: Queryable {
         if !chains.isEmpty {
             request = Self.applyFilter(request: request, .chains(chains))
         }
-        
         if filters.contains(.buyable) {
             request = Self.applyFilter(request: request, .buyable)
         }
-        
-        return request.asRequest(of: AssetRecord.self)
+        if filters.contains(.swappable) {
+            request = Self.applyFilter(request: request, .swappable)
+        }
+
+        return request.asRequest(of: AssetRecordInfo.self)
     }
 }
