@@ -73,7 +73,7 @@ class StakeViewModel {
     func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
         switch delegatitonsState {
         case .noData: return .noData
-        case .loading: return .loading
+        case .loading: return delegationModels.isEmpty ? .loading : .loaded(delegationModels)
         case .loaded: return delegationModels.isEmpty ? .noData : .loaded(delegationModels)
         case .error(let error): return .error(error)
         }
