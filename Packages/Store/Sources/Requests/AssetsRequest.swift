@@ -66,16 +66,12 @@ public struct AssetsRequest: Queryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AssetBalanceRecord.databaseTableName, walletID))
+            .joining(optional: AssetRecord.balance
+                .filter(Columns.Balance.walletId == walletID)
+                .order(Columns.Balance.fiatValue.desc)
             )
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletID))
-            )
-            .order(literal:
-                SQL(stringLiteral: String(format: "%@.fiatValue DESC", AssetBalanceRecord.databaseTableName))
-            )
-        
+            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
