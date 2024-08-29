@@ -13,7 +13,7 @@
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <TestPlanReference
-               reference = "container:GemTests/screenshots.xctestplan">
+               reference = "container:GemUITests/screenshots.xctestplan">
             </TestPlanReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -39,7 +39,7 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <TestPlans>
          <TestPlanReference
-            reference = "container:GemTests/screenshots.xctestplan"
+            reference = "container:GemUITests/screenshots.xctestplan"
             default = "YES">
          </TestPlanReference>
       </TestPlans>

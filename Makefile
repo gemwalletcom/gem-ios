@@ -34,6 +34,13 @@ test:
 	-destination "platform=iOS Simulator,name=iPhone 15" \
 	test | xcbeautify
 
+test_ui:
+	@set -o pipefail && xcodebuild -project Gem.xcodeproj \
+	-scheme GemUITests \
+	-sdk iphonesimulator \
+	-destination "platform=iOS Simulator,name=iPhone 15" \
+	test | xcbeautify
+
 localize:
 	@sh core/scripts/localize.sh ios Gem/Resources
 	@make generate-model
