@@ -189,4 +189,12 @@ public class BalanceService: BalancerUpdater {
     func hideAsset(walletId: WalletId, assetId: AssetId) throws {
         try balanceStore.setIsEnabled(walletId: walletId.id, assetIds: [assetId.identifier], value: false)
     }
+
+    func pinAsset(walletId: WalletId, assetId: AssetId) throws {
+        try balanceStore.pinAsset(walletId: walletId.id, assetId: assetId.identifier, value: true)
+    }
+
+    func unpinAsset(walletId: WalletId, assetId: AssetId) throws {
+        try balanceStore.pinAsset(walletId: walletId.id, assetId: assetId.identifier, value: false)
+    }
 }

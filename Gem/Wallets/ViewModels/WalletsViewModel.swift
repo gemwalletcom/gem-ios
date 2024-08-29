@@ -3,13 +3,16 @@ import Keystore
 import Primitives
 import SwiftUI
 
-struct WalletsViewModel {
+class WalletsViewModel {
 
+    @Binding var navigationPath: NavigationPath
     let walletService: WalletService
 
     init(
+        navigationPath: Binding<NavigationPath>,
         walletService: WalletService
     ) {
+        _navigationPath = navigationPath
         self.walletService = walletService
     }
     
@@ -29,6 +32,10 @@ extension WalletsViewModel {
         walletService.setCurrent(walletId)
     }
 
+    func onEdit(wallet: Wallet) {
+        navigationPath.append(Scenes.WalletDetail(wallet: wallet))
+    }
+
     func delete(_ wallet: Wallet) throws {
         try walletService.delete(wallet)
     }
@@ -39,5 +46,9 @@ extension WalletsViewModel {
         } else {
             try walletService.pin(wallet: wallet)
         }
+    }
+
+    func swapOrder(from: WalletId, to: WalletId) throws {
+        try walletService.swapOrder(from: from, to: to)
     }
 }

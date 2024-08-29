@@ -48,8 +48,10 @@ public struct AssetStore {
     
     public func getAssetsData(for walletId: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
         try db.read { db in
-            let request = AssetsRequest.fetchAssets(for: walletId, searchBy: "", filters: filters)
-            return try request.fetchAll(db).map { $0.assetData}
+            return try AssetsRequest(walletID: walletId)
+                .fetchAssets(filters: filters)
+                .fetchAll(db)
+                .map { $0.assetData}
         }
     }
     

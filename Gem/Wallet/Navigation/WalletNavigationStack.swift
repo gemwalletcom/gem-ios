@@ -18,18 +18,7 @@ struct WalletNavigationStack: View {
         NavigationStack(path: $navigationPath) {
             WalletScene(model: model)
             .sheet(isPresented: $isWalletsPresented) {
-                NavigationStack {
-                    WalletsScene(model: WalletsViewModel(walletService: walletService))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isWalletsPresented.toggle()
-                                }
-                                .bold()
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                }
+                WalletsNavigationStack()
             }
             .navigationBarTitleDisplayMode(.inline)
         }

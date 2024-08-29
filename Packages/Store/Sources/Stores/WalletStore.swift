@@ -30,8 +30,10 @@ public struct WalletStore {
     }
     
     public func addWallet(_ wallet: Wallet) throws {
+        let index = try nextWalletIndex()
         var record = wallet.record
-        record.index = try nextWalletIndex()
+        record.index = index
+        record.order = index
         try db.write { db in
             try record.insert(db, onConflict: .ignore)
             for account in wallet.accounts {
@@ -86,6 +88,23 @@ public struct WalletStore {
             return try WalletRecord
                 .filter(Columns.Wallet.id == walletId)
                 .updateAll(db, Columns.Wallet.isPinned.set(to: value))
+        }
+    }
+
+    public func swapOrder(from: WalletId, to: WalletId) throws {
+        guard 
+            let fromWallet = try getWallet(id: from.id),
+            let toWallet = try getWallet(id: to.id) else {
+            throw AnyError("Unable to locate wallets to swap order")
+        }
+        return try db.write { db in
+            try WalletRecord
+                .filter(Columns.Wallet.id == fromWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: toWallet.order))
+
+            try WalletRecord
+                .filter(Columns.Wallet.id == toWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: fromWallet.order))
         }
     }
 

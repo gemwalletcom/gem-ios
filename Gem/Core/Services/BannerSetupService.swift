@@ -19,12 +19,13 @@ struct BannerSetupService {
 
     func setup() throws {
         // Adding staking for all chains
-        
-        for chain in StakeChain.allCases {
-            try store.addBanner(
-                Banner(wallet: .none, asset: chain.chain.asset, event: .stake, state: .active)
-            )
-        }
+
+//TODO: Enable when deep links to staking work
+//        for chain in StakeChain.allCases {
+//            try store.addBanner(
+//                Banner(wallet: .none, asset: chain.chain.asset, event: .stake, state: .active)
+//            )
+//        }
 
         // Enable push notifications
 //        if !preferences.isPushNotificationsEnabled && preferences.launchesCount > 2 {

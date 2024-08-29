@@ -53,6 +53,10 @@ public struct Migrations {
             }
         }
 
+        migrator.registerMigration("Set order as index in \(WalletRecord.databaseTableName)") { db in
+            try db.execute(sql: "UPDATE wallets SET \"order\" = \"index\"")
+        }
+
         try migrator.migrate(dbQueue)
     }
 }

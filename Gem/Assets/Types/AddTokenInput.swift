@@ -4,14 +4,18 @@ import Primitives
 import Settings
 
 struct AddTokenInput {
-    let availableChains: [Chain]
+    
+    let chains: [Chain]
 
     var chain: Chain?
     var address: String?
 
-    init(availableChains: [Chain]) {
-        self.availableChains = availableChains
-        // set default chain
-        self.chain = availableChains.first
+    var hasManyChains: Bool {
+        chains.count > 1
+    }
+
+    init(chains: [Chain]) {
+        self.chains = chains
+        self.chain = chains.first
     }
 }

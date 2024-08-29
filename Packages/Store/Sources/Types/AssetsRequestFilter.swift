@@ -12,7 +12,8 @@ public enum AssetsRequestFilter {
     case enabled
     case hidden
     case chains([String])
-    
+    case includePinned(Bool)
+
     // special case
     case includeNewAssets
 }

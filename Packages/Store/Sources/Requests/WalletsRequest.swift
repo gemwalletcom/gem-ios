@@ -28,6 +28,7 @@ public struct WalletsRequest: Queryable {
         return try WalletRecord
             .including(all: WalletRecord.accounts)
             .filter(Columns.Wallet.isPinned == isPinned)
+            .order(Columns.Wallet.order.asc)
             .asRequest(of: WalletRecordInfo.self)
             .fetchAll(db)
             .compactMap { $0.mapToWallet() }

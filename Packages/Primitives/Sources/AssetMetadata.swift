@@ -9,11 +9,13 @@ public struct AssetMetaData: Codable {
 	public let isBuyEnabled: Bool
 	public let isSwapEnabled: Bool
 	public let isStakeEnabled: Bool
+	public let isPinned: Bool
 
-	public init(isEnabled: Bool, isBuyEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool) {
+	public init(isEnabled: Bool, isBuyEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool) {
 		self.isEnabled = isEnabled
 		self.isBuyEnabled = isBuyEnabled
 		self.isSwapEnabled = isSwapEnabled
 		self.isStakeEnabled = isStakeEnabled
+		self.isPinned = isPinned
 	}
 }

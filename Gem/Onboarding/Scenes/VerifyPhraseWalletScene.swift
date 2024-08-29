@@ -6,7 +6,6 @@ import Style
 
 struct VerifyPhraseWalletScene: View {
     
-    @Binding var path: NavigationPath
     @StateObject var model: VerifyPhraseViewModel
 
     @Environment(\.isWalletsPresented) private var isWalletsPresented
