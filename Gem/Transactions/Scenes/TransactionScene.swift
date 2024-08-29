@@ -62,9 +62,12 @@ struct TransactionScene: View {
                     if model.showMemoField {
                         MemoListItem(memo: model.memo)
                     }
-                    HStack {
-                        ListItemView(title: model.networkField, subtitle: model.network)
-                        AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                    if model.openNetwork {
+                        NavigationLink(value: Scenes.Asset(asset: model.model.transaction.asset.chain.asset)) {
+                            networkView
+                        }
+                    } else {
+                        networkView
                     }
                     ListItemView(
                         title: model.networkFeeField,
@@ -117,6 +120,15 @@ struct TransactionScene: View {
         }
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
+        }
+    }
+}
+
+extension TransactionScene {
+    private var networkView: some View {
+        HStack {
+            ListItemView(title: model.networkField, subtitle: model.network)
+            AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
         }
     }
 }
