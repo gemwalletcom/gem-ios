@@ -153,7 +153,7 @@ struct AmountScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: model.amountRecipientData.data.asset.chain),
-                    walletService: model.walletService
+                    walletsService: model.walletsService
                 )
             )
         }

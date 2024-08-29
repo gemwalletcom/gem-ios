@@ -13,7 +13,7 @@ struct RecipientScene: View {
     
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
 
     @State var address: String = ""
@@ -119,7 +119,7 @@ struct RecipientScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
-                    walletService: walletService
+                    walletsService: walletsService
                 )
             )
         }
@@ -129,7 +129,7 @@ struct RecipientScene: View {
                     amountRecipientData: data,
                     wallet: model.wallet,
                     keystore: keystore,
-                    walletService: walletService,
+                    walletsService: walletsService,
                     stakeService: stakeService
                 )
             )
@@ -203,7 +203,7 @@ struct RecipientScene: View {
 //            model: RecipientViewModel(
 //                wallet: .main,
 //                keystore: .main,
-//                walletService: .main,
+//                walletsService: .main,
 //                assetModel: AssetViewModel(asset: .main)
 //            )
 //        )

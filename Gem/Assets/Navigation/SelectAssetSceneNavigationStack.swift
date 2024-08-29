@@ -9,7 +9,6 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
-    @Environment(\.walletService) private var walletService
 
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false

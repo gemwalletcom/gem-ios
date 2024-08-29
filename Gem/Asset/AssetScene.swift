@@ -9,7 +9,7 @@ import Store
 import Style
 
 struct AssetScene: View {
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.stakeService) private var stakeService
@@ -35,7 +35,7 @@ struct AssetScene: View {
 
     private var model: AssetSceneViewModel {
         return AssetSceneViewModel(
-            walletService: walletService,
+            walletsService: walletsService,
             assetsService: assetsService,
             transactionsService: transactionsService,
             stakeService: stakeService,
@@ -152,8 +152,8 @@ struct AssetScene: View {
         .navigationDestination(for: Asset.self) { asset in
             ChartScene(model: ChartsViewModel(
                     walletId: input.walletId,
-                    priceService: walletService.priceService,
-                    assetsService: walletService.assetsService,
+                    priceService: walletsService.priceService,
+                    assetsService: walletsService.assetsService,
                     assetModel: AssetViewModel(asset: asset)
                 )
             )

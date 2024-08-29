@@ -8,18 +8,25 @@ import UIKit
 struct WalletSceneViewModel {
 
     let wallet: Wallet
-    private let walletService: WalletService
+    private let balanceService: BalanceService
+    private let walletsService: WalletsService
     
     init(
         wallet: Wallet,
-        walletService: WalletService
+        balanceService: BalanceService,
+        walletsService: WalletsService
     ) {
         self.wallet = wallet
-        self.walletService = walletService
+        self.balanceService = balanceService
+        self.walletsService = walletsService
+    }
+
+    var assetsPinnedRequest: AssetsRequest {
+        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(true)])
     }
 
     var assetsRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, chains: [], filters: [.enabled])
+        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(false)])
     }
 
     var fiatValueRequest: TotalValueRequest {
@@ -39,11 +46,11 @@ struct WalletSceneViewModel {
     }
 
     func setupWallet() throws {
-        try walletService.setupWallet(wallet)
+        try walletsService.setupWallet(wallet)
     }
 
     func fetch(walletId: WalletId, assets: [AssetData]) async throws {
-        try await walletService.fetch(
+        try await walletsService.fetch(
             walletId: walletId,
             assetIds: assets.map { $0.asset.id }
         )
@@ -58,7 +65,15 @@ struct WalletSceneViewModel {
     }
 
     func hideAsset(_ assetId: AssetId) throws {
-        try walletService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+        try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+    }
+
+    func pinAsset(_ assetId: AssetId, value: Bool) throws {
+        if value {
+            try balanceService.pinAsset(walletId: wallet.walletId, assetId: assetId)
+        } else {
+            try balanceService.unpinAsset(walletId: wallet.walletId, assetId: assetId)
+        }
     }
 
     func copyAssetAddress(for address: String) {

@@ -13,7 +13,6 @@ struct SettingsNavigationStack: View {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
     
-    @Environment(\.keystore) private var keystore
     @Environment(\.deviceService) private var deviceService
     @Environment(\.subscriptionService) private var subscriptionService
     @Environment(\.transactionsService) private var transactionsService
@@ -21,15 +20,14 @@ struct SettingsNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.walletService) private var walletService
-    
+    @Environment(\.walletsService) private var walletsService
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SettingsScene(
                 model: SettingsViewModel(
-                    keystore: keystore,
-                    walletService: walletService,
                     walletId: walletId,
+                    walletsService: walletsService,
                     currencyModel: currencyModel,
                     securityModel: securityModel
                 )
@@ -74,18 +72,7 @@ struct SettingsNavigationStack: View {
                 CurrencyScene(model: currencyModel)
             }
             .sheet(isPresented: $isWalletsPresented) {
-                NavigationStack {
-                    WalletsScene(model: WalletsViewModel(keystore: keystore))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isWalletsPresented.toggle()
-                                }
-                                .bold()
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                }
+                WalletsNavigationStack()
             }
         }
         .onChange(of: currencyModel.currency) { oldValue, newValue in

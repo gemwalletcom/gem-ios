@@ -8,7 +8,7 @@ struct StakeDetailScene: View {
     let model: StakeDetailViewModel
     
     @Environment(\.keystore) private var keystore
-    @Environment(\.walletService) private var walletService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
 
     @State var recipientData: AmountRecipientData?
@@ -62,7 +62,7 @@ struct StakeDetailScene: View {
                     amountRecipientData: $0,
                     wallet: model.wallet,
                     keystore: keystore,
-                    walletService: walletService,
+                    walletsService: walletsService,
                     stakeService: stakeService,
                     currentValidator: model.recommendedValidator(address: $0.data.recipient.address)
                 )

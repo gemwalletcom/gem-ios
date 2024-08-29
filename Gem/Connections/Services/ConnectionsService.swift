@@ -82,6 +82,6 @@ class ConnectionsService {
     
     func disconnectPairing(pairingId: String) async throws {
         try store.delete(ids: [pairingId])
-        try await connector.disconnectPairing(pairingId: pairingId)
+        await connector.disconnectPairing(pairingId: pairingId)
     }
 }

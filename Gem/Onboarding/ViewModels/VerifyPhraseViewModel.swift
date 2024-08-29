@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Keystore
 import Settings
+import SwiftUI
 
 class VerifyPhraseViewModel: ObservableObject {
     
@@ -11,14 +12,18 @@ class VerifyPhraseViewModel: ObservableObject {
     private let shuffledWords: [String]
     private let keystore: any Keystore
 
+    @Binding private var navigationPath: NavigationPath
+
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
     @Published var isContinueDisabled: Bool = true
     
     init(
+        navigationPath: Binding<NavigationPath>,
         words: [String],
         keystore: any Keystore
     ) {
+        _navigationPath = navigationPath
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)

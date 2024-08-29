@@ -1,10 +1,33 @@
 import SwiftUI
 import Primitives
 import Keystore
+import Components
+import Style
 
-struct WalletDetailViewModel {
+class WalletDetailViewModel {
+
+    @Binding var navigationPath: NavigationPath
     let wallet: Wallet
     let keystore: any Keystore
+
+    init(
+        navigationPath: Binding<NavigationPath>,
+        wallet: Wallet,
+        keystore: any Keystore
+    ) {
+        _navigationPath = navigationPath
+        self.wallet = wallet
+        self.keystore = keystore
+    }
+
+    var image: AssetImage {
+        AssetImage(
+            type: .empty,
+            imageURL: .none,
+            placeholder: WalletViewModel(wallet: wallet).image,
+            chainPlaceholder: .none //Image(systemName: SystemImage.settings)
+        )
+    }
 
     var name: String {
         wallet.name
@@ -57,5 +80,11 @@ extension WalletDetailViewModel {
         if keystore.wallets.isEmpty {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
+    }
+
+    func onSelectImage() {
+        #if DEBUG
+        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
+        #endif
     }
 }

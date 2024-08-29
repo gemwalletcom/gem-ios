@@ -13,14 +13,14 @@ struct RecipientViewModel {
     let wallet: Wallet
     
     private let keystore: any Keystore
-    private let walletService: WalletService
+    private let walletsService: WalletsService
     private let assetModel: AssetViewModel
     private let formatter = ValueFormatter(style: .full)
     
-    init(wallet: Wallet, keystore: any Keystore, walletService: WalletService, assetModel: AssetViewModel) {
+    init(wallet: Wallet, keystore: any Keystore, walletsService: WalletsService, assetModel: AssetViewModel) {
         self.wallet = wallet
         self.keystore = keystore
-        self.walletService = walletService
+        self.walletsService = walletsService
         self.assetModel = assetModel
     }
     

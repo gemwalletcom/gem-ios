@@ -253,3 +253,6 @@
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
 "banner.enable_notifications.title" = "Habilitar notificações";
 "banner.enable_notifications.description" = "Fique por dentro das atividades da sua carteira.";
+"common.pin" = "Pin";
+"common.pinned" = "Pinned";
+"common.unpin" = "Unpin";

@@ -9,7 +9,11 @@ import Primitives
 public struct WalletsRequest: Queryable {
     public static var defaultValue: [Wallet] { [] }
     
-    public init() {
+    private let isPinned: Bool
+    public init(
+        isPinned: Bool
+    ) {
+        self.isPinned = isPinned
     }
     
     public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[Wallet], Error> {
@@ -23,6 +27,8 @@ public struct WalletsRequest: Queryable {
     private func fetch(_ db: Database) throws -> [Wallet] {
         return try WalletRecord
             .including(all: WalletRecord.accounts)
+            .filter(Columns.Wallet.isPinned == isPinned)
+            .order(Columns.Wallet.order.asc)
             .asRequest(of: WalletRecordInfo.self)
             .fetchAll(db)
             .compactMap { $0.mapToWallet() }

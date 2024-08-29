@@ -68,7 +68,9 @@ public struct WalletKeyStore {
             name: wallet.key.name,
             index: 0, 
             type: .privateKey,
-            accounts: [account]
+            accounts: [account],
+            order: 0,
+            isPinned: false
         )
     }
 
@@ -103,7 +105,9 @@ public struct WalletKeyStore {
             name: wallet.key.name,
             index: 0,
             type: type,
-            accounts: accounts
+            accounts: accounts,
+            order: 0,
+            isPinned: false
         )
     }
     

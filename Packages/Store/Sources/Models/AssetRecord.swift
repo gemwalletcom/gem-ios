@@ -93,29 +93,13 @@ extension AssetRecord {
             type: type
         )
     }
-    
-    var assetData: AssetData {
-        return AssetData(
-            asset: mapToAsset(),
-            balance: .zero,
-            account: Account(chain: .bitcoin, address: "", derivationPath: "", extendedPublicKey: .none),
-            price: .none,
-            details: .none,
-            metadata: AssetMetaData(
-                isEnabled: false,
-                isBuyEnabled: isBuyable,
-                isSwapEnabled: isSwappable,
-                isStakeEnabled: isStakeable
-            )
-        )
-    }
 }
 
 extension AssetRecordInfo {
     var assetData: AssetData {
         return AssetData(
             asset: asset.mapToAsset(),
-            balance: balance.mapToBalance(),
+            balance: balance?.mapToBalance() ?? .zero,
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
             details: details?.mapToAssetDetailsInfo(asset: asset),
@@ -125,10 +109,11 @@ extension AssetRecordInfo {
     
     var metadata: AssetMetaData {
         return AssetMetaData(
-            isEnabled: balance.isEnabled,
+            isEnabled: balance?.isEnabled ?? false,
             isBuyEnabled: asset.isBuyable,
             isSwapEnabled: asset.isSwappable,
-            isStakeEnabled: asset.isStakeable
+            isStakeEnabled: asset.isStakeable,
+            isPinned: balance?.isPinned ?? false
         )
     }
 }

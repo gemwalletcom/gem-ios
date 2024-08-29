@@ -70,7 +70,7 @@ struct AssetsFilterScene: View {
         }
         .sheet(isPresented: $isPresentingChains) {
             NavigationStack {
-                ChipsSelectorScene(allChips: model.allChains, selectedChips: $model.assetsRequest.chains)
+                ChipsSelectorScene(allChips: model.allChains, selectedChips: .constant([]))
             }
             .presentationDetents([.medium])
         }

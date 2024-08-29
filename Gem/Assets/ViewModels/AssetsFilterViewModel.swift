@@ -35,7 +35,6 @@ struct AssetsFilterViewModel {
 
         self.assetsRequest = AssetsRequest(
             walletID: wallet.id,
-            chains: filterChains,
             filters: Self.defaultFilters(type: type)
         )
         // TODO: - integrate chains & filters selection

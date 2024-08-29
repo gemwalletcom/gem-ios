@@ -16,6 +16,11 @@ struct AddTokenScene: View {
 
     var action: ((Asset) -> Void)?
 
+    init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
+        self.model = model
+        self.action = action
+    }
+
     var body: some View {
         VStack {
             addTokenList
@@ -53,7 +58,11 @@ extension AddTokenScene {
         List {
             if let chain = model.input.chain {
                 Section(model.networkTitle) {
-                    NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                    if model.input.hasManyChains {
+                        NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                    } else {
+                        ChainView(chain: chain)
+                    }
                 }
             }
             Section {

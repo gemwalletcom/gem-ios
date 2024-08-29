@@ -11,7 +11,7 @@ class SelectAssetViewModel {
     let keystore: any Keystore
     let selectType: SelectAssetType
     let assetsService: AssetsService
-    let walletService: WalletService
+    let walletsService: WalletsService
 
     var state: StateViewType<[AssetFull]> = .noData
     var filterModel: AssetsFilterViewModel
@@ -21,13 +21,13 @@ class SelectAssetViewModel {
         keystore: any Keystore,
         selectType: SelectAssetType,
         assetsService: AssetsService,
-        walletService: WalletService
+        walletsService: WalletsService
     ) {
         self.wallet = wallet
         self.keystore = keystore
         self.selectType = selectType
         self.assetsService = assetsService
-        self.walletService = walletService
+        self.walletsService = walletsService
 
         self.filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)
     }
@@ -47,6 +47,25 @@ class SelectAssetViewModel {
     var assetsInfoRequest: AssetsInfoRequest {
         AssetsInfoRequest(walletId: wallet.walletId.id)
     }
+    
+//    var assetRequest: AssetsRequest {
+//        switch selectType {
+//        case .send:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hasBalance])
+//        case .receive:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
+//        case .buy:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .buyable, .includeNewAssets])
+//        case .swap:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .swappable])
+//        case .stake:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .stakeable])
+//        case .manage:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
+//        case .hidden:
+//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hidden])
+//        }
+//    }
 
     var showAssetsInfo: Bool {
         selectType == .manage
@@ -71,7 +90,7 @@ extension SelectAssetViewModel {
     }
 
     func enableAsset(assetId: AssetId, enabled: Bool) {
-        walletService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
+        walletsService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
     }
 }
 

@@ -12,7 +12,8 @@ struct MainTabView: View {
     let model: MainTabViewModel
 
     @Environment(\.keystore) private var keystore
-    @Environment(\.walletService) private var walletService
+    @Environment(\.balanceService) private var balanceService
+    @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
 
     // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
@@ -46,7 +47,11 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
-                model: .init(wallet: model.wallet, walletService: walletService),
+                model: .init(
+                    wallet: model.wallet,
+                    balanceService: balanceService,
+                    walletsService: walletsService
+                ),
                 navigationPath: $navigationStateManager.wallet
             )
             .tabItem {

@@ -25,7 +25,13 @@ extension Price {
 }
 
 extension AssetMetaData {
-    static let main = AssetMetaData(isEnabled: true, isBuyEnabled: true, isSwapEnabled: true, isStakeEnabled: false)
+    static let main = AssetMetaData(
+        isEnabled: true,
+        isBuyEnabled: true,
+        isSwapEnabled: true,
+        isStakeEnabled: false,
+        isPinned: false
+    )
 }
 
 extension AssetId {
@@ -109,8 +115,8 @@ extension NameService {
     static let main = NameService()
 }
 
-extension WalletService {
-    static let main = WalletService(
+extension WalletsService {
+    static let main = WalletsService(
         keystore: LocalKeystore.main,
         priceStore: .main,
         assetsService: .main,
@@ -126,6 +132,10 @@ extension WalletService {
 
 extension TransactionsService {
     static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
+}
+
+extension WalletService {
+    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main)
 }
 
 extension AssetStore {
@@ -181,8 +191,8 @@ extension DB {
 }
 
 extension Wallet {
-    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main])
-    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main])
+    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main], order: 0, isPinned: false)
+    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main], order: 0, isPinned: false)
 }
 
 extension WalletId {

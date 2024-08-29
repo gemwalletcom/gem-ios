@@ -8,7 +8,7 @@
 "wallet.buy" = "Купити";
 "wallet.swap" = "Обмін";
 "wallets.title" = "Гаманці";
-"wallet.import.title" = "Імпорт Гаманця";
+"wallet.import.title" = "Імпорт гаманця";
 "wallet.new.title" = "Новий Гаманець";
 "receive.title" = "Отримати %s";
 "buy.title" = "Купити %s";
@@ -26,9 +26,9 @@
 "common.provider" = "Провайдер";
 "wallet.new.backup_confirm_warning" = "Переконайтеся, що ви записали і надійно зберегли свою Секретна Фраза Гаманця, перш ніж продовжити, оскільки це має вирішальне значення для майбутнього доступу до гаманця і його відновлення.";
 "common.loading" = "Завантаження";
-"wallet.multicoin" = "Multi-Coin";
+"wallet.multicoin" = "Мультимонетний";
 "common.address" = "Адреса";
-"transfer.network_fee" = "Мережева Плата";
+"transfer.network_fee" = "Мережева плата";
 "transfer.amount" = "Сума";
 "transfer.address" = "Адреса";
 "wallet.import.address_field" = "Адреса або Ім'я";
@@ -119,8 +119,8 @@
 "asset.market_cap" = "Ринкова Капіталізація";
 "asset.trading_volume" = "Обсяг Торгів (24г)";
 "asset.market_cap_rank" = "Рейтинг Ринкової Капіталізації";
-"asset.total_supply" = "Загальна Пропозиція";
-"asset.circulating_supply" = "В Обігу";
+"asset.total_supply" = "Загальна пропозиція";
+"asset.circulating_supply" = "В обігу";
 "common.not_available" = "Недоступно";
 "wallet_connect.title" = "WalletConnect";
 "wallet_connect.connection.title" = "Підключення";
@@ -144,7 +144,7 @@
 "transfer.stake.title" = "Стейкінг";
 "transfer.claim_rewards.title" = "Отримати винагороду";
 "transfer.unstake.title" = "Скасувати Стейкінг";
-"buy.no_results" = "Немає доступних місць";
+"buy.no_results" = "Немає доступних котирувань";
 "stake.validator" = "Валідатор";
 "stake.validators" = "Валідатори";
 "stake.apr" = "APR %@";
@@ -253,3 +253,6 @@
 "banner.stake.description" = "Заробляйте %@ винагороди на свїй стейк, поки ви спите.";
 "banner.enable_notifications.title" = "Увімкнути сповіщення";
 "banner.enable_notifications.description" = "Будьте в курсі активності гаманця.";
+"common.pin" = "Закріпити";
+"common.pinned" = "Закріплені";
+"common.unpin" = "Відкріпити";

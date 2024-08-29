@@ -17,13 +17,17 @@ public struct Wallet: Codable, Equatable {
 	public let index: Int32
 	public let type: WalletType
 	public let accounts: [Account]
+	public let order: Int32
+	public let isPinned: Bool
 
-	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account]) {
+	public init(id: String, name: String, index: Int32, type: WalletType, accounts: [Account], order: Int32, isPinned: Bool) {
 		self.id = id
 		self.name = name
 		self.index = index
 		self.type = type
 		self.accounts = accounts
+		self.order = order
+		self.isPinned = isPinned
 	}
 }
 

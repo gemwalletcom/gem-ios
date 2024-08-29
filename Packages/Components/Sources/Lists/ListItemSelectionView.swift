@@ -51,7 +51,7 @@ public struct ListItemSelectionView<T: Hashable>: View {
             }
         }, label: {
             HStack {
-                if selectionDirection == .left {
+                if selectionDirection == .left && selection == value {
                     selectionImageView
                 }
                 ListItemView(
@@ -61,8 +61,8 @@ public struct ListItemSelectionView<T: Hashable>: View {
                     subtitleExtra: subtitleExtra,
                     placeholders: placeholders
                 )
-                Spacer()
-                if selectionDirection == .right {
+                if selectionDirection == .right && selection == value {
+                    Spacer()
                     selectionImageView
                 }
             }
@@ -72,9 +72,7 @@ public struct ListItemSelectionView<T: Hashable>: View {
 
     private var selectionImageView: some View {
         ZStack {
-            if selection == value {
-                Image(systemName: SystemImage.checkmark)
-            }
+            Image(systemName: SystemImage.checkmark)
         }
         .frame(width: Sizing.list.image)
     }

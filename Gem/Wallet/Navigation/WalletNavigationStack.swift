@@ -9,7 +9,7 @@ struct WalletNavigationStack: View {
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
     
-    @Environment(\.keystore) private var keystore
+    @Environment(\.walletService) private var walletService
 
     let model: WalletSceneViewModel
     @Binding var navigationPath: NavigationPath
@@ -18,18 +18,7 @@ struct WalletNavigationStack: View {
         NavigationStack(path: $navigationPath) {
             WalletScene(model: model)
             .sheet(isPresented: $isWalletsPresented) {
-                NavigationStack {
-                    WalletsScene(model: WalletsViewModel(keystore: keystore))
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isWalletsPresented.toggle()
-                                }
-                                .bold()
-                            }
-                        }
-                        .navigationBarTitleDisplayMode(.inline)
-                }
+                WalletsNavigationStack()
             }
             .navigationBarTitleDisplayMode(.inline)
         }

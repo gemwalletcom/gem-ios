@@ -9,6 +9,7 @@ import Style
 struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.db) private var DB
+    @Environment(\.keystore) private var keystore
 
     @State private var isPresentingErrorMessage: String?
     @State private var showingDeleteAlert = false
@@ -16,21 +17,24 @@ struct WalletsScene: View {
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
 
-    @State var walletEdit: Wallet? = .none
     @State var walletDelete: Wallet? = .none
 
     var model: WalletsViewModel
 
     @Query<WalletsRequest>
-    var wallets: [Wallet]
+    private var pinnedWallets: [Wallet]
+
+    @Query<WalletsRequest>
+    private var wallets: [Wallet]
 
     init(
         model: WalletsViewModel
     ) {
         self.model = model
-        _wallets = Query(WalletsRequest(), in: \.db.dbQueue)
+        _pinnedWallets = Query(WalletsRequest(isPinned: true), in: \.db.dbQueue)
+        _wallets = Query(WalletsRequest(isPinned: false), in: \.db.dbQueue)
     }
-    
+
     var body: some View {
         List {
             Section {
@@ -53,70 +57,40 @@ struct WalletsScene: View {
                     }
                 )
             }
-            Section {
-                ForEach(wallets.map { WalletViewModel(wallet: $0) }) { wallet in
-                    // https://www.jessesquires.com/blog/2023/07/18/navigation-link-accessory-view-swiftui
-                    // Hack to hide chevron
-                    ZStack {
-                        NavigationCustomLink(
-                            with: EmptyView(),
-                            action: { onSelect(wallet: wallet.wallet) }
+            if !pinnedWallets.isEmpty {
+                Section {
+                    ForEach(pinnedWallets) {
+                        WalletListItemView(
+                            wallet: $0,
+                            currentWallet: model.currentWallet,
+                            onSelect: onSelect,
+                            onEdit: onEdit,
+                            onPin: onPin,
+                            onDelete: onDelete
                         )
-                        .opacity(0)
-
-                        HStack {
-                            AssetImageView(assetImage: wallet.assetImage, size: Sizing.image.chain)
-                            ListItemView(title: wallet.name, titleExtra: wallet.subType)
-                            
-                            Spacer()
-                            
-                            if model.currentWallet == wallet.wallet {
-                                Image(.walletSelected)
-                            }
-
-                            Button(
-                                action: { onSelectEdit(wallet: wallet.wallet) },
-                                label: {
-                                    Image(.editIcon)
-                                        .padding(.vertical, 8)
-                                        .padding(.leading, Spacing.small)
-                                }
-                            )
-                            .buttonStyle(.borderless)
-                        }
                     }
-                    .contextMenu {
-                        ContextMenuItem(
-                            title: Localized.Common.wallet,
-                            image: SystemImage.settings
-                        ) {
-                            onSelectEdit(wallet: wallet.wallet)
-                        }
-                        ContextMenuDelete {
-                            walletDelete = wallet.wallet
-                        }
-                    }
-                    .swipeActions {
-                        Button(
-                            action: { onSelectEdit(wallet: wallet.wallet) },
-                            label: {
-                                Label("", systemImage: SystemImage.settings)
-                            }
-                        )
-                        .tint(Colors.gray)
-                        Button(
-                            Localized.Common.delete,
-                            action: { onSelectDelete(wallet: wallet.wallet) }
-                        )
-                        .tint(Colors.red)
+                    .onMove(perform: onMovePinned)
+                } header: {
+                    HStack {
+                        Image(systemName: SystemImage.pin)
+                        Text(Localized.Common.pinned)
                     }
                 }
             }
-        }
-        .navigationDestination(for: $walletEdit) { wallet in
-            WalletDetailScene(
-                model: WalletDetailViewModel(wallet: wallet, keystore: model.keystore)
-            )
+
+            Section {
+                ForEach(wallets) {
+                    WalletListItemView(
+                        wallet: $0,
+                        currentWallet: model.currentWallet,
+                        onSelect: onSelect,
+                        onEdit: onEdit,
+                        onPin: onPin,
+                        onDelete: onDelete
+                    )
+                }
+                .onMove(perform: onMove)
+            }
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
@@ -154,17 +128,72 @@ extension WalletsScene {
         isPresentingImportWalletSheet.toggle()
     }
 
-    private func onSelectDelete(wallet: Wallet) {
+    private func onDelete(wallet: Wallet) {
         walletDelete = wallet
     }
 
-    private func onSelectEdit(wallet: Wallet) {
-        walletEdit = wallet
+    private func onEdit(wallet: Wallet) {
+        model.onEdit(wallet: wallet)
     }
 
     private func onSelect(wallet: Wallet) {
         model.setCurrent(wallet.walletId)
         dismiss()
+    }
+
+    private func onPin(wallet: Wallet) {
+        do {
+            try model.pin(wallet)
+        } catch {
+            NSLog("onPin error: \(error)")
+        }
+    }
+
+    private func onMovePinned(from source: IndexSet, to destination: Int) {
+        guard let source = source.first else { return }
+        do {
+            try swapOrder(wallets: pinnedWallets, source: source, destination: destination)
+        } catch {
+            NSLog("onMovePinned error: \(error)")
+        }
+    }
+
+    private func onMove(from source: IndexSet, to destination: Int) {
+        guard let source = source.first else { return }
+        do {
+            try swapOrder(wallets: wallets, source: source, destination: destination)
+        } catch {
+            NSLog("onMove error: \(error)")
+        }
+    }
+
+    private func swapOrder(wallets: [Wallet], source: Int, destination: Int) throws {
+        NSLog("swapOrder source: \(source) destination: \(destination)")
+
+        let from = try wallets.getElement(safe: source)
+        if source - destination == 1 { // if next to each other, swap
+            let to = try wallets.getElement(safe: destination)
+            try model.swapOrder(
+                from: from.walletId,
+                to: to.walletId
+            )
+        } else if source == 0 || wallets.count == destination  { // moving to last position
+            for i in source..<destination-1 {
+                let to = try wallets.getElement(safe: i+1)
+                try model.swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
+        } else if source == wallets.count-1 { // moving to the first position
+            for i in stride(from: wallets.count-1, through: destination+1, by: -1) {
+                let to = try wallets.getElement(safe: i-1)
+                try model.swapOrder(
+                    from: from.walletId,
+                    to: to.walletId
+                )
+            }
+        }
     }
 }
 
@@ -186,7 +215,12 @@ extension WalletsScene {
 
 #Preview {
     NavigationStack {
-        WalletsScene(model: .init(keystore: LocalKeystore.main))
-            .navigationBarTitleDisplayMode(.inline)
+        WalletsScene(
+            model: .init(
+                navigationPath: Binding.constant(NavigationPath()),
+                walletService: .main
+            )
+        )
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

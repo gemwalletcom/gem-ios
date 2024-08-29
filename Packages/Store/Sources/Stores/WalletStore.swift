@@ -30,8 +30,10 @@ public struct WalletStore {
     }
     
     public func addWallet(_ wallet: Wallet) throws {
+        let index = try nextWalletIndex()
         var record = wallet.record
-        record.index = try nextWalletIndex()
+        record.index = index
+        record.order = index
         try db.write { db in
             try record.insert(db, onConflict: .ignore)
             for account in wallet.accounts {
@@ -80,7 +82,32 @@ public struct WalletStore {
             return true
         }
     }
-    
+
+    public func pinWallet(_ walletId: String, value: Bool) throws {
+        let _ = try db.write { db in
+            return try WalletRecord
+                .filter(Columns.Wallet.id == walletId)
+                .updateAll(db, Columns.Wallet.isPinned.set(to: value))
+        }
+    }
+
+    public func swapOrder(from: WalletId, to: WalletId) throws {
+        guard 
+            let fromWallet = try getWallet(id: from.id),
+            let toWallet = try getWallet(id: to.id) else {
+            throw AnyError("Unable to locate wallets to swap order")
+        }
+        return try db.write { db in
+            try WalletRecord
+                .filter(Columns.Wallet.id == fromWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: toWallet.order))
+
+            try WalletRecord
+                .filter(Columns.Wallet.id == toWallet.id)
+                .updateAll(db, Columns.Wallet.order.set(to: fromWallet.order))
+        }
+    }
+
     public func observer() -> SubscriptionsObserver {
         return SubscriptionsObserver(dbQueue: db)
     }
@@ -93,7 +120,9 @@ extension WalletRecord {
             name: name,
             index: index.asInt32,
             type: WalletType(rawValue: type)!,
-            accounts: []
+            accounts: [],
+            order: order.asInt32,
+            isPinned: isPinned
         )
     }
 }
@@ -105,7 +134,8 @@ extension Wallet {
             name: name,
             type: type.rawValue, 
             index: index.asInt,
-            order: 0
+            order: 0,
+            isPinned: false
         )
     }
 }

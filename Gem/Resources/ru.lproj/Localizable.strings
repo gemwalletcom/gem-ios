@@ -253,3 +253,6 @@
 "banner.stake.description" = "Зарабатывайте %@ наград за свою стейк, пока спите.";
 "banner.enable_notifications.title" = "Включить уведомления";
 "banner.enable_notifications.description" = "Будьте в курсе активности вашего кошелька.";
+"common.pin" = "Закрепить";
+"common.pinned" = "Закрепленные";
+"common.unpin" = "Открепить";
