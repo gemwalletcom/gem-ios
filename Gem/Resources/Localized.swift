@@ -316,6 +316,18 @@ internal enum Localized {
     /// Slow
     internal static let slow = Localized.tr("Localizable", "fee_rates.slow", fallback: "Slow")
   }
+  internal enum Filter {
+    /// All networks
+    internal static let allNetworks = Localized.tr("Localizable", "filter.all_networks", fallback: "All networks")
+    /// Clear
+    internal static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
+    /// %@ networks
+    internal static func countNetworks(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "filter.count_networks", String(describing: p1), fallback: "%@ networks")
+    }
+    /// Filters
+    internal static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
+  }
   internal enum Library {
     /// Select from Photo Library
     internal static let selectFromPhotoLibrary = Localized.tr("Localizable", "library.select_from_photo_library", fallback: "Select from Photo Library")

@@ -32,8 +32,16 @@ struct SelectAssetSceneNavigationStack: View {
                             Button {
                                 isPresentingFilteringView = true
                             } label: {
-                                Image(systemName: "line.horizontal.3.decrease")
+                                if model.filterModel.isCusomFilteringSpecified {
+                                    Image(systemName: SystemImage.filterFill)
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(Colors.whiteSolid, Colors.blue)
+                                } else {
+                                    Image(systemName: SystemImage.filter)
+                                        .foregroundStyle(.primary)
+                                }
                             }
+                            .contentTransition(.symbolEffect(.replace))
                         }
 
                         ToolbarItem(placement: .navigationBarTrailing) {
@@ -58,7 +66,7 @@ struct SelectAssetSceneNavigationStack: View {
             NavigationStack {
                 AssetsFilterScene(model: $model.filterModel)
             }
-            .presentationDetents([.height(200)])
+            .presentationDetents([.height(120)])
             .presentationDragIndicator(.visible)
         }
     }

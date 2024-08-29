@@ -4,13 +4,6 @@ import SwiftUI
 import Style
 
 public struct ListItemSelectionView<T: Hashable>: View {
-    public enum SelectionImageDirection: Identifiable {
-        case left
-        case right
-
-        public var id: Self { self }
-    }
-
     let title: String?
     let titleExtra: String?
     let subtitle: String?
@@ -45,35 +38,19 @@ public struct ListItemSelectionView<T: Hashable>: View {
     }
 
     public var body: some View {
-        Button(action: {
-            if let value = value {
-                action?(value)
-            }
-        }, label: {
-            HStack {
-                if selectionDirection == .left && selection == value {
-                    selectionImageView
-                }
-                ListItemView(
-                    title: title,
-                    titleExtra: titleExtra,
-                    subtitle: subtitle,
-                    subtitleExtra: subtitleExtra,
-                    placeholders: placeholders
-                )
-                if selectionDirection == .right && selection == value {
-                    Spacer()
-                    selectionImageView
-                }
-            }
-        })
-        .contentShape(Rectangle())
-    }
-
-    private var selectionImageView: some View {
-        ZStack {
-            Image(systemName: SystemImage.checkmark)
-        }
-        .frame(width: Sizing.list.image)
-    }
+         SelectionView(
+             value: value,
+             selection: selection,
+             selectionDirection: selectionDirection,
+             action: action
+         ) {
+             ListItemView(
+                 title: title,
+                 titleExtra: titleExtra,
+                 subtitle: subtitle,
+                 subtitleExtra: subtitleExtra,
+                 placeholders: placeholders
+             )
+         }
+     }
 }

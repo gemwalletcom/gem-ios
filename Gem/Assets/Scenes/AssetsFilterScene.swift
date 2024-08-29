@@ -3,6 +3,7 @@
 import SwiftUI
 import Store
 import Style
+import Primitives
 
 struct AssetsFilterScene: View {
     @Environment(\.dismiss) var dismiss
@@ -15,48 +16,45 @@ struct AssetsFilterScene: View {
     }
 
     var body: some View {
-        // TODO: - layout
-        ScrollView {
-            VStack {
-                Divider()
-                Button("filter") {
-                    model.assetsRequest.filters = []
-                    model.assetsRequest.filters.append(.hasBalance)
+        VStack {
+            HStack {
+                Button(action: onSelectChainsFilter) {
+                    HStack {
+                        Text(model.chainsFilterModel.title)
+                        Image(systemName: SystemImage.chevronDown)
+                    }
+                    .font(.body)
+                    .foregroundStyle(model.chainsFilterModel.type == ChainsFilterType.primary ? .black : .white)
+                    .padding(.horizontal, Spacing.tiny + Spacing.small)
+                    .padding(.vertical, Spacing.tiny)
+                    .background(
+                        Capsule()
+                            .fill(model.chainsFilterModel.type == ChainsFilterType.primary ? .white : Colors.blue)
+                            .if(model.chainsFilterModel.type == ChainsFilterType.primary) {
+                                $0.stroke(Color.gray.opacity(0.33), lineWidth: 0.66)
+                            }
+                    )
                 }
-                Button("Open chips") {
-                    isPresentingChains.toggle()
-                }
-
-                HStack(spacing: Spacing.extraSmall) {
-                    Text(model.chainFilterType.title)
-                    Image(systemName: SystemImage.chevronDown)
-                }
-                .font(.body)
-                .foregroundStyle(model.chainFilterType == CainsFilterType.primary ? .black : .white)
-                .padding(.horizontal, Spacing.extraSmall + Spacing.small)
-                .padding(.vertical, Spacing.extraSmall)
-                .background(
-                    Capsule()
-                        .fill(model.chainFilterType == CainsFilterType.primary ? .white : Colors.blue)
-                        .if(model.chainFilterType == CainsFilterType.primary) {
-                            $0.stroke(Color.gray.opacity(0.33), lineWidth: 0.66)
-                        }
-                )
-
+                .buttonStyle(.plain)
+                Spacer()
             }
-            .frame(maxWidth: .infinity)
+            Divider()
+            Spacer()
         }
-        .navigationTitle("Filters")
+        .frame(maxWidth: .infinity)
+        .padding()
+        .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
-            ToolbarItem(placement: .cancellationAction) {
-                Button("Clear", action: onSelectClear)
-                    .font(.body.bold())
+            if model.isCusomFilteringSpecified {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button(model.clear, action: onSelectClear)
+                        .bold()
+                }
             }
-
             ToolbarItem(placement: .primaryAction) {
                 Button(action: onSelectClose) {
-                    Image(systemName: "xmark")
+                    Image(systemName: SystemImage.xmark)
                         .foregroundStyle(.secondary)
                         .font(.system(size: 12, design: .rounded).bold())
                         .background {
@@ -64,15 +62,17 @@ struct AssetsFilterScene: View {
                                 .foregroundStyle(.tertiary.opacity(0.12))
                                 .frame(width: 30, height: 30)
                         }
+                        .bold()
                 }
                 .buttonStyle(.plain)
             }
         }
         .sheet(isPresented: $isPresentingChains) {
-            NavigationStack {
-                ChipsSelectorScene(allChips: model.allChains, selectedChips: .constant([]))
-            }
-            .presentationDetents([.medium])
+            NetworkSelectorNavigationStack(
+                chains: model.allChains,
+                selectedChains: model.selectedChains,
+                onSelectMultipleChains: onSelectMultiple(chains:)
+            )
         }
     }
 }
@@ -81,11 +81,20 @@ struct AssetsFilterScene: View {
 
 extension AssetsFilterScene {
     private func onSelectClear() {
-        // clean to default
+        // clean to default, extend with different filters
+        model.selectedChains = []
     }
 
     private func onSelectClose() {
         dismiss()
+    }
+
+    private func onSelectMultiple(chains: [Chain]) {
+        model.selectedChains = chains
+    }
+
+    private func onSelectChainsFilter() {
+        isPresentingChains.toggle()
     }
 }
 

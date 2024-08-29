@@ -256,3 +256,7 @@
 "common.pin" = "Закріпити";
 "common.pinned" = "Закріплені";
 "common.unpin" = "Відкріпити";
+"filter.all_networks" = " Всі мережі";
+"filter.count_networks" = "%@ мережі";
+"filter.clear" = "Очистити";
+"filter.title" = "Фільтри";

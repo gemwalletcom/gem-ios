@@ -40,12 +40,10 @@ struct AddTokenScene: View {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .sheet(isPresented: $model.isPresentingSelectNetwork) {
-            if let chain = model.input.chain {
-                NetworkSelectorNavigationStack(
-                    model: NetworkSelectorViewModel(chains: model.chains, selectedChain: chain),
-                    onSelectChain: onSelectNewChain(_:)
-                )
-            }
+            NetworkSelectorNavigationStack(
+                chains: model.chains,
+                onSelectChain: onSelectNewChain(_:)
+            )
         }
     }
 }

@@ -47,25 +47,6 @@ class SelectAssetViewModel {
     var assetsInfoRequest: AssetsInfoRequest {
         AssetsInfoRequest(walletId: wallet.walletId.id)
     }
-    
-//    var assetRequest: AssetsRequest {
-//        switch selectType {
-//        case .send:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hasBalance])
-//        case .receive:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
-//        case .buy:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .buyable, .includeNewAssets])
-//        case .swap:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .swappable])
-//        case .stake:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .stakeable])
-//        case .manage:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
-//        case .hidden:
-//            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hidden])
-//        }
-//    }
 
     var showAssetsInfo: Bool {
         selectType == .manage
