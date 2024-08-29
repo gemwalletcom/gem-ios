@@ -29,12 +29,8 @@ public struct AssetsRequest: Queryable {
             .eraseToAnyPublisher()
     }
     
-    func assetBalancesRequest(_ db: Database, searchBy: String) throws -> [AssetData] {
-        return try Self.fetchAssets(
-            for: walletID,
-            searchBy: searchBy,
-            filters: filters
-        )
+    func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
+        try fetchAssets(filters: filters)
         .fetchAll(db).map { $0.assetData }
     }
     
@@ -51,22 +47,22 @@ public struct AssetsRequest: Queryable {
     private func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
         if filters.contains(.includeNewAssets) {
-            let request1 = try assetBalancesRequest(db, searchBy: searchBy)
+            let request1 = try assetBalancesRequest(db)
             let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
             
             return [request1, request2].flatMap { $0 }
         } else {
-            return try assetBalancesRequest(db, searchBy: searchBy)
+            return try assetBalancesRequest(db)
         }
     }
     
-    static func fetchAssets(for walletID: String, searchBy: String, filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
+    func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
-            .joining(optional: AssetRecord.balance
+            .joining(required: AssetRecord.balance
                 .filter(Columns.Balance.walletId == walletID)
                 .order(Columns.Balance.fiatValue.desc)
             )

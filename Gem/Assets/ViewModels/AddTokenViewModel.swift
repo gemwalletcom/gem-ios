@@ -25,7 +25,7 @@ class AddTokenViewModel {
             .intersection(wallet.accounts.map { $0.chain }.asSet())
             .asArray()
             .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
-        self.input = AddTokenInput(availableChains: availableChains)
+        self.input = AddTokenInput(chains: availableChains)
     }
 
     var title: String { Localized.Wallet.AddToken.title }
@@ -38,7 +38,7 @@ class AddTokenViewModel {
     var qrImage: Image { Image(systemName: SystemImage.qrCode) }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
-    var chains: [Chain] { input.availableChains }
+    var chains: [Chain] { input.chains }
 
     var addressBinding: Binding<String> {
         Binding(
