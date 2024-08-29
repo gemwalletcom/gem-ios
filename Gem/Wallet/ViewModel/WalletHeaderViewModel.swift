@@ -11,47 +11,19 @@ import Components
 struct WalletHeaderViewModel {
     //Remove WalletType from here
     let walletType: WalletType
-    let value: WalletFiatValue
+    let value: Double
     let currencyFormatter = CurrencyFormatter.currency()
     
     public init(
         walletType: WalletType,
-        value: WalletFiatValue
+        value: Double
     ) {
         self.walletType = walletType
         self.value = value
     }
     
-    var priceViewModel: PriceViewModel {
-        return PriceViewModel(
-            price: Price(price: value.price, priceChangePercentage24h: value.priceChangePercentage24h)
-        )
-    }
-    
     public var totalValueText: String {
-        return currencyFormatter.string(value.totalValue)
-    }
-    
-    // totalPrice
-    public var totalPrice: String {
-        return priceViewModel.priceAmountPositiveText
-    }
-    
-    public var totalPriceColor: Color {
-        return priceViewModel.priceAmountColor
-    }
-    
-    // price change
-    public var totalPriceChange: String {
-        return priceViewModel.priceChangeText
-    }
-    
-    public var totalPriceChangeBackground: Color {
-        return priceViewModel.priceChangeTextBackgroundColor
-    }
-    
-    public var totalPriceChangeColor: Color {
-        return priceViewModel.priceChangeTextColor
+        return currencyFormatter.string(value)
     }
 }
 

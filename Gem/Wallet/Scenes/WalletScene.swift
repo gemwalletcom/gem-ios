@@ -22,7 +22,7 @@ struct WalletScene: View {
     @Environment(\.bannerService) private var bannerService
 
     @Query<TotalValueRequest>
-    private var fiatValue: WalletFiatValue
+    private var fiatValue: Double
 
     @Query<AssetsRequest>
     private var assetsPinned: [AssetData]
