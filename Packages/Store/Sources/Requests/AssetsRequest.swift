@@ -66,7 +66,7 @@ public struct AssetsRequest: Queryable {
                 .filter(Columns.Balance.walletId == walletID)
                 .order(Columns.Balance.fiatValue.desc)
             )
-            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+            .joining(required: AssetRecord.account.filter(Columns.Account.walletId == walletID))
 
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
