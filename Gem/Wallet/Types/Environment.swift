@@ -7,6 +7,7 @@ import Store
 import Keystore
 import GemstonePrimitives
 
+// TODO: - remove ref. https://swiftpackageindex.com/groue/grdbquery/0.9.0/documentation/grdbquery/migratingtogrdbquery09-unrestricted-writes
 struct DatabaseQueueKey: EnvironmentKey {
     static var defaultValue: DB { DB.main }
 }
@@ -80,6 +81,7 @@ struct IsWalletPresentedServiceKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
+    // TODO: - remove ref. https://swiftpackageindex.com/groue/grdbquery/0.9.0/documentation/grdbquery/migratingtogrdbquery09-unrestricted-writes
     var db: DB {
         get { self[DatabaseQueueKey.self] }
         set { self[DatabaseQueueKey.self] = newValue }
