@@ -25,7 +25,13 @@ extension Price {
 }
 
 extension AssetMetaData {
-    static let main = AssetMetaData(isEnabled: true, isBuyEnabled: true, isSwapEnabled: true, isStakeEnabled: false)
+    static let main = AssetMetaData(
+        isEnabled: true,
+        isBuyEnabled: true,
+        isSwapEnabled: true,
+        isStakeEnabled: false,
+        isPinned: false
+    )
 }
 
 extension AssetId {

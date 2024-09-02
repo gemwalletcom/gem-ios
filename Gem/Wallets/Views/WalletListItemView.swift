@@ -55,7 +55,7 @@ struct WalletListItemView: View {
                 Button(
                     action: { onEdit(model.wallet) },
                     label: {
-                        Image(.editIcon)
+                        Image(systemName: SystemImage.settings)
                             .padding(.vertical, 8)
                             .padding(.leading, Spacing.small)
                     }
@@ -65,7 +65,7 @@ struct WalletListItemView: View {
         }
         .contextMenu {
             ContextMenuItem(
-                title: Localized.Common.wallet,
+                title: Localized.Settings.title,
                 image: SystemImage.settings
             ) {
                 onEdit(model.wallet)

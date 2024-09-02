@@ -172,6 +172,7 @@ struct WalletCoordinator: View {
                 .environment(\.assetsService, assetsService)
                 .environment(\.stakeService, stakeService)
                 .environment(\.bannerService, bannerService)
+                .environment(\.balanceService, balanceService)
                 .environment(\.chainServiceFactory, chainServiceFactory)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))

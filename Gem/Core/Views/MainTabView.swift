@@ -12,6 +12,7 @@ struct MainTabView: View {
     let model: MainTabViewModel
 
     @Environment(\.keystore) private var keystore
+    @Environment(\.balanceService) private var balanceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
 
@@ -46,7 +47,11 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
-                model: .init(wallet: model.wallet, walletsService: walletsService),
+                model: .init(
+                    wallet: model.wallet,
+                    balanceService: balanceService,
+                    walletsService: walletsService
+                ),
                 navigationPath: $navigationStateManager.wallet
             )
             .tabItem {
@@ -57,6 +62,7 @@ struct MainTabView: View {
             TransactionsNavigationStack(
                 model: .init(
                     walletId: model.walletId,
+                    wallet: model.wallet,
                     type: .all,
                     service: transactionsService
                 ),

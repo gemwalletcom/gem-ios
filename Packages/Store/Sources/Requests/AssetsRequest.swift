@@ -9,18 +9,15 @@ public struct AssetsRequest: Queryable {
     
     public var walletID: String
     public var searchBy: String
-    public var chains: [String]
     public var filters: [AssetsRequestFilter]
     
     public init(
         walletID: String,
         searchBy: String = "",
-        chains: [String],
         filters: [AssetsRequestFilter] = []
     ) {
         self.walletID = walletID
         self.searchBy = searchBy
-        self.chains = chains
         self.filters = filters
     }
     
@@ -32,19 +29,15 @@ public struct AssetsRequest: Queryable {
             .eraseToAnyPublisher()
     }
     
-    func assetBalancesRequest(_ db: Database, searchBy: String) throws -> [AssetData] {
-        return try Self.fetchAssets(
-            for: walletID,
-            searchBy: searchBy,
-            filters: filters
-        )
+    func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
+        try fetchAssets(filters: filters)
         .fetchAll(db).map { $0.assetData }
     }
     
     func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
         return try Self.fetchAssetsSearch(
+            walletId: walletID,
             searchBy: searchBy,
-            chains: chains,
             filters: filters,
             excludeAssetIds: excludeAssetIds
         )
@@ -54,32 +47,27 @@ public struct AssetsRequest: Queryable {
     private func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
         if filters.contains(.includeNewAssets) {
-            let request1 = try assetBalancesRequest(db, searchBy: searchBy)
+            let request1 = try assetBalancesRequest(db)
             let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
             
             return [request1, request2].flatMap { $0 }
         } else {
-            return try assetBalancesRequest(db, searchBy: searchBy)
+            return try assetBalancesRequest(db)
         }
     }
     
-    static func fetchAssets(for walletID: String, searchBy: String, filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
+    func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
-            //.joining(optional: AssetBalanceRecord.filter(Columns.Balance.assetId == assetId.identifier)))
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AssetBalanceRecord.databaseTableName, walletID))
+            .joining(required: AssetRecord.balance
+                .filter(Columns.Balance.walletId == walletID)
+                .order(Columns.Balance.fiatValue.desc)
             )
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletID))
-            )
-            .order(literal:
-                SQL(stringLiteral: String(format: "%@.fiatValue DESC", AssetBalanceRecord.databaseTableName))
-            )
-        
+            .joining(required: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
@@ -102,71 +90,91 @@ public struct AssetsRequest: Queryable {
         case .hasFiatValue:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName, true) )
+                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .hasBalance:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName, true) )
+                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .buyable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName))
                 )
         case .swappable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isSwappable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isSwappable == true", AssetRecord.databaseTableName))
                 )
         case .stakeable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isStakeable == true", AssetRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isStakeable == true", AssetRecord.databaseTableName))
                 )
         case .enabled:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isEnabled == true", AssetBalanceRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isEnabled == true", AssetBalanceRecord.databaseTableName))
                 )
         case .hidden:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isHidden == true", AssetBalanceRecord.databaseTableName, true))
+                    SQL(stringLiteral:  String(format: "%@.isHidden == true", AssetBalanceRecord.databaseTableName))
                 )
         case .chains(let chains):
             if chains.isEmpty {
                 return request
             }
             return request.filter(chains.contains(Columns.Asset.chain))
+        case .includePinned(let value):
+            return request
+                .filter(
+                    SQL(stringLiteral:  String(format: "%@.isPinned == %d", AssetBalanceRecord.databaseTableName, value))
+                )
         case .includeNewAssets:
             return request
         }
     }
     
     static func fetchAssetsSearch(
+        walletId: String,
         searchBy: String,
-        chains: [String],
         filters: [AssetsRequestFilter],
         excludeAssetIds: [String]
-    )-> QueryInterfaceRequest<AssetRecord>  {
+    )-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
+            .including(optional: AssetRecord.account)
             .filter(!excludeAssetIds.contains(Columns.Asset.id))
-            .order(Columns.Asset.rank.desc)
+            .filter(literal:
+                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
+            )
+            .order(Columns.Asset.rank.asc)
             .limit(50)
         
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
-        
-        if !chains.isEmpty {
-            request = Self.applyFilter(request: request, .chains(chains))
+
+        //Ignoring some filters as they only applied to balances table
+        filters.forEach {
+            switch $0 {
+            case .buyable,
+                .swappable,
+                .stakeable,
+                .chains:
+                request = Self.applyFilter(request: request, $0)
+            case .hasFiatValue,
+                .hasBalance,
+                .enabled,
+                .hidden,
+                .includePinned,
+                .includeNewAssets,
+                .search:
+                break
+            }
         }
-        
-        if filters.contains(.buyable) {
-            request = Self.applyFilter(request: request, .buyable)
-        }
-        
-        return request.asRequest(of: AssetRecord.self)
+
+        return request.asRequest(of: AssetRecordInfo.self)
     }
 }

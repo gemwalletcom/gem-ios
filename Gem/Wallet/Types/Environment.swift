@@ -39,6 +39,13 @@ struct DeviceServiceKey: EnvironmentKey {
     static var defaultValue: DeviceService { DeviceService(subscriptionsService: .main, walletStore: .main) }
 }
 
+struct BalanceServiceKey: EnvironmentKey {
+    static var defaultValue: BalanceService { BalanceService(
+        balanceStore: .main,
+        chainServiceFactory: ChainServiceFactory(nodeProvider: NodeService(nodeStore: .main)))
+    }
+}
+
 struct BannerServiceKey: EnvironmentKey {
     static var defaultValue: BannerService { BannerService(store: .main) }
 }
@@ -106,6 +113,11 @@ extension EnvironmentValues {
     var deviceService: DeviceService {
         get { self[DeviceServiceKey.self] }
         set { self[DeviceServiceKey.self] = newValue }
+    }
+
+    var balanceService: BalanceService {
+        get { self[BalanceServiceKey.self] }
+        set { self[BalanceServiceKey.self] = newValue }
     }
 
     var bannerService: BannerService {

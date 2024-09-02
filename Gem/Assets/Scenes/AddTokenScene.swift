@@ -56,7 +56,11 @@ extension AddTokenScene {
         List {
             if let chain = model.input.chain {
                 Section(model.networkTitle) {
-                    NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                    if model.input.hasManyChains {
+                        NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                    } else {
+                        ChainView(chain: chain)
+                    }
                 }
             }
             Section {

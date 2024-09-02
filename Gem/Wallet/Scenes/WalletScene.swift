@@ -22,10 +22,14 @@ struct WalletScene: View {
     @Environment(\.bannerService) private var bannerService
 
     @Query<TotalValueRequest>
-    private var fiatValue: WalletFiatValue
+    private var fiatValue: Double
+
+    @Query<AssetsRequest>
+    private var assetsPinned: [AssetData]
 
     @Query<AssetsRequest>
     private var assets: [AssetData]
+
 
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
@@ -46,6 +50,7 @@ struct WalletScene: View {
         try? model.setupWallet()
 
         _assets = Query(constant: model.assetsRequest, in: \.db.dbQueue)
+        _assetsPinned = Query(constant: model.assetsPinnedRequest, in: \.db.dbQueue)
         _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
         _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
         _banners = Query(constant: model.bannersRequest, in: \.db.dbQueue)
@@ -72,14 +77,35 @@ struct WalletScene: View {
                 }
             }
 
+            if !assetsPinned.isEmpty {
+                Section {
+                    WalletAssetsList(
+                        assets: assetsPinned,
+                        copyAssetAddress: { model.copyAssetAddress(for: $0) },
+                        hideAsset: { try? model.hideAsset($0) },
+                        pinAsset: { (assetId, value) in
+                            try? model.pinAsset(assetId, value: value)
+                        }
+                    )
+                } header: {
+                    HStack {
+                        Image(systemName: SystemImage.pin)
+                        Text(Localized.Common.pinned)
+                    }
+                }
+            }
+
             Section {
                 WalletAssetsList(
                     assets: assets,
                     copyAssetAddress: { address in
                         model.copyAssetAddress(for: address)
                     },
-                    hideAsset: { assetId in
-                        Task { try model.hideAsset(assetId) }
+                    hideAsset: {
+                        try? model.hideAsset($0)
+                    },
+                    pinAsset: { (assetId, value) in
+                        try? model.pinAsset(assetId, value: value)
                     }
                 )
             } footer: {
@@ -221,11 +247,20 @@ struct WalletScene: View {
                 input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
             )
         }
-        .navigationDestination(for: AssetData.self) { assetData in
+        .navigationDestination(for: Scenes.Asset.self) {
             AssetScene(
                 wallet: model.wallet,
-                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: assetData.asset.id),
+                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: $0.asset.id),
                 isPresentingAssetSelectType: $isPresentingAssetSelectType
+            )
+        }
+        .navigationDestination(for: Scenes.Price.self) { scene in
+            ChartScene(model: ChartsViewModel(
+                    walletId: model.wallet.walletId,
+                    priceService: walletsService.priceService,
+                    assetsService: walletsService.assetsService,
+                    assetModel: AssetViewModel(asset: scene.asset)
+                )
             )
         }
         .navigationBarTitleDisplayMode(.inline)

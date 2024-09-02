@@ -64,3 +64,16 @@ public extension Sequence where Iterator.Element: Hashable {
         return self.filter { elements.insert($0).inserted }
     }
 }
+
+public enum ArrayError: Error {
+    case indexOutOfBounds
+}
+
+public extension Array {
+    func getElement(safe index: Int) throws -> Element {
+        guard indices.contains(index) else {
+            throw ArrayError.indexOutOfBounds
+        }
+        return self[index]
+    }
+}

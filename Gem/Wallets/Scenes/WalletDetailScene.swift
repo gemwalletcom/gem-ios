@@ -29,6 +29,19 @@ struct WalletDetailScene: View {
             List {
                 Section {
                     FloatTextField(Localized.Wallet.name, text: $name, allowClean: false, trailingView: {})
+                } header: {
+                    HStack {
+                        Spacer()
+                        Button(action: onSelectImage) {
+                            AssetImageView(
+                                assetImage: model.image,
+                                size: Sizing.image.chain * 1.6,
+                                overlayImageSize: Spacing.large
+                            )
+                                .padding(.bottom, Spacing.extraLarge)
+                        }
+                        Spacer()
+                    }
                 }
                 switch model.wallet.type {
                 case .multicoin, .single:
@@ -149,13 +162,21 @@ extension WalletDetailScene {
             isPresentingErrorMessage = error.localizedDescription
         }
     }
+
+    private func onSelectImage() {
+        model.onSelectImage()
+    }
 }
 
 // MARK: - Previews
 
 #Preview {
     NavigationStack {
-        WalletDetailScene(model: .init(wallet: .main, keystore: LocalKeystore.main))
+        WalletDetailScene(model: .init(
+            navigationPath: Binding.constant(NavigationPath()),
+            wallet: .main,
+            keystore: LocalKeystore.main)
+        )
             .navigationBarTitleDisplayMode(.inline)
     }
 }

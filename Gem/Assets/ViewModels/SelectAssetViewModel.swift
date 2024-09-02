@@ -58,19 +58,19 @@ class SelectAssetViewModel: ObservableObject {
     var assetRequest: AssetsRequest {
         switch selectType {
         case .send:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.hasBalance])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hasBalance])
         case .receive:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.includeNewAssets])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
         case .buy:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.buyable, .includeNewAssets])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .buyable, .includeNewAssets])
         case .swap:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.swappable])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .swappable])
         case .stake:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.stakeable])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .stakeable])
         case .manage:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.includeNewAssets])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .includeNewAssets])
         case .hidden:
-            return AssetsRequest(walletID: wallet.id, chains: filterChains, filters: [.hidden])
+            return AssetsRequest(walletID: wallet.id, filters: [.chains(filterChains), .hidden])
         }
     }
     

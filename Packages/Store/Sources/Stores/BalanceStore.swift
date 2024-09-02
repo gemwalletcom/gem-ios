@@ -106,7 +106,20 @@ public struct BalanceStore {
             return try AssetBalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(assetIds.contains(Columns.Balance.assetId))
-                .updateAll(db, Columns.Balance.isEnabled.set(to: value), Columns.Balance.isHidden.set(to: !value))
+                .updateAll(db, 
+                    Columns.Balance.isEnabled.set(to: value),
+                    Columns.Balance.isHidden.set(to: !value),
+                    Columns.Balance.isPinned.set(to: false)
+                )
+        }
+    }
+
+    public func pinAsset(walletId: String, assetId: String, value: Bool) throws -> Int {
+        try db.write { db in
+            return try AssetBalanceRecord
+                .filter(Columns.Balance.walletId == walletId)
+                .filter(Columns.Balance.assetId == assetId)
+                .updateAll(db, Columns.Balance.isPinned.set(to: value))
         }
     }
 }
