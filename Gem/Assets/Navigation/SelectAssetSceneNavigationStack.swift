@@ -69,7 +69,7 @@ struct SelectAssetSceneNavigationStack: View {
             NavigationStack {
                 AssetsFilterScene(model: $model.filterModel)
             }
-            .presentationDetents([.height(120)])
+            .presentationDetents([.height(200)])
             .presentationDragIndicator(.visible)
         }
     }

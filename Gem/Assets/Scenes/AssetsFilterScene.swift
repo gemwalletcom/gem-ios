@@ -4,6 +4,7 @@ import SwiftUI
 import Store
 import Style
 import Primitives
+import Components
 
 struct AssetsFilterScene: View {
     @Environment(\.dismiss) var dismiss
@@ -16,33 +17,17 @@ struct AssetsFilterScene: View {
     }
 
     var body: some View {
-        VStack {
-            HStack {
-                Button(action: onSelectChainsFilter) {
-                    HStack {
-                        Text(model.chainsFilterModel.title)
-                        Image(systemName: SystemImage.chevronDown)
-                    }
-                    .font(.body)
-                    .foregroundStyle(model.chainsFilterModel.type == ChainsFilterType.primary ? .black : .white)
-                    .padding(.horizontal, Spacing.tiny + Spacing.small)
-                    .padding(.vertical, Spacing.tiny)
-                    .background(
-                        Capsule()
-                            .fill(model.chainsFilterModel.type == ChainsFilterType.primary ? .white : Colors.blue)
-                            .if(model.chainsFilterModel.type == ChainsFilterType.primary) {
-                                $0.stroke(Color.gray.opacity(0.33), lineWidth: 0.66)
-                            }
-                    )
-                }
-                .buttonStyle(.plain)
-                Spacer()
-            }
-            Divider()
-            Spacer()
+        List {
+            NavigationCustomLink(
+                with: ListItemView(
+                    title: model.chainsFilterModel.title,
+                    subtitle: model.chainsFilterModel.value,
+                    image: model.chainsFilterModel.chainsImage
+                ),
+                action: onSelectChainsFilter
+            )
         }
-        .frame(maxWidth: .infinity)
-        .padding()
+        .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

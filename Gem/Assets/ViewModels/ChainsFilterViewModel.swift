@@ -5,14 +5,20 @@ import SwiftUI
 struct ChainsFilterViewModel {
     let type: ChainsFilterType
 
-    var title: String {
+    var value: String {
         switch type {
         case .allChains:
-            Localized.Filter.allNetworks
+            Localized.Common.all
         case let .chain(chain):
             chain.rawValue.capitalized
         case let .chains(selected):
-            Localized.Filter.countNetworks(selected.count)
+            "\(selected.count)"
         }
     }
+
+    var title: String {
+        Localized.Settings.Networks.title
+    }
+    
+    var chainsImage: Image { Image(.settingsNetworks) }
 }

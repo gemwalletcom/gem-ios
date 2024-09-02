@@ -256,7 +256,5 @@
 "common.pin" = "Закрепить";
 "common.pinned" = "Закрепленные";
 "common.unpin" = "Открепить";
-"filter.all_networks" = "Все сети";
-"filter.count_networks" = "%@ сети";
 "filter.clear" = "Очистить";
 "filter.title" = "Фильтры";

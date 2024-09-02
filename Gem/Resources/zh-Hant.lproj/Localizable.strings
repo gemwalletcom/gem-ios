@@ -256,7 +256,5 @@
 "common.pin" = "Pin";
 "common.pinned" = "Pinned";
 "common.unpin" = "Unpin";
-"filter.all_networks" = "All networks";
-"filter.count_networks" = "%@ networks";
 "filter.clear" = "Clear";
 "filter.title" = "Filters";
