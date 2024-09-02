@@ -50,21 +50,13 @@ struct AssetsFilterScene: View {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(model.clear, action: onSelectClear)
                         .bold()
+                        .buttonStyle(.plain)
                 }
             }
             ToolbarItem(placement: .primaryAction) {
-                Button(action: onSelectClose) {
-                    Image(systemName: SystemImage.xmark)
-                        .foregroundStyle(.secondary)
-                        .font(.system(size: 12, design: .rounded).bold())
-                        .background {
-                            Circle()
-                                .foregroundStyle(.tertiary.opacity(0.12))
-                                .frame(width: 30, height: 30)
-                        }
-                        .bold()
-                }
-                .buttonStyle(.plain)
+                Button(model.done, action: onSelectDone)
+                    .bold()
+                    .buttonStyle(.plain)
             }
         }
         .sheet(isPresented: $isPresentingChains) {
@@ -85,7 +77,7 @@ extension AssetsFilterScene {
         model.selectedChains = []
     }
 
-    private func onSelectClose() {
+    private func onSelectDone() {
         dismiss()
     }
 

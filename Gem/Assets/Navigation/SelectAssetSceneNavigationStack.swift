@@ -13,10 +13,13 @@ struct SelectAssetSceneNavigationStack: View {
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
 
-    let model: SelectAssetViewModel
+    @State private var model: SelectAssetViewModel
+
+    init(model: SelectAssetViewModel) {
+        _model = State(wrappedValue: model)
+    }
 
     var body: some View {
-        @Bindable var model = model
         NavigationStack {
             SelectAssetScene(model: model, isPresentingAddToken: $isPresentingAddToken)
                 .toolbar {

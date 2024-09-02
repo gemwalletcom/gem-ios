@@ -7,8 +7,9 @@ import Settings
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType
-    var assetsRequest: AssetsRequest
     let allChains: [Chain] = AssetConfiguration.allChains
+
+    var assetsRequest: AssetsRequest
 
     var selectedChains: [Chain] {
         get {
@@ -58,6 +59,7 @@ struct AssetsFilterViewModel {
     
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
+    var done: String { Localized.Common.done }
 }
 
 // MARK: - Models extensions

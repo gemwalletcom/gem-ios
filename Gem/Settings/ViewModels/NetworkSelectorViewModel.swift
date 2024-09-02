@@ -22,7 +22,7 @@ struct NetworkSelectorViewModel {
     }
 
     var clearButtonTitle: String {
-        "Clear"
+        Localized.Filter.clear
     }
 
     var doneButtonTitle: String {
