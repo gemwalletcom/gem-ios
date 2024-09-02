@@ -37,7 +37,7 @@ struct ImportWalletScene: View {
         VStack {
             Form {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name)
+                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: false, trailingView: {})
                         .focused($focusedField, equals: .name)
                 }
                 Section {

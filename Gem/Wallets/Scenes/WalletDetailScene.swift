@@ -28,7 +28,7 @@ struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name)
+                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: false, trailingView: {})
                 }
                 switch model.wallet.type {
                 case .multicoin, .single:
