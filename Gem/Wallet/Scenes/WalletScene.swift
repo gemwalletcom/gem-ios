@@ -245,11 +245,20 @@ struct WalletScene: View {
                 input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
             )
         }
-        .navigationDestination(for: AssetData.self) { assetData in
+        .navigationDestination(for: Scenes.Asset.self) {
             AssetScene(
                 wallet: model.wallet,
-                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: assetData.asset.id),
+                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: $0.asset.id),
                 isPresentingAssetSelectType: $isPresentingAssetSelectType
+            )
+        }
+        .navigationDestination(for: Scenes.Price.self) { scene in
+            ChartScene(model: ChartsViewModel(
+                    walletId: model.wallet.walletId,
+                    priceService: walletsService.priceService,
+                    assetsService: walletsService.assetsService,
+                    assetModel: AssetViewModel(asset: scene.asset)
+                )
             )
         }
         .navigationBarTitleDisplayMode(.inline)

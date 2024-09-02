@@ -76,7 +76,7 @@ struct AssetScene: View {
 
             Section {
                 if model.showPriceView {
-                    NavigationLink(value: model.assetModel.asset) {
+                    NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
                         HStack {
                             ListItemView(title: Localized.Asset.price)
                                 .accessibilityIdentifier("price")
@@ -91,9 +91,12 @@ struct AssetScene: View {
                     }
                 }
                 if model.showNetwork {
-                    HStack {
-                        ListItemView(title: model.networkField, subtitle: model.networkText)
-                        AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                    if model.openNetwork {
+                        NavigationLink(value: Scenes.Asset(asset: model.assetModel.asset.chain.asset)) {
+                            networkView
+                        }
+                    } else {
+                        networkView
                     }
                 }
             }
@@ -149,15 +152,7 @@ struct AssetScene: View {
                 }
             }
         }
-        .navigationDestination(for: Asset.self) { asset in
-            ChartScene(model: ChartsViewModel(
-                    walletId: input.walletId,
-                    priceService: walletsService.priceService,
-                    assetsService: walletsService.assetsService,
-                    assetModel: AssetViewModel(asset: asset)
-                )
-            )
-        }
+        
         .sheet(isPresented: $isPresentingStaking) {
             NavigationStack {
                 StakeScene(
@@ -178,6 +173,17 @@ struct AssetScene: View {
         }
         .taskOnce(onTaskOnce)
         .navigationTitle(model.title)
+    }
+}
+
+// MARK: - UI Components
+
+extension AssetScene {
+    private var networkView: some View {
+        HStack {
+            ListItemView(title: model.networkField, subtitle: model.networkText)
+            AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+        }
     }
 }
 

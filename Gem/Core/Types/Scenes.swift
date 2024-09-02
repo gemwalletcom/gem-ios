@@ -28,4 +28,10 @@ struct Scenes {
     struct WalletSelectImage: Hashable {
         let wallet: Wallet
     }
+    struct Price: Hashable {
+        let asset: Primitives.Asset
+    }
+    struct Asset: Hashable {
+        let asset: Primitives.Asset
+    }
 }

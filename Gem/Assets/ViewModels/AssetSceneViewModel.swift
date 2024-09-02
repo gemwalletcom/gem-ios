@@ -62,6 +62,7 @@ class AssetSceneViewModel: ObservableObject {
     }
     
     var showNetwork: Bool { true }
+    var openNetwork: Bool { assetDataModel.asset.type != .native }
     var showBalances: Bool { assetDataModel.showBalances }
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }

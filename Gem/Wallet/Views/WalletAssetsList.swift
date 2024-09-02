@@ -27,7 +27,7 @@ struct WalletAssetsList: View {
 
     var body: some View {
         ForEach(assets) { asset in
-            NavigationLink(value: asset) {
+            NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
                 ListAssetItemView(model: ListAssetItemViewModel(assetData: asset, formatter: .short))
                     .contextMenu {
                         ContextMenuItem(
