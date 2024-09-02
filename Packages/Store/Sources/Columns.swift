@@ -6,6 +6,7 @@ import GRDB
 struct Columns {
     struct Price {
         static let assetId = Column("assetId")
+        static let price = Column("price")
     }
     
     struct Asset {

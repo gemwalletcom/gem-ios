@@ -10,6 +10,7 @@ import Keystore
 
 struct TransactionsViewModel {
     let walletId: WalletId
+    let wallet: Wallet //TODO: Remove later
 
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
@@ -17,10 +18,12 @@ struct TransactionsViewModel {
 
     init(
         walletId: WalletId,
+        wallet: Wallet,
         type: TransactionsRequestType,
         service: TransactionsService
     ) {
         self.walletId = walletId
+        self.wallet = wallet
         self.type = type
         self.service = service
     }

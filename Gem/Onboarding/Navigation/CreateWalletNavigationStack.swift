@@ -8,13 +8,15 @@ struct CreateWalletNavigationStack: View {
     
     @Environment(\.keystore) private var keystore
     
-    @State private var path = NavigationPath()
-    
+    @State private var navigationPath = NavigationPath()
+
     var body: some View {
-        NavigationStack(path: $path) {
+        NavigationStack(path: $navigationPath) {
             CreateWalletScene(
-                path: $path,
-                model: CreateWalletViewModel(keystore: keystore)
+                model: CreateWalletViewModel(
+                    navigationPath: $navigationPath,
+                    keystore: keystore
+                )
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -26,8 +28,11 @@ struct CreateWalletNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.VerifyPhrase.self) {
                 VerifyPhraseWalletScene(
-                    path: $path,
-                    model: VerifyPhraseViewModel(words: $0.words, keystore: keystore)
+                    model: VerifyPhraseViewModel(
+                        navigationPath: $navigationPath,
+                        words: $0.words,
+                        keystore: keystore
+                    )
                 )
             }
         }

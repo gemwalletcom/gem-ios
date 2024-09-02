@@ -22,11 +22,11 @@ struct WalletSceneViewModel {
     }
 
     var assetsPinnedRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, chains: [], filters: [.enabled, .includePinned(true)])
+        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(true)])
     }
 
     var assetsRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, chains: [], filters: [.enabled, .includePinned(false)])
+        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(false)])
     }
 
     var fiatValueRequest: TotalValueRequest {

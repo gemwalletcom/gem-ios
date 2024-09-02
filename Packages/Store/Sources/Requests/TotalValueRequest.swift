@@ -5,8 +5,8 @@ import Combine
 import Primitives
 
 public struct TotalValueRequest: Queryable {
-    public static var defaultValue: WalletFiatValue { WalletFiatValue.empty }
-    
+    public static var defaultValue: Double { 0 }
+
     public var walletId: String
     
     public init(
@@ -15,7 +15,7 @@ public struct TotalValueRequest: Queryable {
         self.walletId = walletID
     }
     
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<WalletFiatValue, Error> {
+    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<Double, Error> {
         ValueObservation
             .tracking { db in try fetch(db) }
             // The `.immediate` scheduling feeds the view right on subscription,
@@ -24,37 +24,19 @@ public struct TotalValueRequest: Queryable {
             .eraseToAnyPublisher()
     }
     
-    private func fetch(_ db: Database) throws -> WalletFiatValue {
-        let request = try AssetRecord
-            .filter(literal: SQL(stringLiteral: "balances.walletId = '\(walletId)'"))
-            .filter(literal: SQL(stringLiteral: "balances.isEnabled = true"))
-            .filter(literal: SQL(stringLiteral: "balances.fiatValue > 0"))
+    private func fetch(_ db: Database) throws -> Double {
+        //TODO: Refactor to calculate total price
+        return try AssetRecord
             .including(optional: AssetRecord.price)
-            .including(
-                optional: AssetRecord.balance
-// TODO: SQL
-//                    .filter(Columns.Balance.walletId == walletId)
-//                    .filter(Columns.Balance.isEnabled == true)
-//                    .filter(Columns.Balance.fiatValue > 0)
+            .including(optional: AssetRecord.balance)
+            .joining(required: AssetRecord.balance
+                .filter(Columns.Balance.walletId == walletId)
+                .filter(Columns.Balance.isEnabled == true)
+                .filter(Columns.Balance.fiatValue > 0)
             )
             .asRequest(of: AssetRecordInfoMinimal.self)
             .fetchAll(db)
-       
-        let totalValue = request.reduce(0) { partialResult, record in
-            partialResult + (record.balance.total * (record.price?.price ?? 0))
-        }
-        
-        let totalPrice = request.reduce(0) { partialResult, record in
-            let value = (record.balance.total * (record.price?.price ?? 0))
-            return partialResult + (value * (record.price?.priceChangePercentage24h ?? 0) / 100)
-        }
-        
-        let priceChange = (100 * totalPrice) / totalValue
-        
-        return WalletFiatValue(
-            totalValue: totalValue,
-            price: totalPrice,
-            priceChangePercentage24h: priceChange.isNaN ? 0 : priceChange
-        )
+            .map { $0.balance.total * ($0.price?.price ?? 0) }
+            .reduce(0, +)
     }
 }

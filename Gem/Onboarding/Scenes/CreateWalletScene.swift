@@ -5,7 +5,6 @@ import Components
 
 struct CreateWalletScene: View {
 
-    @Binding var path: NavigationPath
     @StateObject var model: CreateWalletViewModel
     
     @State private var showCopyMessage = false
@@ -43,7 +42,7 @@ struct CreateWalletScene: View {
     }
     
     func continueAction() {
-        path.append(Scenes.VerifyPhrase(words: model.words))
+        model.continueAction()
     }
 }
 

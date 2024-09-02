@@ -34,22 +34,16 @@ public struct AssetRequest: Queryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AssetBalanceRecord.databaseTableName, walletId))
-            )
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
-            )
+            .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))
+            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletId))
             .filter(Columns.Asset.id == assetId)
-            .order(literal:
-                SQL(stringLiteral: String(format: "%@.fiatValue DESC", AssetBalanceRecord.databaseTableName))
-            )
             .asRequest(of: AssetRecordInfo.self)
             .fetchOne(db)
-            .map { $0.assetData }!
+            .map { $0.assetData } ?? .empty
     }
 }
 
+//TODO: Find a way to remove .empty
 extension AssetData {
     static let empty: AssetData = {
         return AssetData(

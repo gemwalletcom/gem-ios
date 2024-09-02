@@ -7,7 +7,7 @@ struct AssetRecordInfo: FetchableRecord, Codable {
     var asset: AssetRecord
     var price: PriceRecord?
     var account: AccountRecord
-    var balance: AssetBalanceRecord
+    var balance: AssetBalanceRecord?
     var details: AssetDetailsRecord?
 }
 
