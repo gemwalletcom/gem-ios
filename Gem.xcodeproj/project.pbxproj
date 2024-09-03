@@ -251,6 +251,7 @@
 		D8BAC95D2BD1A3E2001608BC /* AddAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */; };
 		D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */; };
 		D8BAC9612BDC82F7001608BC /* WordSuggestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */; };
+		D8C4A2352C8785A2006FABE8 /* FiatQuoteViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A2342C8785A2006FABE8 /* FiatQuoteViewModelTests.swift */; };
 		D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */; };
 		D8CD362B2C647D0300E18764 /* ChartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362A2C647D0300E18764 /* ChartSelection.swift */; };
 		D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */; };
@@ -553,6 +554,7 @@
 		D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetViewModel.swift; sourceTree = "<group>"; };
 		D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestionView.swift; sourceTree = "<group>"; };
 		D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestor.swift; sourceTree = "<group>"; };
+		D8C4A2342C8785A2006FABE8 /* FiatQuoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatQuoteViewModelTests.swift; sourceTree = "<group>"; };
 		D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeViewModel.swift; sourceTree = "<group>"; };
 		D8CD362A2C647D0300E18764 /* ChartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSelection.swift; sourceTree = "<group>"; };
 		D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyViewModel.swift; sourceTree = "<group>"; };
@@ -766,6 +768,7 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
+				D8C4A2322C878590006FABE8 /* Fiat */,
 				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				D8D726B42C6DBE7B00A6B559 /* Transactions */,
 				8325539B2C0FB22000C9CA0C /* Settings */,
@@ -1541,6 +1544,22 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		D8C4A2322C878590006FABE8 /* Fiat */ = {
+			isa = PBXGroup;
+			children = (
+				D8C4A2332C878594006FABE8 /* ViewModels */,
+			);
+			path = Fiat;
+			sourceTree = "<group>";
+		};
+		D8C4A2332C878594006FABE8 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				D8C4A2342C8785A2006FABE8 /* FiatQuoteViewModelTests.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
 		D8C6E35C2B2243EE00D0B513 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -2209,6 +2228,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3A7CB9129CFD6E600431341 /* WalletHeaderViewModelTests.swift in Sources */,
+				D8C4A2352C8785A2006FABE8 /* FiatQuoteViewModelTests.swift in Sources */,
 				C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */,
 				C3A7CB9929D35EC200431341 /* WalletSceneViewModelTests.swift in Sources */,
 				C3A7CB9729D3569C00431341 /* PriceViewModelTests.swift in Sources */,

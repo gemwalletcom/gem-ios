@@ -57,7 +57,7 @@ class BuyAssetViewModel {
     }
 
     func rateValue(for quote: FiatQuote) -> String {
-        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote).formattedRate
+        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote).rateText
         return "1 \(asset.symbol) ≈ \(quoteRate)"
     }
 

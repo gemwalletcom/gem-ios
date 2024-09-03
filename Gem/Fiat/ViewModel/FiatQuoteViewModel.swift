@@ -8,20 +8,18 @@ struct FiatQuoteViewModel {
     let asset: Asset
     let quote: FiatQuote
 
-    private let formatter = ValueFormatter(locale: .US, style: .medium)
-
     var title: String {
         quote.provider.name
     }
     
     var amount: String {
-        "\(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
+        let amount = CurrencyFormatter.currency().string(decimal: Decimal(quote.cryptoAmount))
+        return "\(amount) \(asset.symbol)"
     }
 
-    var formattedRate: String {
-        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
-        let bigIntRate = BigInt(rate)
-        return bigIntRate.isZero ? "\(rate)" : formatter.string(bigIntRate, decimals: 0)
+    var rateText: String {
+        let amount = quote.fiatAmount / quote.cryptoAmount
+        return CurrencyFormatter(currencyCode: quote.fiatCurrency).string(amount)
     }
 
     var image: String {
