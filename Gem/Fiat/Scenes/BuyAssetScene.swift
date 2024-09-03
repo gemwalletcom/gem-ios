@@ -92,16 +92,20 @@ extension BuyAssetScene {
                         Button(model.buttonTitle(amount: amount)) {
                             onSelect(amount: amount)
                         }
-                        .foregroundStyle(Colors.black)
                         .font(.subheadline.weight(.semibold))
-                        .buttonStyle(.bordered)
+                        .foregroundStyle(Colors.black)
+                        .padding(.all, Spacing.small)
+                        .background(
+                            RoundedRectangle(cornerRadius: 8)
+                                .foregroundStyle(Colors.grayVeryLight)
+                        )
+                        .buttonStyle(.plain)
                     }
 
                     Button(Emoji.random) {
                         onSelect(amount: model.randomAmount)
                     }
                     .buttonStyle(.plain)
-                    .foregroundStyle(Colors.black)
                     .font(.title.weight(.semibold))
                     .padding(.all, Spacing.tiny)
                     .background {

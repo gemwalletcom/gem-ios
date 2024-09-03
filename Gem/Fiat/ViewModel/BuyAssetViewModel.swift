@@ -52,12 +52,13 @@ class BuyAssetViewModel {
 
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
-        return "≈ \(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
+        let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote).amount
+        return "≈ \(quoteAmount)"
     }
 
     func rateValue(for quote: FiatQuote) -> String {
-        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
-        return "1 \(asset.symbol) ≈ \(currencySymbol)\(rate)"
+        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote).formattedRate
+        return "1 \(asset.symbol) ≈ \(quoteRate)"
     }
 
     func buttonTitle(amount: Double) -> String {

@@ -2,19 +2,28 @@
 
 import Foundation
 import Primitives
+import BigInt
 
 struct FiatQuoteViewModel {
     let asset: Asset
     let quote: FiatQuote
-    
+
+    private let formatter = ValueFormatter(locale: .US, style: .medium)
+
     var title: String {
-        return quote.provider.name
+        quote.provider.name
     }
     
     var amount: String {
-        return  "\(quote.cryptoAmount) \(asset.symbol)"
+        "\(quote.cryptoAmount.rounded(toPlaces: 4)) \(asset.symbol)"
     }
-    
+
+    var formattedRate: String {
+        let rate = (quote.fiatAmount / quote.cryptoAmount).rounded(toPlaces: 2)
+        let bigIntRate = BigInt(rate)
+        return bigIntRate.isZero ? "\(rate)" : formatter.string(bigIntRate, decimals: 0)
+    }
+
     var image: String {
         return quote.provider.name.lowercased().replacing(" ", with: "_")
     }
@@ -22,6 +31,6 @@ struct FiatQuoteViewModel {
 
 extension FiatQuoteViewModel: Identifiable {
     var id: String {
-        return "\(asset.id.identifier)\(quote.provider.name)\(quote.cryptoAmount)"
+        "\(asset.id.identifier)\(quote.provider.name)\(quote.cryptoAmount)"
     }
 }
