@@ -38,7 +38,7 @@ struct RecipientScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                    FloatTextField(model.recipientField, text: $address) {
                         HStack(spacing: Spacing.large/2) {
                             NameRecordView(
                                 model: NameRecordViewModel(chain: model.asset.chain),
@@ -53,6 +53,7 @@ struct RecipientScene: View {
                             }
                         }
                     }
+                    .allowClean(false)
                     .focused($focusedField, equals: .address)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()

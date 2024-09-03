@@ -32,20 +32,19 @@ public struct FloatTextField<TrailingView: View>: View {
 
     private let placeholder: String
     private let style: FloatFieldStyle
-    private let allowClean: Bool
+
+    private var allowClean: Bool = true
     private var trailingView: TrailingView
 
     public init(
         _ placeholder: String,
         text: Binding<String>,
         style: FloatFieldStyle = .standard,
-        allowClean: Bool = true,
-        @ViewBuilder trailingView: () -> TrailingView
+        @ViewBuilder trailingView: () -> TrailingView = { EmptyView() }
     ) {
         _text = text
         self.placeholder = placeholder
         self.style = style
-        self.allowClean = allowClean
         self.trailingView = trailingView()
     }
 
@@ -66,6 +65,32 @@ public struct FloatTextField<TrailingView: View>: View {
         }
     }
 
+    private var shouldShowSpacer: Bool {
+        shouldShowClean || !(trailingView is EmptyView)
+    }
+
+    private var shouldShowClean: Bool {
+        allowClean && !text.isEmpty
+    }
+
+    private func onSelectClean() {
+        text = ""
+    }
+}
+
+// MARK: - Modifiers
+
+extension FloatTextField {
+    public func allowClean(_ allow: Bool) -> FloatTextField {
+        var mutSelf = self
+        mutSelf.allowClean = allow
+        return mutSelf
+    }
+}
+
+// MARK: - UI Components
+
+extension FloatTextField {
     private var placeholderView: some View {
         Text(placeholder)
             .textStyle(
@@ -97,17 +122,6 @@ public struct FloatTextField<TrailingView: View>: View {
                 trailingView
             }
         }
-    }
-    private var shouldShowSpacer: Bool {
-        shouldShowClean || !(trailingView is EmptyView)
-    }
-
-    private var shouldShowClean: Bool {
-        allowClean && !text.isEmpty
-    }
-
-    private func onSelectClean() {
-        text = ""
     }
 }
 

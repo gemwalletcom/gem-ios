@@ -28,7 +28,8 @@ struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: false, trailingView: {})
+                    FloatTextField(Localized.Wallet.name, text: $name)
+                        .allowClean(false)
                 } header: {
                     HStack {
                         Spacer()
