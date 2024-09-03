@@ -256,3 +256,5 @@
 "common.pin" = "Pin";
 "common.pinned" = "Pinned";
 "common.unpin" = "Unpin";
+"filter.clear" = "Clear";
+"filter.title" = "Filters";
