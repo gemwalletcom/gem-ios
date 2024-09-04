@@ -1,6 +1,4 @@
-install: install-rust install-typeshare install-toolchains
-	@echo "==> Install SwiftGen"
-	@brew install swiftgen
+install: install-rust install-typeshare install-toolchains install-swifttools
 
 install-rust:
 	@echo "==> Install Rust"
@@ -10,11 +8,15 @@ install-rust:
 
 install-typeshare:
 	@echo "==> Install typeshare-cli"
-	@cargo install typeshare-cli --version 1.9.2
+	@cargo install typeshare-cli --version 1.11.0 --force
 
 install-toolchains:
 	@echo "==> Install toolchains for uniffi"
 	@cd core/gemstone && make prepare-apple
+
+install-swifttools:
+	@echo "==> Install SwiftGen and SwiftFormat"
+	@brew install swiftgen swiftformat
 
 bootstrap: setup-git install generate
 	@echo "<== Bootstrap done."
