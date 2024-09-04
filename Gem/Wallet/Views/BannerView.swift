@@ -21,7 +21,7 @@ struct BannerView: View {
 
                 if banner.canClose {
                     ListButton(
-                        image: Image(systemName: SystemImage.xmark),
+                        image: Image(systemName: SystemImage.xmarkCircle),
                         action: {
                             closeAction(banner.banner)
                         }

@@ -7,7 +7,7 @@ import Primitives
 import Style
 
 struct AddTokenScene: View {
-    @State var model: AddTokenViewModel
+    @State private var model: AddTokenViewModel
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -15,6 +15,11 @@ struct AddTokenScene: View {
     }
 
     var action: ((Asset) -> Void)?
+
+    init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
+        self.model = model
+        self.action = action
+    }
 
     var body: some View {
         VStack {
@@ -38,12 +43,10 @@ struct AddTokenScene: View {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .sheet(isPresented: $model.isPresentingSelectNetwork) {
-            if let chain = model.input.chain {
-                NetworkSelectorNavigationStack(
-                    model: NetworkSelectorViewModel(chains: model.chains, selectedChain: chain),
-                    onSelectChain: onSelectNewChain(_:)
-                )
-            }
+            NetworkSelectorNavigationStack(
+                chains: model.chains,
+                onSelectChain: onSelectNewChain(_:)
+            )
         }
     }
 }

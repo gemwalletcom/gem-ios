@@ -9,9 +9,20 @@ import Style
 struct NetworkSelectorNavigationStack: View {
     @Environment (\.dismiss) var dismiss
 
-    let model: NetworkSelectorViewModel
+    @State private var model: NetworkSelectorViewModel
 
-    var onSelectChain: (Chain) -> Void
+    private var onSelectChain: ((Chain) -> Void)?
+    private var onSelectMultipleChains: (([Chain]) -> Void)?
+
+    init(chains: [Chain], onSelectChain: @escaping ((Chain) -> Void)) {
+        _model = State(initialValue: NetworkSelectorViewModel(chains: chains, selectedChains: [], isMultipleSelectionEnabled: false))
+        self.onSelectChain = onSelectChain
+    }
+
+    init(chains: [Chain], selectedChains: [Chain], onSelectMultipleChains: @escaping (([Chain]) -> Void)) {
+        _model = State(initialValue: NetworkSelectorViewModel(chains: chains, selectedChains: selectedChains, isMultipleSelectionEnabled: true))
+        self.onSelectMultipleChains = onSelectMultipleChains
+    }
 
     var body: some View {
         NavigationStack {
@@ -19,8 +30,19 @@ struct NetworkSelectorNavigationStack: View {
                 items: model.chains,
                 filter: model.filter(_:query:),
                 content: { chain in
-                    NavigationCustomLink(with: ChainView(chain: chain)) {
-                        onSelect(chain: chain)
+                    if model.isMultipleSelectionEnabled {
+                        SelectionView(
+                            value: chain,
+                            selection: model.selectedChains.contains(chain) ? chain : nil,
+                            action: onSelectMultiple(chain:),
+                            content: {
+                                ChainView(chain: chain)
+                            }
+                        )
+                    } else {
+                        NavigationCustomLink(with: ChainView(chain: chain)) {
+                            onSelect(chain: chain)
+                        }
                     }
                 },
                 emptyContent: {
@@ -33,9 +55,24 @@ struct NetworkSelectorNavigationStack: View {
             .navigationTitle(Localized.Settings.Networks.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        onCancel()
+                if model.isMultipleSelectionEnabled && !model.selectedChains.isEmpty {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(model.clearButtonTitle, action: onClear)
+                            .bold()
+                    }
+                } else {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(model.cancelButtonTitle, action: onCancel)
+                            .bold()
+                    }
+                }
+
+                if model.isMultipleSelectionEnabled {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(model.doneButtonTitle) {
+                            onDone()
+                        }
+                        .bold()
                     }
                 }
             }
@@ -47,23 +84,30 @@ struct NetworkSelectorNavigationStack: View {
 
 extension NetworkSelectorNavigationStack {
     private func onSelect(chain: Chain) {
-        onSelectChain(chain)
+        onSelectChain?(chain)
         dismiss()
+    }
+
+    private func onSelectMultiple(chain: Chain) {
+        model.toggle(chain: chain)
     }
 
     private func onCancel() {
         dismiss()
+    }
+
+    private func onDone() {
+        onSelectMultipleChains?(Array(model.selectedChains))
+        dismiss()
+    }
+
+    private func onClear() {
+        model.clean()
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    let mockChains = Chain.allCases
-    @State var selectedChain: Chain = .smartChain
-    @State var isPresenting: Bool = false
-
-    return NetworkSelectorNavigationStack(model: .init(chains: mockChains, selectedChain: .ethereum)) { _ in
-        
-    }
+    NetworkSelectorNavigationStack(chains: Chain.allCases, selectedChains: [.smartChain]) { _ in }
 }
