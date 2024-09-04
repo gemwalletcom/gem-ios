@@ -30,7 +30,6 @@ struct WalletScene: View {
     @Query<AssetsRequest>
     private var assets: [AssetData]
 
-
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
 
@@ -132,8 +131,7 @@ struct WalletScene: View {
                     selectType: value,
                     assetsService: assetsService,
                     walletsService: walletsService
-                ),
-                isPresenting: $isPresentingSelectType
+                )
             )
         }
         .toolbar {

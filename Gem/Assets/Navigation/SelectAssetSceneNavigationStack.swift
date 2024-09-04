@@ -6,39 +6,57 @@ import Components
 import Style
 
 struct SelectAssetSceneNavigationStack: View {
-    
     @Environment(\.dismiss) private var dismiss
-    
-    let model: SelectAssetViewModel
-    @State var isPresenting: Binding<SelectAssetType?>
-    @State private var isPresentingAddToken: Bool = false
-
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
-    @Environment(\.walletsService) private var walletsService
-    
+
+    @State private var isPresentingAddToken: Bool = false
+    @State private var isPresentingFilteringView: Bool = false
+
+    @State private var model: SelectAssetViewModel
+
+    init(model: SelectAssetViewModel) {
+        _model = State(wrappedValue: model)
+    }
+
     var body: some View {
         NavigationStack {
             SelectAssetScene(model: model, isPresentingAddToken: $isPresentingAddToken)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
-                        isPresenting.wrappedValue = nil
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(Localized.Common.done) {
+                            dismiss()
+                        }
+                        .bold()
+                        .accessibilityIdentifier("cancel")
                     }
-                    .bold()
-                    .accessibilityIdentifier("cancel")
-                }
-                if model.showAddToken {
-                    ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingAddToken = true
-                        } label: {
-                            Image(systemName: SystemImage.plus)
+                    if model.showAddToken {
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isPresentingFilteringView = true
+                            } label: {
+                                if model.filterModel.isCusomFilteringSpecified {
+                                    Image(systemName: SystemImage.filterFill)
+                                        .symbolRenderingMode(.palette)
+                                        .foregroundStyle(Colors.whiteSolid, Colors.blue)
+                                } else {
+                                    Image(systemName: SystemImage.filter)
+                                        .foregroundStyle(.primary)
+                                }
+                            }
+                            .contentTransition(.symbolEffect(.replace))
+                        }
+
+                        ToolbarItem(placement: .navigationBarTrailing) {
+                            Button {
+                                isPresentingAddToken = true
+                            } label: {
+                                Image(systemName: SystemImage.plus)
+                            }
                         }
                     }
                 }
-            }
-            .navigationBarTitleDisplayMode(.inline)
+                .navigationBarTitleDisplayMode(.inline)
         }
         .sheet(isPresented: $isPresentingAddToken) {
             AddTokenNavigationStack(
@@ -47,8 +65,15 @@ struct SelectAssetSceneNavigationStack: View {
                 action: addAsset
             )
         }
+        .sheet(isPresented: $isPresentingFilteringView) {
+            NavigationStack {
+                AssetsFilterScene(model: $model.filterModel)
+            }
+            .presentationDetents([.height(200)])
+            .presentationDragIndicator(.visible)
+        }
     }
-    
+
     func addAsset(_ asset: Asset) {
         Task {
             try model.assetsService.addAsset(walletId: model.wallet.walletId, asset: asset)

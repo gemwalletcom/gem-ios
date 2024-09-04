@@ -5,36 +5,42 @@ import Settings
 import Store
 import GRDBQuery
 import Style
+import Keystore
 
 struct SelectAssetScene: View {
-
     @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
 
-    @State var isPresentingAddToken: Binding<Bool>
     @State private var isPresentingCopyMessage: Bool = false
     @State private var isPresentingCopyMessageValue: String?  = .none
-    
-    @Query<AssetsRequest>
-    var assets: [AssetData]
-    
+
+    @Binding private var isPresentingAddToken: Bool
+
+    @Query<AssetsRequest> 
+    private var assets: [AssetData]
     @Query<AssetsInfoRequest>
     var assetInfo: AssetsInfo
-    
-    @StateObject var model: SelectAssetViewModel
-    
+
+    @State private var model: SelectAssetViewModel
+
     init(
         model: SelectAssetViewModel,
         isPresentingAddToken: Binding<Bool>
     ) {
-        _model = StateObject(wrappedValue: model)
-        _assets = Query(model.assetRequest, in: \.db.dbQueue)
+        _model = State(wrappedValue: model)
+        _isPresentingAddToken = isPresentingAddToken
+
+        let request = Binding {
+            model.filterModel.assetsRequest
+        } set: { new in
+            model.filterModel.assetsRequest = new
+        }
+        _assets = Query(request, in: \.db.dbQueue)
         _assetInfo =  Query(model.assetsInfoRequest, in: \.db.dbQueue)
-        self.isPresentingAddToken = isPresentingAddToken
     }
-    
+
     var body: some View {
         List {
             if model.showAssetsInfo {
@@ -48,7 +54,7 @@ struct SelectAssetScene: View {
                                 assetsService: model.assetsService,
                                 walletsService: model.walletsService
                             ),
-                            isPresentingAddToken: isPresentingAddToken
+                            isPresentingAddToken: $isPresentingAddToken
                         )
                     } label: {
                         ListItemView(title: Localized.Assets.hidden, subtitle: "\(assetInfo.hidden)")
@@ -61,15 +67,15 @@ struct SelectAssetScene: View {
                     switch model.selectType {
                     case .buy, .receive, .send, .swap, .stake:
                         NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                         }
                     case .manage, .hidden:
-                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
+                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                     }
                 }
             } footer: {
                 VStack {
-                    if model.isLoading {
+                    if model.state.isLoading {
                         HStack {
                             LoadingView()
                         }
@@ -83,7 +89,7 @@ struct SelectAssetScene: View {
             if model.showAddToken {
                 Section {
                     NavigationCustomLink(with: Text(Localized.Assets.addCustomToken)) {
-                        isPresentingAddToken.wrappedValue = true
+                        isPresentingAddToken = true
                     }
                 }
             }
@@ -92,13 +98,11 @@ struct SelectAssetScene: View {
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
         )
+        .debounce(value: $assets.searchBy,
+                  interval: Duration.milliseconds(250),
+                  action: model.search(query:))
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .navigationBarTitle(model.title)
-        .onChange(of: $assets.searchBy.wrappedValue) { _, query in
-            Task {
-                await model.searchQuery(query: query)
-            }
-        }
         .navigationDestination(for: SelectAssetInput.self) { input in
             switch input.type {
             case .send:
@@ -143,8 +147,12 @@ struct SelectAssetScene: View {
             }
         }
     }
-    
-    func assetAction(_ action: ListAssetItemAction, assetData: AssetData) {
+}
+
+// MARK: - Actions
+
+extension SelectAssetScene {
+    private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
         case .enabled(let enabled):
@@ -154,7 +162,6 @@ struct SelectAssetScene: View {
             isPresentingCopyMessage = true
             isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
             UIPasteboard.general.string = address
-            
             model.enableAsset(assetId: asset.id, enabled: true)
         }
     }
@@ -178,16 +185,18 @@ private struct ListAssetItemSelectionView: View {
     }
 }
 
-//struct SelectAssetScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SelectAssetScene(
-//            model: SelectAssetViewModel(
-//                wallet: .main,
-//                keystore: .main,
-//                selectType: .receive,
-//                assetsService: .main,
-//                walletsService: .main
-//            )
-//        )
-//    }
-//}
+#Preview {
+    @State var present: Bool = false
+    return NavigationStack {
+        SelectAssetScene(
+            model: SelectAssetViewModel(
+                wallet: .main,
+                keystore: LocalKeystore.main,
+                selectType: .receive,
+                assetsService: .main,
+                walletsService: .main
+            ),
+            isPresentingAddToken: $present
+        )
+    }
+}
