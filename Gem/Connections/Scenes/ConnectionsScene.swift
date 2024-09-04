@@ -13,7 +13,7 @@ struct ConnectionsScene: View {
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorMessage: String?
     
-    @Query(ConnectionsRequest())
+    @Query<ConnectionsRequest>
     var connections: [WalletConnection]
     
     var groupedByWallet: [Wallet: [Primitives.WalletConnection]] {
@@ -26,10 +26,9 @@ struct ConnectionsScene: View {
     
     let model: ConnectionsViewModel
     
-    init(
-        model: ConnectionsViewModel
-    ) {
+    init(model: ConnectionsViewModel) {
         self.model = model
+        _connections = Query(constant: model.request)
     }
     
     var body: some View {
