@@ -255,7 +255,8 @@ struct WalletCoordinator: View {
                 ConnectionProposalScene(
                     model: ConnectionProposalViewModel(
                         confirmTransferDelegate: data.delegate,
-                        payload: data.payload
+                        payload: data.payload,
+                        wallets: keystore.wallets
                     )
                 )
                 .interactiveDismissDisabled(true)

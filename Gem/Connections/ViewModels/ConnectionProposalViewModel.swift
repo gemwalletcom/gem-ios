@@ -4,28 +4,33 @@ import Foundation
 import Primitives
 
 struct ConnectionProposalViewModel {
-
     private let confirmTransferDelegate: ConfirmTransferDelegate
     private let payload: WalletConnectionSessionProposal
 
+    var walletSelectorModel: WalletSelectorViewModel
+
     init(
         confirmTransferDelegate: @escaping ConfirmTransferDelegate,
-        payload: WalletConnectionSessionProposal
+        payload: WalletConnectionSessionProposal,
+        wallets: [Wallet]
     ) {
         self.confirmTransferDelegate = confirmTransferDelegate
         self.payload = payload
+        self.walletSelectorModel = WalletSelectorViewModel(
+            wallets: wallets,
+            selectedWallet: payload.wallet
+        )
     }
     
-    var title: String {
-        return Localized.WalletConnect.Connect.title
+    var title: String { Localized.WalletConnect.Connect.title }
+    var buttonTitle: String { Localized.Transfer.confirm }
+
+    var selectedWalletName: String {
+        walletSelectorModel.walletModel.name
     }
-    
-    var walletText: String {
-        return payload.wallet.name
-    }
-    
+
     var appText: String {
-        return payload.metadata.name
+        payload.metadata.name
     }
     
     var websiteText: String? {
@@ -36,11 +41,13 @@ struct ConnectionProposalViewModel {
     }
     
     var imageUrl: URL? {
-        return URL(string: payload.metadata.icon)
+        URL(string: payload.metadata.icon)
     }
-    
-    var buttonTitle: String { Localized.Transfer.confirm }
-    
+}
+
+// MARK: - Business Logic
+
+extension ConnectionProposalViewModel {
     func accept() throws {
         confirmTransferDelegate(.success(""))
     }
