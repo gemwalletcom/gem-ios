@@ -15,6 +15,7 @@ final class CurrencyFormatterTests: XCTestCase {
     let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: "")
     
     func testCurrency() {
+        XCTAssertEqual(currencyFormatterUS.string(0), "$0.00")
         XCTAssertEqual(currencyFormatterUS.string(11.12), "$11.12")
         XCTAssertEqual(currencyFormatterUS.string(11), "$11.00")
         XCTAssertEqual(currencyFormatterUS.string(12000123), "$12,000,123.00")

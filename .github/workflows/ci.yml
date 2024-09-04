@@ -37,8 +37,8 @@ jobs:
 
       - name: Install dependencies
         run: |
-          make install-typeshare && make install-toolchains
-          brew install swiftgen xcbeautify
+          rustc --version
+          make install-typeshare && make install-toolchains && make install-swifttools
 
       - name: Build Core
         run: make generate-stone
