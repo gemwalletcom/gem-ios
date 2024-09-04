@@ -37,6 +37,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          rustc --version
           make install-typeshare && make install-toolchains && make install-swifttools
 
       - name: Build Core
