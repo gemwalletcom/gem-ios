@@ -6,26 +6,17 @@ import GRDBQuery
 import Combine
 import Primitives
 
-public struct WalletsRequest: Queryable {
+public struct WalletsRequest: ValueObservationQueryable {
     public static var defaultValue: [Wallet] { [] }
     
     private let isPinned: Bool
-    public init(
-        isPinned: Bool
-    ) {
+    
+    public init(isPinned: Bool) {
         self.isPinned = isPinned
     }
     
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[Wallet], Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .map { $0.map{ $0 } }
-            .eraseToAnyPublisher()
-    }
-    
-    private func fetch(_ db: Database) throws -> [Wallet] {
-        return try WalletRecord
+    public func fetch(_ db: Database) throws -> [Wallet] {
+        try WalletRecord
             .including(all: WalletRecord.accounts)
             .filter(Columns.Wallet.isPinned == isPinned)
             .order(Columns.Wallet.order.asc)

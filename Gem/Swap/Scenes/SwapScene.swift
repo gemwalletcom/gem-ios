@@ -12,9 +12,14 @@ import Keystore
 struct SwapScene: View {
     @Environment(\.nodeService) private var nodeService
 
-    @Query<AssetRequest> var fromAsset: AssetData
-    @Query<AssetRequest> var toAsset: AssetData
-    @Query<TransactionsRequest> var tokenApprovals: [TransactionExtended]
+    @Query<AssetRequest>
+    var fromAsset: AssetData
+
+    @Query<AssetRequest>
+    var toAsset: AssetData
+    
+    @Query<TransactionsRequest>
+    var tokenApprovals: [TransactionExtended]
 
     @State var model: SwapViewModel
 
@@ -25,9 +30,9 @@ struct SwapScene: View {
 
     init(model: SwapViewModel) {
         _model = State(initialValue: model)
-        _fromAsset = Query(model.fromAssetRequest, in: \.db.dbQueue)
-        _toAsset = Query(model.toAssetRequest, in: \.db.dbQueue)
-        _tokenApprovals = Query(model.tokenApprovalsRequest, in: \.db.dbQueue)
+        _fromAsset = Query(model.fromAssetRequest)
+        _toAsset = Query(model.toAssetRequest)
+        _tokenApprovals = Query(model.tokenApprovalsRequest)
     }
 
     var body: some View {

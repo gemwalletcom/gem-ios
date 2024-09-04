@@ -8,7 +8,6 @@ import Style
 
 struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
 
     @State private var isPresentingErrorMessage: String?
@@ -31,8 +30,8 @@ struct WalletsScene: View {
         model: WalletsViewModel
     ) {
         self.model = model
-        _pinnedWallets = Query(WalletsRequest(isPinned: true), in: \.db.dbQueue)
-        _wallets = Query(WalletsRequest(isPinned: false), in: \.db.dbQueue)
+        _pinnedWallets = Query(WalletsRequest(isPinned: true))
+        _wallets = Query(WalletsRequest(isPinned: false))
     }
 
     var body: some View {

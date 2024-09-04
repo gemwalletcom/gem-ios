@@ -19,3 +19,4 @@ public enum AssetsRequestFilter {
 }
 
 extension AssetsRequestFilter: Equatable {}
+extension AssetsRequestFilter: Sendable {}

@@ -20,7 +20,7 @@ struct ChartScene: View {
         model: ChartsViewModel
     ) {
         _model = StateObject(wrappedValue: model)
-        _assetData = Query(constant: model.assetRequest, in: \.db.dbQueue)
+        _assetData = Query(constant: model.assetRequest)
     }
     
     var body: some View {

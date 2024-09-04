@@ -9,7 +9,6 @@ import Components
 import Style
 
 struct StakeScene: View {
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
@@ -25,7 +24,7 @@ struct StakeScene: View {
 
     init(model: StakeViewModel) {
         _model = State(initialValue: model)
-        _delegations = Query(model.request, in: \.db.dbQueue)
+        _delegations = Query(model.request)
     }
     
     var body: some View {

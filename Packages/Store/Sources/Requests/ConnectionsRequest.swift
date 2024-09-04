@@ -9,11 +9,10 @@ import Primitives
 public struct ConnectionsRequest: ValueObservationQueryable {
     public static var defaultValue: [WalletConnection] { [] }
     
-    public init() {
-    }
+    public init() {}
 
     public func fetch(_ db: Database) throws -> [WalletConnection] {
-        return try WalletRecord
+        try WalletRecord
             .including(required: WalletRecord.connection)
             .asRequest(of: WalletConnectionInfo.self)
             .fetchAll(db)

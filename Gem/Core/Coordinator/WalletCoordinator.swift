@@ -161,7 +161,6 @@ struct WalletCoordinator: View {
                 } message: {
                     Text(Localized.UpdateApp.description(updateAvailableAlertSheetMessage ?? ""))
                 }
-                .environment(\.db, db)
                 .environment(\.nodeService, nodeService)
                 .environment(\.keystore, keystore)
                 .environment(\.walletService, walletService)

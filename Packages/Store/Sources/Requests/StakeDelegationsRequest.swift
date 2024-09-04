@@ -6,27 +6,19 @@ import GRDBQuery
 import Combine
 import Primitives
 
-public struct StakeDelegationsRequest: Queryable {
+public struct StakeDelegationsRequest: ValueObservationQueryable {
     public static var defaultValue: [Delegation] { [] }
     
-    let walletId: String
-    let assetId: String
-    
+    private let walletId: String
+    private let assetId: String
+
     public init(walletId: String, assetId: String) {
         self.walletId = walletId
         self.assetId = assetId
     }
-    
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[Delegation], Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .map { $0.map{ $0 } }
-            .eraseToAnyPublisher()
-    }
-    
-    private func fetch(_ db: Database) throws -> [Delegation] {
-        return try StakeDelegationRecord
+
+    public func fetch(_ db: Database) throws -> [Delegation] {
+        try StakeDelegationRecord
             .including(optional: StakeDelegationRecord.validator)
             .including(optional: StakeDelegationRecord.price)
             .filter(Columns.StakeDelegation.walletId == walletId)

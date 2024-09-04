@@ -9,8 +9,6 @@ import QRScanner
 import Style
 
 struct ConnectionsScene: View {
-    
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorMessage: String?

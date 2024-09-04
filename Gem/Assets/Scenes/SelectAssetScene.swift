@@ -7,8 +7,6 @@ import GRDBQuery
 import Style
 
 struct SelectAssetScene: View {
-
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
@@ -30,8 +28,8 @@ struct SelectAssetScene: View {
         isPresentingAddToken: Binding<Bool>
     ) {
         _model = StateObject(wrappedValue: model)
-        _assets = Query(model.assetRequest, in: \.db.dbQueue)
-        _assetInfo =  Query(model.assetsInfoRequest, in: \.db.dbQueue)
+        _assets = Query(model.assetRequest)
+        _assetInfo =  Query(model.assetsInfoRequest)
         self.isPresentingAddToken = isPresentingAddToken
     }
     
