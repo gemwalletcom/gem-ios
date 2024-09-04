@@ -32,6 +32,9 @@ struct AddTokenScene: View {
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .onAppear {
+            focusedField = .address
+        }
         .onChange(of: model.input.address, onAddressClean)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
@@ -64,22 +67,17 @@ extension AddTokenScene {
                 }
             }
             Section {
-                VStack {
-                    HStack {
-                        FloatTextField(model.addressTitleField, text: model.addressBinding)
-                            .textFieldStyle(.plain)
-                            .focused($focusedField, equals: .address)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .submitLabel(.search)
-                            .onSubmit(fetch)
-                        Spacer()
-                        HStack(spacing: Spacing.medium) {
-                            ListButton(image: model.pasteImage, action: onSelectPaste)
-                            ListButton(image: model.qrImage, action: onSelectScan)
-                        }
+                FloatTextField(model.addressTitleField, text: model.addressBinding) {
+                    HStack(spacing: Spacing.medium) {
+                        ListButton(image: model.pasteImage, action: onSelectPaste)
+                        ListButton(image: model.qrImage, action: onSelectScan)
                     }
                 }
+                .focused($focusedField, equals: .address)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .submitLabel(.search)
+                .onSubmit(fetch)
             }
             switch model.state {
             case .noData:

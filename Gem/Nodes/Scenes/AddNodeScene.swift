@@ -31,6 +31,9 @@ struct AddNodeScene: View {
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .onAppear {
+            focusedField = .address
+        }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
@@ -63,20 +66,17 @@ extension AddNodeScene {
     @ViewBuilder
     private var inputView: some View {
         Section {
-            HStack {
-                FloatTextField(model.inputFieldTitle, text: $model.urlInput)
-                    .textFieldStyle(.plain)
-                    .focused($focusedField, equals: .address)
-                    .textInputAutocapitalization(.never)
-                    .autocorrectionDisabled()
-                    .submitLabel(.search)
-                    .onSubmit(onSubmitUrl)
-                Spacer()
+            FloatTextField(model.inputFieldTitle, text: $model.urlInput) {
                 HStack(spacing: Spacing.medium) {
                     ListButton(image: Image(systemName: SystemImage.paste), action: onSelectPaste)
                     ListButton(image: Image(systemName: SystemImage.qrCode), action: onSelectScan)
                 }
             }
+            .focused($focusedField, equals: .address)
+            .autocorrectionDisabled()
+            .textInputAutocapitalization(.never)
+            .submitLabel(.search)
+            .onSubmit(onSubmitUrl)
         }
         if case let .error(error) = model.state {
             ListItemErrorView(errorTitle: model.errorTitle, error: error)
