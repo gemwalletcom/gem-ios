@@ -256,3 +256,5 @@
 "common.pin" = "Закрепить";
 "common.pinned" = "Закрепленные";
 "common.unpin" = "Открепить";
+"filter.clear" = "Очистить";
+"filter.title" = "Фильтры";

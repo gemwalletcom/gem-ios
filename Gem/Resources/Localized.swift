@@ -316,6 +316,12 @@ internal enum Localized {
     /// Slow
     internal static let slow = Localized.tr("Localizable", "fee_rates.slow", fallback: "Slow")
   }
+  internal enum Filter {
+    /// Clear
+    internal static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
+    /// Filters
+    internal static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
+  }
   internal enum Library {
     /// Select from Photo Library
     internal static let selectFromPhotoLibrary = Localized.tr("Localizable", "library.select_from_photo_library", fallback: "Select from Photo Library")

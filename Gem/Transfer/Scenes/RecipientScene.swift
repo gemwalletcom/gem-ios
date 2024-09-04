@@ -38,14 +38,8 @@ struct RecipientScene: View {
         VStack {
             List {
                 Section {
-                    HStack {
-                        FloatTextField(model.recipientField, text: $address)
-                            .textFieldStyle(.plain)
-                            .focused($focusedField, equals: .address)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        Spacer()
-                        HStack(spacing: 12) {
+                    FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                        HStack(spacing: Spacing.large/2) {
                             NameRecordView(
                                 model: NameRecordViewModel(chain: model.asset.chain),
                                 state: $nameResolveState,
@@ -59,20 +53,22 @@ struct RecipientScene: View {
                             }
                         }
                     }
-                    
+                    .focused($focusedField, equals: .address)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                 }
+
                 if model.showMemo {
-                    HStack {
-                        FloatTextField(model.memoField, text: $memo)
-                            .focused($focusedField, equals: .memo)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        Spacer()
+                    FloatTextField(model.memoField, text: $memo) {
                         ListButton(image: Image(systemName: SystemImage.qrCode)) {
                             isPresentingScanner = .memo
                         }
                     }
+                    .focused($focusedField, equals: .memo)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
                 }
+
                 if !model.getRecipient(by: .wallets).isEmpty {
                     Section {
                         ForEach(model.getRecipient(by: .wallets)) { recipient in
@@ -104,6 +100,9 @@ struct RecipientScene: View {
             .buttonStyle(.blue())
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
+        }
+        .onAppear {
+            focusedField = .address
         }
         .background(Colors.grayBackground)
         .sheet(item: $isPresentingScanner) { value in
