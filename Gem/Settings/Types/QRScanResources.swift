@@ -9,5 +9,5 @@ struct QRScanResources: QRScannerResources {
     var tryAgain: String { Localized.Common.tryAgain }
 
     var dismissSystemImage: String { SystemImage.chevronDown }
-    var gallerySystemImage: String { SystemImage.gallery }
+    var gallerySystemImage: String { SystemImage.photo }
 }
