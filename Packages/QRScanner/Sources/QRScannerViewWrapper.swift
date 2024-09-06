@@ -32,13 +32,10 @@ extension QRScannerViewWrapper: UIViewControllerRepresentable {
             recognizedDataTypes: [.barcode(symbologies: [.qr])],
             qualityLevel: .accurate,
             recognizesMultipleItems: false,
-            isHighFrameRateTrackingEnabled: false,
-            isGuidanceEnabled: false,
-            isHighlightingEnabled: false
+            isHighFrameRateTrackingEnabled: true,
+            isHighlightingEnabled: true
         )
         dataScannerVC.delegate = context.coordinator
-        
-        try? dataScannerVC.startScanning()
 
         return dataScannerVC
     }
@@ -68,19 +65,25 @@ extension QRScannerViewWrapper {
         init(_ parent: QRScannerViewWrapper) {
             self.parent = parent
         }
+
+        func didAddItem(item: RecognizedItem) {
+            guard case .barcode(let barcode) = item else { return }
+
+            if let code = barcode.payloadStringValue {
+                parent.scanResult(.success(code))
+            } else {
+                parent.scanResult(.failure(QRScannerError.decoding))
+            }
+        }
     }
 }
 
 // MARK: - DataScannerViewControllerDelegate
 
 extension QRScannerViewWrapper.Coordinator: DataScannerViewControllerDelegate {
-    func dataScanner(_ dataScanner: DataScannerViewController, didTapOn item: RecognizedItem) {
-        guard case .barcode(let barcode) = item else { return }
-
-        if let code = barcode.payloadStringValue {
-            parent.scanResult(.success(code))
-        } else {
-            parent.scanResult(.failure(QRScannerError.decoding))
+    func dataScanner(_ dataScanner: DataScannerViewController, didAdd addedItems: [RecognizedItem], allItems: [RecognizedItem]) {
+        if let item = addedItems.first {
+            didAddItem(item: item)
         }
     }
 }
