@@ -5,14 +5,14 @@ import Components
 
 struct StakeDetailScene: View {
     
-    let model: StakeDetailViewModel
-    
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
 
-    @State var recipientData: AmountRecipientData?
-    
+    let model: StakeDetailViewModel
+
+    @State var amountInput: AmountInput?
+
     var body: some View {
         List {
             Section {
@@ -34,42 +34,40 @@ struct StakeDetailScene: View {
                 Section(Localized.Common.manage) {
                     if model.isStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Stake.title)) {
-                            self.recipientData = try? model.stakeRecipientData()
+                            self.amountInput = try? model.stakeRecipientData()
                         }
                     }
                     if model.isUnstakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Unstake.title)) {
-                            self.recipientData = try? model.unstakeRecipientData()
+                            self.amountInput = try? model.unstakeRecipientData()
                         }
                     }
                     if model.isRedelegateAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Redelegate.title)) {
-                            self.recipientData = try? model.redelegateRecipientData()
+                            self.amountInput = try? model.redelegateRecipientData()
                         }
                     }
                     if model.isWithdrawStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Withdraw.title)) {
-                            self.recipientData = try? model.withdrawStakeRecipientData()
+                            self.amountInput = try? model.withdrawStakeRecipientData()
                         }
                     }
                 }
             }
         }
         .navigationTitle(model.title)
-        .navigationDestination(for: $recipientData) {
+        .navigationDestination(for: $amountInput) {
             AmountScene(
                 model: AmounViewModel(
-                    amountRecipientData: $0,
+                    input: $0,
                     wallet: model.wallet,
                     keystore: keystore,
                     walletsService: walletsService,
-                    stakeService: stakeService,
-                    currentValidator: model.recommendedValidator(address: $0.data.recipient.address)
+                    stakeService: stakeService
                 )
             )
         }
     }
-    
 }
 
 //#Preview {

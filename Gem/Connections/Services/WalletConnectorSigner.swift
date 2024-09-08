@@ -121,7 +121,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                     asset: chain.asset,
                     recipient: Recipient(name: .none, address: address, memo: .none)
                 ),
-                value: value
+                value: value,
+                canChangeValue: false
             )
             
             return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
@@ -132,7 +133,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                     asset: chain.asset,
                     recipient: Recipient(name: .none, address: "", memo: .none)
                 ),
-                value: .zero
+                value: .zero,
+                canChangeValue: false
             )
             return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
         }

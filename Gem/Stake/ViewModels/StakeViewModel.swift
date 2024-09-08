@@ -13,7 +13,7 @@ class StakeViewModel {
     let wallet: Wallet
 
     var transferData: TransferData?
-    var recipientData: AmountRecipientData?
+    var amountInput: AmountInput?
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
@@ -22,13 +22,15 @@ class StakeViewModel {
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
 
-    init(wallet: Wallet, chain: Chain, stakeService: StakeService) {
+    init(
+        wallet: Wallet,
+        chain: Chain,
+        stakeService: StakeService
+    ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
     }
-
-    static let stakeMemo = Localized.Stake.viagem
 
     var title: String { Localized.Transfer.Stake.title }
 
@@ -95,19 +97,20 @@ class StakeViewModel {
             type: .stake(chain.asset, .rewards(validators: validators)),
             recipientData: RecipientData(
                 asset: chain.asset,
-                recipient: Recipient(name: .none, address: "", memo: StakeViewModel.stakeMemo)
+                recipient: Recipient(name: .none, address: "", memo: .none)
             ),
-            value: value
+            value: value,
+            canChangeValue: false
         )
     }
 
-    func stakeRecipientData() throws -> AmountRecipientData {
-        AmountRecipientData(
-            type: .stake(validators: try stakeService.getActiveValidators(assetId: chain.assetId)),
-            data: RecipientData(
-                asset: chain.asset,
-                recipient: Recipient(name: "", address: "", memo: Self.stakeMemo)
-            )
+    func stakeRecipientData() throws -> AmountInput {
+        AmountInput(
+            type: .stake(
+                validators: try stakeService.getActiveValidators(assetId: chain.assetId),
+                recommendedValidator: recommendedCurrentValidator
+            ),
+            asset: chain.asset
         )
     }
 }

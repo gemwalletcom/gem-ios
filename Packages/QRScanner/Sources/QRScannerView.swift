@@ -61,8 +61,7 @@ public struct QRScannerView: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: model.resources.dismissSystemImage)
-                        .bold()
+                    Text(model.resources.dismissText)
                 }
             }
         }

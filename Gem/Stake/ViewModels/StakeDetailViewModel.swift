@@ -97,53 +97,38 @@ struct StakeDetailViewModel {
         return try? service.store.getValidator(assetId: asset.id, validatorId: validatorId)
     }
     
-    func recommendedValidator(address: String) -> DelegationValidator? {
-        if !address.isEmpty {
-            return try? service.store.getValidator(assetId: asset.id, validatorId: address)
-        }
-        return recommendedCurrentValidator
-    }
-    
-    func stakeRecipientData() throws -> AmountRecipientData {
-        AmountRecipientData(
-            type: .stake(validators: try service.getActiveValidators(assetId: asset.id)),
-            data: RecipientData(
-                asset: asset,
-                recipient: Recipient(name: "", address: model.delegation.base.validatorId, memo: StakeViewModel.stakeMemo)
-            )
+    func stakeRecipientData() throws -> AmountInput {
+        AmountInput(
+            type: .stake(
+                validators: try service.getActiveValidators(assetId: asset.id),
+                recommendedValidator: model.delegation.validator
+            ),
+            asset: asset
         )
     }
     
-    func unstakeRecipientData() throws -> AmountRecipientData {
-        AmountRecipientData(
+    func unstakeRecipientData() throws -> AmountInput {
+        AmountInput(
             type: .unstake(delegation: model.delegation),
-            data: RecipientData(
-                asset: asset,
-                recipient: Recipient(name: "", address: "", memo: StakeViewModel.stakeMemo)
-            )
+            asset: asset
         )
     }
     
-    func redelegateRecipientData() throws -> AmountRecipientData {
-        return AmountRecipientData(
+    func redelegateRecipientData() throws -> AmountInput {
+        AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
-                validators: try service.store.getValidators(assetId: asset.id)
+                validators: try service.store.getValidators(assetId: asset.id),
+                recommendedValidator: recommendedCurrentValidator
             ),
-            data: RecipientData(
-                asset: asset,
-                recipient: Recipient(name: "", address: "", memo: StakeViewModel.stakeMemo)
-            )
+            asset: asset
         )
     }
     
-    func withdrawStakeRecipientData() throws -> AmountRecipientData {
-        return AmountRecipientData(
+    func withdrawStakeRecipientData() throws -> AmountInput {
+        AmountInput(
             type: .withdraw(delegation: model.delegation),
-            data: RecipientData(
-                asset: asset,
-                recipient: Recipient(name: "", address: "", memo: .none)
-            )
+            asset: asset
         )
     }
 }

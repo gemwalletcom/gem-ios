@@ -19,7 +19,8 @@ public struct TranferAmountInput {
     public let assetFee: Asset
     public let assetFeeBalance: Balance
     public let fee: BigInt
-    
+    public let canChangeValue: Bool
+
     public init(
         asset: Asset,
         assetBalance: Balance,
@@ -27,7 +28,8 @@ public struct TranferAmountInput {
         availableValue: BigInt,
         assetFee: Asset,
         assetFeeBalance: Balance,
-        fee: BigInt
+        fee: BigInt,
+        canChangeValue: Bool
     ) {
         self.asset = asset
         self.assetBalance = assetBalance
@@ -36,6 +38,7 @@ public struct TranferAmountInput {
         self.assetFee = assetFee
         self.assetFeeBalance = assetFeeBalance
         self.fee = fee
+        self.canChangeValue = canChangeValue
     }
     
     public var isMaxValue: Bool {

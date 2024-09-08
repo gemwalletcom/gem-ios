@@ -20,6 +20,7 @@ struct WalletScene: View {
     @Environment(\.isWalletsPresented) private var isWalletsPresented
     @Environment(\.nodeService) private var nodeService
     @Environment(\.bannerService) private var bannerService
+    @Environment(\.stakeService) private var stakeService
 
     @Query<TotalValueRequest>
     private var fiatValue: Double
@@ -37,7 +38,6 @@ struct WalletScene: View {
     var dbWallet: Wallet?
 
     @State private var isPresentingSelectType: SelectAssetType? = nil
-    @State private var isPresentingAssetSelectType: SelectAssetInput? = nil
     
     let model: WalletSceneViewModel
 
@@ -71,9 +71,7 @@ struct WalletScene: View {
             .listRowInsets(.zero)
 
             Section {
-                BannerView(banners: banners) { banner in
-                    Task { try bannerService.closeBanner(banner: banner) }
-                }
+                BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)
             }
 
             if !assetsPinned.isEmpty {
@@ -154,113 +152,6 @@ struct WalletScene: View {
                 }
             }
         }
-        .sheet(item: $isPresentingAssetSelectType) { selectType in
-            NavigationStack {
-                switch selectType.type {
-                case .send:
-                    RecipientScene(
-                        model: RecipientViewModel(
-                            wallet: model.wallet,
-                            keystore: keystore,
-                            walletsService: walletsService,
-                            assetModel: AssetViewModel(asset: selectType.asset)
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(Localized.Common.done) {
-                                isPresentingAssetSelectType = nil
-                            }.bold()
-                        }
-                    }
-                    .navigationBarTitleDisplayMode(.inline)
-                case .receive:
-                    ReceiveScene(
-                        model: ReceiveViewModel(
-                            assetModel: AssetViewModel(asset: selectType.asset),
-                            walletId: model.wallet.walletId,
-                            address: selectType.address,
-                            walletsService: walletsService
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(Localized.Common.done) {
-                                isPresentingAssetSelectType = nil
-                            }.bold()
-                        }
-                    }
-                case .buy:
-                    BuyAssetScene(
-                        model: BuyAssetViewModel(
-                            assetAddress: selectType.assetAddress,
-                            input: .default
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(Localized.Common.done) {
-                                isPresentingAssetSelectType = nil
-                            }.bold()
-                        }
-                    }
-                case .swap:
-                    SwapScene(
-                        model: SwapViewModel(
-                            wallet: model.wallet,
-                            assetId: selectType.asset.id,
-                            walletsService: walletsService,
-                            swapService: SwapService(nodeProvider: nodeService),
-                            keystore: keystore
-                        )
-                    )
-                    .navigationBarTitleDisplayMode(.inline)
-                    .toolbar {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(Localized.Common.done) {
-                                isPresentingAssetSelectType = nil
-                            }.bold()
-                        }
-                    }
-                case .stake:
-                    StakeScene(model: StakeViewModel(wallet: model.wallet, chain: selectType.asset.id.chain, stakeService: walletsService.stakeService))
-                        .navigationBarTitleDisplayMode(.inline)
-                        .toolbar {
-                            ToolbarItem(placement: .navigationBarLeading) {
-                                Button(Localized.Common.done) {
-                                    isPresentingAssetSelectType = nil
-                                }.bold()
-                            }
-                        }
-                case .manage, .hidden:
-                    EmptyView()
-                }
-            }
-        }
-        .navigationDestination(for: TransactionExtended.self) { transaction in
-            TransactionScene(
-                input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
-            )
-        }
-        .navigationDestination(for: Scenes.Asset.self) {
-            AssetScene(
-                wallet: model.wallet,
-                input: AssetSceneInput(walletId: model.wallet.walletId, assetId: $0.asset.id),
-                isPresentingAssetSelectType: $isPresentingAssetSelectType
-            )
-        }
-        .navigationDestination(for: Scenes.Price.self) { scene in
-            ChartScene(model: ChartsViewModel(
-                    walletId: model.wallet.walletId,
-                    priceService: walletsService.priceService,
-                    assetsService: walletsService.assetsService,
-                    assetModel: AssetViewModel(asset: scene.asset)
-                )
-            )
-        }
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: model.wallet, fetch)
         .taskOnce(fetch)
@@ -282,5 +173,18 @@ struct WalletScene: View {
                 NSLog("fetch error: \(error)")
             }
         }
+    }
+}
+
+// MARK: - Actions
+
+extension WalletScene {
+
+    private func onBannerAction(banner: Banner) {
+        //
+    }
+
+    private func onBannerClose(banner: Banner) {
+        Task { try bannerService.closeBanner(banner: banner) }
     }
 }

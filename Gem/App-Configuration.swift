@@ -236,7 +236,7 @@ extension RecipientData {
 }
 
 extension TransferData {
-    static let main = TransferData(type: .transfer(.main), recipientData: .main, value: .zero)
+    static let main = TransferData(type: .transfer(.main), recipientData: .main, value: .zero, canChangeValue: true)
 }
 
 extension TransferDataMetadata {

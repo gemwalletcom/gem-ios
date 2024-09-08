@@ -9,11 +9,14 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.nodeService) private var nodeService
+    @Environment(\.walletsService) private var walletsService
 
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
 
     @State private var model: SelectAssetViewModel
+    @State private var navigationPath = NavigationPath()
 
     init(model: SelectAssetViewModel) {
         _model = State(wrappedValue: model)
@@ -21,7 +24,11 @@ struct SelectAssetSceneNavigationStack: View {
 
     var body: some View {
         NavigationStack {
-            SelectAssetScene(model: model, isPresentingAddToken: $isPresentingAddToken)
+            SelectAssetScene(
+                model: model,
+                isPresentingAddToken: $isPresentingAddToken,
+                navigationPath: $navigationPath
+            )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
