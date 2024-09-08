@@ -38,6 +38,7 @@ public struct SystemImage {
     public static let unpin = "pin.slash"
     public static let filter = "line.horizontal.3.decrease.circle"
     public static let filterFill = "line.horizontal.3.decrease.circle.fill"
+    public static let book = "book"
 }
 
 // MARK: - Previews
@@ -78,6 +79,7 @@ public struct SystemImage {
         (SystemImage.unpin, "Unpin"),
         (SystemImage.filter, "Filter"),
         (SystemImage.filterFill, "Filter Fill"),
+        (SystemImage.book, "book"),
     ]
 
     return List {

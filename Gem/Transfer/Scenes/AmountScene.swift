@@ -14,6 +14,7 @@ struct AmountScene: View {
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingScanner: AmountScene.Field?
+    @State private var isPresentingContacts: Bool = false
 
     // focus
     enum Field: Int, Hashable, Identifiable {
@@ -98,6 +99,9 @@ struct AmountScene: View {
                                 ListButton(image: Image(systemName: SystemImage.qrCode)) {
                                     isPresentingScanner = .address
                                 }
+//                                ListButton(image: Image(systemName: SystemImage.book)) {
+//                                    isPresentingContacts = true
+//                                }
                             }
                         }
                         .focused($focusedField, equals: .address)
@@ -194,6 +198,12 @@ struct AmountScene: View {
             ScanQRCodeNavigationStack() {
                 onHandleScan($0, for: value)
             }
+        }
+        .sheet(isPresented: $isPresentingContacts) {
+            ContactsNavigationStack(
+                wallet: model.wallet,
+                asset: model.asset
+            )
         }
         .navigationDestination(for: $transferData) {
             ConfirmTransferScene(

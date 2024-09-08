@@ -522,6 +522,7 @@
 		D8C4A3722C8CE1EA006FABE8 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
 		D8C4A3742C8CE87C006FABE8 /* AmountNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */; };
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */; };
+		D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
 		D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */; };
 		D8CD362B2C647D0300E18764 /* ChartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362A2C647D0300E18764 /* ChartSelection.swift */; };
 		D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */; };
@@ -846,6 +847,7 @@
 		D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationFlow.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationFlow.swift; sourceTree = "<group>"; };
+		D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavigationStack.swift; sourceTree = "<group>"; };
 		D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeViewModel.swift; sourceTree = "<group>"; };
 		D8CD362A2C647D0300E18764 /* ChartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSelection.swift; sourceTree = "<group>"; };
 		D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyViewModel.swift; sourceTree = "<group>"; };
@@ -1901,6 +1903,7 @@
 			children = (
 				D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */,
 				D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */,
+				D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -2428,6 +2431,7 @@
 				C3E99BCF2A787A8D005DF35F /* RateService.swift in Sources */,
 				835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */,
 				D848B5A32AE843B800814FB4 /* AssetTitleView.swift in Sources */,
+				D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */,
 				D8C4A36C2C8CDB86006FABE8 /* TransferNavigationStack.swift in Sources */,
 				C3549B4129C51BCE00B4BE01 /* BalanceViewModel.swift in Sources */,
 				D890F79F2C7D216400C26819 /* WalletService.swift in Sources */,
@@ -3307,7 +3311,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.39;
+				MARKETING_VERSION = 1.3.42;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.dev;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.gemwallet.ios;
@@ -3357,7 +3361,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.39;
+				MARKETING_VERSION = 1.3.42;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.dev;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.gemwallet.ios;
