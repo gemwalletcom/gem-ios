@@ -89,9 +89,6 @@ class SettingsViewModel: ObservableObject {
     var aboutUsTitle: String { Localized.Settings.aboutus }
     var aboutUsImage: Image { Image(.settingsGem) }
 
-    var rateAppTitle: String { Localized.Settings.rateApp }
-    var rateAppImage: Image { Image(.settingsRate) }
-
     var developerModeTitle: String { Localized.Settings.developer }
     var developerModeImage: Image { Image(.settingsDeveloper) }
 
