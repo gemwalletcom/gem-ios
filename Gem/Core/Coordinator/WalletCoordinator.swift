@@ -58,7 +58,7 @@ struct WalletCoordinator: View {
 
     @State var transferData: TransferDataCallback<TransferData>? // wallet connector
     @State var signMessage: TransferDataCallback<SignMessagePayload>? // wallet connector
-    @State var connectionProposal: TransferDataCallback<WalletConnectionSessionProposal>? // wallet connector
+    @State var connectionProposal: TransferDataCallback<WCPairingProposal>? // wallet connector
 
     init(
         db: DB
@@ -254,8 +254,9 @@ struct WalletCoordinator: View {
             NavigationStack {
                 ConnectionProposalScene(
                     model: ConnectionProposalViewModel(
+                        connectionsService: connectionsService,
                         confirmTransferDelegate: data.delegate,
-                        payload: data.payload,
+                        pairingProposal: data.payload,
                         wallets: keystore.wallets
                     )
                 )

@@ -5,8 +5,8 @@ import WalletConnector
 import Primitives
 
 struct WalletConnectorInteractor: WalletConnectorInteractable {
-    func sessionApproval(payload: WalletConnectionSessionProposal) async throws -> Bool {
-        return true
+    func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
+        return WalletId(id: "")
     }
     
     func signMessage(payload: SignMessagePayload) async throws -> String {

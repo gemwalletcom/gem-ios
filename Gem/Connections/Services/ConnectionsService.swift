@@ -35,7 +35,7 @@ class ConnectionsService {
     
     func addConnectionURI(uri: String, wallet: Wallet) async throws {
         let id = try await connector.addConnectionURI(uri: uri)
-        let chains = try signer.getChains()
+        let chains = signer.getChains(wallet: wallet)
         let session = WalletConnectionSession.started(id: id, chains: chains)
         let connection = WalletConnection(
             session: session,
@@ -43,7 +43,11 @@ class ConnectionsService {
         )
         try? self.store.addConnection(connection)
     }
-    
+
+    func updateConnection(id: String, wallet: WalletId) throws {
+        try store.updateConnection(id: id, with: wallet)
+    }
+
     func disconnect(sessionId: String) async throws {
         try store.delete(ids: [sessionId])
         try await connector.disconnect(sessionId: sessionId)

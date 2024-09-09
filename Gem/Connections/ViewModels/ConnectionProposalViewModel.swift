@@ -2,23 +2,27 @@
 
 import Foundation
 import Primitives
+import WalletConnector
 
 struct ConnectionProposalViewModel {
+    private let connectionsService: ConnectionsService
     private let confirmTransferDelegate: ConfirmTransferDelegate
-    private let payload: WalletConnectionSessionProposal
+    private let pairingProposal: WCPairingProposal
 
     var walletSelectorModel: WalletSelectorViewModel
 
     init(
+        connectionsService: ConnectionsService,
         confirmTransferDelegate: @escaping ConfirmTransferDelegate,
-        payload: WalletConnectionSessionProposal,
+        pairingProposal: WCPairingProposal,
         wallets: [Wallet]
     ) {
+        self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
-        self.payload = payload
+        self.pairingProposal = pairingProposal
         self.walletSelectorModel = WalletSelectorViewModel(
             wallets: wallets,
-            selectedWallet: payload.wallet
+            selectedWallet: pairingProposal.proposal.wallet
         )
     }
     
@@ -43,12 +47,20 @@ struct ConnectionProposalViewModel {
     var imageUrl: URL? {
         URL(string: payload.metadata.icon)
     }
+
+    private var payload: WalletConnectionSessionProposal {
+        pairingProposal.proposal
+    }
 }
 
 // MARK: - Business Logic
 
 extension ConnectionProposalViewModel {
     func accept() throws {
-        confirmTransferDelegate(.success(""))
+        let selectedWalletId = walletSelectorModel.walletModel.wallet.walletId
+        if payload.wallet.walletId != selectedWalletId {
+            try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
+        }
+        confirmTransferDelegate(.success(selectedWalletId.id))
     }
 }

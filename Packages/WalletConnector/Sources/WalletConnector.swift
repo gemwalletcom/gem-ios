@@ -87,8 +87,6 @@ extension WalletConnector {
 
 // MARK: - Private
 
-// MARK: - Sessions
-
 extension WalletConnector {
     private func handleSessions() async {
         for await sessions in interactor.sessionsStream {
@@ -106,7 +104,7 @@ extension WalletConnector {
             NSLog("Session proposal received: \(session)")
             Task {
                 do {
-                    try await acceptProposal(proposal: session.proposal)
+                    try await processSession(proposal: session.proposal)
                 } catch {
                     NSLog("Error accepting proposal: \(error)")
                     try signer.sessionReject(id: session.proposal.pairingTopic, error: error)
@@ -131,7 +129,7 @@ extension WalletConnector {
         guard let method = WalletConnectionMethods(rawValue: request.method) else {
             throw(AnyError("unresolved method: \(request.method)"))
         }
-        guard let chain = try self.signer.getChains().filter({ $0.blockchain == request.chainId }).first else {
+        guard let chain = signer.allChains.filter({ $0.blockchain == request.chainId }).first else {
             throw(AnyError("unresolved chain: \(request.chainId)"))
         }
 
@@ -139,7 +137,7 @@ extension WalletConnector {
         NSLog("handleMethod received params: \(request.params) ")
 
         do {
-            let response = try await self.handleMethod(method: method, chain: chain, request: request)
+            let response = try await handleMethod(method: method, chain: chain, request: request)
             NSLog("handleMethod result: \(method) \(response)")
             try await Web3Wallet.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
@@ -176,12 +174,32 @@ extension WalletConnector {
         }
     }
 
-    private func acceptProposal(proposal: Session.Proposal) async throws {
-        let wallet = try signer.getWallet()
-        let chains = try signer.getChains()
-        let accounts = try signer.getAccounts().filter { chains.contains($0.chain) }
-        let events = try signer.getEvents()
-        let methods = try signer.getMethods()
+    private func processSession(proposal: Session.Proposal) async throws {
+        var wallet = try signer.getCurrentWallet()
+
+        let chains = signer.getChains(wallet: wallet)
+        let accounts = signer.getAccounts(wallet: wallet, chains: chains)
+
+        let payload = WalletConnectionSessionProposal(
+            wallet: wallet,
+            accounts: accounts,
+            metadata: proposal.proposer.metadata
+        )
+
+        let payloadTopic = WCPairingProposal(pairingId: proposal.pairingTopic, proposal: payload)
+        let approvedWalletId = try await signer.sessionApproval(payload: payloadTopic)
+
+        if wallet.walletId != approvedWalletId {
+            wallet = try signer.getWallet(id: approvedWalletId)
+        }
+        try await acceptProposal(proposal: proposal, wallet: wallet)
+    }
+
+    private func acceptProposal(proposal: Session.Proposal, wallet: Wallet) async throws {
+        let chains = signer.getChains(wallet: wallet)
+        let accounts = signer.getAccounts(wallet: wallet, chains: chains)
+        let events = signer.getEvents()
+        let methods = signer.getMethods()
         let supportedAccounts = accounts.compactMap { $0.blockchain }
         let supportedChains = chains.compactMap { $0.blockchain }
 
@@ -192,18 +210,11 @@ extension WalletConnector {
             events: events.map { $0.rawValue },
             accounts: supportedAccounts
         )
-        let payload = WalletConnectionSessionProposal(
-            wallet: wallet,
-            accounts: accounts,
-            metadata: proposal.proposer.metadata
-        )
-        let _ = try await signer.sessionApproval(payload: payload)
         let _ = try await Web3Wallet.instance.approve(
             proposalId: proposal.id,
             namespaces: sessionNamespaces,
             sessionProperties: proposal.sessionProperties
         )
-        //try await Pair.instance.disconnect(topic: proposal.pairingTopic)
     }
 
     private func ethSign(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
