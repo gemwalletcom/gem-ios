@@ -5,19 +5,22 @@ import Blockchain
 import Style
 import Components
 import Primitives
+import GemstonePrimitives
 
 struct AmountScene: View {
 
     @StateObject var model: AmounViewModel
-
     @Environment(\.nodeService) private var nodeService
 
-    @State var amount: String = ""
     @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingScanner: AmountScene.Field?
+    @State private var isPresentingContacts: Bool = false
 
     // focus
-    private enum Field: Int, Hashable, Identifiable {
+    enum Field: Int, Hashable, Identifiable {
         case amount
+        case address
+        case memo
         var id: String { String(rawValue) }
     }
     @FocusState private var focusedField: Field?
@@ -25,6 +28,12 @@ struct AmountScene: View {
     // next scene
     @State var transferData: TransferData?
     @State var delegation: DelegationValidator?
+
+    @State var amount: String = ""
+    @State var address: String = ""
+    @State var memo: String = ""
+
+    @State var nameResolveState: NameRecordState = .none
 
     var body: some View {
         UITextField.appearance().clearButtonMode = .never
@@ -73,16 +82,65 @@ struct AmountScene: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets())
 
-                if let validator = model.currentValidator  {
-                    Section(Localized.Stake.validator) {
-                        //TODO: Use this, other option does not work for some reason
-                        /*
-                        NavigationLink(value: Scenes.Validators()) {
-                            ListItemView(title: validator.name, subtitle: .none)
+
+                switch model.type {
+                case .transfer:
+                    Section(Localized.Transfer.Recipient.title) {
+                        FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                            HStack(spacing: Spacing.large/2) {
+                                NameRecordView(
+                                    model: NameRecordViewModel(chain: model.asset.chain),
+                                    state: $nameResolveState,
+                                    address: $address
+                                )
+                                ListButton(image: Image(systemName: SystemImage.paste)) {
+                                    paste(field: .address)
+                                }
+                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                                    isPresentingScanner = .address
+                                }
+//                                ListButton(image: Image(systemName: SystemImage.book)) {
+//                                    isPresentingContacts = true
+//                                }
+                            }
                         }
-                         */
-                        if model.isSelectValidatorEnabled {
-                            NavigationCustomLink(with:
+                        .focused($focusedField, equals: .address)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+
+                        if model.showMemo {
+                            FloatTextField(model.memoField, text: $memo) {
+                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                                    isPresentingScanner = .memo
+                                }
+                            }
+                            .focused($focusedField, equals: .memo)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                        }
+                    }
+                case .stake, .unstake, .redelegate, .withdraw:
+                    if let validator = model.currentValidator  {
+                        Section(Localized.Stake.validator) {
+                            //TODO: Use this, other option does not work for some reason
+                            /*
+                            NavigationLink(value: Scenes.Validators()) {
+                                ListItemView(title: validator.name, subtitle: .none)
+                            }
+                             */
+                            if model.isSelectValidatorEnabled {
+                                NavigationCustomLink(with:
+                                    HStack {
+                                        ValidatorImageView(validator: validator)
+                                        ListItemView(
+                                            title: StakeValidatorViewModel(validator: validator).name,
+                                            subtitle: StakeValidatorViewModel(validator: validator).aprText
+                                        )
+                                    }
+                                ) {
+                                    self.delegation = model.currentValidator
+                                }
+                            } else {
                                 HStack {
                                     ValidatorImageView(validator: validator)
                                     ListItemView(
@@ -90,20 +148,11 @@ struct AmountScene: View {
                                         subtitle: StakeValidatorViewModel(validator: validator).aprText
                                     )
                                 }
-                            ) {
-                                self.delegation = model.currentValidator
-                            }
-                        } else {
-                            HStack {
-                                ValidatorImageView(validator: validator)
-                                ListItemView(
-                                    title: StakeValidatorViewModel(validator: validator).name,
-                                    subtitle: StakeValidatorViewModel(validator: validator).aprText
-                                )
                             }
                         }
                     }
                 }
+
                 if model.isBalanceViewEnabled {
                     Section {
                         VStack {
@@ -145,6 +194,17 @@ struct AmountScene: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
+        .sheet(item: $isPresentingScanner) { value in
+            ScanQRCodeNavigationStack() {
+                onHandleScan($0, for: value)
+            }
+        }
+        .sheet(isPresented: $isPresentingContacts) {
+            ContactsNavigationStack(
+                wallet: model.wallet,
+                asset: model.asset
+            )
+        }
         .navigationDestination(for: $transferData) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
@@ -152,10 +212,11 @@ struct AmountScene: View {
                     keystore: model.keystore,
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: model.amountRecipientData.data.asset.chain),
+                        .service(for: $0.recipientData.asset.chain),
                     walletsService: model.walletsService
                 )
             )
+            .navigationBarTitleDisplayMode(.inline)
         }
         .navigationDestination(for: $delegation) { value in
             StakeValidatorsScene(
@@ -189,9 +250,15 @@ struct AmountScene: View {
     func next() async {
         //TODO: Move validation per field on demand
 
+        next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)
+    }
+
+    func next(amount: String, name: NameRecord?, address: String, memo: String?, canChangeValue: Bool) {
         do {
             let value = try model.isValidAmount(amount: amount)
-            let transfer = try model.getTransferData(value: value)
+            let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
+            let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
+
             transferData = transfer
         } catch {
             isPresentingErrorMessage = error.localizedDescription
@@ -202,5 +269,44 @@ struct AmountScene: View {
         amount = model.maxBalance
 
         focusedField = .none
+    }
+}
+
+// MARK: - Actions
+
+extension AmountScene {
+    private func paste(field: Self.Field) {
+        guard let string = UIPasteboard.general.string else { return }
+        switch field {
+        case .address, .memo, .amount:
+            self.address = string.trim()
+        }
+    }
+
+    private func onHandleScan(_ result: String, for field: Self.Field) {
+        switch field {
+        case .address:
+            do {
+                let result = try model.getTransferDataFromScan(string: result)
+
+                // special case when all data is ready
+                if let amount = result.amount, (model.showMemo ? !memo.isEmpty : true) {
+                    next(amount: amount, name: .none, address: result.address, memo: memo, canChangeValue: false)
+                } else {
+
+                    address = result.address
+                    memo = result.memo ?? ""
+                    amount = result.amount ?? ""
+
+//                    if !address.isEmpty && (model.showMemo ? !memo.isEmpty : true) && !amount.isEmpty {
+//                        self.focusedField = .none
+//                    }
+                }
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+            }
+        case .memo, .amount:
+            memo = result
+        }
     }
 }

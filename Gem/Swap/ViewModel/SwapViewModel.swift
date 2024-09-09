@@ -195,11 +195,17 @@ extension SwapViewModel {
 
     private func getSwapDataOnApprove(fromAsset: Asset, toAsset: Asset, spender: String, spenderName: String) throws -> TransferData {
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(spender: spender, allowance: .MAX_256))
-        let recipientData = RecipientData(asset: fromAsset,
-                                          recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(),
-                                                               memo: .none))
+        let recipientData = RecipientData(
+            asset: fromAsset,
+            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none)
+        )
 
-        return TransferData(type: transferDataType, recipientData: recipientData, value: BigInt.zero)
+        return TransferData(
+            type: transferDataType,
+            recipientData: recipientData,
+            value: BigInt.zero,
+            canChangeValue: false
+        )
     }
 
     private func getSwapData(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> TransferData {
@@ -214,7 +220,7 @@ extension SwapViewModel {
         let recepientData = RecipientData(asset: fromAsset,
                                           recipient: Recipient(name: quote.provider.name, address: data.to, memo: .none))
 
-        return TransferData(type: transferDataType, recipientData: recepientData, value: amount)
+        return TransferData(type: transferDataType, recipientData: recepientData, value: amount, canChangeValue: false)
     }
 
     private func quote(fromAsset: Asset, toAsset: Asset, amount: String, includeData: Bool) async throws -> SwapQuote {

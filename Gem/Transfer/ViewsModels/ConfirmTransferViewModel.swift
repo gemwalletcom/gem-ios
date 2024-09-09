@@ -235,7 +235,8 @@ extension ConfirmTransferViewModel {
                     availableValue: availableValue,
                     assetFee: dataModel.asset.feeAsset,
                     assetFeeBalance: Balance(available: metaData.assetFeeBalance),
-                    fee: fee.totalFee
+                    fee: fee.totalFee,
+                    canChangeValue: dataModel.data.canChangeValue
                 )
             )
 

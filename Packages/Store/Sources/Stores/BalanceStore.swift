@@ -114,6 +114,7 @@ public struct BalanceStore {
         }
     }
 
+    @discardableResult
     public func pinAsset(walletId: String, assetId: String, value: Bool) throws -> Int {
         try db.write { db in
             return try AssetBalanceRecord

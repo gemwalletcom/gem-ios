@@ -118,14 +118,6 @@ extension SettingsScene {
                 )
             }
 
-            NavigationCustomLink(
-                with: ListItemView(
-                    title: model.rateAppTitle,
-                    image: model.rateAppImage
-                ),
-                action: onSelectRateApp
-            )
-
             if model.isDeveloperEnabled {
                 NavigationLink(value: Scenes.Developer()) {
                     ListItemView(
@@ -161,11 +153,6 @@ extension SettingsScene {
     @MainActor
     private func onEnableDevSettings() {
         model.isDeveloperEnabled.toggle()
-    }
-
-    @MainActor
-    private func onSelectRateApp() {
-        RateService().rate()
     }
 
     @MainActor

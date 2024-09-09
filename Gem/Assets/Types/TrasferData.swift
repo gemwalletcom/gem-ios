@@ -2,6 +2,8 @@ import Foundation
 import Primitives
 import BigInt
 
+typealias TransferDataAction = ((TransferData) -> Void)?
+
 struct Recipient {
     let name: String?
     let address: String
@@ -12,12 +14,6 @@ struct RecipientImport {
     let name: String
     let address: String
 }
-
-struct AmountRecipientData: Equatable {
-    let type: AmountType
-    let data: RecipientData
-}
-extension AmountRecipientData: Hashable {}
 
 extension Recipient: Hashable {}
 
@@ -32,9 +28,15 @@ struct TransferData {
     let type: TransferDataType
     let recipientData: RecipientData
     let value: BigInt
-    
+    let canChangeValue: Bool
+
     func updateValue(_ newValue: BigInt) -> TransferData {
-        return TransferData(type: type, recipientData: recipientData, value: newValue)
+        return TransferData(
+            type: type, 
+            recipientData: recipientData,
+            value: newValue,
+            canChangeValue: canChangeValue
+        )
     }
 }
 

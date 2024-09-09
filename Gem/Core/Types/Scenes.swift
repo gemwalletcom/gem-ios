@@ -17,7 +17,10 @@ struct Scenes {
     struct WalletConnections: Hashable {}
     struct WalletConnectorScene: Hashable {}
     struct Validators: Hashable {}
-    struct Stake: Hashable {}
+    struct Stake: Hashable {
+        let chain: Chain
+        let wallet: Wallet
+    }
     struct WalletConnect: Hashable {}
     struct WalletsSelector: Hashable {}
     struct VerifyPhrase: Hashable {
