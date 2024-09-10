@@ -380,6 +380,8 @@ internal enum Localized {
     internal static func enableValue(_ p1: Any) -> String {
       return Localized.tr("Localizable", "settings.enable_value", String(describing: p1), fallback: "Enable %@")
     }
+    /// Help Center
+    internal static let helpCenter = Localized.tr("Localizable", "settings.help_center", fallback: "Help Center")
     /// Language
     internal static let language = Localized.tr("Localizable", "settings.language", fallback: "Language")
     /// Privacy Policy
@@ -388,6 +390,8 @@ internal enum Localized {
     internal static let rateApp = Localized.tr("Localizable", "settings.rate_app", fallback: "Rate App")
     /// Security
     internal static let security = Localized.tr("Localizable", "settings.security", fallback: "Security")
+    /// Support
+    internal static let support = Localized.tr("Localizable", "settings.support", fallback: "Support")
     /// Terms of Services
     internal static let termsOfServices = Localized.tr("Localizable", "settings.terms_of_services", fallback: "Terms of Services")
     /// Settings

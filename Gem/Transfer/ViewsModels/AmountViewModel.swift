@@ -13,20 +13,17 @@ import GemstonePrimitives
 class AmounViewModel: ObservableObject {
     let input: AmountInput
     let wallet: Wallet
-    let keystore: any Keystore
     let walletsService: WalletsService
     let stakeService: StakeService
 
     public init(
         input: AmountInput,
         wallet: Wallet,
-        keystore: any Keystore,
         walletsService: WalletsService,
         stakeService: StakeService
     ) {
         self.input = input
         self.wallet = wallet
-        self.keystore = keystore
         self.walletsService = walletsService
         self.stakeService = stakeService
 
@@ -90,7 +87,7 @@ class AmounViewModel: ObservableObject {
     }
     
     var title: String {
-        return Localized.Transfer.Amount.title
+        return Localized.Transfer.Send.title
     }
 
     var assetSymbol: String {
@@ -222,13 +219,12 @@ class AmounViewModel: ObservableObject {
             }
             return Recipient(name: .none, address: address, memo: memo)
         }()
-
-        guard isValidAddress(address: recipient.address) else {
-            throw TransferError.invalidAddress(asset: asset)
-        }
-
         switch type {
-        case .transfer: 
+        case .transfer:
+            guard isValidAddress(address: recipient.address) else {
+                throw TransferError.invalidAddress(asset: asset)
+            }
+
             return RecipientData(
                 asset: input.asset,
                 recipient: recipient

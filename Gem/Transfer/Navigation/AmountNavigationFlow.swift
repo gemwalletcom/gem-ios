@@ -26,7 +26,6 @@ struct AmountNavigationFlow: View {
             model: AmounViewModel(
                 input: input,
                 wallet: wallet,
-                keystore: keystore,
                 walletsService: walletsService,
                 stakeService: stakeService
             )

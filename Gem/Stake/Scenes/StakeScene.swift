@@ -39,6 +39,7 @@ struct StakeScene: View {
         .refreshable {
             await model.fetch()
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: $model.transferData) {
             ConfirmTransferScene(
@@ -57,7 +58,6 @@ struct StakeScene: View {
                 model: AmounViewModel(
                     input: $0,
                     wallet: model.wallet,
-                    keystore: keystore,
                     walletsService: walletsService,
                     stakeService: stakeService
                 )

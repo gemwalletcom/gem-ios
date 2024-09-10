@@ -123,6 +123,7 @@ extension ConfirmTransferScene {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
+        .listSectionSpacing(.compact)
     }
 
     private var networkFeeView: some  View {

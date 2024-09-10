@@ -90,6 +90,7 @@ struct ChartScene: View {
             Task { await model.updateAsset() }
             Task { await model.updateCharts() }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
     

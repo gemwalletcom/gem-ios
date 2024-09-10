@@ -258,3 +258,5 @@
 "common.unpin" = "Открепить";
 "filter.clear" = "Очистить";
 "filter.title" = "Фильтры";
+"settings.help_center" = "Центр помощи";
+"settings.support" = "Поддерживать";

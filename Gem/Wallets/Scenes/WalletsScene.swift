@@ -111,7 +111,8 @@ struct WalletsScene: View {
                     role: .destructive,
                     action: { delete(wallet: wallet) }
                 )
-            })
+            }
+        )
         .navigationBarTitle(model.title)
     }
 }

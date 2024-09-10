@@ -61,6 +61,7 @@ struct AssetScene: View {
             Section { } header: {
                 WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
                     .padding(.top, Spacing.small)
+                    .padding(.bottom, Spacing.medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -142,6 +143,7 @@ struct AssetScene: View {
             }
         }
         .taskOnce(onTaskOnce)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }

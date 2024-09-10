@@ -113,6 +113,8 @@ struct ImportWalletScene: View {
                     .listRowBackground(Colors.white)
                 }
             }
+            .listSectionSpacing(.compact)
+
             Spacer()
             Button(Localized.Wallet.Import.action) {
                 Task {
