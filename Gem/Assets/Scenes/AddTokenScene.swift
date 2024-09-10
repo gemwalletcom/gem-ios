@@ -95,9 +95,7 @@ extension AddTokenScene {
                 }
                 if let url = asset.explorerUrl {
                     Section {
-                        NavigationCustomLink(with: ListItemView(title: asset.explorerText)) {
-                            UIApplication.shared.open(url)
-                        }
+                        NavigationOpenLink(url: url, with: ListItemView(title: asset.explorerText))
                     }
                 }
             case .error(let error):

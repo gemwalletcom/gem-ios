@@ -174,8 +174,6 @@ extension BuyAssetScene {
         guard let quote = model.input.quote,
               let url = URL(string: quote.redirectUrl) else { return }
 
-        // TODO: - use new @Environment(\.openURL) var openURL, insead use UIKit UIApplication
-        // currently impossible to use due navigation issues in nav stack
         UIApplication.shared.open(url, options: [:])
     }
 

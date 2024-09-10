@@ -112,16 +112,15 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
-
-            ListItemView(
+            NavigationOpenLink(url: model.helpCenterURL, with: ListItemView(
                 title: model.helpCenterTitle,
                 image: model.helpCenterImage
-            )
+            ))
 
-            ListItemView(
+            NavigationOpenLink(url: model.supportURL, with: ListItemView(
                 title: model.supportTitle,
                 image: model.supportImage
-            )
+            ))
 
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
