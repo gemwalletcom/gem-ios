@@ -247,14 +247,14 @@ extension AmountScene {
                 if let amount = result.amount, (model.showMemo ? !memo.isEmpty : true) {
                     next(amount: amount, name: .none, address: result.address, memo: memo, canChangeValue: false)
                 } else {
-
                     address = result.address
-                    memo = result.memo ?? ""
-                    amount = result.amount ?? ""
-
-//                    if !address.isEmpty && (model.showMemo ? !memo.isEmpty : true) && !amount.isEmpty {
-//                        self.focusedField = .none
-//                    }
+                    
+                    if let memo = result.memo {
+                        self.memo = memo
+                    }
+                    if let amount = result.amount {
+                        self.amount = amount
+                    }
                 }
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
