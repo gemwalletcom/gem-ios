@@ -5,7 +5,12 @@ import Components
 
 struct BuyAssetScene: View {
     @State private var model: BuyAssetViewModel
-    @FocusState private var focusedField: BuyAssetInputField.FiatField?
+    @FocusState private var focusedField: Field?
+
+    enum Field: Int, Hashable, Identifiable {
+        case amount
+        var id: String { String(rawValue) }
+    }
 
     init(model: BuyAssetViewModel) {
         _model = State(initialValue: model)
@@ -14,20 +19,30 @@ struct BuyAssetScene: View {
     var body: some View {
         VStack {
             List {
-                amountInputView
+                CurrencyInputView(
+                    text: $model.amountText,
+                    currencySymbol: model.currencySymbol,
+                    currencyPosition: .leading,
+                    secondaryText: model.cryptoAmountValue,
+                    keyboardType: .numberPad
+                )
+                .padding(.top, Spacing.medium)
+                .listGroupRowStyle()
+                .focused($focusedField, equals: .amount)
+
                 amountSelectorSection
                 providerSection
             }
+            .contentMargins([.top], .zero, for: .scrollContent)
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectContinue
             )
-            .listSectionSpacing(.compact)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
-        .listStyle(.insetGrouped)
+        .listSectionSpacing(.compact)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
@@ -41,11 +56,10 @@ struct BuyAssetScene: View {
             await onTask()
         }
         .onAppear {
-            UITextField.appearance().clearButtonMode = .never
-            focusedField = .fiat
+            focusedField = .amount
         }
         .onChange(of: model.input.amount) { _, _ in
-            focusedField = .fiat
+            focusedField = .amount
         }
         .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
@@ -62,23 +76,6 @@ struct BuyAssetScene: View {
 // MARK: - UI Components
 
 extension BuyAssetScene {
-    private var amountInputView: some View {
-        VStack(alignment: .center, spacing: 0) {
-            BuyAssetInputField(
-                text: $model.amountText,
-                currencySymbol: model.currencySymbol,
-                focusedField: $focusedField
-            )
-            Text(model.cryptoAmountValue)
-                .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: Sizing.list.image)
-        }
-        .frame(maxWidth: .infinity)
-        .listRowInsets(EdgeInsets())
-        .background(Colors.grayBackground)
-        .listRowSeparator(.hidden)
-    }
-
     private var amountSelectorSection: some View {
         Section {
             HStack(spacing: Spacing.small) {

@@ -18,7 +18,6 @@
 		830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA442C224316003DA605 /* NavigationStateManager.swift */; };
 		830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA472C22EEC4003DA605 /* TabItem.swift */; };
 		8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */; };
-		831B491F2C512FB6006DCDD1 /* BuyAssetInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
 		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		833A0C852C80C11B0004DBA9 /* ChainsFilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A0C842C80C11B0004DBA9 /* ChainsFilterType.swift */; };
@@ -393,7 +392,6 @@
 		D8C4A2E02C8A7B14006FABE8 /* ImportWalletTypeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BDD29BE3FF400E96586 /* ImportWalletTypeScene.swift */; };
 		D8C4A2E12C8A7B14006FABE8 /* ChainsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A0C862C80C2A50004DBA9 /* ChainsFilterViewModel.swift */; };
 		D8C4A2E22C8A7B14006FABE8 /* LatencyMeasureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836EC8572C32B22F00970BF1 /* LatencyMeasureService.swift */; };
-		D8C4A2E32C8A7B14006FABE8 /* BuyAssetInputField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */; };
 		D8C4A2E42C8A7B14006FABE8 /* WalletsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BA029B2FFF600E96586 /* WalletsScene.swift */; };
 		D8C4A2E52C8A7B14006FABE8 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D8C4A2E62C8A7B14006FABE8 /* WalletSelectImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A62C7FCAD100C26819 /* WalletSelectImageViewModel.swift */; };
@@ -580,7 +578,6 @@
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanResources.swift; sourceTree = "<group>"; };
-		831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInputField.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
 		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		833A0C842C80C11B0004DBA9 /* ChainsFilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainsFilterType.swift; sourceTree = "<group>"; };
@@ -998,7 +995,6 @@
 		831B491D2C512F6D006DCDD1 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				831B491E2C512FB6006DCDD1 /* BuyAssetInputField.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2549,7 +2545,6 @@
 				C3CF3BDE29BE3FF400E96586 /* ImportWalletTypeScene.swift in Sources */,
 				833A0C872C80C2A50004DBA9 /* ChainsFilterViewModel.swift in Sources */,
 				836EC8582C32B22F00970BF1 /* LatencyMeasureService.swift in Sources */,
-				831B491F2C512FB6006DCDD1 /* BuyAssetInputField.swift in Sources */,
 				C3CF3BA129B2FFF600E96586 /* WalletsScene.swift in Sources */,
 				D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */,
 				D890F7A72C7FCAD100C26819 /* WalletSelectImageViewModel.swift in Sources */,
@@ -2820,7 +2815,6 @@
 				D8C4A2E02C8A7B14006FABE8 /* ImportWalletTypeScene.swift in Sources */,
 				D8C4A2E12C8A7B14006FABE8 /* ChainsFilterViewModel.swift in Sources */,
 				D8C4A2E22C8A7B14006FABE8 /* LatencyMeasureService.swift in Sources */,
-				D8C4A2E32C8A7B14006FABE8 /* BuyAssetInputField.swift in Sources */,
 				D8C4A2E42C8A7B14006FABE8 /* WalletsScene.swift in Sources */,
 				D8C4A2E52C8A7B14006FABE8 /* WalletsNavigationStack.swift in Sources */,
 				D8C4A2E62C8A7B14006FABE8 /* WalletSelectImageViewModel.swift in Sources */,
