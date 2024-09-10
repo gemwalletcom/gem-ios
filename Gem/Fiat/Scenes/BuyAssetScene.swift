@@ -40,9 +40,9 @@ struct BuyAssetScene: View {
                 viewState: model.state,
                 action: onSelectContinue
             )
-            .listSectionSpacing(.compact)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .listSectionSpacing(.compact)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
