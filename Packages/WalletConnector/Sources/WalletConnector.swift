@@ -175,24 +175,22 @@ extension WalletConnector {
     }
 
     private func processSession(proposal: Session.Proposal) async throws {
-        var wallet = try signer.getCurrentWallet()
+        let currentWallet = try signer.getCurrentWallet()
 
-        let chains = signer.getChains(wallet: wallet)
-        let accounts = signer.getAccounts(wallet: wallet, chains: chains)
+        let chains = signer.getChains(wallet: currentWallet)
+        let accounts = signer.getAccounts(wallet: currentWallet, chains: chains)
 
         let payload = WalletConnectionSessionProposal(
-            wallet: wallet,
+            wallet: currentWallet,
             accounts: accounts,
             metadata: proposal.proposer.metadata
         )
 
         let payloadTopic = WCPairingProposal(pairingId: proposal.pairingTopic, proposal: payload)
         let approvedWalletId = try await signer.sessionApproval(payload: payloadTopic)
+        let selectedWallet = try signer.getWallet(id: approvedWalletId)
 
-        if wallet.walletId != approvedWalletId {
-            wallet = try signer.getWallet(id: approvedWalletId)
-        }
-        try await acceptProposal(proposal: proposal, wallet: wallet)
+        try await acceptProposal(proposal: proposal, wallet: selectedWallet)
     }
 
     private func acceptProposal(proposal: Session.Proposal, wallet: Wallet) async throws {
