@@ -33,6 +33,7 @@ extension QRScannerViewWrapper: UIViewControllerRepresentable {
             qualityLevel: .accurate,
             recognizesMultipleItems: false,
             isHighFrameRateTrackingEnabled: true,
+            isGuidanceEnabled: false,
             isHighlightingEnabled: true
         )
         dataScannerVC.delegate = context.coordinator
