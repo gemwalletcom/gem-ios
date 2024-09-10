@@ -36,52 +36,25 @@ struct AmountScene: View {
     @State var nameResolveState: NameRecordState = .none
 
     var body: some View {
-        UITextField.appearance().clearButtonMode = .never
-
-        return VStack {
+        VStack {
             List {
-                Section { } header: {
-                    VStack(alignment: .center, spacing: 0) {
-                        HStack(alignment: .center, spacing: 0) {
-                            TextField(String.zero, text: $amount)
-                                .keyboardType(.decimalPad)
-                                .foregroundColor(Colors.black)
-                                .font(.system(size: 52))
-                                .fontWeight(.semibold)
-                                .focused($focusedField, equals: .amount)
-                                .multilineTextAlignment(.center)
-                                .textFieldStyle(.plain)
-                                .lineLimit(1)
-                                //.minimumScaleFactor(0.5)
-                                .frame(minWidth: 40, maxWidth: 260)
-                                .padding(.trailing, 8)
-                                .fixedSize(horizontal: true, vertical: false)
-                                .disabled(model.isInputDisabled)
+                VStack(alignment: .center, spacing: 0) {
+                    CurrencyTextField(
+                        .zero,
+                        text: $amount,
+                        keyboardType: .decimalPad,
+                        currencySymbol: model.assetSymbol,
+                        symbolPosition: .trailing,
+                        isInputDisabled: model.isInputDisabled
+                    )
+                    .focused($focusedField, equals: .amount)
 
-                            Text(model.assetSymbol)
-                                .font(.system(size: 52))
-                                .fontWeight(.semibold)
-                                .lineLimit(1)
-                                .foregroundColor(Colors.black)
-                                .fixedSize()
-                        }
-
-                        ZStack {
-                            Text(model.fiatAmount(amount: amount))
-                                .font(Font.system(size: 16))
-                                .fontWeight(.medium)
-                                .foregroundColor(Colors.gray)
-                                .frame(minHeight: 20)
-                        }
-                        .padding(.top, 0)
-                    }
-                    .padding(.top, 16)
+                    Text(model.fiatAmount(amount: amount))
+                        .textStyle(.calloutSecondary.weight(.medium))
+                        .frame(minHeight: Sizing.list.image)
                 }
-                .frame(maxWidth: .infinity)
-                .textCase(nil)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-
+                .padding(.top, Spacing.medium)
+                .listGroupRowStyle()
 
                 switch model.type {
                 case .transfer:
@@ -177,22 +150,23 @@ struct AmountScene: View {
                                 }
                             )
                         }
-                        .frame(maxWidth: .infinity)
                     }
                 }
             }
+            .contentMargins([.top], .zero, for: .scrollContent)
 
             Spacer()
-
-            Button(Localized.Common.continue, action: {
+            
+            Button(Localized.Common.continue) {
                 Task { await next() }
-            })
-            .padding(.bottom, Spacing.scene.bottom)
+            }
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .buttonStyle(.blue())
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .frame(maxWidth: .infinity)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
         .sheet(item: $isPresentingScanner) { value in
             ScanQRCodeNavigationStack() {
@@ -246,30 +220,6 @@ struct AmountScene: View {
             Alert(title: Text(""), message: Text($0))
         }
     }
-
-    func next() async {
-        //TODO: Move validation per field on demand
-
-        next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)
-    }
-
-    func next(amount: String, name: NameRecord?, address: String, memo: String?, canChangeValue: Bool) {
-        do {
-            let value = try model.isValidAmount(amount: amount)
-            let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
-            let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
-
-            transferData = transfer
-        } catch {
-            isPresentingErrorMessage = error.localizedDescription
-        }
-    }
-
-    func useMax() {
-        amount = model.maxBalance
-
-        focusedField = .none
-    }
 }
 
 // MARK: - Actions
@@ -308,5 +258,29 @@ extension AmountScene {
         case .memo, .amount:
             memo = result
         }
+    }
+
+    private func next() async {
+        //TODO: Move validation per field on demand
+
+        next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)
+    }
+
+    private func next(amount: String, name: NameRecord?, address: String, memo: String?, canChangeValue: Bool) {
+        do {
+            let value = try model.isValidAmount(amount: amount)
+            let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
+            let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
+
+            transferData = transfer
+        } catch {
+            isPresentingErrorMessage = error.localizedDescription
+        }
+    }
+
+    private func useMax() {
+        amount = model.maxBalance
+
+        focusedField = .none
     }
 }

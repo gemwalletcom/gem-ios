@@ -5,7 +5,12 @@ import Components
 
 struct BuyAssetScene: View {
     @State private var model: BuyAssetViewModel
-    @FocusState private var focusedField: BuyAssetInputField.FiatField?
+    @FocusState private var focusedField: Field?
+
+    enum Field: Int, Hashable, Identifiable {
+        case amount
+        var id: String { String(rawValue) }
+    }
 
     init(model: BuyAssetViewModel) {
         _model = State(initialValue: model)
@@ -18,6 +23,7 @@ struct BuyAssetScene: View {
                 amountSelectorSection
                 providerSection
             }
+            .contentMargins([.top], .zero, for: .scrollContent)
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
@@ -26,7 +32,6 @@ struct BuyAssetScene: View {
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
-        .listStyle(.insetGrouped)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
@@ -40,11 +45,10 @@ struct BuyAssetScene: View {
             await onTask()
         }
         .onAppear {
-            UITextField.appearance().clearButtonMode = .never
-            focusedField = .fiat
+            focusedField = .amount
         }
         .onChange(of: model.input.amount) { _, _ in
-            focusedField = .fiat
+            focusedField = .amount
         }
         .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
@@ -63,18 +67,21 @@ struct BuyAssetScene: View {
 extension BuyAssetScene {
     private var amountInputView: some View {
         VStack(alignment: .center, spacing: 0) {
-            BuyAssetInputField(
+            CurrencyTextField(
+                .zero,
                 text: $model.amountText,
+                keyboardType: .numberPad,
                 currencySymbol: model.currencySymbol,
-                focusedField: $focusedField
+                symbolPosition: .leading
             )
+            .focused($focusedField, equals: .amount)
+
             Text(model.cryptoAmountValue)
                 .textStyle(.calloutSecondary.weight(.medium))
                 .frame(minHeight: Sizing.list.image)
         }
-        .frame(maxWidth: .infinity)
-        .background(Colors.grayBackground)
-        .listRowInsets(EdgeInsets())
+        .padding(.top, Spacing.medium)
+        .listGroupRowStyle()
     }
 
     private var amountSelectorSection: some View {
