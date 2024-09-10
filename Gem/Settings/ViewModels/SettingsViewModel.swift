@@ -89,9 +89,11 @@ class SettingsViewModel: ObservableObject {
 
     var helpCenterTitle: String { Localized.Settings.helpCenter }
     var helpCenterImage: Image { Image(.settingsHelpCenter) }
+    var helpCenterURL: URL { Docs.url(.start) }
 
     var supportTitle: String { Localized.Settings.support }
     var supportImage: Image { Image(.settingsSupport) }
+    var supportURL: URL { PublicConstants.url(.support) }
 
     var developerModeTitle: String { Localized.Settings.developer }
     var developerModeImage: Image { Image(.settingsDeveloper) }
