@@ -105,25 +105,30 @@ extension BuyAssetScene {
                     Button(Emoji.random) {
                         onSelect(amount: model.randomAmount)
                     }
-                    .buttonStyle(.plain)
-                    .font(.title.weight(.semibold))
-                    .padding(.all, Spacing.tiny)
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.all, Spacing.small)
                     .background {
-                        RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color(hex: "#2A32FF"),
-                                        Color(hex: "#6CB8FF"),
-                                        Color(hex: "#F213F6"),
-                                        Color(hex: "FFF963")
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 3
-                            )
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12)
+                                         .foregroundStyle(Colors.grayVeryLight)
+
+                            RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(hex: "#2A32FF"),
+                                            Color(hex: "#6CB8FF"),
+                                            Color(hex: "#F213F6"),
+                                            Color(hex: "FFF963")
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 3
+                                )
+                        }
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }

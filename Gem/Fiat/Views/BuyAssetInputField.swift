@@ -26,7 +26,7 @@ struct BuyAssetInputField: View {
                 .font(.system(size: 52).weight(.semibold))
                 .foregroundStyle(Colors.black)
                 .lineLimit(1)
-                .padding(.trailing, Spacing.tiny)
+                .padding(.trailing, Spacing.extraSmall)
                 .fixedSize(horizontal: true, vertical: false)
 
             TextField(String.zero, text: $text)
