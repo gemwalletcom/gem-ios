@@ -10,6 +10,7 @@ import GemstonePrimitives
 struct AmountScene: View {
 
     @StateObject var model: AmounViewModel
+    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
     @State private var isPresentingErrorMessage: String?
@@ -217,7 +218,7 @@ struct AmountScene: View {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    keystore: model.keystore,
+                    keystore: keystore,
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),

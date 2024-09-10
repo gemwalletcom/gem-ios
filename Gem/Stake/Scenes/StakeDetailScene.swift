@@ -62,7 +62,6 @@ struct StakeDetailScene: View {
                 model: AmounViewModel(
                     input: $0,
                     wallet: model.wallet,
-                    keystore: keystore,
                     walletsService: walletsService,
                     stakeService: stakeService
                 )

@@ -64,6 +64,7 @@ struct WalletScene: View {
                     isPresentingSelectType = $0.selectType
                 }
                 .padding(.top, Spacing.small)
+                .padding(.bottom, Spacing.medium)
             }
             .frame(maxWidth: .infinity, alignment: .center)
             .textCase(nil)
