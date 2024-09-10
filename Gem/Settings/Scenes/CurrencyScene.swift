@@ -32,6 +32,7 @@ struct CurrencyScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }

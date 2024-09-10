@@ -38,6 +38,7 @@ struct AddTokenScene: View {
         .onChange(of: model.input.address, onAddressClean)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))

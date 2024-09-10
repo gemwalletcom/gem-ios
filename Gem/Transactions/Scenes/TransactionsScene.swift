@@ -36,6 +36,7 @@ struct TransactionsScene: View {
                     .textStyle(.body)
             }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: TransactionExtended.self) { transaction in
             TransactionScene(

@@ -28,6 +28,7 @@ struct SettingsScene: View {
         }
         .onChange(of: model.currencyValue, onCurrencyChange)
         .listStyle(.insetGrouped)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }
@@ -111,6 +112,17 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
+
+            ListItemView(
+                title: model.helpCenterTitle,
+                image: model.helpCenterImage
+            )
+
+            ListItemView(
+                title: model.supportTitle,
+                image: model.supportImage
+            )
+
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
                     title: model.aboutUsTitle,
@@ -126,23 +138,6 @@ extension SettingsScene {
                     )
                 }
             }
-
-            ListItemView(
-                title: model.versionTextTitle,
-                subtitle: model.versionTextValue,
-                image: model.versionTextImage
-            )
-            .contextMenu {
-                ContextMenuCopy(
-                    title: model.contextCopyTitle,
-                    value: model.versionTextValue
-                )
-                ContextMenuItem(
-                    title: model.contextDevTitle,
-                    image: SystemImage.info,
-                    action: onEnableDevSettings
-                )
-            }
         }
     }
 }
@@ -150,11 +145,6 @@ extension SettingsScene {
 // MARK: - Actions
 
 extension SettingsScene {
-    @MainActor
-    private func onEnableDevSettings() {
-        model.isDeveloperEnabled.toggle()
-    }
-
     @MainActor
     private func onSelectCommutity(link: CommunityLink) {
         openURL(link.url)

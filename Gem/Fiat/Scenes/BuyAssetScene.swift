@@ -24,6 +24,7 @@ struct BuyAssetScene: View {
                 viewState: model.state,
                 action: onSelectContinue
             )
+            .listSectionSpacing(.compact)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .listStyle(.insetGrouped)
@@ -73,8 +74,9 @@ extension BuyAssetScene {
                 .frame(minHeight: Sizing.list.image)
         }
         .frame(maxWidth: .infinity)
-        .background(Colors.grayBackground)
         .listRowInsets(EdgeInsets())
+        .background(Colors.grayBackground)
+        .listRowSeparator(.hidden)
     }
 
     private var amountSelectorSection: some View {

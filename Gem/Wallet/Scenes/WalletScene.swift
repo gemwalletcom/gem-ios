@@ -117,6 +117,7 @@ struct WalletScene: View {
                 .padding(Spacing.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
+            .listSectionSpacing(.compact)
         }
         .refreshable {
             await refreshable()

@@ -82,7 +82,6 @@ struct AmountScene: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets())
 
-
                 switch model.type {
                 case .transfer:
                     Section(Localized.Transfer.Recipient.title) {
@@ -105,6 +104,7 @@ struct AmountScene: View {
                             }
                         }
                         .focused($focusedField, equals: .address)
+                        .keyboardType(.alphabet)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
 
@@ -115,6 +115,7 @@ struct AmountScene: View {
                                 }
                             }
                             .focused($focusedField, equals: .memo)
+                            .keyboardType(.alphabet)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                         }
@@ -181,11 +182,11 @@ struct AmountScene: View {
                     }
                 }
             }
+            .listSectionSpacing(.compact)
 
             Spacer()
-
             Button(Localized.Common.continue, action: {
-                Task { await next() }
+                next()
             })
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
@@ -204,6 +205,13 @@ struct AmountScene: View {
                 wallet: model.wallet,
                 asset: model.asset
             )
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(Localized.Common.next) {
+                    next()
+                }.bold()
+            }
         }
         .navigationDestination(for: $transferData) {
             ConfirmTransferScene(
@@ -247,7 +255,7 @@ struct AmountScene: View {
         }
     }
 
-    func next() async {
+    func next() {
         //TODO: Move validation per field on demand
 
         next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)

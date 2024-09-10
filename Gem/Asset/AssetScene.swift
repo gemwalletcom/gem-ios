@@ -142,6 +142,7 @@ struct AssetScene: View {
             }
         }
         .taskOnce(onTaskOnce)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }

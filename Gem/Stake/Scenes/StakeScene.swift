@@ -39,6 +39,7 @@ struct StakeScene: View {
         .refreshable {
             await model.fetch()
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: $model.transferData) {
             ConfirmTransferScene(

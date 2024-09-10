@@ -76,10 +76,16 @@ public struct TransferAmountCalculator {
         if input.assetFeeBalance.available < input.fee {
             throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
         }
-        
+
+        if !input.canChangeValue {
+            if input.availableValue < input.value + input.fee  {
+                throw TransferAmountCalculatorError.insufficientBalance(input.asset)
+            }
+        }
+
         // max value transfer
         if input.assetBalance.available == input.value {
-            if input.asset == input.asset.feeAsset {
+            if input.asset == input.asset.feeAsset && input.canChangeValue  {
                 return TransferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, useMaxAmount: true)
             }
             return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)

@@ -26,6 +26,7 @@ struct ConnectionScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
     

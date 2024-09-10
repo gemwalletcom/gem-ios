@@ -90,7 +90,7 @@ class AmounViewModel: ObservableObject {
     }
     
     var title: String {
-        return Localized.Transfer.Amount.title
+        return Localized.Transfer.Send.title
     }
 
     var assetSymbol: String {
@@ -228,7 +228,7 @@ class AmounViewModel: ObservableObject {
         }
 
         switch type {
-        case .transfer: 
+        case .transfer:
             return RecipientData(
                 asset: input.asset,
                 recipient: recipient

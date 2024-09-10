@@ -55,6 +55,7 @@ struct StakeDetailScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: $amountInput) {
             AmountScene(
