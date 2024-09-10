@@ -4,7 +4,9 @@ import SwiftUI
 import Style
 
 public struct CurrencyTextField: View {
-    public enum SymbolPosition {
+    @Environment(\.isEnabled) var isEnabled
+
+    public enum CurrencyPosition {
         case leading
         case trailing
     }
@@ -14,28 +16,25 @@ public struct CurrencyTextField: View {
     private let currencySymbol: String
     private let placeholder: String
     private let keyboardType: UIKeyboardType
-    private let symbolPosition: SymbolPosition
-    private let isInputDisabled: Bool
+    private let currencyPosition: CurrencyPosition
 
     public init(
         _ placeholder: String,
         text: Binding<String>,
-        keyboardType: UIKeyboardType,
         currencySymbol: String,
-        symbolPosition: SymbolPosition,
-        isInputDisabled: Bool = false
+        currencyPosition: CurrencyPosition,
+        keyboardType: UIKeyboardType
     ) {
         _text = text
         self.placeholder = placeholder
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
-        self.symbolPosition = symbolPosition
-        self.isInputDisabled = isInputDisabled
+        self.currencyPosition = currencyPosition
     }
 
     public var body: some View {
         HStack(alignment: .center, spacing: .zero) {
-            if symbolPosition == .leading {
+            if currencyPosition == .leading {
                 currencySymbolView
             }
 
@@ -46,12 +45,12 @@ public struct CurrencyTextField: View {
                 .multilineTextAlignment(.center)
                 .textFieldStyle(.plain)
                 .lineLimit(1)
-                .padding(symbolPosition == .leading ? .leading : .trailing, Spacing.tiny)
+                .padding(currencyPosition == .leading ? .leading : .trailing, Spacing.tiny)
                 .frame(minWidth: 40, maxWidth: 260)
                 .fixedSize(horizontal: true, vertical: false)
-                .disabled(isInputDisabled)
+                .disabled(!isEnabled)
 
-            if symbolPosition == .trailing {
+            if currencyPosition == .trailing {
                 currencySymbolView
             }
         }
@@ -71,7 +70,7 @@ public struct CurrencyTextField: View {
     @State var textTrailing: String = "100"
 
     return VStack {
-        CurrencyTextField("0", text: $textLeading, keyboardType: .numberPad, currencySymbol: "$", symbolPosition: .leading)
-        CurrencyTextField("0", text: $textTrailing, keyboardType: .numberPad, currencySymbol: "$", symbolPosition: .trailing)
+        CurrencyTextField("0", text: $textLeading, currencySymbol: "$", currencyPosition: .leading, keyboardType: .numberPad)
+        CurrencyTextField("0", text: $textTrailing, currencySymbol: "$", currencyPosition: .trailing, keyboardType: .decimalPad)
     }
 }

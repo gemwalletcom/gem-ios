@@ -19,7 +19,17 @@ struct BuyAssetScene: View {
     var body: some View {
         VStack {
             List {
-                amountInputView
+                CurrencyInputView(
+                    text: $model.amountText,
+                    currencySymbol: model.currencySymbol,
+                    currencyPosition: .leading,
+                    secondaryText: model.cryptoAmountValue,
+                    keyboardType: .numberPad
+                )
+                .padding(.top, Spacing.medium)
+                .listGroupRowStyle()
+                .focused($focusedField, equals: .amount)
+
                 amountSelectorSection
                 providerSection
             }
@@ -66,25 +76,6 @@ struct BuyAssetScene: View {
 // MARK: - UI Components
 
 extension BuyAssetScene {
-    private var amountInputView: some View {
-        VStack(alignment: .center, spacing: 0) {
-            CurrencyTextField(
-                .zero,
-                text: $model.amountText,
-                keyboardType: .numberPad,
-                currencySymbol: model.currencySymbol,
-                symbolPosition: .leading
-            )
-            .focused($focusedField, equals: .amount)
-
-            Text(model.cryptoAmountValue)
-                .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: Sizing.list.image)
-        }
-        .padding(.top, Spacing.medium)
-        .listGroupRowStyle()
-    }
-
     private var amountSelectorSection: some View {
         Section {
             HStack(spacing: Spacing.small) {

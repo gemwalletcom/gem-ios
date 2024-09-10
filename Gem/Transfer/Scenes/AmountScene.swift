@@ -39,23 +39,17 @@ struct AmountScene: View {
     var body: some View {
         VStack {
             List {
-                VStack(alignment: .center, spacing: 0) {
-                    CurrencyTextField(
-                        .zero,
-                        text: $amount,
-                        keyboardType: .decimalPad,
-                        currencySymbol: model.assetSymbol,
-                        symbolPosition: .trailing,
-                        isInputDisabled: model.isInputDisabled
-                    )
-                    .focused($focusedField, equals: .amount)
-
-                    Text(model.fiatAmount(amount: amount))
-                        .textStyle(.calloutSecondary.weight(.medium))
-                        .frame(minHeight: Sizing.list.image)
-                }
+                CurrencyInputView(
+                    text: $amount,
+                    currencySymbol: model.assetSymbol,
+                    currencyPosition: .trailing,
+                    secondaryText: model.fiatAmount(amount: amount),
+                    keyboardType: .decimalPad
+                )
                 .padding(.top, Spacing.medium)
                 .listGroupRowStyle()
+                .disabled(model.isInputDisabled)
+                .focused($focusedField, equals: .amount)
 
                 switch model.type {
                 case .transfer:
