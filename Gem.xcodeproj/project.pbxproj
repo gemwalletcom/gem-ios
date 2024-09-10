@@ -524,7 +524,6 @@
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */; };
 		D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
 		D8C4A37A2C8E2D64006FABE8 /* AboutUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */; };
-		D8C4A3802C9096A6006FABE8 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */; };
 		D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */; };
 		D8CD362B2C647D0300E18764 /* ChartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362A2C647D0300E18764 /* ChartSelection.swift */; };
 		D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */; };
@@ -909,7 +908,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D8C4A3802C9096A6006FABE8 /* KeystoreTestKit in Frameworks */,
 				C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */,
 				D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */,
 			);
@@ -2230,7 +2228,6 @@
 			packageProductDependencies = (
 				C3A7CB9429D140DB00431341 /* CSQLite */,
 				D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */,
-				D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */,
 			);
 			productName = walletTests;
 			productReference = C30952C1299C39D80004C0F9 /* GemTests.xctest */;
@@ -3646,10 +3643,6 @@
 		D8C4A2572C8A7B14006FABE8 /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GemstonePrimitives;
-		};
-		D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = KeystoreTestKit;
 		};
 		D8D203CF2AE078BE00261CA2 /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;

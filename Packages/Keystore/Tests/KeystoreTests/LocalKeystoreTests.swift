@@ -11,13 +11,13 @@ final class LocalKeystoreTests: XCTestCase {
     let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
     
     func testCreateWallet() {
-        let keystore = LocalKeystore.make()
+        let keystore = LocalKeystore.mock()
         
         XCTAssertEqual(keystore.createWallet().count, 12)
     }
     
     func testImportWallet() {
-        let keystore = LocalKeystore.make()
+        let keystore = LocalKeystore.mock()
         let words = keystore.createWallet()
 
         XCTAssertEqual(keystore.wallets.count, 0)
@@ -28,7 +28,7 @@ final class LocalKeystoreTests: XCTestCase {
     }
     
     func testImportSolanaWallet() {
-        let keystore = LocalKeystore.make()
+        let keystore = LocalKeystore.mock()
         let _ = try! keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.solana]))
 
         XCTAssertEqual(keystore.wallets.count, 1)
@@ -37,7 +37,7 @@ final class LocalKeystoreTests: XCTestCase {
     }
     
     func testImportEthereumWallet() {
-        let keystore = LocalKeystore.make()
+        let keystore = LocalKeystore.mock()
         let chains: [Chain] = [.ethereum, .smartChain, .blast]
         let _ = try! keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.ethereum, .smartChain, .blast]))
 
@@ -48,7 +48,7 @@ final class LocalKeystoreTests: XCTestCase {
     }
 
     func testExportSolanaPrivateKey() throws {
-        let keystore = LocalKeystore.make()
+        let keystore = LocalKeystore.mock()
         let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
         let wallet = try keystore.importWallet(name: "Test Solana", type: .privateKey(text: hex, chain: .solana))
 
@@ -58,7 +58,7 @@ final class LocalKeystoreTests: XCTestCase {
         XCTAssertEqual(exportedHex, hex)
         XCTAssertEqual(exportedBase58, "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
 
-        let keystore2 = LocalKeystore.make()
+        let keystore2 = LocalKeystore.mock()
         let wallet2 = try keystore2.importWallet(name: "Test Solana 2", type: .privateKey(text: exportedBase58, chain: .solana))
         let exportedKey = try keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
 
