@@ -55,13 +55,13 @@ struct StakeDetailScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: $amountInput) {
             AmountScene(
                 model: AmounViewModel(
                     input: $0,
                     wallet: model.wallet,
-                    keystore: keystore,
                     walletsService: walletsService,
                     stakeService: stakeService
                 )

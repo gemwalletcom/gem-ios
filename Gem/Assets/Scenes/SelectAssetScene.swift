@@ -99,6 +99,7 @@ struct SelectAssetScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .searchable(
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
@@ -107,6 +108,7 @@ struct SelectAssetScene: View {
                   interval: Duration.milliseconds(250),
                   action: model.search(query:))
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
+        .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
         .navigationDestination(for: SelectAssetInput.self) { input in
             switch input.type {

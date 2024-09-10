@@ -258,3 +258,5 @@
 "common.unpin" = "Lösen";
 "filter.clear" = "Löschen";
 "filter.title" = "Filter";
+"settings.help_center" = "Hilfezentrum";
+"settings.support" = "Unterstützung";

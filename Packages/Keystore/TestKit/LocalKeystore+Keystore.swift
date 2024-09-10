@@ -5,7 +5,7 @@ import Keystore
 import Store
 
 public extension LocalKeystore {
-    static func make(
+    static func mock(
         preferences: Preferences = Preferences(),
         keystorePassword: KeystorePassword = MockKeystorePassword()
     ) -> LocalKeystore {

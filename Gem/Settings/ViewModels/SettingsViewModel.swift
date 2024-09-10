@@ -14,9 +14,7 @@ class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
     @ObservedObject var securityModel: SecurityViewModel
 
-    @Published var isDeveloperEnabled: Bool {
-        didSet { preferences.isDeveloperEnabled = isDeveloperEnabled }
-    }
+    @Published var isDeveloperEnabled: Bool
 
     private let walletId: WalletId
     private let walletsService: WalletsService
@@ -89,20 +87,16 @@ class SettingsViewModel: ObservableObject {
     var aboutUsTitle: String { Localized.Settings.aboutus }
     var aboutUsImage: Image { Image(.settingsGem) }
 
+    var helpCenterTitle: String { Localized.Settings.helpCenter }
+    var helpCenterImage: Image { Image(.settingsHelpCenter) }
+    var helpCenterURL: URL { Docs.url(.start) }
+
+    var supportTitle: String { Localized.Settings.support }
+    var supportImage: Image { Image(.settingsSupport) }
+    var supportURL: URL { PublicConstants.url(.support) }
+
     var developerModeTitle: String { Localized.Settings.developer }
     var developerModeImage: Image { Image(.settingsDeveloper) }
-
-    var versionTextTitle: String { Localized.Settings.version }
-    var versionTextValue: String {
-        let version = Bundle.main.releaseVersionNumber
-        let number = Bundle.main.buildVersionNumber
-        return "\(version) (\(number))"
-    }
-    var versionTextImage: Image { Image(.settingsVersion) }
-
-    var contextCopyTitle: String { Localized.Common.copy }
-    var contextDevTitle: String { Localized.Settings.enableValue(Localized.Settings.developer) }
-
 }
 
 // MARK: - Business Logic

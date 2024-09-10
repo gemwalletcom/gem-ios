@@ -525,6 +525,8 @@
 		D8C4A3742C8CE87C006FABE8 /* AmountNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */; };
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */; };
 		D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
+		D8C4A37A2C8E2D64006FABE8 /* AboutUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */; };
+		D8C4A3802C9096A6006FABE8 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */; };
 		D8C6E35E2B2243F500D0B513 /* StakeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */; };
 		D8CD362B2C647D0300E18764 /* ChartSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362A2C647D0300E18764 /* ChartSelection.swift */; };
 		D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */; };
@@ -852,6 +854,7 @@
 		D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationFlow.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationFlow.swift; sourceTree = "<group>"; };
 		D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavigationStack.swift; sourceTree = "<group>"; };
+		D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsViewModel.swift; sourceTree = "<group>"; };
 		D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeViewModel.swift; sourceTree = "<group>"; };
 		D8CD362A2C647D0300E18764 /* ChartSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartSelection.swift; sourceTree = "<group>"; };
 		D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyViewModel.swift; sourceTree = "<group>"; };
@@ -910,6 +913,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8C4A3802C9096A6006FABE8 /* KeystoreTestKit in Frameworks */,
 				C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */,
 				D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */,
 			);
@@ -1441,6 +1445,7 @@
 				D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */,
 				83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */,
 				83DF762E2C45989F001239E7 /* NodeStatusViewModel.swift */,
+				D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2231,6 +2236,7 @@
 			packageProductDependencies = (
 				C3A7CB9429D140DB00431341 /* CSQLite */,
 				D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */,
+				D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */,
 			);
 			productName = walletTests;
 			productReference = C30952C1299C39D80004C0F9 /* GemTests.xctest */;
@@ -2528,6 +2534,7 @@
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				83D854502C5D221200D4078C /* TransferDataViewModel.swift in Sources */,
 				C3340B742A4A920100884D48 /* ChainListSettingsScene.swift in Sources */,
+				D8C4A37A2C8E2D64006FABE8 /* AboutUsViewModel.swift in Sources */,
 				D8B738DA2C59B727004EF083 /* SecretPhraseDataType.swift in Sources */,
 				D8148C192BE2C65E0066586A /* VerifyPhraseWalletScene.swift in Sources */,
 				D848B59C2AE5CDF700814FB4 /* ConnectionView.swift in Sources */,
@@ -3647,6 +3654,10 @@
 		D8C4A2572C8A7B14006FABE8 /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GemstonePrimitives;
+		};
+		D8C4A37F2C9096A6006FABE8 /* KeystoreTestKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = KeystoreTestKit;
 		};
 		D8D203CF2AE078BE00261CA2 /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;

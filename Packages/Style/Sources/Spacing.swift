@@ -10,7 +10,7 @@ public struct Spacing {
     
     public struct scene {
         public static let top: CGFloat = 16
-        public static let bottom: CGFloat = 16
+        public static let bottom: CGFloat = 8
         public struct button {
             public static let maxWidth: CGFloat = 340
         }

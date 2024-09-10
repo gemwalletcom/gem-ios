@@ -10,6 +10,7 @@ import GemstonePrimitives
 struct AmountScene: View {
 
     @StateObject var model: AmounViewModel
+    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
     @State private var isPresentingErrorMessage: String?
@@ -82,7 +83,6 @@ struct AmountScene: View {
                 .listRowSeparator(.hidden)
                 .listRowInsets(EdgeInsets())
 
-
                 switch model.type {
                 case .transfer:
                     Section(Localized.Transfer.Recipient.title) {
@@ -105,6 +105,7 @@ struct AmountScene: View {
                             }
                         }
                         .focused($focusedField, equals: .address)
+                        .keyboardType(.alphabet)
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
 
@@ -115,6 +116,7 @@ struct AmountScene: View {
                                 }
                             }
                             .focused($focusedField, equals: .memo)
+                            .keyboardType(.alphabet)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                         }
@@ -181,11 +183,11 @@ struct AmountScene: View {
                     }
                 }
             }
+            .listSectionSpacing(.compact)
 
             Spacer()
-
             Button(Localized.Common.continue, action: {
-                Task { await next() }
+                next()
             })
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
@@ -205,11 +207,18 @@ struct AmountScene: View {
                 asset: model.asset
             )
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(Localized.Common.next) {
+                    next()
+                }.bold()
+            }
+        }
         .navigationDestination(for: $transferData) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    keystore: model.keystore,
+                    keystore: keystore,
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
@@ -247,7 +256,7 @@ struct AmountScene: View {
         }
     }
 
-    func next() async {
+    func next() {
         //TODO: Move validation per field on demand
 
         next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)

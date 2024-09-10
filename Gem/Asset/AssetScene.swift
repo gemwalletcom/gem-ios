@@ -61,6 +61,7 @@ struct AssetScene: View {
             Section { } header: {
                 WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
                     .padding(.top, Spacing.small)
+                    .padding(.bottom, Spacing.medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -142,6 +143,7 @@ struct AssetScene: View {
             }
         }
         .taskOnce(onTaskOnce)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }
@@ -177,10 +179,6 @@ extension AssetScene {
 
     @MainActor
     private func onOpenLink(_ url: URL) {
-        // TODO: - find issue why we can't use @Environment(\.openURL) private var openURL here
-        // once we add native env url openning, we go to recursion on NavigationLink(value: model.assetModel.asset) { }
-        // AssetSceneViewModel recreates infinitly
-        guard UIApplication.shared.canOpenURL(url) else { return }
         UIApplication.shared.open(url)
     }
 

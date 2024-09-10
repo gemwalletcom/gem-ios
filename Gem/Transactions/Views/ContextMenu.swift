@@ -7,15 +7,23 @@ import Style
 import Primitives
 
 struct ContextMenuCopy: View {
-    
+
     let title: String
     let value: String
-    
+
+    init(
+        title: String = Localized.Common.copy,
+        value: String
+    ) {
+        self.title = title
+        self.value = value
+    }
+
     var body: some View {
         Button(action: {
             UIPasteboard.general.string = value
         }) {
-            Text(title)
+            Text(Localized.Common.copy)
             Image(systemName: SystemImage.copy)
         }
     }

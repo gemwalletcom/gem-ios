@@ -258,3 +258,5 @@
 "common.unpin" = "Unpin";
 "filter.clear" = "Clear";
 "filter.title" = "Filters";
+"settings.help_center" = "도움말 센터";
+"settings.support" = "지원하다";
