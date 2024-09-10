@@ -78,7 +78,7 @@ class ConfirmTransferViewModel {
     }
 
     var senderAddressExplorerUrl: URL { senderLink.url }
-    var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.url) }
+    var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }
 
     var shouldShowRecipientField: Bool { dataModel.shouldShowRecipient }
     var recipientTitle: String { dataModel.recipientTitle }
