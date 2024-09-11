@@ -88,6 +88,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try store.getConnection(id: sessionId)
+        let wallet = try keystore.getWallet(session.wallet.walletId)
+
         switch transaction {
         case .ethereum(let transaction):
             let address = transaction.to
@@ -131,8 +133,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                 value: value,
                 canChangeValue: false
             )
-            
-            return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
+
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         case .solana(let data):
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: data.data(using: .utf8))),
@@ -143,7 +145,7 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                 value: .zero,
                 canChangeValue: false
             )
-            return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
     }
     
