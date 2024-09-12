@@ -3,7 +3,6 @@
 import Foundation
 import Store
 import WalletConnector
-import Combine
 import Primitives
 
 class ConnectionsService {
@@ -11,9 +10,6 @@ class ConnectionsService {
     let store: ConnectionsStore
     let signer: WalletConnectorSignable
     let connector: WalletConnector
-    
-    private var sessionsObserver: AnyCancellable?
-    private var proposalsObserver: AnyCancellable?
     
     init(
         store: ConnectionsStore,
@@ -34,39 +30,12 @@ class ConnectionsService {
 
     private func configure() async {
         connector.configure()
-        connector.setup()
-        
-        NSLog("wallet connector setup")
-        
-        // all
-        Task {
-//            try await connector.disconnectAll()
-//            let sessions = try store.getSessions()
-//            
-//            for session in sessions {
-//                try store.delete(id: session.id)
-//            }
-        }
-        
-        // single
-        Task {
-            //let session = try store.getConnection(id: "0dc56c68346d09c4ddfff85dc5843d0ecff7309016e74f004921a0d6c6410b92")
-            //try await connector.disconnect(topic: "02ebb058cbe4b798e3ca649b96e5453cad739ae5076e41ca3fa93128f182b1fb") //session.id)
-            //try store.delete(id: session.id)
-        }
-        
-//        do {
-//            //try await connector.run()
-//            
-//            NSLog("wallet connector run")
-//        } catch {
-//            NSLog("wallet connector error \(error)")
-//        }
+        await connector.setup()
     }
     
     func addConnectionURI(uri: String, wallet: Wallet) async throws {
         let id = try await connector.addConnectionURI(uri: uri)
-        let chains = try signer.getChains()
+        let chains = signer.getChains(wallet: wallet)
         let session = WalletConnectionSession.started(id: id, chains: chains)
         let connection = WalletConnection(
             session: session,
@@ -74,7 +43,11 @@ class ConnectionsService {
         )
         try? self.store.addConnection(connection)
     }
-    
+
+    func updateConnection(id: String, wallet: WalletId) throws {
+        try store.updateConnection(id: id, with: wallet)
+    }
+
     func disconnect(sessionId: String) async throws {
         try store.delete(ids: [sessionId])
         try await connector.disconnect(sessionId: sessionId)

@@ -1,25 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Combine
 import Web3Wallet
-//import Auth
 
 final class WCConnectionsInteractor {
+    var sessionsStream: AsyncStream<[Session]> {
+        Web3Wallet.instance.sessionsPublisher.asAsyncStream()
+    }
 
-    var sessionsPublisher: AnyPublisher<[Session], Never> {
-        return Web3Wallet.instance.sessionsPublisher
+    var sessionProposalStream: AsyncStream<(proposal: Session.Proposal, context: VerifyContext?)> {
+        Web3Wallet.instance.sessionProposalPublisher.asAsyncStream()
     }
-    
-    var sessionProposalPublisher: AnyPublisher<(proposal: Session.Proposal, context: VerifyContext?), Never> {
-        return Web3Wallet.instance.sessionProposalPublisher
+
+    var sessionRequestStream: AsyncStream<(request: Request, context: VerifyContext?)> {
+        Web3Wallet.instance.sessionRequestPublisher.asAsyncStream()
     }
-    
-    var sessionRequestPublisher: AnyPublisher<(request: Request, context: VerifyContext?), Never> {
-        return Web3Wallet.instance.sessionRequestPublisher
-    }
-    
-//    var authRequestPublisher: AnyPublisher<(request: AuthRequest, context: VerifyContext?), Never> {
-//        return Web3Wallet.instance.authRequestPublisher
-//    }
 }

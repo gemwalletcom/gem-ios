@@ -21,7 +21,7 @@ struct GemApp: App {
                 db: db
             )
             .navigationBarTitleDisplayMode(.inline)
-            .tint(Colors.blue)
+            .tint(Colors.black)
         }
     }
 }
