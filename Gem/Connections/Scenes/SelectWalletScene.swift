@@ -4,12 +4,12 @@ import SwiftUI
 import Components
 import Style
 
-struct WalletsSelectorScene: View {
+struct SelectWalletScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @Binding private var model: WalletSelectorViewModel
+    @Binding private var model: SellectWalletViewModel
 
-    init(model: Binding<WalletSelectorViewModel>) {
+    init(model: Binding<SellectWalletViewModel>) {
         _model = model
     }
 
@@ -36,7 +36,7 @@ struct WalletsSelectorScene: View {
 
 // MARK: - Actions
 
-extension WalletsSelectorScene {
+extension SelectWalletScene {
     private func onSelect(wallet: WalletViewModel) {
         model.walletModel = wallet
         dismiss()
@@ -46,8 +46,8 @@ extension WalletsSelectorScene {
 // MARK: - Previews
 
 #Preview {
-    @State var model = WalletSelectorViewModel(wallets: [.main, .view], selectedWallet: .main)
+    @State var model = SellectWalletViewModel(wallets: [.main, .view], selectedWallet: .main)
     return NavigationStack {
-        WalletsSelectorScene(model: $model)
+        SelectWalletScene(model: $model)
     }
 }

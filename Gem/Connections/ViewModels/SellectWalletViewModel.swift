@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-struct WalletSelectorViewModel {
+struct SellectWalletViewModel {
     private var wallets: [Wallet]
     private var selectedWallet: Wallet
 

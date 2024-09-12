@@ -9,7 +9,7 @@ struct ConnectionProposalViewModel {
     private let confirmTransferDelegate: ConfirmTransferDelegate
     private let pairingProposal: WCPairingProposal
 
-    var walletSelectorModel: WalletSelectorViewModel
+    var walletSelectorModel: SellectWalletViewModel
 
     init(
         connectionsService: ConnectionsService,
@@ -20,7 +20,7 @@ struct ConnectionProposalViewModel {
         self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.pairingProposal = pairingProposal
-        self.walletSelectorModel = WalletSelectorViewModel(
+        self.walletSelectorModel = SellectWalletViewModel(
             wallets: wallets,
             selectedWallet: pairingProposal.proposal.wallet
         )
@@ -28,8 +28,11 @@ struct ConnectionProposalViewModel {
     
     var title: String { Localized.WalletConnect.Connect.title }
     var buttonTitle: String { Localized.Transfer.confirm }
+    var walletTitle: String { Localized.Common.wallet }
+    var appTitle: String { Localized.WalletConnect.app }
+    var websiteTitle: String { Localized.WalletConnect.website }
 
-    var selectedWalletName: String {
+    var walletName: String {
         walletSelectorModel.walletModel.name
     }
 

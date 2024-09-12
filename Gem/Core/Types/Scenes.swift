@@ -22,7 +22,7 @@ struct Scenes {
         let wallet: Wallet
     }
     struct WalletConnect: Hashable {}
-    struct WalletsSelector: Hashable {}
+    struct SelectWallet: Hashable {}
     struct VerifyPhrase: Hashable {
         let words: [String]
     }

@@ -29,15 +29,15 @@ struct ConnectionProposalScene: View {
                 .listRowInsets(EdgeInsets())
                 
                 Section {
-                    NavigationLink(value: Scenes.WalletsSelector()) {
+                    NavigationLink(value: Scenes.SelectWallet()) {
                         ListItemView(
-                            title: Localized.Common.wallet,
-                            subtitle: model.selectedWalletName
+                            title: model.walletTitle,
+                            subtitle: model.walletName
                         )
                     }
-                    ListItemView(title: Localized.WalletConnect.app, subtitle: model.appText)
+                    ListItemView(title: model.appTitle, subtitle: model.appText)
                     if let website = model.websiteText {
-                        ListItemView(title: Localized.WalletConnect.website, subtitle: website)
+                        ListItemView(title: model.websiteTitle, subtitle: website)
                     }
                 }
             }
@@ -50,8 +50,8 @@ struct ConnectionProposalScene: View {
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
-        .navigationDestination(for: Scenes.WalletsSelector.self) { _ in
-            WalletsSelectorScene(model: $model.walletSelectorModel)
+        .navigationDestination(for: Scenes.SelectWallet.self) { _ in
+            SelectWalletScene(model: $model.walletSelectorModel)
         }
     }
 }
