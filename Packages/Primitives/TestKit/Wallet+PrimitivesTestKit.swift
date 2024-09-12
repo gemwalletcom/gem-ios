@@ -5,13 +5,14 @@ import Primitives
 
 public extension Wallet {
     static func mock(
+        accounts: [Account] = []
     ) -> Wallet {
         Wallet(
             id: "",
             name: "",
             index: 0,
             type: .multicoin,
-            accounts: [],
+            accounts: accounts,
             order: 0,
             isPinned: false
         )
