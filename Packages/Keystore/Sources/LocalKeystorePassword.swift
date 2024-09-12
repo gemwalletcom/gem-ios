@@ -35,8 +35,9 @@ public class LocalKeystorePassword: KeystorePassword {
         try keychain
             .set(authentication.rawValue, key: Keys.passwordAuthentication)
         
+        //Changing whenPasscodeSetThisDeviceOnly => whenUnlockedThisDeviceOnly due to Apple Review team not being able to test the app.
         try keychain
-            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: authentication.policy)
+            .accessibility(.whenUnlockedThisDeviceOnly, authenticationPolicy: authentication.policy)
             .authenticationContext(context)
             .set(password, key: Keys.password)
     }

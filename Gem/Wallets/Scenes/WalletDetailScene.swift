@@ -38,7 +38,7 @@ struct WalletDetailScene: View {
                                 size: Sizing.image.chain * 1.6,
                                 overlayImageSize: Spacing.large
                             )
-                                .padding(.bottom, Spacing.extraLarge)
+                            .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()
                     }

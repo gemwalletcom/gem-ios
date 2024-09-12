@@ -22,7 +22,9 @@ struct StakeScene: View {
         delegations.map { StakeDelegationViewModel(delegation: $0) }
     }
 
-    init(model: StakeViewModel) {
+    init(
+        model: StakeViewModel
+    ) {
         _model = State(initialValue: model)
         _delegations = Query(model.request)
     }
@@ -36,6 +38,7 @@ struct StakeScene: View {
         .refreshable {
             await model.fetch()
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: $model.transferData) {
             ConfirmTransferScene(
@@ -49,15 +52,13 @@ struct StakeScene: View {
                 )
             )
         }
-        .navigationDestination(for: $model.recipientData) {
+        .navigationDestination(for: $model.amountInput) {
             AmountScene(
                 model: AmounViewModel(
-                    amountRecipientData: $0,
+                    input: $0,
                     wallet: model.wallet,
-                    keystore: keystore,
                     walletsService: walletsService,
-                    stakeService: stakeService,
-                    currentValidator: model.recommendedCurrentValidator
+                    stakeService: stakeService
                 )
             )
         }
@@ -149,7 +150,7 @@ extension StakeScene {
 
 extension StakeScene {
     private func onSelectStake() {
-        model.recipientData = try? model.stakeRecipientData()
+        model.amountInput = try? model.stakeRecipientData()
     }
 
     private func onSelectDelegations() {

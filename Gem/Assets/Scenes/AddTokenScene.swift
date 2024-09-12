@@ -38,6 +38,7 @@ struct AddTokenScene: View {
         .onChange(of: model.input.address, onAddressClean)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
@@ -94,9 +95,7 @@ extension AddTokenScene {
                 }
                 if let url = asset.explorerUrl {
                     Section {
-                        NavigationCustomLink(with: ListItemView(title: asset.explorerText)) {
-                            UIApplication.shared.open(url)
-                        }
+                        NavigationOpenLink(url: url, with: ListItemView(title: asset.explorerText))
                     }
                 }
             case .error(let error):

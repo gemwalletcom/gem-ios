@@ -76,9 +76,10 @@ struct ChartScene: View {
                 }
                 Section(Localized.Social.links) {
                     ForEach(details.socialUrls) { link in
-                        NavigationCustomLink(with: ListItemView(title: link.type.name, image: link.type.image)) {
-                            UIApplication.shared.open(link.url)
-                        }
+                        NavigationOpenLink(
+                            url: link.url,
+                            with: ListItemView(title: link.type.name, image: link.type.image)
+                        )
                     }
                 }
             }
@@ -90,6 +91,7 @@ struct ChartScene: View {
             Task { await model.updateAsset() }
             Task { await model.updateCharts() }
         }
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
     

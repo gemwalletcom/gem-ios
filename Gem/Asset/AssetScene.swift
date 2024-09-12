@@ -15,7 +15,6 @@ struct AssetScene: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
 
-    @State private var isPresentingStaking: Bool = false
     @State private var showingOptions = false
 
     @Binding private var isPresentingAssetSelectType: SelectAssetInput?
@@ -62,6 +61,7 @@ struct AssetScene: View {
             Section { } header: {
                 WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
                     .padding(.top, Spacing.small)
+                    .padding(.bottom, Spacing.medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -69,9 +69,7 @@ struct AssetScene: View {
             .listRowInsets(EdgeInsets())
 
             Section {
-                BannerView(banners: banners) { banner in
-                    Task { try bannerService.closeBanner(banner: banner) }
-                }
+                BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)
             }
 
             Section {
@@ -106,11 +104,7 @@ struct AssetScene: View {
                     ListItemView(title: Localized.Asset.Balances.available, subtitle: model.assetDataModel.availableBalanceTextWithSymbol)
 
                     if model.showStakedBalance {
-                        NavigationCustomLink(
-                            with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol),
-                            action: onToggleStacking
-                        )
-                        .accessibilityIdentifier("stake")
+                        stakeView
                     }
 
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
@@ -121,11 +115,7 @@ struct AssetScene: View {
                     }
                 }
             } else if model.assetDataModel.isStakeEnabled {
-                NavigationCustomLink(
-                    with: ListItemView(title: Localized.Transfer.Stake.title, subtitle: model.stakeAprText),
-                    action: onToggleStacking
-                )
-                .accessibilityIdentifier("stake")
+                stakeView
             }
 
             if transactions.count > 0 {
@@ -152,26 +142,8 @@ struct AssetScene: View {
                 }
             }
         }
-        
-        .sheet(isPresented: $isPresentingStaking) {
-            NavigationStack {
-                StakeScene(
-                    model: StakeViewModel(
-                        wallet: wallet,
-                        chain: model.assetModel.asset.chain,
-                        stakeService: stakeService
-                    )
-                )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done, action: onToggleStacking)
-                        .bold()
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-            }
-        }
         .taskOnce(onTaskOnce)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }
@@ -185,6 +157,16 @@ extension AssetScene {
             AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
         }
     }
+
+    private var stakeView: some View {
+//        NavigationLink(value: Scenes.Stake(chain: model.assetModel.asset.chain, wallet: wallet)) {
+//
+//        }
+        NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
+            .accessibilityIdentifier("stake")) {
+                isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+            }
+    }
 }
 
 // MARK: - Actions
@@ -196,16 +178,7 @@ extension AssetScene {
     }
 
     @MainActor
-    private func onToggleStacking() {
-        isPresentingStaking.toggle()
-    }
-
-    @MainActor
     private func onOpenLink(_ url: URL) {
-        // TODO: - find issue why we can't use @Environment(\.openURL) private var openURL here
-        // once we add native env url openning, we go to recursion on NavigationLink(value: model.assetModel.asset) { }
-        // AssetSceneViewModel recreates infinitly
-        guard UIApplication.shared.canOpenURL(url) else { return }
         UIApplication.shared.open(url)
     }
 
@@ -221,6 +194,19 @@ extension AssetScene {
         Task {
             await model.updateAsset()
         }
+    }
+
+    private func onBannerAction(banner: Banner) {
+        switch banner.event {
+        case .stake:
+            isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+        case .accountActivation, .enableNotifications:
+            break
+        }
+    }
+
+    private func onBannerClose(banner: Banner) {
+        Task { try bannerService.closeBanner(banner: banner) }
     }
 }
 

@@ -5,7 +5,12 @@ import Components
 
 struct BuyAssetScene: View {
     @State private var model: BuyAssetViewModel
-    @FocusState private var focusedField: BuyAssetInputField.FiatField?
+    @FocusState private var focusedField: Field?
+
+    enum Field: Int, Hashable, Identifiable {
+        case amount
+        var id: String { String(rawValue) }
+    }
 
     init(model: BuyAssetViewModel) {
         _model = State(initialValue: model)
@@ -14,10 +19,21 @@ struct BuyAssetScene: View {
     var body: some View {
         VStack {
             List {
-                amountInputView
+                CurrencyInputView(
+                    text: $model.amountText,
+                    currencySymbol: model.currencySymbol,
+                    currencyPosition: .leading,
+                    secondaryText: model.cryptoAmountValue,
+                    keyboardType: .numberPad
+                )
+                .padding(.top, Spacing.medium)
+                .listGroupRowStyle()
+                .focused($focusedField, equals: .amount)
+
                 amountSelectorSection
                 providerSection
             }
+            .contentMargins([.top], .zero, for: .scrollContent)
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
@@ -26,7 +42,7 @@ struct BuyAssetScene: View {
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
-        .listStyle(.insetGrouped)
+        .listSectionSpacing(.compact)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
@@ -40,11 +56,10 @@ struct BuyAssetScene: View {
             await onTask()
         }
         .onAppear {
-            UITextField.appearance().clearButtonMode = .never
-            focusedField = .fiat
+            focusedField = .amount
         }
         .onChange(of: model.input.amount) { _, _ in
-            focusedField = .fiat
+            focusedField = .amount
         }
         .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
@@ -61,22 +76,6 @@ struct BuyAssetScene: View {
 // MARK: - UI Components
 
 extension BuyAssetScene {
-    private var amountInputView: some View {
-        VStack(alignment: .center, spacing: 0) {
-            BuyAssetInputField(
-                text: $model.amountText,
-                currencySymbol: model.currencySymbol,
-                focusedField: $focusedField
-            )
-            Text(model.cryptoAmountValue)
-                .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: Sizing.list.image)
-        }
-        .frame(maxWidth: .infinity)
-        .background(Colors.grayBackground)
-        .listRowInsets(EdgeInsets())
-    }
-
     private var amountSelectorSection: some View {
         Section {
             HStack(spacing: Spacing.small) {
@@ -105,25 +104,30 @@ extension BuyAssetScene {
                     Button(Emoji.random) {
                         onSelect(amount: model.randomAmount)
                     }
-                    .buttonStyle(.plain)
-                    .font(.title.weight(.semibold))
-                    .padding(.all, Spacing.tiny)
+                    .font(.subheadline.weight(.semibold))
+                    .padding(.all, Spacing.small)
                     .background {
-                        RoundedRectangle(cornerRadius: 16)
-                            .strokeBorder(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color(hex: "#2A32FF"),
-                                        Color(hex: "#6CB8FF"),
-                                        Color(hex: "#F213F6"),
-                                        Color(hex: "FFF963")
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                lineWidth: 3
-                            )
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12)
+                                         .foregroundStyle(Colors.grayVeryLight)
+
+                            RoundedRectangle(cornerRadius: 12)
+                                .strokeBorder(
+                                    LinearGradient(
+                                        gradient: Gradient(colors: [
+                                            Color(hex: "#2A32FF"),
+                                            Color(hex: "#6CB8FF"),
+                                            Color(hex: "#F213F6"),
+                                            Color(hex: "FFF963")
+                                        ]),
+                                        startPoint: .topLeading,
+                                        endPoint: .bottomTrailing
+                                    ),
+                                    lineWidth: 3
+                                )
+                        }
                     }
+                    .buttonStyle(.plain)
                 }
             }
         }
@@ -170,8 +174,6 @@ extension BuyAssetScene {
         guard let quote = model.input.quote,
               let url = URL(string: quote.redirectUrl) else { return }
 
-        // TODO: - use new @Environment(\.openURL) var openURL, insead use UIKit UIApplication
-        // currently impossible to use due navigation issues in nav stack
         UIApplication.shared.open(url, options: [:])
     }
 

@@ -5,19 +5,23 @@ import Blockchain
 import Style
 import Components
 import Primitives
+import GemstonePrimitives
 
 struct AmountScene: View {
 
     @StateObject var model: AmounViewModel
-
+    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
-    @State var amount: String = ""
     @State private var isPresentingErrorMessage: String?
+    @State private var isPresentingScanner: AmountScene.Field?
+    @State private var isPresentingContacts: Bool = false
 
     // focus
-    private enum Field: Int, Hashable, Identifiable {
+    enum Field: Int, Hashable, Identifiable {
         case amount
+        case address
+        case memo
         var id: String { String(rawValue) }
     }
     @FocusState private var focusedField: Field?
@@ -26,63 +30,87 @@ struct AmountScene: View {
     @State var transferData: TransferData?
     @State var delegation: DelegationValidator?
 
+    @State var amount: String = ""
+    @State var address: String = ""
+    @State var memo: String = ""
+
+    @State var nameResolveState: NameRecordState = .none
+
     var body: some View {
-        UITextField.appearance().clearButtonMode = .never
-
-        return VStack {
+        VStack {
             List {
-                Section { } header: {
-                    VStack(alignment: .center, spacing: 0) {
-                        HStack(alignment: .center, spacing: 0) {
-                            TextField(String.zero, text: $amount)
-                                .keyboardType(.decimalPad)
-                                .foregroundColor(Colors.black)
-                                .font(.system(size: 52))
-                                .fontWeight(.semibold)
-                                .focused($focusedField, equals: .amount)
-                                .multilineTextAlignment(.center)
-                                .textFieldStyle(.plain)
-                                .lineLimit(1)
-                                //.minimumScaleFactor(0.5)
-                                .frame(minWidth: 40, maxWidth: 260)
-                                .padding(.trailing, 8)
-                                .fixedSize(horizontal: true, vertical: false)
-                                .disabled(model.isInputDisabled)
+                CurrencyInputView(
+                    text: $amount,
+                    currencySymbol: model.assetSymbol,
+                    currencyPosition: .trailing,
+                    secondaryText: model.fiatAmount(amount: amount),
+                    keyboardType: .decimalPad
+                )
+                .padding(.top, Spacing.medium)
+                .listGroupRowStyle()
+                .disabled(model.isInputDisabled)
+                .focused($focusedField, equals: .amount)
 
-                            Text(model.assetSymbol)
-                                .font(.system(size: 52))
-                                .fontWeight(.semibold)
-                                .lineLimit(1)
-                                .foregroundColor(Colors.black)
-                                .fixedSize()
+                switch model.type {
+                case .transfer:
+                    Section(Localized.Transfer.Recipient.title) {
+                        FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                            HStack(spacing: Spacing.large/2) {
+                                NameRecordView(
+                                    model: NameRecordViewModel(chain: model.asset.chain),
+                                    state: $nameResolveState,
+                                    address: $address
+                                )
+                                ListButton(image: Image(systemName: SystemImage.paste)) {
+                                    paste(field: .address)
+                                }
+                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                                    isPresentingScanner = .address
+                                }
+//                                ListButton(image: Image(systemName: SystemImage.book)) {
+//                                    isPresentingContacts = true
+//                                }
+                            }
                         }
+                        .focused($focusedField, equals: .address)
+                        .keyboardType(.alphabet)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
 
-                        ZStack {
-                            Text(model.fiatAmount(amount: amount))
-                                .font(Font.system(size: 16))
-                                .fontWeight(.medium)
-                                .foregroundColor(Colors.gray)
-                                .frame(minHeight: 20)
+                        if model.showMemo {
+                            FloatTextField(model.memoField, text: $memo) {
+                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                                    isPresentingScanner = .memo
+                                }
+                            }
+                            .focused($focusedField, equals: .memo)
+                            .keyboardType(.alphabet)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
                         }
-                        .padding(.top, 0)
                     }
-                    .padding(.top, 16)
-                }
-                .frame(maxWidth: .infinity)
-                .textCase(nil)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-
-                if let validator = model.currentValidator  {
-                    Section(Localized.Stake.validator) {
-                        //TODO: Use this, other option does not work for some reason
-                        /*
-                        NavigationLink(value: Scenes.Validators()) {
-                            ListItemView(title: validator.name, subtitle: .none)
-                        }
-                         */
-                        if model.isSelectValidatorEnabled {
-                            NavigationCustomLink(with:
+                case .stake, .unstake, .redelegate, .withdraw:
+                    if let validator = model.currentValidator  {
+                        Section(Localized.Stake.validator) {
+                            //TODO: Use this, other option does not work for some reason
+                            /*
+                            NavigationLink(value: Scenes.Validators()) {
+                                ListItemView(title: validator.name, subtitle: .none)
+                            }
+                             */
+                            if model.isSelectValidatorEnabled {
+                                NavigationCustomLink(with:
+                                    HStack {
+                                        ValidatorImageView(validator: validator)
+                                        ListItemView(
+                                            title: StakeValidatorViewModel(validator: validator).name,
+                                            subtitle: StakeValidatorViewModel(validator: validator).aprText
+                                        )
+                                    }
+                                ) {
+                                    self.delegation = model.currentValidator
+                                }
+                            } else {
                                 HStack {
                                     ValidatorImageView(validator: validator)
                                     ListItemView(
@@ -90,20 +118,11 @@ struct AmountScene: View {
                                         subtitle: StakeValidatorViewModel(validator: validator).aprText
                                     )
                                 }
-                            ) {
-                                self.delegation = model.currentValidator
-                            }
-                        } else {
-                            HStack {
-                                ValidatorImageView(validator: validator)
-                                ListItemView(
-                                    title: StakeValidatorViewModel(validator: validator).name,
-                                    subtitle: StakeValidatorViewModel(validator: validator).aprText
-                                )
                             }
                         }
                     }
                 }
+
                 if model.isBalanceViewEnabled {
                     Section {
                         VStack {
@@ -128,34 +147,54 @@ struct AmountScene: View {
                                 }
                             )
                         }
-                        .frame(maxWidth: .infinity)
                     }
                 }
             }
+            .contentMargins([.top], .zero, for: .scrollContent)
+            .listSectionSpacing(.compact)
 
             Spacer()
-
             Button(Localized.Common.continue, action: {
-                Task { await next() }
+                next()
             })
-            .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .buttonStyle(.blue())
         }
-        .navigationBarTitleDisplayMode(.inline)
+        .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .frame(maxWidth: .infinity)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
+        .sheet(item: $isPresentingScanner) { value in
+            ScanQRCodeNavigationStack() {
+                onHandleScan($0, for: value)
+            }
+        }
+        .sheet(isPresented: $isPresentingContacts) {
+            ContactsNavigationStack(
+                wallet: model.wallet,
+                asset: model.asset
+            )
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button(Localized.Common.next) {
+                    next()
+                }.bold()
+            }
+        }
         .navigationDestination(for: $transferData) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    keystore: model.keystore,
+                    keystore: keystore,
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: model.amountRecipientData.data.asset.chain),
+                        .service(for: $0.recipientData.asset.chain),
                     walletsService: model.walletsService
                 )
             )
+            .navigationBarTitleDisplayMode(.inline)
         }
         .navigationDestination(for: $delegation) { value in
             StakeValidatorsScene(
@@ -185,20 +224,65 @@ struct AmountScene: View {
             Alert(title: Text(""), message: Text($0))
         }
     }
+}
 
-    func next() async {
+// MARK: - Actions
+
+extension AmountScene {
+    private func paste(field: Self.Field) {
+        guard let string = UIPasteboard.general.string else { return }
+        switch field {
+        case .address, .memo, .amount:
+            self.address = string.trim()
+        }
+    }
+
+    private func onHandleScan(_ result: String, for field: Self.Field) {
+        switch field {
+        case .address:
+            do {
+                let result = try model.getTransferDataFromScan(string: result)
+
+                // special case when all data is ready
+                if let amount = result.amount, (model.showMemo ? !memo.isEmpty : true) {
+                    next(amount: amount, name: .none, address: result.address, memo: memo, canChangeValue: false)
+                } else {
+                    address = result.address
+                    
+                    if let memo = result.memo {
+                        self.memo = memo
+                    }
+                    if let amount = result.amount {
+                        self.amount = amount
+                    }
+                }
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+            }
+        case .memo, .amount:
+            memo = result
+        }
+    }
+
+    private func next() {
         //TODO: Move validation per field on demand
 
+        next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)
+    }
+
+    private func next(amount: String, name: NameRecord?, address: String, memo: String?, canChangeValue: Bool) {
         do {
             let value = try model.isValidAmount(amount: amount)
-            let transfer = try model.getTransferData(value: value)
+            let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
+            let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
+
             transferData = transfer
         } catch {
             isPresentingErrorMessage = error.localizedDescription
         }
     }
 
-    func useMax() {
+    private func useMax() {
         amount = model.maxBalance
 
         focusedField = .none

@@ -11,6 +11,7 @@ struct SelectAssetScene: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.stakeService) private var stakeService
 
     @State private var isPresentingCopyMessage: Bool = false
     @State private var isPresentingCopyMessageValue: String?  = .none
@@ -23,13 +24,16 @@ struct SelectAssetScene: View {
     var assetInfo: AssetsInfo
 
     @State private var model: SelectAssetViewModel
+    @Binding var navigationPath: NavigationPath
 
     init(
         model: SelectAssetViewModel,
-        isPresentingAddToken: Binding<Bool>
+        isPresentingAddToken: Binding<Bool>,
+        navigationPath: Binding<NavigationPath>
     ) {
         _model = State(wrappedValue: model)
         _isPresentingAddToken = isPresentingAddToken
+        _navigationPath = navigationPath
 
         let request = Binding {
             model.filterModel.assetsRequest
@@ -53,7 +57,8 @@ struct SelectAssetScene: View {
                                 assetsService: model.assetsService,
                                 walletsService: model.walletsService
                             ),
-                            isPresentingAddToken: $isPresentingAddToken
+                            isPresentingAddToken: $isPresentingAddToken,
+                            navigationPath: $navigationPath
                         )
                     } label: {
                         ListItemView(title: Localized.Assets.hidden, subtitle: "\(assetInfo.hidden)")
@@ -93,6 +98,7 @@ struct SelectAssetScene: View {
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .searchable(
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
@@ -101,15 +107,15 @@ struct SelectAssetScene: View {
                   interval: Duration.milliseconds(250),
                   action: model.search(query:))
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
+        .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
         .navigationDestination(for: SelectAssetInput.self) { input in
             switch input.type {
             case .send:
-                RecipientScene(model: RecipientViewModel(
+                AmountNavigationFlow(
+                    input: AmountInput(type: .transfer, asset: input.asset),
                     wallet: model.wallet,
-                    keystore: keystore,
-                    walletsService: walletsService,
-                    assetModel: AssetViewModel(asset: input.asset))
+                    navigationPath: $navigationPath
                 )
             case .receive:
                 ReceiveScene(
@@ -127,7 +133,8 @@ struct SelectAssetScene: View {
                         input: .default)
                     )
             case .swap:
-                SwapScene(model: SwapViewModel(
+                SwapScene(
+                    model: SwapViewModel(
                         wallet: model.wallet,
                         assetId: input.asset.id,
                         walletsService: walletsService,
@@ -135,13 +142,7 @@ struct SelectAssetScene: View {
                         keystore: keystore
                     )
                 )
-            case .stake:
-                StakeScene(model: StakeViewModel(
-                    wallet: model.wallet,
-                    chain: input.asset.id.chain,
-                    stakeService: walletsService.stakeService)
-                )
-            case .manage, .hidden:
+            case .manage, .hidden, .stake:
                 EmptyView()
             }
         }
@@ -195,7 +196,8 @@ private struct ListAssetItemSelectionView: View {
                 assetsService: .main,
                 walletsService: .main
             ),
-            isPresentingAddToken: $present
+            isPresentingAddToken: $present,
+            navigationPath: Binding.constant(NavigationPath())
         )
     }
 }

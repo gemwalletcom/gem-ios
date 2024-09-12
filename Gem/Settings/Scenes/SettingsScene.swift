@@ -28,6 +28,7 @@ struct SettingsScene: View {
         }
         .onChange(of: model.currencyValue, onCurrencyChange)
         .listStyle(.insetGrouped)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }
@@ -111,20 +112,22 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
+            NavigationOpenLink(url: model.helpCenterURL, with: ListItemView(
+                title: model.helpCenterTitle,
+                image: model.helpCenterImage
+            ))
+
+            NavigationOpenLink(url: model.supportURL, with: ListItemView(
+                title: model.supportTitle,
+                image: model.supportImage
+            ))
+
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
                     title: model.aboutUsTitle,
                     image: model.aboutUsImage
                 )
             }
-
-            NavigationCustomLink(
-                with: ListItemView(
-                    title: model.rateAppTitle,
-                    image: model.rateAppImage
-                ),
-                action: onSelectRateApp
-            )
 
             if model.isDeveloperEnabled {
                 NavigationLink(value: Scenes.Developer()) {
@@ -134,23 +137,6 @@ extension SettingsScene {
                     )
                 }
             }
-
-            ListItemView(
-                title: model.versionTextTitle,
-                subtitle: model.versionTextValue,
-                image: model.versionTextImage
-            )
-            .contextMenu {
-                ContextMenuCopy(
-                    title: model.contextCopyTitle,
-                    value: model.versionTextValue
-                )
-                ContextMenuItem(
-                    title: model.contextDevTitle,
-                    image: SystemImage.info,
-                    action: onEnableDevSettings
-                )
-            }
         }
     }
 }
@@ -158,16 +144,6 @@ extension SettingsScene {
 // MARK: - Actions
 
 extension SettingsScene {
-    @MainActor
-    private func onEnableDevSettings() {
-        model.isDeveloperEnabled.toggle()
-    }
-
-    @MainActor
-    private func onSelectRateApp() {
-        RateService().rate()
-    }
-
     @MainActor
     private func onSelectCommutity(link: CommunityLink) {
         openURL(link.url)

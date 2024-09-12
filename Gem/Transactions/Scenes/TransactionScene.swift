@@ -96,14 +96,11 @@ struct TransactionScene: View {
                 }
                 
                 Section {
-                    Button(role: .none) {
-                        UIApplication.shared.open(model.transactionExplorerUrl)
-                    } label: {
-                        HStack {
-                            Text(model.transactionExplorerText)
-                                .tint(Colors.black)
-                        }
-                    }
+                    NavigationOpenLink(
+                        url: model.transactionExplorerUrl,
+                        with: Text(model.transactionExplorerText)
+                            .tint(Colors.black)
+                    )
                 }
             }
         }

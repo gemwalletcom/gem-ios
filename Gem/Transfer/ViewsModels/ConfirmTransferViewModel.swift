@@ -78,7 +78,7 @@ class ConfirmTransferViewModel {
     }
 
     var senderAddressExplorerUrl: URL { senderLink.url }
-    var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.url) }
+    var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }
 
     var shouldShowRecipientField: Bool { dataModel.shouldShowRecipient }
     var recipientTitle: String { dataModel.recipientTitle }
@@ -235,7 +235,8 @@ extension ConfirmTransferViewModel {
                     availableValue: availableValue,
                     assetFee: dataModel.asset.feeAsset,
                     assetFeeBalance: Balance(available: metaData.assetFeeBalance),
-                    fee: fee.totalFee
+                    fee: fee.totalFee,
+                    canChangeValue: dataModel.data.canChangeValue
                 )
             )
 

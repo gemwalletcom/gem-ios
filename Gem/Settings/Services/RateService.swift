@@ -11,7 +11,7 @@ struct RateService {
     func perform() {
         #if DEBUG
         #else
-        if preferences.launchesCount >= 15 && !preferences.rateApplicationShown {
+        if preferences.launchesCount >= 5 && !preferences.rateApplicationShown {
             rate()
             preferences.rateApplicationShown = true
         }
