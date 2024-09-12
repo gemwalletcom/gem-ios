@@ -115,4 +115,22 @@ extension WalletConnectionRecord {
             redirectUniversal: session.metadata.redirectUniversal
         )
     }
+
+    func update(with wallet: WalletId) -> WalletConnectionRecord {
+        return WalletConnectionRecord(
+            id: session.id,
+            sessionId: session.sessionId,
+            walletId: wallet.id,
+            state: session.state,
+            chains: chains ?? [],
+            createdAt: createdAt,
+            expireAt: session.expireAt,
+            appName: session.metadata.name,
+            appDescription: session.metadata.description,
+            appLink: session.metadata.url,
+            appIcon: session.metadata.icon,
+            redirectNative: session.metadata.redirectNative,
+            redirectUniversal: session.metadata.redirectUniversal
+        )
+    }
 }

@@ -2,30 +2,42 @@
 
 import Foundation
 import Primitives
+import WalletConnector
 
 struct ConnectionProposalViewModel {
-
+    private let connectionsService: ConnectionsService
     private let confirmTransferDelegate: ConfirmTransferDelegate
-    private let payload: WalletConnectionSessionProposal
+    private let pairingProposal: WCPairingProposal
+
+    var walletSelectorModel: SellectWalletViewModel
 
     init(
+        connectionsService: ConnectionsService,
         confirmTransferDelegate: @escaping ConfirmTransferDelegate,
-        payload: WalletConnectionSessionProposal
+        pairingProposal: WCPairingProposal,
+        wallets: [Wallet]
     ) {
+        self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
-        self.payload = payload
+        self.pairingProposal = pairingProposal
+        self.walletSelectorModel = SellectWalletViewModel(
+            wallets: wallets,
+            selectedWallet: pairingProposal.proposal.wallet
+        )
     }
     
-    var title: String {
-        return Localized.WalletConnect.Connect.title
+    var title: String { Localized.WalletConnect.Connect.title }
+    var buttonTitle: String { Localized.Transfer.confirm }
+    var walletTitle: String { Localized.Common.wallet }
+    var appTitle: String { Localized.WalletConnect.app }
+    var websiteTitle: String { Localized.WalletConnect.website }
+
+    var walletName: String {
+        walletSelectorModel.walletModel.name
     }
-    
-    var walletText: String {
-        return payload.wallet.name
-    }
-    
+
     var appText: String {
-        return payload.metadata.name
+        payload.metadata.name
     }
     
     var websiteText: String? {
@@ -36,12 +48,22 @@ struct ConnectionProposalViewModel {
     }
     
     var imageUrl: URL? {
-        return URL(string: payload.metadata.icon)
+        URL(string: payload.metadata.icon)
     }
-    
-    var buttonTitle: String { Localized.Transfer.confirm }
-    
+
+    private var payload: WalletConnectionSessionProposal {
+        pairingProposal.proposal
+    }
+}
+
+// MARK: - Business Logic
+
+extension ConnectionProposalViewModel {
     func accept() throws {
-        confirmTransferDelegate(.success(""))
+        let selectedWalletId = walletSelectorModel.walletModel.wallet.walletId
+        if payload.wallet.walletId != selectedWalletId {
+            try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
+        }
+        confirmTransferDelegate(.success(selectedWalletId.id))
     }
 }
