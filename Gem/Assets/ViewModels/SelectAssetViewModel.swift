@@ -52,7 +52,7 @@ class SelectAssetViewModel {
     }
     
     var showAddToken: Bool {
-        selectType == .manage && !walletChains.isEmpty
+        selectType == .manage && !filterModel.allChains.isEmpty
     }
 }
 
@@ -77,10 +77,6 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
-    private var walletChains: WalletSupportedChains {
-        WalletSupportedChains(wallet: wallet)
-    }
-
     private func chains(for type: WalletType) -> [Chain] {
         switch wallet.type {
         case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }

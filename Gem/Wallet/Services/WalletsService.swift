@@ -230,10 +230,7 @@ class WalletsService {
     //
 
     func setupWallet(_ wallet: Wallet) throws {
-        let chains = wallet.accounts.map { $0.chain }.asSet()
-            .intersection(AssetConfiguration.allChains)
-            .map { $0 }
-
+        let chains = wallet.chains(type: .all)
         try enableAssetBalances(wallet: wallet, chains: chains)
     }
 

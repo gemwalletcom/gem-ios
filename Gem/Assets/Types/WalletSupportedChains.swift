@@ -4,30 +4,25 @@ import Foundation
 import Primitives
 import Settings
 
-struct WalletSupportedChains {
-    private let chains: [Chain]
-
-    init(wallet: Wallet) {
-        let walletChains = wallet.accounts.map { $0.chain }.asSet()
-        let supportedChains = AssetConfiguration.supportedChainsWithTokens
-
-        self.chains = walletChains.intersection(supportedChains).asArray()
-    }
-
-    var sortedByRank: [Chain] {
-        chains.sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
-    }
-
-    var hasMany: Bool {
-        chains.count > 1
-    }
-
-    var hasOne: Bool {
-        chains.count == 1
-    }
-
-    var isEmpty: Bool {
-        chains.isEmpty
-    }
+enum WalletSupportedChains {
+    case all
+    case withTokens
 }
 
+// MARK: - Model extensions
+
+extension Primitives.Wallet {
+    func chains(type: WalletSupportedChains) -> [Chain] {
+        let supportedChains: [Chain]
+        switch type {
+        case .all:
+            supportedChains = AssetConfiguration.allChains
+        case .withTokens:
+            supportedChains = AssetConfiguration.supportedChainsWithTokens
+        }
+
+        let walletChains = accounts.map { $0.chain }.asSet()
+        return walletChains.intersection(supportedChains).asArray()
+            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
+    }
+}
