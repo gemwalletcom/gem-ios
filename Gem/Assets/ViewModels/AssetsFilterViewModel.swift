@@ -7,7 +7,8 @@ import Settings
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType
-    let allChains: [Chain] = AssetConfiguration.allChains
+
+    let allChains: [Chain]
 
     var assetsRequest: AssetsRequest
 
@@ -25,6 +26,7 @@ struct AssetsFilterViewModel {
     }
 
     init(wallet: Wallet, type: SelectAssetType) {
+        self.allChains = WalletSupportedChains(wallet: wallet).sortedByRank
         self.assetsRequest = AssetsRequest(
             walletID: wallet.id,
             filters: Self.defaultFilters(type: type)

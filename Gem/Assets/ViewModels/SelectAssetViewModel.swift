@@ -54,10 +54,6 @@ class SelectAssetViewModel {
     var showAddToken: Bool {
         selectType == .manage && !walletChains.isEmpty
     }
-
-    var showFiltering: Bool {
-        selectType == .manage && walletChains.hasMany
-    }
 }
 
 // MARK: - Business Logic
