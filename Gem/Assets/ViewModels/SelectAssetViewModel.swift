@@ -2,7 +2,6 @@ import Foundation
 import Keystore
 import Primitives
 import Store
-import Settings
 import Components
 
 @Observable
@@ -53,7 +52,11 @@ class SelectAssetViewModel {
     }
     
     var showAddToken: Bool {
-        selectType == .manage && wallet.accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
+        selectType == .manage && !walletChains.isEmpty
+    }
+
+    var showFiltering: Bool {
+        selectType == .manage && walletChains.hasMany
     }
 }
 
@@ -78,6 +81,10 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
+    private var walletChains: WalletSupportedChains {
+        WalletSupportedChains(wallet: wallet)
+    }
+
     private func chains(for type: WalletType) -> [Chain] {
         switch wallet.type {
         case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }

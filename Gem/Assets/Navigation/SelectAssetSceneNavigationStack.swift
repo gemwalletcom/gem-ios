@@ -38,20 +38,23 @@ struct SelectAssetSceneNavigationStack: View {
                         .accessibilityIdentifier("cancel")
                     }
                     if model.showAddToken {
-                        ToolbarItem(placement: .navigationBarTrailing) {
-                            Button {
-                                isPresentingFilteringView = true
-                            } label: {
-                                if model.filterModel.isCusomFilteringSpecified {
-                                    Image(systemName: SystemImage.filterFill)
-                                        .symbolRenderingMode(.palette)
-                                        .foregroundStyle(Colors.whiteSolid, Colors.blue)
-                                } else {
-                                    Image(systemName: SystemImage.filter)
-                                        .foregroundStyle(.primary)
+                        
+                        if model.showFiltering {
+                            ToolbarItem(placement: .navigationBarTrailing) {
+                                Button {
+                                    isPresentingFilteringView = true
+                                } label: {
+                                    if model.filterModel.isCusomFilteringSpecified {
+                                        Image(systemName: SystemImage.filterFill)
+                                            .symbolRenderingMode(.palette)
+                                            .foregroundStyle(Colors.whiteSolid, Colors.blue)
+                                    } else {
+                                        Image(systemName: SystemImage.filter)
+                                            .foregroundStyle(.primary)
+                                    }
                                 }
+                                .contentTransition(.symbolEffect(.replace))
                             }
-                            .contentTransition(.symbolEffect(.replace))
                         }
 
                         ToolbarItem(placement: .navigationBarTrailing) {
