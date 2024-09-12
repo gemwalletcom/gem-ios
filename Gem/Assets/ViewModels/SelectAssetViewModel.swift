@@ -2,7 +2,6 @@ import Foundation
 import Keystore
 import Primitives
 import Store
-import Settings
 import Components
 
 @Observable
@@ -53,7 +52,7 @@ class SelectAssetViewModel {
     }
     
     var showAddToken: Bool {
-        selectType == .manage && wallet.accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
+        selectType == .manage && !filterModel.allChains.isEmpty
     }
 }
 

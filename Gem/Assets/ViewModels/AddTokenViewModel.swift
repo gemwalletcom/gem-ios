@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import SwiftUI
-import Settings
 import Blockchain
 import Components
 import Style
@@ -20,12 +19,8 @@ class AddTokenViewModel {
 
     init(wallet: Wallet, service: AddTokenService) {
         self.service = service
-
-        let availableChains = AssetConfiguration.supportedChainsWithTokens.asSet()
-            .intersection(wallet.accounts.map { $0.chain }.asSet())
-            .asArray()
-            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
-        self.input = AddTokenInput(chains: availableChains)
+        let chains = wallet.chains(type: .withTokens)
+        self.input = AddTokenInput(chains: chains)
     }
 
     var title: String { Localized.Wallet.AddToken.title }

@@ -7,7 +7,8 @@ import Settings
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType
-    let allChains: [Chain] = AssetConfiguration.allChains
+
+    let allChains: [Chain]
 
     var assetsRequest: AssetsRequest
 
@@ -30,6 +31,7 @@ struct AssetsFilterViewModel {
             filters: Self.defaultFilters(type: type)
         )
         self.type = type
+        self.allChains = wallet.chains(type: .all)
     }
 
     static func defaultFilters(type: SelectAssetType) -> [AssetsRequestFilter] {
