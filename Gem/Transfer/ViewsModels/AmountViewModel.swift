@@ -87,7 +87,13 @@ class AmounViewModel: ObservableObject {
     }
     
     var title: String {
-        return Localized.Transfer.Send.title
+        switch type {
+        case .transfer: Localized.Transfer.Send.title
+        case .stake: Localized.Transfer.Stake.title
+        case .unstake: Localized.Transfer.Unstake.title
+        case .redelegate: Localized.Transfer.Redelegate.title
+        case .withdraw: Localized.Transfer.Withdraw.title
+        }
     }
 
     var assetSymbol: String {
