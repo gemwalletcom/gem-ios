@@ -56,9 +56,9 @@ struct WalletCoordinator: View {
     @State var isPresentingError: String? = .none
     @State var isPresentingWalletConnectBar: Bool = false
 
-    @State var transferData: TransferDataCallback<TransferData>? // wallet connector
+    @State var transferData: TransferDataCallback<WCTransferData>? // wallet connector
     @State var signMessage: TransferDataCallback<SignMessagePayload>? // wallet connector
-    @State var connectionProposal: TransferDataCallback<WalletConnectionSessionProposal>? // wallet connector
+    @State var connectionProposal: TransferDataCallback<WCPairingProposal>? // wallet connector
 
     init(
         db: DB
@@ -205,11 +205,11 @@ struct WalletCoordinator: View {
             NavigationStack {
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
-                        wallet: keystore.currentWallet!,
+                        wallet: data.payload.wallet,
                         keystore: keystore,
-                        data: data.payload,
+                        data: data.payload.tranferData,
                         service: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.payload.recipientData.asset.chain),
+                            .service(for: data.payload.tranferData.recipientData.asset.chain),
                         walletsService: walletsService,
                         confirmTransferDelegate: data.delegate
                     )
@@ -253,8 +253,10 @@ struct WalletCoordinator: View {
             NavigationStack {
                 ConnectionProposalScene(
                     model: ConnectionProposalViewModel(
+                        connectionsService: connectionsService,
                         confirmTransferDelegate: data.delegate,
-                        payload: data.payload
+                        pairingProposal: data.payload,
+                        wallets: keystore.wallets
                     )
                 )
                 .interactiveDismissDisabled(true)

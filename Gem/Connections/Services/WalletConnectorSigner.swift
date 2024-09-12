@@ -22,30 +22,37 @@ public class WalletConnectorSigner: WalletConnectorSignable {
         self.keystore = keystore
         self.walletConnectorInteractor = walletConnectorInteractor
     }
-    
-    public func getWallet() throws -> Wallet {
-        return try keystore.getCurrentWallet()
+
+    public var allChains: [Primitives.Chain]  {
+        Config.shared.getWalletConnectConfig().chains.compactMap { Chain(rawValue: $0) }
     }
 
-    public func getChains() throws -> [Primitives.Chain] {
-        let chains = Config.shared.getWalletConnectConfig().chains.compactMap { Chain(rawValue: $0) }
-        return try getWallet().accounts.map { $0.chain }.asSet().intersection(chains).asArray()
+    public func getCurrentWallet() throws -> Wallet {
+        try keystore.getCurrentWallet()
+    }
+
+    public func getWallet(id: WalletId) throws -> Wallet {
+        try keystore.getWallet(id)
+    }
+
+    public func getChains(wallet: Wallet) -> [Primitives.Chain] {
+        wallet.accounts.map { $0.chain }.asSet().intersection(allChains).asArray()
+    }
+
+    public func getAccounts(wallet: Wallet, chains: [Primitives.Chain]) -> [Primitives.Account] {
+        wallet.accounts.filter { chains.contains($0.chain) }
+    }
+
+    public func getEvents() -> [WalletConnectionEvents] {
+        WalletConnectionEvents.allCases
     }
     
-    public func getAccounts() throws -> [Primitives.Account] {
-        return try getWallet().accounts
+    public func getMethods() -> [WalletConnectionMethods] {
+        WalletConnectionMethods.allCases
     }
-    
-    public func getEvents() throws -> [WalletConnectionEvents] {
-        return WalletConnectionEvents.allCases
-    }
-    
-    public func getMethods() throws -> [WalletConnectionMethods] {
-        return WalletConnectionMethods.allCases
-    }
-    
-    public func sessionApproval(payload: WalletConnectionSessionProposal) async throws -> Bool {
-        return try await walletConnectorInteractor.sessionApproval(payload: payload)
+
+    public func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
+        try await walletConnectorInteractor.sessionApproval(payload: payload)
     }
     
     public func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String {
@@ -81,6 +88,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try store.getConnection(id: sessionId)
+        let wallet = try keystore.getWallet(session.wallet.walletId)
+
         switch transaction {
         case .ethereum(let transaction):
             let address = transaction.to
@@ -124,8 +133,8 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                 value: value,
                 canChangeValue: false
             )
-            
-            return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
+
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         case .solana(let data):
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: data.data(using: .utf8))),
@@ -136,7 +145,7 @@ public class WalletConnectorSigner: WalletConnectorSignable {
                 value: .zero,
                 canChangeValue: false
             )
-            return try await walletConnectorInteractor.sendTransaction(transferData: transferData)
+            return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
         }
     }
     

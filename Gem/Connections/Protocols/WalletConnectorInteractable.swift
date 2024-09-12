@@ -6,10 +6,10 @@ import Primitives
 
 protocol WalletConnectorInteractable {
     func sessionReject(error: Error)
-    func sessionApproval(payload: WalletConnectionSessionProposal) async throws -> Bool
+    func sessionApproval(payload: WCPairingProposal) async throws -> WalletId
     func signMessage(payload: SignMessagePayload) async throws -> String
     
-    func signTransaction(transferData: TransferData) async throws -> String
-    func sendTransaction(transferData: TransferData) async throws -> String
-    func sendRawTransaction(transferData: TransferData) async throws -> String
+    func signTransaction(transferData: WCTransferData) async throws -> String
+    func sendTransaction(transferData: WCTransferData) async throws -> String
+    func sendRawTransaction(transferData: WCTransferData) async throws -> String
 }

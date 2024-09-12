@@ -22,7 +22,7 @@ struct GemApp: App {
             )
             .databaseContext(.readWrite { db.dbQueue })
             .navigationBarTitleDisplayMode(.inline)
-            .tint(Colors.blue)
+            .tint(Colors.black)
         }
     }
 }

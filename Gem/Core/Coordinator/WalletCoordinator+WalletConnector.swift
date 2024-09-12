@@ -30,13 +30,13 @@ extension WalletCoordinator: WalletConnectorInteractable {
         
         self.isPresentingError = error.localizedDescription
     }
-    
-    func sessionApproval(payload: WalletConnectionSessionProposal) async throws -> Bool {
+
+    func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
         return try await withCheckedThrowingContinuation { continuation in
             let transferDataCallback = TransferDataCallback(payload: payload) { result in
                 switch result {
-                case .success:
-                    continuation.resume(with: .success(true))
+                case let .success(value):
+                    continuation.resume(with: .success(WalletId(id: value)))
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
@@ -59,11 +59,11 @@ extension WalletCoordinator: WalletConnectorInteractable {
         }
     }
     
-    func signTransaction(transferData: TransferData) async throws -> String {
+    func signTransaction(transferData: WCTransferData) async throws -> String {
         fatalError()
     }
     
-    func sendTransaction(transferData: TransferData) async throws -> String {
+    func sendTransaction(transferData: WCTransferData) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             let transferDataCallback = TransferDataCallback(payload: transferData) { result in
                 switch result {
@@ -77,7 +77,7 @@ extension WalletCoordinator: WalletConnectorInteractable {
         }
     }
     
-    func sendRawTransaction(transferData: TransferData) async throws -> String {
+    func sendRawTransaction(transferData: WCTransferData) async throws -> String {
         fatalError()
     }
 }
