@@ -45,7 +45,7 @@
 "wallet.manage_token_list" = "管理代幣列表";
 "wallet.scan_qr_code" = "掃描二維碼";
 "buy.providers.title" = "供應商";
-"buy.rate" = "評價";
+"buy.rate" = "費率";
 "common.try_again" = "重試";
 "transfer.confirm" = "確認";
 "transfer.from" = "來自";

@@ -45,7 +45,7 @@
 "wallet.manage_token_list" = "管理代币列表";
 "wallet.scan_qr_code" = "扫描二维码";
 "buy.providers.title" = "提供商";
-"buy.rate" = "评价";
+"buy.rate" = "汇率";
 "common.try_again" = "重试";
 "transfer.confirm" = "确认";
 "transfer.from" = "来自";

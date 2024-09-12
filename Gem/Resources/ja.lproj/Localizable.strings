@@ -45,7 +45,7 @@
 "wallet.manage_token_list" = "トークンリストの管理";
 "wallet.scan_qr_code" = "QRコードをスキャン";
 "buy.providers.title" = "プロバイダー";
-"buy.rate" = "アプリを評価";
+"buy.rate" = "レート";
 "common.try_again" = "もう一度やり直してください";
 "transfer.confirm" = "確認";
 "transfer.from" = "から";
