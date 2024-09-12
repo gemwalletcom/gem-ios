@@ -10,8 +10,6 @@ import GRDBQuery
 import Style
 
 struct WalletScene: View {
-    
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
@@ -48,11 +46,11 @@ struct WalletScene: View {
 
         try? model.setupWallet()
 
-        _assets = Query(constant: model.assetsRequest, in: \.db.dbQueue)
-        _assetsPinned = Query(constant: model.assetsPinnedRequest, in: \.db.dbQueue)
-        _fiatValue = Query(constant: model.fiatValueRequest, in: \.db.dbQueue)
-        _dbWallet = Query(constant: model.walletRequest, in: \.db.dbQueue)
-        _banners = Query(constant: model.bannersRequest, in: \.db.dbQueue)
+        _assets = Query(constant: model.assetsRequest)
+        _assetsPinned = Query(constant: model.assetsPinnedRequest)
+        _fiatValue = Query(constant: model.fiatValueRequest)
+        _dbWallet = Query(constant: model.walletRequest)
+        _banners = Query(constant: model.bannersRequest)
     }
     
     var body: some View {

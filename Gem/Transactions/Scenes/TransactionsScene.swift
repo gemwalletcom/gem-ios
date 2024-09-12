@@ -8,8 +8,6 @@ import Store
 import Style
 
 struct TransactionsScene: View {
-    @Environment(\.db) private var DB
-
     @Query<TransactionsRequest>
     private var transactions: [TransactionExtended]
 
@@ -19,7 +17,7 @@ struct TransactionsScene: View {
         model: TransactionsViewModel
     ) {
         self.model = model
-        _transactions = Query(constant: model.request, in: \.db.dbQueue)
+        _transactions = Query(constant: model.request)
     }
 
     var body: some View {

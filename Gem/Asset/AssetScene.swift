@@ -51,9 +51,9 @@ struct AssetScene: View {
         self.wallet = wallet
         self.input = input
         _isPresentingAssetSelectType = isPresentingAssetSelectType
-        _assetData = Query(constant: input.assetRequest, in: \.db.dbQueue)
-        _transactions = Query(constant: input.transactionsRequest, in: \.db.dbQueue)
-        _banners = Query(constant: input.bannersRequest, in: \.db.dbQueue)
+        _assetData = Query(constant: input.assetRequest)
+        _transactions = Query(constant: input.transactionsRequest)
+        _banners = Query(constant: input.bannersRequest)
     }
 
     var body: some View {

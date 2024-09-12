@@ -4,9 +4,9 @@ import Foundation
 import GRDB
 import GRDBQuery
 import Combine
-import Primitives
+@preconcurrency import Primitives // TODO: - integrate Sendable for TransactionState
 
-public struct TransactionsCountRequest: Queryable {
+public struct TransactionsCountRequest: ValueObservationQueryable {
     public static var defaultValue: Int { 0 }
 
     private let walletId: String
@@ -20,15 +20,8 @@ public struct TransactionsCountRequest: Queryable {
         self.state = state
     }
 
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<Int, Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-
-    private func fetch(_ db: Database) throws -> Int {
-        return try TransactionRecord
+    public func fetch(_ db: Database) throws -> Int {
+        try TransactionRecord
             .filter(Columns.Transaction.walletId == walletId)
             .filter(Columns.Transaction.state == state.rawValue)
             .fetchCount(db)
