@@ -13,14 +13,14 @@ read_deployment_target() {
 }
 
 generate() {
-    if [ -s $BUILD_MODE ]; then
+    if [ -z $BUILD_MODE ]; then
         echo "Build Gemstone debug"
     else
         echo "Build Gemstone $BUILD_MODE"
     fi
-    
+
     pushd ${STONE_DIR} > /dev/null
-    make apple BUILD_MODE=$BUILD_MODE IPHONEOS_DEPLOYMENT_TARGET=$(read_deployment_target)
+    BUILD_MODE=$BUILD_MODE IPHONEOS_DEPLOYMENT_TARGET=$(read_deployment_target) just build-ios
     rm -rf ${PACKAGES_DIR}
     cp -Rf target/spm ${PACKAGES_DIR}
 
