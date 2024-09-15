@@ -1,4 +1,4 @@
-export GEMSTONE_VERSION = 0.2.0
+export GEMSTONE_VERSION := "v0.2.0"
 
 list:
     just --list
@@ -57,7 +57,7 @@ localize:
     just generate-model
     just generate-swiftgen
 
-generate: generate-model generate-stone generate-swiftgen
+generate: generate-model generate-swiftgen
 
 generate-model:
     @echo "==> Generate typeshare for iOS"
