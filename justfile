@@ -1,3 +1,5 @@
+export GEMSTONE_VERSION = 0.2.0
+
 list:
     just --list
 
@@ -27,6 +29,10 @@ install-gemstone VERSION:
     rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
     wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2 -O Packages/Gemstone-spm.tar.bz2
     tar -xvjf Gemstone-spm.tar.bz2 -C Packages/Gemstone
+
+install-gemstone-ci:
+    @echo "==> Install binary Gemstone on CI"
+    just install-gemstone {{GEMSTONE_VERSION}}
 
 setup-git:
     @echo "==> Setup git submodules"

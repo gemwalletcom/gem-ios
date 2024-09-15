@@ -44,7 +44,7 @@ jobs:
           just install-typeshare && just install-toolchains && just install-swifttools
 
       - name: Build Core
-        run: just generate-stone
+        run: just install-gemstone-ci
 
       - name: Unit Tests
         run: just test
