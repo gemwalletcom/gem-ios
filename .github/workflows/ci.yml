@@ -35,13 +35,16 @@ jobs:
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.3
 
+      - name: Install just
+        run: cargo install just
+
       - name: Install dependencies
         run: |
           rustc --version
-          make install-typeshare && make install-toolchains && make install-swifttools
+          just install-typeshare && just install-toolchains && just install-swifttools
 
       - name: Build Core
-        run: make generate-stone
+        run: just generate-stone
 
       - name: Unit Tests
-        run: make test
+        run: just test
