@@ -18,6 +18,16 @@ install-swifttools:
 bootstrap: install generate
     @echo "<== Bootstrap done."
 
+install-wallet-core VERSION:
+    @echo "==> Install wallet-core {{VERSION}}"
+    wget https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -O Packages/WalletCore/Package.swift
+
+install-gemstone VERSION:
+    @echo "==> Install binary Gemstone {{VERSION}}"
+    rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
+    wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2 -O Packages/Gemstone-spm.tar.bz2
+    tar -xvjf Gemstone-spm.tar.bz2 -C Packages/Gemstone
+
 setup-git:
     @echo "==> Setup git submodules"
     @git submodule update --init --recursive

@@ -11,3 +11,5 @@ DerivedData/
 Packages/Gemstone/
 .vscode/settings.json
 build
+*.tar.bz2
+.xcframework/
