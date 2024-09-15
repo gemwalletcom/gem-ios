@@ -17,7 +17,7 @@ install-swifttools:
     @echo "==> Install SwiftGen and SwiftFormat"
     @brew install swiftgen swiftformat
 
-bootstrap: install generate
+bootstrap: install install-gemstone-ci
     @echo "<== Bootstrap done."
 
 install-wallet-core VERSION:
@@ -25,10 +25,13 @@ install-wallet-core VERSION:
     wget https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -O Packages/WalletCore/Package.swift
 
 install-gemstone VERSION:
-    @echo "==> Install binary Gemstone {{VERSION}}"
+    #!/usr/bin/env bash
+    echo "==> Install binary Gemstone {{VERSION}}"
     rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
-    wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2 -O Packages/Gemstone-spm.tar.bz2
-    tar -xvjf Gemstone-spm.tar.bz2 -C Packages/Gemstone
+    cd Packages/Gemstone
+    wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2
+    tar -xvjf Gemstone-spm.tar.bz2
+    rm Gemstone-spm.tar.bz2
 
 install-gemstone-ci:
     @echo "==> Install binary Gemstone on CI"
