@@ -6,68 +6,30 @@ import LocalAuthentication
 import Primitives
 
 public class LocalKeystorePassword: KeystorePassword {
-    
     private struct Keys {
         static let password = "password"
         static let passwordAuthentication = "password_authentication"
     }
     
-    let keychain = Keychain()
+    private let keychain = Keychain()
     
-    public init() {
-
-    }
+    public init() {}
     
-    public func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
-        return try setPassword(password, authentication: authentication, context: LAContext())
-    }
-    
-    public func getPassword() throws -> String {
-        return try getPassword(context: LAContext())
-    }
-    
-    public func setPassword(
-        _ password: String,
-        authentication: KeystoreAuthentication,
-        context: LAContext
-    ) throws {
-        //NSLog("setPassword")
-        try keychain
-            .set(authentication.rawValue, key: Keys.passwordAuthentication)
-        
-        //Changing whenPasscodeSetThisDeviceOnly => whenUnlockedThisDeviceOnly due to Apple Review team not being able to test the app.
-        try keychain
-            .accessibility(.whenUnlockedThisDeviceOnly, authenticationPolicy: authentication.policy)
-            .authenticationContext(context)
-            .set(password, key: Keys.password)
-    }
-    
-    public func getPassword(
-        context: LAContext
-    ) throws -> String {
-        //NSLog("getPassword")
-        
-        return try keychain
-            .authenticationContext(context)
-            .get(Keys.password) ?? ""
+    public func getAvailableAuthentication() -> KeystoreAuthentication {
+        KeystoreAuthentication.availableAuthenticationType
     }
     
     public func getAuthentication() throws -> KeystoreAuthentication {
-        //NSLog("getAuthentication")
         guard let value = try keychain.get(Keys.passwordAuthentication) else {
             return .none
         }
         return KeystoreAuthentication(rawValue: value) ?? .none
     }
     
-    public func getAvailableAuthentication() throws -> KeystoreAuthentication {
-        return KeystoreAuthentication.availableAuthenticationType
-    }
-    
-    public func enableAuthentication(_ value: Bool, context: LAContext) throws {
-        switch value {
+    public func enableAuthentication(_ enable: Bool, context: LAContext) throws {
+        switch enable {
         case true:
-            let authentication = try getAvailableAuthentication()
+            let authentication = getAvailableAuthentication()
             switch authentication {
             case .biometrics, .passcode:
                 try changeAuthentication(authentication: authentication, context: context)
@@ -79,18 +41,46 @@ public class LocalKeystorePassword: KeystorePassword {
         }
     }
     
-    public func changeAuthentication(authentication: KeystoreAuthentication, context: LAContext) throws {
-        //NSLog("changeAuthentication \(authentication)")
-        
-        let password = try getPassword(context: context)
-        try setPassword(password, authentication: authentication, context: context)
+    public func getPassword() throws -> String {
+        try getPassword(context: LAContext())
+    }
+    
+    public func getPassword(context: LAContext) throws -> String {
+        try keychain
+            .authenticationContext(context)
+            .get(Keys.password) ?? ""
+    }
+    
+    public func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
+        try setPassword(password, authentication: authentication, context: LAContext())
     }
     
     public func remove() throws {
         try keychain
             .remove(Keys.password)
     }
+    
+    private func setPassword(
+        _ password: String,
+        authentication: KeystoreAuthentication,
+        context: LAContext
+    ) throws {
+        try keychain
+            .set(authentication.rawValue, key: Keys.passwordAuthentication)
+        
+        try keychain
+            .accessibility(.whenUnlockedThisDeviceOnly, authenticationPolicy: authentication.policy)
+            .authenticationContext(context)
+            .set(password, key: Keys.password)
+    }
+    
+    private func changeAuthentication(authentication: KeystoreAuthentication, context: LAContext) throws {
+        let password = try getPassword(context: context)
+        try setPassword(password, authentication: authentication, context: context)
+    }
 }
+
+// MARK: - Models extensions
 
 extension LAContext {
     public func canEvaluatePolicyThrowing(policy: LAPolicy) throws {

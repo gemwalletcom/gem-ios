@@ -148,32 +148,35 @@ struct WalletCoordinator: View {
     var body: some View {
         VStack {
             if let currentWallet = keystore.currentWallet {
-                MainTabView(
-                    model: .init(wallet: currentWallet),
-                    navigationStateManager: $navigationStateManager
-                )
-                .tint(Colors.black)
-                .alert(Localized.UpdateApp.title, isPresented: $updateAvailableAlertSheetMessage.mappedToBool()) {
-                    Button(Localized.Common.cancel, role: .cancel) { }
-                    Button(Localized.UpdateApp.action, role: .none) {
-                        UIApplication.shared.open(PublicConstants.url(.appStore))
+
+                LockScreenScene(model: LockSceneViewModel()) {
+                    MainTabView(
+                        model: .init(wallet: currentWallet),
+                        navigationStateManager: $navigationStateManager
+                    )
+                    .tint(Colors.black)
+                    .alert(Localized.UpdateApp.title, isPresented: $updateAvailableAlertSheetMessage.mappedToBool()) {
+                        Button(Localized.Common.cancel, role: .cancel) { }
+                        Button(Localized.UpdateApp.action, role: .none) {
+                            UIApplication.shared.open(PublicConstants.url(.appStore))
+                        }
+                    } message: {
+                        Text(Localized.UpdateApp.description(updateAvailableAlertSheetMessage ?? ""))
                     }
-                } message: {
-                    Text(Localized.UpdateApp.description(updateAvailableAlertSheetMessage ?? ""))
+                    .environment(\.db, db)
+                    .environment(\.nodeService, nodeService)
+                    .environment(\.keystore, keystore)
+                    .environment(\.walletService, walletService)
+                    .environment(\.walletsService, walletsService)
+                    .environment(\.deviceService, deviceService)
+                    .environment(\.subscriptionService, subscriptionService)
+                    .environment(\.transactionsService, transactionsService)
+                    .environment(\.assetsService, assetsService)
+                    .environment(\.stakeService, stakeService)
+                    .environment(\.bannerService, bannerService)
+                    .environment(\.balanceService, balanceService)
+                    .environment(\.chainServiceFactory, chainServiceFactory)
                 }
-                .environment(\.db, db)
-                .environment(\.nodeService, nodeService)
-                .environment(\.keystore, keystore)
-                .environment(\.walletService, walletService)
-                .environment(\.walletsService, walletsService)
-                .environment(\.deviceService, deviceService)
-                .environment(\.subscriptionService, subscriptionService)
-                .environment(\.transactionsService, transactionsService)
-                .environment(\.assetsService, assetsService)
-                .environment(\.stakeService, stakeService)
-                .environment(\.bannerService, bannerService)
-                .environment(\.balanceService, balanceService)
-                .environment(\.chainServiceFactory, chainServiceFactory)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
             }

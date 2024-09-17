@@ -3,28 +3,79 @@
 import SwiftUI
 import Style
 
-struct LockScreenScene: View {
-    
-    @ObservedObject var lockStateService: LockStateService
-    
+struct LockScreenScene<Content: View>: View {
+    @Environment(\.scenePhase) var scenePhase
+
+    @State private var model: LockSceneViewModel
+    private let content: Content
+
+    init(
+        model: LockSceneViewModel,
+        @ViewBuilder content: () -> Content
+    ) {
+        self.model = model
+        self.content = content()
+    }
+
     var body: some View {
-        VStack {
-            Spacer()
-            VStack() {
-                Image(.logo)
-                    .resizable()
-                    .frame(width: 128, height: 128)
-                    .scaledToFit()
+        ZStack {
+            content
+                .blur(radius: model.blur)
+                .disabled(model.isLocked)
+
+            if model.isLocked {
+                Rectangle()
+                    .ignoresSafeArea()
+                    .foregroundStyle(.clear)
+                    .overlay(alignment: .bottom) {
+                        unlockButton
+                    }
+                    .onAppear {
+                        unlock()
+                    }
             }
-            Spacer()
         }
+        .animation(.smooth, value: model.blur)
         .frame(maxWidth: .infinity)
-        .background(Colors.white)
+        .onChange(of: scenePhase, onScenePhaseChange)
     }
 }
 
-//struct LockScreenScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        LockScreenScene()
-//    }
-//}
+// MARK: - UI Components
+
+extension LockScreenScene {
+    @ViewBuilder
+    private var unlockButton: some View {
+        VStack(spacing: Spacing.medium) {
+            if model.state == .lockedCanceled {
+                Button(action: unlock) {
+                    Text(model.unlockTitle)
+                }
+                .buttonStyle(.blue())
+                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .padding()
+            }
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension LockScreenScene {
+    @MainActor
+    private func onScenePhaseChange(_: ScenePhase, _ phase: ScenePhase) {
+        model.handleSceneChange(to: phase)
+    }
+
+    private func unlock() {
+        Task {
+            await model.unlock()
+        }
+    }
+}
+
+// MARK: - Previews
+
+#Preview {
+    LockScreenScene(model: .init()) { }
+}

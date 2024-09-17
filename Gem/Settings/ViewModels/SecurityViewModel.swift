@@ -3,38 +3,52 @@
 import Foundation
 import Keystore
 import Components
-import LocalAuthentication
 
-class SecurityViewModel: ObservableObject {
-    
-    let keystorePassword = LocalKeystorePassword()
-    
-    var title: String {
-        return Localized.Settings.security
+@Observable
+class SecurityViewModel {
+    private let service: BiometryAuthentifiable
+
+    var isPresentingError: String?
+    var isEnabled: Bool
+
+    init(service: BiometryAuthentifiable = BiometryAuthentificationService()) {
+        self.service = service
+        self.isEnabled = service.isAuthenticationEnabled
     }
-    
+
+    var title: String {
+        Localized.Settings.security
+    }
+
     var authenticationTitle: String {
-        switch try! keystorePassword.getAvailableAuthentication() {
+        switch service.availableAuthentication {
         case .biometrics:
             return Localized.Settings.enableValue("Face ID")
-        case .none, .passcode:
+        case .passcode, .none:
             return Localized.Settings.enablePasscode
         }
     }
-    
-    var authenticationEnabled: Bool {
-        guard let authentication = try? keystorePassword.getAuthentication() else {
-            return false
-        }
-        switch authentication {
-        case .biometrics, .passcode:
-            return true
-        case .none:
-            return false
-        }
+
+    static var reason: String {
+        Localized.Settings.Security.authentication
     }
-    
-    func changeEnableBiometrics(value: Bool, context: LAContext) throws {
-        try keystorePassword.enableAuthentication(value, context: context)
+}
+
+// MARK: - Business Logic
+
+extension SecurityViewModel {
+    func toggleBiometrics() async {
+        guard isEnabled != service.isAuthenticationEnabled else { return }
+        do {
+            try await service.enableAuthentication(isEnabled, reason: SecurityViewModel.reason)
+        } catch let error as BiometryAuthentificationError {
+            if !error.isAuthCanceled {
+                isPresentingError = error.localizedDescription
+            }
+            isEnabled = !isEnabled
+        } catch {
+            isPresentingError = error.localizedDescription
+            isEnabled = !isEnabled
+        }
     }
 }

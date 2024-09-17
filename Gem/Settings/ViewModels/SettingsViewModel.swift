@@ -12,7 +12,7 @@ import Primitives
 // TODO: - #2 review observation migrate to @Observable
 class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
-    @ObservedObject var securityModel: SecurityViewModel
+    @State var securityModel: SecurityViewModel
 
     @Published var isDeveloperEnabled: Bool
 

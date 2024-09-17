@@ -11,7 +11,7 @@ struct SettingsNavigationStack: View {
     @Binding var navigationPath: NavigationPath
 
     @ObservedObject var currencyModel: CurrencySceneViewModel
-    @ObservedObject var securityModel: SecurityViewModel
+    @State var securityModel: SecurityViewModel
     
     @Environment(\.deviceService) private var deviceService
     @Environment(\.subscriptionService) private var subscriptionService
