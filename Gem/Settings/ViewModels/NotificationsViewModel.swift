@@ -9,6 +9,7 @@ struct NotificationsViewModel {
     
     let deviceService: DeviceService
     let subscriptionService: SubscriptionService
+    let pushNotificationService = PushNotificationEnablerService()
     let preferences = Preferences()
     
     var isPushNotificationsEnabled: Bool {
@@ -24,6 +25,6 @@ struct NotificationsViewModel {
     }
     
     func requestPermissions() async throws -> Bool {
-        try await deviceService.requestPermissions()
+        try await pushNotificationService.requestPermissions()
     }
 }

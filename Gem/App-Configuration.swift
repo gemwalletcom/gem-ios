@@ -24,6 +24,10 @@ extension Price {
     static let main = Price(price: 10, priceChangePercentage24h: 21)
 }
 
+extension PriceAlert {
+    static let main = PriceAlert(assetId: AssetId.main.identifier, price: .none, pricePercentChange: .none)
+}
+
 extension AssetMetaData {
     static let main = AssetMetaData(
         isEnabled: true,
@@ -42,7 +46,7 @@ extension AssetId {
 }
 
 extension AssetData  {
-    static let main = AssetData(asset: .main, balance: .main, account: .main, price: .main, details: .none, metadata: .main)
+    static let main = AssetData(asset: .main, balance: .main, account: .main, price: .main, price_alert: .none, details: .none, metadata: .main)
 }
 
 extension Preferences {
@@ -130,8 +134,16 @@ extension WalletsService {
     )
 }
 
+extension PriceAlertService {
+    static let main = PriceAlertService(store: .main, deviceService: .main)
+}
+
 extension TransactionsService {
     static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
+}
+
+extension DeviceService {
+    static let main = DeviceService(subscriptionsService: .main, walletStore: .main)
 }
 
 extension WalletService {
@@ -144,6 +156,10 @@ extension AssetStore {
 
 extension PriceStore {
     static let main = PriceStore(db: .main)
+}
+
+extension PriceAlertStore {
+    static let main = PriceAlertStore(db: .main)
 }
 
 extension BalanceStore {
@@ -301,7 +317,7 @@ extension ExplorerService {
     static let main = ExplorerService(storage: ExplorerStorage.main)
 }
 
-extension BitcoinFeeCalculatorError: LocalizedError {
+extension BitcoinFeeCalculatorError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee

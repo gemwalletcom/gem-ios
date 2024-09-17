@@ -34,6 +34,7 @@ public struct SystemImage {
     public static let xmarkCircle = "xmark.circle.fill"
     public static let xmark = "xmark"
     public static let bell = "bell"
+    public static let bellFill = "bell.fill"
     public static let pin = "pin"
     public static let unpin = "pin.slash"
     public static let filter = "line.horizontal.3.decrease.circle"

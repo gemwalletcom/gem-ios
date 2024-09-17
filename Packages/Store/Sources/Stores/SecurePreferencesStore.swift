@@ -2,6 +2,7 @@
 
 import Foundation
 import KeychainAccess
+import Primitives
 
 public typealias SecurePreferences = SecurePreferencesStore
 
@@ -40,5 +41,12 @@ public class SecurePreferencesStore {
         for key in Keys.allCases {
             try delete(key: key)
         }
+    }
+
+    public func getDeviceId() throws -> String  {
+        guard let deviceId = try SecurePreferences.standard.get(key: .deviceId) else {
+            throw AnyError("no device id")
+        }
+        return deviceId
     }
 }

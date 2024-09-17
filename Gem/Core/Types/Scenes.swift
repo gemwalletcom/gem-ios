@@ -8,6 +8,7 @@ struct Scenes {
     struct ImportWallet: Hashable {}
     struct FiatProviders: Hashable {}
     struct Notifications: Hashable {}
+    struct PriceAlerts: Hashable {}
     struct Chains: Hashable {}
     struct AboutUs: Hashable {}
     struct Developer: Hashable {}

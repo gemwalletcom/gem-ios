@@ -260,3 +260,6 @@
 "filter.title" = "Filters";
 "settings.help_center" = "ศูนย์ช่วยเหลือ";
 "settings.support" = "สนับสนุน";
+"settings.price_alerts.title" = "การแจ้งเตือนราคา";
+"price_alerts.enabled_for" = "เปิดใช้งานการแจ้งเตือนราคาสำหรับ %@";
+"price_alerts.disabled_for" = "ปิดใช้งานการแจ้งเตือนราคาสำหรับ %@";

@@ -342,6 +342,16 @@ internal enum Localized {
       internal static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
     }
   }
+  internal enum PriceAlerts {
+    /// Price alert disabled for %@
+    internal static func disabledFor(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "price_alerts.disabled_for", String(describing: p1), fallback: "Price alert disabled for %@")
+    }
+    /// Price alert enabled for %@
+    internal static func enabledFor(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "price_alerts.enabled_for", String(describing: p1), fallback: "Price alert enabled for %@")
+    }
+  }
   internal enum Receive {
     /// Receive %s
     internal static func title(_ p1: UnsafePointer<CChar>) -> String {
@@ -411,6 +421,10 @@ internal enum Localized {
     internal enum Notifications {
       /// Notifications
       internal static let title = Localized.tr("Localizable", "settings.notifications.title", fallback: "Notifications")
+    }
+    internal enum PriceAlerts {
+      /// Price Alerts
+      internal static let title = Localized.tr("Localizable", "settings.price_alerts.title", fallback: "Price Alerts")
     }
     internal enum Security {
       /// Authentication

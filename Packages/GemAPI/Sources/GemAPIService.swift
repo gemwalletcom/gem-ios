@@ -54,6 +54,12 @@ public protocol GemAPISwapService {
     func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult
 }
 
+public protocol GemAPIPriceAlertService {
+    func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
+    func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
+    func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -208,5 +214,25 @@ extension GemAPIService: GemAPIAssetsService {
         try await provider
             .request(.getSearchAssets(query: query, chains: chains))
             .map(as: [AssetFull].self)
+    }
+}
+
+extension GemAPIService: GemAPIPriceAlertService {
+    public func getPriceAlerts(deviceId: String) async throws -> [PriceAlert] {
+        return try await provider
+            .request(.getPriceAlerts(deviceId: deviceId))
+            .map(as: [PriceAlert].self)
+    }
+
+    public func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+        let _ = try await provider
+            .request(.addPriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .map(as: Int.self)
+    }
+
+    public func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+        let _ = try await provider
+            .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .map(as: Int.self)
     }
 }

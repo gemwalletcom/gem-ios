@@ -84,6 +84,8 @@ extension ListAssetItemView {
             .background(Colors.grayVeryLight)
             .foregroundStyle(Colors.gray)
             .clipShape(RoundedRectangle(cornerRadius: 24))
+        case .none:
+            EmptyView()
         }
     }
 

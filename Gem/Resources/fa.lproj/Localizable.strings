@@ -260,3 +260,6 @@
 "filter.title" = "فیلترها";
 "settings.help_center" = "مرکز راهنمایی";
 "settings.support" = "پشتیبانی کنید";
+"settings.price_alerts.title" = "هشدارهای قیمت";
+"price_alerts.enabled_for" = "هشدار قیمت برای %@ فعال شد";
+"price_alerts.disabled_for" = "هشدار قیمت برای %@ غیرفعال شد";

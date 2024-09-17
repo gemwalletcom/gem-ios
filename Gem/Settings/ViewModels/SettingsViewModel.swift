@@ -45,6 +45,9 @@ class SettingsViewModel: ObservableObject {
     var notificationsTitle: String { Localized.Settings.Notifications.title }
     var notificationsImage: Image { Image(.settingsNotifications) }
 
+    var priceAlertsTitle: String { Localized.Settings.PriceAlerts.title }
+    var priceAlertsImage: Image { Image(.settingsPriceAlerts) }
+
     var currencyTitle: String { Localized.Settings.currency }
     var currencyValue: String {
         let currentCurrency = currencyModel.currency

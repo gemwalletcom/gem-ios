@@ -7,7 +7,7 @@ import Components
 import Style
 
 struct NetworkSelectorNavigationStack: View {
-    @Environment (\.dismiss) var dismiss
+    @Environment(\.dismiss) var dismiss
 
     @State private var model: NetworkSelectorViewModel
 
