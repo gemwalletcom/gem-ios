@@ -19,7 +19,8 @@ struct ScanQRCodeNavigationStack: View {
 
 // MARK: - LocalizedQRCodeError
 
-extension QRScannerError: LocalizedQRCodeError {
+extension QRScannerError: @retroactive LocalizedError {}
+extension QRScannerError: @retroactive LocalizedQRCodeError {
     public var titleImage: ErrorTitleImage? {
         switch self {
         case .notSupported:

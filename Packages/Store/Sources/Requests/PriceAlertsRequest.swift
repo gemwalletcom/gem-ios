@@ -36,7 +36,3 @@ extension PriceAlertInfo {
         )
     }
 }
-
-extension PriceAlertData: Identifiable {
-    public var id: String { asset.id.identifier }
-}
