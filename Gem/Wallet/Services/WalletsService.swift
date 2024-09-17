@@ -151,9 +151,7 @@ class WalletsService {
         try await Task.sleep(nanoseconds: UInt64(1 * Double(NSEC_PER_SEC)))
         
         let preferences = wallet.preferences
-        guard let deviceId = try SecurePreferences.standard.get(key: .deviceId) else {
-            throw AnyError("no device id")
-        }
+        let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
         try await discoverAssetService.updateTokens(

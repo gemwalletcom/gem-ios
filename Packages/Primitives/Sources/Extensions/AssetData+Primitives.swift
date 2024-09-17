@@ -21,6 +21,10 @@ public extension AssetData {
             BalanceType.reserved: balance.reserved,
         ]
     }
+
+    var isPriceAlertsEnabled: Bool {
+        price_alert != nil
+    }
 }
 
 extension AssetData: Hashable {

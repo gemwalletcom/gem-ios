@@ -12,9 +12,10 @@ public struct Device: Codable, Equatable {
 	public let version: String
 	public let currency: String
 	public let isPushEnabled: Bool
+	public let isPriceAlertsEnabled: Bool?
 	public let subscriptionsVersion: Int32
 
-	public init(id: String, platform: Platform, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, subscriptionsVersion: Int32) {
+	public init(id: String, platform: Platform, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, isPriceAlertsEnabled: Bool?, subscriptionsVersion: Int32) {
 		self.id = id
 		self.platform = platform
 		self.token = token
@@ -22,6 +23,7 @@ public struct Device: Codable, Equatable {
 		self.version = version
 		self.currency = currency
 		self.isPushEnabled = isPushEnabled
+		self.isPriceAlertsEnabled = isPriceAlertsEnabled
 		self.subscriptionsVersion = subscriptionsVersion
 	}
 }

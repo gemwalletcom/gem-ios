@@ -21,6 +21,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.bannerService) private var bannerService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -42,6 +43,11 @@ struct SettingsNavigationStack: View {
                         deviceService: deviceService,
                         subscriptionService: subscriptionService
                     )
+                )
+            }
+            .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
+                PriceAlertsScene(
+                    model: PriceAlertsViewModel(priceAlertService: priceAlertService)
                 )
             }
             .navigationDestination(for: Scenes.Chains.self) { _ in

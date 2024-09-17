@@ -99,6 +99,7 @@ class DeviceService {
             version: Bundle.main.releaseVersionNumber,
             currency: preferences.currency,
             isPushEnabled: preferences.isPushNotificationsEnabled,
+            isPriceAlertsEnabled: preferences.isPriceAlertsEnabled,
             subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32
         )
     }

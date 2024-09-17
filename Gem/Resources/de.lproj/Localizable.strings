@@ -260,3 +260,6 @@
 "filter.title" = "Filter";
 "settings.help_center" = "Hilfezentrum";
 "settings.support" = "Unterstützung";
+"settings.price_alerts.title" = "Preisalarme";
+"price_alerts.enabled_for" = "Preisalarm aktiviert für %@";
+"price_alerts.disabled_for" = "Preisalarm deaktiviert für %@";

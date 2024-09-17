@@ -23,6 +23,10 @@ public enum GemAPI: TargetType {
     case addSubscriptions(deviceId: String, subscriptions: [Subscription])
     case deleteSubscriptions(deviceId: String, subscriptions: [Subscription])
     
+    case getPriceAlerts(deviceId: String)
+    case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
+    case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
+
     case getTransactions(deviceId: String, options: TransactionsFetchOption)
     
     case getAsset(AssetId)
@@ -49,18 +53,21 @@ public enum GemAPI: TargetType {
             .getTransactions,
             .getAsset,
             .getSearchAssets,
-            .getAssetsList:
+            .getAssetsList,
+            .getPriceAlerts:
             return .GET
         case .getPrices,
             .addSubscriptions,
             .addDevice,
             .getSwap,
-            .getAssets:
+            .getAssets,
+            .addPriceAlerts:
             return .POST
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
-            .deleteDevice:
+            .deleteDevice,
+            .deletePriceAlerts:
             return .DELETE
         }
     }
@@ -107,6 +114,8 @@ public enum GemAPI: TargetType {
             return "/v1/assets/search"
         case .getAssetsList(let deviceId, let walletIndex, let fromTimestamp):
             return "/v1/assets/by_device_id/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+        case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
+            return "/v1/price_alerts/\(deviceId)"
         }
     }
     
@@ -121,7 +130,8 @@ public enum GemAPI: TargetType {
             .getDevice,
             .deleteDevice,
             .getAssetsList,
-            .getAsset:
+            .getAsset,
+            .getPriceAlerts:
             return .plain
         case .getPrices(let value):
             return .encodable(value)
@@ -141,6 +151,9 @@ public enum GemAPI: TargetType {
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)
+        case .addPriceAlerts(_, let priceAlerts),
+            .deletePriceAlerts(_, let priceAlerts):
+            return .encodable(priceAlerts)
         case .addDevice(let device),
             .updateDevice(let device):
             return .encodable(device)

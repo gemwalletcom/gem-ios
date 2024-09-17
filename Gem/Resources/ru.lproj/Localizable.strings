@@ -260,3 +260,6 @@
 "filter.title" = "Фильтры";
 "settings.help_center" = "Центр помощи";
 "settings.support" = "Поддерживать";
+"settings.price_alerts.title" = "Уведомления о ценах";
+"price_alerts.enabled_for" = "Оповещение о цене включено для %@";
+"price_alerts.disabled_for" = "Оповещение о цене отключено для %@";

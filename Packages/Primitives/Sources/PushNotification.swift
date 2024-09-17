@@ -6,6 +6,7 @@ import Foundation
 
 public enum PushNotificationTypes: String, Codable, Equatable {
 	case transaction
+	case priceAlertClient = "pricealertclient"
 }
 
 public struct PushNotification: Codable, Equatable {
