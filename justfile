@@ -1,3 +1,5 @@
+export GEMSTONE_VERSION := "v0.2.0"
+
 list:
     just --list
 
@@ -15,8 +17,25 @@ install-swifttools:
     @echo "==> Install SwiftGen and SwiftFormat"
     @brew install swiftgen swiftformat
 
-bootstrap: install generate
+bootstrap: install install-gemstone
     @echo "<== Bootstrap done."
+
+download-wallet-core VERSION:
+    @echo "==> Install wallet-core {{VERSION}}"
+    wget https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -O Packages/WalletCore/Package.swift
+
+download-gemstone VERSION:
+    #!/usr/bin/env bash
+    echo "==> Install binary Gemstone {{VERSION}}"
+    rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
+    cd Packages/Gemstone
+    wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2
+    tar -xvjf Gemstone-spm.tar.bz2
+    rm Gemstone-spm.tar.bz2
+
+install-gemstone:
+    @echo "==> Install binary Gemstone {{GEMSTONE_VERSION}}"
+    just install-gemstone {{GEMSTONE_VERSION}}
 
 setup-git:
     @echo "==> Setup git submodules"
@@ -38,7 +57,7 @@ localize:
     just generate-model
     just generate-swiftgen
 
-generate: generate-model generate-stone generate-swiftgen
+generate: generate-model generate-swiftgen
 
 generate-model:
     @echo "==> Generate typeshare for iOS"
