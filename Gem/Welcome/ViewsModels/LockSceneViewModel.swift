@@ -6,6 +6,8 @@ import Store
 
 @Observable
 class LockSceneViewModel {
+    private static var disabledBlur: CGFloat = 10
+
     private let service: BiometryAuthentifiable
     private let preferences: Preferences
 
@@ -19,7 +21,7 @@ class LockSceneViewModel {
         self.service = service
         self.preferences = preferences
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
-        self.blur = service.isAuthenticationEnabled ? 10 : 0
+        self.blur = service.isAuthenticationEnabled ? LockSceneViewModel.disabledBlur : .zero
     }
 
     // TODO: - localize
@@ -76,8 +78,8 @@ extension LockSceneViewModel {
 
     private static func blur(phase: ScenePhase, isLocked: Bool) -> CGFloat {
         if case .active = phase {
-            return isLocked ? 10 : 0
+            return isLocked ? LockSceneViewModel.disabledBlur : .zero
         }
-        return 10
+        return LockSceneViewModel.disabledBlur
     }
 }
