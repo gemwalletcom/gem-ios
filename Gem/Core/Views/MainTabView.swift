@@ -77,8 +77,7 @@ struct MainTabView: View {
             SettingsNavigationStack(
                 walletId: model.wallet.walletId,
                 navigationPath: $navigationStateManager.settings,
-                currencyModel: CurrencySceneViewModel(),
-                securityModel: SecurityViewModel()
+                currencyModel: CurrencySceneViewModel()
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Image(.tabSettings))

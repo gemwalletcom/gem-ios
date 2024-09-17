@@ -3,6 +3,7 @@
 import Foundation
 import Keystore
 import Components
+import Store
 
 @Observable
 class SecurityViewModel {
@@ -11,9 +12,14 @@ class SecurityViewModel {
     var isPresentingError: String?
     var isEnabled: Bool
 
-    init(service: BiometryAuthentifiable = BiometryAuthentificationService()) {
+    var lockPeriodModel: LockPeriodSelectionViewModel
+
+    init(service: BiometryAuthentifiable = BiometryAuthentificationService(),
+         lockPeriodModel: LockPeriodSelectionViewModel = LockPeriodSelectionViewModel()
+    ) {
         self.service = service
         self.isEnabled = service.isAuthenticationEnabled
+        self.lockPeriodModel = lockPeriodModel
     }
 
     var title: String {
@@ -22,10 +28,8 @@ class SecurityViewModel {
 
     var authenticationTitle: String {
         switch service.availableAuthentication {
-        case .biometrics:
-            return Localized.Settings.enableValue("Face ID")
-        case .passcode, .none:
-            return Localized.Settings.enablePasscode
+        case .biometrics: Localized.Settings.enableValue("Face ID")
+        case .passcode, .none: Localized.Settings.enablePasscode
         }
     }
 

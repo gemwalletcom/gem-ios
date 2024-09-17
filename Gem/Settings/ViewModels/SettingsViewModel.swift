@@ -12,7 +12,6 @@ import Primitives
 // TODO: - #2 review observation migrate to @Observable
 class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
-    @State var securityModel: SecurityViewModel
 
     @Published var isDeveloperEnabled: Bool
 
@@ -23,13 +22,11 @@ class SettingsViewModel: ObservableObject {
     init(
         walletId: WalletId,
         walletsService: WalletsService,
-        currencyModel: CurrencySceneViewModel,
-        securityModel: SecurityViewModel
+        currencyModel: CurrencySceneViewModel
     ) {
         self.walletId = walletId
         self.walletsService = walletsService
         self.currencyModel = currencyModel
-        self.securityModel = securityModel
         self.isDeveloperEnabled = preferences.isDeveloperEnabled
     }
 

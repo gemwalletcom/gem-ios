@@ -60,7 +60,10 @@ public class PreferencesStore {
     
     @UserDefault(defaults: .standard, key: "rate_application_shown", defaultValue: false)
     public var rateApplicationShown: Bool
-    
+
+    @UserDefault(defaults: .standard, key: "authentification_lock_option", defaultValue: 0)
+    public var authentificationLockOption: Int
+
     @UserDefault(defaults: .standard, key: "is_developer_enabled", defaultValue: false)
     public var isDeveloperEnabled: Bool
     
