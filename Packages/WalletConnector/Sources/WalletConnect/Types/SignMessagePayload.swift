@@ -26,6 +26,6 @@ extension SignMessagePayload: Identifiable {
     public var id: String { session.id }
 }
 
-extension WalletConnectionSessionProposal: Identifiable {
+extension WalletConnectionSessionProposal: @retroactive Identifiable {
     public var id: String { metadata.url }
 }

@@ -5,7 +5,7 @@ import Starscream
 import Starscream
 import WalletConnectRelay
 
-extension WebSocket: WebSocketConnecting { }
+extension WebSocket: @retroactive WebSocketConnecting { }
 
 struct DefaultSocketFactory: WebSocketFactory {
     func create(with url: URL) -> WebSocketConnecting {

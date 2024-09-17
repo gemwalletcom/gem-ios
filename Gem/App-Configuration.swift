@@ -301,7 +301,7 @@ extension ExplorerService {
     static let main = ExplorerService(storage: ExplorerStorage.main)
 }
 
-extension BitcoinFeeCalculatorError: LocalizedError {
+extension BitcoinFeeCalculatorError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee

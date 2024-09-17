@@ -68,7 +68,7 @@ public struct ListItemErrorView: View {
 
 // MARK: - Preview
 
-#Preview {
+#Preview("Error States") {
     List {
         Section(header: Text("General Error")) {
             ListItemErrorView(
@@ -119,5 +119,4 @@ public struct ListItemErrorView: View {
     }
     .listStyle(InsetGroupedListStyle())
     .background(Colors.grayBackground)
-    .previewDisplayName("Error States")
 }

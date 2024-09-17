@@ -186,7 +186,7 @@ private struct ListAssetItemSelectionView: View {
 }
 
 #Preview {
-    @State var present: Bool = false
+    @Previewable @State var present: Bool = false
     return NavigationStack {
         SelectAssetScene(
             model: SelectAssetViewModel(
