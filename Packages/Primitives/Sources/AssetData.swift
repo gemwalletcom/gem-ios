@@ -19,14 +19,16 @@ public struct AssetData: Codable {
 	public let balance: Balance
 	public let account: Account
 	public let price: Price?
+	public let price_alert: PriceAlert?
 	public let details: AssetDetailsInfo?
 	public let metadata: AssetMetaData
 
-	public init(asset: Asset, balance: Balance, account: Account, price: Price?, details: AssetDetailsInfo?, metadata: AssetMetaData) {
+	public init(asset: Asset, balance: Balance, account: Account, price: Price?, price_alert: PriceAlert?, details: AssetDetailsInfo?, metadata: AssetMetaData) {
 		self.asset = asset
 		self.balance = balance
 		self.account = account
 		self.price = price
+		self.price_alert = price_alert
 		self.details = details
 		self.metadata = metadata
 	}

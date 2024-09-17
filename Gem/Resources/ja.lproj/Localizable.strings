@@ -260,3 +260,6 @@
 "filter.title" = "フィルター";
 "settings.help_center" = "ヘルプセンター";
 "settings.support" = "サポート";
+"settings.price_alerts.title" = "価格アラート";
+"price_alerts.enabled_for" = "%@の価格アラートが有効になりました";
+"price_alerts.disabled_for" = "%@の価格アラートは無効です";

@@ -25,7 +25,3 @@ public struct SignMessagePayload {
 extension SignMessagePayload: Identifiable {
     public var id: String { session.id }
 }
-
-extension WalletConnectionSessionProposal: @retroactive Identifiable {
-    public var id: String { metadata.url }
-}

@@ -11,6 +11,7 @@ class AssetSceneViewModel: ObservableObject {
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
     private let stakeService: StakeService
+    private let priceAlertService: PriceAlertService
 
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
@@ -24,6 +25,7 @@ class AssetSceneViewModel: ObservableObject {
         assetsService: AssetsService,
         transactionsService: TransactionsService,
         stakeService: StakeService,
+        priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
         walletModel: WalletViewModel
     ) {
@@ -31,6 +33,7 @@ class AssetSceneViewModel: ObservableObject {
         self.assetsService = assetsService
         self.transactionsService = transactionsService
         self.stakeService = stakeService
+        self.priceAlertService = priceAlertService
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
@@ -133,6 +136,23 @@ extension AssetSceneViewModel {
         } catch {
             // TODO: - handle fetch error
             print("asset scene: updateWallet error \(error)")
+        }
+    }
+
+    func enablePriceAlert() async {
+        do {
+            try await priceAlertService.requestPermissions()
+            try await priceAlertService.addPriceAlert(assetId: assetModel.asset.id.identifier, autoEnable: true)
+        } catch {
+            NSLog("enablePriceAlert error \(error)")
+        }
+    }
+
+    func disablePriceAlert() async {
+        do {
+            try await priceAlertService.deletePriceAlert(assetId: assetModel.asset.id.identifier)
+        } catch {
+            NSLog("disablePriceAlert error \(error)")
         }
     }
 }

@@ -28,6 +28,7 @@ struct WalletCoordinator: View {
     let stakeStore: StakeStore
     let connectionsStore: ConnectionsStore
     let bannerStore: BannerStore
+    let priceAlertStore: PriceAlertStore
 
     let assetsService: AssetsService
     let balanceService: BalanceService
@@ -44,6 +45,7 @@ struct WalletCoordinator: View {
     let transactionsService: TransactionsService
     let connectionsService: ConnectionsService
     let bannerService: BannerService
+    let priceAlertService: PriceAlertService
     let walletConnectorSigner: WalletConnectorSigner
     let walletConnectorInteractor: WalletConnectorInteractor
     
@@ -73,6 +75,7 @@ struct WalletCoordinator: View {
         self.connectionsStore = ConnectionsStore(db: db)
         self.stakeStore = StakeStore(db: db)
         self.bannerStore = BannerStore(db: db)
+        self.priceAlertStore = PriceAlertStore(db: db)
         self.nodeService = NodeService(nodeStore: nodeStore)
         self.chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
         self.assetsService = AssetsService(
@@ -130,6 +133,10 @@ struct WalletCoordinator: View {
         self.subscriptionService = SubscriptionService(walletStore: walletStore)
         self.deviceService = DeviceService(subscriptionsService: subscriptionService, walletStore: walletStore)
         self.bannerSetupService = BannerSetupService(store: bannerStore)
+        self.priceAlertService = PriceAlertService(
+            store: priceAlertStore,
+            deviceService: deviceService
+        )
         self.onstartService = OnstartAsyncService(
             assetStore: assetStore,
             keystore: _keystore.wrappedValue,
@@ -172,6 +179,7 @@ struct WalletCoordinator: View {
                 .environment(\.stakeService, stakeService)
                 .environment(\.bannerService, bannerService)
                 .environment(\.balanceService, balanceService)
+                .environment(\.priceAlertService, priceAlertService)
                 .environment(\.chainServiceFactory, chainServiceFactory)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
