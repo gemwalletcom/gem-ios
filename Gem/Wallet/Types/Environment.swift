@@ -7,10 +7,6 @@ import Store
 import Keystore
 import GemstonePrimitives
 
-struct DatabaseQueueKey: EnvironmentKey {
-    static var defaultValue: DB { DB.main }
-}
-
 struct NodeServiceKey: EnvironmentKey {
     static var defaultValue: NodeService { NodeService.main }
 }
@@ -80,11 +76,6 @@ struct IsWalletPresentedServiceKey: EnvironmentKey {
 }
 
 extension EnvironmentValues {
-    var db: DB {
-        get { self[DatabaseQueueKey.self] }
-        set { self[DatabaseQueueKey.self] = newValue }
-    }
-    
     var nodeService: NodeService {
         get { self[NodeServiceKey.self] }
         set { self[NodeServiceKey.self] = newValue }

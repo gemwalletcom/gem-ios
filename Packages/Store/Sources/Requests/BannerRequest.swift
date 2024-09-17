@@ -4,14 +4,14 @@ import Foundation
 import GRDB
 import GRDBQuery
 import Combine
-import Primitives
+@preconcurrency import Primitives // TODO: - integrate Sendable for BannerEvent
 
-public struct BannersRequest: Queryable {
+public struct BannersRequest: ValueObservationQueryable {
     public static var defaultValue: [Banner] { [] }
 
-    let walletId: String?
-    let assetId: String?
-    let events: [BannerEvent]
+    private let walletId: String?
+    private let assetId: String?
+    private let events: [BannerEvent]
 
     public init(
         walletId: String?,
@@ -23,16 +23,8 @@ public struct BannersRequest: Queryable {
         self.events = events
     }
 
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[Banner], Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .map { $0.map{ $0 } }
-            .eraseToAnyPublisher()
-    }
-
-    private func fetch(_ db: Database) throws -> [Banner] {
-        return try BannerRecord
+    public func fetch(_ db: Database) throws -> [Banner] {
+        try BannerRecord
             .including(optional: BannerRecord.asset)
             .including(optional: BannerRecord.wallet)
             .filter(Columns.Banner.walletId == walletId || Columns.Banner.walletId == nil)

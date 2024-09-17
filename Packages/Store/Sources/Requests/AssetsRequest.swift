@@ -4,13 +4,14 @@ import GRDBQuery
 import Combine
 import Primitives
 
-public struct AssetsRequest: Queryable {
+public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
     
-    public var walletID: String
+    private let walletID: String
+
     public var searchBy: String
     public var filters: [AssetsRequestFilter]
-    
+
     public init(
         walletID: String,
         searchBy: String = "",
@@ -20,42 +21,19 @@ public struct AssetsRequest: Queryable {
         self.searchBy = searchBy
         self.filters = filters
     }
-    
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[AssetData], Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .map { $0.map{ $0 } }
-            .eraseToAnyPublisher()
-    }
-    
-    func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
-        try fetchAssets(filters: filters)
-        .fetchAll(db).map { $0.assetData }
-    }
-    
-    func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
-        return try Self.fetchAssetsSearch(
-            walletId: walletID,
-            searchBy: searchBy,
-            filters: filters,
-            excludeAssetIds: excludeAssetIds
-        )
-        .fetchAll(db).map { $0.assetData }
-    }
-    
-    private func fetch(_ db: Database) throws -> [AssetData] {
+
+    public func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
+
         if filters.contains(.includeNewAssets) {
             let request1 = try assetBalancesRequest(db)
             let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
-            
+
             return [request1, request2].flatMap { $0 }
-        } else {
-            return try assetBalancesRequest(db)
         }
+        return try assetBalancesRequest(db)
     }
-    
+
     func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
             .including(optional: AssetRecord.price)
@@ -71,14 +49,33 @@ public struct AssetsRequest: Queryable {
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
-        
+
         filters.forEach {
             request = Self.applyFilter(request: request, $0)
         }
         return request.asRequest(of: AssetRecordInfo.self)
     }
-    
-    static func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
+}
+
+// MARK: - Private
+
+extension AssetsRequest {
+    private func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
+        try fetchAssets(filters: filters)
+            .fetchAll(db).map { $0.assetData }
+    }
+
+    private func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
+        try Self.fetchAssetsSearch(
+            walletId: walletID,
+            searchBy: searchBy,
+            filters: filters,
+            excludeAssetIds: excludeAssetIds
+        )
+        .fetchAll(db).map { $0.assetData }
+    }
+
+    static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
         switch filter {
         case .search(let name):
             return request
@@ -136,8 +133,8 @@ public struct AssetsRequest: Queryable {
             return request
         }
     }
-    
-    static func fetchAssetsSearch(
+
+    static private func fetchAssetsSearch(
         walletId: String,
         searchBy: String,
         filters: [AssetsRequestFilter],
@@ -151,7 +148,7 @@ public struct AssetsRequest: Queryable {
             )
             .order(Columns.Asset.rank.asc)
             .limit(50)
-        
+
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }

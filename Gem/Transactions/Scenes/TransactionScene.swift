@@ -29,7 +29,7 @@ struct TransactionScene: View {
         input: TransactionSceneInput
     ) {
         self.input = input
-        _transactions = Query(input.transactionRequest, in: \.db.dbQueue)
+        _transactions = Query(input.transactionRequest)
     }
     
     @State private var showShareSheet = false

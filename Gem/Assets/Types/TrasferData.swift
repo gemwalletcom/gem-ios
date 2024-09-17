@@ -24,6 +24,13 @@ struct RecipientData {
 
 extension RecipientData: Hashable {}
 
+struct WCTransferData: Identifiable {
+    let tranferData: TransferData
+    let wallet: Wallet
+
+    var id: String { wallet.id }
+}
+
 struct TransferData {
     let type: TransferDataType
     let recipientData: RecipientData

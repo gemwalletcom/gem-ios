@@ -9,8 +9,6 @@ import QRScanner
 import Style
 
 struct ConnectionsScene: View {
-    
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorMessage: String?
@@ -28,11 +26,9 @@ struct ConnectionsScene: View {
     
     let model: ConnectionsViewModel
     
-    init(
-        model: ConnectionsViewModel
-    ) {
+    init(model: ConnectionsViewModel) {
         self.model = model
-        _connections = Query(ConnectionsRequest(), in: \.db.dbQueue)
+        _connections = Query(constant: model.request)
     }
     
     var body: some View {

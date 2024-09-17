@@ -8,7 +8,6 @@ import Style
 import Keystore
 
 struct SelectAssetScene: View {
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
@@ -41,8 +40,8 @@ struct SelectAssetScene: View {
         } set: { new in
             model.filterModel.assetsRequest = new
         }
-        _assets = Query(request, in: \.db.dbQueue)
-        _assetInfo =  Query(model.assetsInfoRequest, in: \.db.dbQueue)
+        _assets = Query(request)
+        _assetInfo =  Query(model.assetsInfoRequest)
     }
 
     var body: some View {

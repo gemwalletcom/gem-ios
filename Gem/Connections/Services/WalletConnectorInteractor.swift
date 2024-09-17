@@ -5,23 +5,23 @@ import WalletConnector
 import Primitives
 
 struct WalletConnectorInteractor: WalletConnectorInteractable {
-    func sessionApproval(payload: WalletConnectionSessionProposal) async throws -> Bool {
-        return true
+    func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
+        return WalletId(id: "")
     }
     
     func signMessage(payload: SignMessagePayload) async throws -> String {
         return ""
     }
-    
-    func signTransaction(transferData: TransferData) async throws -> String {
+
+    func signTransaction(transferData: WCTransferData) async throws -> String {
+        return ""
+    }
+
+    func sendTransaction(transferData: WCTransferData) throws -> String {
         return ""
     }
     
-    func sendTransaction(transferData: TransferData) throws -> String {
-        return ""
-    }
-    
-    func sendRawTransaction(transferData: TransferData) async throws -> String {
+    func sendRawTransaction(transferData: WCTransferData) async throws -> String {
         return ""
     }
     

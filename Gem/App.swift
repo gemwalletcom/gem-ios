@@ -20,8 +20,9 @@ struct GemApp: App {
             WalletCoordinator(
                 db: db
             )
+            .databaseContext(.readWrite { db.dbQueue })
             .navigationBarTitleDisplayMode(.inline)
-            .tint(Colors.blue)
+            .tint(Colors.black)
         }
     }
 }

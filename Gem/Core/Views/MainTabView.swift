@@ -40,7 +40,7 @@ struct MainTabView: View {
         navigationStateManager: Binding<NavigationStateManagable>
     ) {
         self.model = model
-        _transactions = Query(constant: model.transactionsCountRequest, in: \.db.dbQueue)
+        _transactions = Query(constant: model.transactionsCountRequest)
         _navigationStateManager = navigationStateManager
     }
 

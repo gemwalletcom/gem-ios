@@ -8,7 +8,7 @@ struct WalletViewModel {
     let wallet: Wallet
     
     var name: String {
-        return wallet.name
+        wallet.name
     }
     
     var subType: String? {
@@ -48,6 +48,6 @@ struct WalletViewModel {
     }
 }
 
-extension WalletViewModel: Identifiable {
+extension WalletViewModel: Identifiable, Hashable {
     var id: String { wallet.id }
 }
