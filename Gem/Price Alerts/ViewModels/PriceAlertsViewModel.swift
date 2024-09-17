@@ -5,9 +5,16 @@ import Store
 
 struct PriceAlertsViewModel {
 
-    let preferences: Preferences = .standard
-    
-    let priceAlertService: PriceAlertService
+    let preferences: Preferences
+    private let priceAlertService: PriceAlertService
+
+    init(
+        preferences: Preferences = Preferences.standard,
+        priceAlertService: PriceAlertService
+    ) {
+        self.preferences = preferences
+        self.priceAlertService = priceAlertService
+    }
 
     var title: String {
         Localized.Settings.PriceAlerts.title
@@ -25,6 +32,14 @@ struct PriceAlertsViewModel {
         preferences.isPriceAlertsEnabled
     }
 
+    func requestPermissions() async throws -> Bool {
+        try await priceAlertService.requestPermissions()
+    }
+
+    func deviceUpdate() async throws {
+        try await priceAlertService.deviceUpdate()
+    }
+
     func fetch() async {
         do {
             try await priceAlertService.getPriceAlerts()
@@ -35,7 +50,7 @@ struct PriceAlertsViewModel {
 
     func addPriceAlert(assetId: String) async {
         do {
-            try await priceAlertService.addPriceAlert(assetId: assetId, enable: false)
+            try await priceAlertService.addPriceAlert(assetId: assetId, autoEnable: false)
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }

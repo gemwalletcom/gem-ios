@@ -124,11 +124,4 @@ class DeviceService {
         return try await deviceProvider.updateDevice(device: device)
     }
     
-    // permissions
-    
-    func requestPermissions() async throws -> Bool {
-        let result = try await UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert])
-        await UIApplication.shared.registerForRemoteNotifications()
-        return result
-    }
 }

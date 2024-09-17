@@ -12,6 +12,7 @@ struct PriceAlertService {
     private let deviceService: DeviceService
     private let preferences: Preferences
     private let securePreferences: SecurePreferences
+    private let pushNotificationService = PushNotificationEnablerService()
 
     init(
         store: PriceAlertStore,
@@ -27,15 +28,30 @@ struct PriceAlertService {
         self.securePreferences = securePreferences
     }
 
+    var isPushNotificationsEnabled: Bool {
+        preferences.isPushNotificationsEnabled
+    }
+
+    @discardableResult
+    func requestPermissions() async throws -> Bool {
+        try await pushNotificationService.requestPermissions()
+    }
+
+    func deviceUpdate() async throws {
+        try await deviceService.update()
+    }
+
     func getPriceAlerts() async throws {
         let priceAlerts = try await apiService.getPriceAlerts(deviceId: securePreferences.getDeviceId())
         try store.addPriceAlerts(priceAlerts)
     }
 
-    func addPriceAlert(assetId: String, enable: Bool) async throws {
-        if !preferences.isPriceAlertsEnabled && enable {
-            preferences.isPriceAlertsEnabled = true
-            try await deviceService.update()
+    func addPriceAlert(assetId: String, autoEnable: Bool) async throws {
+        if autoEnable {
+            if !preferences.isPriceAlertsEnabled {
+                preferences.isPriceAlertsEnabled = true
+                try await deviceService.update()
+            }
         }
 
         let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none)

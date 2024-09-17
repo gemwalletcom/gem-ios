@@ -31,8 +31,8 @@ struct PriceAlertsScene: View {
             )
             .toggleStyle(AppToggleStyle())
             Section {
-                ForEach(priceAlerts) { priceAlert in
-                    Text("\(priceAlert.asset.name): \(priceAlert.price?.price) : \(priceAlert.priceAlert.price)")
+                ForEach(priceAlerts) {
+                    ListAssetItemView(model: PriceAlertItemViewModel(data: $0))
                 }
             }
         }
@@ -42,17 +42,17 @@ struct PriceAlertsScene: View {
         .onChange(of: isPriceAlertsEnabled) { (_, newValue) in
             model.preferences.isPriceAlertsEnabled = newValue
 
-//            switch newValue {
-//            case true:
-//                Task {
-//                    notificationsEnabled = try await model.requestPermissions()
-//                    try await model.update()
-//                }
-//            case false:
-//                Task {
-//                    try await model.update()
-//                }
-//            }
+            switch newValue {
+            case true:
+                Task {
+                    model.preferences.isPushNotificationsEnabled = try await model.requestPermissions()
+                    try await model.deviceUpdate()
+                }
+            case false:
+                Task {
+                    try await model.deviceUpdate()
+                }
+            }
         }
         .task {
             await model.fetch()
