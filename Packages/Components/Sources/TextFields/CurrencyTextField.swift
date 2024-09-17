@@ -66,8 +66,8 @@ public struct CurrencyTextField: View {
 }
 
 #Preview {
-    @State var textLeading: String = "10"
-    @State var textTrailing: String = "100"
+    @Previewable @State var textLeading: String = "10"
+    @Previewable @State var textTrailing: String = "100"
 
     return VStack {
         CurrencyTextField("0", text: $textLeading, currencySymbol: "$", currencyPosition: .leading, keyboardType: .numberPad)

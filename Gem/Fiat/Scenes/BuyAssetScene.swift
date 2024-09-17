@@ -194,7 +194,7 @@ extension BuyAssetScene {
 // MARK: - Previews
 
 #Preview {
-    @State var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
+    @Previewable @State var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
     return NavigationStack {
         BuyAssetScene(model: model)
             .navigationBarTitleDisplayMode(.inline)
