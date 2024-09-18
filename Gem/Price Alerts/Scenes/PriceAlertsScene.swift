@@ -31,9 +31,16 @@ struct PriceAlertsScene: View {
             )
             .toggleStyle(AppToggleStyle())
             Section {
-                ForEach(priceAlerts) {
-                    ListAssetItemView(model: PriceAlertItemViewModel(data: $0))
+                ForEach(priceAlerts) { alert in
+                    ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                        .swipeActions(edge: .trailing) {
+                            Button(Localized.Common.delete) {
+                                onDelete(alert: alert)
+                            }
+                            .tint(Colors.red)
+                        }
                 }
+
             }
         }
         .refreshable {
@@ -61,8 +68,18 @@ struct PriceAlertsScene: View {
     }
 }
 
-//#Preview {
-//    PriceAlertsScene(
-//        model: PriceAlertsViewModel(priceAlertService: PriceAlertService)
-//    )
-//}
+#Preview {
+    PriceAlertsScene(
+        model: PriceAlertsViewModel(priceAlertService: .main)
+    )
+}
+
+// MARK: - Actions
+
+extension PriceAlertsScene {
+    func onDelete(alert: PriceAlertData) {
+        Task {
+            await model.deletePriceAlert(assetId: alert.asset.id)
+        }
+    }
+}

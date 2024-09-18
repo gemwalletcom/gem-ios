@@ -2,6 +2,7 @@
 
 import Foundation
 import Store
+import Primitives
 
 struct PriceAlertsViewModel {
 
@@ -48,17 +49,17 @@ struct PriceAlertsViewModel {
         }
     }
 
-    func addPriceAlert(assetId: String) async {
+    func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.addPriceAlert(assetId: assetId, autoEnable: false)
+            try await priceAlertService.addPriceAlert(assetId: assetId.identifier, autoEnable: false)
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }
     }
 
-    func deletePriceAlert(assetId: String) async {
+    func deletePriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.deletePriceAlert(assetId: assetId)
+            try await priceAlertService.deletePriceAlert(assetId: assetId.identifier)
         }catch {
             NSLog("deletePriceAlert error: \(error)")
         }
