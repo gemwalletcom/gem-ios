@@ -271,3 +271,5 @@
 "lock.six_hours" = "6 saat";
 "lock.require_authentication" = "Require authentication";
 "lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "Favori kripto varlıklarınızda önemli bir fiyat değişikliği olduğunda bildirim alın.";
+"price_alerts.empty_state.message" = "Henüz fiyat uyarısı eklenmedi.";

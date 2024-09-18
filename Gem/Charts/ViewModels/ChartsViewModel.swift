@@ -8,8 +8,7 @@ import Gemstone
 import Style
 
 class ChartsViewModel: ObservableObject {
-    
-    let walletId: WalletId
+
     let service: ChartService
     let priceService: PriceService
     let assetModel: AssetViewModel
@@ -34,8 +33,8 @@ class ChartsViewModel: ObservableObject {
     
     private let preferences: Preferences = .standard
 
-    var assetRequest: AssetRequest {
-        return AssetRequest(walletId: walletId.id, assetId: assetModel.asset.id.identifier)
+    var priceRequest: PriceRequest {
+        return PriceRequest(assetId: assetModel.asset.id.identifier)
     }
 
     var title: String { assetModel.title }
@@ -52,14 +51,12 @@ class ChartsViewModel: ObservableObject {
     }
     
     init(
-        walletId: WalletId,
         service: ChartService = ChartService(),
         priceService: PriceService,
         assetsService: AssetsService,
         assetModel: AssetViewModel,
         currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
     ) {
-        self.walletId = walletId
         self.service = service
         self.priceService = priceService
         self.assetsService = assetsService

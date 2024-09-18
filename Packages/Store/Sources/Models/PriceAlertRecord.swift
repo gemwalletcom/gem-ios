@@ -10,7 +10,7 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public var id: String
     public var assetId: String
-    public var priceDirection: PriceDirection?
+    public var priceDirection: PriceAlertDirection?
     public var price: Double?
     public var pricePercentChange: Double?
 

@@ -35,7 +35,7 @@ download-gemstone VERSION:
 
 install-gemstone:
     @echo "==> Install binary Gemstone {{GEMSTONE_VERSION}}"
-    just install-gemstone {{GEMSTONE_VERSION}}
+    just download-gemstone {{GEMSTONE_VERSION}}
 
 setup-git:
     @echo "==> Setup git submodules"

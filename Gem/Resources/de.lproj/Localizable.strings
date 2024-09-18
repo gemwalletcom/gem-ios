@@ -271,3 +271,5 @@
 "lock.six_hours" = "6 Stunden";
 "lock.require_authentication" = "Require authentication";
 "lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "Lassen Sie sich benachrichtigen, wenn es bei Ihren bevorzugten Krypto-Assets zu einer erheblichen Preisänderung kommt.";
+"price_alerts.empty_state.message" = "Es wurden noch keine Preisalarme hinzugefügt.";

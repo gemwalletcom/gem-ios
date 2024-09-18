@@ -13,3 +13,17 @@ public struct Price: Codable, Equatable, Hashable {
 		self.priceChangePercentage24h = priceChangePercentage24h
 	}
 }
+
+public struct PriceData: Codable {
+	public let asset: Asset
+	public let price: Price?
+	public let priceAlert: PriceAlert?
+	public let details: AssetDetailsInfo?
+
+	public init(asset: Asset, price: Price?, priceAlert: PriceAlert?, details: AssetDetailsInfo?) {
+		self.asset = asset
+		self.price = price
+		self.priceAlert = priceAlert
+		self.details = details
+	}
+}

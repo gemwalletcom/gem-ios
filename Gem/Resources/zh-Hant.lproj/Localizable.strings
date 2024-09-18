@@ -271,3 +271,5 @@
 "lock.six_hours" = "6小時";
 "lock.require_authentication" = "鎖定時間";
 "lock.Unlock" = "解鎖";
+"price_alerts.get_notified_explain_message" = "當您最喜歡的加密資產發生重大價格變化時收到通知。";
+"price_alerts.empty_state.message" = "尚未添加價格提醒。";
