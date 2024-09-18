@@ -6,6 +6,7 @@ public enum ListAssetItemRightView {
     case balance(balance: TextValue, totalFiat: TextValue)
     case toggle(Bool)
     case copy
+    case none
 }
 
 public enum ListAssetItemSubtitleView {
@@ -34,7 +35,7 @@ public protocol ListAssetItemViewable {
 extension ListAssetItemViewable {
     var isAssetEnabled: Bool {
         switch rightView {
-        case .balance, .copy: false
+        case .balance, .copy, .none: false
         case .toggle(let value): value
         }
     }

@@ -260,3 +260,6 @@
 "filter.title" = "篩選";
 "settings.help_center" = "幫助中心";
 "settings.support" = "支援";
+"settings.price_alerts.title" = "價格提醒";
+"price_alerts.enabled_for" = "為%@啟用價格提醒";
+"price_alerts.disabled_for" = "已停用%@的價格提醒";

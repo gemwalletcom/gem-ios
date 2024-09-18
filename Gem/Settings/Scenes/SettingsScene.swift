@@ -63,6 +63,13 @@ extension SettingsScene {
                 )
             }
 
+            NavigationLink(value: Scenes.PriceAlerts()) {
+                ListItemView(
+                    title: model.priceAlertsTitle,
+                    image: model.priceAlertsImage
+                )
+            }
+
             NavigationLink(value: Scenes.Currency()) {
                 ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
             }

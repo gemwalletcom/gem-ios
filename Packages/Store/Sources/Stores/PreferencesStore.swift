@@ -54,7 +54,10 @@ public class PreferencesStore {
     
     @UserDefault(defaults: .standard, key: "is_push_notifications_enabled", defaultValue: false)
     public var isPushNotificationsEnabled: Bool
-    
+
+    @UserDefault(defaults: .standard, key: "is_price_alerts_enabled", defaultValue: false)
+    public var isPriceAlertsEnabled: Bool
+
     @UserDefault(defaults: .standard, key: "is_subscriptions_enabled", defaultValue: true)
     public var isSubscriptionsEnabled: Bool
     

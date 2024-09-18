@@ -46,7 +46,7 @@ extension SelectWalletScene {
 // MARK: - Previews
 
 #Preview {
-    @State var model = SellectWalletViewModel(wallets: [.main, .view], selectedWallet: .main)
+    @Previewable @State var model = SellectWalletViewModel(wallets: [.main, .view], selectedWallet: .main)
     return NavigationStack {
         SelectWalletScene(model: $model)
     }

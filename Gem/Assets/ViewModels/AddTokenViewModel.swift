@@ -77,7 +77,7 @@ extension AddTokenViewModel {
 
 // MARK: - Models extensions
 
-extension TokenValidationError: LocalizedError {
+extension TokenValidationError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidTokenId: Localized.Errors.Token.invalidId

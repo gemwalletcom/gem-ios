@@ -45,8 +45,8 @@ struct ChartScene: View {
                     }
                     .frame(height: 320)
 
-                    HStack(alignment: .center, spacing: 10) {
-                        ForEach(model.periods, id: \.period) { period in
+                    HStack(alignment: .center, spacing: Spacing.medium) {
+                        ForEach(model.periods) { period in
                             Button {
                                 model.currentPeriod = period.period
                             } label: {
@@ -60,6 +60,7 @@ struct ChartScene: View {
                             .buttonStyle(.borderless)
                         }
                     }
+                    .padding(.bottom, Spacing.medium)
                 }
             }
             .frame(maxWidth: .infinity)

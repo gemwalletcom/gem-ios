@@ -15,11 +15,11 @@ struct DeveloperViewModel {
     }
     
     var deviceId: String {
-        try! SecurePreferences().get(key: .deviceId) ?? .empty
+        (try? SecurePreferences().get(key: .deviceId)) ?? .empty
     }
     
     var deviceToken: String {
-        try! SecurePreferences().get(key: .deviceToken) ?? .empty
+        (try? SecurePreferences().get(key: .deviceToken)) ?? .empty
     }
     
     func reset() {

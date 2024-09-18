@@ -7,3 +7,7 @@ struct ChartSelection {
     let period: ChartPeriod
     let title: String
 }
+
+extension ChartSelection: Identifiable {
+    var id: String { period.rawValue }
+}

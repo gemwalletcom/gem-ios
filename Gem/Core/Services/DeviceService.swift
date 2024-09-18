@@ -99,6 +99,7 @@ class DeviceService {
             version: Bundle.main.releaseVersionNumber,
             currency: preferences.currency,
             isPushEnabled: preferences.isPushNotificationsEnabled,
+            isPriceAlertsEnabled: preferences.isPriceAlertsEnabled,
             subscriptionsVersion: ignoreSubscriptionsVersion ? 0 : preferences.subscriptionsVersion.asInt32
         )
     }
@@ -123,11 +124,4 @@ class DeviceService {
         return try await deviceProvider.updateDevice(device: device)
     }
     
-    // permissions
-    
-    func requestPermissions() async throws -> Bool {
-        let result = try await UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert])
-        await UIApplication.shared.registerForRemoteNotifications()
-        return result
-    }
 }

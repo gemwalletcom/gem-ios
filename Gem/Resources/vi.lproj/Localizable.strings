@@ -260,3 +260,6 @@
 "filter.title" = "Filters";
 "settings.help_center" = "Trung tâm trợ giúp";
 "settings.support" = "Ủng hộ";
+"settings.price_alerts.title" = "Cảnh báo giá";
+"price_alerts.enabled_for" = "Đã bật cảnh báo giá cho %@";
+"price_alerts.disabled_for" = "Cảnh báo giá đã bị vô hiệu hóa đối với %@";

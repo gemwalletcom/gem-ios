@@ -113,7 +113,7 @@ extension MainTabView {
 // MARK: - Previews
 
 #Preview {
-    @State var navigationStateManager: NavigationStateManagable = NavigationStateManager(initialSelecedTab: .wallet)
+    @Previewable @State var navigationStateManager: NavigationStateManagable = NavigationStateManager(initialSelecedTab: .wallet)
     return MainTabView(
         model: MainTabViewModel(wallet: .main),
         navigationStateManager: $navigationStateManager)

@@ -9,6 +9,8 @@ struct AssetRecordInfo: FetchableRecord, Codable {
     var account: AccountRecord
     var balance: AssetBalanceRecord?
     var details: AssetDetailsRecord?
+    var priceAlert: PriceAlertRecord?
+    //var priceAlerts: [PriceAlertRecord]?
 }
 
 struct AssetRecordInfoMinimal: FetchableRecord, Codable {

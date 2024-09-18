@@ -40,6 +40,7 @@ public struct Migrations {
 
             // others
             try BannerRecord.create(db: db)
+            try PriceAlertRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -55,6 +56,10 @@ public struct Migrations {
 
         migrator.registerMigration("Set order as index in \(WalletRecord.databaseTableName)") { db in
             try db.execute(sql: "UPDATE wallets SET \"order\" = \"index\"")
+        }
+
+        migrator.registerMigration("Create \(PriceAlertRecord.databaseTableName)") { db in
+            try PriceAlertRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

@@ -32,6 +32,6 @@ struct ImportWalletNavigationStack: View {
 // MARK: - Previews
 
 #Preview {
-    @State var isPresenting: Bool = false
+    @Previewable @State var isPresenting: Bool = false
     return ImportWalletNavigationStack(isPresenting: $isPresenting)
 }

@@ -26,6 +26,8 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     static let details = hasOne(AssetDetailsRecord.self, key: "details")
     static let balance = hasOne(AssetBalanceRecord.self)
     static let account = hasOne(AccountRecord.self, key: "account", using: ForeignKey(["chain"], to: ["chain"]))
+    static let priceAlert = hasOne(PriceAlertRecord.self).forKey("priceAlert")
+    static let priceAlerts = hasMany(PriceAlertRecord.self).forKey("priceAlerts")
 }
 
 extension AssetRecord: CreateTable {
@@ -102,6 +104,7 @@ extension AssetRecordInfo {
             balance: balance?.mapToBalance() ?? .zero,
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
+            price_alert: priceAlert?.map(),
             details: details?.mapToAssetDetailsInfo(asset: asset),
             metadata: metadata
         )

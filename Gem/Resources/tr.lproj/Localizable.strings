@@ -260,3 +260,6 @@
 "filter.title" = "Filtreler";
 "settings.help_center" = "Yardım Merkezi";
 "settings.support" = "Destek";
+"settings.price_alerts.title" = "Fiyat Uyarıları";
+"price_alerts.enabled_for" = "%@ için fiyat uyarısı etkinleştirildi";
+"price_alerts.disabled_for" = "Fiyat uyarısı %@ için devre dışı bırakıldı";

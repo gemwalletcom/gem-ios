@@ -14,8 +14,10 @@ struct AssetScene: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var showingOptions = false
+    @State private var showingPriceAlertMessage = false
 
     @Binding private var isPresentingAssetSelectType: SelectAssetInput?
 
@@ -38,6 +40,7 @@ struct AssetScene: View {
             assetsService: assetsService,
             transactionsService: transactionsService,
             stakeService: stakeService,
+            priceAlertService: priceAlertService,
             assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
             walletModel: WalletViewModel(wallet: wallet)
         )
@@ -129,15 +132,27 @@ struct AssetScene: View {
         .refreshable {
             await fetch()
         }
+        .modifier(
+            ToastModifier(
+                isPresenting: $showingPriceAlertMessage,
+                value: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
+                systemImage: assetData.priceAlertSystemImage
+            )
+        )
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: onSelectOptions) {
-                    Image(systemName: SystemImage.ellipsis)
-                }
-                .confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
-                    Button(model.viewAddressOnTitle) { onOpenLink(model.addressExplorerUrl )}
-                    if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
-                        Button(title) { onOpenLink(url) }
+                HStack {
+                    Button(action: onPriceAlertToggle) {
+                        Image(systemName: assetData.priceAlertSystemImage)
+                    }
+                    Button(action: onSelectOptions) {
+                        Image(systemName: SystemImage.ellipsis)
+                    }
+                    .confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
+                        Button(model.viewAddressOnTitle) { onOpenLink(model.addressExplorerUrl )}
+                        if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
+                            Button(title) { onOpenLink(url) }
+                        }
                     }
                 }
             }
@@ -208,6 +223,18 @@ extension AssetScene {
     private func onBannerClose(banner: Banner) {
         Task { try bannerService.closeBanner(banner: banner) }
     }
+
+    private func onPriceAlertToggle() {
+        showingPriceAlertMessage = true
+
+        Task {
+            if assetData.isPriceAlertsEnabled {
+                await model.disablePriceAlert()
+            } else {
+                await model.enablePriceAlert()
+            }
+        }
+    }
 }
 
 // MARK: - Effects
@@ -215,5 +242,12 @@ extension AssetScene {
 extension AssetScene {
     private func fetch() async {
         await model.updateWallet()
+    }
+}
+
+
+extension AssetData {
+    var priceAlertSystemImage: String {
+        isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell
     }
 }

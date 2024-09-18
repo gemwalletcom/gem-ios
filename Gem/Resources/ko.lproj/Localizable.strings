@@ -260,3 +260,6 @@
 "filter.title" = "Filters";
 "settings.help_center" = "도움말 센터";
 "settings.support" = "지원하다";
+"settings.price_alerts.title" = "가격 알림";
+"price_alerts.enabled_for" = "%@ 에 대한 가격 알림이 활성화되었습니다.";
+"price_alerts.disabled_for" = "%@ 에 대한 가격 알림이 비활성화되었습니다.";
