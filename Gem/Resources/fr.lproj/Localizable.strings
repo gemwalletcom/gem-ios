@@ -272,3 +272,4 @@
 "lock.require_authentication" = "Require authentication";
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "Soyez averti lorsqu'il y a un changement de prix significatif dans vos actifs cryptographiques préférés.";
+"price_alerts.empty_state.message" = "Aucune alerte de prix n'a encore été ajoutée.";

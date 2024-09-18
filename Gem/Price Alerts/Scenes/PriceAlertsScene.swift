@@ -36,15 +36,19 @@ struct PriceAlertsScene: View {
             }
 
             Section {
-                ForEach(priceAlerts) { alert in
-                    NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                        ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
-                            .swipeActions(edge: .trailing) {
-                                Button(Localized.Common.delete) {
-                                    onDelete(alert: alert)
+                if priceAlerts.isEmpty {
+                    StateEmptyView(title: Localized.PriceAlerts.EmptyState.message)
+                } else {
+                    ForEach(priceAlerts) { alert in
+                        NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                            ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                                .swipeActions(edge: .trailing) {
+                                    Button(Localized.Common.delete) {
+                                        onDelete(alert: alert)
+                                    }
+                                    .tint(Colors.red)
                                 }
-                                .tint(Colors.red)
-                            }
+                        }
                     }
                 }
             }

@@ -272,3 +272,4 @@
 "lock.require_authentication" = "Require authentication";
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "जब आपकी पसंदीदा क्रिप्टो परिसंपत्तियों में कोई महत्वपूर्ण मूल्य परिवर्तन हो तो सूचना प्राप्त करें।";
+"price_alerts.empty_state.message" = "अभी तक कोई मूल्य अलर्ट नहीं जोड़ा गया है.";
