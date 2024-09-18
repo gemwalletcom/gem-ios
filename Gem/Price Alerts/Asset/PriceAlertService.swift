@@ -54,13 +54,13 @@ struct PriceAlertService {
             }
         }
 
-        let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none)
+        let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none, priceDirection: .none)
         try store.addPriceAlerts([priceAlert])
         try await apiService.addPriceAlerts(deviceId: securePreferences.getDeviceId(), priceAlerts: [priceAlert])
     }
 
     func deletePriceAlert(assetId: String) async throws {
-        let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none)
+        let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none, priceDirection: .none)
         try store.deletePriceAlerts([priceAlert])
         try await apiService.deletePriceAlerts(deviceId: securePreferences.getDeviceId(), priceAlerts: [priceAlert])
     }

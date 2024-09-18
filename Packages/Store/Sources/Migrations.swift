@@ -59,7 +59,6 @@ public struct Migrations {
         }
 
         migrator.registerMigration("Create \(PriceAlertRecord.databaseTableName)") { db in
-            //try db.drop(table: "price_alerts")
             try PriceAlertRecord.create(db: db)
         }
 

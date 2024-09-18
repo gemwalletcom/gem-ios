@@ -25,7 +25,7 @@ extension Price {
 }
 
 extension PriceAlert {
-    static let main = PriceAlert(assetId: AssetId.main.identifier, price: .none, pricePercentChange: .none)
+    static let main = PriceAlert(assetId: AssetId.main.identifier, price: .none, pricePercentChange: .none, priceDirection: .none)
 }
 
 extension AssetMetaData {

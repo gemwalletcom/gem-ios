@@ -10,6 +10,7 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public var id: String
     public var assetId: String
+    public var priceDirection: PriceDirection?
     public var price: Double?
     public var pricePercentChange: Double?
 
@@ -23,6 +24,7 @@ extension PriceAlertRecord: CreateTable {
                 .primaryKey()
             $0.column("assetId", .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
+            $0.column("priceDirection", .text)
             $0.column("price", .double)
             $0.column("pricePercentChange", .double)
             $0.column("lastNotifiedAt", .date)
@@ -35,7 +37,8 @@ extension PriceAlertRecord {
         PriceAlert(
             assetId: assetId,
             price: price,
-            pricePercentChange: pricePercentChange
+            pricePercentChange: pricePercentChange,
+            priceDirection: priceDirection
         )
     }
 }

@@ -4,15 +4,22 @@
 
 import Foundation
 
+public enum PriceDirection: String, Codable, Equatable, Hashable {
+	case up
+	case down
+}
+
 public struct PriceAlert: Codable, Equatable, Hashable {
 	public let assetId: String
 	public let price: Double?
 	public let pricePercentChange: Double?
+	public let priceDirection: PriceDirection?
 
-	public init(assetId: String, price: Double?, pricePercentChange: Double?) {
+	public init(assetId: String, price: Double?, pricePercentChange: Double?, priceDirection: PriceDirection?) {
 		self.assetId = assetId
 		self.price = price
 		self.pricePercentChange = pricePercentChange
+		self.priceDirection = priceDirection
 	}
 }
 
