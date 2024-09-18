@@ -27,7 +27,7 @@ public struct ListAssetItemView: View {
 extension ListAssetItemView {
     @ViewBuilder
     private var primaryContent: some View {
-        VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+        VStack(alignment: .leading, spacing: Spacing.tiny) {
             headerView
             subtitleView
         }
@@ -50,11 +50,13 @@ extension ListAssetItemView {
     private var subtitleView: some View {
         switch model.subtitleView {
         case .price(let price, let priceChangePercentage24h):
-            HStack(spacing: Spacing.extraSmall) {
-                Text(price.text)
-                    .textStyle(price.style)
-                Text(priceChangePercentage24h.text)
-                    .textStyle(priceChangePercentage24h.style)
+            if !price.text.isEmpty {
+                HStack(spacing: Spacing.extraSmall) {
+                    Text(price.text)
+                        .textStyle(price.style)
+                    Text(priceChangePercentage24h.text)
+                        .textStyle(priceChangePercentage24h.style)
+                }
             }
         case .type(let textValue):
             Text(textValue.text)
@@ -90,7 +92,7 @@ extension ListAssetItemView {
     }
 
     private func balanceView(balance: TextValue, totalFiat: TextValue) -> some View {
-        VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
+        VStack(alignment: .trailing, spacing: Spacing.tiny) {
             Text(balance.text)
                 .textStyle(balance.style)
             if !totalFiat.text.isEmpty {
