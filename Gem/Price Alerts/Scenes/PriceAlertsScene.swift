@@ -25,22 +25,28 @@ struct PriceAlertsScene: View {
 
     var body: some View {
         List {
-            Toggle(
-                model.enableTitle,
-                isOn: $isPriceAlertsEnabled
-            )
-            .toggleStyle(AppToggleStyle())
+            Section {
+                Toggle(
+                    model.enableTitle,
+                    isOn: $isPriceAlertsEnabled
+                )
+                .toggleStyle(AppToggleStyle())
+            } footer: {
+                Text(Localized.PriceAlerts.getNotifiedExplainMessage)
+            }
+
             Section {
                 ForEach(priceAlerts) { alert in
-                    ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
-                        .swipeActions(edge: .trailing) {
-                            Button(Localized.Common.delete) {
-                                onDelete(alert: alert)
+                    NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                        ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                            .swipeActions(edge: .trailing) {
+                                Button(Localized.Common.delete) {
+                                    onDelete(alert: alert)
+                                }
+                                .tint(Colors.red)
                             }
-                            .tint(Colors.red)
-                        }
+                    }
                 }
-
             }
         }
         .refreshable {

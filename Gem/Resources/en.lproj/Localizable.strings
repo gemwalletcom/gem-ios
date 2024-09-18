@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "Price Alerts";
 "price_alerts.enabled_for" = "Price alert enabled for %@";
 "price_alerts.disabled_for" = "Price alert disabled for %@";
+"lock.immediately" = "Immediately";
+"lock.one_minute" = "1 minute";
+"lock.five_minutes" = "5 minutes";
+"lock.fifteen_minutes" = "15 minutes";
+"lock.one_hour" = "1 hour";
+"lock.six_hours" = "6 hours";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "Get notified when there’s a significant price change in your favorite crypto assets.";

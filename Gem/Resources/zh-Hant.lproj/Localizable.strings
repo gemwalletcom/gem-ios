@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "價格提醒";
 "price_alerts.enabled_for" = "為%@啟用價格提醒";
 "price_alerts.disabled_for" = "已停用%@的價格提醒";
+"lock.immediately" = "立刻";
+"lock.one_minute" = "1分鐘";
+"lock.five_minutes" = "5分鐘";
+"lock.fifteen_minutes" = "15分鐘";
+"lock.one_hour" = "1小時";
+"lock.six_hours" = "6小時";
+"lock.require_authentication" = "鎖定時間";
+"lock.Unlock" = "解鎖";
+"price_alerts.get_notified_explain_message" = "當您最喜歡的加密資產發生重大價格變化時收到通知。";

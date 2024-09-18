@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "Peringatan Harga";
 "price_alerts.enabled_for" = "Peringatan harga diaktifkan untuk %@";
 "price_alerts.disabled_for" = "Peringatan harga dinonaktifkan untuk %@";
+"lock.immediately" = "Langsung";
+"lock.one_minute" = "1 menit";
+"lock.five_minutes" = "5 menit";
+"lock.fifteen_minutes" = "15 menit";
+"lock.one_hour" = "1 jam";
+"lock.six_hours" = "6 jam";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "Dapatkan pemberitahuan saat ada perubahan harga yang signifikan pada aset kripto favorit Anda.";

@@ -50,6 +50,15 @@ struct SettingsNavigationStack: View {
                     model: PriceAlertsViewModel(priceAlertService: priceAlertService)
                 )
             }
+            .navigationDestination(for: Scenes.Price.self) { scene in
+                ChartScene(
+                    model: ChartsViewModel(
+                        priceService: walletsService.priceService,
+                        assetsService: walletsService.assetsService,
+                        assetModel: AssetViewModel(asset: scene.asset)
+                    )
+                )
+            }
             .navigationDestination(for: Scenes.Chains.self) { _ in
                 ChainListSettingsScene()
             }

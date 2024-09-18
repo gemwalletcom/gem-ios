@@ -326,6 +326,24 @@ internal enum Localized {
     /// Select from Photo Library
     internal static let selectFromPhotoLibrary = Localized.tr("Localizable", "library.select_from_photo_library", fallback: "Select from Photo Library")
   }
+  internal enum Lock {
+    /// 15 minutes
+    internal static let fifteenMinutes = Localized.tr("Localizable", "lock.fifteen_minutes", fallback: "15 minutes")
+    /// 5 minutes
+    internal static let fiveMinutes = Localized.tr("Localizable", "lock.five_minutes", fallback: "5 minutes")
+    /// Immediately
+    internal static let immediately = Localized.tr("Localizable", "lock.immediately", fallback: "Immediately")
+    /// 1 hour
+    internal static let oneHour = Localized.tr("Localizable", "lock.one_hour", fallback: "1 hour")
+    /// 1 minute
+    internal static let oneMinute = Localized.tr("Localizable", "lock.one_minute", fallback: "1 minute")
+    /// Require authentication
+    internal static let requireAuthentication = Localized.tr("Localizable", "lock.require_authentication", fallback: "Require authentication")
+    /// 6 hours
+    internal static let sixHours = Localized.tr("Localizable", "lock.six_hours", fallback: "6 hours")
+    /// Unlock
+    internal static let unlock = Localized.tr("Localizable", "lock.Unlock", fallback: "Unlock")
+  }
   internal enum Nodes {
     /// Gem Wallet Node
     internal static let gemWalletNode = Localized.tr("Localizable", "nodes.gem_wallet_node", fallback: "Gem Wallet Node")
@@ -351,6 +369,8 @@ internal enum Localized {
     internal static func enabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.enabled_for", String(describing: p1), fallback: "Price alert enabled for %@")
     }
+    /// Get notified when there’s a significant price change in your favorite crypto assets.
+    internal static let getNotifiedExplainMessage = Localized.tr("Localizable", "price_alerts.get_notified_explain_message", fallback: "Get notified when there’s a significant price change in your favorite crypto assets.")
   }
   internal enum Receive {
     /// Receive %s

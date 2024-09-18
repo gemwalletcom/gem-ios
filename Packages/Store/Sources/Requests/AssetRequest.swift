@@ -10,7 +10,6 @@ public struct AssetRequest: ValueObservationQueryable {
     public static var defaultValue: AssetData { AssetData.empty }
     
     public var assetId: String
-
     private let walletId: String
 
     public init(walletId: String, assetId: String) {

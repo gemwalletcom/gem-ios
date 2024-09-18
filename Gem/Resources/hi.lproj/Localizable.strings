@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "मूल्य अलर्ट";
 "price_alerts.enabled_for" = "%@ के लिए मूल्य अलर्ट सक्षम किया गया";
 "price_alerts.disabled_for" = "%@ के लिए मूल्य चेतावनी अक्षम की गई";
+"lock.immediately" = "तुरंत";
+"lock.one_minute" = "1 मिनट";
+"lock.five_minutes" = "5 मिनट";
+"lock.fifteen_minutes" = "15 मिनटों";
+"lock.one_hour" = "1 घंटा";
+"lock.six_hours" = "6 घंटे";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "जब आपकी पसंदीदा क्रिप्टो परिसंपत्तियों में कोई महत्वपूर्ण मूल्य परिवर्तन हो तो सूचना प्राप्त करें।";

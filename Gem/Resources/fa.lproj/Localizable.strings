@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "هشدارهای قیمت";
 "price_alerts.enabled_for" = "هشدار قیمت برای %@ فعال شد";
 "price_alerts.disabled_for" = "هشدار قیمت برای %@ غیرفعال شد";
+"lock.immediately" = "بلافاصله";
+"lock.one_minute" = "1 دقیقه";
+"lock.five_minutes" = "5 دقیقه";
+"lock.fifteen_minutes" = "15 دقیقه";
+"lock.one_hour" = "1 ساعت";
+"lock.six_hours" = "6 ساعت";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "هنگامی که تغییر قیمت قابل توجهی در دارایی های رمزنگاری مورد علاقه شما ایجاد می شود مطلع شوید.";

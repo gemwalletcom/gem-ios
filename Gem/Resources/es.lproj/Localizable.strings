@@ -263,3 +263,12 @@
 "settings.price_alerts.title" = "Alertas de precios";
 "price_alerts.enabled_for" = "Alerta de precio habilitada para %@";
 "price_alerts.disabled_for" = "Alerta de precio deshabilitada para %@";
+"lock.immediately" = "Inmediatamente";
+"lock.one_minute" = "1 minuto";
+"lock.five_minutes" = "5 minutos";
+"lock.fifteen_minutes" = "15 minutos";
+"lock.one_hour" = "1 hora";
+"lock.six_hours" = "6 horas";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "Recibe notificaciones cuando haya un cambio de precio significativo en tus criptoactivos favoritos.";
