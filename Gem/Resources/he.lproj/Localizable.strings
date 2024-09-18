@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "התראות על מחירים";
 "price_alerts.enabled_for" = "התראת מחיר מופעלת עבור %@";
 "price_alerts.disabled_for" = "התראת מחיר מושבתת עבור %@";
+"lock.immediately" = "מִיָד";
+"lock.one_minute" = "דקה אחת";
+"lock.five_minutes" = "5 דקות";
+"lock.fifteen_minutes" = "15 דקות";
+"lock.one_hour" = "שעה אחת";
+"lock.six_hours" = "6 שעות";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

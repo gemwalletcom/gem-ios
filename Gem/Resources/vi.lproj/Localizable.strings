@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "Cảnh báo giá";
 "price_alerts.enabled_for" = "Đã bật cảnh báo giá cho %@";
 "price_alerts.disabled_for" = "Cảnh báo giá đã bị vô hiệu hóa đối với %@";
+"lock.immediately" = "Ngay lập tức";
+"lock.one_minute" = "1 phút";
+"lock.five_minutes" = "5 phút";
+"lock.fifteen_minutes" = "15 phút";
+"lock.one_hour" = "1 giờ";
+"lock.six_hours" = "6 giờ";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

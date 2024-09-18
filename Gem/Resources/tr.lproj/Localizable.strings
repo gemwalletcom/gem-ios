@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "Fiyat Uyarıları";
 "price_alerts.enabled_for" = "%@ için fiyat uyarısı etkinleştirildi";
 "price_alerts.disabled_for" = "Fiyat uyarısı %@ için devre dışı bırakıldı";
+"lock.immediately" = "Hemen";
+"lock.one_minute" = "1 dakika";
+"lock.five_minutes" = "5 dakika";
+"lock.fifteen_minutes" = "15 dakika";
+"lock.one_hour" = "1 saat";
+"lock.six_hours" = "6 saat";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

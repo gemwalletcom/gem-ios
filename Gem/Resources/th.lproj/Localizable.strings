@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "การแจ้งเตือนราคา";
 "price_alerts.enabled_for" = "เปิดใช้งานการแจ้งเตือนราคาสำหรับ %@";
 "price_alerts.disabled_for" = "ปิดใช้งานการแจ้งเตือนราคาสำหรับ %@";
+"lock.immediately" = "โดยทันที";
+"lock.one_minute" = "1 นาที";
+"lock.five_minutes" = "5 นาที";
+"lock.fifteen_minutes" = "15 นาที";
+"lock.one_hour" = "1 ชั่วโมง";
+"lock.six_hours" = "6 ชั่วโมง";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

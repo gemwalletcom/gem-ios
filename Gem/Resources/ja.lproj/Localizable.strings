@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "価格アラート";
 "price_alerts.enabled_for" = "%@の価格アラートが有効になりました";
 "price_alerts.disabled_for" = "%@の価格アラートは無効です";
+"lock.immediately" = "すぐに";
+"lock.one_minute" = "1 分";
+"lock.five_minutes" = "5 分";
+"lock.fifteen_minutes" = "15 分";
+"lock.one_hour" = "1 時間";
+"lock.six_hours" = "6 時間";
+"lock.require_authentication" = "ロック時間";
+"lock.Unlock" = "ロック解除";

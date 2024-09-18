@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "Alerty cenowe";
 "price_alerts.enabled_for" = "Alert cenowy włączony dla %@";
 "price_alerts.disabled_for" = "Alert cenowy wyłączony dla %@";
+"lock.immediately" = "Natychmiast";
+"lock.one_minute" = "1 minuta";
+"lock.five_minutes" = "5 minut";
+"lock.fifteen_minutes" = "15 minut";
+"lock.one_hour" = "1 godzina";
+"lock.six_hours" = "6 godzin";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

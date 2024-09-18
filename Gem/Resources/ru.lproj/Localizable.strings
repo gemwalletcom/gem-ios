@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "Уведомления о ценах";
 "price_alerts.enabled_for" = "Оповещение о цене включено для %@";
 "price_alerts.disabled_for" = "Оповещение о цене отключено для %@";
+"lock.immediately" = "Немедленно";
+"lock.one_minute" = "1 минута";
+"lock.five_minutes" = "5 минут";
+"lock.fifteen_minutes" = "15 минут";
+"lock.one_hour" = "1 час";
+"lock.six_hours" = "6 часов";
+"lock.require_authentication" = "Требуется аутентификация";
+"lock.Unlock" = "Разблокировать";

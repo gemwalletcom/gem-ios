@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "Оповіщення про ціни";
 "price_alerts.enabled_for" = "Сповіщення про ціну ввімкнено для %@";
 "price_alerts.disabled_for" = "Сповіщення про ціну вимкнено для %@";
+"lock.immediately" = "Негайно";
+"lock.one_minute" = "1 хвилина";
+"lock.five_minutes" = "5 хвилин";
+"lock.fifteen_minutes" = "15 хвилин";
+"lock.one_hour" = "1 година";
+"lock.six_hours" = "6 годин";
+"lock.require_authentication" = "Вимагається автентифікація";
+"lock.Unlock" = "Розблокувати";

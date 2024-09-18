@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "가격 알림";
 "price_alerts.enabled_for" = "%@ 에 대한 가격 알림이 활성화되었습니다.";
 "price_alerts.disabled_for" = "%@ 에 대한 가격 알림이 비활성화되었습니다.";
+"lock.immediately" = "즉시";
+"lock.one_minute" = "1분";
+"lock.five_minutes" = "5분";
+"lock.fifteen_minutes" = "15분";
+"lock.one_hour" = "1시간";
+"lock.six_hours" = "6시간";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";

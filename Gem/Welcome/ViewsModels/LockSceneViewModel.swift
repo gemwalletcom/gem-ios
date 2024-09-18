@@ -9,18 +9,8 @@ class LockSceneViewModel {
     private let service: BiometryAuthenticable
     private let preferences: Preferences
 
-    var lastUnlockTime: Date = Date(timeIntervalSince1970: 0) {
-        didSet {
-            print("LockSceneViewModel: lastUnlockTime: \(lastUnlockTime)")
-        }
-    }
-
-    var state: LockSceneState {
-        didSet {
-            print("LockSceneViewModel: state: \(state)")
-        }
-    }
-
+    var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
+    var state: LockSceneState
     var inBackground: Bool = false
 
     init(preferences: Preferences = Preferences.main,
@@ -30,8 +20,7 @@ class LockSceneViewModel {
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
     }
 
-    // TODO: - localize
-    var unlockTitle: String { "Unlock" }
+    var unlockTitle: String { Localized.Lock.unlock }
 }
 
 // MARK: - Business Logic

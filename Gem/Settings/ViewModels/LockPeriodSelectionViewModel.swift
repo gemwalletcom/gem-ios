@@ -19,22 +19,20 @@ struct LockPeriodSelectionViewModel {
         self.selectedOption = lockOption
     }
 
-    // TODO: - localize
-    var title: String { "Require authentication" }
+    var title: String { Localized.Lock.requireAuthentication }
 }
 
 // MARK: - Model Extensions
 
 extension LockOption {
-    // TODO: - localize
     var title: String {
         switch self {
-        case .immediate: "Immediately"
-        case .oneMinute: "1 minute"
-        case .fiveMinutes: "5 minutes"
-        case .fifteenMinutes: "15 minutes"
-        case .oneHour: "1 hour"
-        case .sixHours: "6 hours"
+        case .immediate: Localized.Lock.immediately
+        case .oneMinute: Localized.Lock.oneMinute
+        case .fiveMinutes: Localized.Lock.fiveMinutes
+        case .fifteenMinutes: Localized.Lock.fifteenMinutes
+        case .oneHour: Localized.Lock.oneHour
+        case .sixHours: Localized.Lock.sixHours
         }
     }
 }

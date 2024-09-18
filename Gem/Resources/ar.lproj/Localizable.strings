@@ -263,3 +263,11 @@
 "settings.price_alerts.title" = "تنبيهات الأسعار";
 "price_alerts.enabled_for" = "تم تفعيل تنبيه السعر لـ %@";
 "price_alerts.disabled_for" = "تم تعطيل تنبيه السعر لـ %@";
+"lock.immediately" = "في الحال";
+"lock.one_minute" = "1 دقيقة";
+"lock.five_minutes" = "5 دقائق";
+"lock.fifteen_minutes" = "15 دقيقة";
+"lock.one_hour" = "1 ساعة";
+"lock.six_hours" = "6 ساعات";
+"lock.require_authentication" = "Require authentication";
+"lock.Unlock" = "Unlock";
