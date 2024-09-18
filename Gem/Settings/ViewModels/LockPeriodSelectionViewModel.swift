@@ -9,18 +9,18 @@ struct LockPeriodSelectionViewModel {
     let allOptions: [LockOption] = LockOption.allCases
     var selectedOption: LockOption {
         didSet {
-            preferences.authentificationLockOption = selectedOption.id
+            preferences.authenticationLockOption = selectedOption.id
         }
     }
 
     init(preferences: Preferences = Preferences.main) {
         self.preferences = preferences
-        let lockOption = LockOption(rawValue: preferences.authentificationLockOption) ?? .immediate
+        let lockOption = LockOption(rawValue: preferences.authenticationLockOption) ?? .immediate
         self.selectedOption = lockOption
     }
 
     // TODO: - localize
-    var title: String { "Require authentification" }
+    var title: String { "Require authentication" }
 }
 
 // MARK: - Model Extensions
@@ -32,6 +32,7 @@ extension LockOption {
         case .immediate: "Immediately"
         case .oneMinute: "1 minute"
         case .fiveMinutes: "5 minutes"
+        case .fifteenMinutes: "15 minutes"
         case .oneHour: "1 hour"
         case .sixHours: "6 hours"
         }

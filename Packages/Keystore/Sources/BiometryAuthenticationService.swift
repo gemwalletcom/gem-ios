@@ -2,7 +2,7 @@
 
 import LocalAuthentication
 
-public struct BiometryAuthentificationService: BiometryAuthentifiable {
+public struct BiometryAuthenticationService: BiometryAuthenticable {
     private let keystorePassword: KeystorePassword
 
     public init(keystorePassword: KeystorePassword = LocalKeystorePassword()) {
@@ -10,7 +10,11 @@ public struct BiometryAuthentificationService: BiometryAuthentifiable {
     }
 
     public var isAuthenticationEnabled: Bool {
-        availableAuthentication != .none
+        do {
+            return try keystorePassword.getAuthentication() != .none
+        } catch {
+            return false
+        }
     }
 
     public var availableAuthentication: KeystoreAuthentication {
@@ -18,15 +22,15 @@ public struct BiometryAuthentificationService: BiometryAuthentifiable {
     }
 
     public func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws {
-        do {
-            try await authenticate(context: context, reason: reason)
-            try keystorePassword.enableAuthentication(enable, context: context)
-        } catch let error as NSError {
-            throw BiometryAuthentificationError(error: error)
-        }
+        try await authenticate(context: context, reason: reason)
+        try keystorePassword.enableAuthentication(enable, context: context)
     }
 
     public func authenticate(context: LAContext, reason: String) async throws {
-        try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason)
+        do {
+            try await context.evaluatePolicy(.deviceOwnerAuthentication, localizedReason: reason)
+        } catch let error as NSError {
+            throw BiometryAuthenticationError(error: error)
+        }
     }
 }

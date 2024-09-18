@@ -20,24 +20,28 @@ struct LockScreenScene<Content: View>: View {
     var body: some View {
         ZStack {
             content
-                .blur(radius: model.blur)
                 .disabled(model.isLocked)
 
-            if model.isLocked {
-                Rectangle()
-                    .ignoresSafeArea()
-                    .foregroundStyle(.clear)
+            if model.shouldShowPlaceholder {
+                placeholderView
                     .overlay(alignment: .bottom) {
                         unlockButton
                     }
-                    .onAppear {
-                        unlock()
+                    .onAppear() {
+                        if model.isLocked {
+                            unlock()
+                        }
                     }
             }
         }
-        .animation(.smooth, value: model.blur)
+        .animation(.smooth, value: model.isLocked)
         .frame(maxWidth: .infinity)
         .onChange(of: scenePhase, onScenePhaseChange)
+        .onChange(of: model.isLocked) { oldValue, newValue in
+            if newValue {
+                unlock()
+            }
+        }
     }
 }
 
@@ -49,13 +53,28 @@ extension LockScreenScene {
         VStack(spacing: Spacing.medium) {
             if model.state == .lockedCanceled {
                 Button(action: unlock) {
-                    Text(model.unlockTitle)
+                    HStack {
+                        Image(systemName: SystemImage.lock)
+                        Text(model.unlockTitle)
+                    }
                 }
                 .buttonStyle(.blue())
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
                 .padding()
             }
         }
+    }
+
+    @ViewBuilder
+    private var placeholderView: some View {
+        ZStack {
+            Image(.logoLaunch)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 128, height: 128)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Colors.white)
     }
 }
 

@@ -6,22 +6,28 @@ import Store
 
 @Observable
 class LockSceneViewModel {
-    private static var disabledBlur: CGFloat = 10
-
-    private let service: BiometryAuthentifiable
+    private let service: BiometryAuthenticable
     private let preferences: Preferences
 
-    private var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
+    var lastUnlockTime: Date = Date(timeIntervalSince1970: 0) {
+        didSet {
+            print("LockSceneViewModel: lastUnlockTime: \(lastUnlockTime)")
+        }
+    }
 
-    var state: LockSceneState
-    var blur: CGFloat
+    var state: LockSceneState {
+        didSet {
+            print("LockSceneViewModel: state: \(state)")
+        }
+    }
+
+    var inBackground: Bool = false
 
     init(preferences: Preferences = Preferences.main,
-         service: BiometryAuthentifiable = BiometryAuthentificationService()) {
+         service: BiometryAuthenticable = BiometryAuthenticationService()) {
         self.service = service
         self.preferences = preferences
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
-        self.blur = service.isAuthenticationEnabled ? LockSceneViewModel.disabledBlur : .zero
     }
 
     // TODO: - localize
@@ -31,25 +37,24 @@ class LockSceneViewModel {
 // MARK: - Business Logic
 
 extension LockSceneViewModel {
-    var isLocked: Bool {
-        state != .unlocked
-    }
-
-    var shouldLock: Bool {
-        Date() > lastUnlockTime
-    }
+    var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
+    var shouldShowPlaceholder: Bool { isLocked || inBackground }
+    var isLocked: Bool { state != .unlocked && isAutoLockEnabled }
+    var shouldLock: Bool { Date() > lastUnlockTime && isAutoLockEnabled }
 
     func handleSceneChange(to phase: ScenePhase) {
+        guard isAutoLockEnabled else { return }
         if phase == .background {
+            inBackground = true
             if state == .unlocked && !shouldLock {
                 lastUnlockTime = Date().addingTimeInterval(TimeInterval(lockOption.rawValue))
             }
         } else if phase == .active {
+            inBackground = false
             if state == .unlocked && shouldLock {
                 state = .locked
             }
         }
-        blur = Self.blur(phase: phase, isLocked: isLocked)
     }
 
     func unlock() async {
@@ -59,12 +64,10 @@ extension LockSceneViewModel {
             try await service.authenticate(reason: SecurityViewModel.reason)
             state = .unlocked
             lastUnlockTime = Date(timeIntervalSinceNow: .greatestFiniteMagnitude)
-        } catch let error as BiometryAuthentificationError {
-            if error.isAuthCanceled {
-                state = .lockedCanceled
-            }
+        } catch let error as BiometryAuthenticationError {
+            state = error.isAuthCancelled ? .lockedCanceled : .locked
         } catch {
-            state = .lockedCanceled
+            state = .locked
         }
     }
 }
@@ -73,13 +76,6 @@ extension LockSceneViewModel {
 
 extension LockSceneViewModel {
     private var lockOption: LockOption {
-        LockOption(rawValue: preferences.authentificationLockOption) ?? .immediate
-    }
-
-    private static func blur(phase: ScenePhase, isLocked: Bool) -> CGFloat {
-        if case .active = phase {
-            return isLocked ? LockSceneViewModel.disabledBlur : .zero
-        }
-        return LockSceneViewModel.disabledBlur
+        LockOption(rawValue: preferences.authenticationLockOption) ?? .immediate
     }
 }

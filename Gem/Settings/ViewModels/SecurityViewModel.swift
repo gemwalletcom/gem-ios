@@ -7,14 +7,14 @@ import Store
 
 @Observable
 class SecurityViewModel {
-    private let service: BiometryAuthentifiable
+    private let service: BiometryAuthenticable
 
     var isPresentingError: String?
     var isEnabled: Bool
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: BiometryAuthentifiable = BiometryAuthentificationService(),
+    init(service: BiometryAuthenticable = BiometryAuthenticationService(),
          lockPeriodModel: LockPeriodSelectionViewModel = LockPeriodSelectionViewModel()
     ) {
         self.service = service
@@ -45,8 +45,8 @@ extension SecurityViewModel {
         guard isEnabled != service.isAuthenticationEnabled else { return }
         do {
             try await service.enableAuthentication(isEnabled, reason: SecurityViewModel.reason)
-        } catch let error as BiometryAuthentificationError {
-            if !error.isAuthCanceled {
+        } catch let error as BiometryAuthenticationError {
+            if !error.isAuthCancelled {
                 isPresentingError = error.localizedDescription
             }
             isEnabled = !isEnabled
