@@ -2,7 +2,7 @@
 
 import LocalAuthentication
 
-public struct BiometryAuthenticationService: BiometryAuthenticable {
+public struct BiometryAuthenticationService: BiometryAuthenticatable {
     private let keystorePassword: KeystorePassword
 
     public init(keystorePassword: KeystorePassword = LocalKeystorePassword()) {

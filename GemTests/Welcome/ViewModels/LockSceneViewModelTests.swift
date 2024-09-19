@@ -368,7 +368,7 @@ struct LockSceneViewModelTests {
 // MARK: - Mock
 
 // TODO: - probably move to Keystore TestKip
-fileprivate class MockBiometryAuthenticationService: BiometryAuthenticable {
+fileprivate class MockBiometryAuthenticationService: BiometryAuthenticatable {
     var isAuthenticationEnabled: Bool
     var availableAuthentication: KeystoreAuthentication
 

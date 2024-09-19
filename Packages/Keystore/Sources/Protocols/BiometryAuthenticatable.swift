@@ -3,7 +3,7 @@
 import Foundation
 import LocalAuthentication
 
-public protocol BiometryAuthenticable {
+public protocol BiometryAuthenticatable {
     var isAuthenticationEnabled: Bool { get }
     var availableAuthentication: KeystoreAuthentication { get }
 
@@ -11,7 +11,7 @@ public protocol BiometryAuthenticable {
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws
 }
 
-extension BiometryAuthenticable {
+extension BiometryAuthenticatable {
     public func authenticate(reason: String) async throws {
         try await authenticate(context: LAContext(), reason: reason)
     }

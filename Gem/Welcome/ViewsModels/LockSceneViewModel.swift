@@ -6,7 +6,7 @@ import Store
 
 @Observable
 class LockSceneViewModel {
-    private let service: BiometryAuthenticable
+    private let service: BiometryAuthenticatable
     private let preferences: Preferences
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
@@ -14,7 +14,7 @@ class LockSceneViewModel {
     var inBackground: Bool = false
 
     init(preferences: Preferences = Preferences.main,
-         service: BiometryAuthenticable = BiometryAuthenticationService()) {
+         service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
         self.preferences = preferences
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
@@ -54,7 +54,7 @@ extension LockSceneViewModel {
             state = .unlocked
             lastUnlockTime = Date(timeIntervalSinceNow: .greatestFiniteMagnitude)
         } catch let error as BiometryAuthenticationError {
-            state = error.isAuthCancelled ? .lockedCanceled : .locked
+            state = error.isAuthenticationCancelled ? .lockedCanceled : .locked
         } catch {
             state = .locked
         }

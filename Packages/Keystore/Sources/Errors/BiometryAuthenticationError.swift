@@ -5,7 +5,7 @@ import LocalAuthentication
 
 public enum BiometryAuthenticationError: Error {
     case biometryUnavailable
-    case canceled
+    case cancelled
     case authenticationFailed
 
     init(error: NSError) {
@@ -20,7 +20,7 @@ public enum BiometryAuthenticationError: Error {
                 LAError.biometryLockout,
                 LAError.systemCancel,
                 LAError.appCancel:
-                self = .canceled
+                self = .cancelled
             default:
                 self = .authenticationFailed
             }
@@ -29,9 +29,9 @@ public enum BiometryAuthenticationError: Error {
         }
     }
 
-    public var isAuthCancelled: Bool {
+    public var isAuthenticationCancelled: Bool {
         switch self {
-        case .canceled: true
+        case .cancelled: true
         case .biometryUnavailable, .authenticationFailed: false
         }
     }
