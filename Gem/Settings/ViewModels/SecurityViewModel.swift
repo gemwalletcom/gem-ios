@@ -9,6 +9,8 @@ import Store
 class SecurityViewModel {
     private let service: BiometryAuthenticatable
 
+    static let reason: String = Localized.Settings.Security.authentication
+
     var isPresentingError: String?
     var isEnabled: Bool
 
@@ -22,19 +24,14 @@ class SecurityViewModel {
         self.lockPeriodModel = lockPeriodModel
     }
 
-    var title: String {
-        Localized.Settings.security
-    }
+    var title: String { Localized.Settings.security }
+    var errorTitle: String { Localized.Errors.errorOccured }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {
         case .biometrics: Localized.Settings.enableValue("Face ID")
         case .passcode, .none: Localized.Settings.enablePasscode
         }
-    }
-
-    static var reason: String {
-        Localized.Settings.Security.authentication
     }
 }
 
@@ -49,10 +46,10 @@ extension SecurityViewModel {
             if !error.isAuthenticationCancelled {
                 isPresentingError = error.localizedDescription
             }
-            isEnabled = !isEnabled
+            isEnabled.toggle()
         } catch {
             isPresentingError = error.localizedDescription
-            isEnabled = !isEnabled
+            isEnabled.toggle()
         }
     }
 }

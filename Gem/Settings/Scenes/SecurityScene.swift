@@ -17,16 +17,18 @@ struct SecurityScene: View {
             Toggle(model.authenticationTitle, isOn: $model.isEnabled)
             .toggleStyle(AppToggleStyle())
 
-            NavigationLink(value: model.lockPeriodModel.selectedOption) {
-                ListItemView(
-                    title: model.lockPeriodModel.title,
-                    subtitle: model.lockPeriodModel.selectedOption.title
-                )
+            if model.isEnabled {
+                NavigationLink(value: model.lockPeriodModel.selectedOption) {
+                    ListItemView(
+                        title: model.lockPeriodModel.title,
+                        subtitle: model.lockPeriodModel.selectedOption.title
+                    )
+                }
             }
         }
         .onChange(of: model.isEnabled, onToggleEnable)
         .alert(item: $model.isPresentingError) {
-            Alert(title: Text("Transfer Error"), message: Text($0))
+            Alert(title: Text(model.errorTitle), message: Text($0))
         }
         .navigationDestination(for: LockOption.self) { _ in
             LockPeriodSelectionScene(model: $model.lockPeriodModel)

@@ -70,7 +70,7 @@ struct LockSceneViewModelTests {
             isAuthEnabled: true,
             availableAuth: .biometrics
         )
-        mockService.errorToThrow = BiometryAuthenticationError.canceled
+        mockService.errorToThrow = BiometryAuthenticationError.cancelled
         let viewModel = LockSceneViewModel(service: mockService)
         viewModel.state = .locked
 
@@ -391,7 +391,7 @@ fileprivate class MockBiometryAuthenticationService: BiometryAuthenticatable {
             throw error
         }
         if !shouldAuthenticateSucceed {
-            throw BiometryAuthenticationError.canceled
+            throw BiometryAuthenticationError.cancelled
         }
     }
 }
