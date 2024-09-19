@@ -81,7 +81,7 @@
 "transaction.sender" = "Gönderen";
 "transaction.date" = "Tarih";
 "transaction.view_on" = "%@ tarihinde görüntüle";
-"wallet.default_name" = "%@ Cüzdan";
+"wallet.default_name" = "Cüzdan # %d";
 "wallet.default_name_chain" = "%@ Cüzdan # %d";
 "settings.currency" = "Para birimi";
 "common.recommended" = "Tavsiye edilen";
