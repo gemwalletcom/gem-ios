@@ -271,3 +271,5 @@
 "lock.six_hours" = "6 ساعات";
 "lock.require_authentication" = "Require authentication";
 "lock.Unlock" = "Unlock";
+"price_alerts.get_notified_explain_message" = "احصل على إشعار عندما يكون هناك تغيير كبير في سعر الأصول المشفرة المفضلة لديك.";
+"price_alerts.empty_state.message" = "لم تتم إضافة تنبيهات الأسعار بعد.";

@@ -13,14 +13,14 @@ struct ChartScene: View {
     
     @StateObject var model: ChartsViewModel
     
-    @Query<AssetRequest>
-    var assetData: AssetData
-    
+    @Query<PriceRequest>
+    var priceData: PriceData
+
     init(
         model: ChartsViewModel
     ) {
         _model = StateObject(wrappedValue: model)
-        _assetData = Query(constant: model.assetRequest)
+        _priceData = Query(constant: model.priceRequest)
     }
     
     var body: some View {
@@ -68,8 +68,8 @@ struct ChartScene: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             
-            if let details = assetData.details {
-                let model = AssetDetailsInfoViewModel(asset: assetData.asset, details: details)
+            if let details = priceData.details {
+                let model = AssetDetailsInfoViewModel(asset: priceData.asset, details: details)
                 Section {
                     ForEach(model.marketValues, id: \.title) {
                         ListItemView(title: $0.title, subtitle: $0.subtitle)

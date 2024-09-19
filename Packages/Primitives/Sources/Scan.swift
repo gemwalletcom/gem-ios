@@ -8,14 +8,14 @@ public struct ScanAddress: Codable, Equatable {
 	public let name: String?
 	public let address: String
 	public let isVerified: Bool
-	public let isFradulent: Bool
+	public let isFraudulent: Bool
 	public let isMemoRequired: Bool
 
-	public init(name: String?, address: String, isVerified: Bool, isFradulent: Bool, isMemoRequired: Bool) {
+	public init(name: String?, address: String, isVerified: Bool, isFraudulent: Bool, isMemoRequired: Bool) {
 		self.name = name
 		self.address = address
 		self.isVerified = isVerified
-		self.isFradulent = isFradulent
+		self.isFraudulent = isFraudulent
 		self.isMemoRequired = isMemoRequired
 	}
 }

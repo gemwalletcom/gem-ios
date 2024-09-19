@@ -271,3 +271,5 @@
 "lock.six_hours" = "6 годин";
 "lock.require_authentication" = "Вимагається автентифікація";
 "lock.Unlock" = "Розблокувати";
+"price_alerts.get_notified_explain_message" = "Отримуйте сповіщення, коли відбувається значна зміна ціни на ваші улюблені криптоактиви.";
+"price_alerts.empty_state.message" = "Ще не додано сповіщення про ціни.";

@@ -369,6 +369,12 @@ internal enum Localized {
     internal static func enabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.enabled_for", String(describing: p1), fallback: "Price alert enabled for %@")
     }
+    /// Get notified when there’s a significant price change in your favorite crypto assets.
+    internal static let getNotifiedExplainMessage = Localized.tr("Localizable", "price_alerts.get_notified_explain_message", fallback: "Get notified when there’s a significant price change in your favorite crypto assets.")
+    internal enum EmptyState {
+      /// No price alerts added yet.
+      internal static let message = Localized.tr("Localizable", "price_alerts.empty_state.message", fallback: "No price alerts added yet.")
+    }
   }
   internal enum Receive {
     /// Receive %s

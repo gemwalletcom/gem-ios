@@ -97,6 +97,17 @@ extension AssetRecord {
     }
 }
 
+extension PriceRecordInfo {
+    var priceData: PriceData {
+        PriceData(
+            asset: asset.mapToAsset(),
+            price: price?.mapToPrice(),
+            priceAlert: priceAlert?.map(),
+            details: details?.mapToAssetDetailsInfo(asset: asset)
+        )
+    }
+}
+
 extension AssetRecordInfo {
     var assetData: AssetData {
         return AssetData(
@@ -109,7 +120,7 @@ extension AssetRecordInfo {
             metadata: metadata
         )
     }
-    
+
     var metadata: AssetMetaData {
         return AssetMetaData(
             isEnabled: balance?.isEnabled ?? false,

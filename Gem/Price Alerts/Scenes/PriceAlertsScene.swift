@@ -25,14 +25,31 @@ struct PriceAlertsScene: View {
 
     var body: some View {
         List {
-            Toggle(
-                model.enableTitle,
-                isOn: $isPriceAlertsEnabled
-            )
-            .toggleStyle(AppToggleStyle())
             Section {
-                ForEach(priceAlerts) {
-                    ListAssetItemView(model: PriceAlertItemViewModel(data: $0))
+                Toggle(
+                    model.enableTitle,
+                    isOn: $isPriceAlertsEnabled
+                )
+                .toggleStyle(AppToggleStyle())
+            } footer: {
+                Text(Localized.PriceAlerts.getNotifiedExplainMessage)
+            }
+
+            Section {
+                if priceAlerts.isEmpty {
+                    StateEmptyView(title: Localized.PriceAlerts.EmptyState.message)
+                } else {
+                    ForEach(priceAlerts) { alert in
+                        NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                            ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                                .swipeActions(edge: .trailing) {
+                                    Button(Localized.Common.delete) {
+                                        onDelete(alert: alert)
+                                    }
+                                    .tint(Colors.red)
+                                }
+                        }
+                    }
                 }
             }
         }
@@ -61,8 +78,18 @@ struct PriceAlertsScene: View {
     }
 }
 
-//#Preview {
-//    PriceAlertsScene(
-//        model: PriceAlertsViewModel(priceAlertService: PriceAlertService)
-//    )
-//}
+#Preview {
+    PriceAlertsScene(
+        model: PriceAlertsViewModel(priceAlertService: .main)
+    )
+}
+
+// MARK: - Actions
+
+extension PriceAlertsScene {
+    func onDelete(alert: PriceAlertData) {
+        Task {
+            await model.deletePriceAlert(assetId: alert.asset.id)
+        }
+    }
+}
