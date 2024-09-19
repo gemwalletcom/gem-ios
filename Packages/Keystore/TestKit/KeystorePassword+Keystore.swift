@@ -4,14 +4,17 @@ import Foundation
 import Keystore
 import LocalAuthentication
 
-public class MockKeystorePassword: KeystorePassword {
+public class MockKeystorePassword: KeystorePassword {    
     private var memoryPassword: String
     private var isAuthenticationEnabled: Bool
+    private var lockPeriod: LockPeriod?
     private var availableAuthentication: KeystoreAuthentication
+
 
     public init(
         memoryPassword: String = "",
         isAuthenticationEnabled: Bool = false,
+        lockPeriod: LockPeriod? = .immediate,
         availableAuthentication: KeystoreAuthentication = .none
     ) {
         self.memoryPassword = memoryPassword
@@ -33,6 +36,14 @@ public class MockKeystorePassword: KeystorePassword {
     
     public func getAvailableAuthentication() -> KeystoreAuthentication {
         availableAuthentication
+    }
+
+    public func getAuthenticationLockPeriod() throws -> LockPeriod? {
+        lockPeriod
+    }
+
+    public func setAuthenticationLockPeriod(period: LockPeriod) throws {
+        lockPeriod = period
     }
 
     public func enableAuthentication(_ enable: Bool, context: LAContext) throws {

@@ -9,6 +9,7 @@ public class LocalKeystorePassword: KeystorePassword {
     private struct Keys {
         static let password = "password"
         static let passwordAuthentication = "password_authentication"
+        static let passwordAuthenticationPeriod = "password_authentication_period"
     }
     
     private let keychain = Keychain()
@@ -25,7 +26,18 @@ public class LocalKeystorePassword: KeystorePassword {
         }
         return KeystoreAuthentication(rawValue: value) ?? .none
     }
-    
+
+    public func getAuthenticationLockPeriod() throws -> LockPeriod? {
+        guard let option = try keychain.get(Keys.passwordAuthenticationPeriod) else {
+            return .none
+        }
+        return LockPeriod(rawValue: option)
+    }
+
+    public func setAuthenticationLockPeriod(period: LockPeriod) throws {
+        try keychain.set(period.rawValue, key: Keys.passwordAuthenticationPeriod)
+    }
+
     public func enableAuthentication(_ enable: Bool, context: LAContext) throws {
         switch enable {
         case true:
@@ -59,7 +71,11 @@ public class LocalKeystorePassword: KeystorePassword {
         try keychain
             .remove(Keys.password)
     }
-    
+}
+
+// MARK: - Private
+
+extension LocalKeystorePassword {
     private func setPassword(
         _ password: String,
         authentication: KeystoreAuthentication,
@@ -67,13 +83,13 @@ public class LocalKeystorePassword: KeystorePassword {
     ) throws {
         try keychain
             .set(authentication.rawValue, key: Keys.passwordAuthentication)
-        
+
         try keychain
             .accessibility(.whenUnlockedThisDeviceOnly, authenticationPolicy: authentication.policy)
             .authenticationContext(context)
             .set(password, key: Keys.password)
     }
-    
+
     private func changeAuthentication(authentication: KeystoreAuthentication, context: LAContext) throws {
         let password = try getPassword(context: context)
         try setPassword(password, authentication: authentication, context: context)

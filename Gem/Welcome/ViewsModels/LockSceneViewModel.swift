@@ -7,36 +7,35 @@ import Store
 @Observable
 class LockSceneViewModel {
     private let service: BiometryAuthenticatable
-    private let preferences: Preferences
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
     var state: LockSceneState
     var inBackground: Bool = false
 
-    init(preferences: Preferences = Preferences.main,
-         service: BiometryAuthenticatable = BiometryAuthenticationService()) {
+    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
-        self.preferences = preferences
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
     }
 
     var unlockTitle: String { Localized.Lock.unlock }
+
+    var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
+    var isLocked: Bool { state != .unlocked && isAutoLockEnabled }
+
+    var shouldShowPlaceholder: Bool { isLocked || (inBackground && shouldLock) }
+    var shouldLock: Bool { Date() > lastUnlockTime && isAutoLockEnabled }
+    var lockPeriod: LockPeriod { service.lockPeriod ?? .immediate }
 }
 
 // MARK: - Business Logic
 
 extension LockSceneViewModel {
-    var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
-    var shouldShowPlaceholder: Bool { isLocked || inBackground }
-    var isLocked: Bool { state != .unlocked && isAutoLockEnabled }
-    var shouldLock: Bool { Date() > lastUnlockTime && isAutoLockEnabled }
-
     func handleSceneChange(to phase: ScenePhase) {
         guard isAutoLockEnabled else { return }
         if phase == .background {
             inBackground = true
             if state == .unlocked && !shouldLock {
-                lastUnlockTime = Date().addingTimeInterval(TimeInterval(lockOption.rawValue))
+                lastUnlockTime = Date().addingTimeInterval(TimeInterval(lockPeriod.value))
             }
         } else if phase == .active {
             inBackground = false
@@ -58,13 +57,5 @@ extension LockSceneViewModel {
         } catch {
             state = .locked
         }
-    }
-}
-
-// MARK: - Private
-
-extension LockSceneViewModel {
-    private var lockOption: LockOption {
-        LockOption(rawValue: preferences.authenticationLockOption) ?? .immediate
     }
 }

@@ -17,6 +17,18 @@ public struct BiometryAuthenticationService: BiometryAuthenticatable {
         }
     }
 
+    public var lockPeriod: LockPeriod? {
+        do {
+            return try keystorePassword.getAuthenticationLockPeriod()
+        } catch {
+            return nil
+        }
+    }
+
+    public func update(period: LockPeriod) throws {
+        try keystorePassword.setAuthenticationLockPeriod(period: period)
+    }
+
     public var availableAuthentication: KeystoreAuthentication {
         keystorePassword.getAvailableAuthentication()
     }

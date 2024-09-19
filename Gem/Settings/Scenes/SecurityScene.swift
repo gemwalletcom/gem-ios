@@ -2,8 +2,8 @@
 
 import SwiftUI
 import Components
-import LocalAuthentication
 import Style
+import Keystore
 
 struct SecurityScene: View {
     @State private var model: SecurityViewModel
@@ -18,10 +18,10 @@ struct SecurityScene: View {
             .toggleStyle(AppToggleStyle())
 
             if model.isEnabled {
-                NavigationLink(value: model.lockPeriodModel.selectedOption) {
+                NavigationLink(value: model.lockPeriodModel.selectedPeriod) {
                     ListItemView(
                         title: model.lockPeriodModel.title,
-                        subtitle: model.lockPeriodModel.selectedOption.title
+                        subtitle: model.lockPeriodModel.selectedPeriod.title
                     )
                 }
             }
@@ -30,7 +30,7 @@ struct SecurityScene: View {
         .alert(item: $model.isPresentingError) {
             Alert(title: Text(model.errorTitle), message: Text($0))
         }
-        .navigationDestination(for: LockOption.self) { _ in
+        .navigationDestination(for: LockPeriod.self) { _ in
             LockPeriodSelectionScene(model: $model.lockPeriodModel)
         }
         .navigationTitle(model.title)

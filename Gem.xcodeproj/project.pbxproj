@@ -34,7 +34,6 @@
 		83A704272C17CA78005B77F4 /* BuyAssetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A704262C17CA78005B77F4 /* BuyAssetInput.swift */; };
 		83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */; };
 		83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */; };
-		83B672ED2C99B2440034100C /* LockOption.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672EC2C99B2440034100C /* LockOption.swift */; };
 		83B672EF2C99BFB60034100C /* LockPeriodSelectionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */; };
 		83B672F12C99BFD40034100C /* LockPeriodSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */; };
 		83BB7E772C9A050700D90F2C /* LockSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB7E762C9A050700D90F2C /* LockSceneViewModelTests.swift */; };
@@ -611,7 +610,6 @@
 		83A704262C17CA78005B77F4 /* BuyAssetInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetInput.swift; sourceTree = "<group>"; };
 		83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterScene.swift; sourceTree = "<group>"; };
 		83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterViewModel.swift; sourceTree = "<group>"; };
-		83B672EC2C99B2440034100C /* LockOption.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockOption.swift; sourceTree = "<group>"; };
 		83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionScene.swift; sourceTree = "<group>"; };
 		83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionViewModel.swift; sourceTree = "<group>"; };
 		83BB7E762C9A050700D90F2C /* LockSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSceneViewModelTests.swift; sourceTree = "<group>"; };
@@ -1282,7 +1280,6 @@
 			isa = PBXGroup;
 			children = (
 				83F7ED072C99A87A00A6A035 /* LockSceneState.swift */,
-				83B672EC2C99B2440034100C /* LockOption.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -2565,7 +2562,6 @@
 				D890F7A32C7FC03800C26819 /* WalletSelectImageScene.swift in Sources */,
 				8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */,
 				C3CF3BC729B7CB4900E96586 /* BuyAssetViewModel.swift in Sources */,
-				83B672ED2C99B2440034100C /* LockOption.swift in Sources */,
 				D82E9EDA2B26698100DB06C8 /* StakeService.swift in Sources */,
 				D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */,
 				D8385CF42B06D65500F784C7 /* SwapChangeView.swift in Sources */,

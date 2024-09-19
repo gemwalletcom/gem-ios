@@ -16,12 +16,10 @@ class SecurityViewModel {
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: BiometryAuthenticatable = BiometryAuthenticationService(),
-         lockPeriodModel: LockPeriodSelectionViewModel = LockPeriodSelectionViewModel()
-    ) {
+    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
         self.isEnabled = service.isAuthenticationEnabled
-        self.lockPeriodModel = lockPeriodModel
+        self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)
     }
 
     var title: String { Localized.Settings.security }

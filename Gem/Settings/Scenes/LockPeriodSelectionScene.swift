@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Components
+import Keystore
 
 struct LockPeriodSelectionScene: View {
     @Environment(\.dismiss) var dismiss
@@ -13,16 +14,16 @@ struct LockPeriodSelectionScene: View {
     }
 
     var body: some View {
-        List(model.allOptions) { option in
+        List(model.allPeriods) { option in
             ListItemSelectionView(
                 title: option.title,
                 titleExtra: .none,
                 subtitle: .none,
                 subtitleExtra: .none,
                 value: option,
-                selection: model.selectedOption
+                selection: model.selectedPeriod
             ) {
-                onSelect(option: $0)
+                onSelect(period: $0)
             }
         }
         .listSectionSpacing(.compact)
@@ -33,14 +34,14 @@ struct LockPeriodSelectionScene: View {
 // MARK: - Actions
 
 extension LockPeriodSelectionScene {
-    private func onSelect(option: LockOption) {
-        model.selectedOption = option
+    private func onSelect(period: LockPeriod) {
+        model.update(period: period)
         dismiss()
     }
 }
 
 #Preview {
     NavigationStack {
-        LockPeriodSelectionScene(model: .constant(.init()))
+        LockPeriodSelectionScene(model: .constant(.init(service: BiometryAuthenticationService())))
     }
 }

@@ -1,31 +1,39 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Store
+import Keystore
 
-struct LockPeriodSelectionViewModel {
-    private let preferences: Preferences
+@Observable
+class LockPeriodSelectionViewModel {
+    private let service: BiometryAuthenticatable
 
-    let allOptions: [LockOption] = LockOption.allCases
-    var selectedOption: LockOption {
-        didSet {
-            preferences.authenticationLockOption = selectedOption.id
-        }
-    }
+    var selectedPeriod: LockPeriod
 
-    init(preferences: Preferences = Preferences.main) {
-        self.preferences = preferences
-        let lockOption = LockOption(rawValue: preferences.authenticationLockOption) ?? .immediate
-        self.selectedOption = lockOption
+    init(service: BiometryAuthenticatable) {
+        self.service = service
+        self.selectedPeriod = service.lockPeriod ?? .immediate
     }
 
     var title: String { Localized.Lock.requireAuthentication }
+
+    var allPeriods: [LockPeriod] {
+        LockPeriod.allCases
+    }
+
+    func update(period: LockPeriod) {
+        do {
+            try service.update(period: period)
+            selectedPeriod = period
+        } catch {
+            selectedPeriod = service.lockPeriod ?? .immediate
+        }
+    }
 }
 
-// MARK: - Model Extensions
+// MARK: - Models extension
 
-extension LockOption {
-    var title: String {
+extension LockPeriod {
+    public var title: String {
         switch self {
         case .immediate: Localized.Lock.immediately
         case .oneMinute: Localized.Lock.oneMinute
@@ -33,6 +41,17 @@ extension LockOption {
         case .fifteenMinutes: Localized.Lock.fifteenMinutes
         case .oneHour: Localized.Lock.oneHour
         case .sixHours: Localized.Lock.sixHours
+        }
+    }
+
+    public var value: Int {
+        switch self {
+        case .immediate: 0
+        case .oneMinute: 60
+        case .fiveMinutes: 300
+        case .fifteenMinutes: 900
+        case .oneHour: 3600
+        case .sixHours: 21600
         }
     }
 }
