@@ -178,6 +178,7 @@ struct WalletCoordinator: View {
                 .environment(\.assetsService, assetsService)
                 .environment(\.stakeService, stakeService)
                 .environment(\.bannerService, bannerService)
+                .environment(\.priceService, priceService)
                 .environment(\.balanceService, balanceService)
                 .environment(\.priceAlertService, priceAlertService)
                 .environment(\.chainServiceFactory, chainServiceFactory)

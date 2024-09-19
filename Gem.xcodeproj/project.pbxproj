@@ -218,6 +218,9 @@
 		D852CAF72C9A35C9004121D3 /* PriceAlertItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAF62C9A35C9004121D3 /* PriceAlertItemViewModel.swift */; };
 		D852CAF92C9A397E004121D3 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAF82C9A397E004121D3 /* PushNotificationService.swift */; };
 		D852CAFA2C9A397E004121D3 /* PushNotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAF82C9A397E004121D3 /* PushNotificationService.swift */; };
+		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
+		D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
+		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
 		D85620252AAA71FA00D65D81 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85620242AAA71FA00D65D81 /* SubscriptionService.swift */; };
 		D85620272AAAAD9A00D65D81 /* DeveloperViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */; };
 		D856202B2AAB89C000D65D81 /* EnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */; };
@@ -515,15 +518,15 @@
 		D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		D8C4A36C2C8CDB86006FABE8 /* TransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */; };
 		D8C4A3722C8CE1EA006FABE8 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
-		D8C4A3742C8CE87C006FABE8 /* AmountNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */; };
-		D8C4A3762C8CF956006FABE8 /* StakeNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */; };
+		D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */; };
+		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
 		D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
 		D8C4A37A2C8E2D64006FABE8 /* AboutUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */; };
 		D8C4A3852C9388C7006FABE8 /* PriceAlertsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3842C9388C7006FABE8 /* PriceAlertsScene.swift */; };
 		D8C4A3892C938A1B006FABE8 /* PriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3882C938A1B006FABE8 /* PriceAlertsViewModel.swift */; };
 		D8C4A38C2C969473006FABE8 /* PriceAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A38B2C969473006FABE8 /* PriceAlertService.swift */; };
-		D8C4A3A52C9696FE006FABE8 /* AssetNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationFlow.swift */; };
-		D8C4A3A62C9696FE006FABE8 /* AssetNavigationFlow.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationFlow.swift */; };
+		D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
+		D8C4A3A62C9696FE006FABE8 /* AssetNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */; };
 		D8C4A3A92C9696FE006FABE8 /* AssetSceneInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A39C2C9696FE006FABE8 /* AssetSceneInput.swift */; };
 		D8C4A3AA2C9696FE006FABE8 /* AssetSceneInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A39C2C9696FE006FABE8 /* AssetSceneInput.swift */; };
 		D8C4A3AD2C9696FE006FABE8 /* AssetHeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A39F2C9696FE006FABE8 /* AssetHeaderViewModel.swift */; };
@@ -799,6 +802,9 @@
 		D848B5A62AE85C7D00814FB4 /* WalletImportType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletImportType.swift; sourceTree = "<group>"; };
 		D852CAF62C9A35C9004121D3 /* PriceAlertItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertItemViewModel.swift; sourceTree = "<group>"; };
 		D852CAF82C9A397E004121D3 /* PushNotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushNotificationService.swift; sourceTree = "<group>"; };
+		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
+		D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertsViewModel.swift; sourceTree = "<group>"; };
+		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
 		D85620242AAA71FA00D65D81 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 		D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperViewModel.swift; sourceTree = "<group>"; };
 		D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
@@ -855,14 +861,14 @@
 		D8C4A3642C8A7B14006FABE8 /* GemDev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = GemDev.plist; path = "/Users/gemcoder/Documents/GitHub/gem-ios/GemDev.plist"; sourceTree = "<absolute>"; };
 		D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
-		D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationFlow.swift; sourceTree = "<group>"; };
-		D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationFlow.swift; sourceTree = "<group>"; };
+		D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationView.swift; sourceTree = "<group>"; };
+		D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactsNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutUsViewModel.swift; sourceTree = "<group>"; };
 		D8C4A3842C9388C7006FABE8 /* PriceAlertsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsScene.swift; sourceTree = "<group>"; };
 		D8C4A3882C938A1B006FABE8 /* PriceAlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsViewModel.swift; sourceTree = "<group>"; };
 		D8C4A38B2C969473006FABE8 /* PriceAlertService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertService.swift; sourceTree = "<group>"; };
-		D8C4A3992C9696FE006FABE8 /* AssetNavigationFlow.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationFlow.swift; sourceTree = "<group>"; };
+		D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A39C2C9696FE006FABE8 /* AssetSceneInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetSceneInput.swift; sourceTree = "<group>"; };
 		D8C4A39F2C9696FE006FABE8 /* AssetHeaderViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetHeaderViewModel.swift; sourceTree = "<group>"; };
 		D8C4A3A12C9696FE006FABE8 /* AssetScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AssetScene.swift; sourceTree = "<group>"; };
@@ -1824,6 +1830,15 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
+		D852CAFB2C9C9827004121D3 /* Navigation */ = {
+			isa = PBXGroup;
+			children = (
+				D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */,
+				D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */,
+			);
+			path = Navigation;
+			sourceTree = "<group>";
+		};
 		D85620282AAB89B000D65D81 /* Core */ = {
 			isa = PBXGroup;
 			children = (
@@ -1891,7 +1906,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */,
-				D8C4A3732C8CE87C006FABE8 /* AmountNavigationFlow.swift */,
+				D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */,
 				D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */,
 			);
 			path = Navigation;
@@ -1900,7 +1915,7 @@
 		D8C4A36E2C8CE065006FABE8 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D8C4A3752C8CF956006FABE8 /* StakeNavigationFlow.swift */,
+				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -1908,6 +1923,7 @@
 		D8C4A3812C9388AC006FABE8 /* Price Alerts */ = {
 			isa = PBXGroup;
 			children = (
+				D852CAFB2C9C9827004121D3 /* Navigation */,
 				D8C4A38A2C969469006FABE8 /* Services */,
 				D8C4A3832C9388B7006FABE8 /* ViewModels */,
 				D8C4A3822C9388B2006FABE8 /* Scenes */,
@@ -1928,6 +1944,7 @@
 			children = (
 				D8C4A3882C938A1B006FABE8 /* PriceAlertsViewModel.swift */,
 				D852CAF62C9A35C9004121D3 /* PriceAlertItemViewModel.swift */,
+				D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1944,7 +1961,7 @@
 		D8C4A39A2C9696FE006FABE8 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D8C4A3992C9696FE006FABE8 /* AssetNavigationFlow.swift */,
+				D8C4A3992C9696FE006FABE8 /* AssetNavigationView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -2487,6 +2504,7 @@
 				D8DC1B022C113C6000697D0A /* WalletDetailAddress.swift in Sources */,
 				C3B6F09229E7C31500C3B746 /* ConfirmTransferScene.swift in Sources */,
 				D8C4A3892C938A1B006FABE8 /* PriceAlertsViewModel.swift in Sources */,
+				D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */,
 				D8148C202BE33BA20066586A /* OnboardingHeaderTitle.swift in Sources */,
 				C3E99BCF2A787A8D005DF35F /* RateService.swift in Sources */,
 				835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */,
@@ -2592,7 +2610,7 @@
 				C3FA949429D7EEF000BFC23D /* WalletType.swift in Sources */,
 				D820CB542B55B07F0063D70C /* StakeRecommendedValidators.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
-				D8C4A3742C8CE87C006FABE8 /* AmountNavigationFlow.swift in Sources */,
+				D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */,
 				D8148C282BF191AB0066586A /* WalletNameGenerator.swift in Sources */,
 				D8FB43112C7A392C002B94B1 /* BannerSetupService.swift in Sources */,
 				D852CAF92C9A397E004121D3 /* PushNotificationService.swift in Sources */,
@@ -2611,7 +2629,7 @@
 				830FDA382C204E07003DA605 /* AddNodeScene.swift in Sources */,
 				C3E99BC12A72DF67005DF35F /* AssetIdViewModel.swift in Sources */,
 				C3CF3BDE29BE3FF400E96586 /* ImportWalletTypeScene.swift in Sources */,
-				D8C4A3A52C9696FE006FABE8 /* AssetNavigationFlow.swift in Sources */,
+				D8C4A3A52C9696FE006FABE8 /* AssetNavigationView.swift in Sources */,
 				833A0C872C80C2A50004DBA9 /* ChainsFilterViewModel.swift in Sources */,
 				836EC8582C32B22F00970BF1 /* LatencyMeasureService.swift in Sources */,
 				D8C4A3B22C969796006FABE8 /* AssetViewModel.swift in Sources */,
@@ -2705,13 +2723,15 @@
 				D8D203C02ACE058200261CA2 /* ChartValuesViewModel.swift in Sources */,
 				83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */,
 				D8148C2D2BF54FB80066586A /* MemoListItem.swift in Sources */,
+				D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */,
 				832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */,
 				C3D1C4FE2A421842006E8EEA /* NodeService.swift in Sources */,
 				838F14382C3D476C0049A8D2 /* AddNodeResultViewModel.swift in Sources */,
 				C3CF3BCB29B8041700E96586 /* RecipientViewModel.swift in Sources */,
-				D8C4A3762C8CF956006FABE8 /* StakeNavigationFlow.swift in Sources */,
+				D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */,
 				D810F3782AF1AB770006D9C6 /* SwapScene.swift in Sources */,
 				C3D1C4FA2A3BDAC8006E8EEA /* PriceService.swift in Sources */,
+				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833A0C852C80C11B0004DBA9 /* ChainsFilterType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -2781,7 +2801,7 @@
 				D8C4A27A2C8A7B14006FABE8 /* WordSuggestor.swift in Sources */,
 				D8C4A27B2C8A7B14006FABE8 /* BannerViewModel.swift in Sources */,
 				D8C4A27C2C8A7B14006FABE8 /* BannerService.swift in Sources */,
-				D8C4A3A62C9696FE006FABE8 /* AssetNavigationFlow.swift in Sources */,
+				D8C4A3A62C9696FE006FABE8 /* AssetNavigationView.swift in Sources */,
 				D8C4A27D2C8A7B14006FABE8 /* NetworkSelectorNavigationStack.swift in Sources */,
 				D8C4A27E2C8A7B14006FABE8 /* SelectAssetViewModel.swift in Sources */,
 				D8C4A27F2C8A7B14006FABE8 /* SwapAmountView.swift in Sources */,

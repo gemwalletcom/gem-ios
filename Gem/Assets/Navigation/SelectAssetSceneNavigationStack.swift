@@ -53,7 +53,6 @@ struct SelectAssetSceneNavigationStack: View {
                             }
                             .contentTransition(.symbolEffect(.replace))
                         }
-
                         ToolbarItem(placement: .navigationBarTrailing) {
                             Button {
                                 isPresentingAddToken = true
@@ -61,6 +60,43 @@ struct SelectAssetSceneNavigationStack: View {
                                 Image(systemName: SystemImage.plus)
                             }
                         }
+                    }
+                }
+                .navigationDestination(for: SelectAssetInput.self) { input in
+                    switch input.type {
+                    case .send:
+                        AmountNavigationView(
+                            input: AmountInput(type: .transfer, asset: input.asset),
+                            wallet: model.wallet,
+                            navigationPath: $navigationPath
+                        )
+                    case .receive:
+                        ReceiveScene(
+                            model: ReceiveViewModel(
+                                assetModel: AssetViewModel(asset: input.asset),
+                                walletId: model.wallet.walletId,
+                                address: input.assetAddress.address,
+                                walletsService: walletsService
+                            )
+                        )
+                    case .buy:
+                        BuyAssetScene(
+                            model: BuyAssetViewModel(
+                                assetAddress: input.assetAddress,
+                                input: .default)
+                            )
+                    case .swap:
+                        SwapScene(
+                            model: SwapViewModel(
+                                wallet: model.wallet,
+                                assetId: input.asset.id,
+                                walletsService: walletsService,
+                                swapService: SwapService(nodeProvider: nodeService),
+                                keystore: keystore
+                            )
+                        )
+                    case .manage, .stake, .priceAlert:
+                        EmptyView()
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)

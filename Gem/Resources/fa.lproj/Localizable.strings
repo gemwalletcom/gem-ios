@@ -273,3 +273,4 @@
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "هنگامی که تغییر قیمت قابل توجهی در دارایی های رمزنگاری مورد علاقه شما ایجاد می شود مطلع شوید.";
 "price_alerts.empty_state.message" = "هنوز هیچ هشدار قیمت اضافه نشده است.";
+"assets.select_asset" = "Asset را انتخاب کنید";

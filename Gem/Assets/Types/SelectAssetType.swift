@@ -7,8 +7,8 @@ enum SelectAssetType: String, Identifiable {
     case swap
     case stake
     case manage
-    case hidden
-    
+    case priceAlert
+
     var id: String {
         return rawValue
     }

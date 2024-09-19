@@ -20,8 +20,6 @@ struct SelectAssetScene: View {
 
     @Query<AssetsRequest> 
     private var assets: [AssetData]
-    @Query<AssetsInfoRequest>
-    var assetInfo: AssetsInfo
 
     @State private var model: SelectAssetViewModel
     @Binding var navigationPath: NavigationPath
@@ -41,31 +39,10 @@ struct SelectAssetScene: View {
             model.filterModel.assetsRequest = new
         }
         _assets = Query(request)
-        _assetInfo =  Query(model.assetsInfoRequest)
     }
 
     var body: some View {
         List {
-            if model.showAssetsInfo {
-                if assetInfo.hidden > 0 && $assets.searchBy.wrappedValue.isEmpty {
-                    NavigationLink {
-                        SelectAssetScene(
-                            model: SelectAssetViewModel(
-                                wallet: model.wallet,
-                                keystore: model.keystore,
-                                selectType: .hidden,
-                                assetsService: model.assetsService,
-                                walletsService: model.walletsService
-                            ),
-                            isPresentingAddToken: $isPresentingAddToken,
-                            navigationPath: $navigationPath
-                        )
-                    } label: {
-                        ListItemView(title: Localized.Assets.hidden, subtitle: "\(assetInfo.hidden)")
-                    }
-                }
-            }
-            
             Section {
                 ForEach(assets) { assetData in
                     switch model.selectType {
@@ -73,21 +50,27 @@ struct SelectAssetScene: View {
                         NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
                             ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                         }
-                    case .manage, .hidden:
+                    case .manage:
                         ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+                    case .priceAlert:
+                        NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
+                            model.selectAsset(asset: assetData.asset)
+                        }
                     }
                 }
             } footer: {
-                VStack {
-                    if model.state.isLoading {
-                        HStack {
-                            LoadingView()
+                if model.state.isLoading || assets.isEmpty {
+                    VStack {
+                        if model.state.isLoading {
+                            HStack {
+                                LoadingView()
+                            }
+                        } else if assets.isEmpty {
+                            Text(Localized.Assets.noAssetsFound)
                         }
-                    } else if assets.isEmpty {
-                        Text(Localized.Assets.noAssetsFound)
                     }
+                    .frame(height: 22)
                 }
-                .frame(height: 22)
             }
             
             if model.showAddToken {
@@ -103,49 +86,15 @@ struct SelectAssetScene: View {
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
         )
-        .debounce(value: $assets.searchBy,
-                  interval: Duration.milliseconds(250),
-                  action: model.search(query:))
+        .debounce(
+            value: $assets.searchBy,
+            interval: Duration.milliseconds(250),
+            action: model.search(query:)
+        )
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
-        .navigationDestination(for: SelectAssetInput.self) { input in
-            switch input.type {
-            case .send:
-                AmountNavigationFlow(
-                    input: AmountInput(type: .transfer, asset: input.asset),
-                    wallet: model.wallet,
-                    navigationPath: $navigationPath
-                )
-            case .receive:
-                ReceiveScene(
-                    model: ReceiveViewModel(
-                        assetModel: AssetViewModel(asset: input.asset),
-                        walletId: model.wallet.walletId,
-                        address: input.assetAddress.address,
-                        walletsService: walletsService
-                    )
-                )
-            case .buy:
-                BuyAssetScene(
-                    model: BuyAssetViewModel(
-                        assetAddress: input.assetAddress,
-                        input: .default)
-                    )
-            case .swap:
-                SwapScene(
-                    model: SwapViewModel(
-                        wallet: model.wallet,
-                        assetId: input.asset.id,
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
-                    )
-                )
-            case .manage, .hidden, .stake:
-                EmptyView()
-            }
-        }
+        
     }
 }
 

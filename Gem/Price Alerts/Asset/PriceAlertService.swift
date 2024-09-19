@@ -32,6 +32,10 @@ struct PriceAlertService {
         preferences.isPushNotificationsEnabled
     }
 
+    func getPriceAlerts() throws -> [PriceAlert] {
+        try store.getPriceAlerts()
+    }
+
     @discardableResult
     func requestPermissions() async throws -> Bool {
         try await pushNotificationService.requestPermissions()
@@ -41,9 +45,13 @@ struct PriceAlertService {
         try await deviceService.update()
     }
 
-    func getPriceAlerts() async throws {
-        let priceAlerts = try await apiService.getPriceAlerts(deviceId: securePreferences.getDeviceId())
+    func updatePriceAlerts() async throws {
+        let priceAlerts = try await getPriceAlerts()
         try store.addPriceAlerts(priceAlerts)
+    }
+
+    private func getPriceAlerts() async throws -> [PriceAlert] {
+        try await apiService.getPriceAlerts(deviceId: securePreferences.getDeviceId())
     }
 
     func addPriceAlert(assetId: String, autoEnable: Bool) async throws {

@@ -4,7 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 
-struct AssetNavigationFlow: View {
+struct AssetNavigationView: View {
 
     @Environment(\.stakeService) private var stakeService
 

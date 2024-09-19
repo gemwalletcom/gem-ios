@@ -8,13 +8,16 @@ struct PriceAlertsViewModel {
 
     let preferences: Preferences
     private let priceAlertService: PriceAlertService
+    private let priceService: PriceService
 
     init(
         preferences: Preferences = Preferences.standard,
-        priceAlertService: PriceAlertService
+        priceAlertService: PriceAlertService,
+        priceService: PriceService
     ) {
         self.preferences = preferences
         self.priceAlertService = priceAlertService
+        self.priceService = priceService
     }
 
     var title: String {
@@ -33,6 +36,22 @@ struct PriceAlertsViewModel {
         preferences.isPriceAlertsEnabled
     }
 
+    func onPriceAlertsEnabled(newValue: Bool) async {
+        preferences.isPriceAlertsEnabled = newValue
+
+        switch newValue {
+        case true:
+            Task {
+                preferences.isPushNotificationsEnabled = try await requestPermissions()
+                try await deviceUpdate()
+            }
+        case false:
+            Task {
+                try await deviceUpdate()
+            }
+        }
+    }
+
     func requestPermissions() async throws -> Bool {
         try await priceAlertService.requestPermissions()
     }
@@ -43,7 +62,12 @@ struct PriceAlertsViewModel {
 
     func fetch() async {
         do {
-            try await priceAlertService.getPriceAlerts()
+            try await priceAlertService.updatePriceAlerts()
+
+            // update prices
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            try await priceService.updatePrices(assetIds: assetIds)
+
         } catch {
             NSLog("getPriceAlerts error: \(error)")
         }

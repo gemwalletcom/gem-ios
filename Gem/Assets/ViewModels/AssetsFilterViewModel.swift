@@ -42,13 +42,13 @@ struct AssetsFilterViewModel {
         case .swap: [.swappable]
         case .stake: [.stakeable]
         case .manage: [.includeNewAssets]
-        case .hidden: [.hidden]
+        case .priceAlert: [.includeNewAssets]
         }
     }
 
     var isCusomFilteringSpecified: Bool {
         switch type {
-        case .send, .receive, .buy, .swap, .stake, .hidden: false
+        case .send, .receive, .buy, .swap, .stake, .priceAlert: false
         case .manage: !selectedChains.isEmpty
         }
     }

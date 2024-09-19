@@ -12,6 +12,14 @@ public struct PriceAlertStore {
         self.db = db.dbQueue
     }
 
+    public func getPriceAlerts() throws -> [PriceAlert] {
+        try db.read { db in
+            try PriceAlertRecord
+                .fetchAll(db)
+                .map { $0.map() }
+        }
+    }
+
     public func addPriceAlerts(_ alerts: [PriceAlert]) throws {
         try db.write { (db: Database) in
             for alert in alerts {
