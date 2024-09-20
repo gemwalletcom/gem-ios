@@ -49,7 +49,7 @@ test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name=iPhone 15" \
+    -destination "platform=iOS Simulator,name=iPhone 16" \
     test | xcbeautify
 
 localize:
