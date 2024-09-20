@@ -9,7 +9,7 @@ struct AddAssetPriceAlertsViewModel {
 
     func onSelectAsset(_ asset: Asset) {
         Task {
-            try await priceAlertService.addPriceAlert(assetId: asset.id.identifier, autoEnable: true)
+            try await priceAlertService.addPriceAlert(assetId: asset.id.identifier)
         }
     }
 }

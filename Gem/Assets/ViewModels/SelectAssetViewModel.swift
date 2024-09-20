@@ -15,7 +15,7 @@ class SelectAssetViewModel {
     var state: StateViewType<[AssetFull]> = .noData
     var filterModel: AssetsFilterViewModel
 
-    private var selectAssetAction: AssetAction?
+    var selectAssetAction: AssetAction?
 
     init(
         wallet: Wallet,

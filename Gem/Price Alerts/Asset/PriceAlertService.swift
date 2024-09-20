@@ -54,7 +54,7 @@ struct PriceAlertService {
         try await apiService.getPriceAlerts(deviceId: securePreferences.getDeviceId())
     }
 
-    func addPriceAlert(assetId: String, autoEnable: Bool) async throws {
+    func addPriceAlert(assetId: String, autoEnable: Bool = false) async throws {
         if autoEnable {
             if !preferences.isPriceAlertsEnabled {
                 preferences.isPriceAlertsEnabled = true

@@ -94,7 +94,6 @@ struct SelectAssetScene: View {
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
-        
     }
 }
 

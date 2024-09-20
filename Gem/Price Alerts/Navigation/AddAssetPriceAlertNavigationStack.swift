@@ -7,28 +7,24 @@ import Primitives
 struct AddAssetPriceAlertsNavigationStack: View {
 
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.keystore) private var keystore
-    @Environment(\.assetsService) private var assetsService
-    @Environment(\.walletsService) private var walletsService
 
-    let model: AddAssetPriceAlertsViewModel
+    @State private var model: AddAssetPriceAlertsViewModel
+    @State private var selectAssetModel: SelectAssetViewModel
+
+    init(
+        model: AddAssetPriceAlertsViewModel,
+        selectAssetModel: SelectAssetViewModel
+    ) {
+        self.model = model
+        self.selectAssetModel = selectAssetModel
+    }
 
     @State var navigationPath = NavigationPath()
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SelectAssetScene(
-                model: SelectAssetViewModel(
-                    wallet: keystore.currentWallet!,
-                    keystore: keystore,
-                    selectType: .priceAlert,
-                    assetsService: assetsService,
-                    walletsService: walletsService,
-                    selectAssetAction: {
-                        model.onSelectAsset($0)
-                        dismiss()
-                    }
-                ),
+                model: selectAssetModel,
                 isPresentingAddToken: .constant(false),
                 navigationPath: $navigationPath
             )
@@ -40,6 +36,12 @@ struct AddAssetPriceAlertsNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
+        }
+        .task {
+            self.selectAssetModel.selectAssetAction = {
+                model.onSelectAsset($0)
+                dismiss()
+            }
         }
     }
 }
