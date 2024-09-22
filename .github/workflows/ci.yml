@@ -47,6 +47,4 @@ jobs:
         run: just install-gemstone
 
       - name: Unit Tests
-        run: |
-          sudo xcode-select -s /Applications/Xcode_16_Release_Candidate.app
-          just test
+        run: just test
