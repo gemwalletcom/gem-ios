@@ -273,3 +273,4 @@
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "รับการแจ้งเตือนเมื่อมีการเปลี่ยนแปลงราคาที่สำคัญในสินทรัพย์ crypto ที่คุณชื่นชอบ";
 "price_alerts.empty_state.message" = "ยังไม่มีการเพิ่มการแจ้งเตือนราคา";
+"assets.select_asset" = "เลือกสินทรัพย์";

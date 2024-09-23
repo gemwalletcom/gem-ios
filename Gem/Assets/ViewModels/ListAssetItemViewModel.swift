@@ -9,6 +9,7 @@ enum AssetListType {
     case manage
     case view
     case copy
+    case price
 }
 
 struct ListAssetItemViewModel: ListAssetItemViewable {
@@ -39,7 +40,8 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
     var symbol: String? {
         switch type {
         case .wallet,
-            .view:
+            .view,
+            .price:
             return .none
         case .manage,
             .copy:
@@ -52,7 +54,7 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
     
     var subtitleView: ListAssetItemSubtitleView {
         switch type {
-        case .wallet:
+        case .wallet, .price:
             return .price(
                 price: TextValue(
                     text: assetDataModel.priceAmountText,
@@ -95,6 +97,8 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
             return .toggle(assetDataModel.isEnabled)
         case .copy:
             return .copy
+        case .price:
+            return .none
         }
     }
     

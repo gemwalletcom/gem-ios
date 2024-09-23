@@ -21,7 +21,12 @@ public struct PriceService {
         self.priceStore = priceStore
         self.preferences = preferences
     }
-    
+
+    public func updatePrices(assetIds: [String]) async throws {
+        let prices = try await fetchPrices(for: assetIds)
+        try updatePrices(prices: prices)
+    }
+
     public func updatePrices(prices: [AssetPrice]) throws {
         return try priceStore.updatePrices(prices: prices)
     }

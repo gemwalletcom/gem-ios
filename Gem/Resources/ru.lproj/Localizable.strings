@@ -273,3 +273,4 @@
 "lock.Unlock" = "Разблокировать";
 "price_alerts.get_notified_explain_message" = "Получайте уведомления о значительном изменении цен на ваши любимые криптоактивы.";
 "price_alerts.empty_state.message" = "Пока не добавлено ни одного ценового оповещения.";
+"assets.select_asset" = "Выберите актив";

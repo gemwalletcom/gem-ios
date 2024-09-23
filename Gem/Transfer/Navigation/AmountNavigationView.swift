@@ -5,7 +5,7 @@ import Foundation
 import SwiftUI
 import Primitives
 
-struct AmountNavigationFlow: View {
+struct AmountNavigationView: View {
     
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService

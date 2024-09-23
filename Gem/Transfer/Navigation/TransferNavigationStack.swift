@@ -20,7 +20,7 @@ struct TransferNavigationStack: View {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            AmountNavigationFlow(
+            AmountNavigationView(
                 input: input,
                 wallet: wallet,
                 navigationPath: $navigationPath

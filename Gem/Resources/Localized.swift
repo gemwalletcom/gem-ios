@@ -69,6 +69,8 @@ internal enum Localized {
     internal static let hidden = Localized.tr("Localizable", "assets.hidden", fallback: "Hidden")
     /// No assets found
     internal static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
+    /// Select Asset
+    internal static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
   }
   internal enum Banner {
     internal enum AccountActivation {

@@ -11,6 +11,10 @@ struct NodeServiceKey: EnvironmentKey {
     static var defaultValue: NodeService { NodeService.main }
 }
 
+struct PriceServiceKey: EnvironmentKey {
+    static var defaultValue: PriceService { PriceService.main }
+}
+
 struct ExplorerServiceKey: EnvironmentKey {
     static var defaultValue: ExplorerService { ExplorerService.main }
 }
@@ -84,7 +88,12 @@ extension EnvironmentValues {
         get { self[NodeServiceKey.self] }
         set { self[NodeServiceKey.self] = newValue }
     }
-    
+
+    var priceService: PriceService {
+        get { self[PriceServiceKey.self] }
+        set { self[PriceServiceKey.self] = newValue }
+    }
+
     var keystore: any Keystore {
         get { self[KeystoreKey.self] }
         set { self[KeystoreKey.self] = newValue }

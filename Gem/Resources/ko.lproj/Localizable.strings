@@ -273,3 +273,4 @@
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "즐겨찾는 암호화폐의 가격이 크게 변동되면 알림을 받으세요.";
 "price_alerts.empty_state.message" = "아직 가격 알림이 추가되지 않았습니다.";
+"assets.select_asset" = "자산 선택";

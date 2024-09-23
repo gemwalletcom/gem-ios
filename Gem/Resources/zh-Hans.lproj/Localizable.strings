@@ -273,3 +273,4 @@
 "lock.Unlock" = "解锁";
 "price_alerts.get_notified_explain_message" = "当您最喜欢的加密资产的价格发生重大变化时收到通知。";
 "price_alerts.empty_state.message" = "尚未添加价格警报。";
+"assets.select_asset" = "选择资产";

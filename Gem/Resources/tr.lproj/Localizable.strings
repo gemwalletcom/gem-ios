@@ -81,8 +81,8 @@
 "transaction.sender" = "Gönderen";
 "transaction.date" = "Tarih";
 "transaction.view_on" = "%@ tarihinde görüntüle";
-"wallet.default_name" = "%@ Cüzdan";
-"wallet.default_name_chain" = "%@ Cüzdan";
+"wallet.default_name" = "Cüzdan # %d";
+"wallet.default_name_chain" = "%@ Cüzdan # %d";
 "settings.currency" = "Para birimi";
 "common.recommended" = "Tavsiye edilen";
 "common.all" = "Tüm";
@@ -273,3 +273,4 @@
 "lock.Unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "Favori kripto varlıklarınızda önemli bir fiyat değişikliği olduğunda bildirim alın.";
 "price_alerts.empty_state.message" = "Henüz fiyat uyarısı eklenmedi.";
+"assets.select_asset" = "Varlık Seç";

@@ -28,7 +28,7 @@ struct WalletNavigationStack: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) { asset in
-                AssetNavigationFlow(
+                AssetNavigationView(
                     wallet: model.wallet,
                     assetId: asset.asset.id,
                     isPresentingAssetSelectType: $isPresentingAssetSelectType,
@@ -41,7 +41,7 @@ struct WalletNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.Stake.self) {
-                StakeNavigationFlow(wallet: $0.wallet, assetId: $0.chain.assetId)
+                StakeNavigationView(wallet: $0.wallet, assetId: $0.chain.assetId)
             }
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
@@ -56,7 +56,7 @@ struct WalletNavigationStack: View {
                 NavigationStack {
                     switch selectType.type {
                     case .send:
-                        AmountNavigationFlow(
+                        AmountNavigationView(
                             input: AmountInput(type: .transfer, asset: selectType.asset),
                             wallet: model.wallet,
                             navigationPath: $navigationPathSelect
@@ -120,7 +120,7 @@ struct WalletNavigationStack: View {
                             }
                         }
                     case .stake:
-                        StakeNavigationFlow(
+                        StakeNavigationView(
                             wallet: model.wallet,
                             assetId: selectType.asset.id
                         )
@@ -132,7 +132,7 @@ struct WalletNavigationStack: View {
                                 }.bold()
                             }
                         }
-                    case .manage, .hidden:
+                    case .manage, .priceAlert:
                         EmptyView()
                     }
                 }

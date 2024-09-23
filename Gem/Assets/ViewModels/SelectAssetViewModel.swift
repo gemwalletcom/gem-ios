@@ -15,18 +15,22 @@ class SelectAssetViewModel {
     var state: StateViewType<[AssetFull]> = .noData
     var filterModel: AssetsFilterViewModel
 
+    var selectAssetAction: AssetAction?
+
     init(
         wallet: Wallet,
         keystore: any Keystore,
         selectType: SelectAssetType,
         assetsService: AssetsService,
-        walletsService: WalletsService
+        walletsService: WalletsService,
+        selectAssetAction: AssetAction? = .none
     ) {
         self.wallet = wallet
         self.keystore = keystore
         self.selectType = selectType
         self.assetsService = assetsService
         self.walletsService = walletsService
+        self.selectAssetAction = selectAssetAction
 
         self.filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)
     }
@@ -39,20 +43,16 @@ class SelectAssetViewModel {
         case .swap: Localized.Wallet.swap
         case .stake: Localized.Wallet.stake
         case .manage: Localized.Wallet.manageTokenList
-        case .hidden: Localized.Assets.hidden
+        case .priceAlert: Localized.Assets.selectAsset
         }
     }
 
-    var assetsInfoRequest: AssetsInfoRequest {
-        AssetsInfoRequest(walletId: wallet.walletId.id)
-    }
-
-    var showAssetsInfo: Bool {
-        selectType == .manage
-    }
-    
     var showAddToken: Bool {
         selectType == .manage && !filterModel.allChains.isEmpty
+    }
+
+    func selectAsset(asset: Asset) {
+        selectAssetAction?(asset)
     }
 }
 
@@ -62,9 +62,9 @@ extension SelectAssetViewModel {
     func search(query: String) async {
         let query = query.trim()
         switch selectType {
-        case .manage, .receive, .buy:
+        case .manage, .receive, .buy, .priceAlert:
             await searchAssets(query: query)
-        case .send, .stake, .swap, .hidden:
+        case .send, .stake, .swap:
             break
         }
     }
@@ -123,13 +123,10 @@ extension SelectAssetType {
         case .send,
             .buy,
             .swap,
-            .stake:
-            return .view
-        case .receive:
-            return .copy
-        case .manage,
-            .hidden:
-            return .manage
+            .stake: .view
+        case .receive: .copy
+        case .manage:.manage
+        case .priceAlert: .price
         }
     }
 }
