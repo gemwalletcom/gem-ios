@@ -15,7 +15,10 @@ struct WalletCoordinator: View {
 
     @State var navigationStateManager: NavigationStateManagable
     @ObservedObject var keystore: LocalKeystore = .main
-    
+
+    @State var walletConnectManager: WalletConnectManager
+    @State var lockModel: LockSceneViewModel
+
     let assetStore: AssetStore
     let balanceStore: BalanceStore
     let priceStore: PriceStore
@@ -51,13 +54,8 @@ struct WalletCoordinator: View {
 
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
-    @State private var updateAvailableAlertSheetMessage: String? = .none
     @State var isPresentingError: String? = .none
-    @State var isPresentingWalletConnectBar: Bool = false
-
-    @State var transferData: TransferDataCallback<WCTransferData>? // wallet connector
-    @State var signMessage: TransferDataCallback<SignMessagePayload>? // wallet connector
-    @State var connectionProposal: TransferDataCallback<WCPairingProposal>? // wallet connector
+    @State private var updateAvailableAlertSheetMessage: String? = .none
 
     init(
         db: DB
@@ -147,12 +145,17 @@ struct WalletCoordinator: View {
         self.deviceService.observer()
 
         _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
+        _walletConnectManager = State(initialValue: WalletConnectManager(
+            connectionsService: connectionsService,
+            keystore: _keystore.wrappedValue)
+        )
+        _lockModel = State(initialValue: LockSceneViewModel())
     }
     
     var body: some View {
         VStack {
             if let currentWallet = keystore.currentWallet {
-                LockScreenScene(model: LockSceneViewModel()) {
+                LockScreenScene(model: lockModel) {
                     MainTabView(
                         model: .init(wallet: currentWallet),
                         navigationStateManager: $navigationStateManager
@@ -184,6 +187,13 @@ struct WalletCoordinator: View {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
             }
         }
+        .onChange(of: lockModel.shouldShowPlaceholder) { _, show in
+            if show {
+                walletConnectManager.setRequestsPending()
+            } else {
+                walletConnectManager.processPendingRequests()
+            }
+        }
         .onOpenURL(perform: { url in
             Task {
                 await handleUrl(url: url)
@@ -191,7 +201,7 @@ struct WalletCoordinator: View {
             
             //isPresentingError = url.absoluteString
         })
-        .sheet(item: $transferData) { data in
+        .sheet(item: $walletConnectManager.transferData) { data in
             NavigationStack {
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
@@ -208,8 +218,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            transferData?.delegate(.failure(AnyError("User cancelled")))
-                            transferData = nil
+                            walletConnectManager.cancelTransferData()
                         }
                         .bold()
                     }
@@ -217,7 +226,7 @@ struct WalletCoordinator: View {
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .sheet(item: $signMessage) { data in
+        .sheet(item: $walletConnectManager.signMessage) { data in
             NavigationStack {
                 SignMessageScene(
                     model: SignMessageSceneViewModel(
@@ -230,8 +239,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            signMessage?.delegate(.failure(AnyError("User cancelled")))
-                            signMessage = nil
+                            walletConnectManager.cancelSignMessage()
                         }
                         .bold()
                     }
@@ -239,7 +247,7 @@ struct WalletCoordinator: View {
                 .navigationBarTitleDisplayMode(.inline)
             }
         }
-        .sheet(item: $connectionProposal) { data in
+        .sheet(item: $walletConnectManager.connectionProposal) { data in
             NavigationStack {
                 ConnectionProposalScene(
                     model: ConnectionProposalViewModel(
@@ -253,8 +261,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            connectionProposal?.delegate(.failure(ConnectionsError.userCancelled))
-                            connectionProposal = nil
+                            walletConnectManager.cancelConnectionProposal()
                         }
                         .bold()
                     }
@@ -293,36 +300,27 @@ struct WalletCoordinator: View {
             runUpdatePrices()
         }
         .modifier(
-            ToastModifier(isPresenting: $isPresentingWalletConnectBar, value: "\(Localized.WalletConnect.brandName)...", systemImage: SystemImage.network)
+            ToastModifier(
+                isPresenting: $walletConnectManager.isPresentingWalletConnectBar,
+                value: "\(Localized.WalletConnect.brandName)...",
+                systemImage: SystemImage.network
+            )
         )
     }
-    
-    func runUpdatePrices() {
+
+    private func runUpdatePrices() {
         NSLog("runUpdatePrices")
         Task {
             try await walletsService.updatePrices()
         }
     }
 
-    func handleUrl(url: URL) async {
+    private func handleUrl(url: URL) async {
         do {
-            let url = try URLParser.from(url: url)
-            //TODO: Show loading indicator of connecting to WC
-            switch url {
-            case .walletConnect(let uri):
-                isPresentingWalletConnectBar = true
-                try await connectionsService.addConnectionURI(
-                    uri: uri,
-                    wallet: try keystore.getCurrentWallet()
-                )
-            case .walletConnectRequest:
-                isPresentingWalletConnectBar = true
-                break
-            }
-            
+            let urlAction = try URLParser.from(url: url)
+            try await walletConnectManager.handle(action: urlAction)
         } catch {
             NSLog("handleUrl error: \(error)")
-            
             isPresentingError = error.localizedDescription
         }
     }
