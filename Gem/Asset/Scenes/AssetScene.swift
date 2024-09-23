@@ -69,7 +69,7 @@ struct AssetScene: View {
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
+            .listRowInsets(.zero)
 
             Section {
                 BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)

@@ -75,12 +75,14 @@ struct ChartScene: View {
                         ListItemView(title: $0.title, subtitle: $0.subtitle)
                     }
                 }
-                Section(Localized.Social.links) {
-                    ForEach(details.socialUrls) { link in
-                        NavigationOpenLink(
-                            url: link.url,
-                            with: ListItemView(title: link.type.name, image: link.type.image)
-                        )
+                if !details.socialUrls.isEmpty {
+                    Section(Localized.Social.links) {
+                        ForEach(details.socialUrls) { link in
+                            NavigationOpenLink(
+                                url: link.url,
+                                with: ListItemView(title: link.type.name, image: link.type.image)
+                            )
+                        }
                     }
                 }
             }
