@@ -53,7 +53,7 @@ struct AmountScene: View {
 
                 switch model.type {
                 case .transfer:
-                    Section(Localized.Transfer.Recipient.title) {
+                    Section {
                         FloatTextField(model.recipientField, text: $address, allowClean: false) {
                             HStack(spacing: Spacing.large/2) {
                                 NameRecordView(

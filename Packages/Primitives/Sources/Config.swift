@@ -42,6 +42,18 @@ public struct ConfigApp: Codable {
 	}
 }
 
+public struct Release: Codable {
+	public let version: String
+	public let store: PlatformStore
+	public let upgrade_required: Bool
+
+	public init(version: String, store: PlatformStore, upgrade_required: Bool) {
+		self.version = version
+		self.store = store
+		self.upgrade_required = upgrade_required
+	}
+}
+
 public struct ConfigVersions: Codable {
 	public let fiatAssets: Int32
 	public let swapAssets: Int32
@@ -54,10 +66,12 @@ public struct ConfigVersions: Codable {
 
 public struct ConfigResponse: Codable {
 	public let app: ConfigApp
+	public let releases: [Release]
 	public let versions: ConfigVersions
 
-	public init(app: ConfigApp, versions: ConfigVersions) {
+	public init(app: ConfigApp, releases: [Release], versions: ConfigVersions) {
 		self.app = app
+		self.releases = releases
 		self.versions = versions
 	}
 }

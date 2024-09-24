@@ -69,7 +69,7 @@ struct AssetScene: View {
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
+            .listRowInsets(.zero)
 
             Section {
                 BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)
@@ -215,8 +215,12 @@ extension AssetScene {
         switch banner.event {
         case .stake:
             isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
-        case .accountActivation, .enableNotifications:
+        case .enableNotifications:
             break
+        case .accountActivation:
+            if let url = model.reservedBalanceUrl {
+                onOpenLink(url)
+            }
         }
     }
 
