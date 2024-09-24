@@ -43,19 +43,11 @@ extension LockWindowManager {
               overlayWindow == nil else { return }
 
         overlayWindow = LockWindowManager.createOverlayWindow(model: lockModel, windowScene: windowScene)
-        UIView.animate(
-            withDuration: 0.25,
-            delay: 0.0,
-            options: [.curveEaseIn]
-        ) { [weak self] in
-            guard let `self` = self else { return }
-            overlayWindow?.alpha = 1.0
-        }
     }
 
     private func hideLock() {
         UIView.animate(
-            withDuration: 0.25,
+            withDuration: 0.15,
             delay: 0.0,
             options: [.curveEaseOut],
             animations: { [weak self] in
@@ -81,7 +73,7 @@ extension LockWindowManager {
         lockWindow.windowLevel = UIWindow.Level.alert + 1
         lockWindow.backgroundColor = .clear
         lockWindow.isHidden = false
-        lockWindow.alpha = 0
+
 
         lockWindow.makeKeyAndVisible()
         return lockWindow
