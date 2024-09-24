@@ -231,7 +231,6 @@
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
-		D852CB032CA327F6004121D3 /* GemDev.plist in Resources */ = {isa = PBXBuildFile; fileRef = D852CB022CA327F6004121D3 /* GemDev.plist */; };
 		D852CB042CA327F6004121D3 /* GemDev.plist in Resources */ = {isa = PBXBuildFile; fileRef = D852CB022CA327F6004121D3 /* GemDev.plist */; };
 		D852CB052CA32B14004121D3 /* PriceAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A38B2C969473006FABE8 /* PriceAlertService.swift */; };
 		D852CB062CA32B32004121D3 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
@@ -2503,7 +2502,6 @@
 				D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */,
 				C3866B612A803B19004FB60C /* Launch Screen.storyboard in Resources */,
 				DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */,
-				D852CB032CA327F6004121D3 /* GemDev.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

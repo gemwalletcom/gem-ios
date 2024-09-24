@@ -45,12 +45,12 @@ public struct ConfigApp: Codable {
 public struct Release: Codable {
 	public let version: String
 	public let store: PlatformStore
-	public let upgrade_required: Bool
+	public let upgradeRequired: Bool
 
-	public init(version: String, store: PlatformStore, upgrade_required: Bool) {
+	public init(version: String, store: PlatformStore, upgradeRequired: Bool) {
 		self.version = version
 		self.store = store
-		self.upgrade_required = upgrade_required
+		self.upgradeRequired = upgradeRequired
 	}
 }
 
