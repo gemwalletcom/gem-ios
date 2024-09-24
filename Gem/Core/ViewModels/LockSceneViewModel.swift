@@ -14,7 +14,9 @@ class LockSceneViewModel {
     private var showPlaceholderPreview: Bool = false
     private var inBackground: Bool = false
 
-    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
+    init(
+        service: BiometryAuthenticatable = BiometryAuthenticationService()
+    ) {
         self.service = service
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked
     }
