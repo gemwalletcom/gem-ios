@@ -11,7 +11,6 @@ struct SettingsNavigationStack: View {
     @Binding var navigationPath: NavigationPath
 
     @ObservedObject var currencyModel: CurrencySceneViewModel
-    @ObservedObject var securityModel: SecurityViewModel
     
     @Environment(\.deviceService) private var deviceService
     @Environment(\.subscriptionService) private var subscriptionService
@@ -30,13 +29,12 @@ struct SettingsNavigationStack: View {
                 model: SettingsViewModel(
                     walletId: walletId,
                     walletsService: walletsService,
-                    currencyModel: currencyModel,
-                    securityModel: securityModel
+                    currencyModel: currencyModel
                 )
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
-                SecurityScene(model: securityModel)
+                SecurityScene(model: SecurityViewModel())
             }
             .navigationDestination(for: Scenes.Notifications.self) { _ in
                 NotificationsScene(

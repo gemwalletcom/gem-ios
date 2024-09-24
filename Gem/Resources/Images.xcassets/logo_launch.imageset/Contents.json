@@ -1,26 +1,8 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "filename" : "appstore launch screen@2x.png",
-      "idiom" : "universal",
-      "scale" : "3x"
-    },
-    {
-      "idiom" : "ipad",
-      "scale" : "1x"
-    },
-    {
       "filename" : "logo_launch_white.png",
-      "idiom" : "ipad",
-      "scale" : "2x"
+      "idiom" : "universal"
     }
   ],
   "info" : {

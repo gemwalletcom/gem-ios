@@ -11,14 +11,11 @@ import Style
 import GemstonePrimitives
 
 struct WalletCoordinator: View {
-    
-    @Environment(\.scenePhase) var scenePhase
-    
     let db: DB
 
     @State var navigationStateManager: NavigationStateManagable
     @ObservedObject var keystore: LocalKeystore = .main
-    
+
     let assetStore: AssetStore
     let balanceStore: BalanceStore
     let priceStore: PriceStore
@@ -54,8 +51,8 @@ struct WalletCoordinator: View {
 
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
-    @State private var updateAvailableAlertSheetMessage: String? = .none
     @State var isPresentingError: String? = .none
+    @State private var updateAvailableAlertSheetMessage: String? = .none
     @State var isPresentingWalletConnectBar: Bool = false
 
     @State var transferData: TransferDataCallback<WCTransferData>? // wallet connector
@@ -178,7 +175,6 @@ struct WalletCoordinator: View {
                 .environment(\.assetsService, assetsService)
                 .environment(\.stakeService, stakeService)
                 .environment(\.bannerService, bannerService)
-                .environment(\.priceService, priceService)
                 .environment(\.balanceService, balanceService)
                 .environment(\.priceAlertService, priceAlertService)
                 .environment(\.chainServiceFactory, chainServiceFactory)
@@ -190,26 +186,7 @@ struct WalletCoordinator: View {
             Task {
                 await handleUrl(url: url)
             }
-            
-            //isPresentingError = url.absoluteString
         })
-        .onChange(of: scenePhase) {
-            switch scenePhase {
-                case .inactive:
-                    NSLog("WalletCoordinator: inactive")
-                    //lockStateService.state = .locked
-                case .active:
-//                    if lockStateService.state == .locked {
-//                        lockStateService.state = .unlocked
-//                    }
-                    NSLog("WalletCoordinator: active")
-                case .background:
-                    //lockStateService.state = .locked
-                    NSLog("WalletCoordinator: background")
-            @unknown default:
-                NSLog("WalletCoordinator: unknown state")
-            }
-        }
         .sheet(item: $transferData) { data in
             NavigationStack {
                 ConfirmTransferScene(
@@ -227,7 +204,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            transferData?.delegate(.failure(AnyError("User cancelled")))
+                            transferData?.delegate(.failure(ConnectionsError.userCancelled))
                             transferData = nil
                         }
                         .bold()
@@ -249,7 +226,7 @@ struct WalletCoordinator: View {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            signMessage?.delegate(.failure(AnyError("User cancelled")))
+                            signMessage?.delegate(.failure(ConnectionsError.userCancelled))
                             signMessage = nil
                         }
                         .bold()
@@ -312,21 +289,24 @@ struct WalletCoordinator: View {
             runUpdatePrices()
         }
         .modifier(
-            ToastModifier(isPresenting: $isPresentingWalletConnectBar, value: "\(Localized.WalletConnect.brandName)...", systemImage: SystemImage.network)
+            ToastModifier(
+                isPresenting: $isPresentingWalletConnectBar,
+                value: "\(Localized.WalletConnect.brandName)...",
+                systemImage: SystemImage.network
+            )
         )
     }
-    
-    func runUpdatePrices() {
+
+    private func runUpdatePrices() {
         NSLog("runUpdatePrices")
         Task {
             try await walletsService.updatePrices()
         }
     }
 
-    func handleUrl(url: URL) async {
+    private func handleUrl(url: URL) async {
         do {
             let url = try URLParser.from(url: url)
-            //TODO: Show loading indicator of connecting to WC
             switch url {
             case .walletConnect(let uri):
                 isPresentingWalletConnectBar = true
@@ -338,10 +318,8 @@ struct WalletCoordinator: View {
                 isPresentingWalletConnectBar = true
                 break
             }
-            
         } catch {
             NSLog("handleUrl error: \(error)")
-            
             isPresentingError = error.localizedDescription
         }
     }

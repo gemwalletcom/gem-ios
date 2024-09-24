@@ -24,8 +24,11 @@ struct CleanUpService {
 //            try LocalKeystorePassword().remove()
 //        }
     }
-    
+    /*
+     keychains temp not deleted, prior to possible bug db and empty wallets keystore
+     */
     func onDeleteAllWallets() throws {
+
         //preferences.clear()
         //try LocalKeystorePassword().remove()
     }

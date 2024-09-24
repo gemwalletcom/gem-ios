@@ -20,8 +20,8 @@ class WalletsViewModel {
         Localized.Wallets.title
     }
     
-    var currentWallet: Wallet {
-        walletService.currentWallet!
+    var currentWallet: Wallet? {
+        walletService.currentWallet
     }
 }
 

@@ -2,69 +2,52 @@
 
 import SwiftUI
 import Components
-import LocalAuthentication
 import Style
+import Keystore
 
 struct SecurityScene: View {
-    
-    let model: SecurityViewModel
-    @State public var authenticationEnabled: Bool
-    @State public var authenticationInProgress: Bool = false
-    @State private var isPresentingErrorMessage: String?
+    @State private var model: SecurityViewModel
 
-    init(
-        model: SecurityViewModel
-    ) {
+    init(model: SecurityViewModel) {
         self.model = model
-        self.authenticationEnabled = model.authenticationEnabled
     }
     
     var body: some View {
         List {
-            HStack {
-                Toggle(
-                    model.authenticationTitle,
-                    isOn: $authenticationEnabled
-                )
-                .toggleStyle(AppToggleStyle())
-            }
-        }
-        .onChange(of: authenticationEnabled) {
-            Task {
-                let context = LAContext()
-                do {
-                    guard try await context.evaluatePolicy(.deviceOwnerAuthentication,
-                        localizedReason: Localized.Settings.Security.authentication
-                    ) else {
-                        return
-                    }
-                    do {
-                        try model.changeEnableBiometrics(value: authenticationEnabled, context: context)
-                    } catch {
-                        DispatchQueue.main.async {
-                            isPresentingErrorMessage = error.localizedDescription
-                        }
-                    }
-                } catch {
-                    DispatchQueue.main.async {
-                        authenticationEnabled = model.authenticationEnabled
-                    }
+            Toggle(model.authenticationTitle, isOn: $model.isEnabled)
+            .toggleStyle(AppToggleStyle())
+
+            if model.isEnabled {
+                NavigationLink(value: model.lockPeriodModel.selectedPeriod) {
+                    ListItemView(
+                        title: model.lockPeriodModel.title,
+                        subtitle: model.lockPeriodModel.selectedPeriod.title
+                    )
                 }
             }
         }
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text("Transfer Error"), message: Text($0))
+        .onChange(of: model.isEnabled, onToggleEnable)
+        .alert(item: $model.isPresentingError) {
+            Alert(title: Text(model.errorTitle), message: Text($0))
+        }
+        .navigationDestination(for: LockPeriod.self) { _ in
+            LockPeriodSelectionScene(model: $model.lockPeriodModel)
         }
         .navigationTitle(model.title)
-    }
-    
-    func changeEnableBiometrics(value: Bool) {
-        
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-//struct SecurityScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SecurityScene()
-//    }
-//}
+// MARK: - Actions
+
+extension SecurityScene {
+    private func onToggleEnable() {
+        Task {
+            await model.toggleBiometrics()
+        }
+    }
+}
+
+#Preview {
+    SecurityScene(model: .init())
+}

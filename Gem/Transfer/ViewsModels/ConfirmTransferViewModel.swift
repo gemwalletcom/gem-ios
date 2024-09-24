@@ -138,12 +138,8 @@ class ConfirmTransferViewModel {
             return nil
         }
 
-        let type = (try? keystore.getPasswordAuthentication()) ?? .none
-        switch type {
-        case .biometrics: return SystemImage.faceid
-        case .passcode: return SystemImage.lock
-        case .none: return SystemImage.none
-        }
+        let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
+        return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
     }
 
     var shouldDisableButton: Bool {

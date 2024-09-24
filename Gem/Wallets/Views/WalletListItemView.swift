@@ -9,7 +9,7 @@ import Primitives
 struct WalletListItemView: View {
 
     let model: WalletViewModel
-    let currentWallet: Wallet
+    let currentWallet: Wallet?
 
     let onSelect: (@MainActor (Wallet) -> Void)
     let onEdit: (@MainActor (Wallet) -> Void)
@@ -18,7 +18,7 @@ struct WalletListItemView: View {
 
     init(
         wallet: Wallet,
-        currentWallet: Wallet,
+        currentWallet: Wallet?,
         onSelect: @escaping (Wallet) -> Void,
         onEdit: @escaping (Wallet) -> Void,
         onPin: @escaping (Wallet) -> Void,

@@ -44,30 +44,26 @@ extension WalletCoordinator: WalletConnectorInteractable {
             self.connectionProposal = transferDataCallback
         }
     }
-    
+
     func signMessage(payload: SignMessagePayload) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
-            let signMessageCallback = TransferDataCallback(payload: payload) { result in
+            let transferDataCallback = TransferDataCallback(payload: payload) { result in
                 switch result {
-                case .success(let id):
+                case let .success(id):
                     continuation.resume(with: .success(id))
                 case .failure(let error):
                     continuation.resume(throwing: error)
                 }
             }
-            self.signMessage = signMessageCallback
+            self.signMessage = transferDataCallback
         }
     }
-    
-    func signTransaction(transferData: WCTransferData) async throws -> String {
-        fatalError()
-    }
-    
+
     func sendTransaction(transferData: WCTransferData) async throws -> String {
         return try await withCheckedThrowingContinuation { continuation in
             let transferDataCallback = TransferDataCallback(payload: transferData) { result in
                 switch result {
-                case .success(let id):
+                case let .success(id):
                     continuation.resume(with: .success(id))
                 case .failure(let error):
                     continuation.resume(throwing: error)
@@ -76,7 +72,11 @@ extension WalletCoordinator: WalletConnectorInteractable {
             self.transferData = transferDataCallback
         }
     }
-    
+
+    func signTransaction(transferData: WCTransferData) async throws -> String {
+        fatalError()
+    }
+
     func sendRawTransaction(transferData: WCTransferData) async throws -> String {
         fatalError()
     }

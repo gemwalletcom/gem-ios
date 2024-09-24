@@ -17,14 +17,6 @@ struct WelcomeScene: View {
     var body: some View {
         VStack {
             Spacer()
-            VStack(alignment: .center) {
-                Image(.logo)
-                    .resizable()
-                    .frame(width: 128, height: 128)
-                    .scaledToFit()
-            }
-            .padding(.top, 116)
-            Spacer()
             VStack(alignment: .center, spacing: 24) {
     //            Text(Localized.Welcome.title)
     //                .fontWeight(.bold)
@@ -57,6 +49,15 @@ struct WelcomeScene: View {
                 ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
             }
         }
+        .overlay(
+            ZStack {
+                Image(.logo)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 128, height: 128)
+            }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+        )
         .frame(maxWidth: .infinity)
         .background(Colors.white)
         .navigationTitle(model.title)
