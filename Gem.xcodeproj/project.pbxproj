@@ -229,6 +229,27 @@
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
+		D852CB032CA327F6004121D3 /* GemDev.plist in Resources */ = {isa = PBXBuildFile; fileRef = D852CB022CA327F6004121D3 /* GemDev.plist */; };
+		D852CB042CA327F6004121D3 /* GemDev.plist in Resources */ = {isa = PBXBuildFile; fileRef = D852CB022CA327F6004121D3 /* GemDev.plist */; };
+		D852CB052CA32B14004121D3 /* PriceAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A38B2C969473006FABE8 /* PriceAlertService.swift */; };
+		D852CB062CA32B32004121D3 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
+		D852CB072CA32B5A004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
+		D852CB082CA32B5A004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
+		D852CB092CA32B5A004121D3 /* PriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3882C938A1B006FABE8 /* PriceAlertsViewModel.swift */; };
+		D852CB0A2CA32B5A004121D3 /* PriceAlertItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAF62C9A35C9004121D3 /* PriceAlertItemViewModel.swift */; };
+		D852CB0B2CA32B5A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
+		D852CB0C2CA32B5A004121D3 /* PriceAlertsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3842C9388C7006FABE8 /* PriceAlertsScene.swift */; };
+		D852CB0D2CA32B5A004121D3 /* LockSceneState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F7ED072C99A87A00A6A035 /* LockSceneState.swift */; };
+		D852CB0E2CA32B5A004121D3 /* TransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */; };
+		D852CB0F2CA32B5A004121D3 /* AmountNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */; };
+		D852CB102CA32B5A004121D3 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
+		D852CB112CA32B5A004121D3 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
+		D852CB122CA32B5A004121D3 /* SellectWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832A705F2C88CE9600045367 /* SellectWalletViewModel.swift */; };
+		D852CB132CA32B5A004121D3 /* SelectWalletScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832A705D2C88CE0A00045367 /* SelectWalletScene.swift */; };
+		D852CB142CA32B5A004121D3 /* WalletSupportedChains.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83352B632C92F898003D52F3 /* WalletSupportedChains.swift */; };
+		D852CB152CA32B5A004121D3 /* AboutUsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3792C8E2D64006FABE8 /* AboutUsViewModel.swift */; };
+		D852CB162CA32B5A004121D3 /* LockPeriodSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */; };
+		D852CB172CA32B5A004121D3 /* LockPeriodSelectionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */; };
 		D85620252AAA71FA00D65D81 /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85620242AAA71FA00D65D81 /* SubscriptionService.swift */; };
 		D85620272AAAAD9A00D65D81 /* DeveloperViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */; };
 		D856202B2AAB89C000D65D81 /* EnvironmentVariables.swift in Sources */ = {isa = PBXBuildFile; fileRef = D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */; };
@@ -818,6 +839,7 @@
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertsViewModel.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
+		D852CB022CA327F6004121D3 /* GemDev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = GemDev.plist; sourceTree = "<group>"; };
 		D85620242AAA71FA00D65D81 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
 		D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeveloperViewModel.swift; sourceTree = "<group>"; };
 		D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnvironmentVariables.swift; sourceTree = "<group>"; };
@@ -871,7 +893,6 @@
 		D8C4A23E2C87CD09006FABE8 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8C4A23F2C87CD60006FABE8 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8C4A3632C8A7B14006FABE8 /* GemDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GemDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8C4A3642C8A7B14006FABE8 /* GemDev.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = GemDev.plist; path = "/Users/gemcoder/Documents/GitHub/gem-ios/GemDev.plist"; sourceTree = "<absolute>"; };
 		D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationView.swift; sourceTree = "<group>"; };
@@ -1149,7 +1170,7 @@
 				C30952B3299C39D70004C0F9 /* App.swift */,
 				C3CF3BB429B6917600E96586 /* App-Configuration.swift */,
 				C3FA949529DD50E200BFC23D /* Info.plist */,
-				D8C4A3642C8A7B14006FABE8 /* GemDev.plist */,
+				D852CB022CA327F6004121D3 /* GemDev.plist */,
 				C3866B602A803B19004FB60C /* Launch Screen.storyboard */,
 				DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */,
 			);
@@ -2478,6 +2499,7 @@
 				D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */,
 				C3866B612A803B19004FB60C /* Launch Screen.storyboard in Resources */,
 				DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */,
+				D852CB032CA327F6004121D3 /* GemDev.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2504,6 +2526,7 @@
 				D8C4A3652C8B9D4F006FABE8 /* Images.xcassets in Resources */,
 				D8C4A35D2C8A7B14006FABE8 /* Launch Screen.storyboard in Resources */,
 				D8C4A35E2C8A7B14006FABE8 /* PrivacyInfo.xcprivacy in Resources */,
+				D852CB042CA327F6004121D3 /* GemDev.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2806,6 +2829,23 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D852CB072CA32B5A004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */,
+				D852CB082CA32B5A004121D3 /* PriceAlertsNavigationView.swift in Sources */,
+				D852CB092CA32B5A004121D3 /* PriceAlertsViewModel.swift in Sources */,
+				D852CB0A2CA32B5A004121D3 /* PriceAlertItemViewModel.swift in Sources */,
+				D852CB0B2CA32B5A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */,
+				D852CB0C2CA32B5A004121D3 /* PriceAlertsScene.swift in Sources */,
+				D852CB0D2CA32B5A004121D3 /* LockSceneState.swift in Sources */,
+				D852CB0E2CA32B5A004121D3 /* TransferNavigationStack.swift in Sources */,
+				D852CB0F2CA32B5A004121D3 /* AmountNavigationView.swift in Sources */,
+				D852CB102CA32B5A004121D3 /* ContactsNavigationStack.swift in Sources */,
+				D852CB112CA32B5A004121D3 /* StakeNavigationView.swift in Sources */,
+				D852CB122CA32B5A004121D3 /* SellectWalletViewModel.swift in Sources */,
+				D852CB132CA32B5A004121D3 /* SelectWalletScene.swift in Sources */,
+				D852CB142CA32B5A004121D3 /* WalletSupportedChains.swift in Sources */,
+				D852CB152CA32B5A004121D3 /* AboutUsViewModel.swift in Sources */,
+				D852CB162CA32B5A004121D3 /* LockPeriodSelectionViewModel.swift in Sources */,
+				D852CB172CA32B5A004121D3 /* LockPeriodSelectionScene.swift in Sources */,
 				D8C4A2592C8A7B14006FABE8 /* WalletImportError.swift in Sources */,
 				D8C4A25A2C8A7B14006FABE8 /* ScanRecipientResult.swift in Sources */,
 				D8C4A25B2C8A7B14006FABE8 /* ConnectionSceneViewModel.swift in Sources */,
@@ -2836,6 +2876,7 @@
 				D8C4A2732C8A7B14006FABE8 /* AssetTitleView.swift in Sources */,
 				D8C4A2742C8A7B14006FABE8 /* BalanceViewModel.swift in Sources */,
 				D8C4A2752C8A7B14006FABE8 /* WalletService.swift in Sources */,
+				D852CB052CA32B14004121D3 /* PriceAlertService.swift in Sources */,
 				D8C4A2762C8A7B14006FABE8 /* TransactionService.swift in Sources */,
 				D8C4A2772C8A7B14006FABE8 /* NameResolveView.swift in Sources */,
 				D8C4A2782C8A7B14006FABE8 /* SettingsViewModel.swift in Sources */,
@@ -3034,6 +3075,7 @@
 				D8C4A3382C8A7B14006FABE8 /* LatencyViewModel.swift in Sources */,
 				D8C4A3392C8A7B14006FABE8 /* TransactionsList.swift in Sources */,
 				D8C4A33A2C8A7B14006FABE8 /* DiscoverAssetsService.swift in Sources */,
+				D852CB062CA32B32004121D3 /* TransferType.swift in Sources */,
 				D8C4A33B2C8A7B14006FABE8 /* NetworkSelectorViewModel.swift in Sources */,
 				D8C4A33C2C8A7B14006FABE8 /* ChartValuesViewModel.swift in Sources */,
 				D8C4A33D2C8A7B14006FABE8 /* ChainFilterable.swift in Sources */,
@@ -3422,7 +3464,7 @@
 				DEVELOPMENT_TEAM = U2D6XV88CZ;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GemDev.plist;
+				INFOPLIST_FILE = Gem/GemDev.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Gem - Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Gem Wallet needs access to your Camera to scan QR Codes.";
@@ -3441,7 +3483,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.42;
+				MARKETING_VERSION = 1.3.49;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.dev;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.gemwallet.ios;
@@ -3472,7 +3514,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = GemDev.plist;
+				INFOPLIST_FILE = Gem/GemDev.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = "Gem - Dev";
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Gem Wallet needs access to your Camera to scan QR Codes.";
@@ -3491,7 +3533,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.42;
+				MARKETING_VERSION = 1.3.49;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.dev;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=macosx*]" = com.gemwallet.ios;

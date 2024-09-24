@@ -90,20 +90,16 @@ class OnstartAsyncService {
                     }
                 }
             }
-            #if RELEASE
             if let newVersion = config.releases.first(where: { $0.store == .appStore }),
                 VersionCheck.isVersionHigher(new: newVersion.version, current: Bundle.main.releaseVersionNumber) {
                     NSLog("Newer version available")
                     updateVersionAction?(newVersion.version)
             }
-            #endif
         } catch {
             NSLog("Fetching config error: \(error)")
         }
 
-        #if RELEASE
         RateService().perform()
-        #endif
 
         Task {
             try await deviceService.update()
