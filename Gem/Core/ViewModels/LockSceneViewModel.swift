@@ -20,6 +20,9 @@ class LockSceneViewModel {
     }
 
     var unlockTitle: String { Localized.Lock.unlock }
+    var unlockImage: String {
+        KeystoreAuthenticationViewModel(authentication: service.availableAuthentication).authenticationImage
+    }
 
     var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
     var isLocked: Bool { state != .unlocked && isAutoLockEnabled }

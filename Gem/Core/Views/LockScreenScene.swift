@@ -41,7 +41,7 @@ extension LockScreenScene {
             if model.state == .lockedCanceled {
                 Button(action: unlock) {
                     HStack {
-                        Image(systemName: SystemImage.lock)
+                        Image(systemName: model.unlockImage)
                         Text(model.unlockTitle)
                     }
                 }

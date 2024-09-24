@@ -25,6 +25,8 @@
 		83352B712C93615C003D52F3 /* LockSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83352B702C93615C003D52F3 /* LockSceneViewModel.swift */; };
 		833A0C852C80C11B0004DBA9 /* ChainsFilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A0C842C80C11B0004DBA9 /* ChainsFilterType.swift */; };
 		833A0C872C80C2A50004DBA9 /* ChainsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A0C862C80C2A50004DBA9 /* ChainsFilterViewModel.swift */; };
+		8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */; };
+		8350FB822CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */; };
 		835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835644FC2C501C2200C6B4DB /* SwapError.swift */; };
 		836EC8582C32B22F00970BF1 /* LatencyMeasureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836EC8572C32B22F00970BF1 /* LatencyMeasureService.swift */; };
 		8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374DC592C6CDF6C00183109 /* AddTokenInput.swift */; };
@@ -628,6 +630,7 @@
 		83352B702C93615C003D52F3 /* LockSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSceneViewModel.swift; sourceTree = "<group>"; };
 		833A0C842C80C11B0004DBA9 /* ChainsFilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainsFilterType.swift; sourceTree = "<group>"; };
 		833A0C862C80C2A50004DBA9 /* ChainsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainsFilterViewModel.swift; sourceTree = "<group>"; };
+		8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		835644FC2C501C2200C6B4DB /* SwapError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapError.swift; sourceTree = "<group>"; };
 		836EC8572C32B22F00970BF1 /* LatencyMeasureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyMeasureService.swift; sourceTree = "<group>"; };
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
@@ -1926,6 +1929,7 @@
 		D8B738D22C596432004EF083 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */,
 				83352B702C93615C003D52F3 /* LockSceneViewModel.swift */,
 				D8B738D32C59643D004EF083 /* MainTabViewModel.swift */,
 			);
@@ -2754,6 +2758,7 @@
 				D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */,
 				D8BAC95D2BD1A3E2001608BC /* AddAssetViewModel.swift in Sources */,
 				D801814A2B46209200F4D22B /* StakeValidatorsScene.swift in Sources */,
+				8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */,
 				D80700522BBB6AEC00ED770B /* ImportWalletNavigationStack.swift in Sources */,
 				C3E99BCB2A76C8E8005DF35F /* CurrencyScene.swift in Sources */,
 				83DF762F2C45989F001239E7 /* NodeStatusViewModel.swift in Sources */,
@@ -3046,6 +3051,7 @@
 				D8C4A31B2C8A7B14006FABE8 /* Environment.swift in Sources */,
 				D8C4A31C2C8A7B14006FABE8 /* ConnectionsService.swift in Sources */,
 				D8C4A31D2C8A7B14006FABE8 /* ConfirmTransferViewModel.swift in Sources */,
+				8350FB822CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */,
 				D8C4A31E2C8A7B14006FABE8 /* ButtonListItem.swift in Sources */,
 				D8C4A31F2C8A7B14006FABE8 /* AddAssetViewModel.swift in Sources */,
 				D8C4A3202C8A7B14006FABE8 /* StakeValidatorsScene.swift in Sources */,
