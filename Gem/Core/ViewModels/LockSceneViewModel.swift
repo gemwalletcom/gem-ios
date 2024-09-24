@@ -10,7 +10,9 @@ class LockSceneViewModel {
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
     var state: LockSceneState
-    var inBackground: Bool = false
+
+    private var showPlaceholderPreview: Bool = false
+    private var inBackground: Bool = false
 
     init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
@@ -21,9 +23,9 @@ class LockSceneViewModel {
 
     var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
     var isLocked: Bool { state != .unlocked && isAutoLockEnabled }
-
-    var shouldShowPlaceholder: Bool { isLocked || (inBackground && shouldLock) }
     var shouldLock: Bool { Date() > lastUnlockTime && isAutoLockEnabled }
+    var shouldShowLockScreen: Bool { isLocked || showPlaceholderPreview }
+
     var lockPeriod: LockPeriod { service.lockPeriod ?? .immediate }
 }
 
@@ -31,17 +33,25 @@ class LockSceneViewModel {
 
 extension LockSceneViewModel {
     func handleSceneChange(to phase: ScenePhase) {
-        guard isAutoLockEnabled else { return }
-        if phase == .background {
+        switch phase {
+        case .background:
             inBackground = true
             if state == .unlocked && !shouldLock {
                 lastUnlockTime = Date().addingTimeInterval(TimeInterval(lockPeriod.value))
             }
-        } else if phase == .active {
-            inBackground = false
-            if state == .unlocked && shouldLock {
-                state = .locked
+        case .active:
+            showPlaceholderPreview = false
+            if inBackground {
+                inBackground = false
+                if state == .unlocked && shouldLock {
+                    state = .locked
+                }
             }
+        case .inactive:
+            showPlaceholderPreview = true
+            break
+        @unknown default:
+            break
         }
     }
 
@@ -51,11 +61,17 @@ extension LockSceneViewModel {
         do {
             try await service.authenticate(reason: SecurityViewModel.reason)
             state = .unlocked
-            lastUnlockTime = Date(timeIntervalSinceNow: .greatestFiniteMagnitude)
+            lastUnlockTime = Date.distantFuture
         } catch let error as BiometryAuthenticationError {
             state = error.isAuthenticationCancelled ? .lockedCanceled : .locked
         } catch {
             state = .locked
         }
+    }
+
+    func resetLockState() {
+        inBackground = false
+        showPlaceholderPreview = false
+        state = .unlocked
     }
 }

@@ -8,7 +8,6 @@ import LocalAuthentication
 @testable import Gem
 
 struct LockSceneViewModelTests {
-
     @Test
     func testInitializationWhenAuthEnabled() {
         let mockService = MockBiometryAuthenticationService(
@@ -33,16 +32,19 @@ struct LockSceneViewModelTests {
     func testHandleSceneChangeToBackgroundWhenUnlockedAndShouldNotLock() {
         let mockService = MockBiometryAuthenticationService(
             isAuthEnabled: true,
-            availableAuth: .biometrics
+            availableAuth: .biometrics,
+            lockPeriod: .oneMinute
         )
         let viewModel = LockSceneViewModel(service: mockService)
         viewModel.state = .unlocked
         viewModel.lastUnlockTime = Date().addingTimeInterval(1000) // Future date
 
         viewModel.handleSceneChange(to: .background)
-
-        #expect(viewModel.shouldShowPlaceholder)
-        #expect(!viewModel.isLocked)
+        #expect(!viewModel.shouldLock)
+        // Optionally, check that lastUnlockTime has been updated appropriately
+        let expectedTime = Date().addingTimeInterval(TimeInterval(viewModel.lockPeriod.value))
+        let timeDifference = abs(viewModel.lastUnlockTime.timeIntervalSince(expectedTime))
+        #expect(timeDifference < 1.0)
     }
 
     @Test
@@ -58,7 +60,7 @@ struct LockSceneViewModelTests {
         await viewModel.unlock()
 
         #expect(viewModel.state == .unlocked)
-        #expect(abs(viewModel.lastUnlockTime.timeIntervalSinceReferenceDate - Date(timeIntervalSinceNow: .greatestFiniteMagnitude).timeIntervalSinceReferenceDate) < 1.0)
+        #expect(viewModel.lastUnlockTime == Date.distantFuture)
     }
 
     @Test
@@ -128,23 +130,25 @@ struct LockSceneViewModelTests {
     }
 
     @Test
-    func testShouldShowPlaceholder() {
+    func testShouldShowLockScreen() {
         let mockService = MockBiometryAuthenticationService(
             isAuthEnabled: true,
             availableAuth: .biometrics
         )
         let viewModel = LockSceneViewModel(service: mockService)
 
+        // Initial state
         viewModel.state = .unlocked
-        viewModel.inBackground = false
-        #expect(!viewModel.shouldShowPlaceholder)
+        #expect(!viewModel.shouldShowLockScreen)
 
+        // When locked
         viewModel.state = .locked
-        #expect(viewModel.shouldShowPlaceholder)
+        #expect(viewModel.shouldShowLockScreen)
 
+        // Simulate inactive phase to set showPlaceholderPreview
         viewModel.state = .unlocked
-        viewModel.inBackground = true
-        #expect(viewModel.shouldShowPlaceholder)
+        viewModel.handleSceneChange(to: .inactive)
+        #expect(viewModel.shouldShowLockScreen)
     }
 
     @Test
@@ -157,12 +161,12 @@ struct LockSceneViewModelTests {
         viewModel.state = .unlocked
 
         viewModel.handleSceneChange(to: .background)
-        #expect(viewModel.inBackground == false)
         #expect(viewModel.state == .unlocked)
+        #expect(!viewModel.shouldShowLockScreen)
 
         viewModel.handleSceneChange(to: .active)
-        #expect(viewModel.inBackground == false)
         #expect(viewModel.state == .unlocked)
+        #expect(!viewModel.shouldShowLockScreen)
     }
 
     @Test
@@ -226,8 +230,8 @@ struct LockSceneViewModelTests {
         viewModel.handleSceneChange(to: .active)
         viewModel.handleSceneChange(to: .background)
 
-        #expect(viewModel.inBackground)
         #expect(viewModel.state == .unlocked)
+        #expect(!viewModel.shouldLock)
     }
 
     @Test
@@ -319,9 +323,13 @@ struct LockSceneViewModelTests {
         viewModel.state = .unlocked
         viewModel.lastUnlockTime = Date(timeIntervalSince1970: 0) // Past date
 
+        // Simulate going to background
+        viewModel.handleSceneChange(to: .background)
+        // Now simulate becoming active
         viewModel.handleSceneChange(to: .active)
 
         #expect(viewModel.state == .locked)
+        #expect(viewModel.shouldShowLockScreen)
     }
 
     @Test
@@ -357,12 +365,29 @@ struct LockSceneViewModelTests {
 
         #expect(viewModel.state == .locked)
     }
+
+    @Test
+    func testResetLockState() {
+        let mockService = MockBiometryAuthenticationService(
+            isAuthEnabled: true,
+            availableAuth: .biometrics
+        )
+        let viewModel = LockSceneViewModel(service: mockService)
+        viewModel.state = .locked
+
+        // Perform reset
+        viewModel.resetLockState()
+
+        #expect(viewModel.state == .unlocked)
+        #expect(!viewModel.shouldShowLockScreen)
+        #expect(!viewModel.isLocked)
+    }
 }
 
 // MARK: - Mock
 
 // TODO: - probably move to Keystore TestKip
-fileprivate class MockBiometryAuthenticationService: BiometryAuthenticatable {
+class MockBiometryAuthenticationService: BiometryAuthenticatable {
     var lockPeriod: LockPeriod?
 
     var isAuthenticationEnabled: Bool

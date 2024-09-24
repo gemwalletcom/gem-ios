@@ -27,6 +27,6 @@ struct CleanUpService {
     
     func onDeleteAllWallets() throws {
         //preferences.clear()
-        //try LocalKeystorePassword().remove()
+        try LocalKeystorePassword().remove()
     }
 }

@@ -32,24 +32,45 @@ extension WalletCoordinator: WalletConnectorInteractable {
     }
 
     func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
-        try await walletConnectManager.handleApproveRequest(
-            payload: payload,
-            isPending: lockModel.shouldShowPlaceholder
-        )
+        return try await withCheckedThrowingContinuation { continuation in
+            let transferDataCallback = TransferDataCallback(payload: payload) { result in
+                switch result {
+                case let .success(value):
+                    continuation.resume(with: .success(WalletId(id: value)))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            self.connectionProposal = transferDataCallback
+        }
     }
 
     func signMessage(payload: SignMessagePayload) async throws -> String {
-        try await walletConnectManager.handleSignMessageRequest(
-            payload: payload,
-            isPending: lockModel.shouldShowPlaceholder
-        )
+        return try await withCheckedThrowingContinuation { continuation in
+            let transferDataCallback = TransferDataCallback(payload: payload) { result in
+                switch result {
+                case let .success(id):
+                    continuation.resume(with: .success(id))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            self.signMessage = transferDataCallback
+        }
     }
 
     func sendTransaction(transferData: WCTransferData) async throws -> String {
-        try await walletConnectManager.handleSendTransactionRequest(
-            payload: transferData,
-            isPending: lockModel.shouldShowPlaceholder
-        )
+        return try await withCheckedThrowingContinuation { continuation in
+            let transferDataCallback = TransferDataCallback(payload: transferData) { result in
+                switch result {
+                case let .success(id):
+                    continuation.resume(with: .success(id))
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            self.transferData = transferDataCallback
+        }
     }
 
     func signTransaction(transferData: WCTransferData) async throws -> String {

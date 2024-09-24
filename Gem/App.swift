@@ -6,11 +6,13 @@ import Primitives
 
 @main
 struct GemApp: App {
-    
+    @Environment(\.scenePhase) var scenePhase
+
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
     @State var db = DB.main
-    
+    @State var lockManager = LockWindowManager(lockModel: LockSceneViewModel())
+
     init(){
         UNUserNotificationCenter.current().delegate = appDelegate
     }
@@ -23,6 +25,15 @@ struct GemApp: App {
             .databaseContext(.readWrite { db.dbQueue })
             .navigationBarTitleDisplayMode(.inline)
             .tint(Colors.black)
+            .onAppear {
+                lockManager.toggleLock(show: lockManager.showLockScreen)
+            }
+            .onChange(of: scenePhase) { _, newPhase in
+                lockManager.setPhase(phase: newPhase)
+            }
+            .onChange(of: lockManager.showLockScreen) { _, showLockScreen in
+                lockManager.toggleLock(show: showLockScreen)
+            }
         }
     }
 }

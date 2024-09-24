@@ -3,42 +3,29 @@
 import SwiftUI
 import Style
 
-struct LockScreenScene<Content: View>: View {
-    @Environment(\.scenePhase) var scenePhase
-
+struct LockScreenScene: View {
     @State private var model: LockSceneViewModel
-    private let content: Content
 
-    init(
-        model: LockSceneViewModel,
-        @ViewBuilder content: () -> Content
-    ) {
+    init(model: LockSceneViewModel) {
         self.model = model
-        self.content = content()
     }
 
     var body: some View {
         ZStack {
-            content
-                .disabled(model.isLocked)
-
-            if model.shouldShowPlaceholder {
-                placeholderView
-                    .overlay(alignment: .bottom) {
-                        unlockButton
+            placeholderView
+                .overlay(alignment: .bottom) {
+                    unlockButton
+                }
+                .onAppear() {
+                    if model.isLocked {
+                        unlock()
                     }
-                    .onAppear() {
-                        if model.isLocked {
-                            unlock()
-                        }
-                    }
-            }
+                }
         }
         .animation(.smooth, value: model.isLocked)
         .frame(maxWidth: .infinity)
-        .onChange(of: scenePhase, onScenePhaseChange)
-        .onChange(of: model.isLocked) { oldValue, newValue in
-            if newValue {
+        .onChange(of: model.isLocked) { oldsState, newState in
+            if newState {
                 unlock()
             }
         }
@@ -66,7 +53,7 @@ extension LockScreenScene {
     }
 
     @ViewBuilder
-    private var placeholderView: some View {
+    var placeholderView: some View {
         ZStack {
             Image(.logoLaunch)
                 .resizable()
@@ -81,11 +68,6 @@ extension LockScreenScene {
 // MARK: - Actions
 
 extension LockScreenScene {
-    @MainActor
-    private func onScenePhaseChange(_: ScenePhase, _ phase: ScenePhase) {
-        model.handleSceneChange(to: phase)
-    }
-
     private func unlock() {
         Task {
             await model.unlock()
@@ -96,5 +78,5 @@ extension LockScreenScene {
 // MARK: - Previews
 
 #Preview {
-    LockScreenScene(model: .init()) { }
+    LockScreenScene(model: .init())
 }

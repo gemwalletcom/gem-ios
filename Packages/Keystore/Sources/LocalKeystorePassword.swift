@@ -68,8 +68,9 @@ public class LocalKeystorePassword: KeystorePassword {
     }
     
     public func remove() throws {
-        try keychain
-            .remove(Keys.password)
+        try keychain.remove(Keys.password)
+        try keychain.remove(Keys.passwordAuthentication)
+        try keychain.remove(Keys.passwordAuthenticationPeriod)
     }
 }
 
