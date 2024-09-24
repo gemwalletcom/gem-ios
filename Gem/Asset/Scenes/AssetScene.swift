@@ -215,8 +215,12 @@ extension AssetScene {
         switch banner.event {
         case .stake:
             isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
-        case .accountActivation, .enableNotifications:
+        case .enableNotifications:
             break
+        case .accountActivation:
+            if let url = model.reservedBalanceUrl {
+                onOpenLink(url)
+            }
         }
     }
 
