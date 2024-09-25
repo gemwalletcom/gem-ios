@@ -231,7 +231,6 @@
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
-		D852CB042CA327F6004121D3 /* GemDev.plist in Resources */ = {isa = PBXBuildFile; fileRef = D852CB022CA327F6004121D3 /* GemDev.plist */; };
 		D852CB052CA32B14004121D3 /* PriceAlertService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A38B2C969473006FABE8 /* PriceAlertService.swift */; };
 		D852CB062CA32B32004121D3 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
 		D852CB072CA32B5A004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
@@ -2436,7 +2435,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1500;
-				LastUpgradeCheck = 1510;
+				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					C30952AF299C39D70004C0F9 = {
 						CreatedOnToolsVersion = 14.2;
@@ -2532,7 +2531,6 @@
 				D8C4A3652C8B9D4F006FABE8 /* Images.xcassets in Resources */,
 				D8C4A35D2C8A7B14006FABE8 /* Launch Screen.storyboard in Resources */,
 				D8C4A35E2C8A7B14006FABE8 /* PrivacyInfo.xcprivacy in Resources */,
-				D852CB042CA327F6004121D3 /* GemDev.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -3371,7 +3369,6 @@
 		C30952D9299C39D80004C0F9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -3394,7 +3391,6 @@
 		C30952DA299C39D80004C0F9 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
