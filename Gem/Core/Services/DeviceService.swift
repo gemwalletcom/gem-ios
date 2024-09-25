@@ -94,6 +94,7 @@ class DeviceService {
         return Device(
             id: deviceId,
             platform: .ios,
+            platformStore: .appStore,
             token: deviceToken,
             locale: locale,
             version: Bundle.main.releaseVersionNumber,

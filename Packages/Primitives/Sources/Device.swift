@@ -7,6 +7,7 @@ import Foundation
 public struct Device: Codable, Equatable {
 	public let id: String
 	public let platform: Platform
+	public let platformStore: PlatformStore?
 	public let token: String
 	public let locale: String
 	public let version: String
@@ -15,9 +16,10 @@ public struct Device: Codable, Equatable {
 	public let isPriceAlertsEnabled: Bool?
 	public let subscriptionsVersion: Int32
 
-	public init(id: String, platform: Platform, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, isPriceAlertsEnabled: Bool?, subscriptionsVersion: Int32) {
+	public init(id: String, platform: Platform, platformStore: PlatformStore?, token: String, locale: String, version: String, currency: String, isPushEnabled: Bool, isPriceAlertsEnabled: Bool?, subscriptionsVersion: Int32) {
 		self.id = id
 		self.platform = platform
+		self.platformStore = platformStore
 		self.token = token
 		self.locale = locale
 		self.version = version
