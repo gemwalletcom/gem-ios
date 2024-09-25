@@ -10,11 +10,11 @@ public enum Platform: String, Codable, Equatable {
 }
 
 public enum PlatformStore: String, Codable, CaseIterable, Equatable {
-	case appStore
-	case googlePlay
+	case appStore = "app_store"
+	case googlePlay = "google_play"
 	case fdroid
 	case huawei
-	case solanaDAppStore
-	case samsungStore
-	case apkUniversal
+	case solanaStore = "solana_store"
+	case samsungStore = "samsung_store"
+	case apkUniversal = "apk_universal"
 }

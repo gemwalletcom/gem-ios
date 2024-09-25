@@ -5,16 +5,25 @@
 import Foundation
 
 public enum PushNotificationTypes: String, Codable, Equatable {
+	case test
 	case transaction
-	case priceAlertClient = "pricealertclient"
+	case priceAlert = "price_alert"
 }
 
-public struct PushNotification: Codable, Equatable {
+public struct PushNotificationPayloadType: Codable, Equatable {
 	public let type: PushNotificationTypes
-	public let data: Transaction
 
-	public init(type: PushNotificationTypes, data: Transaction) {
+	public init(type: PushNotificationTypes) {
 		self.type = type
-		self.data = data
+	}
+}
+
+public struct PushNotificationTransaction: Codable, Equatable {
+	public let wallet_index: Int32
+	public let transaction: Transaction
+
+	public init(wallet_index: Int32, transaction: Transaction) {
+		self.wallet_index = wallet_index
+		self.transaction = transaction
 	}
 }

@@ -113,9 +113,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         NSLog("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
     }
-    
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        do {
+            let notification = try PushNotification(from: userInfo)
+            NSLog("didReceiveRemoteNotification notification: \(notification)")
+        } catch {
+            NSLog("didReceiveRemoteNotification error \(error)")
+        }
+    }
+
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
         NSLog("url \(url)")
         return true
     }
@@ -136,10 +144,14 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
-        //let userInfo = notification.request.content.userInfo
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //let userInfo = response.notification.request.content.userInfo
+        do {
+            let notification = try PushNotification(from: response.notification.request.content.userInfo)
+            NSLog("userNotificationCenter didReceive notification: \(notification)")
+        } catch {
+            NSLog("userNotificationCenter didReceive error \(error)")
+        }
     }
 }
