@@ -43,7 +43,14 @@ class AssetsService {
     public func getEnabledAssets() throws -> [AssetId] {
         return try balanceStore.getEnabledAssetIds()
     }
-    
+
+    public func getAsset(for assetId: AssetId) throws -> Asset {
+        if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
+            return asset
+        }
+        throw AnyError("asset not found")
+    }
+
     public func getAssets(for assetIds: [AssetId]) throws -> [Asset] {
         return try assetStore.getAssets(for: assetIds.ids)
     }

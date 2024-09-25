@@ -43,7 +43,7 @@ extension StakeValidatorRecord: CreateTable {
 extension StakeValidatorRecord {
     var validator: DelegationValidator {
         DelegationValidator(
-            chain: AssetId(id: assetId)!.chain,
+            chain: try! AssetId(id: assetId).chain,
             id: validatorId,
             name: name,
             isActive: isActive,

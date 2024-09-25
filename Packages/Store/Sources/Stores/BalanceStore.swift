@@ -74,7 +74,7 @@ public struct BalanceStore {
             return try AssetBalanceRecord
                 .filter(Columns.Balance.isEnabled == true)
                 .fetchAll(db)
-                .compactMap { AssetId(id: $0.assetId) }
+                .compactMap { try? AssetId(id: $0.assetId) }
         }
     }
     

@@ -15,6 +15,7 @@ struct MainTabView: View {
     @Environment(\.balanceService) private var balanceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
+    @Environment(\.notificationService) private var notificationService
 
     // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
     // ref: - https://forums.swift.org/t/using-observation-in-a-protocol-throws-compiler-error/69090/6 if object explicity conforms protocol
@@ -87,6 +88,9 @@ struct MainTabView: View {
         .onChange(of: keystore.currentWalletId) {
             navigationStateManager.selectedTab = .wallet
         }
+        .onChange(of: notificationService.notifications) { _, newValue in
+            onReceiveNotifications(newValue)
+        }
     }
 }
 
@@ -107,6 +111,53 @@ extension MainTabView {
 extension MainTabView {
     private func onSelect(tab: TabItem) {
         navigationStateManager.select(tab: tab)
+    }
+
+    private func onReceiveNotifications(_ notifications: [PushNotification]) {
+        if let notification = notifications.first {
+            onReceiveNotification(notification: notification)
+        }
+        notificationService.clear()
+    }
+
+    private func onReceiveNotification(notification: PushNotification) {
+        do {
+            switch notification {
+            case .transaction(let transaction):
+                let walletIndex = transaction.walletIndex
+
+                //select wallet
+                if walletIndex != keystore.currentWallet?.index  {
+                    keystore.setCurrentWalletIndex(walletIndex.asInt)
+                }
+
+                let asset = try walletsService.assetsService.getAsset(for: try AssetId(id: transaction.assetId))
+                navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
+            case .priceAlert(let priceAlert):
+                let asset = try walletsService.assetsService.getAsset(for: try AssetId(id: priceAlert.assetId))
+                navigationStateManager.wallet.append(Scenes.Price(asset: asset))
+            case .buyAsset(let assetId):
+                let asset = try walletsService.assetsService.getAsset(for: assetId)
+                navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
+            case .test, .unknown:
+                break
+            }
+
+            if let selectTab = notification.selectTab {
+                navigationStateManager.selectedTab = selectTab
+            }
+        } catch {
+            NSLog("onReceiveNotification error \(error)")
+        }
+    }
+}
+
+extension PushNotification {
+    var selectTab: TabItem? {
+        switch self {
+        case .transaction, .priceAlert, .buyAsset: .wallet
+        case .test, .unknown: nil
+        }
     }
 }
 

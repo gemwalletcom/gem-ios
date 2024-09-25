@@ -35,6 +35,8 @@ struct WalletScene: View {
     @Query<WalletRequest>
     var dbWallet: Wallet?
 
+    let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
+
     @State private var isPresentingSelectType: SelectAssetType? = nil
     
     let model: WalletSceneViewModel
@@ -153,8 +155,16 @@ struct WalletScene: View {
         .navigationBarTitleDisplayMode(.inline)
         .onChange(of: model.wallet, fetch)
         .taskOnce(fetch)
+        .onReceive(pricesTimer) { time in
+            runUpdatePrices()
+        }
     }
-    
+}
+
+// MARK: - Actions
+
+extension WalletScene {
+
     func refreshable() async {
         if let walletId = keystore.currentWalletId {
             Task {
@@ -172,11 +182,6 @@ struct WalletScene: View {
             }
         }
     }
-}
-
-// MARK: - Actions
-
-extension WalletScene {
 
     private func onBannerAction(banner: Banner) {
         //
@@ -184,5 +189,12 @@ extension WalletScene {
 
     private func onBannerClose(banner: Banner) {
         Task { try bannerService.closeBanner(banner: banner) }
+    }
+
+    private func runUpdatePrices() {
+        NSLog("runUpdatePrices")
+        Task {
+            try await walletsService.updatePrices()
+        }
     }
 }

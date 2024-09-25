@@ -9,7 +9,7 @@ struct GemApp: App {
     @Environment(\.scenePhase) var scenePhase
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
+
     @State var db = DB.main
     @State var lockManager = LockWindowManager(lockModel: LockSceneViewModel())
 
@@ -67,14 +67,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         //NSLog("User Defaults: \(UserDefaults.standard.dictionaryRepresentation())")
         
         #endif
-        
-        // screenshots
-        if ProcessInfo().arguments.contains("SKIP_ANIMATIONS") {
-            UIView.setAnimationsEnabled(false)
-            // set device
-            try! SecurePreferences().set(key: .deviceId, value: "screenshots")
-        }
-        
+
         let service = OnstartService(
             assetsService: AssetsService(
                 assetStore: .main,
@@ -88,16 +81,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         service.migrations()
         
         PreferencesStore.main.incrementLaunchesCount()
-        
-        if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            NSLog("didFinishLaunchingWithOptions userInfo \(userInfo)")
-        }
-        
+
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
             fatalError()
         }
-        
+
+        if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
+            NotificationService.main.handleUserInfoOnLaunch(userInfo)
+        }
+
         return true
     }
     
@@ -115,12 +108,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        do {
-            let notification = try PushNotification(from: userInfo)
-            NSLog("didReceiveRemoteNotification notification: \(notification)")
-        } catch {
-            NSLog("didReceiveRemoteNotification error \(error)")
-        }
+        NotificationService.main.handleUserInfo(userInfo)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -144,14 +132,13 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
+
+        #if DEBUG
+        NotificationService.main.handleUserInfo(notification.request.content.userInfo)
+        #endif
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        do {
-            let notification = try PushNotification(from: response.notification.request.content.userInfo)
-            NSLog("userNotificationCenter didReceive notification: \(notification)")
-        } catch {
-            NSLog("userNotificationCenter didReceive error \(error)")
-        }
+        NotificationService.main.handleUserInfo(response.notification.request.content.userInfo)
     }
 }

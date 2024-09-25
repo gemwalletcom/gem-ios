@@ -72,8 +72,16 @@ public final class LocalKeystore: Keystore {
         currentWallet = getWalletById(id: walletId.id)
     }
 
+    public func setCurrentWalletIndex(_ index: Int) {
+        setCurrentWalletId(getWalletByIndex(index: index)?.walletId)
+    }
+
     private func getWalletById(id: String) -> Primitives.Wallet? {
         return wallets.filter({ $0.id == id  }).first ?? wallets.first
+    }
+
+    private func getWalletByIndex(index: Int) -> Primitives.Wallet? {
+        return wallets.filter({ $0.index == index  }).first ?? wallets.first
     }
 
     public func importWallet(name: String, type: KeystoreImportType) throws -> Primitives.Wallet {

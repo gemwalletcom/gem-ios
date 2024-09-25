@@ -123,7 +123,7 @@ public class BalanceService: BalancerUpdater {
     
     func getTokenBalance(chain: Chain, address: String, tokenIds: [String]) async throws -> [AssetBalance] {
         return try await chainServiceFactory.service(for: chain)
-           .tokenBalance(for: address, tokenIds: tokenIds.compactMap { AssetId(id: $0) })
+           .tokenBalance(for: address, tokenIds: tokenIds.compactMap { try? AssetId(id: $0) })
     }
     
     public func observeBalance() -> AnyPublisher<BalanceUpdate, Never> {

@@ -57,7 +57,7 @@ class WalletsService {
                 NSLog("discover assets: \(update.wallet.name): \(update.assets)")
                 
                 do {
-                    try self.addNewAssets(walletId: update.wallet.walletId, assetIds: update.assets.compactMap { AssetId(id: $0) })
+                    try self.addNewAssets(walletId: update.wallet.walletId, assetIds: update.assets.compactMap { try? AssetId(id: $0) })
                 } catch {
                     NSLog("newAssetUpdate error: \(error)")
                 }

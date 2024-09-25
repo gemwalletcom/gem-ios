@@ -92,7 +92,7 @@ extension AssetBalanceRecord {
     
     func mapToAssetBalance() -> AssetBalance {
         return AssetBalance(
-            assetId: AssetId(id: assetId)!,
+            assetId: try! AssetId(id: assetId),
             balance: mapToBalance()
         )
     }

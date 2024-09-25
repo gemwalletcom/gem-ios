@@ -181,7 +181,7 @@ extension GemAPIService: GemAPIAssetsListService {
         try await provider
             .request(.getAssetsList(deviceId: deviceId, walletIndex: walletIndex, fromTimestamp: fromTimestamp))
             .map(as: [String].self)
-            .compactMap { AssetId(id: $0) }
+            .compactMap { try? AssetId(id: $0) }
     }
     
     public func getFiatAssets() async throws -> FiatAssets {

@@ -2,11 +2,11 @@ import Foundation
 
 public extension AssetId {
 
-    init?(id: String) {
+    init(id: String) throws {
         if let (chain, tokenID) = AssetId.getData(id: id) {
             self.init(chain: chain, tokenId: tokenID)
         } else {
-            return nil
+            throw AnyError("invalid asset id: \(id)")
         }
     }
     

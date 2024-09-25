@@ -4,10 +4,19 @@
 
 import Foundation
 
+public struct PushNotificationBuyAsset: Codable, Equatable {
+	public let assetId: String
+
+	public init(assetId: String) {
+		self.assetId = assetId
+	}
+}
+
 public enum PushNotificationTypes: String, Codable, Equatable {
 	case test
 	case transaction
-	case priceAlert = "price_alert"
+	case priceAlert
+	case buyAsset
 }
 
 public struct PushNotificationPayloadType: Codable, Equatable {
@@ -19,11 +28,13 @@ public struct PushNotificationPayloadType: Codable, Equatable {
 }
 
 public struct PushNotificationTransaction: Codable, Equatable {
-	public let wallet_index: Int32
-	public let transaction: Transaction
+	public let walletIndex: Int32
+	public let assetId: String
+	public let transactionId: String
 
-	public init(wallet_index: Int32, transaction: Transaction) {
-		self.wallet_index = wallet_index
-		self.transaction = transaction
+	public init(walletIndex: Int32, assetId: String, transactionId: String) {
+		self.walletIndex = walletIndex
+		self.assetId = assetId
+		self.transactionId = transactionId
 	}
 }

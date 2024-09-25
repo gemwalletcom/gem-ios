@@ -4,12 +4,12 @@ import Primitives
 final class AssetIdTests: XCTestCase {
 
     func testId() {
-        XCTAssertNil(AssetId(id: ""))
-        XCTAssertNil(AssetId(id: "random_chain"))
-        XCTAssertEqual(AssetId(id: "bitcoin"), AssetId(chain: .bitcoin, tokenId: .none))
-        XCTAssertEqual(AssetId(id: "ethereum_0x123"), AssetId(chain: .ethereum, tokenId: "0x123"))
-        XCTAssertEqual(AssetId(id: "ton_EQAhRC_oZ4B9VgMltfNkENSdLktlMADPE73zIiIcL6es2o7-"), AssetId(chain: .ton, tokenId: "EQAhRC_oZ4B9VgMltfNkENSdLktlMADPE73zIiIcL6es2o7-"))
-        XCTAssertEqual(AssetId(id: "ton_EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"), AssetId(chain: .ton, tokenId: "EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"))
+        XCTAssertNil(try? AssetId(id: ""))
+        XCTAssertNil(try? AssetId(id: "random_chain"))
+        XCTAssertEqual(try! AssetId(id: "bitcoin"), AssetId(chain: .bitcoin, tokenId: .none))
+        XCTAssertEqual(try! AssetId(id: "ethereum_0x123"), AssetId(chain: .ethereum, tokenId: "0x123"))
+        XCTAssertEqual(try! AssetId(id: "ton_EQAhRC_oZ4B9VgMltfNkENSdLktlMADPE73zIiIcL6es2o7-"), AssetId(chain: .ton, tokenId: "EQAhRC_oZ4B9VgMltfNkENSdLktlMADPE73zIiIcL6es2o7-"))
+        XCTAssertEqual(try! AssetId(id: "ton_EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"), AssetId(chain: .ton, tokenId: "EQAvlWFDxGF2lXm67y4yzC17wYKD9A0guwPkMs1gOsM__NOT"))
     }
     
     func testType() {

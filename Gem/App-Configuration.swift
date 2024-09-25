@@ -40,9 +40,9 @@ extension AssetMetaData {
 
 extension AssetId {
     static let main = Self.ethereum
-    static let ethereum = AssetId(id: "ethereum")!
-    static let bitcoin = AssetId(id: "bitcoin")!
-    static let binance = AssetId(id: "smartchain")!
+    static let ethereum = Chain.ethereum.assetId
+    static let bitcoin = Chain.bitcoin.assetId
+    static let smartChain = Chain.smartChain.assetId
 }
 
 extension AssetData  {
@@ -71,6 +71,10 @@ extension AssetsService {
         balanceStore: .main, 
         chainServiceFactory: .init(nodeProvider: NodeService.main)
     )
+}
+
+extension NotificationService {
+    static let main = NotificationService()
 }
 
 extension ChartService {

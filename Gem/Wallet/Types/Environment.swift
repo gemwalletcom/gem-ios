@@ -67,6 +67,10 @@ struct AssetsServiceKey: EnvironmentKey {
     static var defaultValue: AssetsService { AssetsService.main }
 }
 
+struct NotificationServiceKey: EnvironmentKey {
+    static var defaultValue: NotificationService { NotificationService.main }
+}
+
 struct StakeServiceKey: EnvironmentKey {
     static var defaultValue: StakeService { StakeService.main }
 }
@@ -148,7 +152,12 @@ extension EnvironmentValues {
         get { self[AssetsServiceKey.self] }
         set { self[AssetsServiceKey.self] = newValue }
     }
-    
+
+    var notificationService: NotificationService {
+        get { self[NotificationServiceKey.self] }
+        set { self[NotificationServiceKey.self] = newValue }
+    }
+
     var stakeService: StakeService {
         get { self[StakeServiceKey.self] }
         set { self[StakeServiceKey.self] = newValue }

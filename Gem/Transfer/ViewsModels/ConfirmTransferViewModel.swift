@@ -353,11 +353,8 @@ extension ConfirmTransferViewModel {
         }
 
         let assetPricesIds: [AssetId] = [assetId, feeAssetId] + assetsIds
-        let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds).toMap { price in
-            guard let assetId = AssetId(id: price.assetId) else {
-                throw AssetMetadataError.invalidAssetId
-            }
-            return assetId
+        let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds).toMap {
+            try AssetId(id: $0.assetId)
         }
         let assetPricesMap = assetPrices.reduce(into: [:]) { partialResult, value in
             partialResult[value.key.identifier] = Price(price: value.value.price, priceChangePercentage24h: value.value.priceChangePercentage24h)

@@ -9,7 +9,7 @@ public extension Chain {
         //TODO: Force unwrap for now, until move Asset to Gemstone
         let assetWrapper = Gemstone.assetWrapper(chain: id)
         return Asset(
-            id: AssetId(id: assetWrapper.id)!,
+            id: try! AssetId(id: assetWrapper.id),
             name: assetWrapper.name,
             symbol: assetWrapper.symbol,
             decimals: assetWrapper.decimals,

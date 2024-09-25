@@ -46,7 +46,7 @@ struct ImportAssetsService {
     func updateFiatAssets() async throws {
         let assets = try await assetListService.getFiatAssets()
 
-        try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { AssetId(id: $0) })
+        try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })
         try assetStore.setAssetIsBuyable(for: assets.assetIds, value: true)
         
         preferences.fiatAssetsVersion = Int(assets.version)
@@ -55,7 +55,7 @@ struct ImportAssetsService {
     func updateSwapAssets() async throws {
         let assets = try await assetListService.getSwapAssets()
 
-        try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { AssetId(id: $0) })
+        try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })
         try assetStore.setAssetIsSwappable(for: assets.assetIds, value: true)
     
         preferences.swapAssetsVersion = Int(assets.version)

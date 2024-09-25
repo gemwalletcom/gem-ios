@@ -2,9 +2,10 @@
 
 import Foundation
 
-public enum PushNotification {
+public enum PushNotification: Equatable {
     case transaction(PushNotificationTransaction)
     case priceAlert(PriceAlert)
+    case buyAsset(AssetId)
     case test
     case unknown
 
@@ -21,11 +22,15 @@ public enum PushNotification {
         let decoder = JSONDecoder()
         switch type {
         case .transaction:
-            let transactionData = try decoder.decode(PushNotificationTransaction.self, from: data)
-            self = .transaction(transactionData)
+            let transaction = try decoder.decode(PushNotificationTransaction.self, from: data)
+            self = .transaction(transaction)
         case .priceAlert:
-            let priceAlertData = try decoder.decode(PriceAlert.self, from: data)
-            self = .priceAlert(priceAlertData)
+            let priceAlert = try decoder.decode(PriceAlert.self, from: data)
+            self = .priceAlert(priceAlert)
+        case .buyAsset:
+            let buyAsset = try decoder.decode(PushNotificationBuyAsset.self, from: data)
+            let assetId = try AssetId(id: buyAsset.assetId)
+            self = .buyAsset(assetId)
         case .test:
             self = .test
         }

@@ -100,8 +100,8 @@ extension TransactionRecord: CreateTable {
 
 extension TransactionRecord {
     func mapToTransaction() -> Transaction {
-        let assetId = AssetId(id: assetId)!
-        let feeAssetId = AssetId(id: feeAssetId)!
+        let assetId = try! AssetId(id: assetId)
+        let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
             id: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
             hash: hash,

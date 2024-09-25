@@ -57,6 +57,6 @@ public extension Array where Element == AssetId {
 
 public extension Array where Element == Chain {
     var ids: [AssetId] {
-        return self.compactMap { AssetId(id: $0.id) }
+        return self.compactMap { $0.assetId }
     }
 }

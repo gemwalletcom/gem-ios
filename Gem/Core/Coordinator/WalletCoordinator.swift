@@ -43,13 +43,13 @@ struct WalletCoordinator: View {
     let connectionsService: ConnectionsService
     let bannerService: BannerService
     let priceAlertService: PriceAlertService
+    let notificationService = NotificationService.main
+
     let walletConnectorSigner: WalletConnectorSigner
     let walletConnectorInteractor: WalletConnectorInteractor
     
     let preferences = Preferences()
     let onstartService: OnstartAsyncService
-
-    let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @State var isPresentingError: String? = .none
     @State private var updateAvailableAlertSheetMessage: String? = .none
@@ -177,6 +177,8 @@ struct WalletCoordinator: View {
                 .environment(\.bannerService, bannerService)
                 .environment(\.balanceService, balanceService)
                 .environment(\.priceAlertService, priceAlertService)
+                .environment(\.notificationService, notificationService)
+
                 .environment(\.chainServiceFactory, chainServiceFactory)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
@@ -285,9 +287,6 @@ struct WalletCoordinator: View {
                 onstartService.setup(wallet: newValue)
             }
         }
-        .onReceive(pricesTimer) { time in
-            runUpdatePrices()
-        }
         .modifier(
             ToastModifier(
                 isPresenting: $isPresentingWalletConnectBar,
@@ -295,13 +294,6 @@ struct WalletCoordinator: View {
                 systemImage: SystemImage.network
             )
         )
-    }
-
-    private func runUpdatePrices() {
-        NSLog("runUpdatePrices")
-        Task {
-            try await walletsService.updatePrices()
-        }
     }
 
     private func handleUrl(url: URL) async {

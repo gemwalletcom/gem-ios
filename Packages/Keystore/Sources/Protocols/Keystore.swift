@@ -7,6 +7,7 @@ public protocol Keystore: ObservableObject {
     var currentWalletId: Primitives.WalletId? { get }
     var currentWallet: Primitives.Wallet? { get }
     func setCurrentWalletId(_ walletId: Primitives.WalletId?)
+    func setCurrentWalletIndex(_ index: Int)
     var wallets: [Wallet] { get }
     func getCurrentWallet() throws -> Wallet
     func getWallet(_ walletId: WalletId) throws -> Wallet
