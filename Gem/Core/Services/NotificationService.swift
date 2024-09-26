@@ -17,10 +17,6 @@ class NotificationService {
         notifications = []
     }
 
-    func handleUserInfoOnLaunch(_ userInfo: [AnyHashable : Any]) {
-        handleUserInfo(userInfo)
-    }
-
     func handleUserInfo(_ userInfo: [AnyHashable : Any]) {
         do {
             let notification = try PushNotification(from: userInfo)

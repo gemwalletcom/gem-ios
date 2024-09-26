@@ -27,6 +27,14 @@ public struct PushNotificationPayloadType: Codable, Equatable {
 	}
 }
 
+public struct PushNotificationPriceAlert: Codable, Equatable {
+	public let assetId: String
+
+	public init(assetId: String) {
+		self.assetId = assetId
+	}
+}
+
 public struct PushNotificationTransaction: Codable, Equatable {
 	public let walletIndex: Int32
 	public let assetId: String
