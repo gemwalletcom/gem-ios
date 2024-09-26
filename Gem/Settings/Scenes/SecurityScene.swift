@@ -25,6 +25,11 @@ struct SecurityScene: View {
                     )
                 }
             }
+
+            if model.isEnabled {
+                Toggle(model.privacyLockTitle, isOn: $model.isPrivacyLockEnabled)
+                .toggleStyle(AppToggleStyle())
+            }
         }
         .onChange(of: model.isEnabled, onToggleEnable)
         .alert(item: $model.isPresentingError) {

@@ -31,6 +31,9 @@ struct GemApp: App {
             .onChange(of: scenePhase) { _, newPhase in
                 lockManager.setPhase(phase: newPhase)
             }
+            .onChange(of: lockManager.isPrivacyLockVisible) { _, updateAppearance in
+                lockManager.togglePrivacyLockVisibility(updateAppearance)
+            }
             .onChange(of: lockManager.showLockScreen) { _, showLockScreen in
                 lockManager.toggleLock(show: showLockScreen)
             }

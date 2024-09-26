@@ -7,23 +7,34 @@ import Store
 
 @Observable
 class SecurityViewModel {
+    private let preferences: Preferences
     private let service: BiometryAuthenticatable
 
     static let reason: String = Localized.Settings.Security.authentication
 
     var isPresentingError: String?
     var isEnabled: Bool
+    var isPrivacyLockEnabled: Bool {
+        didSet {
+            preferences.isPrivacyLockEnabled = isPrivacyLockEnabled
+        }
+    }
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
+    init(service: BiometryAuthenticatable = BiometryAuthenticationService(),
+         preferences: Preferences = .main) {
         self.service = service
-        self.isEnabled = service.isAuthenticationEnabled
+        self.preferences = preferences
+
         self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)
+        self.isEnabled = service.isAuthenticationEnabled
+        self.isPrivacyLockEnabled = preferences.isPrivacyLockEnabled
     }
 
     var title: String { Localized.Settings.security }
     var errorTitle: String { Localized.Errors.errorOccured }
+    var privacyLockTitle: String { Localized.Lock.privacyLock }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {

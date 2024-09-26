@@ -69,7 +69,10 @@ public class PreferencesStore {
 
     @UserDefault(defaults: .standard, key: "is_developer_enabled", defaultValue: false)
     public var isDeveloperEnabled: Bool
-    
+
+    @UserDefault(defaults: .standard, key: "is_privacy_lock_enabled", defaultValue: false)
+    public var isPrivacyLockEnabled: Bool
+
     public func incrementLaunchesCount() {
         launchesCount = launchesCount + 1
     }

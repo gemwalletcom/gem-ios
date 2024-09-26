@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Keystore
-import Store
 
 @Observable
 class LockSceneViewModel {

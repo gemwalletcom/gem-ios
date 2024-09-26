@@ -270,7 +270,8 @@
 "lock.one_hour" = "1 jam";
 "lock.six_hours" = "6 jam";
 "lock.require_authentication" = "Require authentication";
-"lock.Unlock" = "Unlock";
+"lock.unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "Dapatkan pemberitahuan saat ada perubahan harga yang signifikan pada aset kripto favorit Anda.";
 "price_alerts.empty_state.message" = "Belum ada peringatan harga yang ditambahkan.";
 "assets.select_asset" = "Pilih Aset";
+"lock.privacy_lock" = "Privacy Lock";

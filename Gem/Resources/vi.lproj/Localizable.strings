@@ -270,7 +270,8 @@
 "lock.one_hour" = "1 giờ";
 "lock.six_hours" = "6 giờ";
 "lock.require_authentication" = "Require authentication";
-"lock.Unlock" = "Unlock";
+"lock.unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "Nhận thông báo khi có thay đổi đáng kể về giá của tài sản tiền điện tử yêu thích của bạn.";
 "price_alerts.empty_state.message" = "Chưa có thông báo giá nào được thêm vào.";
 "assets.select_asset" = "Chọn Tài sản";
+"lock.privacy_lock" = "Privacy Lock";
