@@ -1,9 +1,7 @@
 name: Unit Tests
 
 on:
-  push:
-    branches: ["main"]
-  pull_request:
+  pull_request: 
     branches: ["main"]
 
 concurrency:
@@ -17,7 +15,7 @@ env:
 jobs:
   unit_test:
     name: Build and Test iPhone simulator
-    runs-on: macos-latest
+    runs-on: macos-15
 
     steps:
       - name: Checkout
@@ -48,5 +46,4 @@ jobs:
 
       - name: Unit Tests
         run: |
-          sudo xcode-select -s /Applications/Xcode_16_Release_Candidate.app
           just test
