@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/WalletConnect/WalletConnectSwiftV2", exact: Version(stringLiteral: "1.20.3")),
+        .package(url: "https://github.com/reown-com/reown-swift", exact: Version(stringLiteral: "1.0.0")),
         .package(url: "https://github.com/daltoniam/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
@@ -27,11 +27,11 @@ let package = Package(
                 "GemstonePrimitives",
                 .product(
                     name: "WalletConnect",
-                    package: "WalletConnectSwiftV2"
+                    package: "reown-swift"
                 ),
                 .product(
-                    name: "Web3Wallet",
-                    package: "WalletConnectSwiftV2"
+                    name: "ReownWalletKit",
+                    package: "reown-swift"
                 ),
                 .product(name: "Starscream", package: "Starscream"),
             ],

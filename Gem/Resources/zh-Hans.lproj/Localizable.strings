@@ -137,7 +137,7 @@
 "swap.approve_token_permission" = "批准 %@ 代币进行兑换";
 "swap.provider" = "提供者";
 "common.phrase" = "短语";
-"stake.active" = "积极的";
+"stake.active" = "已激活";
 "stake.pending" = "待打包";
 "stake.rewards" = "奖励";
 "assets.no_assets_found" = "未找到资产";
@@ -181,7 +181,7 @@
 "asset.decimals" = "位数";
 "asset.token_id" = "代币 ID";
 "common.type" = "类型";
-"stake.active_in" = "活跃于";
+"stake.active_in" = "激活于";
 "errors.import.invalid_secret_phrase" = "助记词无效";
 "errors.import.invalid_secret_phrase_word" = "助记词无效：%@";
 "secret_phrase.do_not_share.title" = "不要分享你的秘密短语！";
@@ -190,7 +190,7 @@
 "secret_phrase.confirm.quick_test.title" = "完成此快速测试以确认您已正确保存所有内容。";
 "wallets.watch" = "观察";
 "transfer.minimum_amount" = "最低金额为%@";
-"wallet_connect.no_active_connections" = "没有活动连接";
+"wallet_connect.no_active_connections" = "没有活跃的连接";
 "stake.minimum_amount" = "最低金额";
 "common.no_results_found" = "未找到结果";
 "social.x" = "X（前 Twitter）";
@@ -271,6 +271,6 @@
 "lock.six_hours" = "6 小时";
 "lock.require_authentication" = "锁定时间";
 "lock.Unlock" = "解锁";
-"price_alerts.get_notified_explain_message" = "当您最喜欢的加密资产的价格发生重大变化时收到通知。";
+"price_alerts.get_notified_explain_message" = "您最喜欢的加密资产价格变动时通知。";
 "price_alerts.empty_state.message" = "尚未添加价格警报。";
 "assets.select_asset" = "选择资产";
