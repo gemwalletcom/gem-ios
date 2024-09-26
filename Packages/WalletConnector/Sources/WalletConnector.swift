@@ -58,7 +58,7 @@ extension WalletConnector {
     }
 
     public func disconnectPairing(pairingId: String) async {
-        await WalletKit.instance.disconnectPairing(topic: pairingId)
+        // Pairing will disconnect automatically
     }
 
     public func disconnect(topic: String) async throws {
@@ -71,7 +71,7 @@ extension WalletConnector {
 
         for session in sessions {
             try? await WalletKit.instance.disconnect(topic: session.topic)
-            await WalletKit.instance.disconnectPairing(topic: session.pairingTopic)
+            // Pairing will disconnect automatically
         }
 
         let pairings = Pair.instance.getPairings()
