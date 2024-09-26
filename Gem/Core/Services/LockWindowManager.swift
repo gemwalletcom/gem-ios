@@ -53,7 +53,7 @@ class LockWindowManager {
         }
     }
 
-    func togglePrivacyLockVisibility(_ visible: Bool) {
+    func togglePrivacyLock(visible: Bool) {
         overlayWindow?.alpha = visible ? 1 : 0
     }
 }
