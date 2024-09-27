@@ -143,7 +143,7 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 fee: BigInt(1),
                 canChangeValue: true
             )),
-            TransferAmount(value: 1000, networkFee: 1, useMaxAmount: false)
+            TransferAmount(value: 1000, networkFee: 1, useMaxAmount: true)
         )
         
         XCTAssertThrowsError(
@@ -185,6 +185,37 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
                 canChangeValue: false
+            ))
+        )
+    }
+
+    func testignoreValueCheck() {
+        XCTAssertEqual(
+            try? service.calculate(input: TranferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: 12),
+                value: BigInt(2222),
+                availableValue: BigInt(12),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(12)),
+                fee: BigInt(3),
+                canChangeValue: true,
+                ignoreValueCheck: true
+            )),
+            TransferAmount(value: 2222, networkFee: 3, useMaxAmount: false)
+        )
+
+        XCTAssertThrowsError(
+            try service.calculate(input: TranferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: 12),
+                value: BigInt(2222),
+                availableValue: BigInt(12),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(12)),
+                fee: BigInt(13),
+                canChangeValue: true,
+                ignoreValueCheck: true
             ))
         )
     }

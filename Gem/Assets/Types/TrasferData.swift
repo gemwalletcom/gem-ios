@@ -36,13 +36,29 @@ struct TransferData {
     let recipientData: RecipientData
     let value: BigInt
     let canChangeValue: Bool
+    let ignoreValueCheck: Bool
+
+    init(
+        type: TransferDataType,
+        recipientData: RecipientData,
+        value: BigInt,
+        canChangeValue: Bool,
+        ignoreValueCheck: Bool = false
+    ) {
+        self.type = type
+        self.recipientData = recipientData
+        self.value = value
+        self.canChangeValue = canChangeValue
+        self.ignoreValueCheck = ignoreValueCheck
+    }
 
     func updateValue(_ newValue: BigInt) -> TransferData {
         return TransferData(
             type: type, 
             recipientData: recipientData,
             value: newValue,
-            canChangeValue: canChangeValue
+            canChangeValue: canChangeValue,
+            ignoreValueCheck: ignoreValueCheck
         )
     }
 }
