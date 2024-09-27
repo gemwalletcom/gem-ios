@@ -137,7 +137,7 @@
 "swap.approve_token_permission" = "批准 %@ 進行交換";
 "swap.provider" = "提供者";
 "common.phrase" = "片語";
-"stake.active" = "積極的";
+"stake.active" = "已啟用";
 "stake.pending" = "等待處理";
 "stake.rewards" = "獎勵";
 "assets.no_assets_found" = "未找到資產";
@@ -152,7 +152,7 @@
 "wallet.receive.no_memo_required" = "不需要備忘";
 "wallet.receive.no_destination_tag_required" = "不需要目的地標籤";
 "stake.available_in" = "可用於";
-"stake.inactive" = "非活躍";
+"stake.inactive" = "未啟用";
 "common.manage" = "管理";
 "stake.lock_time" = "鎖定時間";
 "transfer.redelegate.title" = "重新質押";
@@ -181,7 +181,7 @@
 "asset.decimals" = "位數";
 "asset.token_id" = "代幣 ID";
 "common.type" = "類型";
-"stake.active_in" = "活躍於";
+"stake.active_in" = "激活於";
 "errors.import.invalid_secret_phrase" = "無效的秘密短語";
 "errors.import.invalid_secret_phrase_word" = "無效的密語單字： %@";
 "secret_phrase.do_not_share.title" = "不要分享您的秘密短語！";
@@ -218,7 +218,7 @@
 "nodes.import_node.latency" = "延遲";
 "common.latency_in_ms" = "%d 毫秒";
 "stake.viagem" = "Stake via Gem Wallet";
-"stake.no_active_staking" = "當前沒有啟動的質押";
+"stake.no_active_staking" = "當前沒有啟用的質押";
 "errors.error" = "錯誤";
 "nodes.gem_wallet_node" = "Gem 錢包節點";
 "errors.connections.user_cancelled" = "用戶取消";
