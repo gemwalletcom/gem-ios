@@ -20,6 +20,7 @@ public struct TranferAmountInput {
     public let assetFeeBalance: Balance
     public let fee: BigInt
     public let canChangeValue: Bool
+    public let ignoreValueCheck: Bool // in some cases like claim rewards we should ignore checking total balance
 
     public init(
         asset: Asset,
@@ -29,7 +30,8 @@ public struct TranferAmountInput {
         assetFee: Asset,
         assetFeeBalance: Balance,
         fee: BigInt,
-        canChangeValue: Bool
+        canChangeValue: Bool,
+        ignoreValueCheck: Bool = false
     ) {
         self.asset = asset
         self.assetBalance = assetBalance
@@ -39,6 +41,7 @@ public struct TranferAmountInput {
         self.assetFeeBalance = assetFeeBalance
         self.fee = fee
         self.canChangeValue = canChangeValue
+        self.ignoreValueCheck = ignoreValueCheck
     }
     
     public var isMaxValue: Bool {
@@ -66,9 +69,18 @@ public struct TransferAmountCalculator {
         if input.assetBalance.available == 0 {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
-        
+
         //TODO: Check for input.value + input.fee
-        
+
+        if input.ignoreValueCheck {
+
+            if input.assetFeeBalance.available < input.fee {
+                throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
+            }
+
+            return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+        }
+
         if input.availableValue < input.value  {
             throw TransferAmountCalculatorError.insufficientBalance(input.asset)
         }
@@ -90,7 +102,8 @@ public struct TransferAmountCalculator {
             }
             return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
         }
-        
-        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+        let useMaxAmount = input.availableValue == input.value
+
+        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
     }
 }

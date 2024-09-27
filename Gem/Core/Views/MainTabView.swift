@@ -91,6 +91,10 @@ struct MainTabView: View {
         .onChange(of: notificationService.notifications) { _, newValue in
             onReceiveNotifications(newValue)
         }
+        .onAppear {
+            //Needed here because .onChange(of: notificationService.notifications) not trigger on cold start
+            onReceiveNotifications(notificationService.notifications)
+        }
     }
 }
 
@@ -123,18 +127,16 @@ extension MainTabView {
     private func onReceiveNotification(notification: PushNotification) {
         do {
             switch notification {
-            case .transaction(let transaction):
-                let walletIndex = transaction.walletIndex
-
+            case .transaction(let walletIndex, let assetId):
                 //select wallet
-                if walletIndex != keystore.currentWallet?.index  {
-                    keystore.setCurrentWalletIndex(walletIndex.asInt)
+                if walletIndex != keystore.currentWallet?.index.asInt  {
+                    keystore.setCurrentWalletIndex(walletIndex)
                 }
 
-                let asset = try walletsService.assetsService.getAsset(for: try AssetId(id: transaction.assetId))
+                let asset = try walletsService.assetsService.getAsset(for: assetId)
                 navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
-            case .priceAlert(let priceAlert):
-                let asset = try walletsService.assetsService.getAsset(for: try AssetId(id: priceAlert.assetId))
+            case .priceAlert(let assetId):
+                let asset = try walletsService.assetsService.getAsset(for: assetId)
                 navigationStateManager.wallet.append(Scenes.Price(asset: asset))
             case .buyAsset(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)

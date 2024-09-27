@@ -87,10 +87,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             fatalError()
         }
 
-        if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            NotificationService.main.handleUserInfoOnLaunch(userInfo)
-        }
-
         return true
     }
     
@@ -102,7 +98,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             try await DeviceService(subscriptionsService: .main, walletStore: .main).update()
         }
     }
-    
+
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         NSLog("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
     }
@@ -132,13 +128,10 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
 extension AppDelegate: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
-
-        #if DEBUG
-        NotificationService.main.handleUserInfo(notification.request.content.userInfo)
-        #endif
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         NotificationService.main.handleUserInfo(response.notification.request.content.userInfo)
+        completionHandler()
     }
 }
