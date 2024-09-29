@@ -17,6 +17,7 @@ public enum PushNotificationTypes: String, Codable, Equatable {
 	case transaction
 	case priceAlert
 	case buyAsset
+	case swapAsset
 }
 
 public struct PushNotificationPayloadType: Codable, Equatable {
@@ -32,6 +33,16 @@ public struct PushNotificationPriceAlert: Codable, Equatable {
 
 	public init(assetId: String) {
 		self.assetId = assetId
+	}
+}
+
+public struct PushNotificationSwapAsset: Codable, Equatable {
+	public let fromAssetId: String
+	public let toAssetId: String
+
+	public init(fromAssetId: String, toAssetId: String) {
+		self.fromAssetId = fromAssetId
+		self.toAssetId = toAssetId
 	}
 }
 
