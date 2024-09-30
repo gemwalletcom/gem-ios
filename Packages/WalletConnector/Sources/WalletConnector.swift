@@ -2,7 +2,7 @@
 
 import Foundation
 import WalletConnectPairing
-import Web3Wallet
+import ReownWalletKit
 import Primitives
 
 public class WalletConnector {
@@ -24,7 +24,7 @@ extension WalletConnector {
             socketFactory: DefaultSocketFactory()
         )
 
-        Web3Wallet.configure(
+        WalletKit.configure(
             metadata: AppMetadata(
                 name: "Gem Wallet",
                 description: "Gem Web3 Wallet",
@@ -54,24 +54,24 @@ extension WalletConnector {
     }
 
     public func disconnect(sessionId: String) async throws {
-        try await Web3Wallet.instance.disconnect(topic: sessionId)
+        try await WalletKit.instance.disconnect(topic: sessionId)
     }
 
     public func disconnectPairing(pairingId: String) async {
-        await Web3Wallet.instance.disconnectPairing(topic: pairingId)
+        // Pairing will disconnect automatically
     }
 
     public func disconnect(topic: String) async throws {
-        try await Web3Wallet.instance.disconnect(topic: topic)
+        try await WalletKit.instance.disconnect(topic: topic)
     }
 
     public func disconnectAll() async throws {
-        let sessions = Web3Wallet.instance.getSessions()
+        let sessions = WalletKit.instance.getSessions()
         NSLog("sessions \(sessions)")
 
         for session in sessions {
-            try? await Web3Wallet.instance.disconnect(topic: session.topic)
-            await Web3Wallet.instance.disconnectPairing(topic: session.pairingTopic)
+            try? await WalletKit.instance.disconnect(topic: session.topic)
+            // Pairing will disconnect automatically
         }
 
         let pairings = Pair.instance.getPairings()
@@ -81,7 +81,7 @@ extension WalletConnector {
             try? await Pair.instance.disconnect(topic: pairing.topic)
         }
 
-        try await Web3Wallet.instance.cleanup()
+        try await WalletKit.instance.cleanup()
     }
 }
 
@@ -139,10 +139,10 @@ extension WalletConnector {
         do {
             let response = try await handleMethod(method: method, chain: chain, request: request)
             NSLog("handleMethod result: \(method) \(response)")
-            try await Web3Wallet.instance.respond(topic: request.topic, requestId: request.id, response: response)
+            try await WalletKit.instance.respond(topic: request.topic, requestId: request.id, response: response)
         } catch {
             NSLog("handleMethod error: \(error)")
-            try await Web3Wallet.instance.respond(topic: request.topic ,requestId: request.id, response: .error(JSONRPCError(code: 0, message: "rejected")))
+            try await WalletKit.instance.respond(topic: request.topic ,requestId: request.id, response: .error(JSONRPCError(code: 0, message: "rejected")))
         }
     }
 
@@ -208,7 +208,7 @@ extension WalletConnector {
             events: events.map { $0.rawValue },
             accounts: supportedAccounts
         )
-        let _ = try await Web3Wallet.instance.approve(
+        let _ = try await WalletKit.instance.approve(
             proposalId: proposal.id,
             namespaces: sessionNamespaces,
             sessionProperties: proposal.sessionProperties
