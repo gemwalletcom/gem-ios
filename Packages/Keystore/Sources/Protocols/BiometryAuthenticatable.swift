@@ -7,10 +7,12 @@ public protocol BiometryAuthenticatable {
     var isAuthenticationEnabled: Bool { get }
     var availableAuthentication: KeystoreAuthentication { get }
     var lockPeriod: LockPeriod? { get }
+    var isPrivacyLockEnabled: Bool { get }
 
     func authenticate(context: LAContext, reason: String) async throws
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws
     func update(period: LockPeriod) throws
+    func togglePrivacyLock(enbaled: Bool) throws
 }
 
 extension BiometryAuthenticatable {

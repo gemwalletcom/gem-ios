@@ -3,7 +3,6 @@
 import Testing
 import SwiftUI
 import UIKit
-import Store
 import Keystore
 
 @testable import Gem
@@ -194,15 +193,15 @@ struct LockWindowManagerTests {
      }
 
      @Test
-     func testPrivacyLockFlagResetAfterFirstAppear() async {
+     func testPrivacyLockFlagAfterFirstAppear() async {
          let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
          manager.toggleLock(show: true)
 
          try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
 
-         #expect(manager.overlayWindow == nil)
+         #expect(manager.overlayWindow != nil)
          #expect(manager.overlayWindow?.alpha == 1)
-         #expect(manager.isPrivacyLockVisible)
+         #expect(!manager.isPrivacyLockVisible)
 
          manager.toggleLock(show: false)
 
@@ -213,7 +212,7 @@ struct LockWindowManagerTests {
          try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
 
          #expect(manager.overlayWindow != nil)
-         #expect(manager.overlayWindow?.alpha == 1)
+         #expect(manager.overlayWindow?.alpha == 0)
          #expect(!manager.isPrivacyLockVisible)
      }
 
@@ -228,13 +227,11 @@ struct LockWindowManagerTests {
             let service = MockBiometryAuthenticationService(
                 isAuthEnabled: isAuthEnabled,
                 availableAuth: availableAuth,
-                lockPeriod: lockPeriod
+                lockPeriod: lockPeriod,
+                isPrivacyLockEnabled: isPrivacyLockEnabled
             )
             let lockModel = LockSceneViewModel(service: service)
-
-            let preferences = Preferences()
-            preferences.isPrivacyLockEnabled = isPrivacyLockEnabled
-            return LockWindowManager(lockModel: lockModel, preferences: preferences)
+            return LockWindowManager(lockModel: lockModel)
         }
     }
  }

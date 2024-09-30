@@ -2,22 +2,17 @@
 
 import SwiftUI
 import Style
-import Store
 
 @Observable
 @MainActor
 class LockWindowManager {
-    private let preferences: Preferences
-
     let lockModel: LockSceneViewModel
     var overlayWindow: UIWindow?
 
     private var showPrivacyLockOnFirstAppear: Bool = true
 
-    init(lockModel: LockSceneViewModel,
-         preferences: Preferences = .main) {
+    init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
-        self.preferences = preferences
     }
 
     var showLockScreen: Bool {
@@ -25,11 +20,7 @@ class LockWindowManager {
     }
 
     var isPrivacyLockVisible: Bool {
-        guard lockModel.isAutoLockEnabled else { return false }
-        guard preferences.isPrivacyLockEnabled else {
-            return lockModel.state == .lockedCanceled
-        }
-        return true
+        lockModel.isPrivacyLockVisible
     }
 
     func setPhase(phase: ScenePhase) {
@@ -65,11 +56,11 @@ extension LockWindowManager {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               overlayWindow == nil else { return }
 
-        let firstRun = lockModel.isAutoLockEnabled && !preferences.isPrivacyLockEnabled && showPrivacyLockOnFirstAppear
+        let firstRun = lockModel.isAutoLockEnabled && !lockModel.isPrivacyLockEnabled && showPrivacyLockOnFirstAppear
 
         overlayWindow = Self.createOverlayWindow(
             model: lockModel,
-            isPrivacyLockVisible: isPrivacyLockVisible || firstRun,
+            isPrivacyLockVisible: lockModel.isPrivacyLockVisible || firstRun,
             windowScene: windowScene
         )
 

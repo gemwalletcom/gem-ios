@@ -17,6 +17,19 @@ public struct BiometryAuthenticationService: BiometryAuthenticatable {
         }
     }
 
+    public var isPrivacyLockEnabled: Bool {
+        do {
+            return try keystorePassword.getPrivacyLockStatus() == .enabled
+        } catch {
+            return false
+        }
+    }
+
+    public func togglePrivacyLock(enbaled: Bool) throws {
+        let status = PrivacyLockStatus(enabled: enbaled)
+        try keystorePassword.setPrivacyLockStatus(status)
+    }
+
     public var lockPeriod: LockPeriod? {
         do {
             return try keystorePassword.getAuthenticationLockPeriod()

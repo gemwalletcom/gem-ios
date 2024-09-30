@@ -31,7 +31,8 @@ struct SecurityScene: View {
                 .toggleStyle(AppToggleStyle())
             }
         }
-        .onChange(of: model.isEnabled, onToggleEnable)
+        .onChange(of: model.isEnabled, onToggleBiometrics)
+        .onChange(of: model.isPrivacyLockEnabled, onToggleSecurityLock)
         .alert(item: $model.isPresentingError) {
             Alert(title: Text(model.errorTitle), message: Text($0))
         }
@@ -46,10 +47,14 @@ struct SecurityScene: View {
 // MARK: - Actions
 
 extension SecurityScene {
-    private func onToggleEnable() {
+    private func onToggleBiometrics() {
         Task {
             await model.toggleBiometrics()
         }
+    }
+
+    private func onToggleSecurityLock() {
+        model.togglePrivacyLock()
     }
 }
 

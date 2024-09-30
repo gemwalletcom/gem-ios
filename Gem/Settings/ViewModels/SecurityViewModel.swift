@@ -3,33 +3,25 @@
 import Foundation
 import Keystore
 import Components
-import Store
 
 @Observable
 class SecurityViewModel {
-    private let preferences: Preferences
     private let service: BiometryAuthenticatable
 
     static let reason: String = Localized.Settings.Security.authentication
 
     var isPresentingError: String?
     var isEnabled: Bool
-    var isPrivacyLockEnabled: Bool {
-        didSet {
-            preferences.isPrivacyLockEnabled = isPrivacyLockEnabled
-        }
-    }
+    var isPrivacyLockEnabled: Bool
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: BiometryAuthenticatable = BiometryAuthenticationService(),
-         preferences: Preferences = .main) {
+    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
-        self.preferences = preferences
 
         self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)
         self.isEnabled = service.isAuthenticationEnabled
-        self.isPrivacyLockEnabled = preferences.isPrivacyLockEnabled
+        self.isPrivacyLockEnabled = service.isPrivacyLockEnabled
     }
 
     var title: String { Localized.Settings.security }
@@ -59,6 +51,16 @@ extension SecurityViewModel {
         } catch {
             isPresentingError = error.localizedDescription
             isEnabled.toggle()
+        }
+    }
+
+    func togglePrivacyLock() {
+        guard isPrivacyLockEnabled != service.isPrivacyLockEnabled else { return }
+        do {
+            try service.togglePrivacyLock(enbaled: isPrivacyLockEnabled)
+        } catch {
+            isPresentingError = error.localizedDescription
+            isPrivacyLockEnabled.toggle()
         }
     }
 }

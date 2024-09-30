@@ -10,6 +10,7 @@ public class LocalKeystorePassword: KeystorePassword {
         static let password = "password"
         static let passwordAuthentication = "password_authentication"
         static let passwordAuthenticationPeriod = "password_authentication_period"
+        static let passwordAuthenticationPrivacyLock = "password_authentication_privacy_lock"
     }
     
     private let keychain = Keychain()
@@ -32,6 +33,17 @@ public class LocalKeystorePassword: KeystorePassword {
             return .none
         }
         return LockPeriod(rawValue: option)
+    }
+
+    public func getPrivacyLockStatus() throws -> PrivacyLockStatus? {
+        guard let value = try keychain.get(Keys.passwordAuthenticationPrivacyLock) else {
+            return .none
+        }
+        return PrivacyLockStatus(rawValue: value) ?? .none
+    }
+
+    public func setPrivacyLockStatus(_ status: PrivacyLockStatus) throws {
+        try keychain.set(status.rawValue, key: Keys.passwordAuthenticationPrivacyLock)
     }
 
     public func setAuthenticationLockPeriod(period: LockPeriod) throws {
@@ -71,6 +83,7 @@ public class LocalKeystorePassword: KeystorePassword {
         try keychain.remove(Keys.password)
         try keychain.remove(Keys.passwordAuthentication)
         try keychain.remove(Keys.passwordAuthenticationPeriod)
+        try keychain.remove(Keys.passwordAuthenticationPrivacyLock)
     }
 }
 
