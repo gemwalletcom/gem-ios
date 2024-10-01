@@ -53,9 +53,11 @@ extension AptosService: ChainFeeCalculateable {
             .map(as: AptosGasFee.self).prioritized_gas_estimate
         //Magic number for gas usage when account exist or not.
         //gasLimit * 2 for safety
+        //TODO: Add check for "error_code" == "account_not_found",
         async let getDestinationAccount = try await provider
             .request(.account(address: input.destinationAddress))
-            .mapOrCatch( as: AptosAccount.self, codes: [404], result: AptosAccount(sequence_number: .empty))
+            .mapOrCatch( as: AptosAccount.self, codes: [200], result: AptosAccount(sequence_number: .empty))
+
         let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
         
         let gasLimit = Int32(destinationAccount.sequence_number == .empty ? 676 : 6)
