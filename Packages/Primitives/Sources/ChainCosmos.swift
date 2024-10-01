@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum CosmosChain: String, Codable, CaseIterable, Equatable {
+public enum CosmosChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case cosmos
 	case osmosis
 	case celestia
@@ -14,7 +14,7 @@ public enum CosmosChain: String, Codable, CaseIterable, Equatable {
 	case noble
 }
 
-public enum CosmosDenom: String, Codable, CaseIterable, Equatable {
+public enum CosmosDenom: String, Codable, CaseIterable, Equatable, Sendable {
 	case rune
 	case uatom
 	case uosmo

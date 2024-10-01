@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum Currency: String, Codable, CaseIterable, Equatable {
+public enum Currency: String, Codable, CaseIterable, Equatable, Sendable {
 	case mxn = "MXN"
 	case chf = "CHF"
 	case cny = "CNY"

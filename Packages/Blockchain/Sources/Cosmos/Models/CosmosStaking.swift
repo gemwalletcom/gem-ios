@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct CosmosDelegationData: Codable {
+public struct CosmosDelegationData: Codable, Sendable {
 	public let validator_address: String
 
 	public init(validator_address: String) {
@@ -12,7 +12,7 @@ public struct CosmosDelegationData: Codable {
 	}
 }
 
-public struct CosmosDelegation: Codable {
+public struct CosmosDelegation: Codable, Sendable {
 	public let delegation: CosmosDelegationData
 	public let balance: CosmosBalance
 
@@ -22,7 +22,7 @@ public struct CosmosDelegation: Codable {
 	}
 }
 
-public struct CosmosDelegations: Codable {
+public struct CosmosDelegations: Codable, Sendable {
 	public let delegation_responses: [CosmosDelegation]
 
 	public init(delegation_responses: [CosmosDelegation]) {
@@ -30,7 +30,7 @@ public struct CosmosDelegations: Codable {
 	}
 }
 
-public struct CosmosReward: Codable {
+public struct CosmosReward: Codable, Sendable {
 	public let validator_address: String
 	public let reward: [CosmosBalance]
 
@@ -40,7 +40,7 @@ public struct CosmosReward: Codable {
 	}
 }
 
-public struct CosmosRewards: Codable {
+public struct CosmosRewards: Codable, Sendable {
 	public let rewards: [CosmosReward]
 
 	public init(rewards: [CosmosReward]) {
@@ -48,7 +48,7 @@ public struct CosmosRewards: Codable {
 	}
 }
 
-public struct CosmosUnboudingDelegationEntry: Codable {
+public struct CosmosUnboudingDelegationEntry: Codable, Sendable {
 	public let completion_time: String
 	public let creation_height: String
 	public let balance: String
@@ -60,7 +60,7 @@ public struct CosmosUnboudingDelegationEntry: Codable {
 	}
 }
 
-public struct CosmosUnboundingDelegation: Codable {
+public struct CosmosUnboundingDelegation: Codable, Sendable {
 	public let validator_address: String
 	public let entries: [CosmosUnboudingDelegationEntry]
 
@@ -70,7 +70,7 @@ public struct CosmosUnboundingDelegation: Codable {
 	}
 }
 
-public struct CosmosUnboundingDelegations: Codable {
+public struct CosmosUnboundingDelegations: Codable, Sendable {
 	public let unbonding_responses: [CosmosUnboundingDelegation]
 
 	public init(unbonding_responses: [CosmosUnboundingDelegation]) {
@@ -78,7 +78,7 @@ public struct CosmosUnboundingDelegations: Codable {
 	}
 }
 
-public struct CosmosValidatorMoniker: Codable {
+public struct CosmosValidatorMoniker: Codable, Sendable {
 	public let moniker: String
 
 	public init(moniker: String) {
@@ -86,7 +86,7 @@ public struct CosmosValidatorMoniker: Codable {
 	}
 }
 
-public struct CosmosValidatorCommissionRates: Codable {
+public struct CosmosValidatorCommissionRates: Codable, Sendable {
 	public let rate: String
 
 	public init(rate: String) {
@@ -94,7 +94,7 @@ public struct CosmosValidatorCommissionRates: Codable {
 	}
 }
 
-public struct CosmosValidatorCommission: Codable {
+public struct CosmosValidatorCommission: Codable, Sendable {
 	public let commission_rates: CosmosValidatorCommissionRates
 
 	public init(commission_rates: CosmosValidatorCommissionRates) {
@@ -102,7 +102,7 @@ public struct CosmosValidatorCommission: Codable {
 	}
 }
 
-public struct CosmosValidator: Codable {
+public struct CosmosValidator: Codable, Sendable {
 	public let operator_address: String
 	public let jailed: Bool
 	public let status: String
@@ -118,7 +118,7 @@ public struct CosmosValidator: Codable {
 	}
 }
 
-public struct CosmosValidators: Codable {
+public struct CosmosValidators: Codable, Sendable {
 	public let validators: [CosmosValidator]
 
 	public init(validators: [CosmosValidator]) {

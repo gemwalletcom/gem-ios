@@ -25,6 +25,7 @@ struct TransactionsScene: View {
             TransactionsList(transactions)
         }
         .listSectionSpacing(.compact)
+        .listSectionSpacing(.compact)
         .refreshable {
             await fetch()
         }
@@ -35,18 +36,9 @@ struct TransactionsScene: View {
                     .textStyle(.body)
             }
         }
+        .navigationTitle(model.title)
         .onAppear {
-            onAppear()
-        }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionsScene {
-    private func onAppear() {
-        Task {
-            await fetch()
+            fetch()
         }
     }
 }

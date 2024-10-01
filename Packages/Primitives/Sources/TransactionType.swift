@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum TransactionType: String, Codable, CaseIterable, Equatable {
+public enum TransactionType: String, Codable, CaseIterable, Equatable, Sendable {
 	case transfer
 	case swap
 	case tokenApproval

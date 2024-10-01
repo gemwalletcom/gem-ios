@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatAssets: Codable {
+public struct FiatAssets: Codable, Sendable {
 	public let version: UInt32
 	public let assetIds: [String]
 

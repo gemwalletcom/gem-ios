@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TronReceipt: Codable {
+public struct TronReceipt: Codable, Sendable {
 	public let result: String?
 
 	public init(result: String?) {
@@ -12,7 +12,7 @@ public struct TronReceipt: Codable {
 	}
 }
 
-public struct TronTransactionContractRef: Codable {
+public struct TronTransactionContractRef: Codable, Sendable {
 	public let contractRet: String
 
 	public init(contractRet: String) {
@@ -20,7 +20,7 @@ public struct TronTransactionContractRef: Codable {
 	}
 }
 
-public struct TronTransaction: Codable {
+public struct TronTransaction: Codable, Sendable {
 	public let ret: [TronTransactionContractRef]
 
 	public init(ret: [TronTransactionContractRef]) {
@@ -28,7 +28,7 @@ public struct TronTransaction: Codable {
 	}
 }
 
-public struct TronTransactionBroadcast: Codable {
+public struct TronTransactionBroadcast: Codable, Sendable {
 	public let result: Bool
 	public let txid: String
 
@@ -38,7 +38,7 @@ public struct TronTransactionBroadcast: Codable {
 	}
 }
 
-public struct TronTransactionBroadcastError: Codable {
+public struct TronTransactionBroadcastError: Codable, Sendable {
 	public let message: String
 
 	public init(message: String) {
@@ -46,7 +46,7 @@ public struct TronTransactionBroadcastError: Codable {
 	}
 }
 
-public struct TronTransactionReceipt: Codable {
+public struct TronTransactionReceipt: Codable, Sendable {
 	public let blockNumber: Int32
 	public let fee: Int32?
 	public let result: String?

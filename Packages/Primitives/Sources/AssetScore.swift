@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetScore: Codable, Equatable {
+public struct AssetScore: Codable, Equatable, Sendable {
 	public let rank: Int32
 
 	public init(rank: Int32) {
@@ -12,7 +12,7 @@ public struct AssetScore: Codable, Equatable {
 	}
 }
 
-public enum AssetRank: String, Codable, CaseIterable, Equatable {
+public enum AssetRank: String, Codable, CaseIterable, Equatable, Sendable {
 	case high
 	case medium
 	case low

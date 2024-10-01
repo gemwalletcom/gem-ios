@@ -4,14 +4,14 @@
 
 import Foundation
 
-public enum WalletType: String, Codable, Equatable, Hashable {
+public enum WalletType: String, Codable, Equatable, Hashable, Sendable {
 	case multicoin
 	case single
 	case privateKey
 	case view
 }
 
-public struct Wallet: Codable, Equatable {
+public struct Wallet: Codable, Equatable, Sendable {
 	public let id: String
 	public let name: String
 	public let index: Int32
@@ -31,7 +31,7 @@ public struct Wallet: Codable, Equatable {
 	}
 }
 
-public struct WalletId: Codable, Equatable {
+public struct WalletId: Codable, Equatable, Sendable {
 	public let id: String
 
 	public init(id: String) {

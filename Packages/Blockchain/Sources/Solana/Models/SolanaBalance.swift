@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaBalance: Codable {
+public struct SolanaBalance: Codable, Sendable {
 	public let value: Int
 
 	public init(value: Int) {
@@ -12,7 +12,7 @@ public struct SolanaBalance: Codable {
 	}
 }
 
-public struct SolanaBalanceValue: Codable {
+public struct SolanaBalanceValue: Codable, Sendable {
 	public let amount: String
 
 	public init(amount: String) {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetMetaData: Codable {
+public struct AssetMetaData: Codable, Sendable {
 	public let isEnabled: Bool
 	public let isBuyEnabled: Bool
 	public let isSwapEnabled: Bool

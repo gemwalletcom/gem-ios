@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Asset: Codable {
+public struct Asset: Codable, Sendable {
 	public let id: AssetId
 	public let name: String
 	public let symbol: String

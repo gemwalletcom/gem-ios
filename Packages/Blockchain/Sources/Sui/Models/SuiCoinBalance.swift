@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SuiCoin: Codable {
+public struct SuiCoin: Codable, Sendable {
 	public let coinType: String
 	public let coinObjectId: String
 	public let balance: String
@@ -20,7 +20,7 @@ public struct SuiCoin: Codable {
 	}
 }
 
-public struct SuiCoinBalance: Codable {
+public struct SuiCoinBalance: Codable, Sendable {
 	public let coinType: String
 	public let totalBalance: String
 
@@ -30,7 +30,7 @@ public struct SuiCoinBalance: Codable {
 	}
 }
 
-public struct SuiData<T: Codable>: Codable {
+public struct SuiData<T: Codable & Sendable>: Codable, Sendable {
 	public let data: T
 
 	public init(data: T) {
@@ -38,7 +38,7 @@ public struct SuiData<T: Codable>: Codable {
 	}
 }
 
-public struct SuiGasUsed: Codable {
+public struct SuiGasUsed: Codable, Sendable {
 	public let computationCost: String
 	public let storageCost: String
 	public let storageRebate: String
@@ -52,7 +52,7 @@ public struct SuiGasUsed: Codable {
 	}
 }
 
-public struct SuiStatus: Codable {
+public struct SuiStatus: Codable, Sendable {
 	public let status: String
 
 	public init(status: String) {
@@ -60,7 +60,7 @@ public struct SuiStatus: Codable {
 	}
 }
 
-public struct SuiObjectReference: Codable {
+public struct SuiObjectReference: Codable, Sendable {
 	public let objectId: String
 
 	public init(objectId: String) {
@@ -68,7 +68,7 @@ public struct SuiObjectReference: Codable {
 	}
 }
 
-public struct SuiObjectChange: Codable {
+public struct SuiObjectChange: Codable, Sendable {
 	public let reference: SuiObjectReference
 
 	public init(reference: SuiObjectReference) {
@@ -76,7 +76,7 @@ public struct SuiObjectChange: Codable {
 	}
 }
 
-public struct SuiEffects: Codable {
+public struct SuiEffects: Codable, Sendable {
 	public let gasUsed: SuiGasUsed
 	public let status: SuiStatus
 	public let created: [SuiObjectChange]?
@@ -88,7 +88,7 @@ public struct SuiEffects: Codable {
 	}
 }
 
-public struct SuiTransaction: Codable {
+public struct SuiTransaction: Codable, Sendable {
 	public let effects: SuiEffects
 
 	public init(effects: SuiEffects) {

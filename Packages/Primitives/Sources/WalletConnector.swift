@@ -4,14 +4,14 @@
 
 import Foundation
 
-public enum SignDigestType: String, Codable {
+public enum SignDigestType: String, Codable, Sendable {
 	case sign
 	case eip191
 	case eip712
 	case base58
 }
 
-public struct SignMessage: Codable {
+public struct SignMessage: Codable, Sendable {
 	public let type: SignDigestType
 	public let data: Data
 
@@ -21,13 +21,13 @@ public struct SignMessage: Codable {
 	}
 }
 
-public enum WalletConnectionState: String, Codable, Hashable {
+public enum WalletConnectionState: String, Codable, Hashable, Sendable {
 	case started
 	case active
 	case expired
 }
 
-public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable {
+public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let description: String
 	public let url: String
@@ -45,7 +45,7 @@ public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WalletConnectionSession: Codable, Equatable, Hashable {
+public struct WalletConnectionSession: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let sessionId: String
 	public let state: WalletConnectionState
@@ -65,7 +65,7 @@ public struct WalletConnectionSession: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WalletConnection: Codable, Equatable, Hashable {
+public struct WalletConnection: Codable, Equatable, Hashable, Sendable {
 	public let session: WalletConnectionSession
 	public let wallet: Wallet
 
@@ -75,7 +75,7 @@ public struct WalletConnection: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable {
+public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable, Sendable {
 	public let wallet: Wallet
 	public let accounts: [Account]
 	public let metadata: WalletConnectionSessionAppMetadata
@@ -87,14 +87,14 @@ public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable {
 	}
 }
 
-public enum WalletConnectionEvents: String, Codable, CaseIterable {
+public enum WalletConnectionEvents: String, Codable, CaseIterable, Sendable {
 	case connect
 	case disconnect
 	case accountsChanged
 	case chainChanged
 }
 
-public enum WalletConnectionMethods: String, Codable, CaseIterable {
+public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case ethChainId = "eth_chainId"
 	case ethSign = "eth_sign"
 	case personalSign = "personal_sign"

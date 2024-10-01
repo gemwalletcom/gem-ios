@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaStakeAccountDataParsedInfoStakeDelegation: Codable {
+public struct SolanaStakeAccountDataParsedInfoStakeDelegation: Codable, Sendable {
 	public let voter: String
 	public let stake: String
 	public let activationEpoch: String
@@ -18,7 +18,7 @@ public struct SolanaStakeAccountDataParsedInfoStakeDelegation: Codable {
 	}
 }
 
-public struct SolanaStakeAccountDataParsedInfoStake: Codable {
+public struct SolanaStakeAccountDataParsedInfoStake: Codable, Sendable {
 	public let delegation: SolanaStakeAccountDataParsedInfoStakeDelegation
 
 	public init(delegation: SolanaStakeAccountDataParsedInfoStakeDelegation) {
@@ -26,7 +26,7 @@ public struct SolanaStakeAccountDataParsedInfoStake: Codable {
 	}
 }
 
-public struct SolanaStakeAccountDataParsedInfoMeta: Codable {
+public struct SolanaStakeAccountDataParsedInfoMeta: Codable, Sendable {
 	public let rentExemptReserve: String
 
 	public init(rentExemptReserve: String) {
@@ -34,7 +34,7 @@ public struct SolanaStakeAccountDataParsedInfoMeta: Codable {
 	}
 }
 
-public struct SolanaStakeAccountDataParsedInfo: Codable {
+public struct SolanaStakeAccountDataParsedInfo: Codable, Sendable {
 	public let stake: SolanaStakeAccountDataParsedInfoStake
 	public let meta: SolanaStakeAccountDataParsedInfoMeta
 
@@ -44,7 +44,7 @@ public struct SolanaStakeAccountDataParsedInfo: Codable {
 	}
 }
 
-public struct SolanaStakeAccountDataParsed: Codable {
+public struct SolanaStakeAccountDataParsed: Codable, Sendable {
 	public let info: SolanaStakeAccountDataParsedInfo
 
 	public init(info: SolanaStakeAccountDataParsedInfo) {
@@ -52,7 +52,7 @@ public struct SolanaStakeAccountDataParsed: Codable {
 	}
 }
 
-public struct SolanaStakeAccountData: Codable {
+public struct SolanaStakeAccountData: Codable, Sendable {
 	public let parsed: SolanaStakeAccountDataParsed
 
 	public init(parsed: SolanaStakeAccountDataParsed) {
@@ -60,7 +60,7 @@ public struct SolanaStakeAccountData: Codable {
 	}
 }
 
-public struct SolanaStakeAccount: Codable {
+public struct SolanaStakeAccount: Codable, Sendable {
 	public let lamports: Int
 	public let space: Int32
 	public let data: SolanaStakeAccountData
@@ -72,7 +72,7 @@ public struct SolanaStakeAccount: Codable {
 	}
 }
 
-public struct SolanaTokenAccount: Codable {
+public struct SolanaTokenAccount: Codable, Sendable {
 	public let pubkey: String
 
 	public init(pubkey: String) {
@@ -80,7 +80,7 @@ public struct SolanaTokenAccount: Codable {
 	}
 }
 
-public struct SolanaTokenAccountResult<T: Codable>: Codable {
+public struct SolanaTokenAccountResult<T: Codable & Sendable>: Codable, Sendable {
 	public let account: T
 	public let pubkey: String
 

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum BitcoinChain: String, Codable, CaseIterable, Equatable {
+public enum BitcoinChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case bitcoin
 	case litecoin
 	case doge

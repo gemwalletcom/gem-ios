@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct CosmosHeader: Codable {
+public struct CosmosHeader: Codable, Sendable {
 	public let chain_id: String
 	public let height: String
 
@@ -14,7 +14,7 @@ public struct CosmosHeader: Codable {
 	}
 }
 
-public struct CosmosBlock: Codable {
+public struct CosmosBlock: Codable, Sendable {
 	public let header: CosmosHeader
 
 	public init(header: CosmosHeader) {
@@ -22,7 +22,7 @@ public struct CosmosBlock: Codable {
 	}
 }
 
-public struct CosmosBlockResponse: Codable {
+public struct CosmosBlockResponse: Codable, Sendable {
 	public let block: CosmosBlock
 
 	public init(block: CosmosBlock) {
@@ -30,7 +30,7 @@ public struct CosmosBlockResponse: Codable {
 	}
 }
 
-public struct CosmosNodeInfo: Codable {
+public struct CosmosNodeInfo: Codable, Sendable {
 	public let network: String
 
 	public init(network: String) {
@@ -38,7 +38,7 @@ public struct CosmosNodeInfo: Codable {
 	}
 }
 
-public struct CosmosNodeInfoResponse: Codable {
+public struct CosmosNodeInfoResponse: Codable, Sendable {
 	public let default_node_info: CosmosNodeInfo
 
 	public init(default_node_info: CosmosNodeInfo) {

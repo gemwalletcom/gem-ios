@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct BitcoinUTXO: Codable {
+public struct BitcoinUTXO: Codable, Sendable {
 	public let txid: String
 	public let vout: Int32
 	public let value: String

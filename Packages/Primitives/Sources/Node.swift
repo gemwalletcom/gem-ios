@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum NodeState: String, Codable, CaseIterable, Equatable {
+public enum NodeState: String, Codable, CaseIterable, Equatable, Sendable {
 	case active
 	case inactive
 }
 
-public struct Node: Codable {
+public struct Node: Codable, Sendable {
 	public let url: String
 	public let status: NodeState
 	public let priority: Int32
@@ -21,7 +21,7 @@ public struct Node: Codable {
 	}
 }
 
-public struct ChainNode: Codable {
+public struct ChainNode: Codable, Sendable {
 	public let chain: String
 	public let node: Node
 
@@ -31,7 +31,7 @@ public struct ChainNode: Codable {
 	}
 }
 
-public struct ChainNodes: Codable {
+public struct ChainNodes: Codable, Sendable {
 	public let chain: String
 	public let nodes: [Node]
 
@@ -41,7 +41,7 @@ public struct ChainNodes: Codable {
 	}
 }
 
-public struct NodesResponse: Codable {
+public struct NodesResponse: Codable, Sendable {
 	public let version: Int32
 	public let nodes: [ChainNodes]
 

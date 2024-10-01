@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum Platform: String, Codable, Equatable {
+public enum Platform: String, Codable, Equatable, Sendable {
 	case ios
 	case android
 }
 
-public enum PlatformStore: String, Codable, CaseIterable, Equatable {
+public enum PlatformStore: String, Codable, CaseIterable, Equatable, Sendable {
 	case appStore
 	case googlePlay
 	case fdroid

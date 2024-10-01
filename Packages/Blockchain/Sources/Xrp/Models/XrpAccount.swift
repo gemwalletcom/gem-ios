@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct XRPAccount: Codable {
+public struct XRPAccount: Codable, Sendable {
 	public let Balance: String
 	public let Sequence: Int32
 
@@ -14,7 +14,7 @@ public struct XRPAccount: Codable {
 	}
 }
 
-public struct XRPAccountResult: Codable {
+public struct XRPAccountResult: Codable, Sendable {
 	public let account_data: XRPAccount
 
 	public init(account_data: XRPAccount) {
@@ -22,7 +22,7 @@ public struct XRPAccountResult: Codable {
 	}
 }
 
-public struct XRPDrops: Codable {
+public struct XRPDrops: Codable, Sendable {
 	public let median_fee: String
 
 	public init(median_fee: String) {
@@ -30,7 +30,7 @@ public struct XRPDrops: Codable {
 	}
 }
 
-public struct XRPFee: Codable {
+public struct XRPFee: Codable, Sendable {
 	public let drops: XRPDrops
 
 	public init(drops: XRPDrops) {
@@ -38,7 +38,7 @@ public struct XRPFee: Codable {
 	}
 }
 
-public struct XRPLatestBlock: Codable {
+public struct XRPLatestBlock: Codable, Sendable {
 	public let ledger_current_index: Int
 
 	public init(ledger_current_index: Int) {
@@ -46,7 +46,7 @@ public struct XRPLatestBlock: Codable {
 	}
 }
 
-public struct XRPResult<T: Codable>: Codable {
+public struct XRPResult<T: Codable & Sendable>: Codable, Sendable {
 	public let result: T
 
 	public init(result: T) {
@@ -54,7 +54,7 @@ public struct XRPResult<T: Codable>: Codable {
 	}
 }
 
-public struct XRPTransaction: Codable {
+public struct XRPTransaction: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {
@@ -62,7 +62,7 @@ public struct XRPTransaction: Codable {
 	}
 }
 
-public struct XRPTransactionBroadcast: Codable {
+public struct XRPTransactionBroadcast: Codable, Sendable {
 	public let accepted: Bool
 	public let engine_result_message: String?
 	public let tx_json: XRPTransaction?
@@ -74,7 +74,7 @@ public struct XRPTransactionBroadcast: Codable {
 	}
 }
 
-public struct XRPTransactionStatus: Codable {
+public struct XRPTransactionStatus: Codable, Sendable {
 	public let status: String
 
 	public init(status: String) {

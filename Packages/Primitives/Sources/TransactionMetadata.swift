@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum TransactionMetadata: Codable {
+public enum TransactionMetadata: Codable, Sendable {
     case null
     case swap(TransactionSwapMetadata)
     

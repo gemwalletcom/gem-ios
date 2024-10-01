@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct BitcoinTransaction: Codable {
+public struct BitcoinTransaction: Codable, Sendable {
 	public let blockHeight: Int32
 
 	public init(blockHeight: Int32) {
@@ -12,7 +12,7 @@ public struct BitcoinTransaction: Codable {
 	}
 }
 
-public struct BitcoinTransactionBroacastError: Codable {
+public struct BitcoinTransactionBroacastError: Codable, Sendable {
 	public let message: String
 
 	public init(message: String) {
@@ -20,7 +20,7 @@ public struct BitcoinTransactionBroacastError: Codable {
 	}
 }
 
-public struct BitcoinTransactionBroacastResult: Codable {
+public struct BitcoinTransactionBroacastResult: Codable, Sendable {
 	public let error: BitcoinTransactionBroacastError?
 	public let result: String?
 

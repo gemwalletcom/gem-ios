@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Price: Codable, Equatable, Hashable {
+public struct Price: Codable, Equatable, Hashable, Sendable {
 	public let price: Double
 	public let priceChangePercentage24h: Double
 
@@ -14,7 +14,7 @@ public struct Price: Codable, Equatable, Hashable {
 	}
 }
 
-public struct PriceData: Codable {
+public struct PriceData: Codable, Sendable {
 	public let asset: Asset
 	public let price: Price?
 	public let priceAlert: PriceAlert?

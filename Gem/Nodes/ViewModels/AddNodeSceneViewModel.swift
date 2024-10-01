@@ -7,7 +7,7 @@ import GemstonePrimitives
 import BigInt
 import Blockchain
 
-class AddNodeSceneViewModel: ObservableObject {
+final class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
 

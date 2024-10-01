@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct PushNotificationBuyAsset: Codable, Equatable {
+public struct PushNotificationBuyAsset: Codable, Equatable, Sendable {
 	public let assetId: String
 
 	public init(assetId: String) {
@@ -12,7 +12,7 @@ public struct PushNotificationBuyAsset: Codable, Equatable {
 	}
 }
 
-public enum PushNotificationTypes: String, Codable, Equatable {
+public enum PushNotificationTypes: String, Codable, Equatable, Sendable {
 	case test
 	case transaction
 	case priceAlert
@@ -20,7 +20,7 @@ public enum PushNotificationTypes: String, Codable, Equatable {
 	case swapAsset
 }
 
-public struct PushNotificationPayloadType: Codable, Equatable {
+public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
 	public let type: PushNotificationTypes
 
 	public init(type: PushNotificationTypes) {
@@ -28,7 +28,7 @@ public struct PushNotificationPayloadType: Codable, Equatable {
 	}
 }
 
-public struct PushNotificationPriceAlert: Codable, Equatable {
+public struct PushNotificationPriceAlert: Codable, Equatable, Sendable {
 	public let assetId: String
 
 	public init(assetId: String) {
@@ -36,7 +36,7 @@ public struct PushNotificationPriceAlert: Codable, Equatable {
 	}
 }
 
-public struct PushNotificationSwapAsset: Codable, Equatable {
+public struct PushNotificationSwapAsset: Codable, Equatable, Sendable {
 	public let fromAssetId: String
 	public let toAssetId: String
 
@@ -46,7 +46,7 @@ public struct PushNotificationSwapAsset: Codable, Equatable {
 	}
 }
 
-public struct PushNotificationTransaction: Codable, Equatable {
+public struct PushNotificationTransaction: Codable, Equatable, Sendable {
 	public let walletIndex: Int32
 	public let assetId: String
 	public let transactionId: String

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct NameRecord: Codable {
+public struct NameRecord: Codable, Sendable {
 	public let name: String
 	public let chain: Chain
 	public let address: String
@@ -18,7 +18,7 @@ public struct NameRecord: Codable {
 	}
 }
 
-public enum NameProvider: String, Codable {
+public enum NameProvider: String, Codable, Sendable {
 	case ud
 	case ens
 	case sns

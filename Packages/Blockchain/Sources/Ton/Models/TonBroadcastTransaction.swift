@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonBroadcastTransaction: Codable {
+public struct TonBroadcastTransaction: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetLinks: Codable {
+public struct AssetLinks: Codable, Sendable {
 	public let homepage: String?
 	public let explorer: String?
 	public let twitter: String?
@@ -32,7 +32,7 @@ public struct AssetLinks: Codable {
 	}
 }
 
-public struct AssetDetails: Codable {
+public struct AssetDetails: Codable, Sendable {
 	public let links: AssetLinks
 	public let isBuyable: Bool
 	public let isSellable: Bool
@@ -50,7 +50,7 @@ public struct AssetDetails: Codable {
 	}
 }
 
-public struct AssetDetailsInfo: Codable {
+public struct AssetDetailsInfo: Codable, Sendable {
 	public let details: AssetDetails
 	public let market: AssetMarket
 
@@ -60,7 +60,7 @@ public struct AssetDetailsInfo: Codable {
 	}
 }
 
-public struct AssetFull: Codable {
+public struct AssetFull: Codable, Sendable {
 	public let asset: Asset
 	public let details: AssetDetails?
 	public let price: Price?
@@ -76,7 +76,7 @@ public struct AssetFull: Codable {
 	}
 }
 
-public struct AssetMarketPrice: Codable {
+public struct AssetMarketPrice: Codable, Sendable {
 	public let price: Price?
 	public let market: AssetMarket?
 

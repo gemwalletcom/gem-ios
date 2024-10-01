@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum ChainType: String, Codable, CaseIterable, Equatable, Hashable {
+public enum ChainType: String, Codable, CaseIterable, Equatable, Hashable, Sendable {
 	case ethereum
 	case bitcoin
 	case solana

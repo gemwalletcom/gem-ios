@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatQuote: Codable, Equatable {
+public struct FiatQuote: Codable, Equatable, Sendable {
 	public let provider: FiatProvider
 	public let fiatAmount: Double
 	public let fiatCurrency: String
@@ -20,7 +20,7 @@ public struct FiatQuote: Codable, Equatable {
 	}
 }
 
-public struct FiatQuotes: Codable {
+public struct FiatQuotes: Codable, Sendable {
 	public let quotes: [FiatQuote]
 
 	public init(quotes: [FiatQuote]) {

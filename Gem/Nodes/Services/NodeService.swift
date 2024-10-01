@@ -7,7 +7,7 @@ import Primitives
 import Blockchain
 import Gemstone
 
-public class NodeService {
+public final class NodeService {
     let nodeStore: NodeStore
     var requestedChains = Set<Chain>()
     

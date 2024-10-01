@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonJettonBalance: Codable {
+public struct TonJettonBalance: Codable, Sendable {
 	public let balance: UInt64
 
 	public init(balance: UInt64) {
@@ -12,7 +12,7 @@ public struct TonJettonBalance: Codable {
 	}
 }
 
-public struct TonJettonTokenContentData: Codable {
+public struct TonJettonTokenContentData: Codable, Sendable {
 	public let name: String
 	public let symbol: String
 	public let decimals: String
@@ -24,7 +24,7 @@ public struct TonJettonTokenContentData: Codable {
 	}
 }
 
-public struct TonJettonTokenContent: Codable {
+public struct TonJettonTokenContent: Codable, Sendable {
 	public let type: String
 	public let data: TonJettonTokenContentData
 
@@ -34,7 +34,7 @@ public struct TonJettonTokenContent: Codable {
 	}
 }
 
-public struct TonJettonToken: Codable {
+public struct TonJettonToken: Codable, Sendable {
 	public let jetton_content: TonJettonTokenContent
 
 	public init(jetton_content: TonJettonTokenContent) {
@@ -42,7 +42,7 @@ public struct TonJettonToken: Codable {
 	}
 }
 
-public struct TonTransactionId: Codable {
+public struct TonTransactionId: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {
@@ -50,7 +50,7 @@ public struct TonTransactionId: Codable {
 	}
 }
 
-public struct TonTransaction: Codable {
+public struct TonTransaction: Codable, Sendable {
 	public let transaction_id: TonTransactionId
 
 	public init(transaction_id: TonTransactionId) {
@@ -58,7 +58,7 @@ public struct TonTransaction: Codable {
 	}
 }
 
-public struct TonTransactionMessage: Codable {
+public struct TonTransactionMessage: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {

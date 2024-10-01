@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TronSmartContractCall: Codable {
+public struct TronSmartContractCall: Codable, Sendable {
 	public let contract_address: String
 	public let function_selector: String
 	public let parameter: String?
@@ -24,7 +24,7 @@ public struct TronSmartContractCall: Codable {
 	}
 }
 
-public struct TronSmartContractResultMessage: Codable {
+public struct TronSmartContractResultMessage: Codable, Sendable {
 	public let result: Bool
 	public let message: String?
 
@@ -34,7 +34,7 @@ public struct TronSmartContractResultMessage: Codable {
 	}
 }
 
-public struct TronSmartContractResult: Codable {
+public struct TronSmartContractResult: Codable, Sendable {
 	public let result: TronSmartContractResultMessage
 	public let constant_result: [String]
 	public let energy_used: Int32
