@@ -7,10 +7,10 @@ import Store
 
 struct ChartService {
     
-    let chartProvider: GemAPIChartService
-    
+    let chartProvider: any GemAPIChartService
+
     init(
-        chartProvider: GemAPIChartService = GemAPIService.shared
+        chartProvider: any GemAPIChartService = GemAPIService.shared
     ) {
         self.chartProvider = chartProvider
     }

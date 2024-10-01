@@ -6,7 +6,7 @@ import Style
 
 struct ScanQRCodeNavigationStack: View {
     var action: ((String) -> Void)
-    private let resources: QRScannerResources = QRScanResources()
+    private let resources: any QRScannerResources = QRScanResources()
 
     var body: some View {
         NavigationStack {

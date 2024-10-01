@@ -19,7 +19,7 @@ class TransferDataCallback<T: Identifiable>: Identifiable {
 }
 
 extension WalletCoordinator: WalletConnectorInteractable {
-    func sessionReject(error: Error) {
+    func sessionReject(error: any Error) {
         let ignoreErrors = [
             "User cancelled" // User cancelled throw by WalletConnect if session proposal is rejected
         ]

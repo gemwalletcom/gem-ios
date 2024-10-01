@@ -82,7 +82,7 @@ extension AddNodeSceneViewModel {
 // MARK: - Private
 
 extension AddNodeSceneViewModel {
-    private func fetchChainID(service: ChainIDFetchable) async throws -> (latency: Latency, value: String) {
+    private func fetchChainID(service: any ChainIDFetchable) async throws -> (latency: Latency, value: String) {
         let result = try await LatencyMeasureService.measure(for: service.getChainID)
         try validate(networkId: result.value)
         return (latency: .from(duration: result.duration), value: result.value)
@@ -95,7 +95,7 @@ extension AddNodeSceneViewModel {
         }
     }
 
-    private func updateStateWithError(error: Error) async {
+    private func updateStateWithError(error: any Error) async {
         await MainActor.run { [self] in
             self.state = .error(error)
         }

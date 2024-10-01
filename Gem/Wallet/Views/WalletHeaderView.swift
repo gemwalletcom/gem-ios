@@ -16,7 +16,7 @@ protocol HeaderViewModel {
 
 struct WalletHeaderView: View {
     
-    let model: HeaderViewModel
+    let model: any HeaderViewModel
     var action: HeaderButtonAction?
     
     var body: some View {

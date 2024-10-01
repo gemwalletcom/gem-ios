@@ -7,7 +7,7 @@ import Style
 
 struct ShowSecretDataScene: View {
     
-    let model: SecretPhraseViewableModel
+    let model: any SecretPhraseViewableModel
     @State private var showCopyMessage = false
 
     var body: some View {

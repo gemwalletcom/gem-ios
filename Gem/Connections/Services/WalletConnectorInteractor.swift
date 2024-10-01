@@ -25,7 +25,7 @@ struct WalletConnectorInteractor: WalletConnectorInteractable {
         return ""
     }
     
-    func sessionReject(error: Error) {
+    func sessionReject(error: any Error) {
         
     }
 }

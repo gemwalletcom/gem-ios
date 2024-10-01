@@ -5,7 +5,7 @@ import WalletConnector
 import Primitives
 
 protocol WalletConnectorInteractable {
-    func sessionReject(error: Error)
+    func sessionReject(error: any Error)
     func sessionApproval(payload: WCPairingProposal) async throws -> WalletId
     func signMessage(payload: SignMessagePayload) async throws -> String
     

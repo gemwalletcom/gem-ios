@@ -5,6 +5,6 @@ import BigInt
 
 enum NodeStatus {
     case result(blockNumber: BigInt, latency: Latency)
-    case error(error: Error)
+    case error(error: any Error)
     case none
 }

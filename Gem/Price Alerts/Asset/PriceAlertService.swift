@@ -8,7 +8,7 @@ import Primitives
 struct PriceAlertService {
 
     private let store: PriceAlertStore
-    private let apiService: GemAPIPriceAlertService
+    private let apiService: any GemAPIPriceAlertService
     private let deviceService: DeviceService
     private let preferences: Preferences
     private let securePreferences: SecurePreferences
@@ -16,7 +16,7 @@ struct PriceAlertService {
 
     init(
         store: PriceAlertStore,
-        apiService: GemAPIPriceAlertService = GemAPIService(),
+        apiService: any GemAPIPriceAlertService = GemAPIService(),
         deviceService: DeviceService,
         preferences: Preferences = Preferences.standard,
         securePreferences: SecurePreferences = SecurePreferences.standard

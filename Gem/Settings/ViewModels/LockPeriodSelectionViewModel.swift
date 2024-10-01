@@ -5,11 +5,11 @@ import Keystore
 
 @Observable
 class LockPeriodSelectionViewModel {
-    private let service: BiometryAuthenticatable
+    private let service: any BiometryAuthenticatable
 
     var selectedPeriod: LockPeriod
 
-    init(service: BiometryAuthenticatable) {
+    init(service: any BiometryAuthenticatable) {
         self.service = service
         self.selectedPeriod = service.lockPeriod ?? .immediate
     }

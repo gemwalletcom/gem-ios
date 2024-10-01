@@ -12,7 +12,7 @@ class OnstartAsyncService {
     let nodeStore: NodeStore
     let keystore: any Keystore
     let preferences: Preferences
-    let configService: GemAPIConfigService = GemAPIService()
+    let configService: any GemAPIConfigService = GemAPIService()
     let service: ImportAssetsService
     let subscriptionService: SubscriptionService
     let deviceService: DeviceService

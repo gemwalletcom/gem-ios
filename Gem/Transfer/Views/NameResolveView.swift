@@ -30,8 +30,8 @@ struct NameRecordView: View {
     @Binding var address: String
     let debounceTimeout = Duration.seconds(1)
     
-    @State var nameResolveTask: Task<NameRecord, Error>?
-    
+    @State var nameResolveTask: Task<NameRecord, any Error>?
+
     var body: some View {
         VStack(alignment: .center, spacing: 0) {
             switch state {

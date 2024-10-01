@@ -9,7 +9,7 @@ import Combine
 
 final class DeviceService {
 
-    let deviceProvider: GemAPIDeviceService
+    let deviceProvider: any GemAPIDeviceService
     let preferences = Preferences()
     let securePreferences = SecurePreferences()
     let subscriptionsService: SubscriptionService
@@ -18,7 +18,7 @@ final class DeviceService {
     private var subscriptionsObserverAnyCancellable: AnyCancellable?
 
     init(
-        deviceProvider: GemAPIDeviceService = GemAPIService(),
+        deviceProvider: any GemAPIDeviceService = GemAPIService(),
         subscriptionsService: SubscriptionService,
         walletStore: WalletStore
     ) {
