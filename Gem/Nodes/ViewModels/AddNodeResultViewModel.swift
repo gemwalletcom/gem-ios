@@ -5,7 +5,7 @@ import Primitives
 import Style
 
 struct AddNodeResultViewModel {
-    static var valueFormatter = ValueFormatter.full_US
+    static let valueFormatter = ValueFormatter.full_US
 
     private let addNodeResult: AddNodeResult
 
