@@ -219,7 +219,7 @@ extension CosmosService: ChainBalanceable {
 extension CosmosService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         //TODO: Estimate it
-        let feeValue: BigInt = getFee(chain: chain, type: input.type)
+        let fee = getFee(chain: chain, type: input.type)
         let gasLimit: BigInt = {
             switch input.type.transactionType {
             case .transfer: BigInt(200_000)
@@ -233,7 +233,7 @@ extension CosmosService: ChainFeeCalculateable {
         }()
 
         return Fee(
-            fee: feeValue,
+            fee: fee,
             gasPriceType: .regular(gasPrice: 1),
             gasLimit: gasLimit,
             options: getFeeOptions(chain: chain, type: input.type),

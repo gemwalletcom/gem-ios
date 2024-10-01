@@ -40,9 +40,13 @@ public struct Fee {
     }
     
     public var totalFee: BigInt {
-        return fee + options.map { $0.value }.reduce(0, +)
+        return fee + optionsFee
     }
-    
+
+    public var optionsFee: BigInt {
+        options.map { $0.value }.reduce(0, +)
+    }
+
     public func withOptions(_ feeOptions: [FeeOption]) -> Fee {
         return Fee(
             fee: fee + options.filter { feeOptions.contains($0.key) }.map { $0.value }.reduce(0, +),
