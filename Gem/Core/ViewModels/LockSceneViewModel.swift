@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Keystore
-import Store
 
 @Observable
 class LockSceneViewModel {
@@ -32,6 +31,15 @@ class LockSceneViewModel {
     var shouldShowLockScreen: Bool { isLocked || showPlaceholderPreview }
 
     var lockPeriod: LockPeriod { service.lockPeriod ?? .immediate }
+
+    var isPrivacyLockEnabled: Bool { service.isPrivacyLockEnabled }
+    var isPrivacyLockVisible: Bool {
+        guard isAutoLockEnabled else { return false }
+        guard isPrivacyLockEnabled else {
+            return state == .lockedCanceled
+        }
+        return true
+    }
 }
 
 // MARK: - Business Logic

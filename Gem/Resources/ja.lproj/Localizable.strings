@@ -270,7 +270,8 @@
 "lock.one_hour" = "1 時間";
 "lock.six_hours" = "6 時間";
 "lock.require_authentication" = "ロック時間";
-"lock.Unlock" = "ロック解除";
+"lock.unlock" = "ロック解除";
 "price_alerts.get_notified_explain_message" = "お気に入りの暗号資産の価格が大幅に変動したときに通知を受け取ります。";
 "price_alerts.empty_state.message" = "価格アラートはまだ追加されていません。";
 "assets.select_asset" = "資産を選択";
+"lock.privacy_lock" = "Privacy Lock";

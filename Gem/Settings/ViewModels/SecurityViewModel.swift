@@ -3,7 +3,6 @@
 import Foundation
 import Keystore
 import Components
-import Store
 
 @Observable
 class SecurityViewModel {
@@ -13,17 +12,21 @@ class SecurityViewModel {
 
     var isPresentingError: String?
     var isEnabled: Bool
+    var isPrivacyLockEnabled: Bool
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
     init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
-        self.isEnabled = service.isAuthenticationEnabled
+
         self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)
+        self.isEnabled = service.isAuthenticationEnabled
+        self.isPrivacyLockEnabled = service.isPrivacyLockEnabled
     }
 
     var title: String { Localized.Settings.security }
     var errorTitle: String { Localized.Errors.errorOccured }
+    var privacyLockTitle: String { Localized.Lock.privacyLock }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {
@@ -48,6 +51,16 @@ extension SecurityViewModel {
         } catch {
             isPresentingError = error.localizedDescription
             isEnabled.toggle()
+        }
+    }
+
+    func togglePrivacyLock() {
+        guard isPrivacyLockEnabled != service.isPrivacyLockEnabled else { return }
+        do {
+            try service.togglePrivacyLock(enbaled: isPrivacyLockEnabled)
+        } catch {
+            isPresentingError = error.localizedDescription
+            isPrivacyLockEnabled.toggle()
         }
     }
 }

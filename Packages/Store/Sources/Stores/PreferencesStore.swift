@@ -69,7 +69,7 @@ public class PreferencesStore {
 
     @UserDefault(defaults: .standard, key: "is_developer_enabled", defaultValue: false)
     public var isDeveloperEnabled: Bool
-    
+
     public func incrementLaunchesCount() {
         launchesCount = launchesCount + 1
     }
