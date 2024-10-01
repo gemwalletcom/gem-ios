@@ -141,7 +141,7 @@ extension MainTabView {
             case .buyAsset(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
                 navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
-            case .swapAsset(let fromAssetId, let toAssetId):
+            case .swapAsset(_, _):
                 //let fromAsset = try walletsService.assetsService.getAsset(for: fromAssetId)
                 //let toAsset = try walletsService.assetsService.getAsset(for: toAssetId)
                 //TODO:
