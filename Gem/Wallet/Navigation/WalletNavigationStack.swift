@@ -4,35 +4,40 @@ import SwiftUI
 import Primitives
 
 struct WalletNavigationStack: View {
-    
-    @State private var isWalletsPresented = false
-    @State private var isPresentingCreateWalletSheet = false
-    @State private var isPresentingImportWalletSheet = false
-    @State private var isPresentingAssetSelectType: SelectAssetInput?
-
     @Environment(\.keystore) private var keystore
     @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.navigationState) private var navigationState
+
+    @State private var isWalletsPresented = false
+    @State private var isPresentingCreateWalletSheet = false
+    @State private var isPresentingImportWalletSheet = false
+    @State private var isPresentingAssetSelectType: SelectAssetInput?
+    @State private var isPresentingSelectType: SelectAssetType?
 
     let model: WalletSceneViewModel
-    @Binding var navigationPath: NavigationPath
-    @State private var navigationPathSelect = NavigationPath()
+    @State private var navigationPathSelectType = NavigationPath()
 
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            WalletScene(model: model)
+        @Bindable var navigationState = navigationState
+        NavigationStack(path: $navigationState.wallet) {
+            WalletScene(
+                model: model,
+                isPresentingSelectType: $isPresentingSelectType
+            )
             .sheet(isPresented: $isWalletsPresented) {
                 WalletsNavigationStack()
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) { asset in
+                @Bindable var navigationState = navigationState
                 AssetNavigationView(
                     wallet: model.wallet,
                     assetId: asset.asset.id,
                     isPresentingAssetSelectType: $isPresentingAssetSelectType,
-                    navigationPath: $navigationPath
+                    navigationPath: $navigationState.wallet
                 )
             }
             .navigationDestination(for: TransactionExtended.self) { transaction in
@@ -52,14 +57,25 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
+            .sheet(item: $isPresentingSelectType) { value in
+                SelectAssetSceneNavigationStack(
+                    model: SelectAssetViewModel(
+                        wallet: model.wallet,
+                        keystore: keystore,
+                        selectType: value,
+                        assetsService: walletsService.assetsService,
+                        walletsService: walletsService
+                    ),
+                    navigationPath: $navigationPathSelectType
+                )
+            }
             .sheet(item: $isPresentingAssetSelectType) { selectType in
                 NavigationStack {
                     switch selectType.type {
                     case .send:
                         AmountNavigationView(
                             input: AmountInput(type: .transfer, asset: selectType.asset),
-                            wallet: model.wallet,
-                            navigationPath: $navigationPathSelect
+                            wallet: model.wallet
                         )
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {

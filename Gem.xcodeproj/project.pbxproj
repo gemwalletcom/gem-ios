@@ -1440,7 +1440,6 @@
 				C3CF3B9C29AED8C400E96586 /* HeaderButtonType.swift */,
 				C3CF3BD129B9744400E96586 /* WalletImportError.swift */,
 				C3A7CB9D29D64CE500431341 /* TransferError.swift */,
-				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				C3D1C4F12A357AC3006E8EEA /* CopyType.swift */,
 				C37028992A9AA1DF009AE123 /* HeaderButton.swift */,
 			);
@@ -1911,6 +1910,7 @@
 		D85620292AAB89B600D65D81 /* Types */ = {
 			isa = PBXGroup;
 			children = (
+				C36679092A0B7E5800F1D74D /* Environment.swift */,
 				83F7ED072C99A87A00A6A035 /* LockSceneState.swift */,
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
 				D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */,

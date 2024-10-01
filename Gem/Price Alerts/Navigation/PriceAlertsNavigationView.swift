@@ -14,6 +14,7 @@ struct PriceAlertsNavigationView: View {
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var isPresentingAddAsset: Bool = false
+    @State private var assetPriceAlertsNavigationPath = NavigationPath()
 
     let model: PriceAlertsViewModel
 
@@ -44,7 +45,8 @@ struct PriceAlertsNavigationView: View {
                     selectType: .priceAlert,
                     assetsService: assetsService,
                     walletsService: walletsService
-                )
+                ),
+                navigationPath: $assetPriceAlertsNavigationPath
             )
         }
     }

@@ -7,6 +7,12 @@ import Store
 import Keystore
 import GemstonePrimitives
 
+extension NavigationStateManager: EnvironmentKey {
+    public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
+}
+
+// TODO: - Enviroment key add as extensions
+
 struct NodeServiceKey: EnvironmentKey {
     static var defaultValue: NodeService { NodeService.main }
 }
@@ -58,7 +64,6 @@ struct BannerSetupServiceKey: EnvironmentKey {
     static var defaultValue: BannerSetupService { BannerSetupService(store: .main) }
 }
 
-
 struct TransactionsServiceKey: EnvironmentKey {
     static var defaultValue: TransactionsService { TransactionsService.main }
 }
@@ -101,6 +106,11 @@ extension EnvironmentValues {
     var keystore: any Keystore {
         get { self[KeystoreKey.self] }
         set { self[KeystoreKey.self] = newValue }
+    }
+
+    var navigationState: NavigationStateManager {
+        get { self[NavigationStateManager.self] }
+        set { self[NavigationStateManager.self] = newValue }
     }
 
     var walletService: WalletService {

@@ -13,7 +13,6 @@ import GemstonePrimitives
 struct WalletCoordinator: View {
     let db: DB
 
-    @State var navigationStateManager: NavigationStateManagable
     @ObservedObject var keystore: LocalKeystore = .main
 
     let assetStore: AssetStore
@@ -50,6 +49,7 @@ struct WalletCoordinator: View {
     
     let preferences = Preferences()
     let onstartService: OnstartAsyncService
+    let navigationState: NavigationStateManager = NavigationStateManager.defaultValue
 
     @State var isPresentingError: String? = .none
     @State private var updateAvailableAlertSheetMessage: String? = .none
@@ -145,16 +145,13 @@ struct WalletCoordinator: View {
             bannerSetupService: bannerSetupService
         )
         self.deviceService.observer()
-
-        _navigationStateManager = State(initialValue: NavigationStateManager(initialSelecedTab: .wallet))
     }
     
     var body: some View {
         VStack {
             if let currentWallet = keystore.currentWallet {
                 MainTabView(
-                    model: .init(wallet: currentWallet),
-                    navigationStateManager: $navigationStateManager
+                    model: .init(wallet: currentWallet)
                 )
                 .tint(Colors.black)
                 .alert(Localized.UpdateApp.title, isPresented: $updateAvailableAlertSheetMessage.mappedToBool()) {
@@ -178,8 +175,8 @@ struct WalletCoordinator: View {
                 .environment(\.balanceService, balanceService)
                 .environment(\.priceAlertService, priceAlertService)
                 .environment(\.notificationService, notificationService)
-
                 .environment(\.chainServiceFactory, chainServiceFactory)
+                .environment(\.navigationState, navigationState)
             } else {
                 WelcomeScene(model: WelcomeViewModel(keystore: keystore))
             }

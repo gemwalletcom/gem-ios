@@ -4,14 +4,7 @@ import SwiftUI
 import Primitives
 
 struct SettingsNavigationStack: View {
-    let walletId: WalletId
-
-    @State private var isWalletsPresented = false
-
-    @Binding var navigationPath: NavigationPath
-
-    @ObservedObject var currencyModel: CurrencySceneViewModel
-    
+    @Environment(\.navigationState) private var navigationState
     @Environment(\.deviceService) private var deviceService
     @Environment(\.subscriptionService) private var subscriptionService
     @Environment(\.transactionsService) private var transactionsService
@@ -23,8 +16,14 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
 
+    @State private var isWalletsPresented = false
+    @ObservedObject var currencyModel: CurrencySceneViewModel
+
+    let walletId: WalletId
+
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        @Bindable var navigationState = navigationState
+        NavigationStack(path: $navigationState.settings) {
             SettingsScene(
                 model: SettingsViewModel(
                     walletId: walletId,
@@ -90,7 +89,7 @@ struct SettingsNavigationStack: View {
             }
         }
         .onChange(of: currencyModel.currency) { oldValue, newValue in
-            navigationPath.removeLast()
+            navigationState.settings.removeLast()
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)
     }

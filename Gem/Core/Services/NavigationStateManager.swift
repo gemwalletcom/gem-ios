@@ -52,14 +52,10 @@ extension NavigationStateManager {
             guard !wallet.isEmpty else { return }
             wallet.removeLast(wallet.count)
         case .activity:
-            guard !activity.isEmpty else {
-                return
-            }
+            guard !activity.isEmpty else { return }
             activity.removeLast(activity.count)
         case .settings:
-            guard !settings.isEmpty else {
-                return
-            }
+            guard !settings.isEmpty else { return }
             settings.removeLast(settings.count)
         }
     }

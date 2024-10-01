@@ -22,16 +22,13 @@ struct SelectAssetScene: View {
     private var assets: [AssetData]
 
     @State private var model: SelectAssetViewModel
-    @Binding var navigationPath: NavigationPath
 
     init(
         model: SelectAssetViewModel,
-        isPresentingAddToken: Binding<Bool>,
-        navigationPath: Binding<NavigationPath>
+        isPresentingAddToken: Binding<Bool>
     ) {
         _model = State(wrappedValue: model)
         _isPresentingAddToken = isPresentingAddToken
-        _navigationPath = navigationPath
 
         let request = Binding {
             model.filterModel.assetsRequest
@@ -144,8 +141,7 @@ private struct ListAssetItemSelectionView: View {
                 assetsService: .main,
                 walletsService: .main
             ),
-            isPresentingAddToken: $present,
-            navigationPath: Binding.constant(NavigationPath())
+            isPresentingAddToken: $present
         )
     }
 }
