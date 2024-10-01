@@ -5,7 +5,7 @@ import BigInt
 
 public enum FeeOption {
     case tokenAccountCreation
-    case outboundNativeReserved
+    case outboundNativeReserved //Rune specific: https://docs.thorchain.org/how-it-works/fees#fee-process
 }
 
 public typealias FeeOptionMap = [FeeOption: BigInt]

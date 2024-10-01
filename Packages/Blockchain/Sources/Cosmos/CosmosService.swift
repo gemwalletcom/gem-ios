@@ -116,7 +116,7 @@ extension CosmosService {
             switch type {
             case let .transfer(asset):
                 switch asset.id.type {
-                case .native: [.outboundNativeReserved: 2_000_000]
+                case .native: [.outboundNativeReserved: getFee(chain: chain, type: .transfer(asset))]
                 case .token: [:]
                 }
             case .swap, .stake, .generic: [:]
