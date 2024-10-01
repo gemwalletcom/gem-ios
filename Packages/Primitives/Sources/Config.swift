@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct ConfigAppVersion: Codable {
+public struct ConfigAppVersion: Codable, Sendable {
 	public let production: String
 	public let beta: String
 	public let alpha: String
@@ -16,7 +16,7 @@ public struct ConfigAppVersion: Codable {
 	}
 }
 
-public struct ConfigAndroidApp: Codable {
+public struct ConfigAndroidApp: Codable, Sendable {
 	public let version: ConfigAppVersion
 
 	public init(version: ConfigAppVersion) {
@@ -24,7 +24,7 @@ public struct ConfigAndroidApp: Codable {
 	}
 }
 
-public struct ConfigIOSApp: Codable {
+public struct ConfigIOSApp: Codable, Sendable {
 	public let version: ConfigAppVersion
 
 	public init(version: ConfigAppVersion) {
@@ -32,7 +32,7 @@ public struct ConfigIOSApp: Codable {
 	}
 }
 
-public struct ConfigApp: Codable {
+public struct ConfigApp: Codable, Sendable {
 	public let ios: ConfigIOSApp
 	public let android: ConfigAndroidApp
 
@@ -42,7 +42,7 @@ public struct ConfigApp: Codable {
 	}
 }
 
-public struct Release: Codable {
+public struct Release: Codable, Sendable {
 	public let version: String
 	public let store: PlatformStore
 	public let upgradeRequired: Bool
@@ -54,7 +54,7 @@ public struct Release: Codable {
 	}
 }
 
-public struct ConfigVersions: Codable {
+public struct ConfigVersions: Codable, Sendable {
 	public let fiatAssets: Int32
 	public let swapAssets: Int32
 
@@ -64,7 +64,7 @@ public struct ConfigVersions: Codable {
 	}
 }
 
-public struct ConfigResponse: Codable {
+public struct ConfigResponse: Codable, Sendable {
 	public let app: ConfigApp
 	public let releases: [Release]
 	public let versions: ConfigVersions

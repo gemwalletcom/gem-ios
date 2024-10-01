@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct BitcoinBlock: Codable {
+public struct BitcoinBlock: Codable, Sendable {
 	public let previousBlockHash: String?
 
 	public init(previousBlockHash: String?) {

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct CosmosAccount: Codable {
+public struct CosmosAccount: Codable, Sendable {
 	public let account_number: String
 	public let sequence: String
 
@@ -14,7 +14,7 @@ public struct CosmosAccount: Codable {
 	}
 }
 
-public struct CosmosAccountResponse<T: Codable>: Codable {
+public struct CosmosAccountResponse<T: Codable>: Codable, Sendable {
 	public let account: T
 
 	public init(account: T) {
@@ -22,7 +22,7 @@ public struct CosmosAccountResponse<T: Codable>: Codable {
 	}
 }
 
-public struct CosmosInjectiveAccount: Codable {
+public struct CosmosInjectiveAccount: Codable, Sendable {
 	public let base_account: CosmosAccount
 
 	public init(base_account: CosmosAccount) {

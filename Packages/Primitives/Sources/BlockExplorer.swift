@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct BlockExplorerLink: Codable, Equatable, Hashable {
+public struct BlockExplorerLink: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let link: String
 

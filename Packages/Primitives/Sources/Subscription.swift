@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Subscription: Codable, Equatable, Hashable {
+public struct Subscription: Codable, Equatable, Hashable, Sendable {
 	public let wallet_index: Int32
 	public let chain: Chain
 	public let address: String

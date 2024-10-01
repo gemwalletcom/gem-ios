@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SwapApprovalData: Codable, Equatable, Hashable {
+public struct SwapApprovalData: Codable, Equatable, Hashable, Sendable {
 	public let spender: String
 
 	public init(spender: String) {
@@ -12,7 +12,7 @@ public struct SwapApprovalData: Codable, Equatable, Hashable {
 	}
 }
 
-public struct SwapProvider: Codable, Equatable, Hashable {
+public struct SwapProvider: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 
 	public init(name: String) {
@@ -20,7 +20,7 @@ public struct SwapProvider: Codable, Equatable, Hashable {
 	}
 }
 
-public struct SwapQuoteData: Codable, Equatable, Hashable {
+public struct SwapQuoteData: Codable, Equatable, Hashable, Sendable {
 	public let to: String
 	public let value: String
 	public let data: String
@@ -32,7 +32,7 @@ public struct SwapQuoteData: Codable, Equatable, Hashable {
 	}
 }
 
-public struct SwapQuote: Codable, Equatable, Hashable {
+public struct SwapQuote: Codable, Equatable, Hashable, Sendable {
 	public let chainType: ChainType
 	public let fromAmount: String
 	public let toAmount: String
@@ -52,7 +52,7 @@ public struct SwapQuote: Codable, Equatable, Hashable {
 	}
 }
 
-public struct SwapQuoteRequest: Codable {
+public struct SwapQuoteRequest: Codable, Sendable {
 	public let fromAsset: String
 	public let toAsset: String
 	public let walletAddress: String
@@ -70,7 +70,7 @@ public struct SwapQuoteRequest: Codable {
 	}
 }
 
-public struct SwapQuoteResult: Codable, Equatable {
+public struct SwapQuoteResult: Codable, Equatable, Sendable {
 	public let quote: SwapQuote
 
 	public init(quote: SwapQuote) {
@@ -78,7 +78,7 @@ public struct SwapQuoteResult: Codable, Equatable {
 	}
 }
 
-public enum SwapMode: String, Codable, Equatable {
+public enum SwapMode: String, Codable, Equatable, Sendable {
 	case exactIn = "exactin"
 	case exactOut = "exactout"
 }

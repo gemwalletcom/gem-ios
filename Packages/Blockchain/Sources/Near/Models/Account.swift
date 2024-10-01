@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct NearAccount: Codable {
+public struct NearAccount: Codable, Sendable {
 	public let amount: String
 
 	public init(amount: String) {
@@ -12,7 +12,7 @@ public struct NearAccount: Codable {
 	}
 }
 
-public struct NearAccountAccessKey: Codable {
+public struct NearAccountAccessKey: Codable, Sendable {
 	public let nonce: Int
 
 	public init(nonce: Int) {
@@ -20,7 +20,7 @@ public struct NearAccountAccessKey: Codable {
 	}
 }
 
-public struct NearBlockHeader: Codable {
+public struct NearBlockHeader: Codable, Sendable {
 	public let hash: String
 	public let height: Int
 
@@ -30,7 +30,7 @@ public struct NearBlockHeader: Codable {
 	}
 }
 
-public struct NearBlock: Codable {
+public struct NearBlock: Codable, Sendable {
 	public let header: NearBlockHeader
 
 	public init(header: NearBlockHeader) {
@@ -38,7 +38,7 @@ public struct NearBlock: Codable {
 	}
 }
 
-public struct NearBroadcastTransaction: Codable {
+public struct NearBroadcastTransaction: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {
@@ -46,7 +46,7 @@ public struct NearBroadcastTransaction: Codable {
 	}
 }
 
-public struct NearBroadcastResult: Codable {
+public struct NearBroadcastResult: Codable, Sendable {
 	public let final_execution_status: String
 	public let transaction: NearBroadcastTransaction
 
@@ -56,7 +56,7 @@ public struct NearBroadcastResult: Codable {
 	}
 }
 
-public struct NearError: Codable {
+public struct NearError: Codable, Sendable {
 	public let message: String
 	public let data: String?
 
@@ -66,7 +66,7 @@ public struct NearError: Codable {
 	}
 }
 
-public struct NearGasPrice: Codable {
+public struct NearGasPrice: Codable, Sendable {
 	public let gas_price: String
 
 	public init(gas_price: String) {
@@ -74,7 +74,7 @@ public struct NearGasPrice: Codable {
 	}
 }
 
-public struct NearGenesisConfig: Codable {
+public struct NearGenesisConfig: Codable, Sendable {
 	public let chain_id: String
 
 	public init(chain_id: String) {
@@ -82,7 +82,7 @@ public struct NearGenesisConfig: Codable {
 	}
 }
 
-public struct NearRPCError: Codable {
+public struct NearRPCError: Codable, Sendable {
 	public let error: NearError
 
 	public init(error: NearError) {

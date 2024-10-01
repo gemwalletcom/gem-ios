@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct UTXO: Codable {
+public struct UTXO: Codable, Sendable {
 	public let transaction_id: String
 	public let vout: Int32
 	public let value: String

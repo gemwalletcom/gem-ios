@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatBuyRequest: Codable {
+public struct FiatBuyRequest: Codable, Sendable {
 	public let assetId: String
 	public let fiatCurrency: String
 	public let fiatAmount: Double

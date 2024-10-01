@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaPrioritizationFee: Codable {
+public struct SolanaPrioritizationFee: Codable, Sendable {
 	public let prioritizationFee: Int32
 
 	public init(prioritizationFee: Int32) {

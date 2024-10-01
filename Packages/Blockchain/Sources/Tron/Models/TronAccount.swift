@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TronAccount: Codable {
+public struct TronAccount: Codable, Sendable {
 	public let balance: UInt64?
 	public let address: String?
 
@@ -14,7 +14,7 @@ public struct TronAccount: Codable {
 	}
 }
 
-public struct TronAccountRequest: Codable {
+public struct TronAccountRequest: Codable, Sendable {
 	public let address: String
 	public let visible: Bool
 
@@ -24,7 +24,7 @@ public struct TronAccountRequest: Codable {
 	}
 }
 
-public struct TronAccountUsage: Codable {
+public struct TronAccountUsage: Codable, Sendable {
 	public let freeNetUsed: Int32?
 	public let freeNetLimit: Int32?
 
@@ -34,7 +34,7 @@ public struct TronAccountUsage: Codable {
 	}
 }
 
-public struct TronEmptyAccount: Codable {
+public struct TronEmptyAccount: Codable, Sendable {
 	public let address: String?
 
 	public init(address: String?) {

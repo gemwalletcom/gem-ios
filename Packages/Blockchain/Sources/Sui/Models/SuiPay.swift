@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SuiAddStakeRequest: Codable {
+public struct SuiAddStakeRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let validatorAddress: String
 	public let coins: [String]
@@ -20,7 +20,7 @@ public struct SuiAddStakeRequest: Codable {
 	}
 }
 
-public struct SuiBatchRequest: Codable {
+public struct SuiBatchRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let gasBudget: String
 
@@ -30,7 +30,7 @@ public struct SuiBatchRequest: Codable {
 	}
 }
 
-public struct SuiBroadcastTransaction: Codable {
+public struct SuiBroadcastTransaction: Codable, Sendable {
 	public let digest: String
 
 	public init(digest: String) {
@@ -38,7 +38,7 @@ public struct SuiBroadcastTransaction: Codable {
 	}
 }
 
-public struct SuiCoinMetadata: Codable {
+public struct SuiCoinMetadata: Codable, Sendable {
 	public let decimals: Int32
 	public let name: String
 	public let symbol: String
@@ -50,7 +50,7 @@ public struct SuiCoinMetadata: Codable {
 	}
 }
 
-public struct SuiMoveCallRequest: Codable {
+public struct SuiMoveCallRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let objectId: String
 	public let module: String
@@ -68,7 +68,7 @@ public struct SuiMoveCallRequest: Codable {
 	}
 }
 
-public struct SuiPay: Codable {
+public struct SuiPay: Codable, Sendable {
 	public let txBytes: String
 
 	public init(txBytes: String) {
@@ -76,7 +76,7 @@ public struct SuiPay: Codable {
 	}
 }
 
-public struct SuiPayRequest: Codable {
+public struct SuiPayRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let recipientAddress: String
 	public let coins: [String]
@@ -94,7 +94,7 @@ public struct SuiPayRequest: Codable {
 	}
 }
 
-public struct SuiSplitCoinRequest: Codable {
+public struct SuiSplitCoinRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let coin: String
 	public let splitAmounts: [String]
@@ -108,7 +108,7 @@ public struct SuiSplitCoinRequest: Codable {
 	}
 }
 
-public struct SuiStake: Codable {
+public struct SuiStake: Codable, Sendable {
 	public let stakedSuiId: String
 	public let status: String
 	public let principal: String
@@ -126,7 +126,7 @@ public struct SuiStake: Codable {
 	}
 }
 
-public struct SuiStakeDelegation: Codable {
+public struct SuiStakeDelegation: Codable, Sendable {
 	public let validatorAddress: String
 	public let stakingPool: String
 	public let stakes: [SuiStake]
@@ -138,7 +138,7 @@ public struct SuiStakeDelegation: Codable {
 	}
 }
 
-public struct SuiSystemState: Codable {
+public struct SuiSystemState: Codable, Sendable {
 	public let epoch: String
 	public let epochStartTimestampMs: String
 	public let epochDurationMs: String
@@ -150,7 +150,7 @@ public struct SuiSystemState: Codable {
 	}
 }
 
-public struct SuiUnstakeRequest: Codable {
+public struct SuiUnstakeRequest: Codable, Sendable {
 	public let senderAddress: String
 	public let delegationId: String
 	public let gasBudget: String
@@ -162,7 +162,7 @@ public struct SuiUnstakeRequest: Codable {
 	}
 }
 
-public struct SuiValidator: Codable {
+public struct SuiValidator: Codable, Sendable {
 	public let address: String
 	public let apy: Double
 
@@ -172,7 +172,7 @@ public struct SuiValidator: Codable {
 	}
 }
 
-public struct SuiValidators: Codable {
+public struct SuiValidators: Codable, Sendable {
 	public let apys: [SuiValidator]
 
 	public init(apys: [SuiValidator]) {

@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum AssetSubtype: String, Codable, CaseIterable, Equatable {
+public enum AssetSubtype: String, Codable, CaseIterable, Equatable, Sendable {
 	case native = "NATIVE"
 	case token = "TOKEN"
 }
 
-public enum AssetType: String, Codable, CaseIterable, Equatable {
+public enum AssetType: String, Codable, CaseIterable, Equatable, Sendable {
 	case native = "NATIVE"
 	case erc20 = "ERC20"
 	case bep20 = "BEP20"

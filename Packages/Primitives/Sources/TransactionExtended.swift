@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TransactionExtended: Codable {
+public struct TransactionExtended: Codable, Sendable {
 	public let transaction: Transaction
 	public let asset: Asset
 	public let feeAsset: Asset

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AptosAccount: Codable {
+public struct AptosAccount: Codable, Sendable {
 	public let sequence_number: String
 
 	public init(sequence_number: String) {
@@ -12,7 +12,7 @@ public struct AptosAccount: Codable {
 	}
 }
 
-public struct AptosGasFee: Codable {
+public struct AptosGasFee: Codable, Sendable {
 	public let gas_estimate: Int32
 	public let prioritized_gas_estimate: Int32
 
@@ -22,7 +22,7 @@ public struct AptosGasFee: Codable {
 	}
 }
 
-public struct AptosLedger: Codable {
+public struct AptosLedger: Codable, Sendable {
 	public let chain_id: Int32
 	public let ledger_version: String
 
@@ -32,7 +32,7 @@ public struct AptosLedger: Codable {
 	}
 }
 
-public struct AptosResource<T: Codable>: Codable {
+public struct AptosResource<T: Codable>: Codable, Sendable {
 	public let type: String
 	public let data: T
 
@@ -42,7 +42,7 @@ public struct AptosResource<T: Codable>: Codable {
 	}
 }
 
-public struct AptosResourceCoin: Codable {
+public struct AptosResourceCoin: Codable, Sendable {
 	public let value: String
 
 	public init(value: String) {
@@ -50,7 +50,7 @@ public struct AptosResourceCoin: Codable {
 	}
 }
 
-public struct AptosResourceBalance: Codable {
+public struct AptosResourceBalance: Codable, Sendable {
 	public let coin: AptosResourceCoin
 
 	public init(coin: AptosResourceCoin) {
@@ -58,7 +58,7 @@ public struct AptosResourceBalance: Codable {
 	}
 }
 
-public struct AptosTransaction: Codable {
+public struct AptosTransaction: Codable, Sendable {
 	public let success: Bool
 
 	public init(success: Bool) {
@@ -66,7 +66,7 @@ public struct AptosTransaction: Codable {
 	}
 }
 
-public struct AptosTransactionBroacast: Codable {
+public struct AptosTransactionBroacast: Codable, Sendable {
 	public let hash: String
 
 	public init(hash: String) {

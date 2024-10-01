@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TronChainParameter: Codable {
+public struct TronChainParameter: Codable, Sendable {
 	public let key: String
 	public let value: Int64?
 
@@ -14,7 +14,7 @@ public struct TronChainParameter: Codable {
 	}
 }
 
-public struct TronChainParameters: Codable {
+public struct TronChainParameters: Codable, Sendable {
 	public let chainParameter: [TronChainParameter]
 
 	public init(chainParameter: [TronChainParameter]) {
@@ -22,7 +22,7 @@ public struct TronChainParameters: Codable {
 	}
 }
 
-public enum TronChainParameterKey: String, Codable, Equatable {
+public enum TronChainParameterKey: String, Codable, Equatable, Sendable {
 	case getCreateNewAccountFeeInSystemContract
 	case getCreateAccountFee
 	case getEnergyFee

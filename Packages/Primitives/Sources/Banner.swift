@@ -4,19 +4,19 @@
 
 import Foundation
 
-public enum BannerEvent: String, Codable, CaseIterable, Equatable {
+public enum BannerEvent: String, Codable, CaseIterable, Equatable, Sendable {
 	case stake
 	case accountActivation
 	case enableNotifications
 }
 
-public enum BannerState: String, Codable, CaseIterable, Equatable {
+public enum BannerState: String, Codable, CaseIterable, Equatable, Sendable {
 	case active
 	case cancelled
 	case alwaysActive
 }
 
-public struct Banner: Codable, Equatable {
+public struct Banner: Codable, Equatable, Sendable {
 	public let wallet: Wallet?
 	public let asset: Asset?
 	public let event: BannerEvent

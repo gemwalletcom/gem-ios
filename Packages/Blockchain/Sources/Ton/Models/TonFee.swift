@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonEstimateFee: Codable {
+public struct TonEstimateFee: Codable, Sendable {
 	public let address: String
 	public let body: String
 	public let ignore_chksig: Bool
@@ -16,7 +16,7 @@ public struct TonEstimateFee: Codable {
 	}
 }
 
-public struct TonFee: Codable {
+public struct TonFee: Codable, Sendable {
 	public let in_fwd_fee: Int32
 	public let storage_fee: Int32
 
@@ -26,7 +26,7 @@ public struct TonFee: Codable {
 	}
 }
 
-public struct TonFees: Codable {
+public struct TonFees: Codable, Sendable {
 	public let source_fees: TonFee
 
 	public init(source_fees: TonFee) {

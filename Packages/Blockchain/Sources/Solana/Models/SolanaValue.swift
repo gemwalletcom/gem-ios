@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaValue<T: Codable>: Codable {
+public struct SolanaValue<T: Codable>: Codable, Sendable {
 	public let value: T
 
 	public init(value: T) {

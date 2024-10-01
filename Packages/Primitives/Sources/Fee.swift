@@ -4,13 +4,13 @@
 
 import Foundation
 
-public enum FeePriority: String, Codable, CaseIterable, Equatable {
+public enum FeePriority: String, Codable, CaseIterable, Equatable, Sendable {
 	case slow
 	case normal
 	case fast
 }
 
-public enum FeeUnitType: String, Codable, CaseIterable, Equatable {
+public enum FeeUnitType: String, Codable, CaseIterable, Equatable, Sendable {
 	case satVb
 	case satB
 }

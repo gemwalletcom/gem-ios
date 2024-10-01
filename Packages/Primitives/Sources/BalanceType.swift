@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum BalanceType: String, Codable, CaseIterable, Equatable {
+public enum BalanceType: String, Codable, CaseIterable, Equatable, Sendable {
 	case available
 	case locked
 	case frozen

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct ScanAddress: Codable, Equatable {
+public struct ScanAddress: Codable, Equatable, Sendable {
 	public let name: String?
 	public let address: String
 	public let isVerified: Bool

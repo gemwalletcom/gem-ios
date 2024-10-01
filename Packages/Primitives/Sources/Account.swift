@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Account: Codable, Equatable, Hashable {
+public struct Account: Codable, Equatable, Hashable, Sendable {
 	public let chain: Chain
 	public let address: String
 	public let derivationPath: String

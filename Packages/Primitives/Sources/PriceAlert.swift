@@ -4,12 +4,12 @@
 
 import Foundation
 
-public enum PriceAlertDirection: String, Codable, Equatable, Hashable {
+public enum PriceAlertDirection: String, Codable, Equatable, Hashable, Sendable {
 	case up
 	case down
 }
 
-public struct PriceAlert: Codable, Equatable, Hashable {
+public struct PriceAlert: Codable, Equatable, Hashable, Sendable {
 	public let assetId: String
 	public let price: Double?
 	public let pricePercentChange: Double?
@@ -23,7 +23,7 @@ public struct PriceAlert: Codable, Equatable, Hashable {
 	}
 }
 
-public struct PriceAlertData: Codable, Equatable, Hashable {
+public struct PriceAlertData: Codable, Equatable, Hashable, Sendable {
 	public let asset: Asset
 	public let price: Price?
 	public let priceAlert: PriceAlert

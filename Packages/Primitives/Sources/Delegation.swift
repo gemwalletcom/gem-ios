@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum DelegationState: String, Codable, CaseIterable, Equatable {
+public enum DelegationState: String, Codable, CaseIterable, Equatable, Sendable {
 	case active
 	case pending
 	case undelegating

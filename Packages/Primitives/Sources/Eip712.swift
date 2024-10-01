@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct EIP712Domain: Codable, Equatable {
+public struct EIP712Domain: Codable, Equatable, Sendable {
 	public let name: String
 	public let version: String
 	public let chainId: UInt32
@@ -18,7 +18,7 @@ public struct EIP712Domain: Codable, Equatable {
 	}
 }
 
-public struct EIP712Type: Codable, Equatable {
+public struct EIP712Type: Codable, Equatable, Sendable {
 	public let name: String
 	public let type: String
 

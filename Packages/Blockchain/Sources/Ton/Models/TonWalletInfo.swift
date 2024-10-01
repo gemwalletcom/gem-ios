@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonResult<T: Codable>: Codable {
+public struct TonResult<T: Codable>: Codable, Sendable {
 	public let result: T
 
 	public init(result: T) {
@@ -12,7 +12,7 @@ public struct TonResult<T: Codable>: Codable {
 	}
 }
 
-public struct TonWalletInfo: Codable {
+public struct TonWalletInfo: Codable, Sendable {
 	public let seqno: Int32?
 	public let last_transaction_id: TonTransactionId
 

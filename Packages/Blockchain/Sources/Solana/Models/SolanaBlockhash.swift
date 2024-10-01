@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaBlockhash: Codable {
+public struct SolanaBlockhash: Codable, Sendable {
 	public let blockhash: String
 
 	public init(blockhash: String) {
@@ -12,7 +12,7 @@ public struct SolanaBlockhash: Codable {
 	}
 }
 
-public struct SolanaBlockhashResult: Codable {
+public struct SolanaBlockhashResult: Codable, Sendable {
 	public let value: SolanaBlockhash
 
 	public init(value: SolanaBlockhash) {

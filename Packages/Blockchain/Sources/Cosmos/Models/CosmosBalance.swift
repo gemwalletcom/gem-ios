@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct CosmosBalance: Codable {
+public struct CosmosBalance: Codable, Sendable {
 	public let denom: String
 	public let amount: String
 
@@ -14,7 +14,7 @@ public struct CosmosBalance: Codable {
 	}
 }
 
-public struct CosmosBalances: Codable {
+public struct CosmosBalances: Codable, Sendable {
 	public let balances: [CosmosBalance]
 
 	public init(balances: [CosmosBalance]) {
