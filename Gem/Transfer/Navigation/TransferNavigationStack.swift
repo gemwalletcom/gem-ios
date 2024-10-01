@@ -22,8 +22,7 @@ struct TransferNavigationStack: View {
         NavigationStack(path: $navigationPath) {
             AmountNavigationView(
                 input: input,
-                wallet: wallet,
-                navigationPath: $navigationPath
+                wallet: wallet
             )
         }
     }

@@ -37,14 +37,17 @@ struct WalletScene: View {
 
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
-    @State private var isPresentingSelectType: SelectAssetType? = nil
-    
+    @Binding var isPresentingSelectType: SelectAssetType?
+
     let model: WalletSceneViewModel
+//    @State private var selectAssetNavigationPath = NavigationPath()
 
     public init(
-        model: WalletSceneViewModel
+        model: WalletSceneViewModel,
+        isPresentingSelectType: Binding<SelectAssetType?>
     ) {
         self.model = model
+        _isPresentingSelectType = isPresentingSelectType
 
         try? model.setupWallet()
 
@@ -120,17 +123,6 @@ struct WalletScene: View {
         }
         .refreshable {
             await refreshable()
-        }
-        .sheet(item: $isPresentingSelectType) { value in
-            SelectAssetSceneNavigationStack(
-                model: SelectAssetViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    selectType: value,
-                    assetsService: assetsService,
-                    walletsService: walletsService
-                )
-            )
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
