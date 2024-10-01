@@ -8,8 +8,8 @@ public protocol NodeURLFetchable {
     func node(for chain: Chain) -> URL
 }
 
-public class ChainServiceFactory {
-    
+public final class ChainServiceFactory {
+
     let nodeProvider: NodeURLFetchable
     
     init(nodeProvider: NodeURLFetchable) {

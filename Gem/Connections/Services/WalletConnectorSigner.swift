@@ -8,7 +8,7 @@ import Primitives
 import BigInt
 import Gemstone
 
-public class WalletConnectorSigner: WalletConnectorSignable {
+public final class WalletConnectorSigner: WalletConnectorSignable {
     let store: ConnectionsStore
     let keystore: any Keystore
     var walletConnectorInteractor: WalletConnectorInteractable

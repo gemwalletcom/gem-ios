@@ -5,8 +5,8 @@ import Primitives
 
 public typealias Preferences = PreferencesStore
 
-public class PreferencesStore {
-    
+public final class PreferencesStore {
+
     private let defaults: UserDefaults
     
     public struct Keys {

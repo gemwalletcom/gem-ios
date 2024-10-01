@@ -19,7 +19,7 @@ public protocol BalancerUpdater {
     func updateBalance(walletId: String, asset: AssetId, address: String) async
 }
 
-public class BalanceService: BalancerUpdater {
+public final class BalanceService: BalancerUpdater {
     
     private let balanceStore: BalanceStore
     private let chainServiceFactory: ChainServiceFactory
