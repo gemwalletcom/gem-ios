@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct BitcoinFeeResult: Codable {
+public struct BitcoinFeeResult: Codable, Sendable {
 	public let result: String
 
 	public init(result: String) {

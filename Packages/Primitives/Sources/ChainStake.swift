@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum StakeChain: String, Codable, CaseIterable, Equatable {
+public enum StakeChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case cosmos
 	case osmosis
 	case injective

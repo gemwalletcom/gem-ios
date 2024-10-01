@@ -12,9 +12,9 @@ struct WalletsScene: View {
 
     @State private var isPresentingErrorMessage: String?
     @State private var showingDeleteAlert = false
-    
-    @State private var isPresentingCreateWalletSheet = false
-    @State private var isPresentingImportWalletSheet = false
+
+    @Binding private var isPresentingCreateWalletSheet: Bool
+    @Binding private var isPresentingImportWalletSheet: Bool
 
     @State var walletDelete: Wallet? = .none
 
@@ -27,11 +27,16 @@ struct WalletsScene: View {
     private var wallets: [Wallet]
 
     init(
-        model: WalletsViewModel
+        model: WalletsViewModel,
+        isPresentingCreateWalletSheet: Binding<Bool>,
+        isPresentingImportWalletSheet: Binding<Bool>
     ) {
         self.model = model
         _pinnedWallets = Query(WalletsRequest(isPinned: true))
         _wallets = Query(WalletsRequest(isPinned: false))
+        
+        _isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
+        _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
     var body: some View {
@@ -93,12 +98,6 @@ struct WalletsScene: View {
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
-        }
-        .sheet(isPresented: $isPresentingCreateWalletSheet) {
-            CreateWalletNavigationStack(isPresenting: $isPresentingCreateWalletSheet)
-        }
-        .sheet(isPresented: $isPresentingImportWalletSheet) {
-            ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
         }
         .confirmationDialog(
             Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
@@ -219,7 +218,9 @@ extension WalletsScene {
             model: .init(
                 navigationPath: Binding.constant(NavigationPath()),
                 walletService: .main
-            )
+            ),
+            isPresentingCreateWalletSheet: Binding.constant(false),
+            isPresentingImportWalletSheet: Binding.constant(false)
         )
         .navigationBarTitleDisplayMode(.inline)
     }

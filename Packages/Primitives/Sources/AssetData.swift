@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetAddress: Codable, Equatable, Hashable {
+public struct AssetAddress: Codable, Equatable, Hashable, Sendable {
 	public let asset: Asset
 	public let address: String
 
@@ -14,7 +14,7 @@ public struct AssetAddress: Codable, Equatable, Hashable {
 	}
 }
 
-public struct AssetData: Codable {
+public struct AssetData: Codable, Sendable {
 	public let asset: Asset
 	public let balance: Balance
 	public let account: Account

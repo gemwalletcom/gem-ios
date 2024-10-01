@@ -5,8 +5,8 @@ import Primitives
 
 public typealias Preferences = PreferencesStore
 
-public class PreferencesStore {
-    
+public final class PreferencesStore {
+
     private let defaults: UserDefaults
     
     public struct Keys {
@@ -69,7 +69,7 @@ public class PreferencesStore {
 
     @UserDefault(defaults: .standard, key: "is_developer_enabled", defaultValue: false)
     public var isDeveloperEnabled: Bool
-    
+
     public func incrementLaunchesCount() {
         launchesCount = launchesCount + 1
     }

@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct StakeValidator: Codable, Equatable, Hashable {
+public struct StakeValidator: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
 

@@ -36,18 +36,6 @@ struct TransactionsScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .navigationDestination(for: TransactionExtended.self) { transaction in
-            TransactionScene(
-                input: TransactionSceneInput(transactionId: transaction.id, walletId: model.walletId)
-            )
-        }
-        .navigationDestination(for: Scenes.Asset.self) {
-            AssetScene(
-                wallet: model.wallet,
-                input: AssetSceneInput(walletId: model.walletId, assetId: $0.asset.id),
-                isPresentingAssetSelectType: Binding.constant(.none)
-            )
-        }
         .onAppear {
             onAppear()
         }

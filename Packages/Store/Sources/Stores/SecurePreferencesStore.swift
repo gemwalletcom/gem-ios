@@ -6,8 +6,8 @@ import Primitives
 
 public typealias SecurePreferences = SecurePreferencesStore
 
-public class SecurePreferencesStore {
-    
+public final class SecurePreferencesStore {
+
     public static let standard = SecurePreferencesStore()
     
     let keychain: Keychain

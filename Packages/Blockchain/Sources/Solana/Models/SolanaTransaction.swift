@@ -4,11 +4,11 @@
 
 import Foundation
 
-public struct SolanaTransactionError: Codable {
+public struct SolanaTransactionError: Codable, Sendable {
 	public init() {}
 }
 
-public struct SolanaTransactionMeta: Codable {
+public struct SolanaTransactionMeta: Codable, Sendable {
 	public let err: SolanaTransactionError?
 
 	public init(err: SolanaTransactionError?) {
@@ -16,7 +16,7 @@ public struct SolanaTransactionMeta: Codable {
 	}
 }
 
-public struct SolanaTransaction: Codable {
+public struct SolanaTransaction: Codable, Sendable {
 	public let meta: SolanaTransactionMeta
 	public let slot: Int32
 

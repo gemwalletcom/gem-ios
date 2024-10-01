@@ -270,7 +270,8 @@
 "lock.one_hour" = "1 ชั่วโมง";
 "lock.six_hours" = "6 ชั่วโมง";
 "lock.require_authentication" = "Require authentication";
-"lock.Unlock" = "Unlock";
+"lock.unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "รับการแจ้งเตือนเมื่อมีการเปลี่ยนแปลงราคาที่สำคัญในสินทรัพย์ crypto ที่คุณชื่นชอบ";
 "price_alerts.empty_state.message" = "ยังไม่มีการเพิ่มการแจ้งเตือนราคา";
 "assets.select_asset" = "เลือกสินทรัพย์";
+"lock.privacy_lock" = "Privacy Lock";

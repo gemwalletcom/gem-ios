@@ -12,6 +12,9 @@ public protocol KeystorePassword {
     func enableAuthentication(_ enable: Bool, context: LAContext) throws
     func remove() throws
 
+    func getPrivacyLockStatus() throws -> PrivacyLockStatus?
+    func setPrivacyLockStatus(_ status: PrivacyLockStatus) throws
+
     func getAuthenticationLockPeriod() throws -> LockPeriod?
     func setAuthenticationLockPeriod(period: LockPeriod) throws
 }

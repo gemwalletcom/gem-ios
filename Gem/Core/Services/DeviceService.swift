@@ -7,8 +7,8 @@ import Store
 import UIKit
 import Combine
 
-class DeviceService {
-    
+final class DeviceService {
+
     let deviceProvider: GemAPIDeviceService
     let preferences = Preferences()
     let securePreferences = SecurePreferences()

@@ -339,12 +339,14 @@ internal enum Localized {
     internal static let oneHour = Localized.tr("Localizable", "lock.one_hour", fallback: "1 hour")
     /// 1 minute
     internal static let oneMinute = Localized.tr("Localizable", "lock.one_minute", fallback: "1 minute")
+    /// Privacy Lock
+    internal static let privacyLock = Localized.tr("Localizable", "lock.privacy_lock", fallback: "Privacy Lock")
     /// Require authentication
     internal static let requireAuthentication = Localized.tr("Localizable", "lock.require_authentication", fallback: "Require authentication")
     /// 6 hours
     internal static let sixHours = Localized.tr("Localizable", "lock.six_hours", fallback: "6 hours")
     /// Unlock
-    internal static let unlock = Localized.tr("Localizable", "lock.Unlock", fallback: "Unlock")
+    internal static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
   }
   internal enum Nodes {
     /// Gem Wallet Node

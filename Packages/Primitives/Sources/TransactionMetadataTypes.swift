@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TransactionSwapMetadata: Codable {
+public struct TransactionSwapMetadata: Codable, Sendable {
 	public let fromAsset: AssetId
 	public let fromValue: String
 	public let toAsset: AssetId

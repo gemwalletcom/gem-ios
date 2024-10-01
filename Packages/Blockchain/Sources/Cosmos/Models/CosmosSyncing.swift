@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct CosmosSyncing: Codable {
+public struct CosmosSyncing: Codable, Sendable {
 	public let syncing: Bool
 
 	public init(syncing: Bool) {

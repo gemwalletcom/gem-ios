@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct WCEthereumTransaction: Codable, Equatable, Hashable {
+public struct WCEthereumTransaction: Codable, Equatable, Hashable, Sendable {
 	public let chainId: String?
 	public let from: String
 	public let to: String
@@ -32,7 +32,7 @@ public struct WCEthereumTransaction: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WCSolanaSignMessage: Codable, Equatable, Hashable {
+public struct WCSolanaSignMessage: Codable, Equatable, Hashable, Sendable {
 	public let message: String
 	public let pubkey: String
 
@@ -42,7 +42,7 @@ public struct WCSolanaSignMessage: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WCSolanaSignMessageResult: Codable, Equatable, Hashable {
+public struct WCSolanaSignMessageResult: Codable, Equatable, Hashable, Sendable {
 	public let signature: String
 
 	public init(signature: String) {
@@ -50,7 +50,7 @@ public struct WCSolanaSignMessageResult: Codable, Equatable, Hashable {
 	}
 }
 
-public struct WCSolanaTransaction: Codable, Equatable, Hashable {
+public struct WCSolanaTransaction: Codable, Equatable, Hashable, Sendable {
 	public let transaction: String
 
 	public init(transaction: String) {
@@ -58,7 +58,7 @@ public struct WCSolanaTransaction: Codable, Equatable, Hashable {
 	}
 }
 
-public enum WallletConnectCAIP2: String, Codable {
+public enum WallletConnectCAIP2: String, Codable, Sendable {
 	case eip155
 	case solana
 	case cosmos

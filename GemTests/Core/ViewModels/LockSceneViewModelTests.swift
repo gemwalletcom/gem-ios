@@ -391,16 +391,22 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable {
     var lockPeriod: LockPeriod?
 
     var isAuthenticationEnabled: Bool
+    var isPrivacyLockEnabled: Bool
     var availableAuthentication: KeystoreAuthentication
 
     var shouldAuthenticateSucceed: Bool = true
     var errorToThrow: Error?
     var authenticateHandler: (() -> Void)?
 
-    init(isAuthEnabled: Bool, availableAuth: KeystoreAuthentication, lockPeriod: LockPeriod? = nil) {
+    init(isAuthEnabled: Bool,
+         availableAuth: KeystoreAuthentication,
+         lockPeriod: LockPeriod? = nil,
+         isPrivacyLockEnabled: Bool = false
+    ) {
         self.isAuthenticationEnabled = isAuthEnabled
         self.availableAuthentication = availableAuth
         self.lockPeriod = lockPeriod
+        self.isPrivacyLockEnabled = isPrivacyLockEnabled
     }
 
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws {
@@ -418,6 +424,10 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable {
     }
 
     func update(period: LockPeriod) throws {
-        self.lockPeriod = period
+        lockPeriod = period
+    }
+
+    func togglePrivacyLock(enbaled: Bool) throws {
+        isPrivacyLockEnabled = enbaled
     }
 }

@@ -11,10 +11,15 @@ struct WalletsNavigationStack: View {
 
     @State var navigationPath = NavigationPath()
 
+    @State private var isPresentingCreateWalletSheet = false
+    @State private var isPresentingImportWalletSheet = false
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             WalletsScene(
-                model: WalletsViewModel(navigationPath: $navigationPath, walletService: walletService)
+                model: WalletsViewModel(navigationPath: $navigationPath, walletService: walletService),
+                isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
+                isPresentingImportWalletSheet: $isPresentingImportWalletSheet
             )
             .navigationDestination(for: Scenes.WalletDetail.self) {
                 WalletDetailScene(
@@ -32,6 +37,12 @@ struct WalletsNavigationStack: View {
                         wallet: $0.wallet
                     )
                 )
+            }
+            .sheet(isPresented: $isPresentingCreateWalletSheet) {
+                CreateWalletNavigationStack(isPresenting: $isPresentingCreateWalletSheet)
+            }
+            .sheet(isPresented: $isPresentingImportWalletSheet) {
+                ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

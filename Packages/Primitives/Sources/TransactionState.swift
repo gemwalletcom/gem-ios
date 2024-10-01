@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum TransactionState: String, Codable, CaseIterable, Equatable {
+public enum TransactionState: String, Codable, CaseIterable, Equatable, Sendable {
 	case pending
 	case confirmed
 	case failed

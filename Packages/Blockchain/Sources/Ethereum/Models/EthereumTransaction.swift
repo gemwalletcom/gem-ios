@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct EthereumFeeHistory: Codable {
+public struct EthereumFeeHistory: Codable, Sendable {
 	public let reward: [[String]]
 	public let baseFeePerGas: [String]
 
@@ -14,7 +14,7 @@ public struct EthereumFeeHistory: Codable {
 	}
 }
 
-public struct EthereumTransactionReciept: Codable {
+public struct EthereumTransactionReciept: Codable, Sendable {
 	public let status: String
 	public let gasUsed: String
 	public let effectiveGasPrice: String

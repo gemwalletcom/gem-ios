@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetId: Codable, Equatable, Hashable {
+public struct AssetId: Codable, Equatable, Hashable, Sendable {
 	public let chain: Chain
 	public let tokenId: String?
 

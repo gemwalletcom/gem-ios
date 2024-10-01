@@ -270,7 +270,8 @@
 "lock.one_hour" = "שעה אחת";
 "lock.six_hours" = "6 שעות";
 "lock.require_authentication" = "Require authentication";
-"lock.Unlock" = "Unlock";
+"lock.unlock" = "Unlock";
 "price_alerts.get_notified_explain_message" = "קבל הודעה כאשר יש שינוי משמעותי במחיר בנכסי הקריפטו המועדפים עליך.";
 "price_alerts.empty_state.message" = "עדיין לא נוספו התראות מחיר.";
 "assets.select_asset" = "בחר נכס";
+"lock.privacy_lock" = "Privacy Lock";

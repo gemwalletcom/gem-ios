@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum DelegationState: String, Codable, CaseIterable, Equatable {
+public enum DelegationState: String, Codable, CaseIterable, Equatable, Sendable {
 	case active
 	case pending
 	case undelegating
@@ -14,7 +14,7 @@ public enum DelegationState: String, Codable, CaseIterable, Equatable {
 	case awaitingWithdrawal = "awaitingwithdrawal"
 }
 
-public struct DelegationBase: Codable, Equatable, Hashable {
+public struct DelegationBase: Codable, Equatable, Hashable, Sendable {
 	public let assetId: AssetId
 	public let state: DelegationState
 	public let balance: String
@@ -36,7 +36,7 @@ public struct DelegationBase: Codable, Equatable, Hashable {
 	}
 }
 
-public struct DelegationValidator: Codable, Equatable, Hashable {
+public struct DelegationValidator: Codable, Equatable, Hashable, Sendable {
 	public let chain: Chain
 	public let id: String
 	public let name: String
@@ -54,7 +54,7 @@ public struct DelegationValidator: Codable, Equatable, Hashable {
 	}
 }
 
-public struct Delegation: Codable, Equatable, Hashable {
+public struct Delegation: Codable, Equatable, Hashable, Sendable {
 	public let base: DelegationBase
 	public let validator: DelegationValidator
 	public let price: Price?

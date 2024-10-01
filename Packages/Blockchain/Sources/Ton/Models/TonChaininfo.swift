@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonBlock: Codable {
+public struct TonBlock: Codable, Sendable {
 	public let seqno: Int32
 	public let root_hash: String
 
@@ -14,7 +14,7 @@ public struct TonBlock: Codable {
 	}
 }
 
-public struct TonMasterchainInfo: Codable {
+public struct TonMasterchainInfo: Codable, Sendable {
 	public let last: TonBlock
 
 	public init(last: TonBlock) {

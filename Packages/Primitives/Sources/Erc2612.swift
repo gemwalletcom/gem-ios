@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct ERC2612Permit: Codable, Equatable {
+public struct ERC2612Permit: Codable, Equatable, Sendable {
 	public let owner: String
 	public let spender: String
 	public let value: String
@@ -20,7 +20,7 @@ public struct ERC2612Permit: Codable, Equatable {
 	}
 }
 
-public struct ERC2612Types: Codable, Equatable {
+public struct ERC2612Types: Codable, Equatable, Sendable {
 	public let EIP712Domain: [EIP712Type]
 	public let Permit: [EIP712Type]
 
@@ -30,7 +30,7 @@ public struct ERC2612Types: Codable, Equatable {
 	}
 }
 
-public struct ERC2612PermitMessage: Codable, Equatable {
+public struct ERC2612PermitMessage: Codable, Equatable, Sendable {
 	public let types: ERC2612Types
 	public let primaryType: String
 	public let domain: EIP712Domain

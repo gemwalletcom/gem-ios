@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct SolanaEpoch: Codable {
+public struct SolanaEpoch: Codable, Sendable {
 	public let epoch: Int32
 	public let slotIndex: Int32
 	public let slotsInEpoch: Int32
@@ -16,7 +16,7 @@ public struct SolanaEpoch: Codable {
 	}
 }
 
-public struct SolanaValidator: Codable {
+public struct SolanaValidator: Codable, Sendable {
 	public let votePubkey: String
 	public let commission: Int32
 	public let epochVoteAccount: Bool
@@ -28,7 +28,7 @@ public struct SolanaValidator: Codable {
 	}
 }
 
-public struct SolanaValidators: Codable {
+public struct SolanaValidators: Codable, Sendable {
 	public let current: [SolanaValidator]
 
 	public init(current: [SolanaValidator]) {

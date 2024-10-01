@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct AssetMarket: Codable {
+public struct AssetMarket: Codable, Sendable {
 	public let marketCap: Double?
 	public let marketCapRank: Int32?
 	public let totalVolume: Double?
@@ -22,7 +22,7 @@ public struct AssetMarket: Codable {
 	}
 }
 
-public struct AssetPrice: Codable {
+public struct AssetPrice: Codable, Sendable {
 	public let assetId: String
 	public let price: Double
 	public let priceChangePercentage24h: Double
@@ -34,7 +34,7 @@ public struct AssetPrice: Codable {
 	}
 }
 
-public struct AssetPrices: Codable {
+public struct AssetPrices: Codable, Sendable {
 	public let currency: String
 	public let prices: [AssetPrice]
 
@@ -44,7 +44,7 @@ public struct AssetPrices: Codable {
 	}
 }
 
-public struct AssetPricesRequest: Codable, Equatable {
+public struct AssetPricesRequest: Codable, Equatable, Sendable {
 	public let currency: String?
 	public let assetIds: [String]
 
@@ -54,7 +54,7 @@ public struct AssetPricesRequest: Codable, Equatable {
 	}
 }
 
-public struct ChartValue: Codable {
+public struct ChartValue: Codable, Sendable {
 	public let timestamp: Int32
 	public let value: Float
 
@@ -64,7 +64,7 @@ public struct ChartValue: Codable {
 	}
 }
 
-public struct Charts: Codable {
+public struct Charts: Codable, Sendable {
 	public let prices: [ChartValue]
 	public let marketCaps: [ChartValue]
 	public let totalVolumes: [ChartValue]
@@ -76,7 +76,7 @@ public struct Charts: Codable {
 	}
 }
 
-public enum ChartPeriod: String, Codable {
+public enum ChartPeriod: String, Codable, Sendable {
 	case hour
 	case day
 	case week
