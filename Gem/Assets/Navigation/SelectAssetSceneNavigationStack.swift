@@ -69,7 +69,8 @@ struct SelectAssetSceneNavigationStack: View {
                 case .send:
                     AmountNavigationView(
                         input: AmountInput(type: .transfer, asset: input.asset),
-                        wallet: model.wallet
+                        wallet: model.wallet,
+                        navigationPath: $navigationPath
                     )
                 case .receive:
                     ReceiveScene(

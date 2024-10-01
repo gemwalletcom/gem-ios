@@ -12,9 +12,6 @@ import GemstonePrimitives
 class StakeViewModel {
     let wallet: Wallet
 
-    var transferData: TransferData?
-    var amountInput: AmountInput?
-
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
     private let stakeService: StakeService
@@ -22,14 +19,21 @@ class StakeViewModel {
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
 
+    let onTransferAction: TransferDataAction
+    let onAmountInputAction: AmountInputAction
+
     init(
         wallet: Wallet,
         chain: Chain,
-        stakeService: StakeService
+        stakeService: StakeService,
+        onTransferAction: TransferDataAction,
+        onAmountInputAction: AmountInputAction
     ) {
         self.wallet = wallet
         self.chain = chain
         self.stakeService = stakeService
+        self.onTransferAction = onTransferAction
+        self.onAmountInputAction = onAmountInputAction
     }
 
     var title: String { Localized.Transfer.Stake.title }

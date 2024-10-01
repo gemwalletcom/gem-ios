@@ -15,9 +15,17 @@ struct AmountNavigationView: View {
     let input: AmountInput
     let wallet: Wallet
 
-    @State private var transferData: TransferData?
+    @Binding private var navigationPath: NavigationPath
 
-    @State private var isPresentingScanner: AmountScene.Field?
+    init(
+        input: AmountInput,
+        wallet: Wallet,
+        navigationPath: Binding<NavigationPath>
+    ) {
+        self.input = input
+        self.wallet = wallet
+        _navigationPath = navigationPath
+    }
 
     var body: some View {
         AmountScene(
@@ -25,10 +33,13 @@ struct AmountNavigationView: View {
                 input: input,
                 wallet: wallet,
                 walletsService: walletsService,
-                stakeService: stakeService
+                stakeService: stakeService,
+                onTransferAction: { data in
+                    navigationPath.append(data)
+                }
             )
         )
-        .navigationDestination(for: $transferData) { data in
+        .navigationDestination(for: TransferData.self) { data in
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: wallet,
@@ -40,12 +51,5 @@ struct AmountNavigationView: View {
                 )
             )
         }
-
-//        .sheet(item: $isPresentingScanner) { value in
-//            ScanQRCodeNavigationStack() {_ in 
-//                //onHandleScan($0, for: value)
-//            }
-//        }
-
     }
 }

@@ -240,7 +240,6 @@
 		D852CB0B2CA32B5A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
 		D852CB0C2CA32B5A004121D3 /* PriceAlertsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3842C9388C7006FABE8 /* PriceAlertsScene.swift */; };
 		D852CB0D2CA32B5A004121D3 /* LockSceneState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F7ED072C99A87A00A6A035 /* LockSceneState.swift */; };
-		D852CB0E2CA32B5A004121D3 /* TransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */; };
 		D852CB0F2CA32B5A004121D3 /* AmountNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */; };
 		D852CB102CA32B5A004121D3 /* ContactsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */; };
 		D852CB112CA32B5A004121D3 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
@@ -546,7 +545,6 @@
 		D8C4A35E2C8A7B14006FABE8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		D8C4A3652C8B9D4F006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
-		D8C4A36C2C8CDB86006FABE8 /* TransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */; };
 		D8C4A3722C8CE1EA006FABE8 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
 		D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */; };
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
@@ -897,7 +895,6 @@
 		D8C4A23E2C87CD09006FABE8 /* he */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = he; path = he.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8C4A23F2C87CD60006FABE8 /* id */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = id; path = id.lproj/Localizable.strings; sourceTree = "<group>"; };
 		D8C4A3632C8A7B14006FABE8 /* GemDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GemDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferNavigationStack.swift; sourceTree = "<group>"; };
 		D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationView.swift; sourceTree = "<group>"; };
@@ -1965,7 +1962,6 @@
 		D8C4A36D2C8CDB8B006FABE8 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D8C4A36B2C8CDB86006FABE8 /* TransferNavigationStack.swift */,
 				D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */,
 				D8C4A3772C8D4D97006FABE8 /* ContactsNavigationStack.swift */,
 			);
@@ -2573,7 +2569,6 @@
 				835644FD2C501C2200C6B4DB /* SwapError.swift in Sources */,
 				D848B5A32AE843B800814FB4 /* AssetTitleView.swift in Sources */,
 				D8C4A3782C8D4D97006FABE8 /* ContactsNavigationStack.swift in Sources */,
-				D8C4A36C2C8CDB86006FABE8 /* TransferNavigationStack.swift in Sources */,
 				C3549B4129C51BCE00B4BE01 /* BalanceViewModel.swift in Sources */,
 				D890F79F2C7D216400C26819 /* WalletService.swift in Sources */,
 				C3D1C4F42A38E2E7006E8EEA /* TransactionService.swift in Sources */,
@@ -2842,7 +2837,6 @@
 				D852CB0B2CA32B5A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */,
 				D852CB0C2CA32B5A004121D3 /* PriceAlertsScene.swift in Sources */,
 				D852CB0D2CA32B5A004121D3 /* LockSceneState.swift in Sources */,
-				D852CB0E2CA32B5A004121D3 /* TransferNavigationStack.swift in Sources */,
 				D852CB0F2CA32B5A004121D3 /* AmountNavigationView.swift in Sources */,
 				D852CB102CA32B5A004121D3 /* ContactsNavigationStack.swift in Sources */,
 				D852CB112CA32B5A004121D3 /* StakeNavigationView.swift in Sources */,
@@ -3315,7 +3309,7 @@
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
-				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -3380,7 +3374,7 @@
 				SWIFT_UPCOMING_FEATURE_IMPORT_OBJC_FORWARD_DECLS = YES;
 				SWIFT_UPCOMING_FEATURE_INFER_SENDABLE_FROM_CAPTURES = YES;
 				SWIFT_UPCOMING_FEATURE_ISOLATED_DEFAULT_VALUES = YES;
-				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = YES;
+				SWIFT_UPCOMING_FEATURE_REGION_BASED_ISOLATION = NO;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

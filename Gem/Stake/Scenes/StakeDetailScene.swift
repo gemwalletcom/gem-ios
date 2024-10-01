@@ -11,8 +11,6 @@ struct StakeDetailScene: View {
 
     let model: StakeDetailViewModel
 
-    @State var amountInput: AmountInput?
-
     var body: some View {
         List {
             Section {
@@ -30,26 +28,35 @@ struct StakeDetailScene: View {
                     ListItemView(title: Localized.Stake.rewards, subtitle: rewardsText)
                 }
             }
+            //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
                 Section(Localized.Common.manage) {
                     if model.isStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Stake.title)) {
-                            self.amountInput = try? model.stakeRecipientData()
+                            if let value = try? model.stakeRecipientData() {
+                                model.onAmountInputAction?(value)
+                            }
                         }
                     }
                     if model.isUnstakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Unstake.title)) {
-                            self.amountInput = try? model.unstakeRecipientData()
+                            if let value = try? model.unstakeRecipientData() {
+                                model.onAmountInputAction?(value)
+                            }
                         }
                     }
                     if model.isRedelegateAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Redelegate.title)) {
-                            self.amountInput = try? model.redelegateRecipientData()
+                            if let value = try? model.redelegateRecipientData() {
+                                model.onAmountInputAction?(value)
+                            }
                         }
                     }
                     if model.isWithdrawStakeAvailable {
                         NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Withdraw.title)) {
-                            self.amountInput = try? model.withdrawStakeRecipientData()
+                            if let value = try? model.withdrawStakeRecipientData() {
+                                model.onAmountInputAction?(value)
+                            }
                         }
                     }
                 }
@@ -57,16 +64,6 @@ struct StakeDetailScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .navigationDestination(for: $amountInput) {
-            AmountScene(
-                model: AmounViewModel(
-                    input: $0,
-                    wallet: model.wallet,
-                    walletsService: walletsService,
-                    stakeService: stakeService
-                )
-            )
-        }
     }
 }
 

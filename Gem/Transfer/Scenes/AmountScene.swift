@@ -26,15 +26,13 @@ struct AmountScene: View {
     }
     @FocusState private var focusedField: Field?
 
-    // next scene
-    @State var transferData: TransferData?
-    @State var delegation: DelegationValidator?
+    @State private var delegation: DelegationValidator?
 
-    @State var amount: String = ""
-    @State var address: String = ""
-    @State var memo: String = ""
+    @State private var amount: String = ""
+    @State private var address: String = ""
+    @State private var memo: String = ""
 
-    @State var nameResolveState: NameRecordState = .none
+    @State private var nameResolveState: NameRecordState = .none
 
     var body: some View {
         VStack {
@@ -183,19 +181,6 @@ struct AmountScene: View {
                 }.bold()
             }
         }
-        .navigationDestination(for: $transferData) {
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    data: $0,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.recipientData.asset.chain),
-                    walletsService: model.walletsService
-                )
-            )
-            .navigationBarTitleDisplayMode(.inline)
-        }
         .navigationDestination(for: $delegation) { value in
             StakeValidatorsScene(
                 model: StakeValidatorsViewModel(
@@ -276,7 +261,7 @@ extension AmountScene {
             let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
             let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
 
-            transferData = transfer
+            model.onTransferAction?(transfer)
         } catch {
             isPresentingErrorMessage = error.localizedDescription
         }

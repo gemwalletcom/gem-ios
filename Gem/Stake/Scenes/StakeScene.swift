@@ -40,7 +40,7 @@ struct StakeScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .navigationDestination(for: $model.transferData) {
+        .navigationDestination(for: TransferData.self) {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
@@ -50,23 +50,6 @@ struct StakeScene: View {
                         .service(for: $0.recipientData.asset.chain),
                     walletsService: walletsService
                 )
-            )
-        }
-        .navigationDestination(for: $model.amountInput) {
-            AmountScene(
-                model: AmounViewModel(
-                    input: $0,
-                    wallet: model.wallet,
-                    walletsService: walletsService,
-                    stakeService: stakeService
-                )
-            )
-        }
-        .navigationDestination(for: Delegation.self) { value in
-            StakeDetailScene(model: StakeDetailViewModel(
-                wallet: model.wallet,
-                model: StakeDelegationViewModel(delegation: value),
-                service: stakeService)
             )
         }
         .taskOnce {
@@ -150,11 +133,14 @@ extension StakeScene {
 
 extension StakeScene {
     private func onSelectStake() {
-        model.amountInput = try? model.stakeRecipientData()
+        if let value = try? model.stakeRecipientData() {
+            model.onAmountInputAction?(value)
+        }
     }
 
     private func onSelectDelegations() {
-        model.transferData = model.claimRewardsTransferData(delegations: delegations)
+        let transferData = model.claimRewardsTransferData(delegations: delegations)
+        model.onTransferAction?(transferData)
     }
 
     private func onOpenLockTimeURL() {
@@ -174,7 +160,7 @@ extension StakeScene {
 
 #Preview {
     return NavigationStack {
-        StakeScene(model: .init(wallet: .main, chain: .ethereum, stakeService: .main))
+        StakeScene(model: .init(wallet: .main, chain: .ethereum, stakeService: .main, onTransferAction: .none, onAmountInputAction: .none))
             .navigationBarTitleDisplayMode(.inline)
     }
 }

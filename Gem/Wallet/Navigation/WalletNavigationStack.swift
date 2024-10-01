@@ -18,6 +18,7 @@ struct WalletNavigationStack: View {
     @State private var isPresentingSelectType: SelectAssetType?
 
     let model: WalletSceneViewModel
+    @State private var navigationPathAssetSelectType = NavigationPath()
     @State private var navigationPathSelectType = NavigationPath()
 
     var body: some View {
@@ -45,9 +46,6 @@ struct WalletNavigationStack: View {
                     input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
                 )
             }
-            .navigationDestination(for: Scenes.Stake.self) {
-                StakeNavigationView(wallet: $0.wallet, assetId: $0.chain.assetId)
-            }
             .navigationDestination(for: Scenes.Price.self) { scene in
                 ChartScene(
                     model: ChartsViewModel(
@@ -70,12 +68,13 @@ struct WalletNavigationStack: View {
                 )
             }
             .sheet(item: $isPresentingAssetSelectType) { selectType in
-                NavigationStack {
+                NavigationStack(path: $navigationPathAssetSelectType) {
                     switch selectType.type {
                     case .send:
                         AmountNavigationView(
                             input: AmountInput(type: .transfer, asset: selectType.asset),
-                            wallet: model.wallet
+                            wallet: model.wallet,
+                            navigationPath: $navigationPathAssetSelectType
                         )
                         .toolbar {
                             ToolbarItem(placement: .navigationBarLeading) {
@@ -138,7 +137,8 @@ struct WalletNavigationStack: View {
                     case .stake:
                         StakeNavigationView(
                             wallet: model.wallet,
-                            assetId: selectType.asset.id
+                            assetId: selectType.asset.id,
+                            navigationPath: $navigationPathAssetSelectType
                         )
                         .navigationBarTitleDisplayMode(.inline)
                         .toolbar {

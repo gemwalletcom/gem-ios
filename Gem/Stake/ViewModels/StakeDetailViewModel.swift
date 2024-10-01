@@ -11,6 +11,20 @@ struct StakeDetailViewModel {
     let wallet: Wallet
     let model: StakeDelegationViewModel
     let service: StakeService
+    let onAmountInputAction: AmountInputAction
+
+    init(
+        wallet: Wallet,
+        model: StakeDelegationViewModel,
+        service: StakeService,
+        onAmountInputAction: AmountInputAction
+    ) {
+        self.wallet = wallet
+        self.model = model
+        self.service = service
+        self.onAmountInputAction = onAmountInputAction
+    }
+
 
     var title: String {
         return Localized.Transfer.Stake.title

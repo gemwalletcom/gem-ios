@@ -15,17 +15,20 @@ class AmounViewModel: ObservableObject {
     let wallet: Wallet
     let walletsService: WalletsService
     let stakeService: StakeService
+    let onTransferAction: TransferDataAction
 
     public init(
         input: AmountInput,
         wallet: Wallet,
         walletsService: WalletsService,
-        stakeService: StakeService
+        stakeService: StakeService,
+        onTransferAction: TransferDataAction
     ) {
         self.input = input
         self.wallet = wallet
         self.walletsService = walletsService
         self.stakeService = stakeService
+        self.onTransferAction = onTransferAction
 
         self.currentValidator = defaultValidator
     }

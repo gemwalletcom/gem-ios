@@ -3,6 +3,7 @@ import Primitives
 import BigInt
 
 typealias TransferDataAction = ((TransferData) -> Void)?
+typealias AmountInputAction = ((AmountInput) -> Void)?
 
 struct Recipient {
     let name: String?
