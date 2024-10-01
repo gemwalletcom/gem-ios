@@ -74,9 +74,7 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
-        .onChange(of: keystore.currentWalletId) {
-            navigationState.selectedTab = .wallet
-        }
+        .onChange(of: keystore.currentWalletId, onWalletIdChange)
         .onChange(of: notificationService.notifications) { _, newValue in
             onReceiveNotifications(newValue)
         }
@@ -146,6 +144,11 @@ extension MainTabView {
         } catch {
             NSLog("onReceiveNotification error \(error)")
         }
+    }
+
+    private func onWalletIdChange() {
+        navigationState.clearAll()
+        navigationState.selectedTab = .wallet
     }
 }
 

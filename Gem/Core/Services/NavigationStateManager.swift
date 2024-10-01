@@ -14,6 +14,7 @@ protocol NavigationStateManagable: Observation.Observable, AnyObject {
 
     func select(tab: TabItem)
     func backToRoot(tab: TabItem)
+    func clearAll()
 }
 
 // MARK: - NavigationStateManagable
@@ -58,5 +59,11 @@ extension NavigationStateManager {
             guard !settings.isEmpty else { return }
             settings.removeLast(settings.count)
         }
+    }
+
+    func clearAll() {
+        backToRoot(tab: .wallet)
+        backToRoot(tab: .activity)
+        backToRoot(tab: .settings)
     }
 }
