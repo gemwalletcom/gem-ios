@@ -45,8 +45,7 @@ struct PriceAlertsNavigationView: View {
                     selectType: .priceAlert,
                     assetsService: assetsService,
                     walletsService: walletsService
-                ),
-                navigationPath: $assetPriceAlertsNavigationPath
+                )
             )
         }
     }

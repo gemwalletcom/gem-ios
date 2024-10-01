@@ -10,21 +10,17 @@ struct AddAssetPriceAlertsNavigationStack: View {
     @State private var model: AddAssetPriceAlertsViewModel
     @State private var selectAssetModel: SelectAssetViewModel
 
-    @Binding private var navigationPath: NavigationPath
-
     init(
         model: AddAssetPriceAlertsViewModel,
-        selectAssetModel: SelectAssetViewModel,
-        navigationPath: Binding<NavigationPath>
+        selectAssetModel: SelectAssetViewModel
     ) {
         self.model = model
         self.selectAssetModel = selectAssetModel
-        _navigationPath = navigationPath
     }
 
     // TODO: - review logic with self.selectAssetModel.selectAssetAction
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack {
             SelectAssetScene(
                 model: selectAssetModel,
                 isPresentingAddToken: .constant(false)
