@@ -5,6 +5,7 @@ import BigInt
 
 public enum FeeOption {
     case tokenAccountCreation
+    case outboundNativeReserved
 }
 
 public typealias FeeOptionMap = [FeeOption: BigInt]

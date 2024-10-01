@@ -444,12 +444,15 @@ extension ConfirmTransferViewModel {
         let destinationAddress = transferData.recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
 
+        let isReserved = input.fee.options.contains(where: { $0.key == .outboundNativeReserved })
+        let networkFee = isReserved ? input.fee.fee : amount.networkFee
+
         let input = SignerInput(
             type: transferData.type,
             asset: transferData.recipientData.asset,
             value: amount.value,
             fee: Fee(
-                fee: amount.networkFee,
+                fee: networkFee,
                 gasPriceType: input.fee.gasPriceType,
                 gasLimit: input.fee.gasLimit,
                 options: input.fee.options,
