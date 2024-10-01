@@ -22,6 +22,7 @@ struct AddAssetPriceAlertsNavigationStack: View {
         _navigationPath = navigationPath
     }
 
+    // TODO: - review logic with self.selectAssetModel.selectAssetAction
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SelectAssetScene(

@@ -36,9 +36,8 @@ struct TransactionsScene: View {
                     .textStyle(.body)
             }
         }
-        .navigationTitle(model.title)
-        .onAppear {
-            fetch()
+        .task {
+            await fetch()
         }
     }
 }
