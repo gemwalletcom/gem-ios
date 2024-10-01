@@ -5,7 +5,6 @@ import SwiftUI
 import Primitives
 
 struct AddAssetPriceAlertsNavigationStack: View {
-
     @Environment(\.dismiss) private var dismiss
 
     @State private var model: AddAssetPriceAlertsViewModel
@@ -19,14 +18,12 @@ struct AddAssetPriceAlertsNavigationStack: View {
         self.selectAssetModel = selectAssetModel
     }
 
-    @State var navigationPath = NavigationPath()
-
+    // TODO: - review logic with self.selectAssetModel.selectAssetAction
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack {
             SelectAssetScene(
                 model: selectAssetModel,
-                isPresentingAddToken: .constant(false),
-                navigationPath: $navigationPath
+                isPresentingAddToken: .constant(false)
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -36,11 +33,11 @@ struct AddAssetPriceAlertsNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .task {
-            self.selectAssetModel.selectAssetAction = {
-                model.onSelectAsset($0)
-                dismiss()
+            .task {
+                self.selectAssetModel.selectAssetAction = {
+                    model.onSelectAsset($0)
+                    dismiss()
+                }
             }
         }
     }

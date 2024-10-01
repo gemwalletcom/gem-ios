@@ -15,8 +15,6 @@ struct AmountNavigationView: View {
     let input: AmountInput
     let wallet: Wallet
 
-    @Binding var navigationPath: NavigationPath
-
     @State private var transferData: TransferData?
 
     @State private var isPresentingScanner: AmountScene.Field?

@@ -8,19 +8,14 @@ import GRDBQuery
 import Store
 
 struct MainTabView: View {
-
-    let model: MainTabViewModel
-
     @Environment(\.keystore) private var keystore
     @Environment(\.balanceService) private var balanceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.notificationService) private var notificationService
+    @Environment(\.navigationState) private var navigationState
 
-    // TODO: - remove @Binding and use @Bindable instead prior to iOS 17, back when apple do a fix
-    // ref: - https://forums.swift.org/t/using-observation-in-a-protocol-throws-compiler-error/69090/6 if object explicity conforms protocol
-    // inject a protocol, by now swift can't process it
-    @Binding var navigationStateManager: NavigationStateManagable
+    let model: MainTabViewModel
 
     @Query<TransactionsCountRequest>
     private var transactions: Int
@@ -28,7 +23,7 @@ struct MainTabView: View {
     private var tabViewSelection: Binding<TabItem> {
         return Binding(
             get: {
-                navigationStateManager.selectedTab
+                navigationState.selectedTab
             },
             set: {
                 onSelect(tab: $0)
@@ -36,24 +31,20 @@ struct MainTabView: View {
         )
     }
 
-    init(
-        model: MainTabViewModel,
-        navigationStateManager: Binding<NavigationStateManagable>
-    ) {
+    init(model: MainTabViewModel) {
         self.model = model
         _transactions = Query(constant: model.transactionsCountRequest)
-        _navigationStateManager = navigationStateManager
     }
 
     var body: some View {
+        @Bindable var navigationState = navigationState
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
                 model: .init(
                     wallet: model.wallet,
                     balanceService: balanceService,
                     walletsService: walletsService
-                ),
-                navigationPath: $navigationStateManager.wallet
+                )
             )
             .tabItem {
                 tabItem(Localized.Wallet.title, Image(.tabWallet))
@@ -66,8 +57,7 @@ struct MainTabView: View {
                     wallet: model.wallet,
                     type: .all,
                     service: transactionsService
-                ),
-                navigationPath: $navigationStateManager.activity
+                )
             )
             .tabItem {
                 tabItem(Localized.Activity.title, Image(.tabActivity) )
@@ -76,9 +66,8 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                walletId: model.wallet.walletId,
-                navigationPath: $navigationStateManager.settings,
-                currencyModel: CurrencySceneViewModel()
+                currencyModel: CurrencySceneViewModel(),
+                walletId: model.wallet.walletId
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Image(.tabSettings))
@@ -86,7 +75,7 @@ struct MainTabView: View {
             .tag(TabItem.settings)
         }
         .onChange(of: keystore.currentWalletId) {
-            navigationStateManager.selectedTab = .wallet
+            navigationState.selectedTab = .wallet
         }
         .onChange(of: notificationService.notifications) { _, newValue in
             onReceiveNotifications(newValue)
@@ -114,7 +103,7 @@ extension MainTabView {
 
 extension MainTabView {
     private func onSelect(tab: TabItem) {
-        navigationStateManager.select(tab: tab)
+        navigationState.select(tab: tab)
     }
 
     private func onReceiveNotifications(_ notifications: [PushNotification]) {
@@ -134,13 +123,13 @@ extension MainTabView {
                 }
 
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
-                navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
+                navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .priceAlert(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
-                navigationStateManager.wallet.append(Scenes.Price(asset: asset))
+                navigationState.wallet.append(Scenes.Price(asset: asset))
             case .buyAsset(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
-                navigationStateManager.wallet.append(Scenes.Asset(asset: asset))
+                navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .swapAsset(_, _):
                 //let fromAsset = try walletsService.assetsService.getAsset(for: fromAssetId)
                 //let toAsset = try walletsService.assetsService.getAsset(for: toAssetId)
@@ -152,7 +141,7 @@ extension MainTabView {
             }
 
             if let selectTab = notification.selectTab {
-                navigationStateManager.selectedTab = selectTab
+                navigationState.selectedTab = selectTab
             }
         } catch {
             NSLog("onReceiveNotification error \(error)")
@@ -172,8 +161,5 @@ extension PushNotification {
 // MARK: - Previews
 
 #Preview {
-    @Previewable @State var navigationStateManager: NavigationStateManagable = NavigationStateManager(initialSelecedTab: .wallet)
-    return MainTabView(
-        model: MainTabViewModel(wallet: .main),
-        navigationStateManager: $navigationStateManager)
+    return MainTabView(model: MainTabViewModel(wallet: .main))
 }
