@@ -1,0 +1,13 @@
+diff --git a/Gem/Resources/Localized.swift b/Gem/Resources/Localized.swift
+index 3c5612e..89f2324 100644
+--- a/Gem/Resources/Localized.swift
++++ b/Gem/Resources/Localized.swift
+@@ -793,7 +793,7 @@ internal enum Localized {
+ // MARK: - Implementation Details
+ 
+ extension Localized {
+-  private static func tr(_ table: String, _ key: String, _ args: CVarArg..., fallback value: String) -> String {
++  private static func tr(_ table: String, _ key: String, _ args: any CVarArg..., fallback value: String) -> String {
+     let format = BundleToken.bundle.localizedString(forKey: key, value: value, table: table)
+     return String(format: format, locale: Locale.current, arguments: args)
+   }
