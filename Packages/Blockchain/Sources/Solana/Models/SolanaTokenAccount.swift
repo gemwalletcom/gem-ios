@@ -80,7 +80,7 @@ public struct SolanaTokenAccount: Codable, Sendable {
 	}
 }
 
-public struct SolanaTokenAccountResult<T: Codable>: Codable, Sendable {
+public struct SolanaTokenAccountResult<T: Codable & Sendable>: Codable, Sendable {
 	public let account: T
 	public let pubkey: String
 

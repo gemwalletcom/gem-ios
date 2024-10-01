@@ -32,7 +32,7 @@ public struct AptosLedger: Codable, Sendable {
 	}
 }
 
-public struct AptosResource<T: Codable>: Codable, Sendable {
+public struct AptosResource<T: Codable & Sendable>: Codable, Sendable {
 	public let type: String
 	public let data: T
 

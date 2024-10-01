@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct TonResult<T: Codable>: Codable, Sendable {
+public struct TonResult<T: Codable & Sendable>: Codable, Sendable {
 	public let result: T
 
 	public init(result: T) {

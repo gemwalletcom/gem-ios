@@ -14,7 +14,7 @@ public struct CosmosAccount: Codable, Sendable {
 	}
 }
 
-public struct CosmosAccountResponse<T: Codable>: Codable, Sendable {
+public struct CosmosAccountResponse<T: Codable & Sendable>: Codable, Sendable {
 	public let account: T
 
 	public init(account: T) {

@@ -46,7 +46,7 @@ public struct XRPLatestBlock: Codable, Sendable {
 	}
 }
 
-public struct XRPResult<T: Codable>: Codable, Sendable {
+public struct XRPResult<T: Codable & Sendable>: Codable, Sendable {
 	public let result: T
 
 	public init(result: T) {

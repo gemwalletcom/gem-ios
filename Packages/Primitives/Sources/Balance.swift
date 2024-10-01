@@ -1,8 +1,8 @@
 import Foundation
-import BigInt
+@preconcurrency import BigInt
 
-public struct Balance: Codable {
-	
+public struct Balance: Codable, Sendable {
+
     public var available: BigInt
     public var frozen: BigInt
     public var locked: BigInt

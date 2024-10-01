@@ -30,7 +30,7 @@ public struct SuiCoinBalance: Codable, Sendable {
 	}
 }
 
-public struct SuiData<T: Codable>: Codable, Sendable {
+public struct SuiData<T: Codable & Sendable>: Codable, Sendable {
 	public let data: T
 
 	public init(data: T) {
