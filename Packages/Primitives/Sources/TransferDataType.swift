@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import BigInt
+@preconcurrency import BigInt
 
-public enum StakeType: Hashable, Equatable {
+public enum StakeType: Hashable, Equatable, Sendable {
     case stake(validator: DelegationValidator)
     case unstake(delegation: Delegation)
     case redelegate(delegation: Delegation, toValidator: DelegationValidator)
@@ -28,7 +28,7 @@ extension StakeType {
     }
 }
 
-public enum TransferDataType: Hashable, Equatable {
+public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case swap(Asset, Asset, SwapAction)
     case stake(Asset, StakeType)
@@ -130,7 +130,7 @@ public enum TransferDataType: Hashable, Equatable {
     }
 }
 
-public struct TransferDataExtra: Equatable {
+public struct TransferDataExtra: Equatable, Sendable {
     public let gasLimit: BigInt?
     public let gasPrice: GasPriceType?
     public let data: Data?
@@ -147,7 +147,7 @@ public struct TransferDataExtra: Equatable {
 }
 extension TransferDataExtra: Hashable {}
 
-public enum SwapAction {
+public enum SwapAction: Sendable {
     case swap(SwapData)
     case approval(spender: String, allowance: BigInt)
 }
@@ -160,7 +160,7 @@ public struct SwapApproval: Equatable {
 }
 extension SwapApproval: Hashable {}
 
-public struct SwapData: Equatable {
+public struct SwapData: Equatable, Sendable {
     public let quote: SwapQuote
     
     public init(

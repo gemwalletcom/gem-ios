@@ -3,20 +3,19 @@
 import Foundation
 import BigInt
 
-public struct ValueFormatter {
-    
-    public enum Style {
+public struct ValueFormatter: Sendable {
+    public enum Style: Sendable {
         case short
         case medium
         case full
     }
     
     private let locale: Locale
-    private let style: Self.Style
+    private let style: Style
     
     public init(
         locale: Locale = .current,
-        style: Self.Style
+        style: Style
     ) {
         self.locale = locale
         self.style = style

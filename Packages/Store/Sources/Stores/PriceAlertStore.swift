@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct PriceAlertStore: Sendable {
+public struct PriceAlertStore {
 
     let db: DatabaseQueue
 
