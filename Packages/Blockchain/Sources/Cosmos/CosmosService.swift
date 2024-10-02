@@ -82,10 +82,7 @@ extension CosmosService {
     private func getFee(chain: CosmosChain, type: TransferDataType) -> BigInt {
         switch chain {
         case .thorchain:
-            switch type {
-            case .transfer: BigInt(2_000_000)
-            case .stake, .swap, .generic: BigInt(4_000_000)
-            }
+            BigInt(2_000_000)
         case .cosmos: switch type {
             case .transfer, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
@@ -107,21 +104,6 @@ extension CosmosService {
             case .stake: BigInt(1_000_000_000_000_000)
         }
         case .noble: BigInt(25_000)
-        }
-    }
-
-    private func getFeeOptions(chain: CosmosChain, type: TransferDataType) -> FeeOptionMap {
-        switch chain {
-        case .thorchain:
-            switch type {
-            case let .transfer(asset):
-                switch asset.id.type {
-                case .native: [.outboundNativeReserved: getFee(chain: chain, type: .transfer(asset))]
-                case .token: [:]
-                }
-            case .swap, .stake, .generic: [:]
-            }
-        case .celestia, .cosmos, .injective, .noble, .osmosis, .sei: [:]
         }
     }
 }
@@ -236,7 +218,6 @@ extension CosmosService: ChainFeeCalculateable {
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
             gasLimit: gasLimit,
-            options: getFeeOptions(chain: chain, type: input.type),
             feeRates: [],
             selectedFeeRate: nil
         )
