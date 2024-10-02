@@ -62,6 +62,10 @@ public struct Migrations {
             try PriceAlertRecord.create(db: db)
         }
 
+        migrator.registerMigration("Clear deprecated pairing WalletConnect sessions") { db in
+            try WalletConnectionRecord.deleteAll(db)
+        }
+
         try migrator.migrate(dbQueue)
     }
 }
