@@ -18,10 +18,6 @@ struct WelcomeScene: View {
         VStack {
             Spacer()
             VStack(alignment: .center, spacing: 24) {
-    //            Text(Localized.Welcome.title)
-    //                .fontWeight(.bold)
-    //                .font(.system(size: 42))
-    //                .padding(.bottom, 16)
                 Button(Localized.Wallet.createNewWallet) {
                     isPresentingCreateWalletSheet.toggle()
                 }
@@ -35,32 +31,19 @@ struct WelcomeScene: View {
             }
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .padding(Spacing.scene.bottom * 2)
-            //TODO: Enable
-    //        Text(.init(model.legalText))
-    //            .multilineTextAlignment(.center)
-    //            .font(.footnote)
-    //            .foregroundColor(Colors.grayLight)
-    //            .fontWeight(.light)
-    //            .padding(Spacing.scene.bottom)
-            .sheet(isPresented: $isPresentingCreateWalletSheet) {
-                CreateWalletNavigationStack(isPresenting: $isPresentingCreateWalletSheet)
-            }
-            .sheet(isPresented: $isPresentingImportWalletSheet) {
-                ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
-            }
         }
         .overlay(
-            ZStack {
-                Image(.logo)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .frame(width: 128, height: 128)
-            }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            LogoView()
         )
         .frame(maxWidth: .infinity)
         .background(Colors.white)
         .navigationTitle(model.title)
+        .sheet(isPresented: $isPresentingCreateWalletSheet) {
+            CreateWalletNavigationStack()
+        }
+        .sheet(isPresented: $isPresentingImportWalletSheet) {
+            ImportWalletNavigationStack()
+        }
     }
 }
 
