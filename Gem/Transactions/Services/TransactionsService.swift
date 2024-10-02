@@ -9,13 +9,13 @@ import Combine
 
 class TransactionsService {
 
-    let provider: GemAPITransactionService
+    let provider: any GemAPITransactionService
     let transactionStore: TransactionStore
     let assetsService: AssetsService
     let keystore: any Keystore
 
     init(
-        provider: GemAPITransactionService = GemAPIService(),
+        provider: any GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
         assetsService: AssetsService,
         keystore: any Keystore

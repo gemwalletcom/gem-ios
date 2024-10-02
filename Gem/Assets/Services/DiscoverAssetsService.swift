@@ -16,12 +16,12 @@ public struct DiscoverAssetsService {
     private var assetSubject = PassthroughSubject<AssetUpdate, Never>()
     
     private let balanceService: BalanceService
-    private let assetsService: GemAPIAssetsListService
+    private let assetsService: any GemAPIAssetsListService
     private let chainServiceFactory: ChainServiceFactory
     
     public init(
         balanceService: BalanceService,
-        assetsService: GemAPIAssetsListService = GemAPIService.shared,
+        assetsService: any GemAPIAssetsListService = GemAPIService.shared,
         chainServiceFactory: ChainServiceFactory
     ) {
         self.balanceService = balanceService

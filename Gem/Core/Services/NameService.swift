@@ -6,10 +6,10 @@ import Primitives
 
 struct NameService {
     
-    let provider: GemAPINameService
-    
+    let provider: any GemAPINameService
+
     init(
-        provider: GemAPINameService = GemAPIService()
+        provider: any GemAPINameService = GemAPIService()
     ) {
         self.provider = provider
     }

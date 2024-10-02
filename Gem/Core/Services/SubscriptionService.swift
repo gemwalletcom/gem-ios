@@ -7,12 +7,12 @@ import Store
 
 struct SubscriptionService {
     
-    let subscriptionProvider: GemAPISubscriptionService
+    let subscriptionProvider: any GemAPISubscriptionService
     let preferences = Preferences()
     let walletStore: WalletStore
     
     init(
-        subscriptionProvider: GemAPISubscriptionService = GemAPIService(),
+        subscriptionProvider: any GemAPISubscriptionService = GemAPIService(),
         walletStore: WalletStore
     ) {
         self.subscriptionProvider = subscriptionProvider

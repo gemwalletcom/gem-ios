@@ -32,7 +32,7 @@ class ConfirmTransferViewModel {
     private let data: TransferData
     private let wallet: Wallet
     private let keystore: any Keystore
-    private let service: ChainServiceable
+    private let service: any ChainServiceable
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: ConfirmTransferDelegate?
@@ -41,7 +41,7 @@ class ConfirmTransferViewModel {
         wallet: Wallet,
         keystore: any Keystore,
         data: TransferData,
-        service: ChainServiceable,
+        service: any ChainServiceable,
         walletsService: WalletsService,
         confirmTransferDelegate: ConfirmTransferDelegate? = .none
     ) {

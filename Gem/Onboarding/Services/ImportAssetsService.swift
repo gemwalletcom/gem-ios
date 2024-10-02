@@ -8,7 +8,7 @@ import GemAPI
 
 struct ImportAssetsService {
     let nodeService: NodeService
-    let assetListService: GemAPIAssetsListService = GemAPIService()
+    let assetListService: any GemAPIAssetsListService = GemAPIService()
     let assetsService: AssetsService
     var assetStore: AssetStore
     let preferences: Preferences

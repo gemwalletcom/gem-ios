@@ -5,7 +5,7 @@ import Keystore
 
 @Observable
 class LockSceneViewModel {
-    private let service: BiometryAuthenticatable
+    private let service: any BiometryAuthenticatable
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
     var state: LockSceneState
@@ -14,7 +14,7 @@ class LockSceneViewModel {
     private var inBackground: Bool = false
 
     init(
-        service: BiometryAuthenticatable = BiometryAuthenticationService()
+        service: any BiometryAuthenticatable = BiometryAuthenticationService()
     ) {
         self.service = service
         self.state = service.isAuthenticationEnabled ? .locked : .unlocked

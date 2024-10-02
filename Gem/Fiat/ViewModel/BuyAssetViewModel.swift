@@ -9,14 +9,14 @@ import Style
 class BuyAssetViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(300)
 
-    private let fiatService: GemAPIFiatService
+    private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
 
     var input: BuyAssetInput
     var state: StateViewType<[FiatQuote]> = .loading
 
     init(
-        fiatService: GemAPIFiatService = GemAPIService(),
+        fiatService: any GemAPIFiatService = GemAPIService(),
         assetAddress: AssetAddress,
         input: BuyAssetInput
     ) {

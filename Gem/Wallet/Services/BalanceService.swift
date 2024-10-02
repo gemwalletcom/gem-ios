@@ -12,7 +12,7 @@ public struct BalanceUpdate {
 
 public struct BalanceUpdateError {
     public let chain: Chain
-    public let error: Error
+    public let error: any Error
 }
 
 public protocol BalancerUpdater {

@@ -10,13 +10,13 @@ public protocol NodeURLFetchable {
 
 public final class ChainServiceFactory {
 
-    let nodeProvider: NodeURLFetchable
-    
-    init(nodeProvider: NodeURLFetchable) {
+    let nodeProvider: any NodeURLFetchable
+
+    init(nodeProvider: any NodeURLFetchable) {
         self.nodeProvider = nodeProvider
     }
     
-    func service(for chain: Chain) -> ChainServiceable {
+    func service(for chain: Chain) -> any ChainServiceable {
         return ChainService.service(
             chain: chain,
             with: nodeProvider.node(for: chain)

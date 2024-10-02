@@ -8,12 +8,12 @@ import Primitives
 class ConnectionsService {
     
     let store: ConnectionsStore
-    let signer: WalletConnectorSignable
+    let signer: any WalletConnectorSignable
     let connector: WalletConnector
     
     init(
         store: ConnectionsStore,
-        signer: WalletConnectorSignable
+        signer: any WalletConnectorSignable
     ) {
         self.store = store
         self.signer = signer

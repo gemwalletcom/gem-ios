@@ -10,9 +10,9 @@ import GemstonePrimitives
 
 class SwapService {
     
-    private let provider: GemAPISwapService
-    private let nodeProvider: NodeURLFetchable
-    
+    private let provider: any GemAPISwapService
+    private let nodeProvider: any NodeURLFetchable
+
     static func getSpender(chain: Chain, quote: SwapQuote?) throws -> String {
 
         guard let swapQuote = quote else {
@@ -30,8 +30,8 @@ class SwapService {
     }
 
     init(
-        provider: GemAPISwapService = GemAPIService(),
-        nodeProvider: NodeURLFetchable
+        provider: any GemAPISwapService = GemAPIService(),
+        nodeProvider: any NodeURLFetchable
     ) {
         self.provider = provider
         self.nodeProvider = nodeProvider

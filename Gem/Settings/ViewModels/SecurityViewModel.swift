@@ -6,7 +6,7 @@ import Components
 
 @Observable
 class SecurityViewModel {
-    private let service: BiometryAuthenticatable
+    private let service: any BiometryAuthenticatable
 
     static let reason: String = Localized.Settings.Security.authentication
 
@@ -16,7 +16,7 @@ class SecurityViewModel {
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: BiometryAuthenticatable = BiometryAuthenticationService()) {
+    init(service: any BiometryAuthenticatable = BiometryAuthenticationService()) {
         self.service = service
 
         self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)

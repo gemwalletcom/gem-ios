@@ -11,12 +11,12 @@ import Gemstone
 public final class WalletConnectorSigner: WalletConnectorSignable {
     let store: ConnectionsStore
     let keystore: any Keystore
-    var walletConnectorInteractor: WalletConnectorInteractable
-    
+    var walletConnectorInteractor: any WalletConnectorInteractable
+
     init(
         store: ConnectionsStore,
         keystore: any Keystore,
-        walletConnectorInteractor: WalletConnectorInteractable
+        walletConnectorInteractor: any WalletConnectorInteractable
     ) {
         self.store = store
         self.keystore = keystore
@@ -77,7 +77,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
         }
     }
     
-    public func sessionReject(id: String, error: Error) throws {
+    public func sessionReject(id: String, error: any Error) throws {
         try self.store.delete(ids: [id])
         walletConnectorInteractor.sessionReject(error: error)
     }

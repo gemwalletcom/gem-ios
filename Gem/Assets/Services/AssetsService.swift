@@ -8,14 +8,14 @@ class AssetsService {
     
     let assetStore: AssetStore
     let balanceStore: BalanceStore
-    let assetsProvider: GemAPIAssetsService
+    let assetsProvider: any GemAPIAssetsService
     let chainServiceFactory: ChainServiceFactory
     
     init(
         assetStore: AssetStore,
         balanceStore: BalanceStore,
         chainServiceFactory: ChainServiceFactory,
-        assetsProvider: GemAPIAssetsService = GemAPIService.shared
+        assetsProvider: any GemAPIAssetsService = GemAPIService.shared
     ) {
         self.assetStore = assetStore
         self.balanceStore = balanceStore

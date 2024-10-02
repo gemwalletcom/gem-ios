@@ -11,7 +11,7 @@ class TransactionService {
     
     let transactionStore: TransactionStore
     let chainServiceFactory: ChainServiceFactory
-    let balanceUpdater: BalancerUpdater
+    let balanceUpdater: any BalancerUpdater
     let stakeService: StakeService
     
     private var cancellables = Set<AnyCancellable>()
@@ -21,7 +21,7 @@ class TransactionService {
         transactionStore: TransactionStore,
         stakeService: StakeService,
         chainServiceFactory: ChainServiceFactory,
-        balanceUpdater: BalancerUpdater
+        balanceUpdater: any BalancerUpdater
     ) {
         self.transactionStore = transactionStore
         self.stakeService = stakeService
