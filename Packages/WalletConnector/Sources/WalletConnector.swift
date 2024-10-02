@@ -307,7 +307,7 @@ extension Chain {
 extension Session {
     var asSession: Primitives.WalletConnectionSession {
         WalletConnectionSession(
-            id: peer.metadata.url,
+            id: pairingTopic,
             sessionId: topic,
             state: .active,
             chains: [],
