@@ -4,10 +4,9 @@ import SwiftUI
 
 struct CreateWalletNavigationStack: View {
     
-    @State var isPresenting: Binding<Bool>
-    
     @Environment(\.keystore) private var keystore
-    
+    @Environment(\.dismiss) private var dismiss
+
     @State private var navigationPath = NavigationPath()
 
     var body: some View {
@@ -21,7 +20,7 @@ struct CreateWalletNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {
-                        isPresenting.wrappedValue.toggle()
+                        dismiss()
                     }
                 }
             }

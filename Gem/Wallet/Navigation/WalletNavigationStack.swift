@@ -12,8 +12,6 @@ struct WalletNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
 
     @State private var isWalletsPresented = false
-    @State private var isPresentingCreateWalletSheet = false
-    @State private var isPresentingImportWalletSheet = false
     @State private var isPresentingAssetSelectType: SelectAssetInput?
     @State private var isPresentingSelectType: SelectAssetType?
 
@@ -28,9 +26,6 @@ struct WalletNavigationStack: View {
                 model: model,
                 isPresentingSelectType: $isPresentingSelectType
             )
-            .sheet(isPresented: $isWalletsPresented) {
-                WalletsNavigationStack()
-            }
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) { asset in
                 @Bindable var navigationState = navigationState
@@ -152,6 +147,9 @@ struct WalletNavigationStack: View {
                         EmptyView()
                     }
                 }
+            }
+            .sheet(isPresented: $isWalletsPresented) {
+                WalletsNavigationStack()
             }
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)

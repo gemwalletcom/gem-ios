@@ -54,13 +54,7 @@ extension LockScreenScene {
 
     @ViewBuilder
     var placeholderView: some View {
-        ZStack {
-            Image(.logoLaunch)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: 128, height: 128)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        LogoView()
         .background(Colors.white)
     }
 }

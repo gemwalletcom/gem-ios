@@ -5,6 +5,7 @@ import Primitives
 import Keystore
 import Settings
 import SwiftUI
+import Style
 
 class VerifyPhraseViewModel: ObservableObject {
     
@@ -16,8 +17,8 @@ class VerifyPhraseViewModel: ObservableObject {
 
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
-    @Published var isContinueDisabled: Bool = true
-    
+    @Published var buttonState = StateButtonStyle.State.disabled
+
     init(
         navigationPath: Binding<NavigationPath>,
         words: [String],
@@ -62,7 +63,7 @@ class VerifyPhraseViewModel: ObservableObject {
         }
         // last word
         if wordsIndex == words.count {
-            isContinueDisabled = false
+            buttonState = .normal
         }
     }
     

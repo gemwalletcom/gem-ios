@@ -39,10 +39,10 @@ struct WalletsNavigationStack: View {
                 )
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
-                CreateWalletNavigationStack(isPresenting: $isPresentingCreateWalletSheet)
+                CreateWalletNavigationStack()
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
-                ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
+                ImportWalletNavigationStack()
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
