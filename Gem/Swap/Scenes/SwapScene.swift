@@ -28,6 +28,7 @@ struct SwapScene: View {
     }
     @FocusState private var focusedField: Field?
 
+
     init(model: SwapViewModel) {
         _model = State(initialValue: model)
         _fromAsset = Query(model.fromAssetRequest)
