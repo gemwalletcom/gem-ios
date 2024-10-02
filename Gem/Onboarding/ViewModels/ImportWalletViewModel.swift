@@ -2,12 +2,15 @@ import Foundation
 import Keystore
 import Primitives
 import Settings
+import Style
 
-struct ImportWalletViewModel {
-    
+class ImportWalletViewModel: ObservableObject {
+
     let type: ImportWalletType
     let keystore: any Keystore
     let wordSuggestor = WordSuggestor()
+
+    @Published var buttonState = StateButtonStyle.State.normal
 
     init(
         type: ImportWalletType,
