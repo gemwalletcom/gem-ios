@@ -273,26 +273,10 @@ extension Wallet {
 }
 
 extension BigNumberFormatter {
-    static let full: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        return formatter
-    }()
-    static let medium: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.maximumFractionDigits = 6
-        return formatter
-    }()
-    static let short: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
-    // no group separator
-    static let simple: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.groupingSeparator = ""
-        return formatter
-    }()
+    static let full: BigNumberFormatter = BigNumberFormatter()
+    static let medium: BigNumberFormatter = BigNumberFormatter(maximumFractionDigits: 6)
+    static let short: BigNumberFormatter = BigNumberFormatter(maximumFractionDigits: 2)
+    static let simple: BigNumberFormatter = BigNumberFormatter(groupingSeparator: "")
 }
 
 extension ValueFormatter {
