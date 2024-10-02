@@ -9,8 +9,6 @@ class LockWindowManager {
     let lockModel: LockSceneViewModel
     var overlayWindow: UIWindow?
 
-    private var showPrivacyLockOnFirstAppear: Bool = true
-
     init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
@@ -38,10 +36,6 @@ class LockWindowManager {
         } else {
             hideLock()
         }
-
-        if showPrivacyLockOnFirstAppear {
-            showPrivacyLockOnFirstAppear = false
-        }
     }
 
     func togglePrivacyLock(visible: Bool) {
@@ -56,18 +50,11 @@ extension LockWindowManager {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
               overlayWindow == nil else { return }
 
-        let firstRun = lockModel.isAutoLockEnabled && !lockModel.isPrivacyLockEnabled && showPrivacyLockOnFirstAppear
-
         overlayWindow = Self.createOverlayWindow(
             model: lockModel,
-            isPrivacyLockVisible: lockModel.isPrivacyLockVisible || firstRun,
+            isPrivacyLockVisible: lockModel.isPrivacyLockVisible,
             windowScene: windowScene
         )
-
-        // Reset the flag for first appearance after showing
-        if showPrivacyLockOnFirstAppear {
-            showPrivacyLockOnFirstAppear = false
-        }
     }
 
     private func hideLock() {

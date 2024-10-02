@@ -36,7 +36,7 @@ class LockSceneViewModel {
     var isPrivacyLockVisible: Bool {
         guard isAutoLockEnabled else { return false }
         guard isPrivacyLockEnabled else {
-            return state == .lockedCanceled
+            return state == .lockedCanceled || shouldLock
         }
         return true
     }
