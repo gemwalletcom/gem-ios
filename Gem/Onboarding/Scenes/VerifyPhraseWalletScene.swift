@@ -11,8 +11,7 @@ struct VerifyPhraseWalletScene: View {
     @Environment(\.isWalletsPresented) private var isWalletsPresented
     
     @State private var isPresentingErrorMessage: String?
-    @State private var isLoading: Bool = false
-    
+
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: Spacing.medium) {
@@ -48,10 +47,15 @@ struct VerifyPhraseWalletScene: View {
                 .padding(.top, Spacing.small)
                 
                 Spacer()
-                Button(Localized.Common.continue, action: importWallet)
-                    .disabled(model.isContinueDisabled)
-                    .buttonStyle(.blue())
-                    .frame(maxWidth: Spacing.scene.button.maxWidth)
+                StateButton(
+                    text: Localized.Common.continue,
+                    styleState: model.buttonState,
+                    action: importWallet
+                )
+//                Button(Localized.Common.continue, action: importWallet)
+//                    .disabled(model.isContinueDisabled)
+//                    .buttonStyle(.blue())
+//                    .frame(maxWidth: Spacing.scene.button.maxWidth)
             }
             .frame(maxWidth: Spacing.scene.content.maxWidth)
         }
@@ -60,20 +64,28 @@ struct VerifyPhraseWalletScene: View {
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.createWallet("")), message: Text($0))
         }
-        .modifier(
-            ActivityIndicatorModifier(message: Localized.Common.loading, isLoading: isLoading)
-        )
     }
-    
-    func importWallet() {
-        isLoading = true
-        do {
-            let _ = try model.importWallet()
-        } catch {
-            isPresentingErrorMessage = error.localizedDescription
-        }
-        isLoading = false
 
-        isWalletsPresented.wrappedValue = false
+    func importWallet() {
+        model.buttonState = .loading
+
+        Task {
+            //TODO: For some reason loading does not start unless there is a delay.
+            try await Task.sleep(for: .milliseconds(50))
+
+            do {
+                let _ = try model.importWallet()
+                await MainActor.run {
+                    isWalletsPresented.wrappedValue = false
+                }
+            } catch {
+                await MainActor.run {
+                    isPresentingErrorMessage = error.localizedDescription
+                }
+            }
+            await MainActor.run {
+                model.buttonState = .normal
+            }
+        }
     }
 }

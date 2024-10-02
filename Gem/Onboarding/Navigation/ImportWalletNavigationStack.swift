@@ -4,18 +4,17 @@ import SwiftUI
 import Primitives
 
 struct ImportWalletNavigationStack: View {
-    
-    @State var isPresenting: Binding<Bool>
-    
+
     @Environment(\.keystore) private var keystore
-    
+    @Environment(\.dismiss) private var dismiss
+
     var body: some View {
         NavigationStack {
             ImportWalletTypeScene(model: ImportWalletTypeViewModel(keystore: keystore))
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.cancel) {
-                            isPresenting.wrappedValue.toggle()
+                            dismiss()
                         }
                     }
                 }
@@ -33,5 +32,5 @@ struct ImportWalletNavigationStack: View {
 
 #Preview {
     @Previewable @State var isPresenting: Bool = false
-    return ImportWalletNavigationStack(isPresenting: $isPresenting)
+    return ImportWalletNavigationStack()
 }
