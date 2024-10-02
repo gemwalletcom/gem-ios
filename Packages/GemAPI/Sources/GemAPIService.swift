@@ -24,11 +24,11 @@ public protocol GemAPIAssetsService {
     func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetFull]
 }
 
-public protocol GemAPINameService {
+public protocol GemAPINameService: Sendable {
     func getName(name: String, chain: String) async throws -> NameRecord
 }
 
-public protocol GemAPIChartService {
+public protocol GemAPIChartService: Sendable {
     func getCharts(assetId: AssetId, currency: String, period: String) async throws -> Charts
 }
 
@@ -39,7 +39,7 @@ public protocol GemAPIDeviceService {
     func deleteDevice(deviceId: String) async throws
 }
 
-public protocol GemAPISubscriptionService {
+public protocol GemAPISubscriptionService: Sendable {
     func getSubscriptions(deviceId: String) async throws -> [Subscription]
     func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
     func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws

@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct WalletStore {
+public struct WalletStore: Sendable {
     
     let db: DatabaseQueue
     let preferences: Preferences

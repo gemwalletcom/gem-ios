@@ -1,7 +1,7 @@
 import Foundation
 import Combine
 
-public protocol ProviderType {
+public protocol ProviderType: Sendable {
     associatedtype Target: TargetType
 }
 
