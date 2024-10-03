@@ -8,7 +8,7 @@ import BigInt
 import Gemstone
 
 // https://docs.lido.fi/deployed-contracts/
-public struct LidoService {
+public struct LidoService: Sendable {
     public let provider: Provider<EthereumProvider>
 
 

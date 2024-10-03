@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import BigInt
 
-public struct TransactionInput {
+public struct TransactionInput: Sendable {
     public let type: TransferDataType
     public let asset: Asset
     public let senderAddress: String
