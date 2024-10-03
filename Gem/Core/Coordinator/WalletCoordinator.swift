@@ -178,7 +178,7 @@ struct WalletCoordinator: View {
                 .environment(\.chainServiceFactory, chainServiceFactory)
                 .environment(\.navigationState, navigationState)
             } else {
-                WelcomeScene(model: WelcomeViewModel(keystore: keystore))
+                WelcomeScene(model: WelcomeViewModel())
             }
         }
         .onOpenURL(perform: { url in

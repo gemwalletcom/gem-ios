@@ -1,19 +1,18 @@
 import SwiftUI
 import Style
+import Keystore
 
 struct WelcomeScene: View {
-    
+
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
-    
-    let model: WelcomeViewModel
-    
-    init(
-        model: WelcomeViewModel
-    ) {
+
+    private let model: WelcomeViewModel
+
+    init(model: WelcomeViewModel) {
         self.model = model
     }
-    
+
     var body: some View {
         VStack {
             Spacer()
@@ -47,8 +46,8 @@ struct WelcomeScene: View {
     }
 }
 
-//struct WelcomeScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        WelcomeScene(model: WelcomeViewModel(keystore: .main))
-//    }
-//}
+// MARK: - Previews
+
+#Preview {
+    WelcomeScene(model: .init())
+}
