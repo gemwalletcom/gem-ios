@@ -28,7 +28,7 @@ extension UIDevice {
 }
 
 private struct JailBrokenHelper {
-    static func hasCydiaInstalled() -> Bool {
+    @MainActor static func hasCydiaInstalled() -> Bool {
         return UIApplication.shared.canOpenURL(URL(string: "cydia://")!)
     }
     

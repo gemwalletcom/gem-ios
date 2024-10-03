@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct IntegerFormatter {
+public struct IntegerFormatter: Sendable {
     
     private let locale: Locale
     private var integerFormatter: Foundation.NumberFormatter {
