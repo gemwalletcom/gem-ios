@@ -50,13 +50,13 @@ public struct Response {
 }
 
 extension Formatter {
-   public static var customISO8601DateFormatter: ISO8601DateFormatter = {
+   public static let customISO8601DateFormatter: ISO8601DateFormatter = {
       let formatter = ISO8601DateFormatter()
       formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
       return formatter
    }()
     
-    public static var customISO8601DateFormatterNoSeconds: ISO8601DateFormatter = {
+    public static let customISO8601DateFormatterNoSeconds: ISO8601DateFormatter = {
        let formatter = ISO8601DateFormatter()
        formatter.formatOptions = [.withInternetDateTime]
        return formatter
@@ -64,7 +64,7 @@ extension Formatter {
 }
 
 extension JSONDecoder.DateDecodingStrategy {
-   static var iso8601WithFractionalSeconds = custom { decoder in
+   static let iso8601WithFractionalSeconds = custom { decoder in
       let dateStr = try decoder.singleValueContainer().decode(String.self)
       if let date = Formatter.customISO8601DateFormatter.date(from: dateStr) {
          return date
