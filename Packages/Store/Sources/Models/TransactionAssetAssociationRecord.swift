@@ -2,11 +2,11 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 public struct TransactionAssetAssociationRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = TransactionRecord.databaseTableName + "_assets"
+    public static let databaseTableName: String = TransactionRecord.databaseTableName + "_assets"
     
     public var transactionId: Int
     public var assetId: String

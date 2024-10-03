@@ -1,4 +1,4 @@
-// swift-tools-version: 5.9
+// swift-tools-version: 6.0
 // The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
@@ -17,7 +17,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 29, 2)),
+        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 29, 3)),
         .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 9, 0)),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
     ],
@@ -30,7 +30,10 @@ let package = Package(
                 .product(name: "GRDBQuery", package: "GRDBQuery"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
-            path: "Sources"
+            path: "Sources",
+            swiftSettings: [
+                .swiftLanguageMode(.v6)
+            ]
         ),
         .target(
             name: "StoreTestKit",

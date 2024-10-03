@@ -1,5 +1,5 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
 public final class DB: ObservableObject, Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
@@ -26,7 +26,7 @@ public final class DB: ObservableObject, Sendable {
         }
     }
 
-    public static var defaultConfiguration: GRDB.Configuration = {
+    public static let defaultConfiguration: GRDB.Configuration = {
         var config = GRDB.Configuration()
         #if DEBUG
         config.publicStatementArguments = true
