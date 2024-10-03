@@ -27,11 +27,16 @@
 	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
-	<key>NSCameraUsageDescription</key>
-	<string>Gem Wallet needs access to your Camera to scan QR Codes.</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>launchScreenBackground</string>
+		<key>UIImageName</key>
+		<string>logo</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
+		<false/>
+	</dict>
 	<key>get-task-allow</key>
 	<true/>
-	<key>NSFaceIDUsageDescription</key>
-	<string>Enabling Face ID helps Gem Wallet keep your assets secure.</string>
 </dict>
 </plist>
