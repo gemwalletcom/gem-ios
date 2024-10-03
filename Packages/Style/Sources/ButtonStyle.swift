@@ -154,11 +154,7 @@ public struct StateButtonStyle: ButtonStyle {
     let backgroundDisabled: Color
 
     private var shouldDisableInteractions: Bool {
-        isGrayBackgroundState || state == .loading
-    }
-
-    private var isGrayBackgroundState: Bool {
-        state == .disabled
+        state == .disabled || state == .loading
     }
 
     public init(
@@ -205,7 +201,7 @@ public struct StateButtonStyle: ButtonStyle {
 
     private var backgroundView: some View {
         RoundedRectangle(cornerRadius: 12)
-            .fill(isGrayBackgroundState ? backgroundDisabled : background)
+            .fill(state == .disabled ? backgroundDisabled : background)
     }
 
     private func backgroundPressedView(configuration: Configuration) -> some View {
@@ -215,7 +211,7 @@ public struct StateButtonStyle: ButtonStyle {
 
     private func labelBackground(configuration: Configuration) -> some View {
         Group {
-            if !isGrayBackgroundState && state != .loading {
+            if state != .disabled && state != .loading {
                 backgroundPressedView(configuration: configuration)
             } else {
                 backgroundView

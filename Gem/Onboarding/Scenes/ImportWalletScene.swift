@@ -7,12 +7,11 @@ import QRScanner
 import Settings
 
 struct ImportWalletScene: View {
-    
     enum Field: Int, Hashable {
         case name, input
     }
     @Environment(\.isWalletsPresented) private var isWalletsPresented
-    
+
     @State private var name: String = ""
     @State private var wordSuggestion: String? = .none
 
@@ -23,9 +22,9 @@ struct ImportWalletScene: View {
     @State private var isPresentingScanner = false
     @FocusState private var focusedField: Field?
     @State var nameResolveState: NameRecordState = .none
-    
+
     @StateObject var model: ImportWalletViewModel
-    
+
     var body: some View {
         VStack {
             Form {
@@ -122,7 +121,7 @@ struct ImportWalletScene: View {
     func selectWord(word: String) {
         input = model.selectWordCalculate(input: input, word: word)
     }
-    
+
     func onHandleScan(_ result: String) {
         input = result
     }
@@ -150,7 +149,7 @@ struct ImportWalletScene: View {
         }
         return true
     }
-    
+
     func paste() {
         guard let string = UIPasteboard.general.string else {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
@@ -158,7 +157,7 @@ struct ImportWalletScene: View {
         }
         input = string.trim()
     }
-    
+
     func scanQR() {
         isPresentingScanner = true
     }
@@ -172,24 +171,21 @@ extension String: @retroactive Identifiable {
 
 extension ImportWalletScene {
     func onImportWallet() {
-        model.buttonState = .loading
-
+        guard model.buttonState != .loading else { return }
         Task {
-            //TODO: For some reason loading does not start unless there is a delay.
-            try await Task.sleep(for: .milliseconds(50))
-
+            await MainActor.run {
+                model.buttonState = .loading
+            }
             do {
-                let _ = try importWallet()
-                await MainActor.run {
+                try await MainActor.run {
+                    try importWallet()
                     isWalletsPresented.wrappedValue = false
                 }
             } catch {
                 await MainActor.run {
                     isPresentingErrorMessage = error.localizedDescription
+                    model.buttonState = .normal
                 }
-            }
-            await MainActor.run {
-                model.buttonState = .normal
             }
         }
     }
