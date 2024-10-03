@@ -1,6 +1,6 @@
 import Foundation
 import Primitives
-@preconcurrency import BigInt
+import BigInt
 
 typealias TransferDataAction = ((TransferData) -> Void)?
 typealias AmountInputAction = ((AmountInput) -> Void)?

@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import BigInt
+import BigInt
 
 public enum GasPriceType: Equatable, Sendable {
     case regular(gasPrice: BigInt)

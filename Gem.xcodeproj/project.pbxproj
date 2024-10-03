@@ -87,7 +87,6 @@
 		C37028962A99D179009AE123 /* ChartView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37028952A99D179009AE123 /* ChartView.swift */; };
 		C37028982A9A9E99009AE123 /* HeaderButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37028972A9A9E99009AE123 /* HeaderButtonsView.swift */; };
 		C370289A2A9AA1DF009AE123 /* HeaderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37028992A9AA1DF009AE123 /* HeaderButton.swift */; };
-		C37482022A86F401008A5F0E /* BigInt in Frameworks */ = {isa = PBXBuildFile; productRef = C37482012A86F401008A5F0E /* BigInt */; };
 		C37482072A8AC808008A5F0E /* LockScreenScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C37482062A8AC808008A5F0E /* LockScreenScene.swift */; };
 		C3866B612A803B19004FB60C /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C3866B602A803B19004FB60C /* Launch Screen.storyboard */; };
 		C3A7CB7C29CA5F7000431341 /* Store in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB7B29CA5F7000431341 /* Store */; };
@@ -944,7 +943,6 @@
 				C3D1C4E22A2A9485006E8EEA /* Signer in Frameworks */,
 				C3A7CB8429CBA9E700431341 /* GRDBQuery in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
-				C37482022A86F401008A5F0E /* BigInt in Frameworks */,
 				C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
@@ -2334,7 +2332,6 @@
 				C366791C2A18623800F1D74D /* QRScanner */,
 				C3D1C4E12A2A9485006E8EEA /* Signer */,
 				C3E99BBE2A71E932005DF35F /* WalletCorePrimitives */,
-				C37482012A86F401008A5F0E /* BigInt */,
 				C35DA07B2A9C3B4B008CCEFA /* Settings */,
 				D8D203CF2AE078BE00261CA2 /* WalletConnector */,
 				D8D203D22AE0818C00261CA2 /* SwiftHTTPClient */,
@@ -2482,7 +2479,7 @@
 			packageReferences = (
 				C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
-				C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */,
+				DFDF9CF22CAE618A003A731B /* XCRemoteSwiftPackageReference "BigInt" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -3652,14 +3649,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/gemwalletcom/BigInt.git";
-			requirement = {
-				kind = exactVersion;
-				version = 5.3.0;
-			};
-		};
 		C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/groue/GRDB.swift.git";
@@ -3700,6 +3689,14 @@
 				version = 5.3.0;
 			};
 		};
+		DFDF9CF22CAE618A003A731B /* XCRemoteSwiftPackageReference "BigInt" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/attaswift/BigInt.git";
+			requirement = {
+				kind = exactVersion;
+				version = 5.4.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -3714,11 +3711,6 @@
 		C366791C2A18623800F1D74D /* QRScanner */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = QRScanner;
-		};
-		C37482012A86F401008A5F0E /* BigInt */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C37482002A86F401008A5F0E /* XCRemoteSwiftPackageReference "BigInt" */;
-			productName = BigInt;
 		};
 		C3A7CB7B29CA5F7000431341 /* Store */ = {
 			isa = XCSwiftPackageProductDependency;

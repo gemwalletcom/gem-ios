@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import BigInt
+import BigInt
 
 public enum StakeType: Hashable, Equatable, Sendable {
     case stake(validator: DelegationValidator)

@@ -15,7 +15,7 @@ let package = Package(
             targets: ["PrimitivesTestKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/gemwalletcom/BigInt.git", exact: Version(5, 3, 0)),
+        .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 4, 1)),
     ],
     targets: [
         .target(
