@@ -385,8 +385,8 @@ private extension CachedAsyncImage {
 
 // MARK: - AsyncImageURLSession
 
-private class URLSessionTaskController: NSObject, URLSessionTaskDelegate {
-    
+private final class URLSessionTaskController: NSObject, URLSessionTaskDelegate, @unchecked Sendable {
+
     var metrics: URLSessionTaskMetrics?
     
     func urlSession(_ session: URLSession, task: URLSessionTask, didFinishCollecting metrics: URLSessionTaskMetrics) {
