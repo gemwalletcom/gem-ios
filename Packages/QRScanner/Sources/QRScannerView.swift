@@ -38,8 +38,9 @@ public struct QRScannerView: View {
                     actions: {
                         switch error {
                         case .notSupported:
+                            let text = model.resources.selectFromPhotos
                             photosPicker {
-                                Text(model.resources.selectFromPhotos)
+                                Text(text)
                             }
                         case .permissionsNotGranted:
                             Button(model.resources.openSettings, action: onSelectOpenSettings)
@@ -52,8 +53,9 @@ public struct QRScannerView: View {
         }
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
+                let imageName = model.resources.gallerySystemImage
                 photosPicker {
-                    Image(systemName: model.resources.gallerySystemImage)
+                    Image(systemName: imageName)
                         .bold()
                 }
             }
@@ -72,7 +74,7 @@ public struct QRScannerView: View {
         }
     }
 
-    private func photosPicker<Content: View>(@ViewBuilder content: () -> Content) -> some View {
+    private func photosPicker<Content: View>(@ViewBuilder content: @Sendable () -> Content) -> some View {
         PhotosPicker(
             selection: $model.selectedPhoto,
             matching: .images,
