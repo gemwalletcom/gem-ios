@@ -11,18 +11,23 @@ struct ReceiveScene: View {
     
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
-    @State private var renderedImage = UIImage()
+    @State private var renderedImage: UIImage?
 
     var body: some View {
         VStack {
             Spacer()
-            HStack {
-                Image(uiImage: renderedImage)
-                    .interpolation(.none)
-                    .resizable()
-                    .frame(width: 240, height: 240, alignment: .center)
-                    .cornerRadius(8)
+            ZStack {
+                if let image = renderedImage {
+                    Image(uiImage: image)
+                        .resizable()
+                        .interpolation(.none)
+                        .scaledToFit()
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                } else {
+                    LoadingView()
+                }
             }
+            .frame(width: 240, height: 240, alignment: .center)
             .padding(8)
             .padding(.bottom, 24)
             
@@ -75,22 +80,29 @@ struct ReceiveScene: View {
         )
         .navigationBarTitle(model.title)
         .taskOnce {
-            // generate image in the background
-            DispatchQueue.global(qos: .background).async {
-                let image = generator.generate(from: model.address)
-                DispatchQueue.main.async {
-                    renderedImage = image
-                }
-            }
+            generateQRCode()
             model.enableAsset()
             
             try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
         }
     }
-    
-    func copyAddress() {
+
+    private func copyAddress() {
         showCopyMessage = true
         UIPasteboard.general.string = model.address
+    }
+
+    private func generateQRCode() {
+        Task.detached(priority: .utility) {
+            let image = await generator.generate(
+                from: model.address,
+                logo: UIImage(named: "logo")
+            )
+
+            await MainActor.run {
+                renderedImage = image
+            }
+        }
     }
 }
 
