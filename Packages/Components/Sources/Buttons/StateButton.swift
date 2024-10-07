@@ -60,6 +60,10 @@ public struct StateButton: View {
         self.image = image
     }
 
+    private var isDisabled: Bool {
+        styleState != .normal
+    }
+
     public var body: some View {
         VStack {
             if let infoTextValue {
@@ -80,7 +84,7 @@ public struct StateButton: View {
                 }
             )
             .buttonStyle(.statefullBlue(state: styleState))
-            .disabled(styleState != .normal)
+            .disabled(isDisabled)
         }
     }
 }
