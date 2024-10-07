@@ -175,21 +175,17 @@ extension ImportWalletScene {
         model.buttonState = .loading
 
         Task {
-            //TODO: For some reason loading does not start unless there is a delay.
             try await Task.sleep(for: .milliseconds(50))
-
             do {
-                let _ = try importWallet()
-                await MainActor.run {
+                try await MainActor.run {
+                    try importWallet()
                     isWalletsPresented.wrappedValue = false
                 }
             } catch {
                 await MainActor.run {
                     isPresentingErrorMessage = error.localizedDescription
+                    model.buttonState = .normal
                 }
-            }
-            await MainActor.run {
-                model.buttonState = .normal
             }
         }
     }
