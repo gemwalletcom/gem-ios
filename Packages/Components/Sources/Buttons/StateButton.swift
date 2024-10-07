@@ -99,7 +99,7 @@ public struct StateButton: View {
                     }
                 }
             )
-            .disabled(styleState == .disabled)
+            .disabled(styleState != .normal)
             .buttonStyle(.statefullBlue(state: styleState))
         }
     }
