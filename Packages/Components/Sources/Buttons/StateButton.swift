@@ -55,27 +55,13 @@ public struct StateButton: View {
     ) {
         self.textValue = TextValue(text: text, style: textStyle)
         self.styleState = styleState
-        if let infoTitle {
-            self.infoTextValue = TextValue(text: infoTitle, style: infoTitleStyle)
-        } else {
-            self.infoTextValue = nil
-        }
+        self.infoTextValue = infoTitle.map({ TextValue(text: $0, style: infoTitleStyle) })
         self.action = action
         self.image = image
     }
 
-    public init(
-        textValue: TextValue,
-        styleState: StateButtonStyle.State,
-        infoTextValue: TextValue? = nil,
-        image: Image? = nil,
-        action: @escaping () -> Void
-    ) {
-        self.textValue = textValue
-        self.styleState = styleState
-        self.infoTextValue = infoTextValue
-        self.action = action
-        self.image = image
+    private var isDisabled: Bool {
+        styleState != .normal
     }
 
     public var body: some View {
@@ -91,16 +77,14 @@ public struct StateButton: View {
                     HStack {
                         if let image {
                             image
-                                .font(textValue.style.font)
-                                .foregroundStyle(textValue.style.color)
                         }
                         Text(textValue.text)
-                            .textStyle(textValue.style)
                     }
+                    .font(textValue.style.font)
                 }
             )
-            .disabled(styleState == .disabled)
             .buttonStyle(.statefullBlue(state: styleState))
+            .disabled(isDisabled)
         }
     }
 }

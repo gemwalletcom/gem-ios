@@ -153,14 +153,6 @@ public struct StateButtonStyle: ButtonStyle {
     let backgroundPressed: Color
     let backgroundDisabled: Color
 
-    private var shouldDisableInteractions: Bool {
-        isGrayBackgroundState || state == .loading
-    }
-
-    private var isGrayBackgroundState: Bool {
-        state == .disabled
-    }
-
     public init(
         state: State,
         foregroundStyle: Color,
@@ -178,48 +170,33 @@ public struct StateButtonStyle: ButtonStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        ZStack {
-            backgroundView
-                .frame(height: StateButtonStyle.maxButtonHeight)
-            switch state {
-            case .normal, .disabled:
-                configuration.label
-                    .lineLimit(1)
-                    .foregroundStyle(foregroundStyle(configuration: configuration))
-                    .padding(.horizontal, Spacing.medium)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: StateButtonStyle.maxButtonHeight)
-                    .background(labelBackground(configuration: configuration))
-            case .loading:
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
-            }
+        configuration.label
+            .lineLimit(1)
+            .foregroundStyle(foregroundStyle(configuration: configuration))
+            .padding(.horizontal, Spacing.medium)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: StateButtonStyle.maxButtonHeight)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(backgroundColor(configuration: configuration))
+            )
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+            .animation(.bouncy, value: configuration.isPressed)
+    }
+
+    private func backgroundColor(configuration: Configuration) -> Color {
+        switch state {
+        case .normal: configuration.isPressed ? backgroundPressed : background
+        case .loading: backgroundPressed
+        case .disabled: backgroundDisabled
         }
-        .frame(maxWidth: .infinity)
-        .disabled(shouldDisableInteractions)
     }
 
     private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
-    }
-
-    private var backgroundView: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(isGrayBackgroundState ? backgroundDisabled : background)
-    }
-
-    private func backgroundPressedView(configuration: Configuration) -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(configuration.isPressed ? backgroundPressed : background)
-    }
-
-    private func labelBackground(configuration: Configuration) -> some View {
-        Group {
-            if !isGrayBackgroundState && state != .loading {
-                backgroundPressedView(configuration: configuration)
-            } else {
-                backgroundView
-            }
+        switch state {
+        case .normal: configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        case .loading: foregroundStylePressed.opacity(0.65)
+        case .disabled: foregroundStyle
         }
     }
 }
