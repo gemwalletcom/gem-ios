@@ -170,36 +170,34 @@ public struct StateButtonStyle: ButtonStyle {
     }
 
     public func makeBody(configuration: Configuration) -> some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 12)
-                .fill(backgroundColor(configuration: configuration))
-                .frame(height: StateButtonStyle.maxButtonHeight)
-            switch state {
-            case .normal, .disabled:
-                configuration.label
-                    .lineLimit(1)
-                    .foregroundStyle(foregroundStyle(configuration: configuration))
-                    .padding(.horizontal, Spacing.medium)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: StateButtonStyle.maxButtonHeight)
-            case .loading:
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
-            }
-        }
-        .frame(maxWidth: .infinity)
+        configuration.label
+            .lineLimit(1)
+            .foregroundStyle(foregroundStyle(configuration: configuration))
+            .padding(.horizontal, Spacing.medium)
+            .frame(minWidth: 0, maxWidth: .infinity)
+            .frame(height: StateButtonStyle.maxButtonHeight)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(backgroundColor(configuration: configuration))
+            )
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
+            .animation(.bouncy, value: configuration.isPressed)
     }
 
     private func backgroundColor(configuration: Configuration) -> Color {
         switch state {
         case .normal: configuration.isPressed ? backgroundPressed : background
-        case .loading: background
+        case .loading: backgroundPressed
         case .disabled: backgroundDisabled
         }
     }
 
     private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        switch state {
+        case .normal: configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        case .loading: foregroundStylePressed.opacity(0.65)
+        case .disabled: foregroundStyle
+        }
     }
 }
 
