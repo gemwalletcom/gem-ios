@@ -30,10 +30,7 @@ let package = Package(
                 .product(name: "GRDBQuery", package: "GRDBQuery"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
-            path: "Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
+            path: "Sources"
         ),
         .target(
             name: "StoreTestKit",

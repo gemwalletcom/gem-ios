@@ -5,7 +5,7 @@ import Keystore
 import Components
 import Store
 import BigInt
-import WalletConnector
+@preconcurrency import WalletConnector
 import GemstonePrimitives
 import Blockchain
 

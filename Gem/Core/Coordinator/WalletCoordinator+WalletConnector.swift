@@ -18,7 +18,7 @@ class TransferDataCallback<T: Identifiable>: Identifiable {
     var id: any Hashable { payload.id }
 }
 
-extension WalletCoordinator: WalletConnectorInteractable {
+extension WalletCoordinator: @preconcurrency WalletConnectorInteractable {
     func sessionReject(error: any Error) {
         let ignoreErrors = [
             "User cancelled" // User cancelled throw by WalletConnect if session proposal is rejected

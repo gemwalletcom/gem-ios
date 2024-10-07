@@ -23,10 +23,7 @@ let package = Package(
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
             ],
-            path: "Sources",
-            swiftSettings: [
-                .swiftLanguageMode(.v6)
-            ]
+            path: "Sources"
         ),
         .target(
             name: "PrimitivesTestKit",
