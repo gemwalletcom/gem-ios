@@ -16,6 +16,7 @@ struct WalletNavigationStack: View {
     @State private var isPresentingSelectType: SelectAssetType?
 
     let model: WalletSceneViewModel
+    
     @State private var navigationPathAssetSelectType = NavigationPath()
     @State private var navigationPathSelectType = NavigationPath()
 
@@ -151,6 +152,17 @@ struct WalletNavigationStack: View {
             .sheet(isPresented: $isWalletsPresented) {
                 WalletsNavigationStack()
             }
+            .onChange(of: isPresentingSelectType) { oldValue, newValue in
+                if newValue == nil {
+                    navigationPathSelectType.removeAll()
+                }
+            }
+            .onChange(of: isPresentingAssetSelectType) { oldValue, newValue in
+                if newValue == nil {
+                    navigationPathAssetSelectType.removeAll()
+                }
+            }
+
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)
     }

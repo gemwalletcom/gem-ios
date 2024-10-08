@@ -50,12 +50,8 @@ struct VerifyPhraseWalletScene: View {
                 StateButton(
                     text: Localized.Common.continue,
                     styleState: model.buttonState,
-                    action: importWallet
+                    action: onImportWallet
                 )
-//                Button(Localized.Common.continue, action: importWallet)
-//                    .disabled(model.isContinueDisabled)
-//                    .buttonStyle(.blue())
-//                    .frame(maxWidth: Spacing.scene.button.maxWidth)
             }
             .frame(maxWidth: Spacing.scene.content.maxWidth)
         }
@@ -66,25 +62,26 @@ struct VerifyPhraseWalletScene: View {
         }
     }
 
-    func importWallet() {
+}
+
+// MARK: - Actions
+
+extension VerifyPhraseWalletScene {
+    func onImportWallet() {
         model.buttonState = .loading
 
         Task {
-            //TODO: For some reason loading does not start unless there is a delay.
             try await Task.sleep(for: .milliseconds(50))
-
             do {
-                let _ = try model.importWallet()
-                await MainActor.run {
+                try await MainActor.run {
+                    let _ = try model.importWallet()
                     isWalletsPresented.wrappedValue = false
                 }
             } catch {
                 await MainActor.run {
                     isPresentingErrorMessage = error.localizedDescription
+                    model.buttonState = .normal
                 }
-            }
-            await MainActor.run {
-                model.buttonState = .normal
             }
         }
     }

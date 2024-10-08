@@ -9,29 +9,22 @@ import Settings
 struct ImportWalletScene: View {
     
     enum Field: Int, Hashable {
-        case name, phrase, address, privateKey
+        case name, input
     }
     @Environment(\.isWalletsPresented) private var isWalletsPresented
     
     @State private var name: String = ""
     @State private var wordSuggestion: String? = .none
 
-    @State private var importType: WalletImportType = .address
-    @State private var secretPhrase: String = ""
-    @State private var privateKey: String = ""
-    @State private var address: String = ""
+    @State private var importType: WalletImportType = .phrase
+    @State private var input: String = ""
+
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingScanner = false
     @FocusState private var focusedField: Field?
     @State var nameResolveState: NameRecordState = .none
     
-    let model: ImportWalletViewModel
-    
-    init(
-        model: ImportWalletViewModel
-    ) {
-        self.model = model
-    }
+    @StateObject var model: ImportWalletViewModel
     
     var body: some View {
         VStack {
@@ -50,49 +43,29 @@ struct ImportWalletScene: View {
                             }
                             .pickerStyle(.segmented)
                         }
-                        switch importType {
-                        case .phrase:
-                            TextField(Localized.Wallet.Import.secretPhrase, text: $secretPhrase, axis: .vertical)
+                        HStack {
+                            TextField(importType.description, text: $input, axis: .vertical)
                                 .textInputAutocapitalization(.never)
                                 .lineLimit(8)
-                                .keyboardType(.alphabet)
+                                .keyboardType(importType.keyboardType)
                                 .autocorrectionDisabled(true)
                                 .frame(minHeight: 80, alignment: .top)
-                                .focused($focusedField, equals: .phrase)
-                                .accessibilityIdentifier("phrase")
+                                .focused($focusedField, equals: .input)
+                                .accessibilityIdentifier(importType.id.lowercased())
                                 .toolbar {
-                                    ToolbarItem(placement: .keyboard) {
-                                        WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
+                                    if importType.showToolbar {
+                                        ToolbarItem(placement: .keyboard) {
+                                            WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
+                                        }
                                     }
                                 }
-                                .padding(.top, Spacing.small)
-                        case .privateKey:
-                            if !model.keyEncodingTypes.isEmpty {
-                                TextField(Localized.Wallet.Import.privateKey(model.importPrivateKeyPlaceholder), text: $privateKey, axis: .vertical)
-                                    .textInputAutocapitalization(.never)
-                                    .lineLimit(8)
-                                    .keyboardType(.default)
-                                    .autocorrectionDisabled(true)
-                                    .frame(minHeight: 80, alignment: .top)
-                                    .focused($focusedField, equals: .privateKey)
-                                    .padding(.top, Spacing.small)
-                            }
-                        case .address:
-                            if let chain = model.chain {
-                                HStack {
-                                    TextField(Localized.Wallet.Import.addressField, text: $address, axis: .vertical)
-                                        .textInputAutocapitalization(.never)
-                                        .autocorrectionDisabled()
-                                        .focused($focusedField, equals: .address)
-                                        .frame(minHeight: 80, alignment: .top)
-                                        .accessibilityIdentifier("address")
-                                        .padding(.top, Spacing.small)
+                                .padding(.top, Spacing.small + Spacing.tiny)
+                                if let chain = model.chain, importType == .address {
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
                                         state: $nameResolveState,
-                                        address: $address
+                                        address: $input
                                     )
-                                }
                             }
                         }
                         HStack(alignment: .center, spacing: 16) {
@@ -116,19 +89,13 @@ struct ImportWalletScene: View {
             .listSectionSpacing(.compact)
 
             Spacer()
-            Button(Localized.Wallet.Import.action) {
-                Task {
-                    do {
-                        focusedField = nil
-                        let _ = try importWallet()
-                    } catch {
-                        isPresentingErrorMessage = error.localizedDescription
-                    }
-                }
-            }
+            StateButton(
+                text: Localized.Wallet.Import.action,
+                styleState: model.buttonState,
+                action: onImportWallet
+            )
             .accessibilityIdentifier("import_wallet")
             .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(.blue())
         }
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
@@ -138,69 +105,28 @@ struct ImportWalletScene: View {
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
-        .onChange(of: secretPhrase) { oldValue, newValue in
+        .onChange(of: input) { oldValue, newValue in
             wordSuggestion = model.wordSuggestionCalculate(value: newValue)
         }
-        .onChange(of: importType) {
-            focusedField = importType.field
+        .onChange(of: importType) { (_, _) in
+            input = ""
         }
         .navigationBarTitle(model.title)
         .taskOnce {
             name = model.name
             importType = model.importTypes.first!
+            focusedField = .input
         }
     }
 
     func selectWord(word: String) {
-        secretPhrase = model.selectWordCalculate(input: secretPhrase, word: word)
+        input = model.selectWordCalculate(input: input, word: word)
     }
     
     func onHandleScan(_ result: String) {
-        switch importType {
-        case .phrase: secretPhrase = result
-        case .address: address = result
-        case .privateKey: privateKey = result
-        }
+        input = result
     }
 
-    func importWallet() throws {
-        let recipient: RecipientImport = {
-            if let result = nameResolveState.result {
-                return RecipientImport(name: result.name, address: result.address)
-            }
-            return RecipientImport(name: name, address: address)
-        }()
-        switch importType {
-        case .phrase:
-            let words = secretPhrase.split(separator: " ").map{String($0)}
-            guard try validateForm(type: importType, address: recipient.address, words: words) else {
-                return
-            }
-            switch model.type {
-            case .multicoin:
-                try model.importWallet(
-                    name: recipient.name,
-                    keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
-                )
-            case .chain(let chain):
-                try model.importWallet(
-                    name: recipient.name,
-                    keystoreType: .single(words: words, chain: chain)
-                )
-            }
-        case .privateKey:
-            guard try validateForm(type: importType, address: recipient.address, words: [privateKey]) else {
-                return
-            }
-            try model.importWallet(name: recipient.name, keystoreType: .privateKey(text: privateKey, chain: model.chain!))
-        case .address:
-
-            try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
-        }
-        
-        isWalletsPresented.wrappedValue = false
-    }
-    
     func validateForm(type: WalletImportType, address: String, words: [String]) throws  -> Bool {
         guard !name.isEmpty else {
             throw WalletImportError.emptyName
@@ -230,14 +156,7 @@ struct ImportWalletScene: View {
             UINotificationFeedbackGenerator().notificationOccurred(.error)
             return
         }
-        switch importType {
-        case .phrase:
-            secretPhrase = string.trim()
-        case .privateKey:
-            privateKey = string.trim()
-        case .address:
-            address = string.trim()
-        }
+        input = string.trim()
     }
     
     func scanQR() {
@@ -247,4 +166,65 @@ struct ImportWalletScene: View {
 
 extension String: @retroactive Identifiable {
     public var id: String { self }
+}
+
+// MARK: - Actions
+
+extension ImportWalletScene {
+    func onImportWallet() {
+        model.buttonState = .loading
+
+        Task {
+            try await Task.sleep(for: .milliseconds(50))
+            do {
+                try await MainActor.run {
+                    try importWallet()
+                    isWalletsPresented.wrappedValue = false
+                }
+            } catch {
+                await MainActor.run {
+                    isPresentingErrorMessage = error.localizedDescription
+                    model.buttonState = .normal
+                }
+            }
+        }
+    }
+
+    func importWallet() throws {
+        let recipient: RecipientImport = {
+            if let result = nameResolveState.result {
+                return RecipientImport(name: result.name, address: result.address)
+            }
+            return RecipientImport(name: name, address: input)
+        }()
+        switch importType {
+        case .phrase:
+            let words = input.split(separator: " ").map{String($0)}
+            guard try validateForm(type: importType, address: recipient.address, words: words) else {
+                return
+            }
+            switch model.type {
+            case .multicoin:
+                try model.importWallet(
+                    name: recipient.name,
+                    keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
+                )
+            case .chain(let chain):
+                try model.importWallet(
+                    name: recipient.name,
+                    keystoreType: .single(words: words, chain: chain)
+                )
+            }
+        case .privateKey:
+            guard try validateForm(type: importType, address: recipient.address, words: [input]) else {
+                return
+            }
+            try model.importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: model.chain!))
+        case .address:
+            guard try validateForm(type: importType, address: recipient.address, words: []) else {
+                return
+            }
+            try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
+        }
+    }
 }

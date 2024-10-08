@@ -190,7 +190,7 @@ extension SwapViewModel {
         let asset = assetData.asset
         let amount = (try? formatter.inputNumber(from: fromValue, decimals: Int(asset.decimals))) ?? BigInt.zero
 
-        return amount > 0 && amount <= assetData.balance.available
+        return amount > 0
     }
 
     private func getSwapDataOnApprove(fromAsset: Asset, toAsset: Asset, spender: String, spenderName: String) throws -> TransferData {
