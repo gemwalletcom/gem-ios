@@ -16,7 +16,7 @@ public struct Signer {
         self.keystore = keystore
     }
     
-    public func sign(input: SignerInput) throws -> String {
+    @MainActor public func sign(input: SignerInput) throws -> String {
         let chain = input.asset.chain
         let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
         let signer = signer(for: chain)

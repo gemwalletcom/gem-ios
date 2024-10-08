@@ -94,7 +94,7 @@ class WalletsService {
     }
     
     func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
-        let wallet = try keystore.getWallet(walletId)
+        let wallet = try await keystore.getWallet(walletId)
         async let balances: () = try updateBalance(for: walletId, assetIds: assetIds)
         async let prices: () = try updatePrices(assetIds: assetIds)
         async let newAssets: () = try getNewAssets(for: wallet)
@@ -104,7 +104,7 @@ class WalletsService {
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
         NSLog("fetch balances: \(assetIds.count)")
         
-        let wallet = try keystore.getWallet(walletId)
+        let wallet = try await keystore.getWallet(walletId)
         balanceService.updateBalance(for: wallet, assetIds: assetIds)
     }
     

@@ -36,7 +36,7 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
         .secretPhrase
     }
 
-    func generateWords() -> [String] {
+    @MainActor func generateWords() -> [String] {
         return keystore.createWallet()
     }
     

@@ -29,7 +29,7 @@ struct RecipientViewModel {
         return Localized.Transfer.Recipient.title
     }
 
-    func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
+    @MainActor func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
         switch type {
         case .wallets:
             return keystore.wallets

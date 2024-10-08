@@ -9,6 +9,7 @@ import Style
 import GemstonePrimitives
 
 @Observable
+@MainActor
 class ConfirmTransferViewModel {
     var state: StateViewType<TransactionInputViewModel> = .loading
     var confirmingState: StateViewType<Bool> = .noData {

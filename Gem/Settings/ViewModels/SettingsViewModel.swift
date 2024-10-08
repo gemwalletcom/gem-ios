@@ -10,6 +10,7 @@ import Primitives
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable
+@MainActor
 class SettingsViewModel: ObservableObject {
     @ObservedObject var currencyModel: CurrencySceneViewModel
 

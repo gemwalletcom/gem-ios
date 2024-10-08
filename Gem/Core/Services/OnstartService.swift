@@ -17,7 +17,7 @@ struct OnstartService {
     let keystore: any Keystore
     let preferences = Preferences()
     
-    func migrations() {
+    @MainActor func migrations() {
         let preferences = PreferencesStore()
         
         do {

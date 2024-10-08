@@ -4,6 +4,7 @@ import Keystore
 import Components
 import Style
 
+@MainActor
 class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath

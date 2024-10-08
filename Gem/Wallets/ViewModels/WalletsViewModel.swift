@@ -3,6 +3,7 @@ import Keystore
 import Primitives
 import SwiftUI
 
+@MainActor
 class WalletsViewModel {
 
     @Binding var navigationPath: NavigationPath

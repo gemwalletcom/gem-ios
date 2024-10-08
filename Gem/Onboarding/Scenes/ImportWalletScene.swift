@@ -177,8 +177,8 @@ extension ImportWalletScene {
         Task {
             try await Task.sleep(for: .milliseconds(50))
             do {
-                try await MainActor.run {
-                    try importWallet()
+                try await importWallet()
+                await MainActor.run {
                     isWalletsPresented.wrappedValue = false
                 }
             } catch {
@@ -190,7 +190,7 @@ extension ImportWalletScene {
         }
     }
 
-    func importWallet() throws {
+    func importWallet() async throws {
         let recipient: RecipientImport = {
             if let result = nameResolveState.result {
                 return RecipientImport(name: result.name, address: result.address)
@@ -205,12 +205,12 @@ extension ImportWalletScene {
             }
             switch model.type {
             case .multicoin:
-                try model.importWallet(
+                try await model.importWallet(
                     name: recipient.name,
                     keystoreType: .phrase(words: words, chains: AssetConfiguration.allChains)
                 )
             case .chain(let chain):
-                try model.importWallet(
+                try await model.importWallet(
                     name: recipient.name,
                     keystoreType: .single(words: words, chain: chain)
                 )
@@ -219,12 +219,12 @@ extension ImportWalletScene {
             guard try validateForm(type: importType, address: recipient.address, words: [input]) else {
                 return
             }
-            try model.importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: model.chain!))
+            try await model.importWallet(name: recipient.name, keystoreType: .privateKey(text: input, chain: model.chain!))
         case .address:
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
             }
-            try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
+            try await model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
         }
     }
 }

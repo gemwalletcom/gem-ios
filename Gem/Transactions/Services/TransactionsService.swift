@@ -27,7 +27,7 @@ class TransactionsService {
     }
 
     func updateAll(deviceId: String, walletId: WalletId) async throws {
-        let wallet = try keystore.getWallet(walletId)
+        let wallet = try await keystore.getWallet(walletId)
         let store = WalletPreferencesStore(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         

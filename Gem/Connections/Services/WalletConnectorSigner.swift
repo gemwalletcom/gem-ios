@@ -8,7 +8,7 @@ import Primitives
 import BigInt
 import Gemstone
 
-public final class WalletConnectorSigner: WalletConnectorSignable {
+public final class WalletConnectorSigner: @preconcurrency WalletConnectorSignable {
     let store: ConnectionsStore
     let keystore: any Keystore
     var walletConnectorInteractor: any WalletConnectorInteractable
@@ -27,11 +27,11 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
         Config.shared.getWalletConnectConfig().chains.compactMap { Chain(rawValue: $0) }
     }
 
-    public func getCurrentWallet() throws -> Wallet {
+    @MainActor public func getCurrentWallet() throws -> Wallet {
         try keystore.getCurrentWallet()
     }
 
-    public func getWallet(id: WalletId) throws -> Wallet {
+    @MainActor public func getWallet(id: WalletId) throws -> Wallet {
         try keystore.getWallet(id)
     }
 
@@ -88,7 +88,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
         let session = try store.getConnection(id: sessionId)
-        let wallet = try keystore.getWallet(session.wallet.walletId)
+        let wallet = try await keystore.getWallet(session.wallet.walletId)
 
         switch transaction {
         case .ethereum(let transaction):

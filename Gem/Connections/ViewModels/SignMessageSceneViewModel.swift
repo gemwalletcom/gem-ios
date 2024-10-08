@@ -37,7 +37,7 @@ struct SignMessageSceneViewModel {
         Localized.Transfer.confirm
     }
     
-    func signMessage() throws {
+    @MainActor func signMessage() throws {
         let message = SignMessage(type: payload.message.type, data: payload.message.data)
         let data = try keystore.sign(wallet: payload.wallet, message: message, chain: payload.chain)
         let result = SignMessageDecoder(message: message).getResult(from: data)
