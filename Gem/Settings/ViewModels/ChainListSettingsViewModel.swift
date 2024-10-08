@@ -4,10 +4,13 @@ import Foundation
 import Primitives
 import Settings
 
-struct ChainListSettingsViewModel {
+@Observable
+class ChainListSettingsViewModel {
     var title: String {
-        return Localized.Settings.Networks.title
+        Localized.Settings.Networks.title
     }
+
+    var selectedChain: Chain?
 }
 
 // MARK: - ChainFilterable

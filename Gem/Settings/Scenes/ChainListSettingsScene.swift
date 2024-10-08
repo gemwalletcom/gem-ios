@@ -10,15 +10,15 @@ struct ChainListSettingsScene: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.explorerService) private var explorerService
 
-    let model = ChainListSettingsViewModel()
+    @State private var model = ChainListSettingsViewModel()
 
     var body: some View {
         SearchableListView(
             items: model.chains,
             filter: model.filter(_:query:),
             content: { chain in
-                NavigationLink(value: chain) {
-                    ChainView(chain: chain)
+                NavigationCustomLink(with: ChainView(chain: chain)) {
+                    onSelect(chain: chain)
                 }
             },
             emptyContent: {
@@ -28,13 +28,21 @@ struct ChainListSettingsScene: View {
                 )
             }
         )
-        .navigationDestination(for: Chain.self) { chain in
+        .navigationDestination(item: $model.selectedChain) { chain in
             ChainSettingsScene(
                 model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: chain)
             )
         }
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+// MARK: - Actions
+
+extension ChainListSettingsScene {
+    private func onSelect(chain: Chain) {
+        model.selectedChain = chain
     }
 }
 
