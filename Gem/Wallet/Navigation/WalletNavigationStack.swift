@@ -29,12 +29,10 @@ struct WalletNavigationStack: View {
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) { asset in
-                @Bindable var navigationState = navigationState
                 AssetNavigationView(
                     wallet: model.wallet,
                     assetId: asset.asset.id,
-                    isPresentingAssetSelectType: $isPresentingAssetSelectType,
-                    navigationPath: $navigationState.wallet
+                    isPresentingAssetSelectType: $isPresentingAssetSelectType
                 )
             }
             .navigationDestination(for: TransactionExtended.self) { transaction in
