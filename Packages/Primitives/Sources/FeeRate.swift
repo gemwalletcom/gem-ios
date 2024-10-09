@@ -2,7 +2,7 @@
 
 import BigInt
 
-public struct FeeRate: Identifiable, Equatable, Hashable {
+public struct FeeRate: Identifiable, Equatable, Hashable, Sendable {
     public let priority: FeePriority
     public let value: BigInt
 

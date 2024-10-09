@@ -5,7 +5,7 @@ import GemAPI
 import Primitives
 import Store
 
-struct SubscriptionService {
+struct SubscriptionService: Sendable {
     
     let subscriptionProvider: any GemAPISubscriptionService
     let preferences = Preferences()

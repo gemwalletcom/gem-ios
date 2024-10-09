@@ -1,6 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import ReownWalletKit
+@preconcurrency import ReownWalletKit
 
 final class WCConnectionsInteractor {
     var sessionsStream: AsyncStream<[Session]> {

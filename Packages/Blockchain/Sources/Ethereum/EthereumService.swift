@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 
-public struct EthereumService {
+public struct EthereumService: Sendable {
 
     static let gasLimitPercent = 50.0
     static let rewardPercentiles = [25]

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct BroadcastOptions {
+public struct BroadcastOptions: Sendable {
     public let skipPreflight: Bool
     
     public init(skipPreflight: Bool) {

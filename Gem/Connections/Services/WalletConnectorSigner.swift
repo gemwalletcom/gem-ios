@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletConnector
+@preconcurrency import WalletConnector
 import Keystore
 import Store
 import Primitives

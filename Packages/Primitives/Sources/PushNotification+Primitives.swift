@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum PushNotification: Equatable {
+public enum PushNotification: Equatable, Sendable {
     case transaction(walletIndex: Int, AssetId)
     case priceAlert(AssetId)
     case buyAsset(AssetId)

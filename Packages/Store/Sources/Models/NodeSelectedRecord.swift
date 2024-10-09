@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 struct NodeSelectedRecordInfo: FetchableRecord, Codable {
     var node: NodeRecord
@@ -11,7 +11,7 @@ struct NodeSelectedRecordInfo: FetchableRecord, Codable {
 
 public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord  {
     
-    public static var databaseTableName: String = "nodes_selected_v1"
+    public static let databaseTableName: String = "nodes_selected_v1"
 
     public var nodeId: Int
     public var chain: Chain

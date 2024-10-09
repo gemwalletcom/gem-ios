@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct ProviderOptions {
+public struct ProviderOptions: Sendable {
     public let baseUrl: URL?
     
     public init(baseUrl: URL?) {

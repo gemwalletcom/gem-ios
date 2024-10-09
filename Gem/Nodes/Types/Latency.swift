@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct Latency {
+struct Latency: Sendable {
     let type: LatencyType
     let value: Double
 

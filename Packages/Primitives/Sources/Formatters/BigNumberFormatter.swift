@@ -1,22 +1,27 @@
 import Foundation
 import BigInt
 
-public final class BigNumberFormatter {
-
+public final class BigNumberFormatter: Sendable {
     public let locale: Locale
-    public let minimumFractionDigits = 0
-    public var maximumFractionDigits = Int.max
+    public let minimumFractionDigits: Int
+    public let maximumFractionDigits: Int
     public let decimalSeparator: String
-    public var groupingSeparator: String
+    public let groupingSeparator: String
 
-    public init(locale: Locale = .current) {
-        decimalSeparator = locale.decimalSeparator ?? "."
-        groupingSeparator = locale.groupingSeparator ?? ","
-        self.locale = locale
-    }
-    
     public static let standard: BigNumberFormatter = BigNumberFormatter(locale: Locale(identifier: "en_US"))
-    
+
+    public init(locale: Locale = .current,
+                minimumFractionDigits: Int = 0,
+                maximumFractionDigits: Int = Int.max,
+                groupingSeparator: String? = nil
+    ) {
+        self.locale = locale
+        self.minimumFractionDigits = minimumFractionDigits
+        self.maximumFractionDigits = maximumFractionDigits
+        self.decimalSeparator = locale.decimalSeparator ?? "."
+        self.groupingSeparator = groupingSeparator ?? (locale.groupingSeparator ?? ",")
+    }
+
     public func number(from string: String, decimals: Int) throws -> BigInt {
         guard let decimalIndex = string.firstIndex(where: { String($0) == decimalSeparator }) else {
             if let value = BigInt(string).flatMap({ $0 * BigInt(10).power(decimals) }) {
@@ -83,7 +88,11 @@ public final class BigNumberFormatter {
         }
         return decimal.doubleValue
     }
+}
 
+// MARK: - Private
+
+extension BigNumberFormatter {
     private func integerString(from bigInt: BigInt) -> String {
         var resultString = bigInt.description
         let isNegative = bigInt.sign == .minus
@@ -96,7 +105,7 @@ public final class BigNumberFormatter {
 
         return resultString
     }
-    
+
     private func fractionalString(from number: BigInt, decimals: Int) -> String {
         var number = number
         let digits = number.description.count

@@ -8,7 +8,7 @@ import Primitives
 // https://github.com/bnb-chain/bsc-genesis-contract/blob/v1.2.2/abi/stakehub.abi
 // https://github.com/bnb-chain/bsc-genesis-contract/blob/v1.2.2/contracts/BC_fusion/StakeHub.sol#L855
 // https://github.com/gemwalletcom/contracts/blob/0.1.1/bsc/hub_reader/src/HubReader.sol
-public struct StakeHub {
+public struct StakeHub: Sendable {
     public static let address = "0x0000000000000000000000000000000000002002"
     public static let reader = "0x830295c0abe7358f7e24bc38408095621474280b"
 

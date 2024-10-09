@@ -7,7 +7,7 @@ import BigInt
 import WalletCore
 import WalletCorePrimitives
 
-public struct BitcoinService {
+public struct BitcoinService: Sendable {
     
     let chain: BitcoinChain
     let provider: Provider<BitcoinProvider>

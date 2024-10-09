@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 
-public struct TronService {
+public struct TronService: Sendable {
     
     let chain: Chain
     let provider: Provider<TronProvider>

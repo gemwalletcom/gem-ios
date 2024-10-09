@@ -1,5 +1,5 @@
 import Foundation
-@preconcurrency import BigInt
+import BigInt
 
 public struct Balance: Codable, Sendable {
 

@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import Gemstone
 
-public struct TonService {
+public struct TonService: Sendable {
     
     let chain: Chain
     let provider: Provider<TonProvider>
@@ -289,7 +289,7 @@ extension TonService: ChainLatestBlockFetchable {
 
 // MARK: - Models
 
-public struct TonMasterChainBlock: Codable {
+public struct TonMasterChainBlock: Codable, Sendable {
     public var last: TonBlock
     public var initial: TonBlock
 
