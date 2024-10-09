@@ -200,6 +200,8 @@
 		D8148C2D2BF54FB80066586A /* MemoListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8148C2C2BF54FB80066586A /* MemoListItem.swift */; };
 		D820CB522B51ED220063D70C /* ValidatorImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820CB512B51ED220063D70C /* ValidatorImageView.swift */; };
 		D820CB542B55B07F0063D70C /* StakeRecommendedValidators.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820CB532B55B07F0063D70C /* StakeRecommendedValidators.swift */; };
+		D829BF242CB5E52000DEB2E8 /* ChainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D829BF232CB5E52000DEB2E8 /* ChainView.swift */; };
+		D829BF252CB5E52000DEB2E8 /* ChainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D829BF232CB5E52000DEB2E8 /* ChainView.swift */; };
 		D82E9EDA2B26698100DB06C8 /* StakeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82E9ED92B26698100DB06C8 /* StakeService.swift */; };
 		D82EF8D02C1E0FA000EC1C92 /* AddNodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */; };
 		D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */; };
@@ -810,6 +812,7 @@
 		D8148C2C2BF54FB80066586A /* MemoListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemoListItem.swift; sourceTree = "<group>"; };
 		D820CB512B51ED220063D70C /* ValidatorImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidatorImageView.swift; sourceTree = "<group>"; };
 		D820CB532B55B07F0063D70C /* StakeRecommendedValidators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeRecommendedValidators.swift; sourceTree = "<group>"; };
+		D829BF232CB5E52000DEB2E8 /* ChainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainView.swift; sourceTree = "<group>"; };
 		D82E9ED92B26698100DB06C8 /* StakeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeService.swift; sourceTree = "<group>"; };
 		D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeService.swift; sourceTree = "<group>"; };
 		D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityLink.swift; sourceTree = "<group>"; };
@@ -1379,6 +1382,7 @@
 		C3CF3B7E29AAF86400E96586 /* Settings */ = {
 			isa = PBXGroup;
 			children = (
+				D829BF222CB5E51A00DEB2E8 /* Views */,
 				D8DC1AF52C11391100697D0A /* Navigation */,
 				C3E99BC72A76BF85005DF35F /* Services */,
 				C3FA949229D7EEE700BFC23D /* Types */,
@@ -1749,6 +1753,14 @@
 			isa = PBXGroup;
 			children = (
 				D820CB512B51ED220063D70C /* ValidatorImageView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		D829BF222CB5E51A00DEB2E8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D829BF232CB5E52000DEB2E8 /* ChainView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -2721,6 +2733,7 @@
 				D801814E2B4621ED00F4D22B /* Scenes.swift in Sources */,
 				C3D1C4EC2A2EA647006E8EEA /* AmountScene.swift in Sources */,
 				D8148C262BEEDD5A0066586A /* ChartDateFormatter.swift in Sources */,
+				D829BF242CB5E52000DEB2E8 /* ChainView.swift in Sources */,
 				83D8544A2C5A97D600D4078C /* NetworkFeeScene.swift in Sources */,
 				D810F3682AE9DBCA0006D9C6 /* WalletCoordinator+WalletConnector.swift in Sources */,
 				C3549B4B29C80B3C00B4BE01 /* WalletBarView.swift in Sources */,
@@ -3015,6 +3028,7 @@
 				D8C4A2FE2C8A7B14006FABE8 /* App.swift in Sources */,
 				D8C4A2FF2C8A7B14006FABE8 /* EnvironmentVariables.swift in Sources */,
 				D8C4A3002C8A7B14006FABE8 /* TransactionsNavigationStack.swift in Sources */,
+				D829BF252CB5E52000DEB2E8 /* ChainView.swift in Sources */,
 				D8C4A3012C8A7B14006FABE8 /* DeviceService.swift in Sources */,
 				D8C4A3022C8A7B14006FABE8 /* Scenes.swift in Sources */,
 				D8C4A3032C8A7B14006FABE8 /* AmountScene.swift in Sources */,

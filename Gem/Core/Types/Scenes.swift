@@ -39,4 +39,7 @@ struct Scenes {
     struct Asset: Hashable {
         let asset: Primitives.Asset
     }
+    struct ChainSettings: Hashable {
+        let chain: Primitives.Chain
+    }
 }
