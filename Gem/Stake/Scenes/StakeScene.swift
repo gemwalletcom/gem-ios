@@ -133,14 +133,11 @@ extension StakeScene {
 
 extension StakeScene {
     private func onSelectStake() {
-        if let value = try? model.stakeRecipientData() {
-            model.onAmountInputAction?(value)
-        }
+        model.onSelectStake()
     }
 
     private func onSelectDelegations() {
-        let transferData = model.claimRewardsTransferData(delegations: delegations)
-        model.onTransferAction?(transferData)
+        model.onSelectDelegations(delegations: delegations)
     }
 
     private func onOpenLockTimeURL() {

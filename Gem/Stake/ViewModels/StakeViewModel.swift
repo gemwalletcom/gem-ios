@@ -141,6 +141,18 @@ extension StakeViewModel {
             }
         }
     }
+
+    func onSelectStake() {
+        if let value = try? stakeRecipientData() {
+            onAmountInputAction?(value)
+        }
+    }
+
+    func onSelectDelegations(delegations: [Delegation]) {
+        let delegations = delegations.filter { $0.base.rewardsValue > 0 }
+        let transferData = claimRewardsTransferData(delegations: delegations)
+        onTransferAction?(transferData)
+    }
 }
 
 // MARK: - Private
