@@ -1,9 +1,9 @@
 import Foundation
 import Primitives
 
-public struct AssetConfiguration {
+public struct AssetConfiguration: Sendable {
 
-    public static var supportedChainsWithTokens: [Chain] = [
+    public static let supportedChainsWithTokens: [Chain] = [
         [
             .solana,
             .ton,
@@ -15,7 +15,7 @@ public struct AssetConfiguration {
     ]
     .flatMap { $0 }
 
-    public static var allChains: [Chain] = [
+    public static let allChains: [Chain] = [
         .bitcoin,
         .litecoin,
         .solana,
@@ -51,7 +51,7 @@ public struct AssetConfiguration {
         .near,
     ]
 
-    public static var enabledByDefault: [AssetId] =  [
+    public static let enabledByDefault: [AssetId] =  [
         AssetId(chain: .bitcoin, tokenId: .none),
         AssetId(chain: .ethereum, tokenId: .none),
         AssetId(chain: .solana, tokenId: .none),

@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 
-public struct NearService {
+public struct NearService: Sendable {
     let chain: Chain
     let provider: Provider<NearProvider>
     

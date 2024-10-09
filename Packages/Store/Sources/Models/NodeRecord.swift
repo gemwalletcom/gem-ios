@@ -6,7 +6,7 @@ import GRDB
 
 public struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "nodes"
+    public static let databaseTableName: String = "nodes"
 
     public var id: Int?
     public var url: String

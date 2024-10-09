@@ -7,7 +7,7 @@ import BigInt
 import Gemstone
 import GemstonePrimitives
 
-public struct SuiService {
+public struct SuiService: Sendable {
     
     let chain: Chain
     let provider: Provider<SuiProvider>

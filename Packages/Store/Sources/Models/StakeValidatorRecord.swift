@@ -6,7 +6,7 @@ import GRDB
 
 public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "stake_validators"
+    public static let databaseTableName: String = "stake_validators"
 
     public var id: String
     public var assetId: String

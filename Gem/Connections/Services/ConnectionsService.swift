@@ -2,7 +2,7 @@
 
 import Foundation
 import Store
-import WalletConnector
+@preconcurrency import WalletConnector
 import Primitives
 
 class ConnectionsService {

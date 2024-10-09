@@ -3,13 +3,13 @@
 import Foundation
 import BigInt
 
-public enum FeeOption {
+public enum FeeOption: Sendable {
     case tokenAccountCreation
 }
 
 public typealias FeeOptionMap = [FeeOption: BigInt]
 
-public struct Fee {
+public struct Fee: Sendable {
     public let fee: BigInt
     public let gasPriceType: GasPriceType
     public let gasLimit: BigInt

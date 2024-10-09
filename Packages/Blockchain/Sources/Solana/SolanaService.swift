@@ -8,7 +8,7 @@ import Gemstone
 import GemstonePrimitives
 import WalletCore
 
-public struct SolanaService {
+public struct SolanaService: Sendable {
     
     let chain: Chain
     let provider: Provider<SolanaProvider>

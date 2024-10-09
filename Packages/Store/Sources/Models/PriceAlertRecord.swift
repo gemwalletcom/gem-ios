@@ -6,7 +6,7 @@ import GRDB
 
 public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
 
-    public static var databaseTableName: String = "price_alerts"
+    public static let databaseTableName: String = "price_alerts"
 
     public var id: String
     public var assetId: String

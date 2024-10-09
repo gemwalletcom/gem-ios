@@ -28,7 +28,7 @@ extension UIDevice {
 }
 
 private struct JailBrokenHelper {
-    static func hasCydiaInstalled() -> Bool {
+    @MainActor static func hasCydiaInstalled() -> Bool {
         return UIApplication.shared.canOpenURL(URL(string: "cydia://")!)
     }
     
@@ -92,25 +92,25 @@ private struct JailBrokenHelper {
                 "/Library/MobileSubstrate/MobileSubstrate.dylib"
         ]
     }
+
     static func checkDYLD() -> Bool {
-       let suspiciousLibraries = [
-           "FridaGadget",
-           "frida",
-           "cynject",
-           "libcycript"
-       ]
+        let suspiciousLibraries = [
+            "FridaGadget",
+            "frida",
+            "cynject",
+            "libcycript"
+        ]
         for libraryIndex in 0..<_dyld_image_count() {
-     
-           guard let loadedLibrary = String(validatingUTF8: _dyld_get_image_name(libraryIndex)) else { continue }
-           for suspiciousLibrary in suspiciousLibraries {
-               if loadedLibrary.lowercased().contains(suspiciousLibrary.lowercased()) {
-                   return true
-               }
-           }
-       }
-       return false
+            guard let loadedLibrary = String(validatingCString: _dyld_get_image_name(libraryIndex)) else { continue }
+            for suspiciousLibrary in suspiciousLibraries {
+                if loadedLibrary.lowercased().contains(suspiciousLibrary.lowercased()) {
+                    return true
+                }
+            }
+        }
+        return false
     }
-   
+
     static func isFridaRunning() -> Bool {
        func swapBytesIfNeeded(port: in_port_t) -> in_port_t {
            let littleEndian = Int(OSHostByteOrder()) == OSLittleEndian

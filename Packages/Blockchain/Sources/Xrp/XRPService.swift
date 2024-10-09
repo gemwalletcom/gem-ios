@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-public struct XRPService {
+public struct XRPService: Sendable {
     
     let chain: Chain
     let provider: Provider<XRPProvider>

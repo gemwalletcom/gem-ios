@@ -1,13 +1,32 @@
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 
-public class DB: ObservableObject {
+public final class DB: ObservableObject, Sendable {
+    private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
     private let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+    private let dbPath: URL
+
     public let dbQueue: DatabaseQueue
 
-    static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
+    public init(
+        path: String,
+        configuration: GRDB.Configuration = DB.defaultConfiguration
+    ) {
+        do {
+            dbPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
+            dbQueue = try DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
+        } catch {
+            fatalError("db initialization error: \(error)")
+        }
+        do {
+            var migrations = Migrations()
+            try migrations.run(dbQueue: dbQueue)
+        } catch {
+            fatalError("db migrations error: \(error)")
+        }
+    }
 
-    public static var defaultConfiguration: GRDB.Configuration = {
+    public static let defaultConfiguration: GRDB.Configuration = {
         var config = GRDB.Configuration()
         #if DEBUG
         config.publicStatementArguments = true
@@ -29,24 +48,4 @@ public class DB: ObservableObject {
         #endif
         return config
     }()
-
-    private let dbPath: URL
-    private var migrations = Migrations()
-
-    public init(
-        path: String,
-        configuration: GRDB.Configuration = DB.defaultConfiguration
-    ) {
-        do {
-            dbPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
-            dbQueue = try DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
-        } catch {
-            fatalError("db initialization error: \(error)")
-        }
-        do {
-            try migrations.run(dbQueue: dbQueue)
-        } catch {
-            fatalError("db migrations error: \(error)")
-        }
-    }
 }

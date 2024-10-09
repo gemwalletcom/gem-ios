@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import WalletCore
 
-public class SmartChainService {
+final public class SmartChainService: Sendable {
     let provider: Provider<EthereumProvider>
     let stakeHub: StakeHub
 

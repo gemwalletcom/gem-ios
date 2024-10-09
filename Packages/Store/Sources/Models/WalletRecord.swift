@@ -2,11 +2,11 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "wallets"
+    public static let databaseTableName: String = "wallets"
 
     public var id: String
     public var name: String

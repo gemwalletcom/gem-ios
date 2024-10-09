@@ -6,7 +6,7 @@ import GRDB
 
 public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "wallets_accounts"
+    public static let databaseTableName: String = "wallets_accounts"
 
     public var walletId: String
     public var chain: Chain

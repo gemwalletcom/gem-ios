@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct FeeInput {
+public struct FeeInput: Sendable {
     public let type: TransferDataType
     public let senderAddress: String
     public let destinationAddress: String

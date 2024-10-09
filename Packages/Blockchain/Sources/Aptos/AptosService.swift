@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-public struct AptosService {
+public struct AptosService: Sendable {
     
     let chain: Chain
     let provider: Provider<AptosProvider>

@@ -2,11 +2,11 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "stake_delegations"
+    public static let databaseTableName: String = "stake_delegations"
 
     public var id: String
     public var assetId: String
