@@ -37,7 +37,6 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        @Bindable var navigationState = navigationState
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
                 model: .init(
