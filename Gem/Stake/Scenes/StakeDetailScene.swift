@@ -62,7 +62,6 @@ struct StakeDetailScene: View {
                 }
             }
         }
-        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }

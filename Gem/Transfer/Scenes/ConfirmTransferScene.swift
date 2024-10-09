@@ -131,7 +131,8 @@ extension ConfirmTransferScene {
             title: model.networkFeeTitle,
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
-            placeholders: [.subtitle]
+            placeholders: [.subtitle],
+            infoAction: onNetworkFeeInfo
         )
     }
 }
@@ -165,6 +166,10 @@ extension ConfirmTransferScene {
         } else {
             onSelectConfirmTransfer()
         }
+    }
+
+    private func onNetworkFeeInfo() {
+        model.onNetworkFeeInfo()
     }
 }
 

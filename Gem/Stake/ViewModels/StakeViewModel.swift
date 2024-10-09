@@ -7,6 +7,7 @@ import Store
 import Components
 import BigInt
 import GemstonePrimitives
+import SwiftUI
 
 @Observable
 class StakeViewModel {
@@ -152,6 +153,10 @@ extension StakeViewModel {
         let delegations = delegations.filter { $0.base.rewardsValue > 0 }
         let transferData = claimRewardsTransferData(delegations: delegations)
         onTransferAction?(transferData)
+    }
+
+    func onSelectLockTime() {
+        UIApplication.shared.open(lockTimeInfoURL)
     }
 }
 

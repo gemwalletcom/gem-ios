@@ -38,7 +38,6 @@ struct StakeScene: View {
         .refreshable {
             await model.fetch()
         }
-        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: TransferData.self) {
             ConfirmTransferScene(
@@ -65,7 +64,7 @@ struct StakeScene: View {
 extension StakeScene {
     
     private var stakeSection: some View {
-        Section {
+        Section(Localized.Common.manage) {
             NavigationCustomLink(
                 with: ListItemView(title: model.stakeTitle),
                 action: onSelectStake
@@ -141,7 +140,7 @@ extension StakeScene {
     }
 
     private func onOpenLockTimeURL() {
-        UIApplication.shared.open(model.lockTimeInfoURL)
+        model.onSelectLockTime()
     }
 }
 
