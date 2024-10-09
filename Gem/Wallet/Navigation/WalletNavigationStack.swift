@@ -20,9 +20,15 @@ struct WalletNavigationStack: View {
     @State private var navigationPathAssetSelectType = NavigationPath()
     @State private var navigationPathSelectType = NavigationPath()
 
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.wallet },
+            set: { navigationState.wallet = $0 }
+        )
+    }
+
     var body: some View {
-        @Bindable var navigationState = navigationState
-        NavigationStack(path: $navigationState.wallet) {
+        NavigationStack(path: navigationPath) {
             WalletScene(
                 model: model,
                 isPresentingSelectType: $isPresentingSelectType
