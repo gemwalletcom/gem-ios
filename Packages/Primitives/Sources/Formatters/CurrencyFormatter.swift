@@ -1,13 +1,13 @@
 import Foundation
 
-public enum CurrencyFormatterType {
+public enum CurrencyFormatterType: Sendable {
     case currency
     case percent
     case percentSignLess
 }
 
-public struct CurrencyFormatter {
-    
+public struct CurrencyFormatter: Sendable {
+
     private let locale: Locale
     private let type: CurrencyFormatterType
     
@@ -50,8 +50,8 @@ public struct CurrencyFormatter {
         return formatter
     }
     
-    public static var percent = CurrencyFormatter(type: .percent)
-    
+    public static let percent = CurrencyFormatter(type: .percent)
+
     public var includePlusSign: Bool = false
     public var currencyCode: String
     

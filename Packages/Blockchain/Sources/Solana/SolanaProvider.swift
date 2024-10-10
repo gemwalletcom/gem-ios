@@ -5,7 +5,7 @@ import SwiftHTTPClient
 
 public enum SolanaProvider: TargetType {
     
-    public struct Options {
+    public struct Options: Sendable {
         let skipPreflight: Bool
     }
     

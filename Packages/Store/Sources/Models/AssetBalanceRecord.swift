@@ -7,7 +7,7 @@ import BigInt
 
 public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "balances"
+    public static let databaseTableName: String = "balances"
 
     public var assetId: String
     public var walletId: String

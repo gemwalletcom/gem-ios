@@ -49,6 +49,33 @@ struct AmountScene: View {
                 .disabled(model.isInputDisabled)
                 .focused($focusedField, equals: .amount)
 
+                if model.isBalanceViewEnabled {
+                    Section {
+                        VStack {
+                            ListItemFlexibleView(
+                                left: {
+                                    AssetImageView(assetImage: model.assetImage)
+                                },
+                                primary: {
+                                    VStack(alignment: .leading, spacing: Spacing.tiny) {
+                                        Text(model.assetName)
+                                            .textStyle(
+                                                TextStyle(font: .body, color: .primary, fontWeight: .semibold)
+                                            )
+                                        Text(model.balanceText)
+                                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                                    }
+                                },
+                                secondary: {
+                                    Button(Localized.Transfer.max, action: useMax)
+                                        .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                        .fixedSize()
+                                }
+                            )
+                        }
+                    }
+                }
+
                 switch model.type {
                 case .transfer:
                     Section {
@@ -76,7 +103,7 @@ struct AmountScene: View {
                         .autocorrectionDisabled()
 
                         if model.showMemo {
-                            FloatTextField(model.memoField, text: $memo) {
+                            FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
                                 ListButton(image: Image(systemName: SystemImage.qrCode)) {
                                     isPresentingScanner = .memo
                                 }
@@ -121,35 +148,10 @@ struct AmountScene: View {
                     }
                 }
 
-                if model.isBalanceViewEnabled {
-                    Section {
-                        VStack {
-                            ListItemFlexibleView(
-                                left: {
-                                    AssetImageView(assetImage: model.assetImage)
-                                },
-                                primary: {
-                                    VStack(alignment: .leading, spacing: Spacing.tiny) {
-                                        Text(model.assetName)
-                                            .textStyle(
-                                                TextStyle(font: .body, color: .primary, fontWeight: .semibold)
-                                            )
-                                        Text(model.balanceText)
-                                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
-                                    }
-                                },
-                                secondary: {
-                                    Button(Localized.Transfer.max, action: useMax)
-                                        .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
-                                        .fixedSize()
-                                }
-                            )
-                        }
-                    }
-                }
+
             }
             .contentMargins([.top], .zero, for: .scrollContent)
-            .listSectionSpacing(.compact)
+            //.listSectionSpacing(.compact)
 
             Spacer()
             Button(Localized.Common.continue, action: {

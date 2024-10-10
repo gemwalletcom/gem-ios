@@ -16,24 +16,29 @@ struct WalletNavigationStack: View {
     @State private var isPresentingSelectType: SelectAssetType?
 
     let model: WalletSceneViewModel
+    
     @State private var navigationPathAssetSelectType = NavigationPath()
     @State private var navigationPathSelectType = NavigationPath()
 
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.wallet },
+            set: { navigationState.wallet = $0 }
+        )
+    }
+
     var body: some View {
-        @Bindable var navigationState = navigationState
-        NavigationStack(path: $navigationState.wallet) {
+        NavigationStack(path: navigationPath) {
             WalletScene(
                 model: model,
                 isPresentingSelectType: $isPresentingSelectType
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) { asset in
-                @Bindable var navigationState = navigationState
                 AssetNavigationView(
                     wallet: model.wallet,
                     assetId: asset.asset.id,
-                    isPresentingAssetSelectType: $isPresentingAssetSelectType,
-                    navigationPath: $navigationState.wallet
+                    isPresentingAssetSelectType: $isPresentingAssetSelectType
                 )
             }
             .navigationDestination(for: TransactionExtended.self) { transaction in
@@ -151,6 +156,17 @@ struct WalletNavigationStack: View {
             .sheet(isPresented: $isWalletsPresented) {
                 WalletsNavigationStack()
             }
+            .onChange(of: isPresentingSelectType) { oldValue, newValue in
+                if newValue == nil {
+                    navigationPathSelectType.removeAll()
+                }
+            }
+            .onChange(of: isPresentingAssetSelectType) { oldValue, newValue in
+                if newValue == nil {
+                    navigationPathAssetSelectType.removeAll()
+                }
+            }
+
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)
     }

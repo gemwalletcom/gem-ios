@@ -7,8 +7,6 @@ import Components
 import Style
 
 struct ChainListSettingsScene: View {
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.explorerService) private var explorerService
 
     let model = ChainListSettingsViewModel()
 
@@ -17,7 +15,7 @@ struct ChainListSettingsScene: View {
             items: model.chains,
             filter: model.filter(_:query:),
             content: { chain in
-                NavigationLink(value: chain) {
+                NavigationLink(value: Scenes.ChainSettings(chain: chain)) {
                     ChainView(chain: chain)
                 }
             },
@@ -28,35 +26,7 @@ struct ChainListSettingsScene: View {
                 )
             }
         )
-        .navigationDestination(for: Chain.self) { chain in
-            ChainSettingsScene(
-                model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: chain)
-            )
-        }
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-// MARK: -
-
-struct ChainView: View {
-    let chain: Chain
-
-    var body: some View {
-        ListItemView(
-            title: Asset(chain).name,
-            image: Image(chain.id),
-            imageSize: Sizing.image.chain,
-            cornerRadius: Sizing.image.chain/2
-        )
-    }
-}
-
-// MARK: - Previews
-
-#Preview {
-    NavigationStack {
-        ChainListSettingsScene()
     }
 }

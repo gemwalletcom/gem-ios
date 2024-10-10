@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum QRScannerState {
+enum QRScannerState: Sendable {
     case idle
     case failure(error: QRScannerError)
     case scanning

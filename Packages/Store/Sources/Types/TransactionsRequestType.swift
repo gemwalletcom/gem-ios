@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import Primitives // TODO: - integrate Sendable for AssetId & TransactionType & TransactionState
+import Primitives
 
 public enum TransactionsRequestType: Equatable {
     case all

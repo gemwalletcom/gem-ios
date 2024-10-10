@@ -2,11 +2,11 @@
 
 import Foundation
 
-public enum SigningdExtra {
+public enum SigningdExtra: Sendable {
     case lidoPermitNonce(String) // dapp specific extra data
 }
 
-public struct TransactionPreload {
+public struct TransactionPreload: Sendable {
     public let accountNumber: Int
     public let sequence: Int
     public let block: SignerInputBlock
@@ -42,7 +42,7 @@ public struct TransactionPreload {
 }
 
 // Solana only
-public struct SignerInputToken {
+public struct SignerInputToken: Sendable {
     public let senderTokenAddress: String
     public let recipientTokenAddress: String?
     public let tokenProgram: SolanaTokenProgramId

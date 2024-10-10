@@ -12,19 +12,16 @@ struct AssetNavigationView: View {
     let assetId: AssetId
 
     @Binding private var isPresentingAssetSelectType: SelectAssetInput?
-    @Binding var navigationPath: NavigationPath
     @State private var isPresentingStaking: Bool = false
 
     init(
         wallet: Wallet,
         assetId: AssetId,
-        isPresentingAssetSelectType: Binding<SelectAssetInput?>,
-        navigationPath: Binding<NavigationPath>
+        isPresentingAssetSelectType: Binding<SelectAssetInput?>
     ) {
         self.wallet = wallet
         self.assetId = assetId
         _isPresentingAssetSelectType = isPresentingAssetSelectType
-        _navigationPath = navigationPath
     }
 
     var body: some View {

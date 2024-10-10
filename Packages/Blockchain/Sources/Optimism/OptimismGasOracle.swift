@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 
-public struct OptimismGasOracle {
+public struct OptimismGasOracle: Sendable {
     
     // https://optimistic.etherscan.io/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://basescan.org/address/0x420000000000000000000000000000000000000F#readProxyContract

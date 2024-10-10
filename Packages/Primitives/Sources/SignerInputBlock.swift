@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct SignerInputBlock {
+public struct SignerInputBlock: Sendable {
     public let number: Int
     public let hash: String
     public let version: Int

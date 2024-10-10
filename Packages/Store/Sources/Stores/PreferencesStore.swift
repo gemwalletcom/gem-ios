@@ -5,7 +5,7 @@ import Primitives
 
 public typealias Preferences = PreferencesStore
 
-public final class PreferencesStore {
+public final class PreferencesStore: @unchecked Sendable {
 
     private let defaults: UserDefaults
     
@@ -90,7 +90,7 @@ public final class PreferencesStore {
 }
 
 @propertyWrapper
-public struct UserDefault<T> {
+public struct UserDefault<T>: @unchecked Sendable {
     var defaults: UserDefaults
     let key: String
     let defaultValue: T

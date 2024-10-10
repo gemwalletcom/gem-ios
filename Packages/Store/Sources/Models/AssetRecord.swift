@@ -1,13 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import GRDB
+@preconcurrency import GRDB
 import Primitives
 import BigInt
 
 public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
-    public static var databaseTableName: String = "assets"
+    public static let databaseTableName: String = "assets"
     
     public var id: String
     public var chain: Chain

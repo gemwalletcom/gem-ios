@@ -5,7 +5,6 @@ import GemAPI
 import Primitives
 
 struct NameService {
-    
     let provider: any GemAPINameService
 
     init(

@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import KeychainAccess
+@preconcurrency import KeychainAccess
 import Primitives
 
 public typealias SecurePreferences = SecurePreferencesStore
 
-public final class SecurePreferencesStore {
+public final class SecurePreferencesStore: Sendable {
 
     public static let standard = SecurePreferencesStore()
     

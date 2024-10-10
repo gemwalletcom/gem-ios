@@ -15,15 +15,23 @@ struct SettingsNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
+    @Environment(\.nodeService) private var nodeService
+    @Environment(\.explorerService) private var explorerService
 
     @State private var isWalletsPresented = false
     @ObservedObject var currencyModel: CurrencySceneViewModel
 
     let walletId: WalletId
 
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.settings },
+            set: { navigationState.settings = $0 }
+        )
+    }
+
     var body: some View {
-        @Bindable var navigationState = navigationState
-        NavigationStack(path: $navigationState.settings) {
+        NavigationStack(path: navigationPath) {
             SettingsScene(
                 model: SettingsViewModel(
                     walletId: walletId,
@@ -83,6 +91,11 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)
+            }
+            .navigationDestination(for: Scenes.ChainSettings.self) {
+                ChainSettingsScene(
+                    model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: $0.chain)
+                )
             }
             .sheet(isPresented: $isWalletsPresented) {
                 WalletsNavigationStack()

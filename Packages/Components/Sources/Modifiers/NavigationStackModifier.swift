@@ -23,7 +23,7 @@ public extension View {
 }
 
 public extension Binding where Value == Bool {
-    init<Wrapped>(bindingOptional: Binding<Wrapped?>) {
+    init<Wrapped: Sendable>(bindingOptional: Binding<Wrapped?>) {
         self.init(
             get: {
                 bindingOptional.wrappedValue != nil
@@ -41,7 +41,7 @@ public extension Binding where Value == Bool {
 
 // TODO: - move Binding extension somewhere to SwiftUI extensions
 extension Binding {
-    public func mappedToBool<Wrapped>() -> Binding<Bool> where Value == Wrapped? {
+    public func mappedToBool<Wrapped: Sendable>() -> Binding<Bool> where Value == Wrapped? {
         return Binding<Bool>(bindingOptional: self)
     }
 }

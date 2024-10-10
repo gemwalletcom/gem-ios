@@ -43,7 +43,8 @@ struct TransactionScene: View {
                         ListItemView(
                             title: model.statusField,
                             subtitle: model.status,
-                            subtitleStyle: model.statusTextStyle
+                            subtitleStyle: model.statusTextStyle,
+                            infoAction: onStatusInfo
                         )
                         switch model.statusType {
                         case .none:
@@ -72,7 +73,8 @@ struct TransactionScene: View {
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
-                        subtitleExtra: model.networkFeeFiatText
+                        subtitleExtra: model.networkFeeFiatText,
+                        infoAction: onNetworkFeeInfo
                     )
                 } header: {
                     switch model.headerType {
@@ -129,3 +131,16 @@ extension TransactionScene {
         }
     }
 }
+
+// MARK: - Actions
+
+extension TransactionScene {
+    func onNetworkFeeInfo() {
+        model.onNetworkFeeInfo()
+    }
+
+    func onStatusInfo() {
+        model.onStatusInfo()
+    }
+}
+

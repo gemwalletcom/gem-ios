@@ -10,6 +10,10 @@ import Primitives
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
 
+    enum Field: Int, Hashable {
+        case name
+    }
+
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String
@@ -18,6 +22,7 @@ struct WalletDetailScene: View {
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
+    @FocusState private var focusedField: Field?
 
     init(model: WalletDetailViewModel) {
         self.model = model
@@ -28,7 +33,8 @@ struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: false)
+                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: focusedField == .name)
+                        .focused($focusedField, equals: .name)
                 } header: {
                     HStack {
                         Spacer()

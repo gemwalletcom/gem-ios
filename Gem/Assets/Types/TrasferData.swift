@@ -32,7 +32,7 @@ struct WCTransferData: Identifiable {
     var id: String { wallet.id }
 }
 
-struct TransferData {
+struct TransferData: Sendable {
     let type: TransferDataType
     let recipientData: RecipientData
     let value: BigInt

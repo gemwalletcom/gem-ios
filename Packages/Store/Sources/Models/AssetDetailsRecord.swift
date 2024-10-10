@@ -7,7 +7,7 @@ import BigInt
 
 public struct AssetDetailsRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "assets_details"
+    public static let databaseTableName: String = "assets_details"
     
     public var assetId: String
     

@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import GRDBQuery
 import Combine
-@preconcurrency import Primitives // TODO: - integrate Sendable for TransactionState
+import Primitives
 
 public struct TransactionsCountRequest: ValueObservationQueryable {
     public static var defaultValue: Int { 0 }

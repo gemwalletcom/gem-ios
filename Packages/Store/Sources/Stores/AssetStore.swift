@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct AssetStore {
+public struct AssetStore: Sendable {
     
     let db: DatabaseQueue
 

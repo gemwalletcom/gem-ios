@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum LockPeriod: String {
+public enum LockPeriod: String, Sendable {
     case immediate
     case oneMinute
     case fiveMinutes

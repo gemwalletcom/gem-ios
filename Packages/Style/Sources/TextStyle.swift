@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 
-public struct TextStyle {
+public struct TextStyle: Sendable {
     public let font: Font
     public let fontWeight: Font.Weight?
     public let color: Color

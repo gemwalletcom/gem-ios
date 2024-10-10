@@ -8,9 +8,15 @@ struct TransactionsNavigationStack: View {
 
     let model: TransactionsViewModel
 
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.activity },
+            set: { navigationState.activity = $0 }
+        )
+    }
+
     var body: some View {
-        @Bindable var navigationState = navigationState
-        NavigationStack(path: $navigationState.activity) {
+        NavigationStack(path: navigationPath) {
             TransactionsScene(model: model)
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(model.title)

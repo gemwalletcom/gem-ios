@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-public struct CosmosService {
+public struct CosmosService: Sendable {
     
     let chain: CosmosChain
     let provider: Provider<CosmosProvider>

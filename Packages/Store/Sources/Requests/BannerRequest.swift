@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import GRDBQuery
 import Combine
-@preconcurrency import Primitives // TODO: - integrate Sendable for BannerEvent
+import Primitives
 
 public struct BannersRequest: ValueObservationQueryable {
     public static var defaultValue: [Banner] { [] }
