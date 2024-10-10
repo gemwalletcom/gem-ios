@@ -5,19 +5,6 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-// TODO: - to typeshare
-struct AptosAPIError: Codable, LocalizedError {
-    public let message: String
-    public let error_code: String
-    public let vm_error_code: Int?
-
-    public init(message: String, error_code: String, vm_error_code: Int? = nil) {
-        self.message = message
-        self.error_code = error_code
-        self.vm_error_code = vm_error_code
-    }
-}
-
 public struct AptosService: Sendable {
     let chain: Chain
     let provider: Provider<AptosProvider>
@@ -41,13 +28,14 @@ public struct AptosService: Sendable {
                 .request(.account(address: address))
                 .mapOrError(
                     as: AptosAccount.self,
-                    asError: AptosAPIError.self
+                    asError: AptosError.self
                 )
-        } catch let apiError as AptosAPIError {
-            switch apiError.error_code {
-            case "account_not_found":
+        } catch let apiError as AptosError {
+            let code = AptosErrorCode(rawValue: apiError.error_code)
+            switch code {
+            case .accountNotFound:
                 return AptosAccount(sequence_number: "")
-            default:
+            case .none:
                 throw apiError
             }
         }
@@ -108,7 +96,7 @@ extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
-        async let fee =  fee(input: input.feeInput)
+        async let fee = fee(input: input.feeInput)
         
         return try await TransactionPreload(
             sequence: Int(account.sequence_number) ?? 0,
@@ -135,11 +123,12 @@ extension AptosService: ChainTransactionStateFetchable {
             .request(.transaction(id: id))
             .map(as: AptosTransaction.self)
 
-
         let state: TransactionState = transaction.success ? .confirmed : .reverted
+        let fee = BigInt(stringLiteral: transaction.gas_used) * BigInt(stringLiteral: transaction.gas_unit_price)
+
         return TransactionChanges(
             state: state,
-            changes: [] // TODO: - requires changes to fix failed state transaction
+            changes: [.networkFee(fee)]
         )
     }
 }
@@ -191,5 +180,11 @@ extension AptosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
         let ledger = try await getLedger()
         return BigInt(stringLiteral: ledger.ledger_version)
+    }
+}
+
+extension AptosError: LocalizedError {
+    public var errorDescription: String? {
+        message
     }
 }
