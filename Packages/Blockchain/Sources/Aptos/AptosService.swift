@@ -6,7 +6,6 @@ import SwiftHTTPClient
 import BigInt
 
 public struct AptosService: Sendable {
-    
     let chain: Chain
     let provider: Provider<AptosProvider>
     
@@ -18,9 +17,28 @@ public struct AptosService: Sendable {
         self.provider = provider
     }
     
-    func getLedger() async throws -> AptosLedger {
+    private func getLedger() async throws -> AptosLedger {
         try await provider.request(.ledger)
             .map(as: AptosLedger.self)
+    }
+
+    private func getAptosAccount(address: String) async throws -> AptosAccount {
+        do {
+            return try await provider
+                .request(.account(address: address))
+                .mapOrError(
+                    as: AptosAccount.self,
+                    asError: AptosError.self
+                )
+        } catch let apiError as AptosError {
+            let code = AptosErrorCode(rawValue: apiError.error_code)
+            switch code {
+            case .accountNotFound:
+                return AptosAccount(sequence_number: "")
+            case .none:
+                throw apiError
+            }
+        }
     }
 }
 
@@ -51,21 +69,19 @@ extension AptosService: ChainFeeCalculateable {
         async let getGasPrice = provider
             .request(.gasPrice)
             .map(as: AptosGasFee.self).prioritized_gas_estimate
-        //Magic number for gas usage when account exist or not.
-        //gasLimit * 2 for safety
-        //TODO: Add check for "error_code" == "account_not_found",
-        async let getDestinationAccount = try await provider
-            .request(.account(address: input.destinationAddress))
-            .mapOrCatch( as: AptosAccount.self, codes: [200], result: AptosAccount(sequence_number: .empty))
+
+        async let getDestinationAccount = getAptosAccount(address: input.destinationAddress)
 
         let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
-        
-        let gasLimit = Int32(destinationAccount.sequence_number == .empty ? 676 : 6)
+        let isDestinationAccNew = destinationAccount.sequence_number.isEmpty
+
+        // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
+        let gasLimit = Int32(isDestinationAccNew ? 679 : 9)
 
         return Fee(
             fee: BigInt(gasPrice * gasLimit),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2),
+            gasLimit: BigInt(gasLimit * 2), // * 2 for safety
             feeRates: [],
             selectedFeeRate: nil
         )
@@ -80,7 +96,7 @@ extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
-        async let fee =  fee(input: input.feeInput)
+        async let fee = fee(input: input.feeInput)
         
         return try await TransactionPreload(
             sequence: Int(account.sequence_number) ?? 0,
@@ -107,8 +123,12 @@ extension AptosService: ChainTransactionStateFetchable {
             .request(.transaction(id: id))
             .map(as: AptosTransaction.self)
 
+        let state: TransactionState = transaction.success ? .confirmed : .reverted
+        let fee = BigInt(stringLiteral: transaction.gas_used) * BigInt(stringLiteral: transaction.gas_unit_price)
+
         return TransactionChanges(
-            state: transaction.success ? .confirmed : .pending
+            state: state,
+            changes: [.networkFee(fee)]
         )
     }
 }
@@ -160,5 +180,11 @@ extension AptosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
         let ledger = try await getLedger()
         return BigInt(stringLiteral: ledger.ledger_version)
+    }
+}
+
+extension AptosError: LocalizedError {
+    public var errorDescription: String? {
+        message
     }
 }
