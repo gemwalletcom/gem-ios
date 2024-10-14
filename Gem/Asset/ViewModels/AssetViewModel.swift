@@ -27,7 +27,6 @@ struct AssetViewModel {
         switch asset.chain.type {
         case .cosmos,
             .ton,
-            .aptos,
             .solana,
             .xrp:
             return true
@@ -35,6 +34,7 @@ struct AssetViewModel {
             .ethereum,
             .tron,
             .sui,
+            .aptos,
             .near:
             return false
         }
