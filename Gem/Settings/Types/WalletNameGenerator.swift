@@ -3,6 +3,7 @@
 import Foundation
 import Keystore
 import Primitives
+import Localization
 
 struct WalletNameGenerator {
     

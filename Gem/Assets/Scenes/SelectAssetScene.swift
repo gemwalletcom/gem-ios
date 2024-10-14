@@ -6,6 +6,7 @@ import Store
 import GRDBQuery
 import Style
 import Keystore
+import Localization
 
 struct SelectAssetScene: View {
     @Environment(\.keystore) private var keystore

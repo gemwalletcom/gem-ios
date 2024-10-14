@@ -6,6 +6,7 @@ import Primitives
 import GRDBQuery
 import Store
 import Style
+import Localization
 
 struct TransactionsScene: View {
     @Query<TransactionsRequest>

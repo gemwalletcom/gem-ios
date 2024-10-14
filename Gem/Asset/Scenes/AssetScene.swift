@@ -7,6 +7,7 @@ import GRDB
 import GRDBQuery
 import Store
 import Style
+import Localization
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService

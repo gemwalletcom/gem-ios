@@ -7,6 +7,7 @@ import Style
 import Primitives
 import Store
 import Keystore
+import Localization
 
 struct SettingsScene: View {
     @Environment(\.isWalletsPresented) private var isWalletsPresented

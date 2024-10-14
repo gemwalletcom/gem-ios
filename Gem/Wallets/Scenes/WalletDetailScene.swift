@@ -6,6 +6,7 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import Localization
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel

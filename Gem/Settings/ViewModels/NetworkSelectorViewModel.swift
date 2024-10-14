@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import Localization
 
 struct NetworkSelectorViewModel {
     var title: String { Localized.Settings.Networks.title }

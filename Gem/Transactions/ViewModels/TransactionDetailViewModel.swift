@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import Primitives
 import BigInt
+import Localization
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel

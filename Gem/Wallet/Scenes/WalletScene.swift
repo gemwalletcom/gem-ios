@@ -8,6 +8,7 @@ import Keystore
 import Store
 import GRDBQuery
 import Style
+import Localization
 
 struct WalletScene: View {
     @Environment(\.keystore) private var keystore

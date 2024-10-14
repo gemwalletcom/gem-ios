@@ -4,6 +4,7 @@ import Foundation
 import UserNotifications
 import UIKit
 import Store
+import Localization
 
 struct NotificationsViewModel {
     

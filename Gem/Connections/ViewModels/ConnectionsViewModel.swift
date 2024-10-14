@@ -3,9 +3,16 @@
 import Foundation
 import Primitives
 import Store
+import Localization
 
 struct ConnectionsViewModel {
     let service: ConnectionsService
+
+    var title: String { Localized.WalletConnect.title }
+
+    var pasteButtonTitle: String { Localized.Common.paste }
+    var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
+    var emptyStateTitle: String { Localized.WalletConnect.noActiveConnections }
 
     var request: ConnectionsRequest {
         ConnectionsRequest()

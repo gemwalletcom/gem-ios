@@ -3,6 +3,7 @@
 import Foundation
 import Gemstone
 import SwiftUI
+import Localization
 
 struct CommunityLink {
     let type: SocialUrl

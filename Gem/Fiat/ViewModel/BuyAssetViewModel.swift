@@ -4,6 +4,7 @@ import SwiftUI
 import GemAPI
 import Components
 import Style
+import Localization
 
 @Observable
 class BuyAssetViewModel {

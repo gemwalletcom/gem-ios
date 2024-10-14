@@ -8,6 +8,7 @@ import Components
 import BigInt
 import GemstonePrimitives
 import SwiftUI
+import Localization
 
 @Observable
 class StakeViewModel {

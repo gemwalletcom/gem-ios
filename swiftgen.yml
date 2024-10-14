@@ -1,9 +1,9 @@
 # localized
 strings:
-  inputs: 
-    Gem/Resources/en.lproj
+  inputs: Gem/Resources/en.lproj
   outputs:
     - templateName: structured-swift5
-      output: Gem/Resources/Localized.swift
+      output: Packages/Localization/Sources/Localized.swift
       params:
-          enumName: Localized
+        enumName: Localized
+        publicAccess: true

@@ -2,6 +2,7 @@
 
 import Foundation
 import Store
+import Localization
 
 struct DeveloperViewModel {
     

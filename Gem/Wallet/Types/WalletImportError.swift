@@ -1,4 +1,5 @@
 import Foundation
+import Localization
 
 enum WalletImportError: LocalizedError {
     case emptyName //TODO: Remove this case, auto generate name

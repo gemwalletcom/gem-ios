@@ -5,6 +5,7 @@ import Settings
 import Primitives
 import Components
 import Style
+import Localization
 
 struct NetworkSelectorNavigationStack: View {
     @Environment(\.dismiss) var dismiss

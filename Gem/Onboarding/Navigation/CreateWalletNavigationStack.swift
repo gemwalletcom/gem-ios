@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Localization
 
 struct CreateWalletNavigationStack: View {
     

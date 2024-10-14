@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Settings
+import Localization
 
 struct ChainListSettingsViewModel {
     var title: String {

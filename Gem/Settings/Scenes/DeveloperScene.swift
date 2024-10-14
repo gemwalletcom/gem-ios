@@ -1,6 +1,7 @@
 import Foundation
 import SwiftUI
 import Components
+import Localization
 
 struct DeveloperScene: View {
     

@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Components
 import Store
+import Localization
 
 class CurrencySceneViewModel: ObservableObject {
 

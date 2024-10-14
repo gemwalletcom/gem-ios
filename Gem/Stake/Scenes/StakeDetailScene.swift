@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Components
+import Localization
 
 struct StakeDetailScene: View {
     

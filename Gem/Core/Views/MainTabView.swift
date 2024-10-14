@@ -6,6 +6,7 @@ import Keystore
 import GRDB
 import GRDBQuery
 import Store
+import Localization
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore

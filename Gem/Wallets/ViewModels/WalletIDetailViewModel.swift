@@ -3,6 +3,7 @@ import Primitives
 import Keystore
 import Components
 import Style
+import Localization
 
 class WalletDetailViewModel {
 

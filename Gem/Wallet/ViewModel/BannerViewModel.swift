@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import GemstonePrimitives
 import Style
+import Localization
 
 struct BannerViewModel {
 

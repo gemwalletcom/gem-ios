@@ -2,10 +2,13 @@
 
 import Foundation
 import Primitives
+import Localization
 
 struct AssetDetailsInfoViewModel {
     let asset: Asset
     let details: AssetDetailsInfo
+
+    var linksSection: String { Localized.Social.links }
 
     var marketValues: [(title: String, subtitle: String?)] {
         return [

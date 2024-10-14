@@ -8,6 +8,7 @@ import BigInt
 @preconcurrency import WalletConnector
 import GemstonePrimitives
 import Blockchain
+import Localization
 
 extension Asset {
     static let main = Asset.bitcoin

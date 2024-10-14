@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Style
+import Localization
 
 struct AddNodeResultViewModel {
     static let valueFormatter = ValueFormatter.full_US

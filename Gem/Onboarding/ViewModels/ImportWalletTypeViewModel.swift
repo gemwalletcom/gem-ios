@@ -3,6 +3,7 @@ import Primitives
 import Settings
 import Keystore
 import SwiftUI
+import Localization
 
 struct ImportWalletTypeViewModel {
 

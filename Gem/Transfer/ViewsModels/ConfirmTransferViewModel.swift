@@ -8,6 +8,7 @@ import Signer
 import Style
 import GemstonePrimitives
 import SwiftUI
+import Localization
 
 @Observable
 class ConfirmTransferViewModel {

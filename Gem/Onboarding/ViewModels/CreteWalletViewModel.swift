@@ -3,6 +3,7 @@ import Keystore
 import Primitives
 import Settings
 import SwiftUI
+import Localization
 
 class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     

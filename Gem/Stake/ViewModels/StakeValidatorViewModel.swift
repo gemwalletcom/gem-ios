@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import Localization
 
 struct StakeValidatorViewModel {
     let validator: DelegationValidator

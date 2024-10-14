@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import GemstonePrimitives
 import BigInt
+import Localization
 
 struct TransactionViewModel {
     let transaction: TransactionExtended

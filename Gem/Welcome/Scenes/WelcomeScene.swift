@@ -1,6 +1,7 @@
 import SwiftUI
 import Style
 import Keystore
+import Localization
 
 struct WelcomeScene: View {
 

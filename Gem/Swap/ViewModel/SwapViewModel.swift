@@ -9,6 +9,7 @@ import Components
 import SwiftUI
 import GRDBQuery
 import Style
+import Localization
 
 @Observable
 class SwapViewModel {

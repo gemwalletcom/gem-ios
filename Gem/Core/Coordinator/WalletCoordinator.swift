@@ -9,6 +9,7 @@ import WalletConnector
 import Components
 import Style
 import GemstonePrimitives
+import Localization
 
 struct WalletCoordinator: View {
     let db: DB

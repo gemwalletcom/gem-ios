@@ -3,6 +3,7 @@
 import Foundation
 import Keystore
 import Components
+import Localization
 
 @Observable
 class SecurityViewModel {

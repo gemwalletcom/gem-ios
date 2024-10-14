@@ -2,6 +2,7 @@ import Foundation
 import Keystore
 import Primitives
 import SwiftUI
+import Localization
 
 class WalletsViewModel {
 

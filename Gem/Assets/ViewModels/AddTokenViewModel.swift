@@ -6,6 +6,7 @@ import SwiftUI
 import Blockchain
 import Components
 import Style
+import Localization
 
 @Observable
 class AddTokenViewModel {

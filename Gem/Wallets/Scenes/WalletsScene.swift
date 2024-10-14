@@ -5,6 +5,7 @@ import Primitives
 import GRDBQuery
 import Store
 import Style
+import Localization
 
 struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss

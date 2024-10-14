@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Localization
 
 enum SwapError: LocalizedError {
     case noQuoteData

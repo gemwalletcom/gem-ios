@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUI
+import Localization
 
 struct WalletsNavigationStack: View {
 

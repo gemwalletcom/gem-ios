@@ -7,6 +7,7 @@ import Store
 import Primitives
 import Components
 import Style
+import Localization
 
 struct StakeScene: View {
     @Environment(\.keystore) private var keystore

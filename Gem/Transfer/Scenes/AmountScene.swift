@@ -6,6 +6,7 @@ import Style
 import Components
 import Primitives
 import GemstonePrimitives
+import Localization
 
 struct AmountScene: View {
 

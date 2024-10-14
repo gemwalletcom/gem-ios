@@ -5,6 +5,7 @@ import SwiftUI
 import Components
 import Store
 import Style
+import Localization
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

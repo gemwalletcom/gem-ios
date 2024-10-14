@@ -2,6 +2,7 @@
 
 import Foundation
 import Keystore
+import Localization
 
 @Observable
 class LockPeriodSelectionViewModel {

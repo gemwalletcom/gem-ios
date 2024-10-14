@@ -2,6 +2,7 @@
 
 import Foundation
 import Style
+import Localization
 
 struct LatencyViewModel {
     

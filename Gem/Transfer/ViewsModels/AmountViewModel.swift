@@ -9,6 +9,7 @@ import Store
 import SwiftUI
 import Gemstone
 import GemstonePrimitives
+import Localization
 
 class AmounViewModel: ObservableObject {
     let input: AmountInput

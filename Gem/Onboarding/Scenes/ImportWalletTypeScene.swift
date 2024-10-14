@@ -3,6 +3,7 @@ import Keystore
 import Components
 import Primitives
 import Style
+import Localization
 
 struct ImportWalletTypeScene: View {
 

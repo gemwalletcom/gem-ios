@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import WalletConnector
+import Localization
 
 struct ConnectionProposalViewModel {
     private let connectionsService: ConnectionsService

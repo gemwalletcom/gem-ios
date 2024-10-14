@@ -3,6 +3,7 @@
 import Foundation
 import Store
 import Primitives
+import Localization
 
 struct PriceAlertsViewModel {
 

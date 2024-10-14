@@ -3,6 +3,7 @@ import Primitives
 import Components
 import SwiftUI
 import Style
+import Localization
 
 struct WalletViewModel {
     let wallet: Wallet

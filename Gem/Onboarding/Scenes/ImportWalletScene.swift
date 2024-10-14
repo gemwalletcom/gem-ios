@@ -5,6 +5,7 @@ import Style
 import Components
 import QRScanner
 import Settings
+import Localization
 
 struct ImportWalletScene: View {
     

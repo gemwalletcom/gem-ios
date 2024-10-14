@@ -7,6 +7,7 @@ import Store
 import Primitives
 import Style
 import Components
+import Localization
 
 struct PriceAlertsScene: View {
 
