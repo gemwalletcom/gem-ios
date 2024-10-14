@@ -275,4 +275,4 @@
 "price_alerts.empty_state.message" = "Пока не добавлено ни одного ценового оповещения.";
 "assets.select_asset" = "Выберите актив";
 "lock.privacy_lock" = "Блокировка конфиденциальности";
-"receive.your_address" = "\"Your Receiving Address\"";
+"receive.your_address" = "Ваш адрес для получения";

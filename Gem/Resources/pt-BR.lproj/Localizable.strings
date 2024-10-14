@@ -275,4 +275,4 @@
 "price_alerts.empty_state.message" = "Nenhum alerta de preço adicionado ainda.";
 "assets.select_asset" = "Selecionar Ativo";
 "lock.privacy_lock" = "Bloqueio de privacidade";
-"receive.your_address" = "\"Your Receiving Address\"";
+"receive.your_address" = "Your Receiving Address";

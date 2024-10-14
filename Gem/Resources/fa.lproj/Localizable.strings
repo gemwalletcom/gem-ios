@@ -275,4 +275,4 @@
 "price_alerts.empty_state.message" = "هنوز هیچ هشدار قیمت اضافه نشده است.";
 "assets.select_asset" = "Asset را انتخاب کنید";
 "lock.privacy_lock" = "Privacy Lock";
-"receive.your_address" = "\"Your Receiving Address\"";
+"receive.your_address" = "Your Receiving Address";

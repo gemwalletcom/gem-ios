@@ -275,4 +275,4 @@
 "price_alerts.empty_state.message" = "尚未添加价格警报。";
 "assets.select_asset" = "选择资产";
 "lock.privacy_lock" = "隐私锁";
-"receive.your_address" = "\"Your Receiving Address\"";
+"receive.your_address" = "Your Receiving Address";

@@ -275,4 +275,4 @@
 "price_alerts.empty_state.message" = "Henüz fiyat uyarısı eklenmedi.";
 "assets.select_asset" = "Varlık Seç";
 "lock.privacy_lock" = "Privacy Lock";
-"receive.your_address" = "\"Your Receiving Address\"";
+"receive.your_address" = "Your Receiving Address";
