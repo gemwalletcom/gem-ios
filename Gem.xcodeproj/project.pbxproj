@@ -2278,7 +2278,6 @@
 				DF8421ED2C1526ED003F558C /* GemstonePrimitives */,
 				DF93C4ED2C969F4F00204ABD /* Gemstone */,
 				D829BF2C2CBDBC5300DEB2E8 /* Localization */,
-				D829BF352CBDC5C900DEB2E8 /* MarketCharts */,
 				D829BF3C2CBDCA8000DEB2E8 /* Intro */,
 				D829BF412CBDD65A00DEB2E8 /* MarketInsight */,
 				D829BF442CBDD9F700DEB2E8 /* FiatConnect */,
@@ -3635,10 +3634,6 @@
 		D829BF2C2CBDBC5300DEB2E8 /* Localization */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Localization;
-		};
-		D829BF352CBDC5C900DEB2E8 /* MarketCharts */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = MarketCharts;
 		};
 		D829BF3C2CBDCA8000DEB2E8 /* Intro */ = {
 			isa = XCSwiftPackageProductDependency;
