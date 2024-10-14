@@ -3,6 +3,7 @@
 import SwiftUI
 import Style
 import Charts
+import MarketInsight
 import Primitives
 
 struct ChartView: View {

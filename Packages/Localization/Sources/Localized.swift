@@ -671,6 +671,10 @@ public enum Localized {
     /// New update available!
     public static let title = Localized.tr("Localizable", "update_app.title", fallback: "New update available!")
   }
+  public enum VerifyPhrase {
+    /// Confirm
+    public static let title = Localized.tr("Localizable", "verify_phrase.title", fallback: "Confirm")
+  }
   public enum Wallet {
     /// Buy
     public static let buy = Localized.tr("Localizable", "wallet.buy", fallback: "Buy")

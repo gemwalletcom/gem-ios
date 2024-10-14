@@ -276,3 +276,4 @@
 "assets.select_asset" = "Виберіть актив";
 "lock.privacy_lock" = "Блокування конфіденційності";
 "receive.your_address" = "Ваша адреса для отримання";
+"verify_phrase.title" = "Підтвердити";

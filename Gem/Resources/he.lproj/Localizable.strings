@@ -276,3 +276,4 @@
 "assets.select_asset" = "בחר נכס";
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
+"verify_phrase.title" = "לְאַשֵׁר";

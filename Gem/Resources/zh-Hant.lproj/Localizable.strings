@@ -276,3 +276,4 @@
 "assets.select_asset" = "選擇資產";
 "lock.privacy_lock" = "隱私鎖";
 "receive.your_address" = "Your Receiving Address";
+"verify_phrase.title" = "確認";

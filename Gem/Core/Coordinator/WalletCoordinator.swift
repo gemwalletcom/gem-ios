@@ -10,6 +10,7 @@ import Components
 import Style
 import GemstonePrimitives
 import Localization
+import Intro
 
 struct WalletCoordinator: View {
     let db: DB
@@ -179,7 +180,7 @@ struct WalletCoordinator: View {
                 .environment(\.chainServiceFactory, chainServiceFactory)
                 .environment(\.navigationState, navigationState)
             } else {
-                WelcomeScene(model: WelcomeViewModel())
+                IntroNavigationView()
             }
         }
         .onOpenURL(perform: { url in

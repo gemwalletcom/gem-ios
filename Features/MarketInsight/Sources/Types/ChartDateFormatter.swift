@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Localization
 
-struct ChartDateFormatter {
+public struct ChartDateFormatter {
     
     private static let time: DateFormatter = {
         let formatter = DateFormatter()
@@ -38,7 +38,7 @@ struct ChartDateFormatter {
         self.date = date
     }
     
-    var formatter: DateFormatter {
+    private var formatter: DateFormatter {
         switch period {
         case .hour,
             .day,
@@ -52,7 +52,7 @@ struct ChartDateFormatter {
         }
     }
     
-    var dateText: String {
+    public var dateText: String {
         if Calendar.current.isDateInToday(date) {
             return String(format: "%@, %@", Localized.Date.today, Self.time.string(from: date))
         } else if Calendar.current.isDateInYesterday(date) {

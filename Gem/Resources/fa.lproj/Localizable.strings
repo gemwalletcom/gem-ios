@@ -276,3 +276,4 @@
 "assets.select_asset" = "Asset را انتخاب کنید";
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
+"verify_phrase.title" = "تایید کنید";

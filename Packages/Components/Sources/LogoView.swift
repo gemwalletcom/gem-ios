@@ -3,10 +3,13 @@
 import Foundation
 import SwiftUI
 
-struct LogoView: View {
-    var body: some View {
+public struct LogoView: View {
+
+    public init() {}
+
+    public var body: some View {
         ZStack {
-            Image(.logo)
+            Image(.gemLogo)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 120, height: 120)

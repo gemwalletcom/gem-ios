@@ -3,33 +3,43 @@
 import Foundation
 import Primitives
 
-struct ChartDateValue {
-    let date: Date
-    let value: Double
-}
+public struct ChartValues {
+    public let charts: [ChartDateValue]
 
-struct ChartValues {
-    let charts: [ChartDateValue]
-    
-    let lowerBoundValue: Double
-    let upperBoundValue: Double
-    
-    let lowerBoundDate: Date
-    let upperBoundDate: Date
-    
-    var yScale: [Double] {
+    public let lowerBoundValue: Double
+    public let upperBoundValue: Double
+
+    public let lowerBoundDate: Date
+    public let upperBoundDate: Date
+
+    public init(
+        charts: [ChartDateValue],
+        lowerBoundValue: Double,
+        upperBoundValue: Double,
+        lowerBoundDate: Date,
+        upperBoundDate: Date
+    ) {
+        self.charts = charts
+        self.lowerBoundValue = lowerBoundValue
+        self.upperBoundValue = upperBoundValue
+        self.lowerBoundDate = lowerBoundDate
+        self.upperBoundDate = upperBoundDate
+    }
+
+
+    public var yScale: [Double] {
         return [lowerBoundValue, upperBoundValue]
     }
     
-    var xScale: [Date] {
+    public var xScale: [Date] {
         return [lowerBoundDate, upperBoundDate]
     }
     
-    var firstValue: Double {
+    public var firstValue: Double {
         return charts.first?.value ?? 0
     }
 
-    static func from(charts: [ChartDateValue]) throws -> ChartValues {
+    public  static func from(charts: [ChartDateValue]) throws -> ChartValues {
         let values = charts.map { $0.value }
         let dates = charts.map { $0.date }
         guard let lowerBoundValue = values.min(),
@@ -48,7 +58,7 @@ struct ChartValues {
         )
     }
 
-    func priceChange(base: Double, price: Double) -> (price: Double, priceChange: Double) {
+    public func priceChange(base: Double, price: Double) -> (price: Double, priceChange: Double) {
         return (price, (price - base) / base * 100)
     }
 }
