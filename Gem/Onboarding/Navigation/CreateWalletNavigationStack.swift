@@ -28,7 +28,6 @@ struct CreateWalletNavigationStack: View {
             .navigationDestination(for: Scenes.VerifyPhrase.self) {
                 VerifyPhraseWalletScene(
                     model: VerifyPhraseViewModel(
-                        navigationPath: $navigationPath,
                         words: $0.words,
                         keystore: keystore
                     )

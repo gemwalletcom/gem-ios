@@ -13,18 +13,14 @@ class VerifyPhraseViewModel: ObservableObject {
     private let shuffledWords: [String]
     private let keystore: any Keystore
 
-    @Binding private var navigationPath: NavigationPath
-
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
     @Published var buttonState = StateButtonStyle.State.disabled
 
     init(
-        navigationPath: Binding<NavigationPath>,
         words: [String],
         keystore: any Keystore
     ) {
-        _navigationPath = navigationPath
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
