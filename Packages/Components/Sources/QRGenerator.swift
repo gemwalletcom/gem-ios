@@ -2,59 +2,99 @@ import Foundation
 import SwiftUI
 import CoreImage.CIFilterBuiltins
 
-public struct QRCodeGenerator {
+public actor QRCodeGenerator {
     private let context = CIContext()
     private let filter = CIFilter.qrCodeGenerator()
 
     public init() {}
 
     public func generate(
-        from string: String,
-        size: CGSize = CGSize(width: 240, height: 240),
-        logo: UIImage? = nil,
-        logoScale: CGFloat = 0.3
-    ) -> UIImage {
-        filter.message = Data(string.utf8)
-        filter.correctionLevel = "H"
+         from string: String,
+         size: CGSize,
+         logo: UIImage? = nil,
+         logoQRScale: CGFloat = 0.3,
+         logoBackgroundScale: CGFloat = 0.7,
+         backgroundColor: UIColor = .white,
+         cornerRadius: CGFloat = 12
+     ) -> UIImage {
+         guard let qrCodeImage = createQRCode(from: string, size: size) else {
+             return UIImage()
+         }
 
-        guard let outputImage = filter.outputImage else { return UIImage() }
+         guard let logo = logo else {
+             return qrCodeImage
+         }
 
-        let transform = CGAffineTransform(
-            scaleX: size.width / outputImage.extent.size.width,
-            y: size.height / outputImage.extent.size.height
-        )
+         return addLogo(
+            to: qrCodeImage,
+            logo: logo,
+            logoQRScale: logoQRScale,
+            logoBackgroundScale: logoBackgroundScale,
+            backgroundColor: backgroundColor,
+            cornerRadius: cornerRadius
+         )
+     }
+
+    private func createQRCode(from string: String, size: CGSize) -> UIImage? {
+        let data = Data(string.utf8)
+        filter.setValue(data, forKey: "inputMessage")
+        filter.setValue("H", forKey: "inputCorrectionLevel")
+
+        guard let outputImage = filter.outputImage else { return nil }
+
+        let transform = CGAffineTransform(scaleX: size.width / outputImage.extent.size.width,
+                                          y: size.height / outputImage.extent.size.height)
         let scaledImage = outputImage.transformed(by: transform)
 
         guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
-            return UIImage()
+            return nil
         }
 
-        let qrCodeImage = UIImage(cgImage: cgImage)
-
-        if let logo = logo {
-            let renderer = UIGraphicsImageRenderer(size: qrCodeImage.size)
-            let combinedImage = renderer.image { context in
-                qrCodeImage.draw(in: CGRect(origin: .zero, size: qrCodeImage.size))
-
-                let logoSize = CGSize(
-                    width: size.width * logoScale,
-                    height: size.height * logoScale
-                )
-                let logoOrigin = CGPoint(
-                    x: (qrCodeImage.size.width - logoSize.width) / 2,
-                    y: (qrCodeImage.size.height - logoSize.height) / 2
-                )
-                logo.draw(in: CGRect(origin: logoOrigin, size: logoSize))
-            }
-
-            return combinedImage
-        }
-        return qrCodeImage
+        return UIImage(cgImage: cgImage)
     }
-}
 
-#Preview {
-    Image(uiImage: QRCodeGenerator().generate(from: "test"))
-        .resizable()
-        .frame(width: 200, height: 200)
+    private func addLogo(to qrCodeImage: UIImage,
+                         logo: UIImage,
+                         logoQRScale: CGFloat,
+                         logoBackgroundScale: CGFloat,
+                         backgroundColor: UIColor,
+                         cornerRadius: CGFloat) -> UIImage {
+        let renderer = UIGraphicsImageRenderer(size: qrCodeImage.size)
+        let combinedImage = renderer.image { context in
+            // Draw the QR code
+            qrCodeImage.draw(in: CGRect(origin: .zero, size: qrCodeImage.size))
+
+            // Calculate background size based on logoScale
+            let backgroundSize = CGSize(width: qrCodeImage.size.width * logoQRScale,
+                                        height: qrCodeImage.size.height * logoQRScale)
+            let backgroundOrigin = CGPoint(x: (qrCodeImage.size.width - backgroundSize.width) / 2,
+                                           y: (qrCodeImage.size.height - backgroundSize.height) / 2)
+            let backgroundRect = CGRect(origin: backgroundOrigin, size: backgroundSize)
+
+            // Draw the background behind the logo
+            let backgroundPath = UIBezierPath(roundedRect: backgroundRect, cornerRadius: cornerRadius)
+            backgroundColor.setFill()
+            backgroundPath.fill()
+
+            let logoMaxSize = CGSize(width: backgroundRect.width * logoBackgroundScale,
+                                     height: backgroundRect.height * logoBackgroundScale)
+            let scaledLogoSize = aspectFitSize(for: logo.size, within: logoMaxSize)
+
+            let logoOrigin = CGPoint(x: backgroundRect.midX - scaledLogoSize.width / 2,
+                                     y: backgroundRect.midY - scaledLogoSize.height / 2)
+            let logoRect = CGRect(origin: logoOrigin, size: scaledLogoSize)
+
+            // Draw the logo
+            logo.draw(in: logoRect)
+        }
+
+        return combinedImage
+    }
+
+    private func aspectFitSize(for originalSize: CGSize, within maxSize: CGSize) -> CGSize {
+        let widthRatio = maxSize.width / originalSize.width
+        let heightRatio = maxSize.height / originalSize.height
+        let scale = min(widthRatio, heightRatio)
+        return CGSize(width: originalSize.width * scale, height: originalSize.height * scale)
+    }
 }

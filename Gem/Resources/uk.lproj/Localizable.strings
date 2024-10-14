@@ -275,3 +275,4 @@
 "price_alerts.empty_state.message" = "Ще не додано сповіщення про ціни.";
 "assets.select_asset" = "Виберіть актив";
 "lock.privacy_lock" = "Блокування конфіденційності";
+"receive.your_address" = "\"Your Receiving Address\"";

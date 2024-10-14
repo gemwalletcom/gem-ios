@@ -17,6 +17,7 @@ public struct Colors {
     public static let grayBackground = Color.dynamicColor("#F2F2F7", dark: "#1C1C1E")
     public static let grayDarkBackground = Color.dynamicColor("#E6E6F0", dark: "#1C1C1E")
     public static let secondaryText = Color.dynamicColor("#818181")
+    public static let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
 }
 
 #Preview {
@@ -37,6 +38,7 @@ public struct Colors {
         ("Gray Background", Colors.grayBackground),
         ("Gray Dark Background", Colors.grayDarkBackground),
         ("Secondary Text", Colors.secondaryText),
+        ("List style color", Colors.listStyleColor),
 
     ]
     return List {

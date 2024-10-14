@@ -275,3 +275,4 @@
 "price_alerts.empty_state.message" = "아직 가격 알림이 추가되지 않았습니다.";
 "assets.select_asset" = "자산 선택";
 "lock.privacy_lock" = "Privacy Lock";
+"receive.your_address" = "\"Your Receiving Address\"";
