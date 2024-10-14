@@ -275,3 +275,4 @@
 "price_alerts.empty_state.message" = "עדיין לא נוספו התראות מחיר.";
 "assets.select_asset" = "בחר נכס";
 "lock.privacy_lock" = "Privacy Lock";
+"receive.your_address" = "\"Your Receiving Address\"";

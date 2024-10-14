@@ -385,6 +385,8 @@ internal enum Localized {
     internal static func title(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "receive.title", p1, fallback: "Receive %s")
     }
+    /// "Your Receiving Address"
+    internal static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "\"Your Receiving Address\"")
   }
   internal enum SecretPhrase {
     /// Save your Secret Phrase in a secure place 

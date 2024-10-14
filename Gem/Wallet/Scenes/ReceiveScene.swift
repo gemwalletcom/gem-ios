@@ -5,54 +5,42 @@ import Components
 import Style
 
 struct ReceiveScene: View {
-    
-    let model: ReceiveViewModel
-    let generator = QRCodeGenerator()
-    
+    @Environment(\.colorScheme) private var scheme
+
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
-    @State private var renderedImage = UIImage()
+    @State private var renderedImage: UIImage?
+
+    private let model: ReceiveViewModel
+    private let generator = QRCodeGenerator()
+
+    init(model: ReceiveViewModel) {
+        self.model = model
+    }
 
     var body: some View {
         VStack {
-            Spacer()
-            HStack {
-                Image(uiImage: renderedImage)
-                    .interpolation(.none)
-                    .resizable()
-                    .frame(width: 240, height: 240, alignment: .center)
-                    .cornerRadius(8)
-            }
-            .padding(8)
-            .padding(.bottom, 24)
-            
             VStack {
-                HStack {
-                    Text(model.address)
-                        .lineLimit(1)
-                        .truncationMode(.middle)
-                        .frame(maxWidth: .infinity)
-                    Spacer()
-                    Button(Localized.Common.copy, action: copyAddress)
-                        .buttonStyle(.blue(paddingHorizontal: 8, paddingVertical: 6))
-                        .fixedSize()
-                }.padding(8)
+                Spacer()
+                if let image = renderedImage {
+                    qrCodeView(image: image)
+                        .transition(.opacity)
+                }
+                Spacer()
+                Button(action: {
+                    showShareSheet.toggle()
+                }) {
+                    Text(model.shareTitle)
+                }
+                .buttonStyle(.blue())
             }
-            .frame(maxWidth: 320)
-            .overlay(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Colors.grayLight, lineWidth: 0.5)
-            )
-            Spacer()
-            Button(action: {
-                showShareSheet.toggle()
-            }) {
-                Text(Localized.Common.share)
-            }
-            .buttonStyle(.blue())
-            .padding(.bottom, Spacing.scene.bottom)
+            .animation(.easeInOut, value: renderedImage != nil)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .padding(.bottom, Spacing.scene.bottom)
+        .frame(maxWidth: .infinity)
+        .background(Colors.grayBackground)
+        .navigationBarTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
@@ -63,9 +51,8 @@ struct ReceiveScene: View {
             }
         }
         .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [model.sharableText])
+            ShareSheet(activityItems: [model.address])
         }
-        .frame(maxWidth: .infinity)
         .modifier(
             ToastModifier(
                 isPresenting: $showCopyMessage,
@@ -73,34 +60,84 @@ struct ReceiveScene: View {
                 systemImage: SystemImage.copy
             )
         )
-        .navigationBarTitle(model.title)
         .taskOnce {
-            // generate image in the background
-            DispatchQueue.global(qos: .background).async {
-                let image = generator.generate(from: model.address)
-                DispatchQueue.main.async {
-                    renderedImage = image
-                }
-            }
+            generateQRCode()
             model.enableAsset()
             
             try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
         }
     }
-    
-    func copyAddress() {
+}
+
+// MARK: - Actions
+
+extension ReceiveScene {
+    private func onCopyAddress() {
         showCopyMessage = true
         UIPasteboard.general.string = model.address
     }
+
+    private func generateQRCode() {
+        Task.detached(priority: .utility) {
+            let image = await generator.generate(
+                from: model.address,
+                size: CGSize(
+                    width: Spacing.scene.button.maxWidth,
+                    height: Spacing.scene.button.maxWidth
+                ),
+                logo: UIImage(named: "logo-dark")
+            )
+
+            await MainActor.run {
+                renderedImage = image
+            }
+        }
+    }
 }
 
-struct ReceiveScene_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationStack {
-            ReceiveScene(
-                model: ReceiveViewModel(assetModel: AssetViewModel(asset: .main), walletId: .main, address: "", walletsService: .main)
-            )
-            .navigationBarTitleDisplayMode(.inline)
+// MARK: - UI Components
+
+extension ReceiveScene {
+    @ViewBuilder
+    private func qrCodeView(image: UIImage) -> some View {
+        VStack(spacing: Spacing.medium) {
+            Image(uiImage: image)
+                .resizable()
+                .interpolation(.none)
+                .scaledToFit()
+                .padding(scheme == .dark ? Spacing.small : .zero)
+                .background(Color.white)
+                .clipShape(RoundedRectangle(cornerRadius: Spacing.medium))
+
+            HStack(spacing: Spacing.small) {
+                AssetImageView(assetImage: model.assetModel.assetImage)
+                VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+                    Text(model.youAddressTitle)
+                        .font(.subheadline.weight(.semibold))
+                        .foregroundStyle(Colors.black)
+                    Text(model.address)
+                        .textStyle(.calloutSecondary)
+                }
+                .lineLimit(1)
+                .truncationMode(.middle)
+                .frame(maxWidth: .infinity)
+
+                Button(model.copyTitle, action: onCopyAddress)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Colors.black)
+                    .padding(.all, Spacing.small)
+                    .background(
+                        RoundedRectangle(cornerRadius: Spacing.small)
+                            .fill(Colors.grayVeryLight)
+                    )
+                    .buttonStyle(.plain)
+            }
         }
+        .padding(Spacing.medium)
+        .background(
+            RoundedRectangle(cornerRadius: Spacing.medium)
+                .fill(Colors.listStyleColor)
+                .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
+        )
     }
 }

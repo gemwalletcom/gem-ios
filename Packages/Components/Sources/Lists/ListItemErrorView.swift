@@ -4,8 +4,6 @@ import SwiftUI
 import Style
 
 public struct ListItemErrorView: View {
-    private let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
-
     let errorTitle: String?
     let errorSystemNameImage: String
     let error: Error
@@ -59,7 +57,7 @@ public struct ListItemErrorView: View {
             }
         }
         .padding()
-        .background(listStyleColor)
+        .background(Colors.listStyleColor)
         .cornerRadius(8)
         .frame(maxWidth: .infinity)
         .listRowInsets(EdgeInsets())

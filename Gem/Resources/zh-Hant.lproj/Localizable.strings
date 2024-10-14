@@ -274,4 +274,5 @@
 "price_alerts.get_notified_explain_message" = "當您最喜歡的加密資產發生重大價格變化時收到通知。";
 "price_alerts.empty_state.message" = "尚未添加價格提醒。";
 "assets.select_asset" = "選擇資產";
-"lock.privacy_lock" = "Privacy Lock";
+"lock.privacy_lock" = "隱私鎖";
+"receive.your_address" = "\"Your Receiving Address\"";
