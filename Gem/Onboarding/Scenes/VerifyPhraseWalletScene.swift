@@ -24,7 +24,7 @@ struct VerifyPhraseWalletScene: View {
                     ForEach(model.rowsSections, id: \.self) { section in
                         GridRow(alignment: .center) {
                             ForEach(section) { row in
-                                if model.isVerified(word: row.word) {
+                                if model.isVerified(index: row) {
                                     Button { } label: {
                                         Text(row.word)
                                     }

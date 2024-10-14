@@ -67,8 +67,8 @@ class VerifyPhraseViewModel: ObservableObject {
         }
     }
     
-    func isVerified(word: String) -> Bool {
-        wordsVerified.contains(word)
+    func isVerified(index: WordIndex) -> Bool {
+        wordsVerified[index.index] == index.word
     }
     
     func importWallet() throws -> Primitives.Wallet  {

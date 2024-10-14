@@ -15,6 +15,7 @@ public struct AptosSigner: Signable {
                 $0.to = input.destinationAddress
                 $0.amount = input.value.UInt
             })
+            // TODO: - 3664390082 = 2086-22:08:02 +UTC, probably need to adjust
             $0.expirationTimestampSecs = 3664390082
             $0.gasUnitPrice = input.fee.gasPrice.UInt
             $0.maxGasAmount = input.fee.gasLimit.UInt
