@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import SwiftUI
@@ -5,6 +7,7 @@ import GemAPI
 import Components
 import Style
 import Localization
+import FiatConnect
 
 @Observable
 class BuyAssetViewModel {

@@ -9,23 +9,20 @@ struct PriceAlertService {
 
     private let store: PriceAlertStore
     private let apiService: any GemAPIPriceAlertService
-    private let deviceService: DeviceService
+    private let deviceService: any DeviceServiceable
     private let preferences: Preferences
-    private let securePreferences: SecurePreferences
     private let pushNotificationService = PushNotificationEnablerService()
 
     init(
         store: PriceAlertStore,
         apiService: any GemAPIPriceAlertService = GemAPIService(),
-        deviceService: DeviceService,
-        preferences: Preferences = Preferences.standard,
-        securePreferences: SecurePreferences = SecurePreferences.standard
+        deviceService: any DeviceServiceable,
+        preferences: Preferences = Preferences.standard
     ) {
         self.store = store
         self.apiService = apiService
         self.deviceService = deviceService
         self.preferences = preferences
-        self.securePreferences = securePreferences
     }
 
     var isPushNotificationsEnabled: Bool {
@@ -51,7 +48,7 @@ struct PriceAlertService {
     }
 
     private func getPriceAlerts() async throws -> [PriceAlert] {
-        try await apiService.getPriceAlerts(deviceId: securePreferences.getDeviceId())
+        try await apiService.getPriceAlerts(deviceId: try deviceService.getDeviceId())
     }
 
     func addPriceAlert(assetId: String, autoEnable: Bool = false) async throws {
@@ -64,12 +61,12 @@ struct PriceAlertService {
 
         let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none, priceDirection: .none)
         try store.addPriceAlerts([priceAlert])
-        try await apiService.addPriceAlerts(deviceId: securePreferences.getDeviceId(), priceAlerts: [priceAlert])
+        try await apiService.addPriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: [priceAlert])
     }
 
     func deletePriceAlert(assetId: String) async throws {
         let priceAlert = PriceAlert(assetId: assetId, price: .none, pricePercentChange: .none, priceDirection: .none)
         try store.deletePriceAlerts([priceAlert])
-        try await apiService.deletePriceAlerts(deviceId: securePreferences.getDeviceId(), priceAlerts: [priceAlert])
+        try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: [priceAlert])
     }
 }

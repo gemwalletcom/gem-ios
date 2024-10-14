@@ -140,7 +140,7 @@ extension WalletsService {
 }
 
 extension PriceAlertService {
-    static let main = PriceAlertService(store: .main, deviceService: .main)
+    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main)
 }
 
 extension TransactionsService {

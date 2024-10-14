@@ -7,7 +7,12 @@ import Store
 import UIKit
 import Combine
 
-final class DeviceService {
+public protocol DeviceServiceable {
+    func getDeviceId() throws -> String
+    func update() async throws
+}
+
+final class DeviceService: DeviceServiceable {
 
     let deviceProvider: any GemAPIDeviceService
     let preferences = Preferences()
@@ -63,8 +68,8 @@ final class DeviceService {
         }
     }
     
-    func getDeviceId() throws -> String? {
-        return try securePreferences.get(key: .deviceId)
+    func getDeviceId() throws -> String {
+        return try securePreferences.getDeviceId()
     }
     
     private func generateDeviceId() -> String {
@@ -72,8 +77,10 @@ final class DeviceService {
     }
     
     private func getOrCreateDeviceId() throws -> String?  {
-        let deviceId = try getDeviceId()
-        if deviceId == nil {
+        do {
+            let deviceId = try getDeviceId()
+            return deviceId
+        } catch {
             #if DEBUG
             let newDeviceId = "ios_simulator_\(UIDevice.current.model.lowercased())_\(UIDevice.current.systemVersion)"
             return try securePreferences.set(key: .deviceId, value: newDeviceId)
@@ -82,7 +89,6 @@ final class DeviceService {
             return try securePreferences.set(key: .deviceId, value: newDeviceId)
             #endif
         }
-        return try getDeviceId()
     }
     
     private func currentDevice(
