@@ -25,7 +25,6 @@ struct ReceiveScene: View {
                 Spacer()
                 if let image = renderedImage {
                     qrCodeView(image: image)
-                        .transition(.opacity)
                 }
                 Spacer()
                 Button(action: {
@@ -35,7 +34,6 @@ struct ReceiveScene: View {
                 }
                 .buttonStyle(.blue())
             }
-            .animation(.easeInOut, value: renderedImage != nil)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
@@ -61,8 +59,10 @@ struct ReceiveScene: View {
                 systemImage: SystemImage.copy
             )
         )
+        .task {
+            await generateQRCode()
+        }
         .taskOnce {
-            generateQRCode()
             model.enableAsset()
             
             try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
@@ -78,21 +78,19 @@ extension ReceiveScene {
         UIPasteboard.general.string = model.address
     }
 
-    private func generateQRCode() {
-        Task.detached(priority: .utility) {
-            let image = await generator.generate(
-                from: model.address,
-                size: CGSize(
-                    width: Spacing.scene.button.maxWidth,
-                    height: Spacing.scene.button.maxWidth
-                ),
-                logo: UIImage(named: "logo-dark"),
-                displayScale: scale
-            )
+    private func generateQRCode() async {
+        let image = await generator.generate(
+            from: model.address,
+            size: CGSize(
+                width: Spacing.scene.button.maxWidth,
+                height: Spacing.scene.button.maxWidth
+            ),
+            logo: UIImage(named: "logo-dark"),
+            displayScale: scale
+        )
 
-            await MainActor.run {
-                renderedImage = image
-            }
+        await MainActor.run {
+            renderedImage = image
         }
     }
 }
