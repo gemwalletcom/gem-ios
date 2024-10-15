@@ -76,7 +76,6 @@
 		C36678FA2A09791C00F1D74D /* ImportAssetsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36678F92A09791C00F1D74D /* ImportAssetsService.swift */; };
 		C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679092A0B7E5800F1D74D /* Environment.swift */; };
 		C36679112A0E1EE000F1D74D /* FiatProvidersScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679102A0E1EE000F1D74D /* FiatProvidersScene.swift */; };
-		C36679132A0E249100F1D74D /* FiatProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679122A0E249100F1D74D /* FiatProvidersViewModel.swift */; };
 		C36679162A119C6200F1D74D /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = C36679152A119C6200F1D74D /* GemAPI */; };
 		C366791A2A17507500F1D74D /* OnstartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679192A17507500F1D74D /* OnstartService.swift */; };
 		C366791D2A18623800F1D74D /* QRScanner in Frameworks */ = {isa = PBXBuildFile; productRef = C366791C2A18623800F1D74D /* QRScanner */; };
@@ -149,7 +148,6 @@
 		C3D1C4FE2A421842006E8EEA /* NodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C4FD2A421842006E8EEA /* NodeService.swift */; };
 		C3D1C5052A43AB04006E8EEA /* TransactionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C5042A43AB04006E8EEA /* TransactionsScene.swift */; };
 		C3D1C5072A43AB11006E8EEA /* TransactionsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C5062A43AB11006E8EEA /* TransactionsViewModel.swift */; };
-		C3D1C50C2A44FD2B006E8EEA /* FiatQuoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C50B2A44FD2B006E8EEA /* FiatQuoteViewModel.swift */; };
 		C3E99BBA2A70739D005DF35F /* TransactionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BB92A70739D005DF35F /* TransactionView.swift */; };
 		C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = C3E99BBE2A71E932005DF35F /* WalletCorePrimitives */; };
 		C3E99BC12A72DF67005DF35F /* AssetIdViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BC02A72DF67005DF35F /* AssetIdViewModel.swift */; };
@@ -339,7 +337,6 @@
 		D8C4A2892C8A7B14006FABE8 /* CreateWalletNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004F2BBB6ABA00ED770B /* CreateWalletNavigationStack.swift */; };
 		D8C4A28A2C8A7B14006FABE8 /* FeeRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854472C59B34F00D4078C /* FeeRateViewModel.swift */; };
 		D8C4A28B2C8A7B14006FABE8 /* ImportAssetsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36678F92A09791C00F1D74D /* ImportAssetsService.swift */; };
-		D8C4A28C2C8A7B14006FABE8 /* FiatProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679122A0E249100F1D74D /* FiatProvidersViewModel.swift */; };
 		D8C4A28D2C8A7B14006FABE8 /* TransactionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BC22A73182E005DF35F /* TransactionScene.swift */; };
 		D8C4A28E2C8A7B14006FABE8 /* SwapAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CEB2B02850F00F784C7 /* SwapAssetView.swift */; };
 		D8C4A28F2C8A7B14006FABE8 /* FiatProvidersScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679102A0E1EE000F1D74D /* FiatProvidersScene.swift */; };
@@ -370,7 +367,6 @@
 		D8C4A2AA2C8A7B14006FABE8 /* ChainNodeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C313D2EB2A8356C2004520BB /* ChainNodeViewModel.swift */; };
 		D8C4A2AB2C8A7B14006FABE8 /* LatencyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD36302C6D52B000E18764 /* LatencyType.swift */; };
 		D8C4A2AC2C8A7B14006FABE8 /* AmountViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C4ED2A2EA7D2006E8EEA /* AmountViewModel.swift */; };
-		D8C4A2AD2C8A7B14006FABE8 /* FiatQuoteViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C50B2A44FD2B006E8EEA /* FiatQuoteViewModel.swift */; };
 		D8C4A2AE2C8A7B14006FABE8 /* TransactionsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3D1C5042A43AB04006E8EEA /* TransactionsScene.swift */; };
 		D8C4A2AF2C8A7B14006FABE8 /* ValidatorImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820CB512B51ED220063D70C /* ValidatorImageView.swift */; };
 		D8C4A2B02C8A7B14006FABE8 /* SwapViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE92B017F4500F784C7 /* SwapViewModel.swift */; };
@@ -670,7 +666,6 @@
 		C36679082A0B1E4200F1D74D /* unit_app.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = unit_app.xctestplan; sourceTree = "<group>"; };
 		C36679092A0B7E5800F1D74D /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		C36679102A0E1EE000F1D74D /* FiatProvidersScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatProvidersScene.swift; sourceTree = "<group>"; };
-		C36679122A0E249100F1D74D /* FiatProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatProvidersViewModel.swift; sourceTree = "<group>"; };
 		C36679142A0FF81000F1D74D /* GemAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemAPI; sourceTree = "<group>"; };
 		C36679192A17507500F1D74D /* OnstartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnstartService.swift; sourceTree = "<group>"; };
 		C366791B2A1860E500F1D74D /* QRScanner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = QRScanner; sourceTree = "<group>"; };
@@ -739,7 +734,6 @@
 		C3D1C4FD2A421842006E8EEA /* NodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeService.swift; sourceTree = "<group>"; };
 		C3D1C5042A43AB04006E8EEA /* TransactionsScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsScene.swift; sourceTree = "<group>"; };
 		C3D1C5062A43AB11006E8EEA /* TransactionsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsViewModel.swift; sourceTree = "<group>"; };
-		C3D1C50B2A44FD2B006E8EEA /* FiatQuoteViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatQuoteViewModel.swift; sourceTree = "<group>"; };
 		C3E99BB92A70739D005DF35F /* TransactionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionView.swift; sourceTree = "<group>"; };
 		C3E99BC02A72DF67005DF35F /* AssetIdViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetIdViewModel.swift; sourceTree = "<group>"; };
 		C3E99BC22A73182E005DF35F /* TransactionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionScene.swift; sourceTree = "<group>"; };
@@ -1512,8 +1506,6 @@
 			isa = PBXGroup;
 			children = (
 				C3CF3BC629B7CB4900E96586 /* BuyAssetViewModel.swift */,
-				C3D1C50B2A44FD2B006E8EEA /* FiatQuoteViewModel.swift */,
-				C36679122A0E249100F1D74D /* FiatProvidersViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2535,7 +2527,6 @@
 				D80700502BBB6ABA00ED770B /* CreateWalletNavigationStack.swift in Sources */,
 				83D854482C59B34F00D4078C /* FeeRateViewModel.swift in Sources */,
 				C36678FA2A09791C00F1D74D /* ImportAssetsService.swift in Sources */,
-				C36679132A0E249100F1D74D /* FiatProvidersViewModel.swift in Sources */,
 				C3E99BC32A73182E005DF35F /* TransactionScene.swift in Sources */,
 				D8385CEC2B02850F00F784C7 /* SwapAssetView.swift in Sources */,
 				C36679112A0E1EE000F1D74D /* FiatProvidersScene.swift in Sources */,
@@ -2567,7 +2558,6 @@
 				C313D2EC2A8356C2004520BB /* ChainNodeViewModel.swift in Sources */,
 				D8CD36312C6D52B000E18764 /* LatencyType.swift in Sources */,
 				C3D1C4EE2A2EA7D2006E8EEA /* AmountViewModel.swift in Sources */,
-				C3D1C50C2A44FD2B006E8EEA /* FiatQuoteViewModel.swift in Sources */,
 				C3D1C5052A43AB04006E8EEA /* TransactionsScene.swift in Sources */,
 				D820CB522B51ED220063D70C /* ValidatorImageView.swift in Sources */,
 				832A705E2C88CE0A00045367 /* SelectWalletScene.swift in Sources */,
@@ -2838,7 +2828,6 @@
 				D8C4A28A2C8A7B14006FABE8 /* FeeRateViewModel.swift in Sources */,
 				D8C4A28B2C8A7B14006FABE8 /* ImportAssetsService.swift in Sources */,
 				D8C4A3B02C9696FE006FABE8 /* AssetScene.swift in Sources */,
-				D8C4A28C2C8A7B14006FABE8 /* FiatProvidersViewModel.swift in Sources */,
 				D8C4A28D2C8A7B14006FABE8 /* TransactionScene.swift in Sources */,
 				D8C4A28E2C8A7B14006FABE8 /* SwapAssetView.swift in Sources */,
 				D8C4A28F2C8A7B14006FABE8 /* FiatProvidersScene.swift in Sources */,
@@ -2870,7 +2859,6 @@
 				D8C4A2AA2C8A7B14006FABE8 /* ChainNodeViewModel.swift in Sources */,
 				D8C4A2AB2C8A7B14006FABE8 /* LatencyType.swift in Sources */,
 				D8C4A2AC2C8A7B14006FABE8 /* AmountViewModel.swift in Sources */,
-				D8C4A2AD2C8A7B14006FABE8 /* FiatQuoteViewModel.swift in Sources */,
 				D8C4A2AE2C8A7B14006FABE8 /* TransactionsScene.swift in Sources */,
 				D8C4A2AF2C8A7B14006FABE8 /* ValidatorImageView.swift in Sources */,
 				D8C4A2B02C8A7B14006FABE8 /* SwapViewModel.swift in Sources */,

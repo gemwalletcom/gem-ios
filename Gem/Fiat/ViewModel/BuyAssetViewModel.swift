@@ -18,6 +18,7 @@ class BuyAssetViewModel {
 
     var input: BuyAssetInput
     var state: StateViewType<[FiatQuote]> = .loading
+    private let formatter = CurrencyFormatter.currency()
 
     init(
         fiatService: any GemAPIFiatService = GemAPIService(),
@@ -56,12 +57,12 @@ class BuyAssetViewModel {
 
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
-        let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote).amount
+        let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote, formatter: formatter).amount
         return "≈ \(quoteAmount)"
     }
 
     func rateValue(for quote: FiatQuote) -> String {
-        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote).rateText
+        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote, formatter: formatter).rateText
         return "1 \(asset.symbol) ≈ \(quoteRate)"
     }
 
