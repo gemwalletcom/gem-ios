@@ -19,14 +19,15 @@ public actor BannerService {
     }
 
     public func handleAction(banner: Banner) async throws {
-        switch banner.event {
-        case .enableNotifications:
-            let _ = try await pushNotificationService.requestPermissions()
-        case .stake, .accountActivation:
-            break
-        }
-
-        if banner.closeOnAction {
+        let result = try await {
+            switch banner.event {
+            case .enableNotifications:
+                return try await pushNotificationService.requestPermissions()
+            case .stake, .accountActivation:
+                return true
+            }
+        }()
+        if banner.closeOnAction && result {
             try closeBanner(banner: banner)
         }
     }
