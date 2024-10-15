@@ -6,6 +6,7 @@ import Style
 
 struct ReceiveScene: View {
     @Environment(\.colorScheme) private var scheme
+    @Environment(\.displayScale) private var scale
 
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
@@ -85,7 +86,8 @@ extension ReceiveScene {
                     width: Spacing.scene.button.maxWidth,
                     height: Spacing.scene.button.maxWidth
                 ),
-                logo: UIImage(named: "logo-dark")
+                logo: UIImage(named: "logo-dark"),
+                displayScale: scale
             )
 
             await MainActor.run {
@@ -103,9 +105,8 @@ extension ReceiveScene {
         VStack(spacing: Spacing.medium) {
             Image(uiImage: image)
                 .resizable()
-                .interpolation(.none)
                 .scaledToFit()
-                .padding(scheme == .dark ? Spacing.small : .zero)
+                .padding(Spacing.small)
                 .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: Spacing.medium))
 
