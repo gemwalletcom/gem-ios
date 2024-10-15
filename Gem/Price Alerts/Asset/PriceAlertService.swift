@@ -4,6 +4,7 @@ import Foundation
 import Store
 import GemAPI
 import Primitives
+import NotificationService
 
 struct PriceAlertService {
 

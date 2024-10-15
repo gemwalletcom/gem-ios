@@ -11,6 +11,8 @@ import Style
 import GemstonePrimitives
 import Localization
 import Intro
+import BannerService
+import NotificationService
 
 struct WalletCoordinator: View {
     let db: DB
@@ -112,7 +114,10 @@ struct WalletCoordinator: View {
             store: connectionsStore,
             signer: walletConnectorSigner
         )
-        self.bannerService = BannerService(store: bannerStore)
+        self.bannerService = BannerService(
+            store: bannerStore,
+            pushNotificationService: PushNotificationEnablerService(preferences: preferences)
+        )
         self.walletService = WalletService(keystore: _keystore.wrappedValue, walletStore: walletStore)
         self.walletsService = WalletsService(
             keystore: _keystore.wrappedValue,

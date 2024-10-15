@@ -6,6 +6,8 @@ import GRDB
 import Store
 import Keystore
 import GemstonePrimitives
+import BannerService
+import NotificationService
 
 extension NavigationStateManager: EnvironmentKey {
     public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
@@ -56,8 +58,8 @@ struct BalanceServiceKey: EnvironmentKey {
     }
 }
 
-struct BannerServiceKey: EnvironmentKey {
-    static var defaultValue: BannerService { BannerService(store: .main) }
+extension BannerService: @retroactive EnvironmentKey {
+    public static let defaultValue: BannerService = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService(preferences: .main))
 }
 
 struct BannerSetupServiceKey: EnvironmentKey {
@@ -144,8 +146,8 @@ extension EnvironmentValues {
     }
 
     var bannerService: BannerService {
-        get { self[BannerServiceKey.self] }
-        set { self[BannerServiceKey.self] = newValue }
+        get { self[BannerService.self] }
+        set { self[BannerService.self] = newValue }
     }
 
     var bannerSetupService: BannerSetupService {

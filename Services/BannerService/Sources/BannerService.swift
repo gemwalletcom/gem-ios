@@ -3,18 +3,22 @@
 import Foundation
 import Store
 import Primitives
+import NotificationService
 
-struct BannerService {
+public actor BannerService {
 
-    let store: BannerStore
+    private let store: BannerStore
+    private let pushNotificationService: PushNotificationEnablerService
 
-    private let pushNotificationService = PushNotificationEnablerService(preferences: .main)
-
-    init(store: BannerStore) {
+    public init(
+        store: BannerStore,
+        pushNotificationService: PushNotificationEnablerService
+    ) {
         self.store = store
+        self.pushNotificationService = pushNotificationService
     }
 
-    func handleAction(banner: Banner) async throws {
+    public func handleAction(banner: Banner) async throws {
         switch banner.event {
         case .enableNotifications:
             let _ = try await pushNotificationService.requestPermissions()
@@ -25,6 +29,10 @@ struct BannerService {
         if banner.closeOnAction {
             try closeBanner(banner: banner)
         }
+    }
+
+    public func clearBanners() throws -> Int {
+        try store.clear()
     }
 
     private func closeBanner(banner: Banner) throws {
@@ -40,11 +48,11 @@ struct BannerService {
 // MARK: - Actions
 
 extension BannerService {
-    func onAction(banner: Banner) {
+    public nonisolated func onAction(banner: Banner) {
         Task { try await handleAction(banner: banner) }
     }
 
-    func onClose(banner: Banner) {
-        Task { try closeBanner(banner: banner) }
+    public nonisolated func onClose(banner: Banner) {
+        Task { try await closeBanner(banner: banner) }
     }
 }

@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 import Store
 
-struct BannerSetupService {
+public struct BannerSetupService {
 
-    let store: BannerStore
-    let preferences: Preferences
+    private let store: BannerStore
+    private let preferences: Preferences
 
-    init(
+    public init(
         store: BannerStore,
         preferences: Preferences
     ) {
@@ -17,26 +17,26 @@ struct BannerSetupService {
         self.preferences = preferences
     }
 
-    func setup() throws {
+    public func setup() throws {
         let stakeChains = StakeChain.allCases.filter({ $0 != .ethereum })
         for chain in stakeChains {
             try store.addBanner(
-                Banner(wallet: .none, asset: chain.chain.asset, event: .stake, state: .active)
+                NewBanner(walletId: .none, assetId: chain.chain.assetId, event: .stake, state: .active)
             )
         }
 
         // Enable push notifications
         if !preferences.isPushNotificationsEnabled && preferences.launchesCount > 2 {
             try store.addBanner(
-                Banner(wallet: .none, asset: .none, event: .enableNotifications, state: .active)
+                NewBanner(walletId: .none, assetId: .none, event: .enableNotifications, state: .active)
             )
         }
     }
 
-    func setupWallet(wallet: Wallet) throws  {
+    public func setupWallet(wallet: Wallet) throws  {
         // Adding XRP activation fee banner
         try store.addBanner(
-            Banner(wallet: wallet, asset: Chain.xrp.asset, event: .accountActivation, state: .active)
+            NewBanner(walletId: .none, assetId: .none, event: .accountActivation, state: .active)
         )
     }
 }

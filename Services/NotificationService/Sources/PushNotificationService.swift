@@ -4,17 +4,17 @@ import Foundation
 import UIKit
 import Store
 
-struct PushNotificationEnablerService {
+public actor PushNotificationEnablerService {
 
     private let preferences: Preferences
 
-    init(
+    public init(
         preferences: Preferences
     ) {
         self.preferences = preferences
     }
 
-    func requestPermissions() async throws -> Bool {
+    public func requestPermissions() async throws -> Bool {
         if !preferences.isPushNotificationsEnabled {
             preferences.isPushNotificationsEnabled = try await requestAuthorizationPermissions()
             return preferences.isPushNotificationsEnabled

@@ -5,6 +5,7 @@ import Store
 import Keystore
 import GemAPI
 import Primitives
+import BannerService
 
 class OnstartAsyncService {
     
