@@ -61,7 +61,7 @@ struct BannerServiceKey: EnvironmentKey {
 }
 
 struct BannerSetupServiceKey: EnvironmentKey {
-    static var defaultValue: BannerSetupService { BannerSetupService(store: .main) }
+    static var defaultValue: BannerSetupService { BannerSetupService(store: .main, preferences: .main) }
 }
 
 struct TransactionsServiceKey: EnvironmentKey {

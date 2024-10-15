@@ -21,7 +21,7 @@ struct OnstartService {
         let preferences = PreferencesStore()
         
         do {
-            try CleanUpService(keystore: keystore).initialSetup()
+            try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
         } catch {
             NSLog("destroy initial files error: \(error)")
         }

@@ -59,7 +59,7 @@ extension LocalKeystore {
 }
 
 extension WalletStore {
-    static let main = WalletStore(db: .main)
+    static let main = WalletStore(db: .main, preferences: .main)
 }
 
 extension BannerStore {
@@ -97,7 +97,7 @@ extension StakeService {
 }
 
 extension PriceService {
-    static let main = PriceService(priceStore: .main)
+    static let main = PriceService(priceStore: .main, preferences: .main)
 }
 
 extension TransactionService {
@@ -140,7 +140,7 @@ extension WalletsService {
 }
 
 extension PriceAlertService {
-    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main)
+    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main, preferences: .main)
 }
 
 extension TransactionsService {

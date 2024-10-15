@@ -70,7 +70,7 @@ struct WalletCoordinator: View {
         self.priceStore = PriceStore(db: db)
         self.transactionStore = TransactionStore(db: db)
         self.nodeStore = NodeStore(db: db)
-        self.walletStore = WalletStore(db: db)
+        self.walletStore = WalletStore(db: db, preferences: preferences)
         self.connectionsStore = ConnectionsStore(db: db)
         self.stakeStore = StakeStore(db: db)
         self.bannerStore = BannerStore(db: db)
@@ -90,7 +90,7 @@ struct WalletCoordinator: View {
             store: stakeStore,
             chainServiceFactory: chainServiceFactory
         )
-        self.priceService = PriceService(priceStore: priceStore)
+        self.priceService = PriceService(priceStore: priceStore, preferences: preferences)
         self.transactionService = TransactionService(
             transactionStore: transactionStore,
             stakeService: stakeService,
@@ -131,10 +131,11 @@ struct WalletCoordinator: View {
         )
         self.subscriptionService = SubscriptionService(walletStore: walletStore)
         self.deviceService = DeviceService(subscriptionsService: subscriptionService, walletStore: walletStore)
-        self.bannerSetupService = BannerSetupService(store: bannerStore)
+        self.bannerSetupService = BannerSetupService(store: bannerStore, preferences: preferences)
         self.priceAlertService = PriceAlertService(
             store: priceAlertStore,
-            deviceService: deviceService
+            deviceService: deviceService,
+            preferences: preferences
         )
         self.onstartService = OnstartAsyncService(
             assetStore: assetStore,

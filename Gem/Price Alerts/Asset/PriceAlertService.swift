@@ -11,18 +11,19 @@ struct PriceAlertService {
     private let apiService: any GemAPIPriceAlertService
     private let deviceService: any DeviceServiceable
     private let preferences: Preferences
-    private let pushNotificationService = PushNotificationEnablerService()
+    private let pushNotificationService: PushNotificationEnablerService
 
     init(
         store: PriceAlertStore,
         apiService: any GemAPIPriceAlertService = GemAPIService(),
         deviceService: any DeviceServiceable,
-        preferences: Preferences = Preferences.standard
+        preferences: Preferences
     ) {
         self.store = store
         self.apiService = apiService
         self.deviceService = deviceService
         self.preferences = preferences
+        self.pushNotificationService = PushNotificationEnablerService(preferences: preferences)
     }
 
     var isPushNotificationsEnabled: Bool {

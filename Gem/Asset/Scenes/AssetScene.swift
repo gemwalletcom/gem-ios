@@ -73,7 +73,7 @@ struct AssetScene: View {
             .listRowInsets(.zero)
 
             Section {
-                BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)
+                BannerView(banners: banners, action: onBannerAction, closeAction: bannerService.onClose)
             }
 
             Section {
@@ -223,10 +223,6 @@ extension AssetScene {
                 onOpenLink(url)
             }
         }
-    }
-
-    private func onBannerClose(banner: Banner) {
-        Task { try bannerService.closeBanner(banner: banner) }
     }
 
     private func onPriceAlertToggle() {

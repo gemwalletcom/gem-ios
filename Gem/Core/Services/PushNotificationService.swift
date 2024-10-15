@@ -9,7 +9,7 @@ struct PushNotificationEnablerService {
     private let preferences: Preferences
 
     init(
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.preferences = preferences
     }

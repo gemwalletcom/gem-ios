@@ -17,7 +17,7 @@ class CurrencySceneViewModel: ObservableObject {
     }
 
     init(
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.currency = preferences.currency
         self.preferences = preferences

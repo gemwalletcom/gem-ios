@@ -180,7 +180,7 @@ extension SettingsScene {
     let model: SettingsViewModel = .init(
         walletId: .main,
         walletsService: .main,
-        currencyModel: .init()
+        currencyModel: .init(preferences: .main)
     )
     return NavigationStack {
         SettingsScene(
