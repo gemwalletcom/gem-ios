@@ -3,6 +3,8 @@
 import Foundation
 import Store
 import Primitives
+import Localization
+import PriceAlertService
 
 struct PriceAlertsViewModel {
 
@@ -65,7 +67,7 @@ struct PriceAlertsViewModel {
             try await priceAlertService.updatePriceAlerts()
 
             // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            let assetIds = try await priceAlertService.getPriceAlerts().map { $0.id }
             try await priceService.updatePrices(assetIds: assetIds)
 
         } catch {

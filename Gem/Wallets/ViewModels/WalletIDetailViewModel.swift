@@ -3,6 +3,7 @@ import Primitives
 import Keystore
 import Components
 import Style
+import Localization
 
 class WalletDetailViewModel {
 
@@ -78,7 +79,7 @@ extension WalletDetailViewModel {
         try keystore.deleteWallet(for: wallet)
 
         if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore).onDeleteAllWallets()
+            try CleanUpService(keystore: keystore, preferences: .main).onDeleteAllWallets()
         }
     }
 

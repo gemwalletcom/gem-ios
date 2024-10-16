@@ -5,6 +5,7 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import Localization
 
 struct WalletListItemView: View {
 

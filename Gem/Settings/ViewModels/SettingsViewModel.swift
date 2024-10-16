@@ -7,6 +7,7 @@ import Keystore
 import GemstonePrimitives
 import Gemstone
 import Primitives
+import Localization
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable

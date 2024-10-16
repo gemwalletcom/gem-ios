@@ -51,8 +51,8 @@
         "repositoryURL": "https://github.com/reown-com/reown-swift",
         "state": {
           "branch": null,
-          "revision": "64c4a24e0897cf0a12a2f04a2f660ac1689df91c",
-          "version": "1.0.0"
+          "revision": "8c1a43e28358a30dc03367dca2f38476f1573ece",
+          "version": "1.0.4"
         }
       },
       {
@@ -84,10 +84,10 @@
       },
       {
         "package": "CoinbaseWalletSDK",
-        "repositoryURL": "https://github.com/WalletConnect/wallet-mobile-sdk",
+        "repositoryURL": "https://github.com/MobileWalletProtocol/wallet-mobile-sdk",
         "state": {
           "branch": null,
-          "revision": "b6dfb7d6b8447c7c5b238a10443a1ac28223f38f",
+          "revision": "84b3d3f25a2e3b140ec12bb0d22c35b58f817d44",
           "version": "1.0.0"
         }
       }

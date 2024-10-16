@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Style
+import Components
 
 struct LockScreenScene: View {
     @State private var model: LockSceneViewModel

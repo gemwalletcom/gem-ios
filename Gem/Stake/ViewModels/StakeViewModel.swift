@@ -7,6 +7,8 @@ import Store
 import Components
 import BigInt
 import GemstonePrimitives
+import SwiftUI
+import Localization
 
 @Observable
 class StakeViewModel {
@@ -140,6 +142,22 @@ extension StakeViewModel {
                 delegatitonsState = .error(error)
             }
         }
+    }
+
+    func onSelectStake() {
+        if let value = try? stakeRecipientData() {
+            onAmountInputAction?(value)
+        }
+    }
+
+    func onSelectDelegations(delegations: [Delegation]) {
+        let delegations = delegations.filter { $0.base.rewardsValue > 0 }
+        let transferData = claimRewardsTransferData(delegations: delegations)
+        onTransferAction?(transferData)
+    }
+
+    func onSelectLockTime() {
+        UIApplication.shared.open(lockTimeInfoURL)
     }
 }
 

@@ -3,6 +3,7 @@ import Keystore
 import Primitives
 import Store
 import Components
+import Localization
 
 @Observable
 class SelectAssetViewModel {

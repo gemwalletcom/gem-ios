@@ -35,18 +35,18 @@ struct ConnectionsScene: View {
         List {
             Section {
                 ButtonListItem(
-                    title: Localized.Common.paste,
+                    title: model.pasteButtonTitle,
                     image: Image(systemName: SystemImage.paste),
                     action: onPaste
                 )
                 ButtonListItem(
-                    title: Localized.Wallet.scanQrCode,
+                    title: model.scanQRCodeButtonTitle,
                     image: Image(systemName: SystemImage.qrCode),
                     action: onScan
                 )
             }
             if headers.isEmpty {
-                StateEmptyView(title: Localized.WalletConnect.noActiveConnections)
+                StateEmptyView(title: model.emptyStateTitle)
             } else {
                 ForEach(headers, id: \.self) { header in
                     Section(
@@ -93,7 +93,7 @@ struct ConnectionsScene: View {
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
-        .navigationTitle(Localized.WalletConnect.title)
+        .navigationTitle(model.title)
     }
     
     func connectURI(uri: String) async {

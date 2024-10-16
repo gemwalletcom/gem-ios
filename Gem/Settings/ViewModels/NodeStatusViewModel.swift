@@ -2,6 +2,7 @@
 
 import Primitives
 import Style
+import Localization
 
 struct NodeStatusViewModel {
     let nodeStatus: NodeStatus

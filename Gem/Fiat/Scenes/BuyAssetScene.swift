@@ -2,6 +2,7 @@ import SwiftUI
 import Primitives
 import Style
 import Components
+import FiatConnect
 
 struct BuyAssetScene: View {
     @State private var model: BuyAssetViewModel
@@ -65,7 +66,8 @@ struct BuyAssetScene: View {
                 model: FiatProvidersViewModel(
                     asset: model.asset,
                     quotes: model.state.value ?? [],
-                    selectQuote: onSelectQuote(_:)
+                    selectQuote: onSelectQuote(_:),
+                    formatter: CurrencyFormatter.currency()
                 )
             )
         }

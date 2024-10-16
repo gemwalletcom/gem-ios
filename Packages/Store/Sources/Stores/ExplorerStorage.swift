@@ -5,9 +5,9 @@ import Primitives
 
 public struct ExplorerStorage: ExplorerStorable {
     
-    private let preferences: PreferencesStore
+    private let preferences: Preferences
     
-    public init(preferences: PreferencesStore) {
+    public init(preferences: Preferences) {
         self.preferences = preferences
     }
     

@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Components
 import Store
+import Localization
 
 class CurrencySceneViewModel: ObservableObject {
 
@@ -16,7 +17,7 @@ class CurrencySceneViewModel: ObservableObject {
     }
 
     init(
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.currency = preferences.currency
         self.preferences = preferences

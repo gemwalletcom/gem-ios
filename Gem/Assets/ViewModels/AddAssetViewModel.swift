@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import GemstonePrimitives
+import Localization
 
 struct AddAssetViewModel {
     let asset: Asset

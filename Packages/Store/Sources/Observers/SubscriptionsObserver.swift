@@ -5,8 +5,8 @@ import GRDB
 import Combine
 import Primitives
 
-public class SubscriptionsObserver {
-    
+public final class SubscriptionsObserver {
+
     private let dbQueue: DatabaseQueue
     private var walletsObserver: AnyDatabaseCancellable?
     private let observation = ValueObservation.tracking(AccountRecord.fetchAll)

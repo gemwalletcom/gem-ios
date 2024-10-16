@@ -6,7 +6,7 @@ import StoreKit
 
 struct RateService {
     
-    let preferences: Preferences = .standard
+    let preferences: Preferences
 
     func perform() {
         #if DEBUG

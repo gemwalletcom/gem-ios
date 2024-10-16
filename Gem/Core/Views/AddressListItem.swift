@@ -5,6 +5,7 @@ import Primitives
 import GemstonePrimitives
 import Components
 import Style
+import Localization
 
 struct SimpleAccount {
     let name: String?

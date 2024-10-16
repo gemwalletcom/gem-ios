@@ -2,6 +2,7 @@
 
 import QRScanner
 import Style
+import Localization
 
 struct QRScanResources: QRScannerResources {
     var selectFromPhotos: String { Localized.Library.selectFromPhotoLibrary }

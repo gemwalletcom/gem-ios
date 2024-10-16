@@ -49,3 +49,41 @@ extension Banner {
         )
     }
 }
+
+extension NewBanner {
+    var record: BannerRecord {
+        let wallet: Wallet? = {
+            if let walletId {
+                return Wallet(id: walletId, name: "", index: 0, type: .multicoin, accounts: [], order: 0, isPinned: false)
+            }
+            return .none
+        }()
+        let asset: Asset? = {
+            if let assetId {
+                return Asset(id: assetId, name: "", symbol: "", decimals: 0, type: .native)
+            }
+            return .none
+        }()
+
+        return Banner(
+            wallet: wallet,
+            asset: asset,
+            event: event,
+            state: state
+        ).record
+    }
+}
+
+public struct NewBanner {
+    public let walletId: String?
+    public let assetId: AssetId?
+    public let event: BannerEvent
+    public let state: BannerState
+
+    public init(walletId: String?, assetId: AssetId?, event: BannerEvent, state: BannerState) {
+        self.walletId = walletId
+        self.assetId = assetId
+        self.event = event
+        self.state = state
+    }
+}

@@ -275,3 +275,5 @@
 "price_alerts.empty_state.message" = "Aún no se han añadido alertas de precios.";
 "assets.select_asset" = "Seleccionar activo";
 "lock.privacy_lock" = "Privacy Lock";
+"receive.your_address" = "Your Receiving Address";
+"verify_phrase.title" = "Confirmar";

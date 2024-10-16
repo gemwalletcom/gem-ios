@@ -7,6 +7,7 @@ import Settings
 import Components
 import GemstonePrimitives
 import Style
+import Localization
 
 struct ChainSettingsScene: View {
     @Environment(\.nodeService) private var nodeService

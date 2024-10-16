@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import Style
 import Components
+import Localization
 
 struct StakeDetailViewModel {
     

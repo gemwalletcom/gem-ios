@@ -6,6 +6,7 @@ import Keystore
 import GRDB
 import GRDBQuery
 import Store
+import Localization
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -37,7 +38,6 @@ struct MainTabView: View {
     }
 
     var body: some View {
-        @Bindable var navigationState = navigationState
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
                 model: .init(
@@ -66,7 +66,7 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                currencyModel: CurrencySceneViewModel(),
+                currencyModel: CurrencySceneViewModel(preferences: .main),
                 walletId: model.wallet.walletId
             )
             .tabItem {

@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import SwiftUI
+import MarketInsight
 
 struct ChartPriceModel {
     

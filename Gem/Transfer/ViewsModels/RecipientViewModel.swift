@@ -3,6 +3,7 @@ import Primitives
 import Keystore
 import Blockchain
 import GemstonePrimitives
+import Localization
 
 enum RecipientAddressType {
     case wallets

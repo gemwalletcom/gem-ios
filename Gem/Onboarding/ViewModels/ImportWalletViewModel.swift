@@ -3,6 +3,7 @@ import Keystore
 import Primitives
 import Settings
 import Style
+import Localization
 
 class ImportWalletViewModel: ObservableObject {
 

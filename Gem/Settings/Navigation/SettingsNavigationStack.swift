@@ -23,9 +23,15 @@ struct SettingsNavigationStack: View {
 
     let walletId: WalletId
 
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.settings },
+            set: { navigationState.settings = $0 }
+        )
+    }
+
     var body: some View {
-        @Bindable var navigationState = navigationState
-        NavigationStack(path: $navigationState.settings) {
+        NavigationStack(path: navigationPath) {
             SettingsScene(
                 model: SettingsViewModel(
                     walletId: walletId,
@@ -41,7 +47,8 @@ struct SettingsNavigationStack: View {
                 NotificationsScene(
                     model: NotificationsViewModel(
                         deviceService: deviceService,
-                        subscriptionService: subscriptionService
+                        subscriptionService: subscriptionService,
+                        preferences: .main
                     )
                 )
             }

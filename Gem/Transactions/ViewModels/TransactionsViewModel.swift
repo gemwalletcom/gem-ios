@@ -7,6 +7,7 @@ import Store
 import GRDB
 import GRDBQuery
 import Keystore
+import Localization
 
 struct TransactionsViewModel {
     let walletId: WalletId

@@ -12,6 +12,16 @@ public struct AptosAccount: Codable, Sendable {
 	}
 }
 
+public struct AptosError: Codable, Sendable {
+	public let message: String
+	public let error_code: String
+
+	public init(message: String, error_code: String) {
+		self.message = message
+		self.error_code = error_code
+	}
+}
+
 public struct AptosGasFee: Codable, Sendable {
 	public let gas_estimate: Int32
 	public let prioritized_gas_estimate: Int32
@@ -60,9 +70,13 @@ public struct AptosResourceBalance: Codable, Sendable {
 
 public struct AptosTransaction: Codable, Sendable {
 	public let success: Bool
+	public let gas_used: String
+	public let gas_unit_price: String
 
-	public init(success: Bool) {
+	public init(success: Bool, gas_used: String, gas_unit_price: String) {
 		self.success = success
+		self.gas_used = gas_used
+		self.gas_unit_price = gas_unit_price
 	}
 }
 
@@ -72,4 +86,8 @@ public struct AptosTransactionBroacast: Codable, Sendable {
 	public init(hash: String) {
 		self.hash = hash
 	}
+}
+
+public enum AptosErrorCode: String, Codable, Equatable, Sendable {
+	case accountNotFound = "account_not_found"
 }

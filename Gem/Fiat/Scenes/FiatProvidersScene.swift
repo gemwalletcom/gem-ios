@@ -3,6 +3,8 @@
 import SwiftUI
 import Components
 import Style
+import Localization
+import FiatConnect
 
 struct FiatProvidersScene: View {
     

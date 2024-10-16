@@ -7,6 +7,7 @@ import Store
 import Primitives
 import Components
 import Style
+import Localization
 
 struct StakeScene: View {
     @Environment(\.keystore) private var keystore
@@ -38,7 +39,6 @@ struct StakeScene: View {
         .refreshable {
             await model.fetch()
         }
-        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .navigationDestination(for: TransferData.self) {
             ConfirmTransferScene(
@@ -65,7 +65,7 @@ struct StakeScene: View {
 extension StakeScene {
     
     private var stakeSection: some View {
-        Section {
+        Section(Localized.Common.manage) {
             NavigationCustomLink(
                 with: ListItemView(title: model.stakeTitle),
                 action: onSelectStake
@@ -133,18 +133,15 @@ extension StakeScene {
 
 extension StakeScene {
     private func onSelectStake() {
-        if let value = try? model.stakeRecipientData() {
-            model.onAmountInputAction?(value)
-        }
+        model.onSelectStake()
     }
 
     private func onSelectDelegations() {
-        let transferData = model.claimRewardsTransferData(delegations: delegations)
-        model.onTransferAction?(transferData)
+        model.onSelectDelegations(delegations: delegations)
     }
 
     private func onOpenLockTimeURL() {
-        UIApplication.shared.open(model.lockTimeInfoURL)
+        model.onSelectLockTime()
     }
 }
 

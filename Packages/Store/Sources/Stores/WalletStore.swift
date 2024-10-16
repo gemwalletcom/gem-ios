@@ -11,7 +11,7 @@ public struct WalletStore: Sendable {
     
     public init(
         db: DB,
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.db = db.dbQueue
         self.preferences = preferences

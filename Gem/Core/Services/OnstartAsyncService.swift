@@ -5,6 +5,8 @@ import Store
 import Keystore
 import GemAPI
 import Primitives
+import BannerService
+import DeviceService
 
 class OnstartAsyncService {
     
@@ -99,7 +101,7 @@ class OnstartAsyncService {
             NSLog("Fetching config error: \(error)")
         }
 
-        RateService().perform()
+        RateService(preferences: preferences).perform()
 
         Task {
             try await deviceService.update()

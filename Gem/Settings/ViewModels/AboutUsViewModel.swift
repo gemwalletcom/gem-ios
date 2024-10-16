@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Store
 import Style
+import Localization
 
 class AboutUsViewModel {
 

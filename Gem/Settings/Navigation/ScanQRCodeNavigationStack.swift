@@ -3,6 +3,7 @@
 import SwiftUI
 import QRScanner
 import Style
+import Localization
 
 struct ScanQRCodeNavigationStack: View {
     var action: ((String) -> Void)

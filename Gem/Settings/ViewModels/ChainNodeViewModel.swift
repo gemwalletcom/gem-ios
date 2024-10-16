@@ -5,6 +5,7 @@ import Primitives
 import BigInt
 import Components
 import Style
+import Localization
 
 struct ChainNodeViewModel {
     let chainNode: ChainNode

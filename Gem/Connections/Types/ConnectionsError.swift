@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Localization
 
 enum ConnectionsError: LocalizedError {
     case userCancelled

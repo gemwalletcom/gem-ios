@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Primitives
+import Localization
 
 struct NetworkFeeScene: View {
     @Environment(\.dismiss) private var dismiss

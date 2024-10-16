@@ -2,6 +2,7 @@ import SwiftUI
 import Style
 import Primitives
 import Components
+import Localization
 
 struct CreateWalletScene: View {
 

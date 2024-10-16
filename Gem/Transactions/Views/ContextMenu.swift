@@ -5,6 +5,7 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import Localization
 
 struct ContextMenuCopy: View {
 

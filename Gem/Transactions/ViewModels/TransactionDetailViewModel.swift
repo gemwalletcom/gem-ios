@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import Primitives
 import BigInt
+import Localization
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
@@ -176,7 +177,11 @@ struct TransactionDetailViewModel {
         }()
         return TextStyle(font: .callout, color: color)
     }
-    
+
+    var statusInfoUrl: URL {
+        Docs.url(.transactionStatus)
+    }
+
     var network: String {
         return model.transaction.asset.chain.asset.name
     }
@@ -195,7 +200,11 @@ struct TransactionDetailViewModel {
         }
         return priceModel.fiatAmountText(amount: model.networkFeeAmount * price.price)
     }
-    
+
+    var networkFeeInfoUrl: URL {
+        Docs.url(.networkFees)
+    }
+
     var showMemoField: Bool {
         AssetViewModel(asset: model.transaction.asset).supportMemo
     }
@@ -217,3 +226,15 @@ extension TransactionDetailViewModel: Identifiable {
     var id: String { model.transaction.id }
 }
 
+
+// MARK: - Actions
+
+extension TransactionDetailViewModel {
+    func onNetworkFeeInfo() {
+        UIApplication.shared.open(networkFeeInfoUrl)
+    }
+
+    func onStatusInfo() {
+        UIApplication.shared.open(statusInfoUrl)
+    }
+}

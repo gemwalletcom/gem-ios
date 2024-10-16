@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Components
 import Style
+import Localization
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss

@@ -6,6 +6,7 @@ import Style
 import Components
 import Primitives
 import GemstonePrimitives
+import Localization
 
 struct AmountScene: View {
 
@@ -103,7 +104,7 @@ struct AmountScene: View {
                         .autocorrectionDisabled()
 
                         if model.showMemo {
-                            FloatTextField(model.memoField, text: $memo) {
+                            FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
                                 ListButton(image: Image(systemName: SystemImage.qrCode)) {
                                     isPresentingScanner = .memo
                                 }

@@ -6,6 +6,7 @@ import GemstonePrimitives
 import Settings
 import Blockchain
 import BigInt
+import Localization
 
 @Observable
 class ChainSettingsViewModel {

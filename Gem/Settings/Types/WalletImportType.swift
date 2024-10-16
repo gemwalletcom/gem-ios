@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUI
+import Localization
 
 enum WalletImportType: String, Hashable, CaseIterable, Identifiable {
     var id: String { rawValue }

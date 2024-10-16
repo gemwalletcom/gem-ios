@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Localization
 
 struct CreateWalletNavigationStack: View {
     
@@ -28,7 +29,6 @@ struct CreateWalletNavigationStack: View {
             .navigationDestination(for: Scenes.VerifyPhrase.self) {
                 VerifyPhraseWalletScene(
                     model: VerifyPhraseViewModel(
-                        navigationPath: $navigationPath,
                         words: $0.words,
                         keystore: keystore
                     )

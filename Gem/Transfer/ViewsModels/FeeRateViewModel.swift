@@ -4,6 +4,7 @@ import Primitives
 import Foundation
 import Style
 
+import Localization
 struct FeeRateViewModel: Identifiable {
     let feeRate: FeeRate
     let chain: Chain

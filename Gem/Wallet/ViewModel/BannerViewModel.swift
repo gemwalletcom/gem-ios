@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import GemstonePrimitives
 import Style
+import Localization
 
 struct BannerViewModel {
 
@@ -60,6 +61,18 @@ struct BannerViewModel {
 
     var canClose: Bool {
         banner.state != .alwaysActive
+    }
+
+    var imageSize: CGFloat {
+        28
+    }
+
+    var cornerRadius: CGFloat {
+        switch banner.event {
+        case .stake,
+            .accountActivation: 14
+        case .enableNotifications: 0
+        }
     }
 }
 

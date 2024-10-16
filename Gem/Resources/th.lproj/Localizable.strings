@@ -275,3 +275,5 @@
 "price_alerts.empty_state.message" = "ยังไม่มีการเพิ่มการแจ้งเตือนราคา";
 "assets.select_asset" = "เลือกสินทรัพย์";
 "lock.privacy_lock" = "Privacy Lock";
+"receive.your_address" = "Your Receiving Address";
+"verify_phrase.title" = "ยืนยัน";

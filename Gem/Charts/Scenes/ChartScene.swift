@@ -76,7 +76,7 @@ struct ChartScene: View {
                     }
                 }
                 if !details.socialUrls.isEmpty {
-                    Section(Localized.Social.links) {
+                    Section(model.linksSection) {
                         ForEach(details.socialUrls) { link in
                             NavigationOpenLink(
                                 url: link.url,

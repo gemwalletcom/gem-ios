@@ -2,9 +2,11 @@
 
 import Foundation
 import Primitives
+import Charts
+import MarketInsight
 
-struct ChartValuesViewModel {
-    
+public struct ChartValuesViewModel {
+
     let period: ChartPeriod
     let price: Price?
     let values: ChartValues
@@ -22,15 +24,15 @@ struct ChartValuesViewModel {
         self.values = values
     }
     
-    var charts: [ChartDateValue] {
+    public var charts: [ChartDateValue] {
         return values.charts
     }
     
-    var lowerBoundValueText: String {
+    public var lowerBoundValueText: String {
         return formatter.string(values.lowerBoundValue)
     }
     
-    var upperBoundValueText: String {
+    public var upperBoundValueText: String {
         return formatter.string(values.upperBoundValue)
     }
     

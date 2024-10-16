@@ -4,6 +4,7 @@ import Style
 import Blockchain
 import Primitives
 import Keystore
+import Localization
 
 typealias ConfirmTransferDelegate = (Result<String, any Error>) -> Void
 typealias ConfirmMessageDelegate = (Result<String, any Error>) -> Void
@@ -131,7 +132,8 @@ extension ConfirmTransferScene {
             title: model.networkFeeTitle,
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
-            placeholders: [.subtitle]
+            placeholders: [.subtitle],
+            infoAction: onNetworkFeeInfo
         )
     }
 }
@@ -165,6 +167,10 @@ extension ConfirmTransferScene {
         } else {
             onSelectConfirmTransfer()
         }
+    }
+
+    private func onNetworkFeeInfo() {
+        model.onNetworkFeeInfo()
     }
 }
 

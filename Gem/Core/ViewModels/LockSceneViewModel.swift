@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Keystore
+import Localization
 
 @Observable
 class LockSceneViewModel {

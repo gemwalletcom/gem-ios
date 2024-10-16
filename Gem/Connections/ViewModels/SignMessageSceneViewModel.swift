@@ -5,6 +5,7 @@ import Keystore
 import WalletConnector
 import Primitives
 import WalletCore
+import Localization
 
 struct SignMessageSceneViewModel {
     private let keystore: any Keystore

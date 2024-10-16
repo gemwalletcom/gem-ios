@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Style
 import SwiftUI
+import Localization
 
 struct TransactionStateViewModel {
     

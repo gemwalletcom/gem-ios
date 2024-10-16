@@ -7,6 +7,8 @@ import Components
 import Signer
 import Style
 import GemstonePrimitives
+import SwiftUI
+import Localization
 
 @Observable
 class ConfirmTransferViewModel {
@@ -88,6 +90,7 @@ class ConfirmTransferViewModel {
     var networkValue: String {
         dataModel.chainAsset.name
     }
+    
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: dataModel.chainAsset.id).assetImage
     }
@@ -98,6 +101,9 @@ class ConfirmTransferViewModel {
     }
     var networkFeeFiatValue: String? {
         state.isError ? nil : state.value?.networkFeeFiatText
+    }
+    var networkFeeInfoUrl: URL {
+        Docs.url(.networkFees)
     }
 
     var buttonTitle: String {
@@ -281,6 +287,14 @@ extension ConfirmTransferViewModel {
     }
 }
 
+// MARK: - Actions
+
+extension ConfirmTransferViewModel {
+    func onNetworkFeeInfo() {
+        UIApplication.shared.open(networkFeeInfoUrl)
+    }
+}
+
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
@@ -392,8 +406,7 @@ extension ConfirmTransferViewModel {
         return hash
     }
 
-    private func addTransaction(transaction: Transaction) throws {
-        NSLog("transaction \(transaction)")
+    private func addTransaction(transaction: Primitives.Transaction) throws {
         try walletsService.addTransaction(walletId: wallet.id, transaction: transaction)
     }
 

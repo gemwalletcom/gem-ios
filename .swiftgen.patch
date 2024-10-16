@@ -1,10 +1,10 @@
-diff --git a/Gem/Resources/Localized.swift b/Gem/Resources/Localized.swift
+diff --git a/Packages/Localization/Sources/Localized.swift b/Gem/Resources/Localized.swift
 index 3c5612e..89f2324 100644
---- a/Gem/Resources/Localized.swift
-+++ b/Gem/Resources/Localized.swift
+--- a/Packages/Localization/Sources/Localized.swift
++++ b/Packages/Localization/Sources/Localized.swift
 @@ -793,7 +793,7 @@ internal enum Localized {
  // MARK: - Implementation Details
- 
+
  extension Localized {
 -  private static func tr(_ table: String, _ key: String, _ args: CVarArg..., fallback value: String) -> String {
 +  private static func tr(_ table: String, _ key: String, _ args: any CVarArg..., fallback value: String) -> String {

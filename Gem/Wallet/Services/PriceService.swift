@@ -16,7 +16,7 @@ public struct PriceService {
     
     public init(
         priceStore: PriceStore,
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.priceStore = priceStore
         self.preferences = preferences

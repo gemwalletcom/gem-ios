@@ -6,6 +6,10 @@ import GRDB
 import Store
 import Keystore
 import GemstonePrimitives
+import BannerService
+import NotificationService
+import DeviceService
+import PriceAlertService
 
 extension NavigationStateManager: EnvironmentKey {
     public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
@@ -33,20 +37,20 @@ struct WalletsServiceKey: EnvironmentKey {
     static var defaultValue: WalletsService { WalletsService.main }
 }
 
-struct PriceAlertServiceKey: EnvironmentKey {
-    static var defaultValue: PriceAlertService { PriceAlertService.main }
+extension PriceAlertService: @retroactive EnvironmentKey {
+    public static let defaultValue: PriceAlertService = PriceAlertService.main
 }
 
 struct WalletServiceKey: EnvironmentKey {
     static var defaultValue: WalletService { WalletService.main }
 }
 
-struct SubscriptionServiceKey: EnvironmentKey {
-    static var defaultValue: SubscriptionService { SubscriptionService.main }
+extension SubscriptionService: @retroactive EnvironmentKey {
+    public static let defaultValue: SubscriptionService = SubscriptionService(walletStore: .main)
 }
 
-struct DeviceServiceKey: EnvironmentKey {
-    static var defaultValue: DeviceService { DeviceService(subscriptionsService: .main, walletStore: .main) }
+extension DeviceService: @retroactive EnvironmentKey {
+    public static let defaultValue: DeviceService = DeviceService(subscriptionsService: .main, walletStore: .main)
 }
 
 struct BalanceServiceKey: EnvironmentKey {
@@ -56,12 +60,12 @@ struct BalanceServiceKey: EnvironmentKey {
     }
 }
 
-struct BannerServiceKey: EnvironmentKey {
-    static var defaultValue: BannerService { BannerService(store: .main) }
+extension BannerService: @retroactive EnvironmentKey {
+    public static let defaultValue: BannerService = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService(preferences: .main))
 }
 
 struct BannerSetupServiceKey: EnvironmentKey {
-    static var defaultValue: BannerSetupService { BannerSetupService(store: .main) }
+    static var defaultValue: BannerSetupService { BannerSetupService(store: .main, preferences: .main) }
 }
 
 struct TransactionsServiceKey: EnvironmentKey {
@@ -124,18 +128,18 @@ extension EnvironmentValues {
     }
 
     var priceAlertService: PriceAlertService {
-        get { self[PriceAlertServiceKey.self] }
-        set { self[PriceAlertServiceKey.self] = newValue }
+        get { self[PriceAlertService.self] }
+        set { self[PriceAlertService.self] = newValue }
     }
 
     var subscriptionService: SubscriptionService {
-        get { self[SubscriptionServiceKey.self] }
-        set { self[SubscriptionServiceKey.self] = newValue }
+        get { self[SubscriptionService.self] }
+        set { self[SubscriptionService.self] = newValue }
     }
     
     var deviceService: DeviceService {
-        get { self[DeviceServiceKey.self] }
-        set { self[DeviceServiceKey.self] = newValue }
+        get { self[DeviceService.self] }
+        set { self[DeviceService.self] = newValue }
     }
 
     var balanceService: BalanceService {
@@ -144,8 +148,8 @@ extension EnvironmentValues {
     }
 
     var bannerService: BannerService {
-        get { self[BannerServiceKey.self] }
-        set { self[BannerServiceKey.self] = newValue }
+        get { self[BannerService.self] }
+        set { self[BannerService.self] = newValue }
     }
 
     var bannerSetupService: BannerSetupService {

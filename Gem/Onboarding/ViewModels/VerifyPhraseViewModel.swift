@@ -6,6 +6,7 @@ import Keystore
 import Settings
 import SwiftUI
 import Style
+import Localization
 
 class VerifyPhraseViewModel: ObservableObject {
     
@@ -13,18 +14,15 @@ class VerifyPhraseViewModel: ObservableObject {
     private let shuffledWords: [String]
     private let keystore: any Keystore
 
-    @Binding private var navigationPath: NavigationPath
-
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
     @Published var buttonState = StateButtonStyle.State.disabled
+    private var selectedIndexes = Set<WordIndex>()
 
     init(
-        navigationPath: Binding<NavigationPath>,
         words: [String],
         keystore: any Keystore
     ) {
-        _navigationPath = navigationPath
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
@@ -32,7 +30,7 @@ class VerifyPhraseViewModel: ObservableObject {
     }
     
     var title: String {
-        "Confirm"
+        Localized.VerifyPhrase.title
     }
     
     var rows: [[WordIndex]] {
@@ -59,6 +57,7 @@ class VerifyPhraseViewModel: ObservableObject {
     func pickWord(index: WordIndex) {
         if words[wordsIndex] == index.word {
             wordsVerified[wordsIndex] = index.word
+            selectedIndexes.insert(index)
             wordsIndex += 1
         }
         // last word
@@ -67,8 +66,8 @@ class VerifyPhraseViewModel: ObservableObject {
         }
     }
     
-    func isVerified(word: String) -> Bool {
-        wordsVerified.contains(word)
+    func isVerified(index: WordIndex) -> Bool {
+        selectedIndexes.contains(index)
     }
     
     func importWallet() throws -> Primitives.Wallet  {

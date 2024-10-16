@@ -6,6 +6,8 @@ import Components
 import Store
 import Gemstone
 import Style
+import Localization
+import MarketInsight
 
 class ChartsViewModel: ObservableObject {
 

@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Components
+import Localization
 
 struct StakeDetailScene: View {
     
@@ -62,7 +63,6 @@ struct StakeDetailScene: View {
                 }
             }
         }
-        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
     }
 }

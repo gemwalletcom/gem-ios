@@ -5,6 +5,7 @@ import Store
 import Style
 import Components
 import GemstonePrimitives
+import Localization
 
 protocol HeaderViewModel {
     var isWatchWallet: Bool { get }

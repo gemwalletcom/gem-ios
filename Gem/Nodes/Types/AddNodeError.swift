@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Localization
 
 enum AddNodeError: LocalizedError {
     case invalidNetworkId
