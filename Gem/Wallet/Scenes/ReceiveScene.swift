@@ -5,10 +5,12 @@ import Components
 import Style
 
 struct ReceiveScene: View {
+    @Environment(\.colorScheme) private var scheme
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
     @State private var renderedImage: UIImage?
 
+    private let qrWidth: CGFloat = 300
     private let model: ReceiveViewModel
     private let generator = QRCodeGenerator()
 
@@ -22,6 +24,7 @@ struct ReceiveScene: View {
                 Spacer()
                 if let image = renderedImage {
                     qrCodeView(image: image)
+                        .frame(maxWidth: qrWidth)
                 }
                 Spacer()
                 Button(action: {
@@ -79,8 +82,8 @@ extension ReceiveScene {
         let image = await generator.generate(
             from: model.address,
             size: CGSize(
-                width: Spacing.scene.button.maxWidth,
-                height: Spacing.scene.button.maxWidth
+                width: qrWidth,
+                height: qrWidth
             ),
             logo: UIImage(named: "logo-dark")
         )
@@ -100,7 +103,7 @@ extension ReceiveScene {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
-                .padding(Spacing.small)
+                .padding(Spacing.extraSmall)
                 .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: Spacing.medium))
 
@@ -109,6 +112,7 @@ extension ReceiveScene {
                 VStack(alignment: .leading, spacing: Spacing.extraSmall) {
                     Text(model.youAddressTitle)
                         .font(.subheadline.weight(.semibold))
+                        .minimumScaleFactor(0.8)
                         .foregroundStyle(Colors.black)
                     Text(model.address)
                         .textStyle(.calloutSecondary)
