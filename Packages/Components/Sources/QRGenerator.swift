@@ -12,10 +12,10 @@ public actor QRCodeGenerator {
         from string: String,
         size: CGSize,
         logo: UIImage? = nil,
-        logoQRScale: CGFloat = 0.3,
-        logoBackgroundScale: CGFloat = 0.7,
+        logoQRScale: CGFloat = 0.24,
+        logoBackgroundScale: CGFloat = 0.78,
         backgroundColor: UIColor = .white,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = 16
     ) -> UIImage? {
         guard let qrCodeImage = createQRCode(from: string, size: size) else {
             return nil
