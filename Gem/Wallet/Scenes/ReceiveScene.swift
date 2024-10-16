@@ -5,7 +5,6 @@ import Components
 import Style
 
 struct ReceiveScene: View {
-    @Environment(\.colorScheme) private var scheme
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
     @State private var renderedImage: UIImage?
