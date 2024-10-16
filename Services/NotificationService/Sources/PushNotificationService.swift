@@ -4,7 +4,7 @@ import Foundation
 import UIKit
 import Store
 
-public actor PushNotificationEnablerService {
+public struct PushNotificationEnablerService: Sendable {
 
     private let preferences: Preferences
 
