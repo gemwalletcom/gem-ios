@@ -30,11 +30,11 @@ public struct BiometryAuthenticationService: BiometryAuthenticatable {
         try keystorePassword.setPrivacyLockStatus(status)
     }
 
-    public var lockPeriod: LockPeriod? {
+    public var lockPeriod: LockPeriod {
         do {
-            return try keystorePassword.getAuthenticationLockPeriod()
+            return try keystorePassword.getAuthenticationLockPeriod() ?? .oneMinute
         } catch {
-            return nil
+            return .oneMinute
         }
     }
 

@@ -388,25 +388,26 @@ struct LockSceneViewModelTests {
 
 // TODO: - probably move to Keystore TestKip
 class MockBiometryAuthenticationService: BiometryAuthenticatable {
-    var lockPeriod: LockPeriod?
+    var lockPeriod: LockPeriod
 
     var isAuthenticationEnabled: Bool
     var isPrivacyLockEnabled: Bool
     var availableAuthentication: KeystoreAuthentication
 
     var shouldAuthenticateSucceed: Bool = true
-    var errorToThrow: Error?
+    var errorToThrow: (any Error)?
     var authenticateHandler: (() -> Void)?
 
     init(isAuthEnabled: Bool,
          availableAuth: KeystoreAuthentication,
-         lockPeriod: LockPeriod? = nil,
+         lockPeriod: LockPeriod = .oneMinute,
          isPrivacyLockEnabled: Bool = false
     ) {
         self.isAuthenticationEnabled = isAuthEnabled
         self.availableAuthentication = availableAuth
         self.lockPeriod = lockPeriod
         self.isPrivacyLockEnabled = isPrivacyLockEnabled
+        self.lockPeriod = lockPeriod
     }
 
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws {

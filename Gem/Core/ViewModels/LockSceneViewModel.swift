@@ -31,7 +31,7 @@ class LockSceneViewModel {
     var shouldLock: Bool { Date() > lastUnlockTime && isAutoLockEnabled }
     var shouldShowLockScreen: Bool { isLocked || showPlaceholderPreview }
 
-    var lockPeriod: LockPeriod { service.lockPeriod ?? .immediate }
+    var lockPeriod: LockPeriod { service.lockPeriod }
 
     var isPrivacyLockEnabled: Bool { service.isPrivacyLockEnabled }
     var isPrivacyLockVisible: Bool {
