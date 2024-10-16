@@ -9,6 +9,8 @@ import BigInt
 import GemstonePrimitives
 import Blockchain
 import Localization
+import DeviceService
+import PriceAlertService
 
 extension Asset {
     static let main = Asset.bitcoin

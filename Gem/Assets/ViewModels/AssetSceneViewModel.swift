@@ -6,6 +6,7 @@ import Components
 import Store
 import Style
 import Localization
+import PriceAlertService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

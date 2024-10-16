@@ -190,13 +190,3 @@ extension SettingsScene {
     }
 }
 
-// MARK: - Bundle extensions
-
-extension Bundle {
-    var releaseVersionNumber: String {
-        return infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-    }
-    var buildVersionNumber: Int {
-        return Int((infoDictionary?["CFBundleVersion"] as? String ?? "")) ?? 0
-    }
-}

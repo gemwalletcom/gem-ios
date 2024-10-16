@@ -6,6 +6,7 @@ import UIKit
 import Store
 import Localization
 import NotificationService
+import DeviceService
 
 struct NotificationsViewModel {
     

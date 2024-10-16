@@ -3,6 +3,7 @@ import Keystore
 import Style
 import Store
 import Primitives
+import DeviceService
 
 @main
 struct GemApp: App {

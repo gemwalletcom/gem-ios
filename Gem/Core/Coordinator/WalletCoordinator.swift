@@ -13,6 +13,8 @@ import Localization
 import Intro
 import BannerService
 import NotificationService
+import DeviceService
+import PriceAlertService
 
 struct WalletCoordinator: View {
     let db: DB
