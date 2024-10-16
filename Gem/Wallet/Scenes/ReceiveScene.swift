@@ -5,8 +5,6 @@ import Components
 import Style
 
 struct ReceiveScene: View {
-    @Environment(\.colorScheme) private var scheme
-
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
     @State private var renderedImage: UIImage?
@@ -24,7 +22,6 @@ struct ReceiveScene: View {
                 Spacer()
                 if let image = renderedImage {
                     qrCodeView(image: image)
-                        .transition(.opacity)
                 }
                 Spacer()
                 Button(action: {
@@ -34,7 +31,6 @@ struct ReceiveScene: View {
                 }
                 .buttonStyle(.blue())
             }
-            .animation(.easeInOut, value: renderedImage != nil)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
@@ -60,8 +56,10 @@ struct ReceiveScene: View {
                 systemImage: SystemImage.copy
             )
         )
+        .task {
+            await generateQRCode()
+        }
         .taskOnce {
-            generateQRCode()
             model.enableAsset()
             
             try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
@@ -77,20 +75,18 @@ extension ReceiveScene {
         UIPasteboard.general.string = model.address
     }
 
-    private func generateQRCode() {
-        Task.detached(priority: .utility) {
-            let image = await generator.generate(
-                from: model.address,
-                size: CGSize(
-                    width: Spacing.scene.button.maxWidth,
-                    height: Spacing.scene.button.maxWidth
-                ),
-                logo: UIImage(named: "logo-dark")
-            )
+    private func generateQRCode() async {
+        let image = await generator.generate(
+            from: model.address,
+            size: CGSize(
+                width: Spacing.scene.button.maxWidth,
+                height: Spacing.scene.button.maxWidth
+            ),
+            logo: UIImage(named: "logo-dark")
+        )
 
-            await MainActor.run {
-                renderedImage = image
-            }
+        await MainActor.run {
+            renderedImage = image
         }
     }
 }
@@ -103,9 +99,8 @@ extension ReceiveScene {
         VStack(spacing: Spacing.medium) {
             Image(uiImage: image)
                 .resizable()
-                .interpolation(.none)
                 .scaledToFit()
-                .padding(scheme == .dark ? Spacing.small : .zero)
+                .padding(Spacing.small)
                 .background(Color.white)
                 .clipShape(RoundedRectangle(cornerRadius: Spacing.medium))
 
