@@ -45,17 +45,20 @@ public actor DeviceService: DeviceServiceable, Sendable {
     }
     
     public func update() async throws  {
+        #if DEBUG
+        return
+        #else
         guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
-        
+
         if device.subscriptionsVersion != localDevice.subscriptionsVersion {
             try await subscriptionsService.update(deviceId: deviceId)
         }
-        
         if device != localDevice  {
             try await updateDevice(localDevice)
         }
+        #endif
     }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
