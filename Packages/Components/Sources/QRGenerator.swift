@@ -13,7 +13,7 @@ public actor QRCodeGenerator {
         size: CGSize,
         logo: UIImage? = nil,
         displayScale: CGFloat,
-        logoQRScale: CGFloat = 0.3,
+        logoQRScale: CGFloat = 0.26,
         logoBackgroundScale: CGFloat = 0.7,
         backgroundColor: UIColor = .white,
         cornerRadius: CGFloat = 12
