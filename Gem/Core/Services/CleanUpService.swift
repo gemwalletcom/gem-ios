@@ -11,7 +11,7 @@ struct CleanUpService {
 
     init(
         keystore: any Keystore,
-        preferences: Preferences = .standard
+        preferences: Preferences
     ) {
         self.keystore = keystore
         self.preferences = preferences

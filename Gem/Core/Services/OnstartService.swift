@@ -18,10 +18,8 @@ struct OnstartService {
     let preferences = Preferences()
     
     func migrations() {
-        let preferences = PreferencesStore()
-        
         do {
-            try CleanUpService(keystore: keystore).initialSetup()
+            try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
         } catch {
             NSLog("destroy initial files error: \(error)")
         }

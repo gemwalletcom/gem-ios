@@ -3,6 +3,7 @@
 import Foundation
 import Store
 import Localization
+import BannerService
 
 struct DeveloperViewModel {
     
@@ -78,10 +79,11 @@ struct DeveloperViewModel {
             try stakeService.store.clearValidators()
         } catch { }
     }
-    
 
     func clearBanners() {
-        let _ = try? bannerService.store.clear()
+        Task {
+            try await bannerService.clearBanners()
+        }
     }
 
     // preferences

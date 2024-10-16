@@ -49,7 +49,7 @@ extension CurrencyScene {
 
 #Preview {
     NavigationStack {
-        CurrencyScene(model: .init())
+        CurrencyScene(model: .init(preferences: .main))
             .navigationBarTitleDisplayMode(.inline)
     }
 }

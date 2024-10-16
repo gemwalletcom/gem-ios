@@ -75,7 +75,11 @@ struct WalletScene: View {
             .listRowInsets(.zero)
 
             Section {
-                BannerView(banners: banners, action: onBannerAction, closeAction: onBannerClose)
+                BannerView(
+                    banners: banners,
+                    action: bannerService.onAction,
+                    closeAction: bannerService.onClose
+                )
             }
 
             if !assetsPinned.isEmpty {
@@ -174,14 +178,6 @@ extension WalletScene {
                 NSLog("fetch error: \(error)")
             }
         }
-    }
-
-    private func onBannerAction(banner: Banner) {
-        //
-    }
-
-    private func onBannerClose(banner: Banner) {
-        Task { try bannerService.closeBanner(banner: banner) }
     }
 
     private func runUpdatePrices() {

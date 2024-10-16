@@ -4,21 +4,21 @@ import Foundation
 import SwiftHTTPClient
 import Primitives
 
-public protocol GemAPIConfigService {
+public protocol GemAPIConfigService: Sendable {
     func getConfig() async throws -> ConfigResponse
 }
 
-public protocol GemAPIFiatService {
+public protocol GemAPIFiatService: Sendable {
     func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
 }
 
-public protocol GemAPIAssetsListService {
+public protocol GemAPIAssetsListService: Sendable {
     func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId]
     func getFiatAssets() async throws -> FiatAssets
     func getSwapAssets() async throws -> FiatAssets
 }
 
-public protocol GemAPIAssetsService {
+public protocol GemAPIAssetsService: Sendable {
     func getAsset(assetId: AssetId) async throws -> AssetFull
     func getAssets(assetIds: [AssetId]) async throws -> [AssetFull]
     func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetFull]
@@ -32,7 +32,7 @@ public protocol GemAPIChartService: Sendable {
     func getCharts(assetId: AssetId, currency: String, period: String) async throws -> Charts
 }
 
-public protocol GemAPIDeviceService {
+public protocol GemAPIDeviceService: Sendable {
     func getDevice(deviceId: String) async throws -> Device
     func addDevice(device: Device) async throws -> Device
     func updateDevice(device: Device) async throws -> Device
@@ -45,16 +45,16 @@ public protocol GemAPISubscriptionService: Sendable {
     func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
 }
 
-public protocol GemAPITransactionService {
+public protocol GemAPITransactionService: Sendable {
     func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [Primitives.Transaction]
     func getTransactionsForAsset(deviceId: String, walletIndex: Int, asset: AssetId, fromTimestamp: Int) async throws -> [Primitives.Transaction]
 }
 
-public protocol GemAPISwapService {
+public protocol GemAPISwapService: Sendable {
     func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult
 }
 
-public protocol GemAPIPriceAlertService {
+public protocol GemAPIPriceAlertService: Sendable {
     func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
     func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
     func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws

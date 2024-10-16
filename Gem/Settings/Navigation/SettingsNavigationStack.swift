@@ -47,7 +47,8 @@ struct SettingsNavigationStack: View {
                 NotificationsScene(
                     model: NotificationsViewModel(
                         deviceService: deviceService,
-                        subscriptionService: subscriptionService
+                        subscriptionService: subscriptionService,
+                        preferences: .main
                     )
                 )
             }

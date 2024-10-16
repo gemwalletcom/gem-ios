@@ -66,7 +66,7 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                currencyModel: CurrencySceneViewModel(),
+                currencyModel: CurrencySceneViewModel(preferences: .main),
                 walletId: model.wallet.walletId
             )
             .tabItem {

@@ -7,12 +7,12 @@ import Store
 import UIKit
 import Combine
 
-public protocol DeviceServiceable {
-    func getDeviceId() throws -> String
+public protocol DeviceServiceable: Sendable {
+    func getDeviceId() async throws -> String
     func update() async throws
 }
 
-final class DeviceService: DeviceServiceable {
+public actor DeviceService: DeviceServiceable, Sendable {
 
     let deviceProvider: any GemAPIDeviceService
     let preferences = Preferences()
@@ -22,7 +22,7 @@ final class DeviceService: DeviceServiceable {
     let walletStore: WalletStore
     private var subscriptionsObserverAnyCancellable: AnyCancellable?
 
-    init(
+    public init(
         deviceProvider: any GemAPIDeviceService = GemAPIService(),
         subscriptionsService: SubscriptionService,
         walletStore: WalletStore
@@ -33,7 +33,7 @@ final class DeviceService: DeviceServiceable {
         self.subscriptionsObserver = walletStore.observer()
     }
     
-    func observer() {
+    public func observer() {
         // only observing wallets at the moment, need to add addresses too
         self.subscriptionsObserverAnyCancellable = subscriptionsObserver.observe().sink { update in
             self.preferences.subscriptionsVersion += 1
@@ -44,21 +44,24 @@ final class DeviceService: DeviceServiceable {
         }
     }
     
-    func update() async throws  {
-        guard let deviceId = try getOrCreateDeviceId() else { return }
+    public func update() async throws  {
+        #if DEBUG
+        return
+        #else
+        guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
-        
+
         if device.subscriptionsVersion != localDevice.subscriptionsVersion {
             try await subscriptionsService.update(deviceId: deviceId)
         }
-        
         if device != localDevice  {
             try await updateDevice(localDevice)
         }
+        #endif
     }
     
-    func getOrCreateDevice(_ deviceId: String) async throws -> Device {
+    private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
         do {
             return try await getDevice(deviceId: deviceId)
         } catch {
@@ -68,7 +71,7 @@ final class DeviceService: DeviceServiceable {
         }
     }
     
-    func getDeviceId() throws -> String {
+    public func getDeviceId() async throws -> String {
         return try securePreferences.getDeviceId()
     }
     
@@ -76,18 +79,13 @@ final class DeviceService: DeviceServiceable {
         return String(NSUUID().uuidString.replacingOccurrences(of: "-", with: "").prefix(32).lowercased())
     }
     
-    private func getOrCreateDeviceId() throws -> String?  {
+    private func getOrCreateDeviceId() async throws -> String?  {
         do {
-            let deviceId = try getDeviceId()
+            let deviceId = try await getDeviceId()
             return deviceId
         } catch {
-            #if DEBUG
-            let newDeviceId = "ios_simulator_\(UIDevice.current.model.lowercased())_\(UIDevice.current.systemVersion)"
-            return try securePreferences.set(key: .deviceId, value: newDeviceId)
-            #else
             let newDeviceId = generateDeviceId()
             return try securePreferences.set(key: .deviceId, value: newDeviceId)
-            #endif
         }
     }
     

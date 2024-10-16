@@ -19,7 +19,13 @@ struct BannerView: View {
                 action(banner.banner)
             }, label: {
                 HStack(spacing: 0) {
-                    ListItemView(title: banner.title, titleExtra: banner.description, image: banner.image, imageSize: 28, cornerRadius: 14)
+                    ListItemView(
+                        title: banner.title,
+                        titleExtra: banner.description,
+                        image: banner.image,
+                        imageSize: banner.imageSize,
+                        cornerRadius: banner.cornerRadius
+                    )
 
                     Spacer()
 
