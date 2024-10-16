@@ -13,3 +13,7 @@ Packages/Gemstone/
 build
 *.tar.bz2
 .xcframework/
+
+# plantuml
+sources.txt
+sources.png
