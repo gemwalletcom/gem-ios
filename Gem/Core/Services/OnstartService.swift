@@ -18,8 +18,6 @@ struct OnstartService {
     let preferences = Preferences()
     
     func migrations() {
-        let preferences = PreferencesStore()
-        
         do {
             try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
         } catch {

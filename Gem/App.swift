@@ -84,7 +84,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         )
         service.migrations()
         
-        PreferencesStore.main.incrementLaunchesCount()
+        Preferences.main.incrementLaunchesCount()
 
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {

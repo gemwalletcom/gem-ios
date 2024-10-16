@@ -3,9 +3,7 @@
 import Foundation
 import Primitives
 
-public typealias Preferences = PreferencesStore
-
-public final class PreferencesStore: @unchecked Sendable {
+public final class Preferences: @unchecked Sendable {
 
     private let defaults: UserDefaults
     
