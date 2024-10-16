@@ -5,20 +5,28 @@ import GemAPI
 import Primitives
 import Store
 
-public actor SubscriptionService: Sendable {
+public struct SubscriptionService: Sendable {
 
     private let subscriptionProvider: any GemAPISubscriptionService
     private let preferences = Preferences()
     private let walletStore: WalletStore
 
     public init(
-        subscriptionProvider: any GemAPISubscriptionService = GemAPIService(),
+        subscriptionProvider: any GemAPISubscriptionService,
         walletStore: WalletStore
     ) {
         self.subscriptionProvider = subscriptionProvider
         self.walletStore = walletStore
     }
-    
+
+    var subscriptionsVersion: Int {
+        preferences.subscriptionsVersion
+    }
+
+    public func incrementSubscriptionsVersion() {
+        preferences.subscriptionsVersion += 1
+    }
+
     public func update(deviceId: String) async throws {
         let remoteSubscriptions = try await getSubscriptions(deviceId: deviceId).asSet()
         let localSubscriptions = try localSubscription().asSet()

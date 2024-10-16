@@ -81,9 +81,9 @@ struct DeveloperViewModel {
     }
 
     func clearBanners() {
-        Task {
-            try await bannerService.clearBanners()
-        }
+        do {
+            try bannerService.clearBanners()
+        } catch { }
     }
 
     // preferences

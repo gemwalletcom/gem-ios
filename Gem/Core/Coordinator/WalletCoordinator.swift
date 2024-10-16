@@ -15,6 +15,7 @@ import BannerService
 import NotificationService
 import DeviceService
 import PriceAlertService
+import GemAPI
 
 struct WalletCoordinator: View {
     let db: DB
@@ -43,13 +44,14 @@ struct WalletCoordinator: View {
     let nodeService: NodeService
     let subscriptionService: SubscriptionService
     let deviceService: DeviceService
+    let deviceObserverService: DeviceObserverService
     let bannerSetupService: BannerSetupService
     let transactionsService: TransactionsService
     let connectionsService: ConnectionsService
     let bannerService: BannerService
     let priceAlertService: PriceAlertService
     let notificationService = NotificationService.main
-
+    let apiService = GemAPIService.shared
     let walletConnectorSigner: WalletConnectorSigner
     let walletConnectorInteractor: WalletConnectorInteractor
     
@@ -136,8 +138,13 @@ struct WalletCoordinator: View {
             nodeService: nodeService,
             connectionsService: connectionsService
         )
-        self.subscriptionService = SubscriptionService(walletStore: walletStore)
-        self.deviceService = DeviceService(subscriptionsService: subscriptionService, walletStore: walletStore)
+        self.subscriptionService = SubscriptionService(subscriptionProvider: apiService, walletStore: walletStore)
+        self.deviceService = DeviceService(deviceProvider: apiService, subscriptionsService: subscriptionService)
+        self.deviceObserverService = DeviceObserverService(
+            deviceService: deviceService,
+            subscriptionsService: subscriptionService,
+            subscriptionsObserver: walletStore.observer()
+        )
         self.bannerSetupService = BannerSetupService(store: bannerStore, preferences: preferences)
         self.priceAlertService = PriceAlertService(
             store: priceAlertStore,
@@ -154,7 +161,6 @@ struct WalletCoordinator: View {
             subscriptionService: subscriptionService,
             bannerSetupService: bannerSetupService
         )
-        self.deviceService.observer()
     }
     
     var body: some View {
@@ -283,6 +289,7 @@ struct WalletCoordinator: View {
             onstartService.setup()
             transactionService.setup()
             connectionsService.setup()
+            deviceObserverService.startSubscriptionsObserver()
 
             if let wallet = keystore.currentWallet {
                 onstartService.setup(wallet: wallet)

@@ -9,7 +9,7 @@ struct RateService {
     let preferences: Preferences
 
     func perform() {
-        #if DEBUG
+        #if targetEnvironment(simulator)
         #else
         if preferences.launchesCount >= 5 && !preferences.rateApplicationShown {
             rate()

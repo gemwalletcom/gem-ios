@@ -5,7 +5,7 @@ import Store
 import Primitives
 import NotificationService
 
-public actor BannerService {
+public struct BannerService: Sendable {
 
     private let store: BannerStore
     private let pushNotificationService: PushNotificationEnablerService
@@ -32,6 +32,7 @@ public actor BannerService {
         }
     }
 
+    @discardableResult
     public func clearBanners() throws -> Int {
         try store.clear()
     }
@@ -49,11 +50,11 @@ public actor BannerService {
 // MARK: - Actions
 
 extension BannerService {
-    public nonisolated func onAction(banner: Banner) {
+    public func onAction(banner: Banner) {
         Task { try await handleAction(banner: banner) }
     }
 
-    public nonisolated func onClose(banner: Banner) {
-        Task { try await closeBanner(banner: banner) }
+    public func onClose(banner: Banner) {
+        Task { try closeBanner(banner: banner) }
     }
 }

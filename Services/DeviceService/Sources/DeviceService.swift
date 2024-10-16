@@ -5,53 +5,38 @@ import GemAPI
 import Primitives
 import Store
 import UIKit
-import Combine
 
 public protocol DeviceServiceable: Sendable {
     func getDeviceId() async throws -> String
     func update() async throws
 }
 
-public actor DeviceService: DeviceServiceable, Sendable {
+public final class DeviceService: DeviceServiceable {
 
-    let deviceProvider: any GemAPIDeviceService
-    let preferences = Preferences()
-    let securePreferences = SecurePreferences()
-    let subscriptionsService: SubscriptionService
-    let subscriptionsObserver: SubscriptionsObserver
-    let walletStore: WalletStore
-    private var subscriptionsObserverAnyCancellable: AnyCancellable?
+    private let deviceProvider: any GemAPIDeviceService
+    private let subscriptionsService: SubscriptionService
+    private let preferences: Preferences
+    private let securePreferences: SecurePreferences
 
     public init(
-        deviceProvider: any GemAPIDeviceService = GemAPIService(),
+        deviceProvider: any GemAPIDeviceService,
         subscriptionsService: SubscriptionService,
-        walletStore: WalletStore
+        preferences: Preferences = Preferences(),
+        securePreferences: SecurePreferences = SecurePreferences()
     ) {
         self.deviceProvider = deviceProvider
         self.subscriptionsService = subscriptionsService
-        self.walletStore = walletStore
-        self.subscriptionsObserver = walletStore.observer()
-    }
-    
-    public func observer() {
-        // only observing wallets at the moment, need to add addresses too
-        self.subscriptionsObserverAnyCancellable = subscriptionsObserver.observe().sink { update in
-            self.preferences.subscriptionsVersion += 1
-            
-            Task {
-                try await self.update()
-            }
-        }
+        self.preferences = preferences
+        self.securePreferences = securePreferences
     }
     
     public func update() async throws  {
-        #if DEBUG
+        #if targetEnvironment(simulator)
         return
         #else
         guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
-
         if device.subscriptionsVersion != localDevice.subscriptionsVersion {
             try await subscriptionsService.update(deviceId: deviceId)
         }
@@ -128,5 +113,4 @@ public actor DeviceService: DeviceServiceable, Sendable {
     private func updateDevice(_ device: Device) async throws -> Device {
         return try await deviceProvider.updateDevice(device: device)
     }
-    
 }
