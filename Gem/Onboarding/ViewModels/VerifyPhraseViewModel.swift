@@ -70,9 +70,9 @@ class VerifyPhraseViewModel: ObservableObject {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() throws -> Primitives.Wallet  {
-        let name = WalletNameGenerator(type: .multicoin, keystore: keystore).name
-        return try keystore.importWallet(
+    func importWallet() async throws -> Primitives.Wallet  {
+        let name = await WalletNameGenerator(type: .multicoin, keystore: keystore).name
+        return try await keystore.importWallet(
             name: name,
             type: .phrase(words: words, chains: AssetConfiguration.allChains)
         )

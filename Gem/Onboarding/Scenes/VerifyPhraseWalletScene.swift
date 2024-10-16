@@ -74,8 +74,8 @@ extension VerifyPhraseWalletScene {
         Task {
             try await Task.sleep(for: .milliseconds(50))
             do {
-                try await MainActor.run {
-                    let _ = try model.importWallet()
+                let _ = try await model.importWallet()
+                await MainActor.run {
                     isWalletsPresented.wrappedValue = false
                 }
             } catch {

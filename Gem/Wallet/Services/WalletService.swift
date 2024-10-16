@@ -5,6 +5,7 @@ import Store
 import Primitives
 import Keystore
 
+@MainActor
 public struct WalletService {
 
     private let keystore: any Keystore

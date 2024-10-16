@@ -4,6 +4,7 @@ import Primitives
 import SwiftUI
 import Localization
 
+@MainActor
 class WalletsViewModel {
 
     @Binding var navigationPath: NavigationPath

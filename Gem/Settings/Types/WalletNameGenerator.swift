@@ -5,6 +5,7 @@ import Keystore
 import Primitives
 import Localization
 
+@MainActor
 struct WalletNameGenerator {
     
     let type: ImportWalletType

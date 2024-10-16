@@ -5,6 +5,7 @@ import Components
 import Style
 import Localization
 
+@MainActor
 class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath

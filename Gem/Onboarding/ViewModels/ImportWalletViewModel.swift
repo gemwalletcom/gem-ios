@@ -5,8 +5,8 @@ import Settings
 import Style
 import Localization
 
-class ImportWalletViewModel: ObservableObject {
-
+@MainActor
+class ImportWalletViewModel: ObservableObject {    
     let type: ImportWalletType
     let keystore: any Keystore
     let wordSuggestor = WordSuggestor()
@@ -67,8 +67,8 @@ class ImportWalletViewModel: ObservableObject {
         keyEncodingTypes.map { $0.rawValue }.joined(separator: " / ")
     }
 
-    func importWallet(name: String, keystoreType: KeystoreImportType) throws {
-        try keystore.importWallet(name: name, type: keystoreType)
+    func importWallet(name: String, keystoreType: KeystoreImportType) async throws {
+        try await keystore.importWallet(name: name, type: keystoreType)
     }
     
     func wordSuggestionCalculate(value: String) -> String? {
