@@ -7,7 +7,7 @@ import Primitives
 import NotificationService
 import DeviceService
 
-public actor PriceAlertService: Sendable {
+public struct PriceAlertService: Sendable {
 
     private let store: PriceAlertStore
     private let apiService: any GemAPIPriceAlertService
