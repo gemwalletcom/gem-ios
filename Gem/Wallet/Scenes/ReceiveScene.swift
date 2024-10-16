@@ -5,9 +5,6 @@ import Components
 import Style
 
 struct ReceiveScene: View {
-    @Environment(\.colorScheme) private var scheme
-    @Environment(\.displayScale) private var scale
-
     @State private var showShareSheet = false
     @State private var showCopyMessage = false
     @State private var renderedImage: UIImage?
@@ -85,8 +82,7 @@ extension ReceiveScene {
                 width: Spacing.scene.button.maxWidth,
                 height: Spacing.scene.button.maxWidth
             ),
-            logo: UIImage(named: "logo-dark"),
-            displayScale: scale
+            logo: UIImage(named: "logo-dark")
         )
 
         await MainActor.run {

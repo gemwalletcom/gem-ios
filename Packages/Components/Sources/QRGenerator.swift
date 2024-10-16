@@ -3,8 +3,8 @@ import SwiftUI
 import CoreImage.CIFilterBuiltins
 
 public actor QRCodeGenerator {
-    private static let context = CIContext(options: nil)
-    private static let filter = CIFilter.qrCodeGenerator()
+    private let context = CIContext(options: nil)
+    private let filter = CIFilter.qrCodeGenerator()
 
     public init() {}
 
@@ -12,20 +12,18 @@ public actor QRCodeGenerator {
         from string: String,
         size: CGSize,
         logo: UIImage? = nil,
-        displayScale: CGFloat,
         logoQRScale: CGFloat = 0.3,
         logoBackgroundScale: CGFloat = 0.7,
         backgroundColor: UIColor = .white,
         cornerRadius: CGFloat = 12
     ) -> UIImage? {
-        guard let qrCodeImage = createQRCode(from: string, size: size, displayScale: displayScale) else {
+        guard let qrCodeImage = createQRCode(from: string, size: size) else {
             return nil
         }
 
         return logo != nil ? addLogo(
             to: qrCodeImage,
             logo: logo!,
-            displayScale: displayScale,
             logoQRScale: logoQRScale,
             logoBackgroundScale: logoBackgroundScale,
             backgroundColor: backgroundColor,
@@ -33,38 +31,36 @@ public actor QRCodeGenerator {
         ) : qrCodeImage
     }
 
-    private func createQRCode(from string: String, size: CGSize, displayScale: CGFloat) -> UIImage? {
-        let data = Data(string.utf8)
-        QRCodeGenerator.filter.setValue(data, forKey: "inputMessage")
-        QRCodeGenerator.filter.setValue("H", forKey: "inputCorrectionLevel")
+    private func createQRCode(from string: String, size: CGSize) -> UIImage? {
+        guard let data = string.data(using: .ascii) else { return nil}
+        filter.message = data
+        filter.correctionLevel = "H"
 
-        guard let outputImage = QRCodeGenerator.filter.outputImage else { return nil }
+        guard let outputImage = filter.outputImage else { return nil }
 
-        let scaleX = size.width * displayScale / outputImage.extent.size.width
-        let scaleY = size.height * displayScale / outputImage.extent.size.height
+        let scaleX = size.width / outputImage.extent.size.width
+        let scaleY = size.height / outputImage.extent.size.height
         let scaledImage = outputImage.transformed(by: CGAffineTransform(scaleX: scaleX, y: scaleY))
 
-        guard let cgImage = QRCodeGenerator.context.createCGImage(scaledImage, from: scaledImage.extent) else {
+        guard let cgImage = context.createCGImage(scaledImage, from: scaledImage.extent) else {
             return nil
         }
 
-        return UIImage(cgImage: cgImage, scale: displayScale, orientation: .up)
+        return UIImage(cgImage: cgImage)
     }
 
     private func addLogo(
         to qrCodeImage: UIImage,
         logo: UIImage,
-        displayScale: CGFloat,
         logoQRScale: CGFloat,
         logoBackgroundScale: CGFloat,
         backgroundColor: UIColor,
         cornerRadius: CGFloat
     ) -> UIImage {
-        let format = UIGraphicsImageRendererFormat.default()
-        format.scale = displayScale
+        let format = UIGraphicsImageRendererFormat.preferred()
         let renderer = UIGraphicsImageRenderer(size: qrCodeImage.size, format: format)
 
-        return renderer.image { context in
+        return renderer.image { _ in
             qrCodeImage.draw(in: CGRect(origin: .zero, size: qrCodeImage.size))
 
             let backgroundSize = CGSize(width: qrCodeImage.size.width * logoQRScale,
