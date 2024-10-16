@@ -6,7 +6,7 @@ import LocalAuthentication
 public protocol BiometryAuthenticatable {
     var isAuthenticationEnabled: Bool { get }
     var availableAuthentication: KeystoreAuthentication { get }
-    var lockPeriod: LockPeriod? { get }
+    var lockPeriod: LockPeriod { get }
     var isPrivacyLockEnabled: Bool { get }
 
     func authenticate(context: LAContext, reason: String) async throws

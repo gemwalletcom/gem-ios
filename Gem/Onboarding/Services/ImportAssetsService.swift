@@ -17,7 +17,7 @@ struct ImportAssetsService {
     func migrate() throws {
         let releaseVersionNumber = Bundle.main.buildVersionNumber
         
-        #if DEBUG
+        #if targetEnvironment(simulator)
         #else
         guard preferences.localAssetsVersion < releaseVersionNumber else {
             return

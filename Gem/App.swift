@@ -4,6 +4,7 @@ import Style
 import Store
 import Primitives
 import DeviceService
+import GemAPI
 
 @main
 struct GemApp: App {
@@ -99,7 +100,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         
         Task {
             let _ = try SecurePreferences().set(key: .deviceToken, value: token)
-            try await DeviceService(subscriptionsService: .main, walletStore: .main).update()
+            try await DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main).update()
         }
     }
 

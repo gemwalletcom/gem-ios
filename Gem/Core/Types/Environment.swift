@@ -10,6 +10,7 @@ import BannerService
 import NotificationService
 import DeviceService
 import PriceAlertService
+import GemAPI
 
 extension NavigationStateManager: EnvironmentKey {
     public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
@@ -46,11 +47,11 @@ struct WalletServiceKey: EnvironmentKey {
 }
 
 extension SubscriptionService: @retroactive EnvironmentKey {
-    public static let defaultValue: SubscriptionService = SubscriptionService(walletStore: .main)
+    public static let defaultValue: SubscriptionService = SubscriptionService(subscriptionProvider: GemAPIService.shared, walletStore: .main)
 }
 
 extension DeviceService: @retroactive EnvironmentKey {
-    public static let defaultValue: DeviceService = DeviceService(subscriptionsService: .main, walletStore: .main)
+    public static let defaultValue: DeviceService = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
 struct BalanceServiceKey: EnvironmentKey {

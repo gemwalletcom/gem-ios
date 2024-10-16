@@ -16,7 +16,7 @@ public final class SubscriptionsObserver {
     public init(dbQueue: DatabaseQueue) {
         self.dbQueue = dbQueue
         self.walletsObserver = observation.start(in: dbQueue, scheduling: .immediate) { error in
-            
+
         } onChange: { value in
             //TODO: figure out how to set scheduling to update on changes without initial values
             self.count += 1

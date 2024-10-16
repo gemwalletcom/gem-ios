@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Store
 
-public struct BannerSetupService {
+public struct BannerSetupService: Sendable {
 
     private let store: BannerStore
     private let preferences: Preferences

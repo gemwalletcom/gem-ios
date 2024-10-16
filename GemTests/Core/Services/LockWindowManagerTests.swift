@@ -222,7 +222,7 @@ struct LockWindowManagerTests {
             isAuthEnabled: Bool = true,
             availableAuth: KeystoreAuthentication = .biometrics,
             isPrivacyLockEnabled: Bool = false,
-            lockPeriod: LockPeriod? = nil
+            lockPeriod: LockPeriod = .oneMinute
         ) -> LockWindowManager {
             let service = MockBiometryAuthenticationService(
                 isAuthEnabled: isAuthEnabled,

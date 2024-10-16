@@ -12,7 +12,7 @@ class LockPeriodSelectionViewModel {
 
     init(service: any BiometryAuthenticatable) {
         self.service = service
-        self.selectedPeriod = service.lockPeriod ?? .immediate
+        self.selectedPeriod = service.lockPeriod
     }
 
     var title: String { Localized.Lock.requireAuthentication }
@@ -26,7 +26,7 @@ class LockPeriodSelectionViewModel {
             try service.update(period: period)
             selectedPeriod = period
         } catch {
-            selectedPeriod = service.lockPeriod ?? .immediate
+            selectedPeriod = service.lockPeriod
         }
     }
 }

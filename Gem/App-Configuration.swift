@@ -11,6 +11,7 @@ import Blockchain
 import Localization
 import DeviceService
 import PriceAlertService
+import GemAPI
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -150,7 +151,7 @@ extension TransactionsService {
 }
 
 extension DeviceService {
-    static let main = DeviceService(subscriptionsService: .main, walletStore: .main)
+    static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
 extension WalletService {
@@ -190,7 +191,7 @@ extension ConnectionsStore {
 }
 
 extension SubscriptionService {
-    static let main = SubscriptionService(walletStore: .main)
+    static let main = SubscriptionService(subscriptionProvider: GemAPIService.shared, walletStore: .main)
 }
 
 extension WalletConnector {

@@ -14,7 +14,7 @@ public class MockKeystorePassword: KeystorePassword {
     public init(
         memoryPassword: String = "",
         isAuthenticationEnabled: Bool = false,
-        lockPeriod: LockPeriod? = .immediate,
+        lockPeriod: LockPeriod? = .oneMinute,
         availableAuthentication: KeystoreAuthentication = .none,
         privacyLockStatus: PrivacyLockStatus? = .none
     ) {
@@ -22,6 +22,7 @@ public class MockKeystorePassword: KeystorePassword {
         self.isAuthenticationEnabled = isAuthenticationEnabled
         self.availableAuthentication = availableAuthentication
         self.privacyLockStatus = privacyLockStatus
+        self.lockPeriod = lockPeriod
     }
 
     public func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
