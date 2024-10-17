@@ -39,6 +39,7 @@ struct BuyAssetScene: View {
             StateButton(
                 text: model.actionButtonTitle,
                 viewState: model.state,
+                showProgressIndicator: false,
                 action: onSelectContinue
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)

@@ -173,7 +173,7 @@ extension String: @retroactive Identifiable {
 
 extension ImportWalletScene {
     func onImportWallet() {
-        model.buttonState = .loading
+        model.buttonState = .loading(showProgress: true)
 
         Task {
             try await Task.sleep(for: .milliseconds(50))
