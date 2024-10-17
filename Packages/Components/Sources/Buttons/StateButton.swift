@@ -83,15 +83,14 @@ public struct StateButton: View {
                 action: action,
                 label: {
                     HStack {
-                        Group {
-                            if let image {
-                                image
-                            }
-                            Text(textValue.text)
+                        if let image {
+                            image
+                                .foregroundStyle(textValue.style.color)
                         }
-                        .foregroundStyle(textValue.style.color)
-                        .font(textValue.style.font)
+                        Text(textValue.text)
+                            .foregroundStyle(textValue.style.color)
                     }
+                    .font(textValue.style.font)
                 }
             )
             .disabled(isDisabled)
