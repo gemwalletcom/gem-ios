@@ -38,8 +38,4 @@ public final class DeviceObserverService {
             try await deviceService.update()
         }
     }
-
-    private func update() {
-        
-    }
 }
