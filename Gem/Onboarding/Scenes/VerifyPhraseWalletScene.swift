@@ -69,7 +69,7 @@ struct VerifyPhraseWalletScene: View {
 
 extension VerifyPhraseWalletScene {
     func onImportWallet() {
-        model.buttonState = .loading
+        model.buttonState = .loading(showProgress: true)
 
         Task {
             try await Task.sleep(for: .milliseconds(50))

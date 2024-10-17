@@ -142,8 +142,17 @@ extension ButtonStyle where Self == ClearButtonStyle {
 public struct StateButtonStyle: ButtonStyle {
     public static let maxButtonHeight: CGFloat = 50
 
-    public enum State {
-        case normal, loading, disabled
+    public enum State: Hashable, Equatable {
+        case normal
+        case loading(showProgress: Bool)
+        case disabled
+
+        var showProgress: Bool {
+            switch self {
+            case .normal, .disabled: false
+            case .loading(let showProgress): showProgress
+            }
+        }
     }
 
     var state: State
@@ -174,17 +183,17 @@ public struct StateButtonStyle: ButtonStyle {
             RoundedRectangle(cornerRadius: 12)
                 .fill(backgroundColor(configuration: configuration))
                 .frame(height: StateButtonStyle.maxButtonHeight)
-            switch state {
-            case .normal, .disabled:
+
+            if state.showProgress {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
+            } else {
                 configuration.label
                     .lineLimit(1)
                     .foregroundStyle(foregroundStyle(configuration: configuration))
                     .padding(.horizontal, Spacing.medium)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .frame(height: StateButtonStyle.maxButtonHeight)
-            case .loading:
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
             }
         }
         .frame(maxWidth: .infinity)
@@ -192,14 +201,24 @@ public struct StateButtonStyle: ButtonStyle {
 
     private func backgroundColor(configuration: Configuration) -> Color {
         switch state {
-        case .normal: configuration.isPressed ? backgroundPressed : background
-        case .loading: background
-        case .disabled: backgroundDisabled
+        case .normal:
+            configuration.isPressed ? backgroundPressed : background
+        case .loading(let showProgress):
+            showProgress ? background : backgroundPressed
+        case .disabled:
+            backgroundDisabled
         }
     }
 
     private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        switch state {
+        case .normal:
+            configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        case .loading(let showProgress):
+            foregroundStylePressed.opacity(showProgress ? 1.0 : 0.65)
+        case .disabled:
+            foregroundStyle
+        }
     }
 }
 
@@ -228,7 +247,7 @@ extension ButtonStyle where Self == StateButtonStyle {
 
         var body: some View {
             Button(action: {
-                state = .loading
+                state = .loading(showProgress: state.showProgress)
                 Task {
                     try await Task.sleep(nanoseconds: 1000000000 * 3)
                     state = .normal
@@ -294,7 +313,10 @@ extension ButtonStyle where Self == StateButtonStyle {
             StatefulButtonPreviewWrapper(text: "Stateful Button", state: .disabled)
                 .disabled(true)
 
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading)
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: true))
+                .disabled(false)
+
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: false))
                 .disabled(false)
         }
     }
