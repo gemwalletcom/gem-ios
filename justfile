@@ -12,6 +12,7 @@ install-typeshare:
 install-toolchains:
     @echo "==> Install toolchains for uniffi"
     @cd core && just gemstone install-nightly
+    @cd core && just gemstone install-ios-targets
 
 install-swifttools:
     @echo "==> Install SwiftGen and SwiftFormat"
@@ -79,7 +80,7 @@ install-uml-tools:
 
 uml-app:
     just uml .
-    
+
 uml PATH:
     #!/usr/bin/env bash
     cd {{ PATH }}
