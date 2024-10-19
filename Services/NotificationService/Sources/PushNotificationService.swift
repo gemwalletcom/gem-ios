@@ -21,6 +21,34 @@ public struct PushNotificationEnablerService: Sendable {
         }
         return true
     }
+    
+    public func requestPermissionsOrOpenSettings() async throws -> Bool {
+        let status = try await getNotificationSettingsStatus()
+        switch status {
+        case  .authorized, .ephemeral, .provisional:
+            return true
+        case .notDetermined:
+            return try await requestPermissions()
+        case .denied:
+            try await openSetting()
+            return false
+        @unknown default:
+            return false
+        }
+    }
+    
+    public func getNotificationSettingsStatus() async throws -> UNAuthorizationStatus {
+        let center = UNUserNotificationCenter.current()
+        return await center.notificationSettings().authorizationStatus
+    }
+    
+    public func openSetting() async throws {
+        if let appSettings = URL(string: UIApplication.openSettingsURLString) {
+            if await UIApplication.shared.canOpenURL(appSettings) {
+                await UIApplication.shared.open(appSettings, completionHandler: .none)
+            }
+        }
+    }
 
     private func requestAuthorizationPermissions() async throws -> Bool {
         let result = try await UNUserNotificationCenter.current().requestAuthorization(options: [.badge, .sound, .alert])

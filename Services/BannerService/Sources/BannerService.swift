@@ -22,7 +22,7 @@ public struct BannerService: Sendable {
         let result = try await {
             switch banner.event {
             case .enableNotifications:
-                return try await pushNotificationService.requestPermissions()
+                return try await pushNotificationService.requestPermissionsOrOpenSettings()
             case .stake, .accountActivation:
                 return true
             }
