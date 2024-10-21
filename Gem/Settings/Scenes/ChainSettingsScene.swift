@@ -25,10 +25,11 @@ struct ChainSettingsScene: View {
                     ListItemSelectionView(
                         title: nodeModel.title,
                         titleExtra: nodeModel.titleExtra,
-                        subtitle: nodeModel.subtitle,
+                        titleTag: nodeModel.titleTag,
+                        titleTagType: nodeModel.titleTagType,
+                        titleTagStyle: nodeModel.titleTagStyle,
+                        subtitle: .none,
                         subtitleExtra: .none,
-                        placeholders: nodeModel.placeholders,
-                        selectionDirection: .left,
                         value: nodeModel.chainNode.host,
                         selection: model.selectedNode.host
                     ) { _ in
@@ -52,6 +53,8 @@ struct ChainSettingsScene: View {
                     ListItemSelectionView(
                         title: explorer,
                         titleExtra: .none,
+                        titleTag: .none,
+                        titleTagType: .none,
                         subtitle: .none,
                         subtitleExtra: .none,
                         value: explorer,

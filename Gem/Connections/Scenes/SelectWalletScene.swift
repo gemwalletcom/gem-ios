@@ -21,6 +21,8 @@ struct SelectWalletScene: View {
                     ListItemSelectionView(
                         title: wallet.name,
                         titleExtra: .none,
+                        titleTag: .none,
+                        titleTagType: .none,
                         subtitle: .none,
                         subtitleExtra: .none,
                         value: wallet,

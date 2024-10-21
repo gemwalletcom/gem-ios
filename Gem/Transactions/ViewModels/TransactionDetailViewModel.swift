@@ -160,7 +160,7 @@ struct TransactionDetailViewModel {
         switch model.transaction.transaction.state {
         case .confirmed: .none
         case .failed, .reverted: .none //TODO:
-        case .pending: .progressView
+        case .pending: .progressView()
         }
     }
     

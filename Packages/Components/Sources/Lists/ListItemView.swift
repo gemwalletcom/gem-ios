@@ -5,7 +5,7 @@ import Style
 
 public enum TitleTagType {
     case none
-    case progressView
+    case progressView(scale: CGFloat = 1.0)
     case image(Image)
 }
 
@@ -186,19 +186,17 @@ extension ListItemView {
                         .buttonStyle(.plain)
                     }
 
-                    if let tag = titleTag {
-                        TitleTagView(titleTag: tag, titleTagType: titleTagType)
+                    if let titleTag {
+                        TitleTagView(titleTag: titleTag, titleTagType: titleTagType)
                     }
                 }
-                .padding(.trailing, Spacing.small)
 
                 if let extra = titleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)
-                        .padding(.trailing, Spacing.medium)
-
                 }
             }
+            .padding(.trailing, Spacing.small)
         }
     }
 }
@@ -220,8 +218,9 @@ extension ListItemView {
                 switch titleTagType {
                 case .none:
                     EmptyView()
-                case .progressView:
+                case let .progressView(scale):
                     LoadingView(size: .small, tint: titleTag.style.color)
+                        .scaleEffect(scale)
                 case .image(let image):
                     image
                 }
@@ -338,7 +337,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Loading",
                 titleTagStyle: tagTextStyleWhite,
-                titleTagType: .progressView,
+                titleTagType: .progressView(),
                 subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle
             )
@@ -379,7 +378,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Loading",
                 titleTagStyle: tagTextStyleBlue,
-                titleTagType: .progressView,
+                titleTagType: .progressView(),
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: longSubtitle,
                 subtitleStyle: defaultTextStyle

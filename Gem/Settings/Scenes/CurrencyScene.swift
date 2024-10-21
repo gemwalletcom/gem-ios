@@ -21,6 +21,8 @@ struct CurrencyScene: View {
                         ListItemSelectionView(
                             title: currency.title,
                             titleExtra: .none,
+                            titleTag: .none,
+                            titleTagType: .none,
                             subtitle: .none,
                             subtitleExtra: .none,
                             value: currency.value,

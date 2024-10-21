@@ -21,6 +21,8 @@ struct StakeValidatorsScene: View {
                             ListItemSelectionView(
                                 title: value.title,
                                 titleExtra: .none,
+                                titleTag: .none,
+                                titleTagType: .none,
                                 subtitle: value.subtitle,
                                 subtitleExtra: .none,
                                 value: value.value.id,

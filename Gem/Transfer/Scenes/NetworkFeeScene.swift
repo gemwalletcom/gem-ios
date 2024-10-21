@@ -24,6 +24,8 @@ struct NetworkFeeScene: View {
                     ListItemSelectionView(
                         title: feeRate.title,
                         titleExtra: .none,
+                        titleTag: .none,
+                        titleTagType: .none,
                         subtitle: feeRate.value,
                         subtitleExtra: .none,
                         selectionDirection: .left,
