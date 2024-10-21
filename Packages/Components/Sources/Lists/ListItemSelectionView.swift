@@ -12,13 +12,15 @@ public struct ListItemSelectionView<T: Hashable>: View {
     let titleTag: String?
     let titleTagType: TitleTagType
     let titleTagStyle: TextStyle
-
+    
+    let image: Image?
+    let imageSize: CGFloat
+    
     let value: T?
     let selection: T?
     let action: ((T) -> Void)?
 
     let placeholders: [ListItemViewPlaceholderType]
-    let selectionDirection: SelectionImageDirection
 
     public init(
         title: String?,
@@ -28,8 +30,9 @@ public struct ListItemSelectionView<T: Hashable>: View {
         titleTagStyle: TextStyle = .body,
         subtitle: String?,
         subtitleExtra: String?,
+        image: Image? = nil,
+        imageSize: CGFloat = 28.0,
         placeholders: [ListItemViewPlaceholderType] = [],
-        selectionDirection: SelectionImageDirection = .right,
         value: T,
         selection: T?,
         action: ((T) -> Void)?
@@ -41,8 +44,9 @@ public struct ListItemSelectionView<T: Hashable>: View {
         self.titleTagStyle = titleTagStyle
         self.subtitle = subtitle
         self.subtitleExtra = subtitleExtra
+        self.image = image
+        self.imageSize = imageSize
         self.placeholders = placeholders
-        self.selectionDirection = selectionDirection
         self.value = value
         self.selection = selection
         self.action = action
@@ -52,7 +56,6 @@ public struct ListItemSelectionView<T: Hashable>: View {
          SelectionView(
              value: value,
              selection: selection,
-             selectionDirection: selectionDirection,
              action: action
          ) {
              ListItemView(
@@ -63,6 +66,8 @@ public struct ListItemSelectionView<T: Hashable>: View {
                  titleExtra: titleExtra,
                  subtitle: subtitle,
                  subtitleExtra: subtitleExtra,
+                 image: image,
+                 imageSize: imageSize,
                  placeholders: placeholders
              )
          }

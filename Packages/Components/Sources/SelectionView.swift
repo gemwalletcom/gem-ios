@@ -3,30 +3,20 @@
 import SwiftUI
 import Style
 
-public enum SelectionImageDirection: Identifiable {
-    case left
-    case right
-
-    public var id: Self { self }
-}
-
 public struct SelectionView<T: Hashable, Content: View>: View {
     let value: T?
     let selection: T?
-    let selectionDirection: SelectionImageDirection
     let content: () -> Content
     let action: ((T) -> Void)?
 
     public init(
         value: T?,
         selection: T?,
-        selectionDirection: SelectionImageDirection = .right,
         action: ((T) -> Void)?,
         @ViewBuilder content: @escaping () -> Content
     ) {
         self.value = value
         self.selection = selection
-        self.selectionDirection = selectionDirection
         self.content = content
         self.action = action
     }
@@ -38,11 +28,8 @@ public struct SelectionView<T: Hashable, Content: View>: View {
             }
         }, label: {
             HStack {
-                if selectionDirection == .left && selection == value {
-                    selectionImageView
-                }
                 content()
-                if selectionDirection == .right && selection == value {
+                if selection == value {
                     Spacer()
                     selectionImageView
                 }
@@ -53,7 +40,13 @@ public struct SelectionView<T: Hashable, Content: View>: View {
 
     private var selectionImageView: some View {
         ZStack {
-            Image(systemName: SystemImage.checkmark)
+            Image(.selected)
+                .resizable()
+                .scaledToFit()
+                .frame(
+                    width: Sizing.list.selected.image,
+                    height: Sizing.list.selected.image
+                )
         }
         .frame(width: Sizing.list.image)
     }
@@ -75,7 +68,6 @@ public struct SelectionView<T: Hashable, Content: View>: View {
                     SelectionView(
                         value: item,
                         selection: selectedValue,
-                        selectionDirection: .right,
                         action: { selected in
                             selectedValue = selected
                         },

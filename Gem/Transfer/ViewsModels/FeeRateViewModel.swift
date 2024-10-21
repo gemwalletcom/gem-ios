@@ -3,8 +3,9 @@
 import Primitives
 import Foundation
 import Style
-
 import Localization
+import SwiftUI
+
 struct FeeRateViewModel: Identifiable {
     let feeRate: FeeRate
     let chain: Chain
@@ -16,11 +17,16 @@ struct FeeRateViewModel: Identifiable {
 
     var id: String { feeRate.priority.rawValue }
 
+    var image: Image? {
+        //TODO Specify image for each priority type
+        .none
+    }
+    
     var title: String {
         switch feeRate.priority {
-        case .slow: String(format: "%@  %@", Emoji.turle, Localized.FeeRates.slow)
-        case .normal: String(format: "%@  %@", Emoji.gem, Localized.FeeRates.normal)
-        case .fast: String(format: "%@  %@", Emoji.rocket, Localized.FeeRates.fast)
+        case .slow: Localized.FeeRates.slow
+        case .normal: Localized.FeeRates.normal
+        case .fast: Localized.FeeRates.fast
         }
     }
 

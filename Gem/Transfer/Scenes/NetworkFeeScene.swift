@@ -23,15 +23,17 @@ struct NetworkFeeScene: View {
                 ForEach(model.feeRatesViewModels) { feeRate in
                     ListItemSelectionView(
                         title: feeRate.title,
-                        titleExtra: .none,
+                        titleExtra: feeRate.value,
                         titleTag: .none,
                         titleTagType: .none,
-                        subtitle: feeRate.value,
+                        subtitle: .none,
                         subtitleExtra: .none,
-                        selectionDirection: .left,
+                        image: feeRate.image,
+                        imageSize: 28,
                         value: feeRate.feeRate.priority,
                         selection: model.selectedFeeRate?.priority,
-                        action: action)
+                        action: action
+                    )
                 }
             } footer: {
                 Text(Localized.FeeRates.info)

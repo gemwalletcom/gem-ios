@@ -27,5 +27,8 @@ public struct Sizing {
     
     public struct list {
         public static let image: CGFloat = 22
+        public struct selected {
+            public static let image: CGFloat = 20
+        }
     }
 }
