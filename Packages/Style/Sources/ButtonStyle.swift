@@ -204,7 +204,7 @@ public struct StateButtonStyle: ButtonStyle {
         case .normal:
             configuration.isPressed ? backgroundPressed : background
         case .loading(let showProgress):
-            showProgress ? background : backgroundPressed
+            showProgress ? background : backgroundDisabled
         case .disabled:
             backgroundDisabled
         }
@@ -232,7 +232,7 @@ extension ButtonStyle where Self == StateButtonStyle {
             foregroundStylePressed: Colors.whiteSolid,
             background: Colors.blue,
             backgroundPressed: Colors.blueDark,
-            backgroundDisabled: Colors.gray
+            backgroundDisabled: Colors.blueDark.opacity(0.6)
         )
     }
 }
