@@ -8,6 +8,11 @@ public struct ListItemSelectionView<T: Hashable>: View {
     let titleExtra: String?
     let subtitle: String?
     let subtitleExtra: String?
+
+    let titleTag: String?
+    let titleTagType: TitleTagType
+    let titleTagStyle: TextStyle
+
     let value: T?
     let selection: T?
     let action: ((T) -> Void)?
@@ -18,6 +23,9 @@ public struct ListItemSelectionView<T: Hashable>: View {
     public init(
         title: String?,
         titleExtra: String?,
+        titleTag: String?,
+        titleTagType: TitleTagType,
+        titleTagStyle: TextStyle = .body,
         subtitle: String?,
         subtitleExtra: String?,
         placeholders: [ListItemViewPlaceholderType] = [],
@@ -28,6 +36,9 @@ public struct ListItemSelectionView<T: Hashable>: View {
     ) {
         self.title = title
         self.titleExtra = titleExtra
+        self.titleTag = titleTag
+        self.titleTagType = titleTagType
+        self.titleTagStyle = titleTagStyle
         self.subtitle = subtitle
         self.subtitleExtra = subtitleExtra
         self.placeholders = placeholders
@@ -46,6 +57,9 @@ public struct ListItemSelectionView<T: Hashable>: View {
          ) {
              ListItemView(
                  title: title,
+                 titleTag: titleTag,
+                 titleTagStyle: titleTagStyle,
+                 titleTagType: titleTagType,
                  titleExtra: titleExtra,
                  subtitle: subtitle,
                  subtitleExtra: subtitleExtra,

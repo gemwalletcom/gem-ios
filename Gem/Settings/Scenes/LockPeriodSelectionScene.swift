@@ -18,6 +18,8 @@ struct LockPeriodSelectionScene: View {
             ListItemSelectionView(
                 title: option.title,
                 titleExtra: .none,
+                titleTag: .none,
+                titleTagType: .none,
                 subtitle: .none,
                 subtitleExtra: .none,
                 value: option,

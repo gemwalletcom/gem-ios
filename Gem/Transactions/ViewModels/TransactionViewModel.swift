@@ -90,7 +90,7 @@ struct TransactionViewModel {
     var titleTagType: TitleTagType {
         switch transaction.transaction.state {
         case .confirmed: .none
-        case .pending: .progressView
+        case .pending: .progressView()
         case .failed, .reverted: .none //TODO Image
         }
     }

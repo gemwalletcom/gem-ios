@@ -3,6 +3,7 @@
 import Primitives
 import Style
 import Localization
+import SwiftUI
 
 struct NodeStatusViewModel {
     let nodeStatus: NodeStatus
@@ -14,10 +15,6 @@ struct NodeStatusViewModel {
         }
         return "\(title): \(value)"
     }
-    
-    private var errorText: String {
-        "\(Localized.Errors.error) \(Emoji.redCircle)"
-    }
 
     var latencyText: String? {
         switch nodeStatus {
@@ -25,11 +22,29 @@ struct NodeStatusViewModel {
             if block > 0 {
                 return LatencyViewModel(latency: latency).title
             }
-            return errorText
+            return Localized.Errors.error
         case .error:
-            return errorText
+            return Localized.Errors.error
         case .none:
-            return .none
+            return ""
+        }
+    }
+
+    var color: Color {
+        switch nodeStatus {
+        case .error: Colors.red
+        case .none: Colors.gray
+        case .result(_, let latency):
+            LatencyViewModel(latency: latency).color
+        }
+    }
+
+    var background: Color {
+        switch nodeStatus {
+        case .error: Colors.red.opacity(0.15)
+        case .none: .clear
+        case .result(_, let latency):
+            LatencyViewModel(latency: latency).background
         }
     }
 }

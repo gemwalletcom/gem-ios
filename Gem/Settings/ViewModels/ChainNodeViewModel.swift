@@ -31,15 +31,24 @@ struct ChainNodeViewModel {
             )
     }
 
-    var subtitle: String? {
+    var titleTag: String? {
         NodeStatusViewModel(nodeStatus: nodeStatus).latencyText
     }
 
-    var placeholders: [ListItemViewPlaceholderType] {
+    var titleTagType: TitleTagType {
         switch nodeStatus {
-        case .result, .error: []
-        case .none: [.subtitle]
+        case .result, .error: .none
+        case .none: .progressView(scale: 1.24)
         }
+    }
+
+    var titleTagStyle: TextStyle {
+        let model = NodeStatusViewModel(nodeStatus: nodeStatus)
+        return TextStyle(
+            font: .footnote.weight(.medium),
+            color: model.color,
+            background: model.background
+        )
     }
 }
 
