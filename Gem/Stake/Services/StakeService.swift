@@ -32,7 +32,6 @@ struct StakeService {
     }
 
     func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
-
         guard let id = validatorId else {
             return nil
         }

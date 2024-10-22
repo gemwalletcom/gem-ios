@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct ScanRecipientResult {
+struct PaymentScanResult {
     let address: String
     let amount: String?
     let memo: String?

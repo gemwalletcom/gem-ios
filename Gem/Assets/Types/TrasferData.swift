@@ -4,6 +4,7 @@ import BigInt
 
 typealias TransferDataAction = ((TransferData) -> Void)?
 typealias AmountInputAction = ((AmountInput) -> Void)?
+typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 struct Recipient {
     let name: String?
@@ -21,6 +22,17 @@ extension Recipient: Hashable {}
 struct RecipientData {
     let asset: Asset
     let recipient: Recipient
+    let amount: String?
+    
+    init(
+        asset: Asset,
+        recipient: Recipient,
+        amount: String? = .none
+    ) {
+        self.asset = asset
+        self.recipient = recipient
+        self.amount = amount
+    }
 }
 
 extension RecipientData: Hashable {}

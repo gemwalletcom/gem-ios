@@ -34,22 +34,10 @@ struct AmountNavigationView: View {
                 wallet: wallet,
                 walletsService: walletsService,
                 stakeService: stakeService,
-                onTransferAction: { data in
-                    navigationPath.append(data)
+                onTransferAction: {
+                    navigationPath.append($0)
                 }
             )
         )
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: wallet,
-                    keystore: keystore,
-                    data: data,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: input.asset.chain),
-                    walletsService: walletsService
-                )
-            )
-        }
     }
 }

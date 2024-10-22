@@ -17,13 +17,12 @@ struct SelectAssetSceneNavigationStack: View {
     @State private var isPresentingFilteringView: Bool = false
 
     @State private var model: SelectAssetViewModel
-    @Binding private var navigationPath: NavigationPath
+    @State private var navigationPath = NavigationPath()
 
-    init(model: SelectAssetViewModel,
-         navigationPath: Binding<NavigationPath>
+    init(
+        model: SelectAssetViewModel
     ) {
         _model = State(wrappedValue: model)
-        _navigationPath = navigationPath
     }
 
     var body: some View {
@@ -68,9 +67,9 @@ struct SelectAssetSceneNavigationStack: View {
             .navigationDestination(for: SelectAssetInput.self) { input in
                 switch input.type {
                 case .send:
-                    AmountNavigationView(
-                        input: AmountInput(type: .transfer, asset: input.asset),
+                    RecipientNavigationView(
                         wallet: model.wallet,
+                        asset: input.asset,
                         navigationPath: $navigationPath
                     )
                 case .receive:

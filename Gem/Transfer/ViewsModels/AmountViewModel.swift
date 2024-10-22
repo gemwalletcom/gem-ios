@@ -40,9 +40,6 @@ class AmounViewModel: ObservableObject {
     @Published var currentValidator: DelegationValidator? = .none
     @Published var currentDelegation: Delegation? = .none
 
-    var recipientField: String { Localized.Transfer.Recipient.addressField }
-    var memoField: String { Localized.Transfer.memo }
-
     var defaultValidator: DelegationValidator? {
         let recommended: DelegationValidator? = switch type {
         case .stake(_, let recommendedValidator): recommendedValidator
@@ -50,10 +47,6 @@ class AmounViewModel: ObservableObject {
         case .transfer, .unstake, .withdraw: .none
         }
         return recommended ?? validators.first
-    }
-
-    var showMemo: Bool {
-        AssetViewModel(asset: input.asset).supportMemo
     }
 
     var type: AmountType {
@@ -217,34 +210,22 @@ class AmounViewModel: ObservableObject {
     private func value(for amount: String) throws -> BigInt {
         return try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
     }
-
-    private func isValidAddress(address: String) -> Bool {
-        return asset.chain.isValidAddress(address)
-    }
-
-    func getRecipientData(name: NameRecord?, address: String, memo: String?) throws -> RecipientData {
-        let recipient: Recipient = {
-            if let result = name {
-                return Recipient(name: result.name, address: result.address, memo: memo)
-            }
-            return Recipient(name: .none, address: address, memo: memo)
-        }()
+    
+    var recipientData: RecipientData {
         switch type {
-        case .transfer:
-            guard isValidAddress(address: recipient.address) else {
-                throw TransferError.invalidAddress(asset: asset)
-            }
-
-            return RecipientData(
-                asset: input.asset,
-                recipient: recipient
-            )
-        case .stake, .unstake, .redelegate, .withdraw:
+        case .transfer(recipient: let recipient):
+            return recipient
+        case .stake,
+            .unstake,
+            .redelegate,
+            .withdraw:
+            
             let recipientAddress = self.stakeService.getRecipientAddress(
                 chain: asset.chain.stakeChain,
                 type: type,
                 validatorId: currentValidator?.id
             )
+            
             return RecipientData(
                 asset: asset,
                 recipient: Recipient(
@@ -255,7 +236,7 @@ class AmounViewModel: ObservableObject {
             )
         }
     }
-
+    
     func getTransferData(recipientData: RecipientData, value: BigInt, canChangeValue: Bool) throws -> TransferData {
         switch type {
         case .transfer:
@@ -305,16 +286,5 @@ class AmounViewModel: ObservableObject {
             return .empty
         }
         return currencyFormatter.string(fiatValue * assetPrice.price)
-    }
-
-    //TODO: Add unit tests
-    func getTransferDataFromScan(string: String) throws -> ScanRecipientResult {
-        let payment = try PaymentURLDecoder.decode(string)
-
-        return ScanRecipientResult(
-            address: payment.address,
-            amount: payment.amount,
-            memo: payment.memo
-        )
     }
 }

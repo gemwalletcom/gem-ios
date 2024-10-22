@@ -14,26 +14,15 @@ struct AmountScene: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
-    @State private var isPresentingErrorMessage: String?
-    @State private var isPresentingScanner: AmountScene.Field?
-    @State private var isPresentingContacts: Bool = false
-
-    // focus
     enum Field: Int, Hashable, Identifiable {
         case amount
-        case address
-        case memo
         var id: String { String(rawValue) }
     }
     @FocusState private var focusedField: Field?
 
-    @State private var delegation: DelegationValidator?
-
     @State private var amount: String = ""
-    @State private var address: String = ""
-    @State private var memo: String = ""
-
-    @State private var nameResolveState: NameRecordState = .none
+    @State private var delegation: DelegationValidator?
+    @State private var isPresentingErrorMessage: String?
 
     var body: some View {
         VStack {
@@ -79,42 +68,7 @@ struct AmountScene: View {
 
                 switch model.type {
                 case .transfer:
-                    Section {
-                        FloatTextField(model.recipientField, text: $address, allowClean: false) {
-                            HStack(spacing: Spacing.large/2) {
-                                NameRecordView(
-                                    model: NameRecordViewModel(chain: model.asset.chain),
-                                    state: $nameResolveState,
-                                    address: $address
-                                )
-                                ListButton(image: Image(systemName: SystemImage.paste)) {
-                                    paste(field: .address)
-                                }
-                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
-                                    isPresentingScanner = .address
-                                }
-//                                ListButton(image: Image(systemName: SystemImage.book)) {
-//                                    isPresentingContacts = true
-//                                }
-                            }
-                        }
-                        .focused($focusedField, equals: .address)
-                        .keyboardType(.alphabet)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-
-                        if model.showMemo {
-                            FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
-                                ListButton(image: Image(systemName: SystemImage.qrCode)) {
-                                    isPresentingScanner = .memo
-                                }
-                            }
-                            .focused($focusedField, equals: .memo)
-                            .keyboardType(.alphabet)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        }
-                    }
+                    EmptyView()
                 case .stake, .unstake, .redelegate, .withdraw:
                     if let validator = model.currentValidator  {
                         Section(Localized.Stake.validator) {
@@ -155,9 +109,7 @@ struct AmountScene: View {
             //.listSectionSpacing(.compact)
 
             Spacer()
-            Button(Localized.Common.continue, action: {
-                next()
-            })
+            Button(Localized.Common.continue, action: next)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
             .buttonStyle(.blue())
         }
@@ -166,17 +118,6 @@ struct AmountScene: View {
         .frame(maxWidth: .infinity)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .sheet(item: $isPresentingScanner) { value in
-            ScanQRCodeNavigationStack() {
-                onHandleScan($0, for: value)
-            }
-        }
-        .sheet(isPresented: $isPresentingContacts) {
-            ContactsNavigationStack(
-                wallet: model.wallet,
-                asset: model.asset
-            )
-        }
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button(Localized.Common.next) {
@@ -208,6 +149,11 @@ struct AmountScene: View {
                 amount = model.maxBalance
             }
         }
+        .taskOnce {
+            if let amount = model.recipientData.amount {
+                self.amount = amount
+            }
+        }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
@@ -217,52 +163,14 @@ struct AmountScene: View {
 // MARK: - Actions
 
 extension AmountScene {
-    private func paste(field: Self.Field) {
-        guard let string = UIPasteboard.general.string else { return }
-        switch field {
-        case .address, .memo, .amount:
-            self.address = string.trim()
-        }
-    }
-
-    private func onHandleScan(_ result: String, for field: Self.Field) {
-        switch field {
-        case .address:
-            do {
-                let result = try model.getTransferDataFromScan(string: result)
-
-                // special case when all data is ready
-                if let amount = result.amount, (model.showMemo ? !memo.isEmpty : true) {
-                    next(amount: amount, name: .none, address: result.address, memo: memo, canChangeValue: false)
-                } else {
-                    address = result.address
-                    
-                    if let memo = result.memo {
-                        self.memo = memo
-                    }
-                    if let amount = result.amount {
-                        self.amount = amount
-                    }
-                }
-            } catch {
-                isPresentingErrorMessage = error.localizedDescription
-            }
-        case .memo, .amount:
-            memo = result
-        }
-    }
-
     private func next() {
-        //TODO: Move validation per field on demand
-
-        next(amount: amount, name: nameResolveState.result, address: address, memo: memo, canChangeValue: true)
-    }
-
-    private func next(amount: String, name: NameRecord?, address: String, memo: String?, canChangeValue: Bool) {
         do {
             let value = try model.isValidAmount(amount: amount)
-            let recipientData = try model.getRecipientData(name: nameResolveState.result, address: address, memo: memo)
-            let transfer = try model.getTransferData(recipientData: recipientData, value: value, canChangeValue: canChangeValue)
+            let transfer = try model.getTransferData(
+                recipientData: model.recipientData,
+                value: value,
+                canChangeValue: true
+            )
 
             model.onTransferAction?(transfer)
         } catch {
