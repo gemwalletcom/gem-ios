@@ -1,41 +1,18 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import BigInt
+import Transfer
 
 typealias TransferDataAction = ((TransferData) -> Void)?
 typealias AmountInputAction = ((AmountInput) -> Void)?
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
-struct Recipient {
-    let name: String?
-    let address: String
-    let memo: String?
-}
-
 struct RecipientImport {
     let name: String
     let address: String
 }
-
-extension Recipient: Hashable {}
-
-struct RecipientData {
-    let asset: Asset
-    let recipient: Recipient
-    let amount: String?
-    
-    init(
-        asset: Asset,
-        recipient: Recipient,
-        amount: String? = .none
-    ) {
-        self.asset = asset
-        self.recipient = recipient
-        self.amount = amount
-    }
-}
-
-extension RecipientData: Hashable {}
 
 struct WCTransferData: Identifiable {
     let tranferData: TransferData

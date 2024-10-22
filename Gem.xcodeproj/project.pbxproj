@@ -231,7 +231,6 @@
 		D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CAFF2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFE2C9CC29A004121D3 /* AddAssetPriceAlertsViewModel.swift */; };
 		D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
-		D852CB062CA32B32004121D3 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
 		D852CB072CA32B5A004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */; };
 		D852CB082CA32B5A004121D3 /* PriceAlertsNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */; };
 		D852CB092CA32B5A004121D3 /* PriceAlertsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3882C938A1B006FABE8 /* PriceAlertsViewModel.swift */; };
@@ -528,7 +527,6 @@
 		D8C4A35E2C8A7B14006FABE8 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		D8C4A3652C8B9D4F006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
 		D8C4A3672C8BA114006FABE8 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C30952B7299C39D80004C0F9 /* Images.xcassets */; };
-		D8C4A3722C8CE1EA006FABE8 /* TransferType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */; };
 		D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */; };
 		D8C4A3762C8CF956006FABE8 /* StakeNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */; };
 		D8C4A3782C8D4D97006FABE8 /* RecipientNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C4A3772C8D4D97006FABE8 /* RecipientNavigationView.swift */; };
@@ -549,6 +547,7 @@
 		D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */; };
 		D8CD362F2C6D507A00E18764 /* Latency.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD362E2C6D507A00E18764 /* Latency.swift */; };
 		D8CD36312C6D52B000E18764 /* LatencyType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8CD36302C6D52B000E18764 /* LatencyType.swift */; };
+		D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */ = {isa = PBXBuildFile; productRef = D8CF19E22CC747370025D6B4 /* Transfer */; };
 		D8D203B82ACC84BA00261CA2 /* ChartsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */; };
 		D8D203BB2ACC878200261CA2 /* ChartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203BA2ACC878200261CA2 /* ChartService.swift */; };
 		D8D203C02ACE058200261CA2 /* ChartValuesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D203BF2ACE058200261CA2 /* ChartValuesViewModel.swift */; };
@@ -852,7 +851,6 @@
 		D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestor.swift; sourceTree = "<group>"; };
 		D8C4A2342C8785A2006FABE8 /* FiatQuoteViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatQuoteViewModelTests.swift; sourceTree = "<group>"; };
 		D8C4A3632C8A7B14006FABE8 /* GemDev.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GemDev.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferType.swift; sourceTree = "<group>"; };
 		D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AmountNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeNavigationView.swift; sourceTree = "<group>"; };
 		D8C4A3772C8D4D97006FABE8 /* RecipientNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientNavigationView.swift; sourceTree = "<group>"; };
@@ -868,6 +866,7 @@
 		D8CD362C2C6D504600E18764 /* LatencyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyViewModel.swift; sourceTree = "<group>"; };
 		D8CD362E2C6D507A00E18764 /* Latency.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Latency.swift; sourceTree = "<group>"; };
 		D8CD36302C6D52B000E18764 /* LatencyType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyType.swift; sourceTree = "<group>"; };
+		D8CF19E12CC745ED0025D6B4 /* Transfer */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Transfer; sourceTree = "<group>"; };
 		D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartsViewModel.swift; sourceTree = "<group>"; };
 		D8D203BA2ACC878200261CA2 /* ChartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartService.swift; sourceTree = "<group>"; };
 		D8D203BF2ACE058200261CA2 /* ChartValuesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChartValuesViewModel.swift; sourceTree = "<group>"; };
@@ -915,6 +914,7 @@
 				C3CF3BDB29BBE45D00E96586 /* Style in Frameworks */,
 				C35DA07C2A9C3B4B008CCEFA /* Settings in Frameworks */,
 				DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */,
+				D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */,
 				D829BF452CBDD9F700DEB2E8 /* FiatConnect in Frameworks */,
 				D829BF542CBF314100DEB2E8 /* PriceAlertService in Frameworks */,
 			);
@@ -1554,7 +1554,6 @@
 			children = (
 				D80181452B3CF84A00F4D22B /* ScanRecipientResult.swift */,
 				830ED2332C63AE2000B9877C /* FeeUnit.swift */,
-				D8C4A3712C8CE1EA006FABE8 /* TransferType.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1684,6 +1683,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				D8CF19E12CC745ED0025D6B4 /* Transfer */,
 				D829BF432CBDD9D200DEB2E8 /* FiatConnect */,
 				D829BF372CBDC7DD00DEB2E8 /* Intro */,
 				D829BF402CBDD64D00DEB2E8 /* MarketInsight */,
@@ -2272,6 +2272,7 @@
 				D829BF502CBF2C4900DEB2E8 /* NotificationService */,
 				D829BF532CBF314100DEB2E8 /* PriceAlertService */,
 				D829BF562CBF3E1900DEB2E8 /* DeviceService */,
+				D8CF19E22CC747370025D6B4 /* Transfer */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -2701,7 +2702,6 @@
 				D8CD362D2C6D504600E18764 /* LatencyViewModel.swift in Sources */,
 				D89D69012A9D769400EA74EE /* TransactionsList.swift in Sources */,
 				C3D1C4FC2A3CD5EA006E8EEA /* DiscoverAssetsService.swift in Sources */,
-				D8C4A3722C8CE1EA006FABE8 /* TransferType.swift in Sources */,
 				83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */,
 				D8D203C02ACE058200261CA2 /* ChartValuesViewModel.swift in Sources */,
 				83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */,
@@ -2985,7 +2985,6 @@
 				D8C4A3382C8A7B14006FABE8 /* LatencyViewModel.swift in Sources */,
 				D8C4A3392C8A7B14006FABE8 /* TransactionsList.swift in Sources */,
 				D8C4A33A2C8A7B14006FABE8 /* DiscoverAssetsService.swift in Sources */,
-				D852CB062CA32B32004121D3 /* TransferType.swift in Sources */,
 				D8C4A33B2C8A7B14006FABE8 /* NetworkSelectorViewModel.swift in Sources */,
 				D8C4A33C2C8A7B14006FABE8 /* ChartValuesViewModel.swift in Sources */,
 				D8C4A33D2C8A7B14006FABE8 /* ChainFilterable.swift in Sources */,
@@ -3723,6 +3722,10 @@
 		D8C4A2572C8A7B14006FABE8 /* GemstonePrimitives */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = GemstonePrimitives;
+		};
+		D8CF19E22CC747370025D6B4 /* Transfer */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Transfer;
 		};
 		D8D203CF2AE078BE00261CA2 /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -5,6 +5,7 @@ import Store
 import Blockchain
 import Primitives
 import GemAPI
+import Transfer
 
 struct StakeService {
     let store: StakeStore

@@ -3,6 +3,7 @@
 import Foundation
 import SwiftUI
 import Primitives
+import Transfer
 
 struct RecipientNavigationView: View {
 

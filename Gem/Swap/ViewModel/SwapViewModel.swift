@@ -10,6 +10,7 @@ import SwiftUI
 import GRDBQuery
 import Style
 import Localization
+import Transfer
 
 @Observable
 class SwapViewModel {
@@ -198,7 +199,7 @@ extension SwapViewModel {
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(spender: spender, allowance: .MAX_256))
         let recipientData = RecipientData(
             asset: fromAsset,
-            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none)
+            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none), amount: .none
         )
 
         return TransferData(
@@ -218,8 +219,11 @@ extension SwapViewModel {
         let amount = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
         let swapData = SwapData(quote: quote)
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(swapData))
-        let recepientData = RecipientData(asset: fromAsset,
-                                          recipient: Recipient(name: quote.provider.name, address: data.to, memo: .none))
+        let recepientData = RecipientData(
+            asset: fromAsset,
+            recipient: Recipient(name: quote.provider.name, address: data.to, memo: .none),
+            amount: .none
+        )
 
         return TransferData(type: transferDataType, recipientData: recepientData, value: amount, canChangeValue: false)
     }

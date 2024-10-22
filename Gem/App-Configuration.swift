@@ -12,6 +12,7 @@ import Localization
 import DeviceService
 import PriceAlertService
 import GemAPI
+import Transfer
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -256,7 +257,7 @@ extension Recipient {
 }
 
 extension RecipientData {
-    static let main = RecipientData(asset: .main, recipient: .main)
+    static let main = RecipientData(asset: .main, recipient: .main, amount: .none)
 }
 
 extension TransferData {

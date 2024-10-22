@@ -10,6 +10,7 @@ import SwiftUI
 import Gemstone
 import GemstonePrimitives
 import Localization
+import Transfer
 
 class AmounViewModel: ObservableObject {
     let input: AmountInput
@@ -232,7 +233,8 @@ class AmounViewModel: ObservableObject {
                     name: currentValidator?.name,
                     address: recipientAddress ?? "",
                     memo: Localized.Stake.viagem
-                )
+                ),
+                amount: .none
             )
         }
     }

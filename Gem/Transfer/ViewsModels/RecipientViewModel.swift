@@ -7,6 +7,7 @@ import Blockchain
 import GemstonePrimitives
 import Localization
 import BigInt
+import Transfer
 
 enum RecipientAddressType {
     case wallets
@@ -124,7 +125,8 @@ class RecipientViewModel: ObservableObject {
                         name: .none,
                         address: payment.address,
                         memo: payment.memo
-                    )
+                    ),
+                    amount: .none
                 ),
                 value: value,
                 canChangeValue: false

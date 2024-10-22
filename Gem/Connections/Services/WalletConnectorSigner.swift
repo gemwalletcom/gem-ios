@@ -7,6 +7,7 @@ import Store
 import Primitives
 import BigInt
 import Gemstone
+import Transfer
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     let store: ConnectionsStore
@@ -128,7 +129,8 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 )),
                 recipientData: RecipientData(
                     asset: chain.asset,
-                    recipient: Recipient(name: .none, address: address, memo: .none)
+                    recipient: Recipient(name: .none, address: address, memo: .none),
+                    amount: .none
                 ),
                 value: value,
                 canChangeValue: false
@@ -140,7 +142,8 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: data.data(using: .utf8))),
                 recipientData: RecipientData(
                     asset: chain.asset,
-                    recipient: Recipient(name: .none, address: "", memo: .none)
+                    recipient: Recipient(name: .none, address: "", memo: .none),
+                    amount: .none
                 ),
                 value: .zero,
                 canChangeValue: false

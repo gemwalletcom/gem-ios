@@ -7,6 +7,7 @@ import QRScanner
 import Blockchain
 import Primitives
 import Localization
+import Transfer
 
 struct RecipientScene: View {
     

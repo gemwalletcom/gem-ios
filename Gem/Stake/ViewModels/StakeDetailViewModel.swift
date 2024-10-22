@@ -6,6 +6,7 @@ import SwiftUI
 import Style
 import Components
 import Localization
+import Transfer
 
 struct StakeDetailViewModel {
     

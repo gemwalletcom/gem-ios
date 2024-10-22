@@ -65,12 +65,10 @@ public struct ConfigVersions: Codable, Sendable {
 }
 
 public struct ConfigResponse: Codable, Sendable {
-	public let app: ConfigApp
 	public let releases: [Release]
 	public let versions: ConfigVersions
 
-	public init(app: ConfigApp, releases: [Release], versions: ConfigVersions) {
-		self.app = app
+	public init(releases: [Release], versions: ConfigVersions) {
 		self.releases = releases
 		self.versions = versions
 	}

@@ -9,6 +9,7 @@ import BigInt
 import GemstonePrimitives
 import SwiftUI
 import Localization
+import Transfer
 
 @Observable
 class StakeViewModel {
@@ -103,7 +104,8 @@ class StakeViewModel {
             type: .stake(chain.asset, .rewards(validators: validators)),
             recipientData: RecipientData(
                 asset: chain.asset,
-                recipient: Recipient(name: .none, address: "", memo: .none)
+                recipient: Recipient(name: .none, address: "", memo: .none),
+                amount: .none
             ),
             value: value,
             canChangeValue: false,

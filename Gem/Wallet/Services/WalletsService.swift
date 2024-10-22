@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Blockchain
 import Primitives
