@@ -22,7 +22,8 @@ public struct Spacing {
 
 public struct Sizing {
     public struct image {
-        public static let chain: CGFloat = 44
+        public static let large: CGFloat = 88
+        public static let medium: CGFloat = 44
     }
     
     public struct list {
