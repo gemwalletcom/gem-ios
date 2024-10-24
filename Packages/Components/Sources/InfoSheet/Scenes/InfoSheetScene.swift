@@ -1,25 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Components
 import Style
 
-struct InfoSheet: View {
+public struct InfoSheetScene: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) var openURL
 
-    let model: InfoSheetViewModel
+    private let model: InfoSheetModelViewable
 
-    init(type: InfoSheetType) {
-        self.model = InfoSheetViewModel(type: type)
+    public init(model: InfoSheetModelViewable) {
+        self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         NavigationStack {
             VStack(spacing: .zero) {
                 if model.url != nil {
                     Spacer()
-                    InfoView(model: model)
+                    InfoSheetView(model: model)
                     Spacer()
                     StateButton(
                         text: model.buttonTitle,
@@ -28,7 +27,7 @@ struct InfoSheet: View {
                     )
                     .frame(maxWidth: Spacing.scene.button.maxWidth)
                 } else {
-                    InfoView(model: model)
+                    InfoSheetView(model: model)
                 }
             }
             .padding(.horizontal, Spacing.medium)
@@ -52,7 +51,7 @@ struct InfoSheet: View {
 
 // MARK: - Actions
 
-extension InfoSheet {
+extension InfoSheetScene {
     private func onClose() {
         dismiss()
     }
@@ -65,6 +64,35 @@ extension InfoSheet {
 
 // MARK: - Previews
 
+struct InfoSheetPreviewModel: InfoSheetModelViewable {
+    var title: String
+    var description: String
+    var buttonTitle: String
+    var url: URL?
+    var image: Image?
+    
+    init(
+        title: String,
+        description: String,
+        buttonTitle: String,
+        url: URL? = nil,
+        image: Image? = nil
+    ) {
+        self.title = title
+        self.description = description
+        self.buttonTitle = buttonTitle
+        self.url = url
+        self.image = image
+    }
+}
+
 #Preview {
-    InfoSheet(type: .networkFees)
+    InfoSheetScene(
+        model: InfoSheetPreviewModel(
+            title: "Network Fees",
+            description: "Network fees needed to pay the miners, quite a long message, double, triple, quadruple, quintuple, etc.",
+            buttonTitle: "Continue",
+            image: Image(systemName: "bell")
+        )
+    )
 }

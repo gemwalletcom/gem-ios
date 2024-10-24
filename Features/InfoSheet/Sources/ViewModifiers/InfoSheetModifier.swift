@@ -1,14 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Components
 
-struct InfoSheetModifier: ViewModifier {
-    @Binding var type: InfoSheetType?
+public struct InfoSheetModifier: ViewModifier {
+    @Binding var isPresented: Bool
+    let model: any InfoSheetModelViewable
 
-    func body(content: Content) -> some View {
+    init(
+        isPresented: Binding<Bool>,
+        model: any InfoSheetModelViewable
+    ) {
+        _isPresented = isPresented
+        self.model = model
+    }
+    
+    public func body(content: Content) -> some View {
         content
-            .sheet(item: $type) {
-                InfoSheet(type: $0)
+            .sheet(isPresented: $isPresented) {
+                InfoSheetScene(model: model)
             }
     }
 }
@@ -16,7 +26,7 @@ struct InfoSheetModifier: ViewModifier {
 // MARK: - Modifier
 
 extension View {
-    public func infoSheet(type: Binding<InfoSheetType?>) -> some View {
-        self.modifier(InfoSheetModifier(type: type))
+    public func infoSheet(isPresented: Binding<Bool>, model: any InfoSheetModelViewable) -> some View {
+        self.modifier(InfoSheetModifier(isPresented: isPresented, model: model))
     }
 }

@@ -2,25 +2,29 @@
 
 import SwiftUI
 import Style
-import Components
 
-struct InfoView: View {
+struct InfoSheetView: View {
     private let image: Image?
 
     private let title: TextValue
     private let description: TextValue
 
-    init(model: any InfoModel) {
-        self.init(title: model.title,
-                  description: model.description,
-                  image: model.image)
+    init(
+        model: any InfoSheetModelViewable
+    ) {
+        self.init(
+            title: model.title,
+            description: model.description,
+            image: model.image
+        )
     }
 
-    init(title: String,
-         titleStyle: TextStyle = .headline,
-         description: String,
-         descriptionStyle: TextStyle = .subheadline,
-         image: Image?
+    init(
+        title: String,
+        titleStyle: TextStyle = .headline,
+        description: String,
+        descriptionStyle: TextStyle = .subheadline,
+        image: Image?
     ) {
         let titleValue = TextValue(text: title, style: titleStyle)
         let descriptionValue = TextValue(text: description, style: descriptionStyle)
@@ -65,8 +69,9 @@ struct InfoView: View {
 // MARK: - Previews
 
 #Preview {
-    InfoView(title: "Network Fee",
-             description: "The Tron network charges a transaction fee which varies based on blockhain usage",
-             image: Image(systemName: SystemImage.bellFill)
+    InfoSheetView(
+        title: "Network Fee",
+        description: "The Tron network charges a transaction fee which varies based on blockhain usage",
+        image: Image(systemName: SystemImage.bellFill)
     )
 }

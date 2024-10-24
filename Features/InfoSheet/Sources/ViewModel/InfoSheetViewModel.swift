@@ -1,22 +1,26 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Components
+import Localization
+import GemstonePrimitives
 
 struct InfoSheetViewModel {
     private let type: InfoSheetType
 
-    init(type: InfoSheetType) {
+    public init(type: InfoSheetType) {
         self.type = type
     }
-
-    var buttonTitle: String { "Learn more" }
 }
 
 // MARK: - InfoModel
 
-extension InfoSheetViewModel: InfoModel {
+extension InfoSheetViewModel: InfoSheetModelViewable {
     var url: URL? {
-        type.url
+        switch type {
+        case .networkFees: Docs.url(.networkFees)
+        case .transactionStatus: Docs.url(.transactionStatus)
+        }
     }
 
     var title: String {
@@ -37,4 +41,6 @@ extension InfoSheetViewModel: InfoModel {
         nil
 //        return Image(.logo)
     }
+    
+    var buttonTitle: String { "Learn more" }
 }
