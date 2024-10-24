@@ -10,26 +10,31 @@ struct InfoSheet: View {
 
     let model: InfoSheetViewModel
 
-    init(viewModel: InfoSheetViewModel) {
-        self.model = viewModel
+    init(type: InfoSheetType) {
+        self.model = InfoSheetViewModel(type: type)
     }
 
     var body: some View {
         NavigationStack {
-            VStack {
-                Spacer()
-                InfoView(model: model)
-                Spacer()
-
-                StateButton(
-                    text: model.buttonTitle,
-                    styleState: .normal,
-                    action: onLearnMore
-                )
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
+            VStack(spacing: .zero) {
+                if model.url != nil {
+                    Spacer()
+                    InfoView(model: model)
+                    Spacer()
+                    StateButton(
+                        text: model.buttonTitle,
+                        styleState: .normal,
+                        action: onLearnMore
+                    )
+                    .frame(maxWidth: Spacing.scene.button.maxWidth)
+                } else {
+                    InfoView(model: model)
+                }
             }
             .padding(.horizontal, Spacing.medium)
-            .padding(.bottom, Spacing.scene.bottom)
+            .if(model.url != nil) {
+                $0.padding(.bottom, Spacing.scene.bottom)
+            }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: onClose) {
@@ -53,12 +58,13 @@ extension InfoSheet {
     }
 
     private func onLearnMore() {
-        openURL(model.url)
+        guard let url = model.url else { return }
+        openURL(url)
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    InfoSheet(viewModel: .init(item: .networkFees))
+    InfoSheet(type: .networkFees)
 }

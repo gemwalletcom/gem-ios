@@ -4,7 +4,7 @@ import SwiftUI
 import Style
 import Components
 
-public struct InfoView: View {
+struct InfoView: View {
     private let image: Image?
 
     private let title: TextValue
@@ -42,7 +42,7 @@ public struct InfoView: View {
         self.image = image
     }
 
-    public var body: some View {
+    var body: some View {
         VStack(spacing: Spacing.large) {
             image?
                 .resizable()
