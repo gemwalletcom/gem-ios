@@ -40,7 +40,7 @@ public struct StateEmptyView: View {
              image?
                  .resizable()
                  .aspectRatio(contentMode: .fit)
-                 .frame(width: Sizing.image.chain, height: Sizing.image.chain, alignment: .center)
+                 .frame(width: Sizing.image.medium, height: Sizing.image.medium, alignment: .center)
                  .foregroundStyle(Colors.gray)
 
              VStack(spacing: description == nil ? 0 : Spacing.tiny) {
