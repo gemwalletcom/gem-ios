@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "לְאַשֵׁר";
+"common.skip" = "לְדַלֵג";
+"common.warning" = "אַזהָרָה";
+"warnings.multi_signature_blocked" = "אל תעביר כספים לארנק ריבוי חתימות %@ זה אלא אם אתה בטוח שאתה שולט במפתחות הפרטיים. אם לא תעשה זאת, תוכל לחשוף אותך להונאות, ואתה עלול לאבד לצמיתות את הנכסים שלך.";

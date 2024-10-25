@@ -43,7 +43,12 @@ struct AssetScene: View {
             stakeService: stakeService,
             priceAlertService: priceAlertService,
             assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-            walletModel: WalletViewModel(wallet: wallet)
+            walletModel: WalletViewModel(wallet: wallet),
+            headerModel: AssetHeaderViewModel(
+                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+                walletModel: WalletViewModel(wallet: wallet),
+                bannersViewModel: HeaderBannersViewModel(banners: banners)
+            )
         )
     }
 
@@ -63,7 +68,7 @@ struct AssetScene: View {
     var body: some View {
         List {
             Section { } header: {
-                WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
+                WalletHeaderView(model: model.headerModel, action: onSelectHeader(_:))
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
             }
@@ -222,6 +227,9 @@ extension AssetScene {
             if let url = model.reservedBalanceUrl {
                 onOpenLink(url)
             }
+        case .accountBlockedMultiSignature:
+            //TODO: Open link
+            break
         }
     }
 

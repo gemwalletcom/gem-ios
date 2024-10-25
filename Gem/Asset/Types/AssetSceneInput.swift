@@ -23,6 +23,7 @@ struct AssetSceneInput {
         return BannersRequest(
             walletId: walletId.id,
             assetId: assetId.identifier,
+            chain: assetId.chain.rawValue,
             events: BannerEvent.allCases
         )
     }

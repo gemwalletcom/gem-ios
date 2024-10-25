@@ -27,6 +27,7 @@ public extension Chain {
                 .solana,
                 .sui,
                 .smartChain,
+                .tron,
                 .none:
             true
         case .ethereum:

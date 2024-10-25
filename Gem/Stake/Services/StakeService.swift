@@ -6,6 +6,7 @@ import Blockchain
 import Primitives
 import GemAPI
 import Transfer
+import ChainService
 
 struct StakeService {
     let store: StakeStore
@@ -37,7 +38,7 @@ struct StakeService {
             return nil
         }
         switch chain {
-        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui:
+        case .cosmos, .osmosis, .injective, .sei, .celestia, .solana, .sui, .tron:
             return id
         case .smartChain:
             return StakeHub.address

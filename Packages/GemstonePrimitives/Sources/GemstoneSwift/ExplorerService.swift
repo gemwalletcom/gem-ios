@@ -46,6 +46,17 @@ public struct ExplorerService {
         }
         return .none
     }
+    
+    public func valiadtorUrl(chain: Chain, address: String) -> BlockExplorerLink? {
+        let name = explorerNameOrDefault(chain: chain)
+        let explorer = Gemstone.Explorer(chain: chain.id)
+        if let tokenUrl = explorer.getValidatorUrl(explorerName: name, address: address), let url = URL(
+            string: tokenUrl
+        ) {
+            return BlockExplorerLink(name: name, link: url.absoluteString)
+        }
+        return .none
+    }
 }
 
 // MARK: - ExplorerStorable

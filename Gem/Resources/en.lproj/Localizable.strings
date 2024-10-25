@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirm";
+"common.skip" = "Skip";
+"common.warning" = "Warning";
+"warnings.multi_signature_blocked" = "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.";

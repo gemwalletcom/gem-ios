@@ -7,6 +7,7 @@ import Style
 import Components
 import Localization
 import Transfer
+import GemstonePrimitives
 
 struct StakeDetailViewModel {
     
@@ -104,6 +105,10 @@ struct StakeDetailViewModel {
     
     var completionDateText: String? {
         model.completionDateText
+    }
+    
+    var validatorUrl: URL? {
+        model.validatorUrl
     }
     
     private var recommendedCurrentValidator: DelegationValidator? {

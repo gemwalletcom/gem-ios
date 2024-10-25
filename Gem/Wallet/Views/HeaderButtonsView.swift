@@ -17,7 +17,11 @@ struct HeaderButtonsView: View {
     var body: some View {
         HStack(alignment: .center, spacing: 2) {
             ForEach(buttons) { button in
-                RoundButton(title: button.title, image: button.image) {
+                RoundButton(
+                    title: button.title,
+                    image: button.image,
+                    isEnabled: button.isEnabled
+                ) {
                     action?(button.type)
                 }
                 .accessibilityIdentifier(button.id)
@@ -30,7 +34,7 @@ struct HeaderButtonsView: View {
 // MARK: - Previews
 
 #Preview {
-    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0) })
+    let buttons = HeaderButtonType.allCases.map({ HeaderButton(type: $0, isEnabled: true) })
     return VStack {
         Spacer()
         HeaderButtonsView(buttons: buttons, action: nil)

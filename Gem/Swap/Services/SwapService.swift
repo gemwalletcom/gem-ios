@@ -7,6 +7,7 @@ import BigInt
 import Blockchain
 import Gemstone
 import GemstonePrimitives
+import ChainService
 
 class SwapService {
     

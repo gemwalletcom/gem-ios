@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "تایید کنید";
+"common.skip" = "پرش کنید";
+"common.warning" = "هشدار";
+"warnings.multi_signature_blocked" = "وجه را به این کیف پول چند امضایی %@ منتقل نکنید، مگر اینکه مطمئن باشید کلیدهای خصوصی را کنترل می کنید. عدم انجام این کار می تواند شما را در معرض کلاهبرداری قرار دهد و ممکن است برای همیشه دارایی های خود را از دست بدهید.";

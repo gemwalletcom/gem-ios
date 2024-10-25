@@ -25,6 +25,8 @@ public struct BannerService: Sendable {
                 return try await pushNotificationService.requestPermissionsOrOpenSettings()
             case .stake, .accountActivation:
                 return true
+            case .accountBlockedMultiSignature:
+                return false
             }
         }()
         if banner.closeOnAction && result {

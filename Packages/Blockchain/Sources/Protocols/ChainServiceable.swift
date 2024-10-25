@@ -11,7 +11,8 @@ public typealias ChainServiceable = ChainBalanceable &
     ChainStakable &
     ChainTokenable &
     ChainIDFetchable &
-    ChainLatestBlockFetchable
+    ChainLatestBlockFetchable &
+    ChainAddressStatusFetchable
 
 // MARK: - Protocols
 
@@ -58,4 +59,8 @@ public protocol ChainTokenable {
 
 public protocol ChainLatestBlockFetchable {
     func getLatestBlock() async throws -> BigInt
+}
+
+public protocol ChainAddressStatusFetchable {
+    func getAddressStatus(address: String) async throws -> [AddressStatus]
 }

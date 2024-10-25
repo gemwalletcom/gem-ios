@@ -7,6 +7,7 @@ import Settings
 import Blockchain
 import BigInt
 import Localization
+import ChainService
 
 @Observable
 class ChainSettingsViewModel {

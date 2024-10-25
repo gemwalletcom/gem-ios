@@ -210,3 +210,11 @@ extension NearRPCError: LocalizedError {
         return error.message
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension NearService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

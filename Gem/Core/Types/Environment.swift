@@ -11,6 +11,7 @@ import NotificationService
 import DeviceService
 import PriceAlertService
 import GemAPI
+import ChainService
 
 extension NavigationStateManager: EnvironmentKey {
     public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)

@@ -8,6 +8,8 @@ import GemAPI
 import Combine
 import Settings
 import Keystore
+import ChainService
+import BannerService
 
 class WalletsService {
     
@@ -16,11 +18,13 @@ class WalletsService {
     let balanceService: BalanceService
     let stakeService: StakeService
     let priceService: PriceService
+    let addressStatusService: AddressStatusService
     
     private let connectionsService: ConnectionsService
     private let discoverAssetService: DiscoverAssetsService
     private let transactionService: TransactionService
     private let nodeService: NodeService
+    private let bannerSetupService: BannerSetupService
 
     private var assetObserver: AnyCancellable?
     private var balanceObserver: AnyCancellable?
@@ -36,7 +40,9 @@ class WalletsService {
         discoverAssetService: DiscoverAssetsService,
         transactionService: TransactionService,
         nodeService: NodeService,
-        connectionsService: ConnectionsService
+        connectionsService: ConnectionsService,
+        bannerSetupService: BannerSetupService,
+        addressStatusService: AddressStatusService
     ) {
         self.keystore = keystore
         self.assetsService = assetsService
@@ -47,6 +53,8 @@ class WalletsService {
         self.transactionService = transactionService
         self.nodeService = nodeService
         self.connectionsService = connectionsService
+        self.bannerSetupService = bannerSetupService
+        self.addressStatusService = addressStatusService
 
         defer {
             self.balanceObserver = balanceService.observeBalance().sink { update in
@@ -236,6 +244,24 @@ class WalletsService {
 
     func enableAssetBalances(wallet: Wallet, chains: [Chain]) throws {
         try addAssetsBalancesIfMissing(assetIds: chains.ids, wallet: wallet)
+    }
+    
+    // In the future move into separate service
+    func runAddressStatusCheck(_ wallet: Wallet) async {
+        guard !wallet.preferences.completeInitialAddressStatus else { return }
+    
+        do {
+            let results = try await addressStatusService.getAddressStatus(accounts: wallet.accounts)
+            
+            for (account, statuses) in results {
+                if statuses.contains(.multiSignature) {
+                    try bannerSetupService.setupAccountMultiSignatureWallet(walletId: wallet.walletId, chain: account.chain)
+                }
+            }
+            wallet.preferences.completeInitialAddressStatus = true
+        } catch {
+            NSLog("runAddressStatusCheck: \(error)")
+        }
     }
 }
 

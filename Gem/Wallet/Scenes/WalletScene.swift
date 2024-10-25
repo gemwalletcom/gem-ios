@@ -63,7 +63,10 @@ struct WalletScene: View {
         List {
            Section { } header: {
                 WalletHeaderView(
-                    model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
+                    model: WalletHeaderViewModel(
+                        walletType: model.wallet.type,
+                        value: fiatValue
+                    )
                 ) {
                     isPresentingSelectType = $0.selectType
                 }
@@ -165,9 +168,15 @@ extension WalletScene {
     func refreshable() async {
         if let walletId = keystore.currentWalletId {
             Task {
-                try await model.fetch(walletId: walletId, assets: assets)
+                do {
+                    try await model.fetch(walletId: walletId, assets: assets)
+                } catch {
+                    NSLog("refreshable error: \(error)")
+                }
             }
         }
+        
+        runAddressStatusCheck()
     }
 
     func fetch() {
@@ -176,6 +185,16 @@ extension WalletScene {
                 try await model.fetch(assets: assets)
             } catch {
                 NSLog("fetch error: \(error)")
+            }
+        }
+        
+        runAddressStatusCheck()
+    }
+    
+    func runAddressStatusCheck() {
+        if let wallet = keystore.currentWallet {
+            Task {
+                await walletsService.runAddressStatusCheck(wallet)
             }
         }
     }

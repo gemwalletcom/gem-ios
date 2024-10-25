@@ -28,7 +28,8 @@ public struct SystemImage {
     public static let plus = "plus"
     public static let eye = "eye.fill"
     public static let searchNoResults = "exclamationmark.magnifyingglass"
-    public static let errorOccurred = "exclamationmark.triangle.fill"
+    public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"
+    public static let exclamationmarkTriangle = "exclamationmark.triangle"
     public static let gallery = "photo.artframe"
     public static let photo = "photo"
     public static let xmarkCircle = "xmark.circle.fill"
@@ -40,6 +41,9 @@ public struct SystemImage {
     public static let filter = "line.horizontal.3.decrease.circle"
     public static let filterFill = "line.horizontal.3.decrease.circle.fill"
     public static let book = "book"
+    
+    // specific to Gem style
+    public static let errorOccurred = exclamationmarkTriangleFill
 }
 
 // MARK: - Previews

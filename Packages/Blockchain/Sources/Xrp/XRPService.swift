@@ -177,3 +177,11 @@ extension XRPService: ChainLatestBlockFetchable {
     }
 }
 
+
+// MARK: - ChainAddressStatusFetchable
+
+extension XRPService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

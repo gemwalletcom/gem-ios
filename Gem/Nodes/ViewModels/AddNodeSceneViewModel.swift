@@ -7,6 +7,7 @@ import GemstonePrimitives
 import BigInt
 import Blockchain
 import Localization
+import ChainService
 
 final class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService

@@ -3,6 +3,7 @@ import Store
 import Primitives
 import GemAPI
 import Blockchain
+import ChainService
 
 class AssetsService {
     

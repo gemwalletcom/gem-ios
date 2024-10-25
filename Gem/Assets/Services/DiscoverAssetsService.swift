@@ -5,6 +5,7 @@ import Combine
 import Store
 import Settings
 import GemAPI
+import ChainService
 
 public struct AssetUpdate {
     public let wallet: Wallet

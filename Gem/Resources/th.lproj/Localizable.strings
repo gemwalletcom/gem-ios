@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "ยืนยัน";
+"common.skip" = "ข้าม";
+"common.warning" = "คำเตือน";
+"warnings.multi_signature_blocked" = "อย่าโอนเงินไปยังกระเป๋าเงินหลายลายเซ็น %@ นี้ เว้นแต่คุณจะแน่ใจว่าคุณควบคุมคีย์ส่วนตัวได้ การไม่ทำเช่นนั้นอาจทำให้คุณตกเป็นเหยื่อของการหลอกลวง และคุณอาจสูญเสียทรัพย์สินของคุณไปอย่างถาวร";

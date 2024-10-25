@@ -6,6 +6,7 @@ import Store
 import Primitives
 import Blockchain
 import Gemstone
+import ChainService
 
 public final class NodeService {
     let nodeStore: NodeStore

@@ -7,14 +7,11 @@ import Primitives
 public struct WalletStore: Sendable {
     
     let db: DatabaseQueue
-    let preferences: Preferences
     
     public init(
-        db: DB,
-        preferences: Preferences
+        db: DB
     ) {
         self.db = db.dbQueue
-        self.preferences = preferences
     }
     
     public func nextWalletIndex() throws -> Int {

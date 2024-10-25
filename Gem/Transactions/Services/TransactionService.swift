@@ -6,6 +6,7 @@ import Store
 import Blockchain
 import Gemstone
 import Combine
+import ChainService
 
 class TransactionService {
     

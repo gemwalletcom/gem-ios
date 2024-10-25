@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import Localization
+import ChainService
 
 struct AddTokenNavigationStack: View {
     

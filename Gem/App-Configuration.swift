@@ -13,6 +13,8 @@ import DeviceService
 import PriceAlertService
 import GemAPI
 import Transfer
+import ChainService
+import BannerService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -63,7 +65,7 @@ extension LocalKeystore {
 }
 
 extension WalletStore {
-    static let main = WalletStore(db: .main, preferences: .main)
+    static let main = WalletStore(db: .main)
 }
 
 extension BannerStore {
@@ -139,7 +141,9 @@ extension WalletsService {
         discoverAssetService: .main,
         transactionService: .main,
         nodeService: NodeService.main,
-        connectionsService: ConnectionsService.main
+        connectionsService: .main,
+        bannerSetupService: .main,
+        addressStatusService: .main
     )
 }
 
@@ -201,6 +205,14 @@ extension WalletConnector {
 
 extension ConnectionsService {
     static let main = ConnectionsService(store: .main, signer: WalletConnectorSigner.main)
+}
+
+extension AddressStatusService {
+    static let main = AddressStatusService(chainServiceFactory: .init(nodeProvider: NodeService.main))
+}
+
+extension BannerSetupService {
+    static let main = BannerSetupService(store: .main, preferences: .main)
 }
 
 extension WalletConnectorSigner {

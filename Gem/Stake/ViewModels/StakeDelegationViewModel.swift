@@ -94,6 +94,10 @@ struct StakeDelegationViewModel {
         validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
     }
     
+    var validatorUrl: URL? {
+        ExplorerService.main.valiadtorUrl(chain: asset.chain, address: delegation.validator.id)?.url
+    }
+    
     var completionDateText: String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {

@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Transfer
+import ChainService
 
 struct RecipientNavigationView: View {
 

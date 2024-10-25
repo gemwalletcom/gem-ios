@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirmer";
+"common.skip" = "Sauter";
+"common.warning" = "Avertissement";
+"warnings.multi_signature_blocked" = "Ne transférez pas de fonds vers ce portefeuille multisignature %@ à moins d'être certain de contrôler les clés privées. Le non-respect de cette règle pourrait vous exposer à des escroqueries et vous pourriez perdre définitivement vos actifs.";

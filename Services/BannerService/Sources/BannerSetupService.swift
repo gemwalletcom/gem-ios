@@ -18,25 +18,31 @@ public struct BannerSetupService: Sendable {
     }
 
     public func setup() throws {
-        let stakeChains = StakeChain.allCases.filter({ $0 != .ethereum })
-        for chain in stakeChains {
-            try store.addBanner(
-                NewBanner(walletId: .none, assetId: chain.chain.assetId, event: .stake, state: .active)
-            )
-        }
+        let stakeChains = StakeChain.allCases.filter({ $0 != .ethereum || $0 != .tron})
+        
+        try store.addBanners(stakeChains.map {
+            NewBanner.stake(assetId: $0.chain.assetId)
+        })
 
         // Enable push notifications
         if !preferences.isPushNotificationsEnabled && preferences.launchesCount > 2 {
-            try store.addBanner(
-                NewBanner(walletId: .none, assetId: .none, event: .enableNotifications, state: .active)
-            )
+            try store.addBanners([
+                NewBanner(event: .enableNotifications, state: .active)
+            ])
         }
     }
 
     public func setupWallet(wallet: Wallet) throws  {
-        // Adding XRP activation fee banner
-        try store.addBanner(
-            NewBanner(walletId: .none, assetId: .none, event: .accountActivation, state: .active)
-        )
+        let chains: [Chain] = [.xrp]
+        let banners = chains.map {
+            NewBanner.accountActivation(assetId: $0.assetId)
+        }
+        try store.addBanners(banners)
+    }
+    
+    public func setupAccountMultiSignatureWallet(walletId: WalletId, chain: Chain) throws {
+        try store.addBanners([
+            NewBanner.accountBlockedMultiSignature(walletId: walletId, chain: chain)
+        ])
     }
 }

@@ -7,6 +7,7 @@ import Blockchain
 import Components
 import Style
 import Localization
+import ChainService
 
 @Observable
 class AddTokenViewModel {

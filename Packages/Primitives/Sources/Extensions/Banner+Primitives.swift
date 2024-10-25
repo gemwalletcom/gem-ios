@@ -4,14 +4,16 @@ import Foundation
 
 extension Banner: Identifiable {
     public var id: String {
-        [wallet?.id, asset?.id.identifier, event.rawValue].compactMap { $0 }.joined(separator: "_")
+        [wallet?.id, asset?.id.identifier, chain?.id, event.rawValue].compactMap { $0 }.joined(separator: "_")
     }
 }
 
 extension Banner {
     public var closeOnAction: Bool {
         switch event {
-        case .stake, .accountActivation: false
+        case .stake,
+            .accountActivation,
+            .accountBlockedMultiSignature: false
         case .enableNotifications: true
         }
     }

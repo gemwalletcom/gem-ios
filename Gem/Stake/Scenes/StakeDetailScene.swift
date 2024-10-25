@@ -15,7 +15,11 @@ struct StakeDetailScene: View {
     var body: some View {
         List {
             Section {
-                ListItemView(title: Localized.Stake.validator, subtitle: model.validatorText)
+                if let url = model.validatorUrl {
+                    NavigationOpenLink(url: url, with: ListItemView(title: Localized.Stake.validator, subtitle: model.validatorText))
+                } else {
+                    ListItemView(title: Localized.Stake.validator, subtitle: model.validatorText)
+                }
                 ListItemView(title: Localized.Stake.apr(""), subtitle: model.validatorAprText)
                 ListItemView(title: Localized.Transaction.status, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
                 

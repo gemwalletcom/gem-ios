@@ -8,6 +8,7 @@ import Components
 import Style
 import BigInt
 import Keystore
+import ChainService
 
 struct SwapScene: View {
     @Environment(\.nodeService) private var nodeService

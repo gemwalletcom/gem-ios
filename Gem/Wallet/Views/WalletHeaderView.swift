@@ -1,19 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 import Style
 import Components
-import GemstonePrimitives
 import Localization
-
-protocol HeaderViewModel {
-    var isWatchWallet: Bool { get }
-    var assetImage: AssetImage? { get }
-    var title: String { get }
-    var subtitle: String? { get }
-    var buttons: [HeaderButton] { get }
-}
 
 struct WalletHeaderView: View {
     
@@ -53,11 +43,13 @@ struct WalletHeaderView: View {
                         .foregroundColor(Colors.black)
                         .font(.callout)
                     
-                    Button {
-                        UIApplication.shared.open(Docs.url(.whatIsWatchWallet))
-                    } label: {
-                        Image(systemName: SystemImage.info)
-                            .tint(Colors.black)
+                    if let url = model.infoButtonUrl {
+                        Button {
+                            UIApplication.shared.open(url)
+                        } label: {
+                            Image(systemName: SystemImage.info)
+                                .tint(Colors.black)
+                        }
                     }
                 }
                 .padding()
@@ -75,7 +67,10 @@ struct WalletHeaderView: View {
 // MARK: - Previews
 
 #Preview {
-    let model = AssetHeaderViewModel(assetDataModel: .init(assetData: .main, formatter: .full_US),
-                                     walletModel: .init(wallet: .main))
+    let model = AssetHeaderViewModel(
+        assetDataModel: .init(assetData: .main, formatter: .full_US),
+        walletModel: .init(wallet: .main),
+        bannersViewModel: HeaderBannersViewModel(banners: [])
+    )
     return WalletHeaderView(model: model, action: nil)
 }
