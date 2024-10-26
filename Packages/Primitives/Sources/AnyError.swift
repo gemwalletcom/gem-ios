@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum AnyError {
+public enum AnyError: Equatable {
     case message(String)
     
     public init(_ message: String) {

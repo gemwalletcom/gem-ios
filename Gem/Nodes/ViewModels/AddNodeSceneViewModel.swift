@@ -39,8 +39,12 @@ final class AddNodeSceneViewModel: ObservableObject {
 
 extension AddNodeSceneViewModel {
     func importFoundNode() throws {
+        guard case .loaded(let model) = state else {
+            throw AnyError("Unknown result")
+        }
+        
         // TODO: - implement disable after user selects "import node button", we can't use state: StateViewType<ImportNodeResult> progress
-        let node = Node(url: urlInput, status: .active, priority: 5)
+        let node = Node(url: model.url.absoluteString, status: .active, priority: 5)
         try addNodeService.addNode(ChainNodes(chain: chain.rawValue, nodes: [node]))
 
         // TODO: - impement correct way of selection node
@@ -48,9 +52,9 @@ extension AddNodeSceneViewModel {
         try nodeService.setNodeSelected(chain: chain, node: node)
          */
     }
-
+    
     func fetch() async  {
-        guard let url = URL(string: urlInput) else {
+        guard let url = try? URLDecoder().decode(urlInput) else {
             await updateStateWithError(error: AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
@@ -69,7 +73,7 @@ extension AddNodeSceneViewModel {
 
             let (latency, chainId, isNodeInSync, blockNumber) = try await (requestLatency, networkId, inSync, latestBlock)
 
-            let result = AddNodeResult(chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
+            let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
             let resultVM = AddNodeResultViewModel(addNodeResult: result)
 
             await MainActor.run { [self] in
