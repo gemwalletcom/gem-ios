@@ -6,13 +6,15 @@ import Components
 import SwiftUI
 import Style
 import GemstonePrimitives
+import Store
 
 public struct StakeDelegationViewModel {
     
     public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
-    
+    private let exploreService: ExplorerService = ExplorerService(storage: ExplorerStorage(preferences: .standard))
+
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.day, .hour]
@@ -97,8 +99,7 @@ public struct StakeDelegationViewModel {
     }
     
     public var validatorUrl: URL? {
-        return .none
-        //ExplorerService().valiadtorUrl(chain: asset.chain, address: delegation.validator.id)?.url
+        exploreService.validatorUrl(chain: asset.chain, address: delegation.validator.id)?.url
     }
     
     public var completionDateText: String? {
