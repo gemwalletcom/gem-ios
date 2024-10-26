@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Blockchain
 
-public struct AddressStatusService {
+public struct AddressStatusService: Sendable {
     
     private let chainServiceFactory: ChainServiceFactory
     private let chains: [Chain] = [.tron]

@@ -8,6 +8,8 @@ import Components
 import Localization
 import Transfer
 import GemstonePrimitives
+import Staking
+import StakeService
 
 struct StakeDetailViewModel {
     
@@ -115,7 +117,7 @@ struct StakeDetailViewModel {
         guard let validatorId = StakeRecommendedValidators().randomValidatorId(chain: model.delegation.base.assetId.chain) else {
             return .none
         }
-        return try? service.store.getValidator(assetId: asset.id, validatorId: validatorId)
+        return try? service.getValidator(assetId: asset.id, validatorId: validatorId)
     }
     
     func stakeRecipientData() throws -> AmountInput {
@@ -139,7 +141,7 @@ struct StakeDetailViewModel {
         AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
-                validators: try service.store.getValidators(assetId: asset.id),
+                validators: try service.getValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: asset

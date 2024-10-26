@@ -4,7 +4,7 @@ import Foundation
 import SwiftHTTPClient
 import Primitives
 
-public struct GemAPIStaticService {
+public struct GemAPIStaticService: Sendable {
     
     let provider: Provider<GemAPIStatic>
     

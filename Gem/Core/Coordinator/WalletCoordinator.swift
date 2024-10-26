@@ -19,6 +19,7 @@ import DeviceService
 import PriceAlertService
 import GemAPI
 import ChainService
+import StakeService
 
 struct WalletCoordinator: View {
     let db: DB

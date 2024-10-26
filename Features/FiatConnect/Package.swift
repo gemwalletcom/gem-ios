@@ -24,5 +24,13 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "FiatConnectTests",
+            dependencies: [
+                "FiatConnect",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "Tests"
+        ),
     ]
 )

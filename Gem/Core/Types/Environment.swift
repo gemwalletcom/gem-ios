@@ -12,6 +12,7 @@ import DeviceService
 import PriceAlertService
 import GemAPI
 import ChainService
+import StakeService
 
 extension NavigationStateManager: EnvironmentKey {
     public static let defaultValue: NavigationStateManager = NavigationStateManager(initialSelecedTab: .wallet)
@@ -82,8 +83,8 @@ struct NotificationServiceKey: EnvironmentKey {
     static var defaultValue: NotificationService { NotificationService.main }
 }
 
-struct StakeServiceKey: EnvironmentKey {
-    static var defaultValue: StakeService { StakeService.main }
+extension StakeService: @retroactive EnvironmentKey {
+    public static let defaultValue: StakeService = StakeService(store: .main, chainServiceFactory: ChainServiceFactory.init(nodeProvider: NodeService.main))
 }
 
 struct ConnectionsServiceKey: EnvironmentKey {
@@ -175,8 +176,8 @@ extension EnvironmentValues {
     }
 
     var stakeService: StakeService {
-        get { self[StakeServiceKey.self] }
-        set { self[StakeServiceKey.self] = newValue }
+        get { self[StakeService.self] }
+        set { self[StakeService.self] = newValue }
     }
     
     var connectionsService: ConnectionsService {

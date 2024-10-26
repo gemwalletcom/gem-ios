@@ -15,6 +15,7 @@ import GemAPI
 import Transfer
 import ChainService
 import BannerService
+import StakeService
 
 extension Asset {
     static let main = Asset.bitcoin

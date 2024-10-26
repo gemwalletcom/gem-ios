@@ -2,15 +2,14 @@
 
 import Foundation
 import Primitives
-import BigInt
 import Components
 import SwiftUI
 import Style
 import GemstonePrimitives
 
-struct StakeDelegationViewModel {
-    let delegation: Delegation
+public struct StakeDelegationViewModel {
     
+    public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
     
@@ -29,19 +28,23 @@ struct StakeDelegationViewModel {
         return formatter
     }()
     
+    public init(delegation: Delegation) {
+        self.delegation = delegation
+    }
+    
     private var asset: Asset {
         delegation.base.assetId.chain.asset
     }
     
-    var state: DelegationState {
+    public var state: DelegationState {
         delegation.base.state
     }
     
-    var stateText: String {
+    public var stateText: String {
         delegation.base.state.title
     }
     
-    var stateTextColor: Color {
+    public var stateTextColor: Color {
         switch state {
         case .active:
             Colors.green
@@ -56,12 +59,11 @@ struct StakeDelegationViewModel {
         }
     }
     
-    
-    var balanceText: String {
+    public var balanceText: String {
         formatter.string(delegation.base.balanceValue, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
-    var rewardsText: String? {
+    public var rewardsText: String? {
         switch delegation.base.state {
         case .active:
             // hide 0 rewards
@@ -79,26 +81,27 @@ struct StakeDelegationViewModel {
         }
     }
     
-    var balanceTextStyle: TextStyle {
+    public var balanceTextStyle: TextStyle {
         .body
     }
     
-    var validatorText: String {
+    public var validatorText: String {
         if delegation.validator.name.isEmpty {
             return AddressFormatter(style: .short, address: delegation.validator.id, chain: asset.chain).value()
         }
         return delegation.validator.name
     }
     
-    var validatorImageUrl: URL? {
+    public var validatorImageUrl: URL? {
         validatorImageFormatter.getValidatorUrl(chain: asset.chain, id: delegation.validator.id)
     }
     
-    var validatorUrl: URL? {
-        ExplorerService.main.valiadtorUrl(chain: asset.chain, address: delegation.validator.id)?.url
+    public var validatorUrl: URL? {
+        return .none
+        //ExplorerService().valiadtorUrl(chain: asset.chain, address: delegation.validator.id)?.url
     }
     
-    var completionDateText: String? {
+    public var completionDateText: String? {
         let now = Date.now
         if let completionDate = delegation.base.completionDate, completionDate > now {
             if now.distance(to: completionDate) < 86400 { // 1 day
@@ -111,5 +114,5 @@ struct StakeDelegationViewModel {
 }
 
 extension StakeDelegationViewModel: Identifiable {
-    var id: String { delegation.id }
+    public var id: String { delegation.id }
 }

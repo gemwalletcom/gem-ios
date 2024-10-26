@@ -6,6 +6,7 @@ import SwiftUI
 import GemstonePrimitives
 import Style
 import Localization
+import struct BannerService.BannerAction
 
 struct BannerViewModel {
 
@@ -86,6 +87,22 @@ struct BannerViewModel {
             .accountActivation: 14
         case .enableNotifications,
             .accountBlockedMultiSignature: 0
+        }
+    }
+    
+    var action: BannerAction {
+        BannerAction(id: banner.id, event: banner.event, url: url)
+    }
+    
+    var url: URL? {
+        switch banner.event {
+        case .stake,
+            .enableNotifications:
+            return.none
+        case .accountActivation:
+            return URL(string: "https://xrpl.org/reserves.html")!
+        case .accountBlockedMultiSignature:
+            return Docs.url(.tronMultiSignature)
         }
     }
 }

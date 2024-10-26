@@ -6,7 +6,6 @@ import BigInt
 import Transfer
 
 typealias TransferDataAction = ((TransferData) -> Void)?
-typealias AmountInputAction = ((AmountInput) -> Void)?
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 struct RecipientImport {

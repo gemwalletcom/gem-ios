@@ -16,6 +16,10 @@ extension Config {
     }
 }
 
+public struct GemstoneConfig {
+    public static let shared = Config()
+}
+
 public struct Docs {
     public static func url(_ item: Gemstone.DocsUrl) -> URL {
         return URL(string: Config.shared.getDocsUrl(item: item))!

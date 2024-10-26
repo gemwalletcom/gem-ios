@@ -10,6 +10,9 @@ import GemstonePrimitives
 import SwiftUI
 import Localization
 import Transfer
+import Staking
+import StakeService
+import typealias Staking.AmountInputAction
 
 @Observable
 class StakeViewModel {
@@ -76,7 +79,7 @@ class StakeViewModel {
 
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
-        return try? stakeService.store.getValidator(assetId: asset.id, validatorId: validatorId)
+        return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
     }
 
     func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
@@ -190,18 +193,3 @@ extension StakeViewModel {
     }
 }
 
-// MARK: - Models extensions
-
-extension DelegationState {
-    public var title: String {
-        switch self {
-        case .active: Localized.Stake.active
-        case .pending: Localized.Stake.pending
-        case .undelegating: Localized.Stake.pending
-        case .inactive: Localized.Stake.inactive
-        case .activating: Localized.Stake.activating
-        case .deactivating: Localized.Stake.deactivating
-        case .awaitingWithdrawal: Localized.Stake.awaitingWithdrawal
-        }
-    }
-}

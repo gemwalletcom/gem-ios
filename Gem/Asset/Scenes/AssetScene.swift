@@ -218,18 +218,16 @@ extension AssetScene {
     }
 
     private func onBannerAction(banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake:
             isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
-        case .enableNotifications:
-            break
-        case .accountActivation:
-            if let url = model.reservedBalanceUrl {
-                onOpenLink(url)
+        case .enableNotifications,
+            .accountActivation,
+            .accountBlockedMultiSignature:
+            Task {
+                try await bannerService.handleAction(action)
             }
-        case .accountBlockedMultiSignature:
-            //TODO: Open link
-            break
         }
     }
 

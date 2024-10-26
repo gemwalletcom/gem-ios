@@ -80,7 +80,7 @@ struct WalletScene: View {
             Section {
                 BannerView(
                     banners: banners,
-                    action: bannerService.onAction,
+                    action: onBannerAction,
                     closeAction: bannerService.onClose
                 )
             }
@@ -205,4 +205,18 @@ extension WalletScene {
             try await walletsService.updatePrices()
         }
     }
+    
+    private func onBannerAction(banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
+        switch banner.event {
+        case .stake,
+            .enableNotifications,
+            .accountActivation,
+            .accountBlockedMultiSignature:
+            Task {
+                try await bannerService.handleAction(action)
+            }
+        }
+    }
 }
+

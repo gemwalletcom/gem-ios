@@ -3,6 +3,6 @@
 import Foundation
 import Primitives
 
-public protocol NodeURLFetchable {
+public protocol NodeURLFetchable: Sendable {
     func node(for chain: Chain) -> URL
 }

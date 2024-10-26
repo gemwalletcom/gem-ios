@@ -10,6 +10,7 @@ import Settings
 import Keystore
 import ChainService
 import BannerService
+import StakeService
 
 class WalletsService {
     

@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import SwiftUI
 import Transfer
+import Staking
 
 struct StakeNavigationView: View {
 

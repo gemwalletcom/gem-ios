@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Blockchain
 
-public final class ChainServiceFactory {
+public final class ChainServiceFactory: Sendable {
 
     private let nodeProvider: any NodeURLFetchable
 

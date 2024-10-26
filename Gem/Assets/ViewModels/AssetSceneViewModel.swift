@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import GemstonePrimitives
@@ -7,6 +9,7 @@ import Store
 import Style
 import Localization
 import PriceAlertService
+import StakeService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

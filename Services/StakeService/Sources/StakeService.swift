@@ -2,22 +2,31 @@
 
 import Foundation
 import Store
-import Blockchain
 import Primitives
-import GemAPI
-import Transfer
 import ChainService
+import GemAPI
+import Blockchain
 
-struct StakeService {
-    let store: StakeStore
-    let chainServiceFactory: ChainServiceFactory
-    let assetsService = GemAPIStaticService()
-
-    func stakeApr(assetId: AssetId) throws -> Double? {
+public struct StakeService: Sendable {
+    private let store: StakeStore
+    private let chainServiceFactory: ChainServiceFactory
+    private let assetsService: GemAPIStaticService
+    
+    public init(
+        store: StakeStore,
+        chainServiceFactory: ChainServiceFactory,
+        assetsService: GemAPIStaticService = GemAPIStaticService()
+    ) {
+        self.store = store
+        self.chainServiceFactory = chainServiceFactory
+        self.assetsService = assetsService
+    }
+    
+    public func stakeApr(assetId: AssetId) throws -> Double? {
         return try store.getStakeApr(assetId: assetId)
     }
     
-    func update(walletId: String, chain: Chain, address: String) async throws {
+    public func update(walletId: String, chain: Chain, address: String) async throws {
         let validators = try store.getValidators(assetId: chain.assetId)
         if validators.isEmpty {
             try await updateValidators(chain: chain)
@@ -28,12 +37,20 @@ struct StakeService {
         }
     }
     
-    func getActiveValidators(assetId: AssetId) throws -> [DelegationValidator] {
+    public func getActiveValidators(assetId: AssetId) throws -> [DelegationValidator] {
         try store.getValidators(assetId: assetId)
             .filter { $0.isActive && !$0.name.isEmpty }
     }
+    
+    public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
+        try store.getValidator(assetId: assetId, validatorId: validatorId)
+    }
+    
+    public func getValidators(assetId: AssetId) throws -> [DelegationValidator] {
+        try store.getValidators(assetId: assetId)
+    }
 
-    func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
+    public func getRecipientAddress(chain: StakeChain?, type: AmountType, validatorId: String?) -> String? {
         guard let id = validatorId else {
             return nil
         }
@@ -106,5 +123,13 @@ struct StakeService {
     private func getDelegations(chain: Chain, address: String) async throws -> [DelegationBase] {
         let service = chainServiceFactory.service(for: chain)
         return try await service.getStakeDelegations(address: address)
+    }
+    
+    public func clearDelegations() throws {
+        try store.clearDelegations()
+    }
+    
+    public func clearValidators() throws {
+        try store.clearValidators()
     }
 }
