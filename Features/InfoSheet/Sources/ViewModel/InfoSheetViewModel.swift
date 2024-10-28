@@ -5,7 +5,7 @@ import Components
 import Localization
 import GemstonePrimitives
 
-struct InfoSheetViewModel {
+public struct InfoSheetViewModel {
     private let type: InfoSheetType
 
     public init(type: InfoSheetType) {
@@ -16,31 +16,30 @@ struct InfoSheetViewModel {
 // MARK: - InfoModel
 
 extension InfoSheetViewModel: InfoSheetModelViewable {
-    var url: URL? {
+    public var url: URL? {
         switch type {
         case .networkFees: Docs.url(.networkFees)
         case .transactionStatus: Docs.url(.transactionStatus)
         }
     }
 
-    var title: String {
+    public var title: String {
         switch type {
         case .networkFees: "Network Fees"
         case .transactionStatus: "Transaction Status"
         }
     }
 
-    var description: String {
+    public var description: String {
         switch type {
         case .networkFees: "Fees paid for transaction processing, varying by network conditions."
         case .transactionStatus: "Track your transactions' status on the blockchain."
         }
     }
 
-    var image: Image? {
+    public var image: Image? {
         nil
-//        return Image(.logo)
     }
     
-    var buttonTitle: String { "Learn more" }
+    public var buttonTitle: String { "Learn more" }
 }
