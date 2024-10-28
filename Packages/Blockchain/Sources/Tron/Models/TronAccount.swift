@@ -4,13 +4,65 @@
 
 import Foundation
 
+public struct TronAccountPermission: Codable, Sendable {
+	public let threshold: Int32
+
+	public init(threshold: Int32) {
+		self.threshold = threshold
+	}
+}
+
+public struct TronVote: Codable, Sendable {
+	public let vote_address: String
+	public let vote_count: UInt64
+
+	public init(vote_address: String, vote_count: UInt64) {
+		self.vote_address = vote_address
+		self.vote_count = vote_count
+	}
+}
+
+public struct TronFrozen: Codable, Sendable {
+	public let type: String?
+	public let amount: UInt64?
+
+	public init(type: String?, amount: UInt64?) {
+		self.type = type
+		self.amount = amount
+	}
+}
+
+public struct TronUnfrozen: Codable, Sendable {
+	public let unfreeze_amount: UInt64?
+	public let unfreeze_expire_time: UInt64?
+
+	public init(unfreeze_amount: UInt64?, unfreeze_expire_time: UInt64?) {
+		self.unfreeze_amount = unfreeze_amount
+		self.unfreeze_expire_time = unfreeze_expire_time
+	}
+}
+
 public struct TronAccount: Codable, Sendable {
 	public let balance: UInt64?
 	public let address: String?
+	public let active_permission: [TronAccountPermission]?
+	public let votes: [TronVote]?
+	public let allowance: UInt64?
+	public let net_usage: Int32?
+	public let free_net_usage: Int32?
+	public let frozenV2: [TronFrozen]?
+	public let unfrozenV2: [TronUnfrozen]?
 
-	public init(balance: UInt64?, address: String?) {
+	public init(balance: UInt64?, address: String?, active_permission: [TronAccountPermission]?, votes: [TronVote]?, allowance: UInt64?, net_usage: Int32?, free_net_usage: Int32?, frozenV2: [TronFrozen]?, unfrozenV2: [TronUnfrozen]?) {
 		self.balance = balance
 		self.address = address
+		self.active_permission = active_permission
+		self.votes = votes
+		self.allowance = allowance
+		self.net_usage = net_usage
+		self.free_net_usage = free_net_usage
+		self.frozenV2 = frozenV2
+		self.unfrozenV2 = unfrozenV2
 	}
 }
 

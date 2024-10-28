@@ -13,6 +13,8 @@ struct AddNodeResultViewModel {
     init(addNodeResult: AddNodeResult) {
         self.addNodeResult = addNodeResult
     }
+    
+    var url: URL { addNodeResult.url }
 
     var chainIdTitle: String { Localized.Nodes.ImportNode.chainId }
     var chainIdValue: String { addNodeResult.chainID }

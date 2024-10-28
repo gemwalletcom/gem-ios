@@ -8,6 +8,8 @@ import Primitives
 import Components
 import Style
 import Localization
+import ChainService
+import Staking
 
 struct StakeScene: View {
     @Environment(\.keystore) private var keystore
@@ -95,17 +97,7 @@ extension StakeScene {
             case .loaded(let delegations):
                 ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.delegation) {
-                        HStack {
-                            ValidatorImageView(validator: delegation.delegation.validator)
-                            ListItemView(
-                                title: delegation.validatorText,
-                                titleExtra: delegation.stateText,
-                                titleStyleExtra: TextStyle(font: .footnote, color: delegation.stateTextColor),
-                                subtitle: delegation.balanceText,
-                                subtitleExtra: delegation.completionDateText,
-                                subtitleStyleExtra: .footnote
-                            )
-                        }
+                        ValidatorDelegationView(delegation: delegation)
                     }
                 }
             case .error(let error):
@@ -156,8 +148,10 @@ extension StakeScene {
 // MARK: - Previwes
 
 #Preview {
-    return NavigationStack {
-        StakeScene(model: .init(wallet: .main, chain: .ethereum, stakeService: .main, onTransferAction: .none, onAmountInputAction: .none))
-            .navigationBarTitleDisplayMode(.inline)
+    NavigationStack {
+        StakeScene(
+            model: .init(wallet: .main, chain: .ethereum, stakeService: .main, onTransferAction: .none, onAmountInputAction: .none)
+        )
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

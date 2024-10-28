@@ -5,6 +5,7 @@ import Blockchain
 import Primitives
 import Keystore
 import Localization
+import ChainService
 
 typealias ConfirmTransferDelegate = (Result<String, any Error>) -> Void
 typealias ConfirmMessageDelegate = (Result<String, any Error>) -> Void

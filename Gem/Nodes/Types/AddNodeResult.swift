@@ -4,12 +4,20 @@ import Foundation
 import BigInt
 
 struct AddNodeResult {
+    let url: URL
     let chainID: String
     let blockNumber: BigInt
     let latency: Latency
     let isInSync: Bool
 
-    init(chainID: String, blockNumber: BigInt, isInSync: Bool, latency: Latency) {
+    init(
+        url: URL,
+        chainID: String,
+        blockNumber: BigInt,
+        isInSync: Bool,
+        latency: Latency
+    ) {
+        self.url = url
         self.chainID = chainID
         self.blockNumber = blockNumber
         self.isInSync = isInSync

@@ -4,19 +4,15 @@ import Foundation
 import Primitives
 import Blockchain
 
-public protocol NodeURLFetchable {
-    func node(for chain: Chain) -> URL
-}
+public final class ChainServiceFactory: Sendable {
 
-public final class ChainServiceFactory {
+    private let nodeProvider: any NodeURLFetchable
 
-    let nodeProvider: any NodeURLFetchable
-
-    init(nodeProvider: any NodeURLFetchable) {
+    public init(nodeProvider: any NodeURLFetchable) {
         self.nodeProvider = nodeProvider
     }
     
-    func service(for chain: Chain) -> any ChainServiceable {
+    public func service(for chain: Chain) -> any ChainServiceable {
         return ChainService.service(
             chain: chain,
             with: nodeProvider.node(for: chain)

@@ -4,6 +4,7 @@ import Foundation
 import Store
 import Primitives
 import NotificationService
+import UIKit
 
 public struct BannerService: Sendable {
 
@@ -18,17 +19,23 @@ public struct BannerService: Sendable {
         self.pushNotificationService = pushNotificationService
     }
 
-    public func handleAction(banner: Banner) async throws {
+    public func handleAction(_ action: BannerAction) async throws {
         let result = try await {
-            switch banner.event {
+            switch action.event {
             case .enableNotifications:
                 return try await pushNotificationService.requestPermissionsOrOpenSettings()
-            case .stake, .accountActivation:
+            case .accountActivation,
+                .accountBlockedMultiSignature:
+                if let url = action.url {
+                    await UIApplication.shared.open(url, completionHandler: .none)
+                }
                 return true
+            case .stake:
+                return false
             }
         }()
-        if banner.closeOnAction && result {
-            try closeBanner(banner: banner)
+        if action.closeOnAction && result {
+            try closeBanner(id: action.id)
         }
     }
 
@@ -37,12 +44,12 @@ public struct BannerService: Sendable {
         try store.clear()
     }
 
-    private func closeBanner(banner: Banner) throws {
-        try updateState(banner: banner, state: .cancelled)
+    private func closeBanner(id: String) throws {
+        try updateState(id: id, state: .cancelled)
     }
 
-    private func updateState(banner: Banner, state: BannerState) throws {
-        let _ = try store.updateState(banner.id, state: state)
+    private func updateState(id: String, state: BannerState) throws {
+        let _ = try store.updateState(id, state: state)
     }
 }
 
@@ -50,11 +57,8 @@ public struct BannerService: Sendable {
 // MARK: - Actions
 
 extension BannerService {
-    public func onAction(banner: Banner) {
-        Task { try await handleAction(banner: banner) }
-    }
-
-    public func onClose(banner: Banner) {
-        Task { try closeBanner(banner: banner) }
+    public func onClose(_ banner: Banner) {
+        Task { try closeBanner(id: banner.id) }
     }
 }
+

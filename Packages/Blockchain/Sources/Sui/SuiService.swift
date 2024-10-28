@@ -509,3 +509,11 @@ extension Blockchain.SuiCoin {
         )
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension SuiService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

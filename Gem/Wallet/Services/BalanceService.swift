@@ -6,6 +6,7 @@ import Combine
 import Store
 import Blockchain
 import Settings
+import ChainService
 
 public struct BalanceUpdate {
     public let walletId: String

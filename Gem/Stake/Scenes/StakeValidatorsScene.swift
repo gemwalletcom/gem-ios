@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import Staking
 
 struct StakeValidatorsScene: View {
     
@@ -16,21 +17,9 @@ struct StakeValidatorsScene: View {
             ForEach(model.list) { section in
                 Section(section.section) {
                     ForEach(section.values) { value in
-                        HStack {
-                            ValidatorImageView(validator: value.value)
-                            ListItemSelectionView(
-                                title: value.title,
-                                titleExtra: .none,
-                                titleTag: .none,
-                                titleTagType: .none,
-                                subtitle: value.subtitle,
-                                subtitleExtra: .none,
-                                value: value.value.id,
-                                selection: model.currentValidator?.id
-                            ) { _ in
-                                model.selectValidator?(value.value)
-                                dismiss()
-                            }
+                        ValidatorSelectionView(value: value, selection: model.currentValidator?.id) {
+                            model.selectValidator?($0)
+                            dismiss()
                         }
                     }
                 }

@@ -61,6 +61,11 @@ public struct Migrations {
         migrator.registerMigration("Create \(PriceAlertRecord.databaseTableName)") { db in
             try PriceAlertRecord.create(db: db)
         }
+        
+        migrator.registerMigration("Recreate \(BannerRecord.databaseTableName)") { db in
+            try db.drop(table: BannerRecord.databaseTableName)
+            try BannerRecord.create(db: db)
+        }
 
         try migrator.migrate(dbQueue)
     }

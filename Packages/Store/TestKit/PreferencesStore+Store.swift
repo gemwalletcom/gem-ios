@@ -3,10 +3,10 @@
 import Foundation
 import Store
 
-public extension PreferencesStore {
+public extension Preferences {
     static func mock(
         defaults: UserDefaults = .mock()
-    ) -> PreferencesStore {
-        PreferencesStore(defaults: defaults)
+    ) -> Preferences {
+        Preferences(defaults: defaults)
     }
 }

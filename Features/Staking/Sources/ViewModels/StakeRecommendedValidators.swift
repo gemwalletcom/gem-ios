@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
-import Gemstone
+import enum Primitives.Chain
+import struct GemstonePrimitives.GemstoneConfig
 
-struct StakeRecommendedValidators {
+public struct StakeRecommendedValidators {
     
     private var list: [Chain: Set<String>] {
         var output: [Chain: Set<String>] = [:]
-        Config().getValidators().forEach { (key, values) in
+        GemstoneConfig.shared.getValidators().forEach { (key, values) in
             if let chain = Chain(rawValue: key) {
                 output[chain] = Set(values)
             }
@@ -16,11 +16,13 @@ struct StakeRecommendedValidators {
         return output
     }
     
-    func randomValidatorId(chain: Chain) -> String? {
+    public init() {}
+    
+    public func randomValidatorId(chain: Chain) -> String? {
         list[chain]?.randomElement()
     }
     
-    func validatorsSet(chain: Chain) -> Set<String> {
+    public func validatorsSet(chain: Chain) -> Set<String> {
         list[chain] ?? Set()
     }
 }

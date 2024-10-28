@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import GemstonePrimitives
@@ -7,6 +9,7 @@ import Store
 import Style
 import Localization
 import PriceAlertService
+import StakeService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService
@@ -18,7 +21,8 @@ class AssetSceneViewModel: ObservableObject {
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
-
+    let headerModel: AssetHeaderViewModel
+    
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
 
@@ -29,7 +33,8 @@ class AssetSceneViewModel: ObservableObject {
         stakeService: StakeService,
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
-        walletModel: WalletViewModel
+        walletModel: WalletViewModel,
+        headerModel: AssetHeaderViewModel
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
@@ -39,17 +44,11 @@ class AssetSceneViewModel: ObservableObject {
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
+        self.headerModel = headerModel
         self.walletModel = walletModel
     }
 
     var title: String { assetModel.name }
-
-    var headerViewModel: AssetHeaderViewModel {
-        AssetHeaderViewModel(
-            assetDataModel: assetDataModel, 
-            walletModel: walletModel
-        )
-    }
     
     var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
     var addressExplorerUrl: URL { addressLink.url }

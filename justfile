@@ -11,7 +11,6 @@ install-typeshare:
 
 install-toolchains:
     @echo "==> Install toolchains for uniffi"
-    @cd core && just gemstone install-nightly
     @cd core && just gemstone install-ios-targets
 
 install-swifttools:

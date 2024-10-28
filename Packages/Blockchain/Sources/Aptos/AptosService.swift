@@ -188,3 +188,11 @@ extension AptosError: LocalizedError {
         message
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension AptosService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

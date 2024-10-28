@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import SwiftUI
 import Keystore
@@ -16,22 +18,13 @@ import NotificationService
 import DeviceService
 import PriceAlertService
 import GemAPI
+import ChainService
+import StakeService
 
 struct WalletCoordinator: View {
     let db: DB
 
     @ObservedObject var keystore: LocalKeystore = .main
-
-    let assetStore: AssetStore
-    let balanceStore: BalanceStore
-    let priceStore: PriceStore
-    let transactionStore: TransactionStore
-    let nodeStore: NodeStore
-    let walletStore: WalletStore
-    let stakeStore: StakeStore
-    let connectionsStore: ConnectionsStore
-    let bannerStore: BannerStore
-    let priceAlertStore: PriceAlertStore
 
     let assetsService: AssetsService
     let balanceService: BalanceService
@@ -71,61 +64,54 @@ struct WalletCoordinator: View {
         db: DB
     ) {
         self.db = db
-        self.assetStore = AssetStore(db: db)
-        self.balanceStore = BalanceStore(db: db)
-        self.priceStore = PriceStore(db: db)
-        self.transactionStore = TransactionStore(db: db)
-        self.nodeStore = NodeStore(db: db)
-        self.walletStore = WalletStore(db: db, preferences: preferences)
-        self.connectionsStore = ConnectionsStore(db: db)
-        self.stakeStore = StakeStore(db: db)
-        self.bannerStore = BannerStore(db: db)
-        self.priceAlertStore = PriceAlertStore(db: db)
-        self.nodeService = NodeService(nodeStore: nodeStore)
+        let storeManager = StoreManager(db: db)
+        
+        self.nodeService = NodeService(nodeStore: storeManager.nodeStore)
         self.chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
         self.assetsService = AssetsService(
-            assetStore: assetStore,
-            balanceStore: balanceStore,
+            assetStore: storeManager.assetStore,
+            balanceStore: storeManager.balanceStore,
             chainServiceFactory: chainServiceFactory
         )
         self.balanceService = BalanceService(
-            balanceStore: balanceStore,
+            balanceStore: storeManager.balanceStore,
             chainServiceFactory: chainServiceFactory
         )
         self.stakeService = StakeService(
-            store: stakeStore,
+            store: storeManager.stakeStore,
             chainServiceFactory: chainServiceFactory
         )
-        self.priceService = PriceService(priceStore: priceStore, preferences: preferences)
+        self.priceService = PriceService(priceStore: storeManager.priceStore, preferences: preferences)
         self.transactionService = TransactionService(
-            transactionStore: transactionStore,
+            transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
             chainServiceFactory: chainServiceFactory,
             balanceUpdater: balanceService
         )
         self.transactionsService = TransactionsService(
-            transactionStore: transactionStore,
+            transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
             keystore: _keystore.wrappedValue
         )
         self.walletConnectorInteractor = WalletConnectorInteractor()
         self.walletConnectorSigner = WalletConnectorSigner(
-            store: connectionsStore,
+            store: storeManager.connectionsStore,
             keystore: _keystore.wrappedValue,
             walletConnectorInteractor: walletConnectorInteractor
         )
         self.connectionsService = ConnectionsService(
-            store: connectionsStore,
+            store: storeManager.connectionsStore,
             signer: walletConnectorSigner
         )
         self.bannerService = BannerService(
-            store: bannerStore,
+            store: storeManager.bannerStore,
             pushNotificationService: PushNotificationEnablerService(preferences: preferences)
         )
-        self.walletService = WalletService(keystore: _keystore.wrappedValue, walletStore: walletStore)
+        self.walletService = WalletService(keystore: _keystore.wrappedValue, walletStore: storeManager.walletStore)
+        self.bannerSetupService = BannerSetupService(store: storeManager.bannerStore, preferences: preferences)
         self.walletsService = WalletsService(
             keystore: _keystore.wrappedValue,
-            priceStore: priceStore,
+            priceStore: storeManager.priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
             stakeService: stakeService,
@@ -136,25 +122,27 @@ struct WalletCoordinator: View {
             ),
             transactionService: transactionService,
             nodeService: nodeService,
-            connectionsService: connectionsService
+            connectionsService: connectionsService,
+            bannerSetupService: bannerSetupService,
+            addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )
-        self.subscriptionService = SubscriptionService(subscriptionProvider: apiService, walletStore: walletStore)
+        self.subscriptionService = SubscriptionService(subscriptionProvider: apiService, walletStore: storeManager.walletStore)
         self.deviceService = DeviceService(deviceProvider: apiService, subscriptionsService: subscriptionService)
         self.deviceObserverService = DeviceObserverService(
             deviceService: deviceService,
             subscriptionsService: subscriptionService,
-            subscriptionsObserver: walletStore.observer()
+            subscriptionsObserver: storeManager.walletStore.observer()
         )
-        self.bannerSetupService = BannerSetupService(store: bannerStore, preferences: preferences)
+        
         self.priceAlertService = PriceAlertService(
-            store: priceAlertStore,
+            store: storeManager.priceAlertStore,
             deviceService: deviceService,
             preferences: preferences
         )
         self.onstartService = OnstartAsyncService(
-            assetStore: assetStore,
+            assetStore: storeManager.assetStore,
             keystore: _keystore.wrappedValue,
-            nodeStore: nodeStore,
+            nodeStore: storeManager.nodeStore,
             preferences: preferences,
                 assetsService: assetsService,
             deviceService: deviceService,

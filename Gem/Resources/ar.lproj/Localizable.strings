@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Privacy Lock";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "يتأكد";
+"common.skip" = "يتخطى";
+"common.warning" = "تحذير";
+"warnings.multi_signature_blocked" = "لا تقم بتحويل الأموال إلى محفظة التوقيعات المتعددة %@ هذه إلا إذا كنت متأكدًا من أنك تتحكم في المفاتيح الخاصة. قد يؤدي عدم القيام بذلك إلى تعريضك للاحتيال، وقد تفقد أصولك بشكل دائم.";

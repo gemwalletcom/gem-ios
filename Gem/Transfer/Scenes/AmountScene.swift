@@ -7,6 +7,9 @@ import Components
 import Primitives
 import GemstonePrimitives
 import Localization
+import class Staking.StakeValidatorsViewModel
+import struct Staking.StakeValidatorViewModel
+import struct Staking.ValidatorView
 
 struct AmountScene: View {
 
@@ -79,25 +82,11 @@ struct AmountScene: View {
                             }
                              */
                             if model.isSelectValidatorEnabled {
-                                NavigationCustomLink(with:
-                                    HStack {
-                                        ValidatorImageView(validator: validator)
-                                        ListItemView(
-                                            title: StakeValidatorViewModel(validator: validator).name,
-                                            subtitle: StakeValidatorViewModel(validator: validator).aprText
-                                        )
-                                    }
-                                ) {
+                                NavigationCustomLink(with: ValidatorView(model: StakeValidatorViewModel(validator: validator))) {
                                     self.delegation = model.currentValidator
                                 }
                             } else {
-                                HStack {
-                                    ValidatorImageView(validator: validator)
-                                    ListItemView(
-                                        title: StakeValidatorViewModel(validator: validator).name,
-                                        subtitle: StakeValidatorViewModel(validator: validator).aprText
-                                    )
-                                }
+                                ValidatorView(model: StakeValidatorViewModel(validator: validator))
                             }
                         }
                     }

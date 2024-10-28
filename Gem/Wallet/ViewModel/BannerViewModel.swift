@@ -6,6 +6,7 @@ import SwiftUI
 import GemstonePrimitives
 import Style
 import Localization
+import struct BannerService.BannerAction
 
 struct BannerViewModel {
 
@@ -14,41 +15,52 @@ struct BannerViewModel {
     var image: Image? {
         switch banner.event {
         case .stake, .accountActivation:
-            guard let asset = banner.asset else {
+            guard let asset = asset else {
                 return .none
             }
             return Image(uiImage: UIImage(imageLiteralResourceName: asset.chain.rawValue))
         case .enableNotifications:
             return Image(systemName: SystemImage.bell)
+        case .accountBlockedMultiSignature:
+            return Image(systemName: SystemImage.exclamationmarkTriangle)
         }
+    }
+    
+    private var asset: Asset? {
+        if let asset = banner.asset {
+            return asset
+        }
+        return banner.chain?.asset
     }
 
     var title: String? {
         switch banner.event {
         case .stake:
-            guard let asset = banner.asset else {
+            guard let asset = asset else {
                 return .none
             }
             return Localized.Banner.Stake.title(asset.name)
         case .accountActivation:
-            guard let asset = banner.asset else {
+            guard let asset = asset else {
                 return .none
             }
             return Localized.Banner.AccountActivation.title(asset.name)
         case .enableNotifications: 
             return Localized.Banner.EnableNotifications.title
+        case .accountBlockedMultiSignature:
+            return Localized.Common.warning
         }
     }
 
     var description: String? {
         switch banner.event {
         case .stake:
-            guard let asset = banner.asset else {
+            guard let asset = asset else {
                 return .none
             }
             return Localized.Banner.Stake.description(asset.symbol)
         case .accountActivation:
-            guard let asset = banner.asset, let fee = asset.chain.accountActivationFee else {
+            guard let asset = asset, let fee = asset.chain.accountActivationFee else {
                 return .none
             }
             let amount = ValueFormatter(style: .full)
@@ -56,6 +68,8 @@ struct BannerViewModel {
             return Localized.Banner.AccountActivation.description(asset.name, amount)
         case .enableNotifications: 
             return Localized.Banner.EnableNotifications.description
+        case .accountBlockedMultiSignature:
+            return Localized.Warnings.multiSignatureBlocked(asset?.name ?? "")
         }
     }
 
@@ -71,7 +85,24 @@ struct BannerViewModel {
         switch banner.event {
         case .stake,
             .accountActivation: 14
-        case .enableNotifications: 0
+        case .enableNotifications,
+            .accountBlockedMultiSignature: 0
+        }
+    }
+    
+    var action: BannerAction {
+        BannerAction(id: banner.id, event: banner.event, url: url)
+    }
+    
+    var url: URL? {
+        switch banner.event {
+        case .stake,
+            .enableNotifications:
+            return.none
+        case .accountActivation:
+            return URL(string: "https://xrpl.org/reserves.html")!
+        case .accountBlockedMultiSignature:
+            return Docs.url(.tronMultiSignature)
         }
     }
 }

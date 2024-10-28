@@ -167,3 +167,11 @@ extension ChainService: ChainLatestBlockFetchable {
             .getLatestBlock()
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension ChainService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

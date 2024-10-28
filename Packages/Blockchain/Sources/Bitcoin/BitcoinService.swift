@@ -194,3 +194,11 @@ public extension Array where Element == BitcoinUnspentTransaction {
        }
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension BitcoinService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

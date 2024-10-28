@@ -1,6 +1,6 @@
 import Foundation
 
-public protocol TargetType {
+public protocol TargetType: Sendable {
     var baseUrl: URL { get }
     var method: HTTPMethod { get }
     var path: String { get }

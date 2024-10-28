@@ -4,6 +4,7 @@ import Foundation
 import Store
 import Localization
 import BannerService
+import StakeService
 
 struct DeveloperViewModel {
     
@@ -70,13 +71,13 @@ struct DeveloperViewModel {
     
     func clearDelegations() {
         do {
-            try stakeService.store.clearDelegations()
+            try stakeService.clearDelegations()
         } catch { }
     }
     
     func clearValidators() {
         do {
-            try stakeService.store.clearValidators()
+            try stakeService.clearValidators()
         } catch { }
     }
 

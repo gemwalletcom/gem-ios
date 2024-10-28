@@ -1,8 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-
 public struct AmountInput {
     public let type: AmountType
     public let asset: Asset

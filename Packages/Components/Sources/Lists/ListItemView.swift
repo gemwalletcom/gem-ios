@@ -113,6 +113,7 @@ public struct ListItemView: View {
                     titleTagType: titleTagType,
                     infoAction: infoAction
                 )
+                .listRowInsets(.zero)
             }
 
             if showPlaceholderProgress(for: .subtitle, value: subtitle) {
@@ -153,6 +154,7 @@ extension ListItemView {
         var body: some View {
             return image
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: imageSize, height: imageSize)
                 .cornerRadius(cornerRadius)
         }

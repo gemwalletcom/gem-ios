@@ -14,7 +14,7 @@ struct BannerView: View {
     var closeAction: ((Banner) -> Void)
 
     var body: some View {
-        ForEach(banners.map { BannerViewModel(banner: $0) }) { banner in
+        if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
             Button(action: {
                 action(banner.banner)
             }, label: {
@@ -27,9 +27,9 @@ struct BannerView: View {
                         cornerRadius: banner.cornerRadius
                     )
 
-                    Spacer()
-
                     if banner.canClose {
+                        Spacer()
+                        
                         ListButton(
                             image: Image(systemName: SystemImage.xmarkCircle),
                             action: {

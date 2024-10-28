@@ -42,7 +42,15 @@ struct WalletSceneViewModel {
     }
 
     var bannersRequest: BannersRequest {
-        BannersRequest(walletId: wallet.walletId.id, assetId: .none, events: [.enableNotifications])
+        BannersRequest(
+            walletId: wallet.walletId.id,
+            assetId: .none,
+            chain: .none,
+            events: [
+                .enableNotifications,
+                .accountBlockedMultiSignature,
+            ]
+        )
     }
 
     func setupWallet() throws {

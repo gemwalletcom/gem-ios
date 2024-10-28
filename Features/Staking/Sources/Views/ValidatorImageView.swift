@@ -5,12 +5,16 @@ import Components
 import Primitives
 import GemstonePrimitives
 
-struct ValidatorImageView: View {
+public struct ValidatorImageView: View {
     
-    let validator: DelegationValidator
+    private let validator: DelegationValidator
     private let formatter = AssetImageFormatter()
     
-    var body: some View {
+    public init(validator: DelegationValidator) {
+        self.validator = validator
+    }
+    
+    public var body: some View {
         AsyncImageView(
             url: formatter.getValidatorUrl(chain: validator.chain, id: validator.id),
             placeholder: .letter(validator.name.first ?? " ")

@@ -7,11 +7,13 @@ import Primitives
 import BigInt
 import Style
 import Components
+import GemstonePrimitives
 
 struct WalletHeaderViewModel {
     //Remove WalletType from here
     let walletType: WalletType
     let value: Double
+    
     let currencyFormatter = CurrencyFormatter.currency()
     
     public init(
@@ -53,9 +55,11 @@ extension WalletHeaderViewModel: HeaderViewModel {
         ]
         return values.compactMap {
             if $0.isShown {
-                return HeaderButton(type: $0.type)
+                return HeaderButton(type: $0.type, isEnabled: true)
             }
             return .none
         }
     }
+    
+    var infoButtonUrl: URL? { Docs.url(.whatIsWatchWallet) }
 }

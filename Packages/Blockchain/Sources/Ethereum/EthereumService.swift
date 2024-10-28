@@ -395,3 +395,11 @@ extension EthereumService: ChainLatestBlockFetchable {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension EthereumService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

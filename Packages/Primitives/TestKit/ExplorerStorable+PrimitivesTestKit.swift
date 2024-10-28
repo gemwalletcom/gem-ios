@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public class MockExplorerStorage: ExplorerStorable {
+public final class MockExplorerStorage: ExplorerStorable, @unchecked Sendable {
     
     private var map: [Chain: String] = [:]
     

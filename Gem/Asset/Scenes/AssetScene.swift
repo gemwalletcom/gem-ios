@@ -43,7 +43,12 @@ struct AssetScene: View {
             stakeService: stakeService,
             priceAlertService: priceAlertService,
             assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-            walletModel: WalletViewModel(wallet: wallet)
+            walletModel: WalletViewModel(wallet: wallet),
+            headerModel: AssetHeaderViewModel(
+                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+                walletModel: WalletViewModel(wallet: wallet),
+                bannersViewModel: HeaderBannersViewModel(banners: banners)
+            )
         )
     }
 
@@ -63,7 +68,7 @@ struct AssetScene: View {
     var body: some View {
         List {
             Section { } header: {
-                WalletHeaderView(model: model.headerViewModel, action: onSelectHeader(_:))
+                WalletHeaderView(model: model.headerModel, action: onSelectHeader(_:))
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
             }
@@ -213,14 +218,15 @@ extension AssetScene {
     }
 
     private func onBannerAction(banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake:
             isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
-        case .enableNotifications:
-            break
-        case .accountActivation:
-            if let url = model.reservedBalanceUrl {
-                onOpenLink(url)
+        case .enableNotifications,
+            .accountActivation,
+            .accountBlockedMultiSignature:
+            Task {
+                try await bannerService.handleAction(action)
             }
         }
     }

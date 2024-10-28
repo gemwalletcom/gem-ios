@@ -63,7 +63,10 @@ struct WalletScene: View {
         List {
            Section { } header: {
                 WalletHeaderView(
-                    model: WalletHeaderViewModel(walletType: model.wallet.type, value: fiatValue)
+                    model: WalletHeaderViewModel(
+                        walletType: model.wallet.type,
+                        value: fiatValue
+                    )
                 ) {
                     isPresentingSelectType = $0.selectType
                 }
@@ -77,7 +80,7 @@ struct WalletScene: View {
             Section {
                 BannerView(
                     banners: banners,
-                    action: bannerService.onAction,
+                    action: onBannerAction,
                     closeAction: bannerService.onClose
                 )
             }
@@ -165,9 +168,15 @@ extension WalletScene {
     func refreshable() async {
         if let walletId = keystore.currentWalletId {
             Task {
-                try await model.fetch(walletId: walletId, assets: assets)
+                do {
+                    try await model.fetch(walletId: walletId, assets: assets)
+                } catch {
+                    NSLog("refreshable error: \(error)")
+                }
             }
         }
+        
+        runAddressStatusCheck()
     }
 
     func fetch() {
@@ -178,6 +187,16 @@ extension WalletScene {
                 NSLog("fetch error: \(error)")
             }
         }
+        
+        runAddressStatusCheck()
+    }
+    
+    func runAddressStatusCheck() {
+        if let wallet = keystore.currentWallet {
+            Task {
+                await walletsService.runAddressStatusCheck(wallet)
+            }
+        }
     }
 
     private func runUpdatePrices() {
@@ -186,4 +205,18 @@ extension WalletScene {
             try await walletsService.updatePrices()
         }
     }
+    
+    private func onBannerAction(banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
+        switch banner.event {
+        case .stake,
+            .enableNotifications,
+            .accountActivation,
+            .accountBlockedMultiSignature:
+            Task {
+                try await bannerService.handleAction(action)
+            }
+        }
+    }
 }
+

@@ -5,22 +5,17 @@ import Primitives
 import Components
 import Localization
 
-enum StakeValidatorsType {
-    case stake
-    case unstake
-}
-
-class StakeValidatorsViewModel: ObservableObject {
+public class StakeValidatorsViewModel: ObservableObject {
     
-    let type: StakeValidatorsType
-    let chain: Chain
-    let currentValidator: DelegationValidator?
-    let validators: [DelegationValidator]
-    var selectValidator: ((DelegationValidator) -> Void)?
+    private let type: StakeValidatorsType
+    private let chain: Chain
+    public let currentValidator: DelegationValidator?
+    private let validators: [DelegationValidator]
+    public var selectValidator: ((DelegationValidator) -> Void)?
     
     private let recommendedValidators = StakeRecommendedValidators()
     
-    init(
+    public init(
         type: StakeValidatorsType,
         chain: Chain,
         currentValidator: DelegationValidator?,
@@ -34,11 +29,11 @@ class StakeValidatorsViewModel: ObservableObject {
         self.selectValidator = selectValidator
     }
     
-    var title: String {
+    public var title: String {
         return Localized.Stake.validators
     }
     
-    var list: [ListItemValueSection<DelegationValidator>] {
+    public var list: [ListItemValueSection<DelegationValidator>] {
         switch type {
         case .stake:
             let recommeneded = recommendedValidators.validatorsSet(chain: chain)
@@ -62,14 +57,14 @@ class StakeValidatorsViewModel: ObservableObject {
         }
     }
     
-    func listSection(title: String, validators: [DelegationValidator]) -> ListItemValueSection<DelegationValidator> {
+    public func listSection(title: String, validators: [DelegationValidator]) -> ListItemValueSection<DelegationValidator> {
         ListItemValueSection(
             section: title,
             values: validators.map(listItem)
         )
     }
     
-    func listItem(validator: DelegationValidator) -> ListItemValue<DelegationValidator> {
+    public func listItem(validator: DelegationValidator) -> ListItemValue<DelegationValidator> {
         let model = StakeValidatorViewModel(validator: validator)
         return ListItemValue(
             title: model.name,

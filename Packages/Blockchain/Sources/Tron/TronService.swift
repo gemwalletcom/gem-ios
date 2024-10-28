@@ -376,3 +376,16 @@ extension TronTransactionBroadcastError: LocalizedError {
         return message
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension TronService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        let account = try await account(address: address)
+        let permissions = account.active_permission ?? []
+        if !permissions.filter({ $0.threshold > 1 }).isEmpty {
+            return [.multiSignature]
+        }
+        return []
+    }
+}

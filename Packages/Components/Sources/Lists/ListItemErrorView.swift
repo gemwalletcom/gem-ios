@@ -30,11 +30,13 @@ public struct ListItemErrorView: View {
         retryTitle: String? = nil,
         retryAction: (() -> Void)? = nil
     ) {
-        self.init(errorTitle: errorTitle,
-                  errorSystemNameImage: SystemImage.errorOccurred,
-                  error: error,
-                  retryTitle: retryTitle,
-                  retryAction: retryAction)
+        self.init(
+            errorTitle: errorTitle,
+            errorSystemNameImage: SystemImage.errorOccurred,
+            error: error,
+            retryTitle: retryTitle,
+            retryAction: retryAction
+        )
     }
 
     public var body: some View {

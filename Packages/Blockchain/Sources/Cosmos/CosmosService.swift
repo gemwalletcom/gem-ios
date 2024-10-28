@@ -404,3 +404,11 @@ extension CosmosService: ChainLatestBlockFetchable {
         BigInt(stringLiteral: try await getLatestCosmosBlock().header.height)
     }
 }
+
+// MARK: - ChainAddressStatusFetchable
+
+extension CosmosService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

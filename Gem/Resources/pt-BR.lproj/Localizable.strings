@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "Bloqueio de privacidade";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "Confirmar";
+"common.skip" = "Pular";
+"common.warning" = "Aviso";
+"warnings.multi_signature_blocked" = "Não transfira fundos para esta carteira %@ Multi-Signature a menos que tenha certeza de que controla as chaves privadas. Não fazer isso pode expô-lo a golpes e você pode perder seus ativos permanentemente.";

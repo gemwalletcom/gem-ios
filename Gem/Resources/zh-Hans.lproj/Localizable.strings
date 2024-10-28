@@ -275,5 +275,8 @@
 "price_alerts.empty_state.message" = "尚未添加价格警报。";
 "assets.select_asset" = "选择资产";
 "lock.privacy_lock" = "隐私锁";
-"receive.your_address" = "Your Receiving Address";
+"receive.your_address" = "您的接收地址";
 "verify_phrase.title" = "确认";
+"common.skip" = "跳过";
+"common.warning" = "警告";
+"warnings.multi_signature_blocked" = "除非您确定自己控制私钥，否则请勿将资金转入此%@多重签名钱包。否则，您可能会遭受诈骗，并且可能会永久失去您的资产。";

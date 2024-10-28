@@ -357,3 +357,10 @@ extension TonWalletInfo {
     }
 }
 
+// MARK: - ChainAddressStatusFetchable
+
+extension TonService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

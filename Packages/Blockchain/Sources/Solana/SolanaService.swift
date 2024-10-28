@@ -443,3 +443,10 @@ extension SolanaService: ChainLatestBlockFetchable {
     }
 }
 
+// MARK: - ChainAddressStatusFetchable
+
+extension SolanaService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

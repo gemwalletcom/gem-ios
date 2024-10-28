@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public class WalletPreferencesStore {
     
@@ -19,6 +20,11 @@ public class WalletPreferencesStore {
         get { defaults.integer(forKey: Keys.assetsTimestamp) }
     }
     
+    public var completeInitialAddressStatus: Bool {
+        set { defaults.setValue(newValue, forKey: Keys.completeInitialAddressStatus) }
+        get { defaults.bool(forKey: Keys.completeInitialAddressStatus) }
+    }
+    
     private let defaults: UserDefaults
     
     struct Keys {
@@ -26,6 +32,7 @@ public class WalletPreferencesStore {
         static let transactionsForAsset = "transactions_for_asset_v1"
         static let transactionsTimestamp = "transactions_timestamp_v1"
         static let completeInitialLoadAssets = "complete_initial_load_assets"
+        static let completeInitialAddressStatus = "complete_initial_address_status"
     }
     
     public init(
@@ -45,5 +52,19 @@ public class WalletPreferencesStore {
     
     public func transactionsForAssetTimestamp(assetId: String) -> Int {
         return defaults.integer(forKey: String(format: "%@_%@", Keys.transactionsForAsset, assetId))
+    }
+    
+    private func encode(key: String, data: Codable) {
+        if let encoded = try? JSONEncoder().encode(data) {
+            defaults.set(encoded, forKey: key)
+        }
+    }
+    
+    private func decode<T: Codable>(key: String) -> T? {
+        if let data = defaults.object(forKey: key) as? Data,
+           let typedData = try? JSONDecoder().decode(T.self, from: data){
+            return typedData
+        }
+        return .none
     }
 }

@@ -203,6 +203,8 @@ public enum Localized {
     public static func show(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.show", String(describing: p1), fallback: "Show %@")
     }
+    /// Skip
+    public static let skip = Localized.tr("Localizable", "common.skip", fallback: "Skip")
     /// Try Again
     public static let tryAgain = Localized.tr("Localizable", "common.try_again", fallback: "Try Again")
     /// Type
@@ -213,6 +215,8 @@ public enum Localized {
     public static let url = Localized.tr("Localizable", "common.url", fallback: "URL")
     /// Wallet
     public static let wallet = Localized.tr("Localizable", "common.wallet", fallback: "Wallet")
+    /// Warning
+    public static let warning = Localized.tr("Localizable", "common.warning", fallback: "Warning")
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
   }
@@ -780,6 +784,12 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "wallets.title", fallback: "Wallets")
     /// Watch
     public static let watch = Localized.tr("Localizable", "wallets.watch", fallback: "Watch")
+  }
+  public enum Warnings {
+    /// Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.
+    public static func multiSignatureBlocked(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "warnings.multi_signature_blocked", String(describing: p1), fallback: "Do not transfer funds to this %@ Multi-Signature wallet unless you are certain you control the private keys. Failure to do so could expose you to scams, and you may permanently lose your assets.")
+    }
   }
   public enum Welcome {
     /// Welcome to Gem Family

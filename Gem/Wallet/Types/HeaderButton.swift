@@ -6,6 +6,7 @@ import Localization
 
 struct HeaderButton: Identifiable {
     let type: HeaderButtonType
+    let isEnabled: Bool
     
     var id: String { type.rawValue }
     

@@ -6,6 +6,6 @@ import StoreTestKit
 
 final class StoreTests: XCTestCase {
     func testExample() throws {
-        XCTAssertNotNil(PreferencesStore.mock())
+        XCTAssertNotNil(Preferences.mock())
     }
 }

@@ -12,9 +12,11 @@ public struct BannerStore: Sendable {
         self.db = db.dbQueue
     }
 
-    public func addBanner(_ banner: NewBanner) throws {
+    public func addBanners(_ banners: [NewBanner]) throws {
         try db.write { db in
-            try banner.record.insert(db, onConflict: .ignore)
+            for banner in banners {
+                try banner.record.insert(db, onConflict: .ignore)
+            }
         }
     }
 

@@ -5,6 +5,7 @@ import Components
 import QRScanner
 import Primitives
 import Style
+import ChainService
 
 struct AddTokenScene: View {
     @State private var model: AddTokenViewModel

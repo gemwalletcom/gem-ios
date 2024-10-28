@@ -107,6 +107,7 @@ struct Columns {
         static let state = Column("state")
         static let event = Column("event")
         static let assetId = Column("assetId")
+        static let chain = Column("chain")
         static let walletId = Column("walletId")
     }
 }

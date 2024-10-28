@@ -277,3 +277,6 @@
 "lock.privacy_lock" = "隱私鎖";
 "receive.your_address" = "Your Receiving Address";
 "verify_phrase.title" = "確認";
+"common.skip" = "跳過";
+"common.warning" = "警告";
+"warnings.multi_signature_blocked" = "除非您確定您控制著私鑰，否則請勿將資金轉移到此%@多重簽名錢包。如果不這樣做，您可能會遭受詐騙，並且您可能會永久失去您的資產。";

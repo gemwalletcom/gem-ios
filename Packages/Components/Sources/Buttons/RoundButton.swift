@@ -4,19 +4,20 @@ import SwiftUI
 import Style
 
 public struct RoundButton: View {
-    @Environment(\.isEnabled) private var isEnabled
     let title: String
     let image: Image
-
+    let isEnabled: Bool
     var action: (() -> Void)?
 
     public init(
         title: String,
         image: Image,
+        isEnabled: Bool = true,
         action: (() -> Void)? = nil
     ) {
         self.action = action
         self.image = image
+        self.isEnabled = isEnabled
         self.title = title
     }
     
@@ -29,7 +30,7 @@ public struct RoundButton: View {
                     .frame(width: 48, height: 48)
                     .background(Colors.blue)
                     .cornerRadius(24)
-                    .opacity(isEnabled ? 1 : 0.6)
+                    .opacity(isEnabled ? 1 : 0.5)
                 Text(title)
                     .allowsTightening(true)
                     .truncationMode(.tail)

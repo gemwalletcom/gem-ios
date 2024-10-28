@@ -11,6 +11,8 @@ import Gemstone
 import GemstonePrimitives
 import Localization
 import Transfer
+import enum Staking.StakeValidatorsType
+import StakeService
 
 class AmounViewModel: ObservableObject {
     let input: AmountInput

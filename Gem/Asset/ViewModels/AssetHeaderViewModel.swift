@@ -7,6 +7,7 @@ import Primitives
 struct AssetHeaderViewModel {
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
+    let bannersViewModel: HeaderBannersViewModel
 }
 
 extension AssetHeaderViewModel: HeaderViewModel {
@@ -31,17 +32,19 @@ extension AssetHeaderViewModel: HeaderViewModel {
     }
     
     var buttons: [HeaderButton] {
-        let values: [(type: HeaderButtonType, isShown: Bool)] = [
-            (HeaderButtonType.send, true),
-            (HeaderButtonType.receive, true),
-            (HeaderButtonType.buy, assetDataModel.isBuyEnabled),
-            (HeaderButtonType.swap, assetDataModel.isSwapEnabled),
+        let values: [(type: HeaderButtonType, isShown: Bool, isEnabled: Bool)] = [
+            (HeaderButtonType.send, true, bannersViewModel.isButtonsEnabled),
+            (HeaderButtonType.receive, true, bannersViewModel.isButtonsEnabled),
+            (HeaderButtonType.buy, assetDataModel.isBuyEnabled, bannersViewModel.isButtonsEnabled),
+            (HeaderButtonType.swap, assetDataModel.isSwapEnabled, bannersViewModel.isButtonsEnabled),
         ]
         return values.compactMap {
             if $0.isShown {
-                return HeaderButton(type: $0.type)
+                return HeaderButton(type: $0.type, isEnabled: $0.isEnabled)
             }
             return .none
         }
     }
+    
+    var infoButtonUrl: URL? { .none }
 }
