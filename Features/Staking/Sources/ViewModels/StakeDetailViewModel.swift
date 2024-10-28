@@ -65,13 +65,7 @@ public struct StakeDetailViewModel {
     }
     
     public var isStakeAvailable: Bool {
-        // TODO: - delete when enable in chain-config
-#if DEBUG
-     if chain == .tron {
-         return model.state == .active
-     }
-#endif
-      return  chain.supportRedelegate && model.state == .active
+      chain.supportRedelegate && model.state == .active
     }
     
     public var isUnstakeAvailable: Bool {
@@ -79,13 +73,7 @@ public struct StakeDetailViewModel {
     }
     
     public var isRedelegateAvailable: Bool {
-        // TODO: - delete when enable in chain-config
-#if DEBUG
-        if chain == .tron {
-            return (model.state == .active || model.state == .inactive)
-        }
-#endif
-        return (model.state == .active || model.state == .inactive) && chain.supportRedelegate
+        (model.state == .active || model.state == .inactive) && chain.supportRedelegate
     }
     
     public var isWithdrawStakeAvailable: Bool {

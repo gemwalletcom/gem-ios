@@ -157,14 +157,7 @@ class AmounViewModel: ObservableObject {
             .redelegate:
             return true
         case .unstake:
-
             if let chain = StakeChain(rawValue: asset.chain.rawValue) {
-// TODO: - delete when enable in chain-config
-#if DEBUG
-        if chain == .tron {
-            return true
-        }
-#endif
                 return chain.canChangeAmountOnUnstake
             }
             return true
@@ -186,12 +179,6 @@ class AmounViewModel: ObservableObject {
         let stakeChain = asset.chain.stakeChain
         switch type {
         case .stake:
-// TODO: - delete when enable in chain-config
-#if DEBUG
-        if stakeChain == .tron {
-            return BigInt(1000000)
-        }
-#endif
             return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
         case .redelegate:
             switch stakeChain {

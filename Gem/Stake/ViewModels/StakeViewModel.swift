@@ -54,12 +54,6 @@ class StakeViewModel {
     var stakeAprValue: String {
         let apr = (try? stakeService.stakeApr(assetId: chain.assetId)) ?? 0
         guard apr > 0 else {
-// TODO: - delete when enable in chain-config
-#if DEBUG
-            if chain == .tron {
-                return CurrencyFormatter(type: .percentSignLess).string(5.1)
-            }
-#endif
             return .empty
         }
         return CurrencyFormatter(type: .percentSignLess).string(apr)
@@ -185,24 +179,11 @@ extension StakeViewModel {
     }()
 
     private var lockTime: TimeInterval {
-// TODO: - delete when enable in chain-config
-#if DEBUG
-        if chain == .tron {
-            // TODO: - 14 days
-            return 15 * 24 * 60 * 60
-        }
-#endif
-        return Double(StakeConfig.config(chain: chain.stakeChain!).timeLock)
+        Double(StakeConfig.config(chain: chain.stakeChain!).timeLock)
     }
 
     private var minAmount: BigInt {
-// TODO: - delete when enable in chain-config
-#if DEBUG
-        if chain == .tron {
-            return BigInt(1000000)
-        }
-#endif
-        return BigInt(StakeConfig.config(chain: chain.stakeChain!).minAmount)
+        BigInt(StakeConfig.config(chain: chain.stakeChain!).minAmount)
     }
 
     private var asset: Asset {
