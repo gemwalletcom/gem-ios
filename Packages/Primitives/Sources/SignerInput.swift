@@ -21,6 +21,8 @@ public struct SignerInput {
     public let utxos: [UTXO]
     public let messageBytes: String
     public let extra: SigningdExtra?
+    // freezeValue: Tron stacking v2 only
+    public let freezeValue: BigInt
 
     public init(
         type: TransferDataType,
@@ -38,7 +40,8 @@ public struct SignerInput {
         token: SignerInputToken,
         utxos: [UTXO],
         messageBytes: String,
-        extra: SigningdExtra? = nil
+        extra: SigningdExtra? = nil,
+        freezeValue: BigInt
     ) {
         self.type = type
         self.asset = asset
@@ -56,5 +59,6 @@ public struct SignerInput {
         self.utxos = utxos
         self.messageBytes = messageBytes
         self.extra = extra
+        self.freezeValue = freezeValue
     }
 }

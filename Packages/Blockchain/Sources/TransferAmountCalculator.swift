@@ -15,7 +15,10 @@ public struct TranferAmountInput {
     public let assetBalance: Balance
     public let value: BigInt
     public let availableValue: BigInt // maximum available value (unstake)
-    
+
+    // freezeValue: tron related
+    public let freezeValue: BigInt // amount to freeze needed to get submit vote
+
     public let assetFee: Asset
     public let assetFeeBalance: Balance
     public let fee: BigInt
@@ -27,6 +30,7 @@ public struct TranferAmountInput {
         assetBalance: Balance,
         value: BigInt,
         availableValue: BigInt,
+        freezeValue: BigInt,
         assetFee: Asset,
         assetFeeBalance: Balance,
         fee: BigInt,
@@ -42,6 +46,7 @@ public struct TranferAmountInput {
         self.fee = fee
         self.canChangeValue = canChangeValue
         self.ignoreValueCheck = ignoreValueCheck
+        self.freezeValue = freezeValue
     }
     
     public var isMaxValue: Bool {
@@ -57,10 +62,10 @@ public struct TransferAmountCalculator {
             let amount = try calculate(input: input)
             return .amount(amount)
         } catch let error as TransferAmountCalculatorError {
-            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+            let amount = TransferAmount(value: input.value, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: false)
             return .error(amount, error)
         } catch {
-            let amount = TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+            let amount = TransferAmount(value: input.value, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: false)
             return .error(amount, error)
         }
     }
@@ -78,7 +83,7 @@ public struct TransferAmountCalculator {
                 throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
             }
 
-            return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: false)
+            return TransferAmount(value: input.value, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: false)
         }
 
         if input.availableValue < input.value  {
@@ -98,12 +103,12 @@ public struct TransferAmountCalculator {
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset && input.canChangeValue  {
-                return TransferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, useMaxAmount: true)
+                return TransferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: true)
             }
-            return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
+            return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: true)
         }
         let useMaxAmount = input.availableValue == input.value
 
-        return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
+        return TransferAmount(value: input.value, networkFee: input.fee, freezeValue: input.freezeValue, useMaxAmount: useMaxAmount)
     }
 }

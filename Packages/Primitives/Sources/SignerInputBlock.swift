@@ -9,7 +9,7 @@ public struct SignerInputBlock: Sendable {
     public let timestamp: Int
     public let transactionTreeRoot: String
     public let parentHash: String
-    public let widnessAddress: String
+    public let witnessAddress: String
     
     public init(
         number: Int = 0,
@@ -26,6 +26,6 @@ public struct SignerInputBlock: Sendable {
         self.timestamp = timestamp
         self.transactionTreeRoot = transactionTreeRoot
         self.parentHash = parentHash
-        self.widnessAddress = widnessAddress
+        self.witnessAddress = widnessAddress
     }
 }

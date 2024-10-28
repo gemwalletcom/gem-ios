@@ -23,7 +23,8 @@ final class XrpSignerTests: XCTestCase {
             block: SignerInputBlock(),
             token: SignerInputToken(),
             utxos: [],
-            messageBytes: ""
+            messageBytes: "",
+            freezeValue: .zero
         )
         let signer = XrpSigner()
         
@@ -47,7 +48,8 @@ final class XrpSignerTests: XCTestCase {
             block: SignerInputBlock(),
             token: SignerInputToken(),
             utxos: [],
-            messageBytes: ""
+            messageBytes: "",
+            freezeValue: .zero
         )
         let signer = XrpSigner()
         

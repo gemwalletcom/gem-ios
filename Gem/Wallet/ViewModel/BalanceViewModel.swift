@@ -57,7 +57,11 @@ struct BalanceViewModel {
     }
     
     var stakingBalanceTextWithSymbol: String {
-        formatter.string(balance.staked + balance.pending, decimals: asset.decimals.asInt, currency: asset.symbol)
+        if asset.chain == .tron {
+            formatter.string(balance.pending + balance.frozen + balance.staked, decimals: asset.decimals.asInt, currency: asset.symbol)
+        } else {
+            formatter.string(balance.staked + balance.pending, decimals: asset.decimals.asInt, currency: asset.symbol)
+        }
     }
     
     var hasReservedBalance: Bool {

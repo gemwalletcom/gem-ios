@@ -110,9 +110,17 @@ class AmounViewModel: ObservableObject {
     
     var availableValue: BigInt {
         switch input.type {
-        case .transfer, .stake:
+        case .transfer:
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
+        case .stake:
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            if input.asset.chain == .tron {
+                // staked balanced can be revoted
+                return balance.available + balance.staked + balance.frozen
+            } else {
+                return balance.available
+            }
         case .unstake(let delegation):
             return delegation.base.balanceValue
         case .redelegate(let delegation, _, _):
@@ -149,7 +157,14 @@ class AmounViewModel: ObservableObject {
             .redelegate:
             return true
         case .unstake:
+
             if let chain = StakeChain(rawValue: asset.chain.rawValue) {
+// TODO: - delete when enable in chain-config
+#if DEBUG
+        if chain == .tron {
+            return true
+        }
+#endif
                 return chain.canChangeAmountOnUnstake
             }
             return true
@@ -171,6 +186,12 @@ class AmounViewModel: ObservableObject {
         let stakeChain = asset.chain.stakeChain
         switch type {
         case .stake:
+// TODO: - delete when enable in chain-config
+#if DEBUG
+        if stakeChain == .tron {
+            return BigInt(1000000)
+        }
+#endif
             return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
         case .redelegate:
             switch stakeChain {

@@ -9,14 +9,14 @@ import Localization
 import GemstonePrimitives
 import StakeService
 
-struct StakeDetailViewModel {
-    
-    let wallet: Wallet
-    let model: StakeDelegationViewModel
-    let service: StakeService
-    let onAmountInputAction: AmountInputAction
+public struct StakeDetailViewModel {
+    public let model: StakeDelegationViewModel
+    public let onAmountInputAction: AmountInputAction
 
-    init(
+    private let wallet: Wallet
+    private let service: StakeService
+
+    public init(
         wallet: Wallet,
         model: StakeDelegationViewModel,
         service: StakeService,
@@ -28,47 +28,34 @@ struct StakeDetailViewModel {
         self.onAmountInputAction = onAmountInputAction
     }
 
-
-    var title: String {
-        return Localized.Transfer.Stake.title
+    public var title: String {
+        Localized.Transfer.Stake.title
     }
     
-    private var asset: Asset {
-        model.delegation.base.assetId.chain.asset
-    }
-    
-    private var stakeApr: Double {
-        model.delegation.validator.apr
-    }
-    
-    private var chain: StakeChain {
-        StakeChain(rawValue: asset.chain.rawValue)!
-    }
-    
-    var stateText: String {
+    public var stateText: String {
         model.state.title
     }
     
-    var stateTextStyle: TextStyle {
+    public var stateTextStyle: TextStyle {
         TextStyle(font: .callout, color: model.stateTextColor)
     }
     
-    var aprTextStyle: TextStyle {
+    public var aprTextStyle: TextStyle {
         if stakeApr > 0 {
             return TextStyle(font: .callout, color: Colors.green)
         }
         return .callout
     }
     
-    var validatorText: String {
+    public var validatorText: String {
         model.validatorText
     }
     
-    var validatorAprText: String {
+    public var validatorAprText: String {
         CurrencyFormatter(type: .percentSignLess).string(model.delegation.validator.apr)
     }
     
-    var showManage: Bool {
+    public var showManage: Bool {
         [
             isStakeAvailable,
             isUnstakeAvailable,
@@ -77,23 +64,35 @@ struct StakeDetailViewModel {
         ].contains(true)
     }
     
-    var isStakeAvailable: Bool {
-        chain.supportRedelegate && model.state == .active
+    public var isStakeAvailable: Bool {
+        // TODO: - delete when enable in chain-config
+#if DEBUG
+     if chain == .tron {
+         return model.state == .active
+     }
+#endif
+      return  chain.supportRedelegate && model.state == .active
     }
     
-    var isUnstakeAvailable: Bool {
+    public var isUnstakeAvailable: Bool {
         (model.state == .active || model.state == .inactive) && model.state != .awaitingWithdrawal
     }
     
-    var isRedelegateAvailable: Bool {
-        (model.state == .active || model.state == .inactive) && chain.supportRedelegate
+    public var isRedelegateAvailable: Bool {
+        // TODO: - delete when enable in chain-config
+#if DEBUG
+        if chain == .tron {
+            return (model.state == .active || model.state == .inactive)
+        }
+#endif
+        return (model.state == .active || model.state == .inactive) && chain.supportRedelegate
     }
     
-    var isWithdrawStakeAvailable: Bool {
+    public var isWithdrawStakeAvailable: Bool {
         model.state == .awaitingWithdrawal
     }
     
-    var completionDateTitle: String? {
+    public var completionDateTitle: String? {
         switch model.state {
         case .pending, .deactivating:
             Localized.Stake.availableIn
@@ -103,22 +102,15 @@ struct StakeDetailViewModel {
         }
     }
     
-    var completionDateText: String? {
+    public var completionDateText: String? {
         model.completionDateText
     }
     
-    var validatorUrl: URL? {
+    public var validatorUrl: URL? {
         model.validatorUrl
     }
     
-    private var recommendedCurrentValidator: DelegationValidator? {
-        guard let validatorId = StakeRecommendedValidators().randomValidatorId(chain: model.delegation.base.assetId.chain) else {
-            return .none
-        }
-        return try? service.getValidator(assetId: asset.id, validatorId: validatorId)
-    }
-    
-    func stakeRecipientData() throws -> AmountInput {
+    public func stakeRecipientData() throws -> AmountInput {
         AmountInput(
             type: .stake(
                 validators: try service.getActiveValidators(assetId: asset.id),
@@ -128,14 +120,14 @@ struct StakeDetailViewModel {
         )
     }
     
-    func unstakeRecipientData() throws -> AmountInput {
+    public func unstakeRecipientData() throws -> AmountInput {
         AmountInput(
             type: .unstake(delegation: model.delegation),
             asset: asset
         )
     }
     
-    func redelegateRecipientData() throws -> AmountInput {
+    public func redelegateRecipientData() throws -> AmountInput {
         AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
@@ -146,10 +138,33 @@ struct StakeDetailViewModel {
         )
     }
     
-    func withdrawStakeRecipientData() throws -> AmountInput {
+    public func withdrawStakeRecipientData() throws -> AmountInput {
         AmountInput(
             type: .withdraw(delegation: model.delegation),
             asset: asset
         )
+    }
+}
+
+// MARK: - Private
+
+extension StakeDetailViewModel {
+    private var asset: Asset {
+        model.delegation.base.assetId.chain.asset
+    }
+
+    private var stakeApr: Double {
+        model.delegation.validator.apr
+    }
+
+    private var chain: StakeChain {
+        StakeChain(rawValue: asset.chain.rawValue)!
+    }
+
+    private var recommendedCurrentValidator: DelegationValidator? {
+        guard let validatorId = StakeRecommendedValidators().randomValidatorId(chain: model.delegation.base.assetId.chain) else {
+            return .none
+        }
+        return try? service.getValidator(assetId: asset.id, validatorId: validatorId)
     }
 }

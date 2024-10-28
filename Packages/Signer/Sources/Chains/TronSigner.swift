@@ -5,6 +5,7 @@ import WalletCore
 import WalletCorePrimitives
 import Blockchain
 import Primitives
+import BigInt
 
 public struct TronSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -30,6 +31,93 @@ public struct TronSigner: Signable {
         return output.json
     }
     
+    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+        fatalError()
+    }
+    
+    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+        fatalError()
+    }
+
+    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+        guard case let .stake(_, stakeType) = input.type else {
+            fatalError("Invalid input type for staking")
+        }
+
+        let contract: WalletCore.TronTransaction.OneOf_ContractOneof
+        switch stakeType {
+        case .stake(let validator):
+            if input.freezeValue.isZero {
+                contract = .voteWitness(TronVoteWitnessContract.with {
+                    $0.ownerAddress = input.senderAddress
+                    $0.support = true
+                    $0.votes = [
+                        TronVoteWitnessContract.Vote.with {
+                            $0.voteAddress = validator.id
+                            $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
+                        }
+                    ]
+                })
+            } else {
+                let freezeContract = TronFreezeBalanceV2Contract.with {
+                    $0.ownerAddress = input.senderAddress
+                    $0.frozenBalance = input.freezeValue.int64
+                    $0.resource = "BANDWIDTH"  // Or "ENERGY"
+                }
+
+                let voteContract = TronVoteWitnessContract.with {
+                    $0.ownerAddress = input.senderAddress
+                    $0.support = true
+                    $0.votes = [
+                        TronVoteWitnessContract.Vote.with {
+                            $0.voteAddress = validator.id
+                            $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
+                        }
+                    ]
+                }
+
+                let freezeInput = try prepareSigningInput(block: input.block, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey)
+                let voteInput = try prepareSigningInput(block: input.block, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
+                let freezeOutput: TronSigningOutput = AnySigner.sign(input: freezeInput, coin: input.coinType)
+                let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
+
+                return freezeOutput.json + "___" + voteOutput.json
+            }
+        case .unstake:
+            contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
+                $0.ownerAddress = input.senderAddress
+                $0.unfreezeBalance = input.value.int64
+                $0.resource = "BANDWIDTH"  // Or "ENERGY"
+            })
+        case .redelegate(_, let validator):
+            contract = .voteWitness(TronVoteWitnessContract.with {
+                $0.ownerAddress = input.senderAddress
+                $0.support = true
+                $0.votes = [
+                    TronVoteWitnessContract.Vote.with {
+                        $0.voteAddress = validator.id
+                        $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
+                    }
+                ]
+            })
+        case .rewards:
+            contract = .withdrawBalance(TronWithdrawBalanceContract.with {
+                $0.ownerAddress = input.senderAddress
+            })
+        case .withdraw:
+            contract = .withdrawExpireUnfreeze(TronWithdrawExpireUnfreezeContract.with {
+                $0.ownerAddress = input.senderAddress
+            })
+        }
+        let signingInput = try prepareSigningInput(block: input.block, contract: contract, feeLimit: .none, privateKey: privateKey)
+        let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
+        return output.json
+    }
+}
+
+// MARK: - Private
+
+extension TronSigner {
     func prepareSigningInput(
         block: SignerInputBlock,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
@@ -38,8 +126,8 @@ public struct TronSigner: Signable {
     ) throws -> TronSigningInput {
         let transactionTreeRoot = try Data.from(hex: block.transactionTreeRoot)
         let parentHash = try Data.from(hex: block.parentHash)
-        let witnessAddress = try Data.from(hex: block.widnessAddress)
-        
+        let witnessAddress = try Data.from(hex: block.witnessAddress)
+
         return TronSigningInput.with {
             $0.transaction = TronTransaction.with {
                 $0.contractOneof = contract
@@ -59,17 +147,5 @@ public struct TronSigner: Signable {
             }
             $0.privateKey = privateKey
         }
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
     }
 }

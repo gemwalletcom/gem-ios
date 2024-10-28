@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct ListItemValue<T> {
+public struct ListItemValue<T: Identifiable> {
     public let title: String?
     public let subtitle: String?
     public let value: T
@@ -15,7 +15,7 @@ public struct ListItemValue<T> {
 }
 
 extension ListItemValue: Identifiable {
-    public var id: String { title ?? subtitle ?? ""}
+    public var id: T.ID { value.id }
 }
 
 // MARK: - 

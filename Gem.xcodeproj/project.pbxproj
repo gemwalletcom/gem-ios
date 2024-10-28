@@ -236,7 +236,6 @@
 		D89D690B2A9FBFD400EA74EE /* TransactionSceneInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89D690A2A9FBFD400EA74EE /* TransactionSceneInput.swift */; };
 		D8AF81252C0E615B002E5FCF /* ButtonListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */; };
 		D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */; };
-		D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */; };
 		D8B738D12C4AF286004EF083 /* ConnectionsError.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D02C4AF286004EF083 /* ConnectionsError.swift */; };
 		D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D32C59643D004EF083 /* MainTabViewModel.swift */; };
 		D8B738D62C598BEC004EF083 /* ExportPrivateKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B738D52C598BEC004EF083 /* ExportPrivateKey.swift */; };
@@ -551,7 +550,6 @@
 		D8A1F8772B17F21E00B15F54 /* ScreenshotsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenshotsLaunchTests.swift; sourceTree = "<group>"; };
 		D8AF81242C0E615B002E5FCF /* ButtonListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonListItem.swift; sourceTree = "<group>"; };
 		D8AF91F12B51BBCE002193E3 /* StakeDetailScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailScene.swift; sourceTree = "<group>"; };
-		D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StakeDetailViewModel.swift; sourceTree = "<group>"; };
 		D8B738D02C4AF286004EF083 /* ConnectionsError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionsError.swift; sourceTree = "<group>"; };
 		D8B738D32C59643D004EF083 /* MainTabViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabViewModel.swift; sourceTree = "<group>"; };
 		D8B738D52C598BEC004EF083 /* ExportPrivateKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportPrivateKey.swift; sourceTree = "<group>"; };
@@ -1672,7 +1670,6 @@
 			isa = PBXGroup;
 			children = (
 				D8C6E35D2B2243F500D0B513 /* StakeViewModel.swift */,
-				D8AF91F32B51BBEE002193E3 /* StakeDetailViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2282,7 +2279,6 @@
 				D8EFE3E52BA2318A00608363 /* TransactionHeaderView.swift in Sources */,
 				D848B59E2AE5D0FA00814FB4 /* ConnectionScene.swift in Sources */,
 				C3CF3BE329BE4C3200E96586 /* WalletsViewModel.swift in Sources */,
-				D8AF91F42B51BBEE002193E3 /* StakeDetailViewModel.swift in Sources */,
 				D82EF8D02C1E0FA000EC1C92 /* AddNodeService.swift in Sources */,
 				C3FB44902A7C21BB0056F124 /* ContextMenu.swift in Sources */,
 				C3CF3B9D29AED8C400E96586 /* HeaderButtonType.swift in Sources */,
