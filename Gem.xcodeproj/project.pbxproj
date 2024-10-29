@@ -39,6 +39,7 @@
 		83BB7E772C9A050700D90F2C /* LockSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB7E762C9A050700D90F2C /* LockSceneViewModelTests.swift */; };
 		83BFDC642CA2D70C0057F5CB /* LockWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BFDC622CA2D70C0057F5CB /* LockWindowManager.swift */; };
 		83BFDC6A2CA30A510057F5CB /* LockWindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BFDC692CA30A510057F5CB /* LockWindowManagerTests.swift */; };
+		83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 83D6808A2CCA90D900B45089 /* InfoSheet */; };
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
 		83D824042C176A0D0023CA0C /* ChainFilterable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824032C176A0D0023CA0C /* ChainFilterable.swift */; };
 		83D854482C59B34F00D4078C /* FeeRateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D854472C59B34F00D4078C /* FeeRateViewModel.swift */; };
@@ -340,6 +341,7 @@
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
 		838F14372C3D476C0049A8D2 /* AddNodeResultViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeResultViewModel.swift; sourceTree = "<group>"; };
 		838F14392C3F4D670049A8D2 /* NodeStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NodeStatus.swift; sourceTree = "<group>"; };
+		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
 		83A681912C46F1EA00A3636B /* SwapAvailabilityResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAvailabilityResult.swift; sourceTree = "<group>"; };
 		83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterScene.swift; sourceTree = "<group>"; };
 		83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterViewModel.swift; sourceTree = "<group>"; };
@@ -642,6 +644,7 @@
 				DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */,
 				D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */,
 				D829BF452CBDD9F700DEB2E8 /* FiatConnect in Frameworks */,
+				83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */,
 				D829BF542CBF314100DEB2E8 /* PriceAlertService in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1378,6 +1381,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				8393897A2CCA8F0000735088 /* InfoSheet */,
 				D8F5B8682CCD50650007E615 /* Staking */,
 				D8CF19E12CC745ED0025D6B4 /* Transfer */,
 				D829BF432CBDD9D200DEB2E8 /* FiatConnect */,
@@ -1951,6 +1955,7 @@
 				D829BF532CBF314100DEB2E8 /* PriceAlertService */,
 				D829BF562CBF3E1900DEB2E8 /* DeviceService */,
 				D8CF19E22CC747370025D6B4 /* Transfer */,
+				83D6808A2CCA90D900B45089 /* InfoSheet */,
 				D8F5B85F2CCA008E0007E615 /* ChainService */,
 				D8F5B86B2CCD52EB0007E615 /* Staking */,
 				D8F5B86E2CCD639A0007E615 /* StakeService */,
@@ -2787,6 +2792,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		83D6808A2CCA90D900B45089 /* InfoSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = InfoSheet;
+		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Settings;
