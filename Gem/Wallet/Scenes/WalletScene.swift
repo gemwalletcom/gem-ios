@@ -119,7 +119,7 @@ struct WalletScene: View {
             } footer: {
                 ListButton(
                     title: Localized.Wallet.manageTokenList,
-                    image: Image(.manageAssets),
+                    image: Images.Actions.manage,
                     action: {
                         isPresentingSelectType = .manage
                     }
@@ -148,7 +148,7 @@ struct WalletScene: View {
                 Button {
                     isPresentingSelectType = .manage
                 } label: {
-                    Image(.manageAssets)
+                    Images.Actions.manage
                 }
             }
         }

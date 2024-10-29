@@ -50,7 +50,7 @@ struct WalletListItemView: View {
                 Spacer()
 
                 if currentWallet == model.wallet {
-                    Image(.walletSelected)
+                    Images.Wallets.selected
                 }
 
                 Button(

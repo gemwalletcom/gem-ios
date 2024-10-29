@@ -27,7 +27,7 @@ class AboutUsViewModel {
         let number = Bundle.main.buildVersionNumber
         return "\(version) (\(number))"
     }
-    var versionTextImage: Image { Image(.settingsVersion) }
+    var versionTextImage: Image { Images.Settings.version }
 
     var contextDevTitle: String { Localized.Settings.enableValue(Localized.Settings.developer) }
     var contextDeveloperImage: String { SystemImage.info }

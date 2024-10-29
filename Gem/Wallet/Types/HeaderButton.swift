@@ -3,6 +3,7 @@
 import Foundation
 import SwiftUI
 import Localization
+import Style
 
 struct HeaderButton: Identifiable {
     let type: HeaderButtonType
@@ -21,10 +22,10 @@ struct HeaderButton: Identifiable {
     
     var image: Image {
         switch type {
-        case .send: Image(.arrowUp)
-        case .receive: Image(.arrowDown)
-        case .buy: Image(.buy)
-        case .swap: Image(.swap)
+        case .send: Images.Actions.send
+        case .receive: Images.Actions.receive
+        case .buy: Images.Actions.buy
+        case .swap: Images.Actions.swap
         }
     }
 }

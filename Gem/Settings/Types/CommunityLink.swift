@@ -4,6 +4,7 @@ import Foundation
 import Gemstone
 import SwiftUI
 import Localization
+import Style
 
 struct CommunityLink {
     let type: SocialUrl
@@ -37,15 +38,15 @@ extension SocialUrl {
     
     var image: Image {
         switch self {
-        case .x: Image(.x)
-        case .discord: Image(.discord)
-        case .telegram: Image(.telegram)
-        case .gitHub: Image(.github)
-        case .youTube: Image(.youtube)
-        case .reddit: Image(.reddit)
-        case .facebook: Image("facebook")
-        case .homepage: Image("homepage")
-        case .coingecko: Image(.coingecko)
+        case .x: Images.Social.x
+        case .discord: Images.Social.discord
+        case .telegram: Images.Social.telegram
+        case .gitHub: Images.Social.github
+        case .youTube: Images.Social.youtube
+        case .reddit: Images.Social.reddit
+        case .facebook: Image("")
+        case .homepage: Image("")
+        case .coingecko: Images.Social.coingecko
         }
     }
     

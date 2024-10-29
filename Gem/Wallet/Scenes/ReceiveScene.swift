@@ -84,7 +84,7 @@ extension ReceiveScene {
                 width: qrWidth,
                 height: qrWidth
             ),
-            logo: UIImage(named: "logo-dark")
+            logo: UIImage.name("logo-dark")
         )
 
         await MainActor.run {

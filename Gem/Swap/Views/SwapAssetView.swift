@@ -22,7 +22,7 @@ struct SwapTokenView: View {
                         HStack {
                             AssetImageView(assetImage: model.assetImage)
                             Text(model.symbol)
-                            Image(.arrowDown)
+                            Images.Actions.receive
                                 .colorMultiply(Colors.gray)
                                 .frame(width: 12, height: 12)
                                 .opacity(0.8)
