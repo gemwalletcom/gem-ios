@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUI
+import Style
 
 struct SwapChangeView: View {
     
@@ -12,7 +13,7 @@ struct SwapChangeView: View {
         Button {
             swap(&fromId, &toId)
         } label: {
-            Image(.swapIcon)
+            Images.Actions.swap
         }
     }
 }

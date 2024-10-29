@@ -47,7 +47,7 @@ struct WalletsScene: View {
                     action: onSelectCreateWallet,
                     label: {
                         HStack {
-                            Image(.createWallet)
+                            Images.Wallets.create
                             Text(Localized.Wallet.createNewWallet)
                         }
                     }
@@ -56,7 +56,7 @@ struct WalletsScene: View {
                     action: onSelectImportWallet,
                     label: {
                         HStack {
-                            Image(.importWallet)
+                            Images.Wallets.import
                             Text(Localized.Wallet.importExistingWallet)
                         }
                     }

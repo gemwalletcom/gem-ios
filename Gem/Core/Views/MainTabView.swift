@@ -7,6 +7,7 @@ import GRDB
 import GRDBQuery
 import Store
 import Localization
+import Style
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -47,7 +48,7 @@ struct MainTabView: View {
                 )
             )
             .tabItem {
-                tabItem(Localized.Wallet.title, Image(.tabWallet))
+                tabItem(Localized.Wallet.title, Images.Tags.wallet)
             }
             .tag(TabItem.wallet)
 
@@ -60,7 +61,7 @@ struct MainTabView: View {
                 )
             )
             .tabItem {
-                tabItem(Localized.Activity.title, Image(.tabActivity) )
+                tabItem(Localized.Activity.title, Images.Tags.activity)
             }
             .badge(transactions)
             .tag(TabItem.activity)
@@ -70,7 +71,7 @@ struct MainTabView: View {
                 walletId: model.wallet.walletId
             )
             .tabItem {
-                tabItem(Localized.Settings.title, Image(.tabSettings))
+                tabItem(Localized.Settings.title, Images.Tags.settings)
             }
             .tag(TabItem.settings)
         }

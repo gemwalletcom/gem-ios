@@ -40,7 +40,7 @@ public struct SelectionView<T: Hashable, Content: View>: View {
 
     private var selectionImageView: some View {
         ZStack {
-            Image(.selected)
+            Images.Wallets.selected
                 .resizable()
                 .scaledToFit()
                 .frame(

@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUI
+import Style
 
 public struct LogoView: View {
 
@@ -9,7 +10,7 @@ public struct LogoView: View {
 
     public var body: some View {
         ZStack {
-            Image(.gemLogo)
+            Images.Logo.logo
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(width: 120, height: 120)

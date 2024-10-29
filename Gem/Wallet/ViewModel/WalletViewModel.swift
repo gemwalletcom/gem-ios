@@ -25,17 +25,17 @@ struct WalletViewModel {
     var image: Image {
         switch wallet.type {
         case .multicoin:
-            return Image(.logo)
+            return Images.Logo.logo
         case .view, .single, .privateKey:
             let name = wallet.accounts.first?.chain.rawValue ?? ""
-            return Image(name)
+            return Images.name(name)
         }
     }
     
     var subImage: Image? {
         switch wallet.type {
         case .multicoin, .single, .privateKey: .none
-        case .view: Image(.glassesRound)
+        case .view: Images.Wallets.watch
         }
     }
     

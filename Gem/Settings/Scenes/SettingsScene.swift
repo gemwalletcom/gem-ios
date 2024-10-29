@@ -72,7 +72,7 @@ extension SettingsScene {
             }
 
             NavigationLink(value: Scenes.Currency()) {
-                ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: Image(.settingsCurrency))
+                ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: model.currencyImage)
             }
 
             NavigationCustomLink(

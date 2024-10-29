@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Localization
+import Style
 
 struct ChainsFilterViewModel {
     let type: ChainsFilterType
@@ -21,5 +22,5 @@ struct ChainsFilterViewModel {
         Localized.Settings.Networks.title
     }
     
-    var chainsImage: Image { Image(.settingsNetworks) }
+    var chainsImage: Image { Images.Settings.networks }
 }

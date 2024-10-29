@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Style
 
 public struct AssetImage {
     public let type: String
@@ -19,7 +20,7 @@ public struct AssetImage {
         return AssetImage(
             type: "",
             imageURL: .none,
-            placeholder: Image(image),
+            placeholder: Images.name(image),
             chainPlaceholder: .none
         )
     }

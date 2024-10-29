@@ -12,7 +12,7 @@ struct ChainView: View {
     var body: some View {
         ListItemView(
             title: Asset(chain).name,
-            image: Image(chain.id),
+            image: Images.name(chain.id),
             imageSize: Sizing.image.chain,
             cornerRadius: Sizing.image.chain/2
         )
