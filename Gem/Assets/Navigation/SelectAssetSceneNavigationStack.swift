@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Components
 import Style
+import ChainService
 import Localization
 
 struct SelectAssetSceneNavigationStack: View {
@@ -12,8 +13,8 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
 
-    @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
 
     @State private var model: SelectAssetViewModel
@@ -28,8 +29,7 @@ struct SelectAssetSceneNavigationStack: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             SelectAssetScene(
-                model: model,
-                isPresentingAddToken: $isPresentingAddToken
+                model: model
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -56,13 +56,20 @@ struct SelectAssetSceneNavigationStack: View {
                         .contentTransition(.symbolEffect(.replace))
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingAddToken = true
-                        } label: {
+                        NavigationLink(value: Scenes.AddToken()) {
                             Image(systemName: SystemImage.plus)
                         }
                     }
                 }
+            }
+            .navigationDestination(for: Scenes.AddToken.self) { _ in
+                AddTokenScene(
+                    model: AddTokenViewModel(
+                        wallet: model.wallet,
+                        service: AddTokenService(chainServiceFactory: chainServiceFactory)
+                    ),
+                    action: addAsset
+                )
             }
             .navigationDestination(for: SelectAssetInput.self) { input in
                 switch input.type {
@@ -102,13 +109,6 @@ struct SelectAssetSceneNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-        }
-        .sheet(isPresented: $isPresentingAddToken) {
-            AddTokenNavigationStack(
-                wallet: model.wallet,
-                isPresenting: $isPresentingAddToken,
-                action: addAsset
-            )
         }
         .sheet(isPresented: $isPresentingFilteringView) {
             NavigationStack {

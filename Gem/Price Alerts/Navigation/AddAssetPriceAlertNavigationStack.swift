@@ -22,10 +22,7 @@ struct AddAssetPriceAlertsNavigationStack: View {
     // TODO: - review logic with self.selectAssetModel.selectAssetAction
     var body: some View {
         NavigationStack {
-            SelectAssetScene(
-                model: selectAssetModel,
-                isPresentingAddToken: .constant(false)
-            )
+            SelectAssetScene(model: selectAssetModel)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {

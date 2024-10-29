@@ -17,19 +17,13 @@ struct SelectAssetScene: View {
     @State private var isPresentingCopyMessage: Bool = false
     @State private var isPresentingCopyMessageValue: String?  = .none
 
-    @Binding private var isPresentingAddToken: Bool
+    @State private var model: SelectAssetViewModel
 
     @Query<AssetsRequest> 
     private var assets: [AssetData]
 
-    @State private var model: SelectAssetViewModel
-
-    init(
-        model: SelectAssetViewModel,
-        isPresentingAddToken: Binding<Bool>
-    ) {
+    init(model: SelectAssetViewModel) {
         _model = State(wrappedValue: model)
-        _isPresentingAddToken = isPresentingAddToken
 
         let request = Binding {
             model.filterModel.assetsRequest
@@ -73,8 +67,8 @@ struct SelectAssetScene: View {
             
             if model.showAddToken {
                 Section {
-                    NavigationCustomLink(with: Text(Localized.Assets.addCustomToken)) {
-                        isPresentingAddToken = true
+                    NavigationLink(value: Scenes.AddToken()) {
+                        Text(Localized.Assets.addCustomToken)
                     }
                 }
             }
@@ -141,8 +135,7 @@ private struct ListAssetItemSelectionView: View {
                 selectType: .receive,
                 assetsService: .main,
                 walletsService: .main
-            ),
-            isPresentingAddToken: $present
+            )
         )
     }
 }

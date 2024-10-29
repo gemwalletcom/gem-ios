@@ -8,14 +8,14 @@ import Style
 import ChainService
 
 struct AddTokenScene: View {
-    @State private var model: AddTokenViewModel
-
-    @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
     }
+    @FocusState private var focusedField: Field?
 
-    var action: ((Asset) -> Void)?
+    @State private var model: AddTokenViewModel
+
+    private var action: ((Asset) -> Void)?
 
     init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
         self.model = model
@@ -113,42 +113,35 @@ extension AddTokenScene {
 // MARK: - Actions
 
 extension AddTokenScene {
-    @MainActor
     private func onSelectNewChain(_ chain: Chain) {
         model.input.chain = chain
         onAddressClean(nil, nil)
     }
 
-    @MainActor
     private func onSelectImportToken() {
         guard case let .loaded(asset) = model.state else { return }
         action?(asset.asset)
     }
 
-    @MainActor
     private func onSelectChain() {
         model.isPresentingSelectNetwork = true
     }
 
-    @MainActor
     private func onSelectScan() {
         model.isPresentingScanner = true
     }
 
-    @MainActor
     private func onSelectPaste() {
         guard let address = UIPasteboard.general.string else { return }
         model.input.address = address
         fetch()
     }
 
-    @MainActor
     private func onHandleScan(_ result: String) {
         model.input.address = result
         fetch()
     }
 
-    @MainActor
     private func onAddressClean(_ oldValue: String?, _ newValue: String?) {
         guard newValue == nil else { return }
         model.input.address = newValue

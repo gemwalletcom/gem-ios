@@ -251,7 +251,6 @@
 		D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9532BD09B7B001608BC /* ScanQRCodeNavigationStack.swift */; };
 		D8BAC9562BD0C0C5001608BC /* NetworkSelectorNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9552BD0C0C5001608BC /* NetworkSelectorNavigationStack.swift */; };
 		D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */; };
-		D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */; };
 		D8BAC95D2BD1A3E2001608BC /* AddAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */; };
 		D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */; };
 		D8BAC9612BDC82F7001608BC /* WordSuggestor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */; };
@@ -567,7 +566,6 @@
 		D8BAC9532BD09B7B001608BC /* ScanQRCodeNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanQRCodeNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC9552BD0C0C5001608BC /* NetworkSelectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetSceneNavigationStack.swift; sourceTree = "<group>"; };
-		D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenNavigationStack.swift; sourceTree = "<group>"; };
 		D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetViewModel.swift; sourceTree = "<group>"; };
 		D8BAC95E2BDAF0AC001608BC /* WordSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestionView.swift; sourceTree = "<group>"; };
 		D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WordSuggestor.swift; sourceTree = "<group>"; };
@@ -1588,7 +1586,6 @@
 			isa = PBXGroup;
 			children = (
 				D8BAC9582BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift */,
-				D8BAC95A2BD0D1DB001608BC /* AddTokenNavigationStack.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -2231,7 +2228,6 @@
 				838F143A2C3F4D670049A8D2 /* NodeStatus.swift in Sources */,
 				D8B738D82C59B705004EF083 /* WordIndex.swift in Sources */,
 				C3FA949429D7EEF000BFC23D /* WalletType.swift in Sources */,
-				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */,
 				D8148C282BF191AB0066586A /* WalletNameGenerator.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
