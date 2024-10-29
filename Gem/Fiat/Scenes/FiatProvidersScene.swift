@@ -19,8 +19,8 @@ struct FiatProvidersScene: View {
                     title: quote.title,
                     subtitle: quote.amount,
                     image: Image(quote.image),
-                    imageSize: Sizing.image.chain,
-                    cornerRadius: Sizing.image.chain/2
+                    imageSize: Sizing.image.medium,
+                    cornerRadius: Sizing.image.medium/2
                 )
             ) {
                 model.selectQuote?(quote.quote)

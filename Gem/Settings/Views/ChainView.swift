@@ -13,8 +13,8 @@ struct ChainView: View {
         ListItemView(
             title: Asset(chain).name,
             image: Image(chain.id),
-            imageSize: Sizing.image.chain,
-            cornerRadius: Sizing.image.chain/2
+            imageSize: Sizing.image.medium,
+            cornerRadius: Sizing.image.medium/2
         )
     }
 }
