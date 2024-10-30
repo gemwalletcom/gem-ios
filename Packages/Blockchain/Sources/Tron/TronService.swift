@@ -182,11 +182,6 @@ extension TronService: ChainBalanceable {
             }
             .reduce(0, +) ?? BigInt(0)
 
-
-        let frozenBalance = account.frozenV2?
-            .compactMap { BigInt($0.amount ?? 0) }
-            .reduce(0, +) ?? BigInt(0)
-
         let votes = account.votes ?? []
         let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
         let votesBalance = BigInt(totalVotes) * BigInt(10).power(Int(chain.asset.decimals))
@@ -195,12 +190,12 @@ extension TronService: ChainBalanceable {
             assetId: chain.assetId,
             balance: Balance(
                 available: availableBalance,
-                frozen: frozenBalance - votesBalance,
-                locked: BigInt(0),
+                frozen: .zero,
+                locked: .zero,
                 staked: votesBalance,
                 pending: pendingBalance,
                 rewards: rewards,
-                reserved: BigInt(0)
+                reserved: .zero
             )
         )
     }
@@ -267,20 +262,25 @@ extension TronService: ChainFeeCalculateable {
                 }
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
-                async let getAccountBalance = coinBalance(for: input.senderAddress)
+                async let getAccount = account(address: input.senderAddress)
 
-                let (accountUsage, accountBalance) = try await (getAccountUsage, getAccountBalance.balance)
+                let (accountUsage, account) = try await (getAccountUsage, getAccount)
 
                 let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
+                let baseFee = BigInt(280_000)
+
                 switch type {
                 case .stake:
-                    let needFreeze = input.value > accountBalance.frozen + accountBalance.staked
-                    if needFreeze {
-                        return availableBandwidth >= 580 ? BigInt.zero : BigInt(280_000 * 2)
+                    return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
+                case .unstake:
+                    let totalVotes = (account.votes ?? []).reduce(0) { $0 + $1.vote_count }.asBigInt * BigInt(10).power(Int(chain.asset.decimals))
+                    if totalVotes > input.value {
+                        return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
+                    } else {
+                        return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                     }
-                    return availableBandwidth >= 300 ? BigInt.zero : BigInt(280_000)
-                case .rewards, .withdraw, .redelegate, .unstake:
-                    return availableBandwidth >= 300 ? BigInt.zero : BigInt(280_000)
+                case .rewards, .withdraw, .redelegate:
+                    return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
             case .generic, .swap:
                 fatalError()
@@ -305,6 +305,37 @@ extension TronService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let block = latestBlock().block_header.raw_data
         async let fee = fee(input: input.feeInput)
+        let signingExtra: SigningdExtra? = try await {
+            guard case let .stake(_, stakeType) = input.type else {
+                return nil
+            }
+            switch stakeType {
+            case .stake, .unstake, .redelegate:
+                let account = try await account(address: input.senderAddress)
+                let currentVote = (input.value / BigInt(10).power(Int(input.asset.decimals))).UInt
+
+                var result = (account.votes ?? []).reduce(into: [String: UInt64]()) { result, vote in
+                    result[vote.vote_address] = vote.vote_count
+                }
+                switch stakeType {
+                case .stake:
+                    result[stakeType.validatorId, default: 0] += currentVote
+                case .unstake:
+                    result[stakeType.validatorId, default: 0] -= currentVote
+                case .redelegate(_, let newValidator):
+                    result[stakeType.validatorId, default: 0] -= currentVote
+                    result[newValidator.id, default: 0] += currentVote
+                case .rewards, .withdraw:
+                    break
+                }
+                let votes = result.filter { _, voteCount in
+                    voteCount > 0
+                }
+                return .vote(votes)
+            case .rewards, .withdraw:
+                return nil
+            }
+        }()
 
         return try await TransactionPreload(
             block: SignerInputBlock(
@@ -315,7 +346,8 @@ extension TronService: ChainTransactionPreloadable {
                 parentHash: block.parentHash,
                 widnessAddress: block.witness_address
             ),
-            fee: fee
+            fee: fee,
+            extra: signingExtra
         )
     }
 }
@@ -373,13 +405,9 @@ extension TronService: ChainSyncable {
 
 extension TronService: ChainStakable {
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
-        let unstackingEmptyValidator = DelegationValidator(
+        let systemUnstacking = DelegationValidator.system(
             chain: chain,
-            id: "Unstacking",
-            name: "Unstacking",
-            isActive: true,
-            commision: 0,
-            apr: 0
+            name: "Unstaking"
         )
 
         return try await provider
@@ -394,12 +422,12 @@ extension TronService: ChainStakable {
                     commision: 0,
                     apr: 0
                 )
-            } + [unstackingEmptyValidator]
+            } + [systemUnstacking]
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         async let getAccount = account(address: address)
-        async let getReward = reward(address: address)//account(address: address)
+        async let getReward = reward(address: address)
         async let getVlidators = getValidators(apr: 0)
 
         let (account, reward, validators) = try await (
@@ -420,10 +448,10 @@ extension TronService: ChainStakable {
                 state: Date() < completionDate ? .pending : .awaitingWithdrawal,
                 balance: BigInt(balance).description,
                 shares: .empty,
-                rewards: "0",
+                rewards: .zero,
                 completionDate: completionDate,
                 delegationId: completionDate.description,
-                validatorId: "Unstacking"
+                validatorId: DelegationValidator.systemId
             )
         }
 

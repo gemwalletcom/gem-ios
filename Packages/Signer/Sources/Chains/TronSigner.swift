@@ -46,59 +46,79 @@ public struct TronSigner: Signable {
 
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
-        case .stake(let validator):
-            if input.freezeValue.isZero {
-                contract = .voteWitness(TronVoteWitnessContract.with {
+        case .stake:
+            guard case let .vote(votes) = input.extra else {
+                fatalError("vote for stacking should be always set")
+            }
+            let freezeContract = TronFreezeBalanceV2Contract.with {
+                $0.ownerAddress = input.senderAddress
+                $0.frozenBalance = input.value.int64
+                $0.resource = "BANDWIDTH"  // Or "ENERGY"
+            }
+
+            let voteContract = TronVoteWitnessContract.with {
+                $0.ownerAddress = input.senderAddress
+                $0.support = true
+                $0.votes = votes.map { (adress, count) in
+                    TronVoteWitnessContract.Vote.with {
+                        $0.voteAddress = adress
+                        $0.voteCount = Int64(count)
+                    }
+                }
+            }
+            let freezeInput = try prepareSigningInput(block: input.block, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey)
+            let voteInput = try prepareSigningInput(block: input.block, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
+            let freezeOutput: TronSigningOutput = AnySigner.sign(input: freezeInput, coin: input.coinType)
+            let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
+
+            return freezeOutput.json + "___" + voteOutput.json
+        case .unstake:
+            guard case let .vote(votes) = input.extra else {
+                fatalError("vote for unstaking should be always set")
+            }
+            if votes.isEmpty {
+                contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
-                    $0.support = true
-                    $0.votes = [
-                        TronVoteWitnessContract.Vote.with {
-                            $0.voteAddress = validator.id
-                            $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
-                        }
-                    ]
+                    $0.unfreezeBalance = input.value.int64
+                    $0.resource = "BANDWIDTH"  // Or "ENERGY"
                 })
             } else {
-                let freezeContract = TronFreezeBalanceV2Contract.with {
+                let unfreezeContract = TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
-                    $0.frozenBalance = input.freezeValue.int64
+                    $0.unfreezeBalance = input.value.int64
                     $0.resource = "BANDWIDTH"  // Or "ENERGY"
                 }
-
                 let voteContract = TronVoteWitnessContract.with {
                     $0.ownerAddress = input.senderAddress
                     $0.support = true
-                    $0.votes = [
+                    $0.votes = votes.map { (adress, count) in
                         TronVoteWitnessContract.Vote.with {
-                            $0.voteAddress = validator.id
-                            $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
+                            $0.voteAddress = adress
+                            $0.voteCount = Int64(count)
                         }
-                    ]
+                    }
                 }
 
-                let freezeInput = try prepareSigningInput(block: input.block, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey)
+                let unfreezeInput = try prepareSigningInput(block: input.block, contract: .unfreezeBalanceV2(unfreezeContract), feeLimit: .none, privateKey: privateKey)
                 let voteInput = try prepareSigningInput(block: input.block, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
-                let freezeOutput: TronSigningOutput = AnySigner.sign(input: freezeInput, coin: input.coinType)
+                let unfreezeOutput: TronSigningOutput = AnySigner.sign(input: unfreezeInput, coin: input.coinType)
                 let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
-
-                return freezeOutput.json + "___" + voteOutput.json
+                
+                return unfreezeOutput.json + "___" + voteOutput.json
             }
-        case .unstake:
-            contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
-                $0.ownerAddress = input.senderAddress
-                $0.unfreezeBalance = input.value.int64
-                $0.resource = "BANDWIDTH"  // Or "ENERGY"
-            })
-        case .redelegate(_, let validator):
+        case .redelegate:
+            guard case let .vote(votes) = input.extra else {
+                fatalError("vote for redelegate should be always set")
+            }
             contract = .voteWitness(TronVoteWitnessContract.with {
                 $0.ownerAddress = input.senderAddress
                 $0.support = true
-                $0.votes = [
+                $0.votes = votes.map { (adress, count) in
                     TronVoteWitnessContract.Vote.with {
-                        $0.voteAddress = validator.id
-                        $0.voteCount = (input.value / BigInt(10).power(Int(input.asset.decimals))).int64
+                        $0.voteAddress = adress
+                        $0.voteCount = Int64(count)
                     }
-                ]
+                }
             })
         case .rewards:
             contract = .withdrawBalance(TronWithdrawBalanceContract.with {

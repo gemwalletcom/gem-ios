@@ -235,7 +235,6 @@ extension ConfirmTransferViewModel {
                     assetBalance: Balance(available: metaData.assetBalance),
                     value: dataModel.data.value,
                     availableValue: availableValue,
-                    freezeValue: freezeValue,
                     assetFee: dataModel.asset.feeAsset,
                     assetFeeBalance: Balance(available: metaData.assetFeeBalance),
                     fee: fee.totalFee,
@@ -277,6 +276,9 @@ extension ConfirmTransferViewModel {
                 if data == signedData.last {
                     let transaction = try getTransaction(input: input, amount: amount, hash: hash)
                     try addTransaction(transaction: transaction)
+                }
+                if signedData.count > 1 && data != signedData.last {
+                    try await Task.sleep(for: .milliseconds(300))
                 }
             }
 
@@ -350,23 +352,7 @@ extension ConfirmTransferViewModel {
             switch stakeType {
             case .stake:
                 guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-                let availableAssetBalance: BigInt = {
-                    guard asset.chain == .tron else {
-                        return balance.available
-                    }
-                    switch data.type.stakeType {
-                    case .stake:
-                        return balance.available + balance.frozen + balance.staked
-                    case .redelegate,
-                            .rewards,
-                            .unstake,
-                            .withdraw:
-                        return balance.available
-                    case .none:
-                        fatalError("")
-                    }
-                }()
-                return availableAssetBalance
+                return balance.available
             case .unstake(let delegation):
                 return delegation.base.balanceValue
             case .redelegate(let delegation, _):
@@ -376,20 +362,6 @@ extension ConfirmTransferViewModel {
             case .withdraw(let delegation):
                 return delegation.base.balanceValue
             }
-        }
-    }
-
-    private var freezeValue: BigInt {
-        guard case .stake(let asset, let stakeType) = dataModel.type, dataModel.chain == .tron else {
-            return .zero
-        }
-        switch stakeType {
-        case .stake:
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-            let stackableFrozen = balance.frozen + balance.staked
-            return dataModel.data.value <= stackableFrozen ? BigInt(0) : dataModel.data.value - stackableFrozen
-        case .unstake, .redelegate, .withdraw, .rewards:
-            return .zero
         }
     }
 
@@ -410,25 +382,8 @@ extension ConfirmTransferViewModel {
             partialResult[value.key.identifier] = Price(price: value.value.price, priceChangePercentage24h: value.value.priceChangePercentage24h)
         }
 
-        let availableAssetBalance: BigInt = {
-            guard asset.chain == .tron else {
-                return assetBalance.available
-            }
-            switch data.type.stakeType {
-            case .stake:
-                return assetBalance.available + assetBalance.frozen + assetBalance.staked
-            case .redelegate,
-                    .rewards,
-                    .unstake,
-                    .withdraw:
-                return assetBalance.available
-            case .none:
-                fatalError("")
-            }
-        }()
-
         return TransferDataMetadata(
-            assetBalance: availableAssetBalance,
+            assetBalance: assetBalance.available,
             assetFeeBalance: assetFeeBalance.available,
             assetPrice: assetPrices[assetId]?.mapToPrice(),
             feePrice: assetPrices[feeAssetId]?.mapToPrice(),
@@ -533,8 +488,7 @@ extension ConfirmTransferViewModel {
             token: input.token,
             utxos: input.utxos,
             messageBytes: input.messageBytes,
-            extra: input.extra,
-            freezeValue: amount.freezeValue
+            extra: input.extra
         )
 
         return try signer.sign(input: input)

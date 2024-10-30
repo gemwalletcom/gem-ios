@@ -20,7 +20,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: .zero,
                 value: BigInt(10),
                 availableValue: .zero,
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(10)),
                 fee: BigInt(1),
@@ -33,7 +32,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: .zero,
                 value: .zero,
                 availableValue: BigInt(0),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: BigInt(1),
@@ -46,7 +44,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: .zero,
                 value: .zero,
                 availableValue: .zero,
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
@@ -59,13 +56,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(10),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
                 canChangeValue: true
             )),
-            TransferAmount(value: 10, networkFee: 1, freezeValue: .zero, useMaxAmount: false)
+            TransferAmount(value: 10, networkFee: 1, useMaxAmount: false)
         )
         XCTAssertEqual(
             try? service.calculate(input: TranferAmountInput(
@@ -73,13 +69,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(11),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
                 canChangeValue: true
             )),
-            TransferAmount(value: 11, networkFee: 1, freezeValue: .zero,  useMaxAmount: false)
+            TransferAmount(value: 11, networkFee: 1,  useMaxAmount: false)
         )
         XCTAssertEqual(
             try? service.calculate(input: TranferAmountInput(
@@ -87,13 +82,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
                 canChangeValue: true
             )),
-            TransferAmount(value: 9, networkFee: 3, freezeValue: .zero, useMaxAmount: true)
+            TransferAmount(value: 9, networkFee: 3, useMaxAmount: true)
         )
     }
 
@@ -104,7 +98,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: BigInt(12)),
                 value: BigInt(12),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: tokenAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(3)),
                 fee: BigInt(4),
@@ -117,7 +110,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: BigInt(12)),
                 value: BigInt(1),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: tokenAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(0)),
                 fee: BigInt(1),
@@ -130,13 +122,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(3)),
                 fee: BigInt(3),
                 canChangeValue: true
             )),
-            TransferAmount(value: 9, networkFee: 3, freezeValue: .zero, useMaxAmount: true)
+            TransferAmount(value: 9, networkFee: 3, useMaxAmount: true)
         )
     }
     
@@ -147,13 +138,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(1000),
                 availableValue: BigInt(1000),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
                 canChangeValue: true
             )),
-            TransferAmount(value: 1000, networkFee: 1, freezeValue: .zero, useMaxAmount: true)
+            TransferAmount(value: 1000, networkFee: 1, useMaxAmount: true)
         )
         
         XCTAssertThrowsError(
@@ -162,7 +152,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(1000),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(1),
@@ -178,13 +167,12 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
                 canChangeValue: true
             )),
-            TransferAmount(value: 9, networkFee: 3, freezeValue: .zero, useMaxAmount: true)
+            TransferAmount(value: 9, networkFee: 3, useMaxAmount: true)
         )
 
         XCTAssertThrowsError(
@@ -193,7 +181,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
@@ -209,14 +196,13 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(2222),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(3),
                 canChangeValue: true,
                 ignoreValueCheck: true
             )),
-            TransferAmount(value: 2222, networkFee: 3, freezeValue: .zero, useMaxAmount: false)
+            TransferAmount(value: 2222, networkFee: 3, useMaxAmount: false)
         )
 
         XCTAssertThrowsError(
@@ -225,7 +211,6 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetBalance: Balance(available: 12),
                 value: BigInt(2222),
                 availableValue: BigInt(12),
-                freezeValue: .zero,
                 assetFee: coinAsset.feeAsset,
                 assetFeeBalance: Balance(available: BigInt(12)),
                 fee: BigInt(13),

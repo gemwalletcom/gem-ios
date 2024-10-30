@@ -110,17 +110,9 @@ class AmounViewModel: ObservableObject {
     
     var availableValue: BigInt {
         switch input.type {
-        case .transfer:
+        case .transfer, .stake:
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
-        case .stake:
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-            if input.asset.chain == .tron {
-                // staked balanced can be revoted
-                return balance.available + balance.staked + balance.frozen
-            } else {
-                return balance.available
-            }
         case .unstake(let delegation):
             return delegation.base.balanceValue
         case .redelegate(let delegation, _, _):

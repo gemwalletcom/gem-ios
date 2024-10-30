@@ -15,14 +15,13 @@ public struct SignerInput {
     public let sequence: Int
     public let senderAddress: String
     public let destinationAddress: String
-    public let block: SignerInputBlock
+
     // token: Solana only
     public let token: SignerInputToken
     public let utxos: [UTXO]
     public let messageBytes: String
     public let extra: SigningdExtra?
-    // freezeValue: Tron stacking v2 only
-    public let freezeValue: BigInt
+    public let block: SignerInputBlock
 
     public init(
         type: TransferDataType,
@@ -40,8 +39,7 @@ public struct SignerInput {
         token: SignerInputToken,
         utxos: [UTXO],
         messageBytes: String,
-        extra: SigningdExtra? = nil,
-        freezeValue: BigInt
+        extra: SigningdExtra? = nil
     ) {
         self.type = type
         self.asset = asset
@@ -59,6 +57,5 @@ public struct SignerInput {
         self.utxos = utxos
         self.messageBytes = messageBytes
         self.extra = extra
-        self.freezeValue = freezeValue
     }
 }

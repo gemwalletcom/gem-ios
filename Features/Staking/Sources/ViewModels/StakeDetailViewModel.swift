@@ -65,7 +65,7 @@ public struct StakeDetailViewModel {
     }
     
     public var isStakeAvailable: Bool {
-      chain.supportRedelegate && model.state == .active
+        chain.supportRedelegate && model.state == .active
     }
     
     public var isUnstakeAvailable: Bool {
@@ -99,9 +99,12 @@ public struct StakeDetailViewModel {
     }
     
     public func stakeRecipientData() throws -> AmountInput {
-        AmountInput(
+        // TODO: - get stacke validators
+        let validators = try service.getActiveValidators(assetId: asset.id)
+            .filter({ !$0.isSystem })
+        return AmountInput(
             type: .stake(
-                validators: try service.getActiveValidators(assetId: asset.id),
+                validators: validators,
                 recommendedValidator: model.delegation.validator
             ),
             asset: asset
@@ -116,10 +119,13 @@ public struct StakeDetailViewModel {
     }
     
     public func redelegateRecipientData() throws -> AmountInput {
-        AmountInput(
+        // TODO: - get stacke validators
+        let validators = try service.getValidators(assetId: asset.id)
+            .filter({ !$0.isSystem && !$0.name.isEmpty })
+        return AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
-                validators: try service.getValidators(assetId: asset.id),
+                validators: validators,
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: asset
