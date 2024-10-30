@@ -87,3 +87,11 @@ public struct TronEmptyAccount: Codable, Sendable {
 		self.address = address
 	}
 }
+
+public struct TronReward: Codable, Sendable {
+	public let reward: UInt64?
+
+	public init(reward: UInt64?) {
+		self.reward = reward
+	}
+}

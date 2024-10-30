@@ -44,7 +44,7 @@ extension TronService {
     private func reward(address: String) async throws -> BigInt {
         let reward = try await provider
             .request(.getReward(address: address))
-            .map(as: TronRewards.self).reward
+            .map(as: TronReward.self).reward ?? .zero
         return BigInt(reward)
     }
 
