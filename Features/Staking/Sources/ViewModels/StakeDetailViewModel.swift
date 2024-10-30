@@ -82,15 +82,15 @@ struct StakeDetailViewModel {
     }
     
     var isUnstakeAvailable: Bool {
-        (model.state == .active || model.state == .inactive) && model.state != .awaitingWithdrawal
+        [.active, .inactive].contains(model.state) && model.state != .awaitingWithdrawal
     }
     
     var isRedelegateAvailable: Bool {
-        (model.state == .active || model.state == .inactive) && chain.supportRedelegate
+        chain.supportRedelegate && [.active, .inactive].contains(model.state)
     }
     
     var isWithdrawStakeAvailable: Bool {
-        model.state == .awaitingWithdrawal
+        chain.supportWidthdraw && model.state == .awaitingWithdrawal
     }
     
     var completionDateTitle: String? {
