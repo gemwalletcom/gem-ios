@@ -37,6 +37,7 @@ extension WalletConnector {
             ),
             crypto: DefaultCryptoProvider()
         )
+        Events.instance.setTelemetryEnabled(false)
     }
 
     public func setup() async {
