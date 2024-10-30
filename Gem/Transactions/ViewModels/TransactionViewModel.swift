@@ -40,9 +40,9 @@ struct TransactionViewModel {
         case .transfer:
             switch transaction.transaction.direction {
             case .incoming:
-                return Image(.transferIncoming)
+                return Images.Transaction.incoming
             case .outgoing, .selfTransfer:
-                return Image(.transferOutgoing)
+                return Images.Transaction.outgoing
             }
         case .swap,
             .tokenApproval,

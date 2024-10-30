@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import Components
+import Style
 
 enum NameRecordState {
     case none
@@ -38,11 +39,11 @@ struct NameRecordView: View {
             case .none:
                 EmptyView()
             case .error:
-                Image(.nameResolveError)
+                Images.NameResolve.error
             case .loading:
                 LoadingView()
             case .complete:
-                Image(.nameResolveSuccess)
+                Images.NameResolve.success
             }
         }.frame(width: 16, height: 16)
         .onChange(of: address) {

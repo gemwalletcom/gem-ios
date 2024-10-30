@@ -33,7 +33,7 @@ public struct SwapAmountView: View {
     public var body: some View {
         VStack(spacing: 0) {
             SwapAmountSingleView(field: from)
-            Image(.arrowDown)
+            Images.Actions.receive
                 .resizable()
                 .colorMultiply(Colors.black)
                 .frame(width: 18, height: 22)

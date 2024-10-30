@@ -42,7 +42,7 @@ struct WalletDetailScene: View {
                         Button(action: onSelectImage) {
                             AssetImageView(
                                 assetImage: model.image,
-                                size: Sizing.image.chain * 1.6,
+                                size: Sizing.image.medium * 1.6,
                                 overlayImageSize: Spacing.large
                             )
                             .padding(.bottom, Spacing.extraLarge)

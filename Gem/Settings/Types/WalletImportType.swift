@@ -35,13 +35,6 @@ extension WalletImportType {
         case .privateKey, .address: false
         }
     }
-
-    public var keyboardType: UIKeyboardType {
-        switch self {
-        case .phrase: .default
-        case .privateKey, .address: .asciiCapable
-        }
-    }
 }
 
 

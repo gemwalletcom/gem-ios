@@ -10,6 +10,14 @@ extension StakeChain {
     }
     
     public var supportRedelegate: Bool {
-        Config.shared.getStakeConfig(chain: rawValue).redelegate
+        Config.shared.getStakeConfig(chain: rawValue).canRedelegate
+    }
+    
+    public var supportWidthdraw: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).canWithdraw
+    }
+    
+    public var supportClaimRewards: Bool {
+        Config.shared.getStakeConfig(chain: rawValue).canClaimRewards
     }
 }

@@ -44,13 +44,13 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AssetImageView(assetImage: model.assetImage, size: Sizing.image.chain)
+                AssetImageView(assetImage: model.assetImage, size: Sizing.image.medium)
                 ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()
 
                 if currentWallet == model.wallet {
-                    Image(.walletSelected)
+                    Images.Wallets.selected
                 }
 
                 Button(

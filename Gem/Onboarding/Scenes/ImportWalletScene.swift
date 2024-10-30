@@ -46,10 +46,10 @@ struct ImportWalletScene: View {
                         }
                         HStack {
                             TextField(importType.description, text: $input, axis: .vertical)
+                                .autocorrectionDisabled(true)
                                 .textInputAutocapitalization(.never)
                                 .lineLimit(8)
-                                .keyboardType(importType.keyboardType)
-                                .autocorrectionDisabled(true)
+                                .keyboardType(.asciiCapable)
                                 .frame(minHeight: 80, alignment: .top)
                                 .focused($focusedField, equals: .input)
                                 .accessibilityIdentifier(importType.id.lowercased())
