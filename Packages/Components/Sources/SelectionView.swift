@@ -31,24 +31,11 @@ public struct SelectionView<T: Hashable, Content: View>: View {
                 content()
                 if selection == value {
                     Spacer()
-                    selectionImageView
+                    SelectionImageView()
                 }
             }
         })
         .contentShape(Rectangle())
-    }
-
-    private var selectionImageView: some View {
-        ZStack {
-            Images.Wallets.selected
-                .resizable()
-                .scaledToFit()
-                .frame(
-                    width: Sizing.list.selected.image,
-                    height: Sizing.list.selected.image
-                )
-        }
-        .frame(width: Sizing.list.image)
     }
 }
 
