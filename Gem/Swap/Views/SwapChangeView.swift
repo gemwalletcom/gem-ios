@@ -14,6 +14,8 @@ struct SwapChangeView: View {
             swap(&fromId, &toId)
         } label: {
             Images.Actions.swap
+                .renderingMode(.template)
+                .foregroundStyle(Colors.gray)
         }
     }
 }
