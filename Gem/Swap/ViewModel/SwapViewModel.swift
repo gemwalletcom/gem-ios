@@ -11,6 +11,7 @@ import GRDBQuery
 import Style
 import Localization
 import Transfer
+import SwapService
 
 @Observable
 class SwapViewModel {
@@ -138,15 +139,16 @@ extension SwapViewModel {
                     toValue = formatter.string(swapQuote.toValue, decimals: toAsset.decimals.asInt)
                 }
             case .bep20, .erc20:
-                let swapQuote = try await quote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue, includeData: false)
-                let address = try wallet.account(for: fromAsset.chain).address
-                let contract = try fromAsset.getTokenId()
-                let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapQuote)
-                let allowance = try await swapService.getAllowance(chain: fromAsset.chain, contract: contract, owner: address, spender: spender)
-                await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: !allowance.isZero))
-                    toValue = formatter.string(swapQuote.toValue, decimals: toAsset.decimals.asInt)
-                }
+                break
+//                let swapQuote = try await quote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue, includeData: false)
+//                let address = try wallet.account(for: fromAsset.chain).address
+//                let contract = try fromAsset.getTokenId()
+//                let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapQuote)
+//                let allowance = try await swapService.getAllowance(chain: fromAsset.chain, contract: contract, owner: address, spender: spender)
+//                await MainActor.run {
+//                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: !allowance.isZero))
+//                    toValue = formatter.string(swapQuote.toValue, decimals: toAsset.decimals.asInt)
+//                }
             }
         } catch {
             await MainActor.run { [self] in
@@ -173,11 +175,11 @@ extension SwapViewModel {
                 transferData = try await getSwapData(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
                 return
             }
-            let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapAvailability.quote)
-
-            try await MainActor.run { [self] in
-                transferData = try getSwapDataOnApprove(fromAsset: fromAsset, toAsset: toAsset, spender: spender, spenderName: swapAvailability.quote.provider.name)
-            }
+            
+            //let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapAvailability.quote)
+//            try await MainActor.run { [self] in
+//                transferData = try getSwapDataOnApprove(fromAsset: fromAsset, toAsset: toAsset, spender: spender, spenderName: swapAvailability.quote.provider.name)
+//            }
         } catch {
             swapAvailabilityState = .error(error)
         }
@@ -230,7 +232,12 @@ extension SwapViewModel {
 
     private func quote(fromAsset: Asset, toAsset: Asset, amount: String, includeData: Bool) async throws -> SwapQuote {
         let request = try createRequest(fromAsset, toAsset, amount, includeData: includeData)
-        return try await swapService.getQuote(request: request).quote
+        switch includeData {
+        case true:
+            return try await swapService.getQuoteData(request).quote
+        case false:
+            return try await swapService.getQuote(request).quote
+        }
     }
 
     private func createRequest(_ fromAsset: Asset, _ toAsset: Asset, _ amount: String, includeData: Bool) throws -> SwapQuoteRequest {

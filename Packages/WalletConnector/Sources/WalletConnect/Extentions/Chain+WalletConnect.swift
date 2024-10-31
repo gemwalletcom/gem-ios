@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import class Gemstone.WalletConnectNamespace
 
 extension Chain {
     // CAIP-2 https://github.com/ChainAgnostic/CAIPs/blob/main/CAIPs/caip-2.md

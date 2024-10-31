@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Style
 import Localization
+import SwapService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss

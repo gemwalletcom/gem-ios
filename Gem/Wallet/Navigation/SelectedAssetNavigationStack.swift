@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Localization
+import SwapService
 
 struct SelectedAssetNavigationStack: View  {
     

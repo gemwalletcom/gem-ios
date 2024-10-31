@@ -5,7 +5,7 @@ import GemAPI
 import Store
 import Primitives
 import Blockchain
-import Gemstone
+import class Gemstone.Config
 import ChainService
 
 public final class NodeService {
