@@ -67,7 +67,6 @@ public struct TransferAmountCalculator {
 
     public func calculate(input: TranferAmountInput) throws -> TransferAmount {
         if input.assetBalance.available == 0 {
-            // TODO: - tests
             guard input.fee.isZero else {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)
             }

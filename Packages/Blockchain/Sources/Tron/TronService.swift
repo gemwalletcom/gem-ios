@@ -83,6 +83,36 @@ extension TronService {
         return Base58.encode(data: data)
     }
 
+    private func accountBalance(address: String) async throws -> Balance {
+        let account = try await account(address: address)
+        let availableBalance = BigInt(account.balance ?? 0)
+
+        let pendingBalance = account.unfrozenV2?
+            .compactMap { unfrozen in
+                guard let amount = unfrozen.unfreeze_amount else { return nil }
+                return BigInt(amount)
+            }
+            .reduce(0, +) ?? BigInt(0)
+
+        let votes = account.votes ?? []
+        let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
+        let votesBalance = BigInt(totalVotes) * BigInt(10).power(Int(chain.asset.decimals))
+
+        return Balance(
+            available: availableBalance,
+            frozen: .zero,
+            locked: .zero,
+            staked: votesBalance,
+            pending: pendingBalance,
+            rewards: .zero,
+            reserved: .zero
+        )
+    }
+
+    private func votes(address: String) async throws -> [TronVote] {
+        try await account(address: address).votes ?? []
+    }
+
     // https://developers.tron.network/docs/set-feelimit#how-to-estimate-energy-consumption
     private func estimateTRC20Transfer(ownerAddress: String, recipientAddress: String, contractAddress: String, value: BigInt) async throws -> BigInt {
         let address = try addressHex(address: recipientAddress)
@@ -108,13 +138,13 @@ extension TronService {
     }
 
     private func parameters() async throws -> [TronChainParameter] {
-        return try await provider
+        try await provider
             .request(.chainParams)
             .map(as: TronChainParameters.self).chainParameter
     }
 
     private func isNewAccount(address: String) async throws -> Bool {
-        return try await provider
+        try await provider
             .request(.account(address: address))
             .map(as: TronEmptyAccount.self).address?.isEmpty ?? true
     }
@@ -168,34 +198,20 @@ extension TronService {
 
 extension TronService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getAccount = account(address: address)
+        async let getBalance = accountBalance(address: address)
         async let getReward = reward(address: address)
-
-        let (account, rewards) = try await (getAccount, getReward)
-
-        let availableBalance = BigInt(account.balance ?? 0)
-
-        let pendingBalance = account.unfrozenV2?
-            .compactMap { unfrozen in
-                guard let amount = unfrozen.unfreeze_amount else { return nil }
-                return BigInt(amount)
-            }
-            .reduce(0, +) ?? BigInt(0)
-
-        let votes = account.votes ?? []
-        let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
-        let votesBalance = BigInt(totalVotes) * BigInt(10).power(Int(chain.asset.decimals))
+        let (balance, rewards) = try await (getBalance, getReward)
 
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: availableBalance,
-                frozen: .zero,
-                locked: .zero,
-                staked: votesBalance,
-                pending: pendingBalance,
+                available: balance.available,
+                frozen: balance.frozen,
+                locked: balance.locked,
+                staked: balance.staked,
+                pending: balance.pending,
                 rewards: rewards,
-                reserved: .zero
+                reserved: balance.reserved
             )
         )
     }
@@ -226,6 +242,8 @@ extension TronService: ChainBalanceable {
 extension TronService: ChainFeeCalculateable {
     public func fee(input: FeeInput) async throws -> Fee {
         let fee = try await {
+            let baseFee = BigInt(280_000)
+
             switch input.type {
             case .transfer(let asset):
                 async let getParameters = parameters()
@@ -247,7 +265,7 @@ extension TronService: ChainFeeCalculateable {
                 switch asset.type {
                 case .native:
                     let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
-                    let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(280_000)
+                    let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                     return isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
                 default:
                     let gasLimit = try await estimateTRC20Transfer(
@@ -262,18 +280,14 @@ extension TronService: ChainFeeCalculateable {
                 }
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
-                async let getAccount = account(address: input.senderAddress)
+                async let getBalance = accountBalance(address: input.senderAddress)
 
-                let (accountUsage, account) = try await (getAccountUsage, getAccount)
-
+                let (accountUsage, totalVotes) = try await (getAccountUsage, getBalance.staked)
                 let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
-                let baseFee = BigInt(280_000)
-
                 switch type {
                 case .stake:
                     return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
                 case .unstake:
-                    let totalVotes = (account.votes ?? []).reduce(0) { $0 + $1.vote_count }.asBigInt * BigInt(10).power(Int(chain.asset.decimals))
                     if totalVotes > input.value {
                         return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
                     } else {
@@ -303,41 +317,42 @@ extension TronService: ChainFeeCalculateable {
 
 extension TronService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let block = latestBlock().block_header.raw_data
-        async let fee = fee(input: input.feeInput)
-        let signingExtra: SigningdExtra? = try await {
-            guard case let .stake(_, stakeType) = input.type else {
-                return nil
-            }
+        async let getBlock = latestBlock().block_header.raw_data
+        async let getFee = fee(input: input.feeInput)
+        async let getVotes: [TronVote]? = {
+            guard case let .stake(_, stakeType) = input.type else { return nil }
             switch stakeType {
             case .stake, .unstake, .redelegate:
-                let account = try await account(address: input.senderAddress)
-                let currentVote = (input.value / BigInt(10).power(Int(input.asset.decimals))).UInt
-
-                var result = (account.votes ?? []).reduce(into: [String: UInt64]()) { result, vote in
-                    result[vote.vote_address] = vote.vote_count
-                }
-                switch stakeType {
-                case .stake:
-                    result[stakeType.validatorId, default: 0] += currentVote
-                case .unstake:
-                    result[stakeType.validatorId, default: 0] -= currentVote
-                case .redelegate(_, let newValidator):
-                    result[stakeType.validatorId, default: 0] -= currentVote
-                    result[newValidator.id, default: 0] += currentVote
-                case .rewards, .withdraw:
-                    break
-                }
-                let votes = result.filter { _, voteCount in
-                    voteCount > 0
-                }
-                return .vote(votes)
+                return try await votes(address: input.senderAddress)
             case .rewards, .withdraw:
                 return nil
             }
         }()
 
-        return try await TransactionPreload(
+        let (block, fee, tronVotes) = try await (getBlock, getFee, getVotes)
+
+        let signingExtra: SigningdExtra? = {
+            guard case let .stake(_, stakeType) = input.type else { return nil }
+            guard let votes = tronVotes else { return nil }
+            let currentVote = (input.value / BigInt(10).power(Int(input.asset.decimals))).UInt
+            var result = votes.reduce(into: [String: UInt64]()) { result, vote in
+                result[vote.vote_address] = vote.vote_count
+            }
+            switch stakeType {
+            case .stake:
+                result[stakeType.validatorId, default: 0] += currentVote
+            case .unstake:
+                result[stakeType.validatorId, default: 0] -= currentVote
+            case .redelegate(_, let newValidator):
+                result[stakeType.validatorId, default: 0] -= currentVote
+                result[newValidator.id, default: 0] += currentVote
+            case .rewards, .withdraw:
+                return nil
+            }
+            return .vote(result.filter { $1 > 0 } )
+        }()
+
+        return TransactionPreload(
             block: SignerInputBlock(
                 number: Int(block.number),
                 version: Int(block.version),
@@ -459,10 +474,7 @@ extension TronService: ChainStakable {
         let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
 
         let delegations: [DelegationBase] = votes.compactMap { vote -> DelegationBase? in
-            guard let validator = validators.first(where: { $0.id == vote.vote_address }) else {
-                print("Validator with address \(vote.vote_address) not found in the validators list.")
-                return nil
-            }
+            guard let validator = validators.first(where: { $0.id == vote.vote_address }) else { return nil }
 
             let rewards: String = {
                 guard totalVotes > 0 else { return String(reward) }
@@ -470,7 +482,6 @@ extension TronService: ChainStakable {
                 let rewardForVote = (Double(reward) * proportion)
                 return String(format: "%.0f", rewardForVote)
             }()
-
             let balance = (BigInt(vote.vote_count) * BigInt(10).power(Int(chain.asset.decimals))).description
 
             return DelegationBase(
