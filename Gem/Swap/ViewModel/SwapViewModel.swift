@@ -13,6 +13,10 @@ import Localization
 import Transfer
 import SwapService
 
+import struct Gemstone.SwapQuoteRequest
+import struct Gemstone.SwapQuote
+import struct Gemstone.SwapQuoteData
+
 @Observable
 class SwapViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(300)
@@ -34,19 +38,23 @@ class SwapViewModel {
 
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
-
+    
+    private let onComplete: VoidAction
+    
     init(
         wallet: Wallet,
         assetId: AssetId,
         walletsService: WalletsService,
         swapService: SwapService,
-        keystore: any Keystore
+        keystore: any Keystore,
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
-
+        self.onComplete = onComplete
+        
         // temp code
         let fromId: AssetId
         let toId: AssetId
@@ -105,6 +113,10 @@ class SwapViewModel {
     func swapTokenModel(from assetData: AssetData) -> SwapTokenViewModel {
         SwapTokenViewModel(model: AssetDataViewModel(assetData: assetData, formatter: .medium))
     }
+    
+    func onCompleteAction() {
+        onComplete?()
+    }
 }
 
 // MARK: - Business Logic
@@ -121,34 +133,39 @@ extension SwapViewModel {
 
     func fetch(fromAssetData: AssetData, toAsset: Asset) async {
         guard isValidFromValue(assetData: fromAssetData) else {
-            swapAvailabilityState = .noData
+            await MainActor.run {
+                swapAvailabilityState = .noData
+            }
             return
         }
 
         let fromAsset = fromAssetData.asset
-        swapAvailabilityState = .loading
-
+        
+        await MainActor.run {
+            swapAvailabilityState = .loading
+        }
+        
         do {
             switch fromAsset.type {
             case .trc20, .ibc, .jetton, .synth:
                 fatalError("Unsupported asset type")
             case .native, .spl, .token:
-                let swapQuote = try await quote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue, includeData: false)
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
                 await MainActor.run {
                     swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
-                    toValue = formatter.string(swapQuote.toValue, decimals: toAsset.decimals.asInt)
+                    toValue = formatter.string(BigInt(stringLiteral: swapQuote.toValue), decimals: toAsset.decimals.asInt)
                 }
             case .bep20, .erc20:
-                break
-//                let swapQuote = try await quote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue, includeData: false)
-//                let address = try wallet.account(for: fromAsset.chain).address
-//                let contract = try fromAsset.getTokenId()
-//                let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapQuote)
-//                let allowance = try await swapService.getAllowance(chain: fromAsset.chain, contract: contract, owner: address, spender: spender)
-//                await MainActor.run {
-//                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: !allowance.isZero))
-//                    toValue = formatter.string(swapQuote.toValue, decimals: toAsset.decimals.asInt)
-//                }
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
+                let allowance = switch swapQuote.approval {
+                    case .approve: false
+                    case .none, .permit2: true
+                }
+                
+                await MainActor.run {
+                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
+                    toValue = formatter.string(BigInt(stringLiteral: swapQuote.toValue), decimals: toAsset.decimals.asInt)
+                }
             }
         } catch {
             await MainActor.run { [self] in
@@ -172,14 +189,27 @@ extension SwapViewModel {
         }
         do {
             if swapAvailability.allowance {
-                transferData = try await getSwapData(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
+                transferData = try await getSwapData(
+                    fromAsset: fromAsset,
+                    toAsset: toAsset,
+                    quote: swapAvailability.quote
+                )
                 return
+            } else {
+                switch swapAvailability.quote.approval {
+                case .approve(let data):
+                    try await MainActor.run { [self] in
+                        transferData = try getSwapDataOnApprove(
+                            fromAsset: fromAsset,
+                            toAsset: toAsset,
+                            spender: data.spender,
+                            spenderName: swapAvailability.quote.provider.name
+                        )
+                    }
+                case .permit2, .none:
+                    break
+                }
             }
-            
-            //let spender = try SwapService.getSpender(chain: fromAsset.chain, quote: swapAvailability.quote)
-//            try await MainActor.run { [self] in
-//                transferData = try getSwapDataOnApprove(fromAsset: fromAsset, toAsset: toAsset, spender: spender, spenderName: swapAvailability.quote.provider.name)
-//            }
         } catch {
             swapAvailabilityState = .error(error)
         }
@@ -212,46 +242,37 @@ extension SwapViewModel {
         )
     }
 
-    private func getSwapData(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> TransferData {
-        let quote = try await self.quote(fromAsset: fromAsset, toAsset: toAsset, amount: amount, includeData: true)
-        guard let data = quote.data else {
-            throw SwapError.noQuoteData
-        }
-
-        let amount = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
-        let swapData = SwapData(quote: quote)
-        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(swapData))
+    private func getSwapData(fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
+        let quoteData = try await getQuoteData(quote: quote)
+        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(quote, quoteData))
+        let value = BigInt(stringLiteral: quote.request.amount)
         let recepientData = RecipientData(
             asset: fromAsset,
-            recipient: Recipient(name: quote.provider.name, address: data.to, memo: .none),
+            recipient: Recipient(name: quote.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )
-
-        return TransferData(type: transferDataType, recipientData: recepientData, value: amount, canChangeValue: false)
+        return TransferData(type: transferDataType, recipientData: recepientData, value: value, canChangeValue: false)
     }
-
-    private func quote(fromAsset: Asset, toAsset: Asset, amount: String, includeData: Bool) async throws -> SwapQuote {
-        let request = try createRequest(fromAsset, toAsset, amount, includeData: includeData)
-        switch includeData {
-        case true:
-            return try await swapService.getQuoteData(request).quote
-        case false:
-            return try await swapService.getQuote(request).quote
-        }
-    }
-
-    private func createRequest(_ fromAsset: Asset, _ toAsset: Asset, _ amount: String, includeData: Bool) throws -> SwapQuoteRequest {
-        let amount = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
+    
+    private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
+        let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
         let walletAddress = try wallet.account(for: fromAsset.chain).address
-        let destinationAddress = try wallet.account(for: toAsset.chain).address
-
-        return SwapQuoteRequest(
-            fromAsset: fromAsset.id.identifier,
-            toAsset: toAsset.id.identifier,
-            walletAddress: walletAddress,
-            destinationAddress: destinationAddress,
-            amount: amount.description,
-            includeData: includeData
+        let quotes = try await swapService.getQuote(
+            fromAsset: fromAsset.id,
+            toAsset: toAsset.id,
+            value: value.description,
+            walletAddress: walletAddress
         )
+        guard let quote = quotes.first else {
+            throw AnyError("No quotes")
+        }
+        
+        NSLog("quote approval: \(quote.approval)")
+        
+        return quote
+    }
+    
+    private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
+        try await self.swapService.getQuoteData(quote)
     }
 }

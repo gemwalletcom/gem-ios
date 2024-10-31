@@ -50,10 +50,6 @@ public protocol GemAPITransactionService: Sendable {
     func getTransactionsForAsset(deviceId: String, walletIndex: Int, asset: AssetId, fromTimestamp: Int) async throws -> [Primitives.Transaction]
 }
 
-public protocol GemAPISwapService: Sendable {
-    func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult
-}
-
 public protocol GemAPIPriceAlertService: Sendable {
     func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
     func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
@@ -165,14 +161,6 @@ extension GemAPIService: GemAPITransactionService {
         return try await provider
             .request(.getTransactions(deviceId: deviceId, options: options))
             .map(as: [Primitives.Transaction].self)
-    }
-}
-
-extension GemAPIService: GemAPISwapService {
-    public func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult {
-        return try await provider
-            .request(.getSwap(request))
-            .map(as: SwapQuoteResult.self)
     }
 }
 

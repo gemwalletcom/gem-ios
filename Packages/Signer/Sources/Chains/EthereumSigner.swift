@@ -108,14 +108,13 @@ public class EthereumSigner: Signable {
                 toAddress: input.asset.tokenId!,
                 privateKey: privateKey
             ))
-        case .swap(let swapData):
-            let quoteData = swapData.quote.data!
-            let data = try Data.from(hex: quoteData.data)
+        case .swap(_, let swapData):
+            let data = try Data.from(hex: swapData.data)
             return try sign(coinType: input.coinType, input: buildBaseInput(
                 input: input,
                 transaction: .with {
                     $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
-                        $0.amount = BigInt(stringLiteral: quoteData.value).magnitude.serialize()
+                        $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
                         $0.data = data
                     }
                 },

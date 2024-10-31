@@ -47,20 +47,14 @@ public struct TronAccount: Codable, Sendable {
 	public let address: String?
 	public let active_permission: [TronAccountPermission]?
 	public let votes: [TronVote]?
-	public let allowance: UInt64?
-	public let net_usage: Int32?
-	public let free_net_usage: Int32?
 	public let frozenV2: [TronFrozen]?
 	public let unfrozenV2: [TronUnfrozen]?
 
-	public init(balance: UInt64?, address: String?, active_permission: [TronAccountPermission]?, votes: [TronVote]?, allowance: UInt64?, net_usage: Int32?, free_net_usage: Int32?, frozenV2: [TronFrozen]?, unfrozenV2: [TronUnfrozen]?) {
+	public init(balance: UInt64?, address: String?, active_permission: [TronAccountPermission]?, votes: [TronVote]?, frozenV2: [TronFrozen]?, unfrozenV2: [TronUnfrozen]?) {
 		self.balance = balance
 		self.address = address
 		self.active_permission = active_permission
 		self.votes = votes
-		self.allowance = allowance
-		self.net_usage = net_usage
-		self.free_net_usage = free_net_usage
 		self.frozenV2 = frozenV2
 		self.unfrozenV2 = unfrozenV2
 	}
@@ -91,5 +85,13 @@ public struct TronEmptyAccount: Codable, Sendable {
 
 	public init(address: String?) {
 		self.address = address
+	}
+}
+
+public struct TronReward: Codable, Sendable {
+	public let reward: UInt64?
+
+	public init(reward: UInt64?) {
+		self.reward = reward
 	}
 }

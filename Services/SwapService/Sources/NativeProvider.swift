@@ -19,7 +19,7 @@ public actor NativeProvider {
 }
 
 extension NativeProvider: AlienProvider {
-    public func getEndpoint(chain: Gemstone.Chain) throws -> String {
+    nonisolated public func getEndpoint(chain: Gemstone.Chain) throws -> String {
         self.nodeProvider.node(for: Primitives.Chain(rawValue: chain)!).absoluteString
     }
 

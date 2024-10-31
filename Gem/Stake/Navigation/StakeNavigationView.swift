@@ -16,14 +16,18 @@ struct StakeNavigationView: View {
 
     @Binding private var navigationPath: NavigationPath
 
+    private let onComplete: VoidAction
+    
     init(
         wallet: Wallet,
         assetId: AssetId,
-        navigationPath: Binding<NavigationPath>
+        navigationPath: Binding<NavigationPath>,
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.assetId = assetId
         _navigationPath = navigationPath
+        self.onComplete = onComplete
     }
 
     var body: some View {
@@ -38,7 +42,8 @@ struct StakeNavigationView: View {
                 onAmountInputAction: {
                     navigationPath.append($0)
                 }
-            )
+            ),
+            onComplete: onComplete
         )
         .navigationDestination(for: AmountInput.self) {
             AmountScene(

@@ -4,7 +4,8 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
+import func Gemstone.tonEncodeGetWalletAddress
+import func Gemstone.tonDecodeJettonAddress
 
 public struct TonService: Sendable {
     

@@ -22,7 +22,7 @@ class LockSceneViewModel {
     }
 
     var unlockTitle: String { Localized.Lock.unlock }
-    var unlockImage: String {
+    var unlockImage: String? {
         KeystoreAuthenticationViewModel(authentication: service.availableAuthentication).authenticationImage
     }
 

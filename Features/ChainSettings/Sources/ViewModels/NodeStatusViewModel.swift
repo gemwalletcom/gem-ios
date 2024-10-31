@@ -8,7 +8,7 @@ import SwiftUI
 struct NodeStatusViewModel {
     let nodeStatus: NodeStatus
 
-    func latestBlockText(title: String, formatter: ValueFormatter) -> String {
+    public func latestBlockText(title: String, formatter: ValueFormatter) -> String {
         let value = switch nodeStatus {
         case .result(let blockNumber, _): formatter.string(blockNumber, decimals: 0)
         case .error, .none: "-"
@@ -16,7 +16,7 @@ struct NodeStatusViewModel {
         return "\(title): \(value)"
     }
 
-    var latencyText: String? {
+    public var latencyText: String? {
         switch nodeStatus {
         case .result(let block, let latency):
             if block > 0 {
@@ -30,21 +30,21 @@ struct NodeStatusViewModel {
         }
     }
 
-    var color: Color {
+    public var color: Color {
         switch nodeStatus {
         case .error: Colors.red
         case .none: Colors.gray
-        case .result(_, let latency):
-            LatencyViewModel(latency: latency).color
+        case .result(let block, let latency):
+            block.isZero ? Colors.red : LatencyViewModel(latency: latency).color
         }
     }
 
-    var background: Color {
+    public var background: Color {
         switch nodeStatus {
         case .error: Colors.red.opacity(0.15)
         case .none: .clear
-        case .result(_, let latency):
-            LatencyViewModel(latency: latency).background
+        case .result(let block, let latency):
+            block.isZero ? Colors.red.opacity(0.15) : LatencyViewModel(latency: latency).background
         }
     }
 }

@@ -38,6 +38,7 @@ class ConfirmTransferViewModel {
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: ConfirmTransferDelegate?
+    private let onComplete: VoidAction
 
     init(
         wallet: Wallet,
@@ -45,7 +46,8 @@ class ConfirmTransferViewModel {
         data: TransferData,
         service: any ChainServiceable,
         walletsService: WalletsService,
-        confirmTransferDelegate: ConfirmTransferDelegate? = .none
+        confirmTransferDelegate: ConfirmTransferDelegate? = .none,
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.keystore = keystore
@@ -53,6 +55,7 @@ class ConfirmTransferViewModel {
         self.service = service
         self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
+        self.onComplete = onComplete
 
         // prefetch asset metadata from local storage
         let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.recipientData.asset, assetsIds: data.type.assetIds)
@@ -170,17 +173,6 @@ class ConfirmTransferViewModel {
         return TransactionInputViewModel(data: dataModel.data, input: nil, metaData: metadata, transferAmountResult: nil).headerType
     }
 
-    var dismissAmount: Int {
-        switch dataModel.type {
-        case .swap(_, _, let type):
-            switch type {
-            case .swap: 2
-            case .approval: 1
-            }
-        default: 2
-        }
-    }
-
     var progressMessage: String { Localized.Common.loading }
     var shouldShowFeeRatesSelector: Bool {
         !feeRates.isEmpty && isSupportedFeeRateSelection
@@ -284,6 +276,10 @@ extension ConfirmTransferViewModel {
             }
             NSLog("confirm transaction error: \(error)")
         }
+    }
+    
+    func onCompleteAction() {
+        self.onComplete?()
     }
 }
 

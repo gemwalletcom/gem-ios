@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum LatencyType: Sendable {
+public enum LatencyType: Sendable {
     case fast
     case normal
     case slow

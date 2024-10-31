@@ -9,13 +9,13 @@ import GemstonePrimitives
 
 public struct SuiService: Sendable {
     
-    let chain: Chain
+    let chain: Primitives.Chain
     let provider: Provider<SuiProvider>
     
     private static let coinId = "0x2::sui::SUI"
 
     public init(
-        chain: Chain,
+        chain: Primitives.Chain,
         provider: Provider<SuiProvider>
     ) {
         self.chain = chain
@@ -97,12 +97,11 @@ extension SuiService {
             }
         case .swap(_, _, let action): try {
             guard
-                case .swap(let swapData) = action,
-                let data = swapData.quote.data?.data
+                case .swap(_, let swapData) = action
             else {
                 return ""
             }
-            let output = try suiValidateAndHash(encoded: data)
+            let output = try Gemstone.suiValidateAndHash(encoded: swapData.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
 
@@ -260,7 +259,7 @@ extension SuiService: ChainBalanceable {
         )
     }
     
-    public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
+    public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
         let balances = try await provider.request(.balances(address: address))
             .map(as: JSONRPCResponse<[SuiCoinBalance]>.self).result
         
