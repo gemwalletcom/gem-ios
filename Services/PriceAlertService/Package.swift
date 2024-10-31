@@ -33,5 +33,9 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "PriceAlertServiceTests",
+            dependencies: ["PriceAlertService"]
+        ),
     ]
 )
