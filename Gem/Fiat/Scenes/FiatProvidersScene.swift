@@ -5,6 +5,7 @@ import Components
 import Style
 import Localization
 import FiatConnect
+import Style
 
 struct FiatProvidersScene: View {
     
@@ -18,7 +19,7 @@ struct FiatProvidersScene: View {
                 with: ListItemView(
                     title: quote.title,
                     subtitle: quote.amount,
-                    image: Image(quote.image),
+                    image: Images.name(quote.image),
                     imageSize: Sizing.image.medium,
                     cornerRadius: Sizing.image.medium/2
                 )
