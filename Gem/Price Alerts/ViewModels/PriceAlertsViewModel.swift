@@ -64,7 +64,7 @@ struct PriceAlertsViewModel {
 
     func fetch() async {
         do {
-            try await priceAlertService.updatePriceAlerts()
+            try await priceAlertService.update()
 
             // update prices
             let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
@@ -77,7 +77,7 @@ struct PriceAlertsViewModel {
 
     func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.addPriceAlert(assetId: assetId.identifier, autoEnable: false)
+            try await priceAlertService.addPriceAlert(for: assetId)
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }
@@ -85,7 +85,7 @@ struct PriceAlertsViewModel {
 
     func deletePriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.deletePriceAlert(assetId: assetId.identifier)
+            try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
         }catch {
             NSLog("deletePriceAlert error: \(error)")
         }
