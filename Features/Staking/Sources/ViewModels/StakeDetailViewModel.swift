@@ -99,12 +99,9 @@ public struct StakeDetailViewModel {
     }
     
     public func stakeRecipientData() throws -> AmountInput {
-        // TODO: - get stacke validators
-        let validators = try service.getActiveValidators(assetId: asset.id)
-            .filter({ !$0.isSystem })
         return AmountInput(
             type: .stake(
-                validators: validators,
+                validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: model.delegation.validator
             ),
             asset: asset
@@ -119,13 +116,10 @@ public struct StakeDetailViewModel {
     }
     
     public func redelegateRecipientData() throws -> AmountInput {
-        // TODO: - get stacke validators
-        let validators = try service.getValidators(assetId: asset.id)
-            .filter({ !$0.isSystem && !$0.name.isEmpty })
         return AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
-                validators: validators,
+                validators: try service.getRedelegateValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: asset
