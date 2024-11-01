@@ -11,6 +11,7 @@ import Keystore
 import ChainService
 
 struct SwapScene: View {
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.nodeService) private var nodeService
 
     @Query<AssetRequest>
@@ -29,8 +30,9 @@ struct SwapScene: View {
     }
     @FocusState private var focusedField: Field?
 
-
-    init(model: SwapViewModel) {
+    init(
+        model: SwapViewModel
+    ) {
         _model = State(initialValue: model)
         _fromAsset = Query(model.fromAssetRequest)
         _toAsset = Query(model.toAssetRequest)
@@ -63,7 +65,8 @@ struct SwapScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
-                    walletsService: model.walletsService
+                    walletsService: model.walletsService,
+                    onComplete: onCompleteAction
                 )
             )
         }
@@ -164,6 +167,20 @@ extension SwapScene {
         model.resetValues()
         focusedField = .from
         fetch()
+    }
+    
+    @MainActor
+    private func onCompleteAction() {
+        switch model.transferData?.type {
+        case .swap(_, _, let action):
+            switch action {
+            case .swap:
+                model.onCompleteAction()
+            case .approval:
+                dismiss() // go back
+            }
+        default: break
+        }
     }
 }
 

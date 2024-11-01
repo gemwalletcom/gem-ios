@@ -61,7 +61,8 @@ struct WalletNavigationStack: View {
                         selectType: value,
                         assetsService: walletsService.assetsService,
                         walletsService: walletsService
-                    )
+                    ),
+                    isPresentingSelectType: $isPresentingSelectType
                 )
             }
             .sheet(item: $isPresentingAssetSelectType) { selectType in

@@ -14,17 +14,20 @@ struct RecipientNavigationView: View {
     
     let wallet: Wallet
     let asset: Asset
+    private let onComplete: VoidAction
 
     @Binding private var navigationPath: NavigationPath
     
     init(
         wallet: Wallet,
         asset: Asset,
-        navigationPath: Binding<NavigationPath>
+        navigationPath: Binding<NavigationPath>,
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.asset = asset
         _navigationPath = navigationPath
+        self.onComplete = onComplete
     }
 
     var body: some View {
@@ -56,7 +59,8 @@ struct RecipientNavigationView: View {
                     data: data,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: data.recipientData.asset.chain),
-                    walletsService: walletsService
+                    walletsService: walletsService,
+                    onComplete: onComplete
                 )
             )
         }

@@ -189,10 +189,7 @@ extension ConfirmTransferScene {
             await model.process(input: input, amount: amount)
             await MainActor.run {
                 if case .loaded(_) = model.confirmingState {
-                    // TODO: - that's crazy, TODO for later
-                    for _ in 0..<model.dismissAmount {
-                        dismiss()
-                    }
+                    model.onCompleteAction()
                 }
             }
         }
@@ -202,11 +199,12 @@ extension ConfirmTransferScene {
 // MARK: - Previews
 
 #Preview {
-    ConfirmTransferScene(model:
-            .init(wallet: .main,
-                  keystore: LocalKeystore.main,
-                  data: .main,
-                  service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
-                  walletsService: .main)
-    )
+    ConfirmTransferScene(model: .init(
+        wallet: .main,
+        keystore: LocalKeystore.main,
+        data: .main,
+        service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
+        walletsService: .main,
+        onComplete: { }
+    ))
 }

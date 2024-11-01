@@ -5,15 +5,19 @@ import Style
 import SwiftUI
 import Localization
 
-struct LatencyViewModel {
+public struct LatencyViewModel {
     
-    let latency: Latency
+    private let latency: Latency
 
-    var title: String {
+    public init(latency: Latency) {
+        self.latency = latency
+    }
+    
+    public var title: String {
         Localized.Common.latencyInMs(value)
     }
 
-    var color: Color {
+    public var color: Color {
         switch latency.type {
         case .fast: Colors.green
         case .normal: Colors.orange
@@ -21,11 +25,11 @@ struct LatencyViewModel {
         }
     }
 
-    var background: Color {
+    public var background: Color {
         color.opacity(0.15)
     }
 
-    var value: Int {
+    public var value: Int {
         Int(latency.value)
     }
 }

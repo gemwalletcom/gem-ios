@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Localization
+import SwapService
 
 struct SelectedAssetNavigationStack: View  {
     
@@ -34,7 +35,10 @@ struct SelectedAssetNavigationStack: View  {
                 RecipientNavigationView(
                     wallet: wallet,
                     asset: selectType.asset,
-                    navigationPath: $navigationPath
+                    navigationPath: $navigationPath,
+                    onComplete: {
+                        isPresentingAssetSelectType = nil
+                    }
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
@@ -83,7 +87,10 @@ struct SelectedAssetNavigationStack: View  {
                         assetId: selectType.asset.id,
                         walletsService: walletsService,
                         swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
+                        keystore: keystore,
+                        onComplete: {
+                            isPresentingAssetSelectType = nil
+                        }
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)
@@ -98,7 +105,10 @@ struct SelectedAssetNavigationStack: View  {
                 StakeNavigationView(
                     wallet: wallet,
                     assetId: selectType.asset.id,
-                    navigationPath: $navigationPath
+                    navigationPath: $navigationPath,
+                    onComplete: {
+                        isPresentingAssetSelectType = nil
+                    }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {

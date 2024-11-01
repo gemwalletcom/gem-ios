@@ -4,13 +4,14 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
-import GemstonePrimitives
+import func Gemstone.solanaDeriveMetadataPda
+import func Gemstone.solanaDecodeMetadata
+import struct GemstonePrimitives.SolanaConfig
 import WalletCore
 
 public struct SolanaService: Sendable {
     
-    let chain: Chain
+    let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
     
     let staticBaseFee = BigInt(50000)
@@ -18,7 +19,7 @@ public struct SolanaService: Sendable {
     let tokenAccountSize = 165
     
     public init(
-        chain: Chain,
+        chain: Primitives.Chain,
         provider: Provider<SolanaProvider>
     ) {
         self.chain = chain

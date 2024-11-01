@@ -8,6 +8,7 @@ import BigInt
 import Blockchain
 import Localization
 import ChainService
+import ChainSettings
 
 final class AddNodeSceneViewModel: ObservableObject {
     private let nodeService: NodeService

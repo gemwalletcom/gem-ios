@@ -3,14 +3,14 @@
 import Foundation
 import BigInt
 
-struct AddNodeResult {
+public struct AddNodeResult: Sendable {
     let url: URL
     let chainID: String
     let blockNumber: BigInt
     let latency: Latency
     let isInSync: Bool
 
-    init(
+    public init(
         url: URL,
         chainID: String,
         blockNumber: BigInt,

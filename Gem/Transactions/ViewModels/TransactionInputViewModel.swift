@@ -103,10 +103,10 @@ struct TransactionInputViewModel {
             return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
         case .swap(let fromAsset, let toAsset, let action):
             switch action {
-            case .swap(let swapData):
+            case .swap(let quote, _):
                 let formatter = ValueFormatter(style: TransactionHeaderType.swapValueFormatterStyle)
-                let fromValue = BigInt(stringLiteral: swapData.quote.fromAmount)
-                let toValue = BigInt(stringLiteral: swapData.quote.toAmount)
+                let fromValue = BigInt(stringLiteral: quote.fromValue)
+                let toValue = BigInt(stringLiteral: quote.toValue)
                 
                 let fromPrice = metaData?.assetPrices[fromAsset.id.identifier]
                 let toPrice = metaData?.assetPrices[toAsset.id.identifier]

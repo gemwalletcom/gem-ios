@@ -25,8 +25,8 @@ extension EthereumService: ChainFeeCalculateable {
                 function.addParamAddress(val: Data(hexString: spender.remove0x)!, isOutput: false)
                 function.addParamUInt256(val: allowance.magnitude.serialize(), isOutput: false)
                 return EthereumAbi.encode(fn: function)
-            case .swap(let data):
-                return data.hexData
+            case .swap(_, let data):
+                return Data(fromHex: data.data)
             }
         case .generic(_, _, let extra):
             return extra.data

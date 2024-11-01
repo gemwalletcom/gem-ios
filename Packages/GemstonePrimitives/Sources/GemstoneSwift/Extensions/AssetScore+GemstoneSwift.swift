@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import func Gemstone.assetDefaultRank
 
 extension AssetScore {
     

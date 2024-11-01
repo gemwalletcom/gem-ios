@@ -4,7 +4,8 @@ import Foundation
 import Primitives
 import Gemstone
 import BigInt
-public extension Chain {
+
+public extension Primitives.Chain {
     var asset: Asset {
         //TODO: Force unwrap for now, until move Asset to Gemstone
         let assetWrapper = Gemstone.assetWrapper(chain: id)
