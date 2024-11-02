@@ -112,7 +112,8 @@ final class LocalKeystoreTests: XCTestCase {
                 .zkSync,
                 .linea,
                 .mantle,
-                .celo:
+                .celo,
+                .world:
                 assertAddress(chain, "0x8f348F300873Fd5DA36950B2aC75a26584584feE", account.address)
             case .solana:
                 assertAddress(chain, "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71", account.address)

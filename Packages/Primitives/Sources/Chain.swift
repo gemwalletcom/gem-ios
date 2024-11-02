@@ -38,4 +38,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Sendable {
 	case mantle
 	case celo
 	case near
+	case world
 }

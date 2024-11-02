@@ -22,29 +22,7 @@ extension EVMChain {
         case .linea: .linea
         case .mantle: .mantle
         case .celo: .celo
-        }
-    }
-    
-    public var isOpStack: Bool {
-        switch self {
-        case .optimism,
-            .base,
-            .opBNB,
-            .blast,
-            .mantle,
-            .celo:
-            return true
-        case .ethereum,
-            .smartChain,
-            .polygon,
-            .arbitrum,
-            .avalancheC,
-            .fantom,
-            .gnosis,
-            .manta,
-            .zkSync,
-            .linea:
-            return false
+        case .world: .world
         }
     }
     

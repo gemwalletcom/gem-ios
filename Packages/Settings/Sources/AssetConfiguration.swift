@@ -49,6 +49,7 @@ public struct AssetConfiguration: Sendable {
         .mantle,
         //.celo, not ready yet
         .near,
+        .world,
     ]
 
     public static let enabledByDefault: [AssetId] =  [

@@ -57,7 +57,8 @@ public extension AssetId {
             .zkSync,
             .linea,
             .mantle,
-            .celo:
+            .celo,
+            .world:
             return .erc20
         case .smartChain, .opBNB:
             return .bep20

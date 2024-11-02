@@ -42,7 +42,7 @@ extension EthereumService {
         do {
             let gasLimit = try await provider
                 .request(.estimateGasLimit(from: from, to: to, value: value, data: data))
-                .mapResultOrError(BigIntable.self).value
+                .mapResultOrError(as: BigIntable.self).value
             return gasLimit == BigInt(21000) ? gasLimit : BigInt(gasLimit).increase(byPercentage: Self.gasLimitPercent)
         } catch let error {
             throw AnyError("Estimate gasLimit error: \(error.localizedDescription)")
@@ -64,7 +64,7 @@ extension EthereumService {
     func getBasePriorityFee(rewardPercentiles: [Int]) async throws -> (baseFee: BigInt, priorityFee: BigInt) {
         let feeHistory = try await provider
             .request(.feeHistory(blocks: 10, rewardPercentiles: rewardPercentiles))
-            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
+            .mapResultOrError(as: JSONRPCResponse<EthereumFeeHistory>.self).result
 
         let rewards = feeHistory.reward
             .compactMap { $0.first }
@@ -105,7 +105,7 @@ extension EthereumService {
         case .polygon:
             // https://polygonscan.com/gastracker
             BigInt(30000000000) // 30 gwei
-        case .optimism:
+        case .optimism, .world:
             // https://optimistic.etherscan.io/chart/gasprice
             BigInt(10000000)    // 0.01 gwei
         case .arbitrum:

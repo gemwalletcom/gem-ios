@@ -51,7 +51,7 @@ public enum SuiProvider: TargetType {
     }
     
     public var path: String {
-        return "/"
+        return ""
     }
     
     public var data: RequestData {
