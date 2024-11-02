@@ -132,20 +132,13 @@ extension CosmosService: ChainBalanceable {
             .sei,
             .noble:
 
-            async let getBalance = getBalance(address: address)
-            async let getStakeBalance = getStakeBalance(address: address)
-
-            let (balances, stakeBalance) = try await (
-                getBalance,
-                getStakeBalance
-            )
-            
+            let balances = try await getBalance(address: address)
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
             return AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
                     available: balance
-                ).merge(stakeBalance.balance)
+                )
             )
         }
     }
@@ -158,7 +151,7 @@ extension CosmosService: ChainBalanceable {
         }
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let denom = chain.denom
         async let getDelegations = getDelegations(address: address)
         async let getUnboundingDelegations = getUnboundingDelegations(address: address)

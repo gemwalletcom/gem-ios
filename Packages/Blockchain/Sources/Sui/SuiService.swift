@@ -247,15 +247,13 @@ extension SuiService {
 
 extension SuiService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getBalance = getBalance(address: address)
-
-        let (balance, staked) = try await (getBalance, getStakeBalance(address: address))
+        let getBalance = try await getBalance(address: address)
 
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: BigInt(stringLiteral: balance.totalBalance)
-            ).merge(staked.balance)
+                available: BigInt(stringLiteral: getBalance.totalBalance)
+            )
         )
     }
     
@@ -280,7 +278,7 @@ extension SuiService: ChainBalanceable {
     }
 
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let delegations = try await getDelegations(address: address)
         let staked = delegations.map { $0.stakes.map { $0.total }.reduce(0, +) }.reduce(0, +)
         

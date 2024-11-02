@@ -245,7 +245,7 @@ extension SwapViewModel {
     private func getSwapData(fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
         let quoteData = try await getQuoteData(quote: quote)
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(quote, quoteData))
-        let value = BigInt(stringLiteral: quote.request.amount)
+        let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
             asset: fromAsset,
             recipient: Recipient(name: quote.provider.name, address: quoteData.to, memo: .none),

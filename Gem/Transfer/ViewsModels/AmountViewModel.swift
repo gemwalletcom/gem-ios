@@ -283,6 +283,7 @@ class AmounViewModel: ObservableObject {
     }
 
     func fiatAmount(amount: String) -> String {
+        // simplify by adding priceService.getAmount(:amount, asset)
         guard
             let value = try? value(for: amount),
             let fiatValue = try? formatter.double(from: value, decimals: asset.decimals.asInt),

@@ -14,6 +14,10 @@ public extension Wallet {
     var walletId: WalletId {
         WalletId(id: id)
     }
+    
+    var hasTokenSupport: Bool {
+        accounts.filter { $0.chain.assetId.assetType != .none }.count > 0
+    }
 }
 
 extension Wallet: Hashable {

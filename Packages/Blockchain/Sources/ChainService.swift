@@ -122,8 +122,8 @@ extension ChainService: ChainStakable {
             .getStakeDelegations(address: address)
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        try await Self.service(chain: chain, with: url).getStakeBalance(address: address)
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        try await Self.service(chain: chain, with: url).getStakeBalance(for: address)
     }
 }
 

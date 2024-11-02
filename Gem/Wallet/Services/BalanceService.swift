@@ -10,7 +10,7 @@ import ChainService
 
 public struct BalanceUpdate {
     public let walletId: String
-    public let balances: [AssetBalance]
+    public let balances: [AssetBalanceChange]
 }
 
 public struct BalanceUpdateError {
@@ -74,21 +74,45 @@ public final class BalanceService: BalancerUpdater {
             return await updateTokenBalances(walletId: walletId, chain: asset.chain, tokenIds: [asset], address: address)
         }
     }
-    
+
     public func updateCoinBalance(walletId: String, asset: AssetId, address: String) async {
         let chain = asset.chain
-        do {
-            let balance = try await getCoinBalance(chain: chain, address: address)
-            balanceSubject.send(BalanceUpdate(walletId: walletId,  balances: [balance]))
-        } catch {
-            balanceErrorsSubject.send(BalanceUpdateError(chain: chain, error: error))
-        }
+        await updateBalanceAsync(
+            walletId: walletId,
+            chain: chain,
+            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
+            mapBalance: { $0 }
+        )
+    }
+
+    public func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async {
+        let chain = asset.chain
+        await updateBalanceAsync(
+            walletId: walletId,
+            chain: chain,
+            fetchBalance: { [try await getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
+            mapBalance: { $0 }
+        )
+    }
+
+    public func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async {
+        await updateBalanceAsync(
+            walletId: walletId,
+            chain: chain,
+            fetchBalance: { try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids) },
+            mapBalance: { $0.tokenChange }
+        )
     }
     
-    public func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async {
+    public func updateBalanceAsync<T>(
+        walletId: String,
+        chain: Chain,
+        fetchBalance: () async throws -> [T],
+        mapBalance: (T) -> AssetBalanceChange?
+    ) async {
         do {
-            let balances = try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids)
-            balanceSubject.send(BalanceUpdate(walletId: walletId,  balances: balances))
+            let balances = try await fetchBalance().compactMap { mapBalance($0) }
+            balanceSubject.send(BalanceUpdate(walletId: walletId, balances: balances))
         } catch {
             balanceErrorsSubject.send(BalanceUpdateError(chain: chain, error: error))
         }
@@ -109,6 +133,9 @@ public final class BalanceService: BalancerUpdater {
                 Task {
                     await updateCoinBalance(walletId: wallet.id, asset: chain.assetId, address: address)
                 }
+                Task {
+                    await updateCoinStakeBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                }
             }
             // token balance
            if !tokenIds.isEmpty {
@@ -124,6 +151,11 @@ public final class BalanceService: BalancerUpdater {
             .coinBalance(for: address)
     }
     
+    func getCoinStakeBalance(chain: Chain, address: String) async throws -> AssetBalance? {
+        return try await chainServiceFactory.service(for: chain)
+            .getStakeBalance(for: address)
+    }
+    
     func getTokenBalance(chain: Chain, address: String, tokenIds: [String]) async throws -> [AssetBalance] {
         return try await chainServiceFactory.service(for: chain)
            .tokenBalance(for: address, tokenIds: tokenIds.compactMap { try? AssetId(id: $0) })
@@ -137,37 +169,69 @@ public final class BalanceService: BalancerUpdater {
         return balanceErrorsSubject.eraseToAnyPublisher()
     }
     
-    func createBalanceUpdate(assets: [Asset], balances: [AssetBalance], prices: [AssetPrice]) -> [UpdateBalance] {
-        let assets = assets.toMap { $0.id.identifier }
-        let prices = prices.toMap { $0.assetId }
-        
-        return balances.compactMap { (balance: AssetBalance) in
-            guard
-                let asset = assets[balance.assetId.identifier],
-                let total = try? formatter.double(from: balance.balance.total(asset.chain.includeStakedBalance), decimals: asset.decimals.asInt)
-            else {
-                return nil
-            }
-            let price = prices[balance.assetId.identifier]
-            let fiatValue = total * (price?.price ?? 0)
-
-            return updateBalance(balance: balance, total: total, fiatValue: fiatValue)
+    func createUpdateBalanceType(asset: Asset, change: AssetBalanceChange) throws -> UpdateBalanceType {
+        let decimals = asset.decimals.asInt
+        switch change.type {
+        case .coin(let available):
+            let available = try UpdateBalanceValue(
+                value: available.description,
+                amount: formatter.double(from: available, decimals: decimals)
+            )
+            return .coin(UpdateCoinBalance(available: available))
+        case .token(let available):
+            let available = try UpdateBalanceValue(
+                value: available.description,
+                amount: formatter.double(from: available, decimals: decimals)
+            )
+            return .token(UpdateTokenBalance(available: available))
+        case .stake(let staked, let pending, let rewards, let reserved, let locked, let frozen):
+            let stakedValue = try UpdateBalanceValue(
+                value: staked.description,
+                amount: formatter.double(from: staked, decimals: decimals)
+            )
+            let pendingValue = try UpdateBalanceValue(
+                value: pending.description,
+                amount: formatter.double(from: pending, decimals: decimals)
+            )
+            let frozenValue = try UpdateBalanceValue(
+                value: frozen.description,
+                amount: formatter.double(from: frozen, decimals: decimals)
+            )
+            let lockedValue = try UpdateBalanceValue(
+                value: locked.description,
+                amount: formatter.double(from: locked, decimals: decimals)
+            )
+            let reservedValue = try UpdateBalanceValue(
+                value: reserved.description,
+                amount: formatter.double(from: reserved, decimals: decimals)
+            )
+            let rewardsValue = try UpdateBalanceValue(
+                value: rewards.description,
+                amount: formatter.double(from: rewards, decimals: decimals)
+            )
+            return .stake(
+                UpdateStakeBalance(
+                    staked: stakedValue,
+                    pending: pendingValue,
+                    frozen: frozenValue,
+                    locked: lockedValue,
+                    reserved: reservedValue,
+                    rewards: rewardsValue
+                )
+            )
         }
     }
     
-    private func updateBalance(balance: AssetBalance, total: Double, fiatValue: Double) -> UpdateBalance {
-        return UpdateBalance(
-            assetID: balance.assetId.identifier,
-            available: balance.balance.available.description,
-            frozen: balance.balance.frozen.description,
-            locked: balance.balance.locked.description,
-            staked: balance.balance.staked.description,
-            pending: balance.balance.pending.description,
-            reserved: balance.balance.reserved.description,
-            total: total,
-            fiatValue: fiatValue,
-            updatedAt: Date()
-        )
+    func createBalanceUpdate(assets: [Asset], balances: [AssetBalanceChange]) -> [UpdateBalance] {
+        let assets = assets.toMap { $0.id.identifier }
+        return balances.compactMap { balance in
+            guard
+                let asset = assets[balance.assetId.identifier],
+                let update = try? createUpdateBalanceType(asset: asset, change: balance) else {
+                    return .none
+            }
+            return UpdateBalance(assetID: balance.assetId.identifier, type: update, updatedAt: Date())
+        }
     }
     
     func addAssetsBalancesIfMissing(assetIds: [AssetId], wallet: Wallet) throws {

@@ -42,9 +42,14 @@ public struct AssetsRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.account)
             .joining(required: AssetRecord.balance
                 .filter(Columns.Balance.walletId == walletID)
-                .order(Columns.Balance.fiatValue.desc)
+                //.order(Columns.Balance.totalAmount.desc)
+                //.order((Columns.Balance.totalAmount * Columns.Price.price).desc)
             )
             .joining(required: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+            .order((
+                TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
+            )
+            
 
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
@@ -84,15 +89,10 @@ extension AssetsRequest {
                     Columns.Asset.name.like("%%\(name)%%") ||
                     Columns.Asset.tokenId.like("%%\(name)%%")
                 )
-        case .hasFiatValue:
-            return request
-                .filter(
-                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName) )
-                )
         case .hasBalance:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName) )
+                    SQL(stringLiteral: String(format: "%@.totalAmount > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .buyable:
             return request
@@ -161,8 +161,7 @@ extension AssetsRequest {
                 .stakeable,
                 .chains:
                 request = Self.applyFilter(request: request, $0)
-            case .hasFiatValue,
-                .hasBalance,
+            case .hasBalance,
                 .enabled,
                 .hidden,
                 .includePinned,

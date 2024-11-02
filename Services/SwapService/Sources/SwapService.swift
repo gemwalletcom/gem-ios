@@ -30,7 +30,7 @@ public final class SwapService {
             toAsset: toAsset.identifier,
             walletAddress: walletAddress,
             destinationAddress: walletAddress,
-            amount: value,
+            value: value,
             mode: .exactIn,
             options: GemSwapOptions(
                 slippageBps: 100,
