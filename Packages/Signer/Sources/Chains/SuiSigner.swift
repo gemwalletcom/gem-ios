@@ -38,6 +38,10 @@ public struct SuiSigner: Signable {
         }
     }
     
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
+    }
+    
     func signMessageBytes(coinType: CoinType, bytes: String, privateKey: Data) -> String {
         let signingInput = SuiSigningInput.with {
             $0.transactionPayload = .signDirectMessage(SuiSignDirect.with {

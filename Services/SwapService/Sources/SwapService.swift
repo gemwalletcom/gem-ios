@@ -7,6 +7,8 @@ import enum Primitives.AnyError
 import Gemstone
 import Primitives
 import ChainService
+import BigInt
+import Signer
 
 public final class SwapService {
     
@@ -42,20 +44,7 @@ public final class SwapService {
         return try await swapper.fetchQuote(request: swapRequest)
     }
     
-    public func getQuoteData(_ request: Gemstone.SwapQuote) async throws -> Gemstone.SwapQuoteData {
-        let quoteData = try await swapper.fetchQuoteData(quote: request, permit2: .none)
-        
-        NSLog("request \(request)")
-        
-        return quoteData
-    }
-    
-    public func permit2() -> Permit2Data {
-        let permit = PermitSingle(
-            details: Permit2Detail(token: "", amount: "", expiration: 0, nonce: 0),
-            spender: "",
-            sigDeadline: 0
-        )
-        return Permit2Data(permitSingle: permit, signature: Data())
+    public func getQuoteData(_ request: Gemstone.SwapQuote, permit2: Permit2Data?) async throws -> Gemstone.SwapQuoteData {
+        return try await swapper.fetchQuoteData(quote: request, permit2: permit2)
     }
 }

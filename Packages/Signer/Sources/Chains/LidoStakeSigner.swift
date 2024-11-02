@@ -30,7 +30,6 @@ public class LidoStakeSigner: EthereumSigner {
                 guard case .lidoPermitNonce(let permitNonce) = input.extra else {
                     throw AnyError("Permit nonce is missing!")
                 }
-                let key = PrivateKey(data: privateKey)!
                 let permit = ERC2612PermitMessage(
                     message: ERC2612Permit(
                         owner: input.senderAddress,
@@ -41,7 +40,10 @@ public class LidoStakeSigner: EthereumSigner {
                     ), 
                     chainId: UInt32(input.chainId)!)
                 let jsonString = String(data: try JSONEncoder().encode(permit), encoding: .utf8)!
-                let signature = EthereumMessageSigner.signTypedMessage(privateKey: key, messageJson: jsonString)
+                let signature = try self.signMessage(
+                    message: .typed(jsonString),
+                    privateKey: privateKey
+                )
                 return Data(hexString: signature) ?? Data()
             default:
                 return Data()

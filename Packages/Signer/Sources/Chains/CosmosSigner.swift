@@ -186,4 +186,8 @@ public struct CosmosSigner: Signable {
             }
         }
     }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
+    }
 }

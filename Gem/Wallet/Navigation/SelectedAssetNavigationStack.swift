@@ -89,6 +89,7 @@ struct SelectedAssetNavigationStack: View  {
                         swapService: SwapService(nodeProvider: nodeService),
                         keystore: keystore,
                         onComplete: {
+                            //TODO: Return back on approval and cancel on swap
                             isPresentingAssetSelectType = nil
                         }
                     )

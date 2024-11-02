@@ -12,10 +12,15 @@ import Style
 import Localization
 import Transfer
 import SwapService
+import Signer
 
 import struct Gemstone.SwapQuoteRequest
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
+import struct Gemstone.PermitSingle
+import struct Gemstone.Permit2Data
+import struct Gemstone.Permit2Detail
+import func Gemstone.permit2DataToEip712Json
 
 @Observable
 class SwapViewModel {
@@ -267,12 +272,39 @@ extension SwapViewModel {
             throw AnyError("No quotes")
         }
         
-        NSLog("quote approval: \(quote.approval)")
-        
         return quote
     }
     
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
-        try await self.swapService.getQuoteData(quote)
+        switch quote.approval {
+        case .approve, .none:
+            return try await self.swapService.getQuoteData(quote, permit2: .none)
+        case .permit2(let data):
+            let chain = try AssetId(id: quote.request.fromAsset).chain
+            let permit2Single = permit2Single(token: data.token, spender: data.spender, value: data.value)
+            let permit2JSON = Gemstone.permit2DataToEip712Json(chain: chain.rawValue, data: permit2Single)
+            let signer = Signer(wallet: wallet, keystore: keystore)
+            let signature = try signer.signMessage(
+                chain: chain,
+                message: .typed(permit2JSON),
+                data: try permit2JSON.encodedData()
+            )
+            let permitData = Permit2Data(permitSingle: permit2Single, signature: Data(hexString: signature) ?? Data())
+            
+            return try await self.swapService.getQuoteData(quote, permit2: permitData)
+        }
+    }
+    
+    public func permit2Single(token: String, spender: String, value: String) -> Gemstone.PermitSingle {
+        return PermitSingle(
+            details: Permit2Detail(
+                token: token,
+                amount: value,
+                expiration: UInt64(Date().timeIntervalSince1970) + 60 * 60 * 30,
+                nonce: 0
+            ),
+            spender: spender,
+            sigDeadline: UInt64(Date().timeIntervalSince1970) + 60 * 30
+        )
     }
 }

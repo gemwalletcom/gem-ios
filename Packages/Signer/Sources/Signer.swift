@@ -36,7 +36,12 @@ public struct Signer {
         case .stake:
             return try signer.signStake(input: input, privateKey: privateKey)
         }
-        
+    }
+    
+    public func signMessage(chain: Chain, message: SignMessage, data: Data) throws -> String {
+        let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
+        return try signer(for: chain)
+            .signMessage(message: message, privateKey: privateKey)
     }
     
     func signer(for chain: Chain) -> Signable {

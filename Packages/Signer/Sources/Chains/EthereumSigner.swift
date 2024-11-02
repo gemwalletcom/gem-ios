@@ -114,7 +114,7 @@ public class EthereumSigner: Signable {
                 input: input,
                 transaction: .with {
                     $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
-                        $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
+                        $0.amount = BigInt(stringLiteral: swapData.value.remove0x).magnitude.serialize()
                         $0.data = data
                     }
                 },
@@ -132,6 +132,16 @@ public class EthereumSigner: Signable {
             return try LidoStakeSigner().signStake(input: input, privateKey: privateKey)
         default:
             fatalError()
+        }
+    }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        guard let privateKey = PrivateKey(data: privateKey) else {
+            throw AnyError("Unable to get private key")
+        }
+        switch message {
+        case .typed(let message):
+            return EthereumMessageSigner.signTypedMessage(privateKey: privateKey, messageJson: message)
         }
     }
 }
