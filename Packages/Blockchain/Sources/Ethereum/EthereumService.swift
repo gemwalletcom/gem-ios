@@ -64,7 +64,7 @@ extension EthereumService {
     func getBasePriorityFee(rewardPercentiles: [Int]) async throws -> (baseFee: BigInt, priorityFee: BigInt) {
         let feeHistory = try await provider
             .request(.feeHistory(blocks: 10, rewardPercentiles: rewardPercentiles))
-            .mapResultOrError(as: JSONRPCResponse<EthereumFeeHistory>.self).result
+            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
 
         let rewards = feeHistory.reward
             .compactMap { $0.first }

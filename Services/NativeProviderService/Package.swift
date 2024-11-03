@@ -3,38 +3,33 @@
 import PackageDescription
 
 let package = Package(
-    name: "SwapService",
+    name: "NativeProviderService",
     platforms: [
         .iOS(.v17),
-        .macOS(.v12)
     ],
     products: [
         .library(
-            name: "SwapService",
-            targets: ["SwapService"]
-        ),
+            name: "NativeProviderService",
+            targets: ["NativeProviderService"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Gemstone", path: "../Gemstone"),
-        .package(name: "Signer", path: "../Signer"),
         .package(name: "ChainService", path: "../ChainService"),
-        .package(name: "NativeProviderService", path: "../NativeProviderService"),
     ],
     targets: [
         .target(
-            name: "SwapService",
+            name: "NativeProviderService",
             dependencies: [
-                "Gemstone",
                 "Primitives",
+                "Gemstone",
                 "ChainService",
-                "Signer",
             ],
             path: "Sources"
         ),
         .testTarget(
-            name: "SwapServiceTests",
-            dependencies: ["SwapService"]
+            name: "NativeProviderServiceTests",
+            dependencies: ["NativeProviderService"]
         ),
     ]
 )

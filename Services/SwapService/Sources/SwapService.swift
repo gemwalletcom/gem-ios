@@ -9,6 +9,7 @@ import Primitives
 import ChainService
 import BigInt
 import Signer
+import NativeProviderService
 
 public final class SwapService {
     
