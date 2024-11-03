@@ -11,11 +11,11 @@ struct KeystoreAuthenticationViewModel {
         self.authentication = authentication
     }
 
-    var authenticationImage: String {
+    var authenticationImage: String? {
         switch authentication {
         case .biometrics: SystemImage.faceid
         case .passcode: SystemImage.lock
-        case .none: SystemImage.none
+        case .none: .none
         }
     }
 }

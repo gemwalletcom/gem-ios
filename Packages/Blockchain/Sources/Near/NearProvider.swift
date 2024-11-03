@@ -32,7 +32,7 @@ public enum NearProvider: TargetType {
     }
     
     public var path: String {
-        return "/"
+        return ""
     }
     
     public var data: RequestData {

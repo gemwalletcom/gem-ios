@@ -55,7 +55,7 @@ extension SmartChainService: ChainStakable {
         return delegations + undelegations
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let delegations = try await getStakeDelegations(address: address)
         let staked = delegations.filter { $0.state == .active }.map { $0.balanceValue }.reduce(0, +)
         let pending = delegations.filter { $0.state == .undelegating }.map { $0.balanceValue }.reduce(0, +)

@@ -67,6 +67,7 @@ struct AssetIdViewModel {
         case .mantle: Images.Chains.mantle
         case .celo: Images.Chains.celo
         case .near: Images.Chains.near
+        case .world: Images.Chains.world
         }
     }
 

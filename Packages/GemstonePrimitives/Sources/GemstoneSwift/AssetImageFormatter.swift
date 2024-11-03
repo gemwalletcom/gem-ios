@@ -2,17 +2,17 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import class Gemstone.Config
 
 public struct AssetImageFormatter {
     
     public init() {}
     
-    public func getURL(for assetId: AssetId) -> URL? {
+    public func getURL(for assetId: Primitives.AssetId) -> URL? {
         URL(string: Config.shared.imageFormatterAssetUrl(chain: assetId.chain.rawValue, tokenId: assetId.tokenId))
     }
     
-    public func getValidatorUrl(chain: Chain, id: String) -> URL {
+    public func getValidatorUrl(chain: Primitives.Chain, id: String) -> URL {
         URL(string: Config.shared.imageFormatterValidatorUrl(chain: chain.rawValue, id: id))!
     }
 }

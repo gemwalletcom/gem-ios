@@ -54,7 +54,7 @@ public enum SolanaProvider: TargetType {
     }
     
     public var path: String {
-        return "/"
+        return ""
     }
     
     public var data: RequestData {
@@ -144,7 +144,7 @@ public enum SolanaProvider: TargetType {
             let params: [JSON<String>] = [
                 .dictionary([
                     "commitment": .string("finalized"),
-                    "keepUnstakedDelinquents": .bool(true)
+                    "keepUnstakedDelinquents": .bool(false)
                 ])
             ]
             return .encodable(

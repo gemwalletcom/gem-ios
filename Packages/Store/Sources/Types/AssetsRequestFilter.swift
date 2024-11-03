@@ -5,7 +5,6 @@ import Foundation
 public enum AssetsRequestFilter {
     case search(String)
     case hasBalance
-    case hasFiatValue
     case buyable // available to buy
     case swappable
     case stakeable

@@ -18,7 +18,6 @@ public struct SystemImage {
     public static let globe = "globe"
     public static let share = "square.and.arrow.up"
     public static let lock = "lock"
-    public static let none = ""
     public static let delete = "trash"
     public static let checkmark = "checkmark"
     public static let ellipsis = "ellipsis"
@@ -65,7 +64,6 @@ public struct SystemImage {
         (SystemImage.globe, "Globe"),
         (SystemImage.share, "Share"),
         (SystemImage.lock, "Lock"),
-        (SystemImage.none, "None"),
         (SystemImage.delete, "Delete"),
         (SystemImage.checkmark, "Checkmark"),
         (SystemImage.ellipsis, "Ellipsis"),

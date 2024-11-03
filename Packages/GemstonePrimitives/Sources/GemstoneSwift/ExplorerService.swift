@@ -1,7 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
+import class Gemstone.Config
+import class Gemstone.Explorer
 import Primitives
 import WalletCore
 import WalletCorePrimitives
@@ -62,11 +63,11 @@ public struct ExplorerService {
 // MARK: - ExplorerStorable
 
 extension ExplorerService: ExplorerStorable {
-    public func set(chain: Primitives.Chain, name: String) {
+    public func set(chain: Chain, name: String) {
         storage.set(chain: chain, name: name)
     }
     
-    public func get(chain: Primitives.Chain) -> String? {
+    public func get(chain: Chain) -> String? {
         storage.get(chain: chain)
     }
 }

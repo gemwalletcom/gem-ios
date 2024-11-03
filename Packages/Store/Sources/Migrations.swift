@@ -66,6 +66,19 @@ public struct Migrations {
             try db.drop(table: BannerRecord.databaseTableName)
             try BannerRecord.create(db: db)
         }
+        
+        migrator.registerMigration("Add balances value to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) {
+                $0.add(column: Columns.Balance.availableAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.stakedAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
+                $0.add(column: Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
+                $0.addColumn(sql: AssetBalanceRecord.totalAmountSQlCreation)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

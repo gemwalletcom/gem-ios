@@ -110,6 +110,11 @@ struct AssetDataViewModel {
     }
     
     var isSwapEnabled: Bool {
+        #if DEBUG
+        if let _ = EVMChain(rawValue: assetData.asset.chain.rawValue) {
+            return true
+        }
+        #endif
         return assetData.metadata.isSwapEnabled
     }
     

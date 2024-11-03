@@ -200,7 +200,10 @@ struct WalletCoordinator: View {
                         service: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.payload.tranferData.recipientData.asset.chain),
                         walletsService: walletsService,
-                        confirmTransferDelegate: data.delegate
+                        confirmTransferDelegate: data.delegate,
+                        onComplete: {
+                            transferData = nil
+                        }
                     )
                 )
                 .interactiveDismissDisabled(true)

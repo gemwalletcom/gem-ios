@@ -24,12 +24,15 @@ struct StakeScene: View {
     private var delegationsModel: [StakeDelegationViewModel] {
         delegations.map { StakeDelegationViewModel(delegation: $0) }
     }
+    private let onComplete: VoidAction
 
     init(
-        model: StakeViewModel
+        model: StakeViewModel,
+        onComplete: VoidAction
     ) {
         _model = State(initialValue: model)
         _delegations = Query(model.request)
+        self.onComplete = onComplete
     }
     
     var body: some View {
@@ -50,7 +53,8 @@ struct StakeScene: View {
                     data: $0,
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
-                    walletsService: walletsService
+                    walletsService: walletsService,
+                    onComplete: onComplete
                 )
             )
         }
@@ -150,7 +154,14 @@ extension StakeScene {
 #Preview {
     NavigationStack {
         StakeScene(
-            model: .init(wallet: .main, chain: .ethereum, stakeService: .main, onTransferAction: .none, onAmountInputAction: .none)
+            model: .init(
+                wallet: .main,
+                chain: .ethereum,
+                stakeService: .main,
+                onTransferAction: .none,
+                onAmountInputAction: .none
+            ),
+            onComplete: {}
         )
         .navigationBarTitleDisplayMode(.inline)
     }

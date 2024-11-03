@@ -49,7 +49,7 @@ class SelectAssetViewModel {
     }
 
     var showAddToken: Bool {
-        selectType == .manage && !filterModel.allChains.isEmpty
+        selectType == .manage && wallet.hasTokenSupport && !filterModel.allChains.isEmpty
     }
 
     func selectAsset(asset: Asset) {
@@ -61,6 +61,8 @@ class SelectAssetViewModel {
 
 extension SelectAssetViewModel {
     func search(query: String) async {
+        guard wallet.hasTokenSupport else { return }
+        
         let query = query.trim()
         switch selectType {
         case .manage, .receive, .buy, .priceAlert:

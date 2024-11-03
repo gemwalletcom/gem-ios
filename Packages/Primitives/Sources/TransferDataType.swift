@@ -1,32 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import BigInt
-
-public enum StakeType: Hashable, Equatable, Sendable {
-    case stake(validator: DelegationValidator)
-    case unstake(delegation: Delegation)
-    case redelegate(delegation: Delegation, toValidator: DelegationValidator)
-    case rewards(validators: [DelegationValidator])
-    case withdraw(delegation: Delegation)
-}
-
-extension StakeType {
-    public var validatorId: String {
-        return switch self {
-        case .stake(let validator):
-            validator.id
-        case .unstake(let delegation):
-            delegation.validator.id
-        case .redelegate(let delegation, _):
-            delegation.validator.id
-        case .rewards(let validators):
-            validators.first?.id ?? ""
-        case .withdraw(let delegation):
-            delegation.validator.id
-        }
-    }
-}
 
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
@@ -40,8 +14,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             return .none
         case .swap(_, _, let extra):
             switch extra {
-            case .swap(let data):
-                return data.hexData
+            case .swap(_, let data):
+                return Data(fromHex: data.data)
             case .approval:
                 // none here, data calculated via signer
                 return .none
@@ -95,21 +69,21 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         switch self {
         case .swap(let fromAsset, let toAsset, let type):
             switch type {
-            case .swap(let data):
+            case .swap(let quote, _):
                 return .swap(
                     TransactionSwapMetadata(
                         fromAsset: fromAsset.id,
-                        fromValue: data.quote.fromAmount,
+                        fromValue: quote.fromValue,
                         toAsset: toAsset.id,
-                        toValue: data.quote.toAmount
+                        toValue: quote.toValue
                     )
                 )
             case .approval:
                 return .null
             }
-        case .generic: 
+        case .generic:
             return .null
-        case .transfer: 
+        case .transfer:
             return .null
         case .stake:
             return .null
@@ -129,54 +103,3 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 }
-
-public struct TransferDataExtra: Equatable, Sendable {
-    public let gasLimit: BigInt?
-    public let gasPrice: GasPriceType?
-    public let data: Data?
-    
-    public init(
-        gasLimit: BigInt? = .none,
-        gasPrice: GasPriceType? = .none,
-        data: Data? = .none
-    ) {
-        self.gasLimit = gasLimit
-        self.gasPrice = gasPrice
-        self.data = data
-    }
-}
-extension TransferDataExtra: Hashable {}
-
-public enum SwapAction: Sendable {
-    case swap(SwapData)
-    case approval(spender: String, allowance: BigInt)
-}
-
-extension SwapAction: Hashable {}
-
-public struct SwapApproval: Equatable {
-    public let allowance: BigInt
-    public let spender: String
-}
-extension SwapApproval: Hashable {}
-
-public struct SwapData: Equatable, Sendable {
-    public let quote: SwapQuote
-    
-    public init(
-        quote: SwapQuote
-    ) {
-        self.quote = quote
-    }
-}
-
-extension SwapData {
-    public var hexData: Data? {
-        guard let value = quote.data?.data else {
-            return .none
-        }
-        return Data(fromHex: value)
-    }
-}
-
-extension SwapData: Hashable {}

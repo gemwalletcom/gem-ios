@@ -49,6 +49,13 @@ public extension String {
     func addPadding(number: Int, padding: Character) -> String {
         return String(repeatElement(padding, count: number - self.count)) + self
     }
+    
+    func encodedData() throws -> Data {
+        guard let data = self.data(using: .utf8) else {
+            throw AnyError("Unable to encode string to data")
+        }
+        return data
+    }
 }
 
 extension Optional where Wrapped == String {

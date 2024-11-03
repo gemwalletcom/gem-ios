@@ -60,7 +60,7 @@ class WalletsService {
         defer {
             self.balanceObserver = balanceService.observeBalance().sink { update in
                 for balance in update.balances {
-                    NSLog("observe balance: \(balance.assetId.identifier): \(balance.balance.available)")
+                    NSLog("observe balance: \(balance.assetId.identifier): \(balance.type)")
                 }
                 try? self.storeBalances(update: update)
             }
@@ -122,15 +122,8 @@ class WalletsService {
     func storeBalances(update: BalanceUpdate) throws {
         let assetIds = update.balances.map { $0.assetId }
         let assets = try assetsService.getAssets(for: assetIds)
-        let prices = try priceService.getPrices(for: assetIds)
-
-        let updateBalances = balanceService.createBalanceUpdate(
-            assets: assets,
-            balances: update.balances,
-            prices: prices
-        )
-        
-        try? balanceService.updateBalances(updateBalances, walletId: update.walletId)
+        let updates = balanceService.createBalanceUpdate(assets: assets, balances: update.balances)
+        try? balanceService.updateBalances(updates, walletId: update.walletId)
     }
     
     func updatePrices() async throws {
@@ -143,12 +136,6 @@ class WalletsService {
         
         let prices = try await priceService.fetchPrices(for: assetIds.ids)
         try priceService.updatePrices(prices: prices)
-        try balanceService
-            .getWalletBalances(assetIds: assetIds.ids)
-            .toMapArray { $0.walletId }
-            .forEach {
-                try storeBalances(update: BalanceUpdate(walletId: $0.key, balances: $0.value.map { $0.balance }))
-            }
     }
     
     // add asset to asset store and create balance store record
@@ -157,24 +144,31 @@ class WalletsService {
     }
     
     func getNewAssets(for wallet: Wallet) async throws {
+        guard wallet.hasTokenSupport else { return }
+
+        let preferences = wallet.preferences
+        
+        Task {
+            if !preferences.completeInitialLoadAssets {
+                await discoverAssetService.updateCoins(wallet: wallet)
+                preferences.completeInitialLoadAssets = true
+            }
+        }
+        
         //FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
         //otherwise it would return no assets
         try await Task.sleep(nanoseconds: UInt64(1 * Double(NSEC_PER_SEC)))
         
-        let preferences = wallet.preferences
         let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
-        try await discoverAssetService.updateTokens(
-            deviceId: deviceId,
-            wallet: wallet,
-            fromTimestamp: preferences.assetsTimestamp
-        )
-        preferences.assetsTimestamp = newTimestamp
-        
-        if !preferences.completeInitialLoadAssets {
-            await discoverAssetService.updateCoins(wallet: wallet)
-            preferences.completeInitialLoadAssets = true
+        Task {
+            try await discoverAssetService.updateTokens(
+                deviceId: deviceId,
+                wallet: wallet,
+                fromTimestamp: preferences.assetsTimestamp
+            )
+            preferences.assetsTimestamp = newTimestamp
         }
     }
     

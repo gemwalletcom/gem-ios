@@ -42,7 +42,7 @@ extension EthereumService {
         do {
             let gasLimit = try await provider
                 .request(.estimateGasLimit(from: from, to: to, value: value, data: data))
-                .mapResultOrError(BigIntable.self).value
+                .mapResultOrError(as: BigIntable.self).value
             return gasLimit == BigInt(21000) ? gasLimit : BigInt(gasLimit).increase(byPercentage: Self.gasLimitPercent)
         } catch let error {
             throw AnyError("Estimate gasLimit error: \(error.localizedDescription)")
@@ -105,7 +105,7 @@ extension EthereumService {
         case .polygon:
             // https://polygonscan.com/gastracker
             BigInt(30000000000) // 30 gwei
-        case .optimism:
+        case .optimism, .world:
             // https://optimistic.etherscan.io/chart/gasprice
             BigInt(10000000)    // 0.01 gwei
         case .arbitrum:
@@ -190,20 +190,22 @@ extension EthereumService {
             .map(as: JSONRPCResponse<String>.self).result
         return Self.decodeABI(hexString: response) ?? ""
     }
+    
+    private func getBalance(address: String) async throws -> BigInt {
+        try await provider.request(.balance(address: address))
+           .mapResult(BigIntable.self).value
+    }
 }
 
 // MARK: - ChainBalanceable
 
 extension EthereumService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let balanceCall = try provider.request(.balance(address: address))
-                    .mapResult(BigIntable.self).value
-        async let stakeCall = try getStakeBalance(address: address)
-        let (balance, stakeBalance) = try await(balanceCall, stakeCall)
+        let balance = try await getBalance(address: address)
 
         return AssetBalance(
             assetId: chain.chain.assetId,
-            balance: Balance(available: balance).merge(stakeBalance.balance)
+            balance: Balance(available: balance)
         )
     }
 
@@ -214,6 +216,18 @@ extension EthereumService: ChainBalanceable {
             result.append(AssetBalance(assetId: tokenId, balance: Balance(available: balance)))
         }
         return result
+    }
+    
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        switch chain {
+        case .smartChain:
+            return try await SmartChainService(provider: provider).getStakeBalance(for: address)
+        case .ethereum:
+            return try await LidoService(provider: provider).getBalance(address: address)
+        default:
+            break
+        }
+        return AssetBalance.make(for: chain.chain.assetId)
     }
 }
 
@@ -314,18 +328,6 @@ extension EthereumService: ChainStakable {
         default:
             return []
         }
-    }
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        switch chain {
-        case .smartChain:
-            return try await SmartChainService(provider: provider).getStakeBalance(address: address)
-        case .ethereum:
-            return try await LidoService(provider: provider).getBalance(address: address)
-        default:
-            break
-        }
-        return AssetBalance.make(for: chain.chain.assetId)
     }
 
     public func getPreloadExtra(chain: Chain, type: TransferDataType, address: String) async throws -> SigningdExtra? {

@@ -28,6 +28,7 @@ public struct Images {
         public static let manta = Image(.manta)
         public static let mantle = Image(.mantle)
         public static let near = Image(.near)
+        public static let world = Image(.world)
         public static let noble = Image(.noble)
         public static let opbnb = Image(.opbnb)
         public static let optimism = Image(.optimism)

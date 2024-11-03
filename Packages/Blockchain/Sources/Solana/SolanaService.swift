@@ -4,13 +4,14 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
-import GemstonePrimitives
+import func Gemstone.solanaDeriveMetadataPda
+import func Gemstone.solanaDecodeMetadata
+import struct GemstonePrimitives.SolanaConfig
 import WalletCore
 
 public struct SolanaService: Sendable {
     
-    let chain: Chain
+    let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
     
     let staticBaseFee = BigInt(50000)
@@ -18,7 +19,7 @@ public struct SolanaService: Sendable {
     let tokenAccountSize = 165
     
     public init(
-        chain: Chain,
+        chain: Primitives.Chain,
         provider: Provider<SolanaProvider>
     ) {
         self.chain = chain
@@ -96,7 +97,7 @@ extension SolanaService {
         return BigInt(fees.map { $0.prioritizationFee }.reduce(0, { $0 + Int($1) }) / fees.count)
     }
 
-    private func getCoinBalance(address: String) async throws -> BigInt {
+    private func getBalance(address: String) async throws -> BigInt {
         try await provider
             .request(.balance(address: address))
             .map(as: JSONRPCResponse<SolanaBalance>.self).result.value.asBigInt
@@ -142,15 +143,12 @@ extension SolanaService {
 
 extension SolanaService: ChainBalanceable {    
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getBalance = getCoinBalance(address: address)
-
-        let (available, staked) = try await (getBalance, getStakeBalance(address: address))
-
+        let balance = try await getBalance(address: address)
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: available
-            ).merge(staked.balance)
+                available: balance
+            )
         )
     }
     
@@ -159,7 +157,7 @@ extension SolanaService: ChainBalanceable {
     }
 
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let staked = try await getDelegations(address: address)
             .map { $0.account.lamports }
             .reduce(0, +)

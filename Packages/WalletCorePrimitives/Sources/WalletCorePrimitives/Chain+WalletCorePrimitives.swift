@@ -24,7 +24,8 @@ public extension Chain {
             .zkSync,
             .linea,
             .mantle,
-            .celo: .ethereum
+            .celo,
+            .world: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos

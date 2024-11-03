@@ -22,7 +22,7 @@ struct WalletScene: View {
     @Environment(\.stakeService) private var stakeService
 
     @Query<TotalValueRequest>
-    private var fiatValue: Double
+    private var totalFiatValue: Double
 
     @Query<AssetsRequest>
     private var assetsPinned: [AssetData]
@@ -54,7 +54,7 @@ struct WalletScene: View {
 
         _assets = Query(constant: model.assetsRequest)
         _assetsPinned = Query(constant: model.assetsPinnedRequest)
-        _fiatValue = Query(constant: model.fiatValueRequest)
+        _totalFiatValue = Query(constant: model.totalFiatValueRequest)
         _dbWallet = Query(constant: model.walletRequest)
         _banners = Query(constant: model.bannersRequest)
     }
@@ -65,7 +65,7 @@ struct WalletScene: View {
                 WalletHeaderView(
                     model: WalletHeaderViewModel(
                         walletType: model.wallet.type,
-                        value: fiatValue
+                        value: totalFiatValue
                     )
                 ) {
                     isPresentingSelectType = $0.selectType

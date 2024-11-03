@@ -30,20 +30,43 @@ public struct BalanceStore: Sendable {
     ) throws {
         try db.write { (db: Database) in
             for balance in balances {
+                let balanceFields: [ColumnAssignment] = switch balance.type {
+                case .coin(let balance):
+                    [
+                        Columns.Balance.available.set(to: balance.available.value),
+                        Columns.Balance.availableAmount.set(to: balance.available.amount)
+                    ]
+                case .token(let balance):
+                    [
+                        Columns.Balance.available.set(to: balance.available.value),
+                        Columns.Balance.availableAmount.set(to: balance.available.amount),
+                    ]
+                case .stake(let balance):
+                    [
+                        Columns.Balance.staked.set(to: balance.staked.value),
+                        Columns.Balance.stakedAmount.set(to: balance.staked.amount),
+                        Columns.Balance.frozen.set(to: balance.frozen.value),
+                        Columns.Balance.frozenAmount.set(to: balance.frozen.amount),
+                        Columns.Balance.locked.set(to: balance.locked.value),
+                        Columns.Balance.lockedAmount.set(to: balance.locked.amount),
+                        Columns.Balance.pending.set(to: balance.pending.value),
+                        Columns.Balance.pendingAmount.set(to: balance.pending.amount),
+                        Columns.Balance.rewards.set(to: balance.rewards.value),
+                        Columns.Balance.rewardsAmount.set(to: balance.rewards.amount),
+                        Columns.Balance.reserved.set(to: balance.reserved.value),
+                        Columns.Balance.reservedAmount.set(to: balance.reserved.amount),
+                    ]
+                }
+                
+                let defaultFields: [ColumnAssignment] = [
+                    Columns.Balance.updatedAt.set(to: balance.updatedAt),
+                ]
+                let assignments = balanceFields + defaultFields
+                
                 try AssetBalanceRecord
                     .filter(Columns.Balance.walletId == walletId)
                     .filter(Columns.Balance.assetId == balance.assetID)
-                    .updateAll(db,[
-                        Columns.Balance.available.set(to: balance.available),
-                        Columns.Balance.frozen.set(to: balance.frozen),
-                        Columns.Balance.locked.set(to: balance.locked),
-                        Columns.Balance.staked.set(to: balance.staked),
-                        Columns.Balance.pending.set(to: balance.pending),
-                        Columns.Balance.reserved.set(to: balance.reserved),
-                        Columns.Balance.total.set(to: balance.total),
-                        Columns.Balance.fiatValue.set(to: balance.fiatValue),
-                        Columns.Balance.updatedAt.set(to: balance.updatedAt),
-                    ])
+                    .updateAll(db, assignments)
             }
         }
     }

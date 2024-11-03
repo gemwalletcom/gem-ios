@@ -21,4 +21,5 @@ public enum EVMChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case linea
 	case mantle
 	case celo
+	case world
 }

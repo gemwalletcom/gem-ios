@@ -29,7 +29,7 @@ struct WalletSceneViewModel {
         AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(false)])
     }
 
-    var fiatValueRequest: TotalValueRequest {
+    var totalFiatValueRequest: TotalValueRequest {
         TotalValueRequest(walletID: wallet.id)
     }
 

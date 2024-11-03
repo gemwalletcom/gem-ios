@@ -96,9 +96,8 @@ public struct SolanaSigner: Signable {
     public func swap(input: SignerInput, privateKey: Data) throws -> String {
         guard 
             case .swap(_, _, let action) = input.type,
-            case .swap(let swapData) = action,
-            let string = swapData.quote.data?.data,
-            let bytes = Base64.decode(string: string) else {
+            case .swap(_, let swapData) = action,
+            let bytes = Base64.decode(string: swapData.data) else {
             throw AnyError("not swap SignerInput")
         }
         return try signData(bytes: bytes, privateKey: privateKey)
@@ -141,6 +140,10 @@ public struct SolanaSigner: Signable {
             throw AnyError("string is not Base58 encoding!");
         }
         return data.base64EncodedString().paddded
+    }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
     }
 }
 

@@ -28,7 +28,8 @@ extension Chain {
             .zkSync,
             .linea,
             .mantle,
-            .celo:
+            .celo,
+            .world:
             return .ethereum
         case .solana:
             return .solana

@@ -87,4 +87,8 @@ public struct TonSigner: Signable {
     public func signStake(input: SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
+    }
 }

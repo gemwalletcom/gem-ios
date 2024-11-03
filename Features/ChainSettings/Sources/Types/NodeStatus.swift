@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-enum NodeStatus {
+public enum NodeStatus: Sendable {
     case result(blockNumber: BigInt, latency: Latency)
     case error(error: any Error)
     case none

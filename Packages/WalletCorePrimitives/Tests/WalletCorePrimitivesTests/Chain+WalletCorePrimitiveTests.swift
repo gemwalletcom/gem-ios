@@ -28,7 +28,8 @@ final class Chain_WalletCorePrimitiveTests: XCTestCase {
                 .zkSync,
                 .linea,
                 .mantle,
-                .celo: XCTAssertEqual(coinType, .ethereum)
+                .celo,
+                .world: XCTAssertEqual(coinType, .ethereum)
             case .solana: XCTAssertEqual(coinType, .solana)
             case .thorchain: XCTAssertEqual(coinType, .thorchain)
             case .cosmos: XCTAssertEqual(coinType, .cosmos)

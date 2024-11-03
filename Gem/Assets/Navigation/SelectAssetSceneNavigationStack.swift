@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Style
 import Localization
+import SwapService
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
@@ -18,11 +19,14 @@ struct SelectAssetSceneNavigationStack: View {
 
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
-
+    @Binding private var isPresentingSelectType: SelectAssetType?
+    
     init(
-        model: SelectAssetViewModel
+        model: SelectAssetViewModel,
+        isPresentingSelectType: Binding<SelectAssetType?>
     ) {
         _model = State(wrappedValue: model)
+        _isPresentingSelectType = isPresentingSelectType
     }
 
     var body: some View {
@@ -70,7 +74,10 @@ struct SelectAssetSceneNavigationStack: View {
                     RecipientNavigationView(
                         wallet: model.wallet,
                         asset: input.asset,
-                        navigationPath: $navigationPath
+                        navigationPath: $navigationPath,
+                        onComplete: {
+                            isPresentingSelectType = nil
+                        }
                     )
                 case .receive:
                     ReceiveScene(
@@ -94,7 +101,10 @@ struct SelectAssetSceneNavigationStack: View {
                             assetId: input.asset.id,
                             walletsService: walletsService,
                             swapService: SwapService(nodeProvider: nodeService),
-                            keystore: keystore
+                            keystore: keystore,
+                            onComplete: {
+                                isPresentingSelectType = .none
+                            }
                         )
                     )
                 case .manage, .stake, .priceAlert:

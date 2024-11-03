@@ -31,7 +31,6 @@ public enum GemAPI: TargetType {
     
     case getAsset(AssetId)
     case getAssets([AssetId])
-    case getSwap(SwapQuoteRequest)
     case getSearchAssets(query: String, chains: [Chain])
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
     
@@ -59,7 +58,6 @@ public enum GemAPI: TargetType {
         case .getPrices,
             .addSubscriptions,
             .addDevice,
-            .getSwap,
             .getAssets,
             .addPriceAlerts:
             return .POST
@@ -106,8 +104,6 @@ public enum GemAPI: TargetType {
             return "/v1/transactions/by_device_id/\(deviceId)"
         case .getAsset(let id):
             return "/v1/assets/\(id.identifier.replacingOccurrences(of: "/", with: "%2F"))"
-        case .getSwap:
-            return "/v1/swap/quote"
         case .getAssets:
             return "/v1/assets"
         case .getSearchAssets:
@@ -165,8 +161,6 @@ public enum GemAPI: TargetType {
             ].compactMapValues { $0 }
             
             return .params(params)
-        case .getSwap(let request):
-            return .encodable(request)
         case .getSearchAssets(let query, let chains):
             return .params([
                 "query": query,

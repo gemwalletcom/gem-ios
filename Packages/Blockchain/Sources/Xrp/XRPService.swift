@@ -56,8 +56,8 @@ extension XRPService: ChainBalanceable {
         []
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        .none
     }
 }
 

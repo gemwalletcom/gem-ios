@@ -48,7 +48,7 @@ public struct StakeConfig {
 }
 
 public struct ChainConfig {
-    public static func config(chain: Chain) -> Gemstone.ChainConfig {
+    public static func config(chain: Primitives.Chain) -> Gemstone.ChainConfig {
         Config.shared.getChainConfig(chain: chain.rawValue)
     }
 }
