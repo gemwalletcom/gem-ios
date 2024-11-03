@@ -127,30 +127,29 @@ extension EthereumService: ChainFeeCalculateable {
         let to = getTo(input: input)
         let value = getValue(input: input)
         
-        let gasLimit: BigInt
-        if case .stake(_, let stakeType) = input.type {
-            gasLimit = try await EthereumStakeService(service: self)
-                .getGasLimit(
-                    chain: chain,
-                    type: stakeType,
-                    stakeValue: input.value, // original value
-                    from: input.senderAddress,
-                    to: to,
-                    value: value,
-                    data: data
-                )
-        } else {
-            gasLimit = try await getGasLimit(
+        async let getBasePriorityFee = getBasePriorityFee(rewardPercentiles: Self.rewardPercentiles)
+        async let getGasLimit: BigInt = {
+            if case .stake(_, let stakeType) = input.type {
+                return try await EthereumStakeService(service: self)
+                    .getGasLimit(
+                        chain: chain,
+                        type: stakeType,
+                        stakeValue: input.value, // original value
+                        from: input.senderAddress,
+                        to: to,
+                        value: value,
+                        data: data
+                    )
+            }
+            return try await self.getGasLimit(
                 from: input.senderAddress,
                 to: to,
                 value: value?.hexString.append0x,
                 data: data?.hexString.append0x
             )
-        }
+        }()
+        let (basePriorityFee, gasLimit) = try await (getBasePriorityFee, getGasLimit)
         
-        async let getGasPrice = getBasePriorityFee(rewardPercentiles: Self.rewardPercentiles)
-        let basePriorityFee = try await getGasPrice
-
         let gasPrice = basePriorityFee.baseFee + basePriorityFee.priorityFee
         let minerFee = {
             switch input.type {
