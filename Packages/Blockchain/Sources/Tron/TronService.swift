@@ -232,12 +232,12 @@ extension TronService: ChainBalanceable {
             assetId: chain.assetId,
             balance: Balance(
                 available: .zero,
-                frozen: balance.frozen,
-                locked: balance.locked,
+                frozen: .zero,
+                locked: .zero,
                 staked: balance.staked,
                 pending: balance.pending,
                 rewards: rewards,
-                reserved: balance.reserved
+                reserved: .zero
             )
         )
     }
