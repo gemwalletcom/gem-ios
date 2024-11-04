@@ -9,6 +9,7 @@ import ChainService
 
 struct AddTokenScene: View {
     @State private var model: AddTokenViewModel
+    @State private var networksModel: NetworkSelectorViewModel
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -18,7 +19,8 @@ struct AddTokenScene: View {
     var action: ((Asset) -> Void)?
 
     init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
-        self.model = model
+        _model = State(initialValue: model)
+        _networksModel = State(initialValue: NetworkSelectorViewModel(chains: model.chains))
         self.action = action
     }
 
@@ -41,14 +43,14 @@ struct AddTokenScene: View {
         .background(Colors.grayBackground)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
+            NetworkSelectorScene(
+                model: $networksModel,
+                onFinishSelection: onFinishChainSelection(chains:)
+            )
+        }
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
-        }
-        .sheet(isPresented: $model.isPresentingSelectNetwork) {
-            NetworkSelectorNavigationStack(
-                chains: model.chains,
-                onSelectChain: onSelectNewChain(_:)
-            )
         }
     }
 }
@@ -62,7 +64,9 @@ extension AddTokenScene {
             if let chain = model.input.chain {
                 Section(model.networkTitle) {
                     if model.input.hasManyChains {
-                        NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                        NavigationLink(value: Scenes.NetworksSelector()) {
+                            ChainView(chain: chain)
+                        }
                     } else {
                         ChainView(chain: chain)
                     }
@@ -113,42 +117,31 @@ extension AddTokenScene {
 // MARK: - Actions
 
 extension AddTokenScene {
-    @MainActor
-    private func onSelectNewChain(_ chain: Chain) {
-        model.input.chain = chain
+    private func onFinishChainSelection(chains: [Chain]) {
+        model.input.chain = chains.first
         onAddressClean(nil, nil)
     }
 
-    @MainActor
     private func onSelectImportToken() {
         guard case let .loaded(asset) = model.state else { return }
         action?(asset.asset)
     }
 
-    @MainActor
-    private func onSelectChain() {
-        model.isPresentingSelectNetwork = true
-    }
-
-    @MainActor
     private func onSelectScan() {
         model.isPresentingScanner = true
     }
 
-    @MainActor
     private func onSelectPaste() {
         guard let address = UIPasteboard.general.string else { return }
         model.input.address = address
         fetch()
     }
 
-    @MainActor
     private func onHandleScan(_ result: String) {
         model.input.address = result
         fetch()
     }
 
-    @MainActor
     private func onAddressClean(_ oldValue: String?, _ newValue: String?) {
         guard newValue == nil else { return }
         model.input.address = newValue

@@ -3,32 +3,32 @@
 import Foundation
 import Primitives
 import Localization
+import Style
+import SwiftUI
 
 struct NetworkSelectorViewModel {
-    var title: String { Localized.Settings.Networks.title }
-
-    let isMultipleSelectionEnabled: Bool
+    let isMultiSelectionEnabled: Bool
     let chains: [Chain]
 
     var selectedChains: Set<Chain>
 
-    init(chains: [Chain], selectedChains: [Chain], isMultipleSelectionEnabled: Bool) {
-        self.isMultipleSelectionEnabled = isMultipleSelectionEnabled
+    init(chains: [Chain], selectedChains: [Chain], isMultiSelectionEnabled: Bool) {
+        self.isMultiSelectionEnabled = isMultiSelectionEnabled
         self.chains = chains
         self.selectedChains = Set(selectedChains)
     }
 
-    var cancelButtonTitle: String {
-        Localized.Common.cancel
+    init(chains: [Chain]) {
+        self.init(chains: chains, selectedChains: [], isMultiSelectionEnabled: false)
     }
 
-    var clearButtonTitle: String {
-        Localized.Filter.clear
-    }
+    var title: String { Localized.Settings.Networks.title }
+    var cancelButtonTitle: String { Localized.Common.cancel }
+    var clearButtonTitle: String { Localized.Filter.clear }
+    var doneButtonTitle: String { Localized.Common.done }
+    var noResultsTitle: String { Localized.Common.noResultsFound }
 
-    var doneButtonTitle: String {
-        Localized.Common.done
-    }
+    var noResultsImage: Image { Image(systemName: SystemImage.searchNoResults) }
 }
 
 // MARK: - Business Logic

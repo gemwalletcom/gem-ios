@@ -48,7 +48,7 @@ struct AssetsFilterScene: View {
             NetworkSelectorNavigationStack(
                 chains: model.allChains,
                 selectedChains: model.selectedChains,
-                onSelectMultipleChains: onSelectMultiple(chains:)
+                onFinishSelection: onFinishSelection(chains:)
             )
         }
     }
@@ -66,7 +66,7 @@ extension AssetsFilterScene {
         dismiss()
     }
 
-    private func onSelectMultiple(chains: [Chain]) {
+    private func onFinishSelection(chains: [Chain]) {
         model.selectedChains = chains
     }
 

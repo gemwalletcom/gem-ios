@@ -42,4 +42,6 @@ struct Scenes {
     struct ChainSettings: Hashable {
         let chain: Primitives.Chain
     }
+
+    struct NetworksSelector: Hashable {}
 }

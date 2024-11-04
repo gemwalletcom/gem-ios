@@ -5,58 +5,34 @@ import Settings
 import Primitives
 import Components
 import Style
-import Localization
 
 struct NetworkSelectorNavigationStack: View {
     @Environment(\.dismiss) var dismiss
 
     @State private var model: NetworkSelectorViewModel
 
-    private var onSelectChain: ((Chain) -> Void)?
-    private var onSelectMultipleChains: (([Chain]) -> Void)?
+    private var onFinishSelection: (([Chain]) -> Void)?
 
-    init(chains: [Chain], onSelectChain: @escaping ((Chain) -> Void)) {
-        _model = State(initialValue: NetworkSelectorViewModel(chains: chains, selectedChains: [], isMultipleSelectionEnabled: false))
-        self.onSelectChain = onSelectChain
+    init(chains: [Chain], onFinishSelection: @escaping (([Chain]) -> Void)) {
+        _model = State(initialValue: NetworkSelectorViewModel(chains: chains))
+        self.onFinishSelection = onFinishSelection
     }
 
-    init(chains: [Chain], selectedChains: [Chain], onSelectMultipleChains: @escaping (([Chain]) -> Void)) {
-        _model = State(initialValue: NetworkSelectorViewModel(chains: chains, selectedChains: selectedChains, isMultipleSelectionEnabled: true))
-        self.onSelectMultipleChains = onSelectMultipleChains
+    init(chains: [Chain], selectedChains: [Chain], onFinishSelection: @escaping (([Chain]) -> Void)) {
+        _model = State(initialValue: NetworkSelectorViewModel(
+            chains: chains,
+            selectedChains: selectedChains,
+            isMultiSelectionEnabled: true)
+        )
+        self.onFinishSelection = onFinishSelection
     }
 
     var body: some View {
         NavigationStack {
-            SearchableListView(
-                items: model.chains,
-                filter: model.filter(_:query:),
-                content: { chain in
-                    if model.isMultipleSelectionEnabled {
-                        SelectionView(
-                            value: chain,
-                            selection: model.selectedChains.contains(chain) ? chain : nil,
-                            action: onSelectMultiple(chain:),
-                            content: {
-                                ChainView(chain: chain)
-                            }
-                        )
-                    } else {
-                        NavigationCustomLink(with: ChainView(chain: chain)) {
-                            onSelect(chain: chain)
-                        }
-                    }
-                },
-                emptyContent: {
-                    StateEmptyView(
-                        title: Localized.Common.noResultsFound,
-                        image: Image(systemName: SystemImage.searchNoResults)
-                    )
-                }
-            )
-            .navigationTitle(Localized.Settings.Networks.title)
+            NetworkSelectorScene(model: $model)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if model.isMultipleSelectionEnabled && !model.selectedChains.isEmpty {
+                if model.isMultiSelectionEnabled && !model.selectedChains.isEmpty {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(model.clearButtonTitle, action: onClear)
                             .bold()
@@ -68,7 +44,7 @@ struct NetworkSelectorNavigationStack: View {
                     }
                 }
 
-                if model.isMultipleSelectionEnabled {
+                if model.isMultiSelectionEnabled {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(model.doneButtonTitle) {
                             onDone()
@@ -84,21 +60,12 @@ struct NetworkSelectorNavigationStack: View {
 // MARK: - Actions
 
 extension NetworkSelectorNavigationStack {
-    private func onSelect(chain: Chain) {
-        onSelectChain?(chain)
-        dismiss()
-    }
-
-    private func onSelectMultiple(chain: Chain) {
-        model.toggle(chain: chain)
-    }
-
     private func onCancel() {
         dismiss()
     }
 
     private func onDone() {
-        onSelectMultipleChains?(Array(model.selectedChains))
+        onFinishSelection?(Array(model.selectedChains))
         dismiss()
     }
 
