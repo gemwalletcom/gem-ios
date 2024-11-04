@@ -280,3 +280,4 @@
 "common.skip" = "Überspringen";
 "common.warning" = "Warnung";
 "warnings.multi_signature_blocked" = "Überweisen Sie kein Geld auf dieses %@ Multi-Signature-Wallet, es sei denn, Sie sind sicher, dass Sie die privaten Schlüssel kontrollieren. Andernfalls könnten Sie Opfer von Betrug werden und Ihr Vermögen dauerhaft verlieren.";
+"swap.price_impact" = "Preisauswirkungen";

@@ -280,3 +280,4 @@
 "common.skip" = "跳过";
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "除非您确定自己控制私钥，否则请勿将资金转入此%@多重签名钱包。否则，您可能会遭受诈骗，并且可能会永久失去您的资产。";
+"swap.price_impact" = "价格影响";

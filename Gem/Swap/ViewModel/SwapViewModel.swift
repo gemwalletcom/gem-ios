@@ -86,6 +86,14 @@ class SwapViewModel {
     var swapToTitle: String { Localized.Swap.youReceive }
     var errorTitle: String { Localized.Errors.errorOccured }
 
+    var priceImpact: String { Localized.Swap.priceImpact }
+    var priceImpactValue: String? {
+        switch swapAvailabilityState {
+        case .loaded(_): return .none //return "1%"
+        default: return .none
+        }
+    }
+    
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
         switch swapAvailabilityState {
         case .noData, .loading:
@@ -236,14 +244,16 @@ extension SwapViewModel {
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(spender: spender, allowance: .MAX_256))
         let recipientData = RecipientData(
             asset: fromAsset,
-            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none), amount: .none
+            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none),
+            amount: .none
         )
 
         return TransferData(
             type: transferDataType,
             recipientData: recipientData,
             value: BigInt.zero,
-            canChangeValue: false
+            canChangeValue: false,
+            ignoreValueCheck: true
         )
     }
 

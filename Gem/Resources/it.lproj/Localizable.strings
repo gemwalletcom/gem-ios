@@ -280,3 +280,4 @@
 "common.skip" = "Saltare";
 "common.warning" = "Avvertimento";
 "warnings.multi_signature_blocked" = "Non trasferire fondi a questo portafoglio multi-firma %@ a meno che tu non sia certo di controllare le chiavi private. In caso contrario, potresti esporti a truffe e potresti perdere definitivamente i tuoi beni.";
+"swap.price_impact" = "Impatto sul prezzo";

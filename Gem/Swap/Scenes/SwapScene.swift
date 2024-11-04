@@ -118,6 +118,15 @@ extension SwapScene {
                 )
                 .focused($focusedField, equals: .to)
             }
+            
+            Section {
+                if let priceImpactValue = model.priceImpactValue {
+                    ListItemView(
+                        title: model.priceImpact,
+                        subtitle: priceImpactValue
+                    )
+                }
+            }
 
             Section {
                 TransactionsList(tokenApprovals, showSections: false)

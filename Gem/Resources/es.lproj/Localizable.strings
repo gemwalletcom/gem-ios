@@ -280,3 +280,4 @@
 "common.skip" = "Saltar";
 "common.warning" = "Advertencia";
 "warnings.multi_signature_blocked" = "No transfiera fondos a esta billetera multifirma %@ a menos que esté seguro de que controla las claves privadas. Si no lo hace, podría exponerse a estafas y perder sus activos de forma permanente.";
+"swap.price_impact" = "Impacto en el precio";
