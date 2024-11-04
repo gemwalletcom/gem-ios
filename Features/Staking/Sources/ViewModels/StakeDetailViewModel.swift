@@ -47,10 +47,6 @@ public struct StakeDetailViewModel {
         TextStyle(font: .callout, color: model.stateTextColor)
     }
     
-    public var aprTextStyle: TextStyle {
-        stakeApr > 0 ? TextStyle(font: .callout, color: Colors.green) : .callout
-    }
-    
     public var validatorText: String {
         model.validatorText
     }

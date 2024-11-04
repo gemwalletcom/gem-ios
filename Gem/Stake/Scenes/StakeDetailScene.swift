@@ -22,7 +22,7 @@ struct StakeDetailScene: View {
                 }
 
                 if model.showValidatorApr {
-                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText, subtitleStyle: model.aprTextStyle)
+                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText)
                 }
 
                 ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
