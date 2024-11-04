@@ -294,7 +294,7 @@ extension SwapViewModel {
                 message: .typed(permit2JSON),
                 data: try permit2JSON.encodedData()
             )
-            let signatureData = try signature.encodedData()
+            let signatureData = try Data.from(hex: signature)
             let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)
             
             return try await self.swapService.getQuoteData(quote, data: .permit2(permitData))
