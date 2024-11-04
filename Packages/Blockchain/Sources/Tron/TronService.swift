@@ -231,7 +231,7 @@ extension TronService: ChainBalanceable {
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: balance.available,
+                available: .zero,
                 frozen: balance.frozen,
                 locked: balance.locked,
                 staked: balance.staked,

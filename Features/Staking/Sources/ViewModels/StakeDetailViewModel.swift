@@ -77,10 +77,6 @@ public struct StakeDetailViewModel {
     }
     
     public var isWithdrawStakeAvailable: Bool {
-        // TODO: - remove once, tron will be supportWidthdraw
-        if chain == .tron {
-            return model.state == .awaitingWithdrawal
-        }
         return chain.supportWidthdraw && model.state == .awaitingWithdrawal
     }
     
