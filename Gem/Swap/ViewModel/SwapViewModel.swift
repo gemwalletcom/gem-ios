@@ -278,30 +278,36 @@ extension SwapViewModel {
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
         switch quote.approval {
         case .approve, .none:
-            return try await self.swapService.getQuoteData(quote, permit2: .none)
+            return try await self.swapService.getQuoteData(quote, data: .none)
         case .permit2(let data):
             let chain = try AssetId(id: quote.request.fromAsset).chain
-            let permit2Single = permit2Single(token: data.token, spender: data.spender, value: data.value)
-            let permit2JSON = Gemstone.permit2DataToEip712Json(chain: chain.rawValue, data: permit2Single)
+            let permit2Single = permit2Single(
+                token: data.token,
+                spender: data.spender,
+                value: data.value,
+                nonce: data.permit2Nonce
+            )
+            let permit2JSON = try Gemstone.permit2DataToEip712Json(chain: chain.rawValue, data: permit2Single)
             let signer = Signer(wallet: wallet, keystore: keystore)
             let signature = try signer.signMessage(
                 chain: chain,
                 message: .typed(permit2JSON),
                 data: try permit2JSON.encodedData()
             )
-            let permitData = Permit2Data(permitSingle: permit2Single, signature: Data(hexString: signature) ?? Data())
+            let signatureData = try signature.encodedData()
+            let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)
             
-            return try await self.swapService.getQuoteData(quote, permit2: permitData)
+            return try await self.swapService.getQuoteData(quote, data: .permit2(permitData))
         }
     }
     
-    public func permit2Single(token: String, spender: String, value: String) -> Gemstone.PermitSingle {
+    public func permit2Single(token: String, spender: String, value: String, nonce: UInt64) -> Gemstone.PermitSingle {
         return PermitSingle(
             details: Permit2Detail(
                 token: token,
                 amount: value,
                 expiration: UInt64(Date().timeIntervalSince1970) + 60 * 60 * 30,
-                nonce: 0
+                nonce: nonce
             ),
             spender: spender,
             sigDeadline: UInt64(Date().timeIntervalSince1970) + 60 * 30
