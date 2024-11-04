@@ -267,10 +267,9 @@ extension ConfirmTransferViewModel {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
             for data in signedData {
                 let hash = try await broadcast(data: data, options: broadcastOptions)
-                if data == signedData.last {
-                    let transaction = try getTransaction(input: input, amount: amount, hash: hash)
-                    try addTransaction(transaction: transaction)
-                }
+                let transaction = try getTransaction(input: input, amount: amount, hash: hash)
+                try addTransaction(transaction: transaction)
+
                 if signedData.count > 1 && data != signedData.last {
                     try await Task.sleep(for: .milliseconds(300))
                 }

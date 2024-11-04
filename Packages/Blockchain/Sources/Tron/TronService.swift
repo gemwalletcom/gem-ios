@@ -198,20 +198,11 @@ extension TronService {
 
 extension TronService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getBalance = accountBalance(address: address)
-        async let getReward = reward(address: address)
-        let (balance, rewards) = try await (getBalance, getReward)
-
+        let available = try await accountBalance(address: address).available
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: balance.available,
-                frozen: balance.frozen,
-                locked: balance.locked,
-                staked: balance.staked,
-                pending: balance.pending,
-                rewards: rewards,
-                reserved: balance.reserved
+                available: available
             )
         )
     }
@@ -233,7 +224,22 @@ extension TronService: ChainBalanceable {
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
-        .none
+        async let getBalance = accountBalance(address: address)
+        async let getReward = reward(address: address)
+        let (balance, rewards) = try await (getBalance, getReward)
+
+        return AssetBalance(
+            assetId: chain.assetId,
+            balance: Balance(
+                available: balance.available,
+                frozen: balance.frozen,
+                locked: balance.locked,
+                staked: balance.staked,
+                pending: balance.pending,
+                rewards: rewards,
+                reserved: balance.reserved
+            )
+        )
     }
 }
 
@@ -445,23 +451,20 @@ extension TronService: ChainStakable {
         async let getReward = reward(address: address)
         async let getVlidators = getValidators(apr: 0)
 
-        let (account, reward, validators) = try await (
-            getAccount,
-            getReward,
-            getVlidators
-        )
+        let (account, reward, validators) = try await (getAccount, getReward, getVlidators)
 
         let pendingDelegations: [DelegationBase] = (account.unfrozenV2 ?? []).compactMap { unfrozen in
             guard let expireTime = unfrozen.unfreeze_expire_time,
                   let amount = unfrozen.unfreeze_amount else { return nil }
 
             let completionDate = Date(timeIntervalSince1970: TimeInterval(expireTime / 1000))
+            let state: DelegationState = Date() < completionDate ? .pending : .awaitingWithdrawal
             let balance = BigInt(amount)
 
             return DelegationBase(
                 assetId: chain.assetId,
-                state: Date() < completionDate ? .pending : .awaitingWithdrawal,
-                balance: BigInt(balance).description,
+                state: state,
+                balance: balance.description,
                 shares: .empty,
                 rewards: .zero,
                 completionDate: completionDate,
@@ -471,25 +474,27 @@ extension TronService: ChainStakable {
         }
 
         let votes = account.votes ?? []
-        let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
-
         let delegations: [DelegationBase] = votes.compactMap { vote -> DelegationBase? in
             guard let validator = validators.first(where: { $0.id == vote.vote_address }) else { return nil }
 
-            let rewards: String = {
-                guard totalVotes > 0 else { return String(reward) }
-                let proportion = Double(vote.vote_count) / Double(totalVotes)
-                let rewardForVote = (Double(reward) * proportion)
-                return String(format: "%.0f", rewardForVote)
-            }()
             let balance = (BigInt(vote.vote_count) * BigInt(10).power(Int(chain.asset.decimals))).description
+            let rewards: BigInt = {
+                let totalVotes = votes.reduce(0) { $0 + $1.vote_count }
+                guard totalVotes > 0 else { return BigInt(reward) }
+
+                let proportion = Double(vote.vote_count) / Double(totalVotes)
+                let rewardForVote = Double(reward) * proportion
+                let roundedRewardForVote = Int(rewardForVote.rounded())
+
+                return BigInt(roundedRewardForVote)
+            }()
 
             return DelegationBase(
                 assetId: chain.assetId,
                 state: .active,
                 balance: balance,
                 shares: .empty,
-                rewards: rewards,
+                rewards: rewards.description,
                 completionDate: nil,
                 delegationId: "\(balance)_\(rewards)",
                 validatorId: validator.id

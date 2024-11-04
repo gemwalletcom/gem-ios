@@ -42,11 +42,6 @@ public struct StakeService: Sendable {
             .filter { $0.isActive && !$0.name.isEmpty && !$0.isSystem }
     }
 
-    public func getRedelegateValidators(assetId: AssetId) throws -> [DelegationValidator] {
-        try store.getValidators(assetId: assetId)
-            .filter { !$0.name.isEmpty && !$0.isSystem }
-    }
-
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try store.getValidator(assetId: assetId, validatorId: validatorId)
     }

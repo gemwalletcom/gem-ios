@@ -77,7 +77,11 @@ public struct StakeDetailViewModel {
     }
     
     public var isWithdrawStakeAvailable: Bool {
-        chain.supportWidthdraw && model.state == .awaitingWithdrawal
+        // TODO: - remove once, tron will be supportWidthdraw
+        if chain == .tron {
+            return model.state == .awaitingWithdrawal
+        }
+        return chain.supportWidthdraw && model.state == .awaitingWithdrawal
     }
     
     public var completionDateTitle: String? {
@@ -119,7 +123,7 @@ public struct StakeDetailViewModel {
         return AmountInput(
             type: .redelegate(
                 delegation: model.delegation,
-                validators: try service.getRedelegateValidators(assetId: asset.id),
+                validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: recommendedCurrentValidator
             ),
             asset: asset

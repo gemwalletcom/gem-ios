@@ -39,16 +39,20 @@ public struct TronSigner: Signable {
         fatalError()
     }
 
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
+    }
+
     public func signStake(input: SignerInput, privateKey: Data) throws -> String {
         guard case let .stake(_, stakeType) = input.type else {
-            fatalError("Invalid input type for staking")
+            throw(AnyError("Invalid input type for staking"))
         }
 
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
         case .stake:
             guard case let .vote(votes) = input.extra else {
-                fatalError("vote for stacking should be always set")
+                throw(AnyError("vote for stacking should be always set"))
             }
             let freezeContract = TronFreezeBalanceV2Contract.with {
                 $0.ownerAddress = input.senderAddress
@@ -74,7 +78,7 @@ public struct TronSigner: Signable {
             return freezeOutput.json + "___" + voteOutput.json
         case .unstake:
             guard case let .vote(votes) = input.extra else {
-                fatalError("vote for unstaking should be always set")
+                throw(AnyError("vote for stacking should be always set"))
             }
             if votes.isEmpty {
                 contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
@@ -108,7 +112,7 @@ public struct TronSigner: Signable {
             }
         case .redelegate:
             guard case let .vote(votes) = input.extra else {
-                fatalError("vote for redelegate should be always set")
+                throw(AnyError("vote for stacking should be always set"))
             }
             contract = .voteWitness(TronVoteWitnessContract.with {
                 $0.ownerAddress = input.senderAddress
