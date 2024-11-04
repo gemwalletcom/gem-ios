@@ -28,10 +28,17 @@ public struct StakeDetailViewModel {
         self.onAmountInputAction = onAmountInputAction
     }
 
-    public var title: String {
-        Localized.Transfer.Stake.title
-    }
-    
+    public var title: String { Localized.Transfer.Stake.title }
+    public var validatorTitle: String { Localized.Stake.validator }
+    public var aprTitle: String { Localized.Stake.apr("") }
+    public var stateTitle: String { Localized.Transaction.status }
+    public var balancesTitle: String { Localized.Asset.balances }
+    public var manageTitle: String { Localized.Common.manage }
+    public var rewardsTitle: String { Localized.Stake.rewards }
+    public var unstakeTitle: String { Localized.Transfer.Unstake.title }
+    public var redelegateTitle: String { Localized.Transfer.Redelegate.title }
+    public var withdrawTitle: String { Localized.Transfer.Withdraw.title }
+
     public var stateText: String {
         model.state.title
     }
@@ -41,10 +48,7 @@ public struct StakeDetailViewModel {
     }
     
     public var aprTextStyle: TextStyle {
-        if stakeApr > 0 {
-            return TextStyle(font: .callout, color: Colors.green)
-        }
-        return .callout
+        stakeApr > 0 ? TextStyle(font: .callout, color: Colors.green) : .callout
     }
     
     public var validatorText: String {
@@ -77,9 +81,13 @@ public struct StakeDetailViewModel {
     }
     
     public var isWithdrawStakeAvailable: Bool {
-        return chain.supportWidthdraw && model.state == .awaitingWithdrawal
+        chain.supportWidthdraw && model.state == .awaitingWithdrawal
     }
-    
+
+    public var showValidatorApr: Bool {
+        !model.delegation.validator.apr.isZero
+    }
+
     public var completionDateTitle: String? {
         switch model.state {
         case .pending, .deactivating:
@@ -99,7 +107,7 @@ public struct StakeDetailViewModel {
     }
     
     public func stakeRecipientData() throws -> AmountInput {
-        return AmountInput(
+        AmountInput(
             type: .stake(
                 validators: try service.getActiveValidators(assetId: asset.id),
                 recommendedValidator: model.delegation.validator

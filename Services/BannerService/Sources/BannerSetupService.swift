@@ -18,8 +18,8 @@ public struct BannerSetupService: Sendable {
     }
 
     public func setup() throws {
-        let stakeChains = StakeChain.allCases.filter({ $0 != .ethereum || $0 != .tron})
-        
+        let stakeChains = StakeChain.allCases.filter { $0 != .ethereum }
+
         try store.addBanners(stakeChains.map {
             NewBanner.stake(assetId: $0.chain.assetId)
         })

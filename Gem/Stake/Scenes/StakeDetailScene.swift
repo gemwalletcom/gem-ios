@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Components
-import Localization
 import Staking
 
 struct StakeDetailScene: View {
@@ -17,49 +16,53 @@ struct StakeDetailScene: View {
         List {
             Section {
                 if let url = model.validatorUrl {
-                    NavigationOpenLink(url: url, with: ListItemView(title: Localized.Stake.validator, subtitle: model.validatorText))
+                    NavigationOpenLink(url: url, with: ListItemView(title: model.validatorTitle, subtitle: model.validatorText))
                 } else {
-                    ListItemView(title: Localized.Stake.validator, subtitle: model.validatorText)
+                    ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
                 }
-                ListItemView(title: Localized.Stake.apr(""), subtitle: model.validatorAprText)
-                ListItemView(title: Localized.Transaction.status, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
-                
+
+                if model.showValidatorApr {
+                    ListItemView(title: model.aprTitle, subtitle: model.validatorAprText, subtitleStyle: model.aprTextStyle)
+                }
+
+                ListItemView(title: model.stateTitle, subtitle: model.stateText, subtitleStyle: model.stateTextStyle)
+
                 if let title = model.completionDateTitle, let subtitle = model.completionDateText {
                     ListItemView(title: title, subtitle: subtitle)
                 }
             }
-            Section(Localized.Asset.balances) {
-                ListItemView(title: Localized.Transfer.Stake.title, subtitle: model.model.balanceText)
+            Section(model.balancesTitle) {
+                ListItemView(title: model.title, subtitle: model.model.balanceText)
                 if let rewardsText = model.model.rewardsText {
-                    ListItemView(title: Localized.Stake.rewards, subtitle: rewardsText)
+                    ListItemView(title: model.rewardsTitle, subtitle: rewardsText)
                 }
             }
             //TODO: Remove NavigationCustomLink usage in favor of NavigationLink()
             if model.showManage {
-                Section(Localized.Common.manage) {
+                Section(model.manageTitle) {
                     if model.isStakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Stake.title)) {
+                        NavigationCustomLink(with: ListItemView(title: model.title)) {
                             if let value = try? model.stakeRecipientData() {
                                 model.onAmountInputAction?(value)
                             }
                         }
                     }
                     if model.isUnstakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Unstake.title)) {
+                        NavigationCustomLink(with: ListItemView(title: model.unstakeTitle)) {
                             if let value = try? model.unstakeRecipientData() {
                                 model.onAmountInputAction?(value)
                             }
                         }
                     }
                     if model.isRedelegateAvailable {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Redelegate.title)) {
+                        NavigationCustomLink(with: ListItemView(title: model.redelegateTitle)) {
                             if let value = try? model.redelegateRecipientData() {
                                 model.onAmountInputAction?(value)
                             }
                         }
                     }
                     if model.isWithdrawStakeAvailable {
-                        NavigationCustomLink(with: ListItemView(title: Localized.Transfer.Withdraw.title)) {
+                        NavigationCustomLink(with: ListItemView(title: model.withdrawTitle)) {
                             if let value = try? model.withdrawStakeRecipientData() {
                                 model.onAmountInputAction?(value)
                             }
