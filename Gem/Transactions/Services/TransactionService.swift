@@ -17,7 +17,7 @@ class TransactionService {
     let stakeService: StakeService
     
     private var cancellables = Set<AnyCancellable>()
-    private let timer = Timer.publish(every: 5, tolerance: 1, on: .main, in: .common).autoconnect()
+    private let timer = Timer.publish(every: 5, tolerance: .none, on: .main, in: .common).autoconnect()
 
     init(
         transactionStore: TransactionStore,
@@ -29,15 +29,15 @@ class TransactionService {
         self.stakeService = stakeService
         self.chainServiceFactory = chainServiceFactory
         self.balanceUpdater = balanceUpdater
-        
-        timer.sink { _ in self.runPendingTransactions() }.store(in: &cancellables)
     }
 
     func setup() {
+        timer.sink { _ in self.runPendingTransactions() }.store(in: &cancellables)
+        
         runPendingTransactions()
     }
 
-    func runPendingTransactions() {
+    private func runPendingTransactions() {
         Task {
             try await updatePendingTransactions()
         }
@@ -115,7 +115,6 @@ class TransactionService {
                             try await stakeService.update(walletId: walletId, chain: assetId.chain, address: transaction.from)
                         }
                     }
-                    
                 }
             }
         }
