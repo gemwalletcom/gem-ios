@@ -270,8 +270,9 @@ extension ConfirmTransferViewModel {
                 let transaction = try getTransaction(input: input, amount: amount, hash: hash)
                 try addTransaction(transaction: transaction)
 
+                // delay if multiple transaction should be exectured
                 if signedData.count > 1 && data != signedData.last {
-                    try await Task.sleep(for: .milliseconds(300))
+                    try await Task.sleep(for: transactionDelay)
                 }
             }
 
@@ -302,6 +303,10 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private var transactionDelay: Duration {
+        .milliseconds(500)
+    }
+
     private enum AssetMetadataError: Error {
         case missingBalance
         case invalidAssetId
