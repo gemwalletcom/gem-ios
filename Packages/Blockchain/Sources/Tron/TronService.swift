@@ -441,7 +441,7 @@ extension TronService: ChainStakable {
                     name: .empty,
                     isActive: $0.isJobs ?? false,
                     commision: 0,
-                    apr: 0
+                    apr: apr
                 )
             } + [systemUnstacking]
     }
