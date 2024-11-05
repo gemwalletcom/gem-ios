@@ -97,15 +97,15 @@ class AmounViewModel: ObservableObject {
     }
 
     var assetSymbol: String {
-        return asset.symbol
+        asset.symbol
     }
     
     var assetImage: AssetImage {
-        return AssetViewModel(asset: asset).assetImage
+        AssetViewModel(asset: asset).assetImage
     }
     
     var assetName: String {
-        return asset.name
+        asset.name
     }
     
     var availableValue: BigInt {

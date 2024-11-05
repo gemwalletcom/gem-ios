@@ -53,7 +53,9 @@ class StakeViewModel {
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
         let apr = (try? stakeService.stakeApr(assetId: chain.assetId)) ?? 0
-        guard apr > 0 else { return .empty}
+        guard apr > 0 else {
+            return .empty
+        }
         return CurrencyFormatter(type: .percentSignLess).string(apr)
     }
 
@@ -90,7 +92,7 @@ class StakeViewModel {
         case .error(let error): return .error(error)
         }
     }
-    
+
     func showClaimRewards(delegations: [Delegation]) -> Bool {
         value(delegations: delegations) > 0 && ![Chain.solana, Chain.sui].contains(chain)
     }

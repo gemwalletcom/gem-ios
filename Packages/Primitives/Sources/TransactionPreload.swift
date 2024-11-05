@@ -4,6 +4,7 @@ import Foundation
 
 public enum SigningdExtra: Sendable {
     case lidoPermitNonce(String) // dapp specific extra data
+    case vote([String: UInt64])
 }
 
 public struct TransactionPreload: Sendable {
