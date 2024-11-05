@@ -10,11 +10,13 @@ import ChainService
 import BigInt
 import Signer
 import NativeProviderService
+import GemstonePrimitives
 
 public final class SwapService {
     
     private let nodeProvider: any NodeURLFetchable
     private let swapper: GemSwapper
+    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     
     public init(
         nodeProvider: any NodeURLFetchable
@@ -23,8 +25,12 @@ public final class SwapService {
         self.swapper = GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider))
     }
     
-    func getFee() -> GemSwapFee {
-        GemSwapFee(bps: 50, address: "0x0D9DAB1A248f63B0a48965bA8435e4de7497a3dC")
+    func getFee(fromAsset: Primitives.AssetId) -> GemSwapFee {
+        
+        return GemSwapFee(
+            bps: swapConfig.referralFee.evm.bps,
+            address: swapConfig.referralFee.evm.address
+        )
     }
     
     public func getQuote(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String) async throws -> [Gemstone.SwapQuote] {
@@ -36,8 +42,8 @@ public final class SwapService {
             value: value,
             mode: .exactIn,
             options: GemSwapOptions(
-                slippageBps: 100,
-                fee: self.getFee(),
+                slippageBps: swapConfig.slippageBps,
+                fee: self.getFee(fromAsset: fromAsset),
                 preferredProviders: []
             )
         )

@@ -70,9 +70,11 @@ struct SwapScene: View {
                 )
             )
         }
-        .debounce(value: $model.fromValue,
-                  interval: SwapViewModel.quoteTaskDebounceTimeout,
-                  action: onChangeFromValue)
+        .debounce(
+            value: $model.fromValue,
+            interval: SwapViewModel.quoteTaskDebounceTimeout,
+            action: onChangeFromValue
+        )
         .onChange(of: fromAsset, onChangeAssetsSwapDirection)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)
         .task {
@@ -117,6 +119,15 @@ extension SwapScene {
                     balanceAction: {}
                 )
                 .focused($focusedField, equals: .to)
+            }
+            
+            Section {
+                if let priceImpactValue = model.priceImpactValue {
+                    ListItemView(
+                        title: model.priceImpact,
+                        subtitle: priceImpactValue
+                    )
+                }
             }
 
             Section {

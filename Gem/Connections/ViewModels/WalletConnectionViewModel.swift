@@ -14,8 +14,8 @@ struct WalletConnectionViewModel {
         return URL(string: connection.session.metadata.icon)
     }
     
-    var host: String {
-        return url?.host(percentEncoded: false) ?? .empty
+    var host: String? {
+        return url?.host(percentEncoded: false)
     }
     
     var url: URL? {

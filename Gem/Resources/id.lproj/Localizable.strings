@@ -280,3 +280,4 @@
 "common.skip" = "Melewati";
 "common.warning" = "Peringatan";
 "warnings.multi_signature_blocked" = "Jangan mentransfer dana ke dompet Multi-Signature %@ ini kecuali Anda yakin bahwa Anda memegang kunci pribadi. Kegagalan untuk melakukannya dapat membuat Anda rentan terhadap penipuan, dan Anda dapat kehilangan aset Anda secara permanen.";
+"swap.price_impact" = "Dampak Harga";

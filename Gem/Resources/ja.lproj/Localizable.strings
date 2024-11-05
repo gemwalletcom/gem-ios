@@ -280,3 +280,4 @@
 "common.skip" = "スキップ";
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "秘密鍵を確実に管理していない限り、この%@マルチ署名ウォレットに資金を送金しないでください。そうしないと、詐欺に遭う可能性があり、資産を永久に失う可能性があります。";
+"swap.price_impact" = "価格の影響";

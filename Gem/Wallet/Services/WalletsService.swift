@@ -220,10 +220,6 @@ class WalletsService {
         try transactionService.addTransaction(walletId: walletId, transaction: transaction)
     }
     
-    func updatePendingTransactions() async throws  {
-        try await transactionService.updatePendingTransactions()
-    }
-    
     // nodes
     
     func updateNode(chain: Chain) throws {

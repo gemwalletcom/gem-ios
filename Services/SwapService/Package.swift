@@ -17,6 +17,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Signer", path: "../Signer"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "NativeProviderService", path: "../NativeProviderService"),
@@ -26,9 +27,11 @@ let package = Package(
             name: "SwapService",
             dependencies: [
                 "Gemstone",
+                "GemstonePrimitives",
                 "Primitives",
                 "ChainService",
                 "Signer",
+                "NativeProviderService",
             ],
             path: "Sources"
         ),

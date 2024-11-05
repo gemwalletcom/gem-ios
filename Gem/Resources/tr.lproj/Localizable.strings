@@ -280,3 +280,4 @@
 "common.skip" = "Atlamak";
 "common.warning" = "Uyarı";
 "warnings.multi_signature_blocked" = "Özel anahtarları kontrol ettiğinizden emin olmadığınız sürece bu %@ Çoklu İmzalı cüzdana para transferi yapmayın. Bunu yapmamanız sizi dolandırıcılıklara maruz bırakabilir ve varlıklarınızı kalıcı olarak kaybedebilirsiniz.";
+"swap.price_impact" = "Fiyat Etkisi";

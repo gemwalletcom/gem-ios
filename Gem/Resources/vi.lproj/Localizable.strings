@@ -280,3 +280,4 @@
 "common.skip" = "Nhảy";
 "common.warning" = "Cảnh báo";
 "warnings.multi_signature_blocked" = "Không chuyển tiền vào ví Đa chữ ký %@ này trừ khi bạn chắc chắn mình kiểm soát được khóa riêng. Nếu không làm như vậy, bạn có thể bị lừa đảo và có thể mất vĩnh viễn tài sản của mình.";
+"swap.price_impact" = "Tác động giá";
