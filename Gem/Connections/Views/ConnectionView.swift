@@ -16,15 +16,17 @@ struct ConnectionView: View {
                     .font(.body)
                     .foregroundColor(.primary)
                     .lineLimit(2)
-                Text(model.host)
-                    .font(.callout)
-                    .foregroundColor(.secondary)
-                    .lineLimit(1)
+                if let host = model.host {
+                    Text(host)
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
             }
         }
         .contextMenu {
-            if let url = model.url {
-                ContextMenuViewURL(title: model.host, url: url, image: SystemImage.network)
+            if let url = model.url, let host = model.host {
+                ContextMenuViewURL(title: host, url: url, image: SystemImage.network)
             }
         }
     }

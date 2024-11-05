@@ -14,6 +14,10 @@ extension Config {
     public func config(for bitcoinChain: BitcoinChain) -> BitcoinChainConfig {
         getBitcoinChainConfig(chain: bitcoinChain.rawValue)
     }
+    
+    public func swapConfig() -> SwapConfig {
+        getSwapConfig()
+    }
 }
 
 public struct GemstoneConfig {

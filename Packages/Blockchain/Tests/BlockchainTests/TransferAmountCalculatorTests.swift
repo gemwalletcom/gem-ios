@@ -255,5 +255,19 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 ignoreValueCheck: true
             ))
         )
+        
+        XCTAssertThrowsError(
+            try service.calculate(input: TranferAmountInput(
+                asset: tokenAsset,
+                assetBalance: Balance(available: 23),
+                value: BigInt(22),
+                availableValue: BigInt(23),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(8)),
+                fee: BigInt(3),
+                canChangeValue: false,
+                ignoreValueCheck: false
+            ))
+        )
     }
 }
