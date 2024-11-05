@@ -27,9 +27,11 @@ let package = Package(
             name: "SwapService",
             dependencies: [
                 "Gemstone",
+                "GemstonePrimitives",
                 "Primitives",
                 "ChainService",
                 "Signer",
+                "NativeProviderService",
             ],
             path: "Sources"
         ),
