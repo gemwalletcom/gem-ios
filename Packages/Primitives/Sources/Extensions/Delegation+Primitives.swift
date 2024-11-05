@@ -32,4 +32,21 @@ public extension DelegationBase {
     }
 }
 
+extension DelegationValidator {
+    public static let systemId = "unstaking"
 
+    public static func system(chain: Chain, name: String) -> DelegationValidator {
+        DelegationValidator(
+            chain: chain,
+            id: systemId,
+            name: name,
+            isActive: true,
+            commision: .zero,
+            apr: .zero
+        )
+    }
+
+    public var isSystem: Bool {
+        id == Self.systemId
+    }
+}

@@ -10,7 +10,7 @@ import Blockchain
 import Gemstone
 
 public class LidoStakeSigner: EthereumSigner {
-    override public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    override public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard let stakeType = input.type.stakeType else {
             throw AnyError("Invalid stake type")
         }
@@ -62,6 +62,6 @@ public class LidoStakeSigner: EthereumSigner {
             toAddress: input.destinationAddress,
             privateKey: privateKey
         ))
-        return data
+        return [data]
     }
 }

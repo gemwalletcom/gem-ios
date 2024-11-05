@@ -49,7 +49,7 @@ public struct BitcoinSigner: Signable {
         fatalError()
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         fatalError()
     }
     

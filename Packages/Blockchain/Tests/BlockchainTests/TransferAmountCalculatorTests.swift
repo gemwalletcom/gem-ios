@@ -4,13 +4,12 @@ import XCTest
 import Blockchain
 import Primitives
 import BigInt
+import Testing
 
 final class TransferAmountCalculatorTests: XCTestCase {
 
     let coinAsset = Asset(.ethereum)
-    
     let tokenAsset = Asset(id: AssetId(chain: .ethereum, tokenId: "0x1"), name: "", symbol: "", decimals: 0, type: .erc20)
-    
     let service = TransferAmountCalculator()
     
     func testTransferCoin() {
@@ -41,6 +40,30 @@ final class TransferAmountCalculatorTests: XCTestCase {
         XCTAssertThrowsError(
             try service.calculate(input: TranferAmountInput(
                 asset: coinAsset,
+                assetBalance: Balance(available: BigInt(10)),
+                value: BigInt(20),
+                availableValue: BigInt(10),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: BigInt(0),
+                canChangeValue: true
+            ))
+        )
+        XCTAssertThrowsError(
+            try service.calculate(input: TranferAmountInput(
+                asset: coinAsset,
+                assetBalance: .zero,
+                value: BigInt(10),
+                availableValue: .zero,
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: .zero,
+                fee: .zero,
+                canChangeValue: true
+            ))
+        )
+        XCTAssertEqual(
+            try? service.calculate(input: TranferAmountInput(
+                asset: coinAsset,
                 assetBalance: .zero,
                 value: .zero,
                 availableValue: .zero,
@@ -48,7 +71,21 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
                 canChangeValue: true
-            ))
+            )),
+            TransferAmount(value: .zero, networkFee: .zero, useMaxAmount: true)
+        )
+        XCTAssertEqual(
+            try? service.calculate(input: TranferAmountInput(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(100)),
+                value: BigInt(50),
+                availableValue: BigInt(100),
+                assetFee: coinAsset.feeAsset,
+                assetFeeBalance: Balance(available: BigInt(100)),
+                fee: .zero,
+                canChangeValue: true
+            )),
+            TransferAmount(value: 50, networkFee: .zero, useMaxAmount: false)
         )
         XCTAssertEqual(
             try? service.calculate(input: TranferAmountInput(
@@ -74,7 +111,7 @@ final class TransferAmountCalculatorTests: XCTestCase {
                 fee: BigInt(1),
                 canChangeValue: true
             )),
-            TransferAmount(value: 11, networkFee: 1, useMaxAmount: false)
+            TransferAmount(value: 11, networkFee: 1,  useMaxAmount: false)
         )
         XCTAssertEqual(
             try? service.calculate(input: TranferAmountInput(

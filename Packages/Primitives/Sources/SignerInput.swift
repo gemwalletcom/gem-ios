@@ -15,12 +15,13 @@ public struct SignerInput {
     public let sequence: Int
     public let senderAddress: String
     public let destinationAddress: String
-    public let block: SignerInputBlock
+
     // token: Solana only
     public let token: SignerInputToken
     public let utxos: [UTXO]
     public let messageBytes: String
     public let extra: SigningdExtra?
+    public let block: SignerInputBlock
 
     public init(
         type: TransferDataType,

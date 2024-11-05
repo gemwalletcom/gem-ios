@@ -15,7 +15,7 @@ public struct TranferAmountInput {
     public let assetBalance: Balance
     public let value: BigInt
     public let availableValue: BigInt // maximum available value (unstake)
-    
+
     public let assetFee: Asset
     public let assetFeeBalance: Balance
     public let fee: BigInt
@@ -67,7 +67,9 @@ public struct TransferAmountCalculator {
 
     public func calculate(input: TranferAmountInput) throws -> TransferAmount {
         if input.assetBalance.available == 0 {
-            throw TransferAmountCalculatorError.insufficientBalance(input.asset)
+            guard input.fee.isZero else {
+                throw TransferAmountCalculatorError.insufficientBalance(input.asset)
+            }
         }
 
         //TODO: Check for input.value + input.fee

@@ -12,35 +12,31 @@ public enum TronProvider: TargetType {
     case triggerSmartContract(TronSmartContractCall)
     case chainParams
     case broadcast(data: String)
-    
+    case listwitnesses
+    case getReward(address: String)
+
     public var baseUrl: URL {
         return URL(string: "")!
     }
     
     public var path: String {
         switch self {
-        case .account:
-            return "/wallet/getaccount"
-        case .accountUsage:
-            return "/wallet/getaccountnet"
-        case .latestBlock:
-            return "/wallet/getnowblock"
-        case .transaction:
-            return "/wallet/gettransactionbyid"
-        case .transactionReceipt:
-            return "/wallet/gettransactioninfobyid"
-        case .triggerSmartContract:
-            return "/wallet/triggerconstantcontract"
-        case .chainParams:
-            return "/wallet/getchainparameters"
-        case .broadcast:
-            return "/wallet/broadcasttransaction"
+        case .account: "/wallet/getaccount"
+        case .accountUsage: "/wallet/getaccountnet"
+        case .latestBlock: "/wallet/getnowblock"
+        case .transaction: "/wallet/gettransactionbyid"
+        case .transactionReceipt: "/wallet/gettransactioninfobyid"
+        case .triggerSmartContract: "/wallet/triggerconstantcontract"
+        case .chainParams: "/wallet/getchainparameters"
+        case .broadcast: "/wallet/broadcasttransaction"
+        case .listwitnesses: "/wallet/listwitnesses"
+        case .getReward: "/wallet/getReward"
         }
     }
 
     public var method: HTTPMethod {
         switch self {
-        case .chainParams:
+        case .chainParams, .listwitnesses:
             return .GET
         case .account,
             .accountUsage,
@@ -48,17 +44,19 @@ public enum TronProvider: TargetType {
             .transaction,
             .transactionReceipt,
             .triggerSmartContract,
-            .broadcast:
+            .broadcast,
+            .getReward:
             return .POST
         }
     }
     
     public var data: RequestData {
         switch self {
-        case .account(let address), .accountUsage(let address):
+        case .account(let address), .accountUsage(let address), .getReward(let address):
             return .encodable(TronAccountRequest(address: address, visible: true))
         case .latestBlock,
-            .chainParams:
+            .chainParams,
+            .listwitnesses:
             return .plain
         case .transaction(let id), .transactionReceipt(let id):
             return .encodable(["value": id])

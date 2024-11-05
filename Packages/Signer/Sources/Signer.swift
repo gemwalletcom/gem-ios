@@ -16,7 +16,7 @@ public struct Signer {
         self.keystore = keystore
     }
     
-    public func sign(input: SignerInput) throws -> String {
+    public func sign(input: SignerInput) throws -> [String] {
         let chain = input.asset.chain
         let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
         let signer = signer(for: chain)
@@ -25,14 +25,14 @@ public struct Signer {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
-                return try signer.signTransfer(input: input, privateKey: privateKey)
+                return [try signer.signTransfer(input: input, privateKey: privateKey)]
             case .token:
-                return try signer.signTokenTransfer(input: input, privateKey: privateKey)
+                return [try signer.signTokenTransfer(input: input, privateKey: privateKey)]
             }
         case .swap:
-            return try signer.swap(input: input, privateKey: privateKey)
+            return try [signer.swap(input: input, privateKey: privateKey)]
         case .generic:
-            return try signer.signData(input: input, privateKey: privateKey)
+            return try [signer.signData(input: input, privateKey: privateKey)]
         case .stake:
             return try signer.signStake(input: input, privateKey: privateKey)
         }

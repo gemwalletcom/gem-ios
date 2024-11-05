@@ -265,9 +265,16 @@ extension ConfirmTransferViewModel {
         }
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
-            let hash = try await broadcast(data: signedData, options: broadcastOptions)
-            let transaction = try getTransaction(input: input, amount: amount, hash: hash)
-            try addTransaction(transaction: transaction)
+            for data in signedData {
+                let hash = try await broadcast(data: data, options: broadcastOptions)
+                let transaction = try getTransaction(input: input, amount: amount, hash: hash)
+                try addTransaction(transaction: transaction)
+
+                // delay if multiple transaction should be exectured
+                if signedData.count > 1 && data != signedData.last {
+                    try await Task.sleep(for: transactionDelay)
+                }
+            }
 
             await MainActor.run { [self] in
                 self.confirmingState = .loaded(true)
@@ -296,6 +303,10 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private var transactionDelay: Duration {
+        .milliseconds(500)
+    }
+
     private enum AssetMetadataError: Error {
         case missingBalance
         case invalidAssetId
@@ -382,11 +393,11 @@ extension ConfirmTransferViewModel {
         )
     }
 
-    private func sign(transferData: TransferData, input: TransactionPreload, amount: TransferAmount) async throws -> String  {
+    private func sign(transferData: TransferData, input: TransactionPreload, amount: TransferAmount) async throws -> [String]  {
         let signer = Signer(wallet: wallet, keystore: keystore)
         let senderAddress = try wallet.account(for: transferData.recipientData.asset.chain).address
 
-        return try await ConfirmTransferViewModel.sign(
+        return try await Self.sign(
             signer: signer,
             senderAddress: senderAddress,
             transferData: transferData,
@@ -451,7 +462,7 @@ extension ConfirmTransferViewModel {
                      senderAddress: String,
                      transferData: TransferData,
                      input: TransactionPreload,
-                     amount: TransferAmount) async throws -> String {
+                     amount: TransferAmount) async throws -> [String] {
         let destinationAddress = transferData.recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
 
