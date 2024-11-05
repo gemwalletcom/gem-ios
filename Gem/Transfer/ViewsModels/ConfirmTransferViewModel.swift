@@ -392,15 +392,13 @@ extension ConfirmTransferViewModel {
         let signer = Signer(wallet: wallet, keystore: keystore)
         let senderAddress = try wallet.account(for: transferData.recipientData.asset.chain).address
 
-        let signedData = try await Self.sign(
+        return try await Self.sign(
             signer: signer,
             senderAddress: senderAddress,
             transferData: transferData,
             input: input,
             amount: amount
         )
-
-        return signedData.split(separator: "___").map({ String($0) })
     }
 
     private func broadcast(data: String, options: BroadcastOptions) async throws -> String  {
@@ -459,7 +457,7 @@ extension ConfirmTransferViewModel {
                      senderAddress: String,
                      transferData: TransferData,
                      input: TransactionPreload,
-                     amount: TransferAmount) async throws -> String {
+                     amount: TransferAmount) async throws -> [String] {
         let destinationAddress = transferData.recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
 

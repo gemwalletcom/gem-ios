@@ -10,6 +10,6 @@ public protocol Signable {
     func signTransfer(input: SignerInput, privateKey: Data) throws -> String
     func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String
     func swap(input: SignerInput, privateKey: Data) throws -> String
-    func signStake(input: SignerInput, privateKey: Data) throws -> String
+    func signStake(input: SignerInput, privateKey: Data) throws -> [String]
     func signMessage(message: SignMessage, privateKey: Data) throws -> String
 }

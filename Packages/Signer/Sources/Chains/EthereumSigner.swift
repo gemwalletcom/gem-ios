@@ -124,7 +124,7 @@ public class EthereumSigner: Signable {
         }
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         switch input.type.stakeChain {
         case .smartChain:
             return try SmartChainSigner().signStake(input: input, privateKey: privateKey)

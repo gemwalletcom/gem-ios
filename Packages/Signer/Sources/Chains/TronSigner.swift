@@ -43,7 +43,7 @@ public struct TronSigner: Signable {
         fatalError()
     }
 
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
             throw(AnyError("Invalid input type for staking"))
         }
@@ -75,7 +75,7 @@ public struct TronSigner: Signable {
             let freezeOutput: TronSigningOutput = AnySigner.sign(input: freezeInput, coin: input.coinType)
             let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
 
-            return freezeOutput.json + "___" + voteOutput.json
+            return [freezeOutput.json, voteOutput.json]
         case .unstake:
             guard case let .vote(votes) = input.extra else {
                 throw(AnyError("vote for stacking should be always set"))
@@ -108,7 +108,7 @@ public struct TronSigner: Signable {
                 let unfreezeOutput: TronSigningOutput = AnySigner.sign(input: unfreezeInput, coin: input.coinType)
                 let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
                 
-                return unfreezeOutput.json + "___" + voteOutput.json
+                return [unfreezeOutput.json, voteOutput.json]
             }
         case .redelegate:
             guard case let .vote(votes) = input.extra else {
@@ -135,7 +135,7 @@ public struct TronSigner: Signable {
         }
         let signingInput = try prepareSigningInput(block: input.block, contract: contract, feeLimit: .none, privateKey: privateKey)
         let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
-        return output.json
+        return [output.json]
     }
 }
 
