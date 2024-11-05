@@ -21,7 +21,7 @@ struct ConnectionsScene: View {
     }
 
     var headers: [Wallet] {
-        groupedByWallet.map({ $0.key })
+        groupedByWallet.map({ $0.key }).sorted { $0.order < $1.order }
     }
     
     let model: ConnectionsViewModel
