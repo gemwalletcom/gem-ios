@@ -46,7 +46,7 @@ struct PriceAlertsScene: View {
                         NavigationLink(value: Scenes.Price(asset: alert.asset)) {
                             ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
                                 .swipeActions(edge: .trailing) {
-                                    Button(Localized.Common.delete) {
+                                    Button(Localized.Common.delete, role: .destructive) {
                                         onDelete(alert: alert)
                                     }
                                     .tint(Colors.red)

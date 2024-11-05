@@ -41,7 +41,7 @@ struct ChainSettingsScene: View {
                     }
                     .if(model.canDelete(node: nodeModel.chainNode)) {
                         $0.swipeActions(edge: .trailing) {
-                            Button(Localized.Common.delete) {
+                            Button(Localized.Common.delete, role: .destructive) {
                                 onSelectDelete(nodeModel.chainNode)
                             }
                             .tint(Colors.red)
