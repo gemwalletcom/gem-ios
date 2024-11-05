@@ -80,7 +80,7 @@ public final class BalanceService: BalancerUpdater {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
+            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).balanceChange] },
             mapBalance: { $0 }
         )
     }
@@ -100,7 +100,7 @@ public final class BalanceService: BalancerUpdater {
             walletId: walletId,
             chain: chain,
             fetchBalance: { try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids) },
-            mapBalance: { $0.tokenChange }
+            mapBalance: { $0.balanceChange }
         )
     }
     
@@ -172,18 +172,12 @@ public final class BalanceService: BalancerUpdater {
     func createUpdateBalanceType(asset: Asset, change: AssetBalanceChange) throws -> UpdateBalanceType {
         let decimals = asset.decimals.asInt
         switch change.type {
-        case .coin(let available):
+        case .balance(let available):
             let available = try UpdateBalanceValue(
                 value: available.description,
                 amount: formatter.double(from: available, decimals: decimals)
             )
             return .coin(UpdateCoinBalance(available: available))
-        case .token(let available):
-            let available = try UpdateBalanceValue(
-                value: available.description,
-                amount: formatter.double(from: available, decimals: decimals)
-            )
-            return .token(UpdateTokenBalance(available: available))
         case .stake(let staked, let pending, let rewards, let reserved, let locked, let frozen):
             let stakedValue = try UpdateBalanceValue(
                 value: staked.description,
