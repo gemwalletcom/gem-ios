@@ -17,7 +17,6 @@ class AddTokenViewModel {
     var input: AddTokenInput
 
     var isPresentingScanner = false
-    var isPresentingSelectNetwork = false
 
     init(wallet: Wallet, service: AddTokenService) {
         self.service = service
