@@ -7,22 +7,24 @@ import Components
 import Style
 
 struct NetworkSelectorNavigationStack: View {
+    typealias FinishSelection = (([Chain]) -> Void)
+
     @Environment(\.dismiss) var dismiss
 
     @State private var model: NetworkSelectorViewModel
 
-    private var onFinishSelection: (([Chain]) -> Void)?
+    private var onFinishSelection: FinishSelection?
 
-    init(chains: [Chain], onFinishSelection: @escaping (([Chain]) -> Void)) {
-        _model = State(initialValue: NetworkSelectorViewModel(chains: chains))
-        self.onFinishSelection = onFinishSelection
-    }
-
-    init(chains: [Chain], selectedChains: [Chain], onFinishSelection: @escaping (([Chain]) -> Void)) {
+    init(
+        chains: [Chain],
+        selectedChains: [Chain] = [],
+        isMultiSelectionEnabled: Bool,
+        onFinishSelection: @escaping FinishSelection
+    ) {
         _model = State(initialValue: NetworkSelectorViewModel(
             chains: chains,
             selectedChains: selectedChains,
-            isMultiSelectionEnabled: true)
+            isMultiSelectionEnabled: isMultiSelectionEnabled)
         )
         self.onFinishSelection = onFinishSelection
     }
@@ -77,5 +79,5 @@ extension NetworkSelectorNavigationStack {
 // MARK: - Previews
 
 #Preview {
-    NetworkSelectorNavigationStack(chains: Chain.allCases, selectedChains: [.smartChain]) { _ in }
+    NetworkSelectorNavigationStack(chains: Chain.allCases, selectedChains: [.smartChain], isMultiSelectionEnabled: false) { _ in }
 }

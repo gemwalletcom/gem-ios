@@ -48,6 +48,7 @@ struct AssetsFilterScene: View {
             NetworkSelectorNavigationStack(
                 chains: model.allChains,
                 selectedChains: model.selectedChains,
+                isMultiSelectionEnabled: true,
                 onFinishSelection: onFinishSelection(chains:)
             )
         }
