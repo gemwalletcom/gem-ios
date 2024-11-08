@@ -22,7 +22,7 @@ public struct ProviderEvmFactory {
 
 extension Chain {
     public var defaultBaseUrl: URL {
-        return URL(string: "https://\(self).gemnodes.com")!
+        return URL(string: "https://\(self.rawValue.lowercased()).gemnodes.com")!
     }
     
     public var defaultNode: Node {

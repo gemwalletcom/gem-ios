@@ -202,7 +202,12 @@ extension CosmosService: ChainFeeCalculateable {
                 .stakeUndelegate: BigInt(1_000_000)
             case .stakeRedelegate: BigInt(1_250_000)
             case .stakeRewards: BigInt(750_000)
-            case .swap, .tokenApproval, .stakeWithdraw:
+            case .swap:
+                switch chain {
+                case .thorchain, .cosmos: BigInt(200_000)
+                default: fatalError()
+                }
+            case .tokenApproval, .stakeWithdraw:
                 fatalError()
             }
         }()

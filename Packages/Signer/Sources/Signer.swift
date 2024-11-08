@@ -38,7 +38,7 @@ public struct Signer {
         }
     }
     
-    public func signMessage(chain: Chain, message: SignMessage, data: Data) throws -> String {
+    public func signMessage(chain: Chain, message: SignMessage) throws -> String {
         let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
         return try signer(for: chain)
             .signMessage(message: message, privateKey: privateKey)

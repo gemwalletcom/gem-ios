@@ -70,7 +70,7 @@ class SwapViewModel {
             fromId = assetId.chain.assetId
             toId = assetId
         }
-
+        
         fromAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: fromId.identifier)
         toAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: toId.identifier)
         tokenApprovalsRequest = TransactionsRequest(
@@ -164,9 +164,10 @@ extension SwapViewModel {
                 fatalError("Unsupported asset type")
             case .native, .spl, .token:
                 let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
+                let value = try BigInt.from(string: swapQuote.toValue)
                 await MainActor.run {
                     swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
-                    toValue = formatter.string(BigInt(stringLiteral: swapQuote.toValue), decimals: toAsset.decimals.asInt)
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
                 }
             case .bep20, .erc20:
                 let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
@@ -174,10 +175,11 @@ extension SwapViewModel {
                     case .approve: false
                     case .none, .permit2: true
                 }
+                let value = try BigInt.from(string: swapQuote.toValue)
                 
                 await MainActor.run {
                     swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
-                    toValue = formatter.string(BigInt(stringLiteral: swapQuote.toValue), decimals: toAsset.decimals.asInt)
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
                 }
             }
         } catch {
@@ -271,7 +273,7 @@ extension SwapViewModel {
     
     private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
         let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
-        let walletAddress = try wallet.account(for: fromAsset.chain).address
+        let walletAddress = try wallet.account(for: toAsset.chain).address
         let quotes = try await swapService.getQuote(
             fromAsset: fromAsset.id,
             toAsset: toAsset.id,
@@ -301,8 +303,7 @@ extension SwapViewModel {
             let signer = Signer(wallet: wallet, keystore: keystore)
             let signature = try signer.signMessage(
                 chain: chain,
-                message: .typed(permit2JSON),
-                data: try permit2JSON.encodedData()
+                message: .typed(permit2JSON)
             )
             let signatureData = try Data.from(hex: signature)
             let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)

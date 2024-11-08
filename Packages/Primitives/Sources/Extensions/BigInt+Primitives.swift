@@ -49,6 +49,14 @@ public extension BigInt {
         try BigNumberFormatter.standard.number(from: string, decimals: decimals)
     }
     
+    static func from(string: String) throws -> BigInt {
+        if string.isEmpty {
+           return .zero
+        } else {
+            return BigInt(stringLiteral: string)
+        }
+    }
+    
     static func fromHex(_ hex: String) throws -> BigInt {
         guard let value = BigInt(hex.remove0x, radix: 16) else {
             throw AnyError("invalid hex value: \(hex)")

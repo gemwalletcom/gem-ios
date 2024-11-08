@@ -19,6 +19,8 @@ final class CurrencyFormatterTests: XCTestCase {
         XCTAssertEqual(currencyFormatterUS.string(11.12), "$11.12")
         XCTAssertEqual(currencyFormatterUS.string(11), "$11.00")
         XCTAssertEqual(currencyFormatterUS.string(12000123), "$12,000,123.00")
+        XCTAssertEqual(currencyFormatterUS.string(0.000_000_000_2), "$0.0000000002")
+        XCTAssertEqual(currencyFormatterUS.string(0.000_000_000_000_1), "$0.00")
     }
     
     func testSmallValue() {
