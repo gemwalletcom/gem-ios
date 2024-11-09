@@ -36,6 +36,8 @@ struct Columns {
     struct Account {
         static let walletId = Column("walletId")
         static let chain = Column("chain")
+        static let address = Column("address")
+        static let index = Column("index")
     }
     
     struct AssetDetail {

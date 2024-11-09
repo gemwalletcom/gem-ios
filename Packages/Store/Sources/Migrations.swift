@@ -50,7 +50,7 @@ public struct Migrations {
 
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: "isPinned", .boolean).defaults(to: false)
+                $0.add(column: Columns.Wallet.isPinned.name, .boolean).defaults(to: false)
             }
         }
 

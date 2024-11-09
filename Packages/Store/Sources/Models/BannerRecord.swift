@@ -23,21 +23,28 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 extension BannerRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.primaryKey("id", .text)
+            $0.primaryKey(Columns.Banner.id.name, .text)
                 .notNull()
                 .indexed()
-            $0.column("walletId", .text)
+            $0.column(Columns.Banner.walletId.name, .text)
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column("assetId", .text)
+            $0.column(Columns.Banner.assetId.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("chain", .text)
+            $0.column(Columns.Banner.chain.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("event", .text)
+            $0.column(Columns.Banner.event.name, .text)
                 .notNull()
-            $0.column("state", .text)
+            $0.column(Columns.Banner.state.name, .text)
                 .notNull()
-            $0.uniqueKey(["walletId", "assetId", "chain", "event"])
+            $0.uniqueKey(
+                [
+                    Columns.Banner.walletId.name,
+                    Columns.Banner.assetId.name,
+                    Columns.Banner.chain.name,
+                    Columns.Banner.event.name
+                ]
+            )
         }
     }
 }

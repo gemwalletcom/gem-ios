@@ -54,26 +54,26 @@ extension AssetBalanceRecord: CreateTable {
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
             
             // balances
-            $0.column("available", .text).defaults(to: "0")
-            $0.column("availableAmount", .numeric).defaults(to: 0)
+            $0.column(Columns.Balance.available.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.availableAmount.name, .numeric).defaults(to: 0)
             
-            $0.column("frozen", .text).defaults(to: "0")
-            $0.column("frozenAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.frozen.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
             
-            $0.column("locked", .text).defaults(to: "0")
-            $0.column("lockedAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.locked.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
             
-            $0.column("staked", .text).defaults(to: "0")
-            $0.column("stakedAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.staked.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.stakedAmount.name, .double).defaults(to: 0)
             
-            $0.column("pending", .text).defaults(to: "0")
-            $0.column("pendingAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.pending.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
             
-            $0.column("rewards", .text).defaults(to: "0")
-            $0.column("rewardsAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.rewards.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
             
-            $0.column("reserved", .text).defaults(to: "0")
-            $0.column("reservedAmount", .double).defaults(to: 0)
+            $0.column(Columns.Balance.reserved.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
             
             $0.column(sql: totalAmountSQlCreation)
             
