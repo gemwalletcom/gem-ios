@@ -4,15 +4,22 @@
 
 import Foundation
 
+public enum FiatQuoteType: String, Codable, Equatable, Sendable {
+	case buy
+	case sell
+}
+
 public struct FiatQuote: Codable, Equatable, Sendable {
 	public let provider: FiatProvider
+	public let type: FiatQuoteType
 	public let fiatAmount: Double
 	public let fiatCurrency: String
 	public let cryptoAmount: Double
 	public let redirectUrl: String
 
-	public init(provider: FiatProvider, fiatAmount: Double, fiatCurrency: String, cryptoAmount: Double, redirectUrl: String) {
+	public init(provider: FiatProvider, type: FiatQuoteType, fiatAmount: Double, fiatCurrency: String, cryptoAmount: Double, redirectUrl: String) {
 		self.provider = provider
+		self.type = type
 		self.fiatAmount = fiatAmount
 		self.fiatCurrency = fiatCurrency
 		self.cryptoAmount = cryptoAmount

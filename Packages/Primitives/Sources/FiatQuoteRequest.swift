@@ -17,3 +17,17 @@ public struct FiatBuyRequest: Codable, Sendable {
 		self.walletAddress = walletAddress
 	}
 }
+
+public struct FiatSellRequest: Codable, Sendable {
+	public let assetId: String
+	public let fiatCurrency: String
+	public let cryptoAmount: Double
+	public let walletAddress: String
+
+	public init(assetId: String, fiatCurrency: String, cryptoAmount: Double, walletAddress: String) {
+		self.assetId = assetId
+		self.fiatCurrency = fiatCurrency
+		self.cryptoAmount = cryptoAmount
+		self.walletAddress = walletAddress
+	}
+}
