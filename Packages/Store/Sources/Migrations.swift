@@ -79,6 +79,26 @@ public struct Migrations {
                 $0.addColumn(sql: AssetBalanceRecord.totalAmountSQlCreation)
             }
         }
+        
+        migrator.registerMigration("Add rewards to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+                t.add(column: Columns.Balance.rewards.name, .text)
+                    .defaults(to: "0")
+            }
+        }
+        
+        migrator.registerMigration("Add reserved to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+                t.add(column: Columns.Balance.reserved.name, .text)
+                    .defaults(to: "0")
+            }
+        }
+        
+        migrator.registerMigration("Add updatedAt to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+                t.add(column: Columns.Balance.updatedAt.name, .date)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }
