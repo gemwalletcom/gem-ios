@@ -93,8 +93,8 @@ class FiatViewModel {
     }
 
     private var address: String { assetAddress.address }
-    private var typeModel: FiatQuoteTypeViewModel {
-        FiatQuoteTypeViewModel(type: input.type)
+    private var typeModel: FiatTransactionTypeViewModel {
+        FiatTransactionTypeViewModel(type: input.type)
     }
 
     private var emptyQuotesTitle: String { Localized.Buy.noResults }

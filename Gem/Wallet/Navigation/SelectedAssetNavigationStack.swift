@@ -68,16 +68,16 @@ struct SelectedAssetNavigationStack: View  {
                 }
             case .buy, .sell:
                 let fiatInput: FiatInput = {
-                    let fiatType: FiatQuoteType = (selectType.type == .buy) ? .buy : .sell
+                    let fiatType: FiatTransactionType = (selectType.type == .buy) ? .buy : .sell
                     let maxAmount: Double = {
                         if fiatType == .buy {
-                            FiatQuoteTypeViewModel.defaultBuyMaxAmount
+                            FiatTransactionTypeViewModel.defaultBuyMaxAmount
                         } else {
                             selectType.availableBalance ?? .zero
                         }
                     }()
                     let defaultAmount: Double = {
-                        FiatQuoteTypeViewModel(
+                        FiatTransactionTypeViewModel(
                             type: fiatType
                         ).defaultAmount
                     }()

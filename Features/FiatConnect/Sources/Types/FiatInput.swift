@@ -3,13 +3,13 @@
 import Primitives
 
 public struct FiatInput: Sendable {
-    public let type: FiatQuoteType
+    public let type: FiatTransactionType
 
     public var amount: Double
     public var maxAmount: Double
     public var quote: FiatQuote?
 
-    public init(type: FiatQuoteType, amount: Double, maxAmount: Double, quote: FiatQuote? = nil) {
+    public init(type: FiatTransactionType, amount: Double, maxAmount: Double, quote: FiatQuote? = nil) {
         self.type = type
         self.amount = amount
         self.quote = quote

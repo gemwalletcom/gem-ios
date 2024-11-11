@@ -4,15 +4,15 @@ import Foundation
 import Localization
 import Primitives
 
-public struct FiatQuoteTypeViewModel: Sendable {
-    public let type: FiatQuoteType
+public struct FiatTransactionTypeViewModel: Sendable {
+    public let type: FiatTransactionType
 
-    public init(type: FiatQuoteType) {
+    public init(type: FiatTransactionType) {
         self.type = type
     }
 }
 
-public extension FiatQuoteTypeViewModel {
+public extension FiatTransactionTypeViewModel {
     static let defaultBuyMaxAmount: Double = 1000
 
     var suggestedAmounts: [Double] {
