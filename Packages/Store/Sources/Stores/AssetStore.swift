@@ -59,7 +59,12 @@ public struct AssetStore: Sendable {
     public func setAssetIsBuyable(for assetIds: [String], value: Bool) throws -> Int {
         try setColumn(for: assetIds, column: Columns.Asset.isBuyable, value: value)
     }
-    
+
+    @discardableResult
+    public func setAssetIsSellable(for assetIds: [String], value: Bool) throws -> Int {
+        try setColumn(for: assetIds, column: Columns.Asset.isSellable, value: value)
+    }
+
     @discardableResult
     public func setAssetIsSwappable(for assetIds: [String], value: Bool) throws -> Int {
         try setColumn(for: assetIds, column: Columns.Asset.isSwappable, value: value)

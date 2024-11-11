@@ -212,7 +212,7 @@
 "common.url" = "Adres URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Język";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ zakodowany klucz prywatny";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,5 @@
 "common.warning" = "Ostrzeżenie";
 "warnings.multi_signature_blocked" = "Nie przelewaj środków do tego portfela Multi-Signature %@ chyba że masz pewność, że kontrolujesz klucze prywatne. Niedopełnienie tego obowiązku może narazić Cię na oszustwa i możesz trwale utracić swoje aktywa.";
 "swap.price_impact" = "Wpływ na cenę";
+"wallet.sell" = "Sprzedać";
+"sell.title" = "Sell %s";

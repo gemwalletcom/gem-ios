@@ -185,7 +185,11 @@ extension AssetScene {
 //        }
         NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
             .accessibilityIdentifier("stake")) {
-                isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+                isPresentingAssetSelectType = SelectAssetInput(
+                    type: .stake,
+                    assetAddress: assetData.assetAddress,
+                    availableBalance: .none
+                )
             }
     }
 }
@@ -195,7 +199,17 @@ extension AssetScene {
 extension AssetScene {
     @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
-        isPresentingAssetSelectType = SelectAssetInput(type: buttonType.selectType, assetAddress: assetData.assetAddress)
+        let availableBalance: Double? = {
+            guard buttonType.selectType == .sell else { return .none }
+            let formatter = ValueFormatter(style: .full)
+            return (try? formatter.double(from: assetData.balance.available, decimals: Int(assetData.asset.decimals))) ?? .zero
+        }()
+
+        return isPresentingAssetSelectType = SelectAssetInput(
+            type: buttonType.selectType,
+            assetAddress: assetData.assetAddress,
+            availableBalance: availableBalance
+        )
     }
 
     @MainActor
@@ -221,7 +235,11 @@ extension AssetScene {
         let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake:
-            isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+            isPresentingAssetSelectType = SelectAssetInput(
+                type: .stake,
+                assetAddress: assetData.assetAddress,
+                availableBalance: .zero
+            )
         case .enableNotifications,
             .accountActivation,
             .accountBlockedMultiSignature:

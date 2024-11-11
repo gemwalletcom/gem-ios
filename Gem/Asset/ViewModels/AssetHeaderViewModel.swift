@@ -17,11 +17,11 @@ extension AssetHeaderViewModel: HeaderViewModel {
     }
     
     var assetImage: AssetImage? {
-        return assetDataModel.assetImage
+        assetDataModel.assetImage
     }
     
     var title: String {
-        return assetDataModel.totalBalanceTextWithSymbol
+        assetDataModel.totalBalanceTextWithSymbol
     }
     
     var subtitle: String? {
@@ -36,6 +36,7 @@ extension AssetHeaderViewModel: HeaderViewModel {
             (HeaderButtonType.send, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.receive, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.buy, assetDataModel.isBuyEnabled, bannersViewModel.isButtonsEnabled),
+            (HeaderButtonType.sell, assetDataModel.isSellEnabled, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.swap, assetDataModel.isSwapEnabled, bannersViewModel.isButtonsEnabled),
         ]
         return values.compactMap {

@@ -60,6 +60,7 @@ public struct Images {
         public static let receive = Image(.receive)
         public static let buy = Image(.buy)
         public static let manage = Image(.manage)
+        public static let sell = Image(.sell)
     }
 
     public struct Settings {

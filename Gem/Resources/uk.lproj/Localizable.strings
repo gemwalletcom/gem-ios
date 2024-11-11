@@ -212,7 +212,7 @@
 "common.url" = "URL-адреса";
 "errors.error_occured" = "Виникла помилка!";
 "settings.language" = "Мова";
-"wallet.import.private_key" = "%s закодований приватний ключ";
+"wallet.import.private_key" = "%@ закодований приватний ключ";
 "errors.invalid_network_id" = "Неправильний ідентифікатор мережі";
 "common.private_key" = "Приватний ключ";
 "nodes.import_node.latency" = "Затримка";
@@ -281,3 +281,5 @@
 "common.warning" = "УВАГА";
 "warnings.multi_signature_blocked" = "Не переказуйте кошти на цей %@ гаманець Multi-Signature, якщо ви не впевнені, що контролюєте закриті ключі. Якщо цього не зробити, ви можете стати жертвою шахрайства та назавжди втратити свої активи.";
 "swap.price_impact" = "Вплив ціни";
+"wallet.sell" = "Продати";
+"sell.title" = "Sell %s";

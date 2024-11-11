@@ -212,7 +212,7 @@
 "common.url" = "網址";
 "errors.error_occured" = "報錯了";
 "settings.language" = "語言";
-"wallet.import.private_key" = "%s 編碼的私鑰";
+"wallet.import.private_key" = "%@編碼私鑰";
 "errors.invalid_network_id" = "無效的網路ID";
 "common.private_key" = "私鑰";
 "nodes.import_node.latency" = "延遲";
@@ -281,3 +281,5 @@
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "除非您確定您控制著私鑰，否則請勿將資金轉移到此%@多重簽名錢包。如果不這樣做，您可能會遭受詐騙，並且您可能會永久失去您的資產。";
 "swap.price_impact" = "價格影響";
+"wallet.sell" = "賣";
+"sell.title" = "Sell %s";

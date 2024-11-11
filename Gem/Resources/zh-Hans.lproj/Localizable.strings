@@ -212,7 +212,7 @@
 "common.url" = "网址";
 "errors.error_occured" = "报错了！";
 "settings.language" = "语言";
-"wallet.import.private_key" = "%s 编码的私钥";
+"wallet.import.private_key" = "%@ 编码私钥";
 "errors.invalid_network_id" = "网络 ID 无效";
 "common.private_key" = "私钥";
 "nodes.import_node.latency" = "延迟";
@@ -281,3 +281,5 @@
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "除非您确定自己控制私钥，否则请勿将资金转入此%@多重签名钱包。否则，您可能会遭受诈骗，并且可能会永久失去您的资产。";
 "swap.price_impact" = "价格影响";
+"wallet.sell" = "卖";
+"sell.title" = "Sell %s";

@@ -6,6 +6,7 @@ import Components
 import Style
 import Localization
 import SwapService
+import FiatConnect
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
@@ -88,11 +89,32 @@ struct SelectAssetSceneNavigationStack: View {
                             walletsService: walletsService
                         )
                     )
-                case .buy:
-                    BuyAssetScene(
-                        model: BuyAssetViewModel(
+                case .buy, .sell:
+                    let fiatInput: FiatInput = {
+                        let fiatType: FiatQuoteType = (input.type == .buy) ? .buy : .sell
+                        let maxAmount: Double = {
+                            if fiatType == .buy {
+                                FiatQuoteTypeViewModel.defaultBuyMaxAmount
+                            } else {
+                                Double(input.availableBalance ?? .zero)
+                            }
+                        }()
+                        let defaultAmount: Double = {
+                            FiatQuoteTypeViewModel(
+                                type: fiatType
+                            ).defaultAmount
+                        }()
+                        return FiatInput(
+                            type: fiatType,
+                            amount: defaultAmount,
+                            maxAmount: maxAmount
+                        )
+                    }()
+                    FiatScene(
+                        model: FiatViewModel(
                             assetAddress: input.assetAddress,
-                            input: .default)
+                            input: fiatInput
+                        )
                     )
                 case .swap:
                     SwapScene(

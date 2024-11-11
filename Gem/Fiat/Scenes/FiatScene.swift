@@ -4,8 +4,8 @@ import Style
 import Components
 import FiatConnect
 
-struct BuyAssetScene: View {
-    @State private var model: BuyAssetViewModel
+struct FiatScene: View {
+    @State private var model: FiatViewModel
     @FocusState private var focusedField: Field?
 
     enum Field: Int, Hashable, Identifiable {
@@ -13,7 +13,7 @@ struct BuyAssetScene: View {
         var id: String { String(rawValue) }
     }
 
-    init(model: BuyAssetViewModel) {
+    init(model: FiatViewModel) {
         _model = State(initialValue: model)
     }
 
@@ -23,9 +23,9 @@ struct BuyAssetScene: View {
                 CurrencyInputView(
                     text: $model.amountText,
                     currencySymbol: model.currencySymbol,
-                    currencyPosition: .leading,
+                    currencyPosition: model.currencyPosition,
                     secondaryText: model.cryptoAmountValue,
-                    keyboardType: .numberPad
+                    keyboardType: model.keyboardType
                 )
                 .padding(.top, Spacing.medium)
                 .listGroupRowStyle()
@@ -65,6 +65,7 @@ struct BuyAssetScene: View {
         .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
                 model: FiatProvidersViewModel(
+                    type: model.input.type,
                     asset: model.asset,
                     quotes: model.state.value ?? [],
                     selectQuote: onSelectQuote(_:),
@@ -77,7 +78,7 @@ struct BuyAssetScene: View {
 
 // MARK: - UI Components
 
-extension BuyAssetScene {
+extension FiatScene {
     private var amountSelectorSection: some View {
         Section {
             HStack(spacing: Spacing.small) {
@@ -103,30 +104,32 @@ extension BuyAssetScene {
                         .buttonStyle(.plain)
                     }
 
-                    Button(Emoji.random) {
-                        onSelect(amount: model.randomAmount)
+                    Button(model.typeAmountButtonTitle) {
+                        onSelectTypeAmount()
                     }
                     .font(.subheadline.weight(.semibold))
                     .padding(.all, Spacing.small)
                     .background {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
-                                         .foregroundStyle(Colors.grayVeryLight)
+                                .foregroundStyle(Colors.grayVeryLight)
 
-                            RoundedRectangle(cornerRadius: 12)
-                                .strokeBorder(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color(hex: "#2A32FF"),
-                                            Color(hex: "#6CB8FF"),
-                                            Color(hex: "#F213F6"),
-                                            Color(hex: "FFF963")
-                                        ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 3
-                                )
+                            if model.isBuy {
+                                RoundedRectangle(cornerRadius: 12)
+                                    .strokeBorder(
+                                        LinearGradient(
+                                            gradient: Gradient(colors: [
+                                                Color(hex: "#2A32FF"),
+                                                Color(hex: "#6CB8FF"),
+                                                Color(hex: "#F213F6"),
+                                                Color(hex: "FFF963")
+                                            ]),
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ),
+                                        lineWidth: 3
+                                    )
+                            }
                         }
                     }
                     .buttonStyle(.plain)
@@ -166,7 +169,7 @@ extension BuyAssetScene {
 
 // MARK: - Actions
 
-extension BuyAssetScene {
+extension FiatScene {
     private func onTask() async {
         guard model.input.quote == nil else { return }
         await model.fetch()
@@ -179,9 +182,12 @@ extension BuyAssetScene {
         UIApplication.shared.open(url, options: [:])
     }
 
-    private func onSelect(amount: Double?) {
-        guard let amount = amount else { return }
-        model.input.amount = amount
+    private func onSelect(amount: Double) {
+        model.select(amount: amount)
+    }
+
+    private func onSelectTypeAmount() {
+        model.selectTypeAmount()
     }
 
     private func onSelectQuote(_ quote: FiatQuote) {
@@ -196,9 +202,12 @@ extension BuyAssetScene {
 // MARK: - Previews
 
 #Preview {
-    @Previewable @State var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
-    return NavigationStack {
-        BuyAssetScene(model: model)
+    @Previewable @State var model = FiatViewModel(
+        assetAddress: .init(asset: .main, address: .empty),
+        input: FiatInput(type: .buy, amount: 50, maxAmount: .zero)
+    )
+    NavigationStack {
+        FiatScene(model: model)
             .navigationBarTitleDisplayMode(.inline)
     }
 }

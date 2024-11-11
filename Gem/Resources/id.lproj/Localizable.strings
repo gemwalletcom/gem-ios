@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "Terjadi kesalahan!";
 "settings.language" = "Bahasa";
-"wallet.import.private_key" = "kunci privat dikodekan %s";
+"wallet.import.private_key" = "kunci privat dikodekan %@";
 "errors.invalid_network_id" = "ID Jaringan Tidak Valid";
 "common.private_key" = "Kunci Privat";
 "nodes.import_node.latency" = "Latensi";
@@ -281,3 +281,5 @@
 "common.warning" = "Peringatan";
 "warnings.multi_signature_blocked" = "Jangan mentransfer dana ke dompet Multi-Signature %@ ini kecuali Anda yakin bahwa Anda memegang kunci pribadi. Kegagalan untuk melakukannya dapat membuat Anda rentan terhadap penipuan, dan Anda dapat kehilangan aset Anda secara permanen.";
 "swap.price_impact" = "Dampak Harga";
+"wallet.sell" = "Menjual";
+"sell.title" = "Sell %s";

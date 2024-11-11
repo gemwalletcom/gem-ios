@@ -109,8 +109,8 @@
 		C3CF3BBC29B6DB5400E96586 /* ImportWalletScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BBB29B6DB5400E96586 /* ImportWalletScene.swift */; };
 		C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BBD29B7C00E00E96586 /* ReceiveScene.swift */; };
 		C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC229B7CACA00E96586 /* ReceiveViewModel.swift */; };
-		C3CF3BC529B7CB3600E96586 /* BuyAssetScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC429B7CB3600E96586 /* BuyAssetScene.swift */; };
-		C3CF3BC729B7CB4900E96586 /* BuyAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC629B7CB4900E96586 /* BuyAssetViewModel.swift */; };
+		C3CF3BC529B7CB3600E96586 /* FiatScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC429B7CB3600E96586 /* FiatScene.swift */; };
+		C3CF3BC729B7CB4900E96586 /* FiatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */; };
 		C3CF3BC929B803F900E96586 /* RecipientScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC829B803F900E96586 /* RecipientScene.swift */; };
 		C3CF3BCB29B8041700E96586 /* RecipientViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BCA29B8041700E96586 /* RecipientViewModel.swift */; };
 		C3CF3BCD29B80B1B00E96586 /* SelectAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */; };
@@ -414,8 +414,8 @@
 		C3CF3BBB29B6DB5400E96586 /* ImportWalletScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImportWalletScene.swift; sourceTree = "<group>"; };
 		C3CF3BBD29B7C00E00E96586 /* ReceiveScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveScene.swift; sourceTree = "<group>"; };
 		C3CF3BC229B7CACA00E96586 /* ReceiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewModel.swift; sourceTree = "<group>"; };
-		C3CF3BC429B7CB3600E96586 /* BuyAssetScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetScene.swift; sourceTree = "<group>"; };
-		C3CF3BC629B7CB4900E96586 /* BuyAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuyAssetViewModel.swift; sourceTree = "<group>"; };
+		C3CF3BC429B7CB3600E96586 /* FiatScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatScene.swift; sourceTree = "<group>"; };
+		C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BC829B803F900E96586 /* RecipientScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientScene.swift; sourceTree = "<group>"; };
 		C3CF3BCA29B8041700E96586 /* RecipientViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetViewModel.swift; sourceTree = "<group>"; };
@@ -1164,7 +1164,7 @@
 			isa = PBXGroup;
 			children = (
 				C36679102A0E1EE000F1D74D /* FiatProvidersScene.swift */,
-				C3CF3BC429B7CB3600E96586 /* BuyAssetScene.swift */,
+				C3CF3BC429B7CB3600E96586 /* FiatScene.swift */,
 			);
 			path = Scenes;
 			sourceTree = "<group>";
@@ -1172,7 +1172,7 @@
 		C3D1C50A2A44FD23006E8EEA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				C3CF3BC629B7CB4900E96586 /* BuyAssetViewModel.swift */,
+				C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2150,7 +2150,7 @@
 				D8F5B8622CCC33F90007E615 /* HeaderBannersViewModel.swift in Sources */,
 				8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */,
 				D8F5B8662CCC380F0007E615 /* HeaderViewModel.swift in Sources */,
-				C3CF3BC729B7CB4900E96586 /* BuyAssetViewModel.swift in Sources */,
+				C3CF3BC729B7CB4900E96586 /* FiatViewModel.swift in Sources */,
 				D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */,
 				D8385CF42B06D65500F784C7 /* SwapChangeView.swift in Sources */,
 				C3D1C4DD2A295AEB006E8EEA /* AboutUsScene.swift in Sources */,
@@ -2174,7 +2174,7 @@
 				C3CF3BE129BE478000E96586 /* ImportWalletViewModel.swift in Sources */,
 				D8385CE32AFEBC1F00F784C7 /* WalletConnectorInteractable.swift in Sources */,
 				D8B738D12C4AF286004EF083 /* ConnectionsError.swift in Sources */,
-				C3CF3BC529B7CB3600E96586 /* BuyAssetScene.swift in Sources */,
+				C3CF3BC529B7CB3600E96586 /* FiatScene.swift in Sources */,
 				D8148C2B2BF54BA30066586A /* AddressListItem.swift in Sources */,
 				832A70602C88CE9600045367 /* SellectWalletViewModel.swift in Sources */,
 				83B672F12C99BFD40034100C /* LockPeriodSelectionViewModel.swift in Sources */,

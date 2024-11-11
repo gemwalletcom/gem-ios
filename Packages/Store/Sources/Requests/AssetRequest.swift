@@ -49,6 +49,7 @@ extension AssetData {
             metadata: AssetMetaData(
                 isEnabled: false,
                 isBuyEnabled: false,
+                isSellEnabled: false,
                 isSwapEnabled: false,
                 isStakeEnabled: false,
                 isPinned: false

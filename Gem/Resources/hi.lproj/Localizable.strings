@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Language";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ एनकोडेड निजी कुंजी";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,5 @@
 "common.warning" = "चेतावनी";
 "warnings.multi_signature_blocked" = "जब तक आप सुनिश्चित न हों कि आप निजी कुंजियों को नियंत्रित करते हैं, तब तक इस %@ मल्टी-सिग्नेचर वॉलेट में धनराशि स्थानांतरित न करें। ऐसा न करने पर आप धोखाधड़ी के शिकार हो सकते हैं, और आप अपनी संपत्ति हमेशा के लिए खो सकते हैं।";
 "swap.price_impact" = "मूल्य प्रभाव";
+"wallet.sell" = "बेचना";
+"sell.title" = "Sell %s";

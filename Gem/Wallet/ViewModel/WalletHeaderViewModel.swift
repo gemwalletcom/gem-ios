@@ -52,6 +52,7 @@ extension WalletHeaderViewModel: HeaderViewModel {
             (.send, true),
             (.receive, true),
             (.buy, true),
+            (.sell, true),
         ]
         return values.compactMap {
             if $0.isShown {

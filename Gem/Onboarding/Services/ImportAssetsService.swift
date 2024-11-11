@@ -42,16 +42,24 @@ struct ImportAssetsService {
             try assetStore.insertFull(assets: assets)
         }
     }
-    
-    func updateFiatAssets() async throws {
-        let assets = try await assetListService.getFiatAssets()
 
-        try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })
-        try assetStore.setAssetIsBuyable(for: assets.assetIds, value: true)
-        
-        preferences.fiatAssetsVersion = Int(assets.version)
+    func updateFiatAssets() async throws {
+        async let getBuyAssets = try assetListService.getFiatAssets(buy: true)
+        async let getSellAssets = try assetListService.getFiatAssets(buy: false)
+
+        let (buyAssets, sellAssets) = try await (getBuyAssets, getSellAssets)
+
+        let allAssetIds = (buyAssets.assetIds + sellAssets.assetIds).compactMap { try? AssetId(id: $0) }
+
+        async let prefetchResult = try assetsService.prefetchAssets(assetIds: allAssetIds)
+        async let setBuyableResult = try assetStore.setAssetIsBuyable(for: buyAssets.assetIds, value: true)
+        async let setSellableResult = try assetStore.setAssetIsSellable(for: sellAssets.assetIds, value: true)
+
+        _ = try await (prefetchResult, setBuyableResult, setSellableResult)
+
+        preferences.fiatAssetsVersion = Int(max(buyAssets.version, sellAssets.version))
     }
-    
+
     func updateSwapAssets() async throws {
         let assets = try await assetListService.getSwapAssets()
 

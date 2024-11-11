@@ -125,6 +125,7 @@ extension AssetRecordInfo {
         return AssetMetaData(
             isEnabled: balance?.isEnabled ?? false,
             isBuyEnabled: asset.isBuyable,
+            isSellEnabled: asset.isSellable,
             isSwapEnabled: asset.isSwappable,
             isStakeEnabled: asset.isStakeable,
             isPinned: balance?.isPinned ?? false

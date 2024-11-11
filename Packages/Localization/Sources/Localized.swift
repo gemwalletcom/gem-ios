@@ -409,6 +409,12 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "secret_phrase.do_not_share.title", fallback: "Do not share your Secret Phrase!")
     }
   }
+  public enum Sell {
+    /// Sell %s
+    public static func title(_ p1: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")
+    }
+  }
   public enum Settings {
     /// About Us
     public static let aboutus = Localized.tr("Localizable", "settings.aboutus", fallback: "About Us")
@@ -710,6 +716,8 @@ public enum Localized {
     public static let scan = Localized.tr("Localizable", "wallet.scan", fallback: "Scan")
     /// Scan QR Code
     public static let scanQrCode = Localized.tr("Localizable", "wallet.scan_qr_code", fallback: "Scan QR Code")
+    /// Sell
+    public static let sell = Localized.tr("Localizable", "wallet.sell", fallback: "Sell")
     /// Send
     public static let send = Localized.tr("Localizable", "wallet.send", fallback: "Send")
     /// Stake
@@ -729,9 +737,9 @@ public enum Localized {
       public static let addressField = Localized.tr("Localizable", "wallet.import.address_field", fallback: "Address or Name")
       /// Contract Address or Token ID
       public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract Address or Token ID")
-      /// %s encoded private key
-      public static func privateKey(_ p1: UnsafePointer<CChar>) -> String {
-        return Localized.tr("Localizable", "wallet.import.private_key", p1, fallback: "%s encoded private key")
+      /// %@ encoded private key
+      public static func privateKey(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "wallet.import.private_key", String(describing: p1), fallback: "%@ encoded private key")
       }
       /// Secret Recovery Phrase
       public static let secretPhrase = Localized.tr("Localizable", "wallet.import.secret_phrase", fallback: "Secret Recovery Phrase")

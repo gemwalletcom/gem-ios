@@ -44,8 +44,20 @@ struct SelectAssetScene: View {
             Section {
                 ForEach(assets) { assetData in
                     switch model.selectType {
-                    case .buy, .receive, .send, .swap, .stake:
-                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
+                    case .buy, .receive, .send, .swap, .stake, .sell:
+                        let availableBalance: Double? = {
+                            guard model.selectType == .sell else { return .none }
+                            let formatter = ValueFormatter(style: .full)
+                            return (try? formatter.double(from: assetData.balance.available, decimals: Int(assetData.asset.decimals))) ?? .zero
+                        }()
+
+                        NavigationLink(
+                            value: SelectAssetInput(
+                                type: model.selectType,
+                                assetAddress: assetData.assetAddress,
+                                availableBalance: availableBalance
+                            )
+                        ) {
                             ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                         }
                     case .manage:

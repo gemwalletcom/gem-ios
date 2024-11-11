@@ -39,7 +39,7 @@ struct AssetsFilterViewModel {
         switch type {
         case .send: [.hasBalance]
         case .receive: [.includeNewAssets]
-        case .buy: [.buyable, .includeNewAssets]
+        case .buy, .sell: [.buyable, .includeNewAssets]
         case .swap: [.swappable]
         case .stake: [.stakeable]
         case .manage: [.includeNewAssets]
@@ -49,7 +49,7 @@ struct AssetsFilterViewModel {
 
     var isCusomFilteringSpecified: Bool {
         switch type {
-        case .send, .receive, .buy, .swap, .stake, .priceAlert: false
+        case .send, .receive, .buy, .sell, .swap, .stake, .priceAlert: false
         case .manage: !selectedChains.isEmpty
         }
     }

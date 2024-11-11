@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "خطایی رخ داد!";
 "settings.language" = "زبان";
-"wallet.import.private_key" = "کلید خصوصی %s رمزگزاری شده.";
+"wallet.import.private_key" = "%@ کلید خصوصی رمزگذاری شده";
 "errors.invalid_network_id" = "شناسه شبکه نامعتبر است.";
 "common.private_key" = "کلید خصوصی";
 "nodes.import_node.latency" = "تاخیر";
@@ -281,3 +281,5 @@
 "common.warning" = "هشدار";
 "warnings.multi_signature_blocked" = "وجه را به این کیف پول چند امضایی %@ منتقل نکنید، مگر اینکه مطمئن باشید کلیدهای خصوصی را کنترل می کنید. عدم انجام این کار می تواند شما را در معرض کلاهبرداری قرار دهد و ممکن است برای همیشه دارایی های خود را از دست بدهید.";
 "swap.price_impact" = "تاثیر قیمت";
+"wallet.sell" = "فروش";
+"sell.title" = "Sell %s";

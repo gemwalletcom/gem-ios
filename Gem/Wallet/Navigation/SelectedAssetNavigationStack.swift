@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Localization
 import SwapService
+import FiatConnect
 
 struct SelectedAssetNavigationStack: View  {
     
@@ -65,11 +66,31 @@ struct SelectedAssetNavigationStack: View  {
                         }.bold()
                     }
                 }
-            case .buy:
-                BuyAssetScene(
-                    model: BuyAssetViewModel(
+            case .buy, .sell:
+                let fiatInput: FiatInput = {
+                    let fiatType: FiatQuoteType = (selectType.type == .buy) ? .buy : .sell
+                    let maxAmount: Double = {
+                        if fiatType == .buy {
+                            FiatQuoteTypeViewModel.defaultBuyMaxAmount
+                        } else {
+                            selectType.availableBalance ?? .zero
+                        }
+                    }()
+                    let defaultAmount: Double = {
+                        FiatQuoteTypeViewModel(
+                            type: fiatType
+                        ).defaultAmount
+                    }()
+                    return FiatInput(
+                        type: fiatType,
+                        amount: defaultAmount,
+                        maxAmount: maxAmount
+                    )
+                }()
+                FiatScene(
+                    model: FiatViewModel(
                         assetAddress: selectType.assetAddress,
-                        input: .default
+                        input: fiatInput
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)

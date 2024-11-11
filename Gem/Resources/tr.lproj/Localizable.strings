@@ -212,7 +212,7 @@
 "common.url" = "URL'si";
 "errors.error_occured" = "Bilinmeyen bir hata oluştu. Lütfen tekrar deneyin.";
 "settings.language" = "Dil";
-"wallet.import.private_key" = "Özel Anahtar";
+"wallet.import.private_key" = "%@ kodlanmış özel anahtar";
 "errors.invalid_network_id" = "Geçersiz adres veya ad";
 "common.private_key" = "Özel Anahtar";
 "nodes.import_node.latency" = "Gecikme";
@@ -281,3 +281,5 @@
 "common.warning" = "Uyarı";
 "warnings.multi_signature_blocked" = "Özel anahtarları kontrol ettiğinizden emin olmadığınız sürece bu %@ Çoklu İmzalı cüzdana para transferi yapmayın. Bunu yapmamanız sizi dolandırıcılıklara maruz bırakabilir ve varlıklarınızı kalıcı olarak kaybedebilirsiniz.";
 "swap.price_impact" = "Fiyat Etkisi";
+"wallet.sell" = "Satmak";
+"sell.title" = "Sell %s";

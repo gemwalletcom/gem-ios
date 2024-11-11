@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "언어";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ 인코딩된 개인 키";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,5 @@
 "common.warning" = "경고";
 "warnings.multi_signature_blocked" = "개인 키를 제어하고 있다는 확신이 없다면 이 %@ 다중 서명 지갑으로 자금을 이체하지 마십시오. 그렇지 않으면 사기에 노출될 수 있으며 자산을 영구적으로 잃을 수 있습니다.";
 "swap.price_impact" = "가격 영향";
+"wallet.sell" = "팔다";
+"sell.title" = "Sell %s";

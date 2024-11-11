@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Language";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ เข้ารหัสคีย์ส่วนตัว";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,5 @@
 "common.warning" = "คำเตือน";
 "warnings.multi_signature_blocked" = "อย่าโอนเงินไปยังกระเป๋าเงินหลายลายเซ็น %@ นี้ เว้นแต่คุณจะแน่ใจว่าคุณควบคุมคีย์ส่วนตัวได้ การไม่ทำเช่นนั้นอาจทำให้คุณตกเป็นเหยื่อของการหลอกลวง และคุณอาจสูญเสียทรัพย์สินของคุณไปอย่างถาวร";
 "swap.price_impact" = "ผลกระทบต่อราคา";
+"wallet.sell" = "ขาย";
+"sell.title" = "Sell %s";

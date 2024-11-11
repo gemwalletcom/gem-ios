@@ -212,7 +212,7 @@
 "common.url" = "عنوان URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "لغة";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ مفتاح خاص مشفر";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,5 @@
 "common.warning" = "تحذير";
 "warnings.multi_signature_blocked" = "لا تقم بتحويل الأموال إلى محفظة التوقيعات المتعددة %@ هذه إلا إذا كنت متأكدًا من أنك تتحكم في المفاتيح الخاصة. قد يؤدي عدم القيام بذلك إلى تعريضك للاحتيال، وقد تفقد أصولك بشكل دائم.";
 "swap.price_impact" = "تأثير السعر";
+"wallet.sell" = "يبيع";
+"sell.title" = "Sell %s";
