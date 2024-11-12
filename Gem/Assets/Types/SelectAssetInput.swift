@@ -4,7 +4,6 @@ import Primitives
 struct SelectAssetInput: Hashable {
     let type: SelectAssetType
     let assetAddress: AssetAddress
-    let availableBalance: Double?
 
     var asset: Asset  {
         assetAddress.asset
@@ -14,10 +13,9 @@ struct SelectAssetInput: Hashable {
         assetAddress.address
     }
 
-    init(type: SelectAssetType, assetAddress: AssetAddress, availableBalance: Double?) {
+    init(type: SelectAssetType, assetAddress: AssetAddress) {
         self.type = type
         self.assetAddress = assetAddress
-        self.availableBalance = availableBalance
     }
 }
 

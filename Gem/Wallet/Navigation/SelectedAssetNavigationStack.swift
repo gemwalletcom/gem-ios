@@ -67,30 +67,11 @@ struct SelectedAssetNavigationStack: View  {
                     }
                 }
             case .buy, .sell:
-                let fiatInput: FiatInput = {
-                    let fiatType: FiatTransactionType = (selectType.type == .buy) ? .buy : .sell
-                    let maxAmount: Double = {
-                        if fiatType == .buy {
-                            FiatTransactionTypeViewModel.defaultBuyMaxAmount
-                        } else {
-                            selectType.availableBalance ?? .zero
-                        }
-                    }()
-                    let defaultAmount: Double = {
-                        FiatTransactionTypeViewModel(
-                            type: fiatType
-                        ).defaultAmount
-                    }()
-                    return FiatInput(
-                        type: fiatType,
-                        amount: defaultAmount,
-                        maxAmount: maxAmount
-                    )
-                }()
                 FiatScene(
                     model: FiatViewModel(
                         assetAddress: selectType.assetAddress,
-                        input: fiatInput
+                        walletId: wallet.id,
+                        type: (selectType.type == .buy) ? .buy : .sell
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)

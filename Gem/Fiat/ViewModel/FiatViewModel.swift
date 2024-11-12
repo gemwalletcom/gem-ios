@@ -8,6 +8,7 @@ import Components
 import Style
 import Localization
 import FiatConnect
+import Store
 
 @Observable
 class FiatViewModel {
@@ -15,6 +16,7 @@ class FiatViewModel {
 
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
+    private let walletId: String
 
     private let currencyFormatter = CurrencyFormatter.currency()
     private let valueFormatter = ValueFormatter(style: .medium)
@@ -25,14 +27,17 @@ class FiatViewModel {
     init(
         fiatService: any GemAPIFiatService = GemAPIService(),
         assetAddress: AssetAddress,
-        input: FiatInput
+        walletId: String,
+        type: FiatTransactionType
     ) {
-        self.assetAddress = assetAddress
         self.fiatService = fiatService
-        self.input = input
+        self.assetAddress = assetAddress
+        self.walletId = walletId
+        self.input = FiatInput(
+            type: type,
+            amount: FiatTransactionTypeViewModel(type: type).defaultAmount
+        )
     }
-
-    var isBuy: Bool { input.type == .buy }
 
     var title: String {
         let name = asset.name
@@ -47,26 +52,25 @@ class FiatViewModel {
     var rateTitle: String { Localized.Buy.rate }
     var errorTitle: String { Localized.Errors.errorOccured }
     var emptyTitle: String { input.amount.isZero ? emptyAmountTitle : emptyQuotesTitle}
+    var typeAmountButtonTitle: String { isBuy ? Emoji.random : Localized.Transfer.max }
+    var assetTitle: String { asset.symbol }
 
-    var currencySymbol: String {
-        isBuy ? "$" : assetAddress.asset.symbol
+    var isBuy: Bool { input.type == .buy }
+
+    var assetRequest: AssetRequest {
+        AssetRequest(walletId: walletId, assetId: assetAddress.asset.id.identifier)
     }
 
-    var asset: Asset {
-        assetAddress.asset
+    var asset: Asset { assetAddress.asset }
+    var assetImage: AssetImage { AssetIdViewModel(assetId: asset.id).assetImage }
+
+    func assetBalance(assetData: AssetData) -> String? {
+        guard !isBuy else { return .none }
+        return balanceModel(assetData: assetData).availableBalanceText
     }
 
-    var typeAmountButtonTitle: String {
-        isBuy ? Emoji.random : Localized.Transfer.max
-    }
-
-    var suggestedAmounts: [Double] {
-        typeModel.suggestedAmounts
-    }
-
-    var assetImage: AssetImage {
-        AssetIdViewModel(assetId: asset.id).assetImage
-    }
+    var suggestedAmounts: [Double] { typeModel.suggestedAmounts }
+    var currencySymbol: String { isBuy ? "$" : assetAddress.asset.symbol }
 
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
@@ -91,28 +95,34 @@ class FiatViewModel {
             input.amount = amount(text: newValue)
         }
     }
+}
 
-    private var address: String { assetAddress.address }
-    private var typeModel: FiatTransactionTypeViewModel {
-        FiatTransactionTypeViewModel(type: input.type)
-    }
+// MARK: - Private
 
+extension FiatViewModel {
     private var emptyQuotesTitle: String { Localized.Buy.noResults }
     private var emptyAmountTitle: String { Localized.Buy.emptyAmount }
 
-    private var shouldProccedFetch: Bool {
-        guard !input.amount.isZero else { return false }
-        guard !isBuy && input.amount <= input.maxAmount else { return false }
-        return true
+    private var address: String { assetAddress.address }
+
+    private func balanceModel(assetData: AssetData) -> BalanceViewModel {
+        BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
+    }
+
+    private func availableBalance(assetData: AssetData) -> Double {
+        balanceModel(assetData: assetData).availableBalanceAmount
+    }
+
+    private var typeModel: FiatTransactionTypeViewModel {
+        FiatTransactionTypeViewModel(type: input.type)
     }
 
     private var formattedAmount: String {
         guard !isBuy else {
             return String(format: "%.0f", input.amount)
         }
-        guard let bigIntNumber = try? valueFormatter.inputNumber(from: String(input.amount), decimals: asset.decimals.asInt) else {
-            return String(input.amount)
-        }
+        let value = String(input.amount).replacingOccurrences(of: ".", with: ",")
+        guard let bigIntNumber = try? valueFormatter.inputNumber(from: value, decimals: asset.decimals.asInt) else { return String(input.amount) }
         return valueFormatter.string(bigIntNumber, decimals: asset.decimals.asInt)
     }
 
@@ -123,41 +133,49 @@ class FiatViewModel {
         }
         return doubleNumber
     }
+
+    private func maxAmount(assetData: AssetData) -> Double {
+        isBuy ? FiatTransactionTypeViewModel.defaultBuyMaxAmount : availableBalance(assetData: assetData)
+    }
+
+    private func shouldProceedFetch(assetData: AssetData) -> Bool {
+        guard !input.amount.isZero else { return false }
+        return isBuy || (!isBuy && input.amount <= maxAmount(assetData: assetData))
+    }
 }
 
 // MARK: - Business Logic
 
 extension FiatViewModel {
-    func select(amount: Double) {
+    func select(amount: Double, assetData: AssetData) {
         if isBuy {
             input.amount = amount
         } else {
-            input.amount = input.maxAmount * (amount / 100)
+            input.amount = availableBalance(assetData: assetData) * (amount / 100)
         }
     }
 
-    func selectTypeAmount() {
+    func selectTypeAmount(assetData: AssetData) {
+        let maxAmount = maxAmount(assetData: assetData)
         if isBuy {
-            input.amount = typeModel.randomAmount(maxAmount: input.maxAmount) ?? .zero
+            input.amount = typeModel.randomAmount(maxAmount: maxAmount) ?? .zero
         } else {
-            input.amount = input.maxAmount
+            input.amount = maxAmount
         }
     }
 
-    func fetch() async {
-        async let shouldFetch: Bool = {
-            await MainActor.run { [self] in
-                self.input.quote = nil
-                if !self.shouldProccedFetch {
-                    self.state = .noData
-                    return false
-                }
-                self.state = .loading
-                return true
+    func fetch(for assetData: AssetData) async {
+        let shouldFetch: Bool = await MainActor.run { [self] in
+            self.input.quote = nil
+            if !self.shouldProceedFetch(assetData: assetData) {
+                self.state = .noData
+                return false
             }
-        }()
+            self.state = .loading
+            return true
+        }
 
-        guard await shouldFetch else { return }
+        guard shouldFetch else { return }
 
         do {
             let quotes = try await fiatService.getQuotes(

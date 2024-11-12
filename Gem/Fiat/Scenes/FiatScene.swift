@@ -3,18 +3,24 @@ import Primitives
 import Style
 import Components
 import FiatConnect
+import GRDBQuery
+import Store
 
 struct FiatScene: View {
-    @State private var model: FiatViewModel
     @FocusState private var focusedField: Field?
-
     enum Field: Int, Hashable, Identifiable {
         case amount
         var id: String { String(rawValue) }
     }
 
+    @Query<AssetRequest>
+    private var assetData: AssetData
+
+    @State private var model: FiatViewModel
+
     init(model: FiatViewModel) {
         _model = State(initialValue: model)
+        _assetData = Query(constant: model.assetRequest)
     }
 
     var body: some View {
@@ -83,12 +89,15 @@ extension FiatScene {
         Section {
             HStack(spacing: Spacing.small) {
                 AssetImageView(assetImage: model.assetImage)
-
-                Text(model.asset.symbol)
-                    .textStyle(.headline.weight(.semibold))
-
+                VStack(alignment: .leading, spacing: Spacing.tiny) {
+                    Text(model.assetTitle)
+                        .textStyle(.headline.weight(.semibold))
+                    if let balance = model.assetBalance(assetData: assetData) {
+                        Text(balance)
+                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                    }
+                }
                 Spacer()
-
                 HStack(spacing: Spacing.medium) {
                     ForEach(model.suggestedAmounts, id: \.self) { amount in
                         Button(model.buttonTitle(amount: amount)) {
@@ -113,7 +122,6 @@ extension FiatScene {
                         ZStack {
                             RoundedRectangle(cornerRadius: 12)
                                 .foregroundStyle(Colors.grayVeryLight)
-
                             if model.isBuy {
                                 RoundedRectangle(cornerRadius: 12)
                                     .strokeBorder(
@@ -172,7 +180,7 @@ extension FiatScene {
 extension FiatScene {
     private func onTask() async {
         guard model.input.quote == nil else { return }
-        await model.fetch()
+        await model.fetch(for: assetData)
     }
 
     private func onSelectContinue() {
@@ -183,11 +191,11 @@ extension FiatScene {
     }
 
     private func onSelect(amount: Double) {
-        model.select(amount: amount)
+        model.select(amount: amount, assetData: assetData)
     }
 
     private func onSelectTypeAmount() {
-        model.selectTypeAmount()
+        model.selectTypeAmount(assetData: assetData)
     }
 
     private func onSelectQuote(_ quote: FiatQuote) {
@@ -195,7 +203,7 @@ extension FiatScene {
     }
 
     private func onChangeAmount(_ amount: Double) async {
-        await model.fetch()
+        await model.fetch(for: assetData)
     }
 }
 
@@ -204,7 +212,8 @@ extension FiatScene {
 #Preview {
     @Previewable @State var model = FiatViewModel(
         assetAddress: .init(asset: .main, address: .empty),
-        input: FiatInput(type: .buy, amount: 50, maxAmount: .zero)
+        walletId: .zero,
+        type: .buy
     )
     NavigationStack {
         FiatScene(model: model)

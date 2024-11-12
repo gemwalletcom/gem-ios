@@ -30,10 +30,18 @@ struct BalanceViewModel {
         do {
             return try ValueFormatter(style: .full).double(from: balance.total, decimals: asset.decimals.asInt)
         } catch {
-            return 0
+            return .zero
         }
     }
-    
+
+    var availableBalanceAmount: Double {
+        do {
+            return try ValueFormatter(style: .full).double(from: balance.available, decimals: asset.decimals.asInt)
+        } catch {
+            return .zero
+        }
+    }
+
     var balanceText: String {
         guard !balance.total.isZero else {
             return .zero

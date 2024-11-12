@@ -415,7 +415,7 @@
 		C3CF3BBD29B7C00E00E96586 /* ReceiveScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveScene.swift; sourceTree = "<group>"; };
 		C3CF3BC229B7CACA00E96586 /* ReceiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BC429B7CB3600E96586 /* FiatScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatScene.swift; sourceTree = "<group>"; };
-		C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatViewModel.swift; sourceTree = "<group>"; };
+		C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatViewModel.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		C3CF3BC829B803F900E96586 /* RecipientScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientScene.swift; sourceTree = "<group>"; };
 		C3CF3BCA29B8041700E96586 /* RecipientViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetViewModel.swift; sourceTree = "<group>"; };

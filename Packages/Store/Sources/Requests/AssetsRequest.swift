@@ -99,6 +99,11 @@ extension AssetsRequest {
                 .filter(
                     SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName))
                 )
+        case .sellable:
+            return request
+                .filter(
+                    SQL(stringLiteral:  String(format: "%@.isSellable == true", AssetRecord.databaseTableName))
+                )
         case .swappable:
             return request
                 .filter(
@@ -157,6 +162,7 @@ extension AssetsRequest {
         filters.forEach {
             switch $0 {
             case .buyable,
+                .sellable,
                 .swappable,
                 .stakeable,
                 .chains:

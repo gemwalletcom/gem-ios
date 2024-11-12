@@ -6,6 +6,7 @@ public enum AssetsRequestFilter {
     case search(String)
     case hasBalance
     case buyable // available to buy
+    case sellable
     case swappable
     case stakeable
     case enabled

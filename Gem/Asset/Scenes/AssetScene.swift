@@ -180,15 +180,11 @@ extension AssetScene {
     }
 
     private var stakeView: some View {
-//        NavigationLink(value: Scenes.Stake(chain: model.assetModel.asset.chain, wallet: wallet)) {
-//
-//        }
         NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
             .accessibilityIdentifier("stake")) {
                 isPresentingAssetSelectType = SelectAssetInput(
                     type: .stake,
-                    assetAddress: assetData.assetAddress,
-                    availableBalance: .none
+                    assetAddress: assetData.assetAddress
                 )
             }
     }
@@ -199,16 +195,9 @@ extension AssetScene {
 extension AssetScene {
     @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
-        let availableBalance: Double? = {
-            guard buttonType.selectType == .sell else { return .none }
-            let formatter = ValueFormatter(style: .full)
-            return (try? formatter.double(from: assetData.balance.available, decimals: Int(assetData.asset.decimals))) ?? .zero
-        }()
-
-        return isPresentingAssetSelectType = SelectAssetInput(
+        isPresentingAssetSelectType = SelectAssetInput(
             type: buttonType.selectType,
-            assetAddress: assetData.assetAddress,
-            availableBalance: availableBalance
+            assetAddress: assetData.assetAddress
         )
     }
 
@@ -237,8 +226,7 @@ extension AssetScene {
         case .stake:
             isPresentingAssetSelectType = SelectAssetInput(
                 type: .stake,
-                assetAddress: assetData.assetAddress,
-                availableBalance: .zero
+                assetAddress: assetData.assetAddress
             )
         case .enableNotifications,
             .accountActivation,
