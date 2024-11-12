@@ -38,6 +38,12 @@ struct FiatScene: View {
                 .focused($focusedField, equals: .amount)
 
                 amountSelectorSection
+                if let balance = model.assetBalance(assetData: assetData) {
+                    ListItemView(
+                        title: model.availableTitle,
+                        subtitle: balance
+                    )
+                }
                 providerSection
             }
             .contentMargins([.top], .zero, for: .scrollContent)
@@ -89,14 +95,8 @@ extension FiatScene {
         Section {
             HStack(spacing: Spacing.small) {
                 AssetImageView(assetImage: model.assetImage)
-                VStack(alignment: .leading, spacing: Spacing.tiny) {
-                    Text(model.assetTitle)
-                        .textStyle(.headline.weight(.semibold))
-                    if let balance = model.assetBalance(assetData: assetData) {
-                        Text(balance)
-                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
-                    }
-                }
+                Text(model.assetTitle)
+                    .textStyle(.headline.weight(.semibold))
                 Spacer()
                 HStack(spacing: Spacing.medium) {
                     ForEach(model.suggestedAmounts, id: \.self) { amount in

@@ -54,6 +54,7 @@ class FiatViewModel {
     var emptyTitle: String { input.amount.isZero ? emptyAmountTitle : emptyQuotesTitle}
     var typeAmountButtonTitle: String { isBuy ? Emoji.random : Localized.Transfer.max }
     var assetTitle: String { asset.symbol }
+    var availableTitle: String { Localized.Asset.Balances.available }
 
     var isBuy: Bool { input.type == .buy }
 
@@ -66,7 +67,7 @@ class FiatViewModel {
 
     func assetBalance(assetData: AssetData) -> String? {
         guard !isBuy else { return .none }
-        return balanceModel(assetData: assetData).availableBalanceText
+        return balanceModel(assetData: assetData).availableBalanceTextWithSymbol
     }
 
     var suggestedAmounts: [Double] { typeModel.suggestedAmounts }
