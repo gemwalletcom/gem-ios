@@ -50,7 +50,6 @@ public struct AssetsRequest: ValueObservationQueryable {
                 TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
             )
             
-
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
@@ -146,7 +145,7 @@ extension AssetsRequest {
             .filter(literal:
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
-            .order(Columns.Asset.rank.asc)
+            .order(Columns.Asset.rank.desc)
             .limit(50)
 
         if !searchBy.isEmpty {
