@@ -209,12 +209,14 @@ extension SwapScene {
         model.resetValues()
         focusedField = .from
         fetch()
+        updateAssets()
     }
     
     @MainActor
     private func onChangeToAsset() {
         model.resetToValue()
         fetch()
+        updateAssets()
     }
 }
 
