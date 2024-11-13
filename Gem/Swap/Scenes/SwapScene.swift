@@ -10,15 +10,23 @@ import BigInt
 import Keystore
 import ChainService
 
+struct SelectSwapAssetId: Hashable {
+    let type: SelectAssetSwapType
+    let assetId: AssetId
+}
+
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.assetsService) private var assetsService
+    @Environment(\.walletsService) private var walletsService
+    
+    @Query<AssetRequestOptional>
+    var fromAsset: AssetData?
 
-    @Query<AssetRequest>
-    var fromAsset: AssetData
-
-    @Query<AssetRequest>
-    var toAsset: AssetData
+    @Query<AssetRequestOptional>
+    var toAsset: AssetData?
     
     @Query<TransactionsRequest>
     var tokenApprovals: [TransactionExtended]
@@ -28,6 +36,7 @@ struct SwapScene: View {
     enum Field: Int, Hashable {
         case from, to
     }
+    
     @FocusState private var focusedField: Field?
 
     init(
@@ -44,41 +53,38 @@ struct SwapScene: View {
             swapList
             Spacer()
             VStack {
-                StateButton(text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                    viewState: model.swapAvailabilityState,
-                    image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                    infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                    disabledRule: model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                    action: onSelectActionButton
-                )
+                if let fromAsset {
+                    StateButton(
+                        text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        viewState: model.swapAvailabilityState,
+                        image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        disabledRule: model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        action: onSelectActionButton
+                    )
+                }
             }
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
-        .navigationDestination(for: $model.transferData) {
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    keystore: model.keystore,
-                    data: $0,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.recipientData.asset.chain),
-                    walletsService: model.walletsService,
-                    onComplete: onCompleteAction
-                )
-            )
-        }
         .debounce(
             value: $model.fromValue,
             interval: SwapViewModel.quoteTaskDebounceTimeout,
             action: onChangeFromValue
         )
-        .onChange(of: fromAsset, onChangeAssetsSwapDirection)
+        .onChange(of: fromAsset, onChangeFromAsset)
+        .onChange(of: toAsset, onChangeToAsset)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)
         .task {
             updateAssets()
+        }
+        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
+            $fromAsset.assetId.wrappedValue = new?.identifier
+        }
+        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
+            $toAsset.assetId.wrappedValue = new?.identifier
         }
         .onAppear {
             if model.toValue.isEmpty {
@@ -94,13 +100,22 @@ extension SwapScene {
     private var swapList: some View {
         List {
             Section {
-                SwapTokenView(
-                    model: model.swapTokenModel(from: fromAsset),
-                    text: $model.fromValue,
-                    balanceAction: onSelectFromBalance
-                )
-                .buttonStyle(.borderless)
-                .focused($focusedField, equals: .from)
+                if let fromAsset {
+                    SwapTokenView(
+                        model: model.swapTokenModel(from: fromAsset, type: .pay),
+                        text: $model.fromValue,
+                        onBalanceAction: onSelectFromBalance,
+                        onSelectAssetAction: onSelectAssetAction
+                    )
+                    .buttonStyle(.borderless)
+                    .focused($focusedField, equals: .from)
+                } else {
+                    SwapTokenEmptyView(
+                        type: .pay,
+                        onSelectAssetAction: onSelectAssetAction
+                    )
+                }
+                
             } header: {
                 Text(model.swapFromTitle)
             } footer: {
@@ -111,14 +126,23 @@ extension SwapScene {
             }
 
             Section(model.swapToTitle) {
-                SwapTokenView(
-                    model: model.swapTokenModel(from: toAsset),
-                    text: $model.toValue,
-                    showLoading: model.swapAvailabilityState.isLoading,
-                    disabledTextField: true,
-                    balanceAction: {}
-                )
-                .focused($focusedField, equals: .to)
+                if let toAsset {
+                    SwapTokenView(
+                        model: model.swapTokenModel(from: toAsset, type: .receive),
+                        text: $model.toValue,
+                        showLoading: model.swapAvailabilityState.isLoading,
+                        disabledTextField: true,
+                        onBalanceAction: {},
+                        onSelectAssetAction: onSelectAssetAction
+                    )
+                    .buttonStyle(.borderless)
+                    .focused($focusedField, equals: .to)
+                } else {
+                    SwapTokenEmptyView(
+                        type: .receive,
+                        onSelectAssetAction: onSelectAssetAction
+                    )
+                }
             }
             
             Section {
@@ -146,8 +170,14 @@ extension SwapScene {
 extension SwapScene {
     @MainActor
     private func onSelectFromBalance() {
+        guard let fromAsset, let _ = toAsset else { return }
         model.setMaxFromValue(asset: fromAsset.asset, value: fromAsset.balance.available)
         focusedField = .none
+    }
+    
+    @MainActor
+    private func onSelectAssetAction(type: SelectAssetSwapType) {
+        model.onSelectAssetAction(type: type)
     }
 
     @MainActor
@@ -170,28 +200,21 @@ extension SwapScene {
     @MainActor
     private func onChangeFromValue(_ value: String) async {
         model.toValue = ""
+        guard let fromAsset, let toAsset else { return }
         await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
     }
 
     @MainActor
-    private func onChangeAssetsSwapDirection() {
+    private func onChangeFromAsset() {
         model.resetValues()
         focusedField = .from
         fetch()
     }
     
     @MainActor
-    private func onCompleteAction() {
-        switch model.transferData?.type {
-        case .swap(_, _, let action):
-            switch action {
-            case .swap:
-                model.onCompleteAction()
-            case .approval:
-                dismiss() // go back
-            }
-        default: break
-        }
+    private func onChangeToAsset() {
+        model.resetToValue()
+        fetch()
     }
 }
 
@@ -200,20 +223,23 @@ extension SwapScene {
 extension SwapScene {
     private func fetch() {
         Task {
+            guard let fromAsset, let toAsset else { return }
             await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
         }
     }
 
     func swap() {
         Task {
+            guard let fromAsset, let toAsset else { return }
             await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
         }
     }
 
     func updateAssets() {
         Task {
+            let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
             do {
-                try await model.updateAssets(assetIds: [fromAsset.asset.id, toAsset.asset.id])
+                try await model.updateAssets(assetIds: assetIds)
             } catch {
                 // TODO: - handle error
                 print("SwapScene updateAssets error: \(error)")

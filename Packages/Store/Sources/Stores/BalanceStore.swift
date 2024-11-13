@@ -126,14 +126,21 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func setIsEnabled(walletId: String, assetIds: [String], value: Bool) throws -> Int {
         try db.write { db in
+            let assigments = switch value {
+            case true: [
+                Columns.Balance.isEnabled.set(to: true),
+                Columns.Balance.isHidden.set(to: false),
+            ]
+            case false: [
+                Columns.Balance.isEnabled.set(to: false),
+                Columns.Balance.isHidden.set(to: true),
+                Columns.Balance.isPinned.set(to: false)
+            ]}
+            
             return try AssetBalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(assetIds.contains(Columns.Balance.assetId))
-                .updateAll(db, 
-                    Columns.Balance.isEnabled.set(to: value),
-                    Columns.Balance.isHidden.set(to: !value),
-                    Columns.Balance.isPinned.set(to: false)
-                )
+                .updateAll(db, assigments)
         }
     }
 

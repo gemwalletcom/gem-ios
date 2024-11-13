@@ -94,20 +94,7 @@ struct SelectAssetSceneNavigationStack: View {
                             assetAddress: input.assetAddress,
                             input: .default)
                     )
-                case .swap:
-                    SwapScene(
-                        model: SwapViewModel(
-                            wallet: model.wallet,
-                            assetId: input.asset.id,
-                            walletsService: walletsService,
-                            swapService: SwapService(nodeProvider: nodeService),
-                            keystore: keystore,
-                            onComplete: {
-                                isPresentingSelectType = .none
-                            }
-                        )
-                    )
-                case .manage, .stake, .priceAlert:
+                case .manage, .stake, .priceAlert, .swap:
                     EmptyView()
                 }
             }

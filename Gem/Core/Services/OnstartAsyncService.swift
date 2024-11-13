@@ -7,6 +7,7 @@ import GemAPI
 import Primitives
 import BannerService
 import DeviceService
+import SwapService
 
 class OnstartAsyncService {
     
@@ -103,6 +104,13 @@ class OnstartAsyncService {
 
         RateService(preferences: preferences).perform()
 
+        Task {
+            let swappper = SwapService(nodeProvider: NodeService(nodeStore: nodeStore))
+            let chains = swappper.supportedChains()
+            
+            try assetStore.setAssetIsSwappable(for: chains.map { $0.id }, value: true)
+        }
+        
         Task {
             try await deviceService.update()
         }

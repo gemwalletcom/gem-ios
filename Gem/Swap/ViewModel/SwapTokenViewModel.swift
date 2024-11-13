@@ -8,10 +8,19 @@ import Localization
 struct SwapTokenViewModel {
     
     private let model: AssetDataViewModel
+    let type: SelectAssetSwapType
     private let formatter = ValueFormatter(style: .medium)
     
-    public init(model: AssetDataViewModel) {
+    public init(
+        model: AssetDataViewModel,
+        type: SelectAssetSwapType
+    ) {
         self.model = model
+        self.type = type
+    }
+    
+    var assetId: AssetId {
+        model.asset.id
     }
 
     var availableBalanceText: String {

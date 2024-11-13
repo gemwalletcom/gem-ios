@@ -15,7 +15,7 @@ extension HeaderButtonType {
         case .receive: return .receive
         case .send: return .send
         case .buy: return .buy
-        case .swap: return .swap
+        case .swap: return .swap(.pay)
         }
     }
 }

@@ -41,7 +41,11 @@ class SelectAssetViewModel {
         case .send: Localized.Wallet.send
         case .receive: Localized.Wallet.receive
         case .buy: Localized.Wallet.buy
-        case .swap: Localized.Wallet.swap
+        case .swap(let type):
+            switch type {
+            case .pay: Localized.Swap.youPay
+            case .receive: Localized.Swap.youReceive
+            }
         case .stake: Localized.Wallet.stake
         case .manage: Localized.Wallet.manageTokenList
         case .priceAlert: Localized.Assets.selectAsset
