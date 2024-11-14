@@ -283,3 +283,4 @@
 "swap.price_impact" = "Fiyat Etkisi";
 "wallet.sell" = "Satmak";
 "sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";

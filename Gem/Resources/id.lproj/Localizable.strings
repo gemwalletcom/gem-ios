@@ -283,3 +283,4 @@
 "swap.price_impact" = "Dampak Harga";
 "wallet.sell" = "Menjual";
 "sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";

@@ -23,14 +23,10 @@ public struct FiatQuoteViewModel {
         quote.provider.name
     }
 
-    public var amount: String {
+    public var amountText: String {
         switch quote.type {
-        case .buy:
-            let amount = formatter.string(decimal: Decimal(quote.cryptoAmount))
-            return "\(amount)\(asset.symbol)"
-        case .sell:
-            let amount = formatter.string(decimal: Decimal(quote.fiatAmount))
-            return "\(amount)$"
+        case .buy: "\(amount)\(asset.symbol)"
+        case .sell: "\(amount)$"
         }
     }
 
@@ -41,6 +37,13 @@ public struct FiatQuoteViewModel {
 
     public var image: String {
         quote.provider.name.lowercased().replacing(" ", with: "_")
+    }
+
+    private var amount: String {
+        switch quote.type {
+        case .buy: formatter.string(decimal: Decimal(quote.cryptoAmount))
+        case .sell: formatter.string(decimal: Decimal(quote.fiatAmount))
+        }
     }
 }
 

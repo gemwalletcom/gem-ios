@@ -16,9 +16,9 @@ struct FiatScene: View {
     @Query<AssetRequest>
     private var assetData: AssetData
 
-    @State private var model: FiatViewModel
+    @State private var model: FiatSceneViewModel
 
-    init(model: FiatViewModel) {
+    init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
         _assetData = Query(constant: model.assetRequest)
     }
@@ -28,22 +28,13 @@ struct FiatScene: View {
             List {
                 CurrencyInputView(
                     text: $model.amountText,
-                    currencySymbol: model.currencySymbol,
-                    currencyPosition: model.currencyPosition,
-                    secondaryText: model.cryptoAmountValue,
-                    keyboardType: model.keyboardType
+                    config: model.currencyInputConfig
                 )
                 .padding(.top, Spacing.medium)
                 .listGroupRowStyle()
                 .focused($focusedField, equals: .amount)
 
                 amountSelectorSection
-                if let balance = model.assetBalance(assetData: assetData) {
-                    ListItemView(
-                        title: model.availableTitle,
-                        subtitle: balance
-                    )
-                }
                 providerSection
             }
             .contentMargins([.top], .zero, for: .scrollContent)
@@ -93,56 +84,42 @@ struct FiatScene: View {
 extension FiatScene {
     private var amountSelectorSection: some View {
         Section {
-            HStack(spacing: Spacing.small) {
-                AssetImageView(assetImage: model.assetImage)
-                Text(model.assetTitle)
-                    .textStyle(.headline.weight(.semibold))
-                Spacer()
-                HStack(spacing: Spacing.medium) {
-                    ForEach(model.suggestedAmounts, id: \.self) { amount in
-                        Button(model.buttonTitle(amount: amount)) {
-                            onSelect(amount: amount)
+            ListItemFlexibleView(
+                left: {
+                    AssetImageView(assetImage: model.assetImage)
+                },
+                primary: {
+                    VStack(alignment: .leading, spacing: Spacing.tiny) {
+                        Text(model.assetTitle)
+                            .textStyle(.headline.weight(.semibold))
+                        Text(model.assetBalance(assetData: assetData))
+                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                    }
+                },
+                secondary: {
+                    HStack(spacing: Spacing.small + Spacing.extraSmall) {
+                        ForEach(model.suggestedAmounts, id: \.self) { amount in
+                            Button(model.buttonTitle(amount: amount)) {
+                                onSelect(amount: amount)
+                            }
+                            .font(.subheadline.weight(.semibold))
+                            .buttonStyle(.amount())
+                        }
+
+                        Button(model.typeAmountButtonTitle) {
+                            onSelectTypeAmount()
                         }
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Colors.black)
-                        .padding(.all, Spacing.small)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(Colors.grayVeryLight)
-                        )
-                        .buttonStyle(.plain)
-                    }
-
-                    Button(model.typeAmountButtonTitle) {
-                        onSelectTypeAmount()
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .padding(.all, Spacing.small)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12)
-                                .foregroundStyle(Colors.grayVeryLight)
-                            if model.isBuy {
-                                RoundedRectangle(cornerRadius: 12)
-                                    .strokeBorder(
-                                        LinearGradient(
-                                            gradient: Gradient(colors: [
-                                                Color(hex: "#2A32FF"),
-                                                Color(hex: "#6CB8FF"),
-                                                Color(hex: "#F213F6"),
-                                                Color(hex: "FFF963")
-                                            ]),
-                                            startPoint: .topLeading,
-                                            endPoint: .bottomTrailing
-                                        ),
-                                        lineWidth: 3
-                                    )
+                        .buttonStyle(model.typeAmountButtonStyle)
+                        .if(model.input.type == .buy) {
+                            $0.overlay {
+                                RandomOverlayView()
                             }
                         }
                     }
-                    .buttonStyle(.plain)
+                    .fixedSize()
                 }
-            }
+            )
         }
     }
 
@@ -210,7 +187,7 @@ extension FiatScene {
 // MARK: - Previews
 
 #Preview {
-    @Previewable @State var model = FiatViewModel(
+    @Previewable @State var model = FiatSceneViewModel(
         assetAddress: .init(asset: .main, address: .empty),
         walletId: .zero,
         type: .buy

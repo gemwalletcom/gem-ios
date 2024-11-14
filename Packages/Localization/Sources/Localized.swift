@@ -410,6 +410,8 @@ public enum Localized {
     }
   }
   public enum Sell {
+    /// Please enter amount to sell
+    public static let emptyAmount = Localized.tr("Localizable", "sell.emptyAmount", fallback: "Please enter amount to sell")
     /// Sell %s
     public static func title(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")

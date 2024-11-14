@@ -29,7 +29,10 @@
 		836EC8582C32B22F00970BF1 /* LatencyMeasureService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836EC8572C32B22F00970BF1 /* LatencyMeasureService.swift */; };
 		8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374DC592C6CDF6C00183109 /* AddTokenInput.swift */; };
 		838805B62CD9299D00C21722 /* NetworkSelectorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838805B52CD9299D00C21722 /* NetworkSelectorScene.swift */; };
+		83912F0B2CE62CFE00444CBD /* FiatSceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83912F0A2CE62CFE00444CBD /* FiatSceneViewModelTests.swift */; };
+		83912F0D2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83912F0C2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift */; };
 		83A681922C46F1EA00A3636B /* SwapAvailabilityResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83A681912C46F1EA00A3636B /* SwapAvailabilityResult.swift */; };
+		83AC88942CE574E6005ACEF8 /* RandomOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AC88932CE574E6005ACEF8 /* RandomOverlayView.swift */; };
 		83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */; };
 		83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */; };
 		83B672EF2C99BFB60034100C /* LockPeriodSelectionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */; };
@@ -110,7 +113,7 @@
 		C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BBD29B7C00E00E96586 /* ReceiveScene.swift */; };
 		C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC229B7CACA00E96586 /* ReceiveViewModel.swift */; };
 		C3CF3BC529B7CB3600E96586 /* FiatScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC429B7CB3600E96586 /* FiatScene.swift */; };
-		C3CF3BC729B7CB4900E96586 /* FiatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */; };
+		C3CF3BC729B7CB4900E96586 /* FiatSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC629B7CB4900E96586 /* FiatSceneViewModel.swift */; };
 		C3CF3BC929B803F900E96586 /* RecipientScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BC829B803F900E96586 /* RecipientScene.swift */; };
 		C3CF3BCB29B8041700E96586 /* RecipientViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BCA29B8041700E96586 /* RecipientViewModel.swift */; };
 		C3CF3BCD29B80B1B00E96586 /* SelectAssetViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */; };
@@ -333,8 +336,11 @@
 		836EC8572C32B22F00970BF1 /* LatencyMeasureService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LatencyMeasureService.swift; sourceTree = "<group>"; };
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
 		838805B52CD9299D00C21722 /* NetworkSelectorScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorScene.swift; sourceTree = "<group>"; };
+		83912F0A2CE62CFE00444CBD /* FiatSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatSceneViewModelTests.swift; sourceTree = "<group>"; };
+		83912F0C2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatCurrencyInputConfig.swift; sourceTree = "<group>"; };
 		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
 		83A681912C46F1EA00A3636B /* SwapAvailabilityResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAvailabilityResult.swift; sourceTree = "<group>"; };
+		83AC88932CE574E6005ACEF8 /* RandomOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomOverlayView.swift; sourceTree = "<group>"; };
 		83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterScene.swift; sourceTree = "<group>"; };
 		83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterViewModel.swift; sourceTree = "<group>"; };
 		83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionScene.swift; sourceTree = "<group>"; };
@@ -415,7 +421,7 @@
 		C3CF3BBD29B7C00E00E96586 /* ReceiveScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveScene.swift; sourceTree = "<group>"; };
 		C3CF3BC229B7CACA00E96586 /* ReceiveViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiveViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BC429B7CB3600E96586 /* FiatScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatScene.swift; sourceTree = "<group>"; };
-		C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatViewModel.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		C3CF3BC629B7CB4900E96586 /* FiatSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FiatSceneViewModel.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		C3CF3BC829B803F900E96586 /* RecipientScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientScene.swift; sourceTree = "<group>"; };
 		C3CF3BCA29B8041700E96586 /* RecipientViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientViewModel.swift; sourceTree = "<group>"; };
 		C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetViewModel.swift; sourceTree = "<group>"; };
@@ -708,6 +714,30 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
+		835185E72CE55C020087F393 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				83AC88932CE574E6005ACEF8 /* RandomOverlayView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		83912F092CE62CF600444CBD /* Fiat */ = {
+			isa = PBXGroup;
+			children = (
+				83912F0A2CE62CFE00444CBD /* FiatSceneViewModelTests.swift */,
+			);
+			path = Fiat;
+			sourceTree = "<group>";
+		};
+		83912F0F2CE641EC00444CBD /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				83912F0C2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift */,
+			);
+			path = Types;
+			sourceTree = "<group>";
+		};
 		83A681902C46F1E000A3636B /* Types */ = {
 			isa = PBXGroup;
 			children = (
@@ -797,6 +827,7 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
+				83912F092CE62CF600444CBD /* Fiat */,
 				83BFDC662CA309C30057F5CB /* Core */,
 				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				D8D726B42C6DBE7B00A6B559 /* Transactions */,
@@ -1154,6 +1185,8 @@
 		C3D1C5082A44FD15006E8EEA /* Fiat */ = {
 			isa = PBXGroup;
 			children = (
+				83912F0F2CE641EC00444CBD /* Types */,
+				835185E72CE55C020087F393 /* Views */,
 				C3D1C50A2A44FD23006E8EEA /* ViewModel */,
 				C3D1C5092A44FD1F006E8EEA /* Scenes */,
 			);
@@ -1172,7 +1205,7 @@
 		C3D1C50A2A44FD23006E8EEA /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				C3CF3BC629B7CB4900E96586 /* FiatViewModel.swift */,
+				C3CF3BC629B7CB4900E96586 /* FiatSceneViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -2085,6 +2118,7 @@
 				C3A7CB9E29D64CE500431341 /* TransferError.swift in Sources */,
 				C3AD581C299C5E26006BC902 /* WalletScene.swift in Sources */,
 				83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */,
+				83AC88942CE574E6005ACEF8 /* RandomOverlayView.swift in Sources */,
 				C3CF3BBA29B6D44A00E96586 /* CreateWalletScene.swift in Sources */,
 				830FDA3B2C20955D003DA605 /* AddNodeSceneViewModel.swift in Sources */,
 				830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */,
@@ -2150,7 +2184,7 @@
 				D8F5B8622CCC33F90007E615 /* HeaderBannersViewModel.swift in Sources */,
 				8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */,
 				D8F5B8662CCC380F0007E615 /* HeaderViewModel.swift in Sources */,
-				C3CF3BC729B7CB4900E96586 /* FiatViewModel.swift in Sources */,
+				C3CF3BC729B7CB4900E96586 /* FiatSceneViewModel.swift in Sources */,
 				D8BAC95F2BDAF0AC001608BC /* WordSuggestionView.swift in Sources */,
 				D8385CF42B06D65500F784C7 /* SwapChangeView.swift in Sources */,
 				C3D1C4DD2A295AEB006E8EEA /* AboutUsScene.swift in Sources */,
@@ -2282,6 +2316,7 @@
 				C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */,
 				DF88688B2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift in Sources */,
 				C3CF3B8529AB18AD00E96586 /* SelectAssetScene.swift in Sources */,
+				83912F0D2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift in Sources */,
 				DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */,
 				D8B738D62C598BEC004EF083 /* ExportPrivateKey.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
@@ -2317,6 +2352,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C3A7CB9129CFD6E600431341 /* WalletHeaderViewModelTests.swift in Sources */,
+				83912F0B2CE62CFE00444CBD /* FiatSceneViewModelTests.swift in Sources */,
 				83BFDC6A2CA30A510057F5CB /* LockWindowManagerTests.swift in Sources */,
 				C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */,
 				83352B6A2C93435F003D52F3 /* WalletSupportedChainsTests.swift in Sources */,

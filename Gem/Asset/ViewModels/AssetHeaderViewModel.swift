@@ -30,13 +30,13 @@ extension AssetHeaderViewModel: HeaderViewModel {
         }
         return assetDataModel.fiatBalanceText
     }
-    
+
     var buttons: [HeaderButton] {
         let values: [(type: HeaderButtonType, isShown: Bool, isEnabled: Bool)] = [
             (HeaderButtonType.send, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.receive, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.buy, assetDataModel.isBuyEnabled, bannersViewModel.isButtonsEnabled),
-            (HeaderButtonType.sell, assetDataModel.isSellEnabled, bannersViewModel.isButtonsEnabled),
+            (HeaderButtonType.sell, assetDataModel.isSellEnabled && assetDataModel.hasAvailableBalance, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.swap, assetDataModel.isSwapEnabled, bannersViewModel.isButtonsEnabled),
         ]
         return values.compactMap {

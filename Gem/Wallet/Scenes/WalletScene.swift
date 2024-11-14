@@ -41,7 +41,6 @@ struct WalletScene: View {
     @Binding var isPresentingSelectType: SelectAssetType?
 
     let model: WalletSceneViewModel
-//    @State private var selectAssetNavigationPath = NavigationPath()
 
     public init(
         model: WalletSceneViewModel,

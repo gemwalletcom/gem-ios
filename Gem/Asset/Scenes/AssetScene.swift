@@ -36,7 +36,7 @@ struct AssetScene: View {
     private let input: AssetSceneInput
 
     private var model: AssetSceneViewModel {
-        return AssetSceneViewModel(
+        AssetSceneViewModel(
             walletsService: walletsService,
             assetsService: assetsService,
             transactionsService: transactionsService,

@@ -282,4 +282,5 @@
 "warnings.multi_signature_blocked" = "Не переказуйте кошти на цей %@ гаманець Multi-Signature, якщо ви не впевнені, що контролюєте закриті ключі. Якщо цього не зробити, ви можете стати жертвою шахрайства та назавжди втратити свої активи.";
 "swap.price_impact" = "Вплив ціни";
 "wallet.sell" = "Продати";
-"sell.title" = "Sell %s";
+"sell.title" = "Будь ласка, введіть суму для продажу";
+"sell.emptyAmount" = "Please enter amount to sell";

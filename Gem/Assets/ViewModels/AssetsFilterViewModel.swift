@@ -40,7 +40,7 @@ struct AssetsFilterViewModel {
         case .send: [.hasBalance]
         case .receive: [.includeNewAssets]
         case .buy: [.buyable, .includeNewAssets]
-        case .sell: [.hasBalance, .sellable]
+        case .sell: [.hasBalance]
         case .swap: [.swappable]
         case .stake: [.stakeable]
         case .manage: [.includeNewAssets]

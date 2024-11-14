@@ -283,3 +283,4 @@
 "swap.price_impact" = "השפעת המחיר";
 "wallet.sell" = "מְכִירָה";
 "sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";

@@ -80,6 +80,6 @@ struct BalanceViewModel {
         guard !balance.total.isZero else {
             return Colors.gray
         }
-        return  Colors.black
+        return Colors.black
     }
 }

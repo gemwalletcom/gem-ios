@@ -84,7 +84,11 @@ struct AssetDataViewModel {
     var hasReservedBalance: Bool {
         balanceViewModel.hasReservedBalance
     }
-    
+
+    var hasAvailableBalance: Bool {
+        balanceViewModel.availableBalanceAmount > 0
+    }
+
     var reservedBalanceTextWithSymbol: String {
         balanceViewModel.reservedBalanceTextWithSymbol
     }

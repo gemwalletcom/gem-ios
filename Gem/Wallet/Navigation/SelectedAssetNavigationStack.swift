@@ -68,7 +68,7 @@ struct SelectedAssetNavigationStack: View  {
                 }
             case .buy, .sell:
                 FiatScene(
-                    model: FiatViewModel(
+                    model: FiatSceneViewModel(
                         assetAddress: selectType.assetAddress,
                         walletId: wallet.id,
                         type: (selectType.type == .buy) ? .buy : .sell

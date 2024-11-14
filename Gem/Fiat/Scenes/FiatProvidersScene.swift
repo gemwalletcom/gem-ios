@@ -18,7 +18,7 @@ struct FiatProvidersScene: View {
             NavigationCustomLink(
                 with: ListItemView(
                     title: quote.title,
-                    subtitle: quote.amount,
+                    subtitle: quote.amountText,
                     image: Images.name(quote.image),
                     imageSize: Sizing.image.medium,
                     cornerRadius: Sizing.image.medium/2

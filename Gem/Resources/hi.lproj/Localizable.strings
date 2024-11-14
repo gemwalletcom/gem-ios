@@ -283,3 +283,4 @@
 "swap.price_impact" = "मूल्य प्रभाव";
 "wallet.sell" = "बेचना";
 "sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";

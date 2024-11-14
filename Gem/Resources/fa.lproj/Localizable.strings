@@ -283,3 +283,4 @@
 "swap.price_impact" = "تاثیر قیمت";
 "wallet.sell" = "فروش";
 "sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";

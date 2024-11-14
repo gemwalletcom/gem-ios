@@ -49,9 +49,9 @@ struct ImportAssetsService {
 
         let (buyAssets, sellAssets) = try await (getBuyAssets, getSellAssets)
 
-        let allAssetIds = (buyAssets.assetIds + sellAssets.assetIds).compactMap { try? AssetId(id: $0) }
+        let assetIds = (buyAssets.assetIds + sellAssets.assetIds).compactMap { try? AssetId(id: $0) }
 
-        async let prefetchResult = try assetsService.prefetchAssets(assetIds: allAssetIds)
+        async let prefetchResult = try assetsService.prefetchAssets(assetIds: assetIds)
         async let setBuyableResult = try assetStore.setAssetIsBuyable(for: buyAssets.assetIds, value: true)
         async let setSellableResult = try assetStore.setAssetIsSellable(for: sellAssets.assetIds, value: true)
 
