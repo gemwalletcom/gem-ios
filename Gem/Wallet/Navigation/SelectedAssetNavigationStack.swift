@@ -71,7 +71,7 @@ struct SelectedAssetNavigationStack: View  {
                     model: FiatSceneViewModel(
                         assetAddress: selectType.assetAddress,
                         walletId: wallet.id,
-                        type: (selectType.type == .buy) ? .buy : .sell
+                        type: selectType.fiatType
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)

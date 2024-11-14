@@ -13,6 +13,14 @@ struct SelectAssetInput: Hashable {
         assetAddress.address
     }
 
+    var fiatType: FiatTransactionType  {
+        switch type {
+        case .send, .receive, .swap, .stake, .manage, .priceAlert: fatalError("fiat operations not supported")
+        case .buy: .buy
+        case .sell: .sell
+        }
+    }
+
     init(type: SelectAssetType, assetAddress: AssetAddress) {
         self.type = type
         self.assetAddress = assetAddress
