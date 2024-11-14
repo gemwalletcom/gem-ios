@@ -44,18 +44,13 @@ struct SelectAssetScene: View {
             Section {
                 ForEach(assets) { assetData in
                     switch model.selectType {
-                    case .buy, .receive, .send, .swap, .stake, .sell:
-                        NavigationLink(
-                            value: SelectAssetInput(
-                                type: model.selectType,
-                                assetAddress: assetData.assetAddress
-                            )
-                        ) {
+                        case .buy, .sell, .receive, .send, .stake:
+                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
                             ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                         }
                     case .manage:
                         ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
-                    case .priceAlert:
+                    case .priceAlert, .swap:
                         NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
                             model.selectAsset(asset: assetData.asset)
                         }

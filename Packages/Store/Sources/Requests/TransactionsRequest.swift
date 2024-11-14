@@ -43,7 +43,9 @@ public struct TransactionsRequest: ValueObservationQueryable {
         case .asset(let assetId):
             request = request.joining(required: TransactionRecord.assetsAssociation.filter(Columns.TransactionAssetAssociation.assetId == assetId.identifier))
         case .assetsTransactionType(let assetIds, _, _):
-            request = request.joining(required: TransactionRecord.assetsAssociation.filter(assetIds.map { $0.identifier }.contains(Columns.TransactionAssetAssociation.assetId)))
+            if !assetIds.isEmpty {
+                request = request.joining(required: TransactionRecord.assetsAssociation.filter(assetIds.map { $0.identifier }.contains(Columns.TransactionAssetAssociation.assetId)))
+            }
         case .transaction(let id):
             request = request.filter(Columns.Transaction.transactionId == id)
         case .all, .pending:

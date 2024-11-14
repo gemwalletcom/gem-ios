@@ -17,7 +17,7 @@ struct WalletAssetsList: View {
     init(
         assets: [AssetData],
         copyAssetAddress: StringAction,
-        hideAsset: AssetIdAction,
+        hideAsset: @escaping AssetIdAction,
         pinAsset: AssetIdBoolAction
     ) {
         self.assets = assets
@@ -46,12 +46,12 @@ struct WalletAssetsList: View {
                             title: Localized.Common.hide,
                             image: SystemImage.hide
                         ) {
-                            hideAsset?(asset.asset.id)
+                            hideAsset(asset.asset.id)
                         }
                     }
                     .swipeActions(edge: .trailing) {
                         Button(Localized.Common.hide, role: .destructive) {
-                            hideAsset?(asset.asset.id)
+                            hideAsset(asset.asset.id)
                         }
                         .tint(Colors.gray)
                     }

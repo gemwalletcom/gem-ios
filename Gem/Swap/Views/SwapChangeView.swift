@@ -6,8 +6,8 @@ import Style
 
 struct SwapChangeView: View {
     
-    @Binding var fromId: String
-    @Binding var toId: String
+    @Binding var fromId: String?
+    @Binding var toId: String?
     
     var body: some View {
         Button {

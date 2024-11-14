@@ -13,11 +13,11 @@ enum HeaderButtonType: String, Identifiable, CaseIterable {
 extension HeaderButtonType {
     var selectType: SelectAssetType {
         switch self {
-        case .receive: return .receive
-        case .send: return .send
-        case .buy: return .buy
-        case .sell: return .sell
-        case .swap: return .swap
+        case .receive: .receive
+        case .send: .send
+        case .buy: .buy
+        case .sell: .sell
+        case .swap: .swap(.pay)
         }
     }
 }

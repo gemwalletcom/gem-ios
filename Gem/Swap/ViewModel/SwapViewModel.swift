@@ -13,6 +13,7 @@ import Localization
 import Transfer
 import SwapService
 import Signer
+import GemstonePrimitives
 
 import struct Gemstone.SwapQuoteRequest
 import struct Gemstone.SwapQuote
@@ -22,60 +23,62 @@ import struct Gemstone.Permit2Data
 import struct Gemstone.Permit2Detail
 import func Gemstone.permit2DataToEip712Json
 
+typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
+
 @Observable
 class SwapViewModel {
-    static let quoteTaskDebounceTimeout = Duration.milliseconds(300)
+    static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
     let keystore: any Keystore
     let walletsService: WalletsService
 
     let wallet: Wallet
 
-    var fromAssetRequest: AssetRequest
-    var toAssetRequest: AssetRequest
+    var fromAssetRequest: AssetRequestOptional
+    var toAssetRequest: AssetRequestOptional
     var tokenApprovalsRequest: TransactionsRequest
 
+    var pairSelectorModel: SwapPairSelectorViewModel
+    
     var fromValue: String = ""
     var toValue: String = ""
-    var transferData: TransferData?
-
+    
     var swapAvailabilityState: StateViewType<SwapAvailabilityResult> = .noData
 
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
     
     private let onComplete: VoidAction
+    private let onSelectAsset: SelectAssetSwapTypeAction
+    private let onTransferAction: TransferDataAction
     
     init(
         wallet: Wallet,
-        assetId: AssetId,
+        pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
         swapService: SwapService,
         keystore: any Keystore,
+        onSelectAsset: SelectAssetSwapTypeAction,
+        onTransferAction: TransferDataAction,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
+        self.pairSelectorModel = pairSelectorModel
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
+        self.onSelectAsset = onSelectAsset
+        self.onTransferAction = onTransferAction
         self.onComplete = onComplete
         
-        // temp code
-        let fromId: AssetId
-        let toId: AssetId
-        if assetId.type == .native {
-            //TODO: Swap. Support later
-            fatalError("Native swaps are not supported yet")
-        } else {
-            fromId = assetId.chain.assetId
-            toId = assetId
-        }
+        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier)
+        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier)
+    
+        let assetsIds = [pairSelectorModel.fromAssetId, pairSelectorModel.toAssetId]
         
-        fromAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: fromId.identifier)
-        toAssetRequest = AssetRequest(walletId: wallet.walletId.id, assetId: toId.identifier)
         tokenApprovalsRequest = TransactionsRequest(
             walletId: wallet.walletId.id,
-            type: .assetsTransactionType(assetIds: [fromId, toId], type: .tokenApproval, states: [.pending]),
+            type: .assetsTransactionType(assetIds: assetsIds.compactMap { $0 }, type: .tokenApproval, states: [.pending]),
             limit: 2
         )
     }
@@ -123,12 +126,19 @@ class SwapViewModel {
         !isValidFromValue(assetData: fromAssetData) || isApprovalProcessInProgress
     }
 
-    func swapTokenModel(from assetData: AssetData) -> SwapTokenViewModel {
-        SwapTokenViewModel(model: AssetDataViewModel(assetData: assetData, formatter: .medium))
+    func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
+        SwapTokenViewModel(
+            model: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            type: type
+        )
     }
     
     func onCompleteAction() {
         onComplete?()
+    }
+    
+    func onSelectAssetAction(type: SelectAssetSwapType) {
+        onSelectAsset?(type)
     }
 }
 
@@ -136,8 +146,12 @@ class SwapViewModel {
 
 extension SwapViewModel {
     func resetValues() {
-        toValue = ""
+        resetToValue()
         fromValue = ""
+    }
+    
+    func resetToValue() {
+        toValue = ""
     }
 
     func setMaxFromValue(asset: Asset, value: BigInt) {
@@ -204,22 +218,24 @@ extension SwapViewModel {
         }
         do {
             if swapAvailability.allowance {
-                transferData = try await getSwapData(
+                let data = try await getSwapData(
                     fromAsset: fromAsset,
                     toAsset: toAsset,
                     quote: swapAvailability.quote
                 )
+                onTransfer(data: data)
                 return
             } else {
                 switch swapAvailability.quote.approval {
                 case .approve(let data):
                     try await MainActor.run { [self] in
-                        transferData = try getSwapDataOnApprove(
+                        let data = try getSwapDataOnApprove(
                             fromAsset: fromAsset,
                             toAsset: toAsset,
                             spender: data.spender,
-                            spenderName: swapAvailability.quote.provider.name
+                            spenderName: swapAvailability.quote.data.provider.name
                         )
+                        onTransfer(data: data)
                     }
                 case .permit2, .none:
                     break
@@ -228,6 +244,10 @@ extension SwapViewModel {
         } catch {
             swapAvailabilityState = .error(error)
         }
+    }
+    
+    func onTransfer(data: TransferData) {
+        onTransferAction?(data)
     }
 }
 
@@ -265,10 +285,10 @@ extension SwapViewModel {
         let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
             asset: fromAsset,
-            recipient: Recipient(name: quote.provider.name, address: quoteData.to, memo: .none),
+            recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )
-        return TransferData(type: transferDataType, recipientData: recepientData, value: value, canChangeValue: false)
+        return TransferData(type: transferDataType, recipientData: recepientData, value: value, canChangeValue: true)
     }
     
     private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {

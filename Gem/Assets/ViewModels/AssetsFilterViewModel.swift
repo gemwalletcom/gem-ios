@@ -41,7 +41,11 @@ struct AssetsFilterViewModel {
         case .receive: [.includeNewAssets]
         case .buy: [.buyable, .includeNewAssets]
         case .sell: [.hasBalance]
-        case .swap: [.swappable]
+        case .swap(let type):
+            switch type {
+            case .pay: [.swappable, .hasBalance]
+            case .receive: [.swappable, .includeNewAssets]
+            }
         case .stake: [.stakeable]
         case .manage: [.includeNewAssets]
         case .priceAlert: [.includeNewAssets]

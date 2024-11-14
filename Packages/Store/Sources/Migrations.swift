@@ -99,6 +99,34 @@ public struct Migrations {
                 t.add(column: Columns.Balance.updatedAt.name, .date)
             }
         }
+        
+        migrator.registerMigration("Add isSellable to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) { t in
+                t.add(column: Columns.Asset.isSellable.name, .boolean)
+                    .defaults(to: false)
+            }
+        }
+        
+        migrator.registerMigration("Add isStakeable to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) { t in
+                t.add(column: Columns.Asset.isStakeable.name, .boolean)
+                    .defaults(to: false)
+            }
+        }
+        
+        migrator.registerMigration("Add rank to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) { t in
+                t.add(column: Columns.Asset.rank.name, .numeric).defaults(to: 0)
+            }
+        }
+        
+        migrator.registerMigration("Add isHidden to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+                t.add(column: Columns.Balance.isHidden.name, .boolean)
+                    .defaults(to: false)
+                    .indexed()
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

@@ -20,5 +20,5 @@ struct SelectAssetInput: Hashable {
 }
 
 extension SelectAssetInput: Identifiable {
-    var id: String { type.rawValue }
+    var id: String { type.id }
 }

@@ -12,7 +12,10 @@ public struct AssetRequest: ValueObservationQueryable {
     public var assetId: String
     private let walletId: String
 
-    public init(walletId: String, assetId: String) {
+    public init(
+        walletId: String,
+        assetId: String
+    ) {
         self.walletId = walletId
         self.assetId = assetId
     }
@@ -38,7 +41,7 @@ public struct AssetRequest: ValueObservationQueryable {
 //TODO: Find a way to remove .empty
 
 extension AssetData {
-    static let empty: AssetData = {
+    public static let empty: AssetData = {
         return AssetData(
             asset: Asset(id: .init(chain: .bitcoin, tokenId: .none), name: "", symbol: "", decimals: 0, type: .native),
             balance: Balance.zero,

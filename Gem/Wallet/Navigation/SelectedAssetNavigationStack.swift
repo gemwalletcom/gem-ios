@@ -83,18 +83,13 @@ struct SelectedAssetNavigationStack: View  {
                     }
                 }
             case .swap:
-                SwapScene(
-                    model: SwapViewModel(
-                        wallet: wallet,
-                        assetId: selectType.asset.id,
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore,
-                        onComplete: {
-                            //TODO: Return back on approval and cancel on swap
-                            isPresentingAssetSelectType = nil
-                        }
-                    )
+                SwapNavigationView(
+                    wallet: wallet,
+                    asset: selectType.asset,
+                    navigationPath: $navigationPath,
+                    onComplete: {
+                        isPresentingAssetSelectType = nil
+                    }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
