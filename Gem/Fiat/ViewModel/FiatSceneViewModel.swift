@@ -213,16 +213,20 @@ extension FiatSceneViewModel {
         guard shouldFetch else { return }
 
         do {
-            let quotes = try await fiatService.getQuotes(
-                asset: asset,
-                buy: input.type == .buy,
-                request: FiatBuyRequest(
+            let quotes: [FiatQuote] = try await {
+                let request = FiatBuyRequest(
                     assetId: asset.id.identifier,
                     fiatCurrency: Currency.usd.rawValue,
                     fiatAmount: input.amount,
                     walletAddress: assetAddress.address
                 )
-            )
+                switch input.type {
+                case .buy:
+                    return try await fiatService.getBuyQuotes(asset: asset, request: request)
+                case .sell:
+                    return try await fiatService.getSellQuotes(asset: asset, request: request)
+                }
+            }()
             await MainActor.run { [self] in
                 if !quotes.isEmpty {
                     self.input.quote = quotes.first
