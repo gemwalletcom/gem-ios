@@ -46,26 +46,16 @@ public struct Signer {
     
     func signer(for chain: Chain) -> Signable {
         switch chain.type {
-        case .solana:
-            return SolanaSigner()
-        case .ethereum:
-            return EthereumSigner()
-        case .cosmos:
-            return CosmosSigner()
-        case .ton:
-            return TonSigner()
-        case .tron:
-            return TronSigner()
-        case .bitcoin:
-            return BitcoinSigner()
-        case .aptos:
-            return AptosSigner()
-        case .sui:
-            return SuiSigner()
-        case .xrp:
-            return XrpSigner()
-        case .near:
-            return NearSigner()
+        case .solana: SolanaSigner()
+        case .ethereum: EthereumSigner()
+        case .cosmos: CosmosSigner()
+        case .ton: TonSigner()
+        case .tron: TronSigner()
+        case .bitcoin: BitcoinSigner()
+        case .aptos: AptosSigner()
+        case .sui: SuiSigner()
+        case .xrp: XrpSigner()
+        case .near: NearSigner()
         }
     }
 }

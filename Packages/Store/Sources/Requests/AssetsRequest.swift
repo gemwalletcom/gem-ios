@@ -123,11 +123,6 @@ extension AssetsRequest {
                 return request
             }
             return request.filter(chains.contains(Columns.Asset.chain))
-        case .includePinned(let value):
-            return request
-                .filter(
-                    SQL(stringLiteral:  String(format: "%@.isPinned == %d", AssetBalanceRecord.databaseTableName, value))
-                )
         case .includeNewAssets:
             return request
         }
@@ -163,7 +158,6 @@ extension AssetsRequest {
             case .hasBalance,
                 .enabled,
                 .hidden,
-                .includePinned,
                 .includeNewAssets,
                 .search:
                 break

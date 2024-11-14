@@ -25,9 +25,6 @@ struct WalletScene: View {
     private var totalFiatValue: Double
 
     @Query<AssetsRequest>
-    private var assetsPinned: [AssetData]
-
-    @Query<AssetsRequest>
     private var assets: [AssetData]
 
     @Query<BannersRequest>
@@ -53,12 +50,15 @@ struct WalletScene: View {
         try? model.setupWallet()
 
         _assets = Query(constant: model.assetsRequest)
-        _assetsPinned = Query(constant: model.assetsPinnedRequest)
         _totalFiatValue = Query(constant: model.totalFiatValueRequest)
         _dbWallet = Query(constant: model.walletRequest)
         _banners = Query(constant: model.bannersRequest)
     }
     
+    private var sections: AssetsSections {
+        AssetsSections.from(assets)
+    }
+
     var body: some View {
         List {
            Section { } header: {
@@ -85,10 +85,10 @@ struct WalletScene: View {
                 )
             }
 
-            if !assetsPinned.isEmpty {
+            if !sections.pinned.isEmpty {
                 Section {
                     WalletAssetsList(
-                        assets: assetsPinned,
+                        assets: sections.pinned,
                         copyAssetAddress: { model.copyAssetAddress(for: $0) },
                         hideAsset: { try? model.hideAsset($0) },
                         pinAsset: { (assetId, value) in
@@ -105,7 +105,7 @@ struct WalletScene: View {
 
             Section {
                 WalletAssetsList(
-                    assets: assets,
+                    assets: sections.assets,
                     copyAssetAddress: { address in
                         model.copyAssetAddress(for: address)
                     },

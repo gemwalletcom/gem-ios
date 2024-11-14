@@ -21,12 +21,8 @@ struct WalletSceneViewModel {
         self.walletsService = walletsService
     }
 
-    var assetsPinnedRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(true)])
-    }
-
     var assetsRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(false)])
+        AssetsRequest(walletID: wallet.id, filters: [.enabled])
     }
 
     var totalFiatValueRequest: TotalValueRequest {

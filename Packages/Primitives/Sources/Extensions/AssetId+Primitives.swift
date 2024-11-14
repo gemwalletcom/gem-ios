@@ -58,33 +58,25 @@ public extension AssetId {
             .linea,
             .mantle,
             .celo,
-            .world:
-            return .erc20
-        case .smartChain, .opBNB:
-            return .bep20
-        case .solana:
-            return .spl
-        case .tron:
-            return .trc20
+            .world: .erc20
+        case .smartChain, .opBNB: .bep20
+        case .solana: .spl
+        case .tron: .trc20
         case .cosmos,
             .osmosis,
             .celestia,
             .injective,
             .sei,
-            .noble:
-            return .ibc
-        case .sui:
-            return .token
-        case .ton:
-            return .jetton
+            .noble: .ibc
+        case .sui: .token
+        case .ton: .jetton
         case .bitcoin,
             .litecoin,
             .thorchain,
             .doge,
             .aptos,
             .xrp,
-            .near:
-            return .none
+            .near: .none
         }
     }
 }
