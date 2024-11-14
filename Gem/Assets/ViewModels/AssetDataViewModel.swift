@@ -114,8 +114,7 @@ struct AssetDataViewModel {
     }
 
     var isSellEnabled: Bool {
-        true
-        //assetData.metadata.isSellEnabled
+        assetData.metadata.isSellEnabled
     }
 
     var isSwapEnabled: Bool {
