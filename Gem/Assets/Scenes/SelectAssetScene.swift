@@ -23,6 +23,10 @@ struct SelectAssetScene: View {
     private var assets: [AssetData]
 
     @State private var model: SelectAssetViewModel
+    
+    private var sections: AssetsSections {
+        AssetsSections.from(assets)
+    }
 
     init(
         model: SelectAssetViewModel,
@@ -41,21 +45,19 @@ struct SelectAssetScene: View {
 
     var body: some View {
         List {
-            Section {
-                ForEach(assets) { assetData in
-                    switch model.selectType {
-                        case .buy, .sell, .receive, .send, .stake:
-                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
-                        }
-                    case .manage:
-                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
-                    case .priceAlert, .swap:
-                        NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
-                            model.selectAsset(asset: assetData.asset)
-                        }
+            if !sections.pinned.isEmpty {
+                Section {
+                    assetsList(assets: sections.pinned)
+                } header: {
+                    HStack {
+                        Image(systemName: SystemImage.pin)
+                        Text(Localized.Common.pinned)
                     }
                 }
+            }
+        
+            Section {
+                assetsList(assets: sections.assets)
             } footer: {
                 if model.state.isLoading || assets.isEmpty {
                     VStack {
@@ -92,6 +94,23 @@ struct SelectAssetScene: View {
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
+    }
+    
+    func assetsList(assets: [AssetData]) -> some View {
+        ForEach(assets) { assetData in
+            switch model.selectType {
+            case .buy, .sell, .receive, .send, .stake:
+                NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
+                    ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+                }
+            case .manage:
+                ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+            case .priceAlert, .swap:
+                NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
+                    model.selectAsset(asset: assetData.asset)
+                }
+            }
+        }
     }
 }
 

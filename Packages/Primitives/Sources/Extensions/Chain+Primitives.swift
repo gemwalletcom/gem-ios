@@ -12,8 +12,7 @@ extension Chain {
         switch self {
         case .bitcoin,
             .doge,
-            .litecoin:
-            return .bitcoin
+            .litecoin: .bitcoin
         case .ethereum,
             .smartChain,
             .arbitrum,
@@ -29,32 +28,22 @@ extension Chain {
             .linea,
             .mantle,
             .celo,
-            .world:
-            return .ethereum
-        case .solana:
-            return .solana
-        case .polygon:
-            return .ethereum
+            .world: .ethereum
+        case .solana: .solana
+        case .polygon: .ethereum
         case .cosmos,
             .thorchain,
             .osmosis,
             .celestia,
             .injective,
             .sei,
-            .noble:
-            return .cosmos
-        case .ton:
-            return .ton
-        case .tron:
-            return .tron
-        case .aptos:
-            return .aptos
-        case .sui:
-            return .sui
-        case .xrp:
-            return .xrp
-        case .near:
-            return .near
+            .noble: .cosmos
+        case .ton: .ton
+        case .tron: .tron
+        case .aptos: .aptos
+        case .sui: .sui
+        case .xrp: .xrp
+        case .near: .near
         }
     }
 }
