@@ -15,7 +15,8 @@ public protocol GemAPIFiatService: Sendable {
 
 public protocol GemAPIAssetsListService: Sendable {
     func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId]
-    func getFiatAssets(buy: Bool) async throws -> FiatAssets
+    func getBuyableFiatAssets() async throws -> FiatAssets
+    func getSellableFiatAssets() async throws -> FiatAssets
     func getSwapAssets() async throws -> FiatAssets
 }
 
@@ -179,7 +180,19 @@ extension GemAPIService: GemAPIAssetsListService {
             .map(as: [String].self)
             .compactMap { try? AssetId(id: $0) }
     }
-    
+
+    public func getBuyableFiatAssets() async throws -> FiatAssets {
+        try await provider
+            .request(.getFiatOnRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
+    public func getSellableFiatAssets() async throws -> FiatAssets {
+        try await provider
+            .request(.getFiatOffRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
     public func getFiatAssets(buy: Bool) async throws -> FiatAssets {
         try await provider
             .request(buy ? .getFiatOnRampAssets : .getFiatOffRampAssets)

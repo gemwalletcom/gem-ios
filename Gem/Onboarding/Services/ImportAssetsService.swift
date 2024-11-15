@@ -44,8 +44,8 @@ struct ImportAssetsService {
     }
 
     func updateFiatAssets() async throws {
-        async let getBuyAssets = try assetListService.getFiatAssets(buy: true)
-        async let getSellAssets = try assetListService.getFiatAssets(buy: false)
+        async let getBuyAssets = try assetListService.getBuyableFiatAssets()
+        async let getSellAssets = try assetListService.getSellableFiatAssets()
 
         let (buyAssets, sellAssets) = try await (getBuyAssets, getSellAssets)
 
