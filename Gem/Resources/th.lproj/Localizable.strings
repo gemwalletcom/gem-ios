@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Language";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ เข้ารหัสคีย์ส่วนตัว";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,14 @@
 "common.warning" = "คำเตือน";
 "warnings.multi_signature_blocked" = "อย่าโอนเงินไปยังกระเป๋าเงินหลายลายเซ็น %@ นี้ เว้นแต่คุณจะแน่ใจว่าคุณควบคุมคีย์ส่วนตัวได้ การไม่ทำเช่นนั้นอาจทำให้คุณตกเป็นเหยื่อของการหลอกลวง และคุณอาจสูญเสียทรัพย์สินของคุณไปอย่างถาวร";
 "swap.price_impact" = "ผลกระทบต่อราคา";
+"wallet.sell" = "ขาย";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Network Fee";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "กระเป๋าเงินที่คุณไม่สามารถเข้าถึงได้แต่คุณสามารถดูธุรกรรมและการเคลื่อนไหวได้";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

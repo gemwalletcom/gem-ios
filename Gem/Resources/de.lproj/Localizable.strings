@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "Es ist ein Fehler aufgetreten!";
 "settings.language" = "Sprache";
-"wallet.import.private_key" = "%s verschlüsselter private key";
+"wallet.import.private_key" = "%@ verschlüsselter private key";
 "errors.invalid_network_id" = "Ungültige Netzwerk-ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latenzzeit";
@@ -281,3 +281,14 @@
 "common.warning" = "Warnung";
 "warnings.multi_signature_blocked" = "Überweisen Sie kein Geld auf dieses %@ Multi-Signature-Wallet, es sei denn, Sie sind sicher, dass Sie die privaten Schlüssel kontrollieren. Andernfalls könnten Sie Opfer von Betrug werden und Ihr Vermögen dauerhaft verlieren.";
 "swap.price_impact" = "Preisauswirkungen";
+"wallet.sell" = "Verkaufen";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Netzwerk-Gebühr";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "Eine Brieftasche, auf die Sie keinen Zugriff haben, deren Transaktionen und Bewegungen Sie jedoch beobachten können.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

@@ -212,7 +212,7 @@
 "common.url" = "URL-адрес";
 "errors.error_occured" = "Произошла ошибка!";
 "settings.language" = "Язык";
-"wallet.import.private_key" = "%s закодированный приватный ключ";
+"wallet.import.private_key" = "%@ приватный ключ";
 "errors.invalid_network_id" = "Неверный идентификатор сети";
 "common.private_key" = "Приватный ключ";
 "nodes.import_node.latency" = "Задержка";
@@ -281,3 +281,14 @@
 "common.warning" = "Внимание";
 "warnings.multi_signature_blocked" = "Не переводите средства на этот %@ кошелек Multi-Signature, если вы не уверены, что контролируете закрытые ключи. Невыполнение этого требования может подвергнуть вас мошенничеству, и вы можете навсегда потерять свои активы.";
 "swap.price_impact" = "Влияние цены";
+"wallet.sell" = "Продавать";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Пожалуйста, введите сумму для продажи";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Сетевая плата";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "Кошелек, к которому у вас нет доступа, но вы можете следить за его транзакциями и движениями.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

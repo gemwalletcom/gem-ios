@@ -12,7 +12,7 @@ extension AssetsSections {
     static func from(_ assets: [AssetData]) -> AssetsSections {
         AssetsSections(
             pinned: assets.filter { $0.metadata.isPinned },
-            assets: assets
+            assets: assets.filter { !$0.metadata.isPinned }
         )
     }
 }

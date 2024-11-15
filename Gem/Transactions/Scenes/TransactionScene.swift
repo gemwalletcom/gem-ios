@@ -8,13 +8,14 @@ import Store
 import GRDB
 import GRDBQuery
 import Primitives
+import InfoSheet
 
 struct TransactionScene: View {
     
     @Query<TransactionsRequest>
-    var transactions: [Primitives.TransactionExtended]
+    private var transactions: [Primitives.TransactionExtended]
     
-    var model: TransactionDetailViewModel {
+    private var model: TransactionDetailViewModel {
         return TransactionDetailViewModel(
             model: TransactionViewModel(
                 transaction: transactions.first!,
@@ -22,8 +23,10 @@ struct TransactionScene: View {
             )
         )
     }
+    private let input: TransactionSceneInput
     
-    let input: TransactionSceneInput
+    @State private var showShareSheet = false
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
     
     init(
         input: TransactionSceneInput
@@ -32,8 +35,6 @@ struct TransactionScene: View {
         _transactions = Query(input.transactionRequest)
     }
     
-    @State private var showShareSheet = false
-
     var body: some View {
         VStack {
             List {
@@ -42,7 +43,7 @@ struct TransactionScene: View {
                     HStack(spacing: Spacing.small) {
                         ListItemView(
                             title: model.statusField,
-                            subtitle: model.status,
+                            subtitle: model.statusText,
                             subtitleStyle: model.statusTextStyle,
                             infoAction: onStatusInfo
                         )
@@ -120,6 +121,9 @@ struct TransactionScene: View {
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
         }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 }
 
@@ -136,11 +140,14 @@ extension TransactionScene {
 
 extension TransactionScene {
     func onNetworkFeeInfo() {
-        model.onNetworkFeeInfo()
+        isPresentingInfoSheet = .networkFee(model.chain)
     }
 
     func onStatusInfo() {
-        model.onStatusInfo()
+        isPresentingInfoSheet = .transactionState(
+            imageURL: model.assetImage.imageURL,
+            state: model.transactionState
+        )
     }
 }
 

@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "Terjadi kesalahan!";
 "settings.language" = "Bahasa";
-"wallet.import.private_key" = "kunci privat dikodekan %s";
+"wallet.import.private_key" = "kunci privat dikodekan %@";
 "errors.invalid_network_id" = "ID Jaringan Tidak Valid";
 "common.private_key" = "Kunci Privat";
 "nodes.import_node.latency" = "Latensi";
@@ -281,3 +281,14 @@
 "common.warning" = "Peringatan";
 "warnings.multi_signature_blocked" = "Jangan mentransfer dana ke dompet Multi-Signature %@ ini kecuali Anda yakin bahwa Anda memegang kunci pribadi. Kegagalan untuk melakukannya dapat membuat Anda rentan terhadap penipuan, dan Anda dapat kehilangan aset Anda secara permanen.";
 "swap.price_impact" = "Dampak Harga";
+"wallet.sell" = "Menjual";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Biaya Jaringan";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "Dompet yang tidak dapat Anda akses, tetapi Anda dapat memantau transaksi dan pergerakannya.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

@@ -14,6 +14,8 @@ let package = Package(
             targets: ["InfoSheet"]),
     ],
     dependencies: [
+        .package(name: "Primitives", path: "../Primitives"),
+        .package(name: "Style", path: "../Style"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives")
@@ -22,6 +24,8 @@ let package = Package(
         .target(
             name: "InfoSheet",
             dependencies: [
+                "Primitives",
+                "Style",
                 "Localization",
                 "Components",
                 "GemstonePrimitives",

@@ -5,115 +5,115 @@
 import Foundation
 
 public struct TronAccountPermission: Codable, Sendable {
-    public let threshold: Int32
+	public let threshold: Int32
 
-    public init(threshold: Int32) {
-        self.threshold = threshold
-    }
+	public init(threshold: Int32) {
+		self.threshold = threshold
+	}
 }
 
 public struct TronVote: Codable, Sendable {
-    public let vote_address: String
-    public let vote_count: UInt64
+	public let vote_address: String
+	public let vote_count: UInt64
 
-    public init(vote_address: String, vote_count: UInt64) {
-        self.vote_address = vote_address
-        self.vote_count = vote_count
-    }
+	public init(vote_address: String, vote_count: UInt64) {
+		self.vote_address = vote_address
+		self.vote_count = vote_count
+	}
 }
 
 public struct TronFrozen: Codable, Sendable {
-    public let type: String?
-    public let amount: UInt64?
+	public let type: String?
+	public let amount: UInt64?
 
-    public init(type: String?, amount: UInt64?) {
-        self.type = type
-        self.amount = amount
-    }
+	public init(type: String?, amount: UInt64?) {
+		self.type = type
+		self.amount = amount
+	}
 }
 
 public struct TronUnfrozen: Codable, Sendable {
-    public let unfreeze_amount: UInt64?
-    public let unfreeze_expire_time: UInt64?
+	public let unfreeze_amount: UInt64?
+	public let unfreeze_expire_time: UInt64?
 
-    public init(unfreeze_amount: UInt64?, unfreeze_expire_time: UInt64?) {
-        self.unfreeze_amount = unfreeze_amount
-        self.unfreeze_expire_time = unfreeze_expire_time
-    }
+	public init(unfreeze_amount: UInt64?, unfreeze_expire_time: UInt64?) {
+		self.unfreeze_amount = unfreeze_amount
+		self.unfreeze_expire_time = unfreeze_expire_time
+	}
 }
 
 public struct TronAccount: Codable, Sendable {
-    public let balance: UInt64?
-    public let address: String?
-    public let active_permission: [TronAccountPermission]?
-    public let votes: [TronVote]?
-    public let frozenV2: [TronFrozen]?
-    public let unfrozenV2: [TronUnfrozen]?
+	public let balance: UInt64?
+	public let address: String?
+	public let active_permission: [TronAccountPermission]?
+	public let votes: [TronVote]?
+	public let frozenV2: [TronFrozen]?
+	public let unfrozenV2: [TronUnfrozen]?
 
-    public init(balance: UInt64?, address: String?, active_permission: [TronAccountPermission]?, votes: [TronVote]?, frozenV2: [TronFrozen]?, unfrozenV2: [TronUnfrozen]?) {
-        self.balance = balance
-        self.address = address
-        self.active_permission = active_permission
-        self.votes = votes
-        self.frozenV2 = frozenV2
-        self.unfrozenV2 = unfrozenV2
-    }
+	public init(balance: UInt64?, address: String?, active_permission: [TronAccountPermission]?, votes: [TronVote]?, frozenV2: [TronFrozen]?, unfrozenV2: [TronUnfrozen]?) {
+		self.balance = balance
+		self.address = address
+		self.active_permission = active_permission
+		self.votes = votes
+		self.frozenV2 = frozenV2
+		self.unfrozenV2 = unfrozenV2
+	}
 }
 
 public struct TronAccountRequest: Codable, Sendable {
-    public let address: String
-    public let visible: Bool
+	public let address: String
+	public let visible: Bool
 
-    public init(address: String, visible: Bool) {
-        self.address = address
-        self.visible = visible
-    }
+	public init(address: String, visible: Bool) {
+		self.address = address
+		self.visible = visible
+	}
 }
 
 public struct TronAccountUsage: Codable, Sendable {
-    public let freeNetUsed: Int32?
-    public let freeNetLimit: Int32?
+	public let freeNetUsed: Int32?
+	public let freeNetLimit: Int32?
 
-    public init(freeNetUsed: Int32?, freeNetLimit: Int32?) {
-        self.freeNetUsed = freeNetUsed
-        self.freeNetLimit = freeNetLimit
-    }
+	public init(freeNetUsed: Int32?, freeNetLimit: Int32?) {
+		self.freeNetUsed = freeNetUsed
+		self.freeNetLimit = freeNetLimit
+	}
 }
 
 public struct TronEmptyAccount: Codable, Sendable {
-    public let address: String?
+	public let address: String?
 
-    public init(address: String?) {
-        self.address = address
-    }
+	public init(address: String?) {
+		self.address = address
+	}
 }
 
 public struct TronReward: Codable, Sendable {
-    public let reward: UInt64?
+	public let reward: UInt64?
 
-    public init(reward: UInt64?) {
-        self.reward = reward
-    }
+	public init(reward: UInt64?) {
+		self.reward = reward
+	}
 }
 
 public struct WitnessAccount: Codable, Sendable {
-    public let address: String
-    public let voteCount: UInt64?
-    public let url: String
-    public let isJobs: Bool?
+	public let address: String
+	public let voteCount: UInt64?
+	public let url: String
+	public let isJobs: Bool?
 
-    public init(address: String, voteCount: UInt64?, url: String, isJobs: Bool?) {
-        self.address = address
-        self.voteCount = voteCount
-        self.url = url
-        self.isJobs = isJobs
-    }
+	public init(address: String, voteCount: UInt64?, url: String, isJobs: Bool?) {
+		self.address = address
+		self.voteCount = voteCount
+		self.url = url
+		self.isJobs = isJobs
+	}
 }
 
 public struct WitnessesList: Codable, Sendable {
-    public let witnesses: [WitnessAccount]
+	public let witnesses: [WitnessAccount]
 
-    public init(witnesses: [WitnessAccount]) {
-        self.witnesses = witnesses
-    }
+	public init(witnesses: [WitnessAccount]) {
+		self.witnesses = witnesses
+	}
 }

@@ -161,6 +161,8 @@ public enum Localized {
     public static func latencyInMs(_ p1: Int) -> String {
       return Localized.tr("Localizable", "common.latency_in_ms", p1, fallback: "%d ms")
     }
+    /// Learn More
+    public static let learnMore = Localized.tr("Localizable", "common.learn_more", fallback: "Learn More")
     /// Loading
     public static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
     /// Manage
@@ -328,6 +330,36 @@ public enum Localized {
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
   }
+  public enum Info {
+    public enum NetworkFee {
+      /// %@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "info.network_fee.description", String(describing: p1), fallback: "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.")
+      }
+      /// Network Fee
+      public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
+    }
+    public enum Transaction {
+      public enum Error {
+        /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
+        public static let description = Localized.tr("Localizable", "info.transaction.error.description", fallback: "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.")
+      }
+      public enum Pending {
+        /// The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.
+        public static let description = Localized.tr("Localizable", "info.transaction.pending.description", fallback: "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.")
+      }
+      public enum Success {
+        /// The transaction has been completed and confirmed on the network. You can review the details to verify its status.
+        public static let description = Localized.tr("Localizable", "info.transaction.success.description", fallback: "The transaction has been completed and confirmed on the network. You can review the details to verify its status.")
+      }
+    }
+    public enum WatchWallet {
+      /// A wallet that you do not have access to, but you can watch its transactions and movements.
+      public static let description = Localized.tr("Localizable", "info.watch_wallet.description", fallback: "A wallet that you do not have access to, but you can watch its transactions and movements.")
+      /// Watch Wallet
+      public static let title = Localized.tr("Localizable", "info.watch_wallet.title", fallback: "Watch Wallet")
+    }
+  }
   public enum Library {
     /// Select from Photo Library
     public static let selectFromPhotoLibrary = Localized.tr("Localizable", "library.select_from_photo_library", fallback: "Select from Photo Library")
@@ -407,6 +439,14 @@ public enum Localized {
       public static let description = Localized.tr("Localizable", "secret_phrase.do_not_share.description", fallback: "If someone has your secret phrase they will have full control of your wallet!")
       /// Do not share your Secret Phrase!
       public static let title = Localized.tr("Localizable", "secret_phrase.do_not_share.title", fallback: "Do not share your Secret Phrase!")
+    }
+  }
+  public enum Sell {
+    /// Please enter amount to sell
+    public static let emptyAmount = Localized.tr("Localizable", "sell.emptyAmount", fallback: "Please enter amount to sell")
+    /// Sell %s
+    public static func title(_ p1: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")
     }
   }
   public enum Settings {
@@ -710,6 +750,8 @@ public enum Localized {
     public static let scan = Localized.tr("Localizable", "wallet.scan", fallback: "Scan")
     /// Scan QR Code
     public static let scanQrCode = Localized.tr("Localizable", "wallet.scan_qr_code", fallback: "Scan QR Code")
+    /// Sell
+    public static let sell = Localized.tr("Localizable", "wallet.sell", fallback: "Sell")
     /// Send
     public static let send = Localized.tr("Localizable", "wallet.send", fallback: "Send")
     /// Stake
@@ -729,9 +771,9 @@ public enum Localized {
       public static let addressField = Localized.tr("Localizable", "wallet.import.address_field", fallback: "Address or Name")
       /// Contract Address or Token ID
       public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract Address or Token ID")
-      /// %s encoded private key
-      public static func privateKey(_ p1: UnsafePointer<CChar>) -> String {
-        return Localized.tr("Localizable", "wallet.import.private_key", p1, fallback: "%s encoded private key")
+      /// %@ encoded private key
+      public static func privateKey(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "wallet.import.private_key", String(describing: p1), fallback: "%@ encoded private key")
       }
       /// Secret Recovery Phrase
       public static let secretPhrase = Localized.tr("Localizable", "wallet.import.secret_phrase", fallback: "Secret Recovery Phrase")

@@ -8,6 +8,7 @@ import GRDBQuery
 import Store
 import Style
 import Localization
+import InfoSheet
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
@@ -19,6 +20,7 @@ struct AssetScene: View {
 
     @State private var showingOptions = false
     @State private var showingPriceAlertMessage = false
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Binding private var isPresentingAssetSelectType: SelectAssetInput?
 
@@ -30,7 +32,6 @@ struct AssetScene: View {
 
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
-
 
     private let wallet: Wallet
     private let input: AssetSceneInput
@@ -68,7 +69,11 @@ struct AssetScene: View {
     var body: some View {
         List {
             Section { } header: {
-                WalletHeaderView(model: model.headerModel, action: onSelectHeader(_:))
+                WalletHeaderView(
+                    model: model.headerModel,
+                    onInfoSheetAction: onInfoSheetAction,
+                    onHeaderAction: onSelectHeader(_:)
+                )
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
             }
@@ -166,6 +171,9 @@ struct AssetScene: View {
         .taskOnce(onTaskOnce)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 }
 
@@ -196,6 +204,11 @@ extension AssetScene {
     @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
         isPresentingAssetSelectType = SelectAssetInput(type: buttonType.selectType, assetAddress: assetData.assetAddress)
+    }
+    
+    @MainActor
+    private func onInfoSheetAction(type: InfoSheetType) {
+        isPresentingInfoSheet = type
     }
 
     @MainActor

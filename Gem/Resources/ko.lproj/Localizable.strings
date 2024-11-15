@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "언어";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ 인코딩된 개인 키";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,14 @@
 "common.warning" = "경고";
 "warnings.multi_signature_blocked" = "개인 키를 제어하고 있다는 확신이 없다면 이 %@ 다중 서명 지갑으로 자금을 이체하지 마십시오. 그렇지 않으면 사기에 노출될 수 있으며 자산을 영구적으로 잃을 수 있습니다.";
 "swap.price_impact" = "가격 영향";
+"wallet.sell" = "팔다";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Network Fee";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "접근할 수는 없지만 거래 및 이동을 볼 수 있는 지갑입니다.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

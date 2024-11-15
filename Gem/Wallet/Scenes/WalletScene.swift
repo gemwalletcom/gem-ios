@@ -9,6 +9,7 @@ import Store
 import GRDBQuery
 import Style
 import Localization
+import InfoSheet
 
 struct WalletScene: View {
     @Environment(\.keystore) private var keystore
@@ -36,7 +37,9 @@ struct WalletScene: View {
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @Binding var isPresentingSelectType: SelectAssetType?
-
+    
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    
     let model: WalletSceneViewModel
 //    @State private var selectAssetNavigationPath = NavigationPath()
 
@@ -66,10 +69,10 @@ struct WalletScene: View {
                     model: WalletHeaderViewModel(
                         walletType: model.wallet.type,
                         value: totalFiatValue
-                    )
-                ) {
-                    isPresentingSelectType = $0.selectType
-                }
+                    ),
+                    onInfoSheetAction: onInfoSheetAction,
+                    onHeaderAction: onHeaderAction
+                )
                 .padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
@@ -153,6 +156,9 @@ struct WalletScene: View {
             }
         }
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
         .onChange(of: model.wallet, fetch)
         .taskOnce(fetch)
         .onReceive(pricesTimer) { time in
@@ -217,6 +223,14 @@ extension WalletScene {
                 try await bannerService.handleAction(action)
             }
         }
+    }
+    
+    private func onInfoSheetAction(type: InfoSheetType) {
+        isPresentingInfoSheet = type
+    }
+    
+    private func onHeaderAction(type: HeaderButtonType) {
+        isPresentingSelectType = type.selectType
     }
 }
 

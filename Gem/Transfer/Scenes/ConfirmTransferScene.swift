@@ -6,6 +6,7 @@ import Primitives
 import Keystore
 import Localization
 import ChainService
+import InfoSheet
 
 typealias ConfirmTransferDelegate = (Result<String, any Error>) -> Void
 typealias ConfirmMessageDelegate = (Result<String, any Error>) -> Void
@@ -14,6 +15,7 @@ struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State var model: ConfirmTransferViewModel
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     var body: some View {
         VStack {
@@ -126,6 +128,9 @@ extension ConfirmTransferScene {
             }
         }
         .listSectionSpacing(.compact)
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 
     private var networkFeeView: some  View {
@@ -171,7 +176,7 @@ extension ConfirmTransferScene {
     }
 
     private func onNetworkFeeInfo() {
-        model.onNetworkFeeInfo()
+        isPresentingInfoSheet = .networkFee(model.dataModel.chain)
     }
 }
 

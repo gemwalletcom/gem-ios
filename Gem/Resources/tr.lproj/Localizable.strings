@@ -212,7 +212,7 @@
 "common.url" = "URL'si";
 "errors.error_occured" = "Bilinmeyen bir hata oluştu. Lütfen tekrar deneyin.";
 "settings.language" = "Dil";
-"wallet.import.private_key" = "Özel Anahtar";
+"wallet.import.private_key" = "%@ kodlanmış özel anahtar";
 "errors.invalid_network_id" = "Geçersiz adres veya ad";
 "common.private_key" = "Özel Anahtar";
 "nodes.import_node.latency" = "Gecikme";
@@ -281,3 +281,14 @@
 "common.warning" = "Uyarı";
 "warnings.multi_signature_blocked" = "Özel anahtarları kontrol ettiğinizden emin olmadığınız sürece bu %@ Çoklu İmzalı cüzdana para transferi yapmayın. Bunu yapmamanız sizi dolandırıcılıklara maruz bırakabilir ve varlıklarınızı kalıcı olarak kaybedebilirsiniz.";
 "swap.price_impact" = "Fiyat Etkisi";
+"wallet.sell" = "Satmak";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Ağ";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "Erişiminizin olmadığı, ancak işlemlerini ve hareketlerini izleyebileceğiniz bir cüzdan.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

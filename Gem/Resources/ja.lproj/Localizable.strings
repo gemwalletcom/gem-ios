@@ -212,7 +212,7 @@
 "common.url" = "メールアドレス";
 "errors.error_occured" = "エラーが発生しました！";
 "settings.language" = "言語";
-"wallet.import.private_key" = "%sエンコードされたプライベートキー";
+"wallet.import.private_key" = "%@エンコードされたプライベートキー";
 "errors.invalid_network_id" = "無効なネットワークID";
 "common.private_key" = "プライベートキー";
 "nodes.import_node.latency" = "レイテンシー";
@@ -281,3 +281,14 @@
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "秘密鍵を確実に管理していない限り、この%@マルチ署名ウォレットに資金を送金しないでください。そうしないと、詐欺に遭う可能性があり、資産を永久に失う可能性があります。";
 "swap.price_impact" = "価格の影響";
+"wallet.sell" = "売る";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "ネットワーク料金";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "アクセス権はありませんが、取引や動きを監視できるウォレットです。";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

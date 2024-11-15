@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "خطایی رخ داد!";
 "settings.language" = "زبان";
-"wallet.import.private_key" = "کلید خصوصی %s رمزگزاری شده.";
+"wallet.import.private_key" = "%@ کلید خصوصی رمزگذاری شده";
 "errors.invalid_network_id" = "شناسه شبکه نامعتبر است.";
 "common.private_key" = "کلید خصوصی";
 "nodes.import_node.latency" = "تاخیر";
@@ -281,3 +281,14 @@
 "common.warning" = "هشدار";
 "warnings.multi_signature_blocked" = "وجه را به این کیف پول چند امضایی %@ منتقل نکنید، مگر اینکه مطمئن باشید کلیدهای خصوصی را کنترل می کنید. عدم انجام این کار می تواند شما را در معرض کلاهبرداری قرار دهد و ممکن است برای همیشه دارایی های خود را از دست بدهید.";
 "swap.price_impact" = "تاثیر قیمت";
+"wallet.sell" = "فروش";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "کارمزد شبکه";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "کیف پولی که به آن دسترسی ندارید اما می توانید تراکنش ها و حرکات آن را تماشا کنید.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

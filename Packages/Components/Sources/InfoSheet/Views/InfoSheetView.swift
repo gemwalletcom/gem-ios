@@ -4,7 +4,7 @@ import SwiftUI
 import Style
 
 struct InfoSheetView: View {
-    private let image: Image?
+    private let image: InfoSheetImage?
 
     private let title: TextValue
     private let description: TextValue
@@ -21,10 +21,10 @@ struct InfoSheetView: View {
 
     init(
         title: String,
-        titleStyle: TextStyle = .headline,
+        titleStyle: TextStyle = .title2,
         description: String,
-        descriptionStyle: TextStyle = .subheadline,
-        image: Image?
+        descriptionStyle: TextStyle = .body,
+        image: InfoSheetImage?
     ) {
         let titleValue = TextValue(text: title, style: titleStyle)
         let descriptionValue = TextValue(text: description, style: descriptionStyle)
@@ -39,7 +39,7 @@ struct InfoSheetView: View {
     init(
         titleValue: TextValue,
         descriptionValue: TextValue,
-        image: Image? = nil
+        image: InfoSheetImage? = nil
     ) {
         self.title = titleValue
         self.description = descriptionValue
@@ -48,11 +48,24 @@ struct InfoSheetView: View {
 
     var body: some View {
         VStack(spacing: Spacing.large) {
-            image?
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: Sizing.image.large, height: Sizing.image.large)
-
+            ZStack {
+                switch image {
+                case .image(let image):
+                    image
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: Sizing.image.extraLarge, height: Sizing.image.extraLarge)
+                case .assetImage(let assetImage):
+                    AssetImageView(
+                        assetImage: assetImage,
+                        size: Sizing.image.extraLarge,
+                        overlayImageSize: Sizing.image.extraLarge / 3
+                    )
+                case nil: EmptyView()
+                }
+            }
+            
+            
             VStack(spacing: Spacing.medium) {
                 Text(title.text)
                     .textStyle(title.style)
@@ -72,6 +85,6 @@ struct InfoSheetView: View {
     InfoSheetView(
         title: "Network Fee",
         description: "The Tron network charges a transaction fee which varies based on blockhain usage",
-        image: Image(systemName: SystemImage.bellFill)
+        image: .image(Image(systemName: SystemImage.bellFill))
     )
 }

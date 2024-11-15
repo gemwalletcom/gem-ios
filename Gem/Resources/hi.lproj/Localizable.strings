@@ -212,7 +212,7 @@
 "common.url" = "URL";
 "errors.error_occured" = "An error occurred!";
 "settings.language" = "Language";
-"wallet.import.private_key" = "%s encoded private key";
+"wallet.import.private_key" = "%@ एनकोडेड निजी कुंजी";
 "errors.invalid_network_id" = "Invalid Network ID";
 "common.private_key" = "Private Key";
 "nodes.import_node.latency" = "Latency";
@@ -281,3 +281,14 @@
 "common.warning" = "चेतावनी";
 "warnings.multi_signature_blocked" = "जब तक आप सुनिश्चित न हों कि आप निजी कुंजियों को नियंत्रित करते हैं, तब तक इस %@ मल्टी-सिग्नेचर वॉलेट में धनराशि स्थानांतरित न करें। ऐसा न करने पर आप धोखाधड़ी के शिकार हो सकते हैं, और आप अपनी संपत्ति हमेशा के लिए खो सकते हैं।";
 "swap.price_impact" = "मूल्य प्रभाव";
+"wallet.sell" = "बेचना";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Network Fee";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "एक वॉलेट जिस तक आपकी पहुंच नहीं है, लेकिन आप इसके लेनदेन और गतिविधियों पर नजर रख सकते हैं।";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

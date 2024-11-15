@@ -212,7 +212,7 @@
 "common.url" = "網址";
 "errors.error_occured" = "報錯了";
 "settings.language" = "語言";
-"wallet.import.private_key" = "%s 編碼的私鑰";
+"wallet.import.private_key" = "%@編碼私鑰";
 "errors.invalid_network_id" = "無效的網路ID";
 "common.private_key" = "私鑰";
 "nodes.import_node.latency" = "延遲";
@@ -281,3 +281,14 @@
 "common.warning" = "警告";
 "warnings.multi_signature_blocked" = "除非您確定您控制著私鑰，否則請勿將資金轉移到此%@多重簽名錢包。如果不這樣做，您可能會遭受詐騙，並且您可能會永久失去您的資產。";
 "swap.price_impact" = "價格影響";
+"wallet.sell" = "賣";
+"sell.title" = "Sell %s";
+"sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "網絡費用";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "您無權訪問的錢包，但您可以查看其交易和動向。";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

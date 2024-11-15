@@ -99,6 +99,12 @@ public struct Images {
     public struct Transaction {
         public static let outgoing = Image(.transferOutgoing)
         public static let incoming = Image(.transferIncoming)
+
+        public struct State {
+            public static let pending = Image(.transactionStatePending)
+            public static let error = Image(.transactionStateError)
+            public static let success = Image(.transactionStateSuccess)
+        }
     }
 
     public struct Wallets {
@@ -112,6 +118,10 @@ public struct Images {
     public struct NameResolve {
         public static let success = Image(.nameResolveSuccess)
         public static let error = Image(.nameResolveError)
+    }
+    
+    public struct Info {
+        public static let networkFee = Image(.networkFee)
     }
 }
 
@@ -206,7 +216,10 @@ public struct Images {
         ]),
         ("Transaction", [
             (Images.Transaction.outgoing, "Outgoing"),
-            (Images.Transaction.incoming, "Incoming")
+            (Images.Transaction.incoming, "Incoming"),
+            (Images.Transaction.State.pending, "Pending"),
+            (Images.Transaction.State.error, "Error"),
+            (Images.Transaction.State.success, "Success")
         ]),
         ("Wallets", [
             (Images.Wallets.edit, "Edit"),
