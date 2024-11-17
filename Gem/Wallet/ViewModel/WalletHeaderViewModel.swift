@@ -60,6 +60,4 @@ extension WalletHeaderViewModel: HeaderViewModel {
             return .none
         }
     }
-    
-    var infoButtonUrl: URL? { Docs.url(.whatIsWatchWallet) }
 }

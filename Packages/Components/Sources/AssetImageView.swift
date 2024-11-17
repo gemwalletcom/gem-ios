@@ -36,15 +36,17 @@ public struct AssetImageView: View {
                 CachedAsyncImage(url: assetImage.imageURL, scale: 1) {
                     $0.resizable()
                 } placeholder: {
-                    ZStack {
-                        Text(assetImage.type)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.3)
-                            .padding(4)
+                    if let type = assetImage.type {
+                        ZStack {
+                            Text(type)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.3)
+                                .padding(4)
+                        }
+                        .frame(width: size, height: size)
+                        .cornerRadius(cornerRadius)
+                        .background(Colors.grayBackground)
                     }
-                    .frame(width: size, height: size)
-                    .cornerRadius(cornerRadius)
-                    .background(Colors.grayBackground)
                 }
                 .cornerRadius(cornerRadius)
             }
@@ -55,7 +57,7 @@ public struct AssetImageView: View {
                 .cornerRadius(overlayImageSize/2)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: overlayImageSize, height: overlayImageSize)
-                .padding(1)
+                .padding(overlayImageSize / 16)
                 .background(Colors.white)
                 .cornerRadius(overlayImageSize+overlayImageSizePadding*2/2)
                 .offset(x: overlayImageOffset + 2, y: overlayImageOffset + 2)

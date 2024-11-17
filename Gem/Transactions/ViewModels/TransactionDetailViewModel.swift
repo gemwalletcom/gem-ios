@@ -108,6 +108,10 @@ struct TransactionDetailViewModel {
         }
     }
     
+    var chain: Chain {
+        model.transaction.transaction.assetId.chain
+    }
+    
     var date: String {
         return TransactionDateFormatter(date: model.transaction.transaction.createdAt).row
     }
@@ -152,7 +156,11 @@ struct TransactionDetailViewModel {
         return SimpleAccount(name: .none, chain: model.transaction.transaction.assetId.chain, address: participant)
     }
     
-    var status: String {
+    var transactionState: TransactionState {
+        model.transaction.transaction.state
+    }
+    
+    var statusText: String {
         TransactionStateViewModel(state: model.transaction.transaction.state).title
     }
     
@@ -178,12 +186,12 @@ struct TransactionDetailViewModel {
         return TextStyle(font: .callout, color: color)
     }
 
-    var statusInfoUrl: URL {
-        Docs.url(.transactionStatus)
-    }
-
     var network: String {
         return model.transaction.asset.chain.asset.name
+    }
+    
+    var assetImage: AssetImage {
+        return AssetIdViewModel(assetId: model.transaction.asset.id).assetImage
     }
     
     var networkAssetImage: AssetImage {
@@ -199,10 +207,6 @@ struct TransactionDetailViewModel {
             return .empty
         }
         return priceModel.fiatAmountText(amount: model.networkFeeAmount * price.price)
-    }
-
-    var networkFeeInfoUrl: URL {
-        Docs.url(.networkFees)
     }
 
     var showMemoField: Bool {
@@ -224,17 +228,4 @@ struct TransactionDetailViewModel {
 
 extension TransactionDetailViewModel: Identifiable {
     var id: String { model.transaction.id }
-}
-
-
-// MARK: - Actions
-
-extension TransactionDetailViewModel {
-    func onNetworkFeeInfo() {
-        UIApplication.shared.open(networkFeeInfoUrl)
-    }
-
-    func onStatusInfo() {
-        UIApplication.shared.open(statusInfoUrl)
-    }
 }

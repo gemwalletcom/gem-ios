@@ -46,6 +46,4 @@ extension AssetHeaderViewModel: HeaderViewModel {
             return .none
         }
     }
-    
-    var infoButtonUrl: URL? { .none }
 }

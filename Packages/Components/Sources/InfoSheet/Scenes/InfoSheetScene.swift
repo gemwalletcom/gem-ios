@@ -15,10 +15,11 @@ public struct InfoSheetScene: View {
 
     public var body: some View {
         NavigationStack {
-            VStack(spacing: .zero) {
+            VStack(spacing: Spacing.small) {
                 if model.url != nil {
                     Spacer()
                     InfoSheetView(model: model)
+                        .padding(Spacing.small)
                     Spacer()
                     StateButton(
                         text: model.buttonTitle,
@@ -69,14 +70,14 @@ struct InfoSheetPreviewModel: InfoSheetModelViewable {
     var description: String
     var buttonTitle: String
     var url: URL?
-    var image: Image?
+    var image: InfoSheetImage?
     
     init(
         title: String,
         description: String,
         buttonTitle: String,
         url: URL? = nil,
-        image: Image? = nil
+        image: InfoSheetImage? = nil
     ) {
         self.title = title
         self.description = description
@@ -92,7 +93,7 @@ struct InfoSheetPreviewModel: InfoSheetModelViewable {
             title: "Network Fees",
             description: "Network fees needed to pay the miners, quite a long message, double, triple, quadruple, quintuple, etc.",
             buttonTitle: "Continue",
-            image: Image(systemName: "bell")
+            image: .image(Image(systemName: "bell"))
         )
     )
 }

@@ -5,6 +5,6 @@
 import Foundation
 
 public enum FiatTransactionType: String, Codable, Equatable, Sendable {
-	case buy = "Buy"
-	case sell = "Sell"
+	case buy
+	case sell
 }

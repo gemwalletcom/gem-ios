@@ -35,6 +35,8 @@ public struct TextStyle: Sendable {
 
 extension TextStyle {
     public static let title = TextStyle(font: .title, color: Colors.black)
+    public static let title2 = TextStyle(font: .title2, color: Colors.black)
+    public static let title3 = TextStyle(font: .title3, color: Colors.black)
     public static let headline = TextStyle(font: .headline, color: Colors.black)
     public static let subheadline = TextStyle(font: .subheadline, color: Colors.secondaryText)
     public static let body = TextStyle(font: .body, color: Colors.black)

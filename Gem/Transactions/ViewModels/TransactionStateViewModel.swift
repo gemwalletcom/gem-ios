@@ -19,7 +19,7 @@ struct TransactionStateViewModel {
         case .failed:
             return Localized.Transaction.Status.failed
         case .reverted:
-            return Localized.Transaction.Status.failed
+            return Localized.Transaction.Status.reverted
         }
     }
     

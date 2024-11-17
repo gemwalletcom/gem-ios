@@ -4,11 +4,14 @@ import SwiftUI
 import Style
 import Components
 import Localization
+import InfoSheet
+import Primitives
 
 struct WalletHeaderView: View {
     
     let model: any HeaderViewModel
-    var action: HeaderButtonAction?
+    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+    var onHeaderAction: HeaderButtonAction?
     
     var body: some View {
         VStack(spacing: Spacing.large/2) {
@@ -36,28 +39,27 @@ struct WalletHeaderView: View {
             
             switch model.isWatchWallet {
             case true:
-                HStack {
-                    Image(systemName: SystemImage.eye)
-                    
-                    Text(Localized.Wallet.Watch.Tooltip.title)
-                        .foregroundColor(Colors.black)
-                        .font(.callout)
-                    
-                    if let url = model.infoButtonUrl {
-                        Button {
-                            UIApplication.shared.open(url)
-                        } label: {
-                            Image(systemName: SystemImage.info)
-                                .tint(Colors.black)
-                        }
+                Button {
+                    onInfoSheetAction?(.watchWallet)
+                } label: {
+                    HStack {
+                        Image(systemName: SystemImage.eye)
+                        
+                        Text(Localized.Wallet.Watch.Tooltip.title)
+                            .foregroundColor(Colors.black)
+                            .font(.callout)
+                        
+                        Image(systemName: SystemImage.info)
+                            .tint(Colors.black)
                     }
+                    .padding()
+                    .background(Colors.grayDarkBackground)
+                    .cornerRadius(Spacing.medium)
+                    .padding(.top, Spacing.medium)
                 }
-                .padding()
-                .background(Colors.grayDarkBackground)
-                .cornerRadius(Spacing.medium)
-                .padding(.top, Spacing.medium)
+                
             case false:
-                HeaderButtonsView(buttons: model.buttons, action: action)
+                HeaderButtonsView(buttons: model.buttons, action: onHeaderAction)
                     .padding(.top, Spacing.small)
             }
         }
@@ -72,5 +74,5 @@ struct WalletHeaderView: View {
         walletModel: .init(wallet: .main),
         bannersViewModel: HeaderBannersViewModel(banners: [])
     )
-    return WalletHeaderView(model: model, action: nil)
+    return WalletHeaderView(model: model, onInfoSheetAction: .none, onHeaderAction: .none)
 }

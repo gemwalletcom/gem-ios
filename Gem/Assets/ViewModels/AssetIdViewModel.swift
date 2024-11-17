@@ -73,19 +73,15 @@ struct AssetIdViewModel {
 
     private var imagePlaceholder: Image? {
         switch assetId.type {
-        case .native:
-            chainImagePlaceholder
-        case .token:
-            .none
+        case .native: chainImagePlaceholder
+        case .token: .none
         }
     }
     
     private var chainPlaceholder: Image? {
         switch assetId.type {
-        case .native:
-            .none
-        case .token:
-            chainImagePlaceholder
+        case .native: .none
+        case .token: chainImagePlaceholder
         }
     }
 }

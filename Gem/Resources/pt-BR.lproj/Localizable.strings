@@ -284,3 +284,11 @@
 "wallet.sell" = "Vender";
 "sell.title" = "Sell %s";
 "sell.emptyAmount" = "Please enter amount to sell";
+"common.learn_more" = "Learn More";
+"info.network_fee.title" = "Taxa de rede";
+"info.watch_wallet.title" = "Watch Wallet";
+"info.watch_wallet.description" = "Uma carteira à qual você não tem acesso, mas pode monitorar suas transações e movimentos.";
+"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
+"info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
+"info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";

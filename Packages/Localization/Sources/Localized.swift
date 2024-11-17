@@ -161,6 +161,8 @@ public enum Localized {
     public static func latencyInMs(_ p1: Int) -> String {
       return Localized.tr("Localizable", "common.latency_in_ms", p1, fallback: "%d ms")
     }
+    /// Learn More
+    public static let learnMore = Localized.tr("Localizable", "common.learn_more", fallback: "Learn More")
     /// Loading
     public static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
     /// Manage
@@ -327,6 +329,36 @@ public enum Localized {
     public static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
+  }
+  public enum Info {
+    public enum NetworkFee {
+      /// %@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.
+      public static func description(_ p1: Any) -> String {
+        return Localized.tr("Localizable", "info.network_fee.description", String(describing: p1), fallback: "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.")
+      }
+      /// Network Fee
+      public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
+    }
+    public enum Transaction {
+      public enum Error {
+        /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
+        public static let description = Localized.tr("Localizable", "info.transaction.error.description", fallback: "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.")
+      }
+      public enum Pending {
+        /// The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.
+        public static let description = Localized.tr("Localizable", "info.transaction.pending.description", fallback: "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.")
+      }
+      public enum Success {
+        /// The transaction has been completed and confirmed on the network. You can review the details to verify its status.
+        public static let description = Localized.tr("Localizable", "info.transaction.success.description", fallback: "The transaction has been completed and confirmed on the network. You can review the details to verify its status.")
+      }
+    }
+    public enum WatchWallet {
+      /// A wallet that you do not have access to, but you can watch its transactions and movements.
+      public static let description = Localized.tr("Localizable", "info.watch_wallet.description", fallback: "A wallet that you do not have access to, but you can watch its transactions and movements.")
+      /// Watch Wallet
+      public static let title = Localized.tr("Localizable", "info.watch_wallet.title", fallback: "Watch Wallet")
+    }
   }
   public enum Library {
     /// Select from Photo Library

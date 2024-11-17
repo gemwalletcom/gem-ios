@@ -9,5 +9,4 @@ protocol HeaderViewModel {
     var title: String { get }
     var subtitle: String? { get }
     var buttons: [HeaderButton] { get }
-    var infoButtonUrl: URL? { get }
 }

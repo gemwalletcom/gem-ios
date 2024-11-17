@@ -295,9 +295,7 @@ extension ConfirmTransferViewModel {
 // MARK: - Actions
 
 extension ConfirmTransferViewModel {
-    func onNetworkFeeInfo() {
-        UIApplication.shared.open(networkFeeInfoUrl)
-    }
+    
 }
 
 // MARK: - Private
