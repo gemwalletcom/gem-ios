@@ -101,8 +101,6 @@ public enum Localized {
     }
   }
   public enum Buy {
-    /// Please enter amount to buy
-    public static let emptyAmount = Localized.tr("Localizable", "buy.empty_amount", fallback: "Please enter amount to buy")
     /// No quotes available
     public static let noResults = Localized.tr("Localizable", "buy.no_results", fallback: "No quotes available")
     /// Rate
@@ -331,6 +329,10 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
   }
   public enum Info {
+    public enum LockTime {
+      /// Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.
+      public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
+    }
     public enum NetworkFee {
       /// %@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.
       public static func description(_ p1: Any) -> String {
@@ -359,6 +361,18 @@ public enum Localized {
       /// Watch Wallet
       public static let title = Localized.tr("Localizable", "info.watch_wallet.title", fallback: "Watch Wallet")
     }
+  }
+  public enum Input {
+    /// buy
+    public static let buy = Localized.tr("Localizable", "input.buy", fallback: "buy")
+    /// Please enter amount to %@
+    public static func enterAmountTo(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "input.enter_amount_to", String(describing: p1), fallback: "Please enter amount to %@")
+    }
+    /// sell
+    public static let sell = Localized.tr("Localizable", "input.sell", fallback: "sell")
+    /// transfer
+    public static let transfer = Localized.tr("Localizable", "input.transfer", fallback: "transfer")
   }
   public enum Library {
     /// Select from Photo Library
@@ -442,8 +456,6 @@ public enum Localized {
     }
   }
   public enum Sell {
-    /// Please enter amount to sell
-    public static let emptyAmount = Localized.tr("Localizable", "sell.emptyAmount", fallback: "Please enter amount to sell")
     /// Sell %s
     public static func title(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "sell.title", p1, fallback: "Sell %s")
