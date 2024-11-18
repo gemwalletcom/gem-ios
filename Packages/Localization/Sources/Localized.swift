@@ -239,6 +239,10 @@ public enum Localized {
     public static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
     /// Failed to decode the QR code. Please try again with a different QR code.
     public static let decodingQr = Localized.tr("Localizable", "errors.decoding_qr", fallback: "Failed to decode the QR code. Please try again with a different QR code.")
+    /// The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.
+    public static func dustThreshold(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.dust_threshold", String(describing: p1), fallback: "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.")
+    }
     /// Error
     public static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!

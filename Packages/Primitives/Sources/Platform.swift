@@ -17,4 +17,5 @@ public enum PlatformStore: String, Codable, CaseIterable, Equatable, Sendable {
 	case solanaStore
 	case samsungStore
 	case apkUniversal
+	case local
 }

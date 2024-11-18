@@ -297,3 +297,4 @@
 "input.transfer" = "отправки";
 "settings.balance_privacy" = "Конфиденциальность баланса";
 "common.popular" = "Популярный";
+"errors.dust_threshold" = "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.";

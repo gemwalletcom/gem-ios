@@ -60,15 +60,6 @@ struct ConnectionsScene: View {
                     }
                 }
             }
-            
-            #if DEBUG
-//            Section("Pending") {
-//                ForEach(connections.filter { $0.session.sessionId.isEmpty }) { connection in
-//                    Text("Walelt: \(connection.wallet.name), ID: \(connection.session.id)")
-//                }
-//            }
-            #endif
-            
         }
         .navigationDestination(for: WalletConnection.self) { connection in
             ConnectionScene(

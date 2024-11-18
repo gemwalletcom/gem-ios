@@ -52,6 +52,10 @@ class SelectAssetViewModel {
         case .priceAlert: Localized.Assets.selectAsset
         }
     }
+    
+    var enablePopularSection: Bool {
+        [.buy, .priceAlert].contains(selectType)
+    }
 
     var showAddToken: Bool {
         selectType == .manage && wallet.hasTokenSupport && !filterModel.allChains.isEmpty

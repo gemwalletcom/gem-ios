@@ -45,7 +45,7 @@ struct SelectAssetScene: View {
 
     var body: some View {
         List {
-            if model.selectType == .buy && !sections.popular.isEmpty {
+            if model.enablePopularSection && !sections.popular.isEmpty {
                 Section {
                     assetsList(assets: sections.popular)
                 } header: {

@@ -84,8 +84,6 @@ extension WalletDetailViewModel {
     }
 
     func onSelectImage() {
-        #if DEBUG
-        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
-        #endif
+        //navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
     }
 }
