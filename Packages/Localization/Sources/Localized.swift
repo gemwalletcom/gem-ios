@@ -183,6 +183,8 @@ public enum Localized {
     public static let pin = Localized.tr("Localizable", "common.pin", fallback: "Pin")
     /// Pinned
     public static let pinned = Localized.tr("Localizable", "common.pinned", fallback: "Pinned")
+    /// Popular
+    public static let popular = Localized.tr("Localizable", "common.popular", fallback: "Popular")
     /// Private Key
     public static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
