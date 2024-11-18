@@ -295,3 +295,4 @@
 "input.buy" = "buy";
 "input.sell" = "sell";
 "input.transfer" = "transfer";
+"settings.balance_privacy" = "Balance Privacy";

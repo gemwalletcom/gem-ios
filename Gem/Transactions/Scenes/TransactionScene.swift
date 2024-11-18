@@ -146,6 +146,7 @@ extension TransactionScene {
     func onStatusInfo() {
         isPresentingInfoSheet = .transactionState(
             imageURL: model.assetImage.imageURL,
+            placeholder: model.assetImage.placeholder,
             state: model.transactionState
         )
     }
