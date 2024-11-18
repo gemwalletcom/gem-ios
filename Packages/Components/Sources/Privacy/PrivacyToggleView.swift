@@ -23,12 +23,11 @@ public struct PrivacyToggleView: View {
             Button(action: onTogglePrivacy) {
                 Text(placeholder)
                     .offset(y: Spacing.small)
-                    .foregroundStyle(Colors.whiteSolid)
             }
             .padding(.horizontal)
             .background(
                 Capsule(style: .circular)
-                    .foregroundStyle(Colors.blue)
+                    .foregroundStyle(Colors.listStyleColor)
             )
         } else {
             Button(action: onTogglePrivacy) {
