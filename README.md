@@ -67,7 +67,8 @@ If you want to contribute, you can use our [developers telegram](https://t.me/ge
 
 ### iOS Development
 
-> [!NOTE] Gem iOS needs [Apple silicon Mac](https://support.apple.com/en-us/116943) to build by default.
+> [!NOTE]
+> Gem iOS needs [Apple silicon Mac](https://support.apple.com/en-us/116943) to build by default.
 
 1. Setup [Xcode](https://developer.apple.com/xcode)
 2. Clone the repo `git clone https://github.com/gemwalletcom/gem-ios.git --recursive`
