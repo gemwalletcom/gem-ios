@@ -10,10 +10,7 @@ import Components
 import Localization
 
 struct PriceAlertsScene: View {
-
-    let model: PriceAlertsViewModel
-
-    @State private var isPriceAlertsEnabled: Bool
+    @State private var model: PriceAlertsViewModel
 
     @Query<PriceAlertsRequest>
     var priceAlerts: [PriceAlertData]
@@ -23,7 +20,6 @@ struct PriceAlertsScene: View {
     ) {
         self.model = model
         _priceAlerts = Query(constant: model.request)
-        _isPriceAlertsEnabled = State(initialValue: model.isPriceAlertsEnabled)
     }
 
     var body: some View {
@@ -31,7 +27,7 @@ struct PriceAlertsScene: View {
             Section {
                 Toggle(
                     model.enableTitle,
-                    isOn: $isPriceAlertsEnabled
+                    isOn: $model.isPriceAlertsEnabled
                 )
                 .toggleStyle(AppToggleStyle())
             } footer: {
@@ -56,25 +52,15 @@ struct PriceAlertsScene: View {
                 }
             }
         }
+        .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)
         .refreshable {
             await model.fetch()
-        }
-        .onChange(of: isPriceAlertsEnabled) { (_, newValue) in
-            Task {
-                await model.onPriceAlertsEnabled(newValue: newValue)
-            }
         }
         .task {
             await model.fetch()
         }
         .navigationTitle(model.title)
     }
-}
-
-#Preview {
-    PriceAlertsScene(
-        model: PriceAlertsViewModel(priceAlertService: .main, priceService: .main)
-    )
 }
 
 // MARK: - Actions
@@ -85,4 +71,18 @@ extension PriceAlertsScene {
             await model.deletePriceAlert(assetId: alert.asset.id)
         }
     }
+
+    func onAlertsEnable(_ _: Bool, newValue: Bool) {
+        Task {
+            await model.handleAlertsEnabled(enabled: newValue)
+        }
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    PriceAlertsScene(
+        model: PriceAlertsViewModel(priceAlertService: .main, priceService: .main)
+    )
 }

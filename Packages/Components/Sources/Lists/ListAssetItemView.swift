@@ -93,10 +93,10 @@ extension ListAssetItemView {
 
     private func balanceView(balance: TextValue, totalFiat: TextValue) -> some View {
         VStack(alignment: .trailing, spacing: Spacing.tiny) {
-            Text(balance.text)
+            PrivacyText(balance.text, balancePrivacyEnabled: model.showBalancePrivacy)
                 .textStyle(balance.style)
             if !totalFiat.text.isEmpty {
-                Text(totalFiat.text)
+                PrivacyText(totalFiat.text, balancePrivacyEnabled: model.showBalancePrivacy)
                     .textStyle(totalFiat.style)
             }
         }
@@ -108,6 +108,7 @@ extension ListAssetItemView {
 
 #Preview {
     struct AssetListViewPreviewable: ListAssetItemViewable {
+        let showBalancePrivacy: Binding<Bool>
         let name: String
         let symbol: String?
         let assetImage: AssetImage
@@ -119,6 +120,7 @@ extension ListAssetItemView {
     return List {
         ListAssetItemView(
             model: AssetListViewPreviewable(
+                showBalancePrivacy: .constant(false),
                 name: "Bitcoin",
                 symbol: "BTC",
                 assetImage: AssetImage(

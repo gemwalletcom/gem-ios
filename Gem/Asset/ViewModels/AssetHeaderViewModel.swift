@@ -11,7 +11,8 @@ struct AssetHeaderViewModel {
 }
 
 extension AssetHeaderViewModel: HeaderViewModel {
-    
+    var showBalancePrivacy: Bool { false }
+
     var isWatchWallet: Bool {
         walletModel.wallet.type == .view
     }

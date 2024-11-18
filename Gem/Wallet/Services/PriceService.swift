@@ -6,8 +6,7 @@ import SwiftHTTPClient
 import GemAPI
 import Store
 
-public struct PriceService {
-    
+public struct PriceService: Sendable {
     let provider = Provider<GemAPI>()
     let priceStore: PriceStore
     let preferences: Preferences

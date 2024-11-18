@@ -295,3 +295,4 @@
 "input.buy" = "покупки";
 "input.sell" = "продажи";
 "input.transfer" = "отправки";
+"settings.balance_privacy" = "Balance Privacy";

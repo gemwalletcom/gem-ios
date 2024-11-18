@@ -25,28 +25,17 @@ struct WalletHeaderViewModel {
     }
     
     public var totalValueText: String {
-        return currencyFormatter.string(value)
+        currencyFormatter.string(value)
     }
 }
 
 extension WalletHeaderViewModel: HeaderViewModel {
-    
-    var isWatchWallet: Bool {
-        walletType == .view
-    }
-    
-    var assetImage: AssetImage? {
-        return .none
-    }
-    
-    var title: String {
-        return totalValueText
-    }
-    
-    var subtitle: String? {
-        return .none
-    }
-    
+    var showBalancePrivacy: Bool { true }
+    var isWatchWallet: Bool { walletType == .view }
+    var title: String { totalValueText }
+    var assetImage: AssetImage? { .none }
+    var subtitle: String? { .none }
+
     var buttons: [HeaderButton] {
         let values: [(type: HeaderButtonType, isShown: Bool)] = [
             (.send, true),

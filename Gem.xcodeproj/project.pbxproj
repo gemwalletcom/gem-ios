@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		830401CD2CE4FB3F00D47DF5 /* ObservablePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830401CC2CE4FB3F00D47DF5 /* ObservablePreferences.swift */; };
 		830ED2342C63AE2000B9877C /* FeeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2332C63AE2000B9877C /* FeeUnit.swift */; };
 		830ED2362C63AE4D00B9877C /* FeeUnitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */; };
 		830FDA382C204E07003DA605 /* AddNodeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA372C204E07003DA605 /* AddNodeScene.swift */; };
@@ -318,6 +319,7 @@
 
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
+		830401CC2CE4FB3F00D47DF5 /* ObservablePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservablePreferences.swift; sourceTree = "<group>"; };
 		830ED2332C63AE2000B9877C /* FeeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnit.swift; sourceTree = "<group>"; };
 		830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnitViewModel.swift; sourceTree = "<group>"; };
 		830FDA372C204E07003DA605 /* AddNodeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddNodeScene.swift; path = Gem/Nodes/Scenes/AddNodeScene.swift; sourceTree = SOURCE_ROOT; };
@@ -1568,6 +1570,7 @@
 				830FDA472C22EEC4003DA605 /* TabItem.swift */,
 				D856202A2AAB89C000D65D81 /* EnvironmentVariables.swift */,
 				D801814D2B4621ED00F4D22B /* Scenes.swift */,
+				830401CC2CE4FB3F00D47DF5 /* ObservablePreferences.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -2313,6 +2316,7 @@
 				D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */,
 				83B672EF2C99BFB60034100C /* LockPeriodSelectionScene.swift in Sources */,
 				C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */,
+				830401CD2CE4FB3F00D47DF5 /* ObservablePreferences.swift in Sources */,
 				D848B59A2AE5CDD700814FB4 /* WalletConnectionViewModel.swift in Sources */,
 				C3340B782A4A985000884D48 /* ChainSettingsViewModel.swift in Sources */,
 				C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */,
