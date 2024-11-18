@@ -9,12 +9,14 @@ public protocol GemAPIConfigService: Sendable {
 }
 
 public protocol GemAPIFiatService: Sendable {
-    func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
+    func getBuyQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
+    func getSellQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
 }
 
 public protocol GemAPIAssetsListService: Sendable {
     func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId]
-    func getFiatAssets() async throws -> FiatAssets
+    func getBuyableFiatAssets() async throws -> FiatAssets
+    func getSellableFiatAssets() async throws -> FiatAssets
     func getSwapAssets() async throws -> FiatAssets
 }
 
@@ -71,9 +73,16 @@ public struct GemAPIService {
 }
 
 extension GemAPIService: GemAPIFiatService {
-    public func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
+    public func getBuyQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
         return try await provider
             .request(.getFiatOnRampQuotes(asset, request))
+            .map(as: FiatQuotes.self)
+            .quotes
+    }
+
+    public func getSellQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
+        return try await provider
+            .request(.getFiatOffRampQuotes(asset, request))
             .map(as: FiatQuotes.self)
             .quotes
     }
@@ -171,10 +180,22 @@ extension GemAPIService: GemAPIAssetsListService {
             .map(as: [String].self)
             .compactMap { try? AssetId(id: $0) }
     }
-    
-    public func getFiatAssets() async throws -> FiatAssets {
+
+    public func getBuyableFiatAssets() async throws -> FiatAssets {
         try await provider
             .request(.getFiatOnRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
+    public func getSellableFiatAssets() async throws -> FiatAssets {
+        try await provider
+            .request(.getFiatOffRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
+    public func getFiatAssets(buy: Bool) async throws -> FiatAssets {
+        try await provider
+            .request(buy ? .getFiatOnRampAssets : .getFiatOffRampAssets)
             .map(as: FiatAssets.self)
     }
     

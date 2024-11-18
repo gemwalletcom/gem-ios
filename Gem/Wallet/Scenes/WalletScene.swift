@@ -41,7 +41,6 @@ struct WalletScene: View {
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     
     let model: WalletSceneViewModel
-//    @State private var selectAssetNavigationPath = NavigationPath()
 
     public init(
         model: WalletSceneViewModel,

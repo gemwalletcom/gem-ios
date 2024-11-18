@@ -6,6 +6,7 @@ import Components
 import Style
 import Localization
 import SwapService
+import FiatConnect
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
@@ -88,11 +89,13 @@ struct SelectAssetSceneNavigationStack: View {
                             walletsService: walletsService
                         )
                     )
-                case .buy:
-                    BuyAssetScene(
-                        model: BuyAssetViewModel(
+                case .buy, .sell:
+                    FiatScene(
+                        model: FiatSceneViewModel(
                             assetAddress: input.assetAddress,
-                            input: .default)
+                            walletId: model.wallet.id,
+                            type: input.fiatType
+                        )
                     )
                 case .manage, .stake, .priceAlert, .swap:
                     EmptyView()

@@ -3,18 +3,24 @@ import Primitives
 import Style
 import Components
 import FiatConnect
+import GRDBQuery
+import Store
 
-struct BuyAssetScene: View {
-    @State private var model: BuyAssetViewModel
+struct FiatScene: View {
     @FocusState private var focusedField: Field?
-
     enum Field: Int, Hashable, Identifiable {
         case amount
         var id: String { String(rawValue) }
     }
 
-    init(model: BuyAssetViewModel) {
+    @Query<AssetRequest>
+    private var assetData: AssetData
+
+    @State private var model: FiatSceneViewModel
+
+    init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
+        _assetData = Query(constant: model.assetRequest)
     }
 
     var body: some View {
@@ -22,10 +28,7 @@ struct BuyAssetScene: View {
             List {
                 CurrencyInputView(
                     text: $model.amountText,
-                    currencySymbol: model.currencySymbol,
-                    currencyPosition: .leading,
-                    secondaryText: model.cryptoAmountValue,
-                    keyboardType: .numberPad
+                    config: model.currencyInputConfig
                 )
                 .padding(.top, Spacing.medium)
                 .listGroupRowStyle()
@@ -65,6 +68,7 @@ struct BuyAssetScene: View {
         .navigationDestination(for: Scenes.FiatProviders.self) { _ in
             FiatProvidersScene(
                 model: FiatProvidersViewModel(
+                    type: model.input.type,
                     asset: model.asset,
                     quotes: model.state.value ?? [],
                     selectQuote: onSelectQuote(_:),
@@ -77,61 +81,45 @@ struct BuyAssetScene: View {
 
 // MARK: - UI Components
 
-extension BuyAssetScene {
+extension FiatScene {
     private var amountSelectorSection: some View {
         Section {
-            HStack(spacing: Spacing.small) {
-                AssetImageView(assetImage: model.assetImage)
+            ListItemFlexibleView(
+                left: {
+                    AssetImageView(assetImage: model.assetImage)
+                },
+                primary: {
+                    VStack(alignment: .leading, spacing: Spacing.tiny) {
+                        Text(model.assetTitle)
+                            .textStyle(.headline.weight(.semibold))
+                        Text(model.assetBalance(assetData: assetData))
+                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                    }
+                },
+                secondary: {
+                    HStack(spacing: Spacing.small + Spacing.extraSmall) {
+                        ForEach(model.suggestedAmounts, id: \.self) { amount in
+                            Button(model.buttonTitle(amount: amount)) {
+                                onSelect(amount: amount)
+                            }
+                            .font(.subheadline.weight(.semibold))
+                            .buttonStyle(.amount())
+                        }
 
-                Text(model.asset.symbol)
-                    .textStyle(.headline.weight(.semibold))
-
-                Spacer()
-
-                HStack(spacing: Spacing.medium) {
-                    ForEach(model.suggestedAmounts, id: \.self) { amount in
-                        Button(model.buttonTitle(amount: amount)) {
-                            onSelect(amount: amount)
+                        Button(model.typeAmountButtonTitle) {
+                            onSelectTypeAmount()
                         }
                         .font(.subheadline.weight(.semibold))
-                        .foregroundStyle(Colors.black)
-                        .padding(.all, Spacing.small)
-                        .background(
-                            RoundedRectangle(cornerRadius: 8)
-                                .foregroundStyle(Colors.grayVeryLight)
-                        )
-                        .buttonStyle(.plain)
-                    }
-
-                    Button(Emoji.random) {
-                        onSelect(amount: model.randomAmount)
-                    }
-                    .font(.subheadline.weight(.semibold))
-                    .padding(.all, Spacing.small)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 12)
-                                         .foregroundStyle(Colors.grayVeryLight)
-
-                            RoundedRectangle(cornerRadius: 12)
-                                .strokeBorder(
-                                    LinearGradient(
-                                        gradient: Gradient(colors: [
-                                            Color(hex: "#2A32FF"),
-                                            Color(hex: "#6CB8FF"),
-                                            Color(hex: "#F213F6"),
-                                            Color(hex: "FFF963")
-                                        ]),
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    ),
-                                    lineWidth: 3
-                                )
+                        .buttonStyle(model.typeAmountButtonStyle)
+                        .if(model.input.type == .buy) {
+                            $0.overlay {
+                                RandomOverlayView()
+                            }
                         }
                     }
-                    .buttonStyle(.plain)
+                    .fixedSize()
                 }
-            }
+            )
         }
     }
 
@@ -166,10 +154,10 @@ extension BuyAssetScene {
 
 // MARK: - Actions
 
-extension BuyAssetScene {
+extension FiatScene {
     private func onTask() async {
         guard model.input.quote == nil else { return }
-        await model.fetch()
+        await model.fetch(for: assetData)
     }
 
     private func onSelectContinue() {
@@ -179,9 +167,12 @@ extension BuyAssetScene {
         UIApplication.shared.open(url, options: [:])
     }
 
-    private func onSelect(amount: Double?) {
-        guard let amount = amount else { return }
-        model.input.amount = amount
+    private func onSelect(amount: Double) {
+        model.select(amount: amount, assetData: assetData)
+    }
+
+    private func onSelectTypeAmount() {
+        model.selectTypeAmount(assetData: assetData)
     }
 
     private func onSelectQuote(_ quote: FiatQuote) {
@@ -189,16 +180,20 @@ extension BuyAssetScene {
     }
 
     private func onChangeAmount(_ amount: Double) async {
-        await model.fetch()
+        await model.fetch(for: assetData)
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    @Previewable @State var model = BuyAssetViewModel(assetAddress: .init(asset: .main, address: .empty), input: .default)
-    return NavigationStack {
-        BuyAssetScene(model: model)
+    @Previewable @State var model = FiatSceneViewModel(
+        assetAddress: .init(asset: .main, address: .empty),
+        walletId: .zero,
+        type: .buy
+    )
+    NavigationStack {
+        FiatScene(model: model)
             .navigationBarTitleDisplayMode(.inline)
     }
 }

@@ -3,6 +3,14 @@
 import SwiftUI
 import Style
 
+public protocol CurrencyInputConfigurable {
+    var placeholder: String { get }
+    var currencySymbol: String { get }
+    var currencyPosition: CurrencyTextField.CurrencyPosition { get }
+    var secondaryText: String { get }
+    var keyboardType: UIKeyboardType { get }
+}
+
 public struct CurrencyInputView: View {
     @Binding var text: String
 
@@ -26,6 +34,16 @@ public struct CurrencyInputView: View {
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
         self.currencyPosition = currencyPosition
+    }
+
+    public init(text: Binding<String>, config: CurrencyInputConfigurable) {
+        self.init(
+            text: text,
+            currencySymbol: config.currencySymbol,
+            currencyPosition: config.currencyPosition,
+            secondaryText: config.secondaryText,
+            keyboardType: config.keyboardType
+        )
     }
 
     public var body: some View {

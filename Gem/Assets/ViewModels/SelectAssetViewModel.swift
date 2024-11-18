@@ -41,6 +41,7 @@ class SelectAssetViewModel {
         case .send: Localized.Wallet.send
         case .receive: Localized.Wallet.receive
         case .buy: Localized.Wallet.buy
+        case .sell: Localized.Wallet.sell
         case .swap(let type):
             switch type {
             case .pay: Localized.Swap.youPay
@@ -71,7 +72,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage, .receive, .buy, .priceAlert:
             await searchAssets(query: query)
-        case .send, .stake, .swap:
+        case .send, .stake, .swap, .sell:
             break
         }
     }
@@ -129,6 +130,7 @@ extension SelectAssetType {
         switch self {
         case .send,
             .buy,
+            .sell,
             .swap,
             .stake: .view
         case .receive: .copy

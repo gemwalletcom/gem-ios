@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Localization
 import SwapService
+import FiatConnect
 
 struct SelectedAssetNavigationStack: View  {
     
@@ -65,11 +66,12 @@ struct SelectedAssetNavigationStack: View  {
                         }.bold()
                     }
                 }
-            case .buy:
-                BuyAssetScene(
-                    model: BuyAssetViewModel(
+            case .buy, .sell:
+                FiatScene(
+                    model: FiatSceneViewModel(
                         assetAddress: selectType.assetAddress,
-                        input: .default
+                        walletId: wallet.id,
+                        type: selectType.fiatType
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)

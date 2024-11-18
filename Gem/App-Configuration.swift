@@ -40,7 +40,7 @@ extension AssetMetaData {
     static let main = AssetMetaData(
         isEnabled: true,
         isBuyEnabled: true,
-        isSellEnabled: false,
+        isSellEnabled: true,
         isSwapEnabled: true,
         isStakeEnabled: false,
         isPinned: false

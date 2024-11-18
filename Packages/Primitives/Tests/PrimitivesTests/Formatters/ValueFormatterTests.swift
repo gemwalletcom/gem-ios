@@ -108,6 +108,8 @@ final class ValueFormatterTests: XCTestCase {
         XCTAssertEqual(try formatter.inputNumber(from: "49.393686762065998369", decimals: 18), BigInt("49393686762065998369"))
         XCTAssertEqual(try formatter.inputNumber(from: "320,000", decimals: 2), 32000000)
         XCTAssertEqual(try formatter.inputNumber(from: "320,000.00", decimals: 2), 32000000)
+        XCTAssertEqual(try formatter.inputNumber(from: "100.18054055999998", decimals: 8), 10018054055)
+        XCTAssertEqual(try formatter.inputNumber(from: "100,18054055999998", decimals: 8), 10018054055)
     }
     
     func testFromInputRU_UA() {
@@ -121,6 +123,8 @@ final class ValueFormatterTests: XCTestCase {
         XCTAssertEqual(try formatter.inputNumber(from: "726'320,82083", decimals: 8), 72632082083000)
         XCTAssertEqual(try formatter.inputNumber(from: "320,000", decimals: 2), 32000)
         XCTAssertEqual(try formatter.inputNumber(from: "320,000.00", decimals: 2), 32000)
+        XCTAssertEqual(try formatter.inputNumber(from: "100.18054055999998", decimals: 8), 10018054055)
+        XCTAssertEqual(try formatter.inputNumber(from: "100,18054055999998", decimals: 8), 10018054055)
     }
     
     func testFromInputBR() {

@@ -4,17 +4,21 @@ import Foundation
 import Primitives
 
 public struct FiatProvidersViewModel {
+    private let formatter: CurrencyFormatter
     private var asset: Asset
     private var quotes: [FiatQuote]
+
+    public let type: FiatTransactionType
     public var selectQuote: ((FiatQuote) -> Void)?
-    private let formatter: CurrencyFormatter
 
     public init(
+        type: FiatTransactionType,
         asset: Asset,
         quotes: [FiatQuote],
         selectQuote: ((FiatQuote) -> Void)? = nil,
         formatter: CurrencyFormatter
     ) {
+        self.type = type
         self.asset = asset
         self.quotes = quotes
         self.selectQuote = selectQuote

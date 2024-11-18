@@ -7,10 +7,12 @@ extension FiatQuote {
     public static func mock(
         fiatAmount: Double = 0,
         cryptoAmount: Double = 0,
+        type: FiatTransactionType = .buy,
         fiatCurrency: String = Currency.usd.rawValue
     ) -> FiatQuote {
         FiatQuote(
             provider: FiatProvider(name: "", imageUrl: ""),
+            type: type,
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,
             cryptoAmount: cryptoAmount,

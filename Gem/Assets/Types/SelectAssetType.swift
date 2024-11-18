@@ -4,6 +4,7 @@ enum SelectAssetType: Identifiable, Hashable {
     case send
     case receive
     case buy
+    case sell
     case swap(SelectAssetSwapType)
     case stake
     case manage
@@ -11,20 +12,14 @@ enum SelectAssetType: Identifiable, Hashable {
 
     var id: String {
         switch self {
-        case .send:
-            return "send"
-        case .receive:
-            return "receive"
-        case .buy:
-            return "buy"
-        case .swap(let type):
-            return "swap_\(type.id)"
-        case .stake:
-            return "stake"
-        case .manage:
-            return "manage"
-        case .priceAlert:
-            return "priceAlert"
+        case .send: "send"
+        case .receive: "receive"
+        case .buy: "buy"
+        case .sell: "sell"
+        case .swap(let type): "swap_\(type.id)"
+        case .stake: "stake"
+        case .manage: "manage"
+        case .priceAlert:"priceAlert"
         }
     }
 }

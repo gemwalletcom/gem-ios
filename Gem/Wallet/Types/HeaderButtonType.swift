@@ -4,6 +4,7 @@ enum HeaderButtonType: String, Identifiable, CaseIterable {
     case send
     case receive
     case buy
+    case sell
     case swap
     
     var id: String { rawValue }
@@ -12,10 +13,11 @@ enum HeaderButtonType: String, Identifiable, CaseIterable {
 extension HeaderButtonType {
     var selectType: SelectAssetType {
         switch self {
-        case .receive: return .receive
-        case .send: return .send
-        case .buy: return .buy
-        case .swap: return .swap(.pay)
+        case .receive: .receive
+        case .send: .send
+        case .buy: .buy
+        case .sell: .sell
+        case .swap: .swap(.pay)
         }
     }
 }

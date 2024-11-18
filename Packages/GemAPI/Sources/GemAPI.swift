@@ -9,6 +9,8 @@ public enum GemAPI: TargetType {
     case getPrices(AssetPricesRequest)
     case getFiatOnRampQuotes(Asset, FiatBuyRequest)
     case getFiatOnRampAssets
+    case getFiatOffRampAssets
+    case getFiatOffRampQuotes(Asset, FiatBuyRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
@@ -43,6 +45,8 @@ public enum GemAPI: TargetType {
         case .getIpAddress,
             .getFiatOnRampQuotes,
             .getFiatOnRampAssets,
+            .getFiatOffRampAssets,
+            .getFiatOffRampQuotes,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -80,6 +84,10 @@ public enum GemAPI: TargetType {
             return "/v1/fiat/on_ramp/quotes/\(asset.id.identifier)"
         case .getFiatOnRampAssets:
             return "/v1/fiat/on_ramp/assets"
+        case .getFiatOffRampAssets:
+            return "/v1/fiat/off_ramp/assets"
+        case .getFiatOffRampQuotes(let asset, _):
+            return "/v1/fiat/off_ramp/quotes/\(asset.id.identifier)"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -119,6 +127,7 @@ public enum GemAPI: TargetType {
         switch self {
         case .getIpAddress,
             .getFiatOnRampAssets,
+            .getFiatOffRampAssets,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -133,11 +142,12 @@ public enum GemAPI: TargetType {
             return .encodable(value)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
-        case .getFiatOnRampQuotes(_, let value):
+        case let .getFiatOffRampQuotes(_, value),
+            let .getFiatOnRampQuotes(_, value):
             return .params([
                 "amount": value.fiatAmount,
                 "currency": value.fiatCurrency,
-                "wallet_address": value.walletAddress,
+                "wallet_address": value.walletAddress
             ])
         case .getCharts(_, let currency, let period):
             return .params([

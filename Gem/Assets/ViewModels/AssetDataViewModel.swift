@@ -44,7 +44,7 @@ struct AssetDataViewModel {
     // price
     
     var isPriceAvailable: Bool {
-        return priceViewModel.isPriceAvailable
+        priceViewModel.isPriceAvailable
     }
     
     var priceAmountText: String {
@@ -84,13 +84,17 @@ struct AssetDataViewModel {
     var hasReservedBalance: Bool {
         balanceViewModel.hasReservedBalance
     }
-    
+
+    var hasAvailableBalance: Bool {
+        balanceViewModel.availableBalanceAmount > 0
+    }
+
     var reservedBalanceTextWithSymbol: String {
         balanceViewModel.reservedBalanceTextWithSymbol
     }
     
     var balanceTextColor: Color {
-        return balanceViewModel.balanceTextColor
+        balanceViewModel.balanceTextColor
     }
     
     var fiatBalanceText: String {
@@ -102,13 +106,17 @@ struct AssetDataViewModel {
     }
     
     var isEnabled: Bool {
-        return assetData.metadata.isEnabled
+        assetData.metadata.isEnabled
     }
     
     var isBuyEnabled: Bool {
-        return assetData.metadata.isBuyEnabled
+        assetData.metadata.isBuyEnabled
     }
-    
+
+    var isSellEnabled: Bool {
+        assetData.metadata.isSellEnabled
+    }
+
     var isSwapEnabled: Bool {
         #if DEBUG
         if let _ = EVMChain(rawValue: assetData.asset.chain.rawValue) {

@@ -37,7 +37,7 @@ struct AssetScene: View {
     private let input: AssetSceneInput
 
     private var model: AssetSceneViewModel {
-        return AssetSceneViewModel(
+        AssetSceneViewModel(
             walletsService: walletsService,
             assetsService: assetsService,
             transactionsService: transactionsService,
@@ -188,12 +188,12 @@ extension AssetScene {
     }
 
     private var stakeView: some View {
-//        NavigationLink(value: Scenes.Stake(chain: model.assetModel.asset.chain, wallet: wallet)) {
-//
-//        }
         NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
             .accessibilityIdentifier("stake")) {
-                isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+                isPresentingAssetSelectType = SelectAssetInput(
+                    type: .stake,
+                    assetAddress: assetData.assetAddress
+                )
             }
     }
 }
@@ -203,7 +203,10 @@ extension AssetScene {
 extension AssetScene {
     @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
-        isPresentingAssetSelectType = SelectAssetInput(type: buttonType.selectType, assetAddress: assetData.assetAddress)
+        isPresentingAssetSelectType = SelectAssetInput(
+            type: buttonType.selectType,
+            assetAddress: assetData.assetAddress
+        )
     }
     
     @MainActor
@@ -234,7 +237,10 @@ extension AssetScene {
         let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake:
-            isPresentingAssetSelectType = SelectAssetInput(type: .stake, assetAddress: assetData.assetAddress)
+            isPresentingAssetSelectType = SelectAssetInput(
+                type: .stake,
+                assetAddress: assetData.assetAddress
+            )
         case .enableNotifications,
             .accountActivation,
             .accountBlockedMultiSignature:

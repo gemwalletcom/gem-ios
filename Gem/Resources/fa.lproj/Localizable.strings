@@ -243,7 +243,6 @@
 "social.coingecko" = "CoinGecko";
 "errors.unable_estimate_network_fee" = "درحال حاضر قادر به محاسبه کارمزد شبکه نیستیم.";
 "errors.invalid_asset_address" = "آدرس %@ نامعتبر است.";
-"buy.empty_amount" = "لطفا مبلغ خرید را وارد کنید.";
 "transaction.title.received" = "دریافت شده.";
 "transaction.title.sent" = "فرستاده شده.";
 "stake.stake" = "استیک کردن.";
@@ -283,7 +282,6 @@
 "swap.price_impact" = "تاثیر قیمت";
 "wallet.sell" = "فروش";
 "sell.title" = "Sell %s";
-"sell.emptyAmount" = "Please enter amount to sell";
 "common.learn_more" = "Learn More";
 "info.network_fee.title" = "کارمزد شبکه";
 "info.watch_wallet.title" = "Watch Wallet";
@@ -292,3 +290,8 @@
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
+"info.lock_time.description" = "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.";
+"input.enter_amount_to" = "Please enter amount to %@";
+"input.buy" = "buy";
+"input.sell" = "sell";
+"input.transfer" = "transfer";
