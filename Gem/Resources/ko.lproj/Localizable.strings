@@ -295,3 +295,5 @@
 "input.buy" = "buy";
 "input.sell" = "sell";
 "input.transfer" = "transfer";
+"settings.balance_privacy" = "Balance Privacy";
+"common.popular" = "인기 있는";

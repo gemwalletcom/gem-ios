@@ -98,6 +98,7 @@ struct Columns {
         static let reserved = Column("reserved")
         static let reservedAmount = Column("reservedAmount")
         static let totalAmount = Column("totalAmount")
+        static let lastUsedAt = Column("lastUsedAt")
         static let updatedAt = Column("updatedAt")
     }
     

@@ -13,6 +13,7 @@ import Transfer
 import Staking
 import StakeService
 import typealias Staking.AmountInputAction
+import InfoSheet
 
 @Observable
 class StakeViewModel {
@@ -65,8 +66,8 @@ class StakeViewModel {
         let date = now.addingTimeInterval(lockTime)
         return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
     }
-    var lockTimeInfoURL: URL {
-        Docs.url(.stakingLockTime)
+    var lockTimeInfoSheet: InfoSheetType {
+        InfoSheetType.stakeLockTime(AssetViewModel(asset: chain.asset).assetImage.placeholder)
     }
 
     var minAmountTitle: String { Localized.Stake.minimumAmount }
@@ -161,10 +162,6 @@ extension StakeViewModel {
         let delegations = delegations.filter { $0.base.rewardsValue > 0 }
         let transferData = claimRewardsTransferData(delegations: delegations)
         onTransferAction?(transferData)
-    }
-
-    func onSelectLockTime() {
-        UIApplication.shared.open(lockTimeInfoURL)
     }
 }
 

@@ -45,6 +45,17 @@ struct SelectAssetScene: View {
 
     var body: some View {
         List {
+            if model.selectType == .buy && !sections.popular.isEmpty {
+                Section {
+                    assetsList(assets: sections.popular)
+                } header: {
+                    HStack {
+                        Image(systemName: SystemImage.starFill)
+                        Text(Localized.Common.popular)
+                    }
+                }
+            }
+            
             if !sections.pinned.isEmpty {
                 Section {
                     assetsList(assets: sections.pinned)
@@ -55,7 +66,7 @@ struct SelectAssetScene: View {
                     }
                 }
             }
-        
+            
             Section {
                 assetsList(assets: sections.assets)
             } footer: {

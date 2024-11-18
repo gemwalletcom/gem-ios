@@ -183,6 +183,8 @@ public enum Localized {
     public static let pin = Localized.tr("Localizable", "common.pin", fallback: "Pin")
     /// Pinned
     public static let pinned = Localized.tr("Localizable", "common.pinned", fallback: "Pinned")
+    /// Popular
+    public static let popular = Localized.tr("Localizable", "common.popular", fallback: "Popular")
     /// Private Key
     public static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
@@ -464,6 +466,8 @@ public enum Localized {
   public enum Settings {
     /// About Us
     public static let aboutus = Localized.tr("Localizable", "settings.aboutus", fallback: "About Us")
+    /// Balance Privacy
+    public static let balancePrivacy = Localized.tr("Localizable", "settings.balance_privacy", fallback: "Balance Privacy")
     /// Community
     public static let community = Localized.tr("Localizable", "settings.community", fallback: "Community")
     /// Currency

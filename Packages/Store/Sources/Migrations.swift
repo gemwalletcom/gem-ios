@@ -127,6 +127,12 @@ public struct Migrations {
                     .indexed()
             }
         }
+        
+        migrator.registerMigration("Add lastUsedAt to \(AssetBalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+                t.add(column: Columns.Balance.lastUsedAt.name, .date)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

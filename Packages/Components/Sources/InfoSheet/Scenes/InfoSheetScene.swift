@@ -17,9 +17,9 @@ public struct InfoSheetScene: View {
         NavigationStack {
             VStack(spacing: Spacing.small) {
                 if model.url != nil {
-                    Spacer()
+                    Spacer(minLength: 0)
                     InfoSheetView(model: model)
-                        .padding(Spacing.small)
+                        .padding(.horizontal, Spacing.small)
                     Spacer()
                     StateButton(
                         text: model.buttonTitle,
