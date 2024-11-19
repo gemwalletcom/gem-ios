@@ -63,7 +63,7 @@ extension Preferences {
 }
 
 extension LocalKeystore {
-    static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .main)
+    @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .main)
 }
 
 extension WalletStore {
@@ -316,11 +316,12 @@ extension ExplorerService {
     static let main = ExplorerService(storage: ExplorerStorage.main)
 }
 
-extension BitcoinFeeCalculatorError: @retroactive LocalizedError {
+extension ChainCoreError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee
         case .incorrectAmount: Localized.Errors.invalidAmount
+        case .dustThreshold(let chain): Localized.Errors.dustThreshold(chain.asset.name)
         }
     }
 }

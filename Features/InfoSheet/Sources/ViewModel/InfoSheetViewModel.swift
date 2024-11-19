@@ -23,13 +23,14 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .networkFee: Docs.url(.networkFees)
         case .transactionState: Docs.url(.transactionStatus)
         case .watchWallet: Docs.url(.whatIsWatchWallet)
+        case .stakeLockTime: Docs.url(.stakingLockTime)
         }
     }
 
     public var title: String {
         switch type {
         case .networkFee: Localized.Info.NetworkFee.title
-        case .transactionState(_, let state):
+        case .transactionState(_,_, let state):
             switch state {
             case .pending: Localized.Transaction.Status.pending
             case .confirmed: Localized.Transaction.Status.confirmed
@@ -37,26 +38,28 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             case .reverted: Localized.Transaction.Status.reverted
             }
         case .watchWallet: Localized.Info.WatchWallet.title
+        case .stakeLockTime: Localized.Stake.lockTime
         }
     }
 
     public var description: String {
         switch type {
         case .networkFee(let chain): Localized.Info.NetworkFee.description(chain.asset.name)
-        case .transactionState(_, let state):
+        case .transactionState(_, _, let state):
             switch state {
             case .pending: Localized.Info.Transaction.Pending.description
             case .confirmed: Localized.Info.Transaction.Success.description
             case .failed, .reverted: Localized.Info.Transaction.Error.description
             }
         case .watchWallet: Localized.Info.WatchWallet.description
+        case .stakeLockTime: Localized.Info.LockTime.description
         }
     }
 
     public var image: InfoSheetImage? {
         switch type {
         case .networkFee: return .image(Images.Info.networkFee)
-        case .transactionState(let imageURL, let state):
+        case .transactionState(let imageURL, let placeholder, let state):
             let stateImage = switch state {
             case .pending: Images.Transaction.State.pending
             case .confirmed: Images.Transaction.State.success
@@ -65,7 +68,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             return .assetImage(
                 AssetImage(
                     imageURL: imageURL,
-                    placeholder: .none,
+                    placeholder: placeholder,
                     chainPlaceholder: stateImage
                 )
             )
@@ -77,6 +80,12 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
                     chainPlaceholder: Images.Wallets.watch
                 )
             )
+        case .stakeLockTime(let image):
+            return .assetImage(AssetImage(
+                imageURL: .none,
+                placeholder: image,
+                chainPlaceholder: .none
+            ))
         }
     }
     

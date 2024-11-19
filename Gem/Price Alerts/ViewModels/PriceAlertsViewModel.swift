@@ -40,7 +40,7 @@ final class PriceAlertsViewModel: Sendable {
 
     func handleAlertsEnabled(enabled: Bool) async {
         if enabled {
-            await pushesUpdate()
+            await notificationPushesUpdate()
         }
         await deviceUpdate()
     }
@@ -74,7 +74,7 @@ final class PriceAlertsViewModel: Sendable {
         }
     }
 
-    private func pushesUpdate() async {
+    private func notificationPushesUpdate() async {
         do {
             preferences.preferences.isPushNotificationsEnabled = try await requestPermissions()
         } catch {

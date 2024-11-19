@@ -10,6 +10,7 @@ import Style
 import Localization
 import ChainService
 import Staking
+import InfoSheet
 
 struct StakeScene: View {
     @Environment(\.keystore) private var keystore
@@ -18,7 +19,8 @@ struct StakeScene: View {
     @Environment(\.stakeService) private var stakeService
 
     @State private var model: StakeViewModel
-
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    
     @Query<StakeDelegationsRequest>
     private var delegations: [Delegation]
     private var delegationsModel: [StakeDelegationViewModel] {
@@ -57,6 +59,9 @@ struct StakeScene: View {
                     onComplete: onComplete
                 )
             )
+        }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
         .taskOnce {
             Task {
@@ -119,7 +124,7 @@ extension StakeScene {
             ListItemView(
                 title: model.lockTimeTitle,
                 subtitle: model.lockTimeValue,
-                infoAction: onOpenLockTimeURL
+                infoAction: onLockTimeAction
             )
         }
     }
@@ -136,8 +141,8 @@ extension StakeScene {
         model.onSelectDelegations(delegations: delegations)
     }
 
-    private func onOpenLockTimeURL() {
-        model.onSelectLockTime()
+    private func onLockTimeAction() {
+        isPresentingInfoSheet =  model.lockTimeInfoSheet
     }
 }
 

@@ -8,32 +8,33 @@ import Style
 import Localization
 
 struct WalletAssetsList: View {
-    @Environment(\.observablePreferences) var observablePreferences
-
     let assets: [AssetData]
     let copyAssetAddress: StringAction
     let hideAsset: AssetIdAction
     let pinAsset: AssetIdBoolAction
 
+    @Binding var showBalancePrivacy: Bool
+
     init(
         assets: [AssetData],
         copyAssetAddress: StringAction,
         hideAsset: @escaping AssetIdAction,
-        pinAsset: AssetIdBoolAction
+        pinAsset: AssetIdBoolAction,
+        showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
         self.copyAssetAddress = copyAssetAddress
         self.hideAsset = hideAsset
         self.pinAsset = pinAsset
+        _showBalancePrivacy = showBalancePrivacy
     }
 
     var body: some View {
-        @Bindable var preferences = observablePreferences
         ForEach(assets) { asset in
             NavigationLink(value: Scenes.Asset(asset: asset.asset)) {
                 ListAssetItemView(
                     model: ListAssetItemViewModel(
-                        showBalancePrivacy: $preferences.isBalancePrivacyEnabled,
+                        showBalancePrivacy: $showBalancePrivacy,
                         assetData: asset,
                         formatter: .short
                     )

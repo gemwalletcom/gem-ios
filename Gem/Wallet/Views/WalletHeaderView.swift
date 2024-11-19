@@ -8,14 +8,14 @@ import InfoSheet
 import Primitives
 
 struct WalletHeaderView: View {
-    @Environment(\.observablePreferences) var observablePreferences
-
     let model: any HeaderViewModel
-    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+
+    @Binding var isBalancePrivacyEnabled: Bool
+
     var onHeaderAction: HeaderButtonAction?
+    var onInfoSheetAction: ((InfoSheetType) -> Void)?
 
     var body: some View {
-        @Bindable var preferences = observablePreferences
         VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
@@ -28,7 +28,7 @@ struct WalletHeaderView: View {
                 if model.showBalancePrivacy {
                     PrivacyToggleView(
                         model.title,
-                        isEnabled: $preferences.isBalancePrivacyEnabled
+                        isEnabled: $isBalancePrivacyEnabled
                     )
                 } else {
                     Text(model.title)
@@ -43,7 +43,7 @@ struct WalletHeaderView: View {
             if let subtitle = model.subtitle {
                 PrivacyText(
                     subtitle,
-                    balancePrivacyEnabled: model.showBalancePrivacy ? $preferences.isBalancePrivacyEnabled : .constant(false)
+                    isEnabled: isEnabled
                 )
                 .font(.system(size: 18))
                 .fontWeight(.semibold)
@@ -77,6 +77,10 @@ struct WalletHeaderView: View {
             }
         }
     }
+
+    private var isEnabled: Binding<Bool> {
+        return model.showBalancePrivacy ? $isBalancePrivacyEnabled : .constant(false)
+    }
 }
 
 // MARK: - Previews
@@ -87,5 +91,11 @@ struct WalletHeaderView: View {
         walletModel: .init(wallet: .main),
         bannersViewModel: HeaderBannersViewModel(banners: [])
     )
-    return WalletHeaderView(model: model, onInfoSheetAction: .none, onHeaderAction: .none)
+
+    WalletHeaderView(
+        model: model,
+        isBalancePrivacyEnabled: .constant(false),
+        onHeaderAction: .none,
+        onInfoSheetAction: .none
+    )
 }

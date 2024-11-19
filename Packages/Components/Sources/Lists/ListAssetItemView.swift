@@ -93,10 +93,10 @@ extension ListAssetItemView {
 
     private func balanceView(balance: TextValue, totalFiat: TextValue) -> some View {
         VStack(alignment: .trailing, spacing: Spacing.tiny) {
-            PrivacyText(balance.text, balancePrivacyEnabled: model.showBalancePrivacy)
+            PrivacyText(balance.text, isEnabled: model.showBalancePrivacy)
                 .textStyle(balance.style)
             if !totalFiat.text.isEmpty {
-                PrivacyText(totalFiat.text, balancePrivacyEnabled: model.showBalancePrivacy)
+                PrivacyText(totalFiat.text, isEnabled: model.showBalancePrivacy)
                     .textStyle(totalFiat.style)
             }
         }

@@ -11,12 +11,12 @@ public struct PrivacyText: View {
 
     public init(
         _ text: String,
-        balancePrivacyEnabled: Binding<Bool>,
+        isEnabled: Binding<Bool>,
         placeholder: String = "*****"
     ) {
         self.text = text
         self.placeholder = placeholder
-        _isEnabled = balancePrivacyEnabled
+        _isEnabled = isEnabled
     }
 
     public var body: some View {

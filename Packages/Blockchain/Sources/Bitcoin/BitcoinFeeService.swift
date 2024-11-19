@@ -27,17 +27,13 @@ extension BitcoinService: ChainFeeCalculateable {
 
     private func getFeeRate(priority: FeePriority) async throws -> FeeRate {
         let blocksFeePriority = Config.shared.config(for: chain).blocksFeePriority
-
         let feePriority = switch priority {
         case .slow: blocksFeePriority.slow
         case .normal: blocksFeePriority.normal
         case .fast: blocksFeePriority.fast
         }
-
-        let fee = try await provider
-            .request(.fee(priority: feePriority.asInt))
-            .map(as: BitcoinFeeResult.self)
-        let rate = try BigInt.from(fee.result, decimals: Int(chain.chain.asset.decimals))
+        let feePriorityValue = try await getFeePriority(for: feePriority.asInt)
+        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals))
         return FeeRate(priority: priority, rate: rate)
     }
 }
@@ -70,11 +66,11 @@ extension BitcoinService {
             utxos: [UTXO]
         ) throws -> Fee {
             guard amount <= BigInt(Int64.max) else {
-                throw BitcoinFeeCalculatorError.incorrectAmount
+                throw ChainCoreError.incorrectAmount
             }
 
             guard let feeRate = feeRates.first(where: { feePriority == $0.priority }) else {
-                throw BitcoinFeeCalculatorError.feeRateMissed
+                throw ChainCoreError.feeRateMissed
             }
 
             let coinType = chain.chain.coinType
@@ -98,10 +94,8 @@ extension BitcoinService {
             }
             let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
 
-            guard plan.error == CommonSigningError.ok else {
-                throw BitcoinFeeCalculatorError.cantEstimateFee
-            }
-
+            try ChainCoreError.fromWalletCore(for: chain.chain, plan.error)
+            
             return Fee(
                 fee: BigInt(plan.fee),
                 gasPriceType: .regular(gasPrice: BigInt(gasPrice)),

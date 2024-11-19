@@ -59,12 +59,11 @@ struct InfoSheetView: View {
                     AssetImageView(
                         assetImage: assetImage,
                         size: Sizing.image.extraLarge,
-                        overlayImageSize: Sizing.image.extraLarge / 3
+                        overlayImageSize: Sizing.image.extraLarge / 2.5
                     )
                 case nil: EmptyView()
                 }
             }
-            
             
             VStack(spacing: Spacing.medium) {
                 Text(title.text)

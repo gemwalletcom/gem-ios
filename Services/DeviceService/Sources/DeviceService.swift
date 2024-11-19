@@ -31,9 +31,6 @@ public final class DeviceService: DeviceServiceable {
     }
     
     public func update() async throws  {
-        #if targetEnvironment(simulator)
-        return
-        #else
         guard let deviceId = try await getOrCreateDeviceId() else { return }
         let device = try await getOrCreateDevice(deviceId)
         let localDevice = try currentDevice(deviceId: deviceId)
@@ -43,7 +40,6 @@ public final class DeviceService: DeviceServiceable {
         if device != localDevice  {
             try await updateDevice(localDevice)
         }
-        #endif
     }
     
     private func getOrCreateDevice(_ deviceId: String) async throws -> Device {
@@ -80,10 +76,16 @@ public final class DeviceService: DeviceServiceable {
     ) throws -> Device {
         let deviceToken = try securePreferences.get(key: .deviceToken) ?? .empty
         let locale = Locale.current.usageLanguageIdentifier()
+        #if targetEnvironment(simulator)
+        let platformStore = PlatformStore.local
+        #else
+        let platformStore = PlatformStore.appStore
+        #endif
+        
         return Device(
             id: deviceId,
             platform: .ios,
-            platformStore: .appStore,
+            platformStore: platformStore,
             token: deviceToken,
             locale: locale,
             version: Bundle.main.releaseVersionNumber,

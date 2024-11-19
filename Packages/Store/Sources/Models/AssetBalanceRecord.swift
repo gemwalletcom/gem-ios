@@ -39,6 +39,7 @@ public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var isHidden: Bool
     public var isPinned: Bool
     
+    public var lastUsedAt: Date?
     public var updatedAt: Date?
 }
 
@@ -77,11 +78,12 @@ extension AssetBalanceRecord: CreateTable {
             
             $0.column(sql: totalAmountSQlCreation)
             
-            $0.column("isEnabled", .boolean).defaults(to: true).indexed()
-            $0.column("isHidden", .boolean).defaults(to: false).indexed()
-            $0.column("isPinned", .boolean).defaults(to: false).indexed()
+            $0.column(Columns.Balance.isEnabled.name, .boolean).defaults(to: true).indexed()
+            $0.column(Columns.Balance.isHidden.name, .boolean).defaults(to: false).indexed()
+            $0.column(Columns.Balance.isPinned.name, .boolean).defaults(to: false).indexed()
             
-            $0.column("updatedAt", .date)
+            $0.column(Columns.Balance.lastUsedAt.name, .date)
+            $0.column(Columns.Balance.updatedAt.name, .date)
             $0.uniqueKey(["assetId", "walletId"])
         }
     }

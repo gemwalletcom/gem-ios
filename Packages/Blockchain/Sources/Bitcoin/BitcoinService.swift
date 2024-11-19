@@ -42,6 +42,12 @@ extension BitcoinService {
             .map(as: [BitcoinUTXO].self)
             .map { $0.mapToUTXO() }
     }
+    
+    func getFeePriority(for blocks: Int) async throws -> String {
+        try await provider
+            .request(.fee(priority: blocks))
+            .map(as: BitcoinFeeResult.self).result
+    }
 }
 
 // MARK: - ChainBalanceable

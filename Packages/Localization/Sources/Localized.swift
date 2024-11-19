@@ -183,6 +183,8 @@ public enum Localized {
     public static let pin = Localized.tr("Localizable", "common.pin", fallback: "Pin")
     /// Pinned
     public static let pinned = Localized.tr("Localizable", "common.pinned", fallback: "Pinned")
+    /// Popular
+    public static let popular = Localized.tr("Localizable", "common.popular", fallback: "Popular")
     /// Private Key
     public static let privateKey = Localized.tr("Localizable", "common.private_key", fallback: "Private Key")
     /// Provider
@@ -237,6 +239,10 @@ public enum Localized {
     public static let decoding = Localized.tr("Localizable", "errors.decoding", fallback: "Decoding Error")
     /// Failed to decode the QR code. Please try again with a different QR code.
     public static let decodingQr = Localized.tr("Localizable", "errors.decoding_qr", fallback: "Failed to decode the QR code. Please try again with a different QR code.")
+    /// The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.
+    public static func dustThreshold(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.dust_threshold", String(describing: p1), fallback: "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.")
+    }
     /// Error
     public static let error = Localized.tr("Localizable", "errors.error", fallback: "Error")
     /// An error occurred!
@@ -437,6 +443,16 @@ public enum Localized {
     }
     /// Your Receiving Address
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
+  }
+  public enum Rootcheck {
+    /// Your device appears to be rooted. This may compromise the security of the app.
+    public static let body = Localized.tr("Localizable", "rootcheck.body", fallback: "Your device appears to be rooted. This may compromise the security of the app.")
+    /// Exit
+    public static let exit = Localized.tr("Localizable", "rootcheck.exit", fallback: "Exit")
+    /// Ignore
+    public static let ignore = Localized.tr("Localizable", "rootcheck.ignore", fallback: "Ignore")
+    /// Security Alert
+    public static let securityAlert = Localized.tr("Localizable", "rootcheck.security_alert", fallback: "Security Alert")
   }
   public enum SecretPhrase {
     /// Save your Secret Phrase in a secure place 
