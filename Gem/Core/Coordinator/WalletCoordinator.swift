@@ -181,6 +181,7 @@ struct WalletCoordinator: View {
                 .environment(\.notificationService, notificationService)
                 .environment(\.chainServiceFactory, chainServiceFactory)
                 .environment(\.navigationState, navigationState)
+                .environment(\.observablePreferences, .default)
             } else {
                 IntroNavigationView()
             }

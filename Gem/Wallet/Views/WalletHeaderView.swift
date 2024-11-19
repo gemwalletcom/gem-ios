@@ -8,11 +8,13 @@ import InfoSheet
 import Primitives
 
 struct WalletHeaderView: View {
-    
     let model: any HeaderViewModel
-    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+
+    @Binding var isBalancePrivacyEnabled: Bool
+
     var onHeaderAction: HeaderButtonAction?
-    
+    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+
     var body: some View {
         VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
@@ -22,21 +24,32 @@ struct WalletHeaderView: View {
                     overlayImageSize: 26
                 )
             }
-            
-            Text(model.title)
-                .minimumScaleFactor(0.5)
-                .font(.system(size: 42))
-                .fontWeight(.semibold)
-                .foregroundColor(Colors.black)
-                .lineLimit(1)
-                
-            if let subtitle = model.subtitle {
-                Text(subtitle)
-                    .font(.system(size: 18))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Colors.gray)
+            ZStack {
+                if model.showBalancePrivacy {
+                    PrivacyToggleView(
+                        model.title,
+                        isEnabled: $isBalancePrivacyEnabled
+                    )
+                } else {
+                    Text(model.title)
+                }
             }
-            
+            .minimumScaleFactor(0.5)
+            .font(.system(size: 42))
+            .fontWeight(.semibold)
+            .foregroundStyle(Colors.black)
+            .lineLimit(1)
+
+            if let subtitle = model.subtitle {
+                PrivacyText(
+                    subtitle,
+                    isEnabled: isEnabled
+                )
+                .font(.system(size: 18))
+                .fontWeight(.semibold)
+                .foregroundStyle(Colors.gray)
+            }
+
             switch model.isWatchWallet {
             case true:
                 Button {
@@ -44,11 +57,11 @@ struct WalletHeaderView: View {
                 } label: {
                     HStack {
                         Image(systemName: SystemImage.eye)
-                        
+
                         Text(Localized.Wallet.Watch.Tooltip.title)
                             .foregroundColor(Colors.black)
                             .font(.callout)
-                        
+
                         Image(systemName: SystemImage.info)
                             .tint(Colors.black)
                     }
@@ -57,12 +70,16 @@ struct WalletHeaderView: View {
                     .cornerRadius(Spacing.medium)
                     .padding(.top, Spacing.medium)
                 }
-                
+
             case false:
                 HeaderButtonsView(buttons: model.buttons, action: onHeaderAction)
                     .padding(.top, Spacing.small)
             }
         }
+    }
+
+    private var isEnabled: Binding<Bool> {
+        return model.showBalancePrivacy ? $isBalancePrivacyEnabled : .constant(false)
     }
 }
 
@@ -74,5 +91,11 @@ struct WalletHeaderView: View {
         walletModel: .init(wallet: .main),
         bannersViewModel: HeaderBannersViewModel(banners: [])
     )
-    return WalletHeaderView(model: model, onInfoSheetAction: .none, onHeaderAction: .none)
+
+    WalletHeaderView(
+        model: model,
+        isBalancePrivacyEnabled: .constant(false),
+        onHeaderAction: .none,
+        onInfoSheetAction: .none
+    )
 }

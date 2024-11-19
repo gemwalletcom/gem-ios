@@ -151,6 +151,7 @@ private struct ListAssetItemSelectionView: View {
     var body: some View {
         ListAssetItemView(
             model: ListAssetItemViewModel(
+                showBalancePrivacy: .constant(false),
                 assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .short),
                 type: type,
                 action: {

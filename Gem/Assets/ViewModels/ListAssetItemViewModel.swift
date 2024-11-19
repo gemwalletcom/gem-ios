@@ -13,24 +13,26 @@ enum AssetListType {
 }
 
 struct ListAssetItemViewModel: ListAssetItemViewable {
-
+    let showBalancePrivacy: Binding<Bool>
     let assetDataModel: AssetDataViewModel
     let type: AssetListType
     var action: ((ListAssetItemAction) -> Void)?
 
     init(
+        showBalancePrivacy: Binding<Bool>,
         assetDataModel: AssetDataViewModel,
         type: AssetListType = .wallet,
         action: (((ListAssetItemAction)) -> Void)? = nil
     ) {
+        self.showBalancePrivacy = showBalancePrivacy
         self.assetDataModel = assetDataModel
         self.type = type
         self.action = action
     }
 
-    init(assetData: AssetData, formatter: ValueFormatter) {
+    init(showBalancePrivacy: Binding<Bool>, assetData: AssetData, formatter: ValueFormatter) {
         let model = AssetDataViewModel(assetData: assetData, formatter: formatter)
-        self.init(assetDataModel: model, type: .wallet, action: nil)
+        self.init(showBalancePrivacy: showBalancePrivacy, assetDataModel: model, type: .wallet, action: nil)
     }
 
     var name: String {

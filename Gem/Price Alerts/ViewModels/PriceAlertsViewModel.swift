@@ -1,19 +1,19 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
+import SwiftUI
 import Store
 import Primitives
 import Localization
 import PriceAlertService
 
-struct PriceAlertsViewModel {
-
-    let preferences: Preferences
+@Observable
+final class PriceAlertsViewModel: Sendable {
+    private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
     private let priceService: PriceService
 
     init(
-        preferences: Preferences = Preferences.standard,
+        preferences: ObservablePreferences = .default,
         priceAlertService: PriceAlertService,
         priceService: PriceService
     ) {
@@ -22,44 +22,27 @@ struct PriceAlertsViewModel {
         self.priceService = priceService
     }
 
-    var title: String {
-        Localized.Settings.PriceAlerts.title
-    }
-
-    var enableTitle: String {
-        Localized.Settings.enableValue("")
-    }
+    var title: String { Localized.Settings.PriceAlerts.title }
+    var enableTitle: String { Localized.Settings.enableValue("") }
 
     var request: PriceAlertsRequest {
         PriceAlertsRequest()
     }
 
     var isPriceAlertsEnabled: Bool {
-        preferences.isPriceAlertsEnabled
-    }
-
-    func onPriceAlertsEnabled(newValue: Bool) async {
-        preferences.isPriceAlertsEnabled = newValue
-
-        switch newValue {
-        case true:
-            Task {
-                preferences.isPushNotificationsEnabled = try await requestPermissions()
-                try await deviceUpdate()
-            }
-        case false:
-            Task {
-                try await deviceUpdate()
-            }
+        get {
+            preferences.isPriceAlertsEnabled
+        }
+        set {
+            preferences.isPriceAlertsEnabled = newValue
         }
     }
 
-    func requestPermissions() async throws -> Bool {
-        try await priceAlertService.requestPermissions()
-    }
-
-    func deviceUpdate() async throws {
-        try await priceAlertService.deviceUpdate()
+    func handleAlertsEnabled(enabled: Bool) async {
+        if enabled {
+            await updateNotifications()
+        }
+        await deviceUpdate()
     }
 
     func fetch() async {
@@ -86,8 +69,28 @@ struct PriceAlertsViewModel {
     func deletePriceAlert(assetId: AssetId) async {
         do {
             try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
-        }catch {
+        } catch {
             NSLog("deletePriceAlert error: \(error)")
         }
+    }
+
+    private func updateNotifications() async {
+        do {
+            preferences.preferences.isPushNotificationsEnabled = try await requestPermissions()
+        } catch {
+            NSLog("pushesUpdate error: \(error)")
+        }
+    }
+
+    private func deviceUpdate() async {
+        do {
+            try await priceAlertService.deviceUpdate()
+        } catch {
+            NSLog("deviceUpdate error: \(error)")
+        }
+    }
+
+    private func requestPermissions() async throws -> Bool {
+        try await priceAlertService.requestPermissions()
     }
 }

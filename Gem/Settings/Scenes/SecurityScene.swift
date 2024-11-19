@@ -11,24 +11,29 @@ struct SecurityScene: View {
     init(model: SecurityViewModel) {
         self.model = model
     }
-    
+
     var body: some View {
         List {
-            Toggle(model.authenticationTitle, isOn: $model.isEnabled)
-            .toggleStyle(AppToggleStyle())
+            Section {
+                Toggle(model.authenticationTitle, isOn: $model.isEnabled)
+                    .toggleStyle(AppToggleStyle())
 
-            if model.isEnabled {
-                NavigationLink(value: model.lockPeriodModel.selectedPeriod) {
-                    ListItemView(
-                        title: model.lockPeriodModel.title,
-                        subtitle: model.lockPeriodModel.selectedPeriod.title
-                    )
+                if model.isEnabled {
+                    NavigationLink(value: model.lockPeriodModel.selectedPeriod) {
+                        ListItemView(
+                            title: model.lockPeriodModel.title,
+                            subtitle: model.lockPeriodModel.selectedPeriod.title
+                        )
+                    }
+
+                    Toggle(model.privacyLockTitle, isOn: $model.isPrivacyLockEnabled)
+                        .toggleStyle(AppToggleStyle())
                 }
             }
 
-            if model.isEnabled {
-                Toggle(model.privacyLockTitle, isOn: $model.isPrivacyLockEnabled)
-                .toggleStyle(AppToggleStyle())
+            Section {
+                Toggle(model.balacePrivacyTitle, isOn: $model.isBalancePrivacyEnabled)
+                    .toggleStyle(AppToggleStyle())
             }
         }
         .onChange(of: model.isEnabled, onToggleBiometrics)

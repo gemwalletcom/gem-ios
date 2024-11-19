@@ -4,9 +4,10 @@ import Foundation
 import Components
 import Primitives
 import Style
+import SwiftUI
 
 struct PriceAlertItemViewModel: ListAssetItemViewable {
-
+    var showBalancePrivacy: Binding<Bool> { .constant(false) }
     let data: PriceAlertData
 
     var name: String { data.asset.name }

@@ -71,8 +71,9 @@ struct AssetScene: View {
             Section { } header: {
                 WalletHeaderView(
                     model: model.headerModel,
-                    onInfoSheetAction: onInfoSheetAction,
-                    onHeaderAction: onSelectHeader(_:)
+                    isBalancePrivacyEnabled: .constant(false),
+                    onHeaderAction: onSelectHeader(_:),
+                    onInfoSheetAction: onInfoSheetAction
                 )
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)

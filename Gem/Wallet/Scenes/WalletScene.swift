@@ -21,6 +21,7 @@ struct WalletScene: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.observablePreferences) private var observablePreferences
 
     @Query<TotalValueRequest>
     private var totalFiatValue: Double
@@ -62,6 +63,8 @@ struct WalletScene: View {
     }
 
     var body: some View {
+        @Bindable var preferences = observablePreferences
+
         List {
            Section { } header: {
                 WalletHeaderView(
@@ -69,8 +72,9 @@ struct WalletScene: View {
                         walletType: model.wallet.type,
                         value: totalFiatValue
                     ),
-                    onInfoSheetAction: onInfoSheetAction,
-                    onHeaderAction: onHeaderAction
+                    isBalancePrivacyEnabled: $preferences.isBalancePrivacyEnabled,
+                    onHeaderAction: onHeaderAction,
+                    onInfoSheetAction: onInfoSheetAction
                 )
                 .padding(.top, Spacing.small)
             }
@@ -95,7 +99,8 @@ struct WalletScene: View {
                         hideAsset: { try? model.hideAsset($0) },
                         pinAsset: { (assetId, value) in
                             try? model.pinAsset(assetId, value: value)
-                        }
+                        },
+                        showBalancePrivacy: $preferences.isBalancePrivacyEnabled
                     )
                 } header: {
                     HStack {
@@ -116,7 +121,8 @@ struct WalletScene: View {
                     },
                     pinAsset: { (assetId, value) in
                         try? model.pinAsset(assetId, value: value)
-                    }
+                    },
+                    showBalancePrivacy: $preferences.isBalancePrivacyEnabled
                 )
             } footer: {
                 ListButton(
