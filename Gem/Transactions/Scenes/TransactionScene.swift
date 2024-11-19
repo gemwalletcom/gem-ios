@@ -64,13 +64,9 @@ struct TransactionScene: View {
                     if model.showMemoField {
                         MemoListItem(memo: model.memo)
                     }
-                    if model.openNetwork {
-                        NavigationLink(value: Scenes.Asset(asset: model.model.transaction.asset.chain.asset)) {
-                            networkView
-                        }
-                    } else {
-                        networkView
-                    }
+
+                    networkView
+
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
