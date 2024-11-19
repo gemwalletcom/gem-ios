@@ -69,10 +69,6 @@ struct TransactionDetailViewModel {
         }
     }
 
-    var openNetwork: Bool {
-        model.transaction.asset.type != .native
-    }
-
     var amountTitle: String {
         switch model.transaction.transaction.type {
         case .transfer, 
