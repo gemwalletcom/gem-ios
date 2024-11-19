@@ -1,6 +1,8 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 
-enum SelectAssetType: Identifiable, Hashable {
+public enum SelectAssetType: Identifiable, Hashable {
     case send
     case receive
     case buy
@@ -10,7 +12,7 @@ enum SelectAssetType: Identifiable, Hashable {
     case manage
     case priceAlert
 
-    var id: String {
+    public var id: String {
         switch self {
         case .send: "send"
         case .receive: "receive"
@@ -24,12 +26,11 @@ enum SelectAssetType: Identifiable, Hashable {
     }
 }
 
-
-enum SelectAssetSwapType: String, Identifiable, Hashable {
+public enum SelectAssetSwapType: String, Identifiable, Hashable {
     case pay
     case receive
     
-    var id: String {
+    public var id: String {
         return rawValue
     }
 }

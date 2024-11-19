@@ -4,12 +4,20 @@ import Foundation
 import SwiftUI
 import Style
 
-struct SwapChangeView: View {
+public struct SwapChangeView: View {
     
     @Binding var fromId: String?
     @Binding var toId: String?
     
-    var body: some View {
+    public init(
+        fromId: Binding<String?> = .constant(.none),
+        toId: Binding<String?> = .constant(.none)
+    ) {
+        _fromId = fromId
+        _toId = toId
+    }
+    
+    public var body: some View {
         Button {
             swap(&fromId, &toId)
         } label: {

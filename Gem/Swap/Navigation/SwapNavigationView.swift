@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import SwapService
 import ChainService
+import class Swap.SwapPairSelectorViewModel
 
 struct SwapNavigationView: View {
     @Environment(\.keystore) private var keystore
@@ -117,8 +118,14 @@ extension SwapNavigationView {
     private func onSelectAssetComplete(type: SelectAssetSwapType, asset: Asset) {
         switch type {
         case .pay:
+            if asset.id == pairSelectorModel.toAssetId {
+                pairSelectorModel.toAssetId = pairSelectorModel.fromAssetId
+            }
             pairSelectorModel.fromAssetId = asset.id
         case .receive:
+            if asset.id == pairSelectorModel.fromAssetId {
+                pairSelectorModel.fromAssetId = pairSelectorModel.toAssetId
+            }
             pairSelectorModel.toAssetId = asset.id
         }
         isPresentingAssetSwapType = .none

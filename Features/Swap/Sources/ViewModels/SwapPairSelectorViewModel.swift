@@ -4,11 +4,11 @@ import Foundation
 import Primitives
 
 @Observable
-class SwapPairSelectorViewModel {
-    var fromAssetId: AssetId?
-    var toAssetId: AssetId?
+public class SwapPairSelectorViewModel {
+    public var fromAssetId: AssetId?
+    public var toAssetId: AssetId?
     
-    init(
+    public init(
         fromAssetId: AssetId?,
         toAssetId: AssetId?
     ) {

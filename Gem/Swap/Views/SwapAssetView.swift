@@ -4,6 +4,7 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import Swap
 
 struct SwapTokenView: View {
     
@@ -59,16 +60,6 @@ struct SwapTokenView: View {
         }
     }
     var chevronView: some View {
-        Images.Actions.receive
-            .colorMultiply(Colors.gray)
-            .frame(width: 12, height: 12)
-            .opacity(0.8)
-    }
-}
-
-struct SwapChevronView: View {
-    
-    var body: some View {
         Images.Actions.receive
             .colorMultiply(Colors.gray)
             .frame(width: 12, height: 12)
