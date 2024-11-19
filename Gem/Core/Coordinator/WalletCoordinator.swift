@@ -50,7 +50,7 @@ struct WalletCoordinator: View {
     
     let preferences = Preferences()
     let onstartService: OnstartAsyncService
-    let navigationState: NavigationStateManager = NavigationStateManager.defaultValue
+    let navigationState: NavigationStateManager = .main
 
     @State var isPresentingError: String? = .none
     @State private var updateAvailableAlertSheetMessage: String? = .none
