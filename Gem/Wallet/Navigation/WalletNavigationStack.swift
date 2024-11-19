@@ -32,24 +32,24 @@ struct WalletNavigationStack: View {
                 isPresentingSelectType: $isPresentingSelectType
             )
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Scenes.Asset.self) { asset in
+            .navigationDestination(for: Scenes.Asset.self) {
                 AssetNavigationView(
                     wallet: model.wallet,
-                    assetId: asset.asset.id,
+                    assetId: $0.asset.id,
                     isPresentingAssetSelectType: $isPresentingAssetSelectType
                 )
             }
-            .navigationDestination(for: TransactionExtended.self) { transaction in
+            .navigationDestination(for: TransactionExtended.self) {
                 TransactionScene(
-                    input: TransactionSceneInput(transactionId: transaction.id, walletId: model.wallet.walletId)
+                    input: TransactionSceneInput(transactionId: $0.id, walletId: model.wallet.walletId)
                 )
             }
-            .navigationDestination(for: Scenes.Price.self) { scene in
+            .navigationDestination(for: Scenes.Price.self) {
                 ChartScene(
                     model: ChartsViewModel(
                         priceService: walletsService.priceService,
                         assetsService: walletsService.assetsService,
-                        assetModel: AssetViewModel(asset: scene.asset)
+                        assetModel: AssetViewModel(asset: $0.asset)
                     )
                 )
             }
@@ -65,9 +65,9 @@ struct WalletNavigationStack: View {
                     isPresentingSelectType: $isPresentingSelectType
                 )
             }
-            .sheet(item: $isPresentingAssetSelectType) { selectType in
+            .sheet(item: $isPresentingAssetSelectType) {
                 SelectedAssetNavigationStack(
-                    selectType: selectType,
+                    selectType: $0,
                     wallet: model.wallet,
                     isPresentingAssetSelectType: $isPresentingAssetSelectType
                 )
