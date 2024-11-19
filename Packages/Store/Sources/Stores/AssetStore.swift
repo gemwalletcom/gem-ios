@@ -101,9 +101,12 @@ public struct AssetStore: Sendable {
                 assignments.append(contentsOf: [
                     Columns.Asset.rank.set(to: details.isBuyable),
                     Columns.Asset.isBuyable.set(to: details.isBuyable),
-                    Columns.Asset.isSellable.set(to: details.isSellable),
-                    //Columns.Asset.isSwappable.set(to: details.isSwapable), //TODO: no longer defined by the backend
                     Columns.Asset.isStakeable.set(to: details.isStakeable),
+                    //TODO: no longer defined by the backend
+                    /*
+                    Columns.Asset.isSellable.set(to: details.isSellable),
+                    Columns.Asset.isSwappable.set(to: details.isSwapable),
+                     */
                 ])
             }
             
