@@ -50,7 +50,6 @@ public final class SwapService {
                 preferredProviders: []
             )
         )
-        
         return try await swapper.fetchQuote(request: swapRequest)
     }
     

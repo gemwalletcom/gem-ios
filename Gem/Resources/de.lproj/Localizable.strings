@@ -298,3 +298,11 @@
 "settings.balance_privacy" = "Balance Privacy";
 "common.popular" = "Beliebt";
 "errors.dust_threshold" = "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.";
+"rootcheck.security_alert" = "Security Alert";
+"rootcheck.body" = "Your device appears to be rooted. This may compromise the security of the app.";
+"rootcheck.ignore" = "Ignore";
+"rootcheck.exit" = "Exit";
+"errors.swap.no_quote_available" = "No quote available.";
+"errors.swap.not_supported_chain" = "Not supported chain.";
+"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_pair" = "Not supported pair.";
