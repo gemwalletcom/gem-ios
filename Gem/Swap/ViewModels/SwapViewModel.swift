@@ -22,6 +22,9 @@ import struct Gemstone.PermitSingle
 import struct Gemstone.Permit2Data
 import struct Gemstone.Permit2Detail
 import func Gemstone.permit2DataToEip712Json
+import class Swap.SwapPairSelectorViewModel
+import struct Swap.SwapAvailabilityResult
+import struct Swap.ErrorWrapper
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
@@ -199,7 +202,7 @@ extension SwapViewModel {
         } catch {
             await MainActor.run { [self] in
                 if !error.isCancelled {
-                    self.swapAvailabilityState = .error(error)
+                    self.swapAvailabilityState = .error(ErrorWrapper(error))
                     NSLog("fetch asset data error: \(error)")
                 }
             }
@@ -242,7 +245,7 @@ extension SwapViewModel {
                 }
             }
         } catch {
-            swapAvailabilityState = .error(error)
+            swapAvailabilityState = .error(ErrorWrapper(error))
         }
     }
     

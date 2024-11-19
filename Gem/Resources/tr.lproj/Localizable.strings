@@ -302,3 +302,7 @@
 "rootcheck.body" = "Your device appears to be rooted. This may compromise the security of the app.";
 "rootcheck.ignore" = "Ignore";
 "rootcheck.exit" = "Exit";
+"errors.swap.no_quote_available" = "No quote available.";
+"errors.swap.not_supported_chain" = "Not supported chain.";
+"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_pair" = "Not supported pair.";

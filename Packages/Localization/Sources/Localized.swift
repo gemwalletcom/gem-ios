@@ -294,8 +294,16 @@ public enum Localized {
       }
     }
     public enum Swap {
+      /// No quote available.
+      public static let noQuoteAvailable = Localized.tr("Localizable", "errors.swap.no_quote_available", fallback: "No quote available.")
       /// No quote data
       public static let noQuoteData = Localized.tr("Localizable", "errors.swap.no_quote_data", fallback: "No quote data")
+      /// Not supported asset.
+      public static let notSupportedAsset = Localized.tr("Localizable", "errors.swap.not_supported_asset", fallback: "Not supported asset.")
+      /// Not supported chain.
+      public static let notSupportedChain = Localized.tr("Localizable", "errors.swap.not_supported_chain", fallback: "Not supported chain.")
+      /// Not supported pair.
+      public static let notSupportedPair = Localized.tr("Localizable", "errors.swap.not_supported_pair", fallback: "Not supported pair.")
     }
     public enum Token {
       /// Invalid Token ID

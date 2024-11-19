@@ -9,6 +9,8 @@ import Style
 import BigInt
 import Keystore
 import ChainService
+import struct Swap.SwapTokenEmptyView
+import struct Swap.SwapChangeView
 
 struct SelectSwapAssetId: Hashable {
     let type: SelectAssetSwapType
