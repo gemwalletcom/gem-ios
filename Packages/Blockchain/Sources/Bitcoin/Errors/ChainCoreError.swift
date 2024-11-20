@@ -12,7 +12,8 @@ public enum ChainCoreError: Error {
     
     static func fromWalletCore(for chain: Chain, _ error: CommonSigningError) throws {
         let chainError: ChainCoreError? = switch error {
-        case .errorDustAmountRequested: ChainCoreError.dustThreshold(chain: chain)
+        case .errorDustAmountRequested,
+            .errorNotEnoughUtxos: ChainCoreError.dustThreshold(chain: chain)
         case .ok: .none
         default: ChainCoreError.cantEstimateFee
         }

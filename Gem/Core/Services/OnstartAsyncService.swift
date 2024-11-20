@@ -72,11 +72,13 @@ class OnstartAsyncService {
 
             let config = try await configService.getConfig()
             let versions = config.versions
-            if versions.fiatAssets > preferences.fiatAssetsVersion {
+            if versions.fiatOnRampAssets > preferences.fiatOnRampAssetsVersion || versions.fiatOffRampAssets > preferences.fiatOffRampAssetsVersion {
                 Task {
                     do {
                         try await service.updateFiatAssets()
-                        NSLog("Update fiat assets version: \(versions.fiatAssets)")
+                        NSLog(
+                            "Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)"
+                        )
                     } catch {
                         NSLog("Update fiat assets error: \(error)")
                     }

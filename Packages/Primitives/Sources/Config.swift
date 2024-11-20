@@ -55,11 +55,13 @@ public struct Release: Codable, Sendable {
 }
 
 public struct ConfigVersions: Codable, Sendable {
-	public let fiatAssets: Int32
+	public let fiatOnRampAssets: Int32
+	public let fiatOffRampAssets: Int32
 	public let swapAssets: Int32
 
-	public init(fiatAssets: Int32, swapAssets: Int32) {
-		self.fiatAssets = fiatAssets
+	public init(fiatOnRampAssets: Int32, fiatOffRampAssets: Int32, swapAssets: Int32) {
+		self.fiatOnRampAssets = fiatOnRampAssets
+		self.fiatOffRampAssets = fiatOffRampAssets
 		self.swapAssets = swapAssets
 	}
 }

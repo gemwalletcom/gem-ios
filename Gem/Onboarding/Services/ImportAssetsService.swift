@@ -57,9 +57,10 @@ struct ImportAssetsService {
 
         _ = try await (prefetchResult, setBuyableResult, setSellableResult)
 
-        preferences.fiatAssetsVersion = Int(max(buyAssets.version, sellAssets.version))
+        preferences.fiatOnRampAssetsVersion = Int(buyAssets.version)
+        preferences.fiatOffRampAssetsVersion = Int(sellAssets.version)
     }
-
+    
     func updateSwapAssets() async throws {
         let assets = try await assetListService.getSwapAssets()
 

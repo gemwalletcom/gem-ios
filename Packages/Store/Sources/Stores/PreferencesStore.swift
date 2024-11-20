@@ -35,8 +35,11 @@ public final class Preferences: @unchecked Sendable {
     @UserDefault(defaults: .standard, key: "local_assets_version", defaultValue: 0)
     public var localAssetsVersion: Int
     
-    @UserDefault(defaults: .standard, key: "fiat_assets_version", defaultValue: 0)
-    public var fiatAssetsVersion: Int
+    @UserDefault(defaults: .standard, key: "fiat_on_ramp_assets_version", defaultValue: 0)
+    public var fiatOnRampAssetsVersion: Int
+    
+    @UserDefault(defaults: .standard, key: "fiat_off_ramp_assets_version", defaultValue: 0)
+    public var fiatOffRampAssetsVersion: Int
     
     @UserDefault(defaults: .standard, key: "swap_assets_version", defaultValue: 0)
     public var swapAssetsVersion: Int
