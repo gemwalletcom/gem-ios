@@ -36,7 +36,7 @@ public final class SwapService {
         swapper.supportedChains().compactMap { Chain(rawValue: $0) }
     }
     
-    public func getQuote(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String) async throws -> [Gemstone.SwapQuote] {
+    public func getQuotes(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String) async throws -> [Gemstone.SwapQuote] {
         let swapRequest = Gemstone.SwapQuoteRequest(
             fromAsset: fromAsset.identifier,
             toAsset: toAsset.identifier,

@@ -297,12 +297,15 @@ extension SwapViewModel {
     private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
         let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
         let walletAddress = try wallet.account(for: toAsset.chain).address
-        let quotes = try await swapService.getQuote(
+        let quotes = try await swapService.getQuotes(
             fromAsset: fromAsset.id,
             toAsset: toAsset.id,
             value: value.description,
             walletAddress: walletAddress
-        )
+        ).sorted {
+            try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)
+        }
+        
         guard let quote = quotes.first else {
             throw AnyError("No quotes")
         }
@@ -322,7 +325,11 @@ extension SwapViewModel {
                 value: data.value,
                 nonce: data.permit2Nonce
             )
-            let permit2JSON = try Gemstone.permit2DataToEip712Json(chain: chain.rawValue, data: permit2Single)
+            let permit2JSON = try Gemstone.permit2DataToEip712Json(
+                chain: chain.rawValue,
+                data: permit2Single,
+                contract: data.permit2Contract
+            )
             let signer = Signer(wallet: wallet, keystore: keystore)
             let signature = try signer.signMessage(
                 chain: chain,
