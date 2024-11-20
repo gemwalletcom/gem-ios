@@ -16,6 +16,7 @@ import Transfer
 import ChainService
 import BannerService
 import StakeService
+import NotificationService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -78,7 +79,7 @@ extension AssetsService {
     static let main = AssetsService(
         assetStore: .main,
         balanceStore: .main, 
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
@@ -93,14 +94,14 @@ extension ChartService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
 extension StakeService {
     static let main = StakeService(
         store: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
@@ -112,7 +113,7 @@ extension TransactionService {
     static let main = TransactionService(
         transactionStore: .main,
         stakeService: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main),
+        chainServiceFactory: .main,
         balanceUpdater: BalanceService.main
     )
 }
@@ -120,7 +121,7 @@ extension TransactionService {
 extension DiscoverAssetsService {
     static let main = DiscoverAssetsService(
         balanceService: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
@@ -210,7 +211,7 @@ extension ConnectionsService {
 }
 
 extension AddressStatusService {
-    static let main = AddressStatusService(chainServiceFactory: .init(nodeProvider: NodeService.main))
+    static let main = AddressStatusService(chainServiceFactory: .main)
 }
 
 extension BannerSetupService {
@@ -324,4 +325,16 @@ extension ChainCoreError: @retroactive LocalizedError {
         case .dustThreshold(let chain): Localized.Errors.dustThreshold(chain.asset.name)
         }
     }
+}
+
+extension ChainServiceFactory {
+    static let main = ChainServiceFactory(nodeProvider: NodeService.main)
+}
+
+extension BannerService {
+    static let main = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService(preferences: .main))
+}
+
+extension NavigationStateManager {
+    static let main = NavigationStateManager(initialSelecedTab: .wallet)
 }
