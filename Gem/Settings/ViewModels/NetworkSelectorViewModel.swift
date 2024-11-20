@@ -28,7 +28,7 @@ struct NetworkSelectorViewModel {
     var doneButtonTitle: String { Localized.Common.done }
     var noResultsTitle: String { Localized.Common.noResultsFound }
 
-    var noResultsImage: Image { Image(systemName: SystemImage.searchNoResults) }
+    var noResultsImage: Image { Images.System.searchNoResults }
 }
 
 // MARK: - Business Logic

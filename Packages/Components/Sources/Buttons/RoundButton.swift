@@ -46,8 +46,8 @@ public struct RoundButton: View {
 struct RoundButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            RoundButton(title: "Buy", image: Image(systemName: SystemImage.eyeglasses))
-            RoundButton(title: "Swap", image: Image(systemName: SystemImage.share))
+            RoundButton(title: "Buy", image: Images.System.eyeglasses)
+            RoundButton(title: "Swap", image: Images.System.share)
         }
     }
 }

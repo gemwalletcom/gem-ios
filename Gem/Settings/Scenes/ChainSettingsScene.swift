@@ -83,7 +83,7 @@ struct ChainSettingsScene: View {
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
                 Button(action: onSelectImportNode) {
-                    Image(systemName: SystemImage.plus)
+                    Images.System.plus
                         .font(.body.weight(.semibold))
                 }
             }

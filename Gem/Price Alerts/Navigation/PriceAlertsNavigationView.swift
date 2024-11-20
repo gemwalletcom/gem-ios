@@ -25,7 +25,7 @@ struct PriceAlertsNavigationView: View {
                 Button {
                     isPresentingAddAsset = true
                 } label: {
-                    Image(systemName: SystemImage.plus)
+                    Images.System.plus
                 }
             }
         }

@@ -48,7 +48,7 @@ struct WalletBarView: View {
                     .lineLimit(1)
                 
                 if model.showChevron {
-                    Image(systemName: SystemImage.chevronDown)
+                    Images.System.chevronDown
                         .resizable()
                         .frame(width: 11, height: 6)
                         .fontWeight(.medium)

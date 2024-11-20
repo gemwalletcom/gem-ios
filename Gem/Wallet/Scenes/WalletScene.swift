@@ -104,7 +104,7 @@ struct WalletScene: View {
                     )
                 } header: {
                     HStack {
-                        Image(systemName: SystemImage.pin)
+                        Images.System.pin
                         Text(Localized.Common.pinned)
                     }
                 }

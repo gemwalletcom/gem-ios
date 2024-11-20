@@ -56,7 +56,7 @@ struct WalletListItemView: View {
                 Button(
                     action: { onEdit(model.wallet) },
                     label: {
-                        Image(systemName: SystemImage.settings)
+                        Images.System.settings
                             .padding(.vertical, 8)
                             .padding(.leading, Spacing.small)
                     }

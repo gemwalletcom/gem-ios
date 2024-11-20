@@ -77,7 +77,7 @@ struct WalletsScene: View {
                     .onMove(perform: onMovePinned)
                 } header: {
                     HStack {
-                        Image(systemName: SystemImage.pin)
+                        Images.System.pin
                         Text(Localized.Common.pinned)
                     }
                 }

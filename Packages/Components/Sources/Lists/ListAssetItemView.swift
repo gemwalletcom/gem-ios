@@ -77,7 +77,7 @@ extension ListAssetItemView {
                 .toggleStyle(AppToggleStyle())
         case .copy:
             ListButton(
-                image: Image(systemName: SystemImage.copy),
+                image: Images.System.copy,
                 padding: Spacing.small,
                 action: {
                     model.action?(.copy)

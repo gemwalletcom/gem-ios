@@ -72,13 +72,13 @@ struct ImportWalletScene: View {
                         HStack(alignment: .center, spacing: 16) {
                             ListButton(
                                 title: Localized.Common.paste,
-                                image: Image(systemName: SystemImage.paste),
+                                image: Images.System.paste,
                                 action: paste
                             )
                             if model.type != .multicoin {
                                 ListButton(
                                     title: Localized.Wallet.scan,
-                                    image: Image(systemName: SystemImage.qrCode),
+                                    image: Images.System.qrCode,
                                     action: scanQR
                                 )
                             }

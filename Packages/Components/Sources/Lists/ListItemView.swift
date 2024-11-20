@@ -181,7 +181,7 @@ extension ListItemView {
 
                     if let infoAction {
                         Button(action: infoAction) {
-                            Image(systemName: SystemImage.info)
+                            Images.System.info
                                 .font(title.style.font)
                                 .foregroundStyle(Colors.gray)
                         }
@@ -347,7 +347,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Image",
                 titleTagStyle: tagTextStyleWhite,
-                titleTagType: .image(Image(systemName: SystemImage.faceid)),
+                titleTagType: .image(Images.System.faceid),
                 subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle
             )
@@ -362,14 +362,14 @@ extension ListItemView {
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: "Subtitle Extra",
-                subtitleStyleExtra: extraTextStyle, image: Image(systemName: SystemImage.faceid),
+                subtitleStyleExtra: extraTextStyle, image: Images.System.faceid,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )
             ListItemView(
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle, image: Image(systemName: SystemImage.eye),
+                subtitleStyle: defaultTextStyle, image: Images.System.eye,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )
@@ -389,7 +389,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Image",
                 titleTagStyle: tagTextStyleBlue,
-                titleTagType: .image(Image(systemName: SystemImage.faceid)),
+                titleTagType: .image(Images.System.faceid),
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: longSubtitleExtra,
@@ -412,7 +412,7 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, image: Image(systemName: SystemImage.eye),
+                titleStyle: defaultTextStyle, image: Images.System.eye,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )

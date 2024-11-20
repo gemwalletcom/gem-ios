@@ -120,7 +120,7 @@ class SwapViewModel {
 
     func actionButtonImage(isApprovalProcessInProgress: Bool) -> Image? {
         if case .loaded(let result) = swapAvailabilityState, !isApprovalProcessInProgress {
-            return result.allowance ? nil : Image(systemName: SystemImage.lock)
+            return result.allowance ? nil : Images.System.lock
         }
         return nil
     }

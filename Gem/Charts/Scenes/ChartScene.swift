@@ -39,7 +39,7 @@ struct ChartScene: View {
                             StateEmptyView(
                                 title: model.errorTitle,
                                 description: error.localizedDescription,
-                                image: Image(systemName: SystemImage.errorOccurred)
+                                image: Images.System.errorOccurred
                             )
                         }
                     }

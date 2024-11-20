@@ -44,7 +44,7 @@ struct ReceiveScene: View {
                 Button {
                     showShareSheet.toggle()
                 } label: {
-                    Image(systemName: SystemImage.share)
+                    Images.System.share
                 }
             }
         }

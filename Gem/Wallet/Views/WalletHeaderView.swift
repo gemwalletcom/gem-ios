@@ -56,13 +56,13 @@ struct WalletHeaderView: View {
                     onInfoSheetAction?(.watchWallet)
                 } label: {
                     HStack {
-                        Image(systemName: SystemImage.eye)
+                        Images.System.eye
 
                         Text(Localized.Wallet.Watch.Tooltip.title)
                             .foregroundColor(Colors.black)
                             .font(.callout)
 
-                        Image(systemName: SystemImage.info)
+                        Images.System.info
                             .tint(Colors.black)
                     }
                     .padding()

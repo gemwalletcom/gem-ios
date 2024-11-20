@@ -158,7 +158,7 @@ struct AssetScene: View {
                         Image(systemName: assetData.priceAlertSystemImage)
                     }
                     Button(action: onSelectOptions) {
-                        Image(systemName: SystemImage.ellipsis)
+                        Images.System.ellipsis
                     }
                     .confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
                         Button(model.viewAddressOnTitle) { onOpenLink(model.addressExplorerUrl )}

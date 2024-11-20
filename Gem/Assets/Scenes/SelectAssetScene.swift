@@ -50,7 +50,7 @@ struct SelectAssetScene: View {
                     assetsList(assets: sections.popular)
                 } header: {
                     HStack {
-                        Image(systemName: SystemImage.starFill)
+                        Images.System.starFill
                         Text(Localized.Common.popular)
                     }
                 }
@@ -61,7 +61,7 @@ struct SelectAssetScene: View {
                     assetsList(assets: sections.pinned)
                 } header: {
                     HStack {
-                        Image(systemName: SystemImage.pin)
+                        Images.System.pin
                         Text(Localized.Common.pinned)
                     }
                 }
