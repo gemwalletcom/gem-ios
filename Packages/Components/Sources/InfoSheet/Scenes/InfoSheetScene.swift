@@ -4,8 +4,8 @@ import SwiftUI
 import Style
 
 public struct InfoSheetScene: View {
-    @Environment(\.dismiss) var dismiss
-    @Environment(\.openURL) var openURL
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
 
     private let model: InfoSheetModelViewable
 
@@ -39,13 +39,16 @@ public struct InfoSheetScene: View {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: onClose) {
                         Images.System.xmarkCircle
-                            .foregroundStyle(Colors.gray)
+                            .symbolRenderingMode(.hierarchical)
+                            .foregroundStyle(.secondary)
+                            .font(.system(size: Spacing.large).bold())
                     }
                     .buttonStyle(.plain)
                 }
             }
         }
         .presentationDetents([.medium])
+        .presentationCornerRadius(24)
         .presentationDragIndicator(.hidden)
     }
 }
@@ -71,7 +74,7 @@ struct InfoSheetPreviewModel: InfoSheetModelViewable {
     var buttonTitle: String
     var url: URL?
     var image: InfoSheetImage?
-    
+
     init(
         title: String,
         description: String,

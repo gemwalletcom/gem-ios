@@ -21,9 +21,9 @@ struct InfoSheetView: View {
 
     init(
         title: String,
-        titleStyle: TextStyle = .title2,
+        titleStyle: TextStyle = .boldTitle,
         description: String,
-        descriptionStyle: TextStyle = .body,
+        descriptionStyle: TextStyle = .bodySecondary,
         image: InfoSheetImage?
     ) {
         let titleValue = TextValue(text: title, style: titleStyle)
@@ -68,12 +68,10 @@ struct InfoSheetView: View {
             VStack(spacing: Spacing.medium) {
                 Text(title.text)
                     .textStyle(title.style)
-                    .multilineTextAlignment(.center)
-
                 Text(description.text)
                     .textStyle(description.style)
-                    .multilineTextAlignment(.center)
             }
+            .multilineTextAlignment(.center)
         }
     }
 }
