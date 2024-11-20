@@ -23,7 +23,7 @@ public struct ErrorWrapper: Error, LocalizedError {
                 .InvalidAmount,
                 .NetworkError,
                 .AbiError,
-                .NotImplemented: self.localizedDescription
+                .NotImplemented: error.localizedDescription
             }
         default: error.localizedDescription
         }
