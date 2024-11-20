@@ -20,9 +20,9 @@ struct BannerViewModel {
             }
             return Images.name(asset.chain.rawValue)
         case .enableNotifications:
-            return Image(systemName: SystemImage.bell)
+            return Images.System.bell
         case .accountBlockedMultiSignature:
-            return Image(systemName: SystemImage.exclamationmarkTriangle)
+            return Images.System.exclamationmarkTriangle
         }
     }
     

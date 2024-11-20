@@ -106,7 +106,7 @@ extension FloatTextField {
         Group {
             if shouldShowClean {
                 Button(action: onSelectClean) {
-                    Image(systemName: SystemImage.clear)
+                    Images.System.clear
                         .foregroundStyle(Colors.gray)
                 }
                 .buttonStyle(.plain)

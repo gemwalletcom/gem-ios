@@ -25,7 +25,7 @@ struct ContextMenuCopy: View {
             UIPasteboard.general.string = value
         }) {
             Text(Localized.Common.copy)
-            Image(systemName: SystemImage.copy)
+            Images.System.copy
         }
     }
 }

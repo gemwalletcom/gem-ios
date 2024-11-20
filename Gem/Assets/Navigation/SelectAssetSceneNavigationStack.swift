@@ -50,11 +50,11 @@ struct SelectAssetSceneNavigationStack: View {
                             isPresentingFilteringView = true
                         } label: {
                             if model.filterModel.isCusomFilteringSpecified {
-                                Image(systemName: SystemImage.filterFill)
+                                Images.System.filterFill
                                     .symbolRenderingMode(.palette)
                                     .foregroundStyle(Colors.whiteSolid, Colors.blue)
                             } else {
-                                Image(systemName: SystemImage.filter)
+                                Images.System.filter
                                     .foregroundStyle(.primary)
                             }
                         }
@@ -64,7 +64,7 @@ struct SelectAssetSceneNavigationStack: View {
                         Button {
                             isPresentingAddToken = true
                         } label: {
-                            Image(systemName: SystemImage.plus)
+                            Images.System.plus
                         }
                     }
                 }

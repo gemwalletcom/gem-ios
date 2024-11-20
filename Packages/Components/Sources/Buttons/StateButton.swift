@@ -105,20 +105,20 @@ public struct StateButton: View {
     List {
         Section(header: Text("Normal State")) {
             StateButton(text: "Submit", styleState: .normal, action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
         }
 
         Section(header: Text("Normal State with info")) {
             StateButton(text: "Submit", styleState: .normal, infoTitle: "Approve token", action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
         }
 
         Section(header: Text("Loading State")) {
-            StateButton(text: "Submit", styleState: .loading(showProgress: true), image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .loading(showProgress: true), image: Images.System.faceid, action: {})
         }
 
         Section(header: Text("Disabled State")) {
-            StateButton(text: "Submit", styleState: .normal, image: Image(systemName: SystemImage.faceid), action: {})
+            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
                 .disabled(true)
 
             StateButton(text: "Submit", styleState: .disabled, action: {})

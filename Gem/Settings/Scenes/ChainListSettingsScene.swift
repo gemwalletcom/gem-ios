@@ -23,7 +23,7 @@ struct ChainListSettingsScene: View {
             emptyContent: {
                 StateEmptyView(
                     title: Localized.Common.noResultsFound,
-                    image: Image(systemName: SystemImage.searchNoResults)
+                    image: Images.System.searchNoResults
                 )
             }
         )

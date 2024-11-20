@@ -30,8 +30,8 @@ class AddTokenViewModel {
     var actionButtonTitlte: String { Localized.Wallet.Import.action }
     var addressTitleField: String { Localized.Wallet.Import.contractAddressField }
 
-    var pasteImage: Image { Image(systemName: SystemImage.paste) }
-    var qrImage: Image { Image(systemName: SystemImage.qrCode) }
+    var pasteImage: Image { Images.System.paste }
+    var qrImage: Image { Images.System.qrCode }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
     var chains: [Chain] { input.chains }

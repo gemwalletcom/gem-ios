@@ -84,6 +84,6 @@ struct InfoSheetView: View {
     InfoSheetView(
         title: "Network Fee",
         description: "The Tron network charges a transaction fee which varies based on blockhain usage",
-        image: .image(Image(systemName: SystemImage.bellFill))
+        image: .image(Images.System.bellFill)
     )
 }

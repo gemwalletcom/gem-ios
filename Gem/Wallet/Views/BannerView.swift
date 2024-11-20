@@ -31,7 +31,7 @@ struct BannerView: View {
                         Spacer()
                         
                         ListButton(
-                            image: Image(systemName: SystemImage.xmarkCircle),
+                            image: Images.System.xmarkCircle,
                             action: {
                                 closeAction(banner.banner)
                             }

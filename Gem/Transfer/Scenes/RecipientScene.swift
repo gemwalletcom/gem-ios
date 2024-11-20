@@ -39,10 +39,10 @@ struct RecipientScene: View {
                                 state: $nameResolveState,
                                 address: $address
                             )
-                            ListButton(image: Image(systemName: SystemImage.paste)) {
+                            ListButton(image: Images.System.paste) {
                                 paste(field: .address)
                             }
-                            ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                            ListButton(image: Images.System.qrCode) {
                                 isPresentingScanner = .address
                             }
                         }
@@ -54,7 +54,7 @@ struct RecipientScene: View {
 
                     if model.showMemo {
                         FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
-                            ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                            ListButton(image: Images.System.qrCode) {
                                 isPresentingScanner = .memo
                             }
                         }

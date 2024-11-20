@@ -38,7 +38,7 @@ public struct InfoSheetScene: View {
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
                     Button(action: onClose) {
-                        Image(systemName: SystemImage.xmarkCircle)
+                        Images.System.xmarkCircle
                             .foregroundStyle(Colors.gray)
                     }
                     .buttonStyle(.plain)

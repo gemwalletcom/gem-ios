@@ -36,12 +36,12 @@ struct ConnectionsScene: View {
             Section {
                 ButtonListItem(
                     title: model.pasteButtonTitle,
-                    image: Image(systemName: SystemImage.paste),
+                    image: Images.System.paste,
                     action: onPaste
                 )
                 ButtonListItem(
                     title: model.scanQRCodeButtonTitle,
-                    image: Image(systemName: SystemImage.qrCode),
+                    image: Images.System.qrCode,
                     action: onScan
                 )
             }
@@ -77,7 +77,7 @@ struct ConnectionsScene: View {
                 Button() {
                     isPresentingScanner = true
                 } label: {
-                    Image(systemName: SystemImage.qrCode)
+                    Images.System.qrCode
                 }
             }
         }
