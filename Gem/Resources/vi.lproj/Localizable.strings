@@ -295,11 +295,11 @@
 "input.buy" = "buy";
 "input.sell" = "sell";
 "input.transfer" = "transfer";
-"settings.balance_privacy" = "Balance Privacy";
+"settings.hide_balance" = "Hide Balance";
 "common.popular" = "Phổ biến";
 "errors.dust_threshold" = "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.";
-"rootcheck.security_alert" = "Security Alert";
-"rootcheck.body" = "Your device appears to be rooted. This may compromise the security of the app.";
+"rootcheck.security_alert" = "Cảnh báo an ninh";
+"rootcheck.body" = "Thiết bị của bạn có vẻ như có quyền truy cập gốc, điều này có thể làm tăng đáng kể rủi ro bảo mật. Sử dụng ứng dụng này trên thiết bị đã root có thể khiến tài sản của bạn bị truy cập trái phép và có khả năng mất mát. Để đảm bảo an toàn cho tiền của bạn, chúng tôi đặc biệt khuyên bạn nên sử dụng thiết bị không root.";
 "rootcheck.ignore" = "Ignore";
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";

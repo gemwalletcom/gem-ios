@@ -72,7 +72,7 @@ public final class Preferences: @unchecked Sendable {
     public var isDeveloperEnabled: Bool
 
     @UserDefault(defaults: .standard, key: "is_balance_privacy_enabled", defaultValue: false)
-    public var isBalancePrivacyEnabled: Bool
+    public var isHideBalanceEnabled: Bool
 
     public func incrementLaunchesCount() {
         launchesCount = launchesCount + 1

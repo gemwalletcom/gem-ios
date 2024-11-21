@@ -295,11 +295,11 @@
 "input.buy" = "buy";
 "input.sell" = "sell";
 "input.transfer" = "transfer";
-"settings.balance_privacy" = "Balance Privacy";
+"settings.hide_balance" = "Hide Balance";
 "common.popular" = "Popular";
 "errors.dust_threshold" = "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.";
-"rootcheck.security_alert" = "Security Alert";
-"rootcheck.body" = "Your device appears to be rooted. This may compromise the security of the app.";
+"rootcheck.security_alert" = "Advertencia de seguridad";
+"rootcheck.body" = "Su dispositivo parece tener acceso root, lo que puede aumentar significativamente los riesgos de seguridad. El uso de esta aplicación en un dispositivo rooteado puede exponer sus activos a acceso no autorizado y a una posible pérdida. Para la seguridad de sus fondos, le recomendamos encarecidamente que utilice un dispositivo no rooteado.";
 "rootcheck.ignore" = "Ignore";
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";

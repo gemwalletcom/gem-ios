@@ -15,12 +15,12 @@ class SecurityViewModel {
     var isPresentingError: String?
     var isEnabled: Bool
     var isPrivacyLockEnabled: Bool
-    var isBalancePrivacyEnabled: Bool {
+    var isHideBalanceEnabled: Bool {
         get {
-            preferences.isBalancePrivacyEnabled
+            preferences.isHideBalanceEnabled
         }
         set {
-            preferences.isBalancePrivacyEnabled = newValue
+            preferences.isHideBalanceEnabled = newValue
         }
     }
 
@@ -40,7 +40,7 @@ class SecurityViewModel {
     var title: String { Localized.Settings.security }
     var errorTitle: String { Localized.Errors.errorOccured }
     var privacyLockTitle: String { Localized.Lock.privacyLock }
-    var balacePrivacyTitle: String { Localized.Settings.balancePrivacy }
+    var hideBalanceTitle: String { Localized.Settings.hideBalance }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {

@@ -453,14 +453,14 @@ public enum Localized {
     public static let yourAddress = Localized.tr("Localizable", "receive.your_address", fallback: "Your Receiving Address")
   }
   public enum Rootcheck {
-    /// Your device appears to be rooted. This may compromise the security of the app.
-    public static let body = Localized.tr("Localizable", "rootcheck.body", fallback: "Your device appears to be rooted. This may compromise the security of the app.")
+    /// Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.
+    public static let body = Localized.tr("Localizable", "rootcheck.body", fallback: "Your device appears to have root access, which can significantly increase security risks. Using this app on a rooted device may expose your assets to unauthorized access and potential loss. For the safety of your funds, we strongly recommend using a non-rooted device.")
     /// Exit
     public static let exit = Localized.tr("Localizable", "rootcheck.exit", fallback: "Exit")
     /// Ignore
     public static let ignore = Localized.tr("Localizable", "rootcheck.ignore", fallback: "Ignore")
-    /// Security Alert
-    public static let securityAlert = Localized.tr("Localizable", "rootcheck.security_alert", fallback: "Security Alert")
+    /// Security Warning
+    public static let securityAlert = Localized.tr("Localizable", "rootcheck.security_alert", fallback: "Security Warning")
   }
   public enum SecretPhrase {
     /// Save your Secret Phrase in a secure place 
@@ -488,8 +488,6 @@ public enum Localized {
   public enum Settings {
     /// About Us
     public static let aboutus = Localized.tr("Localizable", "settings.aboutus", fallback: "About Us")
-    /// Balance Privacy
-    public static let balancePrivacy = Localized.tr("Localizable", "settings.balance_privacy", fallback: "Balance Privacy")
     /// Community
     public static let community = Localized.tr("Localizable", "settings.community", fallback: "Community")
     /// Currency
@@ -504,6 +502,8 @@ public enum Localized {
     }
     /// Help Center
     public static let helpCenter = Localized.tr("Localizable", "settings.help_center", fallback: "Help Center")
+    /// Hide Balance
+    public static let hideBalance = Localized.tr("Localizable", "settings.hide_balance", fallback: "Hide Balance")
     /// Language
     public static let language = Localized.tr("Localizable", "settings.language", fallback: "Language")
     /// Privacy Policy
