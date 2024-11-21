@@ -295,11 +295,11 @@
 "input.buy" = "buy";
 "input.sell" = "sell";
 "input.transfer" = "transfer";
-"settings.balance_privacy" = "Balance Privacy";
+"settings.hide_balance" = "Hide Balance";
 "common.popular" = "人気のある";
 "errors.dust_threshold" = "The transaction failed because the amount is too small to meet the %@ network’s minimum requirement (dust threshold). This limit ensures the transaction value covers the fees and processing costs. Increase the amount or reduce the fees to proceed.";
-"rootcheck.security_alert" = "Security Alert";
-"rootcheck.body" = "Your device appears to be rooted. This may compromise the security of the app.";
+"rootcheck.security_alert" = "セキュリティ警告";
+"rootcheck.body" = "お使いのデバイスはルート権限を持っているようです。これにより、セキュリティ リスクが大幅に増加する可能性があります。ルート権限を取得したデバイスでこのアプリを使用すると、資産が不正アクセスにさらされ、損失が発生する可能性があります。資金の安全のため、ルート権限を取得したデバイス以外のデバイスを使用することを強くお勧めします。";
 "rootcheck.ignore" = "Ignore";
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";

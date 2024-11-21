@@ -72,7 +72,7 @@ struct WalletScene: View {
                         walletType: model.wallet.type,
                         value: totalFiatValue
                     ),
-                    isBalancePrivacyEnabled: $preferences.isBalancePrivacyEnabled,
+                    isHideBalanceEnalbed: $preferences.isHideBalanceEnabled,
                     onHeaderAction: onHeaderAction,
                     onInfoSheetAction: onInfoSheetAction
                 )
@@ -100,7 +100,7 @@ struct WalletScene: View {
                         pinAsset: { (assetId, value) in
                             try? model.pinAsset(assetId, value: value)
                         },
-                        showBalancePrivacy: $preferences.isBalancePrivacyEnabled
+                        showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                 } header: {
                     HStack {
@@ -122,7 +122,7 @@ struct WalletScene: View {
                     pinAsset: { (assetId, value) in
                         try? model.pinAsset(assetId, value: value)
                     },
-                    showBalancePrivacy: $preferences.isBalancePrivacyEnabled
+                    showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
             } footer: {
                 ListButton(

@@ -10,7 +10,7 @@ import Primitives
 struct WalletHeaderView: View {
     let model: any HeaderViewModel
 
-    @Binding var isBalancePrivacyEnabled: Bool
+    @Binding var isHideBalanceEnalbed: Bool
 
     var onHeaderAction: HeaderButtonAction?
     var onInfoSheetAction: ((InfoSheetType) -> Void)?
@@ -25,10 +25,10 @@ struct WalletHeaderView: View {
                 )
             }
             ZStack {
-                if model.showBalancePrivacy {
+                if model.allowHiddenBalance {
                     PrivacyToggleView(
                         model.title,
-                        isEnabled: $isBalancePrivacyEnabled
+                        isEnabled: $isHideBalanceEnalbed
                     )
                 } else {
                     Text(model.title)
@@ -79,7 +79,7 @@ struct WalletHeaderView: View {
     }
 
     private var isEnabled: Binding<Bool> {
-        return model.showBalancePrivacy ? $isBalancePrivacyEnabled : .constant(false)
+        return model.allowHiddenBalance ? $isHideBalanceEnalbed : .constant(false)
     }
 }
 
@@ -94,7 +94,7 @@ struct WalletHeaderView: View {
 
     WalletHeaderView(
         model: model,
-        isBalancePrivacyEnabled: .constant(false),
+        isHideBalanceEnalbed: .constant(false),
         onHeaderAction: .none,
         onInfoSheetAction: .none
     )

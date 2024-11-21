@@ -32,7 +32,7 @@ struct SecurityScene: View {
             }
 
             Section {
-                Toggle(model.balacePrivacyTitle, isOn: $model.isBalancePrivacyEnabled)
+                Toggle(model.hideBalanceTitle, isOn: $model.isHideBalanceEnabled)
                     .toggleStyle(AppToggleStyle())
             }
         }

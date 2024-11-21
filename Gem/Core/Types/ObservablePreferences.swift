@@ -12,14 +12,14 @@ final class ObservablePreferences: Sendable {
     }
 
     @ObservationIgnored
-    var isBalancePrivacyEnabled: Bool {
+    var isHideBalanceEnabled: Bool {
         get {
-            access(keyPath: \.isBalancePrivacyEnabled)
-            return preferences.isBalancePrivacyEnabled
+            access(keyPath: \.isHideBalanceEnabled)
+            return preferences.isHideBalanceEnabled
         }
         set {
-            withMutation(keyPath: \.isBalancePrivacyEnabled) {
-                preferences.isBalancePrivacyEnabled = newValue
+            withMutation(keyPath: \.isHideBalanceEnabled) {
+                preferences.isHideBalanceEnabled = newValue
             }
         }
     }
