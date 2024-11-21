@@ -125,7 +125,7 @@ extension SolanaService {
         type: GasPriceType,
         gasLimit: BigInt
     ) {
-        let gasLimit = 200_000
+        let gasLimit = 100_000
         // filter out any large fees
         let priorityFees = try await getPrioritizationFees()
         
@@ -133,6 +133,7 @@ extension SolanaService {
         case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
         case .stake, .generic, .swap: 100_000
         }
+        
         let minerFee = {
             if priorityFees.isEmpty {
                 multipleOf
@@ -143,6 +144,7 @@ extension SolanaService {
                 )
             }
         }()
+        
         let totalFee = staticBaseFee + (minerFee / (gasLimit / 10_000)).asBigInt
         
         return (

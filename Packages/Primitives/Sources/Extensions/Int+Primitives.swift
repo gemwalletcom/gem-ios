@@ -26,7 +26,7 @@ extension Int {
     }
     
     public func roundToNearest(multipleOf base: Int, mode: RoundingMode) -> Int {
-        guard base > 0 else { return self }
+        guard base > 0 else { return base }
         switch mode {
         case .up:
             return ((self + base - 1) / base) * base
