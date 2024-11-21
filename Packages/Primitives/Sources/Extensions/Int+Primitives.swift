@@ -13,10 +13,28 @@ extension Int32 {
     }
 }
 
+public enum RoundingMode {
+    case up
+    case down
+    case nearest
+}
+
 extension Int {
     
     public func isBetween(_ lowerBound: Int, and upperBound: Int) -> Bool {
         return self >= lowerBound && self <= upperBound
+    }
+    
+    public func roundToNearest(multipleOf base: Int, mode: RoundingMode) -> Int {
+        guard base > 0 else { return self }
+        switch mode {
+        case .up:
+            return ((self + base - 1) / base) * base
+        case .down:
+            return (self / base) * base
+        case .nearest:
+            return ((self + base / 2) / base) * base
+        }
     }
     
     public var asInt32: Int32 {

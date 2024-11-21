@@ -22,6 +22,10 @@ public struct Fee: Sendable {
         return gasPriceType.gasPrice
     }
     
+    public var minerFee: BigInt {
+        return gasPriceType.minerFee
+    }
+    
     public init(
         fee: BigInt,
         gasPriceType: GasPriceType,

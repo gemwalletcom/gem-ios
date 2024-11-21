@@ -15,6 +15,13 @@ public enum GasPriceType: Equatable, Sendable {
             return gasPrice
         }
     }
+    
+    public var minerFee: BigInt {
+        switch self {
+        case .regular: .zero
+        case .eip1559(_, let minerFee): minerFee
+        }
+    }
 }
 
 extension GasPriceType: Hashable {}

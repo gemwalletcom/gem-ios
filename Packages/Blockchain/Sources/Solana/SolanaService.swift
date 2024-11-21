@@ -14,8 +14,7 @@ public struct SolanaService: Sendable {
     let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
     
-    let staticBaseFee = BigInt(50000)
-    let priorityFeeMultipler = 5
+    let staticBaseFee = BigInt(5000)
     let tokenAccountSize = 165
     
     public init(
@@ -88,13 +87,12 @@ extension SolanaService {
         return result
     }
 
-    private func getPrioritizationFee() async throws -> BigInt {
+    private func getPrioritizationFees() async throws -> [Int32] {
         let fees = try await provider
             .request(.fees)
             .map(as: JSONRPCResponse<[SolanaPrioritizationFee]>.self)
             .result
-
-        return BigInt(fees.map { $0.prioritizationFee }.reduce(0, { $0 + Int($1) }) / fees.count)
+        return fees.map { $0.prioritizationFee }
     }
 
     private func getBalance(address: String) async throws -> BigInt {
@@ -121,9 +119,34 @@ extension SolanaService {
             .map(as: JSONRPCResponse<Int>.self).result.asBigInt
     }
 
-    private func getBaseFee() async throws -> BigInt {
-        let priorityFee = try await getPrioritizationFee()
-        return staticBaseFee + (priorityFee * BigInt(priorityFeeMultipler))
+    // https://solana.com/docs/core/fees#compute-unit-limit
+    private func getBaseFee(type: TransferDataType) async throws -> (
+        totalFee: BigInt,
+        type: GasPriceType,
+        gasLimit: BigInt
+    ) {
+        let gasLimit = 100_000
+        // filter out any large fees
+        let priorityFees = try await getPrioritizationFees()
+        let averagePriorityFee = {
+            if priorityFees.isEmpty {
+                0
+            } else {
+                priorityFees.reduce(0, { $0 + Int($1) }) / priorityFees.count
+            }
+        }()
+        let multipleOf = switch type {
+        case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
+        case .stake, .generic, .swap: 100_000
+        }
+        let minerFee = averagePriorityFee.roundToNearest(multipleOf: multipleOf, mode: .up)
+        let totalFee = staticBaseFee + (minerFee / (gasLimit / 10_000)).asBigInt
+        
+        return (
+            totalFee,
+            .eip1559(gasPrice: staticBaseFee, minerFee: minerFee.asBigInt),
+            gasLimit.asBigInt
+        )
     }
     
     private func getSlot() async throws -> BigInt {
@@ -169,7 +192,6 @@ extension SolanaService: ChainBalanceable {
 }
 
 // MARK: - ChainFeeCalculateable
-
 extension SolanaService: ChainFeeCalculateable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     public func fee(input: FeeInput) async throws -> Fee {
@@ -177,16 +199,17 @@ extension SolanaService: ChainFeeCalculateable {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
-                let fee = try await getBaseFee()
+                let fee = try await getBaseFee(type: input.type)
+                
                 return Fee(
-                    fee: fee,
-                    gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1,
+                    fee: fee.totalFee,
+                    gasPriceType: fee.type,
+                    gasLimit: fee.gasLimit,
                     feeRates: [],
                     selectedFeeRate: nil
                 )
             case .token:
-                async let getBaseFee = getBaseFee()
+                async let getBaseFee = getBaseFee(type: input.type)
                 async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
                 async let getToken = try await getTokenTransferType(
                     tokenId: try asset.getTokenId(),
@@ -201,20 +224,20 @@ extension SolanaService: ChainFeeCalculateable {
                 }
                 
                 return Fee(
-                    fee: fee,
-                    gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1,
+                    fee: fee.totalFee,
+                    gasPriceType: fee.type,
+                    gasLimit: fee.gasLimit,
                     options: options,
                     feeRates: [],
                     selectedFeeRate: nil
                 )
             }
         case .swap, .stake:
-            let fee = try await getBaseFee()
+            let fee = try await getBaseFee(type: input.type)
             return Fee(
-                fee: fee,
-                gasPriceType: .regular(gasPrice: fee),
-                gasLimit: 1,
+                fee: fee.totalFee,
+                gasPriceType: fee.type,
+                gasLimit: fee.gasLimit,
                 feeRates: [],
                 selectedFeeRate: nil
             )

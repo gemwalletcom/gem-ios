@@ -10,16 +10,13 @@ public struct SolanaSigner: Signable {
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
-        let input = SolanaSigningInput.with {
-            $0.transferTransaction = SolanaTransfer.with {
-                $0.recipient = input.destinationAddress
-                $0.value = input.value.UInt
-                $0.memo = input.memo.valueOrEmpty
-            }
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
-        }
-        return try sign(input: input, coinType: coinType, privateKey: privateKey)
+        let type = SolanaSigningInput.OneOf_TransactionType.transferTransaction(.with {
+            $0.recipient = input.destinationAddress
+            $0.value = input.value.UInt
+            $0.memo = input.memo.valueOrEmpty
+        })
+                                                                                
+        return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -32,21 +29,21 @@ public struct SolanaSigner: Signable {
         case .token: .tokenProgram
         case .token2022: .token2022Program
         }
-        let input = SolanaSigningInput.with {
-            switch input.token.recipientTokenAddress {
-            case .some(let recipientTokenAddress):
-                $0.tokenTransferTransaction = SolanaTokenTransfer.with {
-                    $0.amount = amount
-                    $0.decimals = decimals
-                    $0.tokenMintAddress = input.asset.tokenId!
-                    $0.senderTokenAddress = input.token.senderTokenAddress
-                    $0.recipientTokenAddress = recipientTokenAddress
-                    $0.memo = input.memo.valueOrEmpty
-                    $0.tokenProgramID = tokenProgram
-                }
-            case .none:
-                let recipientTokenAddress = SolanaAddress(string: destinationAddress)!.defaultTokenAddress(tokenMintAddress: tokenId)!
-                $0.createAndTransferTokenTransaction = SolanaCreateAndTransferToken.with {
+        switch input.token.recipientTokenAddress {
+        case .some(let recipientTokenAddress):
+            let type = SolanaSigningInput.OneOf_TransactionType.tokenTransferTransaction(.with {
+                $0.amount = amount
+                $0.decimals = decimals
+                $0.tokenMintAddress = input.asset.tokenId!
+                $0.senderTokenAddress = input.token.senderTokenAddress
+                $0.recipientTokenAddress = recipientTokenAddress
+                $0.memo = input.memo.valueOrEmpty
+                $0.tokenProgramID = tokenProgram
+            })
+            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
+        case .none:
+            let recipientTokenAddress = SolanaAddress(string: destinationAddress)!.defaultTokenAddress(tokenMintAddress: tokenId)!
+            let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
                     $0.amount = amount
                     $0.decimals = decimals
                     $0.recipientMainAddress = destinationAddress
@@ -56,15 +53,26 @@ public struct SolanaSigner: Signable {
                     $0.memo = input.memo.valueOrEmpty
                     $0.tokenProgramID = tokenProgram
                 }
-            }
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
+            )
+            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
         }
-        return try sign(input: input, coinType: coinType, privateKey: privateKey)
     }
     
-    private func sign(input: SolanaSigningInput, coinType: CoinType, privateKey: Data) throws -> String {
-        let output: SolanaSigningOutput = AnySigner.sign(input: input, coin: coinType)
+    private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
+        let signingInput = SolanaSigningInput.with {
+            $0.transactionType = type
+            $0.recentBlockhash = input.block.hash
+            $0.priorityFeeLimit = .with {
+                $0.limit = UInt32(input.fee.gasLimit)
+            }
+            if input.fee.minerFee > 0 {
+                $0.priorityFeePrice = .with {
+                    $0.price = input.fee.minerFee.UInt
+                }
+            }
+            $0.privateKey = privateKey
+        }
+        let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: coinType)
         return try transcodeBase58ToBase64(output.encoded)
     }
     
@@ -127,12 +135,7 @@ public struct SolanaSigner: Signable {
             .rewards:
             fatalError()
         }
-        let signingInput = SolanaSigningInput.with {
-            $0.transactionType = transactionType
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
-        }
-        return [try sign(input: signingInput, coinType: input.coinType, privateKey: privateKey)]
+        return [try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey)]
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {
