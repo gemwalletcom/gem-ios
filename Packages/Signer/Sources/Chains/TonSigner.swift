@@ -9,7 +9,6 @@ import Primitives
 public struct TonSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let transfer = TheOpenNetworkTransfer.with {
-            $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
             $0.dest = input.destinationAddress
             $0.amount = input.value.UInt
             if let memo = input.memo {
@@ -20,6 +19,7 @@ public struct TonSigner: Signable {
         }
 
         let signingInput = TheOpenNetworkSigningInput.with {
+            $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
             $0.sequenceNumber = UInt32(input.sequence)
             $0.expireAt = expireAt()
             $0.messages = [transfer]
@@ -41,7 +41,6 @@ public struct TonSigner: Signable {
         }
 
         let transfer = TheOpenNetworkTransfer.with {
-            $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
             $0.dest = input.token.senderTokenAddress // My Jetton Wallet address
             $0.amount = jettonCreationFee.UInt
             if let memo = input.memo {
@@ -53,6 +52,7 @@ public struct TonSigner: Signable {
         }
 
         let signingInput = TheOpenNetworkSigningInput.with {
+            $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
             $0.sequenceNumber = UInt32(input.sequence)
             $0.expireAt = expireAt()
             $0.messages = [transfer]
