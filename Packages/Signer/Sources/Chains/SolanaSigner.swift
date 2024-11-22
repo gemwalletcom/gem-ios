@@ -42,7 +42,13 @@ public struct SolanaSigner: Signable {
             })
             return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
         case .none:
-            let recipientTokenAddress = SolanaAddress(string: destinationAddress)!.defaultTokenAddress(tokenMintAddress: tokenId)!
+            let walletAddress = SolanaAddress(string: destinationAddress)!
+            let recipientTokenAddress = switch input.token.tokenProgram {
+            case .token:
+                walletAddress.defaultTokenAddress(tokenMintAddress: tokenId)!
+            case .token2022:
+                walletAddress.token2022Address(tokenMintAddress: tokenId)!
+            }
             let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
                     $0.amount = amount
                     $0.decimals = decimals
