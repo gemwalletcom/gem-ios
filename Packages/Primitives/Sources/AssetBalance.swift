@@ -2,7 +2,8 @@ import Foundation
 import BigInt
 
 public enum AssetBalanceType {
-    case balance(available: BigInt)
+    case coin(available: BigInt, reserved: BigInt)
+    case token(available: BigInt)
     case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt)
 }
 
@@ -30,10 +31,17 @@ public struct AssetBalance: Codable {
 }
 
 extension AssetBalance {
-    public var balanceChange: AssetBalanceChange {
+    public var coinChange: AssetBalanceChange {
         AssetBalanceChange(
             assetId: assetId,
-            type: AssetBalanceType.balance(available: balance.available)
+            type: AssetBalanceType.coin(available: balance.available, reserved: balance.reserved)
+        )
+    }
+    
+    public var tokenChange: AssetBalanceChange {
+        AssetBalanceChange(
+            assetId: assetId,
+            type: AssetBalanceType.token(available: balance.available)
         )
     }
 

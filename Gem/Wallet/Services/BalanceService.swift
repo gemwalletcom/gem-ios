@@ -80,7 +80,7 @@ public final class BalanceService: BalancerUpdater {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).balanceChange] },
+            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
             mapBalance: { $0 }
         )
     }
@@ -100,7 +100,7 @@ public final class BalanceService: BalancerUpdater {
             walletId: walletId,
             chain: chain,
             fetchBalance: { try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids) },
-            mapBalance: { $0.balanceChange }
+            mapBalance: { $0.tokenChange }
         )
     }
     
@@ -172,12 +172,22 @@ public final class BalanceService: BalancerUpdater {
     func createUpdateBalanceType(asset: Asset, change: AssetBalanceChange) throws -> UpdateBalanceType {
         let decimals = asset.decimals.asInt
         switch change.type {
-        case .balance(let available):
+        case .coin(let available, let reserved):
             let available = try UpdateBalanceValue(
                 value: available.description,
                 amount: formatter.double(from: available, decimals: decimals)
             )
-            return .coin(UpdateCoinBalance(available: available))
+            let reservedValue = try UpdateBalanceValue(
+                value: reserved.description,
+                amount: formatter.double(from: reserved, decimals: decimals)
+            )
+            return .coin(UpdateCoinBalance(available: available, reserved: reservedValue))
+        case .token(let available):
+            let available = try UpdateBalanceValue(
+                value: available.description,
+                amount: formatter.double(from: available, decimals: decimals)
+            )
+            return .token(UpdateTokenBalance(available: available))
         case .stake(let staked, let pending, let rewards, let reserved, let locked, let frozen):
             let stakedValue = try UpdateBalanceValue(
                 value: staked.description,
@@ -195,10 +205,6 @@ public final class BalanceService: BalancerUpdater {
                 value: locked.description,
                 amount: formatter.double(from: locked, decimals: decimals)
             )
-            let reservedValue = try UpdateBalanceValue(
-                value: reserved.description,
-                amount: formatter.double(from: reserved, decimals: decimals)
-            )
             let rewardsValue = try UpdateBalanceValue(
                 value: rewards.description,
                 amount: formatter.double(from: rewards, decimals: decimals)
@@ -209,7 +215,6 @@ public final class BalanceService: BalancerUpdater {
                     pending: pendingValue,
                     frozen: frozenValue,
                     locked: lockedValue,
-                    reserved: reservedValue,
                     rewards: rewardsValue
                 )
             )

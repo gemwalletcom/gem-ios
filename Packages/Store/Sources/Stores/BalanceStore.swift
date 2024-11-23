@@ -34,7 +34,9 @@ public struct BalanceStore: Sendable {
                 case .coin(let balance):
                     [
                         Columns.Balance.available.set(to: balance.available.value),
-                        Columns.Balance.availableAmount.set(to: balance.available.amount)
+                        Columns.Balance.availableAmount.set(to: balance.available.amount),
+                        Columns.Balance.reserved.set(to: balance.reserved.value),
+                        Columns.Balance.reservedAmount.set(to: balance.reserved.amount)
                     ]
                 case .token(let balance):
                     [
@@ -53,8 +55,6 @@ public struct BalanceStore: Sendable {
                         Columns.Balance.pendingAmount.set(to: balance.pending.amount),
                         Columns.Balance.rewards.set(to: balance.rewards.value),
                         Columns.Balance.rewardsAmount.set(to: balance.rewards.amount),
-                        Columns.Balance.reserved.set(to: balance.reserved.value),
-                        Columns.Balance.reservedAmount.set(to: balance.reserved.amount),
                     ]
                 }
                 

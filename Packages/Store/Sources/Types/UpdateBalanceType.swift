@@ -10,9 +10,14 @@ public enum UpdateBalanceType {
 
 public struct UpdateCoinBalance {
     public let available: UpdateBalanceValue
+    public let reserved: UpdateBalanceValue
     
-    public init(available: UpdateBalanceValue) {
+    public init(
+        available: UpdateBalanceValue,
+        reserved: UpdateBalanceValue
+    ) {
         self.available = available
+        self.reserved = reserved
     }
 }
 
@@ -29,7 +34,6 @@ public struct UpdateStakeBalance {
     public let pending: UpdateBalanceValue
     public let frozen: UpdateBalanceValue
     public let locked: UpdateBalanceValue
-    public let reserved: UpdateBalanceValue
     public let rewards: UpdateBalanceValue
     
     public init(
@@ -37,14 +41,12 @@ public struct UpdateStakeBalance {
         pending: UpdateBalanceValue,
         frozen: UpdateBalanceValue,
         locked: UpdateBalanceValue,
-        reserved: UpdateBalanceValue,
         rewards: UpdateBalanceValue
     ) {
         self.staked = staked
         self.pending = pending
         self.frozen = frozen
         self.locked = locked
-        self.reserved = reserved
         self.rewards = rewards
     }
 }
