@@ -127,7 +127,7 @@
 "wallet_connect.disconnect" = "Disconnect";
 "wallet_connect.connect.title" = "Connect";
 "wallet_connect.app" = "App";
-"wallet_connect.website" = "Website";
+"wallet_connect.website" = "เว็บไซต์";
 "transfer.approve.title" = "Approve";
 "wallet_connect.brand_name" = "WalletConnect";
 "wallet.stake" = "Stake";
@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "YouTube";
 "social.links" = "Links";
-"social.homepage" = "Homepage";
 "social.facebook" = "Facebook";
 "nodes.import_node.title" = "Add node";
 "nodes.import_node.chain_id" = "Chain ID";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "เว็บไซต์";

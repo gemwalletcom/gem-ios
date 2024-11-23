@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "YouTube";
 "social.links" = "Tautan";
-"social.homepage" = "Beranda";
 "social.facebook" = "Facebook";
 "nodes.import_node.title" = "Tambahkan node";
 "nodes.import_node.chain_id" = "ID Chain";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "Situs web";

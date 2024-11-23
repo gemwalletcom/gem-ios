@@ -558,14 +558,14 @@ public enum Localized {
     public static let facebook = Localized.tr("Localizable", "social.facebook", fallback: "Facebook")
     /// GitHub
     public static let github = Localized.tr("Localizable", "social.github", fallback: "GitHub")
-    /// Homepage
-    public static let homepage = Localized.tr("Localizable", "social.homepage", fallback: "Homepage")
     /// Links
     public static let links = Localized.tr("Localizable", "social.links", fallback: "Links")
     /// Reddit
     public static let reddit = Localized.tr("Localizable", "social.reddit", fallback: "Reddit")
     /// Telegram
     public static let telegram = Localized.tr("Localizable", "social.telegram", fallback: "Telegram")
+    /// Website
+    public static let website = Localized.tr("Localizable", "social.website", fallback: "Website")
     /// X (formerly Twitter)
     public static let x = Localized.tr("Localizable", "social.x", fallback: "X (formerly Twitter)")
     /// YouTube

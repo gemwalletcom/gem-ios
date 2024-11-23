@@ -38,7 +38,6 @@ public struct AssetsRequest: ValueObservationQueryable {
         var request = AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
             .joining(required: AssetRecord.balance
                 .filter(Columns.Balance.walletId == walletID)

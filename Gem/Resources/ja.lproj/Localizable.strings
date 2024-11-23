@@ -200,7 +200,6 @@
 "social.github" = "ギットハブ";
 "social.youtube" = "ユーチューブ";
 "social.links" = "リンク";
-"social.homepage" = "ホームページ";
 "social.facebook" = "フェイスブック";
 "nodes.import_node.title" = "トークンを追加";
 "nodes.import_node.chain_id" = "チェーンID";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "Webサイト";

@@ -4,6 +4,34 @@
 
 import Foundation
 
+public struct AssetProperties: Codable, Sendable {
+	public let isBuyable: Bool
+	public let isSellable: Bool
+	public let isSwapable: Bool
+	public let isStakeable: Bool
+	public let stakingApr: Double?
+
+	public init(isBuyable: Bool, isSellable: Bool, isSwapable: Bool, isStakeable: Bool, stakingApr: Double?) {
+		self.isBuyable = isBuyable
+		self.isSellable = isSellable
+		self.isSwapable = isSwapable
+		self.isStakeable = isStakeable
+		self.stakingApr = stakingApr
+	}
+}
+
+public struct AssetBasic: Codable, Sendable {
+	public let asset: Asset
+	public let properties: AssetProperties
+	public let score: AssetScore
+
+	public init(asset: Asset, properties: AssetProperties, score: AssetScore) {
+		self.asset = asset
+		self.properties = properties
+		self.score = score
+	}
+}
+
 public struct AssetLinks: Codable, Sendable {
 	public let homepage: String?
 	public let explorer: String?
@@ -60,18 +88,26 @@ public struct AssetDetailsInfo: Codable, Sendable {
 	}
 }
 
+public struct AssetLink: Codable, Sendable {
+	public let name: String
+	public let url: String
+
+	public init(name: String, url: String) {
+		self.name = name
+		self.url = url
+	}
+}
+
 public struct AssetFull: Codable, Sendable {
 	public let asset: Asset
-	public let details: AssetDetails?
-	public let price: Price?
-	public let market: AssetMarket?
+	public let links: [AssetLink]
+	public let properties: AssetProperties
 	public let score: AssetScore
 
-	public init(asset: Asset, details: AssetDetails?, price: Price?, market: AssetMarket?, score: AssetScore) {
+	public init(asset: Asset, links: [AssetLink], properties: AssetProperties, score: AssetScore) {
 		self.asset = asset
-		self.details = details
-		self.price = price
-		self.market = market
+		self.links = links
+		self.properties = properties
 		self.score = score
 	}
 }

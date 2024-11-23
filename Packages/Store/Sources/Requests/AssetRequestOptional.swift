@@ -24,7 +24,6 @@ public struct AssetRequestOptional: ValueObservationQueryable {
         try AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.priceAlert)
             .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))

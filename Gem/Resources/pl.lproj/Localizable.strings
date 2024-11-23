@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "YouTube";
 "social.links" = "Spinki do mankietów";
-"social.homepage" = "Strona główna";
 "social.facebook" = "Facebook";
 "nodes.import_node.title" = "Add node";
 "nodes.import_node.chain_id" = "Chain ID";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "Strona internetowa";

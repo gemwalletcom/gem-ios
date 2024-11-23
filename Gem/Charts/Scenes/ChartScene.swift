@@ -68,21 +68,22 @@ struct ChartScene: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             
-            if let details = priceData.details {
-                let model = AssetDetailsInfoViewModel(asset: priceData.asset, details: details)
+            let priceDataModel = AssetDetailsInfoViewModel(priceData: priceData)
+            
+            if priceDataModel.showMarketValues {
                 Section {
-                    ForEach(model.marketValues, id: \.title) {
+                    ForEach(priceDataModel.marketValues, id: \.title) {
                         ListItemView(title: $0.title, subtitle: $0.subtitle)
                     }
                 }
-                if !details.socialUrls.isEmpty {
-                    Section(model.linksSection) {
-                        ForEach(details.socialUrls) { link in
-                            NavigationOpenLink(
-                                url: link.url,
-                                with: ListItemView(title: link.type.name, image: link.type.image)
-                            )
-                        }
+            }
+            if priceDataModel.showLinksSection {
+                Section(priceDataModel.linksSectionText) {
+                    ForEach(priceDataModel.links) { link in
+                        NavigationOpenLink(
+                            url: link.url,
+                            with: ListItemView(title: link.type.name, image: link.type.image)
+                        )
                     }
                 }
             }
@@ -91,8 +92,7 @@ struct ChartScene: View {
             await fetch()
         }
         .taskOnce {
-            Task { await model.updateAsset() }
-            Task { await model.updateCharts() }
+            Task { await fetch() }
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)

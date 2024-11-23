@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Style", path: "../Style"),
+        .package(name: "Components", path: "../Components"),
         .package(name: "Localization", path: "../Localization"),
     ],
     targets: [
@@ -23,6 +24,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Style",
+                "Components",
                 "Localization",
             ],
             path: "Sources"

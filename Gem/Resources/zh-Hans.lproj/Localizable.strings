@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "油管";
 "social.links" = "链接";
-"social.homepage" = "主页";
 "social.facebook" = "脸书";
 "nodes.import_node.title" = "添加节点";
 "nodes.import_node.chain_id" = "链 ID";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "网站";

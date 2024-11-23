@@ -31,7 +31,7 @@ extension SocialUrl {
         case .youTube: Localized.Social.youtube
         case .reddit: Localized.Social.reddit
         case .facebook: Localized.Social.facebook
-        case .homepage: Localized.Social.homepage
+        case .website: Localized.Social.website
         case .coingecko: Localized.Social.coingecko
         }
     }
@@ -44,8 +44,8 @@ extension SocialUrl {
         case .gitHub: Images.Social.github
         case .youTube: Images.Social.youtube
         case .reddit: Images.Social.reddit
-        case .facebook: Image("")
-        case .homepage: Image("")
+        case .facebook: Images.Social.facebook
+        case .website: Images.Social.website
         case .coingecko: Images.Social.coingecko
         }
     }
@@ -60,7 +60,7 @@ extension SocialUrl {
         case .youTube: 30
         case .reddit: 50
         case .facebook: 40
-        case .homepage: 20
+        case .website: 20
         }
     }
 }

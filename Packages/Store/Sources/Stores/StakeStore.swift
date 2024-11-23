@@ -14,8 +14,8 @@ public struct StakeStore: Sendable {
     
     public func getStakeApr(assetId: AssetId) throws -> Double? {
         try db.read { db in
-            try AssetDetailsRecord
-                .filter(Columns.AssetDetail.assetId == assetId.identifier)
+            try AssetRecord
+                .filter(key: assetId.identifier)
                 .fetchOne(db)
                 .map { $0.stakingApr } ?? .none
         }

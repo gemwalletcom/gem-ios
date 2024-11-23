@@ -27,14 +27,18 @@ class AssetsService {
     // Used to add new custom assets
     public func addAsset(walletId: WalletId, asset: Asset) throws {
         try addAssets(assets: [
-            AssetFull(asset: asset, details: .none, price: .none, market: .none, score: AssetScore(rank: 10))
+            AssetBasic(
+                asset: asset,
+                properties: AssetProperties.defaultValue(),
+                score: AssetScore(rank: 10)
+            )
         ])
         try addBalanceIfMissing(walletId: walletId, assetId: asset.id)
         try updateEnabled(walletId: walletId, assetId: asset.id, enabled: true)
     }
     
-    public func addAssets(assets: [AssetFull]) throws {
-        return try assetStore.insertFull(assets: assets)
+    public func addAssets(assets: [AssetBasic]) throws {
+        return try assetStore.add(assets: assets)
     }
     
     public func getAssets() throws -> [Asset] {
@@ -79,9 +83,9 @@ class AssetsService {
     }
     
     func updateAsset(assetId: AssetId) async throws {
-        let details = try await getAsset(assetId: assetId)
-        try assetStore.insertFull(assets: [details])
-        try assetStore.updateDetails(details)
+        let asset = try await getAsset(assetId: assetId)
+        try assetStore.add(assets: [asset.basic])
+        try assetStore.updateLinks(assetId: assetId.identifier, asset.links)
     }
     
     func getAsset(assetId: AssetId) async throws -> AssetFull {
@@ -89,16 +93,16 @@ class AssetsService {
             .getAsset(assetId: assetId)
     }
 
-    func getAssets(assetIds: [AssetId]) async throws -> [AssetFull] {
+    func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic] {
         try await assetsProvider
             .getAssets(assetIds: assetIds)
     }
     
     // search
     
-    func searchAssets(query: String, chains: [Chain]) async throws -> [AssetFull] {
-        let assets = try await withThrowingTaskGroup(of: [AssetFull]?.self) { group in
-            var assets = [AssetFull]()
+    func searchAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {
+        let assets = try await withThrowingTaskGroup(of: [AssetBasic]?.self) { group in
+            var assets = [AssetBasic]()
             
             group.addTask {
                 return try await self.searchAPIAssets(query: query, chains: chains)
@@ -119,7 +123,7 @@ class AssetsService {
         }
     }
     
-    func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetFull] {
+    func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {
         return try await assetsProvider.getSearchAssets(query: query, chains: chains)
     }
     
@@ -135,7 +139,7 @@ class AssetsService {
         return newAssets.map { $0.asset.id }
     }
     
-    func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetFull] {
+    func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetBasic] {
         let services = chains.map {
             chainServiceFactory.service(for: $0)
         }.filter {
@@ -158,11 +162,9 @@ class AssetsService {
         }
         
         return assets.map {
-            AssetFull(
+            AssetBasic(
                 asset: $0,
-                details: .none,
-                price: .none,
-                market: .none,
+                properties: AssetProperties.defaultValue(),
                 score: AssetScore(rank: 12)
             )
         }

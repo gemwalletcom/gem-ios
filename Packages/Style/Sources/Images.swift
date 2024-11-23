@@ -89,6 +89,8 @@ public struct Images {
         public static let discord = Image(.discord)
         public static let reddit = Image(.reddit)
         public static let youtube = Image(.youtube)
+        public static let website = Image(systemName: SystemImage.network)
+        public static let facebook = Image("") //TODO
     }
 
     public struct Tags {

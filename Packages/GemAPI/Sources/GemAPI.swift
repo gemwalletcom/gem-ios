@@ -6,6 +6,7 @@ import Primitives
 
 public enum GemAPI: TargetType {
     case getIpAddress
+    case getPrice(AssetId, currency: String)
     case getPrices(AssetPricesRequest)
     case getFiatOnRampQuotes(Asset, FiatBuyRequest)
     case getFiatOnRampAssets
@@ -43,6 +44,7 @@ public enum GemAPI: TargetType {
     public var method: HTTPMethod {
         switch self {
         case .getIpAddress,
+            .getPrice,
             .getFiatOnRampQuotes,
             .getFiatOnRampAssets,
             .getFiatOffRampAssets,
@@ -78,6 +80,8 @@ public enum GemAPI: TargetType {
         switch self {
         case .getIpAddress:
             return "/v1/ip_address"
+        case .getPrice(let assetId, _):
+            return "/v1/prices/\(assetId.identifier)"
         case .getPrices:
             return "/v1/prices"
         case .getFiatOnRampQuotes(let asset, _):
@@ -138,6 +142,10 @@ public enum GemAPI: TargetType {
             .getAsset,
             .getPriceAlerts:
             return .plain
+        case .getPrice(_, let currency):
+            return .params([
+                "currency": currency
+            ])
         case .getPrices(let value):
             return .encodable(value)
         case .getAssets(let value):

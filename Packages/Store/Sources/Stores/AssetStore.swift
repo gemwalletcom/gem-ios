@@ -12,18 +12,24 @@ public struct AssetStore: Sendable {
         self.db = db.dbQueue
     }
     
-    public func insertFull(assets: [AssetFull]) throws {
+    public func add(assets: [AssetBasic]) throws {
         try db.write { db in
             for asset in assets {
                 try asset.asset.record.insert(db, onConflict: .ignore)
                 try AssetRecord
-                    .filter(Columns.Asset.id == asset.asset.record.id)
-                    .updateAll(db, 
+                    .filter(Columns.Asset.id == asset.asset.id.identifier)
+                    .updateAll(db,
                         Columns.Asset.rank.set(to: asset.score.rank.asInt),
                         Columns.Asset.name.set(to: asset.asset.name),
                         Columns.Asset.symbol.set(to: asset.asset.symbol),
                         Columns.Asset.decimals.set(to: asset.asset.decimals),
-                        Columns.Asset.type.set(to: asset.asset.type.rawValue)
+                        Columns.Asset.type.set(to: asset.asset.type.rawValue),
+                               
+                        Columns.Asset.isBuyable.set(to: asset.properties.isBuyable),
+                        Columns.Asset.isSellable.set(to: asset.properties.isSellable),
+                        Columns.Asset.isSwappable.set(to: asset.properties.isSwapable),
+                        Columns.Asset.isStakeable.set(to: asset.properties.isStakeable),
+                        Columns.Asset.stakingApr.set(to: asset.properties.stakingApr)
                     )
             }
         }
@@ -87,29 +93,11 @@ public struct AssetStore: Sendable {
         }
     }
     
-    // Asset Details
-    
-    public func updateDetails(_ assetsDetails: AssetFull) throws {
+    public func updateLinks(assetId: String, _ links: [AssetLink]) throws {
         try db.write { db in
-            try assetsDetails.record.upsert(db)
-            
-            var assignments: [ColumnAssignment] = [
-                Columns.Asset.rank.set(to: assetsDetails.score.rank),
-            ]
-            
-            if let details = assetsDetails.details {
-                assignments.append(contentsOf: [
-                    Columns.Asset.rank.set(to: details.isBuyable),
-                    Columns.Asset.isBuyable.set(to: details.isBuyable),
-                    Columns.Asset.isSellable.set(to: details.isSellable),
-                    Columns.Asset.isSwappable.set(to: details.isSwapable),
-                    Columns.Asset.isStakeable.set(to: details.isStakeable),
-                ])
+            for link in links {
+                try link.record(assetId: assetId).upsert(db)
             }
-            
-            try AssetRecord
-                .filter(Columns.Asset.id == assetsDetails.asset.id.identifier)
-                .updateAll(db, assignments)
         }
     }
 }

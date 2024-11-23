@@ -7,6 +7,13 @@ struct Columns {
     struct Price {
         static let assetId = Column("assetId")
         static let price = Column("price")
+        static let priceChangePercentage24h = Column("priceChangePercentage24h")
+        static let marketCap = Column("marketCap")
+        static let marketCapRank = Column("marketCapRank")
+        static let totalVolume = Column("totalVolume")
+        static let circulatingSupply = Column("circulatingSupply")
+        static let totalSupply = Column("totalSupply")
+        static let maxSupply = Column("maxSupply")
     }
     
     struct Asset {
@@ -22,6 +29,13 @@ struct Columns {
         static let isSellable = Column("isSellable")
         static let isSwappable = Column("isSwappable")
         static let isStakeable = Column("isStakeable")
+        static let stakingApr = Column("stakingApr")
+    }
+    
+    struct AssetLink {
+        static let assetId = Column("assetId")
+        static let name = Column("name")
+        static let url = Column("url")
     }
     
     struct Wallet {

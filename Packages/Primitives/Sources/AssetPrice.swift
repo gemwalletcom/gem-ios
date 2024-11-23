@@ -65,11 +65,15 @@ public struct ChartValue: Codable, Sendable {
 }
 
 public struct Charts: Codable, Sendable {
+	public let price: Price?
+	public let market: AssetMarket?
 	public let prices: [ChartValue]
 	public let marketCaps: [ChartValue]
 	public let totalVolumes: [ChartValue]
 
-	public init(prices: [ChartValue], marketCaps: [ChartValue], totalVolumes: [ChartValue]) {
+	public init(price: Price?, market: AssetMarket?, prices: [ChartValue], marketCaps: [ChartValue], totalVolumes: [ChartValue]) {
+		self.price = price
+		self.market = market
 		self.prices = prices
 		self.marketCaps = marketCaps
 		self.totalVolumes = totalVolumes

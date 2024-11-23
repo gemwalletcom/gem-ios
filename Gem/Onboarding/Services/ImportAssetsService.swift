@@ -31,15 +31,21 @@ struct ImportAssetsService {
         
         if localAssetsVersion.count != assetIds.count {
             let assets = chains.map {
-                AssetFull(
+                let score = AssetScore.defaultScore(chain: $0.asset.chain)
+                
+                return AssetBasic(
                     asset: $0.asset,
-                    details: .none,
-                    price: .none,
-                    market: .none,
-                    score: AssetScore.defaultScore(chain: $0.asset.chain)
+                    properties: AssetProperties(
+                        isBuyable: score.rank >= 40,
+                        isSellable: false,
+                        isSwapable: false,
+                        isStakeable: false,
+                        stakingApr: .none
+                    ),
+                    score: score
                 )
             }
-            try assetStore.insertFull(assets: assets)
+            try assetStore.add(assets: assets)
         }
     }
 

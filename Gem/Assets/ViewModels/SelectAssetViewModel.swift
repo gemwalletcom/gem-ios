@@ -13,7 +13,7 @@ class SelectAssetViewModel {
     let assetsService: AssetsService
     let walletsService: WalletsService
 
-    var state: StateViewType<[AssetFull]> = .noData
+    var state: StateViewType<[AssetBasic]> = .noData
     var filterModel: AssetsFilterViewModel
 
     var selectAssetAction: AssetAction?

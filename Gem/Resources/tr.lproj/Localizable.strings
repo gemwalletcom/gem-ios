@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "YouTube";
 "social.links" = "Bağlantılar";
-"social.homepage" = "Ana sayfa";
 "social.facebook" = "Facebook";
 "nodes.import_node.title" = "Jeton Ekle";
 "nodes.import_node.chain_id" = "Zincir Kimliği";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "Web sitesi";

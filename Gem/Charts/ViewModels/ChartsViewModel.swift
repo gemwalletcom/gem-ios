@@ -76,6 +76,14 @@ class ChartsViewModel: ObservableObject {
                 period: currentPeriod,
                 currency: preferences.currency
             )
+            if let price = values.price {
+                try priceService.priceStore
+                    .updatePrice(price: price.mapToAssetPrice(assetId: assetModel.asset.id.identifier))
+            }
+            if let market = values.market {
+                try priceService.priceStore.updateMarket(assetId: assetModel.asset.id.identifier, market: market)
+            }
+            
             let price = try priceService.getPrice(for: assetModel.asset.id)
             var charts = values.prices.map {
                 ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value))
@@ -94,34 +102,5 @@ class ChartsViewModel: ObservableObject {
                 self.state = .error(error)
             }
         }
-    }
-    
-    func updateAsset() async {
-        do {
-            try await assetsService.updateAsset(assetId: assetModel.asset.id)
-        } catch {
-            NSLog("charts scene: updateAsset error \(error)")
-        }
-    }
-}
-
-extension AssetDetailsInfo {
-    var socialUrls: [CommunityLink] {
-        let links = details.links
-        let values: [Gemstone.SocialUrl: String] = [
-            .x: links.twitter,
-            .discord: links.discord,
-            .gitHub: links.github,
-            .telegram: links.telegram,
-            .youTube: links.youtube,
-            .coingecko: links.coingecko
-        ].compactMapValues { $0 }
-
-        return values.compactMap { key, value in
-            if let url = URL(string: value) {
-                return CommunityLink(type: key, url: url)
-            }
-            return .none
-        }.sorted()
     }
 }

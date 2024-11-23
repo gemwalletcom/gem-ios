@@ -21,7 +21,7 @@ public struct Migrations {
 
             // asset
             try PriceRecord.create(db: db)
-            try AssetDetailsRecord.create(db: db)
+            try AssetLinkRecord.create(db: db)
 
             // transactions
             try TransactionRecord.create(db: db)
@@ -131,6 +131,27 @@ public struct Migrations {
         migrator.registerMigration("Add lastUsedAt to \(AssetBalanceRecord.databaseTableName)") { db in
             try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.lastUsedAt.name, .date)
+            }
+        }
+        
+        migrator.registerMigration("Create \(AssetLinkRecord.databaseTableName)") { db in
+            try? AssetLinkRecord.create(db: db)
+        }
+        
+        migrator.registerMigration("Add market values to prices table \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: Columns.Price.marketCap.name, .double)
+                $0.add(column: Columns.Price.marketCapRank.name, .integer)
+                $0.add(column: Columns.Price.totalVolume.name, .double)
+                $0.add(column: Columns.Price.circulatingSupply.name, .double)
+                $0.add(column: Columns.Price.totalSupply.name, .double)
+                $0.add(column: Columns.Price.maxSupply.name, .double)
+            }
+        }
+        
+        migrator.registerMigration("Add stakingApr to \(AssetRecord.databaseTableName)") { db in
+            try? db.alter(table: AssetRecord.databaseTableName) {
+                $0.add(column: Columns.Asset.stakingApr.name, .double)
             }
         }
 

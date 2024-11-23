@@ -153,6 +153,6 @@ struct AssetDataViewModel {
     }
     
     var stakeApr: Double? {
-        assetData.details?.details.stakingApr
+        assetData.metadata.stakingApr
     }
 }

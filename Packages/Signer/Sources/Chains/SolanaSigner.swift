@@ -34,7 +34,7 @@ public struct SolanaSigner: Signable {
             let type = SolanaSigningInput.OneOf_TransactionType.tokenTransferTransaction(.with {
                 $0.amount = amount
                 $0.decimals = decimals
-                $0.tokenMintAddress = input.asset.tokenId!
+                $0.tokenMintAddress = tokenId
                 $0.senderTokenAddress = input.token.senderTokenAddress
                 $0.recipientTokenAddress = recipientTokenAddress
                 $0.memo = input.memo.valueOrEmpty

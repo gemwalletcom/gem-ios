@@ -200,7 +200,6 @@
 "social.github" = "GitHub";
 "social.youtube" = "YouTube";
 "social.links" = "連結";
-"social.homepage" = "首頁";
 "social.facebook" = "臉書";
 "nodes.import_node.title" = "添加節點";
 "nodes.import_node.chain_id" = "鏈 ID";
@@ -306,3 +305,4 @@
 "errors.swap.not_supported_chain" = "Not supported chain.";
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
+"social.website" = "網站";

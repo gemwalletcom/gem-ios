@@ -44,7 +44,8 @@ extension AssetMetaData {
         isSellEnabled: true,
         isSwapEnabled: true,
         isStakeEnabled: false,
-        isPinned: false
+        isPinned: false,
+        stakingApr: .none
     )
 }
 
@@ -56,7 +57,14 @@ extension AssetId {
 }
 
 extension AssetData  {
-    static let main = AssetData(asset: .main, balance: .main, account: .main, price: .main, price_alert: .none, details: .none, metadata: .main)
+    static let main = AssetData(
+        asset: .main,
+        balance: .main,
+        account: .main,
+        price: .main,
+        price_alert: .none,
+        metadata: .main
+    )
 }
 
 extension Preferences {

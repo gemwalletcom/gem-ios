@@ -60,3 +60,25 @@ public extension Array where Element == Chain {
         return self.compactMap { $0.assetId }
     }
 }
+
+public extension AssetProperties {
+    static func defaultValue() -> AssetProperties {
+        return AssetProperties(
+            isBuyable: false,
+            isSellable: false,
+            isSwapable: false,
+            isStakeable: false,
+            stakingApr: .none
+        )
+    }
+}
+
+public extension AssetFull {
+    var basic: AssetBasic {
+        AssetBasic(
+            asset: asset,
+            properties: properties,
+            score: score
+        )
+    }
+}
