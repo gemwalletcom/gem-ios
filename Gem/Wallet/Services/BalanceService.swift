@@ -188,7 +188,7 @@ public final class BalanceService: BalancerUpdater {
                 amount: formatter.double(from: available, decimals: decimals)
             )
             return .token(UpdateTokenBalance(available: available))
-        case .stake(let staked, let pending, let rewards, let reserved, let locked, let frozen):
+        case .stake(let staked, let pending, let rewards, _, let locked, let frozen):
             let stakedValue = try UpdateBalanceValue(
                 value: staked.description,
                 amount: formatter.double(from: staked, decimals: decimals)
