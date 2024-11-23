@@ -18,26 +18,12 @@ public struct TonSigner: Signable {
             $0.bounceable = false
         }
 
-        let signingInput = TheOpenNetworkSigningInput.with {
-            $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
-            $0.sequenceNumber = UInt32(input.sequence)
-            $0.expireAt = expireAt()
-            $0.messages = [transfer]
-            $0.privateKey = privateKey
-        }
-        return try sign(input: signingInput, coinType: input.coinType)
+        return try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey)
     }
 
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         guard let jettonCreationFee = input.fee.options[.tokenAccountCreation] else {
             throw AnyError("Invalid token creation fee")
-        }
-
-        let jettonTransfer = TheOpenNetworkJettonTransfer.with {
-            $0.jettonAmount = input.value.UInt
-            $0.toOwner = input.destinationAddress
-            $0.responseAddress = input.senderAddress
-            $0.forwardAmount = 1
         }
 
         let transfer = TheOpenNetworkTransfer.with {
@@ -48,22 +34,26 @@ public struct TonSigner: Signable {
             }
             $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
             $0.bounceable = true
-            $0.jettonTransfer = jettonTransfer
+            $0.jettonTransfer = .with {
+                $0.jettonAmount = input.value.UInt
+                $0.toOwner = input.destinationAddress
+                $0.responseAddress = input.senderAddress
+                $0.forwardAmount = 1
+            }
         }
 
+        return try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey)
+    }
+    
+    private func sign(input: SignerInput, messages: [TW_TheOpenNetwork_Proto_Transfer], coinType: CoinType, privateKey: Data) throws -> String {
         let signingInput = TheOpenNetworkSigningInput.with {
             $0.walletVersion = TheOpenNetworkWalletVersion.walletV4R2
             $0.sequenceNumber = UInt32(input.sequence)
             $0.expireAt = expireAt()
-            $0.messages = [transfer]
+            $0.messages = messages
             $0.privateKey = privateKey
         }
-        
-        return try sign(input: signingInput, coinType: input.coinType)
-    }
-
-    private func sign(input: TheOpenNetworkSigningInput, coinType: CoinType) throws -> String {
-        let output = (AnySigner.sign(input: input, coin: coinType) as TheOpenNetworkSigningOutput)
+        let output = (AnySigner.sign(input: signingInput, coin: coinType) as TheOpenNetworkSigningOutput)
 
         if !output.errorMessage.isEmpty {
             throw AnyError(output.errorMessage)
