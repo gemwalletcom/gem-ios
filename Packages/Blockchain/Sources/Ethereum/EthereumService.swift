@@ -57,9 +57,10 @@ extension EthereumService {
     }
 
     func getChainId() async throws -> Int {
-        return try await provider
-            .request(.chainId)
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value.int
+        if let networkId = Int(GemstoneConfig.shared.getChainConfig(chain: chain.chain.rawValue).networkId) {
+            return networkId
+        }
+        throw AnyError("Unable to get chainId")
     }
 
     func getBasePriorityFee(rewardPercentiles: [Int]) async throws -> (baseFee: BigInt, priorityFee: BigInt) {
