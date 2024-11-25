@@ -104,7 +104,8 @@ class SwapViewModel {
     var actionButtonState: StateViewType<SwapAvailabilityResult> {
         switch swapGetQuoteDataState {
         case .loading: return .loading
-        case .noData, .error, .loaded:
+        case .error(let error): return .error(error)
+        case .noData, .loaded:
             return swapAvailabilityState
         }
     }
