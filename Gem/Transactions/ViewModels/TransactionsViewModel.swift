@@ -9,13 +9,16 @@ import GRDBQuery
 import Keystore
 import Localization
 
-struct TransactionsViewModel {
-    let walletId: WalletId
-    let wallet: Wallet //TODO: Remove later
-
+@Observable
+class TransactionsViewModel {
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
     private let service: TransactionsService
+
+    let walletId: WalletId
+    let wallet: Wallet
+    var filterModel: TransactionsFilterViewModel
+    var request: TransactionsRequest
 
     init(
         walletId: WalletId,
@@ -27,20 +30,32 @@ struct TransactionsViewModel {
         self.wallet = wallet
         self.type = type
         self.service = service
+
+        self.filterModel = TransactionsFilterViewModel(
+            model: ChainsFilterViewModel(
+                allChains: wallet.chains(type: .all),
+                selectedChains: []
+            )
+        )
+        self.request = TransactionsRequest(walletId: walletId.id, type: type)
     }
 
-    var title: String {
-        Localized.Activity.title
-    }
-    
-    var request: TransactionsRequest {
-        TransactionsRequest(walletId: walletId.id, type: type)
+    var title: String { Localized.Activity.title }
+
+    var showFilter: Bool {
+        request.filters.isEmpty
     }
 }
 
 // MARK: - Business Logic
 
 extension TransactionsViewModel {
+    func updateFilterRequest(chains: [Chain]) {
+        request.filters.removeAll(where: { $0.associatedChains.count > 0 })
+        let rawValues = chains.map { $0.rawValue }
+        request.filters.append(.chains(rawValues))
+    }
+
     func fetch() async {
         do {
             guard let deviceId = try preferences.get(key: .deviceId) else {

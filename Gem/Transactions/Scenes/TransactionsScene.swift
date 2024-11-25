@@ -9,23 +9,26 @@ import Style
 import Localization
 
 struct TransactionsScene: View {
+    @State private var model: TransactionsViewModel
+
     @Query<TransactionsRequest>
     private var transactions: [TransactionExtended]
 
-    private let model: TransactionsViewModel
-
-    init(
-        model: TransactionsViewModel
-    ) {
-        self.model = model
-        _transactions = Query(constant: model.request)
+    init(model: TransactionsViewModel) {
+        _model = State(wrappedValue: model)
+        let request = Binding {
+            model.request
+        } set: { new in
+            model.request = new
+        }
+        _transactions = Query(request)
     }
 
     var body: some View {
         List {
             TransactionsList(transactions)
         }
-        .listSectionSpacing(.compact)
+        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
         .listSectionSpacing(.compact)
         .refreshable {
             await fetch()
@@ -46,6 +49,10 @@ struct TransactionsScene: View {
 // MARK: - Effects
 
 extension TransactionsScene {
+    private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
+        model.updateFilterRequest(chains: chains)
+    }
+
     private func fetch() async {
         await model.fetch()
     }

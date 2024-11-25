@@ -15,6 +15,7 @@ class SelectAssetViewModel {
 
     var state: StateViewType<[AssetBasic]> = .noData
     var filterModel: AssetsFilterViewModel
+    var request: AssetsRequest
 
     var selectAssetAction: AssetAction?
 
@@ -33,7 +34,18 @@ class SelectAssetViewModel {
         self.walletsService = walletsService
         self.selectAssetAction = selectAssetAction
 
-        self.filterModel = AssetsFilterViewModel(wallet: wallet, type: selectType)
+        let filter = AssetsFilterViewModel(
+            type: selectType,
+            model: ChainsFilterViewModel(
+                allChains: wallet.chains(type: .all),
+                selectedChains: []
+            )
+        )
+        self.filterModel = filter
+        self.request = AssetsRequest(
+            walletID: wallet.id,
+            filters: filter.defaultFilters
+        )
     }
 
     var title: String {
@@ -58,17 +70,27 @@ class SelectAssetViewModel {
     }
 
     var showAddToken: Bool {
-        selectType == .manage && wallet.hasTokenSupport && !filterModel.allChains.isEmpty
+        selectType == .manage && wallet.hasTokenSupport && !filterModel.chainsFilter.isEmpty
     }
 
-    func selectAsset(asset: Asset) {
-        selectAssetAction?(asset)
+    var showFilter: Bool {
+        wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
     }
 }
 
 // MARK: - Business Logic
 
 extension SelectAssetViewModel {
+    func selectAsset(asset: Asset) {
+        selectAssetAction?(asset)
+    }
+
+    func updateFilterRequest(chains: [Chain]) {
+        request.filters.removeAll(where: { $0.associatedChains.count > 0 })
+        let rawValues = chains.map { $0.rawValue }
+        request.filters.append(.chains(rawValues))
+    }
+
     func search(query: String) async {
         guard wallet.hasTokenSupport else { return }
         

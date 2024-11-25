@@ -1,18 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 import Style
-import Primitives
 import Components
+import Primitives
 
-struct AssetsFilterScene: View {
+struct TransactionsFilterScene: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var model: AssetsFilterViewModel
+    @Binding var model: TransactionsFilterViewModel
 
     @State private var isPresentingChains: Bool = false
 
-    init(model: Binding<AssetsFilterViewModel>) {
+    init(model: Binding<TransactionsFilterViewModel>) {
         _model = model
     }
 
@@ -52,9 +51,8 @@ struct AssetsFilterScene: View {
 
 // MARK: - Actions
 
-extension AssetsFilterScene {
+extension TransactionsFilterScene {
     private func onSelectClear() {
-        // clean to default, extend with different filters
         model.chainsFilter.selectedChains = []
     }
 
@@ -64,7 +62,6 @@ extension AssetsFilterScene {
 
     private func onFinishSelection(chains: [Chain]) {
         model.chainsFilter.selectedChains = chains
-
     }
 
     private func onSelectChainsFilter() {
@@ -74,11 +71,13 @@ extension AssetsFilterScene {
 
 #Preview {
     NavigationStack {
-        AssetsFilterScene(
-            model: .constant(
-                AssetsFilterViewModel(
-                    type: .manage,
-                    model: ChainsFilterViewModel(allChains: [.arbitrum, .avalancheC, .base], selectedChains: [])
+        TransactionsFilterScene(
+            model:.constant(
+                TransactionsFilterViewModel(
+                    model: ChainsFilterViewModel(
+                        allChains: [.aptos, .arbitrum],
+                        selectedChains: []
+                    )
                 )
             )
         )

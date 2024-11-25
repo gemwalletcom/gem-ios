@@ -2,11 +2,18 @@
 
 import SwiftUI
 import Primitives
+import Style
+import Components
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
 
-    let model: TransactionsViewModel
+    @State private var isPresentingFilteringView: Bool = false
+    @State private var model: TransactionsViewModel
+
+    init(model: TransactionsViewModel) {
+        _model = State(wrappedValue: model)
+    }
 
     private var navigationPath: Binding<NavigationPath> {
         Binding(
@@ -18,6 +25,13 @@ struct TransactionsNavigationStack: View {
     var body: some View {
         NavigationStack(path: navigationPath) {
             TransactionsScene(model: model)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        FilterButton(
+                            isActive: model.filterModel.isAnyFilterSpecified,
+                            action: onSelectFilter)
+                    }
+                }
                 .navigationBarTitleDisplayMode(.inline)
                 .navigationTitle(model.title)
                 .navigationDestination(for: TransactionExtended.self) {
@@ -33,5 +47,20 @@ struct TransactionsNavigationStack: View {
                     )
                 }
         }
+        .sheet(isPresented: $isPresentingFilteringView) {
+            NavigationStack {
+                TransactionsFilterScene(model: $model.filterModel)
+            }
+            .presentationDetents([.medium])
+            .presentationDragIndicator(.visible)
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension TransactionsNavigationStack {
+    private func onSelectFilter() {
+        isPresentingFilteringView.toggle()
     }
 }

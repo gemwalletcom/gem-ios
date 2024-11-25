@@ -9,8 +9,6 @@ enum ChainsFilterType {
     case chain(name: Chain)
     case chains(selected: [Chain])
 
-    static let primary = ChainsFilterType.allChains
-
     init(selectedChains: [Chain]) {
         switch selectedChains.count {
         case 0: self = .allChains
