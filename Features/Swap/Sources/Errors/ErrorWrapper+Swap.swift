@@ -24,7 +24,8 @@ public struct ErrorWrapper: Error, LocalizedError {
                 .NetworkError,
                 .AbiError,
                 .NotImplemented,
-                .ComputeQuoteError: error.localizedDescription
+                .ComputeQuoteError,
+                .InvalidRoute: error.localizedDescription
             }
         default: error.localizedDescription
         }

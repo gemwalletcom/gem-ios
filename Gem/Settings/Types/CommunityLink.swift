@@ -51,16 +51,6 @@ extension SocialUrl {
     }
     
     var order: Int {
-        switch self {
-        case .coingecko: 110
-        case .x: 100
-        case .discord: 60
-        case .telegram: 90
-        case .gitHub: 20
-        case .youTube: 30
-        case .reddit: 50
-        case .facebook: 40
-        case .website: 20
-        }
+        socialUrlOrder(url: self).asInt
     }
 }
