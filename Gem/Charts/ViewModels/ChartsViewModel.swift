@@ -65,6 +65,10 @@ class ChartsViewModel: ObservableObject {
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
     }
+    
+    var explorerStorage: ExplorerStorage {
+        ExplorerStorage(preferences: preferences)
+    }
 
     func updateCharts() async {
         DispatchQueue.main.async {

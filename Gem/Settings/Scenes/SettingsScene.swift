@@ -8,6 +8,7 @@ import Primitives
 import Store
 import Keystore
 import Localization
+import MarketInsight
 
 struct SettingsScene: View {
     @Environment(\.isWalletsPresented) private var isWalletsPresented

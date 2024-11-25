@@ -15,6 +15,9 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Localization", path: "../Localization"),
+        .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
+        .package(name: "Store", path: "../Store"),
     ],
     targets: [
         .target(
@@ -22,6 +25,9 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Localization",
+                "Gemstone",
+                "GemstonePrimitives",
+                "Store",
             ],
             path: "Sources"
         ),

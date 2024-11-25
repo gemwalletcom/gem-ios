@@ -8,8 +8,11 @@ import Components
 import GRDB
 import GRDBQuery
 import Store
+import MarketInsight
 
 struct ChartScene: View {
+    
+    @Environment(\.openURL) private var openURL
     
     @StateObject var model: ChartsViewModel
     
@@ -68,21 +71,36 @@ struct ChartScene: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             
-            let priceDataModel = AssetDetailsInfoViewModel(priceData: priceData)
+            let priceDataModel = AssetDetailsInfoViewModel(
+                priceData: priceData,
+                explorerStorage: model.explorerStorage,
+                currencyFormatter: .currency()
+            )
             
             if priceDataModel.showMarketValues {
                 Section {
-                    ForEach(priceDataModel.marketValues, id: \.title) {
-                        ListItemView(title: $0.title, subtitle: $0.subtitle)
+                    ForEach(priceDataModel.marketValues, id: \.title) { link in
+                        if let url = link.url {
+                            NavigationCustomLink(with: ListItemView(title: link.title, subtitle: link.subtitle)) {
+                                openURL(url)
+                            }
+                            .contextMenu {
+                                if let value = link.value {
+                                    ContextMenuCopy(value: value)
+                                }
+                            }
+                        } else {
+                            ListItemView(title: link.title, subtitle: link.subtitle)
+                        }
                     }
                 }
             }
             if priceDataModel.showLinksSection {
                 Section(priceDataModel.linksSectionText) {
-                    ForEach(priceDataModel.links) { link in
+                    ForEach(priceDataModel.links) {
                         NavigationOpenLink(
-                            url: link.url,
-                            with: ListItemView(title: link.type.name, subtitle: link.host, image: link.type.image)
+                            url: $0.url,
+                            with: ListItemView(title: $0.title, subtitle: $0.subtitle, image: $0.image)
                         )
                     }
                 }

@@ -9,6 +9,7 @@ import Gemstone
 import Primitives
 import Localization
 import Style
+import MarketInsight
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable
