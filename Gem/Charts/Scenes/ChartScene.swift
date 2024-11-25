@@ -82,7 +82,7 @@ struct ChartScene: View {
                     ForEach(priceDataModel.links) { link in
                         NavigationOpenLink(
                             url: link.url,
-                            with: ListItemView(title: link.type.name, image: link.type.image)
+                            with: ListItemView(title: link.type.name, subtitle: link.host, image: link.type.image)
                         )
                     }
                 }

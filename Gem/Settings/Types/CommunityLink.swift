@@ -54,3 +54,30 @@ extension SocialUrl {
         socialUrlOrder(url: self).asInt
     }
 }
+
+extension CommunityLink {
+    var host: String? {
+        switch type {
+        case .website: cleanHost(host: self.url.host())
+        case .x,
+            .discord,
+            .telegram,
+            .gitHub,
+            .youTube,
+            .reddit,
+            .facebook,
+            .coingecko: .none
+        }
+    }
+    
+    private func cleanHost(host: String?) -> String? {
+        guard let host else { return host}
+        let values = ["www."]
+        for value in values {
+            if host.hasPrefix(value) {
+                return host.replacingOccurrences(of: value, with: "")
+            }
+        }
+        return host
+    }
+}
