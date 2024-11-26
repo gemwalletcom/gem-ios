@@ -24,12 +24,12 @@ class ConnectionsService {
     
     func setup() {
         Task {
-            await configure()
+            try await configure()
         }
     }
 
-    private func configure() async {
-        connector.configure()
+    private func configure() async throws {
+        try connector.configure()
         await connector.setup()
     }
     
