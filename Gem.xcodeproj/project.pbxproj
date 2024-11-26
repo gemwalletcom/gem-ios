@@ -198,7 +198,6 @@
 		D829BF542CBF314100DEB2E8 /* PriceAlertService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF532CBF314100DEB2E8 /* PriceAlertService */; };
 		D829BF572CBF3E1900DEB2E8 /* DeviceService in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF562CBF3E1900DEB2E8 /* DeviceService */; };
 		D82EF8D02C1E0FA000EC1C92 /* AddNodeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */; };
-		D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */; };
 		D8385CE02AFEBBFB00F784C7 /* WalletConnectorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */; };
 		D8385CE32AFEBC1F00F784C7 /* WalletConnectorInteractable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */; };
 		D847E3512ABCD49C00A56F07 /* TransactionsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D847E3502ABCD49C00A56F07 /* TransactionsService.swift */; };
@@ -291,7 +290,6 @@
 		D8F5B8662CCC380F0007E615 /* HeaderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5B8652CCC380F0007E615 /* HeaderViewModel.swift */; };
 		D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86B2CCD52EB0007E615 /* Staking */; };
 		D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86E2CCD639A0007E615 /* StakeService */; };
-		D8FB43132C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
 		DF8421EE2C1526ED003F558C /* GemstonePrimitives in Frameworks */ = {isa = PBXBuildFile; productRef = DF8421ED2C1526ED003F558C /* GemstonePrimitives */; };
 		DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DF8868882C50F1EB00005AEA /* CalloutView.swift */; };
@@ -512,7 +510,6 @@
 		D829BF522CBF30A900DEB2E8 /* PriceAlertService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlertService; sourceTree = "<group>"; };
 		D829BF552CBF317300DEB2E8 /* DeviceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviceService; sourceTree = "<group>"; };
 		D82EF8CF2C1E0FA000EC1C92 /* AddNodeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeService.swift; sourceTree = "<group>"; };
-		D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityLink.swift; sourceTree = "<group>"; };
 		D8385CDF2AFEBBFB00F784C7 /* WalletConnectorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractor.swift; sourceTree = "<group>"; };
 		D8385CE22AFEBC1F00F784C7 /* WalletConnectorInteractable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractable.swift; sourceTree = "<group>"; };
 		D847E3502ABCD49C00A56F07 /* TransactionsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsService.swift; sourceTree = "<group>"; };
@@ -604,7 +601,6 @@
 		D8F5B8652CCC380F0007E615 /* HeaderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderViewModel.swift; sourceTree = "<group>"; };
 		D8F5B8682CCD50650007E615 /* Staking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Staking; sourceTree = "<group>"; };
 		D8F5B8702CCD6C010007E615 /* StakeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = StakeService; sourceTree = "<group>"; };
-		D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetDetailsInfoViewModel.swift; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyViewModel.swift; sourceTree = "<group>"; };
@@ -1249,7 +1245,6 @@
 				D848B5A62AE85C7D00814FB4 /* WalletImportType.swift */,
 				D8BAC9602BDC82F7001608BC /* WordSuggestor.swift */,
 				D8148C272BF191AB0066586A /* WalletNameGenerator.swift */,
-				D82EF8D12C1E533600EC1C92 /* CommunityLink.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1695,7 +1690,6 @@
 				D8D203B72ACC84BA00261CA2 /* ChartsViewModel.swift */,
 				D8D203BF2ACE058200261CA2 /* ChartValuesViewModel.swift */,
 				D8148C232BED76A80066586A /* ChartPriceModel.swift */,
-				D8FB43122C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -2308,7 +2302,6 @@
 				C37028962A99D179009AE123 /* ChartView.swift in Sources */,
 				C3A7CB8C29CEA2BE00431341 /* WalletHeaderViewModel.swift in Sources */,
 				D848B5952AE3025300814FB4 /* ConnectionsViewModel.swift in Sources */,
-				D82EF8D22C1E533600EC1C92 /* CommunityLink.swift in Sources */,
 				83B672EF2C99BFB60034100C /* LockPeriodSelectionScene.swift in Sources */,
 				C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */,
 				830401CD2CE4FB3F00D47DF5 /* ObservablePreferences.swift in Sources */,
@@ -2335,7 +2328,6 @@
 				DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */,
 				D8B738D62C598BEC004EF083 /* ExportPrivateKey.swift in Sources */,
 				D8BAC9542BD09B7B001608BC /* ScanQRCodeNavigationStack.swift in Sources */,
-				D8FB43132C7A9B45002B94B1 /* AssetDetailsInfoViewModel.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,
 				C3549B3D29C5170000B4BE01 /* WalletIDetailViewModel.swift in Sources */,
 				D8148C222BED76970066586A /* ChartPriceView.swift in Sources */,
@@ -2582,7 +2574,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.69;
+				MARKETING_VERSION = 1.3.73;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -2633,7 +2625,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.69;
+				MARKETING_VERSION = 1.3.73;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;

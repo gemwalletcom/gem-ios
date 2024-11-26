@@ -47,6 +47,7 @@ class SwapViewModel {
     var toValue: String = ""
     
     var swapAvailabilityState: StateViewType<SwapAvailabilityResult> = .noData
+    var swapGetQuoteDataState: StateViewType<Bool> = .noData
 
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
@@ -98,6 +99,23 @@ class SwapViewModel {
         case .loaded(_): return .none //return "1%"
         default: return .none
         }
+    }
+    
+    var actionButtonState: StateViewType<SwapAvailabilityResult> {
+        switch swapGetQuoteDataState {
+        case .loading: return .loading
+        case .error(let error): return .error(error)
+        case .noData, .loaded:
+            return swapAvailabilityState
+        }
+    }
+    
+    var isActionButtonDisabled: Bool {
+        swapAvailabilityState.isLoading
+    }
+    
+    var isQuoteLoading: Bool {
+        swapGetQuoteDataState.isLoading
     }
     
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
@@ -221,11 +239,13 @@ extension SwapViewModel {
         }
         do {
             if swapAvailability.allowance {
+                swapGetQuoteDataState = .loading
                 let data = try await getSwapData(
                     fromAsset: fromAsset,
                     toAsset: toAsset,
                     quote: swapAvailability.quote
                 )
+                swapGetQuoteDataState = .noData
                 onTransfer(data: data)
                 return
             } else {
@@ -245,6 +265,7 @@ extension SwapViewModel {
                 }
             }
         } catch {
+            swapGetQuoteDataState = .error(ErrorWrapper(error))
             swapAvailabilityState = .error(ErrorWrapper(error))
         }
     }

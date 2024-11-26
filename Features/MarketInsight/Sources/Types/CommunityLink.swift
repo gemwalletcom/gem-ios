@@ -6,23 +6,31 @@ import SwiftUI
 import Localization
 import Style
 
-struct CommunityLink {
-    let type: SocialUrl
-    let url: URL
-}
-
-extension CommunityLink: Comparable {
-    static func <(lhs: CommunityLink, rhs: CommunityLink) -> Bool {
-        return lhs.type.order > rhs.type.order
+public struct CommunityLink {
+    public let type: SocialUrl
+    public let url: URL
+    
+    public init(
+        type: SocialUrl,
+        url: URL
+    ) {
+        self.type = type
+        self.url = url
     }
 }
 
 extension CommunityLink: Identifiable {
-    var id: String { type.name }
+    public var id: String { type.name }
+}
+
+extension CommunityLink: Comparable {
+    public static func <(lhs: CommunityLink, rhs: CommunityLink) -> Bool {
+        return lhs.type.order > rhs.type.order
+    }
 }
 
 extension SocialUrl {
-    var name: String {
+    public var name: String {
         switch self {
         case .x: Localized.Social.x
         case .discord: Localized.Social.discord
@@ -36,7 +44,7 @@ extension SocialUrl {
         }
     }
     
-    var image: Image {
+    public var image: Image {
         switch self {
         case .x: Images.Social.x
         case .discord: Images.Social.discord
@@ -50,17 +58,34 @@ extension SocialUrl {
         }
     }
     
-    var order: Int {
-        switch self {
-        case .coingecko: 110
-        case .x: 100
-        case .discord: 60
-        case .telegram: 90
-        case .gitHub: 20
-        case .youTube: 30
-        case .reddit: 50
-        case .facebook: 40
-        case .website: 20
+    public var order: Int {
+        socialUrlOrder(url: self).asInt
+    }
+}
+
+extension CommunityLink {
+    var host: String? {
+        switch type {
+        case .website: cleanHost(host: self.url.host())
+        case .x,
+            .discord,
+            .telegram,
+            .gitHub,
+            .youTube,
+            .reddit,
+            .facebook,
+            .coingecko: .none
         }
+    }
+    
+    private func cleanHost(host: String?) -> String? {
+        guard let host else { return host}
+        let values = ["www."]
+        for value in values {
+            if host.hasPrefix(value) {
+                return host.replacingOccurrences(of: value, with: "")
+            }
+        }
+        return host
     }
 }

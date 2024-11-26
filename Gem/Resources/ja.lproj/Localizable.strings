@@ -306,3 +306,4 @@
 "errors.swap.not_supported_asset" = "Not supported asset.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Webサイト";
+"asset.contract" = "契約";

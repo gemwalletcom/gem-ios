@@ -58,7 +58,7 @@ struct SwapScene: View {
                 if let fromAsset {
                     StateButton(
                         text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                        viewState: model.swapAvailabilityState,
+                        viewState: model.actionButtonState,
                         image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                         infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                         disabledRule: model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
@@ -124,7 +124,7 @@ extension SwapScene {
                 SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
                     .offset(y: Spacing.medium)
                     .frame(maxWidth: .infinity)
-                    .disabled(model.swapAvailabilityState.isLoading)
+                    .disabled(model.isActionButtonDisabled)
             }
 
             Section(model.swapToTitle) {
@@ -132,7 +132,7 @@ extension SwapScene {
                     SwapTokenView(
                         model: model.swapTokenModel(from: toAsset, type: .receive),
                         text: $model.toValue,
-                        showLoading: model.swapAvailabilityState.isLoading,
+                        showLoading: model.isQuoteLoading,
                         disabledTextField: true,
                         onBalanceAction: {},
                         onSelectAssetAction: onSelectAssetAction

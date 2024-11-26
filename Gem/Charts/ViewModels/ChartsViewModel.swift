@@ -39,7 +39,7 @@ class ChartsViewModel: ObservableObject {
         return PriceRequest(assetId: assetModel.asset.id.identifier)
     }
 
-    var title: String { assetModel.title }
+    var title: String { assetModel.name }
 
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
@@ -64,6 +64,10 @@ class ChartsViewModel: ObservableObject {
         self.assetsService = assetsService
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
+    }
+    
+    var explorerStorage: ExplorerStorage {
+        ExplorerStorage(preferences: preferences)
     }
 
     func updateCharts() async {

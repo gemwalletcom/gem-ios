@@ -27,6 +27,8 @@ public enum Localized {
     public static let balances = Localized.tr("Localizable", "asset.balances", fallback: "Balances")
     /// Circulating Supply
     public static let circulatingSupply = Localized.tr("Localizable", "asset.circulating_supply", fallback: "Circulating Supply")
+    /// Contract
+    public static let contract = Localized.tr("Localizable", "asset.contract", fallback: "Contract")
     /// Decimals
     public static let decimals = Localized.tr("Localizable", "asset.decimals", fallback: "Decimals")
     /// Latest Transactions

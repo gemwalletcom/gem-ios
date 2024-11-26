@@ -11,7 +11,13 @@ struct WalletConnectionViewModel {
     }
     
     var imageUrl: URL? {
-        return URL(string: connection.session.metadata.icon)
+        if let url = URL(string: connection.session.metadata.icon) {
+            if url.host() == nil {
+                return URL(string: connection.session.metadata.url + connection.session.metadata.icon)
+            }
+            return url
+        }
+        return .none
     }
     
     var host: String? {

@@ -98,7 +98,7 @@ struct ChartView: View {
         .chartBackground { proxy in
             ZStack(alignment: .topLeading) {
                 GeometryReader { geo in
-                    let maxWidth = 78.0
+                    let maxWidth = 88.0
 
                     // lower
                     if let lowerBoundX = proxy.position(forX: model.values.lowerBoundDate), let lowerBoundY1 = proxy.position(forY: model.values.lowerBoundValue) {

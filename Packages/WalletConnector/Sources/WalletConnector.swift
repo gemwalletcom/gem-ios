@@ -17,7 +17,7 @@ public class WalletConnector {
 // MARK: - Public
 
 extension WalletConnector {
-    public func configure() {
+    public func configure() throws {
         Networking.configure(
             groupIdentifier: "group.com.gemwallet.ios",
             projectId: "3bc07cd7179d11ea65335fb9377702b6",
@@ -30,9 +30,9 @@ extension WalletConnector {
                 description: "Gem Web3 Wallet",
                 url: "https://gemwallet.com",
                 icons: ["https://gemwallet.com/images/gem-logo-256x256.png"],
-                redirect: try! AppMetadata.Redirect(
+                redirect: try AppMetadata.Redirect(
                     native: "gem://",
-                    universal: nil
+                    universal: .none
                 )
             ),
             crypto: DefaultCryptoProvider()
@@ -164,9 +164,9 @@ extension WalletConnector {
         case .ethChainId:
             return .error(.methodNotFound)
         case .walletAddEthereumChain:
-            return try await walletAddEthereumChain(chain: chain, request: request)
+            return walletAddEthereumChain(chain: chain, request: request)
         case  .walletSwitchEthereumChain:
-            return try await walletSwitchEthereumChain(chain: chain, request: request)
+            return walletSwitchEthereumChain(chain: chain, request: request)
         case .solanaSignMessage:
             return try await solanaSignMessage(request: request)
         case .solanaSignTransaction:
@@ -269,12 +269,12 @@ extension WalletConnector {
         return .error(.methodNotFound)
     }
 
-    private func walletAddEthereumChain(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
-        return .error(.methodNotFound)
+    private func walletAddEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
+        return .response(AnyCodable(any: NSNull()))
     }
 
-    private func walletSwitchEthereumChain(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
-        return .error(.methodNotFound)
+    private func walletSwitchEthereumChain(chain: Chain, request: WalletConnectSign.Request) -> RPCResult {
+        return .response(AnyCodable(any: NSNull()))
     }
 
     // solana
