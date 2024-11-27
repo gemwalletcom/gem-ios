@@ -124,7 +124,7 @@ extension SwapScene {
                 SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
                     .offset(y: Spacing.medium)
                     .frame(maxWidth: .infinity)
-                    .disabled(model.isActionButtonDisabled)
+                    .disabled(model.isSwitchAssetButtonDisabled)
             }
 
             Section(model.swapToTitle) {

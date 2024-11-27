@@ -26,7 +26,6 @@ public struct ChartValues {
         self.upperBoundDate = upperBoundDate
     }
 
-
     public var yScale: [Double] {
         return [lowerBoundValue, upperBoundValue]
     }
