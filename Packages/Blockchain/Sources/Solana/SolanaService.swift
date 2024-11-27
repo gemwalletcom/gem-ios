@@ -127,7 +127,7 @@ extension SolanaService {
     ) {
         let gasLimit = switch type {
         case .transfer, .stake: 100_000
-        case .generic, .swap: 1_200_000
+        case .generic, .swap: 1_400_000
         }
         
         // filter out any large fees
@@ -135,21 +135,25 @@ extension SolanaService {
         
         let multipleOf = switch type {
         case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
-        case .stake, .generic, .swap: 500_000
+        case .stake: 100_000
+        case .generic, .swap: 250_000
         }
         
         let minerFee = {
             if priorityFees.isEmpty {
                 multipleOf
             } else {
-                max((priorityFees.reduce(0, { $0 + Int($1) }) / priorityFees.count).roundToNearest(
-                    multipleOf: multipleOf,
-                    mode: .up
-                ), multipleOf)
+                max(
+                    (priorityFees.reduce(0, { $0 + Int($1) }) / priorityFees.count).roundToNearest(
+                        multipleOf: multipleOf,
+                        mode: .up
+                    ),
+                    multipleOf
+                )
             }
         }()
         
-        let totalFee = staticBaseFee + (minerFee / (gasLimit / 10_000)).asBigInt
+        let totalFee = staticBaseFee + (minerFee * gasLimit / 1_000_000).asBigInt
         
         return (
             totalFee,
