@@ -131,7 +131,7 @@ extension SolanaService {
         }
         
         // filter out any large fees
-        let priorityFees = try await getPrioritizationFees()
+        let priorityFees = try await getPrioritizationFees().map { $0.asInt }
         
         let multipleOf = switch type {
         case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
@@ -144,7 +144,7 @@ extension SolanaService {
                 multipleOf
             } else {
                 max(
-                    (priorityFees.reduce(0, { $0 + Int($1) }) / priorityFees.count).roundToNearest(
+                    (priorityFees.reduce(0, +) / priorityFees.count).roundToNearest(
                         multipleOf: multipleOf,
                         mode: .up
                     ),
