@@ -41,7 +41,9 @@ public struct SystemImage {
     public static let filterFill = "line.horizontal.3.decrease.circle.fill"
     public static let book = "book"
     public static let starFill = "star.fill"
-    
+    public static let textPageFill = "text.page.fill"
+
+
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
 }

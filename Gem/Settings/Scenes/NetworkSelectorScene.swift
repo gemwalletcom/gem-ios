@@ -8,7 +8,6 @@ struct NetworkSelectorScene: View {
     @Environment(\.dismiss) var dismiss
 
     @Binding var model: NetworkSelectorViewModel
-
     private var onFinishSelection: (([Chain]) -> Void)?
 
     init(model: Binding<NetworkSelectorViewModel>,
@@ -18,45 +17,17 @@ struct NetworkSelectorScene: View {
     }
 
     var body: some View {
-        SearchableListView(
-            items: model.chains,
-            filter: model.filter(_:query:),
-            content: { chain in
-                if model.isMultiSelectionEnabled {
-                    SelectionView(
-                        value: chain,
-                        selection: model.selectedChains.contains(chain) ? chain : nil,
-                        action: onSelect(chain:),
-                        content: {
-                            ChainView(chain: chain)
-                        }
-                    )
-                } else {
-                    NavigationCustomLink(with: ChainView(chain: chain)) {
-                        onSelect(chain: chain)
-                    }
-                }
+        SearchableSelectableListView(
+            model: $model,
+            onFinishSelection: { value in
+                onFinishSelection?(value)
+                dismiss()
             },
-            emptyContent: {
-                StateEmptyView(
-                    title: model.noResultsTitle,
-                    image: model.noResultsImage
-                )
+            listContent: { chain in
+                ChainView(chain: chain)
             }
         )
         .navigationTitle(model.title)
-    }
-}
-
-// MARK: - Actions
-
-extension NetworkSelectorScene {
-    private func onSelect(chain: Chain) {
-        model.toggle(chain: chain)
-
-        guard !model.isMultiSelectionEnabled else { return }
-        onFinishSelection?(Array(model.selectedChains))
-        dismiss()
     }
 }
 
@@ -64,6 +35,6 @@ extension NetworkSelectorScene {
 
 #Preview {
     NetworkSelectorScene(
-        model: .constant(NetworkSelectorViewModel(chains: [.aptos, .arbitrum, .base]))
+        model: .constant(NetworkSelectorViewModel(items: [.aptos, .arbitrum, .base]))
     )
 }

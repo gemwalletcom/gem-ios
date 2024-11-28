@@ -37,8 +37,7 @@ class SelectAssetViewModel {
         let filter = AssetsFilterViewModel(
             type: selectType,
             model: ChainsFilterViewModel(
-                allChains: wallet.chains(type: .all),
-                selectedChains: []
+                chains: wallet.chains(type: .all)
             )
         )
         self.filterModel = filter
@@ -85,10 +84,16 @@ extension SelectAssetViewModel {
         selectAssetAction?(asset)
     }
 
-    func updateFilterRequest(chains: [Chain]) {
-        request.filters.removeAll(where: { $0.associatedChains.count > 0 })
-        let rawValues = chains.map { $0.rawValue }
-        request.filters.append(.chains(rawValues))
+    func update(filterRequest: AssetsRequestFilter) {
+        request.filters.removeAll { existingFilter in
+            switch (filterRequest, existingFilter) {
+            case (.chains, .chains):
+                return true
+            default:
+                return false
+            }
+        }
+        request.filters.append(filterRequest)
     }
 
     func search(query: String) async {

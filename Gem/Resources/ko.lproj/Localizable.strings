@@ -307,3 +307,4 @@
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "웹사이트";
 "asset.contract" = "계약";
+"filter.types" = "유형";

@@ -8,9 +8,9 @@ import Localization
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType
-    var chainsFilter: any ChainsFilterable
+    var chainsFilter: ChainsFilterViewModel
 
-    init(type: SelectAssetType, model: any ChainsFilterable) {
+    init(type: SelectAssetType, model: ChainsFilterViewModel) {
         self.type = type
         self.chainsFilter = model
     }
@@ -42,6 +42,14 @@ struct AssetsFilterViewModel {
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
+
+    var networksModel: NetworkSelectorViewModel {
+        NetworkSelectorViewModel(
+            items: chainsFilter.allChains,
+            selectedItems: chainsFilter.selectedChains,
+            isMultiSelectionEnabled: true
+        )
+    }
 }
 
 // MARK: - Models extensions

@@ -17,5 +17,3 @@ enum ChainsFilterType {
         }
     }
 }
-
-extension ChainsFilterType: Equatable { }

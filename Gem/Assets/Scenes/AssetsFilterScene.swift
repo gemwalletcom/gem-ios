@@ -18,7 +18,7 @@ struct AssetsFilterScene: View {
 
     var body: some View {
         List {
-            SelectChainView(
+            SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
                 action: onSelectChainsFilter)
         }
@@ -40,11 +40,12 @@ struct AssetsFilterScene: View {
             }
         }
         .sheet(isPresented: $isPresentingChains) {
-            NetworkSelectorNavigationStack(
-                chains: model.chainsFilter.allChains,
-                selectedChains: model.chainsFilter.selectedChains,
-                isMultiSelectionEnabled: true,
-                onFinishSelection: onFinishSelection(chains:)
+            SelectableSheet(
+                model: model.networksModel,
+                onFinishSelection: onFinishSelection(chains:),
+                listContent: { chain in
+                    ChainView(chain: chain)
+                }
             )
         }
     }
@@ -64,7 +65,6 @@ extension AssetsFilterScene {
 
     private func onFinishSelection(chains: [Chain]) {
         model.chainsFilter.selectedChains = chains
-
     }
 
     private func onSelectChainsFilter() {
@@ -78,7 +78,7 @@ extension AssetsFilterScene {
             model: .constant(
                 AssetsFilterViewModel(
                     type: .manage,
-                    model: ChainsFilterViewModel(allChains: [.arbitrum, .avalancheC, .base], selectedChains: [])
+                    model: ChainsFilterViewModel(chains: [.arbitrum, .avalancheC, .base])
                 )
             )
         )

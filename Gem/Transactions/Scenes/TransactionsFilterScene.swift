@@ -10,6 +10,7 @@ struct TransactionsFilterScene: View {
     @Binding var model: TransactionsFilterViewModel
 
     @State private var isPresentingChains: Bool = false
+    @State private var isPresentingTypes: Bool = false
 
     init(model: Binding<TransactionsFilterViewModel>) {
         _model = model
@@ -17,9 +18,14 @@ struct TransactionsFilterScene: View {
 
     var body: some View {
         List {
-            SelectChainView(
+            SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
-                action: onSelectChainsFilter)
+                action: onSelectChainsFilter
+            )
+            SelectFilterView(
+                typeModel: model.transactionTypesFilter.typeModel,
+                action: onSelectTypesFilter
+            )
         }
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
@@ -39,11 +45,21 @@ struct TransactionsFilterScene: View {
             }
         }
         .sheet(isPresented: $isPresentingChains) {
-            NetworkSelectorNavigationStack(
-                chains: model.chainsFilter.allChains,
-                selectedChains: model.chainsFilter.selectedChains,
-                isMultiSelectionEnabled: true,
-                onFinishSelection: onFinishSelection(chains:)
+            SelectableSheet(
+                model: model.networksModel,
+                onFinishSelection: onFinishSelection(chains:),
+                listContent: { chain in
+                    ChainView(chain: chain)
+                }
+            )
+        }
+        .sheet(isPresented: $isPresentingTypes) {
+            SelectableSheet(
+                model: model.typesModel,
+                onFinishSelection: onFinishSelection(types:),
+                listContent: { type in
+                    ListItemView(title: TransactionTypeViewModel(type: type).title)
+                }
             )
         }
     }
@@ -54,6 +70,7 @@ struct TransactionsFilterScene: View {
 extension TransactionsFilterScene {
     private func onSelectClear() {
         model.chainsFilter.selectedChains = []
+        model.transactionTypesFilter.selectedTypes = []
     }
 
     private func onSelectDone() {
@@ -64,8 +81,16 @@ extension TransactionsFilterScene {
         model.chainsFilter.selectedChains = chains
     }
 
+    private func onFinishSelection(types: [TransactionType]) {
+        model.transactionTypesFilter.selectedTypes = types
+    }
+
     private func onSelectChainsFilter() {
         isPresentingChains.toggle()
+    }
+
+    private func onSelectTypesFilter() {
+        isPresentingTypes.toggle()
     }
 }
 
@@ -74,9 +99,11 @@ extension TransactionsFilterScene {
         TransactionsFilterScene(
             model:.constant(
                 TransactionsFilterViewModel(
-                    model: ChainsFilterViewModel(
-                        allChains: [.aptos, .arbitrum],
-                        selectedChains: []
+                    chainsFilterModel: ChainsFilterViewModel(
+                        chains: [.aptos, .arbitrum]
+                    ),
+                    transactionTypesFilter: TransacionTypesFilterViewModel(
+                        types: [.swap, .stakeDelegate]
                     )
                 )
             )

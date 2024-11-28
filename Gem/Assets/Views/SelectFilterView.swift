@@ -2,12 +2,13 @@
 
 import SwiftUI
 import Components
+import Style
 
-struct SelectChainView: View {
-    private let typeModel: ChainsFilterTypeViewModel
+struct SelectFilterView: View {
+    private let typeModel: any FilterTypeRepresentable
     private let action: () -> Void
 
-    init(typeModel: ChainsFilterTypeViewModel, action: @escaping () -> Void) {
+    init(typeModel: any FilterTypeRepresentable, action: @escaping () -> Void) {
         self.typeModel = typeModel
         self.action = action
     }
@@ -17,7 +18,8 @@ struct SelectChainView: View {
             with: ListItemView(
                 title: typeModel.title,
                 subtitle: typeModel.value,
-                image: typeModel.chainsImage
+                image: typeModel.image,
+                imageSize: Sizing.list.image
             ),
             action: action
         )
@@ -25,5 +27,8 @@ struct SelectChainView: View {
 }
 
 #Preview {
-    SelectChainView(typeModel: .init(type: .allChains), action: {})
+    SelectFilterView(
+        typeModel: ChainsFilterTypeViewModel(type: .allChains),
+        action: {}
+    )
 }

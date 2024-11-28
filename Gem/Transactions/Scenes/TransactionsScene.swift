@@ -29,6 +29,7 @@ struct TransactionsScene: View {
             TransactionsList(transactions)
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
+        .onChange(of: model.filterModel.transactionTypesFilter.selectedTypes, onChangeTypes)
         .listSectionSpacing(.compact)
         .refreshable {
             await fetch()
@@ -50,7 +51,11 @@ struct TransactionsScene: View {
 
 extension TransactionsScene {
     private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
-        model.updateFilterRequest(chains: chains)
+        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
+    }
+
+    private func onChangeTypes(_ _: [TransactionType], _ types: [TransactionType]) {
+        model.update(filterRequest: .types(types.map({ $0.rawValue })))
     }
 
     private func fetch() async {

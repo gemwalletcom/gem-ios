@@ -43,5 +43,6 @@ public extension Images {
         public static let book = Image(systemName: SystemImage.book)
         public static let starFill = Image(systemName: SystemImage.starFill)
         public static let errorOccurred = Image(systemName: SystemImage.errorOccurred)
+        public static let textPageFill = Image(systemName: SystemImage.textPageFill)
     }
 }

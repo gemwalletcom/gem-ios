@@ -76,6 +76,11 @@ extension TransactionsRequest {
                 return request
             }
             return request.filter(chains.contains(Columns.Transaction.chain))
+        case .types(let types):
+            if types.isEmpty {
+                return request
+            }
+            return request.filter(types.contains(Columns.Transaction.type))
         }
     }
 

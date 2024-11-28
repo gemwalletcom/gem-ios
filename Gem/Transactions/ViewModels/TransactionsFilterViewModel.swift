@@ -6,28 +6,35 @@ import Store
 import Localization
 
 struct TransactionsFilterViewModel {
-    var chainsFilter: any ChainsFilterable
+    var chainsFilter: ChainsFilterViewModel
+    var transactionTypesFilter: TransacionTypesFilterViewModel
 
-    init(model: any ChainsFilterable) {
-        self.chainsFilter = model
+    init(chainsFilterModel: ChainsFilterViewModel,
+         transactionTypesFilter: TransacionTypesFilterViewModel) {
+        self.chainsFilter = chainsFilterModel
+        self.transactionTypesFilter = transactionTypesFilter
     }
 
     var isAnyFilterSpecified: Bool {
-        chainsFilter.isAnySelected
+        chainsFilter.isAnySelected || transactionTypesFilter.isAnySelected
     }
 
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
-}
 
-// MARK: - Models extensions
+    var networksModel: NetworkSelectorViewModel {
+        NetworkSelectorViewModel(
+            items: chainsFilter.allChains,
+            selectedItems: chainsFilter.selectedChains,
+            isMultiSelectionEnabled: true
+        )
+    }
 
-extension TransactionsRequestFilter {
-    var associatedChains: [String] {
-        if case let .chains(chains) = self {
-            return chains
-        }
-        return []
+    var typesModel: TransactionTypesSelectorViewModel {
+        TransactionTypesSelectorViewModel(
+            items: transactionTypesFilter.allTransactionsTypes,
+            selectedItems: transactionTypesFilter.selectedTypes,
+            isMultiSelectionEnabled: true)
     }
 }

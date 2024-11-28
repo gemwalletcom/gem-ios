@@ -5,7 +5,7 @@ import Foundation
 import Localization
 import Style
 
-struct ChainsFilterTypeViewModel {
+struct ChainsFilterTypeViewModel: FilterTypeRepresentable {
     private let type: ChainsFilterType
 
     init(type: ChainsFilterType) {
@@ -27,5 +27,5 @@ struct ChainsFilterTypeViewModel {
         Localized.Settings.Networks.title
     }
 
-    var chainsImage: Image { Images.Settings.networks }
+    var image: Image { Images.Settings.networks }
 }

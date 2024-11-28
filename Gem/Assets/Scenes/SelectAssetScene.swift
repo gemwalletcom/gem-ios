@@ -130,7 +130,7 @@ struct SelectAssetScene: View {
 
 extension SelectAssetScene {
     private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
-        model.updateFilterRequest(chains: chains)
+        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
     }
     
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {

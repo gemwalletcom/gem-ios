@@ -307,3 +307,4 @@
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "網站";
 "asset.contract" = "合約";
+"filter.types" = "類型";

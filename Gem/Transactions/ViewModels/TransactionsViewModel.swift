@@ -32,9 +32,11 @@ class TransactionsViewModel {
         self.service = service
 
         self.filterModel = TransactionsFilterViewModel(
-            model: ChainsFilterViewModel(
-                allChains: wallet.chains(type: .all),
-                selectedChains: []
+            chainsFilterModel: ChainsFilterViewModel(
+                chains: wallet.chains(type: .all)
+            ),
+            transactionTypesFilter: TransacionTypesFilterViewModel(
+                types: TransactionType.allCases
             )
         )
         self.request = TransactionsRequest(walletId: walletId.id, type: type)
@@ -42,18 +44,22 @@ class TransactionsViewModel {
 
     var title: String { Localized.Activity.title }
 
-    var showFilter: Bool {
-        request.filters.isEmpty
-    }
+    var showFilter: Bool { request.filters.isEmpty }
 }
 
 // MARK: - Business Logic
 
 extension TransactionsViewModel {
-    func updateFilterRequest(chains: [Chain]) {
-        request.filters.removeAll(where: { $0.associatedChains.count > 0 })
-        let rawValues = chains.map { $0.rawValue }
-        request.filters.append(.chains(rawValues))
+    func update(filterRequest: TransactionsRequestFilter) {
+        request.filters.removeAll { existingFilter in
+            switch (filterRequest, existingFilter) {
+            case (.chains, .chains), (.types, .types):
+                return true
+            default:
+                return false
+            }
+        }
+        request.filters.append(filterRequest)
     }
 
     func fetch() async {
