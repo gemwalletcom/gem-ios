@@ -343,6 +343,8 @@ public enum Localized {
     public static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
+    /// Types
+    public static let types = Localized.tr("Localizable", "filter.types", fallback: "Types")
   }
   public enum Info {
     public enum LockTime {

@@ -5,48 +5,33 @@ import Primitives
 import Localization
 import Style
 import SwiftUI
+import Components
 
-struct NetworkSelectorViewModel {
+struct NetworkSelectorViewModel: SelectableSheetViewable {
+    var isSearchable: Bool { true }
     let isMultiSelectionEnabled: Bool
-    let chains: [Chain]
+    let items: [Chain]
 
-    var selectedChains: Set<Chain>
+    var selectedItems: Set<Chain>
 
-    init(chains: [Chain], selectedChains: [Chain], isMultiSelectionEnabled: Bool) {
+    init(items: [Chain], selectedItems: [Chain], isMultiSelectionEnabled: Bool) {
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
-        self.chains = chains
-        self.selectedChains = Set(selectedChains)
-    }
-
-    init(chains: [Chain]) {
-        self.init(chains: chains, selectedChains: [], isMultiSelectionEnabled: false)
+        self.items = items
+        self.selectedItems = Set(selectedItems)
     }
 
     var title: String { Localized.Settings.Networks.title }
     var cancelButtonTitle: String { Localized.Common.cancel }
     var clearButtonTitle: String { Localized.Filter.clear }
     var doneButtonTitle: String { Localized.Common.done }
-    var noResultsTitle: String { Localized.Common.noResultsFound }
-
-    var noResultsImage: Image { Images.System.searchNoResults }
+    var noResultsTitle: String? { Localized.Common.noResultsFound }
+    var noResultsImage: Image? { Images.System.searchNoResults }
 }
 
-// MARK: - Business Logic
-
-extension NetworkSelectorViewModel {
-    mutating func toggle(chain: Chain) {
-        if selectedChains.contains(chain) {
-            selectedChains.remove(chain)
-        } else {
-            selectedChains.insert(chain)
-        }
-    }
-
-    mutating func clean() {
-        selectedChains = []
+extension NetworkSelectorViewModel: ItemFilterable {
+    func filter(_ chain: Chain, query: String) -> Bool {
+        chain.asset.name.localizedCaseInsensitiveContains(query) ||
+        chain.asset.symbol.localizedCaseInsensitiveContains(query) ||
+        chain.rawValue.localizedCaseInsensitiveContains(query)
     }
 }
-
-// MARK: - ChainFilterable
-
-extension NetworkSelectorViewModel: ChainFilterable { }

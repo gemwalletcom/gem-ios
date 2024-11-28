@@ -1,18 +1,18 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 import Style
-import Primitives
 import Components
+import Primitives
 
-struct AssetsFilterScene: View {
+struct TransactionsFilterScene: View {
     @Environment(\.dismiss) var dismiss
-    @Binding var model: AssetsFilterViewModel
+    @Binding var model: TransactionsFilterViewModel
 
     @State private var isPresentingChains: Bool = false
+    @State private var isPresentingTypes: Bool = false
 
-    init(model: Binding<AssetsFilterViewModel>) {
+    init(model: Binding<TransactionsFilterViewModel>) {
         _model = model
     }
 
@@ -20,7 +20,12 @@ struct AssetsFilterScene: View {
         List {
             SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
-                action: onSelectChainsFilter)
+                action: onSelectChainsFilter
+            )
+            SelectFilterView(
+                typeModel: model.transactionTypesFilter.typeModel,
+                action: onSelectTypesFilter
+            )
         }
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
@@ -43,7 +48,16 @@ struct AssetsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
-                listContent: { ChainView(chain: $0)}
+                listContent: { ChainView(chain: $0) }
+            )
+        }
+        .sheet(isPresented: $isPresentingTypes) {
+            SelectableSheet(
+                model: model.typesModel,
+                onFinishSelection: onFinishSelection(types:),
+                listContent: { 
+                    ListItemView(title: TransactionTypeViewModel(type: $0).title)
+                }
             )
         }
     }
@@ -51,10 +65,10 @@ struct AssetsFilterScene: View {
 
 // MARK: - Actions
 
-extension AssetsFilterScene {
+extension TransactionsFilterScene {
     private func onSelectClear() {
-        // clean to default, extend with different filters
         model.chainsFilter.selectedChains = []
+        model.transactionTypesFilter.selectedTypes = []
     }
 
     private func onSelectDone() {
@@ -65,18 +79,30 @@ extension AssetsFilterScene {
         model.chainsFilter.selectedChains = chains
     }
 
+    private func onFinishSelection(types: [TransactionType]) {
+        model.transactionTypesFilter.selectedTypes = types
+    }
+
     private func onSelectChainsFilter() {
         isPresentingChains.toggle()
+    }
+
+    private func onSelectTypesFilter() {
+        isPresentingTypes.toggle()
     }
 }
 
 #Preview {
     NavigationStack {
-        AssetsFilterScene(
-            model: .constant(
-                AssetsFilterViewModel(
-                    type: .manage,
-                    model: ChainsFilterViewModel(chains: [.arbitrum, .avalancheC, .base])
+        TransactionsFilterScene(
+            model:.constant(
+                TransactionsFilterViewModel(
+                    chainsFilterModel: ChainsFilterViewModel(
+                        chains: [.aptos, .arbitrum]
+                    ),
+                    transactionTypesFilter: TransacionTypesFilterViewModel(
+                        types: [.swap, .stakeDelegate]
+                    )
                 )
             )
         )

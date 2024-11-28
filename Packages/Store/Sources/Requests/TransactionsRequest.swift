@@ -13,13 +13,17 @@ public struct TransactionsRequest: ValueObservationQueryable {
     private let type: TransactionsRequestType
     private let limit: Int
 
+    public var filters: [TransactionsRequestFilter] = []
+
     public init(
         walletId: String,
         type: TransactionsRequestType,
+        filters: [TransactionsRequestFilter] = [],
         limit: Int = 50
     ) {
         self.walletId = walletId
         self.type = type
+        self.filters = filters
         self.limit = limit
     }
 
@@ -52,6 +56,10 @@ public struct TransactionsRequest: ValueObservationQueryable {
             break
         }
 
+        filters.forEach {
+            request = Self.applyFilter(request: request, $0)
+        }
+
         return try request.asRequest(of: TransactionInfo.self)
             .fetchAll(db)
             .compactMap { $0.mapToTransactionExtended() }
@@ -61,6 +69,21 @@ public struct TransactionsRequest: ValueObservationQueryable {
 // MARK: - Private
 
 extension TransactionsRequest {
+    static func applyFilter(request: QueryInterfaceRequest<TransactionRecord>, _ filter: TransactionsRequestFilter) -> QueryInterfaceRequest<TransactionRecord> {
+        switch filter {
+        case .chains(let chains):
+            if chains.isEmpty {
+                return request
+            }
+            return request.filter(chains.contains(Columns.Transaction.chain))
+        case .types(let types):
+            if types.isEmpty {
+                return request
+            }
+            return request.filter(types.contains(Columns.Transaction.type))
+        }
+    }
+
     private func states(type: TransactionsRequestType) -> [String] {
         switch type {
         case .pending:

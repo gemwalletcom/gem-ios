@@ -20,7 +20,7 @@ struct AddTokenScene: View {
 
     init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
         _model = State(initialValue: model)
-        _networksModel = State(initialValue: NetworkSelectorViewModel(chains: model.chains))
+        _networksModel = State(initialValue: NetworkSelectorViewModel(items: model.chains))
         self.action = action
     }
 

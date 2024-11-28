@@ -1,26 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Localization
-import Style
+import Primitives
 
 struct ChainsFilterViewModel {
-    let type: ChainsFilterType
+    let allChains: [Primitives.Chain]
+    var selectedChains: [Primitives.Chain]
 
-    var value: String {
-        switch type {
-        case .allChains:
-            Localized.Common.all
-        case let .chain(chain):
-            chain.rawValue.capitalized
-        case let .chains(selected):
-            "\(selected.count)"
-        }
+    init(chains: [Primitives.Chain]) {
+        self.allChains = chains
+        self.selectedChains = []
     }
 
-    var title: String {
-        Localized.Settings.Networks.title
+    var typeModel: ChainsFilterTypeViewModel {
+        ChainsFilterTypeViewModel(
+            type: ChainsFilterType(selectedChains: selectedChains)
+        )
     }
-    
-    var chainsImage: Image { Images.Settings.networks }
+
+    var isAnySelected: Bool { !selectedChains.isEmpty }
+    var isEmpty: Bool { allChains.isEmpty }
 }
+

@@ -69,6 +69,7 @@ struct Columns {
         static let type = Column("type")
         static let fee = Column("fee")
         static let date = Column("date")
+        static let chain = Column("chain")
     }
     
     struct TransactionAssetAssociation {

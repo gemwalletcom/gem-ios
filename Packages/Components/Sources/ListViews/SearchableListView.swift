@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public struct SearchableListView<Item: Identifiable, Content: View, EmptyContent: View>: View {
+public struct SearchableListView<Item: Identifiable & Hashable, Content: View, EmptyContent: View>: View {
     let items: [Item]
     let filter: (Item, String) -> Bool
     let content: (Item) -> Content
@@ -23,11 +23,10 @@ public struct SearchableListView<Item: Identifiable, Content: View, EmptyContent
     }
 
     public var body: some View {
-        List {
-            ForEach(filteredItems) { item in
-                content(item)
-            }
-        }
+        ListView(
+            items: filteredItems,
+            content: content
+        )
         .overlay {
             if filteredItems.isEmpty {
                 emptyContent()

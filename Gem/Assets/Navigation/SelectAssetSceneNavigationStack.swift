@@ -44,21 +44,12 @@ struct SelectAssetSceneNavigationStack: View {
                     .bold()
                     .accessibilityIdentifier("cancel")
                 }
-                if model.showAddToken {
+                if model.showFilter {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingFilteringView = true
-                        } label: {
-                            if model.filterModel.isCusomFilteringSpecified {
-                                Images.System.filterFill
-                                    .symbolRenderingMode(.palette)
-                                    .foregroundStyle(Colors.whiteSolid, Colors.blue)
-                            } else {
-                                Images.System.filter
-                                    .foregroundStyle(.primary)
-                            }
-                        }
-                        .contentTransition(.symbolEffect(.replace))
+                        FilterButton(
+                            isActive: model.filterModel.isAnyFilterSpecified,
+                            action: onSelectFilter
+                        )
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
@@ -118,11 +109,20 @@ struct SelectAssetSceneNavigationStack: View {
             .presentationDragIndicator(.visible)
         }
     }
+}
 
-    func addAsset(_ asset: Asset) {
+// MARK: - Actions
+
+extension SelectAssetSceneNavigationStack {
+    private func onSelectFilter() {
+        isPresentingFilteringView.toggle()
+    }
+
+    private func addAsset(_ asset: Asset) {
         Task {
             try model.assetsService.addAsset(walletId: model.wallet.walletId, asset: asset)
         }
         dismiss()
     }
 }
+

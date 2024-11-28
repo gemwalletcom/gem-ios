@@ -12,14 +12,10 @@ struct TransactionStateViewModel {
     
     var title: String {
         switch state {
-        case .confirmed:
-            return Localized.Transaction.Status.confirmed
-        case .pending:
-            return Localized.Transaction.Status.pending
-        case .failed:
-            return Localized.Transaction.Status.failed
-        case .reverted:
-            return Localized.Transaction.Status.reverted
+        case .confirmed: Localized.Transaction.Status.confirmed
+        case .pending: Localized.Transaction.Status.pending
+        case .failed: Localized.Transaction.Status.failed
+        case .reverted: Localized.Transaction.Status.reverted
         }
     }
     

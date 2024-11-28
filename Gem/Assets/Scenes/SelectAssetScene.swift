@@ -36,9 +36,9 @@ struct SelectAssetScene: View {
         _isPresentingAddToken = isPresentingAddToken
 
         let request = Binding {
-            model.filterModel.assetsRequest
+            model.request
         } set: { new in
-            model.filterModel.assetsRequest = new
+            model.request = new
         }
         _assets = Query(request)
     }
@@ -102,6 +102,7 @@ struct SelectAssetScene: View {
             interval: Duration.milliseconds(250),
             action: model.search(query:)
         )
+        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
@@ -128,6 +129,10 @@ struct SelectAssetScene: View {
 // MARK: - Actions
 
 extension SelectAssetScene {
+    private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
+        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
+    }
+    
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {

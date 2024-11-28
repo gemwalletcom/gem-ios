@@ -8,34 +8,21 @@ import Localization
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType
+    var chainsFilter: ChainsFilterViewModel
 
-    let allChains: [Chain]
-
-    var assetsRequest: AssetsRequest
-
-    var selectedChains: [Chain] {
-        get {
-            assetsRequest.filters
-                .flatMap { $0.associatedChains }
-                .compactMap{ Chain(rawValue: $0) }
-        }
-        set {
-            assetsRequest.filters.removeAll { $0.associatedChains.count > 0 }
-            let rawValues = newValue.map { $0.rawValue }
-            assetsRequest.filters.append(.chains(rawValues))
-        }
-    }
-
-    init(wallet: Wallet, type: SelectAssetType) {
-        self.assetsRequest = AssetsRequest(
-            walletID: wallet.id,
-            filters: Self.defaultFilters(type: type)
-        )
+    init(type: SelectAssetType, model: ChainsFilterViewModel) {
         self.type = type
-        self.allChains = wallet.chains(type: .all)
+        self.chainsFilter = model
     }
 
-    static func defaultFilters(type: SelectAssetType) -> [AssetsRequestFilter] {
+    var isAnyFilterSpecified: Bool {
+        switch type {
+        case .send, .receive, .buy, .sell, .swap, .stake, .priceAlert: false
+        case .manage: chainsFilter.isAnySelected
+        }
+    }
+
+    var defaultFilters: [AssetsRequestFilter] {
         switch type {
         case .send: [.hasBalance]
         case .receive: [.includeNewAssets]
@@ -52,22 +39,17 @@ struct AssetsFilterViewModel {
         }
     }
 
-    var isCusomFilteringSpecified: Bool {
-        switch type {
-        case .send, .receive, .buy, .sell, .swap, .stake, .priceAlert: false
-        case .manage: !selectedChains.isEmpty
-        }
-    }
-
-    var chainsFilterModel: ChainsFilterViewModel {
-        ChainsFilterViewModel(
-            type: ChainsFilterType(selectedChains: selectedChains)
-        )
-    }
-    
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
+
+    var networksModel: NetworkSelectorViewModel {
+        NetworkSelectorViewModel(
+            items: chainsFilter.allChains,
+            selectedItems: chainsFilter.selectedChains,
+            isMultiSelectionEnabled: true
+        )
+    }
 }
 
 // MARK: - Models extensions
