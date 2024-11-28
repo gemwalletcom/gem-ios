@@ -23,9 +23,7 @@ struct NetworkSelectorScene: View {
                 onFinishSelection?(value)
                 dismiss()
             },
-            listContent: { chain in
-                ChainView(chain: chain)
-            }
+            listContent: { ChainView(chain: $0) }
         )
         .navigationTitle(model.title)
     }

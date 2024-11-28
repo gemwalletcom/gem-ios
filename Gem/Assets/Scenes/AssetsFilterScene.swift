@@ -43,9 +43,7 @@ struct AssetsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
-                listContent: { chain in
-                    ChainView(chain: chain)
-                }
+                listContent: { ChainView(chain: $0)}
             )
         }
     }
