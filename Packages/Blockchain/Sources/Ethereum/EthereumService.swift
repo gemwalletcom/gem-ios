@@ -73,16 +73,12 @@ extension EthereumService {
             .compactMap { try? BigInt.fromHex($0) }
             .sorted()
 
-        guard
-            let baseFeePerGas = feeHistory.baseFeePerGas.sorted().last,
-            let baseFee = try? BigInt.fromHex(baseFeePerGas)
-        else {
+        let baseFeePerGas = feeHistory.baseFeePerGas.compactMap { try? BigInt.fromHex($0) }
+        guard let baseFee = baseFeePerGas.sorted().last else {
             throw AnyError( "Unable to calculate base fee")
         }
-
-        guard
-            let lastReward = rewards.last
-        else {
+        
+        guard let lastReward = rewards.last else {
             throw AnyError( "Unable to priority fee")
         }
 
