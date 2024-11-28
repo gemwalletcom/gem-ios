@@ -110,12 +110,12 @@ class SwapViewModel {
         }
     }
     
-    var isActionButtonDisabled: Bool {
-        swapAvailabilityState.isLoading
+    var isSwitchAssetButtonDisabled: Bool {
+        swapAvailabilityState.isLoading || swapGetQuoteDataState.isLoading
     }
     
     var isQuoteLoading: Bool {
-        swapGetQuoteDataState.isLoading
+        swapAvailabilityState.isLoading
     }
     
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {

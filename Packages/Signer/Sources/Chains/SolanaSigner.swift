@@ -5,6 +5,7 @@ import WalletCore
 import WalletCorePrimitives
 import Keystore
 import Primitives
+import BigInt
 
 public struct SolanaSigner: Signable {
     
@@ -110,11 +111,31 @@ public struct SolanaSigner: Signable {
     public func swap(input: SignerInput, privateKey: Data) throws -> String {
         guard 
             case .swap(_, _, let action) = input.type,
-            case .swap(_, let swapData) = action,
-            let bytes = Base64.decode(string: swapData.data) else {
+            case .swap(_, let swapData) = action else {
             throw AnyError("not swap SignerInput")
         }
-        return try signData(bytes: bytes, privateKey: privateKey)
+        let price = input.fee.minerFee
+        let limit = input.fee.gasLimit
+        
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
+            throw AnyError("Unable to set compute unit price")
+        }
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
+            throw AnyError("Unable to set compute unit limit")
+        }
+        guard let transactionData = Base64.decode(string: transaction) else {
+            throw AnyError("not swap SignerInput")
+        }
+        let decodeOutputData = TransactionDecoder.decode(coinType: .solana, encodedTx: transactionData)
+        let decodeOutput = try SolanaDecodingTransactionOutput(serializedData: decodeOutputData)
+        
+        let signingInput = SolanaSigningInput.with {
+            $0.privateKey = privateKey
+            $0.rawMessage = decodeOutput.transaction
+            $0.txEncoding = .base64
+        }
+        let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: .solana)
+        return output.encoded
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
