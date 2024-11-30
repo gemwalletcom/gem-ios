@@ -97,7 +97,7 @@ class ConfirmTransferViewModel {
     }
     
     var networkAssetImage: AssetImage {
-        AssetIdViewModel(assetId: dataModel.chainAsset.id).assetImage
+        AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage
     }
 
     var networkFeeTitle: String { Localized.Transfer.networkFee }

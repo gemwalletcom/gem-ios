@@ -23,6 +23,15 @@ struct AssetIdViewModel {
         assetFormatter.getURL(for: assetId)
     }
     
+    public var networkAssetImage: AssetImage {
+        AssetImage(
+            type: .empty,
+            imageURL: .none,
+            placeholder: chainPlaceholder,
+            chainPlaceholder: .none
+        )
+    }
+    
     public var assetImage: AssetImage {
         AssetImage(
             type: assetId.assetType?.rawValue ?? .empty,
