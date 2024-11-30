@@ -27,7 +27,7 @@ struct AssetIdViewModel {
         AssetImage(
             type: .empty,
             imageURL: .none,
-            placeholder: chainPlaceholder,
+            placeholder: imagePlaceholder,
             chainPlaceholder: .none
         )
     }

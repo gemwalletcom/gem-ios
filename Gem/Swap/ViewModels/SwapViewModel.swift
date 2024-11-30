@@ -101,6 +101,14 @@ class SwapViewModel {
         }
     }
     
+    var providerField: String { Localized.Common.provider }
+    var providerText: String? {
+        if case .loaded(let result) = swapAvailabilityState {
+            return result.quote.data.provider.name
+        }
+        return .none
+    }
+    
     var actionButtonState: StateViewType<SwapAvailabilityResult> {
         switch swapGetQuoteDataState {
         case .loading: return .loading

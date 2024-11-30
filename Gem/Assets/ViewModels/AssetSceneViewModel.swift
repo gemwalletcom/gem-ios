@@ -88,7 +88,7 @@ class AssetSceneViewModel: ObservableObject {
     }
     
     var networkAssetImage: AssetImage {
-        AssetIdViewModel(assetId: assetModel.asset.chain.assetId).assetImage
+        AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
     
     var priceView: TextValue {

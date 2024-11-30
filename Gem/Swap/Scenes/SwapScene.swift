@@ -155,8 +155,11 @@ extension SwapScene {
                     )
                 }
             }
-
+            
             Section {
+                if let provider = model.providerText {
+                    ListItemView(title: model.providerField, subtitle: provider)
+                }
                 TransactionsList(tokenApprovals, showSections: false)
             }
 
