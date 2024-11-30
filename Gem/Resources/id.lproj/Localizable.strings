@@ -308,3 +308,7 @@
 "social.website" = "Situs web";
 "asset.contract" = "Kontrak";
 "filter.types" = "Jenis";
+"fee_rate.gwei" = "%@ gwei";
+"swap.slippage" = "Slippage";
+"swap.quote_fee" = "Quote includes a %@ Gem fee.";
+"common.short_name" = "Gem";

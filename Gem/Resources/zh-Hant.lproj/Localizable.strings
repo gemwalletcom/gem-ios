@@ -308,3 +308,7 @@
 "social.website" = "網站";
 "asset.contract" = "合約";
 "filter.types" = "類型";
+"fee_rate.gwei" = "%@ gwei";
+"swap.slippage" = "Slippage";
+"swap.quote_fee" = "Quote includes a %@ Gem fee.";
+"common.short_name" = "Gem";

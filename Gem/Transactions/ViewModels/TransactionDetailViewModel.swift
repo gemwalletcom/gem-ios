@@ -191,7 +191,7 @@ struct TransactionDetailViewModel {
     }
     
     var networkAssetImage: AssetImage {
-        return AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).assetImage
+        return AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).networkAssetImage
     }
     
     var networkFeeText: String {

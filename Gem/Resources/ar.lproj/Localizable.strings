@@ -308,3 +308,7 @@
 "social.website" = "موقع إلكتروني";
 "asset.contract" = "عقد";
 "filter.types" = "أنواع";
+"fee_rate.gwei" = "%@ gwei";
+"swap.slippage" = "Slippage";
+"swap.quote_fee" = "Quote includes a %@ Gem fee.";
+"common.short_name" = "Gem";

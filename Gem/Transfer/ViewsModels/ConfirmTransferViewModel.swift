@@ -167,7 +167,43 @@ class ConfirmTransferViewModel {
     var memo: String? {
         state.value?.memo ?? dataModel.recipientData.recipient.memo
     }
+    
+    var slippageField: String? {
+        Localized.Swap.slippage
+    }
+    
+    private var slippage: Double? {
+        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let slippage = quote.request.options {
+            Double(Double(slippage.slippageBps) / 100).rounded(toPlaces: 2)
+        } else {
+            .none
+        }
+    }
+    
+    var slippageText: String? {
+        if let slippage {
+            String("\(slippage)%")
+        } else {
+            .none
+        }
+    }
+    
+    private var quoteFee: Double? {
+        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let fee = quote.request.options?.fee {
+             Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
+        } else {
+            .none
+        }
+    }
 
+    var networkFeeFooterText: String? {
+        if let quoteFee {
+            Localized.Swap.quoteFee("\(quoteFee)%")
+        } else {
+            .none
+        }
+    }
+    
     var headerType: TransactionHeaderType {
         if let value = state.value {
             return value.headerType

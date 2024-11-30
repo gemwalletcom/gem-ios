@@ -203,6 +203,8 @@ public enum Localized {
     public static let seeAll = Localized.tr("Localizable", "common.see_all", fallback: "See All")
     /// Share
     public static let share = Localized.tr("Localizable", "common.share", fallback: "Share")
+    /// Gem
+    public static let shortName = Localized.tr("Localizable", "common.short_name", fallback: "Gem")
     /// Show %@
     public static func show(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.show", String(describing: p1), fallback: "Show %@")
@@ -319,6 +321,10 @@ public enum Localized {
     }
   }
   public enum FeeRate {
+    /// %@ gwei
+    public static func gwei(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "fee_rate.gwei", String(describing: p1), fallback: "%@ gwei")
+    }
     /// %@ sat/B
     public static func satB(_ p1: Any) -> String {
       return Localized.tr("Localizable", "fee_rate.satB", String(describing: p1), fallback: "%@ sat/B")
@@ -626,6 +632,12 @@ public enum Localized {
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
     /// Provider
     public static let provider = Localized.tr("Localizable", "swap.provider", fallback: "Provider")
+    /// Quote includes a %@ Gem fee.
+    public static func quoteFee(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "swap.quote_fee", String(describing: p1), fallback: "Quote includes a %@ Gem fee.")
+    }
+    /// Slippage
+    public static let slippage = Localized.tr("Localizable", "swap.slippage", fallback: "Slippage")
     /// You Pay
     public static let youPay = Localized.tr("Localizable", "swap.you_pay", fallback: "You Pay")
     /// You Receive

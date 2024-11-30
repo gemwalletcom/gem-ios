@@ -89,6 +89,11 @@ extension ConfirmTransferScene {
                         ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
                     }
 
+                HStack {
+                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
+                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                }
+                
                 if model.shouldShowRecipientField {
                     AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
                 }
@@ -96,12 +101,10 @@ extension ConfirmTransferScene {
                 if model.shouldShowMemo {
                     MemoListItem(memo: model.memo)
                 }
-
-                HStack {
-                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
-                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                
+                if let slippage = model.slippageText {
+                    ListItemView(title: model.slippageField, subtitle: slippage)
                 }
-
             } header: {
                 HStack {
                     Spacer(minLength: 0)
@@ -120,6 +123,10 @@ extension ConfirmTransferScene {
                     )
                 } else {
                     networkFeeView
+                }
+            } footer: {
+                if let footer = model.networkFeeFooterText {
+                    Text(footer)
                 }
             }
 

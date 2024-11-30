@@ -308,3 +308,7 @@
 "social.website" = "Webサイト";
 "asset.contract" = "契約";
 "filter.types" = "種類";
+"fee_rate.gwei" = "%@ gwei";
+"swap.slippage" = "Slippage";
+"swap.quote_fee" = "Quote includes a %@ Gem fee.";
+"common.short_name" = "Gem";

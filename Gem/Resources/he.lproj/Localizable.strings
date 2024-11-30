@@ -308,3 +308,7 @@
 "social.website" = "אֲתַר אִינטֶרנֶט";
 "asset.contract" = "חוֹזֶה";
 "filter.types" = "סוגים";
+"fee_rate.gwei" = "%@ gwei";
+"swap.slippage" = "Slippage";
+"swap.quote_fee" = "Quote includes a %@ Gem fee.";
+"common.short_name" = "Gem";
