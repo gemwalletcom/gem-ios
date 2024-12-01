@@ -88,11 +88,12 @@ struct AssetScene: View {
             }
 
             Section {
-                if model.showPriceView {
-                    NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
-                        HStack {
-                            ListItemView(title: Localized.Asset.price)
-                                .accessibilityIdentifier("price")
+                NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
+                    HStack {
+                        ListItemView(title: Localized.Asset.price)
+                            .accessibilityIdentifier("price")
+
+                        if model.showPriceView {
                             Spacer()
                             HStack(spacing: Spacing.tiny) {
                                 Text(model.priceView.text)
