@@ -8,8 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		830401CD2CE4FB3F00D47DF5 /* ObservablePreferences.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830401CC2CE4FB3F00D47DF5 /* ObservablePreferences.swift */; };
-		830ED2342C63AE2000B9877C /* FeeUnit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2332C63AE2000B9877C /* FeeUnit.swift */; };
-		830ED2362C63AE4D00B9877C /* FeeUnitViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */; };
 		830FDA382C204E07003DA605 /* AddNodeScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA372C204E07003DA605 /* AddNodeScene.swift */; };
 		830FDA3B2C20955D003DA605 /* AddNodeSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA3A2C20955D003DA605 /* AddNodeSceneViewModel.swift */; };
 		830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA412C2236B6003DA605 /* MainTabView.swift */; };
@@ -321,8 +319,6 @@
 /* Begin PBXFileReference section */
 		487A27E82B632CCE00BEEADB /* Gemstone */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Gemstone; sourceTree = "<group>"; };
 		830401CC2CE4FB3F00D47DF5 /* ObservablePreferences.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ObservablePreferences.swift; sourceTree = "<group>"; };
-		830ED2332C63AE2000B9877C /* FeeUnit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnit.swift; sourceTree = "<group>"; };
-		830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeeUnitViewModel.swift; sourceTree = "<group>"; };
 		830FDA372C204E07003DA605 /* AddNodeScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AddNodeScene.swift; path = Gem/Nodes/Scenes/AddNodeScene.swift; sourceTree = SOURCE_ROOT; };
 		830FDA3A2C20955D003DA605 /* AddNodeSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNodeSceneViewModel.swift; sourceTree = "<group>"; };
 		830FDA412C2236B6003DA605 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
@@ -886,7 +882,6 @@
 				83D854472C59B34F00D4078C /* FeeRateViewModel.swift */,
 				83D8544B2C5A9F2200D4078C /* FeeRatesViewModel.swift */,
 				83D8544F2C5D221200D4078C /* TransferDataViewModel.swift */,
-				830ED2352C63AE4D00B9877C /* FeeUnitViewModel.swift */,
 			);
 			path = ViewsModels;
 			sourceTree = "<group>";
@@ -1273,7 +1268,6 @@
 			isa = PBXGroup;
 			children = (
 				D80181452B3CF84A00F4D22B /* ScanRecipientResult.swift */,
-				830ED2332C63AE2000B9877C /* FeeUnit.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -2225,7 +2219,6 @@
 				C3D1C5052A43AB04006E8EEA /* TransactionsScene.swift in Sources */,
 				832A705E2C88CE0A00045367 /* SelectWalletScene.swift in Sources */,
 				D8C4A3852C9388C7006FABE8 /* PriceAlertsScene.swift in Sources */,
-				830ED2362C63AE4D00B9877C /* FeeUnitViewModel.swift in Sources */,
 				C3D1C4D12A2401F0006E8EEA /* TransactionInputViewModel.swift in Sources */,
 				D8D203B82ACC84BA00261CA2 /* ChartsViewModel.swift in Sources */,
 				C3CF3BE129BE478000E96586 /* ImportWalletViewModel.swift in Sources */,
@@ -2235,7 +2228,6 @@
 				D8148C2B2BF54BA30066586A /* AddressListItem.swift in Sources */,
 				832A70602C88CE9600045367 /* SellectWalletViewModel.swift in Sources */,
 				83B672F12C99BFD40034100C /* LockPeriodSelectionViewModel.swift in Sources */,
-				830ED2342C63AE2000B9877C /* FeeUnit.swift in Sources */,
 				C3CF3BED29C00CFD00E96586 /* ListAssetItemViewModel.swift in Sources */,
 				D8BAC94E2BCF6A81001608BC /* AddTokenScene.swift in Sources */,
 				D8385CE02AFEBBFB00F784C7 /* WalletConnectorInteractor.swift in Sources */,

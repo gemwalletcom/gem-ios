@@ -59,9 +59,9 @@ extension Chain {
 
     public var feeUnitType: FeeUnitType? {
         switch self.type {
-        case .bitcoin:
-            BitcoinChain(rawValue: rawValue)?.feeUnitType
-        case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
+        case .bitcoin: BitcoinChain(rawValue: rawValue)?.feeUnitType
+        case .ethereum: .gwei
+        case .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
             nil
         }
     }

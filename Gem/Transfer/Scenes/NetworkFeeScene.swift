@@ -68,7 +68,7 @@ struct NetworkFeeScene: View {
     NetworkFeeScene(
         model: .init(
             feeRates: [.init(priority: .fast,
-                             rate: 4004.asBigInt)],
+                             gasPriceType: .regular(gasPrice: 4004))],
             chain: .bitcoin,
             networkFeeValue: "-",
             networkFeeFiatValue: "-"

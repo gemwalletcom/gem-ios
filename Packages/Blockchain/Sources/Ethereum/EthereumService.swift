@@ -8,9 +8,8 @@ import WalletCore
 import GemstonePrimitives
 
 public struct EthereumService: Sendable {
-
     static let gasLimitPercent = 50.0
-    static let rewardPercentiles = [25]
+    static let historyBlocks = 10
 
     let chain: EVMChain
     let provider: Provider<EthereumProvider>
@@ -61,33 +60,6 @@ extension EthereumService {
             return networkId
         }
         throw AnyError("Unable to get chainId")
-    }
-
-    func getBasePriorityFee(rewardPercentiles: [Int]) async throws -> (baseFee: BigInt, priorityFee: BigInt) {
-        let feeHistory = try await provider
-            .request(.feeHistory(blocks: 10, rewardPercentiles: rewardPercentiles))
-            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
-
-        let rewards = feeHistory.reward
-            .compactMap { $0.first }
-            .compactMap { try? BigInt.fromHex($0) }
-            .sorted()
-
-        let baseFeePerGas = feeHistory.baseFeePerGas.compactMap { try? BigInt.fromHex($0) }
-        guard let baseFee = baseFeePerGas.sorted().last else {
-            throw AnyError( "Unable to calculate base fee")
-        }
-        
-        guard let lastReward = rewards.last else {
-            throw AnyError( "Unable to priority fee")
-        }
-
-        // use min value if last reward is 0
-        let minPriorityFee = GemstoneConfig.shared.config(for: chain).minPriorityFee.asBigInt
-        
-        let priorityFee = max(minPriorityFee, lastReward)
-
-        return (baseFee, priorityFee)
     }
 
     private func getMaxPriorityFeePerGas() async throws -> BigInt {

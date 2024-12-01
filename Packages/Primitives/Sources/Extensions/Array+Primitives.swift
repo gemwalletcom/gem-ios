@@ -56,6 +56,10 @@ public extension Array where Element: Hashable {
     func asSet() -> Set<Element> {
         return Set(self)
     }
+
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
+    }
 }
 
 public extension Sequence where Iterator.Element: Hashable {

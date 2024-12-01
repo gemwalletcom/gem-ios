@@ -5,6 +5,7 @@ import Foundation
 import Style
 import Localization
 import SwiftUI
+import Transfer
 
 struct FeeRateViewModel: Identifiable {
     let feeRate: FeeRate
@@ -32,7 +33,7 @@ struct FeeRateViewModel: Identifiable {
 
     var feeUnitModel: FeeUnitViewModel? {
         guard let type = chain.feeUnitType else { return nil }
-        let unit = FeeUnit(type: type, value: feeRate.value)
+        let unit = FeeUnit(type: type, value: feeRate.gasPrice)
         return FeeUnitViewModel(unit: unit)
     }
 

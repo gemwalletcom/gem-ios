@@ -4,7 +4,7 @@ import Foundation
 import WalletCore
 import Primitives
 
-public enum ChainCoreError: Error {
+public enum ChainCoreError: Error, Equatable {
     case feeRateMissed
     case cantEstimateFee
     case incorrectAmount    

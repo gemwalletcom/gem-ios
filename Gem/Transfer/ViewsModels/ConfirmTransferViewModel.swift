@@ -351,7 +351,7 @@ extension ConfirmTransferViewModel {
         case .bitcoin: true
         case .aptos: false
         case .cosmos: false
-        case .ethereum: false
+        case .ethereum: EVMChain(rawValue: dataModel.chain.rawValue) != nil
         case .near: false
         case .sui: false
         case .tron: false
@@ -369,13 +369,10 @@ extension ConfirmTransferViewModel {
         switch dataModel.chain {
         case .solana:
             switch dataModel.type {
-            case .transfer, .stake:
-                return .standard
-            case .swap, .generic:
-                return BroadcastOptions(skipPreflight: true)
+            case .transfer, .stake: .standard
+            case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
-        default:
-            return .standard
+        default: .standard
         }
     }
 

@@ -4,6 +4,7 @@ import Foundation
 import WalletCore
 import BigInt
 import Primitives
+import GemstonePrimitives
 
 extension EthereumService: ChainFeeCalculateable {
     public func getData(input: FeeInput) -> Data? {
@@ -114,10 +115,93 @@ extension EthereumService: ChainFeeCalculateable {
         }
     }
 
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
+    public func feeRates() async throws -> [FeeRate] {
+        let (baseFee, priorityFees) = try await getBasePriorityFees(
+            blocks: Self.historyBlocks,
+            rewardPercentiles: EVMHistoryRewardPercentiles()
+        )
+
+        let feeRates: [FeeRate] = {
+            var rates: [FeeRate] = []
+            for priority in FeePriority.allCases {
+                if let priorityFee = priorityFees[priority] {
+                    let feeRate = FeeRate(
+                        priority: priority,
+                        gasPriceType: .eip1559(
+                            gasPrice: baseFee,
+                            minerFee: priorityFee
+                        )
+                    )
+                    rates.append(feeRate)
+                }
+            }
+            return rates
+        }()
+
+        return feeRates
+    }
+
+    func getBasePriorityFees(
+        blocks: Int,
+        rewardPercentiles: EVMHistoryRewardPercentiles
+    ) async throws -> (
+        base: BigInt,
+        priority: [FeePriority: BigInt]
+    ) {
+        let feeHistory = try await provider
+            .request(.feeHistory(blocks: blocks, rewardPercentiles: rewardPercentiles.all))
+            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
+
+        guard let baseFeeHex = feeHistory.baseFeePerGas.last,
+              let baseFeePerGas = try? BigInt.fromHex(baseFeeHex) else {
+            throw AnyError("Unable to retrieve base fee from history")
+        }
+
+        let priorityFeesPerPercentile: [Int: [BigInt]] = {
+            var feesPerPercentile: [Int: [BigInt]] = [:]
+            for percentile in rewardPercentiles.all {
+                feesPerPercentile[percentile] = []
+            }
+
+            for rewardsPerBlock in feeHistory.reward {
+                for (index, feeHex) in rewardsPerBlock.enumerated() {
+                    let percentile = rewardPercentiles.all[index]
+                    if let fee = try? BigInt.fromHex(feeHex) {
+                        feesPerPercentile[percentile]?.append(fee)
+                    }
+                }
+            }
+            return feesPerPercentile
+        }()
+
+        let minPriorityFee = GemstoneConfig.shared.config(for: chain).minPriorityFee.asBigInt
+        let averagePriorityFees: [FeePriority: BigInt] = {
+            var averageFees: [FeePriority: BigInt] = [:]
+            for (percentile, fees) in priorityFeesPerPercentile {
+                let priority: FeePriority = {
+                    switch percentile {
+                    case rewardPercentiles.slow: .slow
+                    case rewardPercentiles.normal: .normal
+                    case rewardPercentiles.fast: .fast
+                    default: .normal
+                    }
+                }()
+                if !fees.isEmpty {
+                    let sum = fees.reduce(0, +)
+                    let average = sum / BigInt(fees.count)
+                    averageFees[priority] = average
+                } else {
+                    // use min value if rewards by priority - empty
+                    averageFees[priority] = minPriorityFee
+                }
+            }
+            return averageFees
+        }()
+
+        return (baseFeePerGas, averagePriorityFees)
+    }
 
     public func fee(input: FeeInput) async throws -> Fee {
-        
         if chain.isOpStack {
             // gas oracle estimates for enveloped tx only
             return try await OptimismGasOracle(chain: chain, provider: provider).fee(input: input)
@@ -126,8 +210,8 @@ extension EthereumService: ChainFeeCalculateable {
         let data = getData(input: input)
         let to = getTo(input: input)
         let value = getValue(input: input)
-        
-        async let getBasePriorityFee = getBasePriorityFee(rewardPercentiles: Self.rewardPercentiles)
+
+        async let getFeeRates = feeRates()
         async let getGasLimit: BigInt = {
             if case .stake(_, let stakeType) = input.type {
                 return try await EthereumStakeService(service: self)
@@ -148,27 +232,29 @@ extension EthereumService: ChainFeeCalculateable {
                 data: data?.hexString.append0x
             )
         }()
-        let (basePriorityFee, gasLimit) = try await (getBasePriorityFee, getGasLimit)
-        
-        let gasPrice = basePriorityFee.baseFee + basePriorityFee.priorityFee
+
+        let (feeRates, gasLimit) = try await (getFeeRates, getGasLimit)
+        guard let feeRate = feeRates.first(where: { $0.priority == input.feePriority }) else {
+            throw ChainCoreError.feeRateMissed
+        }
         let minerFee = {
             switch input.type {
             case .transfer(let asset):
-                return (asset.type == .native && input.isMaxAmount) ? gasPrice : basePriorityFee.priorityFee
+                asset.type == .native && input.isMaxAmount ? feeRate.gasPrice : feeRate.priorityFee
             case .generic, .swap, .stake:
-                return basePriorityFee.priorityFee
+                feeRate.priorityFee
             }
         }()
-        
+
         return Fee(
-            fee: gasPrice * gasLimit,
+            fee: feeRate.gasPrice * gasLimit,
             gasPriceType: .eip1559(
-                gasPrice: gasPrice,
+                gasPrice: feeRate.gasPrice,
                 minerFee: minerFee
             ),
             gasLimit: gasLimit,
-            feeRates: [],
-            selectedFeeRate: nil
+            feeRates: feeRates,
+            selectedFeeRate: feeRate
         )
     }
 }
