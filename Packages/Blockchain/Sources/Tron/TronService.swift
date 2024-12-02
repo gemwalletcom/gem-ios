@@ -311,8 +311,7 @@ extension TronService: ChainFeeCalculateable {
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
             gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
+            feeRates: []
         )
     }
 

@@ -105,8 +105,7 @@ extension OptimismGasOracle: ChainFeeCalculateable {
             fee: l1fee + l2fee,
             gasPriceType: .eip1559(gasPrice: feeRate.gasPrice, minerFee:  minerFee),
             gasLimit: gasLimit,
-            feeRates: feeRates,
-            selectedFeeRate: feeRate
+            feeRates: feeRates
         )
     }
     

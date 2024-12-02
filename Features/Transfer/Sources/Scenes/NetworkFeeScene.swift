@@ -5,19 +5,23 @@ import Components
 import Primitives
 import Localization
 
-struct NetworkFeeScene: View {
+public struct NetworkFeeScene: View {
+    public typealias SelectFeePriority = ((FeePriority) -> Void)
+
     @Environment(\.dismiss) private var dismiss
 
-    private var model: NetworkFeeViewModel
+    private var model: NetworkFeeSceneViewModel
+    private var action: SelectFeePriority
 
-    private var action: ((FeePriority) -> Void)
-
-    init(model: NetworkFeeViewModel, action: @escaping ((FeePriority) -> Void)) {
+    public init(
+        model: NetworkFeeSceneViewModel,
+        action: @escaping SelectFeePriority
+    ) {
         self.model = model
         self.action = action
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 ForEach(model.feeRatesViewModels) { feeRate in
@@ -31,31 +35,31 @@ struct NetworkFeeScene: View {
                         image: feeRate.image,
                         imageSize: 28,
                         value: feeRate.feeRate.priority,
-                        selection: model.selectedFeeRate?.priority,
+                        selection: model.priority,
                         action: action
                     )
                 }
             } footer: {
-                Text(Localized.FeeRates.info)
+                Text(model.infoIcon)
                     .textStyle(.caption)
                     .multilineTextAlignment(.leading)
                     .headerProminence(.increased)
             }
             ListItemView(
-                title: model.networkFeeTitle,
-                subtitle: model.networkFeeValue,
-                subtitleExtra: model.networkFeeFiatValue,
+                title: model.title,
+                subtitle: model.value,
+                subtitleExtra: model.fiatValue,
                 placeholders: [.subtitle]
             )
         }
-        .navigationTitle(Localized.Transfer.networkFee)
+        .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
                 Button {
                     dismiss()
                 } label: {
-                    Text(Localized.Common.done)
+                    Text(model.doneTitle)
                 }
             }
         }
@@ -66,12 +70,6 @@ struct NetworkFeeScene: View {
 
 #Preview {
     NetworkFeeScene(
-        model: .init(
-            feeRates: [.init(priority: .fast,
-                             gasPriceType: .regular(gasPrice: 4004))],
-            chain: .bitcoin,
-            networkFeeValue: "-",
-            networkFeeFiatValue: "-"
-        )
+        model: .init(chain: .aptos)
     ) { _ in }
 }

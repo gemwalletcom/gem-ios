@@ -216,8 +216,7 @@ extension CosmosService: ChainFeeCalculateable {
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
             gasLimit: gasLimit,
-            feeRates: [],
-            selectedFeeRate: nil
+            feeRates: []
         )
     }
 

@@ -253,8 +253,7 @@ extension EthereumService: ChainFeeCalculateable {
                 minerFee: minerFee
             ),
             gasLimit: gasLimit,
-            feeRates: feeRates,
-            selectedFeeRate: feeRate
+            feeRates: feeRates
         )
     }
 }

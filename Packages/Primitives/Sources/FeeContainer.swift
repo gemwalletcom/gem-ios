@@ -16,7 +16,6 @@ public struct Fee: Sendable {
     public let options: FeeOptionMap
 
     public let feeRates: [FeeRate]
-    public let selectedFeeRate: FeeRate?
 
     public var gasPrice: BigInt {
         return gasPriceType.gasPrice
@@ -31,15 +30,13 @@ public struct Fee: Sendable {
         gasPriceType: GasPriceType,
         gasLimit: BigInt,
         options: FeeOptionMap = [:],
-        feeRates: [FeeRate] = [],
-        selectedFeeRate: FeeRate? = nil
+        feeRates: [FeeRate] = []
     ) {
         self.fee = fee
         self.gasPriceType = gasPriceType
         self.gasLimit = gasLimit
         self.options = options
         self.feeRates = feeRates
-        self.selectedFeeRate = selectedFeeRate
     }
     
     public var totalFee: BigInt {
@@ -55,8 +52,7 @@ public struct Fee: Sendable {
             fee: fee + options.filter { feeOptions.contains($0.key) }.map { $0.value }.reduce(0, +),
             gasPriceType: gasPriceType,
             gasLimit: gasLimit,
-            feeRates: feeRates,
-            selectedFeeRate: selectedFeeRate
+            feeRates: feeRates
         )
     }
 }

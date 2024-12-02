@@ -316,8 +316,7 @@ extension SuiService: ChainFeeCalculateable {
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
             gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
+            feeRates: []
         )
     }
 }
