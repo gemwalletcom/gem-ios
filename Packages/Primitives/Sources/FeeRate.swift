@@ -13,9 +13,7 @@ public struct FeeRate: Identifiable, Equatable, Hashable, Sendable {
 
     public var id: String { priority.id }
     public var baseFee: BigInt { gasPriceType.gasPrice }
-    public var gasPrice: BigInt {
-        baseFee + priorityFee
-    }
+    public var gasPrice: BigInt { baseFee + priorityFee }
 
     public var priorityFee: BigInt {
         switch gasPriceType {

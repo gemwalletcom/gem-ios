@@ -2,7 +2,7 @@
 
 import Foundation
 
-// TODO: - evm chain config similar to bitcoin ocnfig ?
+// TODO: - move to evm chain config shared.config(for: chain).rewardPercentiles
 
 public struct EVMHistoryRewardPercentiles: Sendable {
     public let slow: Int

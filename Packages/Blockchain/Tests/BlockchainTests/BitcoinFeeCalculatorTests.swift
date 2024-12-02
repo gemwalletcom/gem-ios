@@ -71,8 +71,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
             gasLimit: 1,
-            feeRates: feeRates,
-            selectedFeeRate: selectedFeeRate
+            feeRates: feeRates
         )
 
         XCTAssertEqual(fee, targetFee)

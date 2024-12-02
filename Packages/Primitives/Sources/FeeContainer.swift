@@ -17,14 +17,6 @@ public struct Fee: Sendable {
 
     public let feeRates: [FeeRate]
 
-    public var gasPrice: BigInt {
-        return gasPriceType.gasPrice
-    }
-    
-    public var minerFee: BigInt {
-        return gasPriceType.minerFee
-    }
-    
     public init(
         fee: BigInt,
         gasPriceType: GasPriceType,
@@ -38,14 +30,11 @@ public struct Fee: Sendable {
         self.options = options
         self.feeRates = feeRates
     }
-    
-    public var totalFee: BigInt {
-        return fee + optionsFee
-    }
 
-    public var optionsFee: BigInt {
-        options.map { $0.value }.reduce(0, +)
-    }
+    public var gasPrice: BigInt { gasPriceType.gasPrice }
+    public var minerFee: BigInt { gasPriceType.minerFee }
+    public var totalFee: BigInt { fee + optionsFee }
+    public var optionsFee: BigInt { options.map { $0.value }.reduce(0, +) }
 
     public func withOptions(_ feeOptions: [FeeOption]) -> Fee {
         return Fee(

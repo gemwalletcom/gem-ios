@@ -55,7 +55,12 @@ extension OptimismGasOracle: ChainFeeCalculateable {
         let data = service.getData(input: input)
         let to = service.getTo(input: input)
         
-        async let getGasLimit = try service.getGasLimit(from: input.senderAddress, to: to, value: service.getValue(input: input)?.hexString.append0x, data: data?.hexString.append0x)
+        async let getGasLimit = try service.getGasLimit(
+            from: input.senderAddress,
+            to: to,
+            value: service.getValue(input: input)?.hexString.append0x,
+            data: data?.hexString.append0x
+        )
         async let getNonce = try service.getNonce(senderAddress: input.senderAddress)
         async let getFeeRates = try feeRates()
         async let getChainId = try service.getChainId()
@@ -103,7 +108,10 @@ extension OptimismGasOracle: ChainFeeCalculateable {
 
         return Fee(
             fee: l1fee + l2fee,
-            gasPriceType: .eip1559(gasPrice: feeRate.gasPrice, minerFee:  minerFee),
+            gasPriceType: .eip1559(
+                gasPrice: feeRate.gasPrice,
+                minerFee: minerFee
+            ),
             gasLimit: gasLimit,
             feeRates: feeRates
         )
