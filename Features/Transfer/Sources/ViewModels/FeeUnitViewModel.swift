@@ -5,12 +5,12 @@ import Localization
 import Primitives
 
 public struct FeeUnitViewModel {
-    private static let formatter = CurrencyFormatter()
-
     private let unit: FeeUnit
+    private let formatter: CurrencyFormatter
 
-    public init(unit: FeeUnit) {
+    public init(unit: FeeUnit, formatter: CurrencyFormatter) {
         self.unit = unit
+        self.formatter = formatter
     }
 
     public var value: String {
@@ -32,7 +32,7 @@ public struct FeeUnitViewModel {
     }
 
     private var unitValueString: String {
-        Self.formatter.string(decimal: Decimal(unitValue))
+        formatter.string(decimal: Decimal(unitValue))
             .replacingOccurrences(of: " ", with: "")
     }
 }

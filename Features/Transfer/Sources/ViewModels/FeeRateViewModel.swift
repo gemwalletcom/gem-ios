@@ -7,6 +7,8 @@ import Localization
 import SwiftUI
 
 public struct FeeRateViewModel: Identifiable {
+    static let formatter = CurrencyFormatter()
+
     public let feeRate: FeeRate
     public let chain: Chain
 
@@ -33,7 +35,7 @@ public struct FeeRateViewModel: Identifiable {
     public var feeUnitModel: FeeUnitViewModel? {
         guard let type = chain.feeUnitType else { return nil }
         let unit = FeeUnit(type: type, value: feeRate.gasPrice)
-        return FeeUnitViewModel(unit: unit)
+        return FeeUnitViewModel(unit: unit, formatter: Self.formatter)
     }
 
     public var value: String? {
