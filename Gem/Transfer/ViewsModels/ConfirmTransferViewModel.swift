@@ -197,11 +197,13 @@ class ConfirmTransferViewModel {
     }
 
     var networkFeeFooterText: String? {
-        if let quoteFee {
-            Localized.Swap.quoteFee("\(quoteFee)%")
-        } else {
-            .none
-        }
+        return .none
+//        TODO: Enable later
+//        if let quoteFee {
+//            Localized.Swap.quoteFee("\(quoteFee)%")
+//        } else {
+//            .none
+//        }
     }
     
     var headerType: TransactionHeaderType {
