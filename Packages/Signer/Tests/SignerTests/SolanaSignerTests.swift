@@ -3,9 +3,82 @@
 import XCTest
 import WalletCore
 @testable import Signer
+import Primitives
+import PrimitivesTestKit
 
 final class SolanaSignerTests: XCTestCase {
 
+    let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, minerFee: 10_000), gasLimit: 125_000)
+    
+    func testTransfer() {
+        let asset = Asset(.solana).chain.asset
+        let input = SignerInput(
+            type: .transfer(asset),
+            asset: asset,
+            value: .zero,
+            fee: fee,
+            isMaxAmount: false,
+            chainId: "",
+            memo: .none,
+            accountNumber: 0,
+            sequence: 0,
+            senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
+            destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
+            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
+            token: SignerInputToken(),
+            utxos: [],
+            messageBytes: ""
+        )
+        
+        XCTAssertEqual(try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey), "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+    }
+    
+    func testTokenTransfer() {
+        let asset = Asset.mock(id: AssetId(chain: .solana, tokenId: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"))
+        let input = SignerInput(
+            type: .transfer(asset),
+            asset: asset,
+            value: .zero,
+            fee: fee,
+            isMaxAmount: false,
+            chainId: "",
+            memo: .none,
+            accountNumber: 0,
+            sequence: 0,
+            senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
+            destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
+            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
+            token: SignerInputToken(),
+            utxos: [],
+            messageBytes: ""
+        )
+        
+        XCTAssertEqual(try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey), "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+    }
+    
+    func testTokenTransferNewAccount() {
+        let asset = Asset.mock(id: AssetId(chain: .solana, tokenId: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB"))
+        let input = SignerInput(
+            type: .transfer(asset),
+            asset: asset,
+            value: .zero,
+            fee: fee,
+            isMaxAmount: false,
+            chainId: "",
+            memo: .none,
+            accountNumber: 0,
+            sequence: 0,
+            senderAddress: "K1tChn2NETQd9cCHe1UmUyWP3rDA92gP1dH4nNyEJrx",
+            destinationAddress: "HVoJWyPbQn4XikG9BY2A8wP27HJQzHAoDnAs1SfsATes",
+            block: SignerInputBlock(hash: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK"),
+            token: SignerInputToken(senderTokenAddress: "Es9vMFrzaCERmJfrF4H2FYD4KCoNkY11McCe8BenwNYB", recipientTokenAddress: "8ntZRPm8pbf4R4pTWsVnTdgqXA35yYXSz8TxUzwBhXEK", tokenProgram: .token),
+            utxos: [],
+            messageBytes: ""
+        )
+        
+        XCTAssertEqual(try SolanaSigner().signTransfer(input: input, privateKey: TestPrivateKey), "AQo2Eug/J7WNOj0pI72OU0RHM9Ss4OXK2HvuGhaKGhJN8KtcxIuEvAbuKuzjBfq+d6q8SfeVx8l6BOfYs0/lsQoBAAIE02lFIZfCpWSB5eLT6L8D3iNJ9npjFRlWgiIIwjNK3uL1G5t56F3oMXO9/md9Dan95RdKnFZ/h5iqL/+hVtYYxAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABzwz4o6+Cji9oIdB7FElRcPSFxAzYV8cPxQk26SYaknAMCAAkDECcAAAAAAAACAAUCSOgBAAMCAAEMAgAAAAAAAAAAAAAA")
+    }
+    
     func testSolanaSwap() throws {
         let tx = "AQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAQAIE4X7qT7inGBPqFijUWiMASkIQer7GcY6cKR108e8O++fF6bw89YHC7acs3m1YUIhVlGt8Lsh5HSIZozEPbcak9lEkZ+TiEMZdELfvcljcnBtv3Cf2z6oSYOBlVK0qYEJiVPvd6ryg3kqPlsEMcw3Fwx5sgoudurpYDKruhuxfayEdR478uf/smdZykpYhZIZWgIVX3IpDQW2WlWxw1AX3C53BHo4HDkVOPejukK6/oQdRT8m1S5xpmRD9q8e3XSK/Xu3TqNZNjLp6OSRg8r3sOv1e+QztSj31QG3tKRlT5zLqo0WQ1mJ0Hxkrw69L1dQmgMqgZd20xmPPvg53n23dsfNG6CPj/KUTsrekiJQc2Hvabji48RBleABXKq2lBKpj89u0FRUiC4li6CDgDgrZl6r6UV4hTXUW6fWb5yNguwg6dRIiwf+OZsakVXlghtpfUMBbAo8Tzu8oq+0HQFjMFcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAMGRm/lIRcy/+ytunLDm+e8jOW7xfcSayxDmzpAAAAABHnVW/IxwG7udMVuzmgVB/2xst6j9I5RArHNola8E48G3fbh12Whk9nL4UbO63msHLSF7V9bN5E6jPWFfv8AqYyXJY9OJInxuz0QKRSODYMLWhOZ2v8QhASOe9jb6fhZrBrj0IfykjcGJUj3DEwErsKplWlJhufLtGdSBiHThjC0P/on9df2SnTAmx8pWHneSwmrNt/J3VFLMhqns4zl6Mb6evO+2606PWXzaqvJdDGxu+TC0vbg5HymAgNFL11hhfF5aGC8uN+dIBDrxV3vHwZYs2RmFKm87C1HtO3e+NIHDAAFAsBcFQAPBgAJACwLDgEBCwIACQwCAAAAgJaYAAAAAAAOAQkBEQ8GAAYAEgsOAQENQg4QAAkFCgYsEgcNEQ0qKRYZCgUXGBArDg0nDi0uEAUhIgQfICYOHiUdGhsoHB4eHh4eHgQDECMOEBQDFQoTCAIBJDLBIJszQdacgQUEAAAAEgA8AAQDKAACB2QCAxEBZAMEgJaYAAAAAACBqQkAAAAAADIAMg4DCQAAAQkEB4tUBJUod+xdJHClaAbwfY0KcsPyS6puvinwAKI7S1cD9e7vBh7xJzZ/XBUMq/0+5x74cLXUfrm4RcW7GMg1vW5lr144gPYI6KKjBMO8u74DwL/CbfplXQ5y4uTDJAQIjShVPQLz8v+me8U9jJd68IPKjLkFvL08uLoAzNqZz4glI8qy5jvrpHYo8Vzh6SmqRgs5a0H2AAOFaZwE6uzp5wNl7es="
         

@@ -5,14 +5,18 @@ import Primitives
 
 public extension Asset {
     static func mock(
-        _ asset: Asset = Asset(
-            id: .mock(),
-            name: "Bitcoin",
-            symbol: "BTC",
-            decimals: 8,
-            type: .native
-        )
+        id: AssetId = .mock(),
+        name: String = "Bitcoin",
+        symbol: String = "BTC",
+        decimals: Int32 = 8,
+        type: AssetType = .native
     ) -> Asset {
-        asset
+        Asset(
+            id: id,
+            name: name,
+            symbol: symbol,
+            decimals: decimals,
+            type: type
+        )
     }
 }

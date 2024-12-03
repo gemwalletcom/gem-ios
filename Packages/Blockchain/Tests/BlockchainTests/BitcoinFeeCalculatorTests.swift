@@ -91,7 +91,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: utxos
         )) { error in
-            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .feeRateMissed)
+            XCTAssertEqual(error as? ChainCoreError, .feeRateMissed)
         }
     }
 
@@ -117,7 +117,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: utxos
         )) { error in
-            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .incorrectAmount)
+            XCTAssertEqual(error as? ChainCoreError, .incorrectAmount)
         }
     }
 
@@ -132,7 +132,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             feeRates: feeRates,
             utxos: [] // set empty utxo for such case
         )) { error in
-            XCTAssertEqual(error as? BitcoinFeeCalculatorError, .cantEstimateFee)
+            XCTAssertEqual(error as? ChainCoreError, .cantEstimateFee)
         }
     }
 }
