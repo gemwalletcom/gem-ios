@@ -2,7 +2,7 @@
 
 import Primitives
 
-struct TransacionTypesFilterViewModel {
+struct TransacionTypesFilterViewModel: Equatable {
     let allTransactionsTypes: [TransactionType]
 
     var selectedTypes: [TransactionType]

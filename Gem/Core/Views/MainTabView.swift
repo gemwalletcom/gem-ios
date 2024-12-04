@@ -54,7 +54,6 @@ struct MainTabView: View {
 
             TransactionsNavigationStack(
                 model: .init(
-                    walletId: model.walletId,
                     wallet: model.wallet,
                     type: .all,
                     service: transactionsService
