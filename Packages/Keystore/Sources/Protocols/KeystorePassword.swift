@@ -4,7 +4,7 @@ import Foundation
 import KeychainAccess
 import LocalAuthentication
 
-public protocol KeystorePassword {
+public protocol KeystorePassword: Sendable {
     func setPassword(_ password: String, authentication: KeystoreAuthentication) throws
     func getPassword() throws -> String
     func getAuthentication() throws -> KeystoreAuthentication

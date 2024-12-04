@@ -46,19 +46,13 @@ struct WalletCoordinator: View {
     let notificationService = NotificationService.main
     let apiService = GemAPIService.shared
     let walletConnectorSigner: WalletConnectorSigner
-    let walletConnectorInteractor: WalletConnectorInteractor
     
     let preferences = Preferences()
     let onstartService: OnstartAsyncService
     let navigationState: NavigationStateManager = .main
 
-    @State var isPresentingError: String? = .none
+    @State private var wcInteractor: WalletConnectorInteractor = WalletConnectorInteractor()
     @State private var updateAvailableAlertSheetMessage: String? = .none
-    @State var isPresentingWalletConnectBar: Bool = false
-
-    @State var transferData: TransferDataCallback<WCTransferData>? // wallet connector
-    @State var signMessage: TransferDataCallback<SignMessagePayload>? // wallet connector
-    @State var connectionProposal: TransferDataCallback<WCPairingProposal>? // wallet connector
 
     init(
         db: DB
@@ -93,11 +87,11 @@ struct WalletCoordinator: View {
             assetsService: assetsService,
             keystore: _keystore.wrappedValue
         )
-        self.walletConnectorInteractor = WalletConnectorInteractor()
+
         self.walletConnectorSigner = WalletConnectorSigner(
             store: storeManager.connectionsStore,
             keystore: _keystore.wrappedValue,
-            walletConnectorInteractor: walletConnectorInteractor
+            walletConnectorInteractor: _wcInteractor.wrappedValue
         )
         self.connectionsService = ConnectionsService(
             store: storeManager.connectionsStore,
@@ -186,94 +180,40 @@ struct WalletCoordinator: View {
                 IntroNavigationView()
             }
         }
-        .onOpenURL(perform: { url in
+        .onOpenURL { url in
             Task {
-                await handleUrl(url: url)
-            }
-        })
-        .sheet(item: $transferData) { data in
-            NavigationStack {
-                ConfirmTransferScene(
-                    model: ConfirmTransferViewModel(
-                        wallet: data.payload.wallet,
-                        keystore: keystore,
-                        data: data.payload.tranferData,
-                        service: ChainServiceFactory(nodeProvider: nodeService)
-                            .service(for: data.payload.tranferData.recipientData.asset.chain),
-                        walletsService: walletsService,
-                        confirmTransferDelegate: data.delegate,
-                        onComplete: {
-                            transferData = nil
-                        }
-                    )
-                )
-                .interactiveDismissDisabled(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            transferData?.delegate(.failure(ConnectionsError.userCancelled))
-                            transferData = nil
-                        }
-                        .bold()
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
+                await onHandleUrl(url: url)
             }
         }
-        .sheet(item: $signMessage) { data in
+        .sheet(item: $wcInteractor.action) { action in
             NavigationStack {
-                SignMessageScene(
-                    model: SignMessageSceneViewModel(
-                        keystore: keystore,
-                        payload: data.payload,
-                        confirmTransferDelegate: data.delegate
-                    )
-                )
-                .interactiveDismissDisabled(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            signMessage?.delegate(.failure(ConnectionsError.userCancelled))
-                            signMessage = nil
+                scene(action: action)
+                    .interactiveDismissDisabled(true)
+                    .toolbar {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(Localized.Common.cancel) {
+                                wcInteractor.cancel(action: action)
+                            }
+                            .bold()
                         }
-                        .bold()
                     }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-            }
-        }
-        .sheet(item: $connectionProposal) { data in
-            NavigationStack {
-                ConnectionProposalScene(
-                    model: ConnectionProposalViewModel(
-                        connectionsService: connectionsService,
-                        confirmTransferDelegate: data.delegate,
-                        pairingProposal: data.payload,
-                        wallets: keystore.wallets
-                    )
-                )
-                .interactiveDismissDisabled(true)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            connectionProposal?.delegate(.failure(ConnectionsError.userCancelled))
-                            connectionProposal = nil
-                        }
-                        .bold()
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
+                    .navigationBarTitleDisplayMode(.inline)
             }
         }
         .confirmationDialog(
-            Text(Localized.WalletConnect.brandName), isPresented: $isPresentingError.mappedToBool(), 
-            actions: {
-                Button(Localized.Common.done, role: .none) {
-                    
-                }
-        }, message: {
-            Text(isPresentingError.valueOrEmpty)
-        })
+            Localized.WalletConnect.brandName,
+            presenting: $wcInteractor.isPresentingError,
+            actions: { _ in
+                Button(
+                    Localized.Common.done,
+                    role: .none,
+                    action: {}
+                )
+            },
+            message: {
+                Text(wcInteractor.isPresentingError.valueOrEmpty)
+            }
+        )
         .taskOnce {
             onstartService.updateVersionAction = {
                 updateAvailableAlertSheetMessage = $0
@@ -286,39 +226,83 @@ struct WalletCoordinator: View {
             if let wallet = keystore.currentWallet {
                 onstartService.setup(wallet: wallet)
             }
-            self.walletConnectorSigner.walletConnectorInteractor = self
         }
         .onChange(of: keystore.currentWallet) { _, newValue in
             if let newValue {
                 onstartService.setup(wallet: newValue)
             }
         }
-        .modifier(
-            ToastModifier(
-                isPresenting: $isPresentingWalletConnectBar,
-                value: "\(Localized.WalletConnect.brandName)...",
-                systemImage: SystemImage.network
-            )
+        .toast(
+            isPresenting: $wcInteractor.isPresentingConnectionBar,
+            title: "\(Localized.WalletConnect.brandName)...",
+            systemImage: SystemImage.network
         )
     }
+}
 
-    private func handleUrl(url: URL) async {
+// MARK: - UI Components
+
+extension WalletCoordinator {
+    @ViewBuilder
+    private func scene(action: WalletConnectAction) -> some View {
+        switch action {
+        case .transferData(let data):
+            ConfirmTransferScene(
+                model: ConfirmTransferViewModel(
+                    wallet: data.payload.wallet,
+                    keystore: keystore,
+                    data: data.payload.tranferData,
+                    service: ChainServiceFactory(nodeProvider: nodeService)
+                        .service(for: data.payload.tranferData.recipientData.asset.chain),
+                    walletsService: walletsService,
+                    confirmTransferDelegate: data.delegate,
+                    onComplete: {
+                        wcInteractor.action = nil
+                    }
+                )
+            )
+        case .signMessage(let data):
+            SignMessageScene(
+                model: SignMessageSceneViewModel(
+                    keystore: keystore,
+                    payload: data.payload,
+                    confirmTransferDelegate: data.delegate
+                )
+            )
+
+        case .connectionProposal(let data):
+            ConnectionProposalScene(
+                model: ConnectionProposalViewModel(
+                    connectionsService: connectionsService,
+                    confirmTransferDelegate: data.delegate,
+                    pairingProposal: data.payload,
+                    wallets: keystore.wallets
+                )
+            )
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension WalletCoordinator {
+    private func onHandleUrl(url: URL) async {
         do {
             let url = try URLParser.from(url: url)
             switch url {
             case .walletConnect(let uri):
-                isPresentingWalletConnectBar = true
+                wcInteractor.isPresentingConnectionBar = true
                 try await connectionsService.addConnectionURI(
                     uri: uri,
                     wallet: try keystore.getCurrentWallet()
                 )
             case .walletConnectRequest:
-                isPresentingWalletConnectBar = true
+                wcInteractor.isPresentingConnectionBar = true
                 break
             }
         } catch {
             NSLog("handleUrl error: \(error)")
-            isPresentingError = error.localizedDescription
+            wcInteractor.isPresentingError = error.localizedDescription
         }
     }
 }

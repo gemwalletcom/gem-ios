@@ -1,8 +1,8 @@
 import Foundation
-import WalletCore
+@preconcurrency import WalletCore
 import Primitives
 
-public struct WalletKeyStore {
+public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
     

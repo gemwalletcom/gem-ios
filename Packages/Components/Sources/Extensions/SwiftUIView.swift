@@ -63,12 +63,14 @@ public extension View {
 // MARK: - Confirmation Dialog
 
 public extension View {
-    func confirmationDialog<S, A, T>(
+    func confirmationDialog<S, A, T, M>(
         _ title: S,
         presenting data: Binding<T?>,
         sensoryFeedback: SensoryFeedback? = nil,
-        @ViewBuilder actions: (T) -> A)
-    -> some View where S: StringProtocol, A: View {
+        @ViewBuilder actions: (T) -> A,
+        @ViewBuilder message: () -> M = { EmptyView() }
+    )
+    -> some View where S: StringProtocol, A: View, M: View {
         let isPresented: Binding<Bool> = Binding(
             get: { data.wrappedValue != nil },
             set: { newValue in
@@ -85,14 +87,20 @@ public extension View {
                     isPresented: isPresented,
                     titleVisibility: .visible,
                     presenting: data.wrappedValue,
-                    actions: actions
+                    actions: actions,
+                    message: { _ in
+                        message()
+                    }
                 )
         } elseContent: {
             $0.alert(
                     title,
                     isPresented: isPresented,
                     presenting: data.wrappedValue,
-                    actions: actions
+                    actions: actions,
+                    message: { _ in
+                        message()
+                    }
                 )
         }
         .ifLet(sensoryFeedback) { view, value in

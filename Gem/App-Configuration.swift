@@ -227,11 +227,7 @@ extension BannerSetupService {
 }
 
 extension WalletConnectorSigner {
-    static let main = WalletConnectorSigner(store: .main, keystore: LocalKeystore.main, walletConnectorInteractor: WalletConnectorInteractor.main)
-}
-
-extension WalletConnectorInteractor {
-    static let main = WalletConnectorInteractor()
+    static let main = WalletConnectorSigner(store: .main, keystore: LocalKeystore.main, walletConnectorInteractor: .none)
 }
  
 extension DB {

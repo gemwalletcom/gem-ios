@@ -7,14 +7,14 @@ import Localization
 
 struct ConnectionProposalViewModel {
     private let connectionsService: ConnectionsService
-    private let confirmTransferDelegate: ConfirmTransferDelegate
+    private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
     private let pairingProposal: WCPairingProposal
 
     var walletSelectorModel: SellectWalletViewModel
 
     init(
         connectionsService: ConnectionsService,
-        confirmTransferDelegate: @escaping ConfirmTransferDelegate,
+        confirmTransferDelegate: @escaping TransferDataCallback.ConfirmTransferDelegate,
         pairingProposal: WCPairingProposal,
         wallets: [Wallet]
     ) {
