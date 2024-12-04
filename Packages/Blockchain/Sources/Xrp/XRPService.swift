@@ -9,7 +9,7 @@ public struct XRPService: Sendable {
     
     let chain: Chain
     let provider: Provider<XRPProvider>
-    private let reservedBalance = BigInt(10_000_000)
+    private let reservedBalance = BigInt(1_000_000)
     
     public init(
         chain: Chain,
