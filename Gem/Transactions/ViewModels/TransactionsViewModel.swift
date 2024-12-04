@@ -27,15 +27,7 @@ final class TransactionsViewModel {
         self.wallet = wallet
         self.type = type
         self.service = service
-
-        self.filterModel = TransactionsFilterViewModel(
-            chainsFilterModel: ChainsFilterViewModel(
-                chains: wallet.chains(type: .all)
-            ),
-            transactionTypesFilter: TransacionTypesFilterViewModel(
-                types: TransactionType.allCases
-            )
-        )
+        self.filterModel = TransactionsFilterViewModel(wallet: wallet)
         self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
@@ -50,27 +42,12 @@ final class TransactionsViewModel {
 extension TransactionsViewModel {
     func refresh(for wallet: Wallet) {
         self.wallet = wallet
-        self.filterModel = TransactionsFilterViewModel(
-            chainsFilterModel: ChainsFilterViewModel(
-                chains: wallet.chains(type: .all)
-            ),
-            transactionTypesFilter: TransacionTypesFilterViewModel(
-                types: TransactionType.allCases
-            )
-        )
+        self.filterModel = TransactionsFilterViewModel(wallet: wallet)
         self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
-    func update(filterRequest: TransactionsRequestFilter) {
-        request.filters.removeAll { existingFilter in
-            switch (filterRequest, existingFilter) {
-            case (.chains, .chains), (.types, .types):
-                return true
-            default:
-                return false
-            }
-        }
-        request.filters.append(filterRequest)
+    func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
+        request.filters = filter.requestFilters
     }
 
     func fetch() async {

@@ -18,12 +18,10 @@ struct TransactionsFilterScene: View {
 
     var body: some View {
         List {
-            if model.showChainsFilter {
-                SelectFilterView(
-                    typeModel: model.chainsFilter.typeModel,
-                    action: onSelectChainsFilter
-                )
-            }
+            SelectFilterView(
+                typeModel: model.chainsFilter.typeModel,
+                action: onSelectChainsFilter
+            )
             SelectFilterView(
                 typeModel: model.transactionTypesFilter.typeModel,
                 action: onSelectTypesFilter

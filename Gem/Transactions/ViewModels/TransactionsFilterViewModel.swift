@@ -5,7 +5,7 @@ import Primitives
 import Store
 import Localization
 
-struct TransactionsFilterViewModel {
+struct TransactionsFilterViewModel: Equatable {
     var chainsFilter: ChainsFilterViewModel
     var transactionTypesFilter: TransacionTypesFilterViewModel
 
@@ -23,10 +23,6 @@ struct TransactionsFilterViewModel {
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
 
-    var showChainsFilter: Bool {
-        chainsFilter.allChains.count > 1
-    }
-
     var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
             items: chainsFilter.allChains,
@@ -39,6 +35,36 @@ struct TransactionsFilterViewModel {
         TransactionTypesSelectorViewModel(
             items: transactionTypesFilter.allTransactionsTypes,
             selectedItems: transactionTypesFilter.selectedTypes,
-            isMultiSelectionEnabled: true)
+            isMultiSelectionEnabled: true
+        )
+    }
+    
+    var requestFilters: [TransactionsRequestFilter] {
+        var filters: [TransactionsRequestFilter] = []
+        
+        if !chainsFilter.selectedChains.isEmpty {
+            let chainIds = chainsFilter.selectedChains.map { $0.rawValue }
+            filters.append(.chains(chainIds))
+        }
+        
+        if !transactionTypesFilter.selectedTypes.isEmpty {
+            let typeIds = transactionTypesFilter.selectedTypes.map { $0.rawValue }
+            filters.append(.types(typeIds))
+        }
+        
+        return filters
+    }
+}
+
+extension TransactionsFilterViewModel {
+    init(wallet: Wallet) {
+        self.init(
+            chainsFilterModel: ChainsFilterViewModel(
+                chains: wallet.chains(type: .all)
+            ),
+            transactionTypesFilter: TransacionTypesFilterViewModel(
+                types: TransactionType.allCases
+            )
+        )
     }
 }

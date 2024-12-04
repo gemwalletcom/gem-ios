@@ -28,11 +28,10 @@ struct TransactionsScene: View {
         List {
             TransactionsList(transactions)
         }
-        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
-        .onChange(of: model.filterModel.transactionTypesFilter.selectedTypes, onChangeTypes)
+        .onChange(of: model.filterModel, model.onChangeFilter)
         .listSectionSpacing(.compact)
         .refreshable {
-            await fetch()
+            await model.fetch()
         }
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
@@ -42,24 +41,8 @@ struct TransactionsScene: View {
             }
         }
         .task {
-            await fetch()
+            await model.fetch()
         }
-    }
-}
-
-// MARK: - Effects
-
-extension TransactionsScene {
-    private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
-        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
-    }
-
-    private func onChangeTypes(_ _: [TransactionType], _ types: [TransactionType]) {
-        model.update(filterRequest: .types(types.map({ $0.rawValue })))
-    }
-
-    private func fetch() async {
-        await model.fetch()
     }
 }
 
