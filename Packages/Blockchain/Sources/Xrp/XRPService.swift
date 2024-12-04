@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
+import GemstonePrimitives
 
 public struct XRPService: Sendable {
     
     let chain: Chain
     let provider: Provider<XRPProvider>
-    private let reservedBalance = BigInt(1_000_000)
     
     public init(
         chain: Chain,
@@ -34,6 +34,10 @@ extension XRPService {
             .request(.latestBlock)
             .map(as: XRPResult<XRPLatestBlock>.self).result.ledger_current_index.asBigInt
     }
+    
+    private func reservedBalance() -> BigInt {
+        BigInt(GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).accountActivationFee ?? 0)
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -41,6 +45,7 @@ extension XRPService {
 extension XRPService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         let balance = try await account(address: address).account_data.Balance
+        let reservedBalance = reservedBalance()
         let available = BigInt(stringLiteral: balance) - reservedBalance
         
         return Primitives.AssetBalance(
