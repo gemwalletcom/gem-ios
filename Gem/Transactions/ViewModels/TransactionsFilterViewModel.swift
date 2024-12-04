@@ -23,6 +23,10 @@ struct TransactionsFilterViewModel {
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
 
+    var showChainsFilter: Bool {
+        chainsFilter.allChains.count > 1
+    }
+
     var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
             items: chainsFilter.allChains,

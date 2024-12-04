@@ -6,6 +6,7 @@ import Style
 import Components
 
 struct TransactionsNavigationStack: View {
+    @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
 
     @State private var isPresentingFilteringView: Bool = false
@@ -47,6 +48,7 @@ struct TransactionsNavigationStack: View {
                     )
                 }
         }
+        .onChange(of: keystore.currentWallet, onWalletChange)
         .sheet(isPresented: $isPresentingFilteringView) {
             NavigationStack {
                 TransactionsFilterScene(model: $model.filterModel)
@@ -60,6 +62,11 @@ struct TransactionsNavigationStack: View {
 // MARK: - Actions
 
 extension TransactionsNavigationStack {
+    private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
+        guard let wallet = wallet else { return }
+        model.refresh(for: wallet)
+    }
+
     private func onSelectFilter() {
         isPresentingFilteringView.toggle()
     }

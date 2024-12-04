@@ -10,23 +10,20 @@ import Keystore
 import Localization
 
 @Observable
-class TransactionsViewModel {
+final class TransactionsViewModel {
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
     private let service: TransactionsService
 
-    let walletId: WalletId
-    let wallet: Wallet
+    var wallet: Wallet
     var filterModel: TransactionsFilterViewModel
     var request: TransactionsRequest
 
     init(
-        walletId: WalletId,
         wallet: Wallet,
         type: TransactionsRequestType,
         service: TransactionsService
     ) {
-        self.walletId = walletId
         self.wallet = wallet
         self.type = type
         self.service = service
@@ -39,17 +36,31 @@ class TransactionsViewModel {
                 types: TransactionType.allCases
             )
         )
-        self.request = TransactionsRequest(walletId: walletId.id, type: type)
+        self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
     var title: String { Localized.Activity.title }
-
-    var showFilter: Bool { request.filters.isEmpty }
+    var walletId: WalletId {
+        WalletId(id: wallet.id)
+    }
 }
 
 // MARK: - Business Logic
 
 extension TransactionsViewModel {
+    func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        self.filterModel = TransactionsFilterViewModel(
+            chainsFilterModel: ChainsFilterViewModel(
+                chains: wallet.chains(type: .all)
+            ),
+            transactionTypesFilter: TransacionTypesFilterViewModel(
+                types: TransactionType.allCases
+            )
+        )
+        self.request = TransactionsRequest(walletId: wallet.id, type: type)
+    }
+
     func update(filterRequest: TransactionsRequestFilter) {
         request.filters.removeAll { existingFilter in
             switch (filterRequest, existingFilter) {

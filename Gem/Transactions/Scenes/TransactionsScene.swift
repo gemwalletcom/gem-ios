@@ -9,13 +9,13 @@ import Style
 import Localization
 
 struct TransactionsScene: View {
-    @State private var model: TransactionsViewModel
+    private var model: TransactionsViewModel
 
     @Query<TransactionsRequest>
     private var transactions: [TransactionExtended]
 
     init(model: TransactionsViewModel) {
-        _model = State(wrappedValue: model)
+        self.model = model
         let request = Binding {
             model.request
         } set: { new in
@@ -66,5 +66,5 @@ extension TransactionsScene {
 // MARK: - Previews
 
 #Preview {
-    TransactionsScene(model: .init(walletId: .main, wallet: .main, type: .all, service: .main))
+    TransactionsScene(model: .init(wallet: .main, type: .all, service: .main))
 }
