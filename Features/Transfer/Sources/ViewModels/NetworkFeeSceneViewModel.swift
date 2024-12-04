@@ -48,7 +48,7 @@ public struct NetworkFeeSceneViewModel {
         case .sui: false
         case .tron: false
         case .xrp: false
-        case .solana: false
+        case .solana: true
         case .ton: false
         }
     }

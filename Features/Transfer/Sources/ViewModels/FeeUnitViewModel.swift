@@ -17,13 +17,15 @@ public struct FeeUnitViewModel {
         switch unit.type {
         case .satVb: Localized.FeeRate.satvB(unitValueString)
         case .gwei: Localized.FeeRate.gwei(unitValueString)
+        case .satB: Localized.FeeRate.satB(unitValueString)
         }
     }
 
     private var conversionFactor: Double {
         switch unit.type {
-        case .satVb: 1 / 1000
+        case .satVb: 1 / 1_000
         case .gwei: 1 / 1_000_000_000
+        case .satB: 4 / 1_000
         }
     }
 

@@ -25,6 +25,12 @@ struct FeeUnitViewModelTests {
         )
         #expect(
             FeeUnitViewModel(
+                unit: FeeUnit(type: .satB, value: BigInt(1000)),
+                formatter: formatter
+            ).value == "4,00 sat/B"
+        )
+        #expect(
+            FeeUnitViewModel(
                 unit: FeeUnit(type: .gwei, value: BigInt(100_000)),
                 formatter: formatter
             ).value == "0,0001 gwei"
@@ -50,14 +56,18 @@ struct FeeUnitViewModelTests {
                 formatter: usFormmatter
             ).value == "100.00 sat/vB"
         )
-
+        #expect(
+            FeeUnitViewModel(
+                unit: FeeUnit(type: .satB, value: BigInt(1000)),
+                formatter: usFormmatter
+            ).value == "4.00 sat/B"
+        )
         #expect(
             FeeUnitViewModel(
                 unit: FeeUnit(type: .satVb, value: BigInt(100_000_123)),
                 formatter: usFormmatter
             ).value == "100,000.12 sat/vB"
         )
-
         #expect(
             FeeUnitViewModel(
                 unit: FeeUnit(type: .gwei, value: BigInt(100_000)),
