@@ -72,14 +72,10 @@ extension TransactionsRequest {
     static func applyFilter(request: QueryInterfaceRequest<TransactionRecord>, _ filter: TransactionsRequestFilter) -> QueryInterfaceRequest<TransactionRecord> {
         switch filter {
         case .chains(let chains):
-            if chains.isEmpty {
-                return request
-            }
+            guard !chains.isEmpty else { return request }
             return request.filter(chains.contains(Columns.Transaction.chain))
         case .types(let types):
-            if types.isEmpty {
-                return request
-            }
+            guard !types.isEmpty else { return request }
             return request.filter(types.contains(Columns.Transaction.type))
         }
     }
