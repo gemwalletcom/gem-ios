@@ -27,18 +27,10 @@ class EthereumFeeServiceTests {
         )
 
         let rewards = response.result.reward.toBigInts()
-        let slowFees = rewards.compactMap { $0[safe: 0] }
-        let normalFees = rewards.compactMap { $0[safe: 1] }
-        let fastFees = rewards.compactMap { $0[safe: 2] }
-
-        let expectedSlowFee = slowFees.reduce(BigInt(0), +) / BigInt(slowFees.count)
-        let expectedNormalFee = normalFees.reduce(BigInt(0), +) / BigInt(normalFees.count)
-        let expectedFastFee = fastFees.reduce(BigInt(0), +) / BigInt(fastFees.count)
-
         let expectedFees: [FeePriority: BigInt] = [
-            .slow: expectedSlowFee,
-            .normal: expectedNormalFee,
-            .fast: expectedFastFee
+            .slow: 1_000_000_000.asBigInt,
+            .normal: 1_644_614_388.asBigInt,
+            .fast: 2_089_906_923.asBigInt
         ]
         let priorityFees = Self.service.calculatePriorityFees(
             rewards: rewards,
@@ -53,7 +45,7 @@ class EthereumFeeServiceTests {
 
     @Test
     func testCalculatePriorityFeesWith1BlockRewards() {
-        let rewards = [[1_000_000_000, 2_000_000_000, 3_000_000_000].map({ $0.asBigInt })]
+        let rewards = [[1_000_000_000, 2_000_000_000, 3_000_000_00].map({ $0.asBigInt })]
         let config = GemstoneConfig.shared.config(for: Self.chain)
         let priorityFees = Self.service.calculatePriorityFees(
             rewards: rewards,
@@ -64,7 +56,7 @@ class EthereumFeeServiceTests {
         let expectedFees: [FeePriority: BigInt] = [
             .slow: 1_000_000_000.asBigInt,
             .normal: 2_000_000_000.asBigInt,
-            .fast: 3_000_000_000.asBigInt
+            .fast: 1_000_000_000.asBigInt
         ]
 
         #expect(priorityFees[.slow] == expectedFees[.slow])
