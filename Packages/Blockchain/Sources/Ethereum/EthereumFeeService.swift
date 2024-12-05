@@ -170,23 +170,17 @@ extension EthereumService: ChainFeeCalculateable {
             Int(rewardsPercentiles.normal): .normal,
             Int(rewardsPercentiles.fast): .fast
         ]
-        let feesPerPriority = FeePriority.allCases.reduce(into: [FeePriority: [BigInt]]()) { result, priority in
-            guard let index = rewardsPercentiles.all.firstIndex(where: { percentileToPriority[$0] == priority }) else { return }
-            let fees = rewards.compactMap { $0[safe: index] }
-            if !fees.isEmpty {
-                result[priority] = fees
-            }
-        }
-        let averageFees = FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
-            if let fees = feesPerPriority[priority], !fees.isEmpty {
-                let sum = fees.reduce(0, +)
-                result[priority] = sum / BigInt(fees.count)
-            } else {
-                // Use minPriorityFee if no fees are available for this priority
+        let avarageFees = FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
+            guard let index = rewardsPercentiles.all.firstIndex(where: { percentileToPriority[$0] == priority }) else {
                 result[priority] = minPriorityFee
+                return
             }
+            let fees = rewards.compactMap { $0[safe: index] }
+            let average = fees.isEmpty ? minPriorityFee : max(minPriorityFee, fees.reduce(0, +) / BigInt(fees.count))
+            result[priority] = average
         }
-        return averageFees
+
+        return avarageFees
     }
 
     public func fee(input: FeeInput) async throws -> Fee {
