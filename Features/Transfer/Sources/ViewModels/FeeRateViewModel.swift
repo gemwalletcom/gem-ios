@@ -6,23 +6,25 @@ import Style
 import Localization
 import SwiftUI
 
-struct FeeRateViewModel: Identifiable {
-    let feeRate: FeeRate
-    let chain: Chain
+public struct FeeRateViewModel: Identifiable {
+    static let formatter = CurrencyFormatter()
 
-    init(feeRate: FeeRate, chain: Chain) {
+    public let feeRate: FeeRate
+    public let chain: Chain
+
+    public init(feeRate: FeeRate, chain: Chain) {
         self.feeRate = feeRate
         self.chain = chain
     }
 
-    var id: String { feeRate.priority.rawValue }
+    public var id: String { feeRate.priority.rawValue }
 
-    var image: Image? {
+    public var image: Image? {
         //TODO Specify image for each priority type
         .none
     }
     
-    var title: String {
+    public var title: String {
         switch feeRate.priority {
         case .slow: Localized.FeeRates.slow
         case .normal: Localized.FeeRates.normal
@@ -30,13 +32,13 @@ struct FeeRateViewModel: Identifiable {
         }
     }
 
-    var feeUnitModel: FeeUnitViewModel? {
+    public var feeUnitModel: FeeUnitViewModel? {
         guard let type = chain.feeUnitType else { return nil }
-        let unit = FeeUnit(type: type, value: feeRate.value)
-        return FeeUnitViewModel(unit: unit)
+        let unit = FeeUnit(type: type, value: feeRate.gasPrice)
+        return FeeUnitViewModel(unit: unit, formatter: Self.formatter)
     }
 
-    var value: String? {
+    public var value: String? {
         feeUnitModel?.value
     }
 }

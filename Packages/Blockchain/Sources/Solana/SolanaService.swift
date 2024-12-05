@@ -218,8 +218,7 @@ extension SolanaService: ChainFeeCalculateable {
                     fee: fee.totalFee,
                     gasPriceType: fee.type,
                     gasLimit: fee.gasLimit,
-                    feeRates: [],
-                    selectedFeeRate: nil
+                    feeRates: []
                 )
             case .token:
                 async let getBaseFee = getBaseFee(type: input.type)
@@ -241,8 +240,7 @@ extension SolanaService: ChainFeeCalculateable {
                     gasPriceType: fee.type,
                     gasLimit: fee.gasLimit,
                     options: options,
-                    feeRates: [],
-                    selectedFeeRate: nil
+                    feeRates: []
                 )
             }
         case .swap, .stake:
@@ -251,8 +249,7 @@ extension SolanaService: ChainFeeCalculateable {
                 fee: fee.totalFee,
                 gasPriceType: fee.type,
                 gasLimit: fee.gasLimit,
-                feeRates: [],
-                selectedFeeRate: nil
+                feeRates: []
             )
         case .generic:
             fatalError()

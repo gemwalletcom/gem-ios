@@ -116,7 +116,7 @@ extension NearService: ChainTransactionPreloadable {
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [], selectedFeeRate: nil)
+            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [])
         )
     }
 }

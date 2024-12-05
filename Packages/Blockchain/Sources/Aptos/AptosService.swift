@@ -82,8 +82,7 @@ extension AptosService: ChainFeeCalculateable {
             fee: BigInt(gasPrice * gasLimit),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
             gasLimit: BigInt(gasLimit * 2), // * 2 for safety
-            feeRates: [],
-            selectedFeeRate: nil
+            feeRates: []
         )
     }
 

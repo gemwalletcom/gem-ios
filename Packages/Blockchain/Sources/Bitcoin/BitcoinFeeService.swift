@@ -34,7 +34,7 @@ extension BitcoinService: ChainFeeCalculateable {
         }
         let feePriorityValue = try await getFeePriority(for: feePriority.asInt)
         let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals))
-        return FeeRate(priority: priority, rate: rate)
+        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: rate))
     }
 }
 
@@ -74,7 +74,7 @@ extension BitcoinService {
             }
 
             let coinType = chain.chain.coinType
-            let byteFee = Int(round(Double(feeRate.value.int) / 1000))
+            let byteFee = Int(round(Double(feeRate.gasPrice.int) / 1000))
 
             let gasPrice = max(byteFee, chain.minimumByteFee)
             let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
@@ -100,8 +100,7 @@ extension BitcoinService {
                 fee: BigInt(plan.fee),
                 gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
                 gasLimit: 1,
-                feeRates: feeRates,
-                selectedFeeRate: feeRate
+                feeRates: feeRates
             )
         }
     }

@@ -18,9 +18,9 @@ class BitcoinFeeCalculatorTests: XCTestCase {
     ]
 
     let feeRates: [FeeRate] = [
-        FeeRate(priority: .fast, rate: BigInt(5647)),
-        FeeRate(priority: .slow, rate: BigInt(3831)),
-        FeeRate(priority: .normal, rate: BigInt(4974))
+        FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: 5647)),
+        FeeRate(priority: .slow, gasPriceType: .regular(gasPrice: 3831)),
+        FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: 4974))
     ]
 
     let chain = BitcoinChain.bitcoin
@@ -48,7 +48,7 @@ class BitcoinFeeCalculatorTests: XCTestCase {
 
         let selectedFeeRate = feeRates[2]
         let coinType = chain.chain.coinType
-        let byteFee = Int(round(Double(selectedFeeRate.value.int) / 1000.0))
+        let byteFee = Int(round(Double(selectedFeeRate.gasPrice.int) / 1000.0))
         let gasPrice = max(byteFee, chain.minimumByteFee)
 
         let utxo = utxos.map { $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType) }
@@ -71,15 +71,14 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
             gasLimit: 1,
-            feeRates: feeRates,
-            selectedFeeRate: selectedFeeRate
+            feeRates: feeRates
         )
 
         XCTAssertEqual(fee, targetFee)
     }
 
     func testCalculateFeeMissingFeeRate() throws {
-        let feeRates = [FeeRate(priority: .fast, rate: BigInt(5647))] // Only fast fee rate available
+        let feeRates = [FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: 5647))] // Only fast fee rate available
 
         XCTAssertThrowsError(try BitcoinService.BitcoinFeeCalculator.calculate(
             chain: chain,

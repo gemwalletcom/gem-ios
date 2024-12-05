@@ -13,4 +13,5 @@ public enum FeePriority: String, Codable, CaseIterable, Equatable, Sendable {
 public enum FeeUnitType: String, Codable, CaseIterable, Equatable, Sendable {
 	case satVb
 	case satB
+	case gwei
 }
