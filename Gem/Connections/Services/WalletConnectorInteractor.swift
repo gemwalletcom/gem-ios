@@ -9,19 +9,22 @@ final class WalletConnectorInteractor {
     var isPresentingError: String? = nil
     var isPresentingConnectionBar: Bool = false
 
+    // TODO: - isPresenting
     var action: WalletConnectAction? = nil
 
     init() {}
 
     func cancel(action: WalletConnectAction) {
+        let error = ConnectionsError.userCancelled
         switch action {
         case .transferData(let transferDataCallback):
-            transferDataCallback.delegate(.failure(ConnectionsError.userCancelled))
+            transferDataCallback.delegate(.failure(error))
         case .signMessage(let transferDataCallback):
-            transferDataCallback.delegate(.failure(ConnectionsError.userCancelled))
+            transferDataCallback.delegate(.failure(error))
         case .connectionProposal(let transferDataCallback):
-            transferDataCallback.delegate(.failure(ConnectionsError.userCancelled))
+            transferDataCallback.delegate(.failure(error))
         }
+        
         self.action = nil
     }
 }

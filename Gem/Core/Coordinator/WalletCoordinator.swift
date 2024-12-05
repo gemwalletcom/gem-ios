@@ -242,6 +242,7 @@ struct WalletCoordinator: View {
 
 // MARK: - UI Components
 
+// TODO: - to navigation stack
 extension WalletCoordinator {
     @ViewBuilder
     private func scene(action: WalletConnectAction) -> some View {
