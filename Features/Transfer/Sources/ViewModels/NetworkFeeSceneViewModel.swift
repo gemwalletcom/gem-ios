@@ -43,7 +43,7 @@ public struct NetworkFeeSceneViewModel {
         case .bitcoin: true
         case .aptos: false
         case .cosmos: false
-        case .ethereum: EVMChain(rawValue: chain.rawValue) != nil
+        case .ethereum: true
         case .near: false
         case .sui: false
         case .tron: false
@@ -63,20 +63,8 @@ extension NetworkFeeSceneViewModel {
         self.fiatValue = fiatValue
     }
 
-    public mutating func clean() {
+    public mutating func reset() {
         self.value = nil
         self.fiatValue = nil
-    }
-}
-
-// MARK: - FeePriority+Rank
-
-extension FeePriority {
-    var rank: Int {
-        switch self {
-        case .slow: 3
-        case .normal: 2
-        case .fast: 1
-        }
     }
 }

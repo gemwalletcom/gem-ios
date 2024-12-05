@@ -116,29 +116,33 @@ extension EthereumService: ChainFeeCalculateable {
     }
 
     public func feeRates() async throws -> [FeeRate] {
+        let config = GemstoneConfig.shared.config(for: chain)
         let (baseFee, priorityFees) = try await getBasePriorityFees(
             blocks: Self.historyBlocks,
-            config: GemstoneConfig.shared.config(for: chain)
+            rewardsPercentiles: config.rewardsPercentiles,
+            minPriorityFee: config.minPriorityFee.asBigInt
         )
-        var rates: [FeeRate] = []
-        for priority in FeePriority.allCases {
-            if let priorityFee = priorityFees[priority] {
-                let feeRate = FeeRate(
+        let feeRates = FeePriority.allCases.compactMap { priority in
+            priorityFees[priority].map {
+                FeeRate(
                     priority: priority,
-                    gasPriceType: .eip1559(
-                        gasPrice: baseFee,
-                        minerFee: priorityFee
-                    )
+                    gasPriceType: .eip1559(gasPrice: baseFee, minerFee: $0)
                 )
-                rates.append(feeRate)
             }
         }
-        return rates
+        return feeRates
     }
 
-    func getBasePriorityFees(blocks: Int, config: EvmChainConfig) async throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
+    func getBasePriorityFees(
+        blocks: Int,
+        rewardsPercentiles: EvmHistoryRewardPercentiles,
+        minPriorityFee: BigInt
+    ) async throws -> (
+        base: BigInt,
+        priority: [FeePriority: BigInt]
+    ) {
         let feeHistory = try await provider
-            .request(.feeHistory(blocks: blocks, rewardPercentiles: config.rewardsPercentiles.list))
+            .request(.feeHistory(blocks: blocks, rewardPercentiles: rewardsPercentiles.all))
             .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
 
         guard
@@ -148,58 +152,41 @@ extension EthereumService: ChainFeeCalculateable {
             throw AnyError("Unable to retrieve base fee from history")
         }
         let priorityFees = calculatePriorityFees(
-            rewards: feeHistory.reward,
-            config: config
+            rewards: feeHistory.reward.toBigInts(),
+            rewardsPercentiles: rewardsPercentiles,
+            minPriorityFee: minPriorityFee
         )
         return (baseFeePerGas, priorityFees)
     }
 
     func calculatePriorityFees(
-        rewards: [[String]],
-        config: EvmChainConfig
+        rewards: [[BigInt]],
+        rewardsPercentiles: EvmHistoryRewardPercentiles,
+        minPriorityFee: BigInt
     ) -> [FeePriority: BigInt] {
 
-        let priorityFeesPerPercentile: [Int: [BigInt]] = {
-            var feesPerPercentile: [Int: [BigInt]] = [:]
-            for percentile in config.rewardsPercentiles.list {
-                feesPerPercentile[percentile] = []
+        let percentileToPriority: [Int: FeePriority] = [
+            Int(rewardsPercentiles.slow): .slow,
+            Int(rewardsPercentiles.normal): .normal,
+            Int(rewardsPercentiles.fast): .fast
+        ]
+        let feesPerPriority = FeePriority.allCases.reduce(into: [FeePriority: [BigInt]]()) { result, priority in
+            guard let index = rewardsPercentiles.all.firstIndex(where: { percentileToPriority[$0] == priority }) else { return }
+            let fees = rewards.compactMap { $0[safe: index] }
+            if !fees.isEmpty {
+                result[priority] = fees
             }
-
-            for rewardsPerBlock in rewards {
-                for (index, feeHex) in rewardsPerBlock.enumerated() {
-                    let percentile = config.rewardsPercentiles.list[index]
-                    if let fee = try? BigInt.fromHex(feeHex) {
-                        feesPerPercentile[percentile]?.append(fee)
-                    }
-                }
+        }
+        let averageFees = FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
+            if let fees = feesPerPriority[priority], !fees.isEmpty {
+                let sum = fees.reduce(0, +)
+                result[priority] = sum / BigInt(fees.count)
+            } else {
+                // Use minPriorityFee if no fees are available for this priority
+                result[priority] = minPriorityFee
             }
-            return feesPerPercentile
-        }()
-
-        let averagePriorityFees: [FeePriority: BigInt] = {
-            var averageFees: [FeePriority: BigInt] = [:]
-            for (percentile, fees) in priorityFeesPerPercentile {
-                let priority: FeePriority = {
-                    switch Int64(percentile) {
-                    case config.rewardsPercentiles.slow: .slow
-                    case config.rewardsPercentiles.normal: .normal
-                    case config.rewardsPercentiles.fast: .fast
-                    default: .normal
-                    }
-                }()
-                if !fees.isEmpty {
-                    let sum = fees.reduce(0, +)
-                    let average = sum / BigInt(fees.count)
-                    averageFees[priority] = average
-                } else {
-                    // use min value if rewards by priority - empty
-                    averageFees[priority] = config.minPriorityFee.asBigInt
-                }
-            }
-            return averageFees
-        }()
-
-        return averagePriorityFees
+        }
+        return averageFees
     }
 
     public func fee(input: FeeInput) async throws -> Fee {
@@ -262,7 +249,15 @@ extension EthereumService: ChainFeeCalculateable {
 // MARK: - Model extensions
 
 extension EvmHistoryRewardPercentiles {
-    var list: [Int] {
-        [slow, normal, fast].map {Int($0)}
+    var all: [Int] { [slow, normal, fast].map {Int($0)} }
+}
+
+extension Array where Element == [String] {
+    func toBigInts() -> [[BigInt]] {
+        map { values in
+            values.compactMap { feeHex in
+                try? BigInt.fromHex(feeHex)
+            }
+        }
     }
 }

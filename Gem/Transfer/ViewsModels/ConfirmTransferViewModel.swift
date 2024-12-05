@@ -229,7 +229,7 @@ extension ConfirmTransferViewModel {
     func fetch() async {
         await MainActor.run { [self] in
             self.state = .loading
-            self.feeModel.clean()
+            self.feeModel.reset()
         }
 
         do {
