@@ -27,25 +27,15 @@ class EthereumFeeServiceTests {
         )
 
         let rewards = response.result.reward.toBigInts()
-        let slowFees = rewards.compactMap { $0[safe: 0] }
-        let normalFees = rewards.compactMap { $0[safe: 1] }
-        let fastFees = rewards.compactMap { $0[safe: 2] }
-
-        let minFee = Self.config.minPriorityFee.asBigInt
-
-        let expectedSlowFee = max(minFee, slowFees.reduce(BigInt(0), +) / BigInt(slowFees.count))
-        let expectedNormalFee = max(minFee, normalFees.reduce(BigInt(0), +) / BigInt(normalFees.count))
-        let expectedFastFee = max(minFee, fastFees.reduce(BigInt(0), +) / BigInt(fastFees.count))
-
         let expectedFees: [FeePriority: BigInt] = [
-            .slow: expectedSlowFee,
-            .normal: expectedNormalFee,
-            .fast: expectedFastFee
+            .slow: 1_000_000_000.asBigInt,
+            .normal: 1_644_614_388.asBigInt,
+            .fast: 2_089_906_923.asBigInt
         ]
         let priorityFees = Self.service.calculatePriorityFees(
             rewards: rewards,
             rewardsPercentiles: Self.config.rewardsPercentiles,
-            minPriorityFee: minFee
+            minPriorityFee: Self.config.minPriorityFee.asBigInt
         )
 
         #expect(priorityFees[.slow] == expectedFees[.slow])
