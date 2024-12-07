@@ -61,18 +61,6 @@ public extension Array where Element == Chain {
     }
 }
 
-public extension AssetProperties {
-    static func defaultValue() -> AssetProperties {
-        return AssetProperties(
-            isBuyable: false,
-            isSellable: false,
-            isSwapable: false,
-            isStakeable: false,
-            stakingApr: .none
-        )
-    }
-}
-
 public extension AssetFull {
     var basic: AssetBasic {
         AssetBasic(

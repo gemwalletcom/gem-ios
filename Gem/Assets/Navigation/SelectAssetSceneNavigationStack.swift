@@ -97,8 +97,7 @@ struct SelectAssetSceneNavigationStack: View {
         .sheet(isPresented: $isPresentingAddToken) {
             AddTokenNavigationStack(
                 wallet: model.wallet,
-                isPresenting: $isPresentingAddToken,
-                action: addAsset
+                isPresenting: $isPresentingAddToken
             )
         }
         .sheet(isPresented: $isPresentingFilteringView) {
@@ -116,13 +115,6 @@ struct SelectAssetSceneNavigationStack: View {
 extension SelectAssetSceneNavigationStack {
     private func onSelectFilter() {
         isPresentingFilteringView.toggle()
-    }
-
-    private func addAsset(_ asset: Asset) {
-        Task {
-            try model.assetsService.addAsset(walletId: model.wallet.walletId, asset: asset)
-        }
-        dismiss()
     }
 }
 

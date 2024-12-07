@@ -25,11 +25,11 @@ class AssetsService {
     }
     
     // Used to add new custom assets
-    public func addAsset(walletId: WalletId, asset: Asset) throws {
+    public func addNewAsset(walletId: WalletId, asset: Asset) throws {
         try addAssets(assets: [
             AssetBasic(
                 asset: asset,
-                properties: AssetProperties.defaultValue(),
+                properties: AssetProperties.defaultValue(assetId: asset.id),
                 score: AssetScore(rank: 10)
             )
         ])
@@ -164,7 +164,7 @@ class AssetsService {
         return assets.map {
             AssetBasic(
                 asset: $0,
-                properties: AssetProperties.defaultValue(),
+                properties: AssetProperties.defaultValue(assetId: $0.id),
                 score: AssetScore(rank: 12)
             )
         }
