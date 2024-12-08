@@ -248,7 +248,13 @@ extension WalletId {
 }
 
 extension Account {
-    static let main = Account(chain: .bitcoin, address: "btc123123", derivationPath: "", extendedPublicKey: "")
+    static let main = Account(
+        chain: .bitcoin,
+        address: "btc123123",
+        derivationPath: "",
+        publicKey: .none,
+        extendedPublicKey: .none
+    )
 }
 
 extension Transaction {
