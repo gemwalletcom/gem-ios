@@ -200,6 +200,7 @@ extension FiatSceneViewModel {
     }
 
     func fetch(for assetData: AssetData) async {
+        let currentAmount = input.amount
         let shouldFetch: Bool = await MainActor.run { [self] in
             self.input.quote = nil
             if !self.shouldProceedFetch(assetData: assetData) {
@@ -228,6 +229,7 @@ extension FiatSceneViewModel {
                 }
             }()
             await MainActor.run { [self] in
+                guard self.input.amount == currentAmount else { return }
                 if !quotes.isEmpty {
                     self.input.quote = quotes.first
                     self.state = .loaded(quotes)

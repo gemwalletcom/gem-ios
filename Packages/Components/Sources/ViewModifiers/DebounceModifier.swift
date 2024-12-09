@@ -15,7 +15,11 @@ struct DebounceModifier<T: Hashable>: ViewModifier {
                 debounceTask?.cancel()
                 debounceTask = Task {
                     if let interval {
-                        try? await Task.sleep(for: interval)
+                        do {
+                            try await Task.sleep(for: interval)
+                        } catch {
+                            return
+                        }
                     }
                     guard !Task.isCancelled else { return }
                     await action(newValue)
