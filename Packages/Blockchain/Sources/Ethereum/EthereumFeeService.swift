@@ -183,7 +183,7 @@ extension EthereumService: ChainFeeCalculateable {
         return avarageFees
     }
 
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         if chain.isOpStack {
             // gas oracle estimates for enveloped tx only
             return try await OptimismGasOracle(chain: chain, provider: provider).fee(input: input)
@@ -214,28 +214,27 @@ extension EthereumService: ChainFeeCalculateable {
                 data: data?.hexString.append0x
             )
         }()
-
         let (feeRates, gasLimit) = try await (getFeeRates, getGasLimit)
-        guard let feeRate = feeRates.first(where: { $0.priority == input.feePriority }) else {
-            throw ChainCoreError.feeRateMissed
+        let feesByPriority = feeRates.reduce(into: [FeePriority: Fee]()) { result, feeRate in
+            let minerFee = {
+                switch input.type {
+                case .transfer(let asset):
+                    asset.type == .native && input.isMaxAmount ? feeRate.gasPrice : feeRate.priorityFee
+                case .generic, .swap, .stake:
+                    feeRate.priorityFee
+                }
+            }()
+            result[feeRate.priority] = Fee(
+                fee: feeRate.gasPrice * gasLimit,
+                gasPriceType: .eip1559(gasPrice: feeRate.gasPrice, minerFee: minerFee),
+                gasLimit: gasLimit
+            )
         }
-        let minerFee = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? feeRate.gasPrice : feeRate.priorityFee
-            case .generic, .swap, .stake:
-                feeRate.priorityFee
-            }
-        }()
-
-        return Fee(
-            fee: feeRate.gasPrice * gasLimit,
-            gasPriceType: .eip1559(
-                gasPrice: feeRate.gasPrice,
-                minerFee: minerFee
-            ),
-            gasLimit: gasLimit,
-            feeRates: feeRates
+        guard let fee = feesByPriority[.normal] else { throw ChainCoreError.feeRateMissed }
+        return Fees(
+            fee: fee,
+            feeRates: feeRates,
+            feeByPriority: feesByPriority
         )
     }
 }

@@ -43,7 +43,7 @@ final class LocalKeystoreTests: XCTestCase {
 
         XCTAssertEqual(keystore.wallets.count, 1)
         XCTAssertEqual(keystore.wallets.first?.accounts, chains.map {
-            Account(chain: $0, address: "0x8f348F300873Fd5DA36950B2aC75a26584584feE", derivationPath: "m/44\'/60\'/0\'/0/0", extendedPublicKey: "")
+            Account(chain: $0, address: "0x8f348F300873Fd5DA36950B2aC75a26584584feE", derivationPath: "m/44\'/60\'/0\'/0/0", publicKey: .empty, extendedPublicKey: "")
         })
     }
 
