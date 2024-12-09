@@ -297,12 +297,12 @@ extension SuiService: ChainBalanceable {
 extension SuiService: ChainFeeCalculateable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
     
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])
         return try await fee(data: data)
     }
 
-    public func fee(data: String) async throws -> Fee {
+    public func fee(data: String) async throws -> Fees {
         let gasUsed = try await provider
             .request(.dryRun(data: data))
             .map(as: JSONRPCResponse<SuiTransaction>.self).result.effects.gasUsed
@@ -312,11 +312,12 @@ extension SuiService: ChainFeeCalculateable {
         let storageRebate = BigInt(stringLiteral: gasUsed.storageRebate)
         let fee = computationCost + storageCost - storageRebate
 
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: 1),
-            gasLimit: 1,
-            feeRates: []
+        return Fees(
+            fee: Fee(
+                fee: fee,
+                gasPriceType: .regular(gasPrice: 1),
+                gasLimit: 1
+            )
         )
     }
 }

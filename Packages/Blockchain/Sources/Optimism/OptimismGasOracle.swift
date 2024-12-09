@@ -50,7 +50,7 @@ extension OptimismGasOracle: ChainFeeCalculateable {
         try await service.feeRates()
     }
     
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
         let data = service.getData(input: input)
         let to = service.getTo(input: input)
@@ -64,56 +64,61 @@ extension OptimismGasOracle: ChainFeeCalculateable {
         async let getNonce = try service.getNonce(senderAddress: input.senderAddress)
         async let getFeeRates = try feeRates()
         async let getChainId = try service.getChainId()
-        
         let (gasLimit, feeRates, nonce, chainId) = try await (getGasLimit, getFeeRates, getNonce, getChainId)
-        guard let feeRate = feeRates.first(where: { $0.priority == input.feePriority }) else {
-            throw ChainCoreError.feeRateMissed
-        }
 
-        let minerFee = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? feeRate.gasPrice : feeRate.priorityFee
-            case .generic, .swap:
-                feeRate.priorityFee
-            case .stake:
-                fatalError()
-            }
-        }()
+        let results = await ConcurrentTask.results(for: feeRates) { feeRate in
+            let minerFee = {
+                switch input.type {
+                case .transfer(let asset):
+                    return (asset.type == .native && input.isMaxAmount) ? feeRate.gasPrice : feeRate.priorityFee
+                case .generic, .swap:
+                    return feeRate.priorityFee
+                case .stake:
+                    fatalError()
+                }
+            }()
 
-        let value = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * feeRate.gasPrice : input.value
-            case .generic, .swap:
-                input.value
-            case .stake:
-                fatalError()
-            }
-        }()
-        
-        let encoded = getEncodedData(
-            gasLimit: gasLimit,
-            gasPrice: feeRate.gasPrice,
-            minerFee: minerFee,
-            nonce: nonce,
-            callData: data ?? Data(),
-            feeInput: input,
-            chainId: chainId,
-            value: value
-        )
-        
-        let l2fee = feeRate.gasPrice * gasLimit
-        let l1fee = try await getL1Fee(data: encoded)
+            let value = {
+                switch input.type {
+                case .transfer(let asset):
+                    return (asset.type == .native && input.isMaxAmount) ? input.balance - gasLimit * feeRate.gasPrice : input.value
+                case .generic, .swap:
+                    return input.value
+                case .stake:
+                    fatalError()
+                }
+            }()
 
-        return Fee(
-            fee: l1fee + l2fee,
-            gasPriceType: .eip1559(
+            let encoded = getEncodedData(
+                gasLimit: gasLimit,
                 gasPrice: feeRate.gasPrice,
-                minerFee: minerFee
-            ),
-            gasLimit: gasLimit,
-            feeRates: feeRates
+                minerFee: minerFee,
+                nonce: nonce,
+                callData: data ?? Data(),
+                feeInput: input,
+                chainId: chainId,
+                value: value
+            )
+            let l2fee = feeRate.gasPrice * gasLimit
+            let l1fee = try await getL1Fee(data: encoded)
+
+            return (
+                feeRate.priority,
+                Fee(
+                    fee: l1fee + l2fee,
+                    gasPriceType: .eip1559(gasPrice: feeRate.gasPrice, minerFee: minerFee),
+                    gasLimit: gasLimit
+                )
+            )
+        }
+        let feesByPriority = results.reduce(into: [FeePriority: Fee]()) { dict, entry in
+            dict[entry.0] = entry.1
+        }
+        guard let fee = feesByPriority[.normal] else { throw ChainCoreError.feeRateMissed }
+        return Fees(
+            fee: fee,
+            feeRates: feeRates,
+            feeByPriority: feesByPriority
         )
     }
     

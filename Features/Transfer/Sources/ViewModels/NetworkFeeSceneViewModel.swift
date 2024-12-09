@@ -7,7 +7,8 @@ import Localization
 public struct NetworkFeeSceneViewModel {
     private let chain: Chain
 
-    private var feeRates: [FeeRate] = []
+    public var feeRates: [FeeRate] = []
+    public var feeByPriority: [FeePriority: Fee] = [:]
 
     public var priority: FeePriority
     public var value: String?
@@ -57,14 +58,19 @@ public struct NetworkFeeSceneViewModel {
 // MARK: - Business Logic
 
 extension NetworkFeeSceneViewModel {
-    public mutating func update(rates: [FeeRate], value: String?, fiatValue: String?) {
+    public mutating func set(
+        rates: [FeeRate],
+        feeByPriority: [FeePriority: Fee],
+        value: String?,
+        fiatValue: String?
+    ) {
         self.feeRates = rates
-        self.value = value
-        self.fiatValue = fiatValue
+        self.feeByPriority = feeByPriority
+        self.update(value: value, fiatValue: fiatValue)
     }
 
-    public mutating func reset() {
-        self.value = nil
-        self.fiatValue = nil
+    public mutating func update(value: String?, fiatValue: String?) {
+        self.value = value
+        self.fiatValue = fiatValue
     }
 }

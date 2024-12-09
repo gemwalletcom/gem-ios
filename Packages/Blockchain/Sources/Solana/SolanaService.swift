@@ -207,18 +207,19 @@ extension SolanaService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 extension SolanaService: ChainFeeCalculateable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
                 let fee = try await getBaseFee(type: input.type)
-                
-                return Fee(
-                    fee: fee.totalFee,
-                    gasPriceType: fee.type,
-                    gasLimit: fee.gasLimit,
-                    feeRates: []
+
+                return Fees(
+                    fee: Fee(
+                        fee: fee.totalFee,
+                        gasPriceType: fee.type,
+                        gasLimit: fee.gasLimit
+                    )
                 )
             case .token:
                 async let getBaseFee = getBaseFee(type: input.type)
@@ -229,27 +230,29 @@ extension SolanaService: ChainFeeCalculateable {
                     destinationAddress: input.destinationAddress
                 )
                 let (fee, tokenAccountCreationFee, token) = try await (getBaseFee, getTokenAccountCreationFee, getToken)
-                
+
                 let options: FeeOptionMap = switch token.recipientTokenAddress {
                 case .some: [:]
                 case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
                 }
-                
-                return Fee(
-                    fee: fee.totalFee,
-                    gasPriceType: fee.type,
-                    gasLimit: fee.gasLimit,
-                    options: options,
-                    feeRates: []
+
+                return Fees(
+                    fee: Fee(
+                        fee: fee.totalFee,
+                        gasPriceType: fee.type,
+                        gasLimit: fee.gasLimit,
+                        options: options
+                    )
                 )
             }
         case .swap, .stake:
             let fee = try await getBaseFee(type: input.type)
-            return Fee(
-                fee: fee.totalFee,
-                gasPriceType: fee.type,
-                gasLimit: fee.gasLimit,
-                feeRates: []
+            return Fees(
+                fee: Fee(
+                    fee: fee.totalFee,
+                    gasPriceType: fee.type,
+                    gasLimit: fee.gasLimit
+                )
             )
         case .generic:
             fatalError()

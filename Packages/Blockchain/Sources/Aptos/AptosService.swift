@@ -65,7 +65,7 @@ extension AptosService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension AptosService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         async let getGasPrice = provider
             .request(.gasPrice)
             .map(as: AptosGasFee.self).prioritized_gas_estimate
@@ -78,11 +78,12 @@ extension AptosService: ChainFeeCalculateable {
         // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
         let gasLimit = Int32(isDestinationAccNew ? 679 : 9)
 
-        return Fee(
-            fee: BigInt(gasPrice * gasLimit),
-            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2), // * 2 for safety
-            feeRates: []
+        return Fees(
+            fee: Fee(
+                fee: BigInt(gasPrice * gasLimit),
+                gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
+                gasLimit: BigInt(gasLimit * 2) // * 2 for safety
+            )
         )
     }
 

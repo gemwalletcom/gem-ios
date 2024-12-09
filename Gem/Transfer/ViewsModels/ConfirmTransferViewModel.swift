@@ -229,7 +229,6 @@ extension ConfirmTransferViewModel {
     func fetch() async {
         await MainActor.run { [self] in
             self.state = .loading
-            self.feeModel.reset()
         }
 
         do {
@@ -248,31 +247,18 @@ extension ConfirmTransferViewModel {
 
             let preloadInput = try await service.load(input: transactionInput)
             let fee = preloadInput.fee
-
-            let transferAmountResult = TransferAmountCalculator().calculateResult(
-                input: TranferAmountInput(
-                    asset: dataModel.asset,
-                    assetBalance: Balance(available: metaData.assetBalance),
-                    value: dataModel.data.value,
-                    availableValue: availableValue,
-                    assetFee: dataModel.asset.feeAsset,
-                    assetFeeBalance: Balance(available: metaData.assetFeeBalance),
-                    fee: fee.totalFee,
-                    canChangeValue: dataModel.data.canChangeValue,
-                    ignoreValueCheck: dataModel.data.ignoreValueCheck
-                )
-            )
-
-            let transactionInputModel = TransactionInputViewModel(
-                data: data,
+            let transactionInputModel = Self.buildTransactionInputModel(
+                dataModel: dataModel,
                 input: preloadInput,
-                metaData: metaData,
-                transferAmountResult: transferAmountResult
+                availableValue: availableValue,
+                fee: fee.fee.totalFee,
+                metaData: metaData
             )
 
             await MainActor.run { [self] in
-                self.feeModel.update(
+                self.feeModel.set(
                     rates: fee.feeRates,
+                    feeByPriority: fee.feeByPriority,
                     value: transactionInputModel.networkFeeText,
                     fiatValue: transactionInputModel.networkFeeFiatText
                 )
@@ -286,6 +272,29 @@ extension ConfirmTransferViewModel {
                     NSLog("preload transaction error: \(error)")
                 }
             }
+        }
+    }
+
+    func onChangeFeePriority(_ priority: FeePriority) async {
+        guard let currentTransactionInputModel = state.value,
+              let preloadInput = currentTransactionInputModel.input,
+              let metaData = metadata,
+              let fee = feeModel.feeByPriority[priority]
+        else { return }
+
+        let transactionInputModel = Self.buildTransactionInputModel(
+            dataModel: dataModel,
+            input: preloadInput,
+            availableValue: availableValue,
+            fee: fee.totalFee,
+            metaData: metaData
+        )
+        await MainActor.run { [self] in
+            self.feeModel.update(
+                value: transactionInputModel.networkFeeText,
+                fiatValue: transactionInputModel.networkFeeFiatText
+            )
+            self.state = .loaded(transactionInputModel)
         }
     }
 
@@ -320,12 +329,6 @@ extension ConfirmTransferViewModel {
     func onCompleteAction() {
         self.onComplete?()
     }
-}
-
-// MARK: - Actions
-
-extension ConfirmTransferViewModel {
-    
 }
 
 // MARK: - Private
@@ -468,6 +471,35 @@ extension ConfirmTransferViewModel {
 // MARK: - Static
 
 extension ConfirmTransferViewModel {
+    static func buildTransactionInputModel(
+            dataModel: TransferDataViewModel,
+            input: TransactionPreload,
+            availableValue: BigInt,
+            fee: BigInt,
+            metaData: TransferDataMetadata
+    ) -> TransactionInputViewModel {
+        let transferAmountResult = TransferAmountCalculator().calculateResult(
+            input: TranferAmountInput(
+                asset: dataModel.asset,
+                assetBalance: Balance(available: metaData.assetBalance),
+                value: dataModel.data.value,
+                availableValue: availableValue,
+                assetFee: dataModel.asset.feeAsset,
+                assetFeeBalance: Balance(available: metaData.assetFeeBalance),
+                fee: fee,
+                canChangeValue: dataModel.data.canChangeValue,
+                ignoreValueCheck: dataModel.data.ignoreValueCheck
+            )
+        )
+
+        return TransactionInputViewModel(
+            data: dataModel.data,
+            input: input,
+            metaData: metaData,
+            transferAmountResult: transferAmountResult
+        )
+    }
+
     static func sign(signer: Signer,
                      senderAddress: String,
                      transferData: TransferData,
@@ -476,16 +508,18 @@ extension ConfirmTransferViewModel {
         let destinationAddress = transferData.recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
 
+        let fee = Fee(
+            fee: amount.networkFee,
+            gasPriceType: input.fee.fee.gasPriceType,
+            gasLimit: input.fee.fee.gasLimit,
+            options: input.fee.fee.options
+        )
+
         let input = SignerInput(
             type: transferData.type,
             asset: transferData.recipientData.asset,
             value: amount.value,
-            fee: Fee(
-                fee: amount.networkFee,
-                gasPriceType: input.fee.gasPriceType,
-                gasLimit: input.fee.gasLimit,
-                options: input.fee.options
-            ),
+            fee: fee,
             isMaxAmount: isMaxAmount,
             chainId: input.chainId,
             memo: transferData.recipientData.recipient.memo,

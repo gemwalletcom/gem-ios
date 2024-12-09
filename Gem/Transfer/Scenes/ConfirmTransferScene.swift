@@ -39,7 +39,7 @@ struct ConfirmTransferScene: View {
         .debounce(
             value: $model.feeModel.priority,
             interval: nil,
-            action: onChangeFeePriority
+            action: model.onChangeFeePriority
         )
         .taskOnce { fetch() }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
@@ -169,10 +169,6 @@ extension ConfirmTransferScene {
 
     private func onSelectFeePicker() {
         model.isPresentedNetworkFeePicker.toggle()
-    }
-
-    private func onChangeFeePriority(_ priority: FeePriority) async {
-        await model.fetch()
     }
 
     private func onAction() {

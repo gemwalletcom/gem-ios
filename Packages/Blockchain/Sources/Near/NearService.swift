@@ -91,7 +91,7 @@ extension NearService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension NearService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         fatalError()
         //let gasPrice = try await gasPrice()
         //let fee = gasPrice
@@ -116,7 +116,7 @@ extension NearService: ChainTransactionPreloadable {
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [])
+            fee: Fees(fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1))
         )
     }
 }

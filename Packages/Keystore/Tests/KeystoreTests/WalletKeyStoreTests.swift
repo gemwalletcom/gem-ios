@@ -26,6 +26,7 @@ final class WalletKeyStoreTests: XCTestCase {
                 chain: .solana,
                 address: "JSTURBrew3zGaJjtk7qcvd7gapeExX3GC7DiQBaCKzU",
                 derivationPath: "m/44\'/501\'/0\'",
+                publicKey: .empty,
                 extendedPublicKey: .none
             )
         ])

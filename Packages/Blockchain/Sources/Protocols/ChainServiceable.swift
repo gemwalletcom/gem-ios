@@ -23,7 +23,7 @@ public protocol ChainBalanceable: Sendable {
 }
 
 public protocol ChainFeeCalculateable: Sendable {
-    func fee(input: FeeInput) async throws -> Fee
+    func fee(input: FeeInput) async throws -> Fees
     func feeRates() async throws -> [FeeRate]
 }
 

@@ -30,7 +30,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
         destinationAddress: "bc1qhgxl7yjhaazdhrfh0tzge572wkyp43h7t64fal",
         value: BigInt(105910),
         balance: BigInt(105910),
-        feePriority: .normal,
         memo: nil
     )
 
@@ -41,7 +40,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             destinationAddress: feeInput.destinationAddress,
             amount: feeInput.value,
             isMaxAmount: feeInput.isMaxAmount,
-            feePriority: feeInput.feePriority,
             feeRates: feeRates,
             utxos: utxos
         )
@@ -70,11 +68,10 @@ class BitcoinFeeCalculatorTests: XCTestCase {
         let targetFee = Fee(
             fee: BigInt(plan.fee),
             gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: 1,
-            feeRates: feeRates
+            gasLimit: 1
         )
 
-        XCTAssertEqual(fee, targetFee)
+        XCTAssertEqual(fee.fee, targetFee)
     }
 
     func testCalculateFeeMissingFeeRate() throws {
@@ -86,7 +83,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             destinationAddress: feeInput.destinationAddress,
             amount: feeInput.value,
             isMaxAmount: feeInput.isMaxAmount,
-            feePriority: feeInput.feePriority,
             feeRates: feeRates,
             utxos: utxos
         )) { error in
@@ -102,7 +98,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             destinationAddress: feeInput.destinationAddress,
             value: BigInt(Int64.max) + 1, // Incorrect amount
             balance: feeInput.balance,
-            feePriority: feeInput.feePriority,
             memo: feeInput.memo
         )
 
@@ -112,7 +107,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             destinationAddress: incorrectAmountFeeInput.destinationAddress,
             amount: incorrectAmountFeeInput.value,
             isMaxAmount: incorrectAmountFeeInput.isMaxAmount,
-            feePriority: incorrectAmountFeeInput.feePriority,
             feeRates: feeRates,
             utxos: utxos
         )) { error in
@@ -127,7 +121,6 @@ class BitcoinFeeCalculatorTests: XCTestCase {
             destinationAddress: feeInput.destinationAddress,
             amount: feeInput.value,
             isMaxAmount: feeInput.isMaxAmount,
-            feePriority: feeInput.feePriority,
             feeRates: feeRates,
             utxos: [] // set empty utxo for such case
         )) { error in

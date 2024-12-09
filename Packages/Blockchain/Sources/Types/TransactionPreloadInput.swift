@@ -11,7 +11,6 @@ public struct TransactionInput: Sendable {
     public let destinationAddress: String
     public let value: BigInt
     public let balance: BigInt
-    public let feePriority: FeePriority
     public let memo: String?
 
     public init(
@@ -30,7 +29,6 @@ public struct TransactionInput: Sendable {
         self.destinationAddress = destinationAddress
         self.value = value
         self.balance = balance
-        self.feePriority = feePriority
         self.memo = memo
     }
 }
@@ -43,7 +41,6 @@ extension TransactionInput {
             destinationAddress: destinationAddress,
             value: value,
             balance: balance,
-            feePriority: feePriority,
             memo: memo
         )
     }

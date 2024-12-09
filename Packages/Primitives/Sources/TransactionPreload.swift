@@ -14,7 +14,7 @@ public struct TransactionPreload: Sendable {
     // Solana only
     public let token: SignerInputToken
     public let chainId: String
-    public var fee: Fee
+    public var fee: Fees
     public let utxos: [UTXO]
     public let messageBytes: String
     public let extra: SigningdExtra?
@@ -25,7 +25,7 @@ public struct TransactionPreload: Sendable {
         block: SignerInputBlock = SignerInputBlock(),
         token: SignerInputToken = SignerInputToken(),
         chainId: String = "",
-        fee: Fee,
+        fee: Fees,
         utxos: [UTXO] = [],
         messageBytes: String = "",
         extra: SigningdExtra? = nil
