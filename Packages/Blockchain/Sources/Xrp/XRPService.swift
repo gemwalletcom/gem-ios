@@ -36,7 +36,7 @@ extension XRPService {
     }
     
     private func reservedBalance() -> BigInt {
-        BigInt(GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).accountActivationFee ?? 0)
+        BigInt(chain.accountActivationFee ?? 0)
     }
 }
 
