@@ -9,26 +9,47 @@ public enum FeeOption: Sendable {
 
 public typealias FeeOptionMap = [FeeOption: BigInt]
 
+public struct Fees: Sendable {
+    public typealias FeeFeePriorityMap = [FeePriority: Fee]
+    public let fee: Fee
+    public let feeRates: [FeeRate]
+    public let feeByPriority: FeeFeePriorityMap
+
+    public init(
+        fee: Fee,
+        feeRates: [FeeRate] = [],
+        feeByPriority: FeeFeePriorityMap = [:]
+    ) {
+        self.fee = fee
+        self.feeRates = feeRates
+        self.feeByPriority = feeByPriority
+    }
+
+    public func withOptions(_ feeOptions: [FeeOption]) -> Fees {
+        Fees(
+            fee: fee.withOptions(feeOptions),
+            feeRates: feeRates,
+            feeByPriority: feeByPriority.mapValues({ $0.withOptions(feeOptions) })
+        )
+    }
+}
+
 public struct Fee: Sendable {
     public let fee: BigInt
     public let gasPriceType: GasPriceType
     public let gasLimit: BigInt
     public let options: FeeOptionMap
 
-    public let feeRates: [FeeRate]
-
     public init(
         fee: BigInt,
         gasPriceType: GasPriceType,
         gasLimit: BigInt,
-        options: FeeOptionMap = [:],
-        feeRates: [FeeRate] = []
+        options: FeeOptionMap = [:]
     ) {
         self.fee = fee
         self.gasPriceType = gasPriceType
         self.gasLimit = gasLimit
         self.options = options
-        self.feeRates = feeRates
     }
 
     public var gasPrice: BigInt { gasPriceType.gasPrice }
@@ -40,8 +61,7 @@ public struct Fee: Sendable {
         return Fee(
             fee: fee + options.filter { feeOptions.contains($0.key) }.map { $0.value }.reduce(0, +),
             gasPriceType: gasPriceType,
-            gasLimit: gasLimit,
-            feeRates: feeRates
+            gasLimit: gasLimit
         )
     }
 }

@@ -69,17 +69,17 @@ extension XRPService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension XRPService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         let medianFee = try await provider
             .request(.fee)
             .map(as: XRPResult<XRPFee>.self).result.drops.median_fee
         let fee = BigInt(stringLiteral: medianFee)
-        
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1,
-            feeRates: []
+        return Fees(
+            fee: Fee(
+                fee: fee,
+                gasPriceType: .regular(gasPrice: fee),
+                gasLimit: 1
+            )
         )
     }
     

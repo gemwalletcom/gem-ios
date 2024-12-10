@@ -11,7 +11,7 @@ import Gemstone
 // MARK: - ChainFeeCalculateable
 
 extension BitcoinService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         async let getRates = feeRates()
         async let getUtxos = getUtxos(address: input.senderAddress)
 
@@ -42,14 +42,13 @@ extension BitcoinService: ChainFeeCalculateable {
 
 extension BitcoinService {
     struct BitcoinFeeCalculator {
-        static func calculate(chain: BitcoinChain, feeInput: FeeInput, feeRates: [FeeRate], utxos: [UTXO]) throws -> Fee {
+        static func calculate(chain: BitcoinChain, feeInput: FeeInput, feeRates: [FeeRate], utxos: [UTXO]) throws -> Fees {
             try Self.calculate(
                 chain: chain,
                 senderAddress: feeInput.senderAddress,
                 destinationAddress: feeInput.destinationAddress,
                 amount: feeInput.value,
                 isMaxAmount: feeInput.isMaxAmount,
-                feePriority: feeInput.feePriority,
                 feeRates: feeRates,
                 utxos: utxos
             )
@@ -61,46 +60,50 @@ extension BitcoinService {
             destinationAddress: String,
             amount: BigInt,
             isMaxAmount: Bool,
-            feePriority: FeePriority,
             feeRates: [FeeRate],
             utxos: [UTXO]
-        ) throws -> Fee {
+        ) throws -> Fees {
             guard amount <= BigInt(Int64.max) else {
                 throw ChainCoreError.incorrectAmount
             }
+            let feesByPriority = try feeRates.reduce(into: [FeePriority: Fee]()) { result, feeRate in
+                let coinType = chain.chain.coinType
+                let byteFee = Int(round(Double(feeRate.gasPrice.int) / 1000))
+                let gasPrice = max(byteFee, chain.minimumByteFee)
 
-            guard let feeRate = feeRates.first(where: { feePriority == $0.priority }) else {
-                throw ChainCoreError.feeRateMissed
+                let preparedUtxos = utxos.map {
+                    $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType)
+                }
+                let scripts = preparedUtxos.mapToScripts(address: senderAddress, coinType: coinType)
+                let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
+
+                let input = BitcoinSigningInput.with {
+                    $0.coinType = coinType.rawValue
+                    $0.hashType = hashType
+                    $0.amount = amount.int64
+                    $0.byteFee = Int64(gasPrice)
+                    $0.toAddress = destinationAddress
+                    $0.changeAddress = senderAddress
+                    $0.utxo = preparedUtxos
+                    $0.scripts = scripts
+                    $0.useMaxAmount = isMaxAmount
+                }
+
+                let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
+                try ChainCoreError.fromWalletCore(for: chain.chain, plan.error)
+
+                let fee = Fee(
+                    fee: BigInt(plan.fee),
+                    gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
+                    gasLimit: 1
+                )
+                result[feeRate.priority] = fee
             }
-
-            let coinType = chain.chain.coinType
-            let byteFee = Int(round(Double(feeRate.gasPrice.int) / 1000))
-
-            let gasPrice = max(byteFee, chain.minimumByteFee)
-            let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
-            let scripts = utxo.mapToScripts(address: senderAddress, coinType: coinType)
-            let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
-
-            let input = BitcoinSigningInput.with {
-                $0.coinType = coinType.rawValue
-                $0.hashType = hashType
-                $0.amount = amount.int64
-                $0.byteFee = Int64(gasPrice)
-                $0.toAddress = destinationAddress
-                $0.changeAddress = senderAddress
-                $0.utxo = utxo
-                $0.scripts = scripts
-                $0.useMaxAmount = isMaxAmount
-            }
-            let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
-
-            try ChainCoreError.fromWalletCore(for: chain.chain, plan.error)
-            
-            return Fee(
-                fee: BigInt(plan.fee),
-                gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-                gasLimit: 1,
-                feeRates: feeRates
+            guard let fee = feesByPriority[.normal] else { throw ChainCoreError.feeRateMissed }
+            return Fees(
+                fee: fee,
+                feeRates: feeRates,
+                feeByPriority: feesByPriority
             )
         }
     }

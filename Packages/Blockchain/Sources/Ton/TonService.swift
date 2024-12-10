@@ -119,17 +119,18 @@ extension TonService: ChainBalanceable {
 // MARK: - ChainFeeCalculateable
 
 extension TonService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
+    public func fee(input: FeeInput) async throws -> Fees {
         switch input.type {
         case .transfer(let asset):
             
             switch asset.id.type {
             case .native:
-                return Fee(
-                    fee: baseFee,
-                    gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1,
-                    feeRates: []
+                return Fees(
+                    fee: Fee(
+                        fee: baseFee,
+                        gasPriceType: .regular(gasPrice: baseFee),
+                        gasLimit: 1
+                    )
                 )
             case .token:
                 let tokenId = try asset.getTokenId()
@@ -138,15 +139,16 @@ extension TonService: ChainFeeCalculateable {
 
                 // https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons
                 let jettonAccountFee: BigInt = switch state {
-                    case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
-                    case false: BigInt(300_000_000) // 0.3 TON
+                case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
+                case false: BigInt(300_000_000) // 0.3 TON
                 }
-                return Fee(
-                    fee: baseFee,
-                    gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1,
-                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)],
-                    feeRates: []
+                return Fees(
+                    fee: Fee(
+                        fee: baseFee,
+                        gasPriceType: .regular(gasPrice: baseFee),
+                        gasLimit: 1,
+                        options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
+                    )
                 )
             }
         case .swap, .generic, .stake:

@@ -4,7 +4,7 @@ import BigInt
 
 public struct FeeRate: Identifiable, Equatable, Hashable, Sendable {
     public let priority: FeePriority
-    private let gasPriceType: GasPriceType
+    public let gasPriceType: GasPriceType
 
     public init(priority: FeePriority, gasPriceType: GasPriceType) {
         self.priority = priority

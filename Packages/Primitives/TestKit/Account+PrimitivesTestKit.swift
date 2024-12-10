@@ -11,6 +11,7 @@ public extension Account {
             chain: chain,
             address: .empty,
             derivationPath: .empty,
+            publicKey: .empty,
             extendedPublicKey: .empty
         )
     }
