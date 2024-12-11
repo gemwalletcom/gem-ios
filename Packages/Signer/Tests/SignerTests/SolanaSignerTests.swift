@@ -8,7 +8,7 @@ import PrimitivesTestKit
 
 final class SolanaSignerTests: XCTestCase {
 
-    let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, minerFee: 10_000), gasLimit: 125_000)
+    let fee = Fee(fee: .zero, gasPriceType: .eip1559(gasPrice: 5_000, priorityFee: 10_000), gasLimit: 125_000)
     
     func testTransfer() {
         let asset = Asset(.solana).chain.asset

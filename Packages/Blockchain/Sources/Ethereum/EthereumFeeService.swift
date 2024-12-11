@@ -146,7 +146,6 @@ extension EthereumService {
         rewardsPercentiles: EvmHistoryRewardPercentiles,
         minPriorityFee: BigInt
     ) -> [FeePriority: BigInt] {
-
         let percentileToPriority: [Int: FeePriority] = [
             Int(rewardsPercentiles.slow): .slow,
             Int(rewardsPercentiles.normal): .normal,
@@ -199,20 +198,20 @@ extension EthereumService {
         let (gasLimit) = try await (getGasLimit)
         let gasPriceType = input.gasPrice
         
-        let minerFee = {
+        let priorityFee = {
             switch input.type {
             case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.minerFee
+                asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
             case .generic, .swap, .stake:
-                gasPriceType.minerFee
+                gasPriceType.priorityFee
             }
         }()
-
+    
         return Fee(
             fee: input.gasPrice.totalFee * gasLimit,
             gasPriceType: .eip1559(
-                gasPrice: gasPriceType.gasPrice,
-                minerFee: minerFee
+                gasPrice: input.gasPrice.totalFee,
+                priorityFee: priorityFee
             ),
             gasLimit: gasLimit
         )
@@ -231,7 +230,7 @@ extension EthereumService: ChainFeeRateFetchable {
             priorityFees[priority].map {
                 FeeRate(
                     priority: priority,
-                    gasPriceType: .eip1559(gasPrice: baseFee, minerFee: $0)
+                    gasPriceType: .eip1559(gasPrice: baseFee, priorityFee: $0)
                 )
             }
         }

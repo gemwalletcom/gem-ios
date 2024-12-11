@@ -110,7 +110,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                    let maxFeePerGasBigInt = BigInt(hex: maxFeePerGas),
                    let maxPriorityFeePerGasBigInt = BigInt(hex: maxPriorityFeePerGas)
                 {
-                    return .eip1559(gasPrice: maxFeePerGasBigInt, minerFee: maxPriorityFeePerGasBigInt)
+                    return .eip1559(gasPrice: maxFeePerGasBigInt, priorityFee: maxPriorityFeePerGasBigInt)
                 }
                 return .none
             }()

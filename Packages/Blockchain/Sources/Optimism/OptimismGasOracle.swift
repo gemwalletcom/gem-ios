@@ -62,14 +62,12 @@ extension OptimismGasOracle {
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
         
-        let minerFee = {
+        let priorityFee = {
             switch input.type {
             case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.minerFee
-            case .generic, .swap:
-                input.gasPrice.minerFee
-            case .stake:
-                fatalError()
+                asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
+            case .generic, .swap, .stake:
+                input.gasPrice.priorityFee
             }
         }()
 
@@ -87,7 +85,7 @@ extension OptimismGasOracle {
         let encoded = getEncodedData(
             gasLimit: gasLimit,
             gasPrice: input.gasPrice.gasPrice,
-            minerFee: minerFee,
+            priorityFee: input.gasPrice.priorityFee,
             nonce: nonce,
             callData: data ?? Data(),
             feeInput: input,
@@ -95,15 +93,12 @@ extension OptimismGasOracle {
             value: value
         )
         
-        let l2fee = input.gasPrice.gasPrice * gasLimit
+        let l2fee = input.gasPrice.totalFee * gasLimit
         let l1fee = try await getL1Fee(data: encoded)
 
         return Fee(
             fee: l1fee + l2fee,
-            gasPriceType: .eip1559(
-                gasPrice: input.gasPrice.gasPrice,
-                minerFee: minerFee
-            ),
+            gasPriceType: .eip1559(gasPrice: input.gasPrice.totalFee, priorityFee: priorityFee),
             gasLimit: gasLimit
         )
     }
@@ -111,7 +106,7 @@ extension OptimismGasOracle {
     private func getEncodedData(
         gasLimit: BigInt,
         gasPrice: BigInt,
-        minerFee: BigInt,
+        priorityFee: BigInt,
         nonce: Int,
         callData: Data,
         feeInput: FeeInput,
@@ -131,7 +126,7 @@ extension OptimismGasOracle {
             }
             $0.gasLimit = gasLimit.magnitude.serialize()
             $0.maxFeePerGas = gasPrice.magnitude.serialize()
-            $0.maxInclusionFeePerGas = minerFee.magnitude.serialize()
+            $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             $0.privateKey = PrivateKey().data
         }
         

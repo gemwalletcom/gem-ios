@@ -125,7 +125,7 @@ extension SolanaService {
         case .transfer, .stake: BigInt(100_000)
         case .generic, .swap: BigInt(1_400_000)
         }
-        let totalFee = gasPrice.gasPrice + (gasPrice.minerFee * gasLimit / BigInt(1_000_000))
+        let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
         
         return Fee(fee: totalFee, gasPriceType: gasPrice, gasLimit: gasLimit)
     }
@@ -220,7 +220,7 @@ extension SolanaService: ChainFeeRateFetchable {
         case .generic, .swap: 250_000
         }
         
-        let minerFee = {
+        let priorityFee = {
             if priorityFees.isEmpty {
                 BigInt(multipleOf)
             } else {
@@ -237,9 +237,9 @@ extension SolanaService: ChainFeeRateFetchable {
         }()
         
         return [
-            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee / 4)),
-            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee)),
-            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee * 2)),
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 4)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 2)),
         ]
     }
 }
