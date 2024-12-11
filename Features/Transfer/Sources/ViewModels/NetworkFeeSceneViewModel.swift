@@ -6,8 +6,8 @@ import Localization
 import Blockchain
 
 public struct NetworkFeeSceneViewModel {
+    
     private let chain: Chain
-
     private var rates: [FeeRate] = []
 
     public var priority: FeePriority
@@ -31,8 +31,10 @@ public struct NetworkFeeSceneViewModel {
     public var infoIcon: String { Localized.FeeRates.info }
 
     public var feeRatesViewModels: [FeeRateViewModel] {
-        rates.map({ FeeRateViewModel(feeRate: $0, chain: chain) })
-            .sorted(by: { $0.feeRate.priority.rank > $1.feeRate.priority.rank })
+        rates.compactMap {
+            guard let unitType = chain.feeUnitType else { return .none }
+            return FeeRateViewModel(feeRate: $0, unitType: unitType)
+        }.sorted()
     }
 
     public var selectedFreeRateViewModel: FeeRateViewModel? {
@@ -45,12 +47,9 @@ public struct NetworkFeeSceneViewModel {
     
     public mutating func getFeeRates() async throws -> [FeeRate] {
         if rates.isEmpty {
-            let rates = try await service.feeRates()
-            self.rates = rates
-            return rates
-        } else {
-            return rates
+            self.rates = try await service.feeRates()
         }
+        return rates
     }
 
     private var isSupportedFeeRateSelection: Bool {

@@ -27,7 +27,7 @@ public struct NetworkFeeScene: View {
                 ForEach(model.feeRatesViewModels) { feeRate in
                     ListItemSelectionView(
                         title: feeRate.title,
-                        titleExtra: feeRate.value,
+                        titleExtra: feeRate.valueText,
                         titleTag: .none,
                         titleTagType: .none,
                         subtitle: .none,
