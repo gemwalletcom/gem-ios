@@ -10,11 +10,20 @@ public struct FeeRateViewModel: Identifiable {
     static let formatter = CurrencyFormatter()
 
     public let feeRate: FeeRate
-    public let chain: Chain
+    public let unitType: FeeUnitType
+    public let decimals: Int
+    public let symbol: String
 
-    public init(feeRate: FeeRate, chain: Chain) {
+    public init(
+        feeRate: FeeRate,
+        unitType: FeeUnitType,
+        decimals: Int,
+        symbol: String
+    ) {
         self.feeRate = feeRate
-        self.chain = chain
+        self.unitType = unitType
+        self.decimals = decimals
+        self.symbol = symbol
     }
 
     public var id: String { feeRate.priority.rawValue }
@@ -32,13 +41,23 @@ public struct FeeRateViewModel: Identifiable {
         }
     }
 
-    public var feeUnitModel: FeeUnitViewModel? {
-        guard let type = chain.feeUnitType else { return nil }
-        let unit = FeeUnit(type: type, value: feeRate.gasPrice)
-        return FeeUnitViewModel(unit: unit, formatter: Self.formatter)
+    public var feeUnitModel: FeeUnitViewModel {
+        let unit = FeeUnit(type: unitType, value: feeRate.gasPriceType.totalFee)
+        return FeeUnitViewModel(
+            unit: unit,
+            decimals: decimals,
+            symbol: symbol,
+            formatter: Self.formatter
+        )
     }
 
-    public var value: String? {
-        feeUnitModel?.value
+    public var valueText: String {
+        feeUnitModel.value
+    }
+}
+
+extension FeeRateViewModel: Comparable {
+    public static func < (lhs: FeeRateViewModel, rhs: FeeRateViewModel) -> Bool {
+        lhs.feeRate.priority.rank > rhs.feeRate.priority.rank
     }
 }

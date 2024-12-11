@@ -5,7 +5,7 @@ import BigInt
 
 public enum GasPriceType: Equatable, Sendable {
     case regular(gasPrice: BigInt)
-    case eip1559(gasPrice: BigInt, minerFee: BigInt)
+    case eip1559(gasPrice: BigInt, priorityFee: BigInt)
     
     public var gasPrice: BigInt {
         switch self {
@@ -16,11 +16,15 @@ public enum GasPriceType: Equatable, Sendable {
         }
     }
     
-    public var minerFee: BigInt {
+    public var priorityFee: BigInt {
         switch self {
         case .regular: .zero
-        case .eip1559(_, let minerFee): minerFee
+        case .eip1559(_, let priorityFee): priorityFee
         }
+    }
+    
+    public var totalFee: BigInt {
+        gasPrice + priorityFee
     }
 }
 

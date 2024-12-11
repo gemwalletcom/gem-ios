@@ -72,9 +72,9 @@ public struct SolanaSigner: Signable {
             $0.priorityFeeLimit = .with {
                 $0.limit = UInt32(input.fee.gasLimit)
             }
-            if input.fee.minerFee > 0 {
+            if input.fee.priorityFee > 0 {
                 $0.priorityFeePrice = .with {
-                    $0.price = input.fee.minerFee.UInt
+                    $0.price = input.fee.priorityFee.UInt
                 }
             }
             $0.privateKey = privateKey
@@ -114,7 +114,7 @@ public struct SolanaSigner: Signable {
             case .swap(_, let swapData) = action else {
             throw AnyError("not swap SignerInput")
         }
-        let price = input.fee.minerFee
+        let price = input.fee.priorityFee
         let limit = input.fee.gasLimit
         
         guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {

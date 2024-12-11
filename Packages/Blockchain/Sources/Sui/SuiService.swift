@@ -294,9 +294,7 @@ extension SuiService: ChainBalanceable {
 
 // MARK: - ChainFeeCalculateable
 
-extension SuiService: ChainFeeCalculateable {
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    
+extension SuiService {
     public func fee(input: FeeInput) async throws -> Fee {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])
         return try await fee(data: data)
@@ -315,9 +313,14 @@ extension SuiService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
-            gasLimit: 1,
-            feeRates: []
+            gasLimit: 1
         )
+    }
+}
+
+extension SuiService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        FeeRate.defaultRates()
     }
 }
 

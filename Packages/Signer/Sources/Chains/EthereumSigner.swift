@@ -51,10 +51,10 @@ public class EthereumSigner: Signable {
                 $0.txMode = .legacy
                 $0.gasPrice = gasPrice.magnitude.serialize()
                 fatalError("no longer supported")
-            case .eip1559(let gasPrice, let minerFee):
+            case .eip1559(let gasPrice, let priorityFee):
                 $0.txMode = .enveloped
                 $0.maxFeePerGas = gasPrice.magnitude.serialize()
-                $0.maxInclusionFeePerGas = minerFee.magnitude.serialize()
+                $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             }
             $0.gasLimit = input.fee.gasLimit.magnitude.serialize()
             $0.chainID = BigInt(stringLiteral: input.chainId).magnitude.serialize()

@@ -162,6 +162,7 @@ extension EthereumService: ChainTransactionPreloadable {
         async let sequence = getNonce(senderAddress: input.senderAddress)
         async let chainId = getChainId()
         async let extra = getPreloadExtra(chain: input.asset.chain, type: input.type, address: input.senderAddress)
+        
         return try await TransactionPreload(
             sequence: sequence,
             chainId: chainId.asString,
