@@ -188,19 +188,19 @@ extension SwapViewModel {
     }
 
     func fetch(fromAssetData: AssetData, toAsset: Asset) async {
-        guard isValidFromValue(assetData: fromAssetData) else {
-            await MainActor.run {
-                swapAvailabilityState = .noData
+        let shouldFetch: Bool = await MainActor.run { [self] in
+            resetToValue()
+            if !self.isValidFromValue(assetData: fromAssetData) {
+                self.swapAvailabilityState = .noData
+                return false
             }
-            return
+            self.swapAvailabilityState = .loading
+            return true
         }
 
+        guard shouldFetch else { return }
         let fromAsset = fromAssetData.asset
-        
-        await MainActor.run {
-            swapAvailabilityState = .loading
-        }
-        
+
         do {
             switch fromAsset.type {
             case .trc20, .ibc, .jetton, .synth:

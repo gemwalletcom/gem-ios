@@ -74,7 +74,7 @@ struct SwapScene: View {
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
         .debounce(
-            value: $model.fromValue,
+            value: model.fromValue,
             interval: SwapViewModel.quoteTaskDebounceTimeout,
             action: onChangeFromValue
         )
@@ -89,6 +89,9 @@ struct SwapScene: View {
         }
         .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
+        }
+        .onReceive(updateQuoteTimer) { _ in
+            fetch()
         }
         .onAppear {
             if model.toValue.isEmpty {
@@ -169,28 +172,22 @@ extension SwapScene {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
         }
-        .onReceive(updateQuoteTimer) { _ in
-            fetch()
-        }
     }
 }
 
 // MARK: - Actions
 
 extension SwapScene {
-    @MainActor
     private func onSelectFromBalance() {
         guard let fromAsset, let _ = toAsset else { return }
         model.setMaxFromValue(asset: fromAsset.asset, value: fromAsset.balance.available)
         focusedField = .none
     }
-    
-    @MainActor
+
     private func onSelectAssetAction(type: SelectAssetSwapType) {
         model.onSelectAssetAction(type: type)
     }
 
-    @MainActor
     private func onSelectActionButton() {
         if model.swapAvailabilityState.isError {
             fetch()
@@ -199,7 +196,6 @@ extension SwapScene {
         }
     }
 
-    @MainActor
     private func onChangeTokenApprovals() {
         if tokenApprovals.isEmpty {
             focusedField = .from
@@ -207,22 +203,18 @@ extension SwapScene {
         fetch()
     }
 
-    @MainActor
     private func onChangeFromValue(_ value: String) async {
-        model.toValue = ""
         guard let fromAsset, let toAsset else { return }
         await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
     }
 
-    @MainActor
     private func onChangeFromAsset() {
         model.resetValues()
         focusedField = .from
         fetch()
         updateAssets()
     }
-    
-    @MainActor
+
     private func onChangeToAsset() {
         model.resetToValue()
         fetch()
