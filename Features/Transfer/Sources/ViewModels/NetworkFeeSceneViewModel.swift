@@ -3,22 +3,27 @@
 import SwiftUI
 import Primitives
 import Localization
+import Blockchain
 
 public struct NetworkFeeSceneViewModel {
     private let chain: Chain
 
-    private var feeRates: [FeeRate] = []
+    private var rates: [FeeRate] = []
 
     public var priority: FeePriority
     public var value: String?
     public var fiatValue: String?
 
+    private let service: any ChainFeeRateFetchable
+    
     public init(
         chain: Chain,
-        priority: FeePriority = .normal
+        priority: FeePriority = .normal,
+        service: any ChainFeeRateFetchable
     ) {
         self.chain = chain
         self.priority = priority
+        self.service = service
     }
 
     public var title: String { Localized.Transfer.networkFee }
@@ -26,7 +31,7 @@ public struct NetworkFeeSceneViewModel {
     public var infoIcon: String { Localized.FeeRates.info }
 
     public var feeRatesViewModels: [FeeRateViewModel] {
-        feeRates.map({ FeeRateViewModel(feeRate: $0, chain: chain) })
+        rates.map({ FeeRateViewModel(feeRate: $0, chain: chain) })
             .sorted(by: { $0.feeRate.priority.rank > $1.feeRate.priority.rank })
     }
 
@@ -35,7 +40,17 @@ public struct NetworkFeeSceneViewModel {
     }
 
     public var showFeeRatesSelector: Bool {
-        isSupportedFeeRateSelection && !feeRates.isEmpty
+        isSupportedFeeRateSelection && !rates.isEmpty
+    }
+    
+    public mutating func getFeeRates() async throws -> [FeeRate] {
+        if rates.isEmpty {
+            let rates = try await service.feeRates()
+            self.rates = rates
+            return rates
+        } else {
+            return rates
+        }
     }
 
     private var isSupportedFeeRateSelection: Bool {
@@ -57,8 +72,7 @@ public struct NetworkFeeSceneViewModel {
 // MARK: - Business Logic
 
 extension NetworkFeeSceneViewModel {
-    public mutating func update(rates: [FeeRate], value: String?, fiatValue: String?) {
-        self.feeRates = rates
+    public mutating func update(value: String?, fiatValue: String?) {
         self.value = value
         self.fiatValue = fiatValue
     }

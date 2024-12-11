@@ -97,7 +97,9 @@ extension NearService: ChainFeeCalculateable {
         //let fee = gasPrice
         //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
     }
+}
 
+extension NearService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 

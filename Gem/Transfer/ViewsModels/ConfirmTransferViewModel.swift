@@ -40,7 +40,7 @@ class ConfirmTransferViewModel {
     private let walletsService: WalletsService
     private let confirmTransferDelegate: ConfirmTransferDelegate?
     private let onComplete: VoidAction
-
+    
     init(
         wallet: Wallet,
         keystore: any Keystore,
@@ -57,7 +57,7 @@ class ConfirmTransferViewModel {
         self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
-        self.feeModel = NetworkFeeSceneViewModel(chain: data.recipientData.asset.chain)
+        self.feeModel = NetworkFeeSceneViewModel(chain: data.recipientData.asset.chain, service: service)
 
         // prefetch asset metadata from local storage
         let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.recipientData.asset, assetsIds: data.type.assetIds)
@@ -235,6 +235,12 @@ extension ConfirmTransferViewModel {
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            let rates = try await feeModel.getFeeRates()
+            
+            guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
+                throw ChainCoreError.feeRateMissed
+            }
+            
             let transactionInput = TransactionInput(
                 type: data.type,
                 asset: dataModel.asset,
@@ -242,7 +248,7 @@ extension ConfirmTransferViewModel {
                 destinationAddress: dataModel.recipient.address,
                 value: dataModel.data.value,
                 balance: metaData.assetBalance,
-                feePriority: feeModel.priority,
+                gasPrice: rate.gasPriceType,
                 memo: dataModel.memo
             )
 
@@ -272,7 +278,6 @@ extension ConfirmTransferViewModel {
 
             await MainActor.run { [self] in
                 self.feeModel.update(
-                    rates: fee.feeRates,
                     value: transactionInputModel.networkFeeText,
                     fiatValue: transactionInputModel.networkFeeFiatText
                 )

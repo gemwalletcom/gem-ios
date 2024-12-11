@@ -15,8 +15,6 @@ public struct Fee: Sendable {
     public let gasLimit: BigInt
     public let options: FeeOptionMap
 
-    public let feeRates: [FeeRate]
-
     public init(
         fee: BigInt,
         gasPriceType: GasPriceType,
@@ -28,7 +26,6 @@ public struct Fee: Sendable {
         self.gasPriceType = gasPriceType
         self.gasLimit = gasLimit
         self.options = options
-        self.feeRates = feeRates
     }
 
     public var gasPrice: BigInt { gasPriceType.gasPrice }
@@ -40,8 +37,7 @@ public struct Fee: Sendable {
         return Fee(
             fee: fee + options.filter { feeOptions.contains($0.key) }.map { $0.value }.reduce(0, +),
             gasPriceType: gasPriceType,
-            gasLimit: gasLimit,
-            feeRates: feeRates
+            gasLimit: gasLimit
         )
     }
 }

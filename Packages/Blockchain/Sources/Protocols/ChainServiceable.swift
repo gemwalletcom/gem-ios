@@ -6,6 +6,7 @@ public typealias ChainServiceable = ChainBalanceable &
     ChainBroadcastable &
     ChainTransactionPreloadable &
     ChainFeeCalculateable &
+    ChainFeeRateFetchable &
     ChainTransactionStateFetchable &
     ChainSyncable &
     ChainStakable &
@@ -24,6 +25,9 @@ public protocol ChainBalanceable: Sendable {
 
 public protocol ChainFeeCalculateable: Sendable {
     func fee(input: FeeInput) async throws -> Fee
+}
+
+public protocol ChainFeeRateFetchable: Sendable {
     func feeRates() async throws -> [FeeRate]
 }
 
