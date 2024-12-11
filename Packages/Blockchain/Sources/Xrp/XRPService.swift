@@ -36,7 +36,7 @@ extension XRPService {
     }
     
     private func reservedBalance() -> BigInt {
-        BigInt(GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).accountActivationFee ?? 0)
+        BigInt(chain.accountActivationFee ?? 0)
     }
 }
 
@@ -66,25 +66,21 @@ extension XRPService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension XRPService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        let medianFee = try await provider
+extension XRPService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let fees = try await provider
             .request(.fee)
-            .map(as: XRPResult<XRPFee>.self).result.drops.median_fee
-        let fee = BigInt(stringLiteral: medianFee)
+            .map(as: XRPResult<XRPFee>.self).result
         
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
-        )
-    }
+        let minimumFee = BigInt(stringLiteral: fees.drops.minimum_fee)
+        let medianFee = BigInt(stringLiteral: fees.drops.median_fee)
     
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
+        return [
+            FeeRate(priority: .slow, gasPriceType: .regular(gasPrice: max(medianFee / 10, minimumFee))),
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: medianFee)),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: medianFee * 2)),
+        ]
+    }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -92,11 +88,10 @@ extension XRPService: ChainFeeCalculateable {
 extension XRPService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = account(address: input.senderAddress)
-        async let fee = fee(input: input.feeInput)
 
         return try await TransactionPreload(
             sequence: Int(account.account_data.Sequence),
-            fee: fee
+            fee: input.defaultFee
         )
     }
 }

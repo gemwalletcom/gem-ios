@@ -7,6 +7,7 @@ import Keystore
 import Localization
 import ChainService
 import InfoSheet
+import Transfer
 
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -33,7 +34,7 @@ struct ConfirmTransferScene: View {
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
         .debounce(
-            value: $model.feePriority,
+            value: $model.feeModel.priority,
             interval: nil,
             action: onChangeFeePriority
         )
@@ -41,7 +42,7 @@ struct ConfirmTransferScene: View {
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
                 NetworkFeeScene(
-                    model: model.feeRatesModel,
+                    model: model.feeModel,
                     action: onSelectFeePriority
                 )
             }
@@ -160,7 +161,7 @@ extension ConfirmTransferScene {
 
     @MainActor
     private func onSelectFeePriority(_ priority: FeePriority) {
-        model.feePriority = priority
+        model.feeModel.priority = priority
     }
 
     private func onSelectFeePicker() {

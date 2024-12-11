@@ -11,6 +11,7 @@ import Style
 import GemstonePrimitives
 import SwiftUI
 import Localization
+import Transfer
 
 @Observable
 class ConfirmTransferViewModel {
@@ -24,9 +25,7 @@ class ConfirmTransferViewModel {
             }
         }
     }
-
-    var feePriority: FeePriority = .normal
-    var feeRates: [FeeRate] = []
+    var feeModel: NetworkFeeSceneViewModel
 
     var isPresentedNetworkFeePicker: Bool = false
     var confirmingErrorMessage: String?
@@ -41,7 +40,7 @@ class ConfirmTransferViewModel {
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
     private let onComplete: VoidAction
-
+    
     init(
         wallet: Wallet,
         keystore: any Keystore,
@@ -58,6 +57,7 @@ class ConfirmTransferViewModel {
         self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
+        self.feeModel = NetworkFeeSceneViewModel(chain: data.recipientData.asset.chain, service: service)
 
         // prefetch asset metadata from local storage
         let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.recipientData.asset, assetsIds: data.type.assetIds)
@@ -92,21 +92,21 @@ class ConfirmTransferViewModel {
     var recipientValue: SimpleAccount { dataModel.recepientAccount }
 
     var networkTitle: String { Localized.Transfer.network }
-    var networkValue: String {
-        dataModel.chainAsset.name
-    }
-    
+    var networkValue: String { dataModel.chainAsset.name }
+
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage
     }
 
-    var networkFeeTitle: String { Localized.Transfer.networkFee }
+    var networkFeeTitle: String { feeModel.title }
     var networkFeeValue: String? {
-        state.isError ? "-" : state.value?.networkFeeText
+        state.isError ? "-" : feeModel.value
     }
+
     var networkFeeFiatValue: String? {
-        state.isError ? nil : state.value?.networkFeeFiatText
+        state.isError ? nil : feeModel.fiatValue
     }
+
     var networkFeeInfoUrl: URL {
         Docs.url(.networkFees)
     }
@@ -161,11 +161,11 @@ class ConfirmTransferViewModel {
     }
 
     var shouldShowMemo: Bool {
-        state.value?.showMemoField ?? dataModel.shouldShowMemo
+        dataModel.shouldShowMemo
     }
 
     var memo: String? {
-        state.value?.memo ?? dataModel.recipientData.recipient.memo
+        dataModel.recipientData.recipient.memo
     }
     
     var slippageField: String? {
@@ -215,20 +215,7 @@ class ConfirmTransferViewModel {
 
     var progressMessage: String { Localized.Common.loading }
     var shouldShowFeeRatesSelector: Bool {
-        !feeRates.isEmpty && isSupportedFeeRateSelection
-    }
-
-    var feeRatesModel: NetworkFeeViewModel {
-        NetworkFeeViewModel(
-            feeRates: state.value?.input?.fee.feeRates ?? feeRates,
-            selectedFeeRate: selectedFeeRate,
-            chain: dataModel.chain,
-            networkFeeValue: networkFeeValue,
-            networkFeeFiatValue: networkFeeFiatValue)
-    }
-
-    var selectedFeeRate: FeeRate? {
-        feeRates.first(where: { $0.priority == feePriority })
+        feeModel.showFeeRatesSelector
     }
 
     var dataModel: TransferDataViewModel {
@@ -242,11 +229,18 @@ extension ConfirmTransferViewModel {
     func fetch() async {
         await MainActor.run { [self] in
             self.state = .loading
+            self.feeModel.reset()
         }
 
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            let rates = try await feeModel.getFeeRates(type: data.type)
+            
+            guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
+                throw ChainCoreError.feeRateMissed
+            }
+            
             let transactionInput = TransactionInput(
                 type: data.type,
                 asset: dataModel.asset,
@@ -254,7 +248,7 @@ extension ConfirmTransferViewModel {
                 destinationAddress: dataModel.recipient.address,
                 value: dataModel.data.value,
                 balance: metaData.assetBalance,
-                feePriority: feePriority,
+                gasPrice: rate.gasPriceType,
                 memo: dataModel.memo
             )
 
@@ -283,7 +277,10 @@ extension ConfirmTransferViewModel {
             )
 
             await MainActor.run { [self] in
-                self.feeRates = fee.feeRates
+                self.feeModel.update(
+                    value: transactionInputModel.networkFeeText,
+                    fiatValue: transactionInputModel.networkFeeFiatText
+                )
                 self.state = .loaded(transactionInputModel)
             }
 
@@ -348,21 +345,6 @@ extension ConfirmTransferViewModel {
         case invalidAssetId
     }
 
-    private var isSupportedFeeRateSelection: Bool {
-        switch dataModel.chainType {
-        case .bitcoin: true
-        case .aptos: false
-        case .cosmos: false
-        case .ethereum: false
-        case .near: false
-        case .sui: false
-        case .tron: false
-        case .xrp: false
-        case .solana: false
-        case .ton: false
-        }
-    }
-
     private var senderLink: BlockExplorerLink {
         ExplorerService.main.addressUrl(chain: dataModel.chain, address: senderAddress)
     }
@@ -371,13 +353,10 @@ extension ConfirmTransferViewModel {
         switch dataModel.chain {
         case .solana:
             switch dataModel.type {
-            case .transfer, .stake:
-                return .standard
-            case .swap, .generic:
-                return BroadcastOptions(skipPreflight: true)
+            case .transfer, .stake: .standard
+            case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
-        default:
-            return .standard
+        default: .standard
         }
     }
 
@@ -510,8 +489,7 @@ extension ConfirmTransferViewModel {
                 fee: amount.networkFee,
                 gasPriceType: input.fee.gasPriceType,
                 gasLimit: input.fee.gasLimit,
-                options: input.fee.options,
-                selectedFeeRate: input.fee.selectedFeeRate
+                options: input.fee.options
             ),
             isMaxAmount: isMaxAmount,
             chainId: input.chainId,

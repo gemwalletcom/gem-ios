@@ -61,9 +61,6 @@ struct TransactionInputViewModel {
         }
     }
 
-    var showMemoField: Bool { dataModel.shouldShowMemo }
-    var memo: String? { dataModel.memo }
-
     var amountText: String {
         valueFormatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }

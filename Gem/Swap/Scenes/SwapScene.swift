@@ -39,6 +39,8 @@ struct SwapScene: View {
         case from, to
     }
     
+    // Update quote every 30 seconds, needed if you come back from the background.
+    private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
     @FocusState private var focusedField: Field?
 
     init(
@@ -166,6 +168,9 @@ extension SwapScene {
             if case let .error(error) = model.swapAvailabilityState {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
+        }
+        .onReceive(updateQuoteTimer) { _ in
+            fetch()
         }
     }
 }

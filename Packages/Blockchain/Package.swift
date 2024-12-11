@@ -37,6 +37,10 @@ let package = Package(
             dependencies: [
                 "Blockchain",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-            ]),
+            ],
+            resources: [
+                .process("EthereumFeeHistory.json")
+            ]
+        )
     ]
 )

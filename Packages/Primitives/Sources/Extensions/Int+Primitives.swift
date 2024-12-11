@@ -8,6 +8,10 @@ extension Int32 {
         return Int(self)
     }
     
+    public var asBigInt: BigInt {
+        BigInt(self)
+    }
+    
     public var asString: String {
         String(self)
     }

@@ -60,6 +60,7 @@ public struct WalletKeyStore: Sendable {
             chain: chain,
             address: chain.coinType.deriveAddress(privateKey: privateKey),
             derivationPath: chain.coinType.derivationPath(), // not applicable
+            publicKey: .none,
             extendedPublicKey: nil
         )
 
@@ -189,6 +190,12 @@ extension WalletCore.Wallet {
 
 extension WalletCore.Account {
     func mapToAccount(chain: Chain) -> Primitives.Account {
-        return Account(chain: chain, address: address, derivationPath: derivationPath, extendedPublicKey: extendedPublicKey)
+        return Account(
+            chain: chain,
+            address: address,
+            derivationPath: derivationPath,
+            publicKey: publicKey,
+            extendedPublicKey: extendedPublicKey
+        )
     }
 }

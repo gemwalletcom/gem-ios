@@ -243,9 +243,7 @@ extension TronService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension TronService: ChainFeeCalculateable {
+extension TronService {
     public func fee(input: FeeInput) async throws -> Fee {
         let fee = try await {
             let baseFee = BigInt(280_000)
@@ -310,13 +308,15 @@ extension TronService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
+            gasLimit: 1
         )
     }
+}
 
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
+extension TronService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        FeeRate.defaultRates()
+    }
 }
 
 // MARK: - ChainTransactionPreloadable

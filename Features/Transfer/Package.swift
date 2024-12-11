@@ -16,13 +16,17 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Localization", path: "../Localization"),
+        .package(name: "Components", path: "../Components"),
+        .package(name: "Blockchain", path: "../Blockchain"),
     ],
     targets: [
         .target(
             name: "Transfer",
             dependencies: [
                 "Primitives",
-                "Localization"
+                "Localization",
+                "Components",
+                "Blockchain",
             ],
             path: "Sources"
         ),

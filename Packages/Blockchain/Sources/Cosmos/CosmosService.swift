@@ -106,6 +106,25 @@ extension CosmosService {
         case .noble: BigInt(25_000)
         }
     }
+    
+    private func getGasLimit(type: TransactionType) -> BigInt {
+        return {
+            switch type {
+            case .transfer: BigInt(200_000)
+            case .stakeDelegate,
+                .stakeUndelegate: BigInt(1_000_000)
+            case .stakeRedelegate: BigInt(1_250_000)
+            case .stakeRewards: BigInt(750_000)
+            case .swap:
+                switch chain {
+                case .thorchain, .cosmos: BigInt(200_000)
+                default: fatalError()
+                }
+            case .tokenApproval, .stakeWithdraw:
+                fatalError()
+            }
+        }()
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -189,39 +208,20 @@ extension CosmosService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension CosmosService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        //TODO: Estimate it
-        let fee = getFee(chain: chain, type: input.type)
-        let gasLimit: BigInt = {
-            switch input.type.transactionType {
-            case .transfer: BigInt(200_000)
-            case .stakeDelegate,
-                .stakeUndelegate: BigInt(1_000_000)
-            case .stakeRedelegate: BigInt(1_250_000)
-            case .stakeRewards: BigInt(750_000)
-            case .swap:
-                switch chain {
-                case .thorchain, .cosmos: BigInt(200_000)
-                default: fatalError()
-                }
-            case .tokenApproval, .stakeWithdraw:
-                fatalError()
-            }
-        }()
-
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: 1),
-            gasLimit: gasLimit,
-            feeRates: [],
-            selectedFeeRate: nil
-        )
+extension CosmosService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let fee = getFee(chain: chain, type: type)
+        if chain.chain == .thorchain {
+            // thorchain has fixed fee
+            return [
+                FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: fee)),
+            ]
+        }
+        return [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: fee)),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: fee * 2)),
+        ]
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -230,13 +230,12 @@ extension CosmosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = getAccount(address: input.senderAddress)
         async let block = getLatestCosmosBlock()
-        async let fee = fee(input: input.feeInput)
 
         return try await TransactionPreload(
             accountNumber: Int(account.account_number) ?? 0,
             sequence: Int(account.sequence) ?? 0,
             chainId: block.header.chain_id,
-            fee: fee
+            fee: input.defaultFee(gasLimit: getGasLimit(type: input.type.transactionType))
         )
     }
 }

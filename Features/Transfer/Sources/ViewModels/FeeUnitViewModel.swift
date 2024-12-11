@@ -2,31 +2,55 @@
 
 import Foundation
 import Localization
+import Primitives
 
 public struct FeeUnitViewModel {
-    public let unit: FeeUnit
-    
-    public init(unit: FeeUnit) {
+    private let unit: FeeUnit
+    private let decimals: Int
+    private let symbol: String
+    private let currencyFormatter: CurrencyFormatter
+    private let valueFormatter = ValueFormatter.full
+
+    public init(
+        unit: FeeUnit,
+        decimals: Int,
+        symbol: String,
+        formatter: CurrencyFormatter
+    ) {
         self.unit = unit
+        self.decimals = decimals
+        self.symbol = symbol
+        self.currencyFormatter = formatter
     }
 
-    public var value: String? {
-        guard let unitValue else { return nil }
+    public var value: String {
         switch unit.type {
-        case .satVb:
-            return Localized.FeeRate.satvB(unitValue)
-        case .satB:
-            return Localized.FeeRate.satB(unitValue)
+        case .satVb: Localized.FeeRate.satvB(unitValueText)
+        case .gwei: Localized.FeeRate.gwei(unitValueText)
+        case .satB: Localized.FeeRate.satB(unitValueText)
+        case .native: unitValueText
         }
     }
 
-    private var unitValue: Int? {
-        let value = Double(unit.value.int)
+    private var conversionFactor: Double {
         switch unit.type {
-        case .satVb:
-            return Int(round(value / 1000))
-        case .satB:
-            return Int(round((value / 1000)) * 4)
+        case .satVb: 1 / 1_000
+        case .gwei: 1 / 1_000_000_000
+        case .satB: 4 / 1_000
+        case .native: 0
+        }
+    }
+
+    private var unitValueText: String {
+        switch unit.type {
+        case .satVb, .gwei, .satB:
+            return currencyFormatter.string(decimal: Decimal(Double(unit.value) * conversionFactor)).replacingOccurrences(of: " ", with: "")
+        case .native:
+            return String(
+                format: "%@ %@",
+                valueFormatter.string(unit.value, decimals: decimals),
+                symbol
+            )
         }
     }
 }

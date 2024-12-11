@@ -45,38 +45,38 @@ public struct OptimismGasOracle: Sendable {
     }
 }
 
-extension OptimismGasOracle: ChainFeeCalculateable {
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    
+extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
         let data = service.getData(input: input)
         let to = service.getTo(input: input)
         
-        async let getGasLimit = try service.getGasLimit(from: input.senderAddress, to: to, value: service.getValue(input: input)?.hexString.append0x, data: data?.hexString.append0x)
+        async let getGasLimit = try service.getGasLimit(
+            from: input.senderAddress,
+            to: to,
+            value: service.getValue(input: input)?.hexString.append0x,
+            data: data?.hexString.append0x
+        )
         async let getNonce = try service.getNonce(senderAddress: input.senderAddress)
-        async let getBasePriorityFee = try service.getBasePriorityFee(rewardPercentiles: EthereumService.rewardPercentiles)
         async let getChainId = try service.getChainId()
         
-        let (gasLimit, basePriorityFee, nonce, chainId) = try await (getGasLimit, getBasePriorityFee, getNonce, getChainId)
-        let (baseFee, priorityFee) = basePriorityFee
-        let gasPrice = baseFee + priorityFee
-        let minerFee = {
+        let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
+        
+        let priorityFee = {
             switch input.type {
             case .transfer(let asset):
-                return (asset.type == .native && input.isMaxAmount) ? gasPrice : priorityFee
-            case .generic, .swap:
-                return priorityFee
-            case .stake:
-                fatalError()
+                asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
+            case .generic, .swap, .stake:
+                input.gasPrice.priorityFee
             }
         }()
+
         let value = {
             switch input.type {
             case .transfer(let asset):
-                return (asset.type == .native && input.isMaxAmount) ? input.balance - gasLimit * gasPrice : input.value
+                asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .generic, .swap:
-                return input.value
+                input.value
             case .stake:
                 fatalError()
             }
@@ -84,8 +84,8 @@ extension OptimismGasOracle: ChainFeeCalculateable {
         
         let encoded = getEncodedData(
             gasLimit: gasLimit,
-            gasPrice: gasPrice,
-            minerFee: minerFee,
+            gasPrice: input.gasPrice.gasPrice,
+            priorityFee: input.gasPrice.priorityFee,
             nonce: nonce,
             callData: data ?? Data(),
             feeInput: input,
@@ -93,22 +93,20 @@ extension OptimismGasOracle: ChainFeeCalculateable {
             value: value
         )
         
-        let l2fee = gasPrice * gasLimit
+        let l2fee = input.gasPrice.totalFee * gasLimit
         let l1fee = try await getL1Fee(data: encoded)
 
         return Fee(
             fee: l1fee + l2fee,
-            gasPriceType: .eip1559(gasPrice: gasPrice, minerFee:  minerFee),
-            gasLimit: gasLimit,
-            feeRates: [],
-            selectedFeeRate: nil
+            gasPriceType: .eip1559(gasPrice: input.gasPrice.totalFee, priorityFee: priorityFee),
+            gasLimit: gasLimit
         )
     }
     
     private func getEncodedData(
         gasLimit: BigInt,
         gasPrice: BigInt,
-        minerFee: BigInt,
+        priorityFee: BigInt,
         nonce: Int,
         callData: Data,
         feeInput: FeeInput,
@@ -128,7 +126,7 @@ extension OptimismGasOracle: ChainFeeCalculateable {
             }
             $0.gasLimit = gasLimit.magnitude.serialize()
             $0.maxFeePerGas = gasPrice.magnitude.serialize()
-            $0.maxInclusionFeePerGas = minerFee.magnitude.serialize()
+            $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             $0.privateKey = PrivateKey().data
         }
         
@@ -152,5 +150,11 @@ extension OptimismGasOracle: ChainFeeCalculateable {
         }
         
         return encoded
+    }
+}
+
+extension OptimismGasOracle: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        try await service.feeRates(type: type)
     }
 }

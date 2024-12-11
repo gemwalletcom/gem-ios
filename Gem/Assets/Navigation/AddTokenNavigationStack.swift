@@ -9,9 +9,9 @@ struct AddTokenNavigationStack: View {
     
     let wallet: Wallet
     @State var isPresenting: Binding<Bool>
-    var action: ((Asset) -> Void)?
     
     @Environment(\.chainServiceFactory) private var chainServiceFactory
+    @Environment(\.assetsService) private var assetsService
 
     var body: some View {
         NavigationStack {
@@ -20,7 +20,7 @@ struct AddTokenNavigationStack: View {
                     wallet: wallet,
                     service: AddTokenService(chainServiceFactory: chainServiceFactory)
                 ),
-                action: action
+                action: addAsset
             )
             .navigationTitle(Localized.Settings.Networks.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -32,5 +32,14 @@ struct AddTokenNavigationStack: View {
                 }
             }
         }
+    }
+}
+
+extension AddTokenNavigationStack {
+    private func addAsset(_ asset: Asset) {
+        Task {
+            try assetsService.addNewAsset(walletId: wallet.walletId, asset: asset)
+        }
+        isPresenting.wrappedValue = false
     }
 }

@@ -40,6 +40,10 @@ public struct Signer {
     
     public func signMessage(chain: Chain, message: SignMessage) throws -> String {
         let privateKey = try keystore.getPrivateKey(wallet: wallet, chain: chain)
+        return try signMessage(chain: chain, message: message, privateKey: privateKey)
+    }
+    
+    public func signMessage(chain: Chain, message: SignMessage, privateKey: Data) throws -> String {
         return try signer(for: chain)
             .signMessage(message: message, privateKey: privateKey)
     }

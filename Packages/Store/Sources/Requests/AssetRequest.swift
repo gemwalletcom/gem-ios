@@ -44,7 +44,13 @@ extension AssetData {
         return AssetData(
             asset: Asset(id: .init(chain: .bitcoin, tokenId: .none), name: "", symbol: "", decimals: 0, type: .native),
             balance: Balance.zero,
-            account: Account(chain: .bitcoin, address: "", derivationPath: "", extendedPublicKey: .none),
+            account: Account(
+                chain: .bitcoin,
+                address: "",
+                derivationPath: "",
+                publicKey: .none,
+                extendedPublicKey: .none
+            ),
             price: .none,
             price_alert: .none,
             metadata: AssetMetaData(

@@ -88,17 +88,13 @@ extension NearService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension NearService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        fatalError()
-        //let gasPrice = try await gasPrice()
-        //let fee = gasPrice
-        //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
+extension NearService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        // async let getGasPrice = try await gasPrice()
+        [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: BigInt(stringLiteral: "900000000000000000000")))
+        ]
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -107,16 +103,12 @@ extension NearService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let getAccount = try await accountAccessKey(for: input.senderAddress)
         async let getBlock = try await latestBlock()
-        async let getGasPrice = try await gasPrice()
-        
-        let (account, block, gasPrice) = try await (getAccount, getBlock, getGasPrice)
-        //TODO: Fix calculation. Fix max transfer
-        let fee = BigInt(stringLiteral: "900000000000000000000") //StaticFee.transfer * 2
+        let (account, block) = try await (getAccount, getBlock)
         
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [], selectedFeeRate: nil)
+            fee: input.defaultFee
         )
     }
 }

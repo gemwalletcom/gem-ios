@@ -8,12 +8,14 @@ public struct Account: Codable, Equatable, Hashable, Sendable {
 	public let chain: Chain
 	public let address: String
 	public let derivationPath: String
+	public let publicKey: String?
 	public let extendedPublicKey: String?
 
-	public init(chain: Chain, address: String, derivationPath: String, extendedPublicKey: String?) {
+	public init(chain: Chain, address: String, derivationPath: String, publicKey: String?, extendedPublicKey: String?) {
 		self.chain = chain
 		self.address = address
 		self.derivationPath = derivationPath
+		self.publicKey = publicKey
 		self.extendedPublicKey = extendedPublicKey
 	}
 }

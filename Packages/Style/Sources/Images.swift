@@ -30,7 +30,7 @@ public struct Images {
         public static let near = Image(.near)
         public static let world = Image(.world)
         public static let noble = Image(.noble)
-        public static let opbnb = Image(.opbnb)
+        public static let opbnb = Image(.smartchain)
         public static let optimism = Image(.optimism)
         public static let osmosis = Image(.osmosis)
         public static let polygon = Image(.polygon)
