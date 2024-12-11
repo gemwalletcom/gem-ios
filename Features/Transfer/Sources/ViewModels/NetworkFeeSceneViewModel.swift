@@ -31,9 +31,13 @@ public struct NetworkFeeSceneViewModel {
     public var infoIcon: String { Localized.FeeRates.info }
 
     public var feeRatesViewModels: [FeeRateViewModel] {
-        rates.compactMap {
-            guard let unitType = chain.feeUnitType else { return .none }
-            return FeeRateViewModel(feeRate: $0, unitType: unitType)
+        rates.map {
+            FeeRateViewModel(
+                feeRate: $0,
+                unitType: chain.feeUnitType,
+                decimals: chain.asset.decimals.asInt,
+                symbol: chain.asset.symbol
+            )
         }.sorted()
     }
 
@@ -42,29 +46,14 @@ public struct NetworkFeeSceneViewModel {
     }
 
     public var showFeeRatesSelector: Bool {
-        isSupportedFeeRateSelection && !rates.isEmpty
+        rates.count > 1
     }
     
-    public mutating func getFeeRates() async throws -> [FeeRate] {
+    public mutating func getFeeRates(type: TransferDataType) async throws -> [FeeRate] {
         if rates.isEmpty {
-            self.rates = try await service.feeRates()
+            self.rates = try await service.feeRates(type: type)
         }
         return rates
-    }
-
-    private var isSupportedFeeRateSelection: Bool {
-        switch chain.type {
-        case .bitcoin: true
-        case .aptos: false
-        case .cosmos: false
-        case .ethereum: true
-        case .near: false
-        case .sui: false
-        case .tron: false
-        case .xrp: false
-        case .solana: true
-        case .ton: false
-        }
     }
 }
 

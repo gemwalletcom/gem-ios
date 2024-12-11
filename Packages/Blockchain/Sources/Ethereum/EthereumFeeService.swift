@@ -7,7 +7,7 @@ import Primitives
 import GemstonePrimitives
 import Gemstone
 
-extension EthereumService: ChainFeeCalculateable {
+extension EthereumService {
     public func getData(input: FeeInput) -> Data? {
         switch input.type {
         case .transfer(let asset):
@@ -202,14 +202,14 @@ extension EthereumService: ChainFeeCalculateable {
         let minerFee = {
             switch input.type {
             case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? gasPriceType.total : gasPriceType.minerFee
+                asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.minerFee
             case .generic, .swap, .stake:
                 gasPriceType.minerFee
             }
         }()
 
         return Fee(
-            fee: input.gasPrice.total * gasLimit,
+            fee: input.gasPrice.totalFee * gasLimit,
             gasPriceType: .eip1559(
                 gasPrice: gasPriceType.gasPrice,
                 minerFee: minerFee
@@ -220,7 +220,7 @@ extension EthereumService: ChainFeeCalculateable {
 }
 
 extension EthereumService: ChainFeeRateFetchable {
-    public func feeRates() async throws -> [FeeRate] {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         let config = GemstoneConfig.shared.config(for: chain)
         let (baseFee, priorityFees) = try await getBasePriorityFees(
             blocks: Self.historyBlocks,

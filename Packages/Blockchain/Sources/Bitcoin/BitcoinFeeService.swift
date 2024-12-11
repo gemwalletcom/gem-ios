@@ -10,10 +10,8 @@ import Gemstone
 
 // MARK: - ChainFeeCalculateable
 
-extension BitcoinService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        async let getUtxos = getUtxos(address: input.senderAddress)
-        let (utxos) = try await (getUtxos)
+extension BitcoinService {
+    public func fee(input: FeeInput, utxos: [UTXO]) async throws -> Fee {
         return try BitcoinFeeCalculator.calculate(chain: chain, feeInput: input, utxos: utxos)
     }
 
@@ -31,7 +29,7 @@ extension BitcoinService: ChainFeeCalculateable {
 }
 
 extension BitcoinService: ChainFeeRateFetchable {
-    public func feeRates() async -> [FeeRate] {
+    public func feeRates(type: TransferDataType) async -> [FeeRate] {
         await ConcurrentTask.results(for: FeePriority.allCases) { rate in
             try await getFeeRate(priority: rate)
         }

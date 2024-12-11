@@ -235,7 +235,7 @@ extension ConfirmTransferViewModel {
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            let rates = try await feeModel.getFeeRates()
+            let rates = try await feeModel.getFeeRates(type: data.type)
             
             guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
                 throw ChainCoreError.feeRateMissed

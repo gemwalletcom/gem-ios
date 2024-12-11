@@ -19,8 +19,7 @@ public struct Fee: Sendable {
         fee: BigInt,
         gasPriceType: GasPriceType,
         gasLimit: BigInt,
-        options: FeeOptionMap = [:],
-        feeRates: [FeeRate] = []
+        options: FeeOptionMap = [:]
     ) {
         self.fee = fee
         self.gasPriceType = gasPriceType

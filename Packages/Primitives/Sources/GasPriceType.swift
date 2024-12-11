@@ -23,7 +23,7 @@ public enum GasPriceType: Equatable, Sendable {
         }
     }
     
-    public var total: BigInt {
+    public var totalFee: BigInt {
         gasPrice + minerFee
     }
 }

@@ -45,7 +45,7 @@ public struct OptimismGasOracle: Sendable {
     }
 }
 
-extension OptimismGasOracle: ChainFeeCalculateable {
+extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
         let data = service.getData(input: input)
@@ -159,7 +159,7 @@ extension OptimismGasOracle: ChainFeeCalculateable {
 }
 
 extension OptimismGasOracle: ChainFeeRateFetchable {
-    public func feeRates() async throws -> [FeeRate] {
-        try await service.feeRates()
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        try await service.feeRates(type: type)
     }
 }

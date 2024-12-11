@@ -5,7 +5,6 @@ import BigInt
 public typealias ChainServiceable = ChainBalanceable &
     ChainBroadcastable &
     ChainTransactionPreloadable &
-    ChainFeeCalculateable &
     ChainFeeRateFetchable &
     ChainTransactionStateFetchable &
     ChainSyncable &
@@ -23,12 +22,8 @@ public protocol ChainBalanceable: Sendable {
     func getStakeBalance(for address: String) async throws -> AssetBalance?
 }
 
-public protocol ChainFeeCalculateable: Sendable {
-    func fee(input: FeeInput) async throws -> Fee
-}
-
 public protocol ChainFeeRateFetchable: Sendable {
-    func feeRates() async throws -> [FeeRate]
+    func feeRates(type: TransferDataType) async throws -> [FeeRate]
 }
 
 public protocol ChainTransactionPreloadable: Sendable  {

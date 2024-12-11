@@ -47,4 +47,20 @@ extension TransactionInput {
             memo: memo
         )
     }
+    
+    public var defaultFee: Fee {
+        Fee(
+            fee: gasPrice.totalFee,
+            gasPriceType: gasPrice,
+            gasLimit: 1
+        )
+    }
+    
+    public func defaultFee(gasLimit: BigInt) -> Fee {
+        Fee(
+            fee: gasPrice.totalFee,
+            gasPriceType: gasPrice,
+            gasLimit: gasLimit
+        )
+    }
 }

@@ -11,13 +11,19 @@ public struct FeeRateViewModel: Identifiable {
 
     public let feeRate: FeeRate
     public let unitType: FeeUnitType
+    public let decimals: Int
+    public let symbol: String
 
     public init(
         feeRate: FeeRate,
-        unitType: FeeUnitType
+        unitType: FeeUnitType,
+        decimals: Int,
+        symbol: String
     ) {
         self.feeRate = feeRate
         self.unitType = unitType
+        self.decimals = decimals
+        self.symbol = symbol
     }
 
     public var id: String { feeRate.priority.rawValue }
@@ -36,8 +42,13 @@ public struct FeeRateViewModel: Identifiable {
     }
 
     public var feeUnitModel: FeeUnitViewModel {
-        let unit = FeeUnit(type: unitType, value: feeRate.gasPriceType.total)
-        return FeeUnitViewModel(unit: unit, formatter: Self.formatter)
+        let unit = FeeUnit(type: unitType, value: feeRate.gasPriceType.totalFee)
+        return FeeUnitViewModel(
+            unit: unit,
+            decimals: decimals,
+            symbol: symbol,
+            formatter: Self.formatter
+        )
     }
 
     public var valueText: String {
