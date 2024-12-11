@@ -82,7 +82,9 @@ extension XRPService: ChainFeeCalculateable {
             feeRates: []
         )
     }
-    
+}
+
+extension XRPService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 

@@ -9,7 +9,7 @@ public struct FeeInput: Sendable {
     public let destinationAddress: String
     public let value: BigInt
     public let balance: BigInt
-    public let feePriority: FeePriority
+    public let gasPrice: GasPriceType
     public let memo: String?
 
     public init(
@@ -18,7 +18,7 @@ public struct FeeInput: Sendable {
         destinationAddress: String,
         value: BigInt,
         balance: BigInt,
-        feePriority: FeePriority,
+        gasPrice: GasPriceType,
         memo: String?
     ) {
         self.type = type
@@ -26,7 +26,7 @@ public struct FeeInput: Sendable {
         self.destinationAddress = destinationAddress
         self.value = value
         self.balance = balance
-        self.feePriority = feePriority
+        self.gasPrice = gasPrice
         self.memo = memo
     }
     

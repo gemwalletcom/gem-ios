@@ -115,24 +115,6 @@ extension EthereumService: ChainFeeCalculateable {
         }
     }
 
-    public func feeRates() async throws -> [FeeRate] {
-        let config = GemstoneConfig.shared.config(for: chain)
-        let (baseFee, priorityFees) = try await getBasePriorityFees(
-            blocks: Self.historyBlocks,
-            rewardsPercentiles: config.rewardsPercentiles,
-            minPriorityFee: config.minPriorityFee.asBigInt
-        )
-        let feeRates = FeePriority.allCases.compactMap { priority in
-            priorityFees[priority].map {
-                FeeRate(
-                    priority: priority,
-                    gasPriceType: .eip1559(gasPrice: baseFee, minerFee: $0)
-                )
-            }
-        }
-        return feeRates
-    }
-
     func getBasePriorityFees(
         blocks: Int,
         rewardsPercentiles: EvmHistoryRewardPercentiles,
@@ -193,7 +175,6 @@ extension EthereumService: ChainFeeCalculateable {
         let to = getTo(input: input)
         let value = getValue(input: input)
 
-        async let getFeeRates = feeRates()
         async let getGasLimit: BigInt = {
             if case .stake(_, let stakeType) = input.type {
                 return try await EthereumStakeService(service: self)
@@ -215,28 +196,46 @@ extension EthereumService: ChainFeeCalculateable {
             )
         }()
 
-        let (feeRates, gasLimit) = try await (getFeeRates, getGasLimit)
-        guard let feeRate = feeRates.first(where: { $0.priority == input.feePriority }) else {
-            throw ChainCoreError.feeRateMissed
-        }
+        let (gasLimit) = try await (getGasLimit)
+        let gasPriceType = input.gasPrice
+        
         let minerFee = {
             switch input.type {
             case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? feeRate.gasPrice : feeRate.priorityFee
+                asset.type == .native && input.isMaxAmount ? gasPriceType.total : gasPriceType.minerFee
             case .generic, .swap, .stake:
-                feeRate.priorityFee
+                gasPriceType.minerFee
             }
         }()
 
         return Fee(
-            fee: feeRate.gasPrice * gasLimit,
+            fee: input.gasPrice.total * gasLimit,
             gasPriceType: .eip1559(
-                gasPrice: feeRate.gasPrice,
+                gasPrice: gasPriceType.gasPrice,
                 minerFee: minerFee
             ),
-            gasLimit: gasLimit,
-            feeRates: feeRates
+            gasLimit: gasLimit
         )
+    }
+}
+
+extension EthereumService: ChainFeeRateFetchable {
+    public func feeRates() async throws -> [FeeRate] {
+        let config = GemstoneConfig.shared.config(for: chain)
+        let (baseFee, priorityFees) = try await getBasePriorityFees(
+            blocks: Self.historyBlocks,
+            rewardsPercentiles: config.rewardsPercentiles,
+            minPriorityFee: config.minPriorityFee.asBigInt
+        )
+        let feeRates = FeePriority.allCases.compactMap { priority in
+            priorityFees[priority].map {
+                FeeRate(
+                    priority: priority,
+                    gasPriceType: .eip1559(gasPrice: baseFee, minerFee: $0)
+                )
+            }
+        }
+        return feeRates
     }
 }
 

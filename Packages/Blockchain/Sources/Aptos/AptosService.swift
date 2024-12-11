@@ -85,7 +85,9 @@ extension AptosService: ChainFeeCalculateable {
             feeRates: []
         )
     }
+}
 
+extension AptosService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 

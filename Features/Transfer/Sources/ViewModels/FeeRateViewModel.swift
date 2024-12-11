@@ -34,7 +34,7 @@ public struct FeeRateViewModel: Identifiable {
 
     public var feeUnitModel: FeeUnitViewModel? {
         guard let type = chain.feeUnitType else { return nil }
-        let unit = FeeUnit(type: type, value: feeRate.gasPrice)
+        let unit = FeeUnit(type: type, value: feeRate.gasPriceType.total)
         return FeeUnitViewModel(unit: unit, formatter: Self.formatter)
     }
 

@@ -314,7 +314,9 @@ extension TronService: ChainFeeCalculateable {
             feeRates: []
         )
     }
+}
 
+extension TronService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 

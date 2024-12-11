@@ -153,7 +153,9 @@ extension TonService: ChainFeeCalculateable {
             fatalError()
         }
     }
+}
 
+extension TonService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 

@@ -219,7 +219,9 @@ extension CosmosService: ChainFeeCalculateable {
             feeRates: []
         )
     }
+}
 
+extension CosmosService: ChainFeeRateFetchable {
     public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
