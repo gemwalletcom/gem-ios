@@ -10,8 +10,9 @@ public enum FeePriority: String, Codable, CaseIterable, Equatable, Sendable {
 	case fast
 }
 
-public enum FeeUnitType: String, Codable, CaseIterable, Equatable, Sendable {
+public enum FeeUnitType: String, Codable, Equatable, Sendable {
 	case satVb
 	case satB
 	case gwei
+	case native
 }

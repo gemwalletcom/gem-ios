@@ -40,6 +40,26 @@ public struct AptosService: Sendable {
             }
         }
     }
+    
+    public func fee(destinationAddress: String) async throws -> Fee {
+        async let getGasPrice = provider
+            .request(.gasPrice)
+            .map(as: AptosGasFee.self).prioritized_gas_estimate
+
+        async let getDestinationAccount = getAptosAccount(address: destinationAddress)
+
+        let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
+        let isDestinationAccNew = destinationAccount.sequence_number.isEmpty
+
+        // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
+        let gasLimit = Int32(isDestinationAccNew ? 679 : 9)
+
+        return Fee(
+            fee: BigInt(gasPrice * gasLimit),
+            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
+            gasLimit: BigInt(gasLimit * 2) // * 2 for safety
+        )
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -62,31 +82,10 @@ extension AptosService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension AptosService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        async let getGasPrice = provider
-            .request(.gasPrice)
-            .map(as: AptosGasFee.self).prioritized_gas_estimate
-
-        async let getDestinationAccount = getAptosAccount(address: input.destinationAddress)
-
-        let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
-        let isDestinationAccNew = destinationAccount.sequence_number.isEmpty
-
-        // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
-        let gasLimit = Int32(isDestinationAccNew ? 679 : 9)
-
-        return Fee(
-            fee: BigInt(gasPrice * gasLimit),
-            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2), // * 2 for safety
-            feeRates: []
-        )
+extension AptosService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        FeeRate.defaultRates()
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -95,7 +94,7 @@ extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
-        async let fee = fee(input: input.feeInput)
+        async let fee = fee(destinationAddress: input.feeInput.destinationAddress)
         
         return try await TransactionPreload(
             sequence: Int(account.sequence_number) ?? 0,

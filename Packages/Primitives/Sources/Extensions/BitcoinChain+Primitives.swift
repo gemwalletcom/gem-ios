@@ -11,10 +11,6 @@ extension BitcoinChain {
         }
     }
 
-    public var feeUnitType: FeeUnitType? {
-        .satVb
-    }
-
     public var minimumByteFee: Int {
         switch self {
         case .bitcoin: 1 // 1 satoshi per byte for Bitcoin

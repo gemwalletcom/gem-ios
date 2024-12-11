@@ -23,9 +23,11 @@ public struct XRPAccountResult: Codable, Sendable {
 }
 
 public struct XRPDrops: Codable, Sendable {
+	public let minimum_fee: String
 	public let median_fee: String
 
-	public init(median_fee: String) {
+	public init(minimum_fee: String, median_fee: String) {
+		self.minimum_fee = minimum_fee
 		self.median_fee = median_fee
 	}
 }

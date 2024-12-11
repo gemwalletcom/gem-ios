@@ -27,7 +27,7 @@ public struct NetworkFeeScene: View {
                 ForEach(model.feeRatesViewModels) { feeRate in
                     ListItemSelectionView(
                         title: feeRate.title,
-                        titleExtra: feeRate.value,
+                        titleExtra: feeRate.valueText,
                         titleTag: .none,
                         titleTagType: .none,
                         subtitle: .none,
@@ -68,8 +68,8 @@ public struct NetworkFeeScene: View {
 
 // MARK: - Previews
 
-#Preview {
-    NetworkFeeScene(
-        model: .init(chain: .aptos)
-    ) { _ in }
-}
+//#Preview {
+//    NetworkFeeScene(
+//        model: .init(chain: .aptos, service: ChainSer)
+//    ) { _ in }
+//}

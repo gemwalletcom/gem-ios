@@ -57,12 +57,18 @@ extension Chain {
         StakeChain(rawValue: rawValue)
     }
 
-    public var feeUnitType: FeeUnitType? {
+    public var feeUnitType: FeeUnitType {
         switch self.type {
-        case .bitcoin: BitcoinChain(rawValue: rawValue)?.feeUnitType
+        case .bitcoin: .satVb
         case .ethereum: .gwei
-        case .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
-            nil
+        case .aptos,
+            .solana,
+            .cosmos,
+            .ton,
+            .tron,
+            .sui,
+            .xrp,
+            .near: .native
         }
     }
 }

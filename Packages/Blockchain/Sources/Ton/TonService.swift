@@ -70,6 +70,38 @@ extension TonService {
             .request(.masterChainInfo)
             .map(as: TonResult<TonMasterChainBlock>.self).result
     }
+    
+    private func fee(input: FeeInput) async throws -> Fee {
+        switch input.type {
+        case .transfer(let asset):
+            switch asset.id.type {
+            case .native:
+                return Fee(
+                    fee: baseFee,
+                    gasPriceType: .regular(gasPrice: baseFee),
+                    gasLimit: 1
+                )
+            case .token:
+                let tokenId = try asset.getTokenId()
+                let jettonAddress = try await jettonAddress(tokenId: tokenId, address: input.destinationAddress)
+                let state = try await addressState(address: jettonAddress)
+
+                // https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons
+                let jettonAccountFee: BigInt = switch state {
+                    case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
+                    case false: BigInt(300_000_000) // 0.3 TON
+                }
+                return Fee(
+                    fee: baseFee,
+                    gasPriceType: .regular(gasPrice: baseFee),
+                    gasLimit: 1,
+                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
+                )
+            }
+        case .swap, .generic, .stake:
+            fatalError()
+        }
+    }
 }
 
 // MARK: - ChainBalanceable
@@ -116,45 +148,10 @@ extension TonService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension TonService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        switch input.type {
-        case .transfer(let asset):
-            
-            switch asset.id.type {
-            case .native:
-                return Fee(
-                    fee: baseFee,
-                    gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1,
-                    feeRates: []
-                )
-            case .token:
-                let tokenId = try asset.getTokenId()
-                let jettonAddress = try await jettonAddress(tokenId: tokenId, address: input.destinationAddress)
-                let state = try await addressState(address: jettonAddress)
-
-                // https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons
-                let jettonAccountFee: BigInt = switch state {
-                    case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
-                    case false: BigInt(300_000_000) // 0.3 TON
-                }
-                return Fee(
-                    fee: baseFee,
-                    gasPriceType: .regular(gasPrice: baseFee),
-                    gasLimit: 1,
-                    options: [.tokenAccountCreation: BigInt(jettonAccountFee)],
-                    feeRates: []
-                )
-            }
-        case .swap, .generic, .stake:
-            fatalError()
-        }
+extension TonService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        FeeRate.defaultRates()
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable

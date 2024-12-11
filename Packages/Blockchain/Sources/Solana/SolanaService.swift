@@ -120,46 +120,14 @@ extension SolanaService {
     }
 
     // https://solana.com/docs/core/fees#compute-unit-limit
-    private func getBaseFee(type: TransferDataType) async throws -> (
-        totalFee: BigInt,
-        type: GasPriceType,
-        gasLimit: BigInt
-    ) {
+    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
         let gasLimit = switch type {
-        case .transfer, .stake: 100_000
-        case .generic, .swap: 1_400_000
+        case .transfer, .stake: BigInt(100_000)
+        case .generic, .swap: BigInt(1_400_000)
         }
+        let totalFee = gasPrice.gasPrice + (gasPrice.minerFee * gasLimit / BigInt(1_000_000))
         
-        // filter out any large fees
-        let priorityFees = try await getPrioritizationFees().map { $0.asInt }
-        
-        let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
-        case .stake: 100_000
-        case .generic, .swap: 250_000
-        }
-        
-        let minerFee = {
-            if priorityFees.isEmpty {
-                multipleOf
-            } else {
-                max(
-                    (priorityFees.reduce(0, +) / priorityFees.count).roundToNearest(
-                        multipleOf: multipleOf,
-                        mode: .up
-                    ),
-                    multipleOf
-                )
-            }
-        }()
-        
-        let totalFee = staticBaseFee + (minerFee * gasLimit / 1_000_000).asBigInt
-        
-        return (
-            totalFee,
-            .eip1559(gasPrice: staticBaseFee, minerFee: minerFee.asBigInt),
-            gasLimit.asBigInt
-        )
+        return Fee(fee: totalFee, gasPriceType: gasPrice, gasLimit: gasLimit)
     }
     
     private func getSlot() async throws -> BigInt {
@@ -204,31 +172,22 @@ extension SolanaService: ChainBalanceable {
     }
 }
 
-// MARK: - ChainFeeCalculateable
-extension SolanaService: ChainFeeCalculateable {
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    public func fee(input: FeeInput) async throws -> Fee {
+extension SolanaService {
+    public func fee(input: TransactionInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
-                let fee = try await getBaseFee(type: input.type)
-                
-                return Fee(
-                    fee: fee.totalFee,
-                    gasPriceType: fee.type,
-                    gasLimit: fee.gasLimit,
-                    feeRates: []
-                )
+                return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
             case .token:
-                async let getBaseFee = getBaseFee(type: input.type)
+                async let getFee = getBaseFee(type: input.type, gasPrice: input.gasPrice)
                 async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
                 async let getToken = try await getTokenTransferType(
                     tokenId: try asset.getTokenId(),
                     senderAddress: input.senderAddress,
                     destinationAddress: input.destinationAddress
                 )
-                let (fee, tokenAccountCreationFee, token) = try await (getBaseFee, getTokenAccountCreationFee, getToken)
+                let (fee, tokenAccountCreationFee, token) = try await (getFee, getTokenAccountCreationFee, getToken)
                 
                 let options: FeeOptionMap = switch token.recipientTokenAddress {
                 case .some: [:]
@@ -236,24 +195,52 @@ extension SolanaService: ChainFeeCalculateable {
                 }
                 
                 return Fee(
-                    fee: fee.totalFee,
-                    gasPriceType: fee.type,
+                    fee: fee.fee,
+                    gasPriceType: fee.gasPriceType,
                     gasLimit: fee.gasLimit,
-                    options: options,
-                    feeRates: []
+                    options: options
                 )
             }
         case .swap, .stake:
-            let fee = try await getBaseFee(type: input.type)
-            return Fee(
-                fee: fee.totalFee,
-                gasPriceType: fee.type,
-                gasLimit: fee.gasLimit,
-                feeRates: []
-            )
+            return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
         case .generic:
             fatalError()
         }
+    }
+}
+
+extension SolanaService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        // filter out any large fees
+        let priorityFees = try await getPrioritizationFees().map { $0.asInt }
+        
+        let multipleOf = switch type {
+        case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
+        case .stake: 100_000
+        case .generic, .swap: 250_000
+        }
+        
+        let minerFee = {
+            if priorityFees.isEmpty {
+                BigInt(multipleOf)
+            } else {
+                BigInt(
+                    max(
+                        (priorityFees.reduce(0, +) / priorityFees.count).roundToNearest(
+                            multipleOf: multipleOf,
+                            mode: .up
+                        ),
+                        multipleOf
+                    )
+                )
+            }
+        }()
+        
+        return [
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee / 4)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, minerFee: minerFee * 2)),
+        ]
     }
 }
 
@@ -264,7 +251,7 @@ extension SolanaService: ChainTransactionPreloadable {
         async let blockhash = provider
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
-        async let fee = fee(input: input.feeInput)
+        async let fee = fee(input: input)
 
         switch input.type {
         case .generic, .transfer:
