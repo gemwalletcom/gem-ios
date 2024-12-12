@@ -48,7 +48,6 @@ extension AssetData {
                 chain: .bitcoin,
                 address: "",
                 derivationPath: "",
-                publicKey: .none,
                 extendedPublicKey: .none
             ),
             price: .none,

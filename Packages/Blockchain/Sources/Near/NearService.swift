@@ -90,25 +90,32 @@ extension NearService: ChainBalanceable {
 
 extension NearService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        // async let getGasPrice = try await gasPrice()
-        [
-            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: BigInt(stringLiteral: "900000000000000000000")))
+        let gasPrice = try await gasPrice()
+        return [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: gasPrice))
         ]
     }
 }
 
 // MARK: - ChainTransactionPreloadable
-
+// https://docs.near.org/concepts/protocol/gas#cost-for-common-actions
 extension NearService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let getAccount = try await accountAccessKey(for: input.senderAddress)
         async let getBlock = try await latestBlock()
         let (account, block) = try await (getAccount, getBlock)
         
+        let transferGasLimit = BigInt(stringLiteral: "9000000000000") // BigInt(stringLiteral: "4174947687500") * 2
+        let fee = Fee(
+            fee: input.gasPrice.gasPrice * transferGasLimit,
+            gasPriceType: .regular(gasPrice: input.gasPrice.gasPrice),
+            gasLimit: 1
+        )
+        
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: input.defaultFee
+            fee: fee
         )
     }
 }
