@@ -11,7 +11,6 @@ public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
     public var walletId: String
     public var chain: Chain
     public var address: String
-    public var publicKey: String?
     public var extendedPublicKey: String?
     public var index: Int
     public var derivationPath: String
@@ -28,7 +27,6 @@ extension AccountRecord: CreateTable {
                 .notNull()
             $0.column(Columns.Account.address.name, .text)
                 .notNull()
-            $0.column(Columns.Account.publicKey.name, .text)
             $0.column(Columns.Account.extendedPublicKey.name, .text)
             $0.column(Columns.Account.index.name, .numeric)
                 .defaults(to: 0)
@@ -51,7 +49,6 @@ extension AccountRecord {
             chain: chain,
             address: address,
             derivationPath: derivationPath,
-            publicKey: publicKey,
             extendedPublicKey: extendedPublicKey
         )
     }
