@@ -12,19 +12,19 @@ struct GemApp: App {
 
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    @State var db = DB.main
     @State var lockManager = LockWindowManager(lockModel: LockSceneViewModel())
 
-    init(){
+    let resolver: AppResolver
+
+    init() {
+        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
     var body: some Scene {
         WindowGroup {
-            WalletCoordinator(
-                db: db
-            )
-            .databaseContext(.readWrite { db.dbQueue })
+            RootScene(model: RootSceneViewModel(resolver: resolver))
+                .inject(resolver: resolver)
             .navigationBarTitleDisplayMode(.inline)
             .tint(Colors.black)
             .onAppear {

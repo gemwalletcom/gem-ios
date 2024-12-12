@@ -1,8 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import WalletConnector
+import Primitives
 
-enum WalletConnectAction: Sendable, Identifiable {
+enum WalletConnectorSheetType: Sendable, Identifiable {
     case transferData(TransferDataCallback<WCTransferData>)
     case signMessage(TransferDataCallback<SignMessagePayload>)
     case connectionProposal(TransferDataCallback<WCPairingProposal>)

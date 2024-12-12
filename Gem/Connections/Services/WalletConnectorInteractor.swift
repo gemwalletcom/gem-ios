@@ -8,15 +8,13 @@ import WalletConnector
 final class WalletConnectorInteractor {
     var isPresentingError: String? = nil
     var isPresentingConnectionBar: Bool = false
-
-    // TODO: - isPresenting
-    var action: WalletConnectAction? = nil
+    var isPresentingSheeet: WalletConnectorSheetType? = nil
 
     init() {}
 
-    func cancel(action: WalletConnectAction) {
+    func cancel(type: WalletConnectorSheetType) {
         let error = ConnectionsError.userCancelled
-        switch action {
+        switch type {
         case .transferData(let transferDataCallback):
             transferDataCallback.delegate(.failure(error))
         case .signMessage(let transferDataCallback):
@@ -24,8 +22,8 @@ final class WalletConnectorInteractor {
         case .connectionProposal(let transferDataCallback):
             transferDataCallback.delegate(.failure(error))
         }
-        
-        self.action = nil
+
+        self.isPresentingSheeet = nil
     }
 }
 
@@ -53,7 +51,7 @@ extension WalletConnectorInteractor: WalletConnectorInteractable {
                     continuation.resume(throwing: error)
                 }
             }
-            self.action = .connectionProposal(transferDataCallback)
+            self.isPresentingSheeet = .connectionProposal(transferDataCallback)
         }
     }
 
@@ -68,11 +66,11 @@ extension WalletConnectorInteractor: WalletConnectorInteractable {
                     continuation.resume(throwing: error)
                 }
             }
-            self.action = .signMessage(transferDataCallback)
+            self.isPresentingSheeet = .signMessage(transferDataCallback)
         }
     }
 
-    func signTransaction(transferData: WCTransferData) async throws -> String {
+    func sendTransaction(transferData: WCTransferData) async throws -> String {
         try await withCheckedThrowingContinuation { [weak self] continuation in
             guard let `self` = self else { return }
             let transferDataCallback = TransferDataCallback(payload: transferData) { result in
@@ -83,15 +81,15 @@ extension WalletConnectorInteractor: WalletConnectorInteractable {
                     continuation.resume(throwing: error)
                 }
             }
-            self.action = .transferData(transferDataCallback)
+            self.isPresentingSheeet = .transferData(transferDataCallback)
         }
     }
 
-    func sendTransaction(transferData: WCTransferData) async throws -> String {
-        fatalError("not implemented")
+    func signTransaction(transferData: WCTransferData) async throws -> String {
+        fatalError("")
     }
 
     func sendRawTransaction(transferData: WCTransferData) async throws -> String {
-        fatalError("not implemented")
+        fatalError("")
     }
 }

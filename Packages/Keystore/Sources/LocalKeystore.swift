@@ -3,6 +3,7 @@ import Primitives
 import Store
 import WalletCore
 
+@Observable
 public final class LocalKeystore: Keystore {
     public let directory: URL
 
@@ -13,8 +14,8 @@ public final class LocalKeystore: Keystore {
     
     let keystorePassword: KeystorePassword
     
-    @Published public var currentWalletId: Primitives.WalletId? = .none
-    @Published public var currentWallet: Primitives.Wallet? = .none
+    public var currentWalletId: Primitives.WalletId? = .none
+    public var currentWallet: Primitives.Wallet? = .none
     
     public init(
         folder: String = "keystore",
