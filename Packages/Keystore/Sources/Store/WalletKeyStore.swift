@@ -60,7 +60,6 @@ public struct WalletKeyStore {
             chain: chain,
             address: chain.coinType.deriveAddress(privateKey: privateKey),
             derivationPath: chain.coinType.derivationPath(), // not applicable
-            publicKey: .none,
             extendedPublicKey: nil
         )
 
@@ -194,7 +193,6 @@ extension WalletCore.Account {
             chain: chain,
             address: address,
             derivationPath: derivationPath,
-            publicKey: publicKey,
             extendedPublicKey: extendedPublicKey
         )
     }

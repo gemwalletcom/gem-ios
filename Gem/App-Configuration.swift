@@ -252,7 +252,6 @@ extension Account {
         chain: .bitcoin,
         address: "btc123123",
         derivationPath: "",
-        publicKey: .none,
         extendedPublicKey: .none
     )
 }

@@ -43,7 +43,6 @@ public extension Wallet {
                     chain: chain,
                     address: address,
                     derivationPath: "",
-                    publicKey: "",
                     extendedPublicKey: ""
                 )
             ],

@@ -52,7 +52,6 @@ struct Columns {
         static let chain = Column("chain")
         static let address = Column("address")
         static let index = Column("index")
-        static let publicKey = Column("publicKey")
         static let extendedPublicKey = Column("extendedPublicKey")
         static let derivationPath = Column("derivationPath")
     }

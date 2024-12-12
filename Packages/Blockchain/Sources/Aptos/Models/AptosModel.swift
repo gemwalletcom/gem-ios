@@ -68,18 +68,6 @@ public struct AptosResourceBalance: Codable, Sendable {
 	}
 }
 
-public struct AptosSignature: Codable, Equatable, Sendable {
-	public let type: String
-	public let public_key: String
-	public let signature: String
-
-	public init(type: String, public_key: String, signature: String) {
-		self.type = type
-		self.public_key = public_key
-		self.signature = signature
-	}
-}
-
 public struct AptosTransaction: Codable, Sendable {
 	public let success: Bool
 	public let gas_used: String
@@ -97,40 +85,6 @@ public struct AptosTransactionBroacast: Codable, Sendable {
 
 	public init(hash: String) {
 		self.hash = hash
-	}
-}
-
-public struct AptosTransactionPayload: Codable, Equatable, Sendable {
-	public let arguments: [String]
-	public let function: String
-	public let type: String
-	public let type_arguments: [String]
-
-	public init(arguments: [String], function: String, type: String, type_arguments: [String]) {
-		self.arguments = arguments
-		self.function = function
-		self.type = type
-		self.type_arguments = type_arguments
-	}
-}
-
-public struct AptosTransactionSimulation: Codable, Equatable, Sendable {
-	public let expiration_timestamp_secs: String
-	public let gas_unit_price: String
-	public let max_gas_amount: String
-	public let payload: AptosTransactionPayload
-	public let sender: String
-	public let sequence_number: String
-	public let signature: AptosSignature
-
-	public init(expiration_timestamp_secs: String, gas_unit_price: String, max_gas_amount: String, payload: AptosTransactionPayload, sender: String, sequence_number: String, signature: AptosSignature) {
-		self.expiration_timestamp_secs = expiration_timestamp_secs
-		self.gas_unit_price = gas_unit_price
-		self.max_gas_amount = max_gas_amount
-		self.payload = payload
-		self.sender = sender
-		self.sequence_number = sequence_number
-		self.signature = signature
 	}
 }
 

@@ -154,12 +154,6 @@ public struct Migrations {
                 $0.add(column: Columns.Asset.stakingApr.name, .double)
             }
         }
-        
-        migrator.registerMigration("Add publicKey to \(AccountRecord.databaseTableName)") { db in
-            try? db.alter(table: AccountRecord.databaseTableName) {
-                $0.add(column: Columns.Account.publicKey.name, .text)
-            }
-        }
 
         try migrator.migrate(dbQueue)
     }
