@@ -151,7 +151,7 @@ extension EthereumService {
             Int(rewardsPercentiles.normal): .normal,
             Int(rewardsPercentiles.fast): .fast
         ]
-        let avarageFees = FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
+        return FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
             guard let index = rewardsPercentiles.all.firstIndex(where: { percentileToPriority[$0] == priority }) else {
                 result[priority] = minPriorityFee
                 return
@@ -160,8 +160,6 @@ extension EthereumService {
             let average = fees.isEmpty ? minPriorityFee : max(minPriorityFee, fees.reduce(0, +) / BigInt(fees.count))
             result[priority] = average
         }
-
-        return avarageFees
     }
 
     public func fee(input: FeeInput) async throws -> Fee {
