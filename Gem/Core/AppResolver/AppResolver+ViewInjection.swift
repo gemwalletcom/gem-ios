@@ -8,7 +8,7 @@ extension View {
         self
             .inject(stores: resolver.stores)
             .inject(services: resolver.services)
-            .inject(stores: resolver.stores)
+            .inject(navigation: resolver.navigation)
     }
 
     private func inject(services: AppResolver.Services) -> some View {
