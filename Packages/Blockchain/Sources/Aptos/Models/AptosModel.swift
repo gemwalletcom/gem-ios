@@ -12,6 +12,18 @@ public struct AptosAccount: Codable, Sendable {
 	}
 }
 
+public struct AptosCoinInfo: Codable, Equatable, Sendable {
+	public let decimals: Int32
+	public let name: String
+	public let symbol: String
+
+	public init(decimals: Int32, name: String, symbol: String) {
+		self.decimals = decimals
+		self.name = name
+		self.symbol = symbol
+	}
+}
+
 public struct AptosError: Codable, Sendable {
 	public let message: String
 	public let error_code: String
@@ -64,6 +76,14 @@ public struct AptosResourceBalance: Codable, Sendable {
 	public let coin: AptosResourceCoin
 
 	public init(coin: AptosResourceCoin) {
+		self.coin = coin
+	}
+}
+
+public struct AptosResourceBalanceOptional: Codable, Sendable {
+	public let coin: AptosResourceCoin?
+
+	public init(coin: AptosResourceCoin?) {
 		self.coin = coin
 	}
 }

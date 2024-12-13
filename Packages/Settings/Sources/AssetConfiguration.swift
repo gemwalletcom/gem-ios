@@ -10,6 +10,7 @@ public struct AssetConfiguration: Sendable {
             .sui,
             .aptos,
             .tron,
+            .aptos,
         ],
         EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) }
     ]

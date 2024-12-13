@@ -68,13 +68,13 @@ public extension AssetId {
             .injective,
             .sei,
             .noble: .ibc
-        case .sui: .token
+        case .sui,
+            .aptos: .token
         case .ton: .jetton
         case .bitcoin,
             .litecoin,
             .thorchain,
             .doge,
-            .aptos,
             .xrp,
             .near: .none
         }
