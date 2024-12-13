@@ -55,7 +55,8 @@ public struct AptosService: Sendable {
             case .native: isDestinationAccNew ? BigInt(679) : BigInt(9)
             case .token: BigInt(1000)
             }
-            case .swap, .stake, .generic: fatalError()
+            case .swap: BigInt(1000)
+            case .stake, .generic: fatalError()
         }
          
         return Fee(

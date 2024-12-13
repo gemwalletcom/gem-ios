@@ -6,12 +6,22 @@ import WalletCorePrimitives
 import Keystore
 import Primitives
 
+enum AptosPayload {
+    case payload(AptosSigningInput.OneOf_TransactionPayload)
+    case anyData(String)
+}
+
 public struct AptosSigner: Signable {
     
-    public func sign(payload: AptosSigningInput.OneOf_TransactionPayload, input: SignerInput , privateKey: Data) throws -> String {
+    func sign(payload: AptosPayload, input: SignerInput , privateKey: Data) throws -> String {
         let signingInput = AptosSigningInput.with {
             $0.chainID = 1
-            $0.transactionPayload = payload
+            switch payload {
+            case .payload(let payload):
+                $0.transactionPayload = payload
+            case .anyData(let string):
+                $0.anyEncoded = string
+            }
             // TODO: - 3664390082 = 2086-22:08:02 +UTC, probably need to adjust
             $0.expirationTimestampSecs = 3664390082
             $0.gasUnitPrice = input.fee.gasPrice.UInt
@@ -27,10 +37,10 @@ public struct AptosSigner: Signable {
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         return try sign(
-            payload: .transfer(AptosTransferMessage.with {
+            payload: .payload(.transfer(AptosTransferMessage.with {
                 $0.to = input.destinationAddress
                 $0.amount = input.value.UInt
-            }),
+            })),
             input: input,
             privateKey: privateKey
         )
@@ -43,7 +53,7 @@ public struct AptosSigner: Signable {
         let name = try parts.getElement(safe: 2)
         
         return try sign(
-            payload: .tokenTransferCoins(AptosTokenTransferCoinsMessage.with {
+            payload: .payload(.tokenTransferCoins(AptosTokenTransferCoinsMessage.with {
                 $0.to = input.destinationAddress
                 $0.amount = input.value.UInt
                 $0.function = AptosStructTag.with {
@@ -51,7 +61,7 @@ public struct AptosSigner: Signable {
                     $0.module = module
                     $0.name = name
                 }
-            }),
+            })),
             input: input,
             privateKey: privateKey
         )
@@ -62,7 +72,15 @@ public struct AptosSigner: Signable {
     }
     
     public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        guard case .swap(_, _, let action) = input.type else {
+            throw AnyError("invalid type")
+        }
+        switch action {
+        case .swap(_, let data):
+            return try sign(payload: .anyData(data.data), input: input, privateKey: privateKey)
+        case .approval:
+            fatalError()
+        }
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {

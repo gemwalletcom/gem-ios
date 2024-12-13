@@ -173,8 +173,8 @@ class ConfirmTransferViewModel {
     }
     
     private var slippage: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let slippage = quote.request.options {
-            Double(Double(slippage.slippageBps) / 100).rounded(toPlaces: 2)
+        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action {
+            Double(Double(quote.request.options.slippageBps) / 100).rounded(toPlaces: 2)
         } else {
             .none
         }
@@ -189,7 +189,7 @@ class ConfirmTransferViewModel {
     }
     
     private var quoteFee: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let fee = quote.request.options?.fee {
+        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let fee = quote.request.options.fee {
              Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
