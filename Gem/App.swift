@@ -8,37 +8,30 @@ import GemAPI
 
 @main
 struct GemApp: App {
-    @Environment(\.scenePhase) var scenePhase
-
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
 
-    @State var lockManager = LockWindowManager(lockModel: LockSceneViewModel())
-
-    let resolver: AppResolver
+    private let resolver: AppResolver = AppResolver()
 
     init() {
-        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
     var body: some Scene {
         WindowGroup {
-            RootScene(model: RootSceneViewModel(resolver: resolver))
-                .inject(resolver: resolver)
+            RootScene(
+                model: RootSceneViewModel(
+                    keystore: resolver.storages.keystore,
+                    walletConnectorInteractor: resolver.services.walletConnectorInteractor,
+                    onstartService: resolver.services.onstartService,
+                    transactionService: resolver.services.transactionService,
+                    connectionsService: resolver.services.connectionsService,
+                    deviceObserverService: resolver.services.deviceObserverService,
+                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel())
+                )
+            )
+            .inject(resolver: resolver)
             .navigationBarTitleDisplayMode(.inline)
             .tint(Colors.black)
-            .onAppear {
-                lockManager.toggleLock(show: lockManager.showLockScreen)
-            }
-            .onChange(of: scenePhase) { _, newPhase in
-                lockManager.setPhase(phase: newPhase)
-            }
-            .onChange(of: lockManager.isPrivacyLockVisible) { _, visible in
-                lockManager.togglePrivacyLock(visible: visible)
-            }
-            .onChange(of: lockManager.showLockScreen) { _, showLockScreen in
-                lockManager.toggleLock(show: showLockScreen)
-            }
         }
     }
 }

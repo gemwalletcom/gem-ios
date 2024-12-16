@@ -4,17 +4,21 @@ import Foundation
 import Keystore
 import DeviceService
 import Primitives
+import SwiftUI
 
 @Observable
 final class RootSceneViewModel {
-    let keystore: any Keystore
-    let walletConnectorInteractor: WalletConnectorInteractor
+    private let keystore: any Keystore
+    private let walletConnectorInteractor: WalletConnectorInteractor
 
-    let onstartService: OnstartAsyncService
-    let transactionService: TransactionService
-    let connectionsService: ConnectionsService
-    let deviceObserverService: DeviceObserverService
+    private let onstartService: OnstartAsyncService
+    private let transactionService: TransactionService
+    private let connectionsService: ConnectionsService
+    private let deviceObserverService: DeviceObserverService
 
+    let lockManager: LockWindowManager
+
+    var currentWallet: Wallet? { keystore.currentWallet }
     var updateAvailableAlertSheetMessage: String?
     var isPresentingConnectorError: String? {
         get { walletConnectorInteractor.isPresentingError }
@@ -30,13 +34,21 @@ final class RootSceneViewModel {
         set { walletConnectorInteractor.isPresentingConnectionBar = newValue }
     }
 
-    init(resolver: AppResolver) {
-        self.keystore = resolver.stores.keystore
-        self.walletConnectorInteractor = resolver.services.walletConnectorInteractor
-        self.onstartService = resolver.services.onstartService
-        self.transactionService = resolver.services.transactionService
-        self.connectionsService = resolver.services.connectionsService
-        self.deviceObserverService = resolver.services.deviceObserverService
+    init(keystore: any Keystore,
+         walletConnectorInteractor: WalletConnectorInteractor,
+         onstartService: OnstartAsyncService,
+         transactionService: TransactionService,
+         connectionsService: ConnectionsService,
+         deviceObserverService: DeviceObserverService,
+         lockWindowManager: LockWindowManager
+    ) {
+        self.keystore = keystore
+        self.walletConnectorInteractor = walletConnectorInteractor
+        self.onstartService = onstartService
+        self.transactionService = transactionService
+        self.connectionsService = connectionsService
+        self.deviceObserverService = deviceObserverService
+        self.lockManager = lockWindowManager
     }
 }
 
@@ -56,14 +68,18 @@ extension RootSceneViewModel {
             onstartService.setup(wallet: wallet)
         }
     }
+}
 
+// MARK: - Effects
+
+extension RootSceneViewModel {
     func onWalletChange(_: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
             onstartService.setup(wallet: newWallet)
         }
     }
 
-    func handleWalletConnectorComplete(type: WalletConnectorSheetType) {
+    func onWalletConnectorComplete(type: WalletConnectorSheetType) {
         switch type {
         case .transferData:
             walletConnectorInteractor.isPresentingSheeet = nil
@@ -72,7 +88,7 @@ extension RootSceneViewModel {
         }
     }
 
-    func handleWalletConnectorCancel(type: WalletConnectorSheetType) {
+    func onWalletConnectorCancel(type: WalletConnectorSheetType) {
         walletConnectorInteractor.cancel(type: type)
     }
 

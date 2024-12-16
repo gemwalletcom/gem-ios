@@ -1,12 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 
 extension View {
     func inject(resolver: AppResolver) -> some View {
         self
-            .inject(stores: resolver.stores)
+            .inject(storages: resolver.storages)
             .inject(services: resolver.services)
             .inject(navigation: resolver.navigation)
     }
@@ -31,11 +30,11 @@ extension View {
             .environment(\.connectionsService, services.connectionsService)
     }
 
-    private func inject(stores: AppResolver.Storages) -> some View {
+    private func inject(storages: AppResolver.Storages) -> some View {
         self
-            .databaseContext(.readWrite { stores.db.dbQueue })
-            .environment(\.keystore, stores.keystore)
-            .environment(\.observablePreferences, stores.observablePreferences)
+            .databaseContext(.readWrite { storages.db.dbQueue })
+            .environment(\.keystore, storages.keystore)
+            .environment(\.observablePreferences, storages.observablePreferences)
     }
 
     private func inject(navigation: NavigationStateManager) -> some View {

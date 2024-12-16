@@ -4,7 +4,6 @@ import SwiftUI
 import Style
 import Localization
 import GemstonePrimitives
-import Components
 import Primitives
 
 struct RootScene: View {
@@ -16,7 +15,7 @@ struct RootScene: View {
 
     var body: some View {
         VStack {
-            if let currentWallet = model.keystore.currentWallet {
+            if let currentWallet = model.currentWallet {
                 MainTabView(
                     model: .init(wallet: currentWallet)
                 )
@@ -40,8 +39,8 @@ struct RootScene: View {
         .sheet(item: $model.isPresentingConnnectorSheet) { type in
             WalletConnectorNavigationStack(
                 type: type,
-                onComplete: model.handleWalletConnectorComplete(type:),
-                onCancel: model.handleWalletConnectorCancel(type:))
+                onComplete: model.onWalletConnectorComplete(type:),
+                onCancel: model.onWalletConnectorCancel(type:))
         }
         .confirmationDialog(
             Localized.WalletConnect.brandName,
@@ -54,11 +53,12 @@ struct RootScene: View {
                 )
             },
             message: {
-                Text(model.walletConnectorInteractor.isPresentingError.valueOrEmpty)
+                Text(model.isPresentingConnectorError.valueOrEmpty)
             }
         )
         .taskOnce(model.setup)
-        .onChange(of: model.keystore.currentWallet, model.onWalletChange)
+        .lockManaged(by: model.lockManager)
+        .onChange(of: model.currentWallet, model.onWalletChange)
         .toast(
             isPresenting: $model.isPresentingConnectorBar,
             title: "\(Localized.WalletConnect.brandName)...",
@@ -66,3 +66,4 @@ struct RootScene: View {
         )
     }
 }
+
