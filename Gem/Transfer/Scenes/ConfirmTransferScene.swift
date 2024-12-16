@@ -34,7 +34,7 @@ struct ConfirmTransferScene: View {
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
         .debounce(
-            value: $model.feeModel.priority,
+            value: model.feeModel.priority,
             interval: nil,
             action: onChangeFeePriority
         )
