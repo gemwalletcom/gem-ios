@@ -70,13 +70,13 @@ public extension Sequence where Iterator.Element: Hashable {
 }
 
 public enum ArrayError: Error {
-    case indexOutOfBounds
+    case indexOutOfBounds(Int)
 }
 
 public extension Array {
     func getElement(safe index: Int) throws -> Element {
         guard indices.contains(index) else {
-            throw ArrayError.indexOutOfBounds
+            throw ArrayError.indexOutOfBounds(index)
         }
         return self[index]
     }
