@@ -98,7 +98,7 @@ struct SelectAssetScene: View {
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .debounce(
-            value: $assets.searchBy,
+            value: $assets.searchBy.wrappedValue,
             interval: Duration.milliseconds(250),
             action: model.search(query:)
         )

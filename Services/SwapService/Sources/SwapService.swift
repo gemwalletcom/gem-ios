@@ -50,10 +50,14 @@ public final class SwapService {
                 preferredProviders: []
             )
         )
-        return try await swapper.fetchQuote(request: swapRequest)
+        let quotes = try await swapper.fetchQuote(request: swapRequest)
+        try Task.checkCancellation()
+        return quotes
     }
     
     public func getQuoteData(_ request: Gemstone.SwapQuote, data: FetchQuoteData) async throws -> Gemstone.SwapQuoteData {
-        return try await swapper.fetchQuoteData(quote: request, data: data)
+        let quoteData = try await swapper.fetchQuoteData(quote: request, data: data)
+        try Task.checkCancellation()
+        return quoteData
     }
 }

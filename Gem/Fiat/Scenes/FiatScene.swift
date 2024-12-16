@@ -52,7 +52,7 @@ struct FiatScene: View {
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .debounce(
-            value: $model.input.amount,
+            value: model.input.amount,
             interval: .none,
             action: onChangeAmount
         )

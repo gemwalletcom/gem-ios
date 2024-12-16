@@ -2,30 +2,31 @@
 
 import SwiftUI
 
-struct DebounceModifier<T: Hashable>: ViewModifier {
+struct DebounceModifier<T: Hashable & Sendable>: ViewModifier {
     @State private var debounceTask: Task<Void, Never>?
-    @Binding var value: T
 
+    let value: T
     let interval: Duration?
-    let action: (T) async -> Void
+    let action: @Sendable (T) async -> Void
 
     func body(content: Content) -> some View {
         content
             .onChange(of: value) { _, newValue in
                 debounceTask?.cancel()
                 debounceTask = Task {
-                    if let interval {
-                        try? await Task.sleep(for: interval)
-                    }
-                    guard !Task.isCancelled else { return }
-                    await action(newValue)
+                    do {
+                        if let interval {
+                            try await Task.sleep(for: interval)
+                        }
+                        await action(newValue)
+                    } catch {}
                 }
             }
     }
 }
 
 public extension View {
-    func debounce<T: Hashable>(value: Binding<T>, interval: Duration?, action: @escaping (T) async -> Void) -> some View {
+    func debounce<T: Hashable & Sendable>(value: T, interval: Duration?, action: @Sendable @escaping (T) async -> Void) -> some View {
         modifier(DebounceModifier(value: value, interval: interval, action: action))
     }
 }
