@@ -41,23 +41,28 @@ public struct AptosService: Sendable {
         }
     }
     
-    public func fee(destinationAddress: String) async throws -> Fee {
-        async let getGasPrice = provider
-            .request(.gasPrice)
-            .map(as: AptosGasFee.self).prioritized_gas_estimate
-
+    public func fee(gasPrice: GasPriceType, transferType: TransferDataType, destinationAddress: String) async throws -> Fee {
         async let getDestinationAccount = getAptosAccount(address: destinationAddress)
 
-        let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
+        let destinationAccount = try await getDestinationAccount
         let isDestinationAccNew = destinationAccount.sequence_number.isEmpty
-
+        
         // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
-        let gasLimit = Int32(isDestinationAccNew ? 679 : 9)
 
+        let gasLimit = switch transferType {
+            case .transfer(let asset):
+            switch asset.id.type {
+            case .native: isDestinationAccNew ? BigInt(679) : BigInt(9)
+            case .token: BigInt(1000)
+            }
+            case .swap: BigInt(1000)
+            case .stake, .generic: fatalError()
+        }
+         
         return Fee(
-            fee: BigInt(gasPrice * gasLimit),
-            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2) // * 2 for safety
+            fee: gasPrice.gasPrice  * gasLimit,
+            gasPriceType: .regular(gasPrice: gasPrice.gasPrice),
+            gasLimit: gasLimit * 2 // * 2 for safety
         )
     }
 }
@@ -74,7 +79,18 @@ extension AptosService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        let resources = try await provider.request(.resources(address: address))
+            .map(as: [AptosResource<AptosResourceBalanceOptional>].self)
+        
+        return tokenIds.compactMap { assetId in
+            if let tokenId = assetId.tokenId, let resource = resources.first(where: { $0.type == "0x1::coin::CoinStore<\(tokenId)>" }), let balance = resource.data.coin {
+                return AssetBalance(
+                    assetId: assetId,
+                    balance: Balance(available: BigInt(stringLiteral: balance.value))
+                )
+            }
+            return .none
+        }
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -84,7 +100,15 @@ extension AptosService: ChainBalanceable {
 
 extension AptosService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        FeeRate.defaultRates()
+        let gasPrice = try await provider
+            .request(.gasPrice)
+            .map(as: AptosGasFee.self)
+        
+        return [
+            FeeRate(priority: .slow, gasPriceType: .regular(gasPrice: BigInt(gasPrice.gas_estimate))),
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: BigInt(gasPrice.prioritized_gas_estimate))),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: BigInt(gasPrice.prioritized_gas_estimate * 2))),
+        ]
     }
 }
 
@@ -94,7 +118,12 @@ extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
-        async let fee = fee(destinationAddress: input.feeInput.destinationAddress)
+        
+        async let fee = fee(
+            gasPrice: input.gasPrice,
+            transferType: input.type,
+            destinationAddress: input.feeInput.destinationAddress
+        )
         
         return try await TransactionPreload(
             sequence: Int(account.sequence_number) ?? 0,
@@ -156,11 +185,25 @@ extension AptosService: ChainStakable {
 
 extension AptosService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let parts: [String] = tokenId.split(separator: "::").map { String($0) }
+        let address = try parts.getElement(safe: 0)
+        let resource = "0x1::coin::CoinInfo<\(tokenId)>"
+        
+        let tokenInfo = try await provider
+            .request(.resource(address: address, resource: resource))
+            .map(as: AptosResource<AptosCoinInfo>.self).data
+        
+        return Asset(
+            id: AssetId(chain: .aptos, tokenId: tokenId),
+            name: tokenInfo.name,
+            symbol: tokenInfo.symbol,
+            decimals: tokenInfo.decimals,
+            type: .token
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
+        tokenId.hasPrefix("0x") && tokenId.contains("::")
     }
 }
 

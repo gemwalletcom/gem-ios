@@ -8,6 +8,8 @@ public enum AptosProvider: TargetType {
     case account(address: String)
     case balance(address: String)
     case transaction(id: String)
+    case resource(address: String, resource: String)
+    case resources(address: String)
     case gasPrice
     case estimateFee(data: Data)
     case broadcast(data: String)
@@ -22,7 +24,9 @@ public enum AptosProvider: TargetType {
             .account,
             .balance,
             .transaction,
-            .gasPrice:
+            .gasPrice,
+            .resource,
+            .resources:
             return .GET
         case .estimateFee,
             .broadcast:
@@ -38,6 +42,8 @@ public enum AptosProvider: TargetType {
         case .transaction(let id): "/v1/transactions/by_hash/\(id)"
         case .gasPrice: "/v1/estimate_gas_price"
         case .estimateFee: "/v1/transactions/simulate?estimate_max_gas_amount=true&estimate_gas_unit_price=true&estimate_prioritized_gas_unit_price=false"
+        case .resource(let address, let resource): "/v1/accounts/\(address)/resource/\(resource)"
+        case .resources(let address): "/v1/accounts/\(address)/resources"
         case .broadcast: "/v1/transactions"
         }
     }
@@ -48,7 +54,9 @@ public enum AptosProvider: TargetType {
             .account,
             .balance,
             .transaction,
-            .gasPrice:
+            .gasPrice,
+            .resource,
+            .resources:
             return .plain
         case .estimateFee(let data):
             return .data(data)
