@@ -4,6 +4,14 @@ import Foundation
 import BigInt
 
 extension Chain {
+    public init(id: String) throws {
+        if let chain = Chain(rawValue: id) {
+            self = chain
+        } else {
+            throw AnyError("invalid chain id: \(id)")
+        }
+    }
+    
     public var assetId: AssetId {
         return AssetId(chain: self, tokenId: .none)
     }

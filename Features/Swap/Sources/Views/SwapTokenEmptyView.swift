@@ -8,20 +8,17 @@ import Primitives
 
 public struct SwapTokenEmptyView: View {
     
-    let type: SelectAssetSwapType
-    var onSelectAssetAction: ((SelectAssetSwapType) -> Void)
+    var onSelectAssetAction: (() -> Void)
     
     public init(
-        type: SelectAssetSwapType,
-        onSelectAssetAction: @escaping (SelectAssetSwapType) -> Void
+        onSelectAssetAction: @escaping () -> Void
     ) {
-        self.type = type
         self.onSelectAssetAction = onSelectAssetAction
     }
     
     public var body: some View {
         Button(role: .none) {
-            onSelectAssetAction(type)
+            onSelectAssetAction()
         } label: {
             HStack {
                 Text(Localized.Assets.selectAsset)

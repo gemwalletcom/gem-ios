@@ -13,14 +13,14 @@ struct SwapTokenView: View {
     var showLoading: Bool = false
     var disabledTextField: Bool = false
     var onBalanceAction: (() -> Void)
-    var onSelectAssetAction: ((SelectAssetSwapType) -> Void)
+    var onSelectAssetAction: (() -> Void)
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 VStack(alignment: .center) {
                     Button(role: .none) {
-                        onSelectAssetAction(model.type)
+                        onSelectAssetAction()
                     } label: {
                         HStack {
                             AssetImageView(assetImage: model.assetImage)

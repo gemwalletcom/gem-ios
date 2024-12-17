@@ -112,14 +112,13 @@ extension SwapScene {
                         model: model.swapTokenModel(from: fromAsset, type: .pay),
                         text: $model.fromValue,
                         onBalanceAction: onSelectFromBalance,
-                        onSelectAssetAction: onSelectAssetAction
+                        onSelectAssetAction: onSelectAssetPayAction
                     )
                     .buttonStyle(.borderless)
                     .focused($focusedField, equals: .from)
                 } else {
                     SwapTokenEmptyView(
-                        type: .pay,
-                        onSelectAssetAction: onSelectAssetAction
+                        onSelectAssetAction: onSelectAssetPayAction
                     )
                 }
                 
@@ -135,19 +134,18 @@ extension SwapScene {
             Section(model.swapToTitle) {
                 if let toAsset {
                     SwapTokenView(
-                        model: model.swapTokenModel(from: toAsset, type: .receive),
+                        model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
                         text: $model.toValue,
                         showLoading: model.isQuoteLoading,
                         disabledTextField: true,
                         onBalanceAction: {},
-                        onSelectAssetAction: onSelectAssetAction
+                        onSelectAssetAction: onSelectAssetReceiveAction
                     )
                     .buttonStyle(.borderless)
                     .focused($focusedField, equals: .to)
                 } else {
                     SwapTokenEmptyView(
-                        type: .receive,
-                        onSelectAssetAction: onSelectAssetAction
+                        onSelectAssetAction: onSelectAssetReceiveAction
                     )
                 }
             }
@@ -183,11 +181,21 @@ extension SwapScene {
         model.setMaxFromValue(asset: fromAsset.asset, value: fromAsset.balance.available)
         focusedField = .none
     }
-
-    private func onSelectAssetAction(type: SelectAssetSwapType) {
-        model.onSelectAssetAction(type: type)
+    
+    @MainActor
+    private func onSelectAssetPayAction() {
+        model.onSelectAssetAction(type: .pay)
     }
 
+    @MainActor
+    private func onSelectAssetReceiveAction() {
+        guard let fromAsset = fromAsset else { return }
+        let (chains, assetIds) = model.getAssetsForPayAssetId(assetId: fromAsset.asset.id)
+        
+        model.onSelectAssetAction(type: .receive(chains: chains, assetIds: assetIds))
+    }
+    
+    @MainActor
     private func onSelectActionButton() {
         if model.swapAvailabilityState.isError {
             fetch()
