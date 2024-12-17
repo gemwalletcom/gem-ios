@@ -7,14 +7,18 @@ import Style
 import Components
 
 struct ChainView: View {
-    let chain: Chain
+    private let model: ChainViewModel
+
+    init(chain: Chain) {
+        self.model = ChainViewModel(chain: chain)
+    }
 
     var body: some View {
         ListItemView(
-            title: Asset(chain).name,
-            image: Images.name(chain.id),
+            title: model.title,
+            image: model.image,
             imageSize: Sizing.image.medium,
-            cornerRadius: Sizing.image.medium/2
+            cornerRadius: Sizing.image.medium / 2
         )
     }
 }
