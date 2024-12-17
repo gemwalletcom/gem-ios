@@ -153,18 +153,15 @@ extension SettingsScene {
 // MARK: - Actions
 
 extension SettingsScene {
-    @MainActor
     private func onSelectCommutity(link: CommunityLink) {
         openURL(link.url)
     }
 
-    @MainActor
     private func onSelectLanguages() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(settingsURL)
     }
 
-    @MainActor
     private func onOpenWallets() {
         isWalletsPresented.wrappedValue.toggle()
     }
@@ -175,19 +172,20 @@ extension SettingsScene {
         }
     }
 }
+
 // MARK: - Previews
 
 #Preview {
-    let model: SettingsViewModel = .init(
-        walletId: .main,
-        walletsService: .main,
-        currencyModel: .init(preferences: .main)
-    )
-    return NavigationStack {
-        SettingsScene(
-            model: model
-        )
-        .navigationBarTitleDisplayMode(.inline)
-    }
+   let model: SettingsViewModel = .init(
+       walletId: .main,
+       walletsService: .main,
+       currencyModel: .init(currencyStorage: Preferences.main)
+   )
+    NavigationStack {
+       SettingsScene(
+           model: model
+       )
+       .navigationBarTitleDisplayMode(.inline)
+   }
 }
 
