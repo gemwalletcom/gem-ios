@@ -7,7 +7,7 @@ import Localization
 
 struct ChainListSettingsViewModel {
     var title: String {
-        return Localized.Settings.Networks.title
+        Localized.Settings.Networks.title
     }
 }
 
