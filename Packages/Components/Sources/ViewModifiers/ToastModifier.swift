@@ -8,7 +8,7 @@ public struct ToastModifier: ViewModifier {
     @State var isPresenting: Binding<Bool>
     let value: String
     let systemImage: String
-    
+
     public init(
         isPresenting: Binding<Bool>,
         value: String,
@@ -18,7 +18,7 @@ public struct ToastModifier: ViewModifier {
         self.value = value
         self.systemImage = systemImage
     }
-    
+
     public func body(content: Content) -> some View {
         return content
             .toast(isPresenting: isPresenting){
@@ -28,5 +28,18 @@ public struct ToastModifier: ViewModifier {
                     title: value
                 )
             }
+    }
+}
+
+// MARK: - View Modifier
+
+public extension View {
+    func toast(isPresenting: Binding<Bool>, title: String, systemImage: String) -> some View {
+        self.modifier(
+            ToastModifier(
+                isPresenting: isPresenting,
+                value: title,
+                systemImage: systemImage)
+        )
     }
 }

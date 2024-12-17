@@ -2,7 +2,7 @@
 
 @preconcurrency import ReownWalletKit
 
-final class WCConnectionsInteractor {
+final class WCConnectionsInteractor: Sendable {
     var sessionsStream: AsyncStream<[Session]> {
         WalletKit.instance.sessionsPublisher.asAsyncStream()
     }

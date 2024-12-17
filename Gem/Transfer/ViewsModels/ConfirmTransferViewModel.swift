@@ -38,7 +38,7 @@ class ConfirmTransferViewModel {
     private let service: any ChainServiceable
 
     private let walletsService: WalletsService
-    private let confirmTransferDelegate: ConfirmTransferDelegate?
+    private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
     private let onComplete: VoidAction
     
     init(
@@ -47,7 +47,7 @@ class ConfirmTransferViewModel {
         data: TransferData,
         service: any ChainServiceable,
         walletsService: WalletsService,
-        confirmTransferDelegate: ConfirmTransferDelegate? = .none,
+        confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
         self.wallet = wallet

@@ -9,9 +9,6 @@ import ChainService
 import InfoSheet
 import Transfer
 
-typealias ConfirmTransferDelegate = (Result<String, any Error>) -> Void
-typealias ConfirmMessageDelegate = (Result<String, any Error>) -> Void
-
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
 
