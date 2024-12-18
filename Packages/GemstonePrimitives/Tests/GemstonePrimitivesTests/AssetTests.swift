@@ -1,17 +1,18 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
-@testable import GemstonePrimitives
+import Testing
 import Primitives
 
-final class AssetTests: XCTestCase {
-    
+@testable import GemstonePrimitives
+
+final class AssetTests {
     let nativeAsset = Asset(.ethereum)
     let tokenAsset = Asset(id: AssetId(chain: .ethereum, tokenId: "0x123"), name: "", symbol: "", decimals: 18, type: .erc20)
-    
+
+    @Test
     func testAssetFee() {
-        XCTAssertEqual(nativeAsset.feeAsset, nativeAsset)
-        XCTAssertNotEqual(tokenAsset.feeAsset, tokenAsset)
-        XCTAssertEqual(tokenAsset.feeAsset, nativeAsset)
+        #expect(nativeAsset.feeAsset == nativeAsset)
+        #expect(tokenAsset.feeAsset != tokenAsset)
+        #expect(tokenAsset.feeAsset == nativeAsset)
     }
 }

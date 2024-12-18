@@ -1,11 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
-@testable import Store
+import Testing
 import StoreTestKit
 
-final class StoreTests: XCTestCase {
-    func testExample() throws {
-        XCTAssertNotNil(Preferences.mock())
+@testable import Store
+
+final class StoreTests {
+    func testExample() {
+        #expect(Preferences.mock() != nil)
     }
 }
