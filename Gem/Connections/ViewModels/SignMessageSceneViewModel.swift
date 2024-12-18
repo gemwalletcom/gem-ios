@@ -10,12 +10,12 @@ import Localization
 struct SignMessageSceneViewModel {
     private let keystore: any Keystore
     private let payload: SignMessagePayload
-    private let confirmTransferDelegate: ConfirmTransferDelegate
+    private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
 
     init(
         keystore: any Keystore,
         payload: SignMessagePayload,
-        confirmTransferDelegate: @escaping ConfirmTransferDelegate
+        confirmTransferDelegate: @escaping TransferDataCallback.ConfirmTransferDelegate
     ) {
         self.keystore = keystore
         self.payload = payload

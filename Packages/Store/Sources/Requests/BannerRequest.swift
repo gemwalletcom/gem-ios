@@ -36,7 +36,7 @@ public struct BannersRequest: ValueObservationQueryable {
             .asRequest(of: BannerInfo.self)
         
         if let walletId {
-            query = query.filter(Columns.Banner.walletId == walletId)
+            query = query.filter(Columns.Banner.walletId == walletId || Columns.Banner.walletId == nil)
         }
         if let assetId, let chain {
             query = query.filter(Columns.Banner.assetId == assetId || Columns.Banner.chain == chain)

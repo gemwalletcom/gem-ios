@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import KeychainAccess
+@preconcurrency import KeychainAccess
 import LocalAuthentication
 import Primitives
 
-public class LocalKeystorePassword: KeystorePassword {
+public final class LocalKeystorePassword: KeystorePassword {
     private struct Keys {
         static let password = "password"
         static let passwordAuthentication = "password_authentication"

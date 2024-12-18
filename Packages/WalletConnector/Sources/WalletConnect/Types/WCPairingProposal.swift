@@ -2,7 +2,7 @@
 
 import Primitives
 
-public struct WCPairingProposal {
+public struct WCPairingProposal: Sendable {
     public let pairingId: String
     public let proposal: WalletConnectionSessionProposal
 }

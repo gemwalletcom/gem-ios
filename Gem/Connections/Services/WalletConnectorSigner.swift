@@ -10,14 +10,15 @@ import class Gemstone.Config
 import Transfer
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
-    let store: ConnectionsStore
-    let keystore: any Keystore
-    var walletConnectorInteractor: any WalletConnectorInteractable
+    private let store: ConnectionsStore
+    private let keystore: any Keystore
+
+    weak var walletConnectorInteractor: (any WalletConnectorInteractable)?
 
     init(
         store: ConnectionsStore,
         keystore: any Keystore,
-        walletConnectorInteractor: any WalletConnectorInteractable
+        walletConnectorInteractor: (any WalletConnectorInteractable)?
     ) {
         self.store = store
         self.keystore = keystore
@@ -53,10 +54,16 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     public func sessionApproval(payload: WCPairingProposal) async throws -> WalletId {
-        try await walletConnectorInteractor.sessionApproval(payload: payload)
+        guard let walletConnectorInteractor else {
+            throw AnyError("Delegate not set")
+        }
+        return try await walletConnectorInteractor.sessionApproval(payload: payload)
     }
     
     public func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String {
+        guard let walletConnectorInteractor else {
+            throw AnyError("Delegate not set")
+        }
         let session = try store.getConnection(id: sessionId)
         let payload = SignMessagePayload(chain: chain, session: session.session, wallet: session.wallet, message: message)
         return try await walletConnectorInteractor.signMessage(payload: payload)
@@ -79,6 +86,9 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func sessionReject(id: String, error: any Error) throws {
+        guard let walletConnectorInteractor else {
+            throw AnyError("Delegate not set")
+        }
         try self.store.delete(ids: [id])
         walletConnectorInteractor.sessionReject(error: error)
     }
@@ -88,6 +98,10 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
+        guard let walletConnectorInteractor else {
+            throw AnyError("Delegate not set")
+        }
+
         let session = try store.getConnection(id: sessionId)
         let wallet = try keystore.getWallet(session.wallet.walletId)
 

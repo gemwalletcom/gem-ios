@@ -15,4 +15,5 @@ public enum ChainType: String, Codable, CaseIterable, Equatable, Hashable, Senda
 	case sui
 	case xrp
 	case near
+	case stellar
 }

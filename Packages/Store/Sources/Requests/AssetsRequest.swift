@@ -122,6 +122,9 @@ extension AssetsRequest {
                 return request
             }
             return request.filter(chains.contains(Columns.Asset.chain))
+        case .chainsOrAssets(let chains, let assetIds):
+            return request
+                .filter(chains.contains(Columns.Asset.chain) || assetIds.contains(Columns.Asset.id))
         case .includeNewAssets:
             return request
         }
@@ -152,7 +155,8 @@ extension AssetsRequest {
             case .buyable,
                 .swappable,
                 .stakeable,
-                .chains:
+                .chains,
+                .chainsOrAssets:
                 request = Self.applyFilter(request: request, $0)
             case .hasBalance,
                 .enabled,

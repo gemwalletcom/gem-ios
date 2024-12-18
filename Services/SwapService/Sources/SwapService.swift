@@ -36,6 +36,18 @@ public final class SwapService {
         swapper.supportedChains().compactMap { Chain(rawValue: $0) }
     }
     
+    public func supportedAssets(for assetId: Primitives.AssetId) -> ([Primitives.Chain], [Primitives.AssetId]) {
+        let swapAssetList = swapper.supportedChainsForFromAsset(assetId: assetId.identifier)
+        
+        
+        NSLog("supported assets: \(swapAssetList)")
+        
+        return (
+            swapAssetList.chains.compactMap { try? Primitives.Chain(id: $0)},
+            swapAssetList.assetIds.compactMap { try? Primitives.AssetId(id: $0) }
+        )
+    }
+    
     public func getQuotes(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String) async throws -> [Gemstone.SwapQuote] {
         let swapRequest = Gemstone.SwapQuoteRequest(
             fromAsset: fromAsset.identifier,

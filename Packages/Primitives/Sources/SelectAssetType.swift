@@ -26,11 +26,11 @@ public enum SelectAssetType: Identifiable, Hashable {
     }
 }
 
-public enum SelectAssetSwapType: String, Identifiable, Hashable {
+public enum SelectAssetSwapType: Identifiable, Hashable {
     case pay
-    case receive
+    case receive(chains: [Chain], assetIds: [AssetId])
     
     public var id: String {
-        return rawValue
+        return "rawValue" //FIX
     }
 }

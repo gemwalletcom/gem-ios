@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct SignMessagePayload {
+public struct SignMessagePayload: Sendable {
     public let chain: Chain
     public let session: WalletConnectionSession
     public let wallet: Wallet

@@ -31,7 +31,15 @@ struct AssetsFilterViewModel {
         case .swap(let type):
             switch type {
             case .pay: [.swappable, .hasBalance]
-            case .receive: [.swappable, .includeNewAssets]
+            case .receive(let chains, let assetIds):
+                [
+                    .chainsOrAssets(
+                        chains.map { $0.rawValue },
+                        assetIds.map { $0.identifier }
+                    ),
+                    .swappable,
+                    .includeNewAssets,
+                ]
             }
         case .stake: [.stakeable]
         case .manage: [.includeNewAssets]

@@ -42,6 +42,7 @@ public extension AssetId {
         }
     }
     
+    //TODO: Gemstone
     var assetType: AssetType? {
         switch chain {
         case .ethereum,
@@ -58,7 +59,8 @@ public extension AssetId {
             .linea,
             .mantle,
             .celo,
-            .world: .erc20
+            .world,
+            .sonic: .erc20
         case .smartChain, .opBNB: .bep20
         case .solana: .spl
         case .tron: .trc20
@@ -76,7 +78,8 @@ public extension AssetId {
             .thorchain,
             .doge,
             .xrp,
-            .near: .none
+            .near,
+            .stellar: .none
         }
     }
 }

@@ -33,7 +33,7 @@ public struct BannerSetupService: Sendable {
     }
 
     public func setupWallet(wallet: Wallet) throws  {
-        let chains: [Chain] = [.xrp]
+        let chains: [Chain] = [.xrp, .stellar]
         let banners = chains.map {
             NewBanner.accountActivation(assetId: $0.assetId)
         }

@@ -100,7 +100,7 @@ struct BannerViewModel {
             .enableNotifications:
             return.none
         case .accountActivation:
-            return URL(string: "https://xrpl.org/reserves.html")!
+            return asset?.chain.accountActivationFeeUrl
         case .accountBlockedMultiSignature:
             return Docs.url(.tronMultiSignature)
         }

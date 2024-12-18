@@ -36,6 +36,7 @@ public extension TargetType {
                 let query = params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&")
                 string = "\(path)?\(query)"
             } else {
+                httpBody = Data(params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&").utf8)
                 string = path
             }
         case .data(let data):
@@ -48,7 +49,7 @@ public extension TargetType {
             string = path
         }
         let url = URL(string: baseURL.absoluteString + string)!
-        var request =  URLRequest(url: url)
+        var request = URLRequest(url: url)
         request.httpBody = httpBody
         request.httpMethod = method.rawValue
         request.setValue(contentType, forHTTPHeaderField: "Content-Type")

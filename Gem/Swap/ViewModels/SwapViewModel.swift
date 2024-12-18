@@ -383,4 +383,8 @@ extension SwapViewModel {
             sigDeadline: UInt64(Date().timeIntervalSince1970) + 60 * 30
         )
     }
+    
+    public func getAssetsForPayAssetId(assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId]) {
+        swapService.supportedAssets(for: assetId)
+    }
 }

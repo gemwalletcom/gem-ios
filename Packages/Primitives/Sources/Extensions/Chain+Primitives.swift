@@ -4,10 +4,19 @@ import Foundation
 import BigInt
 
 extension Chain {
+    public init(id: String) throws {
+        if let chain = Chain(rawValue: id) {
+            self = chain
+        } else {
+            throw AnyError("invalid chain id: \(id)")
+        }
+    }
+    
     public var assetId: AssetId {
         return AssetId(chain: self, tokenId: .none)
     }
     
+    //TODO: Gemstone
     public var type: ChainType {
         switch self {
         case .bitcoin,
@@ -28,7 +37,8 @@ extension Chain {
             .linea,
             .mantle,
             .celo,
-            .world: .ethereum
+            .world,
+            .sonic: .ethereum
         case .solana: .solana
         case .polygon: .ethereum
         case .cosmos,
@@ -44,6 +54,7 @@ extension Chain {
         case .sui: .sui
         case .xrp: .xrp
         case .near: .near
+        case .stellar: .stellar
         }
     }
 }
@@ -68,7 +79,8 @@ extension Chain {
             .tron,
             .sui,
             .xrp,
-            .near: .native
+            .near,
+            .stellar: .native
         }
     }
 }

@@ -60,6 +60,7 @@ public struct Signer {
         case .sui: SuiSigner()
         case .xrp: XrpSigner()
         case .near: NearSigner()
+        case .stellar: StellarSigner()
         }
     }
 }
