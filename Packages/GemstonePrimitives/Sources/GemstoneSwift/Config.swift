@@ -52,8 +52,15 @@ public struct StakeConfig {
 }
 
 public struct ChainConfig {
+    // store in memory for fast access
+    private static let chainConfigs: [Primitives.Chain: Gemstone.ChainConfig] = {
+        Primitives.Chain.allCases.reduce(into: [:]) { result, chain in
+            result[chain] = Config.shared.getChainConfig(chain: chain.rawValue)
+        }
+    }()
+
     public static func config(chain: Primitives.Chain) -> Gemstone.ChainConfig {
-        Config.shared.getChainConfig(chain: chain.rawValue)
+        chainConfigs[chain]!
     }
 }
 

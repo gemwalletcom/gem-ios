@@ -58,4 +58,15 @@ public extension Primitives.Chain {
     var isStakeSupported: Bool {
         ChainConfig.config(chain: self).isStakeSupported
     }
+    
+    var type: ChainType {
+        ChainType(rawValue: ChainConfig.config(chain: self).chainType)!
+    }
+    
+    var feeUnitType: FeeUnitType {
+        guard let feeUnitType = FeeUnitType(rawValue: ChainConfig.config(chain: self).feeUnitType) else {
+            return .native
+        }
+        return feeUnitType
+    }
 }
