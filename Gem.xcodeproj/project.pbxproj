@@ -16,7 +16,6 @@
 		8314DA8D2C57D51E00C83F7D /* QRScanResources.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */; };
 		8317F3A82D10F4BA0030445D /* ChainViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8317F3A72D10F4BA0030445D /* ChainViewModel.swift */; };
 		832553982C0F27F000C9CA0C /* ChartScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553972C0F27F000C9CA0C /* ChartScene.swift */; };
-		8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */; };
 		832A705E2C88CE0A00045367 /* SelectWalletScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832A705D2C88CE0A00045367 /* SelectWalletScene.swift */; };
 		832A70602C88CE9600045367 /* SellectWalletViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832A705F2C88CE9600045367 /* SellectWalletViewModel.swift */; };
 		833185292CF74D6A007ED64F /* TransactionsFilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833185282CF74D6A007ED64F /* TransactionsFilterType.swift */; };
@@ -55,6 +54,7 @@
 		83BCC79E2CF4D27400396296 /* SelectFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BCC79D2CF4D27400396296 /* SelectFilterView.swift */; };
 		83BFDC642CA2D70C0057F5CB /* LockWindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BFDC622CA2D70C0057F5CB /* LockWindowManager.swift */; };
 		83BFDC6A2CA30A510057F5CB /* LockWindowManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BFDC692CA30A510057F5CB /* LockWindowManagerTests.swift */; };
+		83CE0F602D11C50A00A55BBF /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = 83CE0F5F2D11C50A00A55BBF /* Currency */; };
 		83D0C1BF2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D0C1BE2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift */; };
 		83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 83D6808A2CCA90D900B45089 /* InfoSheet */; };
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
@@ -165,8 +165,6 @@
 		C3E99BC32A73182E005DF35F /* TransactionScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BC22A73182E005DF35F /* TransactionScene.swift */; };
 		C3E99BC52A73186E005DF35F /* TransactionDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BC42A73186E005DF35F /* TransactionDetailViewModel.swift */; };
 		C3E99BC92A76BF8B005DF35F /* CleanUpService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BC82A76BF8B005DF35F /* CleanUpService.swift */; };
-		C3E99BCB2A76C8E8005DF35F /* CurrencyScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BCA2A76C8E8005DF35F /* CurrencyScene.swift */; };
-		C3E99BCD2A78376F005DF35F /* CurrencySceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BCC2A78376F005DF35F /* CurrencySceneViewModel.swift */; };
 		C3E99BCF2A787A8D005DF35F /* RateService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BCE2A787A8D005DF35F /* RateService.swift */; };
 		C3E99BD12A788C2D005DF35F /* TransactionStateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BD02A788C2D005DF35F /* TransactionStateViewModel.swift */; };
 		C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E99BD22A7A1D2E005DF35F /* SecurityScene.swift */; };
@@ -334,7 +332,6 @@
 		8314DA8C2C57D51E00C83F7D /* QRScanResources.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QRScanResources.swift; sourceTree = "<group>"; };
 		8317F3A72D10F4BA0030445D /* ChainViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainViewModel.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
-		832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModelTests.swift; sourceTree = "<group>"; };
 		832A705D2C88CE0A00045367 /* SelectWalletScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectWalletScene.swift; sourceTree = "<group>"; };
 		832A705F2C88CE9600045367 /* SellectWalletViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SellectWalletViewModel.swift; sourceTree = "<group>"; };
 		833185282CF74D6A007ED64F /* TransactionsFilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsFilterType.swift; sourceTree = "<group>"; };
@@ -374,6 +371,7 @@
 		83BCC79D2CF4D27400396296 /* SelectFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFilterView.swift; sourceTree = "<group>"; };
 		83BFDC622CA2D70C0057F5CB /* LockWindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWindowManager.swift; sourceTree = "<group>"; };
 		83BFDC692CA30A510057F5CB /* LockWindowManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockWindowManagerTests.swift; sourceTree = "<group>"; };
+		83CE0F5E2D11AE1900A55BBF /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
 		83D0C1BE2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypesSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824032C176A0D0023CA0C /* ChainFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainFilterable.swift; sourceTree = "<group>"; };
@@ -484,8 +482,6 @@
 		C3E99BC42A73186E005DF35F /* TransactionDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionDetailViewModel.swift; sourceTree = "<group>"; };
 		C3E99BC62A733FD6005DF35F /* WalletCorePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCorePrimitives; sourceTree = "<group>"; };
 		C3E99BC82A76BF8B005DF35F /* CleanUpService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanUpService.swift; sourceTree = "<group>"; };
-		C3E99BCA2A76C8E8005DF35F /* CurrencyScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyScene.swift; sourceTree = "<group>"; };
-		C3E99BCC2A78376F005DF35F /* CurrencySceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencySceneViewModel.swift; sourceTree = "<group>"; };
 		C3E99BCE2A787A8D005DF35F /* RateService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RateService.swift; sourceTree = "<group>"; };
 		C3E99BD02A788C2D005DF35F /* TransactionStateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionStateViewModel.swift; sourceTree = "<group>"; };
 		C3E99BD22A7A1D2E005DF35F /* SecurityScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecurityScene.swift; sourceTree = "<group>"; };
@@ -639,6 +635,7 @@
 				C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
+				83CE0F602D11C50A00A55BBF /* Currency in Frameworks */,
 				D829BF3D2CBDCA8000DEB2E8 /* Intro in Frameworks */,
 				D829BF2D2CBDBC5300DEB2E8 /* Localization in Frameworks */,
 				D8D203D02AE078BE00261CA2 /* WalletConnector in Frameworks */,
@@ -711,22 +708,6 @@
 				832553972C0F27F000C9CA0C /* ChartScene.swift */,
 			);
 			path = Scenes;
-			sourceTree = "<group>";
-		};
-		8325539B2C0FB22000C9CA0C /* Settings */ = {
-			isa = PBXGroup;
-			children = (
-				8325539C2C0FB23500C9CA0C /* ViewModels */,
-			);
-			path = Settings;
-			sourceTree = "<group>";
-		};
-		8325539C2C0FB23500C9CA0C /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				832553992C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift */,
-			);
-			path = ViewModels;
 			sourceTree = "<group>";
 		};
 		83352B682C93433D003D52F3 /* Types */ = {
@@ -933,7 +914,6 @@
 				83BFDC662CA309C30057F5CB /* Core */,
 				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				D8D726B42C6DBE7B00A6B559 /* Transactions */,
-				8325539B2C0FB22000C9CA0C /* Settings */,
 				C3549B3229C4395B00B4BE01 /* Assets */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
 				C36679082A0B1E4200F1D74D /* unit_app.xctestplan */,
@@ -1122,7 +1102,6 @@
 				C3D1C4DC2A295AEB006E8EEA /* AboutUsScene.swift */,
 				C3340B732A4A920100884D48 /* ChainListSettingsScene.swift */,
 				C3340B752A4A92B000884D48 /* ChainSettingsScene.swift */,
-				C3E99BCA2A76C8E8005DF35F /* CurrencyScene.swift */,
 				C3E99BD22A7A1D2E005DF35F /* SecurityScene.swift */,
 				D8B977FF2AAA4B97009933B5 /* NotificationsScene.swift */,
 				83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */,
@@ -1213,7 +1192,6 @@
 				C34C7CF429FC9B1C009EEC21 /* SettingsViewModel.swift */,
 				C3340B772A4A985000884D48 /* ChainSettingsViewModel.swift */,
 				C3340B792A4A989E00884D48 /* ChainListSettingsViewModel.swift */,
-				C3E99BCC2A78376F005DF35F /* CurrencySceneViewModel.swift */,
 				C3E99BD42A7A1D44005DF35F /* SecurityViewModel.swift */,
 				D8B978012AAA4C28009933B5 /* NotificationsViewModel.swift */,
 				D85620262AAAAD9A00D65D81 /* DeveloperViewModel.swift */,
@@ -1486,6 +1464,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				83CE0F5E2D11AE1900A55BBF /* Currency */,
 				D8D83C822CECF90A0083AA53 /* Swap */,
 				D85AD29E2CD436680010DEF8 /* ChainSettings */,
 				8393897A2CCA8F0000735088 /* InfoSheet */,
@@ -2039,6 +2018,7 @@
 				D85AD2A22CD442A40010DEF8 /* TransferService */,
 				D85AD2A52CD7017E0010DEF8 /* NativeProviderService */,
 				D8D83C832CECFA610083AA53 /* Swap */,
+				83CE0F5F2D11C50A00A55BBF /* Currency */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -2355,7 +2335,6 @@
 				D8B738DC2C59BA15004EF083 /* SecretDataTypeView.swift in Sources */,
 				C3A7CB8829CD8D3100431341 /* WalletsService.swift in Sources */,
 				D810F36E2AEB25AE0006D9C6 /* ConnectionProposalScene.swift in Sources */,
-				C3E99BCD2A78376F005DF35F /* CurrencySceneViewModel.swift in Sources */,
 				C30952B4299C39D70004C0F9 /* App.swift in Sources */,
 				83BFDC642CA2D70C0057F5CB /* LockWindowManager.swift in Sources */,
 				D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */,
@@ -2393,7 +2372,6 @@
 				83B57FA92CFF8FEB0009319F /* TransferDataCallback.swift in Sources */,
 				D80700522BBB6AEC00ED770B /* ImportWalletNavigationStack.swift in Sources */,
 				8336DC4C2CEF9BAE00F4CD2D /* TransactionsFilterScene.swift in Sources */,
-				C3E99BCB2A76C8E8005DF35F /* CurrencyScene.swift in Sources */,
 				C3D1C4F82A3BD6FA006E8EEA /* BalanceService.swift in Sources */,
 				C3E99BD32A7A1D2E005DF35F /* SecurityScene.swift in Sources */,
 				DF88688B2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift in Sources */,
@@ -2444,7 +2422,6 @@
 				C3A7CB9929D35EC200431341 /* WalletSceneViewModelTests.swift in Sources */,
 				83BB7E772C9A050700D90F2C /* LockSceneViewModelTests.swift in Sources */,
 				C3A7CB9729D3569C00431341 /* PriceViewModelTests.swift in Sources */,
-				8325539A2C0FB11C00C9CA0C /* CurrencySceneViewModelTests.swift in Sources */,
 				C3549B3529C4396A00B4BE01 /* AssetViewModelTests.swift in Sources */,
 				C3549B3129C42E8F00B4BE01 /* AssetListViewModelTests.swift in Sources */,
 				D8D726B72C6DBE9200A6B559 /* TransactionViewModelTests.swift in Sources */,
@@ -2875,6 +2852,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		83CE0F5F2D11C50A00A55BBF /* Currency */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Currency;
+		};
 		83D6808A2CCA90D900B45089 /* InfoSheet */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = InfoSheet;

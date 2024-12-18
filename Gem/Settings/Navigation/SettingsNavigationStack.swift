@@ -2,6 +2,8 @@
 
 import SwiftUI
 import Primitives
+import Currency
+import Store
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -19,9 +21,16 @@ struct SettingsNavigationStack: View {
     @Environment(\.explorerService) private var explorerService
 
     @State private var isWalletsPresented = false
-    @ObservedObject var currencyModel: CurrencySceneViewModel
+    @State private var currencyModel: CurrencySceneViewModel
 
     let walletId: WalletId
+
+    init(walletId: WalletId,
+         preferences: Preferences
+    ) {
+        self.walletId = walletId
+        _currencyModel = State(initialValue: CurrencySceneViewModel(currencyStorage: preferences))
+    }
 
     private var navigationPath: Binding<NavigationPath> {
         Binding(
@@ -102,13 +111,22 @@ struct SettingsNavigationStack: View {
                 WalletsNavigationStack()
             }
         }
-        .onChange(of: currencyModel.currency) { oldValue, newValue in
+        .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in
             navigationState.settings.removeLast()
         }
         .environment(\.isWalletsPresented, $isWalletsPresented)
     }
 }
 
-//#Preview {
-//    SettingsNavigationStack()
-//}
+// MARK: - Previews
+
+#Preview {
+    SettingsNavigationStack(
+        walletId: .main,
+        preferences: .main
+    )
+}
+
+// MARK: - Preferences extensions
+
+extension Preferences: @retroactive CurrencyStorable {}

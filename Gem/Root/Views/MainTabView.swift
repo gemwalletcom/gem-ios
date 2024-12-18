@@ -8,6 +8,7 @@ import GRDBQuery
 import Store
 import Localization
 import Style
+import Currency
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -66,8 +67,8 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                currencyModel: CurrencySceneViewModel(preferences: .main),
-                walletId: model.wallet.walletId
+                walletId: model.wallet.walletId,
+                preferences: .main
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tags.settings)

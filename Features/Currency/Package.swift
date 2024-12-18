@@ -3,33 +3,33 @@
 import PackageDescription
 
 let package = Package(
-    name: "InfoSheet",
+    name: "Currency",
     platforms: [
         .iOS(.v17),
     ],
     products: [
         .library(
-            name: "InfoSheet",
-            targets: ["InfoSheet"]),
+            name: "Currency",
+            targets: ["Currency"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives")
+        .package(name: "Localization", path: "../Localization"),
     ],
     targets: [
         .target(
-            name: "InfoSheet",
+            name: "Currency",
             dependencies: [
                 "Primitives",
-                "Style",
-                "Localization",
                 "Components",
-                "GemstonePrimitives",
+                "Localization"
             ],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "CurrencyTests",
+            dependencies: ["Currency"]
         ),
     ]
 )

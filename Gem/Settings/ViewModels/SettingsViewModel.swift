@@ -10,11 +10,12 @@ import Primitives
 import Localization
 import Style
 import MarketInsight
+import Currency
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable
 class SettingsViewModel: ObservableObject {
-    @ObservedObject var currencyModel: CurrencySceneViewModel
+    var currencyModel: CurrencySceneViewModel
 
     @Published var isDeveloperEnabled: Bool
 
@@ -49,14 +50,7 @@ class SettingsViewModel: ObservableObject {
     var priceAlertsImage: Image { Images.Settings.priceAlerts }
 
     var currencyTitle: String { Localized.Settings.currency }
-    var currencyValue: String {
-        let currentCurrency = currencyModel.currency
-
-        if let currentFlag = currencyModel.emojiFlag {
-            return "\(currentFlag) \(currentCurrency)"
-        }
-        return currentCurrency
-    }
+    var currencyValue: String { currencyModel.selectedCurrencyValue }
     var currencyImage: Image { Images.Settings.currency }
 
     var lanugageTitle: String { Localized.Settings.language }
