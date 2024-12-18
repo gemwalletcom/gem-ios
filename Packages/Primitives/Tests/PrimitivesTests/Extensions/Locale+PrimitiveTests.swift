@@ -1,28 +1,30 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
+import Testing
 import Primitives
 import BigInt
+import Foundation
 
-final class Locale_PrimitivesTests: XCTestCase {
-
+final class Locale_PrimitivesTests {
+    @Test
     func testUsageLanguageIdentifier() {
-        XCTAssertEqual(Locale.US.usageLanguageIdentifier(), "en")
-        XCTAssertEqual(Locale.UK.usageLanguageIdentifier(), "en")
-        XCTAssertEqual(Locale.EN_CH.usageLanguageIdentifier(), "en")
-        XCTAssertEqual(Locale.PT_BR.usageLanguageIdentifier(), "pt-BR")
-        XCTAssertEqual(Locale.FR.usageLanguageIdentifier(), "fr")
-        XCTAssertEqual(Locale.ZH_Simplifier.usageLanguageIdentifier(), "zh-Hans")
-        XCTAssertEqual(Locale.ZH_Singapore.usageLanguageIdentifier(), "zh-Hans")
-        XCTAssertEqual(Locale.ZH_Traditional.usageLanguageIdentifier(), "zh-Hant")
+        #expect(Locale.US.usageLanguageIdentifier() == "en")
+        #expect(Locale.UK.usageLanguageIdentifier() == "en")
+        #expect(Locale.EN_CH.usageLanguageIdentifier() == "en")
+        #expect(Locale.PT_BR.usageLanguageIdentifier() == "pt-BR")
+        #expect(Locale.FR.usageLanguageIdentifier() == "fr")
+        #expect(Locale.ZH_Simplifier.usageLanguageIdentifier() == "zh-Hans")
+        #expect(Locale.ZH_Singapore.usageLanguageIdentifier() == "zh-Hans")
+        #expect(Locale.ZH_Traditional.usageLanguageIdentifier() == "zh-Hant")
     }
 
+    @Test
     func testAppstoreLanguageIdentifier() {
-        XCTAssertEqual(Locale.US.appstoreLanguageIdentifier(), "en-US")
-        XCTAssertEqual(Locale.UK.appstoreLanguageIdentifier(), "en-US")
-        XCTAssertEqual(Locale.FR.appstoreLanguageIdentifier(), "fr-FR")
-        XCTAssertEqual(Locale.IT.appstoreLanguageIdentifier(), "it")
-        XCTAssertEqual(Locale.ZH_Simplifier.appstoreLanguageIdentifier(), "zh-Hans")
-        XCTAssertEqual(Locale.ZH_Traditional.appstoreLanguageIdentifier(), "zh-Hant")
+        #expect(Locale.US.appstoreLanguageIdentifier() == "en-US")
+        #expect(Locale.UK.appstoreLanguageIdentifier() == "en-US")
+        #expect(Locale.FR.appstoreLanguageIdentifier() == "fr-FR")
+        #expect(Locale.IT.appstoreLanguageIdentifier() == "it")
+        #expect(Locale.ZH_Simplifier.appstoreLanguageIdentifier() == "zh-Hans")
+        #expect(Locale.ZH_Traditional.appstoreLanguageIdentifier() == "zh-Hant")
     }
 }

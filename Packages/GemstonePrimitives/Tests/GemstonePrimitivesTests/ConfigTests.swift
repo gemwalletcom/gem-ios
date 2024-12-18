@@ -1,15 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
-@testable import GemstonePrimitives
+import Testing
 import Primitives
 
-final class ConfigTests: XCTestCase {
+@testable import GemstonePrimitives
 
-    func testSolanaProgramId() throws {
-
-        XCTAssertEqual(SolanaConfig.tokenProgramId(owner: "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb"), .token2022)
-        XCTAssertEqual(SolanaConfig.tokenProgramId(owner: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"), .token)
-        XCTAssertEqual(SolanaConfig.tokenProgramId(owner: "Token"), .none)
+final class ConfigTests {
+    @Test
+    func testSolanaProgramId() {
+        #expect(SolanaConfig.tokenProgramId(owner: "TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb") == .token2022)
+        #expect(SolanaConfig.tokenProgramId(owner: "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA") == .token)
+        #expect(SolanaConfig.tokenProgramId(owner: "Token") == .none)
     }
 }

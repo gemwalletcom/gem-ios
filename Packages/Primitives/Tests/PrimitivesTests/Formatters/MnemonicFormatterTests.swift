@@ -1,17 +1,19 @@
-import XCTest
+import Testing
 import Primitives
 
-final class MnemonicFormatterTests: XCTestCase {
+final class MnemonicFormatterTests {
 
     let wordsArray = ["test", "test2"]
     let wordsString = "test test2"
-    
+
+    @Test
     func testFromArray() {
-        XCTAssertEqual(MnemonicFormatter.fromArray(words:wordsArray), wordsString)
+        #expect(MnemonicFormatter.fromArray(words:wordsArray) == wordsString)
     }
-    
+
+    @Test
     func testToArray() {
-        XCTAssertEqual(MnemonicFormatter.toArray(string: wordsString), wordsArray)
-        XCTAssertEqual(MnemonicFormatter.toArray(string: "test\n"), ["test"])
+        #expect(MnemonicFormatter.toArray(string: wordsString) == wordsArray)
+        #expect(MnemonicFormatter.toArray(string: "test\n") == ["test"])
     }
 }

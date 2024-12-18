@@ -1,20 +1,26 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
-import Primitives
+import Foundation
+import Testing
 import BigInt
+@testable import Primitives
 
-final class FeeTests: XCTestCase {
 
+final class FeeTests {
+    @Test
     func testTotalFee() {
         let fee = Fee(fee: BigInt(1), gasPriceType: .regular(gasPrice: BigInt(1)), gasLimit: .zero)
-        
-        XCTAssertEqual(fee.totalFee, BigInt(1))
+        #expect(fee.totalFee == BigInt(1))
     }
-    
+
+    @Test
     func testTotalFeeWithTokenCreation() {
-        let fee = Fee(fee: BigInt(1), gasPriceType: .regular(gasPrice: BigInt(1)), gasLimit: .zero, options: [.tokenAccountCreation: BigInt(10)]);
-        
-        XCTAssertEqual(fee.totalFee, BigInt(11))
+        let fee = Fee(
+            fee: BigInt(1),
+            gasPriceType: .regular(gasPrice: BigInt(1)),
+            gasLimit: .zero,
+            options: [.tokenAccountCreation: BigInt(10)]
+        )
+        #expect(fee.totalFee == BigInt(11))
     }
 }

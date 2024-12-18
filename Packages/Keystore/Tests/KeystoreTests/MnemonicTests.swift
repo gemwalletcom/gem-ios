@@ -1,8 +1,7 @@
-import XCTest
-import Keystore
+import Testing
+@testable import Keystore
 
-final class MnemonicTests: XCTestCase {
-
+final class MnemonicTests {
     let validWords = [
         "credit",
         "expect",
@@ -15,9 +14,9 @@ final class MnemonicTests: XCTestCase {
         "pear",
         "what",
         "skull",
-        "force",
+        "force"
     ]
-    
+
     let invalidWords = [
         "ripple",
         "scissors",
@@ -30,16 +29,18 @@ final class MnemonicTests: XCTestCase {
         "sun",
         "offer",
         "wealth",
-        "tomorrow",
+        "tomorrow"
     ]
-    
+
+    @Test
     func testIsValidMnemonicWords() {
-        XCTAssertTrue(Mnemonic.isValidWords(validWords))
-        XCTAssertFalse(Mnemonic.isValidWords(invalidWords))
+        #expect(Mnemonic.isValidWords(validWords))
+        #expect(!Mnemonic.isValidWords(invalidWords))
     }
-    
+
+    @Test
     func testIsValidMnemonicWord() {
-        XCTAssertTrue(Mnemonic.isValidWord(validWords.first!))
-        XCTAssertFalse(Mnemonic.isValidWord("test1"))
+        #expect(Mnemonic.isValidWord(validWords.first!))
+        #expect(!Mnemonic.isValidWord("test1"))
     }
 }
