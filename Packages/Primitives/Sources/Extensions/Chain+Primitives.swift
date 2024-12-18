@@ -16,6 +16,7 @@ extension Chain {
         return AssetId(chain: self, tokenId: .none)
     }
     
+    //TODO: Gemstone
     public var type: ChainType {
         switch self {
         case .bitcoin,
@@ -52,6 +53,7 @@ extension Chain {
         case .sui: .sui
         case .xrp: .xrp
         case .near: .near
+        case .stellar: .stellar
         }
     }
 }
@@ -76,7 +78,8 @@ extension Chain {
             .tron,
             .sui,
             .xrp,
-            .near: .native
+            .near,
+            .stellar: .native
         }
     }
 }

@@ -14,6 +14,7 @@ public protocol TargetType: Sendable {
 public enum ContentType: String {
     case json = "application/json"
     case plainText = "text/plain"
+    case URLEncoded = "application/x-www-form-urlencoded"
 }
 
 public extension TargetType {

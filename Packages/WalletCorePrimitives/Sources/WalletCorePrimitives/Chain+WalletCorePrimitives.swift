@@ -41,6 +41,7 @@ public extension Chain {
         case .sei: .sei
         case .noble: .noble
         case .near: .near
+        case .stellar: .stellar
         }
     }
 }

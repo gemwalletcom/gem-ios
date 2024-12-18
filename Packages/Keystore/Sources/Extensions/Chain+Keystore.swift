@@ -23,7 +23,8 @@ public extension Chain {
             .sui,
             .xrp,
             .near,
-            .bitcoin:
+            .bitcoin,
+            .stellar:
             [.hex]
         }
     }

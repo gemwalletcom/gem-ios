@@ -23,12 +23,14 @@ struct AssetViewModel {
         return asset.symbol
     }
     
+    //TODO: Gemstone
     var supportMemo: Bool {
         switch asset.chain.type {
         case .cosmos,
             .ton,
             .solana,
-            .xrp:
+            .xrp,
+            .stellar:
             return true
         case .bitcoin,
             .ethereum,

@@ -43,6 +43,7 @@ public struct Images {
         public static let tron = Image(.tron)
         public static let xrp = Image(.xrp)
         public static let zksync = Image(.zksync)
+        public static let stellar = Image(.stellar)
     }
 
     public struct Fiat {
