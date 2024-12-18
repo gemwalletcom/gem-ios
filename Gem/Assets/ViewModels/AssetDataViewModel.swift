@@ -144,7 +144,7 @@ struct AssetDataViewModel {
     }
     
     var showBalances: Bool {
-        return assetData.balances.filter { $0.value > 0 }.count > 1
+        return assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
     }
     
     var stakeApr: Double? {

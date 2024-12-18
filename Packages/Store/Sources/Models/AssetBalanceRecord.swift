@@ -46,10 +46,10 @@ public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
 extension AssetBalanceRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column("assetId", .text)
+            $0.column(Columns.Balance.assetId.name, .text)
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("walletId", .text)
+            $0.column(Columns.Balance.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
@@ -84,11 +84,14 @@ extension AssetBalanceRecord: CreateTable {
             
             $0.column(Columns.Balance.lastUsedAt.name, .date)
             $0.column(Columns.Balance.updatedAt.name, .date)
-            $0.uniqueKey(["assetId", "walletId"])
+            $0.uniqueKey([
+                Columns.Balance.assetId.name,
+                Columns.Balance.walletId.name,
+            ])
         }
     }
     
-    static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount + reservedAmount)"
+    static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount)"
 }
 
 extension AssetBalanceRecord: Identifiable {

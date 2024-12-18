@@ -51,6 +51,7 @@ struct ChainViewModel {
         case .near: Images.Chains.near
         case .world: Images.Chains.world
         case .stellar: Images.Chains.stellar
+        case .sonic: Images.Chains.sonic
         }
     }
 

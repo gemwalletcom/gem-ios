@@ -154,6 +154,13 @@ public struct Migrations {
                 $0.add(column: Columns.Asset.stakingApr.name, .double)
             }
         }
+        
+        migrator.registerMigration("Update \(Columns.Balance.totalAmount.name) column") { db in
+            try? db.alter(table: AssetBalanceRecord.databaseTableName) {
+                $0.drop(column: Columns.Balance.totalAmount.name)
+                $0.addColumn(sql: AssetBalanceRecord.totalAmountSQlCreation)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }
