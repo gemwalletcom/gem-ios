@@ -52,6 +52,7 @@ public struct AssetConfiguration: Sendable {
         .near,
         .world,
         .stellar,
+        .sonic,
     ]
 
     public static let enabledByDefault: [AssetId] =  [

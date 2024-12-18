@@ -23,6 +23,7 @@ extension EVMChain {
         case .mantle: .mantle
         case .celo: .celo
         case .world: .world
+        case .sonic: .sonic
         }
     }
     

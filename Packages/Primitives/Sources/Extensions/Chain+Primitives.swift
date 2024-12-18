@@ -37,7 +37,8 @@ extension Chain {
             .linea,
             .mantle,
             .celo,
-            .world: .ethereum
+            .world,
+            .sonic: .ethereum
         case .solana: .solana
         case .polygon: .ethereum
         case .cosmos,

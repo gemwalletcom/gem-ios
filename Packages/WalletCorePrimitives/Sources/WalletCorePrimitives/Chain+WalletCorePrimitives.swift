@@ -25,7 +25,8 @@ public extension Chain {
             .linea,
             .mantle,
             .celo,
-            .world: .ethereum
+            .world,
+            .sonic: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos

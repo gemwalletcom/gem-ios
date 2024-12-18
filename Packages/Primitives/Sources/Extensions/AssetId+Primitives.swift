@@ -59,7 +59,8 @@ public extension AssetId {
             .linea,
             .mantle,
             .celo,
-            .world: .erc20
+            .world,
+            .sonic: .erc20
         case .smartChain, .opBNB: .bep20
         case .solana: .spl
         case .tron: .trc20
