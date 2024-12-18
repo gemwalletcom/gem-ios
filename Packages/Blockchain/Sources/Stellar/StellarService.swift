@@ -67,7 +67,7 @@ extension StellarService: ChainBalanceable {
         
         let value = try valueFormatter.inputNumber(from: balance, decimals: chain.asset.decimals.asInt)
         let reservedBalance = reservedBalance()
-        let available = value - reservedBalance
+        let available = max(value - reservedBalance, .zero)
         
         return Primitives.AssetBalance(
             assetId: chain.assetId,

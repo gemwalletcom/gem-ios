@@ -72,10 +72,7 @@ class AssetSceneViewModel: ObservableObject {
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
 
     var reservedBalanceUrl: URL? {
-        switch assetModel.asset.chain {
-        case .xrp: URL(string: "https://xrpl.org/reserves.html")!
-        default: .none
-        }
+        assetModel.asset.chain.accountActivationFeeUrl
     }
     
     var networkField: String { Localized.Transfer.network }

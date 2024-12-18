@@ -39,4 +39,11 @@ public extension Primitives.Chain {
     var accountActivationFee: Int32? {
         ChainConfig.config(chain: self).accountActivationFee
     }
+    
+    var accountActivationFeeUrl: URL? {
+        guard let url = ChainConfig.config(chain: self).accountActivationFeeUrl else {
+            return .none
+        }
+        return URL(string: url)
+    }
 }
