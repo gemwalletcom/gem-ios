@@ -1,9 +1,12 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Keystore
 import Primitives
 import Store
 import Components
 import Localization
+import Settings
 
 @Observable
 class SelectAssetViewModel {
@@ -168,5 +171,11 @@ extension SelectAssetType {
         case .manage:.manage
         case .priceAlert: .price
         }
+    }
+}
+
+public extension Wallet {
+    var hasTokenSupport: Bool {
+        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
     }
 }

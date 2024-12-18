@@ -1,6 +1,7 @@
 import Foundation
 import Primitives
 import Components
+import GemstonePrimitives
 
 struct AssetViewModel {
     let asset: Asset    
@@ -12,37 +13,22 @@ struct AssetViewModel {
     }
     
     var title: String {
-        return String(format: "%@ (%@)", asset.name, asset.symbol)
+        String(format: "%@ (%@)", asset.name, asset.symbol)
     }
     
     var name: String {
-        return asset.name
+        asset.name
     }
     
     var symbol: String {
-        return asset.symbol
+        asset.symbol
     }
     
-    //TODO: Gemstone
     var supportMemo: Bool {
-        switch asset.chain.type {
-        case .cosmos,
-            .ton,
-            .solana,
-            .xrp,
-            .stellar:
-            return true
-        case .bitcoin,
-            .ethereum,
-            .tron,
-            .sui,
-            .aptos,
-            .near:
-            return false
-        }
+        asset.chain.isMemoSupported
     }
     
     public var assetImage: AssetImage {
-        return AssetIdViewModel(assetId: asset.id).assetImage
+        AssetIdViewModel(assetId: asset.id).assetImage
     }
 }

@@ -541,7 +541,7 @@ extension TronService: ChainTokenable {
             name: name,
             symbol: symbol,
             decimals: decimals.int.asInt32,
-            type: assetId.assetType!
+            type: try assetId.getAssetType()
         )
     }
     

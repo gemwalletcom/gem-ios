@@ -41,45 +41,4 @@ public extension AssetId {
             return String(format: "%@_%@", chain.rawValue, tokenId ?? "")
         }
     }
-    
-    //TODO: Gemstone
-    var assetType: AssetType? {
-        switch chain {
-        case .ethereum,
-            .polygon,
-            .arbitrum,
-            .optimism,
-            .base,
-            .avalancheC,
-            .fantom,
-            .gnosis,
-            .manta,
-            .blast,
-            .zkSync,
-            .linea,
-            .mantle,
-            .celo,
-            .world,
-            .sonic: .erc20
-        case .smartChain, .opBNB: .bep20
-        case .solana: .spl
-        case .tron: .trc20
-        case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei,
-            .noble: .ibc
-        case .sui,
-            .aptos: .token
-        case .ton: .jetton
-        case .bitcoin,
-            .litecoin,
-            .thorchain,
-            .doge,
-            .xrp,
-            .near,
-            .stellar: .none
-        }
-    }
 }

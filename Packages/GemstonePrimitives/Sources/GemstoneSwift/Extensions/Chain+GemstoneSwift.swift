@@ -16,7 +16,7 @@ public extension Primitives.Chain {
             type: .native
         )
     }
-
+    
     var includeStakedBalance: Bool {
         switch self.stakeChain {
         case .cosmos,
@@ -35,7 +35,7 @@ public extension Primitives.Chain {
             false
         }
     }
-
+    
     var accountActivationFee: Int32? {
         ChainConfig.config(chain: self).accountActivationFee
     }
@@ -45,5 +45,17 @@ public extension Primitives.Chain {
             return .none
         }
         return URL(string: url)
+    }
+    
+    var isMemoSupported: Bool {
+        ChainConfig.config(chain: self).isMemoSupported
+    }
+    
+    var isSwapSupported: Bool {
+        ChainConfig.config(chain: self).isSwapSupported
+    }
+    
+    var isStakeSupported: Bool {
+        ChainConfig.config(chain: self).isStakeSupported
     }
 }

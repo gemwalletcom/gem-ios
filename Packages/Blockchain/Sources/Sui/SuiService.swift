@@ -458,7 +458,7 @@ extension SuiService: ChainTokenable {
             name: data.name,
             symbol: data.symbol,
             decimals: data.decimals,
-            type: assetId.assetType!
+            type: try assetId.getAssetType()
         )
     }
     
