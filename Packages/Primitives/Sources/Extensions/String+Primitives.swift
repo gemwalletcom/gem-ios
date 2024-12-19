@@ -56,6 +56,13 @@ public extension String {
         }
         return data
     }
+    
+    func base64Encoded() throws -> Data {
+        guard let data = Data(base64Encoded: self) else {
+            throw AnyError("Unable to base64 encode string to data")
+        }
+        return data
+    }
 }
 
 extension Optional where Wrapped == String {

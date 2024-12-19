@@ -52,6 +52,8 @@ extension ChainService {
             NearService(chain: chain, provider: ProviderFactory.create(with: url))
         case .stellar:
             StellarService(chain: chain, provider: ProviderFactory.create(with: url))
+        case .algorand:
+            AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
         }
     }
 }

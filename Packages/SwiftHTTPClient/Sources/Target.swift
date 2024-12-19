@@ -15,6 +15,7 @@ public enum ContentType: String {
     case json = "application/json"
     case plainText = "text/plain"
     case URLEncoded = "application/x-www-form-urlencoded"
+    case XBinary = "application/x-binary"
 }
 
 public extension TargetType {

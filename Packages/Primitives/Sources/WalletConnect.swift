@@ -62,4 +62,5 @@ public enum WallletConnectCAIP2: String, Codable, Sendable {
 	case eip155
 	case solana
 	case cosmos
+	case algorand
 }

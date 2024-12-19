@@ -41,4 +41,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Sendable {
 	case world
 	case stellar
 	case sonic
+	case algorand
 }

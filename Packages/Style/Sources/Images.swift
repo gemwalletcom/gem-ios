@@ -45,6 +45,7 @@ public struct Images {
         public static let zksync = Image(.zksync)
         public static let stellar = Image(.stellar)
         public static let sonic = Image(.sonic)
+        public static let algorand = Image(.algorand)
     }
 
     public struct Fiat {
