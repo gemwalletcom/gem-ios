@@ -166,10 +166,9 @@ public struct SolanaSigner: Signable {
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {
-        guard let data = Base58.decodeNoCheck(string: string) else {
-            throw AnyError("string is not Base58 encoding!");
-        }
-        return data.base64EncodedString().paddded
+        return try Base58.decodeNoCheck(string: string)
+            .base64EncodedString()
+            .paddded
     }
     
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
