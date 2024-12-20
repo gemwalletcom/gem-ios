@@ -8,6 +8,7 @@ public extension Chain {
     var coinType: WalletCore.CoinType {
         switch self {
         case .bitcoin: .bitcoin
+        case .bitcoinCash: .bitcoinCash
         case .litecoin: .litecoin
         case .ethereum,
             .arbitrum,

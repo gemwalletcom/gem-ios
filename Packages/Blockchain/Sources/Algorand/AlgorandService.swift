@@ -62,7 +62,18 @@ extension AlgorandService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        let assets = try await account(address: address).assets
+        
+        return tokenIds.map { assetId in
+            let balance: BigInt = {
+                if let value = assets.first(where: { String($0.asset_id) == assetId.tokenId  })?.amount {
+                    return BigInt(value)
+                }
+                return BigInt.zero
+            }()
+            
+            return AssetBalance(assetId: assetId, balance: Balance(available: balance))
+        }
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -143,11 +154,26 @@ extension AlgorandService: ChainStakable {
 
 extension AlgorandService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let asset = try await provider
+            .request(.asset(id: tokenId))
+            .map(as: AlgorandAssetResponse.self).params
+        
+        return Asset(
+            id: AssetId(chain: chain, tokenId: tokenId),
+            name: asset.name,
+            symbol: asset.unit_name,
+            decimals: asset.decimals,
+            type: .asa
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
+        //TODO: Enable once asset activation is working
+        return false
+//        if tokenId.count > 3, let _ = UInt64(tokenId) {
+//            return true
+//        }
+//        return false
     }
 }
 

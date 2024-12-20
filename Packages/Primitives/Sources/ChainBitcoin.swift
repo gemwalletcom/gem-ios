@@ -6,6 +6,7 @@ import Foundation
 
 public enum BitcoinChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case bitcoin
+	case bitcoinCash = "bitcoincash"
 	case litecoin
 	case doge
 }

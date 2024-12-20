@@ -210,7 +210,7 @@ extension SwapViewModel {
 
         do {
             switch fromAsset.type {
-            case .trc20, .ibc, .jetton, .synth:
+            case .trc20, .ibc, .jetton, .synth, .asa:
                 fatalError("Unsupported asset type")
             case .native, .spl, .token:
                 let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)

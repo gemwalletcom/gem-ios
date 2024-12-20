@@ -96,7 +96,7 @@ public class EthereumSigner: Signable {
             fatalError()
         }
         switch type {
-        case .approval(let spender, let allowance):
+        case .approval(_, let spender, let allowance):
             return try sign(coinType: input.coinType, input: buildBaseInput(
                 input: input,
                 transaction: .with {

@@ -4,11 +4,54 @@
 
 import Foundation
 
+public struct AlgorandAccountAccount: Codable, Sendable {
+	public let amount: UInt64
+	public let asset_id: Int32
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case amount,
+			asset_id = "asset-id"
+	}
+
+	public init(amount: UInt64, asset_id: Int32) {
+		self.amount = amount
+		self.asset_id = asset_id
+	}
+}
+
 public struct AlgorandAccount: Codable, Sendable {
 	public let amount: UInt64
+	public let assets: [AlgorandAccountAccount]
 
-	public init(amount: UInt64) {
+	public init(amount: UInt64, assets: [AlgorandAccountAccount]) {
 		self.amount = amount
+		self.assets = assets
+	}
+}
+
+public struct AlgorandAsset: Codable, Sendable {
+	public let decimals: Int32
+	public let name: String
+	public let unit_name: String
+
+	enum CodingKeys: String, CodingKey, Codable {
+		case decimals,
+			name,
+			unit_name = "unit-name"
+	}
+
+	public init(decimals: Int32, name: String, unit_name: String) {
+		self.decimals = decimals
+		self.name = name
+		self.unit_name = unit_name
+	}
+}
+
+public struct AlgorandAssetResponse: Codable, Sendable {
+	public let params: AlgorandAsset
+
+	public init(params: AlgorandAsset) {
+		self.params = params
 	}
 }
 

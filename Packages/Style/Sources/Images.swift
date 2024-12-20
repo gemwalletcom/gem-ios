@@ -14,6 +14,7 @@ public struct Images {
         public static let avalanchec = Image(.avalanchec)
         public static let base = Image(.base)
         public static let bitcoin = Image(.bitcoin)
+        public static let bitcoincash = Image(.bitcoincash)
         public static let blast = Image(.blast)
         public static let celestia = Image(.celestia)
         public static let celo = Image(.celo)

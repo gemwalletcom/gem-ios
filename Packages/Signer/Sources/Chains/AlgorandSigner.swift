@@ -43,7 +43,17 @@ public struct AlgorandSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        let tokenId = try input.asset.getTokenId()
+        let transfer = AlgorandAssetTransfer.with {
+            $0.toAddress = input.destinationAddress
+            $0.amount = input.value.UInt
+            $0.assetID = UInt64(tokenId)!
+        }
+        return try sign(
+            input: input,
+            message: .assetTransfer(transfer),
+            privateKey: privateKey
+        )
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
