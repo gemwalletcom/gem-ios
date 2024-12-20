@@ -3,11 +3,22 @@
 import Foundation
 import BigInt
 import struct Gemstone.SwapQuote
+import enum Gemstone.SwapProvider
 import struct Gemstone.SwapQuoteData
 
+// Add SwapProvider to Approval type
 public enum SwapAction: Sendable {
     case swap(SwapQuote, SwapQuoteData)
-    case approval(spender: String, allowance: BigInt)
+    case approval(SwapQuote, spender: String, allowance: BigInt)
+}
+
+extension SwapAction {
+    public var provider: SwapProvider {
+        switch self {
+        case .swap(let quote, _): quote.data.provider
+        case .approval(let quote, _, _): quote.data.provider
+        }
+    }
 }
 
 extension SwapAction: Hashable {}

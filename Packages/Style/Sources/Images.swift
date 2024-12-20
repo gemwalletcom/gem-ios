@@ -47,6 +47,20 @@ public struct Images {
         public static let sonic = Image(.sonic)
         public static let algorand = Image(.algorand)
     }
+    
+    public struct SwapProviders {
+        public static let uniswap = Image(.uniswap)
+        public static let pancakeswap = Image(.pancakeswap)
+        public static let across = Image(.across)
+        public static let cetus = Image(.cetus)
+        public static let jupiter = Image(.jupiter)
+        public static let mayan = Image(.mayan)
+        public static let stonfi = Image(.stonfi)
+        public static let thorchain = Image(.thorchain)
+        public static let orca = Image(.orca)
+        public static let stargate = Image(.stargate)
+        public static let raydium = Image(.raydium)
+    }
 
     public struct Fiat {
         public static let kado = Image(.kado)

@@ -50,9 +50,19 @@ struct TransferDataViewModel {
     }
 
     var recepientAccount: SimpleAccount {
-        SimpleAccount(name: recipientName,
-                      chain: chain,
-                      address: recipient.address)
+        switch type {
+        case .swap(_, _, let action): SimpleAccount(
+            name: recipientName,
+            chain: chain,
+            address: recipient.address,
+            assetImage: SwapProviderViewModel(provider: action.provider).providerImage
+        )
+        default: SimpleAccount(
+            name: recipientName,
+            chain: chain,
+            address: recipient.address,
+            assetImage: .none
+        )}
     }
 
     var appValue: String? {
