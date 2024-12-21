@@ -168,6 +168,12 @@ final class LocalKeystoreTests {
                     expected = "0c91f6106ff835c0195d5388565a2d69e25038a7e23d26198f85caf6594117ec"
                 case .stellar:
                     expected = "GA3H6I4C5XUBYGVB66KXR27JV5KS3APSTKRUWOIXZ5MVWZKVTLXWKZ2P"
+                case .bitcoinCash:
+                    expected = "bitcoincash:qpzl3jxkzgvfd9flnd26leud5duv795fnv7vuaha70"
+                case .algorand:
+                    expected = "JTJWO524JXIHVPGBDWFLJE7XUIA32ECOZOBLF2QP3V5TQBT3NKZSCG67BQ"
+                case .polkadot:
+                    expected = "13nN6BGAoJwd7Nw1XxeBCx5YcBXuYnL94Mh7i3xBprqVSsFk"
                 }
 
                 #expect(derivedAddress == expected, "\(chain) failed to match address")
