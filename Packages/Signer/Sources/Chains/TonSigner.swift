@@ -10,7 +10,7 @@ public struct TonSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let transfer = TheOpenNetworkTransfer.with {
             $0.dest = input.destinationAddress
-            $0.amount = input.value.UInt
+            $0.amount = input.value.asUInt
             if let memo = input.memo {
                 $0.comment = memo
             }
@@ -28,14 +28,14 @@ public struct TonSigner: Signable {
 
         let transfer = TheOpenNetworkTransfer.with {
             $0.dest = input.token.senderTokenAddress // My Jetton Wallet address
-            $0.amount = jettonCreationFee.UInt
+            $0.amount = jettonCreationFee.asUInt
             if let memo = input.memo {
                 $0.comment = memo
             }
             $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
             $0.bounceable = true
             $0.jettonTransfer = .with {
-                $0.jettonAmount = input.value.UInt
+                $0.jettonAmount = input.value.asUInt
                 $0.toOwner = input.destinationAddress
                 $0.responseAddress = input.senderAddress
                 $0.forwardAmount = 1

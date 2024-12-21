@@ -24,8 +24,8 @@ public struct AptosSigner: Signable {
             }
             // TODO: - 3664390082 = 2086-22:08:02 +UTC, probably need to adjust
             $0.expirationTimestampSecs = 3664390082
-            $0.gasUnitPrice = input.fee.gasPrice.UInt
-            $0.maxGasAmount = input.fee.gasLimit.UInt
+            $0.gasUnitPrice = input.fee.gasPrice.asUInt
+            $0.maxGasAmount = input.fee.gasLimit.asUInt
             $0.sequenceNumber = Int64(input.sequence)
             $0.sender = input.senderAddress
             $0.privateKey = privateKey
@@ -39,7 +39,7 @@ public struct AptosSigner: Signable {
         return try sign(
             payload: .payload(.transfer(AptosTransferMessage.with {
                 $0.to = input.destinationAddress
-                $0.amount = input.value.UInt
+                $0.amount = input.value.asUInt
             })),
             input: input,
             privateKey: privateKey
@@ -55,7 +55,7 @@ public struct AptosSigner: Signable {
         return try sign(
             payload: .payload(.tokenTransferCoins(AptosTokenTransferCoinsMessage.with {
                 $0.to = input.destinationAddress
-                $0.amount = input.value.UInt
+                $0.amount = input.value.asUInt
                 $0.function = AptosStructTag.with {
                     $0.accountAddress = accountAddress
                     $0.module = module

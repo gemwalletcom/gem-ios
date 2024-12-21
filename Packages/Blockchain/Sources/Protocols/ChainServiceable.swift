@@ -34,8 +34,24 @@ public protocol ChainBroadcastable: Sendable {
     func broadcast(data: String, options: BroadcastOptions) async throws -> String
 }
 
+public struct TransactionStateRequest: Sendable {
+    public let id: String
+    public let senderAddress: String
+    public let block: String
+    
+    public init(
+        id: String,
+        senderAddress: String,
+        block: String
+    ) {
+        self.id = id
+        self.senderAddress = senderAddress
+        self.block = block
+    }
+}
+
 public protocol ChainTransactionStateFetchable: Sendable {
-    func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges
+    func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges
 }
 
 public protocol ChainSyncable: Sendable {

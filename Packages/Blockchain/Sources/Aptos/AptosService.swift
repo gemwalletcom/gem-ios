@@ -145,9 +145,9 @@ extension AptosService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension AptosService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: AptosTransaction.self)
 
         let state: TransactionState = transaction.success ? .confirmed : .reverted

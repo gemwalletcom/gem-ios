@@ -6,16 +6,20 @@ public extension BigInt {
         return BigInt(0)
     }
     
-    var int: Int {
+    var asInt: Int {
         return Int(self)
     }
     
-    var int64: Int64 {
+    var asInt64: Int64 {
         return Int64(self)
     }
     
-    var UInt: UInt64 {
+    var asUInt: UInt64 {
         return UInt64(self)
+    }
+    
+    var asUInt32: UInt32 {
+        return UInt32(self)
     }
     
     func increase(byPercentage percentage: Double) -> BigInt {

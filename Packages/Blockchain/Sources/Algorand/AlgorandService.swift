@@ -118,9 +118,9 @@ extension AlgorandService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension AlgorandService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: AlgorandTransactionStatus.self)
         
         let state: TransactionState = transaction.confirmed_round > 0 ? .confirmed : .failed

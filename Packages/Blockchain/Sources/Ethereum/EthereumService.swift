@@ -52,7 +52,7 @@ extension EthereumService {
     func getNonce(senderAddress: String) async throws -> Int {
         return try await provider
             .request(.transactionsCount(address: senderAddress))
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value.int
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value.asInt
     }
 
     func getChainId() async throws -> Int {
@@ -188,9 +188,9 @@ extension EthereumService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension EthereumService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transactionReceipt(id: id))
+            .request(.transactionReceipt(id: request.id))
             .map(as: JSONRPCResponse<EthereumTransactionReciept>.self).result
 
         if transaction.status == "0x0" || transaction.status == "0x1"  {
@@ -291,7 +291,7 @@ extension EthereumService: ChainTokenable {
             id: assetId,
             name: name,
             symbol: symbol,
-            decimals: decimals.int.asInt32,
+            decimals: decimals.asInt.asInt32,
             type: try assetId.getAssetType()
         )
     }

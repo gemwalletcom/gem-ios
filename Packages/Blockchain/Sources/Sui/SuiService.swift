@@ -139,11 +139,11 @@ extension SuiService {
         let input = SuiTransferInput(
             sender: sender,
             recipient: recipient,
-            amount: value.UInt,
+            amount: value.asUInt,
             coins: suiCoins,
             sendMax: sendMax,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             )
         )
@@ -169,10 +169,10 @@ extension SuiService {
         let input = SuiTokenTransferInput(
             sender: sender,
             recipient: recipient,
-            amount: value.UInt,
+            amount: value.asUInt,
             tokens: coins.map { $0.toGemstone() },
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             gasCoin: gas.toGemstone())
@@ -194,9 +194,9 @@ extension SuiService {
         let stakeInput = SuiStakeInput(
             sender: senderAddress,
             validator: validatorAddress,
-            stakeAmount: value.UInt,
+            stakeAmount: value.asUInt,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             coins: suiCoins
@@ -222,7 +222,7 @@ extension SuiService {
             sender: sender,
             stakedSui: object.objectRef,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             gasCoin: gas.toGemstone()
@@ -359,9 +359,9 @@ extension SuiService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension SuiService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: JSONRPCResponse<SuiTransaction>.self).result
         let state: TransactionState = switch transaction.effects.status.status {
         case "success": .confirmed
@@ -499,11 +499,11 @@ extension Blockchain.SuiCoin {
     func toGemstone() -> Gemstone.SuiCoin {
         Gemstone.SuiCoin(
             coinType: coinType,
-            balance: BigInt(stringLiteral: balance).UInt,
+            balance: BigInt(stringLiteral: balance).asUInt,
             objectRef: SuiObjectRef(
                 objectId: coinObjectId,
                 digest: digest,
-                version: BigInt(stringLiteral: version).UInt
+                version: BigInt(stringLiteral: version).asUInt
             )
         )
     }

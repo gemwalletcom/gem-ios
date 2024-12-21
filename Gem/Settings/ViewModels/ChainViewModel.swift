@@ -54,6 +54,7 @@ struct ChainViewModel {
         case .stellar: Images.Chains.stellar
         case .sonic: Images.Chains.sonic
         case .algorand: Images.Chains.algorand
+        case .polkadot: Images.Chains.polkadot
         }
     }
 

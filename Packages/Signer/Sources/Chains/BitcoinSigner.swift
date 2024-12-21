@@ -47,8 +47,8 @@ public struct BitcoinSigner: Signable {
         let signingInput = try BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
-            $0.amount = input.value.int64
-            $0.byteFee = input.fee.gasPrice.int64
+            $0.amount = input.value.asInt64
+            $0.byteFee = input.fee.gasPrice.asInt64
             $0.toAddress = input.destinationAddress
             $0.changeAddress = input.senderAddress
             $0.utxo = utxos

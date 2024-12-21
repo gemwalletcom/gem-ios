@@ -72,7 +72,12 @@ class TransactionService {
         let provider = chainServiceFactory.service(for: assetId.chain)
         var transactionId = transaction.id
         
-        let stateChanges = try await provider.transactionState(for: transaction.hash, senderAddress: transaction.from)
+        let request = TransactionStateRequest(
+            id: transaction.hash,
+            senderAddress: transaction.from,
+            block: transaction.blockNumber
+        )
+        let stateChanges = try await provider.transactionState(for: request)
         // update state changes
         
         NSLog("stateChanges: \(stateChanges)")

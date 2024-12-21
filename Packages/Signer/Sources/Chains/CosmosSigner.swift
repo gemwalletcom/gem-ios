@@ -32,7 +32,7 @@ public struct CosmosSigner: Signable {
                 .sei,
                 .noble:
             CosmosFee.with {
-                $0.gas = UInt64(messages.count * input.fee.gasLimit.int)
+                $0.gas = UInt64(messages.count * input.fee.gasLimit.asInt)
                 $0.amounts = [CosmosAmount.with {
                     $0.amount = input.fee.fee.description
                     $0.denom = chain.denom.rawValue
@@ -40,7 +40,7 @@ public struct CosmosSigner: Signable {
             }
         case .thorchain:
             CosmosFee.with {
-                $0.gas = UInt64(messages.count * input.fee.gasLimit.int)
+                $0.gas = UInt64(messages.count * input.fee.gasLimit.asInt)
             }
         }
 

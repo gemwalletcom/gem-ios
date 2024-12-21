@@ -45,6 +45,7 @@ public extension Chain {
         case .near: .near
         case .stellar: .stellar
         case .algorand: .algorand
+        case .polkadot: .polkadot
         }
     }
 }
