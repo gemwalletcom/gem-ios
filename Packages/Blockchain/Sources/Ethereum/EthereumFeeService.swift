@@ -47,6 +47,7 @@ extension EthereumService {
             default:
                 fatalError()
             }
+        case .account: fatalError()
         }
     }
     public func getTo(input: FeeInput) -> String {
@@ -71,6 +72,7 @@ extension EthereumService {
             default:
                 fatalError()
             }
+        case .account: fatalError()
         }
     }
 
@@ -109,9 +111,9 @@ extension EthereumService {
                 case .rewards:
                     fatalError()
                 }
-            default:
-                fatalError()
+            default: fatalError()
             }
+        case .account: fatalError()
         }
     }
 
@@ -202,6 +204,7 @@ extension EthereumService {
                 asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
             case .generic, .swap, .stake:
                 gasPriceType.priorityFee
+            case .account: fatalError()
             }
         }()
     

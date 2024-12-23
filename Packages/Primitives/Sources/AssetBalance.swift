@@ -10,23 +10,32 @@ public enum AssetBalanceType {
 public struct AssetBalanceChange {
     public let assetId: AssetId
     public let type: AssetBalanceType
+    public let isActive: Bool
     
-    public init(assetId: AssetId, type: AssetBalanceType) {
+    public init(
+        assetId: AssetId, type:
+        AssetBalanceType,
+        isActive: Bool
+    ) {
         self.assetId = assetId
         self.type = type
+        self.isActive = isActive
     }
 }
 
 public struct AssetBalance: Codable {
 	public let assetId: AssetId
 	public let balance: Balance
+    public let isActive: Bool
 
 	public init(
         assetId: AssetId,
-        balance: Balance
+        balance: Balance,
+        isActive: Bool = true
     ) {
 		self.assetId = assetId
 		self.balance = balance
+        self.isActive = isActive
 	}
 }
 
@@ -34,14 +43,16 @@ extension AssetBalance {
     public var coinChange: AssetBalanceChange {
         AssetBalanceChange(
             assetId: assetId,
-            type: AssetBalanceType.coin(available: balance.available, reserved: balance.reserved)
+            type: AssetBalanceType.coin(available: balance.available, reserved: balance.reserved),
+            isActive: isActive
         )
     }
     
     public var tokenChange: AssetBalanceChange {
         AssetBalanceChange(
             assetId: assetId,
-            type: AssetBalanceType.token(available: balance.available)
+            type: AssetBalanceType.token(available: balance.available),
+            isActive: isActive
         )
     }
 
@@ -55,7 +66,8 @@ extension AssetBalance {
                 reserved: balance.reserved,
                 locked: balance.locked,
                 frozen: balance.frozen
-            )
+            ),
+            isActive: isActive
         )
     }
 }

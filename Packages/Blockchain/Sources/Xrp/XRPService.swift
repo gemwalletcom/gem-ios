@@ -23,16 +23,26 @@ public struct XRPService: Sendable {
 // MARK: - Business Logic
 
 extension XRPService {
-    private func account(address: String) async throws -> XRPAccountResult {
+    private func account(address: String) async throws -> XRPAccount? {
         return try await provider
             .request(.account(address: address))
-            .map(as: XRPResult<XRPAccountResult>.self).result
+            .map(as: XRPResult<XRPAccountResult>.self).result.account_data
     }
     
     private func latestBlock() async throws -> BigInt {
         return try await provider
             .request(.latestBlock)
             .map(as: XRPResult<XRPLatestBlock>.self).result.ledger_current_index.asBigInt
+    }
+    
+    private func asset(address: String) async throws -> XRPAssetLine {
+        let objects = try await provider
+            .request(.accountObjects(address: address))
+            .map(as: XRPResult<XRPAccountObjects<[XRPAccountAsset]>>.self).result.account_objects
+        guard let asset = objects.first else {
+            throw AnyError("Unknown asset")
+        }
+        return asset.LowLimit
     }
     
     private func reservedBalance() -> BigInt {
@@ -44,9 +54,20 @@ extension XRPService {
 
 extension XRPService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = BigInt(stringLiteral: try await account(address: address).account_data.Balance)
-        let reserved = reservedBalance()
-        let available = max(balance - reserved, .zero)
+        let account = try await account(address: address)
+        
+        let (available, reserved): (BigInt, BigInt) = {
+            if let account = account {
+                let balance = BigInt(stringLiteral: account.Balance)
+                let reserved = reservedBalance()
+                return (
+                    max(balance - reserved, .zero),
+                    reserved
+                )
+            } else {
+                return (.zero, .zero)
+            }
+        }()
         
         return Primitives.AssetBalance(
             assetId: chain.assetId,
@@ -87,10 +108,11 @@ extension XRPService: ChainFeeRateFetchable {
 
 extension XRPService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let account = account(address: input.senderAddress)
-
-        return try await TransactionPreload(
-            sequence: Int(account.account_data.Sequence),
+        guard let account = try await account(address: input.senderAddress) else {
+            throw AnyError("Invalid account")
+        }
+        return TransactionPreload(
+            sequence: Int(account.Sequence),
             fee: input.defaultFee
         )
     }
@@ -104,7 +126,9 @@ extension XRPService: ChainBroadcastable {
             .request(.broadcast(data: data))
             .map(as: XRPResult<XRPTransactionBroadcast>.self).result
         
-        if let message = result.engine_result_message, !message.isEmpty, !result.accepted  {
+        if let message = result.engine_result_message, !message.isEmpty, result.accepted == false  {
+            throw AnyError(message)
+        } else if let message = result.error_exception {
             throw AnyError(message)
         }
         guard let hash = result.tx_json?.hash else {
@@ -152,11 +176,24 @@ extension XRPService: ChainStakable {
 
 extension XRPService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let asset = try await asset(address: tokenId)
+        let currency = try Data.from(hex: asset.currency.trimmingCharacters(in: CharacterSet(charactersIn: "0")))
+        guard let symbol = String(data: currency, encoding: .ascii) else {
+            throw AnyError("invalid symbol")
+        }
+        
+        return Asset(
+            id: AssetId(chain: chain, tokenId: tokenId),
+            name: symbol,
+            symbol: symbol,
+            decimals: 15, //TODO: Default?
+            type: .token
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
         false
+        //tokenId.hasPrefix("r")
     }
 }
 

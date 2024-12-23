@@ -11,7 +11,8 @@ public struct AssetConfiguration: Sendable {
             .aptos,
             .tron,
             .aptos,
-            //.algorand, TODO: Enable once asset activation is working
+            .algorand,
+            //.xrp, Not complete
         ],
         EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) }
     ]

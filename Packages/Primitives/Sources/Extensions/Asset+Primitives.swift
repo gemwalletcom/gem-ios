@@ -37,6 +37,13 @@ extension Asset {
         }
         return tokenId
     }
+    
+    public func getTokenIdAsInt() throws -> Int {
+        guard let tokenId = tokenId, let tokenId = UInt64(tokenId) else {
+            throw AnyError("tokenId is null")
+        }
+        return Int(tokenId)
+    }
 }
 
 public extension Array where Element == Asset {

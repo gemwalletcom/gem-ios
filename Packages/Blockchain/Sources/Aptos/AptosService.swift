@@ -23,22 +23,9 @@ public struct AptosService: Sendable {
     }
 
     private func getAptosAccount(address: String) async throws -> AptosAccount {
-        do {
-            return try await provider
-                .request(.account(address: address))
-                .mapOrError(
-                    as: AptosAccount.self,
-                    asError: AptosError.self
-                )
-        } catch let apiError as AptosError {
-            let code = AptosErrorCode(rawValue: apiError.error_code)
-            switch code {
-            case .accountNotFound:
-                return AptosAccount(sequence_number: "")
-            case .none:
-                throw apiError
-            }
-        }
+        try await provider
+            .request(.account(address: address))
+            .mapOrCatch(as: AptosAccount.self, codes: [404], result: .empty)
     }
     
     public func fee(gasPrice: GasPriceType, transferType: TransferDataType, destinationAddress: String) async throws -> Fee {
@@ -56,7 +43,7 @@ public struct AptosService: Sendable {
             case .token: BigInt(1000)
             }
             case .swap: BigInt(1000)
-            case .stake, .generic: fatalError()
+            case .stake, .generic, .account: fatalError()
         }
          
         return Fee(
@@ -72,7 +59,11 @@ public struct AptosService: Sendable {
 extension AptosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         let resource = try await provider.request(.balance(address: address))
-            .map(as: AptosResource<AptosResourceBalance>.self)
+            .mapOrCatch(
+                as: AptosResource<AptosResourceBalance>.self,
+                codes: [404],
+                result: AptosResource(type: "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", data: AptosResourceBalance(coin: AptosResourceCoin(value: "0")))
+            )
         
         let balance = BigInt(stringLiteral: resource.data.coin.value)
         return AssetBalance(assetId: chain.assetId, balance: Balance(available: balance))
@@ -224,16 +215,14 @@ extension AptosService: ChainLatestBlockFetchable {
     }
 }
 
-extension AptosError: LocalizedError {
-    public var errorDescription: String? {
-        message
-    }
-}
-
 // MARK: - ChainAddressStatusFetchable
 
 extension AptosService: ChainAddressStatusFetchable {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         []
     }
+}
+
+extension AptosAccount {
+    static let empty = AptosAccount(sequence_number: "")
 }

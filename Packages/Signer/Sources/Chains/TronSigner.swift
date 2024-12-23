@@ -14,33 +14,17 @@ public struct TronSigner: Signable {
             $0.toAddress = input.destinationAddress
             $0.amount = input.value.asInt64
         }
-        let signingInput = try prepareSigningInput(block: input.block, contract: .transfer(contract), feeLimit: .none, privateKey: privateKey)
-        let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
-        return output.json
+        return try sign(input: input, contract: .transfer(contract), feeLimit: .none, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let contract = TronTransferTRC20Contract.with {
-            $0.contractAddress = input.asset.tokenId!
+        let contract = try TronTransferTRC20Contract.with {
+            $0.contractAddress = try input.asset.getTokenId()
             $0.ownerAddress = input.senderAddress
             $0.toAddress = input.destinationAddress
             $0.amount = input.value.magnitude.serialize()
         }
-        let signingInput = try prepareSigningInput(block: input.block, contract: .transferTrc20Contract(contract), feeLimit: input.fee.gasPrice.asInt, privateKey: privateKey)
-        let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
-        return output.json
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
+        return try sign(input: input, contract: .transferTrc20Contract(contract), feeLimit: input.fee.gasPrice.asInt, privateKey: privateKey)
     }
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -70,12 +54,10 @@ public struct TronSigner: Signable {
                     }
                 }
             }
-            let freezeInput = try prepareSigningInput(block: input.block, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey)
-            let voteInput = try prepareSigningInput(block: input.block, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
-            let freezeOutput: TronSigningOutput = AnySigner.sign(input: freezeInput, coin: input.coinType)
-            let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
-
-            return [freezeOutput.json, voteOutput.json]
+            return [
+                try sign(input: input, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey),
+                try sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
+            ]
         case .unstake:
             guard case let .vote(votes) = input.extra else {
                 throw(AnyError("vote for stacking should be always set"))
@@ -102,13 +84,10 @@ public struct TronSigner: Signable {
                         }
                     }
                 }
-
-                let unfreezeInput = try prepareSigningInput(block: input.block, contract: .unfreezeBalanceV2(unfreezeContract), feeLimit: .none, privateKey: privateKey)
-                let voteInput = try prepareSigningInput(block: input.block, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
-                let unfreezeOutput: TronSigningOutput = AnySigner.sign(input: unfreezeInput, coin: input.coinType)
-                let voteOutput: TronSigningOutput = AnySigner.sign(input: voteInput, coin: input.coinType)
-                
-                return [unfreezeOutput.json, voteOutput.json]
+                return [
+                    try sign(input: input, contract: .unfreezeBalanceV2(unfreezeContract), feeLimit: .none, privateKey: privateKey),
+                    try sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey),
+                ]
             }
         case .redelegate:
             guard case let .vote(votes) = input.extra else {
@@ -133,26 +112,27 @@ public struct TronSigner: Signable {
                 $0.ownerAddress = input.senderAddress
             })
         }
-        let signingInput = try prepareSigningInput(block: input.block, contract: contract, feeLimit: .none, privateKey: privateKey)
-        let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
-        return [output.json]
+        return [
+            try sign(input: input, contract: contract, feeLimit: .none, privateKey: privateKey)
+        ]
     }
 }
 
 // MARK: - Private
 
 extension TronSigner {
-    func prepareSigningInput(
-        block: SignerInputBlock,
+    func sign(
+        input: SignerInput,
         contract: WalletCore.TronTransaction.OneOf_ContractOneof,
         feeLimit: Int?,
         privateKey: Data
-    ) throws -> TronSigningInput {
+    ) throws -> String {
+        let block = input.block
         let transactionTreeRoot = try Data.from(hex: block.transactionTreeRoot)
         let parentHash = try Data.from(hex: block.parentHash)
         let witnessAddress = try Data.from(hex: block.witnessAddress)
 
-        return TronSigningInput.with {
+        let signingInput = TronSigningInput.with {
             $0.transaction = TronTransaction.with {
                 $0.contractOneof = contract
                 $0.timestamp = Int64(block.timestamp)
@@ -171,5 +151,12 @@ extension TronSigner {
             }
             $0.privateKey = privateKey
         }
+        let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
+        return output.json
     }
 }

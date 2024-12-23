@@ -31,45 +31,36 @@ public struct AlgorandSigner: Signable {
     }
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let transfer = AlgorandTransfer.with {
-            $0.toAddress = input.destinationAddress
-            $0.amount = input.value.asUInt
-        }
         return try sign(
             input: input,
-            message: .transfer(transfer),
+            message: .transfer(.with {
+                $0.toAddress = input.destinationAddress
+                $0.amount = input.value.asUInt
+            }),
             privateKey: privateKey
         )
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let tokenId = try input.asset.getTokenId()
-        let transfer = AlgorandAssetTransfer.with {
-            $0.toAddress = input.destinationAddress
-            $0.amount = input.value.asUInt
-            $0.assetID = UInt64(tokenId)!
-        }
         return try sign(
             input: input,
-            message: .assetTransfer(transfer),
+            message: .assetTransfer(.with {
+                $0.toAddress = input.destinationAddress
+                $0.amount = input.value.asUInt
+                $0.assetID = try input.asset.getTokenIdAsInt().asUInt64
+            }),
             privateKey: privateKey
         )
     }
     
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
+    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+        return try sign(
+            input: input,
+            message: .assetOptIn(.with {
+                $0.assetID = try input.asset.getTokenIdAsInt().asUInt64
+            }),
+            privateKey: privateKey
+        )
     }
 }
     

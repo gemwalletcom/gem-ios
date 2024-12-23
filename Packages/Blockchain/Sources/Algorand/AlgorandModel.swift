@@ -22,10 +22,18 @@ public struct AlgorandAccountAccount: Codable, Sendable {
 public struct AlgorandAccount: Codable, Sendable {
 	public let amount: UInt64
 	public let assets: [AlgorandAccountAccount]
+	public let min_balance: Int32
 
-	public init(amount: UInt64, assets: [AlgorandAccountAccount]) {
+	enum CodingKeys: String, CodingKey, Codable {
+		case amount,
+			assets,
+			min_balance = "min-balance"
+	}
+
+	public init(amount: UInt64, assets: [AlgorandAccountAccount], min_balance: Int32) {
 		self.amount = amount
 		self.assets = assets
+		self.min_balance = min_balance
 	}
 }
 
@@ -56,17 +64,11 @@ public struct AlgorandAssetResponse: Codable, Sendable {
 }
 
 public struct AlgorandTransactionBroadcast: Codable, Sendable {
-	public let txId: String
+	public let txId: String?
+	public let message: String?
 
-	public init(txId: String) {
+	public init(txId: String?, message: String?) {
 		self.txId = txId
-	}
-}
-
-public struct AlgorandTransactionBroadcastError: Codable, Sendable {
-	public let message: String
-
-	public init(message: String) {
 		self.message = message
 	}
 }

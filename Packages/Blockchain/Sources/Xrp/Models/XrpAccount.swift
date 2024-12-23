@@ -14,10 +14,34 @@ public struct XRPAccount: Codable, Sendable {
 	}
 }
 
-public struct XRPAccountResult: Codable, Sendable {
-	public let account_data: XRPAccount
+public struct XRPAssetLine: Codable, Sendable {
+	public let currency: String
 
-	public init(account_data: XRPAccount) {
+	public init(currency: String) {
+		self.currency = currency
+	}
+}
+
+public struct XRPAccountAsset: Codable, Sendable {
+	public let LowLimit: XRPAssetLine
+
+	public init(LowLimit: XRPAssetLine) {
+		self.LowLimit = LowLimit
+	}
+}
+
+public struct XRPAccountObjects<T: Codable & Sendable>: Codable, Sendable {
+	public let account_objects: T
+
+	public init(account_objects: T) {
+		self.account_objects = account_objects
+	}
+}
+
+public struct XRPAccountResult: Codable, Sendable {
+	public let account_data: XRPAccount?
+
+	public init(account_data: XRPAccount?) {
 		self.account_data = account_data
 	}
 }
@@ -56,6 +80,16 @@ public struct XRPResult<T: Codable & Sendable>: Codable, Sendable {
 	}
 }
 
+public struct XRPTokenId: Codable, Sendable {
+	public let issuer: String
+	public let currency: String
+
+	public init(issuer: String, currency: String) {
+		self.issuer = issuer
+		self.currency = currency
+	}
+}
+
 public struct XRPTransaction: Codable, Sendable {
 	public let hash: String
 
@@ -65,13 +99,15 @@ public struct XRPTransaction: Codable, Sendable {
 }
 
 public struct XRPTransactionBroadcast: Codable, Sendable {
-	public let accepted: Bool
+	public let accepted: Bool?
 	public let engine_result_message: String?
+	public let error_exception: String?
 	public let tx_json: XRPTransaction?
 
-	public init(accepted: Bool, engine_result_message: String?, tx_json: XRPTransaction?) {
+	public init(accepted: Bool?, engine_result_message: String?, error_exception: String?, tx_json: XRPTransaction?) {
 		self.accepted = accepted
 		self.engine_result_message = engine_result_message
+		self.error_exception = error_exception
 		self.tx_json = tx_json
 	}
 }

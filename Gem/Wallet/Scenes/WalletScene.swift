@@ -223,7 +223,8 @@ extension WalletScene {
         case .stake,
             .enableNotifications,
             .accountActivation,
-            .accountBlockedMultiSignature:
+            .accountBlockedMultiSignature,
+            .activateAsset:
             Task {
                 try await bannerService.handleAction(action)
             }

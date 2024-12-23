@@ -353,7 +353,7 @@ extension ConfirmTransferViewModel {
         switch dataModel.chain {
         case .solana:
             switch dataModel.type {
-            case .transfer, .stake: .standard
+            case .transfer, .stake, .account: .standard
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
         default: .standard
@@ -378,6 +378,11 @@ extension ConfirmTransferViewModel {
                 return dataModel.data.value
             case .withdraw(let delegation):
                 return delegation.base.balanceValue
+            }
+        case .account(let asset, let type):
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            switch type {
+            case .activate: return balance.available
             }
         }
     }

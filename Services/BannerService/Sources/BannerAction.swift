@@ -24,7 +24,8 @@ extension BannerAction {
         switch event {
         case .stake,
             .accountActivation,
-            .accountBlockedMultiSignature: false
+            .accountBlockedMultiSignature,
+            .activateAsset: false
         case .enableNotifications: true
         }
     }

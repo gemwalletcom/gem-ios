@@ -85,6 +85,12 @@ public enum Localized {
         return Localized.tr("Localizable", "banner.account_activation.title", String(describing: p1), fallback: "%@ Account Activation Fee")
       }
     }
+    public enum ActivateAsset {
+      /// To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.
+      public static func description(_ p1: Any, _ p2: Any) -> String {
+        return Localized.tr("Localizable", "banner.activate_asset.description", String(describing: p1), String(describing: p2), fallback: "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.")
+      }
+    }
     public enum EnableNotifications {
       /// Stay on top of your wallet activity.
       public static let description = Localized.tr("Localizable", "banner.enable_notifications.description", fallback: "Stay on top of your wallet activity.")
@@ -714,6 +720,10 @@ public enum Localized {
     public static let title = Localized.tr("Localizable", "transfer.title", fallback: "Transfer")
     /// To
     public static let to = Localized.tr("Localizable", "transfer.to", fallback: "To")
+    public enum ActivateAsset {
+      /// Activate Asset
+      public static let title = Localized.tr("Localizable", "transfer.activate_asset.title", fallback: "Activate Asset")
+    }
     public enum Amount {
       /// Amount
       public static let title = Localized.tr("Localizable", "transfer.amount.title", fallback: "Amount")

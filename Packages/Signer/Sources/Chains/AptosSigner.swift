@@ -30,8 +30,12 @@ public struct AptosSigner: Signable {
             $0.sender = input.senderAddress
             $0.privateKey = privateKey
         }
-        
         let output: AptosSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
         return output.json
     }
     
@@ -81,13 +85,5 @@ public struct AptosSigner: Signable {
         case .approval:
             fatalError()
         }
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
     }
 }

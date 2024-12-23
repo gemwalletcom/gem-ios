@@ -68,6 +68,7 @@ extension OptimismGasOracle {
                 asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
             case .generic, .swap, .stake:
                 input.gasPrice.priorityFee
+            case .account: fatalError()
             }
         }()
 
@@ -77,8 +78,7 @@ extension OptimismGasOracle {
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .generic, .swap:
                 input.value
-            case .stake:
-                fatalError()
+            case .stake, .account: fatalError()
             }
         }()
         
@@ -145,7 +145,7 @@ extension OptimismGasOracle {
             }
         case .generic, .swap:
             break
-        case .stake:
+        case .stake, .account:
             fatalError()
         }
         

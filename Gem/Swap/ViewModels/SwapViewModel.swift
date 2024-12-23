@@ -410,6 +410,7 @@ extension Gemstone.SwapProvider {
         case .orca: Images.SwapProviders.orca
         case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap
         case .thorchain: Images.SwapProviders.thorchain
+        case .across: Images.SwapProviders.across
         }
     }
 }

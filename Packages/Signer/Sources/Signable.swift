@@ -12,4 +12,31 @@ public protocol Signable {
     func swap(input: SignerInput, privateKey: Data) throws -> String
     func signStake(input: SignerInput, privateKey: Data) throws -> [String]
     func signMessage(message: SignMessage, privateKey: Data) throws -> String
+    func signAccountAction(input: SignerInput, privateKey: Data) throws -> String
+}
+
+extension Signable {
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        throw AnyError("unimplemented")
+    }
+    
+    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+        throw AnyError("unimplemented")
+    }
+    
+    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+        throw AnyError("unimplemented")
+    }
+    
+    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+        throw AnyError("unimplemented")
+    }
+    
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+        throw AnyError("unimplemented")
+    }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        throw AnyError("unimplemented")
+    }
 }

@@ -31,14 +31,6 @@ public struct BitcoinSigner: Signable {
         }
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
     func sign(input: SignerInput, privateKey: Data, opreturn: String?) throws -> String {
         let coinType = input.coinType
         let utxos = input.utxos.map {

@@ -18,7 +18,7 @@ public struct ErrorWrapper: Error, LocalizedError {
             case .NotSupportedChain: Localized.Errors.Swap.notSupportedChain
             case .NotSupportedAsset: Localized.Errors.Swap.notSupportedAsset
             case .NoQuoteAvailable: Localized.Errors.Swap.noQuoteAvailable
-            case .NotSupportedPair: Localized.Errors.Swap.notSupportedPair
+            case .NotSupportedPair, .NoAvailableProvider: Localized.Errors.Swap.notSupportedPair
             case .InvalidAddress,
                 .InvalidAmount,
                 .NetworkError,

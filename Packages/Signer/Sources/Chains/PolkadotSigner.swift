@@ -27,6 +27,11 @@ public struct PolkadotSigner: Signable {
             $0.messageOneof = message
         }
         let output: PolkadotSigningOutput = AnySigner.sign(input: input, coin: .polkadot)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
         return output.encoded.hexString.append0x
     }
     
@@ -41,26 +46,6 @@ public struct PolkadotSigner: Signable {
             }),
             privateKey: privateKey
         )
-    }
-    
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
     }
 }
     

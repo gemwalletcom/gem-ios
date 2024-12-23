@@ -100,6 +100,7 @@ struct Columns {
         static let isEnabled = Column("isEnabled")
         static let isHidden = Column("isHidden")
         static let isPinned = Column("isPinned")
+        static let isActive = Column("isActive")
         static let available = Column("available")
         static let availableAmount = Column("availableAmount")
         static let frozen = Column("frozen")
