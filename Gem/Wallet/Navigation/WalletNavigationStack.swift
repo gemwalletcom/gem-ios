@@ -46,7 +46,7 @@ struct WalletNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Price.self) {
                 ChartScene(
-                    model: ChartsViewModel(
+                    model: ChartSceneViewModel(
                         priceService: walletsService.priceService,
                         assetsService: walletsService.assetsService,
                         assetModel: AssetViewModel(asset: $0.asset)

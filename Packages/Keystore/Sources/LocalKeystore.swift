@@ -4,7 +4,7 @@ import Store
 import WalletCore
 
 @Observable
-public final class LocalKeystore: Keystore {
+public final class LocalKeystore: Keystore, @unchecked Sendable {
     public let directory: URL
 
     private let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
@@ -13,7 +13,8 @@ public final class LocalKeystore: Keystore {
     private let walletKeyStore: WalletKeyStore
     
     let keystorePassword: KeystorePassword
-    
+
+    // TODO: - remove observable and this mutation and create a wrapper of keystore to monitor current wallet changes
     public var currentWalletId: Primitives.WalletId? = .none
     public var currentWallet: Primitives.Wallet? = .none
     
