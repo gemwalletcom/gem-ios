@@ -118,9 +118,9 @@ extension XRPService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension XRPService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let status = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: XRPResult<XRPTransactionStatus>.self).result.status
         let state: TransactionState = status == "success" ? .confirmed : .pending
         return TransactionChanges(state: state)

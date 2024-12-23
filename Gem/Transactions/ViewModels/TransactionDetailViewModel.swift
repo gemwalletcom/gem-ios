@@ -149,7 +149,12 @@ struct TransactionDetailViewModel {
         guard let participant = participant else {
             return .none
         }
-        return SimpleAccount(name: .none, chain: model.transaction.transaction.assetId.chain, address: participant)
+        return SimpleAccount(
+            name: .none,
+            chain: model.transaction.transaction.assetId.chain,
+            address: participant,
+            assetImage: .none
+        )
     }
     
     var transactionState: TransactionState {

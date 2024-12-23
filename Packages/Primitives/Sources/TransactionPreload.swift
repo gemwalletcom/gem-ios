@@ -10,6 +10,7 @@ public enum SigningdExtra: Sendable {
 public struct TransactionPreload: Sendable {
     public let accountNumber: Int
     public let sequence: Int
+    public let data: SigningData
     public let block: SignerInputBlock
     // Solana only
     public let token: SignerInputToken
@@ -22,6 +23,7 @@ public struct TransactionPreload: Sendable {
     public init(
         accountNumber: Int = 0,
         sequence: Int = 0,
+        data: SigningData = .none,
         block: SignerInputBlock = SignerInputBlock(),
         token: SignerInputToken = SignerInputToken(),
         chainId: String = "",
@@ -32,6 +34,7 @@ public struct TransactionPreload: Sendable {
     ) {
         self.accountNumber = accountNumber
         self.sequence = sequence
+        self.data = data
         self.block = block
         self.token = token
         self.chainId = chainId

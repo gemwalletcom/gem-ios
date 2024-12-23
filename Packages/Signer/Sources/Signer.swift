@@ -62,6 +62,7 @@ public struct Signer {
         case .near: NearSigner()
         case .stellar: StellarSigner()
         case .algorand: AlgorandSigner()
+        case .polkadot: PolkadotSigner()
         }
     }
 }

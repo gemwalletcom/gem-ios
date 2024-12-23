@@ -25,6 +25,7 @@ import func Gemstone.permit2DataToEip712Json
 import class Swap.SwapPairSelectorViewModel
 import struct Swap.SwapAvailabilityResult
 import struct Swap.ErrorWrapper
+import enum Gemstone.SwapProvider
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
@@ -104,7 +105,13 @@ class SwapViewModel {
     var providerField: String { Localized.Common.provider }
     var providerText: String? {
         if case .loaded(let result) = swapAvailabilityState {
-            return result.quote.data.provider.name
+            return SwapProviderViewModel(provider: result.quote.data.provider).providerText
+        }
+        return .none
+    }
+    var providerImage: AssetImage? {
+        if case .loaded(let result) = swapAvailabilityState {
+            return SwapProviderViewModel(provider: result.quote.data.provider).providerImage
         }
         return .none
     }
@@ -203,7 +210,7 @@ extension SwapViewModel {
 
         do {
             switch fromAsset.type {
-            case .trc20, .ibc, .jetton, .synth:
+            case .trc20, .ibc, .jetton, .synth, .asa:
                 fatalError("Unsupported asset type")
             case .native, .spl, .token:
                 let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
@@ -263,8 +270,8 @@ extension SwapViewModel {
                         let data = try getSwapDataOnApprove(
                             fromAsset: fromAsset,
                             toAsset: toAsset,
-                            spender: data.spender,
-                            spenderName: swapAvailability.quote.data.provider.name
+                            quote: swapAvailability.quote,
+                            spender: data.spender
                         )
                         onTransfer(data: data)
                     }
@@ -294,11 +301,17 @@ extension SwapViewModel {
         return amount > 0
     }
 
-    private func getSwapDataOnApprove(fromAsset: Asset, toAsset: Asset, spender: String, spenderName: String) throws -> TransferData {
-        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(spender: spender, allowance: .MAX_256))
+    private func getSwapDataOnApprove(
+        fromAsset: Asset,
+        toAsset: Asset,
+        quote: SwapQuote,
+        spender: String
+    ) throws -> TransferData {
+        let action = SwapAction.approval(quote, spender: spender, allowance: .MAX_256)
+        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(quote, spender: spender, allowance: .MAX_256))
         let recipientData = RecipientData(
             asset: fromAsset,
-            recipient: Recipient(name: spenderName, address: try fromAsset.getTokenId(), memo: .none),
+            recipient: Recipient(name: action.provider.name, address: try fromAsset.getTokenId(), memo: .none),
             amount: .none
         )
 
@@ -386,5 +399,17 @@ extension SwapViewModel {
     
     public func getAssetsForPayAssetId(assetId: AssetId) -> ([Primitives.Chain], [Primitives.AssetId]) {
         swapService.supportedAssets(for: assetId)
+    }
+}
+
+extension Gemstone.SwapProvider {
+    var image: Image {
+        switch self {
+        case .uniswapV3: Images.SwapProviders.uniswap
+        case .jupiter: Images.SwapProviders.jupiter
+        case .orca: Images.SwapProviders.orca
+        case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap
+        case .thorchain: Images.SwapProviders.thorchain
+        }
     }
 }

@@ -17,6 +17,7 @@ struct ChainViewModel {
     var image: Image {
         switch chain {
         case .bitcoin: Images.Chains.bitcoin
+        case .bitcoinCash: Images.Chains.bitcoincash
         case .litecoin: Images.Chains.litecoin
         case .ethereum: Images.Chains.ethereum
         case .smartChain: Images.Chains.smartchain
@@ -53,6 +54,7 @@ struct ChainViewModel {
         case .stellar: Images.Chains.stellar
         case .sonic: Images.Chains.sonic
         case .algorand: Images.Chains.algorand
+        case .polkadot: Images.Chains.polkadot
         }
     }
 

@@ -12,7 +12,7 @@ public struct TronSigner: Signable {
         let contract = TronTransferContract.with {
             $0.ownerAddress = input.senderAddress
             $0.toAddress = input.destinationAddress
-            $0.amount = input.value.int64
+            $0.amount = input.value.asInt64
         }
         let signingInput = try prepareSigningInput(block: input.block, contract: .transfer(contract), feeLimit: .none, privateKey: privateKey)
         let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
@@ -26,7 +26,7 @@ public struct TronSigner: Signable {
             $0.toAddress = input.destinationAddress
             $0.amount = input.value.magnitude.serialize()
         }
-        let signingInput = try prepareSigningInput(block: input.block, contract: .transferTrc20Contract(contract), feeLimit: input.fee.gasPrice.int, privateKey: privateKey)
+        let signingInput = try prepareSigningInput(block: input.block, contract: .transferTrc20Contract(contract), feeLimit: input.fee.gasPrice.asInt, privateKey: privateKey)
         let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
         return output.json
     }
@@ -56,7 +56,7 @@ public struct TronSigner: Signable {
             }
             let freezeContract = TronFreezeBalanceV2Contract.with {
                 $0.ownerAddress = input.senderAddress
-                $0.frozenBalance = input.value.int64
+                $0.frozenBalance = input.value.asInt64
                 $0.resource = "BANDWIDTH"  // Or "ENERGY"
             }
 
@@ -83,13 +83,13 @@ public struct TronSigner: Signable {
             if votes.isEmpty {
                 contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
-                    $0.unfreezeBalance = input.value.int64
+                    $0.unfreezeBalance = input.value.asInt64
                     $0.resource = "BANDWIDTH"  // Or "ENERGY"
                 })
             } else {
                 let unfreezeContract = TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
-                    $0.unfreezeBalance = input.value.int64
+                    $0.unfreezeBalance = input.value.asInt64
                     $0.resource = "BANDWIDTH"  // Or "ENERGY"
                 }
                 let voteContract = TronVoteWitnessContract.with {

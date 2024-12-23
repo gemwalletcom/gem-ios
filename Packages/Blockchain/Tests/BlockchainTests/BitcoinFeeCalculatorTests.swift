@@ -48,7 +48,7 @@ final class BitcoinFeeTests {
         )
 
         let coinType = chain.chain.coinType
-        let byteFee = Int(round(Double(feeInput.gasPrice.gasPrice.int) / 1000.0))
+        let byteFee = Int(round(Double(feeInput.gasPrice.gasPrice.asInt) / 1000.0))
         let computedGasPrice = max(byteFee, chain.minimumByteFee)
 
         let unspent = utxos.map { $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType) }
@@ -58,7 +58,7 @@ final class BitcoinFeeTests {
         let input = BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = hashType
-            $0.amount = feeInput.value.int64
+            $0.amount = feeInput.value.asInt64
             $0.byteFee = Int64(computedGasPrice)
             $0.toAddress = feeInput.destinationAddress
             $0.changeAddress = feeInput.senderAddress

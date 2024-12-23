@@ -13,7 +13,7 @@ public struct SolanaSigner: Signable {
         let coinType = input.coinType
         let type = SolanaSigningInput.OneOf_TransactionType.transferTransaction(.with {
             $0.recipient = input.destinationAddress
-            $0.value = input.value.UInt
+            $0.value = input.value.asUInt
             $0.memo = input.memo.valueOrEmpty
         })
                                                                                 
@@ -24,7 +24,7 @@ public struct SolanaSigner: Signable {
         let coinType = input.coinType
         let decimals = UInt32(input.asset.decimals)
         let tokenId = try input.asset.getTokenId()
-        let amount = input.value.UInt
+        let amount = input.value.asUInt
         let destinationAddress = input.destinationAddress
         let tokenProgram: WalletCore.SolanaTokenProgramId = switch input.token.tokenProgram {
         case .token: .tokenProgram
@@ -74,7 +74,7 @@ public struct SolanaSigner: Signable {
             }
             if input.fee.priorityFee > 0 {
                 $0.priorityFeePrice = .with {
-                    $0.price = input.fee.priorityFee.UInt
+                    $0.price = input.fee.priorityFee.asUInt
                 }
             }
             $0.privateKey = privateKey
@@ -147,7 +147,7 @@ public struct SolanaSigner: Signable {
         case .stake(let validator):
             transactionType = .delegateStakeTransaction(.with {
                 $0.validatorPubkey = validator.id
-                $0.value = input.value.UInt
+                $0.value = input.value.asUInt
             })
         case .unstake(let delegation):
             transactionType = .deactivateStakeTransaction(.with {
@@ -156,7 +156,7 @@ public struct SolanaSigner: Signable {
         case .withdraw(let delegation):
             transactionType = .withdrawTransaction(.with {
                 $0.stakeAccount = delegation.base.delegationId
-                $0.value = delegation.base.balanceValue.UInt
+                $0.value = delegation.base.balanceValue.asUInt
             })
         case .redelegate,
             .rewards:
@@ -166,10 +166,9 @@ public struct SolanaSigner: Signable {
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {
-        guard let data = Base58.decodeNoCheck(string: string) else {
-            throw AnyError("string is not Base58 encoding!");
-        }
-        return data.base64EncodedString().paddded
+        return try Base58.decodeNoCheck(string: string)
+            .base64EncodedString()
+            .paddded
     }
     
     public func signMessage(message: SignMessage, privateKey: Data) throws -> String {

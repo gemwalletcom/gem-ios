@@ -340,7 +340,7 @@ extension TronService: ChainTransactionPreloadable {
         let signingExtra: SigningdExtra? = {
             guard case let .stake(_, stakeType) = input.type else { return nil }
             guard let votes = tronVotes else { return nil }
-            let currentVote = (input.value / BigInt(10).power(Int(input.asset.decimals))).UInt
+            let currentVote = (input.value / BigInt(10).power(Int(input.asset.decimals))).asUInt
             var result = votes.reduce(into: [String: UInt64]()) { result, vote in
                 result[vote.vote_address] = vote.vote_count
             }
@@ -389,9 +389,9 @@ extension TronService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension TronService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transactionReceipt(id: id))
+            .request(.transactionReceipt(id: request.id))
             .map(as: TronTransactionReceipt.self)
     
         if let receipt = transaction.receipt {
@@ -540,7 +540,7 @@ extension TronService: ChainTokenable {
             id: assetId,
             name: name,
             symbol: symbol,
-            decimals: decimals.int.asInt32,
+            decimals: decimals.asInt.asInt32,
             type: try assetId.getAssetType()
         )
     }

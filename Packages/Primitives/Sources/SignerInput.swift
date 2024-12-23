@@ -17,6 +17,7 @@ public struct SignerInput {
     public let destinationAddress: String
 
     // token: Solana only
+    public let data: SigningData
     public let token: SignerInputToken
     public let utxos: [UTXO]
     public let messageBytes: String
@@ -35,6 +36,7 @@ public struct SignerInput {
         sequence: Int,
         senderAddress: String,
         destinationAddress: String,
+        data: SigningData,
         block: SignerInputBlock,
         token: SignerInputToken,
         utxos: [UTXO],
@@ -52,6 +54,7 @@ public struct SignerInput {
         self.sequence = sequence
         self.senderAddress = senderAddress
         self.destinationAddress = destinationAddress
+        self.data = data
         self.block = block
         self.token = token
         self.utxos = utxos

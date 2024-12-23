@@ -11,6 +11,7 @@ struct SimpleAccount {
     let name: String?
     let chain: Chain
     let address: String
+    let assetImage: AssetImage?
 }
 
 struct AddressListItem: View {
@@ -20,11 +21,15 @@ struct AddressListItem: View {
     let account: SimpleAccount
 
     var body: some View {
-        ListItemView(title: title, subtitle: subtitle)
-            .contextMenu {
-                ContextMenuCopy(title: Localized.Common.copy, value: account.address)
-                ContextMenuViewURL(title: addressExplorerText, url: addressExplorerUrl, image: SystemImage.globe)
+        HStack {
+            ListItemView(title: title, subtitle: subtitle)
+            if let assetImage = account.assetImage {
+                AssetImageView(assetImage: assetImage, size: Sizing.list.image)
             }
+        }.contextMenu {
+            ContextMenuCopy(title: Localized.Common.copy, value: account.address)
+            ContextMenuViewURL(title: addressExplorerText, url: addressExplorerUrl, image: SystemImage.globe)
+        }
     }
     
     var subtitle: String {

@@ -27,7 +27,6 @@ public struct FeeUnitViewModel {
         switch unit.type {
         case .satVb: Localized.FeeRate.satvB(unitValueText)
         case .gwei: Localized.FeeRate.gwei(unitValueText)
-        case .satB: Localized.FeeRate.satB(unitValueText)
         case .native: unitValueText
         }
     }
@@ -36,14 +35,13 @@ public struct FeeUnitViewModel {
         switch unit.type {
         case .satVb: 1 / 1_000
         case .gwei: 1 / 1_000_000_000
-        case .satB: 4 / 1_000
         case .native: 0
         }
     }
 
     private var unitValueText: String {
         switch unit.type {
-        case .satVb, .gwei, .satB:
+        case .satVb, .gwei:
             return currencyFormatter.string(decimal: Decimal(Double(unit.value) * conversionFactor)).replacingOccurrences(of: " ", with: "")
         case .native:
             return String(

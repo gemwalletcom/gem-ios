@@ -14,6 +14,7 @@ public struct Images {
         public static let avalanchec = Image(.avalanchec)
         public static let base = Image(.base)
         public static let bitcoin = Image(.bitcoin)
+        public static let bitcoincash = Image(.bitcoincash)
         public static let blast = Image(.blast)
         public static let celestia = Image(.celestia)
         public static let celo = Image(.celo)
@@ -46,6 +47,21 @@ public struct Images {
         public static let stellar = Image(.stellar)
         public static let sonic = Image(.sonic)
         public static let algorand = Image(.algorand)
+        public static let polkadot = Image(.polkadot)
+    }
+    
+    public struct SwapProviders {
+        public static let uniswap = Image(.uniswap)
+        public static let pancakeswap = Image(.pancakeswap)
+        public static let across = Image(.across)
+        public static let cetus = Image(.cetus)
+        public static let jupiter = Image(.jupiter)
+        public static let mayan = Image(.mayan)
+        public static let stonfi = Image(.stonfi)
+        public static let thorchain = Image(.thorchain)
+        public static let orca = Image(.orca)
+        public static let stargate = Image(.stargate)
+        public static let raydium = Image(.raydium)
     }
 
     public struct Fiat {

@@ -35,7 +35,7 @@ public struct StellarSigner: Signable {
         if input.fee.options.contains(where:  { $0.key == .tokenAccountCreation }) {
             let operation = StellarOperationCreateAccount.with {
                 $0.destination = input.destinationAddress
-                $0.amount = input.value.int64
+                $0.amount = input.value.asInt64
             }
             return try sign(
                 input: input,
@@ -45,7 +45,7 @@ public struct StellarSigner: Signable {
         } else {
             let operation = StellarOperationPayment.with {
                 $0.destination = input.destinationAddress
-                $0.amount = input.value.int64
+                $0.amount = input.value.asInt64
             }
             return try sign(
                 input: input,

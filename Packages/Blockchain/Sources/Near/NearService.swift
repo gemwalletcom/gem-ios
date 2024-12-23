@@ -136,9 +136,9 @@ extension NearService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension NearService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id, senderAddress: senderAddress))
+            .request(.transaction(id: request.id, senderAddress: request.senderAddress))
             .map(as: JSONRPCResponse<NearBroadcastResult>.self).result
         
         switch transaction.final_execution_status {

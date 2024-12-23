@@ -196,8 +196,8 @@ extension TonService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension TonService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
-        guard let data = Data(base64Encoded: id) else {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
+        guard let data = Data(base64Encoded: request.id) else {
             throw AnyError("Invalid transaction id")
         }
         let transactions = try await provider
@@ -213,7 +213,7 @@ extension TonService: ChainTransactionStateFetchable {
         return TransactionChanges(
             state: .confirmed,
             changes: [
-                .hashChange(old: id, new: newTransactionId)
+                .hashChange(old: request.id, new: newTransactionId)
             ]
         )
     }

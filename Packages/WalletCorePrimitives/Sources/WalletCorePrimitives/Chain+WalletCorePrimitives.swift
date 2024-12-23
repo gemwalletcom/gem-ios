@@ -8,6 +8,7 @@ public extension Chain {
     var coinType: WalletCore.CoinType {
         switch self {
         case .bitcoin: .bitcoin
+        case .bitcoinCash: .bitcoinCash
         case .litecoin: .litecoin
         case .ethereum,
             .arbitrum,
@@ -44,43 +45,7 @@ public extension Chain {
         case .near: .near
         case .stellar: .stellar
         case .algorand: .algorand
-        }
-    }
-}
-
-public extension WalletCore.CoinType {
-    var chain: Chain? {
-        switch self {
-        case .bitcoin: .bitcoin
-        case .litecoin: .litecoin
-        case .ethereum: .ethereum
-        case .smartChain,
-            .polygon,
-            .arbitrum,
-            .optimism,
-            .base,
-            .avalancheCChain,
-            .opBNB,
-            .fantom,
-            .xdai,
-            .mantaPacific: .none
-        case .solana: .solana
-        case .thorchain: .thorchain
-        case .cosmos: .cosmos
-        case .osmosis: .osmosis
-        case .ton: .ton
-        case .tron: .tron
-        case .dogecoin: .doge
-        case .aptos: .aptos
-        case .sui: .sui
-        case .xrp: .xrp
-        case .tia: .celestia
-        case .nativeInjective: .injective
-        case .sei: .sei
-        case .noble: .noble
-        case .near: .near
-        default:
-            fatalError()
+        case .polkadot: .polkadot
         }
     }
 }

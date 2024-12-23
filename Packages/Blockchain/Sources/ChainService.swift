@@ -54,6 +54,8 @@ extension ChainService {
             StellarService(chain: chain, provider: ProviderFactory.create(with: url))
         case .algorand:
             AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
+        case .polkadot:
+            PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
         }
     }
 }

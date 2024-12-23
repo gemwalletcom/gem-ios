@@ -65,17 +65,12 @@ final class Chain_WalletCorePrimitiveTests {
                #expect(coinType == .near)
            case .stellar:
                #expect(coinType == .stellar)
+           case .bitcoinCash:
+               #expect(coinType == .bitcoinCash)
+           case .algorand:
+               #expect(coinType == .algorand)
+           case .polkadot:
+               #expect(coinType == .polkadot)
            }
-       }
-
-    @Test
-       func testCoinTypeToChain() {
-           // Using #expect to verify expectations:
-           #expect(WalletCore.CoinType.ethereum.chain == .ethereum)
-           #expect(WalletCore.CoinType.bitcoin.chain == .bitcoin)
-
-           // If smartChain and arbitrum do not map back to a chain, we expect nil
-           #expect(WalletCore.CoinType.smartChain.chain == nil)
-           #expect(WalletCore.CoinType.arbitrum.chain == nil)
        }
 }

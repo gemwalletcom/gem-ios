@@ -27,9 +27,16 @@ final class CurrencyFormatterTests {
 
     @Test
     func testSmallValue() {
-        #expect(currencyFormatterUS.string(0.1) == "$0.10")
-        #expect(currencyFormatterUS.string(0.7) == "$0.70")
+        #expect(currencyFormatterUS.string(0.10) == "$0.10")
+        #expect(currencyFormatterUS.string(0.11) == "$0.11")
+        #expect(currencyFormatterUS.string(0.2) == "$0.20")
+        #expect(currencyFormatterUS.string(0.99) == "$0.99")
+        #expect(currencyFormatterUS.string(1.89999) == "$1.90")
+        #expect(currencyFormatterUS.string(0.70) == "$0.70")
+        #expect(currencyFormatterUS.string(0.0345) == "$0.034")
         #expect(currencyFormatterUS.string(0.01) == "$0.01")
+        #expect(currencyFormatterUS.string(0.13) == "$0.13")
+        #expect(currencyFormatterUS.string(0.0123) == "$0.012")
         #expect(currencyFormatterUS.string(0.002) == "$0.002")
         #expect(currencyFormatterUS.string(0.001) == "$0.001")
         #expect(currencyFormatterUS.string(0.000123456) == "$0.00012")

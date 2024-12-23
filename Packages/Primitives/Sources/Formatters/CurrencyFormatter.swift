@@ -89,7 +89,7 @@ public struct CurrencyFormatter: Sendable {
     }
     
     private func formatter(for value: Double) -> NumberFormatter {
-        if (abs(value) > 0.01 || value == 0 || value < 0.000_000_000_1) {
+        if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
             formatter
         } else {
             formatterSmallValues

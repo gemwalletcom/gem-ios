@@ -11,6 +11,7 @@ public struct AssetConfiguration: Sendable {
             .aptos,
             .tron,
             .aptos,
+            //.algorand, TODO: Enable once asset activation is working
         ],
         EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) }
     ]
@@ -18,6 +19,7 @@ public struct AssetConfiguration: Sendable {
 
     public static let allChains: [Chain] = [
         .bitcoin,
+        .bitcoinCash,
         .litecoin,
         .solana,
         .smartChain,
@@ -54,6 +56,7 @@ public struct AssetConfiguration: Sendable {
         .stellar,
         .sonic,
         .algorand,
+        .polkadot,
     ]
 
     public static let enabledByDefault: [AssetId] =  [

@@ -108,9 +108,9 @@ extension BitcoinService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension BitcoinService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: BitcoinTransaction.self)
         return TransactionChanges(
             state: transaction.blockHeight > 0 ? .confirmed : .pending

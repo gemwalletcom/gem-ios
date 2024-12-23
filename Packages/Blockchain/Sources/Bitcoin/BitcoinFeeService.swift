@@ -66,7 +66,7 @@ extension BitcoinService {
             }
 
             let coinType = chain.chain.coinType
-            let byteFee = Int(round(Double(gasPrice.int) / 1000))
+            let byteFee = Int(round(Double(gasPrice.asInt) / 1000))
 
             let gasPrice = max(byteFee, chain.minimumByteFee)
             let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
@@ -76,7 +76,7 @@ extension BitcoinService {
             let input = BitcoinSigningInput.with {
                 $0.coinType = coinType.rawValue
                 $0.hashType = hashType
-                $0.amount = amount.int64
+                $0.amount = amount.asInt64
                 $0.byteFee = Int64(gasPrice)
                 $0.toAddress = destinationAddress
                 $0.changeAddress = senderAddress

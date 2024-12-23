@@ -48,7 +48,8 @@ class WalletDetailViewModel {
                 SimpleAccount(
                     name: .none,
                     chain: account.chain,
-                    address: account.address
+                    address: account.address,
+                    assetImage: .none
                 )
             )
         }

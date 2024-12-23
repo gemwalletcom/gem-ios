@@ -17,7 +17,7 @@ public struct AlgorandSigner: Signable {
             }
             $0.firstRound = input.sequence.asUInt64
             $0.lastRound = input.sequence.asUInt64 + 1000
-            $0.fee = input.fee.gasPrice.UInt
+            $0.fee = input.fee.gasPrice.asUInt
             $0.messageOneof = message
             $0.privateKey = privateKey
         }
@@ -33,7 +33,7 @@ public struct AlgorandSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let transfer = AlgorandTransfer.with {
             $0.toAddress = input.destinationAddress
-            $0.amount = input.value.UInt
+            $0.amount = input.value.asUInt
         }
         return try sign(
             input: input,
@@ -43,7 +43,17 @@ public struct AlgorandSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+        let tokenId = try input.asset.getTokenId()
+        let transfer = AlgorandAssetTransfer.with {
+            $0.toAddress = input.destinationAddress
+            $0.amount = input.value.asUInt
+            $0.assetID = UInt64(tokenId)!
+        }
+        return try sign(
+            input: input,
+            message: .assetTransfer(transfer),
+            privateKey: privateKey
+        )
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {

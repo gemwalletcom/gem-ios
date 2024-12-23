@@ -9,14 +9,14 @@ import Primitives
 public struct XrpSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let signingInput = RippleSigningInput.with {
-            $0.fee = input.fee.fee.int64
+            $0.fee = input.fee.fee.asInt64
             $0.sequence = Int32(input.sequence)
             $0.account = input.senderAddress
             $0.privateKey = privateKey
             $0.operationOneof = .opPayment(
                 RippleOperationPayment.with {
                     $0.destination = input.destinationAddress
-                    $0.amount = input.value.int64
+                    $0.amount = input.value.asInt64
                     if let memo = input.memo, let destinationTag = Int64(memo) {
                         $0.destinationTag = destinationTag
                     }

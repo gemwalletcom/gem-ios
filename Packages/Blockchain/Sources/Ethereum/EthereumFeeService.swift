@@ -22,7 +22,7 @@ extension EthereumService {
             }
         case .swap(_, _, let type):
             switch type {
-            case .approval(let spender, let allowance):
+            case .approval(_, let spender, let allowance):
                 let function = EthereumAbiFunction(name: "approve")
                 function.addParamAddress(val: Data(hexString: spender.remove0x)!, isOutput: false)
                 function.addParamUInt256(val: allowance.magnitude.serialize(), isOutput: false)
