@@ -9,6 +9,7 @@ import BigInt
 import Localization
 import ChainService
 import ChainSettings
+import NodeService
 
 @Observable
 class ChainSettingsViewModel {

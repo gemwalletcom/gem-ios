@@ -4,17 +4,22 @@ import SwiftUI
 import Components
 import Style
 import Localization
+import ChainSettings
 
 struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var model: AddNodeSceneViewModel
-
-    var onDismiss: (() -> Void)
-
+    @State private var model: AddNodeSceneViewModel
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
+    }
+
+    let onDismiss: (() -> Void)?
+
+    init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
+        _model = State(initialValue: model)
+        self.onDismiss = onDismiss
     }
 
     var body: some View {
@@ -63,7 +68,7 @@ extension AddNodeScene {
             ChainView(chain: model.chain)
         }
     }
-    
+
     @ViewBuilder
     private var inputView: some View {
         Section {
@@ -122,7 +127,7 @@ extension AddNodeScene {
     private func onSelectImport() {
         do {
             try model.importFoundNode()
-            onDismiss()
+            onDismiss?()
         } catch {
             model.isPresentingErrorAlert = error.localizedDescription
         }
@@ -150,6 +155,6 @@ extension AddNodeScene {
 
 #Preview {
     return NavigationStack {
-        AddNodeScene(model: .init(chain: .ethereum, nodeService: .main)) { }
+        AddNodeScene(model: .init(chain: .ethereum, nodeService: .main))
     }
 }

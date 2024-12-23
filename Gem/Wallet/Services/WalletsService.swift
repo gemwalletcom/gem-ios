@@ -11,6 +11,7 @@ import Keystore
 import ChainService
 import BannerService
 import StakeService
+import NodeService
 
 class WalletsService {
     

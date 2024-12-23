@@ -4,6 +4,7 @@ import Style
 import Store
 import Primitives
 import DeviceService
+import NodeService
 import GemAPI
 
 @main
