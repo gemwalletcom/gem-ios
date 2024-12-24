@@ -19,6 +19,7 @@ let package = Package(
         .package(name: "Localization", path: "../Localization"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "NodeService", path: "../NodeService"),
+        .package(name: "QRScanner", path: "../QRScanner"),
     ],
     targets: [
         .target(
@@ -29,7 +30,8 @@ let package = Package(
                 "Components",
                 "Localization",
                 "ChainService",
-                "NodeService"
+                "NodeService",
+                "QRScanner"
             ],
             path: "Sources"
         ),

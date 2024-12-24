@@ -7,9 +7,8 @@ import ChainService
 import class Gemstone.Config
 import GemstonePrimitives
 
-public final class NodeService: @unchecked Sendable {
+public final class NodeService: Sendable {
     public let nodeStore: NodeStore
-    public var requestedChains = Set<Chain>()
 
     public init(
         nodeStore: NodeStore
@@ -44,9 +43,12 @@ public final class NodeService: @unchecked Sendable {
     }
     
     public func update(chain: Chain, force: Bool = false) throws {
+        // TODO: - implement later
+        /*
         guard !requestedChains.contains(chain) else { return }
-        //let nodes = try nodeStore.nodeRecords(chain: chain)
+        let nodes = try nodeStore.nodeRecords(chain: chain)
         requestedChains.insert(chain)
+         */
     }
 }
 
@@ -72,6 +74,6 @@ extension NodeService {
     }
 
     public static func isValid(netoworkId: String, for chain: Chain) -> Bool {
-        ChainConfig.config(chain: chain).networkId != netoworkId
+        ChainConfig.config(chain: chain).networkId == netoworkId
     }
 }

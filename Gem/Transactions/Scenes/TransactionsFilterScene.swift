@@ -48,7 +48,7 @@ struct TransactionsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
-                listContent: { ChainView(chain: $0) }
+                listContent: { SimpleListItemView(model: ChainViewModel(chain: $0)) }
             )
         }
         .sheet(isPresented: $isPresentingTypes) {

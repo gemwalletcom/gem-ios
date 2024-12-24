@@ -8,8 +8,9 @@ import Blockchain
 import ChainService
 import NodeService
 
+@MainActor
 @Observable
-public final class AddNodeSceneViewModel: @unchecked Sendable {
+public final class AddNodeSceneViewModel {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
 
@@ -59,10 +60,7 @@ extension AddNodeSceneViewModel {
             return
         }
 
-        await MainActor.run { [self] in
-            self.state = .loading
-        }
-
+        state = .loading
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
@@ -75,10 +73,7 @@ extension AddNodeSceneViewModel {
 
             let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
             let resultVM = AddNodeResultViewModel(addNodeResult: result)
-
-            await MainActor.run { [self] in
-                self.state = .loaded(resultVM)
-            }
+            state = .loaded(resultVM)
         } catch {
             await updateStateWithError(error: error)
         }
@@ -109,9 +104,6 @@ extension AddNodeSceneViewModel {
 extension AddNodeSceneViewModel {
     struct CustomNodeULRFetchable: NodeURLFetchable {
         let url: URL
-
-        func node(for chain: Chain) -> URL {
-            return url
-        }
+        func node(for chain: Chain) -> URL { url }
     }
 }

@@ -66,10 +66,10 @@ extension AddTokenScene {
                 Section(model.networkTitle) {
                     if model.input.hasManyChains {
                         NavigationLink(value: Scenes.NetworksSelector()) {
-                            ChainView(chain: chain)
+                            SimpleListItemView(model: ChainViewModel(chain: chain))
                         }
                     } else {
-                        ChainView(chain: chain)
+                        SimpleListItemView(model: ChainViewModel(chain: chain))
                     }
                 }
             }

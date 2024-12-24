@@ -4,8 +4,6 @@ import Foundation
 import Primitives
 import GemstonePrimitives
 import Settings
-import Blockchain
-import BigInt
 import Localization
 import ChainService
 import ChainSettings

@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Components
 import Style
 import Localization
-import ChainSettings
+import Components
+import QRScanner
 
-struct AddNodeScene: View {
+public struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var model: AddNodeSceneViewModel
@@ -15,14 +15,14 @@ struct AddNodeScene: View {
         case address
     }
 
-    let onDismiss: (() -> Void)?
+    private let onDismiss: (() -> Void)?
 
-    init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
+    public init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
         _model = State(initialValue: model)
         self.onDismiss = onDismiss
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             List {
                 networkSection
@@ -54,9 +54,13 @@ struct AddNodeScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
-        .alert(item: $model.isPresentingErrorAlert) {
-            Alert(title: Text(""), message: Text($0))
-        }
+        .alert("",
+            isPresented: $model.isPresentingErrorAlert.mappedToBool(),
+            actions: {},
+            message: {
+                Text(model.isPresentingErrorAlert ?? "")
+            }
+        )
     }
 }
 
@@ -65,7 +69,7 @@ struct AddNodeScene: View {
 extension AddNodeScene {
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
-            ChainView(chain: model.chain)
+            SimpleListItemView(model: ChainViewModel(chain: model.chain))
         }
     }
 
@@ -155,6 +159,11 @@ extension AddNodeScene {
 
 #Preview {
     return NavigationStack {
-        AddNodeScene(model: .init(chain: .ethereum, nodeService: .main))
+        AddNodeScene(
+            model: .init(
+                chain: .ethereum,
+                nodeService: .init(nodeStore: .init(db: .init(path: "")))
+            )
+        )
     }
 }
