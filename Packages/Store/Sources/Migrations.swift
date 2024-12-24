@@ -164,7 +164,7 @@ public struct Migrations {
         
         migrator.registerMigration("Add isActive to \(AssetBalanceRecord.databaseTableName)") { db in
             try? db.alter(table: AssetBalanceRecord.databaseTableName) {
-                $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: false)
+                $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
             }
         }
 
