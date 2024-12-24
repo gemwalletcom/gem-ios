@@ -26,16 +26,9 @@ public struct StellarService: Sendable {
 
 extension StellarService {
     private func account(address: String) async throws -> StellarAccount {
-        let request = try await provider
+        try await provider
             .request(.account(address: address))
-        
-        if let account = try? request.map(as: StellarAccount.self) {
-            return account
-        } else if let emptyAccount = try? request.map(as: StellarAccountEmpty.self), emptyAccount.status == 404 {
-            return .empty
-        } else {
-            throw AnyError("Unable to get stellar account")
-        }
+            .mapOrCatch(as: StellarAccount.self, codes: [404], result: .empty)
     }
     
     private func isAccountExists(address: String) async throws -> Bool {
@@ -61,19 +54,28 @@ extension StellarService {
 
 extension StellarService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = try await account(address: address).balances
-            .first( where: { $0.asset_type == "native" })?
-            .balance ?? .zero
+        let balance = try await account(address: address)
+            .balances
+            .first( where: { $0.asset_type == "native" })?.balance
         
-        let value = try valueFormatter.inputNumber(from: balance, decimals: chain.asset.decimals.asInt)
-        let reservedBalance = reservedBalance()
-        let available = max(value - reservedBalance, .zero)
+        let (available, reserved): (BigInt, BigInt) = try {
+            if let balance = balance {
+                let reserved = reservedBalance()
+                let balance = try valueFormatter.inputNumber(from: balance, decimals: chain.asset.decimals.asInt)
+                return (
+                    max(balance - reserved, .zero),
+                    reserved
+                )
+            } else {
+                return (.zero, .zero)
+            }
+        }()
         
         return Primitives.AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
                 available: available,
-                reserved: reservedBalance
+                reserved: reserved
             )
         )
     }

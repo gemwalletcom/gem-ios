@@ -20,7 +20,7 @@ class SelectAssetViewModel {
     var filterModel: AssetsFilterViewModel
     var request: AssetsRequest
 
-    var selectAssetAction: AssetAction?
+    var selectAssetAction: AssetAction
 
     init(
         wallet: Wallet,
@@ -28,7 +28,7 @@ class SelectAssetViewModel {
         selectType: SelectAssetType,
         assetsService: AssetsService,
         walletsService: WalletsService,
-        selectAssetAction: AssetAction? = .none
+        selectAssetAction: AssetAction = .none
     ) {
         self.wallet = wallet
         self.keystore = keystore

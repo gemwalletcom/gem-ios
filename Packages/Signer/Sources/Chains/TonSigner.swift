@@ -65,20 +65,4 @@ public struct TonSigner: Signable {
     private func expireAt() -> UInt32 {
         UInt32(Date.now.timeIntervalSince1970 + TimeInterval(600))
     }
-
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
-    }
 }

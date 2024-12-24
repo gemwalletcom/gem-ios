@@ -11,15 +11,17 @@ public struct AssetMetaData: Codable, Sendable {
 	public let isSwapEnabled: Bool
 	public let isStakeEnabled: Bool
 	public let isPinned: Bool
+	public let isActive: Bool
 	public let stakingApr: Double?
 
-	public init(isEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, stakingApr: Double?) {
+	public init(isEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, isActive: Bool, stakingApr: Double?) {
 		self.isEnabled = isEnabled
 		self.isBuyEnabled = isBuyEnabled
 		self.isSellEnabled = isSellEnabled
 		self.isSwapEnabled = isSwapEnabled
 		self.isStakeEnabled = isStakeEnabled
 		self.isPinned = isPinned
+		self.isActive = isActive
 		self.stakingApr = stakingApr
 	}
 }

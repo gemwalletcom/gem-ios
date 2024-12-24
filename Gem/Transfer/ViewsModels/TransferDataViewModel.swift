@@ -38,6 +38,10 @@ struct TransferDataViewModel {
             case .rewards: Localized.Transfer.ClaimRewards.title
             case .withdraw: Localized.Transfer.Withdraw.title
             }
+        case .account(_, let type):
+            switch type {
+            case .activate: Localized.Transfer.ActivateAsset.title
+            }
         }
     }
 
@@ -69,7 +73,8 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
             .swap,
-            .stake: .none
+            .stake,
+            .account: .none
         case .generic(_, let metadata, _):
             metadata.name
         }
@@ -79,7 +84,8 @@ struct TransferDataViewModel {
         switch type {
         case .transfer,
             .swap,
-            .stake: .none
+            .stake,
+            .account: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -89,7 +95,7 @@ struct TransferDataViewModel {
         switch type {
         case .transfer:
             return AssetViewModel(asset: asset).supportMemo
-        case .swap, .generic, .stake:
+        case .swap, .generic, .stake, .account:
             return false
         }
     }
@@ -101,6 +107,7 @@ struct TransferDataViewModel {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
             }
+        case .account: false
         default: true
         }
     }
@@ -114,7 +121,8 @@ extension TransferDataViewModel {
         switch type {
         case .transfer,
                 .swap,
-                .generic:
+                .generic,
+                .account:
             recipient.name ?? recipient.address
         case .stake(_, let stakeType):
             switch stakeType {

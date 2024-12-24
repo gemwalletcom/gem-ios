@@ -14,7 +14,7 @@ struct BannerViewModel {
 
     var image: Image? {
         switch banner.event {
-        case .stake, .accountActivation:
+        case .stake, .accountActivation, .activateAsset:
             guard let asset = asset else {
                 return .none
             }
@@ -49,6 +49,8 @@ struct BannerViewModel {
             return Localized.Banner.EnableNotifications.title
         case .accountBlockedMultiSignature:
             return Localized.Common.warning
+        case .activateAsset:
+            return Localized.Transfer.ActivateAsset.title
         }
     }
 
@@ -70,6 +72,11 @@ struct BannerViewModel {
             return Localized.Banner.EnableNotifications.description
         case .accountBlockedMultiSignature:
             return Localized.Warnings.multiSignatureBlocked(asset?.name ?? "")
+        case .activateAsset:
+            guard let asset = asset else {
+                return .none
+            }
+            return Localized.Banner.ActivateAsset.description(asset.symbol, asset.chain.asset.name)
         }
     }
 
@@ -84,7 +91,8 @@ struct BannerViewModel {
     var cornerRadius: CGFloat {
         switch banner.event {
         case .stake,
-            .accountActivation: 14
+            .accountActivation,
+            .activateAsset: 14
         case .enableNotifications,
             .accountBlockedMultiSignature: 0
         }
@@ -97,7 +105,8 @@ struct BannerViewModel {
     var url: URL? {
         switch banner.event {
         case .stake,
-            .enableNotifications:
+            .enableNotifications,
+            .activateAsset:
             return.none
         case .accountActivation:
             return asset?.chain.accountActivationFeeUrl

@@ -33,46 +33,37 @@ public struct StellarSigner: Signable {
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         if input.fee.options.contains(where:  { $0.key == .tokenAccountCreation }) {
-            let operation = StellarOperationCreateAccount.with {
-                $0.destination = input.destinationAddress
-                $0.amount = input.value.asInt64
-            }
-            return try sign(
+            try sign(
                 input: input,
-                operation: .opCreateAccount(operation),
+                operation: .opCreateAccount(.with {
+                    $0.destination = input.destinationAddress
+                    $0.amount = input.value.asInt64
+                }),
                 privateKey: privateKey
             )
         } else {
-            let operation = StellarOperationPayment.with {
-                $0.destination = input.destinationAddress
-                $0.amount = input.value.asInt64
-            }
-            return try sign(
+            try sign(
                 input: input,
-                operation: .opPayment(operation),
+                operation: .opPayment(.with {
+                    $0.destination = input.destinationAddress
+                    $0.amount = input.value.asInt64
+                }),
                 privateKey: privateKey
             )
         }
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
+    public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
+        try sign(
+            input: input,
+            operation: .opChangeTrust(.with {
+                $0.asset = try .with {
+                    $0.issuer = try input.asset.getTokenId()
+                    $0.alphanum4 = input.asset.symbol
+                }
+            }),
+            privateKey: privateKey
+        )
     }
 }
     

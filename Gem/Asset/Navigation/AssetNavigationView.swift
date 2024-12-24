@@ -3,17 +3,16 @@
 import Foundation
 import SwiftUI
 import Primitives
+import Localization
 
 struct AssetNavigationView: View {
-
-    @Environment(\.stakeService) private var stakeService
 
     let wallet: Wallet
     let assetId: AssetId
 
     @Binding private var isPresentingAssetSelectType: SelectAssetInput?
-    @State private var isPresentingStaking: Bool = false
-
+    @State private var transferData: TransferData?
+    
     init(
         wallet: Wallet,
         assetId: AssetId,
@@ -28,7 +27,30 @@ struct AssetNavigationView: View {
         AssetScene(
             wallet: wallet,
             input: AssetSceneInput(walletId: wallet.walletId, assetId: assetId),
-            isPresentingAssetSelectType: $isPresentingAssetSelectType
-        )
+            isPresentingAssetSelectType: $isPresentingAssetSelectType) { asset in
+                transferData = TransferData(
+                    type: .account(asset, .activate),
+                    recipientData: RecipientData(
+                        asset: asset,
+                        recipient: Recipient(
+                            name: .none,
+                            address: "",
+                            memo: .none
+                        ),
+                        amount: .none
+                    ),
+                    value: 0,
+                    canChangeValue: false,
+                    ignoreValueCheck: true
+                )
+            }
+        .sheet(item: $transferData) { data in
+            ConfirmTransferNavigationStack(
+                wallet: wallet,
+                transferData: data
+            ) {
+                transferData = .none
+            }
+        }
     }
 }

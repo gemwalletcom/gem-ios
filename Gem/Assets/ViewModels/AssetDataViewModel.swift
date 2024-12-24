@@ -139,6 +139,10 @@ struct AssetDataViewModel {
         return false //assetData.metadata.isStakeEnabled
     }
     
+    var isActive: Bool {
+        assetData.metadata.isActive
+    }
+    
     var address: String {
         return assetData.account.address
     }

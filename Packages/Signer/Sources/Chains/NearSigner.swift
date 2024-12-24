@@ -31,25 +31,5 @@ public struct NearSigner: Signable {
         
         return output.signedTransaction.base64EncodedString()
     }
-    
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        fatalError()
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
-    }
 }
     

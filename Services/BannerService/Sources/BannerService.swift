@@ -30,7 +30,7 @@ public struct BannerService: Sendable {
                     await UIApplication.shared.open(url, completionHandler: .none)
                 }
                 return true
-            case .stake:
+            case .stake, .activateAsset:
                 return false
             }
         }()

@@ -13,4 +13,5 @@ public enum TransactionType: String, Codable, CaseIterable, Equatable, Sendable 
 	case stakeRewards
 	case stakeRedelegate
 	case stakeWithdraw
+	case assetActivation
 }

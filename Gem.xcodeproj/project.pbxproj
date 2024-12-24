@@ -239,6 +239,7 @@
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D890F7A72C7FCAD100C26819 /* WalletSelectImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A62C7FCAD100C26819 /* WalletSelectImageViewModel.swift */; };
 		D89BB5EC2D161EAA00C7E510 /* SwapProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5EB2D161EAA00C7E510 /* SwapProviderViewModel.swift */; };
+		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
 		D89D69012A9D769400EA74EE /* TransactionsList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89D69002A9D769400EA74EE /* TransactionsList.swift */; };
 		D89D69032A9EF9BC00EA74EE /* TransactionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89D69022A9EF9BC00EA74EE /* TransactionViewModel.swift */; };
@@ -560,6 +561,7 @@
 		D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsNavigationStack.swift; sourceTree = "<group>"; };
 		D890F7A62C7FCAD100C26819 /* WalletSelectImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSelectImageViewModel.swift; sourceTree = "<group>"; };
 		D89BB5EB2D161EAA00C7E510 /* SwapProviderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderViewModel.swift; sourceTree = "<group>"; };
+		D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferNavigationStack.swift; sourceTree = "<group>"; };
 		D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAssetNavigationStack.swift; sourceTree = "<group>"; };
 		D89D69002A9D769400EA74EE /* TransactionsList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsList.swift; sourceTree = "<group>"; };
 		D89D69022A9EF9BC00EA74EE /* TransactionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionViewModel.swift; sourceTree = "<group>"; };
@@ -1652,6 +1654,7 @@
 			children = (
 				D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */,
 				D8C4A3772C8D4D97006FABE8 /* RecipientNavigationView.swift */,
+				D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -2191,6 +2194,7 @@
 				C3E99BC52A73186E005DF35F /* TransactionDetailViewModel.swift in Sources */,
 				D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */,
 				D8C4A3AD2C9696FE006FABE8 /* AssetHeaderViewModel.swift in Sources */,
+				D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */,
 				D8AF91F22B51BBCE002193E3 /* StakeDetailScene.swift in Sources */,
 				D85BAD162C62AF9B008C41F8 /* BannerView.swift in Sources */,
 				83BCC79E2CF4D27400396296 /* SelectFilterView.swift in Sources */,

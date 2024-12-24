@@ -21,6 +21,7 @@ struct TransactionTypeViewModel {
         case .stakeRedelegate: Localized.Transfer.Redelegate.title
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
+        case .assetActivation: Localized.Transfer.ActivateAsset.title
         }
     }
 }

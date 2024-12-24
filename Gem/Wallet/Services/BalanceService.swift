@@ -229,7 +229,12 @@ public final class BalanceService: BalancerUpdater {
                 let update = try? createUpdateBalanceType(asset: asset, change: balance) else {
                     return .none
             }
-            return UpdateBalance(assetID: balance.assetId.identifier, type: update, updatedAt: Date())
+            return UpdateBalance(
+                assetID: balance.assetId.identifier,
+                type: update,
+                updatedAt: .now,
+                isActive: balance.isActive
+            )
         }
     }
     

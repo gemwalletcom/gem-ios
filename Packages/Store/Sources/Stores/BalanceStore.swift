@@ -60,6 +60,7 @@ public struct BalanceStore: Sendable {
                 
                 let defaultFields: [ColumnAssignment] = [
                     Columns.Balance.updatedAt.set(to: balance.updatedAt),
+                    Columns.Balance.isActive.set(to: balance.isActive),
                 ]
                 let assignments = balanceFields + defaultFields
                 

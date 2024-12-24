@@ -25,7 +25,8 @@ extension Transaction {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return [assetId]
         case .swap:
             switch metadata {

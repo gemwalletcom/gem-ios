@@ -14,7 +14,6 @@ struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
-    @Environment(\.stakeService) private var stakeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.priceAlertService) private var priceAlertService
 
@@ -32,34 +31,37 @@ struct AssetScene: View {
 
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
+    
+    private let walletModel: WalletViewModel
+    private let onAssetActivate: AssetAction
 
-    private let wallet: Wallet
-    private let input: AssetSceneInput
-
+    private var headerModel: AssetHeaderViewModel {
+        AssetHeaderViewModel(
+            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            walletModel: walletModel,
+            bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
+        )
+    }
+    
     private var model: AssetSceneViewModel {
-        AssetSceneViewModel(
+        return AssetSceneViewModel(
             walletsService: walletsService,
             assetsService: assetsService,
             transactionsService: transactionsService,
-            stakeService: stakeService,
             priceAlertService: priceAlertService,
             assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-            walletModel: WalletViewModel(wallet: wallet),
-            headerModel: AssetHeaderViewModel(
-                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
-                walletModel: WalletViewModel(wallet: wallet),
-                bannersViewModel: HeaderBannersViewModel(banners: banners)
-            )
+            walletModel: walletModel
         )
     }
 
     init(
         wallet: Wallet,
         input: AssetSceneInput,
-        isPresentingAssetSelectType: Binding<SelectAssetInput?>
+        isPresentingAssetSelectType: Binding<SelectAssetInput?>,
+        onAssetActivate: AssetAction
     ) {
-        self.wallet = wallet
-        self.input = input
+        self.walletModel = WalletViewModel(wallet: wallet)
+        self.onAssetActivate = onAssetActivate
         _isPresentingAssetSelectType = isPresentingAssetSelectType
         _assetData = Query(constant: input.assetRequest)
         _transactions = Query(constant: input.transactionsRequest)
@@ -70,7 +72,7 @@ struct AssetScene: View {
         List {
             Section { } header: {
                 WalletHeaderView(
-                    model: model.headerModel,
+                    model: headerModel,
                     isHideBalanceEnalbed: .constant(false),
                     onHeaderAction: onSelectHeader(_:),
                     onInfoSheetAction: onInfoSheetAction
@@ -84,9 +86,9 @@ struct AssetScene: View {
             .listRowInsets(.zero)
 
             Section {
-                BannerView(banners: banners, action: onBannerAction, closeAction: bannerService.onClose)
+                BannerView(banners: model.banners, action: onBannerAction, closeAction: bannerService.onClose)
             }
-
+                        
             Section {
                 NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
                     HStack {
@@ -243,6 +245,8 @@ extension AssetScene {
                 type: .stake,
                 assetAddress: assetData.assetAddress
             )
+        case .activateAsset:
+            onAssetActivate?(model.assetDataModel.asset)
         case .enableNotifications,
             .accountActivation,
             .accountBlockedMultiSignature:
@@ -272,7 +276,6 @@ extension AssetScene {
         await model.updateWallet()
     }
 }
-
 
 extension AssetData {
     var priceAlertSystemImage: String {

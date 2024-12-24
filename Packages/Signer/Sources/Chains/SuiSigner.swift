@@ -15,10 +15,6 @@ public struct SuiSigner: Signable {
         signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
     }
     
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
     public func swap(input: SignerInput, privateKey: Data) throws -> String {
         signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
     }
@@ -30,16 +26,12 @@ public struct SuiSigner: Signable {
                 .tokenApproval,
                 .stakeRewards,
                 .stakeRedelegate,
-                .stakeWithdraw:
+                .stakeWithdraw, .assetActivation:
             fatalError()
         case .stakeDelegate,
                 .stakeUndelegate:
             return [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
         }
-    }
-    
-    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
-        fatalError()
     }
     
     func signMessageBytes(coinType: CoinType, bytes: String, privateKey: Data) -> String {

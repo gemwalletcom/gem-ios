@@ -45,6 +45,7 @@ extension AssetMetaData {
         isSwapEnabled: true,
         isStakeEnabled: false,
         isPinned: false,
+        isActive: true,
         stakingApr: .none
     )
 }

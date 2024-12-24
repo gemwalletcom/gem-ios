@@ -50,7 +50,8 @@ struct TransactionViewModel {
             .stakeUndelegate,
             .stakeRewards,
             .stakeRedelegate,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .none
         }
     }
@@ -73,6 +74,7 @@ struct TransactionViewModel {
         case .stakeRedelegate: Localized.Transfer.Redelegate.title
         case .stakeRewards: Localized.Transfer.Rewards.title
         case .stakeWithdraw: Localized.Transfer.Withdraw.title
+        case .assetActivation: Localized.Transfer.ActivateAsset.title
         }
     }
     
@@ -138,7 +140,8 @@ struct TransactionViewModel {
             )
         case .swap,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .none
         }
     }
@@ -207,7 +210,7 @@ struct TransactionViewModel {
                 }
                 return "+" + swapFormatter(asset: asset, value: BigInt(stringLiteral: metadata.toValue))
             }
-        case .tokenApproval:
+        case .tokenApproval, .assetActivation:
             return transaction.asset.symbol
         }
     }
@@ -219,7 +222,8 @@ struct TransactionViewModel {
             .stakeDelegate,
             .stakeUndelegate,
             .stakeRedelegate,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             switch transaction.transaction.direction {
             case .incoming:
                 return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
@@ -244,7 +248,8 @@ struct TransactionViewModel {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .none
         case .swap:
             switch transaction.transaction.metadata {
