@@ -11,18 +11,17 @@ import Store
 import MarketInsight
 
 struct ChartScene: View {
-    
     @Environment(\.openURL) private var openURL
     
-    @StateObject var model: ChartsViewModel
-    
+    @State private var model: ChartsViewModel
+
     @Query<PriceRequest>
-    var priceData: PriceData
+    private var priceData: PriceData
 
     init(
         model: ChartsViewModel
     ) {
-        _model = StateObject(wrappedValue: model)
+        _model = State(initialValue: model)
         _priceData = Query(constant: model.priceRequest)
     }
     
@@ -107,16 +106,12 @@ struct ChartScene: View {
             }
         }
         .refreshable {
-            await fetch()
+            await model.fetch()
         }
-        .taskOnce {
-            Task { await fetch() }
+        .task {
+            await model.fetch()
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-    }
-    
-    func fetch() async {
-        await model.updateCharts()
     }
 }
