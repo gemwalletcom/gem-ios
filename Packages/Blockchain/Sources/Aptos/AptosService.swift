@@ -58,11 +58,12 @@ public struct AptosService: Sendable {
 
 extension AptosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let resource = try await provider.request(.balance(address: address))
+        let resourceName = "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
+        let resource = try await provider.request(.resource(address: address, resource: resourceName))
             .mapOrCatch(
                 as: AptosResource<AptosResourceBalance>.self,
                 codes: [404],
-                result: AptosResource(type: "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>", data: AptosResourceBalance(coin: AptosResourceCoin(value: "0")))
+                result: AptosResource(type: resourceName, data: AptosResourceBalance(coin: AptosResourceCoin(value: "0")))
             )
         
         let balance = BigInt(stringLiteral: resource.data.coin.value)

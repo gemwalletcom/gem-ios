@@ -71,6 +71,8 @@ final class Chain_WalletCorePrimitiveTests {
                #expect(coinType == .algorand)
            case .polkadot:
                #expect(coinType == .polkadot)
+           case .cardano:
+               #expect(coinType == .cardano)
            }
        }
 }

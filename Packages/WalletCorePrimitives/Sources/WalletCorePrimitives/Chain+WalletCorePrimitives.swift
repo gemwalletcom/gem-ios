@@ -46,6 +46,7 @@ public extension Chain {
         case .stellar: .stellar
         case .algorand: .algorand
         case .polkadot: .polkadot
+        case .cardano: .cardano
         }
     }
 }

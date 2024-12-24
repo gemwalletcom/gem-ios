@@ -37,15 +37,18 @@ public protocol ChainBroadcastable: Sendable {
 public struct TransactionStateRequest: Sendable {
     public let id: String
     public let senderAddress: String
+    public let recipientAddress: String
     public let block: String
     
     public init(
         id: String,
         senderAddress: String,
+        recipientAddress: String,
         block: String
     ) {
         self.id = id
         self.senderAddress = senderAddress
+        self.recipientAddress = recipientAddress
         self.block = block
     }
 }

@@ -65,6 +65,7 @@ public struct Signer {
         case .stellar: StellarSigner()
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
+        case .cardano: CardanoSigner()
         }
     }
 }

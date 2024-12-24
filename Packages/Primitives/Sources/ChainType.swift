@@ -18,4 +18,5 @@ public enum ChainType: String, Codable, CaseIterable, Equatable, Hashable, Senda
 	case stellar
 	case algorand
 	case polkadot
+	case cardano
 }

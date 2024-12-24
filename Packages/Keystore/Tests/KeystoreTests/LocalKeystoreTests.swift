@@ -174,6 +174,8 @@ final class LocalKeystoreTests {
                     expected = "JTJWO524JXIHVPGBDWFLJE7XUIA32ECOZOBLF2QP3V5TQBT3NKZSCG67BQ"
                 case .polkadot:
                     expected = "13nN6BGAoJwd7Nw1XxeBCx5YcBXuYnL94Mh7i3xBprqVSsFk"
+                case .cardano:
+                    expected = "addr1qyr8jjfnypp95eq74aqzn7ss687ehxclgj7mu6gratmg3mul2040vt35dypp042awzsjk5xm3zr3zm5qh7454uwdv08s84ray2"
                 }
 
                 #expect(derivedAddress == expected, "\(chain) failed to match address")
