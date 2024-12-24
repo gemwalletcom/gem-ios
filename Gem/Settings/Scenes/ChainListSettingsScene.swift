@@ -17,7 +17,7 @@ struct ChainListSettingsScene: View {
             filter: model.filter(_:query:),
             content: { chain in
                 NavigationLink(value: Scenes.ChainSettings(chain: chain)) {
-                    ChainView(chain: chain)
+                    SimpleListItemView(model: ChainViewModel(chain: chain))
                 }
             },
             emptyContent: {

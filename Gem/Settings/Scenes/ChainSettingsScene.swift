@@ -5,7 +5,6 @@ import SwiftUI
 import Primitives
 import Settings
 import Components
-import GemstonePrimitives
 import Style
 import Localization
 import ChainSettings

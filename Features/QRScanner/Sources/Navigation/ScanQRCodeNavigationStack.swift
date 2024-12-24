@@ -1,15 +1,20 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import QRScanner
 import Style
 import Localization
 
-struct ScanQRCodeNavigationStack: View {
-    var action: ((String) -> Void)
-    private let resources: any QRScannerResources = QRScanResources()
+public struct ScanQRCodeNavigationStack: View {
+    private let resources: any QRScannerResources
 
-    var body: some View {
+    let action: ((String) -> Void)
+
+    public init(action: @escaping (String) -> Void) {
+        self.resources = QRScanResources()
+        self.action = action
+    }
+
+    public var body: some View {
         NavigationStack {
             QRScannerView(resources: resources, action: action)
                 .navigationTitle(Localized.Wallet.scanQrCode)
@@ -20,7 +25,7 @@ struct ScanQRCodeNavigationStack: View {
 
 // MARK: - LocalizedQRCodeError
 
-extension QRScannerError: @retroactive LocalizedQRCodeError {
+extension QRScannerError: LocalizedQRCodeError {
     public var titleImage: ErrorTitleImage? {
         switch self {
         case .notSupported:

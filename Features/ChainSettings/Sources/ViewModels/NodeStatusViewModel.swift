@@ -5,7 +5,7 @@ import Style
 import Localization
 import SwiftUI
 
-struct NodeStatusViewModel {
+struct NodeStatusViewModel: Sendable {
     let nodeStatus: NodeStatus
 
     public func latestBlockText(title: String, formatter: ValueFormatter) -> String {

@@ -6,6 +6,7 @@ import ChainService
 import DeviceService
 import PriceAlertService
 import StakeService
+import NodeService
 import GemstonePrimitives
 
 extension AppResolver {

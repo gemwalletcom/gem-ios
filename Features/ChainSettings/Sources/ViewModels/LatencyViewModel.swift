@@ -5,8 +5,7 @@ import Style
 import SwiftUI
 import Localization
 
-public struct LatencyViewModel {
-    
+public struct LatencyViewModel: Sendable {
     private let latency: Latency
 
     public init(latency: Latency) {

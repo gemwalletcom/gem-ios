@@ -1,6 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import QRScanner
+import Foundation
 import Style
 import Localization
 

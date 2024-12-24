@@ -11,6 +11,7 @@ import Keystore
 import ChainService
 import BannerService
 import StakeService
+import NodeService
 
 class WalletsService {
     
@@ -219,14 +220,6 @@ class WalletsService {
     func addTransaction(walletId: String, transaction: Primitives.Transaction) throws {
         try transactionService.addTransaction(walletId: walletId, transaction: transaction)
     }
-    
-    // nodes
-    
-    func updateNode(chain: Chain) throws {
-        try nodeService.update(chain: chain)
-    }
-
-    //
 
     func setupWallet(_ wallet: Wallet) throws {
         let chains = wallet.chains(type: .all)

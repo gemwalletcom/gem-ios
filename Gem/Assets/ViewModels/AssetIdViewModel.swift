@@ -42,7 +42,7 @@ struct AssetIdViewModel {
     }
     
     var chainImagePlaceholder: Image {
-        ChainViewModel(chain: assetId.chain).image
+        ChainImage(chain: assetId.chain).image
     }
 
     private var imagePlaceholder: Image? {

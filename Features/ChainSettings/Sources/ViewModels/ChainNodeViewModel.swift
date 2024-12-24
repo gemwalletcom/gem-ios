@@ -2,12 +2,11 @@
 
 import Foundation
 import Primitives
-import BigInt
 import Components
 import Style
 import Localization
 
-public struct ChainNodeViewModel {
+public struct ChainNodeViewModel: Sendable {
     public let chainNode: ChainNode
     private let nodeStatus: NodeStatus
     private let formatter: ValueFormatter
