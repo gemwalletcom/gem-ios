@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 60;
+	objectVersion = 56;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -624,6 +624,7 @@
 		DF8868882C50F1EB00005AEA /* CalloutView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalloutView.swift; sourceTree = "<group>"; };
 		DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShowPrivateKeyViewModel.swift; sourceTree = "<group>"; };
 		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
+		DFCB242D2D1A5223000A12CC /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1471,6 +1472,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				DFCB242D2D1A5223000A12CC /* Currency */,
 				D8D83C822CECF90A0083AA53 /* Swap */,
 				D85AD29E2CD436680010DEF8 /* ChainSettings */,
 				8393897A2CCA8F0000735088 /* InfoSheet */,
@@ -2133,7 +2135,6 @@
 				C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
 				C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
 				DFDF9CF22CAE618A003A731B /* XCRemoteSwiftPackageReference "BigInt" */,
-				DFA0B51C2D16C94400355594 /* XCLocalSwiftPackageReference "Features/Currency" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -2836,13 +2837,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		DFA0B51C2D16C94400355594 /* XCLocalSwiftPackageReference "Features/Currency" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Features/Currency;
-		};
-/* End XCLocalSwiftPackageReference section */
 
 /* Begin XCRemoteSwiftPackageReference section */
 		C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
