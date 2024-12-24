@@ -132,6 +132,7 @@ extension AssetRecordInfo {
             isSwapEnabled: asset.isSwappable,
             isStakeEnabled: asset.isStakeable,
             isPinned: balance?.isPinned ?? false,
+            isActive: balance?.isActive ?? true,
             stakingApr: asset.stakingApr
         )
     }

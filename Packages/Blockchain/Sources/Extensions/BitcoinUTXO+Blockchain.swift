@@ -8,7 +8,8 @@ public extension BitcoinUTXO {
         return UTXO(
             transaction_id: txid,
             vout: vout,
-            value: value
+            value: value,
+            address: .none
         )
     }
 }

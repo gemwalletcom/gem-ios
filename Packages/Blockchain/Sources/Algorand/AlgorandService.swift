@@ -38,20 +38,26 @@ extension AlgorandService {
     private func latestBlock() async throws -> BigInt {
         BigInt(try await transactionsParams().last_round)
     }
-    
-    private func reservedBalance() -> BigInt {
-        BigInt(chain.accountActivationFee ?? 0)
-    }
 }
 
 // MARK: - ChainBalanceable
 
 extension AlgorandService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = BigInt(try await account(address: address).amount)
-        let reserved = reservedBalance()
-        let available = max(balance - reserved, .zero)
-
+        let account = try await account(address: address)
+        let (available, reserved): (BigInt, BigInt) = {
+            let amount = BigInt(account.amount)
+            if amount > .zero {
+                let reserved = BigInt(account.min_balance)
+                return (
+                    max(amount - reserved, .zero),
+                    reserved
+                )
+            } else {
+                return (.zero, .zero)
+            }
+        }()
+        
         return Primitives.AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
@@ -65,14 +71,18 @@ extension AlgorandService: ChainBalanceable {
         let assets = try await account(address: address).assets
         
         return tokenIds.map { assetId in
-            let balance: BigInt = {
+            let (balance, isActive): (BigInt, Bool) = {
                 if let value = assets.first(where: { String($0.asset_id) == assetId.tokenId  })?.amount {
-                    return BigInt(value)
+                    return (BigInt(value), true)
                 }
-                return BigInt.zero
+                return (BigInt.zero, false)
             }()
             
-            return AssetBalance(assetId: assetId, balance: Balance(available: balance))
+            return AssetBalance(
+                assetId: assetId,
+                balance: Balance(available: balance),
+                isActive: isActive
+            )
         }
     }
 
@@ -108,10 +118,16 @@ extension AlgorandService: ChainTransactionPreloadable {
 
 extension AlgorandService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        try await provider
+        let result = try await provider
             .request(.broadcast(data: data))
-            .mapOrError(as: AlgorandTransactionBroadcast.self, asError: AlgorandTransactionBroadcastError.self)
-            .txId
+            .map(as: AlgorandTransactionBroadcast.self)
+            
+        if let message = result.message {
+            throw AnyError(message)
+        } else if let hash = result.txId {
+            return hash
+        }
+        throw ChainServiceErrors.broadcastError(chain)
     }
 }
 
@@ -168,12 +184,10 @@ extension AlgorandService: ChainTokenable {
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
-        //TODO: Enable once asset activation is working
+        if tokenId.count > 4, let _ = UInt64(tokenId) {
+            return true
+        }
         return false
-//        if tokenId.count > 3, let _ = UInt64(tokenId) {
-//            return true
-//        }
-//        return false
     }
 }
 
@@ -199,11 +213,5 @@ extension AlgorandService: ChainLatestBlockFetchable {
 extension AlgorandService: ChainAddressStatusFetchable {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         []
-    }
-}
-
-extension AlgorandTransactionBroadcastError: LocalizedError {
-    public var errorDescription: String? {
-        message
     }
 }

@@ -43,7 +43,7 @@ public struct FeeInput: Sendable {
             return fromAsset.chain
         case .generic(let asset, _, _):
             return asset.chain
-        case .stake(let asset, _):
+        case .stake(let asset, _), .account(let asset, _):
             return asset.chain
         }
     }

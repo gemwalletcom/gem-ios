@@ -98,6 +98,10 @@ struct TransactionInputViewModel {
             .generic,
             .stake:
             return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
+        case .account(_, let type):
+            switch type {
+            case .activate: return TransactionHeaderType.amount(title: asset.symbol, subtitle: .none)
+            }
         case .swap(let fromAsset, let toAsset, let action):
             switch action {
             case .swap(let quote, _):
@@ -120,7 +124,7 @@ struct TransactionInputViewModel {
                 )
                 return TransactionHeaderType.swap(from: from, to: to)
             case .approval:
-                return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
+                return TransactionHeaderType.amount(title: asset.symbol, subtitle: amountSecondText)
             }
         }
     }

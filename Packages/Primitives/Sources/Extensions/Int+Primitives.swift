@@ -63,6 +63,14 @@ extension Int {
 }
 
 extension UInt64 {
+    
+    public init(string: String) throws {
+        guard let value = UInt64(string) else {
+            throw AnyError("Invalid value: \(string)")
+        }
+        self = value
+    }
+
     public var asBigInt: BigInt {
         BigInt(self)
     }

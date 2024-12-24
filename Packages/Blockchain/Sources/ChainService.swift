@@ -56,6 +56,8 @@ extension ChainService {
             AlgorandService(chain: chain, provider: ProviderFactory.create(with: url))
         case .polkadot:
             PolkadotService(chain: chain, provider: ProviderFactory.create(with: url))
+        case .cardano:
+            CardanoService(chain: chain, provider: ProviderFactory.create(with: url))
         }
     }
 }

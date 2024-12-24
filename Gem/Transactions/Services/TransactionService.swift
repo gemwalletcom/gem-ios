@@ -75,6 +75,7 @@ class TransactionService {
         let request = TransactionStateRequest(
             id: transaction.hash,
             senderAddress: transaction.from,
+            recipientAddress: transaction.to,
             block: transaction.blockNumber
         )
         let stateChanges = try await provider.transactionState(for: request)

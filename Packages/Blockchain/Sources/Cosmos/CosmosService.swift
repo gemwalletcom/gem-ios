@@ -86,22 +86,27 @@ extension CosmosService {
         case .cosmos: switch type {
             case .transfer, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
+            case .account: fatalError()
         }
         case .osmosis: switch type {
             case .transfer, .swap, .generic: BigInt(10_000)
             case .stake: BigInt(100_000)
+            case .account: fatalError()
         }
         case .celestia: switch type {
             case .transfer, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(10_000)
+            case .account: fatalError()
         }
         case .sei: switch type {
             case .transfer, .swap, .generic: BigInt(100_000)
             case .stake: BigInt(200_000)
+            case .account: fatalError()
         }
         case .injective: switch type {
             case .transfer, .swap, .generic: BigInt(100_000_000_000_000)
             case .stake: BigInt(1_000_000_000_000_000)
+            case .account: fatalError()
         }
         case .noble: BigInt(25_000)
         }
@@ -120,7 +125,7 @@ extension CosmosService {
                 case .thorchain, .cosmos: BigInt(200_000)
                 default: fatalError()
                 }
-            case .tokenApproval, .stakeWithdraw:
+            case .tokenApproval, .stakeWithdraw, .assetActivation:
                 fatalError()
             }
         }()

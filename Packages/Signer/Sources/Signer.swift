@@ -35,6 +35,8 @@ public struct Signer {
             return try [signer.signData(input: input, privateKey: privateKey)]
         case .stake:
             return try signer.signStake(input: input, privateKey: privateKey)
+        case .account:
+            return [try signer.signAccountAction(input: input, privateKey: privateKey)]
         }
     }
     
@@ -63,6 +65,7 @@ public struct Signer {
         case .stellar: StellarSigner()
         case .algorand: AlgorandSigner()
         case .polkadot: PolkadotSigner()
+        case .cardano: CardanoSigner()
         }
     }
 }

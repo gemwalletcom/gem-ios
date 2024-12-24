@@ -15,13 +15,11 @@ class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
-    private let stakeService: StakeService
     private let priceAlertService: PriceAlertService
 
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
-    let headerModel: AssetHeaderViewModel
     
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
@@ -30,21 +28,17 @@ class AssetSceneViewModel: ObservableObject {
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
-        stakeService: StakeService,
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
-        walletModel: WalletViewModel,
-        headerModel: AssetHeaderViewModel
+        walletModel: WalletViewModel
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
-        self.stakeService = stakeService
         self.priceAlertService = priceAlertService
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
-        self.headerModel = headerModel
         self.walletModel = walletModel
     }
 
@@ -108,6 +102,23 @@ class AssetSceneViewModel: ObservableObject {
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+    }
+    
+    // locally comouted banners
+    var banners: [Primitives.Banner] {
+        if !assetDataModel.isActive {
+            return [
+                Primitives
+                    .Banner(
+                        wallet: .none,
+                        asset: assetDataModel.asset,
+                        chain: .none,
+                        event: .activateAsset,
+                        state: .alwaysActive
+                    ),
+            ]
+        }
+        return []
     }
 }
 

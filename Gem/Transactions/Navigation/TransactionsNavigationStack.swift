@@ -44,7 +44,8 @@ struct TransactionsNavigationStack: View {
                     AssetScene(
                         wallet: model.wallet,
                         input: AssetSceneInput(walletId: model.walletId, assetId: $0.asset.id),
-                        isPresentingAssetSelectType: Binding.constant(.none)
+                        isPresentingAssetSelectType: Binding.constant(.none),
+                        onAssetActivate: .none
                     )
                 }
         }

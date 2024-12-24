@@ -80,6 +80,11 @@ public struct SolanaSigner: Signable {
             $0.privateKey = privateKey
         }
         let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: coinType)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
         return try transcodeBase58ToBase64(output.encoded)
     }
     
@@ -135,6 +140,11 @@ public struct SolanaSigner: Signable {
             $0.txEncoding = .base64
         }
         let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: .solana)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
         return output.encoded
     }
     

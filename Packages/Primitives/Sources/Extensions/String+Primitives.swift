@@ -50,6 +50,10 @@ public extension String {
         return String(repeatElement(padding, count: number - self.count)) + self
     }
     
+    func addTrailing(number: Int, padding: Character) -> String {
+        return self + String(repeatElement(padding, count: number - self.count))
+    }
+    
     func encodedData() throws -> Data {
         guard let data = self.data(using: .utf8) else {
             throw AnyError("Unable to encode string to data")

@@ -48,6 +48,7 @@ public struct Images {
         public static let sonic = Image(.sonic)
         public static let algorand = Image(.algorand)
         public static let polkadot = Image(.polkadot)
+        public static let cardano = Image(.cardano)
     }
     
     public struct SwapProviders {

@@ -34,7 +34,8 @@ struct TransactionDetailViewModel {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .amount(title: amountTitle, subtitle: amountSubtitle)
         case .swap:
             switch model.transaction.transaction.metadata {
@@ -81,7 +82,7 @@ struct TransactionDetailViewModel {
         case .swap:
             //TODO: Show ETH <> USDT swap info
             return model.amountSymbolText
-        case .tokenApproval:
+        case .tokenApproval, .assetActivation:
             return model.transaction.asset.symbol
         }
     }
@@ -99,7 +100,7 @@ struct TransactionDetailViewModel {
                 return .none
             }
             return priceModel.fiatAmountText(amount: model.amount * price.price)
-        case .tokenApproval:
+        case .tokenApproval, .assetActivation:
             return .none
         }
     }
@@ -126,7 +127,8 @@ struct TransactionDetailViewModel {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .none
         }
     }
@@ -140,7 +142,8 @@ struct TransactionDetailViewModel {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .assetActivation:
             return .none
         }
     }

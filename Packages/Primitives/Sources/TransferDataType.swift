@@ -2,10 +2,15 @@
 
 import Foundation
 
+public enum AccountDataType: Hashable, Equatable, Sendable {
+    case activate
+}
+
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case swap(Asset, Asset, SwapAction)
     case stake(Asset, StakeType)
+    case account(Asset, AccountDataType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
     
     public var data: Data? {
@@ -20,7 +25,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 // none here, data calculated via signer
                 return .none
             }
-        case .stake:
+        case .stake, .account:
             // singer needs to setup correctly
             return .none
         case .generic(_, _, let extra):
@@ -29,21 +34,17 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     }
 
     public var stakeChain: StakeChain? {
-        switch self {
-        case .transfer, .generic, .swap:
-            return .none
-        case .stake(let asset, _):
-            return asset.chain.stakeChain
+        guard case let .stake(asset, _) = self else {
+            return nil
         }
+        return asset.chain.stakeChain
     }
 
     public var stakeType: StakeType? {
-        switch self {
-        case .transfer, .generic, .swap:
-            return .none
-        case .stake(_, let type):
-            return type
+        guard case let .stake(_, type) = self else {
+            return nil
         }
+        return type
     }
 
     public var transactionType: TransactionType {
@@ -62,6 +63,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .rewards: .stakeRewards
             case .withdraw: .stakeWithdraw
             }
+        case .account(_, _): .assetActivation
         }
     }
     
@@ -81,11 +83,10 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .approval:
                 return .null
             }
-        case .generic:
-            return .null
-        case .transfer:
-            return .null
-        case .stake:
+        case .generic,
+            .transfer,
+            .stake,
+            .account:
             return .null
         }
     }
@@ -99,6 +100,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .stake(let asset, _):
             [asset.id]
         case .generic(let asset, _, _):
+            [asset.id]
+        case .account(let asset, _):
             [asset.id]
         }
     }

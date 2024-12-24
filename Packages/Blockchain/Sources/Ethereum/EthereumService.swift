@@ -63,7 +63,7 @@ extension EthereumService {
     }
 
     private func getMaxPriorityFeePerGas() async throws -> BigInt {
-        return try await provider
+        try await provider
             .request(.maxPriorityFeePerGas)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
