@@ -4,6 +4,7 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import PrimitivesComponents
 
 struct TransactionsFilterScene: View {
     @Environment(\.dismiss) var dismiss
@@ -48,7 +49,7 @@ struct TransactionsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
-                listContent: { SimpleListItemView(model: ChainViewModel(chain: $0)) }
+                listContent: { ChainView(model: ChainViewModel(chain: $0)) }
             )
         }
         .sheet(isPresented: $isPresentingTypes) {

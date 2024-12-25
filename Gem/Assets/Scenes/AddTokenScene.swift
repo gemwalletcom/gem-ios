@@ -7,6 +7,7 @@ import Primitives
 import Style
 import ChainService
 import NodeService
+import PrimitivesComponents
 
 struct AddTokenScene: View {
     @State private var model: AddTokenViewModel
@@ -66,10 +67,10 @@ extension AddTokenScene {
                 Section(model.networkTitle) {
                     if model.input.hasManyChains {
                         NavigationLink(value: Scenes.NetworksSelector()) {
-                            SimpleListItemView(model: ChainViewModel(chain: chain))
+                            ChainView(model: ChainViewModel(chain: chain))
                         }
                     } else {
-                        SimpleListItemView(model: ChainViewModel(chain: chain))
+                        ChainView(model: ChainViewModel(chain: chain))
                     }
                 }
             }

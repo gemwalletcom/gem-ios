@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Primitives
+import PrimitivesComponents
 
 struct NetworkSelectorScene: View {
     @Environment(\.dismiss) var dismiss
@@ -23,7 +24,7 @@ struct NetworkSelectorScene: View {
                 onFinishSelection?(value)
                 dismiss()
             },
-            listContent: { SimpleListItemView(model: ChainViewModel(chain: $0)) }
+            listContent: { ChainView(model: ChainViewModel(chain: $0)) }
         )
         .navigationTitle(model.title)
     }

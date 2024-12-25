@@ -6,6 +6,7 @@ import Primitives
 import Components
 import Style
 import Localization
+import PrimitivesComponents
 
 struct ChainListSettingsScene: View {
 
@@ -17,7 +18,7 @@ struct ChainListSettingsScene: View {
             filter: model.filter(_:query:),
             content: { chain in
                 NavigationLink(value: Scenes.ChainSettings(chain: chain)) {
-                    SimpleListItemView(model: ChainViewModel(chain: chain))
+                    ChainView(model: ChainViewModel(chain: chain))
                 }
             },
             emptyContent: {

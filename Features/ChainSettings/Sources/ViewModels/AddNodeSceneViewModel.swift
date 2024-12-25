@@ -7,6 +7,7 @@ import Localization
 import Blockchain
 import ChainService
 import NodeService
+import PrimitivesComponents
 
 @MainActor
 @Observable
@@ -34,6 +35,7 @@ public final class AddNodeSceneViewModel {
     public var inputFieldTitle: String { Localized.Common.url }
 
     public var errorTitle: String { Localized.Errors.errorOccured }
+    public var chainModel: ChainViewModel { ChainViewModel(chain: chain) }
 }
 
 // MARK: - Business Logic

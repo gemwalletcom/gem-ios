@@ -52,3 +52,9 @@ struct ChainImage {
         }
     }
 }
+
+// MARK: - Identifiable
+
+extension ChainImage: Identifiable {
+    var id: String { chain.rawValue }
+}

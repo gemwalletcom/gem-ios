@@ -3,18 +3,15 @@
 import SwiftUI
 import Primitives
 import Style
-import Components
 
-public protocol ChainViewModelRepresentable: SimpleListItemViewable {
-    init(chain: Chain)
+public struct ChainImage: Sendable {
+    private let chain: Chain
 
-    var chain: Chain { get }
-    var title: String { get }
-    var image: Image { get }
-}
+    public init(chain: Chain) {
+        self.chain = chain
+    }
 
-public extension ChainViewModelRepresentable{
-    var image: Image {
+    public var image: Image {
         switch chain {
         case .bitcoin: Images.Chains.bitcoin
         case .bitcoinCash: Images.Chains.bitcoincash
@@ -58,6 +55,10 @@ public extension ChainViewModelRepresentable{
         case .cardano: Images.Chains.cardano
         }
     }
+}
 
-    var title: String { Asset(chain).name }
+// MARK: - Identifiable
+
+extension ChainImage: Identifiable {
+    public var id: String { chain.rawValue }
 }

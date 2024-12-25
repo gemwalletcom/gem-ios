@@ -5,6 +5,7 @@ import Style
 import Localization
 import Components
 import QRScanner
+import PrimitivesComponents
 
 public struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -69,7 +70,7 @@ public struct AddNodeScene: View {
 extension AddNodeScene {
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
-            SimpleListItemView(model: ChainViewModel(chain: model.chain))
+            ChainView(model: model.chainModel)
         }
     }
 
