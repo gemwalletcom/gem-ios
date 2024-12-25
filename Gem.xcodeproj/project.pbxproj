@@ -343,6 +343,7 @@
 		833C12C62CFF4D6E003A052E /* WalletConnectorInteractor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorInteractor.swift; sourceTree = "<group>"; };
 		833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesFactory.swift; sourceTree = "<group>"; };
 		8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreAuthenticationViewModel.swift; sourceTree = "<group>"; };
+		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
 		837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+ViewInjection.swift"; sourceTree = "<group>"; };
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
@@ -359,7 +360,6 @@
 		83B57FA62CFF8FC20009319F /* WalletConnectorSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorSheetType.swift; sourceTree = "<group>"; };
 		83B57FA82CFF8FEB0009319F /* TransferDataCallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferDataCallback.swift; sourceTree = "<group>"; };
 		83B57FAA2CFF92670009319F /* AppResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResolver.swift; sourceTree = "<group>"; };
-		83B5F76C2D1C28E600960520 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = PrimitivesComponents; path = Services/PrimitivesComponents; sourceTree = SOURCE_ROOT; };
 		83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionScene.swift; sourceTree = "<group>"; };
 		83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionViewModel.swift; sourceTree = "<group>"; };
 		83BB7E762C9A050700D90F2C /* LockSceneViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockSceneViewModelTests.swift; sourceTree = "<group>"; };
@@ -1019,7 +1019,6 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
-				83B5F76C2D1C28E600960520 /* PrimitivesComponents */,
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				487A27E82B632CCE00BEEADB /* Gemstone */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,
@@ -1036,6 +1035,7 @@
 				C3CF3B8629AC2B5500E96586 /* Components */,
 				C3D1C4E32A2AB5B6006E8EEA /* Signer */,
 				D829BF2B2CBDB82600DEB2E8 /* Localization */,
+				83518CCC2D1C998300B339E5 /* PrimitivesComponents */,
 			);
 			path = Packages;
 			sourceTree = "<group>";
