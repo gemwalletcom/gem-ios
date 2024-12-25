@@ -27,7 +27,7 @@ public struct ChainNodeViewModel: Sendable {
     }
 
     public var titleExtra: String? {
-        NodeStatusViewModel(nodeStatus: nodeStatus)
+        nodeStatusModel
             .latestBlockText(
                 title: Localized.Nodes.ImportNode.latestBlock,
                 formatter: formatter
@@ -35,7 +35,7 @@ public struct ChainNodeViewModel: Sendable {
     }
 
     public var titleTag: String? {
-        NodeStatusViewModel(nodeStatus: nodeStatus).latencyText
+        nodeStatusModel.latencyText
     }
 
     public var titleTagType: TitleTagType {
@@ -46,12 +46,15 @@ public struct ChainNodeViewModel: Sendable {
     }
 
     public var titleTagStyle: TextStyle {
-        let model = NodeStatusViewModel(nodeStatus: nodeStatus)
         return TextStyle(
             font: .footnote.weight(.medium),
-            color: model.color,
-            background: model.background
+            color: nodeStatusModel.color,
+            background: nodeStatusModel.background
         )
+    }
+
+    private var nodeStatusModel: NodeStatusViewModel {
+        NodeStatusViewModel(nodeStatus: nodeStatus)
     }
 }
 
