@@ -4,7 +4,7 @@ import Foundation
 import Keystore
 import LocalAuthentication
 
-public class MockKeystorePassword: KeystorePassword {    
+public final class MockKeystorePassword: KeystorePassword, @unchecked Sendable {
     private var memoryPassword: String
     private var isAuthenticationEnabled: Bool
     private var lockPeriod: LockPeriod?

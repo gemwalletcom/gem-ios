@@ -5,8 +5,9 @@ import Keystore
 import Foundation
 import LocalAuthentication
 
-@testable import Gem
+@testable import LockManager
 
+@MainActor
 struct LockSceneViewModelTests {
     @Test
     func testInitializationWhenAuthEnabled() {
@@ -387,7 +388,7 @@ struct LockSceneViewModelTests {
 // MARK: - Mock
 
 // TODO: - probably move to Keystore TestKip
-class MockBiometryAuthenticationService: BiometryAuthenticatable {
+class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sendable {
     var lockPeriod: LockPeriod
 
     var isAuthenticationEnabled: Bool

@@ -1,15 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Style
 
 @Observable
 @MainActor
-class LockWindowManager {
-    let lockModel: LockSceneViewModel
+public class LockWindowManager {
+    var lockModel: LockSceneViewModel
     var overlayWindow: UIWindow?
 
-    init(lockModel: LockSceneViewModel) {
+    public init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
 

@@ -3,9 +3,11 @@
 import SwiftUI
 import Keystore
 import Localization
+import Style
 
+@MainActor
 @Observable
-class LockSceneViewModel {
+public class LockSceneViewModel {
     private let service: any BiometryAuthenticatable
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
@@ -13,8 +15,9 @@ class LockSceneViewModel {
 
     private var showPlaceholderPreview: Bool = false
     private var inBackground: Bool = false
+    static private let reason: String = Localized.Settings.Security.authentication
 
-    init(
+    public init(
         service: any BiometryAuthenticatable = BiometryAuthenticationService()
     ) {
         self.service = service
@@ -23,7 +26,11 @@ class LockSceneViewModel {
 
     var unlockTitle: String { Localized.Lock.unlock }
     var unlockImage: String? {
-        KeystoreAuthenticationViewModel(authentication: service.availableAuthentication).authenticationImage
+        switch service.availableAuthentication {
+        case .biometrics: SystemImage.faceid
+        case .passcode: SystemImage.lock
+        case .none: .none
+        }
     }
 
     var isAutoLockEnabled: Bool { service.isAuthenticationEnabled }
@@ -73,7 +80,7 @@ extension LockSceneViewModel {
         guard state != .unlocking else { return }
         state = .unlocking
         do {
-            try await service.authenticate(reason: SecurityViewModel.reason)
+            try await service.authenticate(reason: Self.reason)
             state = .unlocked
             lastUnlockTime = Date.distantFuture
         } catch let error as BiometryAuthenticationError {

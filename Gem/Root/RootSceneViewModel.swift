@@ -5,6 +5,7 @@ import Keystore
 import DeviceService
 import Primitives
 import SwiftUI
+import LockManager
 
 @Observable
 final class RootSceneViewModel {

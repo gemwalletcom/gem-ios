@@ -27,7 +27,7 @@ private struct LockWindowManagerViewModifier: ViewModifier {
     }
 }
 
-extension View {
+public extension View {
     func lockManaged(by lockManager: LockWindowManager) -> some View {
         self.modifier(LockWindowManagerViewModifier(lockManager: lockManager))
     }

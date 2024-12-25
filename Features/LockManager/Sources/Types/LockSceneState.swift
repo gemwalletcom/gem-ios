@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum LockSceneState {
+enum LockSceneState: Sendable {
     case idle
     case unlocking
     case unlocked

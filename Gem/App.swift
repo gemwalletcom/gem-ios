@@ -5,6 +5,7 @@ import Store
 import Primitives
 import DeviceService
 import GemAPI
+import LockManager
 
 @main
 struct GemApp: App {

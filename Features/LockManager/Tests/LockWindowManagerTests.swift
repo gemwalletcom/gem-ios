@@ -5,7 +5,7 @@ import SwiftUI
 import UIKit
 import Keystore
 
-@testable import Gem
+@testable import LockManager
 
 @MainActor
 struct LockWindowManagerTests {
@@ -215,23 +215,4 @@ struct LockWindowManagerTests {
          #expect(manager.overlayWindow?.alpha == 0)
          #expect(!manager.isPrivacyLockVisible)
      }
-
-    private struct LockWindowManagerMock {
-        @MainActor
-        static func mock(
-            isAuthEnabled: Bool = true,
-            availableAuth: KeystoreAuthentication = .biometrics,
-            isPrivacyLockEnabled: Bool = false,
-            lockPeriod: LockPeriod = .oneMinute
-        ) -> LockWindowManager {
-            let service = MockBiometryAuthenticationService(
-                isAuthEnabled: isAuthEnabled,
-                availableAuth: availableAuth,
-                lockPeriod: lockPeriod,
-                isPrivacyLockEnabled: isPrivacyLockEnabled
-            )
-            let lockModel = LockSceneViewModel(service: service)
-            return LockWindowManager(lockModel: lockModel)
-        }
-    }
  }
