@@ -15,5 +15,7 @@ public struct TransactionChanges {
 
 public enum TransactionChange {
     case networkFee(BigInt)
+    case blockNumber(Int)
+    case createdAt(Date)
     case hashChange(old: String, new: String)
 }

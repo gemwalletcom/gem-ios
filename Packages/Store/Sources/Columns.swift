@@ -72,6 +72,8 @@ struct Columns {
         static let fee = Column("fee")
         static let date = Column("date")
         static let chain = Column("chain")
+        static let blockNumber = Column("blockNumber")
+        static let createdAt = Column("createdAt")
     }
     
     struct TransactionAssetAssociation {

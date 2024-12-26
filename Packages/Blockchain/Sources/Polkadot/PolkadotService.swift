@@ -195,7 +195,12 @@ extension PolkadotService: ChainTransactionStateFetchable {
             }
         }
         
-        return TransactionChanges(state: .pending)
+        return TransactionChanges(
+            state: .pending,
+            changes: [
+                .blockNumber(blockNumber),
+            ]
+        )
     }
 }
 

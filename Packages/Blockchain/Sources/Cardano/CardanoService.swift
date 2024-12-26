@@ -47,14 +47,17 @@ extension CardanoService {
         return .zero
     }
     
-    private func transaction(hash: String) async throws -> CardanoTransaction? {
+    private func transaction(hash: String) async throws -> CardanoTransaction {
         let request = GraphqlRequest(
             operationName: "TransactionsByHash",
             variables: ["hash": hash],
             query: "query TransactionsByHash($hash: Hash32Hex!) { transactions(where: { hash: { _eq: $hash }  } ) { block { number } fee } }"
         )
         let result: CardanoTransactions = try await graphql.requestData(request)
-        return result.transactions.first
+        if let transaction = result.transactions.first {
+            return transaction
+        }
+        throw AnyError("no transaction for hash \(hash)")
     }
     
     private func utxos(address: String) async throws -> [UTXO] {
@@ -157,9 +160,14 @@ extension CardanoService: ChainBroadcastable {
 extension CardanoService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await transaction(hash: request.id)
-        let state: TransactionState = transaction != nil ? .confirmed : .pending
         
-        return TransactionChanges(state: state)
+        return TransactionChanges(
+            state: .confirmed,
+            changes: [
+                .networkFee(BigInt(stringLiteral: transaction.fee)),
+                .blockNumber(transaction.block.number.asInt)
+            ]
+        )
     }
 }
 
