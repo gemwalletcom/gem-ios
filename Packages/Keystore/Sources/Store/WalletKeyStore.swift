@@ -189,6 +189,10 @@ extension WalletCore.Wallet {
 
 extension WalletCore.Account {
     func mapToAccount(chain: Chain) -> Primitives.Account {
+        let address = switch chain {
+        case .bitcoinCash: address.removePrefix("bitcoincash:")
+        default: address
+        }
         return Account(
             chain: chain,
             address: address,

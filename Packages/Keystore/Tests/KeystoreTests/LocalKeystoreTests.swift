@@ -169,7 +169,7 @@ final class LocalKeystoreTests {
                 case .stellar:
                     expected = "GA3H6I4C5XUBYGVB66KXR27JV5KS3APSTKRUWOIXZ5MVWZKVTLXWKZ2P"
                 case .bitcoinCash:
-                    expected = "bitcoincash:qpzl3jxkzgvfd9flnd26leud5duv795fnv7vuaha70"
+                    expected = "qpzl3jxkzgvfd9flnd26leud5duv795fnv7vuaha70"
                 case .algorand:
                     expected = "JTJWO524JXIHVPGBDWFLJE7XUIA32ECOZOBLF2QP3V5TQBT3NKZSCG67BQ"
                 case .polkadot:

@@ -67,6 +67,13 @@ public extension String {
         }
         return data
     }
+    
+    func removePrefix(_ prefix: String) -> String {
+        if self.hasPrefix(prefix) {
+            return String(self.dropFirst(prefix.count))
+        }
+        return self
+    }
 }
 
 extension Optional where Wrapped == String {

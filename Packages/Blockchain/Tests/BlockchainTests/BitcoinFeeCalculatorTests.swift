@@ -15,9 +15,9 @@ final class BitcoinFeeTests {
             transaction_id: "21d603f2bcf5bf3c9b653ec70f53cf6caf9ad51d304e9fbbf609832d1f9a1fec",
             vout: 0,
             value: "1100",
-            address: .none
+            address: ""
         ),
-        UTXO(transaction_id: "e2751b44a4eee26cad70c6f3d41ada51def4765c209de97b422b1c6d05c0ac6e", vout: 1, value: "104810", address: .none)
+        UTXO(transaction_id: "e2751b44a4eee26cad70c6f3d41ada51def4765c209de97b422b1c6d05c0ac6e", vout: 1, value: "104810", address: "")
     ]
 
     let feeRates: [FeeRate] = [
