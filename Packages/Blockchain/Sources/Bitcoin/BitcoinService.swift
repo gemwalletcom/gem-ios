@@ -40,7 +40,7 @@ extension BitcoinService {
         try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
-            .map { $0.mapToUTXO() }
+            .map { $0.mapToUTXO(address: address) }
     }
     
     func getFeePriority(for blocks: Int) async throws -> String {
