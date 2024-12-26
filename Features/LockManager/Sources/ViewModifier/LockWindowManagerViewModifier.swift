@@ -4,9 +4,9 @@ import SwiftUI
 
 private struct LockWindowManagerViewModifier: ViewModifier {
     @Environment(\.scenePhase) var scenePhase
-    let lockManager: LockWindowManager
+    private let lockManager: any LockWindowManageable
 
-    init(lockManager: LockWindowManager) {
+    init(lockManager: any LockWindowManageable) {
         self.lockManager = lockManager
     }
 
@@ -28,7 +28,7 @@ private struct LockWindowManagerViewModifier: ViewModifier {
 }
 
 public extension View {
-    func lockManaged(by lockManager: LockWindowManager) -> some View {
+    func lockManaged(by lockManager: any LockWindowManageable) -> some View {
         self.modifier(LockWindowManagerViewModifier(lockManager: lockManager))
     }
 }

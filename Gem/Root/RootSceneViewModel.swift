@@ -17,7 +17,7 @@ final class RootSceneViewModel {
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
 
-    let lockManager: LockWindowManager
+    let lockManager: any LockWindowManageable
 
     var currentWallet: Wallet? { keystore.currentWallet }
     var updateAvailableAlertSheetMessage: String?
@@ -41,7 +41,7 @@ final class RootSceneViewModel {
          transactionService: TransactionService,
          connectionsService: ConnectionsService,
          deviceObserverService: DeviceObserverService,
-         lockWindowManager: LockWindowManager
+         lockWindowManager: any LockWindowManageable
     ) {
         self.keystore = keystore
         self.walletConnectorInteractor = walletConnectorInteractor

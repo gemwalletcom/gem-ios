@@ -27,6 +27,7 @@
 		833A0C872C80C2A50004DBA9 /* ChainsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833A0C862C80C2A50004DBA9 /* ChainsFilterViewModel.swift */; };
 		833C12C72CFF4D6E003A052E /* WalletConnectorInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833C12C62CFF4D6E003A052E /* WalletConnectorInteractor.swift */; };
 		833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */; };
+		834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */ = {isa = PBXBuildFile; productRef = 834B38192D1D85E2009D58D4 /* LockManager */; };
 		8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */; };
 		8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374DC592C6CDF6C00183109 /* AddTokenInput.swift */; };
 		837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */; };
@@ -646,6 +647,7 @@
 				DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */,
 				D8CF19E32CC747370025D6B4 /* Transfer in Frameworks */,
 				D829BF452CBDD9F700DEB2E8 /* FiatConnect in Frameworks */,
+				834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */,
 				83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */,
 				D829BF542CBF314100DEB2E8 /* PriceAlertService in Frameworks */,
 			);
@@ -1918,6 +1920,7 @@
 				DFA0B51D2D16C94400355594 /* Currency */,
 				839C794A2D1C42A500E32072 /* PrimitivesComponents */,
 				839C794C2D1C42AE00E32072 /* ChainSettings */,
+				834B38192D1D85E2009D58D4 /* LockManager */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -2738,6 +2741,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		834B38192D1D85E2009D58D4 /* LockManager */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = LockManager;
+		};
 		83863EE62D19B93E005048A7 /* NodeService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = NodeService;

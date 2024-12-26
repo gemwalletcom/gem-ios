@@ -4,23 +4,23 @@ import SwiftUI
 
 @Observable
 @MainActor
-public class LockWindowManager {
-    var lockModel: LockSceneViewModel
-    var overlayWindow: UIWindow?
+public final class LockWindowManager: LockWindowManageable {
+    public var lockModel: LockSceneViewModel
+    public var overlayWindow: UIWindow?
 
     public init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
 
-    var showLockScreen: Bool {
+    public var showLockScreen: Bool {
         lockModel.shouldShowLockScreen
     }
 
-    var isPrivacyLockVisible: Bool {
+    public var isPrivacyLockVisible: Bool {
         lockModel.isPrivacyLockVisible
     }
 
-    func setPhase(phase: ScenePhase) {
+    public func setPhase(phase: ScenePhase) {
         guard lockModel.isAutoLockEnabled else {
             lockModel.resetLockState()
             return
@@ -29,7 +29,7 @@ public class LockWindowManager {
         lockModel.handleSceneChange(to: phase)
     }
 
-    func toggleLock(show: Bool) {
+    public func toggleLock(show: Bool) {
         if show {
             showLock()
         } else {
@@ -37,7 +37,7 @@ public class LockWindowManager {
         }
     }
 
-    func togglePrivacyLock(visible: Bool) {
+    public func togglePrivacyLock(visible: Bool) {
         overlayWindow?.alpha = visible ? 1 : 0
     }
 }

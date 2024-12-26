@@ -8,6 +8,8 @@ import Style
 @MainActor
 @Observable
 public class LockSceneViewModel {
+    static private let reason: String = Localized.Settings.Security.authentication
+
     private let service: any BiometryAuthenticatable
 
     var lastUnlockTime: Date = Date(timeIntervalSince1970: 0)
@@ -15,7 +17,6 @@ public class LockSceneViewModel {
 
     private var showPlaceholderPreview: Bool = false
     private var inBackground: Bool = false
-    static private let reason: String = Localized.Settings.Security.authentication
 
     public init(
         service: any BiometryAuthenticatable = BiometryAuthenticationService()

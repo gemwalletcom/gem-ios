@@ -6,22 +6,7 @@ import Keystore
 @testable import LockManager
 
 @MainActor
-protocol LockWindowManagable {
-    var lockModel: LockSceneViewModel { get set }
-    var overlayWindow: UIWindow? { get set }
-
-    var showLockScreen: Bool { get }
-    var isPrivacyLockVisible: Bool { get }
-
-    func setPhase(phase: ScenePhase)
-    func toggleLock(show: Bool)
-    func togglePrivacyLock(visible: Bool)
-}
-
-extension LockWindowManager: LockWindowManagable {}
-
-@MainActor
-class LockWindowManagerMock: LockWindowManagable {
+class LockWindowManagerMock: LockWindowManageable {
     init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
