@@ -9,19 +9,16 @@ import Style
 import Localization
 import MarketInsight
 
-class ChartsViewModel: ObservableObject {
+@MainActor
+@Observable
+class ChartsViewModel {
+    private let service: ChartService
+    private let priceService: PriceService
+    private let assetModel: AssetViewModel
+    private let assetsService: AssetsService
 
-    let service: ChartService
-    let priceService: PriceService
-    let assetModel: AssetViewModel
-    let assetsService: AssetsService
-    
-    @Published var currentPeriod: ChartPeriod {
-        didSet {
-            Task { await updateCharts() }
-        }
-    }
-    
+    private let preferences: Preferences = .standard
+
     let periods: [ChartSelection] = [
         ChartSelection(period: .hour, title: Localized.Charts.hour),
         ChartSelection(period: .day, title: Localized.Charts.day),
@@ -30,19 +27,13 @@ class ChartsViewModel: ObservableObject {
         ChartSelection(period: .year, title: Localized.Charts.year),
         ChartSelection(period: .all, title: Localized.Charts.all),
     ]
-    
-    @Published var state: StateViewType<ChartValuesViewModel> = .loading
-    
-    private let preferences: Preferences = .standard
 
-    var priceRequest: PriceRequest {
-        return PriceRequest(assetId: assetModel.asset.id.identifier)
+    var state: StateViewType<ChartValuesViewModel> = .loading
+    var currentPeriod: ChartPeriod {
+        didSet {
+            Task { await fetch() }
+        }
     }
-
-    var title: String { assetModel.name }
-
-    var emptyTitle: String { Localized.Common.notAvailable }
-    var errorTitle: String { Localized.Errors.errorOccured }
 
     var headerTitleView: WalletBarViewViewModel {
         WalletBarViewViewModel(
@@ -51,7 +42,19 @@ class ChartsViewModel: ObservableObject {
             showChevron: false
         )
     }
-    
+
+    var explorerStorage: ExplorerStorage {
+        ExplorerStorage(preferences: preferences)
+    }
+
+    var priceRequest: PriceRequest {
+        PriceRequest(assetId: assetModel.asset.id.identifier)
+    }
+
+    var title: String { assetModel.name }
+    var emptyTitle: String { Localized.Common.notAvailable }
+    var errorTitle: String { Localized.Errors.errorOccured }
+
     init(
         service: ChartService = ChartService(),
         priceService: PriceService,
@@ -65,15 +68,13 @@ class ChartsViewModel: ObservableObject {
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
     }
-    
-    var explorerStorage: ExplorerStorage {
-        ExplorerStorage(preferences: preferences)
-    }
+}
 
-    func updateCharts() async {
-        DispatchQueue.main.async {
-            self.state = .loading
-        }
+// MARK: - Business Logic
+
+extension ChartsViewModel {
+    func fetch() async {
+        state = .loading
         do {
             let values = try await service.getCharts(
                 assetId: assetModel.asset.id,
@@ -87,7 +88,7 @@ class ChartsViewModel: ObservableObject {
             if let market = values.market {
                 try priceService.priceStore.updateMarket(assetId: assetModel.asset.id.identifier, market: market)
             }
-            
+
             let price = try priceService.getPrice(for: assetModel.asset.id)
             var charts = values.prices.map {
                 ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value))
@@ -95,16 +96,12 @@ class ChartsViewModel: ObservableObject {
             if let price {
                 charts.append(ChartDateValue(date: .now, value: price.price))
             }
-            
+
             let chartValues = try ChartValues.from(charts: charts)
             let model = ChartValuesViewModel(period: currentPeriod, price: price?.mapToPrice(), values: chartValues)
-            DispatchQueue.main.async {
-                self.state = .loaded(model)
-            }
+            state = .loaded(model)
         } catch {
-            DispatchQueue.main.async {
-                self.state = .error(error)
-            }
+            state = .error(error)
         }
     }
 }

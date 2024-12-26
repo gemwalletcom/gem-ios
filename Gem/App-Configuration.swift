@@ -17,6 +17,7 @@ import ChainService
 import BannerService
 import StakeService
 import NotificationService
+import NodeService
 
 extension Asset {
     static let main = Asset.bitcoin

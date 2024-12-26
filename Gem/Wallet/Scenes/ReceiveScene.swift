@@ -63,8 +63,6 @@ struct ReceiveScene: View {
         }
         .taskOnce {
             model.enableAsset()
-            
-            try? model.walletsService.updateNode(chain: model.assetModel.asset.chain)
         }
     }
 }

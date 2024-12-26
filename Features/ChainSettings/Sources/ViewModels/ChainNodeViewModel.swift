@@ -2,12 +2,11 @@
 
 import Foundation
 import Primitives
-import BigInt
 import Components
 import Style
 import Localization
 
-public struct ChainNodeViewModel {
+public struct ChainNodeViewModel: Sendable {
     public let chainNode: ChainNode
     private let nodeStatus: NodeStatus
     private let formatter: ValueFormatter
@@ -28,7 +27,7 @@ public struct ChainNodeViewModel {
     }
 
     public var titleExtra: String? {
-        NodeStatusViewModel(nodeStatus: nodeStatus)
+        nodeStatusModel
             .latestBlockText(
                 title: Localized.Nodes.ImportNode.latestBlock,
                 formatter: formatter
@@ -36,7 +35,7 @@ public struct ChainNodeViewModel {
     }
 
     public var titleTag: String? {
-        NodeStatusViewModel(nodeStatus: nodeStatus).latencyText
+        nodeStatusModel.latencyText
     }
 
     public var titleTagType: TitleTagType {
@@ -47,12 +46,15 @@ public struct ChainNodeViewModel {
     }
 
     public var titleTagStyle: TextStyle {
-        let model = NodeStatusViewModel(nodeStatus: nodeStatus)
         return TextStyle(
             font: .footnote.weight(.medium),
-            color: model.color,
-            background: model.background
+            color: nodeStatusModel.color,
+            background: nodeStatusModel.background
         )
+    }
+
+    private var nodeStatusModel: NodeStatusViewModel {
+        NodeStatusViewModel(nodeStatus: nodeStatus)
     }
 }
 
