@@ -3,7 +3,6 @@
 import SwiftUI
 import PhotosUI
 
-@MainActor
 public struct QRScannerView: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
@@ -28,7 +27,7 @@ public struct QRScannerView: View {
             case .failure(let error):
                 ContentUnavailableView(
                     label: {
-                        if let localizedError = error as? LocalizedQRCodeError, let titleImage = localizedError.titleImage {
+                        if let titleImage = error.titleImage {
                             Label(titleImage.title, systemImage: titleImage.systemImage)
                         }
                     },

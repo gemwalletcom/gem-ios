@@ -8,6 +8,7 @@ import Localization
 import ChainService
 import InfoSheet
 import Transfer
+import NodeService
 
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss

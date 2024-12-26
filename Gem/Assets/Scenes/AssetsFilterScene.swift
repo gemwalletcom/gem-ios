@@ -5,6 +5,7 @@ import Store
 import Style
 import Primitives
 import Components
+import PrimitivesComponents
 
 struct AssetsFilterScene: View {
     @Environment(\.dismiss) var dismiss
@@ -43,7 +44,7 @@ struct AssetsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
-                listContent: { ChainView(chain: $0)}
+                listContent: { ChainView(model: ChainViewModel(chain: $0))}
             )
         }
     }

@@ -1,31 +1,29 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import GemAPI
 import Store
 import Primitives
-import Blockchain
-import class Gemstone.Config
 import ChainService
+import class Gemstone.Config
+import GemstonePrimitives
 
-public final class NodeService {
-    let nodeStore: NodeStore
-    var requestedChains = Set<Chain>()
-    
-    init(
+public final class NodeService: Sendable {
+    public let nodeStore: NodeStore
+
+    public init(
         nodeStore: NodeStore
     ) {
         self.nodeStore = nodeStore
     }
 
-    func getNodeSelected(chain: Chain) -> ChainNode {
+    public func getNodeSelected(chain: Chain) -> ChainNode {
         guard let node = try? nodeStore.selectedNode(chain: chain.rawValue) else {
             return chain.defaultChainNode
         }
         return node
     }
     
-    func setNodeSelected(chain: Chain, node: Primitives.Node) throws {
+    public func setNodeSelected(chain: Chain, node: Primitives.Node) throws {
         if node.url.contains("gemnodes.com") {
             return try nodeStore.deleteNodeSelected(chain: chain.rawValue)
         }
@@ -35,21 +33,22 @@ public final class NodeService {
         try nodeStore.setNodeSelected(node: recordNode)
     }
 
-    func delete(chain: Chain, node: Primitives.Node) throws {
+    public func delete(chain: Chain, node: Primitives.Node) throws {
         try nodeStore.deleteNode(chain: chain.rawValue, url: node.url)
     }
 
-    func nodes(for chain: Chain) throws -> [ChainNode] {
+    public func nodes(for chain: Chain) throws -> [ChainNode] {
         let nodes = try nodeStore.nodes(chain: chain)
         return ([chain.defaultChainNode] + nodes).unique()
     }
     
-    func update(chain: Chain, force: Bool = false) throws {
-        guard !requestedChains.contains(chain) else {
-            return
-        }
-        //let nodes = try nodeStore.nodeRecords(chain: chain)
+    public func update(chain: Chain, force: Bool = false) throws {
+        // TODO: - implement later
+        /*
+        guard !requestedChains.contains(chain) else { return }
+        let nodes = try nodeStore.nodeRecords(chain: chain)
         requestedChains.insert(chain)
+         */
     }
 }
 
@@ -69,8 +68,12 @@ extension NodeService: NodeURLFetchable  {
 // MARK: - Static
 
 extension NodeService {
-    static func defaultNodes(chain: Chain) -> [ChainNode] {
+    public static func defaultNodes(chain: Chain) -> [ChainNode] {
         let nodes = Config.shared.getNodes()[chain.rawValue] ?? []
         return nodes.map({ ChainNode(chain: chain.rawValue, node: $0.node) })
+    }
+
+    public static func isValid(netoworkId: String, for chain: Chain) -> Bool {
+        ChainConfig.config(chain: chain).networkId == netoworkId
     }
 }

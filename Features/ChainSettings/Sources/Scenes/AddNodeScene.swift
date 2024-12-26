@@ -1,23 +1,29 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Components
 import Style
 import Localization
+import Components
+import QRScanner
+import PrimitivesComponents
 
-struct AddNodeScene: View {
+public struct AddNodeScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @StateObject var model: AddNodeSceneViewModel
-
-    var onDismiss: (() -> Void)
-
+    @State private var model: AddNodeSceneViewModel
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
     }
 
-    var body: some View {
+    private let onDismiss: (() -> Void)?
+
+    public init(model: AddNodeSceneViewModel, onDismiss: (() -> Void)? = nil) {
+        _model = State(initialValue: model)
+        self.onDismiss = onDismiss
+    }
+
+    public var body: some View {
         VStack {
             List {
                 networkSection
@@ -49,9 +55,13 @@ struct AddNodeScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
-        .alert(item: $model.isPresentingErrorAlert) {
-            Alert(title: Text(""), message: Text($0))
-        }
+        .alert("",
+            isPresented: $model.isPresentingErrorAlert.mappedToBool(),
+            actions: {},
+            message: {
+                Text(model.isPresentingErrorAlert ?? "")
+            }
+        )
     }
 }
 
@@ -60,10 +70,10 @@ struct AddNodeScene: View {
 extension AddNodeScene {
     private var networkSection: some View {
         Section(Localized.Transfer.network) {
-            ChainView(chain: model.chain)
+            ChainView(model: model.chainModel)
         }
     }
-    
+
     @ViewBuilder
     private var inputView: some View {
         Section {
@@ -122,7 +132,7 @@ extension AddNodeScene {
     private func onSelectImport() {
         do {
             try model.importFoundNode()
-            onDismiss()
+            onDismiss?()
         } catch {
             model.isPresentingErrorAlert = error.localizedDescription
         }
@@ -150,6 +160,11 @@ extension AddNodeScene {
 
 #Preview {
     return NavigationStack {
-        AddNodeScene(model: .init(chain: .ethereum, nodeService: .main)) { }
+        AddNodeScene(
+            model: .init(
+                chain: .ethereum,
+                nodeService: .init(nodeStore: .init(db: .init(path: "")))
+            )
+        )
     }
 }

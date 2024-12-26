@@ -1,18 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
 import SwiftUI
+import Primitives
 import Style
 
-struct ChainViewModel {
-    private let chain: Chain
-
-    init(chain: Chain) {
-        self.chain = chain
-    }
-
-    var title: String { asset.name }
+struct ChainImage {
+    let chain: Chain
 
     var image: Image {
         switch chain {
@@ -58,6 +51,10 @@ struct ChainViewModel {
         case .cardano: Images.Chains.cardano
         }
     }
+}
 
-    private var asset: Asset { Asset(chain) }
+// MARK: - Identifiable
+
+extension ChainImage: Identifiable {
+    var id: String { chain.rawValue }
 }

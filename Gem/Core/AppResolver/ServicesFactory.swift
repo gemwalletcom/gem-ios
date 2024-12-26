@@ -8,6 +8,7 @@ import PriceAlertService
 import StakeService
 import NotificationService
 import GemstonePrimitives
+import NodeService
 import Store
 import GemAPI
 import Keystore

@@ -3,43 +3,45 @@
 import SwiftUI
 import Primitives
 import Components
-import GemstonePrimitives
-import BigInt
-import Blockchain
 import Localization
+import Blockchain
 import ChainService
-import ChainSettings
+import NodeService
+import PrimitivesComponents
 
-final class AddNodeSceneViewModel: ObservableObject {
+@MainActor
+@Observable
+public final class AddNodeSceneViewModel {
     private let nodeService: NodeService
     private let addNodeService: AddNodeService
 
-    let chain: Chain
+    public let chain: Chain
 
-    @Published var urlInput: String = ""
-    @Published var state: StateViewType<AddNodeResultViewModel> = .noData
-    @Published var isPresentingScanner: Bool = false
-    @Published var isPresentingErrorAlert: String?
+    public var urlInput: String = ""
+    public var state: StateViewType<AddNodeResultViewModel> = .noData
+    public var isPresentingScanner: Bool = false
+    public var isPresentingErrorAlert: String?
 
-    init(chain: Chain, nodeService: NodeService) {
+    public init(chain: Chain, nodeService: NodeService) {
         self.chain = chain
         self.nodeService = nodeService
         self.addNodeService = AddNodeService(nodeStore: nodeService.nodeStore)
     }
 
-    var title: String { Localized.Nodes.ImportNode.title }
+    public var title: String { Localized.Nodes.ImportNode.title }
 
-    var actionButtonTitle: String { Localized.Wallet.Import.action }
-    var doneButtonTitle: String { Localized.Common.done }
-    var inputFieldTitle: String { Localized.Common.url }
+    public var actionButtonTitle: String { Localized.Wallet.Import.action }
+    public var doneButtonTitle: String { Localized.Common.done }
+    public var inputFieldTitle: String { Localized.Common.url }
 
-    var errorTitle: String { Localized.Errors.errorOccured }
+    public var errorTitle: String { Localized.Errors.errorOccured }
+    public var chainModel: ChainViewModel { ChainViewModel(chain: chain) }
 }
 
 // MARK: - Business Logic
 
 extension AddNodeSceneViewModel {
-    func importFoundNode() throws {
+    public func importFoundNode() throws {
         guard case .loaded(let model) = state else {
             throw AnyError("Unknown result")
         }
@@ -54,16 +56,13 @@ extension AddNodeSceneViewModel {
          */
     }
     
-    func fetch() async  {
+    public func fetch() async  {
         guard let url = try? URLDecoder().decode(urlInput) else {
             await updateStateWithError(error: AnyError(AddNodeError.invalidURL.errorDescription ?? ""))
             return
         }
 
-        await MainActor.run { [self] in
-            self.state = .loading
-        }
-
+        state = .loading
         let provider = ChainServiceFactory(nodeProvider: CustomNodeULRFetchable(url: url))
         let service = provider.service(for: chain)
 
@@ -76,10 +75,7 @@ extension AddNodeSceneViewModel {
 
             let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
             let resultVM = AddNodeResultViewModel(addNodeResult: result)
-
-            await MainActor.run { [self] in
-                self.state = .loaded(resultVM)
-            }
+            state = .loaded(resultVM)
         } catch {
             await updateStateWithError(error: error)
         }
@@ -91,15 +87,11 @@ extension AddNodeSceneViewModel {
 extension AddNodeSceneViewModel {
     private func fetchChainID(service: any ChainIDFetchable) async throws -> (latency: Latency, value: String) {
         let result = try await LatencyMeasureService.measure(for: service.getChainID)
-        try validate(networkId: result.value)
-        return (latency: .from(duration: result.duration), value: result.value)
-    }
-
-    private func validate(networkId: String) throws {
-        let configNetworkId = ChainConfig.config(chain: chain).networkId
-        if configNetworkId != networkId {
+        let networkId = result.value
+        guard NodeService.isValid(netoworkId: networkId, for: chain) else {
             throw AddNodeError.invalidNetworkId
         }
+        return (latency: .from(duration: result.duration), value: networkId)
     }
 
     private func updateStateWithError(error: any Error) async {
@@ -114,9 +106,6 @@ extension AddNodeSceneViewModel {
 extension AddNodeSceneViewModel {
     struct CustomNodeULRFetchable: NodeURLFetchable {
         let url: URL
-
-        func node(for chain: Chain) -> URL {
-            return url
-        }
+        func node(for chain: Chain) -> URL { url }
     }
 }

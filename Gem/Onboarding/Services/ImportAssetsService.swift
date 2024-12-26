@@ -5,6 +5,7 @@ import Store
 import Primitives
 import Settings
 import GemAPI
+import NodeService
 
 struct ImportAssetsService {
     let nodeService: NodeService
