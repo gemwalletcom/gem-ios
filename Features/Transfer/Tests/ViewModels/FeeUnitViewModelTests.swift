@@ -20,7 +20,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "100,00 sat/vB"
+            ).value == "100,000 sat/vB"
         )
         #expect(
             FeeUnitViewModel(
@@ -28,15 +28,15 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "100000,12 sat/vB"
+            ).value == "100,000,123 sat/vB"
         )
         #expect(
             FeeUnitViewModel(
-                unit: FeeUnit(type: .satB, value: BigInt(1000)),
+                unit: FeeUnit(type: .satVb, value: BigInt(1000)),
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "4,00 sat/B"
+            ).value == "1,000 sat/vB"
         )
         #expect(
             FeeUnitViewModel(
@@ -44,7 +44,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "0,0001 gwei"
+            ).value == "0.0001 gwei"
         )
         #expect(
             FeeUnitViewModel(
@@ -52,7 +52,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "0,12 gwei"
+            ).value == "0.12 gwei"
         )
         #expect(
             FeeUnitViewModel(
@@ -60,7 +60,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "123,46 gwei"
+            ).value == "123.46 gwei"
         )
     }
 
@@ -72,15 +72,15 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: usFormatter
-            ).value == "100.00 sat/vB"
+            ).value == "100,000 sat/vB"
         )
         #expect(
             FeeUnitViewModel(
-                unit: FeeUnit(type: .satB, value: BigInt(1000)),
+                unit: FeeUnit(type: .satVb, value: BigInt(1000)),
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: usFormatter
-            ).value == "4.00 sat/B"
+            ).value == "1,000 sat/vB"
         )
         #expect(
             FeeUnitViewModel(
@@ -88,7 +88,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: usFormatter
-            ).value == "100,000.12 sat/vB"
+            ).value == "100,000,123 sat/vB"
         )
         #expect(
             FeeUnitViewModel(

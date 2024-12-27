@@ -24,8 +24,8 @@ extension BitcoinService {
         case .fast: blocksFeePriority.fast
         }
         let feePriorityValue = try await getFeePriority(for: feePriority.asInt)
-        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals))
-        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: max(rate, BigInt(chain.minimumByteFee * 1000))))
+        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals)) / 1000
+        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: max(rate, BigInt(chain.minimumByteFee))))
     }
 }
 
@@ -67,8 +67,7 @@ extension BitcoinService {
             }
 
             let coinType = chain.chain.coinType
-            let byteFee = Int64(round(Double(gasPrice.asInt) / 1000))
-
+            
             let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
             let scripts = utxo.mapToScripts(address: senderAddress, coinType: coinType)
             let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -77,7 +76,7 @@ extension BitcoinService {
                 $0.coinType = coinType.rawValue
                 $0.hashType = hashType
                 $0.amount = amount.asInt64
-                $0.byteFee = byteFee
+                $0.byteFee = gasPrice.asInt64
                 $0.toAddress = destinationAddress
                 $0.changeAddress = senderAddress
                 $0.utxo = utxo

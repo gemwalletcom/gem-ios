@@ -32,7 +32,10 @@ let package = Package(
         ),
         .testTarget(
             name: "TransferTests",
-            dependencies: ["Transfer"],
+            dependencies: [
+                "Transfer",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
             path: "Tests"
         ),
     ]
