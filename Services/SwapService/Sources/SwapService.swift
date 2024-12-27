@@ -48,12 +48,12 @@ public final class SwapService {
         )
     }
     
-    public func getQuotes(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String) async throws -> [Gemstone.SwapQuote] {
+    public func getQuotes(fromAsset: Primitives.AssetId, toAsset: Primitives.AssetId, value: String, walletAddress: String, destinationAddress: String) async throws -> [Gemstone.SwapQuote] {
         let swapRequest = Gemstone.SwapQuoteRequest(
             fromAsset: fromAsset.identifier,
             toAsset: toAsset.identifier,
             walletAddress: walletAddress,
-            destinationAddress: walletAddress,
+            destinationAddress: destinationAddress,
             value: value,
             mode: .exactIn,
             options: GemSwapOptions(
