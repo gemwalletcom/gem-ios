@@ -16,7 +16,6 @@ extension Chain {
         return AssetId(chain: self, tokenId: .none)
     }
     
-    
     // in most cases address is the case, except bitcoin cash
     // short and full simplifies bitcoincash address
     public func shortAddress(address: String) -> String {
