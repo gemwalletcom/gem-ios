@@ -15,6 +15,23 @@ extension Chain {
     public var assetId: AssetId {
         return AssetId(chain: self, tokenId: .none)
     }
+    
+    
+    // in most cases address is the case, except bitcoin cash
+    // short and full simplifies bitcoincash address
+    public func shortAddress(address: String) -> String {
+        switch self {
+        case .bitcoinCash: address.removePrefix("\(self.rawValue):")
+        default: address
+        }
+    }
+    
+    public func fullAddress(address: String) -> String {
+        switch self {
+        case .bitcoinCash: address.addPrefix("\(self.rawValue):")
+        default: address
+        }
+    }
 }
 
 extension Chain: Identifiable {
