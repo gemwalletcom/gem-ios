@@ -8,9 +8,9 @@ public struct UTXO: Codable, Sendable {
 	public let transaction_id: String
 	public let vout: Int32
 	public let value: String
-	public let address: String?
+	public let address: String
 
-	public init(transaction_id: String, vout: Int32, value: String, address: String?) {
+	public init(transaction_id: String, vout: Int32, value: String, address: String) {
 		self.transaction_id = transaction_id
 		self.vout = vout
 		self.value = value

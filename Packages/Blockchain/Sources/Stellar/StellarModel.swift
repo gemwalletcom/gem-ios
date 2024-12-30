@@ -7,10 +7,14 @@ import Foundation
 public struct StellarBalance: Codable, Sendable {
 	public let balance: String
 	public let asset_type: String
+	public let asset_code: String?
+	public let asset_issuer: String?
 
-	public init(balance: String, asset_type: String) {
+	public init(balance: String, asset_type: String, asset_code: String?, asset_issuer: String?) {
 		self.balance = balance
 		self.asset_type = asset_type
+		self.asset_code = asset_code
+		self.asset_issuer = asset_issuer
 	}
 }
 
@@ -29,6 +33,34 @@ public struct StellarAccountEmpty: Codable, Sendable {
 
 	public init(status: Int32) {
 		self.status = status
+	}
+}
+
+public struct StellarAsset: Codable, Sendable {
+	public let asset_code: String
+	public let asset_issuer: String
+	public let contract_id: String?
+
+	public init(asset_code: String, asset_issuer: String, contract_id: String?) {
+		self.asset_code = asset_code
+		self.asset_issuer = asset_issuer
+		self.contract_id = contract_id
+	}
+}
+
+public struct StellarRecords<T: Codable & Sendable>: Codable, Sendable {
+	public let records: [T]
+
+	public init(records: [T]) {
+		self.records = records
+	}
+}
+
+public struct StellarEmbedded<T: Codable & Sendable>: Codable, Sendable {
+	public let _embedded: StellarRecords<T>
+
+	public init(_embedded: StellarRecords<T>) {
+		self._embedded = _embedded
 	}
 }
 

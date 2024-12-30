@@ -7,6 +7,7 @@ import BigInt
 import WalletCore
 import WalletCorePrimitives
 import Gemstone
+import GemstonePrimitives
 
 // MARK: - ChainFeeCalculateable
 
@@ -23,8 +24,8 @@ extension BitcoinService {
         case .fast: blocksFeePriority.fast
         }
         let feePriorityValue = try await getFeePriority(for: feePriority.asInt)
-        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals))
-        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: rate))
+        let rate = try BigInt.from(feePriorityValue, decimals: Int(chain.chain.asset.decimals)) / 1000
+        return FeeRate(priority: priority, gasPriceType: .regular(gasPrice: max(rate, BigInt(chain.minimumByteFee))))
     }
 }
 
@@ -66,9 +67,7 @@ extension BitcoinService {
             }
 
             let coinType = chain.chain.coinType
-            let byteFee = Int(round(Double(gasPrice.asInt) / 1000))
-
-            let gasPrice = max(byteFee, chain.minimumByteFee)
+            
             let utxo = utxos.map { $0.mapToUnspendTransaction(address: senderAddress, coinType: coinType) }
             let scripts = utxo.mapToScripts(address: senderAddress, coinType: coinType)
             let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -77,7 +76,7 @@ extension BitcoinService {
                 $0.coinType = coinType.rawValue
                 $0.hashType = hashType
                 $0.amount = amount.asInt64
-                $0.byteFee = Int64(gasPrice)
+                $0.byteFee = gasPrice.asInt64
                 $0.toAddress = destinationAddress
                 $0.changeAddress = senderAddress
                 $0.utxo = utxo
@@ -96,3 +95,10 @@ extension BitcoinService {
         }
     }
 }
+
+extension BitcoinChain {
+    public var minimumByteFee: Int {
+        GemstoneConfig.shared.getBitcoinChainConfig(chain: chain.rawValue).minimumByteFee.asInt
+    }
+}
+

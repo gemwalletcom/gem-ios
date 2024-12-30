@@ -62,6 +62,14 @@ public struct TransactionStore: Sendable {
         try updateValues(id: transactionId, values: [Columns.Transaction.fee.set(to: networkFee)])
     }
     
+    public func updateBlockNumber(transactionId: String, block: Int) throws {
+        try updateValues(id: transactionId, values: [Columns.Transaction.blockNumber.set(to: block)])
+    }
+    
+    public func updateCreatedAt(transactionId: String, date: Date) throws {
+        try updateValues(id: transactionId, values: [Columns.Transaction.createdAt.set(to: date)])
+    }
+    
     public func updateTransactionId(oldTransactionId: String, transactionId: String, hash: String) throws {
         if try isExist(transactionId: transactionId) {
             // should not exist in most cases. delete

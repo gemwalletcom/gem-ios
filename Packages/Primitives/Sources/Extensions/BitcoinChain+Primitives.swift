@@ -11,12 +11,4 @@ extension BitcoinChain {
         case .bitcoinCash: return .bitcoinCash
         }
     }
-
-    public var minimumByteFee: Int {
-        switch self {
-        case .bitcoin, .bitcoinCash: 1 // 1 satoshi per byte for Bitcoin
-        case .litecoin: 5 //  0.001 LTC per kB, converted to litoshis per byte
-        case .doge: 1_000 // 1 DOGE per kB, converted to dogetoshis per byte
-        }
-    }
 }

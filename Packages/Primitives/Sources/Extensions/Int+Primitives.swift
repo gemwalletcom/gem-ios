@@ -62,6 +62,14 @@ extension Int {
     }
 }
 
+extension Int32 {
+    public init(string: String) throws {
+        guard let value = Int32(string) else {
+            throw AnyError("Invalid value: \(string)")
+        }
+        self = value
+    }
+}
 extension UInt64 {
     
     public init(string: String) throws {

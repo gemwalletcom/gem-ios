@@ -21,7 +21,7 @@ public struct CardanoSigner: Signable {
             try CardanoTxInput.with {
                 $0.outPoint.txHash = try Data.from(hex: utxo.transaction_id)
                 $0.outPoint.outputIndex = UInt64(utxo.vout)
-                $0.address = try utxo.address.unwrapOrThrow()
+                $0.address = utxo.address
                 $0.amount = try UInt64(string: utxo.value)
             }
         }

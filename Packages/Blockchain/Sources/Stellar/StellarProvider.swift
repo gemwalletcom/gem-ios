@@ -8,6 +8,7 @@ public enum StellarProvider: TargetType {
     case fee
     case transaction(id: String)
     case node
+    case assets(issuer: String)
     case broadcast(data: String)
     
     public var baseUrl: URL {
@@ -19,6 +20,7 @@ public enum StellarProvider: TargetType {
         case .account,
             .fee,
             .transaction,
+            .assets,
             .node: .GET
         case .broadcast: .POST
         }
@@ -30,6 +32,7 @@ public enum StellarProvider: TargetType {
         case .fee: "/fee_stats"
         case .transaction(let id): "/transactions/\(id)"
         case .node: "/"
+        case .assets: "/assets"
         case .broadcast: "/transactions"
         }
     }
@@ -40,6 +43,8 @@ public enum StellarProvider: TargetType {
             .fee,
             .transaction,
             .node: .plain
+        case .assets(let issuer):
+                .params(["asset_issuer": issuer, "limit": 200])
         case .broadcast(let data):
                 .params(["tx": data.addingPercentEncoding(withAllowedCharacters: .alphanumerics)!])
         }
@@ -50,7 +55,8 @@ public enum StellarProvider: TargetType {
         case .account,
             .fee,
             .transaction,
-            .node: ContentType.json.rawValue
+            .node,
+            .assets: ContentType.json.rawValue
         case .broadcast: ContentType.URLEncoded.rawValue
         }
     }

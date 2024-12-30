@@ -24,6 +24,13 @@ public struct BitcoinService: Sendable {
 // MARK: - Business Logic
 
 extension BitcoinService {
+    private func account(address: String) async throws -> BitcoinAccount {
+        let address = chain.chain.fullAddress(address: address)
+        return try await provider
+            .request(.balance(address: address))
+            .map(as: BitcoinAccount.self)
+    }
+    
     private func block(block: Int) async throws -> BitcoinBlock {
         try await provider
             .request(.block(block: block))
@@ -40,7 +47,7 @@ extension BitcoinService {
         try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
-            .map { $0.mapToUTXO() }
+            .map { $0.mapToUTXO(address: address) }
     }
     
     func getFeePriority(for blocks: Int) async throws -> String {
@@ -54,10 +61,8 @@ extension BitcoinService {
 
 extension BitcoinService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let account = try await provider
-            .request(.balance(address: address))
-            .map(as: BitcoinAccount.self)
-        
+        let account = try await account(address: address)
+         
         return Primitives.AssetBalance(
             assetId: chain.chain.assetId,
             balance: Balance(available: BigInt(stringLiteral: account.balance))
@@ -112,6 +117,7 @@ extension BitcoinService: ChainTransactionStateFetchable {
         let transaction = try await provider
             .request(.transaction(id: request.id))
             .map(as: BitcoinTransaction.self)
+        
         return TransactionChanges(
             state: transaction.blockHeight > 0 ? .confirmed : .pending
         )

@@ -32,13 +32,20 @@ extension StellarService {
     }
     
     private func isAccountExists(address: String) async throws -> Bool {
-        try await account(address: address).isEmpty == false
+        if address.isEmpty { return true }
+        return try await account(address: address).isEmpty == false
     }
     
     private func nodeStatus() async throws -> StellarNodeStatus {
         try await provider
             .request(.node)
             .map(as: StellarNodeStatus.self)
+    }
+    
+    private func assets(issuer: String) async throws -> [StellarAsset] {
+        try await provider
+            .request(.assets(issuer: issuer))
+            .map(as: StellarEmbedded<StellarAsset>.self)._embedded.records
     }
     
     private func latestBlock() async throws -> BigInt {
@@ -81,7 +88,18 @@ extension StellarService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        let balances = try await account(address: address).balances
+        return tokenIds.map { tokenId in
+            if
+                let (issuer, symbol) = try? tokenId.twoSubTokenIds(),
+                let balance = balances.first(where: { $0.asset_issuer == issuer && $0.asset_code == symbol }),
+                let available = try? valueFormatter.inputNumber(from: balance.balance, decimals: chain.asset.decimals.asInt)
+            {
+                AssetBalance(assetId: tokenId, balance: Balance(available: available), isActive: true)
+            } else {
+                AssetBalance(assetId: tokenId, balance: Balance(available: 0), isActive: false)
+            }
+        }
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -111,6 +129,7 @@ extension StellarService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let getAccount = account(address: input.senderAddress)
         async let getIsDestinationAccountExist = isAccountExists(address: input.destinationAddress)
+        
         let (account, isDestinationAccountExist) = try await (getAccount, getIsDestinationAccountExist)
         
         guard let sequence = Int(account.sequence) else {
@@ -186,11 +205,29 @@ extension StellarService: ChainStakable {
 
 extension StellarService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let split = tokenId.split(separator: "-").map { String($0) }
+        
+        let symbol = try split.getElement(safe: 0)
+        let asset_issuer = try split.getElement(safe: 1)
+        let assets = try await assets(issuer: asset_issuer)
+        
+        guard let asset = assets.first(where: { $0.contract_id != nil && $0.asset_code == symbol  }) else {
+            throw AnyError("no asset")
+        }
+
+        let id = AssetId(chain: chain, tokenId: AssetId.subTokenId([asset_issuer, symbol]))
+        
+        return Asset(
+            id: id,
+            name: asset.asset_code,
+            symbol: asset.asset_code,
+            decimals: chain.asset.decimals,
+            type: .token
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
+        tokenId.count > 32 && tokenId.contains("-")
     }
 }
 

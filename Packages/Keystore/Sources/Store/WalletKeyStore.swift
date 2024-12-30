@@ -191,7 +191,7 @@ extension WalletCore.Account {
     func mapToAccount(chain: Chain) -> Primitives.Account {
         return Account(
             chain: chain,
-            address: address,
+            address: chain.shortAddress(address: address),
             derivationPath: derivationPath,
             extendedPublicKey: extendedPublicKey
         )

@@ -4,84 +4,118 @@
 
 import Foundation
 
-public struct CardanoTransactionId: Codable, Sendable {
-	public let id: String
+public struct CardanoAggregateSumValue: Codable, Sendable {
+	public let value: String?
 
-	public init(id: String) {
-		self.id = id
+	public init(value: String?) {
+		self.value = value
 	}
 }
 
-public struct Cardano: Codable, Sendable {
-	public let updatableParameters: CardanoTransactionId
+public struct CardanoAggregateSum: Codable, Sendable {
+	public let sum: CardanoAggregateSumValue
 
-	public init(updatableParameters: CardanoTransactionId) {
-		self.updatableParameters = updatableParameters
+	public init(sum: CardanoAggregateSumValue) {
+		self.sum = sum
 	}
 }
 
-public struct CardanoAdaLovelace: Codable, Sendable {
-	public let lovelace: UInt64
+public struct CardanoAggregateBalance: Codable, Sendable {
+	public let aggregate: CardanoAggregateSum
 
-	public init(lovelace: UInt64) {
-		self.lovelace = lovelace
+	public init(aggregate: CardanoAggregateSum) {
+		self.aggregate = aggregate
 	}
 }
 
-public struct CardanoAdaValue: Codable, Sendable {
-	public let ada: CardanoAdaLovelace
+public struct CardanoBalance: Codable, Sendable {
+	public let address: String
+	public let txHash: String
+	public let index: Int32
 
-	public init(ada: CardanoAdaLovelace) {
-		self.ada = ada
+	public init(address: String, txHash: String, index: Int32) {
+		self.address = address
+		self.txHash = txHash
+		self.index = index
+	}
+}
+
+public struct CardanoBlock: Codable, Sendable {
+	public let number: Int32
+
+	public init(number: Int32) {
+		self.number = number
 	}
 }
 
 public struct CardanoBlockTip: Codable, Sendable {
-	public let slot: Int32
+	public let tip: CardanoBlock
 
-	public init(slot: Int32) {
-		self.slot = slot
+	public init(tip: CardanoBlock) {
+		self.tip = tip
 	}
 }
 
-public struct CardanoUpdatableParameters: Codable, Sendable {
-	public let minFeeConstant: CardanoAdaValue
-	public let minFeeCoefficient: Int32
-	public let networkMagic: Int32
+public struct CardanoBlockData: Codable, Sendable {
+	public let cardano: CardanoBlockTip
 
-	public init(minFeeConstant: CardanoAdaValue, minFeeCoefficient: Int32, networkMagic: Int32) {
-		self.minFeeConstant = minFeeConstant
-		self.minFeeCoefficient = minFeeCoefficient
-		self.networkMagic = networkMagic
+	public init(cardano: CardanoBlockTip) {
+		self.cardano = cardano
 	}
 }
 
-public struct CardanoGenesisConfiguration: Codable, Sendable {
-	public let updatableParameters: CardanoUpdatableParameters
+public struct CardanoSubmitTransactionHash: Codable, Sendable {
+	public let hash: String
 
-	public init(updatableParameters: CardanoUpdatableParameters) {
-		self.updatableParameters = updatableParameters
+	public init(hash: String) {
+		self.hash = hash
+	}
+}
+
+public struct CardanoTransaction: Codable, Sendable {
+	public let fee: String
+	public let block: CardanoBlock
+
+	public init(fee: String, block: CardanoBlock) {
+		self.fee = fee
+		self.block = block
 	}
 }
 
 public struct CardanoTransactionBroadcast: Codable, Sendable {
-	public let transaction: CardanoTransactionId
+	public let submitTransaction: CardanoSubmitTransactionHash
 
-	public init(transaction: CardanoTransactionId) {
-		self.transaction = transaction
+	public init(submitTransaction: CardanoSubmitTransactionHash) {
+		self.submitTransaction = submitTransaction
+	}
+}
+
+public struct CardanoTransactions: Codable, Sendable {
+	public let transactions: [CardanoTransaction]
+
+	public init(transactions: [CardanoTransaction]) {
+		self.transactions = transactions
 	}
 }
 
 public struct CardanoUTXO: Codable, Sendable {
-	public let index: Int32
 	public let address: String
-	public let transaction: CardanoTransactionId
-	public let value: CardanoAdaValue
+	public let txHash: String
+	public let index: Int32
+	public let value: String
 
-	public init(index: Int32, address: String, transaction: CardanoTransactionId, value: CardanoAdaValue) {
-		self.index = index
+	public init(address: String, txHash: String, index: Int32, value: String) {
 		self.address = address
-		self.transaction = transaction
+		self.txHash = txHash
+		self.index = index
 		self.value = value
+	}
+}
+
+public struct CardanoUTXOS<T: Codable & Sendable>: Codable, Sendable {
+	public let utxos: T
+
+	public init(utxos: T) {
+		self.utxos = utxos
 	}
 }

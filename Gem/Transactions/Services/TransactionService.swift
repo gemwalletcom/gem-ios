@@ -87,8 +87,8 @@ class TransactionService {
         
         for change in stateChanges.changes {
             switch change {
-            case .networkFee(let bigInt):
-                try transactionStore.updateNetworkFee(transactionId: transactionId, networkFee: bigInt.description)
+            case .networkFee(let networkFee):
+                try transactionStore.updateNetworkFee(transactionId: transactionId, networkFee: networkFee.description)
             case .hashChange(_, let newHash):
                 let newTransactionId = Primitives.Transaction.id(chain: assetId.chain.rawValue, hash: newHash)
                 try transactionStore.updateTransactionId(
@@ -97,6 +97,10 @@ class TransactionService {
                     hash: newHash
                 )
                 transactionId = newTransactionId
+            case .blockNumber(let block):
+                try transactionStore.updateBlockNumber(transactionId: transactionId, block: block)
+            case .createdAt(let date):
+                try transactionStore.updateCreatedAt(transactionId: transactionId, date: date)
             }
         }
         

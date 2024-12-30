@@ -2,6 +2,8 @@ import Foundation
 
 public extension AssetId {
 
+    static let subTokenSeparator = "::"
+    
     init(id: String) throws {
         if let (chain, tokenID) = AssetId.getData(id: id) {
             self.init(chain: chain, tokenId: tokenID)
@@ -40,5 +42,19 @@ public extension AssetId {
         case .token:
             return String(format: "%@_%@", chain.rawValue, tokenId ?? "")
         }
+    }
+    
+    func twoSubTokenIds() throws -> (String, String) {
+        guard let split = tokenId?.split(separator: Self.subTokenSeparator).map ({ String($0) }), split.count == 2 else {
+            throw AnyError("invalid token id: \(tokenId ?? "")")
+        }
+        return (
+            try split.getElement(safe: 0),
+            try split.getElement(safe: 1)
+        )
+    }
+    
+    static func subTokenId(_ ids: [String]) -> String {
+        ids.joined(separator: subTokenSeparator)
     }
 }

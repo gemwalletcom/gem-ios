@@ -339,12 +339,14 @@ extension SwapViewModel {
 
     private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
         let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
-        let walletAddress = try wallet.account(for: toAsset.chain).address
+        let walletAddress = try wallet.account(for: fromAsset.chain).address
+        let destinationAddress = try wallet.account(for: toAsset.chain).address
         let quotes = try await swapService.getQuotes(
             fromAsset: fromAsset.id,
             toAsset: toAsset.id,
             value: value.description,
-            walletAddress: walletAddress
+            walletAddress: walletAddress,
+            destinationAddress: destinationAddress
         ).sorted {
             try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)
         }

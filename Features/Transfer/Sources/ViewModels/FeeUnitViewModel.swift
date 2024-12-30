@@ -31,18 +31,15 @@ public struct FeeUnitViewModel {
         }
     }
 
-    private var conversionFactor: Double {
-        switch unit.type {
-        case .satVb: 1 / 1_000
-        case .gwei: 1 / 1_000_000_000
-        case .native: 0
-        }
-    }
-
     private var unitValueText: String {
         switch unit.type {
-        case .satVb, .gwei:
-            return currencyFormatter.string(decimal: Decimal(Double(unit.value) * conversionFactor)).replacingOccurrences(of: " ", with: "")
+        case .satVb:
+            return IntegerFormatter().string(Int(unit.value))
+        case .gwei:
+            guard let value = try? ValueFormatter.full.double(from: unit.value, decimals: 9) else {
+                return ""
+            }
+            return currencyFormatter.string(decimal: Decimal(value))
         case .native:
             return String(
                 format: "%@ %@",

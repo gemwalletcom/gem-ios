@@ -53,13 +53,30 @@ public struct StellarSigner: Signable {
         }
     }
     
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
+        return try sign(
+            input: input,
+            operation: .opPayment(.with {
+                $0.asset = .with {
+                    $0.alphanum4 = symbol
+                    $0.issuer = issuer
+                }
+                $0.destination = input.destinationAddress
+                $0.amount = input.value.asInt64
+            }),
+            privateKey: privateKey
+        )
+    }
+    
     public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
-        try sign(
+        let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
+        return try sign(
             input: input,
             operation: .opChangeTrust(.with {
-                $0.asset = try .with {
-                    $0.issuer = try input.asset.getTokenId()
-                    $0.alphanum4 = input.asset.symbol
+                $0.asset = .with {
+                    $0.issuer = issuer
+                    $0.alphanum4 = symbol
                 }
             }),
             privateKey: privateKey
