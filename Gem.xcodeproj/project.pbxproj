@@ -49,6 +49,8 @@
 		83B672F12C99BFD40034100C /* LockPeriodSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */; };
 		83BCC79E2CF4D27400396296 /* SelectFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BCC79D2CF4D27400396296 /* SelectFilterView.swift */; };
 		83CE0F602D11C50A00A55BBF /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = 83CE0F5F2D11C50A00A55BBF /* Currency */; };
+		83CED9722D22F13500FF64A6 /* SwapQuoteInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */; };
+		83CED9762D22FBA600FF64A6 /* SwapFetchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */; };
 		83D0C1BF2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D0C1BE2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift */; };
 		83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 83D6808A2CCA90D900B45089 /* InfoSheet */; };
 		83D824022C173FAF0023CA0C /* NetworkSelectorViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */; };
@@ -355,6 +357,8 @@
 		83B672EE2C99BFB60034100C /* LockPeriodSelectionScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionScene.swift; sourceTree = "<group>"; };
 		83B672F02C99BFD40034100C /* LockPeriodSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockPeriodSelectionViewModel.swift; sourceTree = "<group>"; };
 		83BCC79D2CF4D27400396296 /* SelectFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectFilterView.swift; sourceTree = "<group>"; };
+		83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapQuoteInput.swift; sourceTree = "<group>"; };
+		83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapFetchState.swift; sourceTree = "<group>"; };
 		83D0C1BE2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypesSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824012C173FAF0023CA0C /* NetworkSelectorViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkSelectorViewModel.swift; sourceTree = "<group>"; };
 		83D824032C176A0D0023CA0C /* ChainFilterable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChainFilterable.swift; sourceTree = "<group>"; };
@@ -739,6 +743,15 @@
 				833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */,
 			);
 			path = AppResolver;
+			sourceTree = "<group>";
+		};
+		83CED9702D22F10500FF64A6 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */,
+				83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */,
+			);
+			path = Types;
 			sourceTree = "<group>";
 		};
 		83E041562D0AFCA90031D4BC /* Root */ = {
@@ -1286,6 +1299,7 @@
 		D810F3752AF1AB680006D9C6 /* Swap */ = {
 			isa = PBXGroup;
 			children = (
+				83CED9702D22F10500FF64A6 /* Types */,
 				D8D83C8C2CECFD920083AA53 /* Views */,
 				D8D83C852CECFD3A0083AA53 /* ViewModels */,
 				D890ACF52CE30B1F00A31613 /* Navigation */,
@@ -2211,6 +2225,7 @@
 				C3CF3BEA29BF93BF00E96586 /* CreteWalletViewModel.swift in Sources */,
 				83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */,
 				8336DC4A2CEF938000F4CD2D /* TransactionsFilterViewModel.swift in Sources */,
+				83CED9762D22FBA600FF64A6 /* SwapFetchState.swift in Sources */,
 				C3CF3BB529B6917600E96586 /* App-Configuration.swift in Sources */,
 				C3340B7A2A4A989E00884D48 /* ChainListSettingsViewModel.swift in Sources */,
 				D848B5A52AE850E500814FB4 /* WalletConnectorSigner.swift in Sources */,
@@ -2267,6 +2282,7 @@
 				83D0C1BF2CF7C5D20000DBC9 /* TransactionTypesSelectorViewModel.swift in Sources */,
 				83912F0D2CE63F6E00444CBD /* FiatCurrencyInputConfig.swift in Sources */,
 				DF8868892C50F1EB00005AEA /* CalloutView.swift in Sources */,
+				83CED9722D22F13500FF64A6 /* SwapQuoteInput.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
 				D8B738D62C598BEC004EF083 /* ExportPrivateKey.swift in Sources */,
 				C3D1C4E82A2D519D006E8EEA /* SecretPhraseGridView.swift in Sources */,

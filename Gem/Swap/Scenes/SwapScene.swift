@@ -12,36 +12,31 @@ import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 
-struct SelectSwapAssetId: Hashable {
-    let type: SelectAssetSwapType
-    let assetId: AssetId
-}
-
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
-    
-    @Query<AssetRequestOptional>
-    var fromAsset: AssetData?
-
-    @Query<AssetRequestOptional>
-    var toAsset: AssetData?
-    
-    @Query<TransactionsRequest>
-    var tokenApprovals: [TransactionExtended]
-
-    @State var model: SwapViewModel
 
     enum Field: Int, Hashable {
         case from, to
     }
-    
+    @FocusState private var focusedField: Field?
+
+    @Query<AssetRequestOptional>
+    private var fromAsset: AssetData?
+
+    @Query<AssetRequestOptional>
+    private var toAsset: AssetData?
+
+    @Query<TransactionsRequest>
+    private var tokenApprovals: [TransactionExtended]
+
+    @State private var model: SwapViewModel
+
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
-    @FocusState private var focusedField: Field?
 
     init(
         model: SwapViewModel
@@ -63,7 +58,7 @@ struct SwapScene: View {
                         viewState: model.actionButtonState,
                         image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                         infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                        disabledRule: model.shouldDisableActionButton(fromAssetData: fromAsset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                         action: onSelectActionButton
                     )
                 }
@@ -74,23 +69,27 @@ struct SwapScene: View {
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
         .debounce(
-            value: model.fromValue,
-            interval: SwapViewModel.quoteTaskDebounceTimeout,
-            action: onChangeFromValue
+            value: model.fetchState,
+            interval: model.fetchState.delay,
+            action: model.onFetchStateChange
         )
+        .debounce(
+            value: model.assetIds(fromAsset, toAsset),
+            initial: true,
+            interval: .none,
+            action: model.onAssetIdsChange
+        )
+        .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)
-        .task {
-            updateAssets()
-        }
         .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
         .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
-        .onReceive(updateQuoteTimer) { _ in
+        .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
         .onAppear {
@@ -184,21 +183,18 @@ extension SwapScene {
         model.setMaxFromValue(asset: fromAsset.asset, value: fromAsset.balance.available)
         focusedField = .none
     }
-    
-    @MainActor
+
     private func onSelectAssetPayAction() {
         model.onSelectAssetAction(type: .pay)
     }
 
-    @MainActor
     private func onSelectAssetReceiveAction() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = model.getAssetsForPayAssetId(assetId: fromAsset.asset.id)
         
         model.onSelectAssetAction(type: .receive(chains: chains, assetIds: assetIds))
     }
-    
-    @MainActor
+
     private func onSelectActionButton() {
         if model.swapAvailabilityState.isError {
             fetch()
@@ -207,58 +203,45 @@ extension SwapScene {
         }
     }
 
-    private func onChangeTokenApprovals() {
+    private func onChangeTokenApprovals(_: [TransactionExtended], _: [TransactionExtended]) {
         if tokenApprovals.isEmpty {
             focusedField = .from
         }
         fetch()
     }
 
-    private func onChangeFromValue(_ value: String) async {
-        guard let fromAsset, let toAsset else { return }
-        await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
+    private func onChangeFromValue(_: String, _: String) {
+        fetch(delay: SwapViewModel.quoteTaskDebounceTimeout)
     }
 
-    private func onChangeFromAsset() {
+    private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
         focusedField = .from
         fetch()
-        updateAssets()
     }
 
-    private func onChangeToAsset() {
+    private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
         fetch()
-        updateAssets()
     }
 }
 
 // MARK: - Effects
 
 extension SwapScene {
-    private func fetch() {
-        Task {
-            guard let fromAsset, let toAsset else { return }
-            await model.fetch(fromAssetData: fromAsset, toAsset: toAsset.asset)
-        }
+    private func fetch(delay: Duration? = nil) {
+        let input = SwapQuoteInput(
+            fromAsset: fromAsset,
+            toAsset: toAsset,
+            amount: model.fromValue
+        )
+        model.fetchState = .fetch(input: input, delay: delay)
     }
 
     func swap() {
         Task {
             guard let fromAsset, let toAsset else { return }
             await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
-        }
-    }
-
-    func updateAssets() {
-        Task {
-            let assetIds = [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
-            do {
-                try await model.updateAssets(assetIds: assetIds)
-            } catch {
-                // TODO: - handle error
-                print("SwapScene updateAssets error: \(error)")
-            }
         }
     }
 }

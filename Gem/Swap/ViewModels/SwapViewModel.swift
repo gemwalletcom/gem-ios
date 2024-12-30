@@ -47,6 +47,8 @@ class SwapViewModel {
     var fromValue: String = ""
     var toValue: String = ""
 
+    var fetchState: SwapFetchState = .idle
+
     var swapAvailabilityState: StateViewType<SwapAvailabilityResult> = .noData
     var swapGetQuoteDataState: StateViewType<Bool> = .noData
 
@@ -97,8 +99,8 @@ class SwapViewModel {
     var priceImpact: String { Localized.Swap.priceImpact }
     var priceImpactValue: String? {
         switch swapAvailabilityState {
-        case .loaded: return .none // return "1%"
-        default: return .none
+        case .loaded: .none // return "1%"
+        default: .none
         }
     }
 
@@ -119,10 +121,9 @@ class SwapViewModel {
 
     var actionButtonState: StateViewType<SwapAvailabilityResult> {
         switch swapGetQuoteDataState {
-        case .loading: return .loading
-        case .error(let error): return .error(error)
-        case .noData, .loaded:
-            return swapAvailabilityState
+        case .loading: .loading
+        case .error(let error): .error(error)
+        case .noData, .loaded: swapAvailabilityState
         }
     }
 
@@ -159,8 +160,8 @@ class SwapViewModel {
         return nil
     }
 
-    func shouldDisableActionButton(fromAssetData: AssetData, isApprovalProcessInProgress: Bool) -> Bool {
-        !isValidFromValue(assetData: fromAssetData) || isApprovalProcessInProgress
+    func shouldDisableActionButton(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> Bool {
+        !isValidValue(fromAsset: fromAsset) || isApprovalProcessInProgress
     }
 
     func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
@@ -168,6 +169,10 @@ class SwapViewModel {
             model: AssetDataViewModel(assetData: assetData, formatter: .medium),
             type: type
         )
+    }
+
+    func assetIds(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> [AssetId] {
+        [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
 
     func onCompleteAction() {
@@ -195,58 +200,21 @@ extension SwapViewModel {
         fromValue = formatter.string(value, decimals: asset.decimals.asInt)
     }
 
-    func fetch(fromAssetData: AssetData, toAsset: Asset) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
-            resetToValue()
-            if !self.isValidFromValue(assetData: fromAssetData) {
-                self.swapAvailabilityState = .noData
-                return false
-            }
-            self.swapAvailabilityState = .loading
-            return true
-        }
-
-        guard shouldFetch else { return }
-        let fromAsset = fromAssetData.asset
-
-        do {
-            switch fromAsset.type {
-            case .trc20, .ibc, .jetton, .synth, .asa:
-                fatalError("Unsupported asset type")
-            case .native, .spl, .token:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
-                let value = try BigInt.from(string: swapQuote.toValue)
-                await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
-            case .bep20, .erc20:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
-                let allowance = switch swapQuote.approval {
-                case .approve: false
-                case .none, .permit2: true
-                }
-                let value = try BigInt.from(string: swapQuote.toValue)
-
-                await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
-            }
-        } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.swapAvailabilityState = .error(ErrorWrapper(error))
-                    NSLog("fetch asset data error: \(error)")
-                }
-            }
+    func onFetchStateChange(state: SwapFetchState) async {
+        switch state {
+        case let .fetch(input, _):
+            guard let fromAsset = input.fromAsset, let toAsset = input.toAsset else { return }
+            await fetch(
+                fromAsset: fromAsset.asset,
+                toAsset: toAsset.asset,
+                amount: input.amount
+            )
+        case .idle: break
         }
     }
 
-    func updateAssets(assetIds: [AssetId]) async throws {
-        async let prices: () = try walletsService.updatePrices(assetIds: assetIds)
-        async let balances: () = try walletsService.updateBalance(for: wallet.walletId, assetIds: assetIds)
-        _ = try await [prices, balances]
+    func onAssetIdsChange(assetIds: [AssetId]) async {
+        await updateAssets(assetIds: assetIds)
     }
 
     func swap(fromAsset: Asset, toAsset: Asset) async {
@@ -294,12 +262,70 @@ extension SwapViewModel {
 // MARK: - Private
 
 extension SwapViewModel {
-    private func isValidFromValue(assetData: AssetData) -> Bool {
+    private func isValidValue(fromAsset: Asset) -> Bool {
         guard !fromValue.isEmpty else { return false }
-        let asset = assetData.asset
-        let amount = (try? formatter.inputNumber(from: fromValue, decimals: Int(asset.decimals))) ?? BigInt.zero
+        let amount = (try? formatter.inputNumber(from: fromValue, decimals: Int(fromAsset.decimals))) ?? BigInt.zero
 
         return amount > 0
+    }
+
+    private func fetch(fromAsset: Asset, toAsset: Asset, amount: String) async {
+        let shouldFetch: Bool = await MainActor.run { [self] in
+            resetToValue()
+            if !self.isValidValue(fromAsset: fromAsset) {
+                self.swapAvailabilityState = .noData
+                return false
+            }
+            self.swapAvailabilityState = .loading
+            return true
+        }
+
+        guard shouldFetch else { return }
+
+        do {
+            switch fromAsset.type {
+            case .trc20, .ibc, .jetton, .synth, .asa:
+                fatalError("Unsupported asset type")
+            case .native, .spl, .token:
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+                let value = try BigInt.from(string: swapQuote.toValue)
+                await MainActor.run {
+                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+                }
+            case .bep20, .erc20:
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+                let allowance = switch swapQuote.approval {
+                case .approve: false
+                case .none, .permit2: true
+                }
+                let value = try BigInt.from(string: swapQuote.toValue)
+
+                await MainActor.run {
+                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+                }
+            }
+        } catch {
+            await MainActor.run { [self] in
+                if !error.isCancelled {
+                    self.swapAvailabilityState = .error(ErrorWrapper(error))
+                    NSLog("fetch asset data error: \(error)")
+                }
+            }
+        }
+    }
+
+    private func updateAssets(assetIds: [AssetId]) async {
+        async let prices: () = try walletsService.updatePrices(assetIds: assetIds)
+        async let balances: () = try walletsService.updateBalance(for: wallet.walletId, assetIds: assetIds)
+
+        do {
+            _ = try await [prices, balances]
+        } catch {
+            // TODO: - handle error
+            print("SwapScene updateAssets error: \(error)")
+        }
     }
 
     private func getSwapDataOnApprove(
