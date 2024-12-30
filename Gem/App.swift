@@ -6,6 +6,7 @@ import Primitives
 import DeviceService
 import NodeService
 import GemAPI
+import LockManager
 
 @main
 struct GemApp: App {

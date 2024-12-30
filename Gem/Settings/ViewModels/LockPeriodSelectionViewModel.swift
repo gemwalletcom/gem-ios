@@ -44,15 +44,4 @@ extension LockPeriod {
         case .sixHours: Localized.Lock.sixHours
         }
     }
-
-    public var value: Int {
-        switch self {
-        case .immediate: 0
-        case .oneMinute: 60
-        case .fiveMinutes: 300
-        case .fifteenMinutes: 900
-        case .oneHour: 3600
-        case .sixHours: 21600
-        }
-    }
 }
