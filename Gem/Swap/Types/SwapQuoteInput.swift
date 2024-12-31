@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-struct SwapQuoteInput: Equatable, Hashable, Sendable {
+struct SwapQuoteInput: Hashable, Sendable {
     let fromAsset: AssetData?
     let toAsset: AssetData?
     let amount: String
@@ -12,11 +12,5 @@ struct SwapQuoteInput: Equatable, Hashable, Sendable {
 // MARK: - Identifiable
 
 extension SwapQuoteInput: Identifiable {
-    var id: String {
-        guard let fromId = fromAsset?.id,
-              let toId = toAsset?.id
-        else { return "_\(amount)" }
-
-        return "\(fromId)_\(toId)_\(amount)"
-    }
+    var id: String {"\(fromAsset?.id ?? "")_\(toAsset?.id ?? "")_\(amount)" }
 }

@@ -69,8 +69,8 @@ struct SwapScene: View {
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
         .debounce(
-            value: model.fetchState,
-            interval: model.fetchState.delay,
+            value: model.swapState.fetch,
+            interval: model.swapState.fetch.delay,
             action: model.onFetchStateChange
         )
         .debounce(
@@ -168,7 +168,7 @@ extension SwapScene {
                 TransactionsList(tokenApprovals, showSections: false)
             }
 
-            if case let .error(error) = model.swapAvailabilityState {
+            if case let .error(error) = model.swapState.availability {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
         }
@@ -196,7 +196,7 @@ extension SwapScene {
     }
 
     private func onSelectActionButton() {
-        if model.swapAvailabilityState.isError {
+        if model.swapState.availability.isError {
             fetch()
         } else {
             swap()
@@ -235,7 +235,7 @@ extension SwapScene {
             toAsset: toAsset,
             amount: model.fromValue
         )
-        model.fetchState = .fetch(input: input, delay: delay)
+        model.swapState.fetch = .fetch(input: input, delay: delay)
     }
 
     func swap() {

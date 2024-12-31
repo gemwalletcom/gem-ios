@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum SwapFetchState: Identifiable, Equatable, Hashable {
+enum SwapFetchState: Identifiable, Hashable {
     case idle
     case fetch(input: SwapQuoteInput, delay: Duration?)
 

@@ -47,10 +47,7 @@ class SwapViewModel {
     var fromValue: String = ""
     var toValue: String = ""
 
-    var fetchState: SwapFetchState = .idle
-
-    var swapAvailabilityState: StateViewType<SwapAvailabilityResult> = .noData
-    var swapGetQuoteDataState: StateViewType<Bool> = .noData
+    var swapState: SwapState = SwapState()
 
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
@@ -98,7 +95,7 @@ class SwapViewModel {
 
     var priceImpact: String { Localized.Swap.priceImpact }
     var priceImpactValue: String? {
-        switch swapAvailabilityState {
+        switch swapState.availability {
         case .loaded: .none // return "1%"
         default: .none
         }
@@ -106,37 +103,37 @@ class SwapViewModel {
 
     var providerField: String { Localized.Common.provider }
     var providerText: String? {
-        if case .loaded(let result) = swapAvailabilityState {
+        if case .loaded(let result) = swapState.availability {
             return SwapProviderViewModel(provider: result.quote.data.provider).providerText
         }
         return .none
     }
 
     var providerImage: AssetImage? {
-        if case .loaded(let result) = swapAvailabilityState {
+        if case .loaded(let result) = swapState.availability {
             return SwapProviderViewModel(provider: result.quote.data.provider).providerImage
         }
         return .none
     }
 
     var actionButtonState: StateViewType<SwapAvailabilityResult> {
-        switch swapGetQuoteDataState {
+        switch swapState.getQuoteData {
         case .loading: .loading
         case .error(let error): .error(error)
-        case .noData, .loaded: swapAvailabilityState
+        case .noData, .loaded: swapState.availability
         }
     }
 
     var isSwitchAssetButtonDisabled: Bool {
-        swapAvailabilityState.isLoading || swapGetQuoteDataState.isLoading
+        swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
 
     var isQuoteLoading: Bool {
-        swapAvailabilityState.isLoading
+        swapState.availability.isLoading
     }
 
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
-        switch swapAvailabilityState {
+        switch swapState.availability {
         case .noData, .loading:
             return Localized.Wallet.swap
         case .loaded(let result):
@@ -147,14 +144,14 @@ class SwapViewModel {
     }
 
     func actionButtonInfoTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String? {
-        if case .loaded(let result) = swapAvailabilityState, !isApprovalProcessInProgress {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
             return result.allowance ? nil : Localized.Swap.approveTokenPermission(fromAsset.symbol)
         }
         return nil
     }
 
     func actionButtonImage(isApprovalProcessInProgress: Bool) -> Image? {
-        if case .loaded(let result) = swapAvailabilityState, !isApprovalProcessInProgress {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
             return result.allowance ? nil : Images.System.lock
         }
         return nil
@@ -218,18 +215,18 @@ extension SwapViewModel {
     }
 
     func swap(fromAsset: Asset, toAsset: Asset) async {
-        guard case .loaded(let swapAvailability) = swapAvailabilityState else {
+        guard case .loaded(let swapAvailability) = swapState.availability else {
             return
         }
         do {
             if swapAvailability.allowance {
-                swapGetQuoteDataState = .loading
+                swapState.getQuoteData = .loading
                 let data = try await getSwapData(
                     fromAsset: fromAsset,
                     toAsset: toAsset,
                     quote: swapAvailability.quote
                 )
-                swapGetQuoteDataState = .noData
+                swapState.getQuoteData = .noData
                 onTransfer(data: data)
                 return
             } else {
@@ -249,8 +246,8 @@ extension SwapViewModel {
                 }
             }
         } catch {
-            swapGetQuoteDataState = .error(ErrorWrapper(error))
-            swapAvailabilityState = .error(ErrorWrapper(error))
+            swapState.getQuoteData = .error(ErrorWrapper(error))
+            swapState.availability = .error(ErrorWrapper(error))
         }
     }
 
@@ -273,10 +270,10 @@ extension SwapViewModel {
         let shouldFetch: Bool = await MainActor.run { [self] in
             resetToValue()
             if !self.isValidValue(fromAsset: fromAsset) {
-                self.swapAvailabilityState = .noData
+                self.swapState.availability = .noData
                 return false
             }
-            self.swapAvailabilityState = .loading
+            self.swapState.availability = .loading
             return true
         }
 
@@ -290,7 +287,7 @@ extension SwapViewModel {
                 let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
                 let value = try BigInt.from(string: swapQuote.toValue)
                 await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
+                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
                     toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
                 }
             case .bep20, .erc20:
@@ -302,14 +299,14 @@ extension SwapViewModel {
                 let value = try BigInt.from(string: swapQuote.toValue)
 
                 await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
+                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
                     toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
                 }
             }
         } catch {
             await MainActor.run { [self] in
                 if !error.isCancelled {
-                    self.swapAvailabilityState = .error(ErrorWrapper(error))
+                    self.swapState.availability = .error(ErrorWrapper(error))
                     NSLog("fetch asset data error: \(error)")
                 }
             }
