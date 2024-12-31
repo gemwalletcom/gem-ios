@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatProvider: Codable, Equatable, Sendable {
+public struct FiatProvider: Codable, Sendable, Hashable {
 	public let name: String
 	public let imageUrl: String
 

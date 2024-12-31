@@ -8,6 +8,7 @@ import Style
 import Primitives
 import BigInt
 import Localization
+import PrimitivesComponents
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel

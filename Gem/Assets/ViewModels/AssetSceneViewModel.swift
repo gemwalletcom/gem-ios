@@ -10,6 +10,7 @@ import Style
 import Localization
 import PriceAlertService
 import StakeService
+import PrimitivesComponents
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

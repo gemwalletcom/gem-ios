@@ -6,6 +6,7 @@ import Style
 
 public protocol SimpleListItemViewable {
     var title: String { get }
+    var subtitle: String? { get }
     var image: Image { get }
 
     var imageSize: CGFloat { get }
@@ -15,6 +16,7 @@ public protocol SimpleListItemViewable {
 public extension SimpleListItemViewable {
     var imageSize: CGFloat { Sizing.image.medium }
     var cornerRadius: CGFloat { imageSize / 2 }
+    var subtitle: String? { .none }
 }
 
 public struct SimpleListItemView: View {
@@ -27,6 +29,7 @@ public struct SimpleListItemView: View {
     public var body: some View {
         ListItemView(
             title: model.title,
+            subtitle: model.subtitle,
             image: model.image,
             imageSize: model.imageSize,
             cornerRadius: model.cornerRadius

@@ -7,22 +7,23 @@ import GemAPI
 import Components
 import Style
 import Localization
-import FiatConnect
 import Store
+import PrimitivesComponents
 
+@MainActor
 @Observable
-class FiatSceneViewModel {
+public final class FiatSceneViewModel {
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
     private let walletId: String
 
-    private let currencyFormatter = CurrencyFormatter.currency()
+    private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
 
     var input: FiatInput
     var state: StateViewType<[FiatQuote]> = .loading
 
-    init(
+    public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
         assetAddress: AssetAddress,
         walletId: String,
@@ -180,6 +181,10 @@ extension FiatSceneViewModel {
 // MARK: - Business Logic
 
 extension FiatSceneViewModel {
+    func onSelectQuote(_ quote: FiatQuote) {
+        input.quote = quote
+    }
+
     func select(amount: Double, assetData: AssetData) {
         switch input.type {
         case .buy:

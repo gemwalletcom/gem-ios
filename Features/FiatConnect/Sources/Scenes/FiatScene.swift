@@ -2,11 +2,10 @@ import SwiftUI
 import Primitives
 import Style
 import Components
-import FiatConnect
 import GRDBQuery
 import Store
 
-struct FiatScene: View {
+public struct FiatScene: View {
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable, Identifiable {
         case amount
@@ -18,12 +17,15 @@ struct FiatScene: View {
 
     @State private var model: FiatSceneViewModel
 
-    init(model: FiatSceneViewModel) {
+    let onOpenFiatProvider: ((FiatProvidersViewModel) -> Void)?
+
+    public init(model: FiatSceneViewModel, onOpenFiatProvider: ((FiatProvidersViewModel) -> Void)? = nil) {
+        self.onOpenFiatProvider = onOpenFiatProvider
         _model = State(initialValue: model)
         _assetData = Query(constant: model.assetRequest)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             List {
                 CurrencyInputView(
@@ -64,17 +66,6 @@ struct FiatScene: View {
         }
         .onChange(of: model.input.amount) { _, _ in
             focusedField = .amount
-        }
-        .navigationDestination(for: Scenes.FiatProviders.self) { _ in
-            FiatProvidersScene(
-                model: FiatProvidersViewModel(
-                    type: model.input.type,
-                    asset: model.asset,
-                    quotes: model.state.value ?? [],
-                    selectQuote: onSelectQuote(_:),
-                    formatter: CurrencyFormatter.currency()
-                )
-            )
         }
     }
 }
@@ -135,8 +126,15 @@ extension FiatScene {
             case .loaded(let quotes):
                 if let quote = model.input.quote {
                     if quotes.count > 1 {
-                        NavigationLink(value: Scenes.FiatProviders()) {
-                            ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
+                        NavigationCustomLink(with: ListItemView(title: model.providerTitle, subtitle: quote.provider.name)) {
+                            onOpenFiatProvider?(
+                                FiatProvidersViewModel(
+                                    type: model.input.type,
+                                    asset: model.asset,
+                                    quotes: model.state.value ?? [],
+                                    formatter: CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
+                                )
+                            )
                         }
                     } else {
                         ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
@@ -188,7 +186,7 @@ extension FiatScene {
 
 #Preview {
     @Previewable @State var model = FiatSceneViewModel(
-        assetAddress: .init(asset: .main, address: .empty),
+        assetAddress: .init(asset: .init(.algorand), address: .empty),
         walletId: .zero,
         type: .buy
     )

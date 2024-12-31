@@ -2,28 +2,28 @@
 
 import Foundation
 import Primitives
+import Localization
 
-public struct FiatProvidersViewModel {
+public struct FiatProvidersViewModel: Sendable, Hashable {
     private let formatter: CurrencyFormatter
     private var asset: Asset
     private var quotes: [FiatQuote]
 
     public let type: FiatTransactionType
-    public var selectQuote: ((FiatQuote) -> Void)?
 
     public init(
         type: FiatTransactionType,
         asset: Asset,
         quotes: [FiatQuote],
-        selectQuote: ((FiatQuote) -> Void)? = nil,
         formatter: CurrencyFormatter
     ) {
         self.type = type
         self.asset = asset
         self.quotes = quotes
-        self.selectQuote = selectQuote
         self.formatter = formatter
     }
+
+    public var title: String { Localized.Buy.Providers.title }
 
     public var quotesViewModel: [FiatQuoteViewModel] {
         quotes.map {

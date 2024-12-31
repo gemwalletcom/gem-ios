@@ -1,7 +1,7 @@
 import Foundation
 import Primitives
 import Components
-import GemstonePrimitives
+import PrimitivesComponents
 
 struct AssetViewModel {
     let asset: Asset    

@@ -3,13 +3,12 @@
 import Foundation
 import Testing
 import GemAPI
-import FiatConnect
-import PrimitivesTestKit
 import Primitives
 
-@testable import Gem
+@testable import FiatConnect
 
-struct FiatSceneViewModelTests {
+@MainActor
+final class FiatSceneViewModelTests {
     private static func mock(
         service: any GemAPIFiatService = GemAPIService(),
         assetAddress: AssetAddress = .mock(),

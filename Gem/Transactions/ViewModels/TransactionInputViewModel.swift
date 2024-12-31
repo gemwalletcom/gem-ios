@@ -5,6 +5,7 @@ import Blockchain
 import BigInt
 import Primitives
 import GemstonePrimitives
+import PrimitivesComponents
 
 struct TransactionInputViewModel {
     let data: TransferData

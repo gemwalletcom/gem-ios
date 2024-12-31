@@ -1,12 +1,12 @@
 import Foundation
 
-public enum CurrencyFormatterType: Sendable {
+public enum CurrencyFormatterType: Sendable, Hashable {
     case currency
     case percent
     case percentSignLess
 }
 
-public struct CurrencyFormatter: Sendable {
+public struct CurrencyFormatter: Sendable, Hashable {
 
     private let locale: Locale
     private let type: CurrencyFormatterType

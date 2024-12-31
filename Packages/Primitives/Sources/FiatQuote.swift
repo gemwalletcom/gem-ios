@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatQuote: Codable, Equatable, Sendable {
+public struct FiatQuote: Codable, Sendable, Hashable {
 	public let provider: FiatProvider
 	public let type: FiatTransactionType
 	public let fiatAmount: Double
