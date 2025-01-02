@@ -47,8 +47,7 @@ class SwapViewModel {
     var fromValue: String = ""
     var toValue: String = ""
 
-    var swapAvailabilityState: StateViewType<SwapAvailabilityResult> = .noData
-    var swapGetQuoteDataState: StateViewType<Bool> = .noData
+    var swapState: SwapState = SwapState()
 
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
@@ -96,46 +95,45 @@ class SwapViewModel {
 
     var priceImpact: String { Localized.Swap.priceImpact }
     var priceImpactValue: String? {
-        switch swapAvailabilityState {
-        case .loaded: return .none // return "1%"
-        default: return .none
+        switch swapState.availability {
+        case .loaded: .none // return "1%"
+        default: .none
         }
     }
 
     var providerField: String { Localized.Common.provider }
     var providerText: String? {
-        if case .loaded(let result) = swapAvailabilityState {
+        if case .loaded(let result) = swapState.availability {
             return SwapProviderViewModel(provider: result.quote.data.provider).providerText
         }
         return .none
     }
 
     var providerImage: AssetImage? {
-        if case .loaded(let result) = swapAvailabilityState {
+        if case .loaded(let result) = swapState.availability {
             return SwapProviderViewModel(provider: result.quote.data.provider).providerImage
         }
         return .none
     }
 
     var actionButtonState: StateViewType<SwapAvailabilityResult> {
-        switch swapGetQuoteDataState {
-        case .loading: return .loading
-        case .error(let error): return .error(error)
-        case .noData, .loaded:
-            return swapAvailabilityState
+        switch swapState.getQuoteData {
+        case .loading: .loading
+        case .error(let error): .error(error)
+        case .noData, .loaded: swapState.availability
         }
     }
 
     var isSwitchAssetButtonDisabled: Bool {
-        swapAvailabilityState.isLoading || swapGetQuoteDataState.isLoading
+        swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
 
     var isQuoteLoading: Bool {
-        swapAvailabilityState.isLoading
+        swapState.availability.isLoading
     }
 
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
-        switch swapAvailabilityState {
+        switch swapState.availability {
         case .noData, .loading:
             return Localized.Wallet.swap
         case .loaded(let result):
@@ -146,21 +144,21 @@ class SwapViewModel {
     }
 
     func actionButtonInfoTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String? {
-        if case .loaded(let result) = swapAvailabilityState, !isApprovalProcessInProgress {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
             return result.allowance ? nil : Localized.Swap.approveTokenPermission(fromAsset.symbol)
         }
         return nil
     }
 
     func actionButtonImage(isApprovalProcessInProgress: Bool) -> Image? {
-        if case .loaded(let result) = swapAvailabilityState, !isApprovalProcessInProgress {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
             return result.allowance ? nil : Images.System.lock
         }
         return nil
     }
 
-    func shouldDisableActionButton(fromAssetData: AssetData, isApprovalProcessInProgress: Bool) -> Bool {
-        !isValidFromValue(assetData: fromAssetData) || isApprovalProcessInProgress
+    func shouldDisableActionButton(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> Bool {
+        !isValidValue(fromAsset: fromAsset) || isApprovalProcessInProgress
     }
 
     func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
@@ -168,6 +166,10 @@ class SwapViewModel {
             model: AssetDataViewModel(assetData: assetData, formatter: .medium),
             type: type
         )
+    }
+
+    func assetIds(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> [AssetId] {
+        [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
 
     func onCompleteAction() {
@@ -195,73 +197,36 @@ extension SwapViewModel {
         fromValue = formatter.string(value, decimals: asset.decimals.asInt)
     }
 
-    func fetch(fromAssetData: AssetData, toAsset: Asset) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
-            resetToValue()
-            if !self.isValidFromValue(assetData: fromAssetData) {
-                self.swapAvailabilityState = .noData
-                return false
-            }
-            self.swapAvailabilityState = .loading
-            return true
-        }
-
-        guard shouldFetch else { return }
-        let fromAsset = fromAssetData.asset
-
-        do {
-            switch fromAsset.type {
-            case .trc20, .ibc, .jetton, .synth, .asa:
-                fatalError("Unsupported asset type")
-            case .native, .spl, .token:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
-                let value = try BigInt.from(string: swapQuote.toValue)
-                await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
-            case .bep20, .erc20:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: fromValue)
-                let allowance = switch swapQuote.approval {
-                case .approve: false
-                case .none, .permit2: true
-                }
-                let value = try BigInt.from(string: swapQuote.toValue)
-
-                await MainActor.run {
-                    swapAvailabilityState = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
-            }
-        } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.swapAvailabilityState = .error(ErrorWrapper(error))
-                    NSLog("fetch asset data error: \(error)")
-                }
-            }
+    func onFetchStateChange(state: SwapFetchState) async {
+        switch state {
+        case let .fetch(input, _):
+            guard let fromAsset = input.fromAsset, let toAsset = input.toAsset else { return }
+            await fetch(
+                fromAsset: fromAsset.asset,
+                toAsset: toAsset.asset,
+                amount: input.amount
+            )
+        case .idle: break
         }
     }
 
-    func updateAssets(assetIds: [AssetId]) async throws {
-        async let prices: () = try walletsService.updatePrices(assetIds: assetIds)
-        async let balances: () = try walletsService.updateBalance(for: wallet.walletId, assetIds: assetIds)
-        _ = try await [prices, balances]
+    func onAssetIdsChange(assetIds: [AssetId]) async {
+        await updateAssets(assetIds: assetIds)
     }
 
     func swap(fromAsset: Asset, toAsset: Asset) async {
-        guard case .loaded(let swapAvailability) = swapAvailabilityState else {
+        guard case .loaded(let swapAvailability) = swapState.availability else {
             return
         }
         do {
             if swapAvailability.allowance {
-                swapGetQuoteDataState = .loading
+                swapState.getQuoteData = .loading
                 let data = try await getSwapData(
                     fromAsset: fromAsset,
                     toAsset: toAsset,
                     quote: swapAvailability.quote
                 )
-                swapGetQuoteDataState = .noData
+                swapState.getQuoteData = .noData
                 onTransfer(data: data)
                 return
             } else {
@@ -281,8 +246,8 @@ extension SwapViewModel {
                 }
             }
         } catch {
-            swapGetQuoteDataState = .error(ErrorWrapper(error))
-            swapAvailabilityState = .error(ErrorWrapper(error))
+            swapState.getQuoteData = .error(ErrorWrapper(error))
+            swapState.availability = .error(ErrorWrapper(error))
         }
     }
 
@@ -294,12 +259,70 @@ extension SwapViewModel {
 // MARK: - Private
 
 extension SwapViewModel {
-    private func isValidFromValue(assetData: AssetData) -> Bool {
+    private func isValidValue(fromAsset: Asset) -> Bool {
         guard !fromValue.isEmpty else { return false }
-        let asset = assetData.asset
-        let amount = (try? formatter.inputNumber(from: fromValue, decimals: Int(asset.decimals))) ?? BigInt.zero
+        let amount = (try? formatter.inputNumber(from: fromValue, decimals: Int(fromAsset.decimals))) ?? BigInt.zero
 
         return amount > 0
+    }
+
+    private func fetch(fromAsset: Asset, toAsset: Asset, amount: String) async {
+        let shouldFetch: Bool = await MainActor.run { [self] in
+            resetToValue()
+            if !self.isValidValue(fromAsset: fromAsset) {
+                self.swapState.availability = .noData
+                return false
+            }
+            self.swapState.availability = .loading
+            return true
+        }
+
+        guard shouldFetch else { return }
+
+        do {
+            switch fromAsset.type {
+            case .trc20, .ibc, .jetton, .synth, .asa:
+                fatalError("Unsupported asset type")
+            case .native, .spl, .token:
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+                let value = try BigInt.from(string: swapQuote.toValue)
+                await MainActor.run {
+                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+                }
+            case .bep20, .erc20:
+                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+                let allowance = switch swapQuote.approval {
+                case .approve: false
+                case .none, .permit2: true
+                }
+                let value = try BigInt.from(string: swapQuote.toValue)
+
+                await MainActor.run {
+                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: allowance))
+                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+                }
+            }
+        } catch {
+            await MainActor.run { [self] in
+                if !error.isCancelled {
+                    self.swapState.availability = .error(ErrorWrapper(error))
+                    NSLog("fetch asset data error: \(error)")
+                }
+            }
+        }
+    }
+
+    private func updateAssets(assetIds: [AssetId]) async {
+        async let prices: () = try walletsService.updatePrices(assetIds: assetIds)
+        async let balances: () = try walletsService.updateBalance(for: wallet.walletId, assetIds: assetIds)
+
+        do {
+            _ = try await [prices, balances]
+        } catch {
+            // TODO: - handle error
+            print("SwapScene updateAssets error: \(error)")
+        }
     }
 
     private func getSwapDataOnApprove(

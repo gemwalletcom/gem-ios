@@ -80,6 +80,16 @@ extension CardanoService {
         )
         return try await graphql.requestData(request)
     }
+    
+    private func networkMagic() async throws -> BigInt {
+        let request = GraphqlRequest(
+            operationName: "GetNetworkMagic",
+            variables: [:],
+            query: "query GetNetworkMagic { genesis { shelley { networkMagic } } }"
+        )
+        let result: CardanoGenesisData = try await graphql.requestData(request)
+        return BigInt(result.genesis.shelley.networkMagic)
+    }
 
     private func calculateFee(input: TransactionInput, utxos: [UTXO]) throws -> BigInt {
         let signingInput = try CardanoSigningInput.with {
@@ -208,7 +218,7 @@ extension CardanoService: ChainTokenable {
  
 extension CardanoService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        ""
+        try await networkMagic().description
     }
 }
 
