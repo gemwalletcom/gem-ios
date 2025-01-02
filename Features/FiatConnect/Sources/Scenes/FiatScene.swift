@@ -123,7 +123,7 @@ extension FiatScene {
             case .loaded(let quotes):
                 if let quote = model.input.quote {
                     if quotes.count > 1 {
-                        NavigationLink(value: FiatConnectScenes.Providers()) {
+                        NavigationLink(value: Scenes.FiatProviders()) {
                             ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                         }
                     } else {

@@ -2,6 +2,7 @@
 
 import SwiftUI
 import Localization
+import Primitives
 
 struct CreateWalletNavigationStack: View {
     

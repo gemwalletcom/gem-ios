@@ -19,7 +19,7 @@ public struct FiatConnectNavigationView: View {
 
     public var body: some View {
         FiatScene(model: model)
-            .navigationDestination(for: FiatConnectScenes.Providers.self) { _ in
+            .navigationDestination(for: Scenes.FiatProviders.self) { _ in
                 FiatProvidersScene(
                     model: FiatProvidersViewModel(
                         type: model.input.type,
