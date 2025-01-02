@@ -5,13 +5,13 @@ import Primitives
 import Store
 
 public struct FiatConnectNavigationView: View {
-    @Binding var navigationPath: NavigationPath
+    @Binding private var navigationPath: NavigationPath
 
     private let model: FiatSceneViewModel
 
     public init(
-        model: FiatSceneViewModel,
-        navigationPath: Binding<NavigationPath>
+        navigationPath: Binding<NavigationPath>,
+        model: FiatSceneViewModel
     ) {
         self.model = model
         _navigationPath = navigationPath

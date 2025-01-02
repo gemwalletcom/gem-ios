@@ -7,7 +7,6 @@ import Store
 import Primitives
 import BigInt
 import class Gemstone.Config
-import Transfer
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let store: ConnectionsStore
