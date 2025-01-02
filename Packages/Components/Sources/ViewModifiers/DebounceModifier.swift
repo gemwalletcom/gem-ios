@@ -6,12 +6,13 @@ struct DebounceModifier<T: Hashable & Sendable>: ViewModifier {
     @State private var debounceTask: Task<Void, Never>?
 
     let value: T
+    let initial: Bool
     let interval: Duration?
     let action: @Sendable (T) async -> Void
 
     func body(content: Content) -> some View {
         content
-            .onChange(of: value) { _, newValue in
+            .onChange(of: value, initial: initial) { _, newValue in
                 debounceTask?.cancel()
                 debounceTask = Task {
                     do {
@@ -26,7 +27,19 @@ struct DebounceModifier<T: Hashable & Sendable>: ViewModifier {
 }
 
 public extension View {
-    func debounce<T: Hashable & Sendable>(value: T, interval: Duration?, action: @Sendable @escaping (T) async -> Void) -> some View {
-        modifier(DebounceModifier(value: value, interval: interval, action: action))
+    func debounce<T: Hashable & Sendable>(
+        value: T,
+        initial: Bool = false,
+        interval: Duration?,
+        action: @Sendable @escaping (T) async -> Void
+    ) -> some View {
+        modifier(
+            DebounceModifier(
+                value: value,
+                initial: initial,
+                interval: interval,
+                action: action
+            )
+        )
     }
 }
