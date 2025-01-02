@@ -64,6 +64,30 @@ public struct CardanoBlockData: Codable, Sendable {
 	}
 }
 
+public struct CardanoGenesisShelley: Codable, Sendable {
+	public let networkMagic: Int32
+
+	public init(networkMagic: Int32) {
+		self.networkMagic = networkMagic
+	}
+}
+
+public struct CardanoGenesis: Codable, Sendable {
+	public let shelley: CardanoGenesisShelley
+
+	public init(shelley: CardanoGenesisShelley) {
+		self.shelley = shelley
+	}
+}
+
+public struct CardanoGenesisData: Codable, Sendable {
+	public let genesis: CardanoGenesis
+
+	public init(genesis: CardanoGenesis) {
+		self.genesis = genesis
+	}
+}
+
 public struct CardanoSubmitTransactionHash: Codable, Sendable {
 	public let hash: String
 
