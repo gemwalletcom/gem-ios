@@ -4,7 +4,6 @@ import Foundation
 import Keystore
 import WalletConnector
 import Primitives
-import WalletCore
 import Localization
 
 struct SignMessageSceneViewModel {

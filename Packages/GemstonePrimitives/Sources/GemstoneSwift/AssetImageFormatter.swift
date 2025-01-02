@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import class Gemstone.Config
 
-public struct AssetImageFormatter {
+public struct AssetImageFormatter: Sendable {
     
     public init() {}
     

@@ -2,11 +2,10 @@ import SwiftUI
 import Primitives
 import Style
 import Components
-import FiatConnect
 import GRDBQuery
 import Store
 
-struct FiatScene: View {
+public struct FiatScene: View {
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable, Identifiable {
         case amount
@@ -18,12 +17,12 @@ struct FiatScene: View {
 
     @State private var model: FiatSceneViewModel
 
-    init(model: FiatSceneViewModel) {
+    public init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
         _assetData = Query(constant: model.assetRequest)
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             List {
                 CurrencyInputView(
@@ -64,17 +63,6 @@ struct FiatScene: View {
         }
         .onChange(of: model.input.amount) { _, _ in
             focusedField = .amount
-        }
-        .navigationDestination(for: Scenes.FiatProviders.self) { _ in
-            FiatProvidersScene(
-                model: FiatProvidersViewModel(
-                    type: model.input.type,
-                    asset: model.asset,
-                    quotes: model.state.value ?? [],
-                    selectQuote: onSelectQuote(_:),
-                    formatter: CurrencyFormatter.currency()
-                )
-            )
         }
     }
 }
@@ -188,7 +176,7 @@ extension FiatScene {
 
 #Preview {
     @Previewable @State var model = FiatSceneViewModel(
-        assetAddress: .init(asset: .main, address: .empty),
+        assetAddress: .init(asset: .init(.algorand), address: .empty),
         walletId: .zero,
         type: .buy
     )

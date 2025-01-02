@@ -7,22 +7,23 @@ import GemAPI
 import Components
 import Style
 import Localization
-import FiatConnect
 import Store
+import PrimitivesComponents
 
+@MainActor
 @Observable
-class FiatSceneViewModel {
+public final class FiatSceneViewModel {
     private let fiatService: any GemAPIFiatService
     private let assetAddress: AssetAddress
     private let walletId: String
 
-    private let currencyFormatter = CurrencyFormatter.currency()
+    private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
 
     var input: FiatInput
     var state: StateViewType<[FiatQuote]> = .loading
 
-    init(
+    public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
         assetAddress: AssetAddress,
         walletId: String,
@@ -180,6 +181,10 @@ extension FiatSceneViewModel {
 // MARK: - Business Logic
 
 extension FiatSceneViewModel {
+    func onSelectQuote(_ quote: FiatQuote) {
+        input.quote = quote
+    }
+
     func select(amount: Double, assetData: AssetData) {
         switch input.type {
         case .buy:
@@ -200,17 +205,13 @@ extension FiatSceneViewModel {
     }
 
     func fetch(for assetData: AssetData) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
-            self.input.quote = nil
-            if !self.shouldProceedFetch(assetData: assetData) {
-                self.state = .noData
-                return false
-            }
-            self.state = .loading
-            return true
-        }
+        input.quote = nil
 
-        guard shouldFetch else { return }
+        guard shouldProceedFetch(assetData: assetData) else {
+            state = .noData
+            return
+        }
+        state = .loading
 
         do {
             let quotes: [FiatQuote] = try await {
@@ -227,20 +228,17 @@ extension FiatSceneViewModel {
                     return try await fiatService.getSellQuotes(asset: asset, request: request)
                 }
             }()
-            await MainActor.run { [self] in
-                if !quotes.isEmpty {
-                    self.input.quote = quotes.first
-                    self.state = .loaded(quotes)
-                } else {
-                    self.state = .noData
-                }
+
+            if !quotes.isEmpty {
+                input.quote = quotes.first
+                state = .loaded(quotes)
+            } else {
+                state = .noData
             }
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.state = .error(error)
-                    NSLog("get quotes error: \(error)")
-                }
+            if !error.isCancelled {
+                state = .error(error)
+                NSLog("get quotes error: \(error)")
             }
         }
     }

@@ -12,6 +12,7 @@ import GemstonePrimitives
 import SwiftUI
 import Localization
 import Transfer
+import PrimitivesComponents
 
 @Observable
 class ConfirmTransferViewModel {

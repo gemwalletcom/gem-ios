@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import BigInt
-import Transfer
 
 typealias TransferDataAction = ((TransferData) -> Void)?
 typealias RecipientDataAction = ((RecipientData) -> Void)?

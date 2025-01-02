@@ -81,7 +81,8 @@ struct SelectAssetSceneNavigationStack: View {
                         )
                     )
                 case .buy, .sell:
-                    FiatScene(
+                    FiatConnectNavigationView(
+                        navigationPath: $navigationPath,
                         model: FiatSceneViewModel(
                             assetAddress: input.assetAddress,
                             walletId: model.wallet.id,

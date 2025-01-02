@@ -4,6 +4,7 @@ import SwiftUI
 import Style
 import Store
 import Components
+import PrimitivesComponents
 
 struct AssetDataViewModel {
     private let assetData: AssetData

@@ -5,18 +5,14 @@ import SwiftUI
 import Primitives
 import Style
 
-enum BalanceStyle {
-    case short
-    case medium
-    case full
-}
+public struct BalanceViewModel: Sendable {
+    private static let fullFormatter = ValueFormatter(style: .full)
 
-struct BalanceViewModel {
     private let asset: Asset
     private let balance: Balance
     private let formatter: ValueFormatter
 
-    init(
+    public init(
         asset: Asset,
         balance: Balance,
         formatter: ValueFormatter
@@ -25,58 +21,58 @@ struct BalanceViewModel {
         self.balance = balance
         self.formatter = formatter
     }
-    
-    var balanceAmount: Double {
+
+    public var balanceAmount: Double {
         do {
-            return try ValueFormatter(style: .full).double(from: balance.total, decimals: asset.decimals.asInt)
+            return try Self.fullFormatter.double(from: balance.total, decimals: asset.decimals.asInt)
         } catch {
             return .zero
         }
     }
 
-    var availableBalanceAmount: Double {
+    public var availableBalanceAmount: Double {
         do {
-            return try ValueFormatter(style: .full).double(from: balance.available, decimals: asset.decimals.asInt)
+            return try Self.fullFormatter.double(from: balance.available, decimals: asset.decimals.asInt)
         } catch {
             return .zero
         }
     }
 
-    var balanceText: String {
+    public var balanceText: String {
         guard !balance.total.isZero else {
             return .zero
         }
         return formatter.string(balance.total, decimals: asset.decimals.asInt)
     }
-    
-    var availableBalanceText: String {
+
+    public var availableBalanceText: String {
         guard !balance.available.isZero else {
             return .zero
         }
         return formatter.string(balance.available, decimals: asset.decimals.asInt)
     }
-    
-    var totalBalanceTextWithSymbol: String {
+
+    public var totalBalanceTextWithSymbol: String {
         formatter.string(balance.total, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
-    var availableBalanceTextWithSymbol: String {
+
+    public var availableBalanceTextWithSymbol: String {
         formatter.string(balance.available, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
-    var stakingBalanceTextWithSymbol: String {
+
+    public var stakingBalanceTextWithSymbol: String {
         formatter.string(balance.staked + balance.pending, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
-    var hasReservedBalance: Bool {
+
+    public var hasReservedBalance: Bool {
         !balance.reserved.isZero
     }
-    
-    var reservedBalanceTextWithSymbol: String {
+
+    public var reservedBalanceTextWithSymbol: String {
         formatter.string(balance.reserved, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
-    
-    var balanceTextColor: Color {
+
+    public var balanceTextColor: Color {
         guard !balance.total.isZero else {
             return Colors.gray
         }
