@@ -6,7 +6,6 @@ import Primitives
 struct Scenes {
     struct CreateWallet: Hashable {}
     struct ImportWallet: Hashable {}
-    struct FiatProviders: Hashable {}
     struct Notifications: Hashable {}
     struct PriceAlerts: Hashable {}
     struct Chains: Hashable {}
