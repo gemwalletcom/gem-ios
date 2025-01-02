@@ -82,11 +82,12 @@ struct SelectAssetSceneNavigationStack: View {
                     )
                 case .buy, .sell:
                     FiatConnectNavigationView(
-                        assetAddress: input.assetAddress,
-                        walletId: model.wallet.id,
-                        type: input.fiatType,
-                        navigationPath: $navigationPath
-                    )
+                        model: FiatSceneViewModel(
+                            assetAddress: input.assetAddress,
+                            walletId: model.wallet.id,
+                            type: input.fiatType
+                        ),
+                        navigationPath: $navigationPath)
                 case .manage, .stake, .priceAlert, .swap:
                     EmptyView()
                 }

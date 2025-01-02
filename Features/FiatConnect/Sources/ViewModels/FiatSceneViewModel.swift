@@ -205,17 +205,13 @@ extension FiatSceneViewModel {
     }
 
     func fetch(for assetData: AssetData) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
-            self.input.quote = nil
-            if !self.shouldProceedFetch(assetData: assetData) {
-                self.state = .noData
-                return false
-            }
-            self.state = .loading
-            return true
-        }
+        input.quote = nil
 
-        guard shouldFetch else { return }
+        guard shouldProceedFetch(assetData: assetData) else {
+            state = .noData
+            return
+        }
+        state = .loading
 
         do {
             let quotes: [FiatQuote] = try await {
@@ -232,20 +228,17 @@ extension FiatSceneViewModel {
                     return try await fiatService.getSellQuotes(asset: asset, request: request)
                 }
             }()
-            await MainActor.run { [self] in
-                if !quotes.isEmpty {
-                    self.input.quote = quotes.first
-                    self.state = .loaded(quotes)
-                } else {
-                    self.state = .noData
-                }
+
+            if !quotes.isEmpty {
+                input.quote = quotes.first
+                state = .loaded(quotes)
+            } else {
+                state = .noData
             }
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.state = .error(error)
-                    NSLog("get quotes error: \(error)")
-                }
+            if !error.isCancelled {
+                state = .error(error)
+                NSLog("get quotes error: \(error)")
             }
         }
     }

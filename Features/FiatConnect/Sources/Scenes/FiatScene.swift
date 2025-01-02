@@ -17,10 +17,7 @@ public struct FiatScene: View {
 
     @State private var model: FiatSceneViewModel
 
-    let onOpenFiatProvider: ((FiatProvidersViewModel) -> Void)?
-
-    public init(model: FiatSceneViewModel, onOpenFiatProvider: ((FiatProvidersViewModel) -> Void)? = nil) {
-        self.onOpenFiatProvider = onOpenFiatProvider
+    public init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
         _assetData = Query(constant: model.assetRequest)
     }
@@ -126,15 +123,8 @@ extension FiatScene {
             case .loaded(let quotes):
                 if let quote = model.input.quote {
                     if quotes.count > 1 {
-                        NavigationCustomLink(with: ListItemView(title: model.providerTitle, subtitle: quote.provider.name)) {
-                            onOpenFiatProvider?(
-                                FiatProvidersViewModel(
-                                    type: model.input.type,
-                                    asset: model.asset,
-                                    quotes: model.state.value ?? [],
-                                    formatter: CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
-                                )
-                            )
+                        NavigationLink(value: FiatConnectScenes.Providers()) {
+                            ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
                         }
                     } else {
                         ListItemView(title: model.providerTitle, subtitle: quote.provider.name)

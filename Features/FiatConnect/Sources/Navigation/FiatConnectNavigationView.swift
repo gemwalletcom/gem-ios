@@ -2,46 +2,36 @@
 
 import SwiftUI
 import Primitives
+import Store
 
 public struct FiatConnectNavigationView: View {
-    private let assetAddress: AssetAddress
-    private let walletId: String
-    private let type: FiatTransactionType
+    @Binding var navigationPath: NavigationPath
 
-    @Binding private var navigationPath: NavigationPath
+    private let model: FiatSceneViewModel
 
     public init(
-        assetAddress: AssetAddress,
-        walletId: String,
-        type: FiatTransactionType,
+        model: FiatSceneViewModel,
         navigationPath: Binding<NavigationPath>
     ) {
-        self.assetAddress = assetAddress
-        self.walletId = walletId
-        self.type = type
+        self.model = model
         _navigationPath = navigationPath
     }
 
     public var body: some View {
-        let model = FiatSceneViewModel(
-            assetAddress: assetAddress,
-            walletId: walletId,
-            type: type
-        )
-        FiatScene(
-            model: model,
-            onOpenFiatProvider: { model in
-                navigationPath.append(model)
+        FiatScene(model: model)
+            .navigationDestination(for: FiatConnectScenes.Providers.self) { _ in
+                FiatProvidersScene(
+                    model: FiatProvidersViewModel(
+                        type: model.input.type,
+                        asset: model.asset,
+                        quotes: model.state.value ?? [],
+                        formatter: CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency),
+                        onSelectQuote: {
+                            model.onSelectQuote($0)
+                            navigationPath.removeLast()
+                        }
+                    )
+                )
             }
-        )
-        .navigationDestination(for: FiatProvidersViewModel.self) {
-            FiatProvidersScene(
-                model: $0,
-                onSelectQuote: {
-                    model.onSelectQuote($0)
-                    navigationPath.removeLast()
-                }
-            )
-        }
     }
 }
