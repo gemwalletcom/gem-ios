@@ -6,8 +6,10 @@ import DeviceService
 import Primitives
 import SwiftUI
 import LockManager
+import WalletConnector
 
 @Observable
+@MainActor
 final class RootSceneViewModel {
     private let keystore: any Keystore
     private let walletConnectorInteractor: WalletConnectorInteractor

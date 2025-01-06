@@ -2,6 +2,7 @@
 
 import Foundation
 
+@MainActor
 struct AppResolver {
     let storages: Storages
     let navigation: NavigationStateManager

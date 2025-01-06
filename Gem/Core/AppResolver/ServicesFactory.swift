@@ -9,11 +9,13 @@ import StakeService
 import NotificationService
 import GemstonePrimitives
 import NodeService
+import WalletConnector
 import Store
 import GemAPI
 import Keystore
 
 struct ServicesFactory {
+    @MainActor
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
         let apiService: GemAPIService = GemAPIService()
@@ -272,7 +274,7 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         keystore: any Keystore,
-        walletConnectorInteractor: WalletConnectorInteractor?
+        walletConnectorInteractor: WalletConnectorInteractor
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             store: connectionsStore,

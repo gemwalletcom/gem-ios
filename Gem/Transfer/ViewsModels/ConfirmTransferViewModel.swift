@@ -13,6 +13,7 @@ import SwiftUI
 import Localization
 import Transfer
 import PrimitivesComponents
+import WalletConnector
 
 @Observable
 class ConfirmTransferViewModel {

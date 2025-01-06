@@ -8,6 +8,7 @@ import PriceAlertService
 import StakeService
 import NodeService
 import GemstonePrimitives
+import WalletConnector
 
 extension AppResolver {
     struct Services {

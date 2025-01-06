@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import Localization
+import WalletConnector
 
 struct WalletConnectorNavigationStack: View {
     typealias OnConnectorAction = ((WalletConnectorSheetType) -> Void)

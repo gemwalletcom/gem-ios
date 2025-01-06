@@ -9,6 +9,7 @@ import Store
 import Style
 import Localization
 import InfoSheet
+import PrimitivesComponents
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
