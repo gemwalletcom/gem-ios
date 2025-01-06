@@ -150,12 +150,9 @@ extension WalletsService {
         priceStore: .main,
         assetsService: .main,
         balanceService: .main,
-        stakeService: .main,
         priceService: .main,
         discoverAssetService: .main,
         transactionService: .main,
-        nodeService: NodeService.main,
-        connectionsService: .main,
         bannerSetupService: .main,
         addressStatusService: .main
     )
@@ -211,10 +208,6 @@ extension ConnectionsStore {
 
 extension SubscriptionService {
     static let main = SubscriptionService(subscriptionProvider: GemAPIService.shared, walletStore: .main)
-}
-
-extension WalletConnectorService {
-    static let main = WalletConnectorService(signer: WalletConnectorSigner.main)
 }
 
 extension ConnectionsService {

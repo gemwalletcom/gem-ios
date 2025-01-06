@@ -101,11 +101,8 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
-            stakeService: stakeService,
             priceService: priceService,
             transactionService: transactionService,
-            nodeService: nodeService,
-            connectionsService: connectionsService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService
         )
@@ -292,11 +289,8 @@ extension ServicesFactory {
         priceStore: PriceStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        stakeService: StakeService,
         priceService: PriceService,
         transactionService: TransactionService,
-        nodeService: NodeService,
-        connectionsService: ConnectionsService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService
     ) -> WalletsService {
@@ -305,15 +299,12 @@ extension ServicesFactory {
             priceStore: priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
-            stakeService: stakeService,
             priceService: priceService,
             discoverAssetService: DiscoverAssetsService(
                 balanceService: balanceService,
                 chainServiceFactory: chainServiceFactory
             ),
             transactionService: transactionService,
-            nodeService: nodeService,
-            connectionsService: connectionsService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )
