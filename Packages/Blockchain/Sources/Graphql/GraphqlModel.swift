@@ -4,19 +4,21 @@
 
 import Foundation
 
-public struct GraphqlData<T: Codable & Sendable>: Codable, Sendable {
-	public let data: T
-
-	public init(data: T) {
-		self.data = data
-	}
-}
-
 public struct GraphqlError: Codable, Sendable {
 	public let message: String
 
 	public init(message: String) {
 		self.message = message
+	}
+}
+
+public struct GraphqlData<T: Codable & Sendable>: Codable, Sendable {
+	public let data: T?
+	public let errors: [GraphqlError]?
+
+	public init(data: T?, errors: [GraphqlError]?) {
+		self.data = data
+		self.errors = errors
 	}
 }
 

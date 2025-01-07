@@ -72,13 +72,13 @@ extension CardanoService {
         }
     }
     
-    private func broadcast(data: String) async throws -> CardanoTransactionBroadcast {
+    private func broadcast(data: String) async throws -> GraphqlData<CardanoTransactionBroadcast> {
         let request = GraphqlRequest(
             operationName: "SubmitTransaction",
             variables: ["transaction": data],
             query: "mutation SubmitTransaction($transaction: String!) { submitTransaction(transaction: $transaction) { hash } }"
         )
-        return try await graphql.requestData(request)
+        return try await graphql.request(request)
     }
     
     private func networkMagic() async throws -> BigInt {
@@ -161,7 +161,15 @@ extension CardanoService: ChainTransactionPreloadable {
 
 extension CardanoService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        try await self.broadcast(data: data).submitTransaction.hash
+        let transaction = try await self.broadcast(data: data)
+        
+        if let error = transaction.errors?.first {
+            throw AnyError(error.message)
+        } else if let transaction = transaction.data?.submitTransaction {
+            return transaction.hash
+        }
+
+        throw ChainServiceErrors.broadcastError(chain)
     }
 }
 
