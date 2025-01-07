@@ -6,6 +6,7 @@ import Style
 import Components
 import Primitives
 import Localization
+import PrimitivesComponents
 
 struct WalletListItemView: View {
 

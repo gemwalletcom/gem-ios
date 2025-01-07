@@ -8,7 +8,6 @@ import Primitives
 import Localization
 
 struct ContextMenuCopy: View {
-
     let title: String
     let value: String
 
@@ -30,24 +29,7 @@ struct ContextMenuCopy: View {
     }
 }
 
-struct ContextMenuViewURL: View {
-    
-    let title: String
-    let url: URL
-    let image: String
-    
-    var body: some View {
-        Button(action: {
-            UIApplication.shared.open(url)
-        }) {
-            Text(title)
-            Image(systemName: image)
-        }
-    }
-}
-
 struct ContextMenuDelete: View {
-
     let action: VoidAction
     
     var body: some View {
@@ -58,7 +40,6 @@ struct ContextMenuDelete: View {
 }
 
 struct ContextMenuPin: View {
-
     let isPinned: Bool
     let action: VoidAction
 
@@ -78,7 +59,6 @@ struct ContextMenuPin: View {
 }
 
 struct ContextMenuItem: View {
-    
     let title: String
     let image: String
     let action: VoidAction

@@ -2,6 +2,7 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import PrimitivesComponents
 
 struct WalletBarViewViewModel {
     let name: String

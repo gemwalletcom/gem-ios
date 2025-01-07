@@ -4,6 +4,7 @@ import Keystore
 import Components
 import Style
 import Localization
+import PrimitivesComponents
 
 class WalletDetailViewModel {
 

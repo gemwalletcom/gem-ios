@@ -23,7 +23,7 @@ struct GemApp: App {
             RootScene(
                 model: RootSceneViewModel(
                     keystore: resolver.storages.keystore,
-                    walletConnectorInteractor: resolver.services.walletConnectorInteractor,
+                    walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartService: resolver.services.onstartService,
                     transactionService: resolver.services.transactionService,
                     connectionsService: resolver.services.connectionsService,

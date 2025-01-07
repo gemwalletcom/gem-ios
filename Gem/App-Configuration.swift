@@ -5,7 +5,7 @@ import Keystore
 import Components
 import Store
 import BigInt
-@preconcurrency import WalletConnector
+import WalletConnectorService
 import GemstonePrimitives
 import Blockchain
 import Localization
@@ -18,6 +18,7 @@ import BannerService
 import StakeService
 import NotificationService
 import NodeService
+import WalletConnector
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -149,12 +150,9 @@ extension WalletsService {
         priceStore: .main,
         assetsService: .main,
         balanceService: .main,
-        stakeService: .main,
         priceService: .main,
         discoverAssetService: .main,
         transactionService: .main,
-        nodeService: NodeService.main,
-        connectionsService: .main,
         bannerSetupService: .main,
         addressStatusService: .main
     )
@@ -212,10 +210,6 @@ extension SubscriptionService {
     static let main = SubscriptionService(subscriptionProvider: GemAPIService.shared, walletStore: .main)
 }
 
-extension WalletConnector {
-    static let main = WalletConnector(signer: WalletConnectorSigner.main)
-}
-
 extension ConnectionsService {
     static let main = ConnectionsService(store: .main, signer: WalletConnectorSigner.main)
 }
@@ -229,7 +223,11 @@ extension BannerSetupService {
 }
 
 extension WalletConnectorSigner {
-    static let main = WalletConnectorSigner(store: .main, keystore: LocalKeystore.main, walletConnectorInteractor: .none)
+    static let main = WalletConnectorSigner(
+        store: .main,
+        keystore: LocalKeystore.main,
+        walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
+    )
 }
  
 extension DB {
