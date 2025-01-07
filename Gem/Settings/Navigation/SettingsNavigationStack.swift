@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Currency
 import Store
+import PrimitivesComponents
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

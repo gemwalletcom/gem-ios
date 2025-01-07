@@ -6,6 +6,7 @@ import BigInt
 import Primitives
 import GemstonePrimitives
 import PrimitivesComponents
+import Store
 
 struct TransactionInputViewModel {
     let data: TransferData
@@ -13,6 +14,7 @@ struct TransactionInputViewModel {
     let metaData: TransferDataMetadata?
     let transferAmountResult: TransferAmountResult?
 
+    private let preferences: Preferences
     private let valueFormatter = ValueFormatter(style: .full)
     private let networkFeeFormatter = ValueFormatter(style: .medium)
 
@@ -20,12 +22,14 @@ struct TransactionInputViewModel {
         data: TransferData,
         input: TransactionPreload?,
         metaData: TransferDataMetadata?,
-        transferAmountResult: TransferAmountResult?
+        transferAmountResult: TransferAmountResult?,
+        preferences: Preferences = Preferences.standard
     ) {
         self.input = input
         self.data = data
         self.metaData = metaData
         self.transferAmountResult = transferAmountResult
+        self.preferences = preferences
     }
 
     var dataModel: TransferDataViewModel {
@@ -90,7 +94,10 @@ struct TransactionInputViewModel {
             let fiatValue = try? valueFormatter.double(from: value, decimals: decimals) else {
             return .none
         }
-        return PriceViewModel(price: price).fiatAmountText(amount: fiatValue * price.price)
+        return PriceViewModel(
+            price: price,
+            currencyCode: preferences.currency
+        ).fiatAmountText(amount: fiatValue * price.price)
     }
     
     var headerType: TransactionHeaderType {

@@ -14,6 +14,7 @@ import Staking
 import StakeService
 import typealias Staking.AmountInputAction
 import InfoSheet
+import PrimitivesComponents
 
 @Observable
 class StakeViewModel {

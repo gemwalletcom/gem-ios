@@ -8,6 +8,7 @@ import Gemstone
 import Style
 import Localization
 import MarketInsight
+import PrimitivesComponents
 
 @MainActor
 @Observable

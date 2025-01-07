@@ -8,6 +8,7 @@ import Primitives
 import Style
 import Components
 import Localization
+import PriceAlerts
 
 struct PriceAlertsScene: View {
     @State private var model: PriceAlertsViewModel
