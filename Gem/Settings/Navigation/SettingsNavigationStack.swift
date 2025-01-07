@@ -5,6 +5,7 @@ import Primitives
 import Currency
 import Store
 import PrimitivesComponents
+import PriceAlerts
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

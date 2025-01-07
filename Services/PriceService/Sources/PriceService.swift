@@ -8,7 +8,6 @@ import Store
 public struct PriceService: Sendable {
     private let apiService: any GemAPIPriceService
     private let priceStore: PriceStore
-    private let preferences: Preferences
     
     public init(
         apiService: any GemAPIPriceService = GemAPIService(),
@@ -17,11 +16,10 @@ public struct PriceService: Sendable {
     ) {
         self.apiService = apiService
         self.priceStore = priceStore
-        self.preferences = preferences
     }
 
-    public func updatePrices(assetIds: [String]) async throws {
-        let prices = try await fetchPrices(for: assetIds)
+    public func updatePrices(assetIds: [String], currency: String) async throws {
+        let prices = try await fetchPrices(for: assetIds, currency: currency)
         try updatePrices(prices: prices)
     }
 
@@ -45,9 +43,9 @@ public struct PriceService: Sendable {
         try priceStore.getPrices(for: assetIds.map { $0.identifier })
     }
     
-    public func fetchPrices(for assetIds: [String]) async throws -> [AssetPrice] {
+    public func fetchPrices(for assetIds: [String], currency: String) async throws -> [AssetPrice] {
         guard !assetIds.isEmpty else { return [] }
-        return try await apiService.getPrice(assetIds: assetIds, currency: preferences.currency)
+        return try await apiService.getPrice(assetIds: assetIds, currency: currency)
     }
     
     @discardableResult

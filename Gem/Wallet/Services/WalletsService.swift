@@ -28,6 +28,7 @@ class WalletsService {
     private let transactionService: TransactionService
     private let nodeService: NodeService
     private let bannerSetupService: BannerSetupService
+    private let preferences: Preferences
 
     private var assetObserver: AnyCancellable?
     private var balanceObserver: AnyCancellable?
@@ -45,7 +46,8 @@ class WalletsService {
         nodeService: NodeService,
         connectionsService: ConnectionsService,
         bannerSetupService: BannerSetupService,
-        addressStatusService: AddressStatusService
+        addressStatusService: AddressStatusService,
+        preferences: Preferences = Preferences.main
     ) {
         self.keystore = keystore
         self.assetsService = assetsService
@@ -58,6 +60,7 @@ class WalletsService {
         self.connectionsService = connectionsService
         self.bannerSetupService = bannerSetupService
         self.addressStatusService = addressStatusService
+        self.preferences = preferences
 
         defer {
             self.balanceObserver = balanceService.observeBalance().sink { update in
@@ -136,7 +139,7 @@ class WalletsService {
     func updatePrices(assetIds: [AssetId]) async throws {
         NSLog("fetch prices. assetIds: \(assetIds.count)")
         
-        let prices = try await priceService.fetchPrices(for: assetIds.ids)
+        let prices = try await priceService.fetchPrices(for: assetIds.ids, currency: self.preferences.currency)
         try priceService.updatePrices(prices: prices)
     }
     

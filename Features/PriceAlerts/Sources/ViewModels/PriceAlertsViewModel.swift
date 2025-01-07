@@ -8,12 +8,12 @@ import PriceAlertService
 import PriceService
 
 @Observable
-final class PriceAlertsViewModel: Sendable {
+public final class PriceAlertsViewModel: Sendable {
     private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
     private let priceService: PriceService
 
-    init(
+    public init(
         preferences: ObservablePreferences = .default,
         priceAlertService: PriceAlertService,
         priceService: PriceService
@@ -26,9 +26,7 @@ final class PriceAlertsViewModel: Sendable {
     var title: String { Localized.Settings.PriceAlerts.title }
     var enableTitle: String { Localized.Settings.enableValue("") }
 
-    var request: PriceAlertsRequest {
-        PriceAlertsRequest()
-    }
+    var request: PriceAlertsRequest { PriceAlertsRequest() }
 
     var isPriceAlertsEnabled: Bool {
         get {
@@ -36,6 +34,31 @@ final class PriceAlertsViewModel: Sendable {
         }
         set {
             preferences.isPriceAlertsEnabled = newValue
+        }
+    }
+}
+
+// MARK: - Business Logic
+
+extension PriceAlertsViewModel {
+    public func fetch() async {
+        do {
+            try await priceAlertService.update()
+
+            // update prices
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
+
+        } catch {
+            NSLog("getPriceAlerts error: \(error)")
+        }
+    }
+
+    func deletePriceAlert(assetId: AssetId) async {
+        do {
+            try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
+        } catch {
+            NSLog("deletePriceAlert error: \(error)")
         }
     }
 
@@ -46,32 +69,11 @@ final class PriceAlertsViewModel: Sendable {
         await deviceUpdate()
     }
 
-    func fetch() async {
-        do {
-            try await priceAlertService.update()
-
-            // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
-            try await priceService.updatePrices(assetIds: assetIds)
-
-        } catch {
-            NSLog("getPriceAlerts error: \(error)")
-        }
-    }
-
-    func addPriceAlert(assetId: AssetId) async {
+    private func addPriceAlert(assetId: AssetId) async {
         do {
             try await priceAlertService.addPriceAlert(for: assetId)
         } catch {
             NSLog("addPriceAlert error: \(error)")
-        }
-    }
-
-    func deletePriceAlert(assetId: AssetId) async {
-        do {
-            try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
-        } catch {
-            NSLog("deletePriceAlert error: \(error)")
         }
     }
 
