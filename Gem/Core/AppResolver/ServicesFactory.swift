@@ -12,6 +12,7 @@ import NodeService
 import Store
 import GemAPI
 import Keystore
+import PriceService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {

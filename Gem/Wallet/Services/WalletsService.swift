@@ -12,6 +12,7 @@ import ChainService
 import BannerService
 import StakeService
 import NodeService
+import PriceService
 
 class WalletsService {
     

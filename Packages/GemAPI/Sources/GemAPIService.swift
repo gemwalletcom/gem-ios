@@ -58,6 +58,10 @@ public protocol GemAPIPriceAlertService: Sendable {
     func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
 }
 
+public protocol GemAPIPriceService: Sendable {
+    func getPrice(assetIds: [String], currency: String) async throws -> [AssetPrice]
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -243,5 +247,14 @@ extension GemAPIService: GemAPIPriceAlertService {
         let _ = try await provider
             .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
             .map(as: Int.self)
+    }
+}
+
+extension GemAPIService: GemAPIPriceService {
+    public func getPrice(assetIds: [String], currency: String) async throws -> [Primitives.AssetPrice] {
+        let request = AssetPricesRequest(currency: currency, assetIds: assetIds)
+        return try await provider
+            .request(.getPrices(request))
+            .map(as: AssetPrices.self).prices
     }
 }

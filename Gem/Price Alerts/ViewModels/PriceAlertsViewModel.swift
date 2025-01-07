@@ -5,6 +5,7 @@ import Store
 import Primitives
 import Localization
 import PriceAlertService
+import PriceService
 
 @Observable
 final class PriceAlertsViewModel: Sendable {

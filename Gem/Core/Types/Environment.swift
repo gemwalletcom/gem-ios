@@ -14,6 +14,7 @@ import GemAPI
 import ChainService
 import StakeService
 import NodeService
+import PriceService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main
