@@ -85,11 +85,12 @@ struct ServicesFactory {
         )
         let explorerService = ExplorerService(storage: storages.explorerStore)
 
-        let walletConnectorInteractor = WalletConnectorInteractor()
+        let presenter = WalletConnectorPresenter()
+        let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
             keystore: storages.keystore,
-            walletConnectorInteractor: walletConnectorInteractor
+            interactor: walletConnectorManager
         )
 
         let bannerSetupService = BannerSetupService(
@@ -138,7 +139,7 @@ struct ServicesFactory {
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
             onstartService: onstartService,
-            walletConnectorInteractor: walletConnectorInteractor
+            walletConnectorManager: walletConnectorManager
         )
     }
 }
@@ -271,12 +272,12 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         keystore: any Keystore,
-        walletConnectorInteractor: WalletConnectorInteractor
+        interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             store: connectionsStore,
             keystore: keystore,
-            walletConnectorInteractor: walletConnectorInteractor
+            walletConnectorInteractor: interactor
         )
         return ConnectionsService(
             store: connectionsStore,

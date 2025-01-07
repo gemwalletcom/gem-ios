@@ -226,7 +226,7 @@ extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         store: .main,
         keystore: LocalKeystore.main,
-        walletConnectorInteractor: WalletConnectorInteractor()
+        walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
     )
 }
  
