@@ -4,11 +4,13 @@
 
 import Foundation
 
-public struct FiatProvider: Codable, Sendable, Hashable {
+public struct FiatProvider: Codable, Equatable, Hashable, Sendable {
+	public let id: String
 	public let name: String
 	public let imageUrl: String
 
-	public init(name: String, imageUrl: String) {
+	public init(id: String, name: String, imageUrl: String) {
+		self.id = id
 		self.name = name
 		self.imageUrl = imageUrl
 	}

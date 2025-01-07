@@ -28,14 +28,6 @@ public struct StellarAccount: Codable, Sendable {
 	}
 }
 
-public struct StellarAccountEmpty: Codable, Sendable {
-	public let status: Int32
-
-	public init(status: Int32) {
-		self.status = status
-	}
-}
-
 public struct StellarAsset: Codable, Sendable {
 	public let asset_code: String
 	public let asset_issuer: String
@@ -95,17 +87,11 @@ public struct StellarNodeStatus: Codable, Sendable {
 }
 
 public struct StellarTransactionBroadcast: Codable, Sendable {
-	public let hash: String
+	public let hash: String?
+	public let title: String?
 
-	public init(hash: String) {
+	public init(hash: String?, title: String?) {
 		self.hash = hash
-	}
-}
-
-public struct StellarTransactionBroadcastError: Codable, Sendable {
-	public let title: String
-
-	public init(title: String) {
 		self.title = title
 	}
 }

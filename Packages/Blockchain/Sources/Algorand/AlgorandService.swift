@@ -73,9 +73,9 @@ extension AlgorandService: ChainBalanceable {
         return tokenIds.map { assetId in
             let (balance, isActive): (BigInt, Bool) = {
                 if let value = assets.first(where: { String($0.asset_id) == assetId.tokenId  })?.amount {
-                    return (BigInt(value), true)
+                    return (BigInt(value), false)
                 }
-                return (BigInt.zero, false)
+                return (.zero, false)
             }()
             
             return AssetBalance(

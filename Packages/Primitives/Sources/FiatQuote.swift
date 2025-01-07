@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct FiatQuote: Codable, Sendable, Hashable {
+public struct FiatQuote: Codable, Equatable, Hashable, Sendable {
 	public let provider: FiatProvider
 	public let type: FiatTransactionType
 	public let fiatAmount: Double
@@ -19,6 +19,16 @@ public struct FiatQuote: Codable, Sendable, Hashable {
 		self.fiatCurrency = fiatCurrency
 		self.cryptoAmount = cryptoAmount
 		self.redirectUrl = redirectUrl
+	}
+}
+
+public struct FiatQuoteError: Codable, Sendable {
+	public let provider: String
+	public let error: String
+
+	public init(provider: String, error: String) {
+		self.provider = provider
+		self.error = error
 	}
 }
 
