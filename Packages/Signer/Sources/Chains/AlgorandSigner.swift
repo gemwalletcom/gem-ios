@@ -42,7 +42,7 @@ public struct AlgorandSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        return try sign(
+        try sign(
             input: input,
             message: .assetTransfer(.with {
                 $0.toAddress = input.destinationAddress
@@ -54,7 +54,7 @@ public struct AlgorandSigner: Signable {
     }
     
     public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
-        return try sign(
+        try sign(
             input: input,
             message: .assetOptIn(.with {
                 $0.assetID = try input.asset.getTokenIdAsInt().asUInt64

@@ -12,6 +12,7 @@ public enum AptosProvider: TargetType {
     case gasPrice
     case estimateFee(data: Data)
     case broadcast(data: String)
+    case batchBroadcast(data: String)
     
     public var baseUrl: URL {
         return URL(string: "")!
@@ -27,7 +28,8 @@ public enum AptosProvider: TargetType {
             .resources:
             return .GET
         case .estimateFee,
-            .broadcast:
+            .broadcast,
+            .batchBroadcast:
             return .POST
         }
     }
@@ -42,6 +44,7 @@ public enum AptosProvider: TargetType {
         case .resource(let address, let resource): "/v1/accounts/\(address)/resource/\(resource)"
         case .resources(let address): "/v1/accounts/\(address)/resources"
         case .broadcast: "/v1/transactions"
+        case .batchBroadcast: "/v1/transactions/batch"
         }
     }
     
@@ -56,7 +59,7 @@ public enum AptosProvider: TargetType {
             return .plain
         case .estimateFee(let data):
             return .data(data)
-        case .broadcast(let data):
+        case .broadcast(let data), .batchBroadcast(let data):
             return .data(Data(data.utf8))
         }
     }

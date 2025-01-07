@@ -159,9 +159,15 @@ extension StellarService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
         let transaction = try await provider
             .request(.broadcast(data: data))
-            .mapOrError(as: StellarTransactionBroadcast.self, asError: StellarTransactionBroadcastError.self)
+            .map(as: StellarTransactionBroadcast.self)
         
-        return transaction.hash
+        if let hash = transaction.hash {
+            return hash
+        } else if let error = transaction.title {
+            throw AnyError(error)
+        }
+
+        throw ChainServiceErrors.broadcastError(chain)
     }
 }
 
@@ -253,12 +259,6 @@ extension StellarService: ChainLatestBlockFetchable {
 extension StellarService: ChainAddressStatusFetchable {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         []
-    }
-}
-
-extension StellarTransactionBroadcastError: LocalizedError {
-    public var errorDescription: String? {
-        title
     }
 }
 
