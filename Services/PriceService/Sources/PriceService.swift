@@ -11,8 +11,7 @@ public struct PriceService: Sendable {
     
     public init(
         apiService: any GemAPIPriceService = GemAPIService(),
-        priceStore: PriceStore,
-        preferences: Preferences
+        priceStore: PriceStore
     ) {
         self.apiService = apiService
         self.priceStore = priceStore

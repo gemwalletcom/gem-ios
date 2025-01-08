@@ -118,7 +118,7 @@ extension StakeService {
 }
 
 extension PriceService {
-    static let main = PriceService(priceStore: .main, preferences: .main)
+    static let main = PriceService(priceStore: .main)
 }
 
 extension TransactionService {
