@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "Intro",
+    name: "Onboarding",
     platforms: [
         .iOS(.v17),
     ],
     products: [
         .library(
-            name: "Intro",
-            targets: ["Intro"]),
+            name: "Onboarding",
+            targets: ["Onboarding"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -20,7 +20,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Intro",
+            name: "Onboarding",
             dependencies: [
                 "Primitives",
                 "Components",

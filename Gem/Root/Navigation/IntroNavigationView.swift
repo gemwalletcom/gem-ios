@@ -2,7 +2,7 @@
 
 import Foundation
 import SwiftUI
-import Intro
+import Onboarding
 
 struct IntroNavigationView: View {
 
