@@ -176,6 +176,9 @@ extension CosmosService: ChainBalanceable {
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        guard StakeChain(rawValue: chain.rawValue) != nil else {
+            return nil
+        }
         let denom = chain.denom
         async let getDelegations = getDelegations(address: address)
         async let getUnboundingDelegations = getUnboundingDelegations(address: address)
@@ -291,6 +294,9 @@ extension CosmosService: ChainSyncable {
 extension CosmosService: ChainStakable {
     
     public func getValidators(apr: Double) async throws -> [DelegationValidator] {
+        guard StakeChain(rawValue: chain.rawValue) != nil else {
+            return []
+        }
         async let getValidators = getValidatorsList()
         
         let (validators) = try await (
@@ -313,6 +319,10 @@ extension CosmosService: ChainStakable {
     }
     
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
+        guard StakeChain(rawValue: chain.rawValue) != nil else {
+            return []
+        }
+
         async let getDelegations = getDelegations(address: address)
         async let getUnboundingDelegations = getUnboundingDelegations(address: address)
         async let getRewards = getRewards(address: address)
