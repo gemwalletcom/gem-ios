@@ -1073,6 +1073,7 @@
 				C3D1C4F72A3BD6FA006E8EEA /* BalanceService.swift */,
 				C3D1C4F92A3BDAC8006E8EEA /* PriceService.swift */,
 				D890F79E2C7D216400C26819 /* WalletService.swift */,
+				C36678F92A09791C00F1D74D /* ImportAssetsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1655,7 +1656,6 @@
 		D8DC1AFD2C113B6800697D0A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C36678F92A09791C00F1D74D /* ImportAssetsService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
