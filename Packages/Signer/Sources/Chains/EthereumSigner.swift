@@ -128,10 +128,8 @@ public class EthereumSigner: Signable {
         switch input.type.stakeChain {
         case .smartChain:
             return try SmartChainSigner().signStake(input: input, privateKey: privateKey)
-        case .ethereum:
-            return try LidoStakeSigner().signStake(input: input, privateKey: privateKey)
         default:
-            fatalError()
+            fatalError("\(input.asset.name) native staking not supported")
         }
     }
     

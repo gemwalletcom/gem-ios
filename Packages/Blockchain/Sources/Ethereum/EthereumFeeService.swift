@@ -36,14 +36,6 @@ extension EthereumService {
             switch input.chain {
             case .smartChain:
                 return try? StakeHub().encodeStake(type: stakeType, amount: input.value)
-            case .ethereum:
-                if stakeType.validatorId != DelegationValidator.lido.id {
-                    // refactor later to support everstake and others
-                    fatalError()
-                }
-                // empty signature for gas estimation
-                let signature = Data(repeating: 0, count: 65)
-                return try? LidoContract.encodeStake(type: stakeType, sender: input.senderAddress, amount: input.value, signature: signature)
             default:
                 fatalError()
             }
@@ -175,19 +167,7 @@ extension EthereumService {
         let value = getValue(input: input)
 
         async let getGasLimit: BigInt = {
-            if case .stake(_, let stakeType) = input.type {
-                return try await EthereumStakeService(service: self)
-                    .getGasLimit(
-                        chain: chain,
-                        type: stakeType,
-                        stakeValue: input.value, // original value
-                        from: input.senderAddress,
-                        to: to,
-                        value: value,
-                        data: data
-                    )
-            }
-            return try await self.getGasLimit(
+            try await self.getGasLimit(
                 from: input.senderAddress,
                 to: to,
                 value: value?.hexString.append0x,

@@ -145,8 +145,6 @@ extension EthereumService: ChainBalanceable {
         switch chain {
         case .smartChain:
             return try await SmartChainService(provider: provider).getStakeBalance(for: address)
-        case .ethereum:
-            return try await LidoService(provider: provider).getBalance(address: address)
         default:
             break
         }
@@ -234,10 +232,6 @@ extension EthereumService: ChainStakable {
         switch chain {
         case .smartChain:
             return try await SmartChainService(provider: provider).getValidators(apr: 0)
-        case .ethereum:
-            return [
-                DelegationValidator.lido
-            ]
         default:
             return []
         }
@@ -247,28 +241,13 @@ extension EthereumService: ChainStakable {
         switch chain {
         case .smartChain:
             return try await SmartChainService(provider: provider).getStakeDelegations(address: address)
-        case .ethereum:
-            return try await LidoService(provider: provider).getStakeDelegations(address: address)
         default:
             return []
         }
     }
 
     public func getPreloadExtra(chain: Chain, type: TransferDataType, address: String) async throws -> SigningdExtra? {
-        guard let stakeChain = chain.stakeChain else {
-            return .none
-        }
-        guard let stakeType = type.stakeType else {
-            return .none
-        }
-        switch (stakeChain, stakeType) {
-        case(.ethereum, .unstake):
-            return .lidoPermitNonce(
-                try await LidoService(provider: provider).getPermitNonce(address: address)
-            )
-        default:
-            return .none
-        }
+        .none
     }
 }
 
