@@ -39,8 +39,8 @@ struct RootScene: View {
         .sheet(item: $model.isPresentingConnnectorSheet) { type in
             WalletConnectorNavigationStack(
                 type: type,
-                onComplete: model.onWalletConnectorComplete(type:),
-                onCancel: model.onWalletConnectorCancel(type:))
+                presenter: model.walletConnectorPresenter
+            )
         }
         .confirmationDialog(
             Localized.WalletConnect.brandName,

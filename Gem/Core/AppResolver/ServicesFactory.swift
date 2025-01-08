@@ -9,12 +9,14 @@ import StakeService
 import NotificationService
 import GemstonePrimitives
 import NodeService
+import WalletConnector
 import Store
 import GemAPI
 import Keystore
 import PriceService
 
 struct ServicesFactory {
+    @MainActor
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
         let apiService: GemAPIService = GemAPIService()
@@ -84,11 +86,12 @@ struct ServicesFactory {
         )
         let explorerService = ExplorerService(storage: storages.explorerStore)
 
-        let walletConnectorInteractor = WalletConnectorInteractor()
+        let presenter = WalletConnectorPresenter()
+        let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
             keystore: storages.keystore,
-            walletConnectorInteractor: walletConnectorInteractor
+            interactor: walletConnectorManager
         )
 
         let bannerSetupService = BannerSetupService(
@@ -100,11 +103,8 @@ struct ServicesFactory {
             priceStore: storeManager.priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
-            stakeService: stakeService,
             priceService: priceService,
             transactionService: transactionService,
-            nodeService: nodeService,
-            connectionsService: connectionsService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService
         )
@@ -140,7 +140,7 @@ struct ServicesFactory {
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
             onstartService: onstartService,
-            walletConnectorInteractor: walletConnectorInteractor
+            walletConnectorManager: walletConnectorManager
         )
     }
 }
@@ -273,12 +273,12 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         keystore: any Keystore,
-        walletConnectorInteractor: WalletConnectorInteractor?
+        interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             store: connectionsStore,
             keystore: keystore,
-            walletConnectorInteractor: walletConnectorInteractor
+            walletConnectorInteractor: interactor
         )
         return ConnectionsService(
             store: connectionsStore,
@@ -291,11 +291,8 @@ extension ServicesFactory {
         priceStore: PriceStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        stakeService: StakeService,
         priceService: PriceService,
         transactionService: TransactionService,
-        nodeService: NodeService,
-        connectionsService: ConnectionsService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService
     ) -> WalletsService {
@@ -304,15 +301,12 @@ extension ServicesFactory {
             priceStore: priceStore,
             assetsService: assetsService,
             balanceService: balanceService,
-            stakeService: stakeService,
             priceService: priceService,
             discoverAssetService: DiscoverAssetsService(
                 balanceService: balanceService,
                 chainServiceFactory: chainServiceFactory
             ),
             transactionService: transactionService,
-            nodeService: nodeService,
-            connectionsService: connectionsService,
             bannerSetupService: bannerSetupService,
             addressStatusService: AddressStatusService(chainServiceFactory: chainServiceFactory)
         )

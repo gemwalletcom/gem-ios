@@ -43,10 +43,6 @@ public struct Scenes {
         public init() {}
     }
 
-    public struct WalletConnections: Hashable {
-        public init() {}
-    }
-
     public struct WalletConnectorScene: Hashable {
         public init() {}
     }

@@ -3,27 +3,23 @@
 import SwiftUI
 import Primitives
 import Localization
+import WalletConnector
 
 struct WalletConnectorNavigationStack: View {
-    typealias OnConnectorAction = ((WalletConnectorSheetType) -> Void)
-
     @Environment(\.keystore) var keystore
     @Environment(\.chainServiceFactory) var chainServiceFactory
     @Environment(\.walletsService) var walletsService
     @Environment(\.connectionsService) var connectionsService
 
     private let type: WalletConnectorSheetType
-    private let onComplete: OnConnectorAction?
-    private let onCancel: OnConnectorAction?
+    private let presenter: WalletConnectorPresenter
 
     init(
         type: WalletConnectorSheetType,
-        onComplete: OnConnectorAction?,
-        onCancel: OnConnectorAction?
+        presenter: WalletConnectorPresenter
     ) {
         self.type = type
-        self.onComplete = onComplete
-        self.onCancel = onCancel
+        self.presenter = presenter
     }
 
     var body: some View {
@@ -40,9 +36,7 @@ struct WalletConnectorNavigationStack: View {
                                 .service(for: data.payload.tranferData.recipientData.asset.chain),
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
-                            onComplete: {
-                                onComplete?(type)
-                            }
+                            onComplete: { presenter.complete(type: type) }
                         )
                     )
                 case .signMessage(let data):
@@ -69,7 +63,7 @@ struct WalletConnectorNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {
-                        onCancel?(type)
+                        presenter.cancelSheet(type: type)
                     }
                     .bold()
                 }

@@ -139,7 +139,7 @@ extension CosmosService: ChainBalanceable {
         let denom = chain.denom
         
         switch chain {
-        case .thorchain:
+        case .thorchain, .noble:
             let balances = try await getBalance(address: address);
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
             
@@ -153,8 +153,7 @@ extension CosmosService: ChainBalanceable {
             .osmosis,
             .celestia,
             .injective,
-            .sei,
-            .noble:
+            .sei:
 
             let balances = try await getBalance(address: address)
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)

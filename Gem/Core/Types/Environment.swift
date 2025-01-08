@@ -15,6 +15,7 @@ import ChainService
 import StakeService
 import NodeService
 import PriceService
+import WalletConnector
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main

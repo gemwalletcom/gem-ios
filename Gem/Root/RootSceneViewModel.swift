@@ -6,37 +6,38 @@ import DeviceService
 import Primitives
 import SwiftUI
 import LockManager
+import WalletConnector
 
 @Observable
+@MainActor
 final class RootSceneViewModel {
     private let keystore: any Keystore
-    private let walletConnectorInteractor: WalletConnectorInteractor
-
     private let onstartService: OnstartAsyncService
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
 
+    let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
 
     var currentWallet: Wallet? { keystore.currentWallet }
     var updateAvailableAlertSheetMessage: String?
     var isPresentingConnectorError: String? {
-        get { walletConnectorInteractor.isPresentingError }
-        set { walletConnectorInteractor.isPresentingError = newValue }
+        get { walletConnectorPresenter.isPresentingError }
+        set { walletConnectorPresenter.isPresentingError = newValue }
     }
     var isPresentingConnnectorSheet: WalletConnectorSheetType? {
-        get { walletConnectorInteractor.isPresentingSheeet }
-        set { walletConnectorInteractor.isPresentingSheeet = newValue }
+        get { walletConnectorPresenter.isPresentingSheet }
+        set { walletConnectorPresenter.isPresentingSheet = newValue }
     }
 
     var isPresentingConnectorBar: Bool {
-        get { walletConnectorInteractor.isPresentingConnectionBar }
-        set { walletConnectorInteractor.isPresentingConnectionBar = newValue }
+        get { walletConnectorPresenter.isPresentingConnectionBar }
+        set { walletConnectorPresenter.isPresentingConnectionBar = newValue }
     }
 
     init(keystore: any Keystore,
-         walletConnectorInteractor: WalletConnectorInteractor,
+         walletConnectorPresenter: WalletConnectorPresenter,
          onstartService: OnstartAsyncService,
          transactionService: TransactionService,
          connectionsService: ConnectionsService,
@@ -44,7 +45,7 @@ final class RootSceneViewModel {
          lockWindowManager: any LockWindowManageable
     ) {
         self.keystore = keystore
-        self.walletConnectorInteractor = walletConnectorInteractor
+        self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartService = onstartService
         self.transactionService = transactionService
         self.connectionsService = connectionsService
@@ -78,19 +79,6 @@ extension RootSceneViewModel {
         if let newWallet {
             onstartService.setup(wallet: newWallet)
         }
-    }
-
-    func onWalletConnectorComplete(type: WalletConnectorSheetType) {
-        switch type {
-        case .transferData:
-            walletConnectorInteractor.isPresentingSheeet = nil
-        case .connectionProposal, .signMessage:
-            break
-        }
-    }
-
-    func onWalletConnectorCancel(type: WalletConnectorSheetType) {
-        walletConnectorInteractor.cancel(type: type)
     }
 
     func handleOpenUrl(_ url: URL) async {

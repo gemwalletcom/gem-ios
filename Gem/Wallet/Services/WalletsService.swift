@@ -19,14 +19,11 @@ class WalletsService {
     let keystore: any Keystore
     let assetsService: AssetsService
     let balanceService: BalanceService
-    let stakeService: StakeService
     let priceService: PriceService
     let addressStatusService: AddressStatusService
-    
-    private let connectionsService: ConnectionsService
+
     private let discoverAssetService: DiscoverAssetsService
     private let transactionService: TransactionService
-    private let nodeService: NodeService
     private let bannerSetupService: BannerSetupService
     private let preferences: Preferences
 
@@ -39,12 +36,9 @@ class WalletsService {
         priceStore: PriceStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
-        stakeService: StakeService,
         priceService: PriceService,
         discoverAssetService: DiscoverAssetsService,
         transactionService: TransactionService,
-        nodeService: NodeService,
-        connectionsService: ConnectionsService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
         preferences: Preferences = Preferences.main
@@ -52,12 +46,9 @@ class WalletsService {
         self.keystore = keystore
         self.assetsService = assetsService
         self.balanceService = balanceService
-        self.stakeService = stakeService
         self.priceService = priceService
         self.discoverAssetService = discoverAssetService
         self.transactionService = transactionService
-        self.nodeService = nodeService
-        self.connectionsService = connectionsService
         self.bannerSetupService = bannerSetupService
         self.addressStatusService = addressStatusService
         self.preferences = preferences

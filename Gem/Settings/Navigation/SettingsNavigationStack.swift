@@ -6,6 +6,7 @@ import Currency
 import Store
 import PrimitivesComponents
 import PriceAlerts
+import WalletConnector
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -21,6 +22,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.explorerService) private var explorerService
+    @Environment(\.keystore) private var keystore
 
     @State private var isWalletsPresented = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -84,7 +86,12 @@ struct SettingsNavigationStack: View {
                 AboutUsScene()
             }
             .navigationDestination(for: Scenes.WalletConnect.self) { _ in
-                ConnectionsScene(model: ConnectionsViewModel(service: connectionsService))
+                ConnectionsScene(
+                    model: ConnectionsViewModel(
+                        service: connectionsService,
+                        keystore: keystore
+                    )
+                )
             }
             .navigationDestination(for: Scenes.Developer.self) { _ in
                 DeveloperScene(model: DeveloperViewModel(
@@ -93,13 +100,6 @@ struct SettingsNavigationStack: View {
                     stakeService: stakeService,
                     bannerService: bannerService
                 ))
-            }
-            .navigationDestination(for: Scenes.WalletConnections.self) { _ in
-                ConnectionsScene(
-                    model: ConnectionsViewModel(
-                        service: connectionsService
-                    )
-                )
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in
                 CurrencyScene(model: currencyModel)

@@ -3,6 +3,7 @@
 import Foundation
 import Components
 import Primitives
+import PrimitivesComponents
 
 struct AssetHeaderViewModel {
     let assetDataModel: AssetDataViewModel

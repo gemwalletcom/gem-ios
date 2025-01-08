@@ -9,6 +9,7 @@ import StakeService
 import NodeService
 import PriceService
 import GemstonePrimitives
+import WalletConnector
 
 extension AppResolver {
     struct Services {
@@ -33,7 +34,7 @@ extension AppResolver {
         
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartAsyncService
-        let walletConnectorInteractor: WalletConnectorInteractor
+        let walletConnectorManager: WalletConnectorManager
 
         init(
             assetsService: AssetsService,
@@ -55,7 +56,7 @@ extension AppResolver {
             explorerService: ExplorerService,
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartAsyncService,
-            walletConnectorInteractor: WalletConnectorInteractor
+            walletConnectorManager: WalletConnectorManager
         ) {
             self.assetsService = assetsService
             self.balanceService = balanceService
@@ -76,7 +77,7 @@ extension AppResolver {
             self.explorerService = explorerService
             self.deviceObserverService = deviceObserverService
             self.onstartService = onstartService
-            self.walletConnectorInteractor = walletConnectorInteractor
+            self.walletConnectorManager = walletConnectorManager
         }
     }
 }

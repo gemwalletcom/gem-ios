@@ -107,9 +107,9 @@ public struct CardanoTransaction: Codable, Sendable {
 }
 
 public struct CardanoTransactionBroadcast: Codable, Sendable {
-	public let submitTransaction: CardanoSubmitTransactionHash
+	public let submitTransaction: CardanoSubmitTransactionHash?
 
-	public init(submitTransaction: CardanoSubmitTransactionHash) {
+	public init(submitTransaction: CardanoSubmitTransactionHash?) {
 		self.submitTransaction = submitTransaction
 	}
 }
