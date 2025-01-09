@@ -5,6 +5,7 @@ import Style
 import Store
 import Components
 import PrimitivesComponents
+import struct GemstonePrimitives.GemstoneConfig
 
 struct AssetDataViewModel {
     private let assetData: AssetData
@@ -123,21 +124,7 @@ struct AssetDataViewModel {
     }
     
     var isStakeEnabled: Bool {
-        if [
-            Chain.cosmos.assetId,
-            Chain.osmosis.assetId,
-            Chain.injective.assetId,
-            Chain.sei.assetId,
-            Chain.celestia.assetId,
-            Chain.solana.assetId,
-            Chain.sui.assetId,
-            Chain.smartChain.assetId,
-            Chain.tron.assetId,
-//            Chain.ethereum.assetId disabled
-        ].contains(asset.id) {
-            return true
-        }
-        return false //assetData.metadata.isStakeEnabled
+        GemstoneConfig.shared.getChainConfig(chain: assetData.asset.chain.rawValue).isStakeSupported
     }
     
     var isActive: Bool {
