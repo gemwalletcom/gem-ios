@@ -81,8 +81,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let priceService = PriceService(
-            priceStore: storeManager.priceStore,
-            preferences: preferences
+            priceStore: storeManager.priceStore
         )
         let explorerService = ExplorerService(storage: storages.explorerStore)
 
