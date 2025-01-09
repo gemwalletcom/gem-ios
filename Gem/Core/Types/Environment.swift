@@ -35,6 +35,5 @@ extension EnvironmentValues {
     @Entry var notificationService: NotificationService = .main
     @Entry var stakeService: StakeService = .main
     @Entry var connectionsService: ConnectionsService = .main
-    @Entry var isWalletsPresented: Binding<Bool> = .constant(false)
     @Entry var chainServiceFactory: ChainServiceFactory = .main
 }

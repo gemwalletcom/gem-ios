@@ -13,7 +13,7 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.navigationState) private var navigationState
 
-    @State private var isWalletsPresented = false
+    @State private var isPresentingWallets = false
     @State private var isPresentingAssetSelectType: SelectAssetInput?
     @State private var isPresentingSelectType: SelectAssetType?
 
@@ -30,7 +30,8 @@ struct WalletNavigationStack: View {
         NavigationStack(path: navigationPath) {
             WalletScene(
                 model: model,
-                isPresentingSelectType: $isPresentingSelectType
+                isPresentingSelectType: $isPresentingSelectType,
+                isPresentingWallets: $isPresentingWallets
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Asset.self) {
@@ -73,14 +74,9 @@ struct WalletNavigationStack: View {
                     isPresentingAssetSelectType: $isPresentingAssetSelectType
                 )
             }
-            .sheet(isPresented: $isWalletsPresented) {
-                WalletsNavigationStack()
+            .sheet(isPresented: $isPresentingWallets) {
+                WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)
             }
         }
-        .environment(\.isWalletsPresented, $isWalletsPresented)
     }
 }
-
-//#Preview {
-//    WalletNavigationStack()
-//}

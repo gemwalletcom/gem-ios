@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Localization
+import PrimitivesComponents
 
 class ShowSecretPhraseViewModel {
     

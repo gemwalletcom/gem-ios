@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Style
+import PrimitivesComponents
 
 struct ReceiveScene: View {
     @State private var showShareSheet = false

@@ -141,10 +141,6 @@ extension NodeService {
     static let main = NodeService(nodeStore: .main)
 }
 
-extension NameService {
-    static let main = NameService()
-}
-
 extension WalletsService {
     static let main = WalletsService(
         keystore: LocalKeystore.main,

@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Settings
 import Localization
+import PrimitivesComponents
 
 struct ChainListSettingsViewModel {
     var title: String {
