@@ -9,20 +9,18 @@ import Style
 import Components
 import Localization
 
-struct PriceAlertsScene: View {
+public struct PriceAlertsScene: View {
     @State private var model: PriceAlertsViewModel
 
     @Query<PriceAlertsRequest>
-    var priceAlerts: [PriceAlertData]
+    private var priceAlerts: [PriceAlertData]
 
-    init(
-        model: PriceAlertsViewModel
-    ) {
-        self.model = model
+    public init(model: PriceAlertsViewModel) {
+        _model = State(initialValue: model)
         _priceAlerts = Query(constant: model.request)
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 Toggle(
@@ -77,12 +75,4 @@ extension PriceAlertsScene {
             await model.handleAlertsEnabled(enabled: newValue)
         }
     }
-}
-
-// MARK: - Preview
-
-#Preview {
-    PriceAlertsScene(
-        model: PriceAlertsViewModel(priceAlertService: .main, priceService: .main)
-    )
 }

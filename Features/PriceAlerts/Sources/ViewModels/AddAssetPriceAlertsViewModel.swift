@@ -4,11 +4,14 @@ import Foundation
 import Primitives
 import PriceAlertService
 
-struct AddAssetPriceAlertsViewModel {
+public struct AddAssetPriceAlertsViewModel: Sendable {
+    private let priceAlertService: PriceAlertService
 
-    let priceAlertService: PriceAlertService
+    public init(priceAlertService: PriceAlertService) {
+        self.priceAlertService = priceAlertService
+    }
 
-    func onSelectAsset(_ asset: Asset)  {
+    public func onSelectAsset(_ asset: Asset)  {
         Task {
             try await priceAlertService.addPriceAlert(for: asset.id)
             try await priceAlertService.enablePriceAlerts()

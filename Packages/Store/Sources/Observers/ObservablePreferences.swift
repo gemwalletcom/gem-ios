@@ -1,18 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 
 @Observable
-final class ObservablePreferences: Sendable {
-    let preferences: Preferences
+public final class ObservablePreferences: Sendable {
+    public let preferences: Preferences
 
-    init(preferences: Preferences) {
+    public init(preferences: Preferences) {
         self.preferences = preferences
     }
 
     @ObservationIgnored
-    var isHideBalanceEnabled: Bool {
+    public var isHideBalanceEnabled: Bool {
         get {
             access(keyPath: \.isHideBalanceEnabled)
             return preferences.isHideBalanceEnabled
@@ -25,7 +24,7 @@ final class ObservablePreferences: Sendable {
     }
 
     @ObservationIgnored
-    var isPriceAlertsEnabled: Bool {
+    public var isPriceAlertsEnabled: Bool {
         get {
             access(keyPath: \.isPriceAlertsEnabled)
             return preferences.isPriceAlertsEnabled
@@ -39,11 +38,11 @@ final class ObservablePreferences: Sendable {
 }
 
 extension ObservablePreferences {
-    static let `default` = ObservablePreferences(preferences: .main)
+    public static let `default` = ObservablePreferences(preferences: .standard)
 }
 
 extension EnvironmentValues {
-    @Entry var observablePreferences: ObservablePreferences = .default
+    @Entry public var observablePreferences: ObservablePreferences = .default
 }
 
 

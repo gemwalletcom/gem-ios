@@ -37,9 +37,9 @@ let package = Package(
             ],
             path: "Sources"
         ),
-//        .testTarget(
-//            name: "WalletConnectorTests",
-//            dependencies: ["WalletConnector"]
-//        ),
+        .testTarget(
+            name: "WalletConnectorServiceTests",
+            dependencies: ["WalletConnectorService"]
+        ),
     ]
 )

@@ -3,6 +3,7 @@
 import SwiftUI
 import Primitives
 import Localization
+import PrimitivesComponents
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore

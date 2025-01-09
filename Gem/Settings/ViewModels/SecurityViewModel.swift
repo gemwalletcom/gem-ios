@@ -4,6 +4,7 @@ import Foundation
 import Keystore
 import Components
 import Localization
+import Store
 
 @Observable
 class SecurityViewModel {
