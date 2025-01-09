@@ -8,6 +8,7 @@ import Blockchain
 import Primitives
 import Localization
 import Transfer
+import NameResolver
 
 struct RecipientScene: View {
     

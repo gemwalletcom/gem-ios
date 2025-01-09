@@ -17,7 +17,6 @@ struct WalletScene: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.connectionsService) private var connectionsService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.isWalletsPresented) private var isWalletsPresented
     @Environment(\.nodeService) private var nodeService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.stakeService) private var stakeService
@@ -38,17 +37,20 @@ struct WalletScene: View {
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @Binding var isPresentingSelectType: SelectAssetType?
-    
+    @Binding var isPresentingWallets: Bool
+
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     
     let model: WalletSceneViewModel
 
     public init(
         model: WalletSceneViewModel,
-        isPresentingSelectType: Binding<SelectAssetType?>
+        isPresentingSelectType: Binding<SelectAssetType?>,
+        isPresentingWallets: Binding<Bool>
     ) {
         self.model = model
         _isPresentingSelectType = isPresentingSelectType
+        _isPresentingWallets = isPresentingWallets
 
         try? model.setupWallet()
 
@@ -147,7 +149,7 @@ struct WalletScene: View {
                         WalletBarView(
                             model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)
                         ) {
-                            isWalletsPresented.wrappedValue.toggle()
+                            isPresentingWallets.toggle()
                         }
                     }
                 }

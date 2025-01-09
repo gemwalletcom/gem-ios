@@ -3,42 +3,37 @@
 import PackageDescription
 
 let package = Package(
-    name: "Onboarding",
+    name: "NameResolver",
     platforms: [
-        .iOS(.v17),
+        .iOS(.v17)
     ],
     products: [
         .library(
-            name: "Onboarding",
-            targets: ["Onboarding"]),
+            name: "NameResolver",
+            targets: ["NameResolver"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Components", path: "../Components"),
         .package(name: "Style", path: "../Style"),
         .package(name: "Localization", path: "../Localization"),
-        .package(name: "Keystore", path: "../Keystore"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
-        .package(name: "NameResolver", path: "../NameResolver"),
-        .package(name: "QRScanner", path: "../QRScanner"),
-        .package(name: "Settings", path: "../Settings"),
-
+        .package(name: "GemAPI", path: "../GemAPI"),
     ],
     targets: [
         .target(
-            name: "Onboarding",
+            name: "NameResolver",
             dependencies: [
                 "Primitives",
                 "Components",
                 "Style",
                 "Localization",
-                "Keystore",
-                "PrimitivesComponents",
-                "NameResolver",
-                "QRScanner",
-                "Settings"
+                "GemAPI"
             ],
             path: "Sources"
+        ),
+        .testTarget(
+            name: "NameResolverTests",
+            dependencies: ["NameResolver"]
         ),
     ]
 )

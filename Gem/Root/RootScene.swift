@@ -5,6 +5,7 @@ import Style
 import Localization
 import GemstonePrimitives
 import Primitives
+import Onboarding
 
 struct RootScene: View {
     @State private var model: RootSceneViewModel
@@ -28,7 +29,9 @@ struct RootScene: View {
                     Text(Localized.UpdateApp.description(model.updateAvailableAlertSheetMessage ?? ""))
                 }
             } else {
-                IntroNavigationView()
+                OnboardingNavigationView(
+                    model: .init(keystore: model.keystore)
+                )
             }
         }
         .onOpenURL { url in
