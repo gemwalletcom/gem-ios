@@ -1,33 +1,30 @@
 import Foundation
 import Primitives
 import Components
-import PrimitivesComponents
 
-struct AssetViewModel {
-    let asset: Asset    
-    
-    init(
-        asset: Asset
-    ) {
+public struct AssetViewModel {
+    public let asset: Asset
+
+    public init(asset: Asset) {
         self.asset = asset
     }
-    
-    var title: String {
+
+    public var title: String {
         String(format: "%@ (%@)", asset.name, asset.symbol)
     }
-    
-    var name: String {
+
+    public var name: String {
         asset.name
     }
-    
-    var symbol: String {
+
+    public var symbol: String {
         asset.symbol
     }
-    
-    var supportMemo: Bool {
+
+    public var supportMemo: Bool {
         asset.chain.isMemoSupported
     }
-    
+
     public var assetImage: AssetImage {
         AssetIdViewModel(assetId: asset.id).assetImage
     }

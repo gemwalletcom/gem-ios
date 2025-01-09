@@ -3,11 +3,9 @@
 import Foundation
 import Primitives
 import Keystore
-import Blockchain
 import GemstonePrimitives
 import Localization
-import BigInt
-import Transfer
+import PrimitivesComponents
 
 enum RecipientAddressType {
     case wallets

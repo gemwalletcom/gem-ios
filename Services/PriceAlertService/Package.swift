@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "NotificationService", path: "../NotificationService"),
         .package(name: "DeviceService", path: "../DeviceService"),
         .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "PriceService", path: "../PriceService"),
     ],
     targets: [
         .target(
@@ -30,6 +31,7 @@ let package = Package(
                 "NotificationService",
                 "DeviceService",
                 "GemAPI",
+                "PriceService"
             ],
             path: "Sources"
         ),

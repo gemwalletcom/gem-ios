@@ -7,6 +7,7 @@ import Style
 import Localization
 import SwapService
 import FiatConnect
+import PrimitivesComponents
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss

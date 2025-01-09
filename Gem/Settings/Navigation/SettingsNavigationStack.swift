@@ -4,6 +4,8 @@ import SwiftUI
 import Primitives
 import Currency
 import Store
+import PrimitivesComponents
+import PriceAlerts
 import WalletConnector
 
 struct SettingsNavigationStack: View {

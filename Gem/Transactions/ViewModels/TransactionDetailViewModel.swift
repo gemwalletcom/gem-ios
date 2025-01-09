@@ -9,12 +9,19 @@ import Primitives
 import BigInt
 import Localization
 import PrimitivesComponents
+import Store
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
-    
+    private let preferences: Preferences
+
+    init(model: TransactionViewModel, preferences: Preferences = Preferences.standard) {
+        self.model = model
+        self.preferences = preferences
+    }
+
     var priceModel: PriceViewModel {
-        return PriceViewModel(price: model.transaction.price)
+        PriceViewModel(price: model.transaction.price, currencyCode: preferences.currency)
     }
     
     var title: String {

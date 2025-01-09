@@ -9,15 +9,20 @@ import struct GemstonePrimitives.GemstoneConfig
 
 struct AssetDataViewModel {
     private let assetData: AssetData
-    let priceViewModel: PriceViewModel
     private let balanceViewModel: BalanceViewModel
+
+    let priceViewModel: PriceViewModel
 
     init(
         assetData: AssetData,
-        formatter: ValueFormatter
+        formatter: ValueFormatter,
+        preferences: Preferences = Preferences.standard
     ) {
         self.assetData = assetData
-        self.priceViewModel = PriceViewModel(price: assetData.price)
+        self.priceViewModel = PriceViewModel(
+            price: assetData.price,
+            currencyCode: preferences.currency
+        )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
             balance: assetData.balance,

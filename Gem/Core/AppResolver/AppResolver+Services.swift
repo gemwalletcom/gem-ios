@@ -7,6 +7,7 @@ import DeviceService
 import PriceAlertService
 import StakeService
 import NodeService
+import PriceService
 import GemstonePrimitives
 import WalletConnector
 

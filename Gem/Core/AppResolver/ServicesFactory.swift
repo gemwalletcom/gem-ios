@@ -13,6 +13,7 @@ import WalletConnector
 import Store
 import GemAPI
 import Keystore
+import PriceService
 
 struct ServicesFactory {
     @MainActor

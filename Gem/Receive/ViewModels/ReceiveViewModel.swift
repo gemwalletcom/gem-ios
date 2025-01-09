@@ -1,6 +1,7 @@
 import Foundation
 import Primitives
 import Localization
+import PrimitivesComponents
 
 struct ReceiveViewModel {
     
