@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Localization
+import PriceAlerts
 
 struct AddAssetPriceAlertsNavigationStack: View {
     @Environment(\.dismiss) private var dismiss

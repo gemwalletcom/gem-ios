@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Localization
 import Transfer
+import PrimitivesComponents
 
 struct TransferDataViewModel {
     let data: TransferData

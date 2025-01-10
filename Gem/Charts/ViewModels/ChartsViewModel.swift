@@ -8,6 +8,8 @@ import Gemstone
 import Style
 import Localization
 import MarketInsight
+import PrimitivesComponents
+import PriceService
 
 @MainActor
 @Observable
@@ -82,11 +84,10 @@ extension ChartsViewModel {
                 currency: preferences.currency
             )
             if let price = values.price {
-                try priceService.priceStore
-                    .updatePrice(price: price.mapToAssetPrice(assetId: assetModel.asset.id.identifier))
+                try priceService.updatePrice(price: price.mapToAssetPrice(assetId: assetModel.asset.id.identifier))
             }
             if let market = values.market {
-                try priceService.priceStore.updateMarket(assetId: assetModel.asset.id.identifier, market: market)
+                try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market)
             }
 
             let price = try priceService.getPrice(for: assetModel.asset.id)

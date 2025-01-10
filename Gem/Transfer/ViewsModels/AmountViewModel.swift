@@ -13,6 +13,7 @@ import Localization
 import Transfer
 import enum Staking.StakeValidatorsType
 import StakeService
+import PrimitivesComponents
 
 class AmounViewModel: ObservableObject {
     let input: AmountInput

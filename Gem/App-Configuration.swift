@@ -18,6 +18,7 @@ import BannerService
 import StakeService
 import NotificationService
 import NodeService
+import PriceService
 import WalletConnector
 
 extension Asset {
@@ -117,7 +118,7 @@ extension StakeService {
 }
 
 extension PriceService {
-    static let main = PriceService(priceStore: .main, preferences: .main)
+    static let main = PriceService(priceStore: .main)
 }
 
 extension TransactionService {
@@ -138,10 +139,6 @@ extension DiscoverAssetsService {
 
 extension NodeService {
     static let main = NodeService(nodeStore: .main)
-}
-
-extension NameService {
-    static let main = NameService()
 }
 
 extension WalletsService {

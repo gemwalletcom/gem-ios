@@ -4,17 +4,21 @@ import Foundation
 import SwiftUI
 import Localization
 import Primitives
+import Onboarding
 
 struct WalletsNavigationStack: View {
-
-    @Environment(\.isWalletsPresented) private var isWalletsPresented
     @Environment(\.walletService) private var walletService
     @Environment(\.keystore) private var keystore
 
-    @State var navigationPath = NavigationPath()
+    @State private var navigationPath = NavigationPath()
 
     @State private var isPresentingCreateWalletSheet = false
     @State private var isPresentingImportWalletSheet = false
+    @Binding private var isPresentingWallets: Bool
+
+    init(isPresentingWallets: Binding<Bool>) {
+        _isPresentingWallets = isPresentingWallets
+    }
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
@@ -41,21 +45,26 @@ struct WalletsNavigationStack: View {
                 )
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
-                CreateWalletNavigationStack()
+                CreateWalletNavigationStack(
+                    keystore: keystore,
+                    isPresentingWallets: $isPresentingWallets
+                )
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
-                ImportWalletNavigationStack()
+                ImportWalletNavigationStack(
+                    model: ImportWalletTypeViewModel(keystore: keystore),
+                    isPresentingWallets: $isPresentingWallets
+                )
             }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.done) {
-                        isWalletsPresented.wrappedValue.toggle()
+                        isPresentingWallets.toggle()
                     }
                     .bold()
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
         }
-
     }
 }

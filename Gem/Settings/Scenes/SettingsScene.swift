@@ -11,13 +11,17 @@ import Localization
 import MarketInsight
 
 struct SettingsScene: View {
-    @Environment(\.isWalletsPresented) private var isWalletsPresented
     @Environment(\.openURL) private var openURL
 
     @ObservedObject private var model: SettingsViewModel
+    @Binding private var isPresentingWallets: Bool
 
-    init(model: SettingsViewModel) {
+    init(
+        model: SettingsViewModel,
+        isPresentingWallets: Binding<Bool>
+    ) {
         self.model = model
+        _isPresentingWallets = isPresentingWallets
     }
 
     var body: some View {
@@ -163,7 +167,7 @@ extension SettingsScene {
     }
 
     private func onOpenWallets() {
-        isWalletsPresented.wrappedValue.toggle()
+        isPresentingWallets.toggle()
     }
 
     private func onCurrencyChange() {
@@ -183,7 +187,7 @@ extension SettingsScene {
    )
     NavigationStack {
        SettingsScene(
-           model: model
+        model: model, isPresentingWallets: .constant(false)
        )
        .navigationBarTitleDisplayMode(.inline)
    }

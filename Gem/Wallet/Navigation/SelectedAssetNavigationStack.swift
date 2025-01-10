@@ -6,6 +6,8 @@ import Primitives
 import Localization
 import SwapService
 import FiatConnect
+import PrimitivesComponents
+import PriceAlerts
 
 struct SelectedAssetNavigationStack: View  {
     

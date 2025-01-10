@@ -6,6 +6,7 @@ import Localization
 import Gemstone
 import Store
 import GemstonePrimitives
+import Style
 
 public struct AssetDetailsInfoViewModel {
     
@@ -62,11 +63,27 @@ public struct AssetDetailsInfoViewModel {
         }
     }
     
+    public var marketCapViewModel: MarketValueViewModel {
+        if let rank = priceData.market?.marketCapRank, Int(rank).isBetween(1, and: 1000) {
+            return MarketValueViewModel(
+                title: Localized.Asset.marketCap,
+                subtitle: marketCapText,
+                titleTag: " #\(rank) ",
+                titleTagStyle: TextStyle(
+                    font: .system(.body, weight: .regular),
+                    color: Colors.grayLight,
+                    background: Colors.grayVeryLight
+                )
+            )
+        }
+        return MarketValueViewModel(title: Localized.Asset.marketCap, subtitle: marketCapText)
+    }
+    
     public var marketValues: [MarketValueViewModel] {
         return [
-            MarketValueViewModel(title: Localized.Asset.marketCap, subtitle: marketCapText, value: .none, url: .none),
-            MarketValueViewModel(title: Localized.Asset.circulatingSupply, subtitle: circulatingSupplyText, value: .none, url: .none),
-            MarketValueViewModel(title: Localized.Asset.totalSupply, subtitle: totalSupplyText, value: .none, url: .none),
+            marketCapViewModel,
+            MarketValueViewModel(title: Localized.Asset.circulatingSupply, subtitle: circulatingSupplyText),
+            MarketValueViewModel(title: Localized.Asset.totalSupply, subtitle: totalSupplyText),
             MarketValueViewModel(title: Localized.Asset.contract, subtitle: contractText, value: contract, url: contractUrl),
         ].filter { $0.subtitle?.isEmpty == false }
     }

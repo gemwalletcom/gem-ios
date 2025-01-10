@@ -3,6 +3,7 @@ import Primitives
 import Components
 import Style
 import SwiftUI
+import PrimitivesComponents
 
 enum AssetListType {
     case wallet

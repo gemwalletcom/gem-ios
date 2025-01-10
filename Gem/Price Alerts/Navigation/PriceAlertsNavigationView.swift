@@ -3,9 +3,9 @@
 import Foundation
 import SwiftUI
 import Style
+import PriceAlerts
 
 struct PriceAlertsNavigationView: View {
-
     @Environment(\.dismiss) private var dismiss
     @Environment(\.keystore) private var keystore
     @Environment(\.assetsService) private var assetsService

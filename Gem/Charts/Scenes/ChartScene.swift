@@ -80,7 +80,9 @@ struct ChartScene: View {
                 Section {
                     ForEach(priceDataModel.marketValues, id: \.title) { link in
                         if let url = link.url {
-                            NavigationCustomLink(with: ListItemView(title: link.title, subtitle: link.subtitle)) {
+                            NavigationCustomLink(
+                                with: ListItemView(title: link.title)
+                            ) {
                                 openURL(url)
                             }
                             .contextMenu {
@@ -89,7 +91,12 @@ struct ChartScene: View {
                                 }
                             }
                         } else {
-                            ListItemView(title: link.title, subtitle: link.subtitle)
+                            ListItemView(
+                                title: link.title,
+                                titleTag: link.titleTag,
+                                titleTagStyle: link.titleTagStyle ?? .body,
+                                subtitle: link.subtitle
+                            )
                         }
                     }
                 }

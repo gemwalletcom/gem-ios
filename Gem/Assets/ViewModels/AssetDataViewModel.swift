@@ -5,18 +5,24 @@ import Style
 import Store
 import Components
 import PrimitivesComponents
+import struct GemstonePrimitives.GemstoneConfig
 
 struct AssetDataViewModel {
     private let assetData: AssetData
-    let priceViewModel: PriceViewModel
     private let balanceViewModel: BalanceViewModel
+
+    let priceViewModel: PriceViewModel
 
     init(
         assetData: AssetData,
-        formatter: ValueFormatter
+        formatter: ValueFormatter,
+        preferences: Preferences = Preferences.standard
     ) {
         self.assetData = assetData
-        self.priceViewModel = PriceViewModel(price: assetData.price)
+        self.priceViewModel = PriceViewModel(
+            price: assetData.price,
+            currencyCode: preferences.currency
+        )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
             balance: assetData.balance,
@@ -123,21 +129,7 @@ struct AssetDataViewModel {
     }
     
     var isStakeEnabled: Bool {
-        if [
-            Chain.cosmos.assetId,
-            Chain.osmosis.assetId,
-            Chain.injective.assetId,
-            Chain.sei.assetId,
-            Chain.celestia.assetId,
-            Chain.solana.assetId,
-            Chain.sui.assetId,
-            Chain.smartChain.assetId,
-            Chain.tron.assetId,
-//            Chain.ethereum.assetId disabled
-        ].contains(asset.id) {
-            return true
-        }
-        return false //assetData.metadata.isStakeEnabled
+        GemstoneConfig.shared.getChainConfig(chain: assetData.asset.chain.rawValue).isStakeSupported
     }
     
     var isActive: Bool {

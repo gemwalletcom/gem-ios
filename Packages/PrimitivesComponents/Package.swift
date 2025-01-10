@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
         .package(name: "Style", path: "../Style"),
+
     ],
     targets: [
         .target(
@@ -29,7 +30,7 @@ let package = Package(
                 "GemstonePrimitives",
                 "Localization",
                 "Components",
-                "Style",
+                "Style"
             ],
             path: "Sources"
         ),

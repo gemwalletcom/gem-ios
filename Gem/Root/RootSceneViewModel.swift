@@ -11,7 +11,7 @@ import WalletConnector
 @Observable
 @MainActor
 final class RootSceneViewModel {
-    private let keystore: any Keystore
+    let keystore: any Keystore
     private let onstartService: OnstartAsyncService
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService

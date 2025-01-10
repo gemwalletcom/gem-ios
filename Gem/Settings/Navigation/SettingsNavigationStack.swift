@@ -4,6 +4,8 @@ import SwiftUI
 import Primitives
 import Currency
 import Store
+import PrimitivesComponents
+import PriceAlerts
 import WalletConnector
 
 struct SettingsNavigationStack: View {
@@ -22,7 +24,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.explorerService) private var explorerService
     @Environment(\.keystore) private var keystore
 
-    @State private var isWalletsPresented = false
+    @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
 
     let walletId: WalletId
@@ -48,7 +50,8 @@ struct SettingsNavigationStack: View {
                     walletId: walletId,
                     walletsService: walletsService,
                     currencyModel: currencyModel
-                )
+                ),
+                isPresentingWallets: $isPresentingWallets
             )
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
@@ -107,14 +110,13 @@ struct SettingsNavigationStack: View {
                     model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: $0.chain)
                 )
             }
-            .sheet(isPresented: $isWalletsPresented) {
-                WalletsNavigationStack()
+            .sheet(isPresented: $isPresentingWallets) {
+                WalletsNavigationStack(isPresentingWallets: $isPresentingWallets)
             }
         }
         .onChange(of: currencyModel.selectedCurrencyValue) { _, _ in
             navigationState.settings.removeLast()
         }
-        .environment(\.isWalletsPresented, $isWalletsPresented)
     }
 }
 

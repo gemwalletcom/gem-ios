@@ -7,11 +7,6 @@ import BigInt
 typealias TransferDataAction = ((TransferData) -> Void)?
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
-struct RecipientImport {
-    let name: String
-    let address: String
-}
-
 struct TransferDataMetadata {
     let assetBalance: BigInt
     let assetFeeBalance: BigInt
