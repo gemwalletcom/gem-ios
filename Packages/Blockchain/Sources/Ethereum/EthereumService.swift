@@ -159,13 +159,12 @@ extension EthereumService: ChainTransactionPreloadable {
         async let fee = fee(input: input.feeInput)
         async let sequence = getNonce(senderAddress: input.senderAddress)
         async let chainId = getChainId()
-        async let extra = getPreloadExtra(chain: input.asset.chain, type: input.type, address: input.senderAddress)
         
         return try await TransactionPreload(
             sequence: sequence,
             chainId: chainId.asString,
             fee: fee,
-            extra: extra
+            extra: .none
         )
     }
 }
@@ -244,10 +243,6 @@ extension EthereumService: ChainStakable {
         default:
             return []
         }
-    }
-
-    public func getPreloadExtra(chain: Chain, type: TransferDataType, address: String) async throws -> SigningdExtra? {
-        .none
     }
 }
 
