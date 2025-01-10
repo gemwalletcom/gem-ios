@@ -55,17 +55,7 @@ public struct StakeService: Sendable {
             return id
         case .smartChain:
             return StakeHub.address
-        case .ethereum:
-            // for Lido, it's stETH token address or withdrawal queue
-            switch type {
-            case .stake:
-                return LidoContract.address
-            case .unstake, .withdraw:
-                return LidoContract.withdrawal
-            default:
-                fatalError()
-            }
-        case .none:
+        default:
             fatalError()
         }
     }
