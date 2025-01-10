@@ -72,34 +72,22 @@ extension EthereumService {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
-            case .native:
-                return input.value
-            case .token:
-                return .none
+            case .native: input.value
+            case .token: .none
             }
-        case .swap(let asset, _, let type):
+        case .swap(_, _, let type):
             switch type {
-            case .approval:
-                return .zero
-            case .swap:
-                switch asset.id.type {
-                case .native:
-                    return input.value
-                case .token:
-                    return .none
-                }
+            case .approval: .zero
+            case .swap(_, let data): BigInt(stringLiteral: data.value)
             }
-        case .generic:
-            return input.value
+        case .generic: input.value
         case .stake(_, let type):
             switch input.chain {
             case .smartChain,
                     .ethereum:
                 switch type {
-                case .stake:
-                    return input.value
-                case .unstake, .redelegate, .withdraw:
-                    return .none
+                case .stake: input.value
+                case .unstake, .redelegate, .withdraw: .none
                 case .rewards:
                     fatalError()
                 }

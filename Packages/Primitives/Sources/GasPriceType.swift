@@ -9,10 +9,8 @@ public enum GasPriceType: Equatable, Sendable {
     
     public var gasPrice: BigInt {
         switch self {
-        case .regular(let gasPrice):
-            return gasPrice
-        case .eip1559(let gasPrice, _):
-            return gasPrice
+        case .regular(let gasPrice): gasPrice
+        case .eip1559(let gasPrice, _): gasPrice
         }
     }
     
