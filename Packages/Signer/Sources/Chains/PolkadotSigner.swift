@@ -39,7 +39,7 @@ public struct PolkadotSigner: Signable {
         return try sign(
             input: input,
             message: .balanceCall(.with {
-                $0.transfer = PolkadotBalance.Transfer.with {
+                $0.transfer = .with {
                     $0.toAddress = input.destinationAddress
                     $0.value = input.value.magnitude.serialize()
                 }

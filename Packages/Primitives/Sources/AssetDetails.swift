@@ -5,13 +5,15 @@
 import Foundation
 
 public struct AssetProperties: Codable, Sendable {
+	public let isEnabled: Bool
 	public let isBuyable: Bool
 	public let isSellable: Bool
 	public let isSwapable: Bool
 	public let isStakeable: Bool
 	public let stakingApr: Double?
 
-	public init(isBuyable: Bool, isSellable: Bool, isSwapable: Bool, isStakeable: Bool, stakingApr: Double?) {
+	public init(isEnabled: Bool, isBuyable: Bool, isSellable: Bool, isSwapable: Bool, isStakeable: Bool, stakingApr: Double?) {
+		self.isEnabled = isEnabled
 		self.isBuyable = isBuyable
 		self.isSellable = isSellable
 		self.isSwapable = isSwapable

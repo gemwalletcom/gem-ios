@@ -6,6 +6,7 @@ import Primitives
 public extension AssetProperties {
     static func defaultValue(assetId: AssetId) -> AssetProperties {
         return AssetProperties(
+            isEnabled: true,
             isBuyable: false,
             isSellable: false,
             isSwapable: assetId.chain.isSwapSupported,
