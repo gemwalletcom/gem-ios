@@ -37,6 +37,7 @@ struct ImportAssetsService {
                 return AssetBasic(
                     asset: $0.asset,
                     properties: AssetProperties(
+                        isEnabled: true,
                         isBuyable: score.rank >= 40,
                         isSellable: false,
                         isSwapable: false,

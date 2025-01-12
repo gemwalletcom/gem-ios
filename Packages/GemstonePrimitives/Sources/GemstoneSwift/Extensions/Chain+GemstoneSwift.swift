@@ -17,25 +17,6 @@ public extension Primitives.Chain {
         )
     }
     
-    var includeStakedBalance: Bool {
-        switch self.stakeChain {
-        case .cosmos,
-                .osmosis,
-                .injective,
-                .sei,
-                .celestia,
-                .solana,
-                .sui,
-                .smartChain,
-                .tron,
-                .none:
-            true
-        case .ethereum:
-            // stETH duplicate portfolio
-            false
-        }
-    }
-    
     var accountActivationFee: Int32? {
         ChainConfig.config(chain: self).accountActivationFee
     }
