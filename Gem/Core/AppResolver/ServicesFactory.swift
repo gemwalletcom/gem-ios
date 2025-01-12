@@ -73,7 +73,7 @@ struct ServicesFactory {
             bannerStore: storeManager.bannerStore,
             preferences: preferences
         )
-        let notificationService = NotificationService()
+        let notificationService = NotificationService.main
 
         let priceAlertService = Self.makePriceAlertService(
             priceAlertStore: storeManager.priceAlertStore,
