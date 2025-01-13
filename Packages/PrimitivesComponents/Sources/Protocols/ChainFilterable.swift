@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import Settings
 
 public protocol ChainFilterable {
     var chains: [Chain] { get }
