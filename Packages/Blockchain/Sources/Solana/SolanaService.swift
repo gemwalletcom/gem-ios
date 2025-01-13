@@ -166,9 +166,10 @@ extension SolanaService: ChainBalanceable {
         let staked = try await getDelegations(address: address)
             .map { $0.account.lamports }
             .reduce(0, +)
+
         return AssetBalance(
             assetId: chain.assetId,
-            balance: Balance(available: .zero, staked: BigInt(staked))
+            balance: Balance(staked: BigInt(staked))
         )
     }
 }

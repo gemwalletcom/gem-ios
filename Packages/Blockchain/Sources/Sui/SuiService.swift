@@ -283,7 +283,6 @@ extension SuiService: ChainBalanceable {
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: .zero,
                 staked: staked
             )
         )
