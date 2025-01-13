@@ -14,7 +14,7 @@ public struct Balance: Codable, Sendable {
     public var reserved: BigInt
 
     public init(
-        available: BigInt,
+        available: BigInt = .zero,
         frozen: BigInt = .zero,
         locked: BigInt = .zero,
         staked: BigInt = .zero,
