@@ -7,6 +7,8 @@ import Store
 import Localization
 import NotificationService
 import DeviceService
+import BannerService
+import Primitives
 
 @Observable
 @MainActor
@@ -14,17 +16,20 @@ final class NotificationsViewModel {
     private let deviceService: DeviceService
     private let preferences: Preferences
     private let pushNotificationService: PushNotificationEnablerService
+    private let bannerService: BannerService
 
     var isEnabled: Bool
 
     init(
         deviceService: DeviceService,
-        preferences: Preferences
+        preferences: Preferences,
+        bannerService: BannerService
     ) {
         self.deviceService = deviceService
         self.preferences = preferences
         self.pushNotificationService = PushNotificationEnablerService(preferences: preferences)
         self.isEnabled = preferences.isPushNotificationsEnabled
+        self.bannerService = bannerService
     }
     
     var title: String {
@@ -39,6 +44,9 @@ extension NotificationsViewModel {
         switch isEnabled {
         case true:
             self.isEnabled = try await requestPermissionsOrOpenSettings()
+            if isEnabled {
+                try bannerService.closeBanner(id: BannerEvent.enableNotifications.rawValue)
+            }
         case false:
             preferences.isPushNotificationsEnabled = isEnabled
         }
