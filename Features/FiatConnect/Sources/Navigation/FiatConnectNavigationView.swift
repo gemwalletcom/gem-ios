@@ -7,14 +7,15 @@ import Store
 public struct FiatConnectNavigationView: View {
     @Binding private var navigationPath: NavigationPath
 
-    private let model: FiatSceneViewModel
-
+    @State private var model: FiatSceneViewModel
+    
     public init(
         navigationPath: Binding<NavigationPath>,
         model: FiatSceneViewModel
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         _navigationPath = navigationPath
+
     }
 
     public var body: some View {
@@ -27,7 +28,7 @@ public struct FiatConnectNavigationView: View {
                         quotes: model.state.value ?? [],
                         formatter: CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency),
                         onSelectQuote: {
-                            model.onSelectQuote($0)
+                            model.selectQuote($0)
                             navigationPath.removeLast()
                         }
                     )

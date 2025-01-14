@@ -112,7 +112,7 @@ struct SelectAssetScene: View {
     func assetsList(assets: [AssetData]) -> some View {
         ForEach(assets) { assetData in
             switch model.selectType {
-            case .buy, .sell, .receive, .send, .stake:
+            case .buy, .receive, .send, .stake:
                 NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
                     ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
                 }

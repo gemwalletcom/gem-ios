@@ -68,13 +68,12 @@ struct SelectedAssetNavigationStack: View  {
                         }.bold()
                     }
                 }
-            case .buy, .sell:
+            case .buy:
                 FiatConnectNavigationView(
                     navigationPath: $navigationPath,
                     model: FiatSceneViewModel(
                         assetAddress: selectType.assetAddress,
-                        walletId: wallet.id,
-                        type: selectType.fiatType
+                        walletId: wallet.id
                     )
                 )
                 .navigationBarTitleDisplayMode(.inline)

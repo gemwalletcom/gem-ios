@@ -38,7 +38,6 @@ extension AssetHeaderViewModel: HeaderViewModel {
             (HeaderButtonType.send, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.receive, true, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.buy, assetDataModel.isBuyEnabled, bannersViewModel.isButtonsEnabled),
-            (HeaderButtonType.sell, assetDataModel.isSellEnabled && assetDataModel.hasAvailableBalance, bannersViewModel.isButtonsEnabled),
             (HeaderButtonType.swap, assetDataModel.isSwapEnabled, bannersViewModel.isButtonsEnabled),
         ]
         return values.compactMap {

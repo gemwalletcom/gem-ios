@@ -36,9 +36,21 @@ struct FiatCurrencyInputConfig: CurrencyInputConfigurable {
     }
 
     var keyboardType: UIKeyboardType {
+        .decimalPad
+    }
+
+    var sanitizer: ((String) -> String)? {
         switch type {
-        case .buy: .numberPad
-        case .sell: .decimalPad
+        case .buy:
+            return { input in
+                var filtered = input.filter { "0123456789".contains($0) }
+                while filtered.first == "0", filtered.count == 1 {
+                    filtered.removeFirst()
+                }
+                return filtered
+            }
+        case .sell:
+            return .none
         }
     }
 }

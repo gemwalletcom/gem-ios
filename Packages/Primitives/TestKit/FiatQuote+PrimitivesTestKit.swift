@@ -11,7 +11,7 @@ extension FiatQuote {
         fiatCurrency: String = Currency.usd.rawValue
     ) -> FiatQuote {
         FiatQuote(
-            provider: FiatProvider(name: "", imageUrl: ""),
+            provider: FiatProvider(id: UUID().uuidString, name: "", imageUrl: ""),
             type: type,
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,

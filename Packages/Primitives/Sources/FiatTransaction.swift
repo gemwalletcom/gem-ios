@@ -4,7 +4,7 @@
 
 import Foundation
 
-public enum FiatTransactionType: String, Codable, Equatable, Hashable, Sendable {
+public enum FiatTransactionType: String, Codable, Equatable, Hashable, Sendable, CaseIterable {
 	case buy
 	case sell
 }
