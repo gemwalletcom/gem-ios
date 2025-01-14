@@ -21,12 +21,13 @@ public struct PushNotificationEnablerService: Sendable {
         }
         return true
     }
-    
+
     public func requestPermissionsOrOpenSettings() async throws -> Bool {
         let status = try await getNotificationSettingsStatus()
         switch status {
         case  .authorized, .ephemeral, .provisional:
-            return true
+            preferences.isPushNotificationsEnabled = true
+            return preferences.isPushNotificationsEnabled
         case .notDetermined:
             return try await requestPermissions()
         case .denied:

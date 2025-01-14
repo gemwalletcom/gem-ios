@@ -25,7 +25,6 @@ extension AppResolver {
         let priceAlertService: PriceAlertService
         let priceService: PriceService
         let stakeService: StakeService
-        let subscriptionService: SubscriptionService
         let transactionsService: TransactionsService
         let transactionService: TransactionService
         let walletService: WalletService
@@ -48,7 +47,6 @@ extension AppResolver {
             priceAlertService: PriceAlertService,
             priceService: PriceService,
             stakeService: StakeService,
-            subscriptionService: SubscriptionService,
             transactionsService: TransactionsService,
             transactionService: TransactionService,
             walletService: WalletService,
@@ -69,7 +67,6 @@ extension AppResolver {
             self.priceAlertService = priceAlertService
             self.priceService = priceService
             self.stakeService = stakeService
-            self.subscriptionService = subscriptionService
             self.transactionsService = transactionsService
             self.transactionService = transactionService
             self.walletService = walletService

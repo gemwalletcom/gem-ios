@@ -18,7 +18,6 @@ class OnstartAsyncService {
     let preferences: Preferences
     let configService: any GemAPIConfigService = GemAPIService()
     let service: ImportAssetsService
-    let subscriptionService: SubscriptionService
     let deviceService: DeviceService
     let bannerSetupService: BannerSetupService
 
@@ -31,7 +30,6 @@ class OnstartAsyncService {
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        subscriptionService: SubscriptionService,
         bannerSetupService: BannerSetupService,
         updateVersionAction: StringAction = .none
     ) {
@@ -45,7 +43,6 @@ class OnstartAsyncService {
             assetStore: assetStore,
             preferences: preferences
         )
-        self.subscriptionService = subscriptionService
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
         self.updateVersionAction = updateVersionAction
