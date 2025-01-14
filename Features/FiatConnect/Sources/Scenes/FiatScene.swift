@@ -171,7 +171,9 @@ extension FiatScene {
     }
 
     func onChangeType(_: FiatTransactionType, type: FiatTransactionType) {
-        model.selectType(type)
+        // reset focus on type switch
+        focusedField = .none
         focusedField = .amount
+        model.selectType(type)
     }
 }
