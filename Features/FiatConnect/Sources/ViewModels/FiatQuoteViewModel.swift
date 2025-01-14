@@ -27,14 +27,14 @@ public struct FiatQuoteViewModel {
 
     public var amountText: String {
         switch quote.type {
-        case .buy: "\(amount)\(asset.symbol)"
-        case .sell: "\(amount)$"
+        case .buy: "\(amount) \(asset.symbol)"
+        case .sell: "\(amount) $"
         }
     }
 
     public var rateText: String {
         let amount = quote.fiatAmount / quote.cryptoAmount
-        return CurrencyFormatter(currencyCode: quote.fiatCurrency).string(amount)
+        return formatter.string(amount)
     }
 
     private var amount: String {

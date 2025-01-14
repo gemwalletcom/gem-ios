@@ -19,7 +19,6 @@ struct SelectAssetInput: Hashable {
             "fiat operations not supported"
         )
         case .buy: .buy
-        case .sell: .sell
         }
     }
 
