@@ -38,8 +38,8 @@ public extension FiatTransactionTypeViewModel {
 
     var title: String {
         switch type {
-        case .buy: Localized.Input.buy.capitalized
-        case .sell: Localized.Input.sell.capitalized
+        case .buy: Localized.Wallet.buy
+        case .sell: Localized.Wallet.sell
         }
     }
 }
