@@ -59,15 +59,23 @@ public struct NFTCollection: Codable, Sendable {
 	public let chain: Chain
 	public let image: NFTImage
 	public let isVerified: Bool
-	public let assets: [NFTAsset]
 
-	public init(id: String, name: String, description: String?, chain: Chain, image: NFTImage, isVerified: Bool, assets: [NFTAsset]) {
+	public init(id: String, name: String, description: String?, chain: Chain, image: NFTImage, isVerified: Bool) {
 		self.id = id
 		self.name = name
 		self.description = description
 		self.chain = chain
 		self.image = image
 		self.isVerified = isVerified
+	}
+}
+
+public struct NFTData: Codable, Sendable {
+	public let collection: NFTCollection
+	public let assets: [NFTAsset]
+
+	public init(collection: NFTCollection, assets: [NFTAsset]) {
+		self.collection = collection
 		self.assets = assets
 	}
 }
