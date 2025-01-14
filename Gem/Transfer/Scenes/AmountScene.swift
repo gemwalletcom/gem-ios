@@ -43,30 +43,16 @@ struct AmountScene: View {
                 .focused($focusedField, equals: .amount)
 
                 if model.isBalanceViewEnabled {
-                    Section {
-                        VStack {
-                            ListItemFlexibleView(
-                                left: {
-                                    AssetImageView(assetImage: model.assetImage)
-                                },
-                                primary: {
-                                    VStack(alignment: .leading, spacing: Spacing.tiny) {
-                                        Text(model.assetName)
-                                            .textStyle(
-                                                TextStyle(font: .body, color: .primary, fontWeight: .semibold)
-                                            )
-                                        Text(model.balanceText)
-                                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
-                                    }
-                                },
-                                secondary: {
-                                    Button(Localized.Transfer.max, action: useMax)
-                                        .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
-                                        .fixedSize()
-                                }
-                            )
+                    AssetBalanceView(
+                        image: model.assetImage,
+                        title: model.assetName,
+                        balance: model.balanceText,
+                        secondary: {
+                            Button(Localized.Transfer.max, action: useMax)
+                                .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                .fixedSize()
                         }
-                    }
+                    )
                 }
 
                 switch model.type {

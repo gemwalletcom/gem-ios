@@ -88,20 +88,10 @@ public struct FiatScene: View {
 extension FiatScene {
     private var amountSelectorSection: some View {
         Section {
-            ListItemFlexibleView(
-                left: {
-                    AssetImageView(assetImage: model.assetImage)
-                },
-                primary: {
-                    VStack(alignment: .leading, spacing: Spacing.tiny) {
-                        Text(model.assetTitle)
-                            .textStyle(.headline.weight(.semibold))
-                        Text(model.assetBalance(assetData: assetData))
-                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
-                    }
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                },
+            AssetBalanceView(
+                image: model.assetImage,
+                title: model.assetTitle,
+                balance: model.assetBalance(assetData: assetData),
                 secondary: {
                     HStack(spacing: Spacing.small + Spacing.extraSmall) {
                         ForEach(model.suggestedAmounts, id: \.self) { amount in
