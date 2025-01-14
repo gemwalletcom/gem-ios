@@ -99,6 +99,8 @@ extension FiatScene {
                         Text(model.assetBalance(assetData: assetData))
                             .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
                     }
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                 },
                 secondary: {
                     HStack(spacing: Spacing.small + Spacing.extraSmall) {

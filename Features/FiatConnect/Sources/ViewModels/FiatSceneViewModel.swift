@@ -66,7 +66,7 @@ public final class FiatSceneViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
     var availableTitle: String { Localized.Asset.Balances.available }
     var emptyTitle: String { input.amount.isZero ? emptyAmountTitle : emptyQuotesTitle}
-    var assetTitle: String { asset.symbol }
+    var assetTitle: String { asset.name }
 
     var typeAmountButtonTitle: String {
         switch input.type {
