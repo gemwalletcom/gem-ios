@@ -4,6 +4,12 @@
 
 import Foundation
 
+public enum NFTType: String, Codable, Sendable {
+	case erc721
+	case erc1155
+	case spl
+}
+
 public struct NFTImage: Codable, Sendable {
 	public let imageUrl: String
 	public let previewImageUrl: String
@@ -16,13 +22,7 @@ public struct NFTImage: Codable, Sendable {
 	}
 }
 
-public enum NFTType: String, Codable, Sendable {
-	case erc721
-	case erc1155
-	case spl
-}
-
-public struct NFTAttrubute: Codable, Sendable {
+public struct NFTAttribute: Codable, Sendable {
 	public let name: String
 	public let value: String
 
@@ -34,20 +34,24 @@ public struct NFTAttrubute: Codable, Sendable {
 
 public struct NFTAsset: Codable, Sendable {
 	public let id: String
+	public let collectionId: String
+	public let tokenId: String
+	public let tokenType: NFTType
 	public let name: String
 	public let description: String?
 	public let chain: Chain
 	public let image: NFTImage
-	public let type: NFTType
-	public let attributes: [NFTAttrubute]
+	public let attributes: [NFTAttribute]
 
-	public init(id: String, name: String, description: String?, chain: Chain, image: NFTImage, type: NFTType, attributes: [NFTAttrubute]) {
+	public init(id: String, collectionId: String, tokenId: String, tokenType: NFTType, name: String, description: String?, chain: Chain, image: NFTImage, attributes: [NFTAttribute]) {
 		self.id = id
+		self.collectionId = collectionId
+		self.tokenId = tokenId
+		self.tokenType = tokenType
 		self.name = name
 		self.description = description
 		self.chain = chain
 		self.image = image
-		self.type = type
 		self.attributes = attributes
 	}
 }
@@ -57,14 +61,16 @@ public struct NFTCollection: Codable, Sendable {
 	public let name: String
 	public let description: String?
 	public let chain: Chain
+	public let contractAddress: String
 	public let image: NFTImage
 	public let isVerified: Bool
 
-	public init(id: String, name: String, description: String?, chain: Chain, image: NFTImage, isVerified: Bool) {
+	public init(id: String, name: String, description: String?, chain: Chain, contractAddress: String, image: NFTImage, isVerified: Bool) {
 		self.id = id
 		self.name = name
 		self.description = description
 		self.chain = chain
+		self.contractAddress = contractAddress
 		self.image = image
 		self.isVerified = isVerified
 	}
