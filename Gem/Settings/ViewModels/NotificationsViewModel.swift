@@ -8,37 +8,52 @@ import Localization
 import NotificationService
 import DeviceService
 
-struct NotificationsViewModel {
-    
-    let deviceService: DeviceService
-    let subscriptionService: SubscriptionService
-    let preferences: Preferences
-    let pushNotificationService: PushNotificationEnablerService
+@Observable
+@MainActor
+final class NotificationsViewModel {
+    private let deviceService: DeviceService
+    private let preferences: Preferences
+    private let pushNotificationService: PushNotificationEnablerService
+
+    var isEnabled: Bool
 
     init(
         deviceService: DeviceService,
-        subscriptionService: SubscriptionService,
         preferences: Preferences
     ) {
         self.deviceService = deviceService
-        self.subscriptionService = subscriptionService
         self.preferences = preferences
         self.pushNotificationService = PushNotificationEnablerService(preferences: preferences)
-    }
-
-    var isPushNotificationsEnabled: Bool {
-        preferences.isPushNotificationsEnabled
+        self.isEnabled = preferences.isPushNotificationsEnabled
     }
     
     var title: String {
-        return Localized.Settings.Notifications.title
+        Localized.Settings.Notifications.title
     }
-    
-    func update() async throws {
+}
+
+// MARK: - Business Logic
+
+extension NotificationsViewModel {
+    func enable(isEnabled: Bool) async throws {
+        switch isEnabled {
+        case true:
+            self.isEnabled = try await requestPermissionsOrOpenSettings()
+        case false:
+            preferences.isPushNotificationsEnabled = isEnabled
+        }
+        try await update()
+    }
+}
+
+// MARK: - Private
+
+extension NotificationsViewModel {
+    private func update() async throws {
         try await deviceService.update()
     }
-    
-    func requestPermissions() async throws -> Bool {
-        try await pushNotificationService.requestPermissions()
+
+    private func requestPermissionsOrOpenSettings() async throws -> Bool {
+        try await pushNotificationService.requestPermissionsOrOpenSettings()
     }
 }

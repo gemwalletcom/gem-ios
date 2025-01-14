@@ -11,7 +11,6 @@ import WalletConnector
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.deviceService) private var deviceService
-    @Environment(\.subscriptionService) private var subscriptionService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.stakeService) private var stakeService
@@ -61,7 +60,6 @@ struct SettingsNavigationStack: View {
                 NotificationsScene(
                     model: NotificationsViewModel(
                         deviceService: deviceService,
-                        subscriptionService: subscriptionService,
                         preferences: .main
                     )
                 )
