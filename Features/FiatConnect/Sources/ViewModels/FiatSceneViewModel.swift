@@ -17,25 +17,28 @@ public final class FiatSceneViewModel {
     private let assetAddress: AssetAddress
     private let walletId: String
 
-    private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
+    private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
 
+    var amountText: String
     var input: FiatInput
     var state: StateViewType<[FiatQuote]> = .loading
 
     public init(
         fiatService: any GemAPIFiatService = GemAPIService(),
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String,
-        type: FiatTransactionType
+        walletId: String
     ) {
         self.fiatService = fiatService
+        self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.walletId = walletId
-        self.input = FiatInput(
-            type: type,
-            amount: FiatTransactionTypeViewModel(type: type).defaultAmount
-        )
+
+        let input = FiatInput(type: .buy)
+        let defaultAmount = FiatTransactionTypeViewModel(type: input.type).defaultAmount
+        self.input = input
+        self.amountText = String(Int(defaultAmount))
     }
 
     var title: String {
@@ -45,11 +48,15 @@ public final class FiatSceneViewModel {
         }
     }
 
+    func pickerTitle(type: FiatTransactionType) -> String {
+        typeModel(type: type).title
+    }
+
     var currencyInputConfig: any CurrencyInputConfigurable {
         FiatCurrencyInputConfig(
             type: input.type,
             assetAddress: assetAddress,
-            secondaryText: secondaryTitle
+            secondaryText: cryptoAmountValue
         )
     }
 
@@ -59,7 +66,7 @@ public final class FiatSceneViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
     var availableTitle: String { Localized.Asset.Balances.available }
     var emptyTitle: String { input.amount.isZero ? emptyAmountTitle : emptyQuotesTitle}
-    var assetTitle: String { asset.symbol }
+    var assetTitle: String { asset.name }
 
     var typeAmountButtonTitle: String {
         switch input.type {
@@ -82,16 +89,16 @@ public final class FiatSceneViewModel {
     var asset: Asset { assetAddress.asset }
     var assetImage: AssetImage { AssetIdViewModel(assetId: asset.id).assetImage }
 
-    func assetBalance(assetData: AssetData) -> String {
-        balanceModel(assetData: assetData).availableBalanceText
-    }
-
-    var suggestedAmounts: [Double] { typeModel.suggestedAmounts }
+    var suggestedAmounts: [Double] { typeModel(type: input.type).suggestedAmounts }
 
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
         let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote, formatter: currencyFormatter).amountText
         return "≈ \(quoteAmount)"
+    }
+
+    func showFiatTypePicker(_ assetData: AssetData) -> Bool {
+        !assetData.balance.available.isZero
     }
 
     func rateValue(for quote: FiatQuote) -> String {
@@ -106,13 +113,8 @@ public final class FiatSceneViewModel {
         }
     }
 
-    var amountText: String {
-        get {
-            formattedAmount
-        }
-        set {
-            input.amount = amount(text: newValue)
-        }
+    func assetBalance(assetData: AssetData) -> String {
+        balanceModel(assetData: assetData).availableBalanceText
     }
 }
 
@@ -126,40 +128,41 @@ extension FiatSceneViewModel {
         case .sell: Localized.Input.enterAmountTo(Localized.Input.sell)
         }
     }
-    private var secondaryTitle: String {
-        if amountText.isEmpty {
-            emptyAmountTitle
-        } else {
-            cryptoAmountValue
-        }
-    }
 
     private func balanceModel(assetData: AssetData) -> BalanceViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }
 
-    private var typeModel: FiatTransactionTypeViewModel {
-        FiatTransactionTypeViewModel(type: input.type)
+    private func typeModel(type: FiatTransactionType) -> FiatTransactionTypeViewModel {
+        FiatTransactionTypeViewModel(type: type)
     }
 
-    private var formattedAmount: String {
+    private func parseAmount(text: String) -> Double {
         switch input.type {
         case .buy:
-            return String(format: "%.0f", input.amount)
+            return Double(text) ?? .zero
         case .sell:
-            guard let bigIntNumber = try? valueFormatter.inputNumber(from: String(input.amount), decimals: asset.decimals.asInt) else {
-                return String(input.amount)
+            guard let bigIntNumber = try? valueFormatter.inputNumber(from: text, decimals: asset.decimals.asInt),
+                  let doubleNumber = (try? valueFormatter.double(from: bigIntNumber, decimals: asset.decimals.asInt))
+            else {
+                return Double(text) ?? .zero
+            }
+            return doubleNumber
+        }
+    }
+
+    private func formatAmount(_ amount: Double) -> String {
+        switch input.type {
+        case .buy:
+            return String(Int(amount))
+        case .sell:
+            guard let bigIntNumber = try? valueFormatter.inputNumber(from: String(amount), decimals: asset.decimals.asInt),
+                  !bigIntNumber.isZero
+            else {
+                return ""
             }
             return valueFormatter.string(bigIntNumber, decimals: asset.decimals.asInt)
         }
-    }
-
-    private func amount(text: String) -> Double {
-        guard let bigIntNumber = try? valueFormatter.inputNumber(from: text, decimals: asset.decimals.asInt),
-              let doubleNumber = (try? valueFormatter.double(from: bigIntNumber, decimals: asset.decimals.asInt)) else {
-            return Double(text) ?? .zero
-        }
-        return doubleNumber
     }
 
     private func maxAmount(assetData: AssetData) -> Double {
@@ -181,16 +184,22 @@ extension FiatSceneViewModel {
 // MARK: - Business Logic
 
 extension FiatSceneViewModel {
-    func onSelectQuote(_ quote: FiatQuote) {
+    func selectQuote(_ quote: FiatQuote) {
         input.quote = quote
+    }
+
+    func selectType(_ type: FiatTransactionType) {
+        input.type = type
+        amountText = formatAmount(input.amount)
     }
 
     func select(amount: Double, assetData: AssetData) {
         switch input.type {
         case .buy:
-            input.amount = amount
+            amountText = formatAmount(amount)
         case .sell:
-            input.amount = maxAmount(assetData: assetData) * (amount / 100)
+            let percentAmount = maxAmount(assetData: assetData) * (amount / 100)
+            amountText = formatAmount(percentAmount)
         }
     }
 
@@ -198,10 +207,15 @@ extension FiatSceneViewModel {
         let maxAmount = maxAmount(assetData: assetData)
         switch input.type {
         case .buy:
-            input.amount = typeModel.randomAmount(maxAmount: maxAmount) ?? .zero
+            let randomAmount = typeModel(type: input.type).randomAmount(maxAmount: maxAmount) ?? .zero
+            amountText = formatAmount(randomAmount)
         case .sell:
-            input.amount = maxAmount
+            amountText = formatAmount(maxAmount)
         }
+    }
+
+    func changeAmountText(_: String, text: String) {
+        input.amount = parseAmount(text: text)
     }
 
     func fetch(for assetData: AssetData) async {
@@ -217,7 +231,7 @@ extension FiatSceneViewModel {
             let quotes: [FiatQuote] = try await {
                 let request = FiatBuyRequest(
                     assetId: asset.id.identifier,
-                    fiatCurrency: Currency.usd.rawValue,
+                    fiatCurrency: currencyFormatter.currencyCode,
                     fiatAmount: input.amount,
                     walletAddress: assetAddress.address
                 )

@@ -3,7 +3,13 @@ export GEMSTONE_VERSION := "v0.2.0"
 list:
     just --list
 
-install: install-typeshare install-toolchains install-swifttools
+bootstrap: install install-gemstone
+    @echo "<== Bootstrap done."
+
+install: install-rust install-typeshare install-toolchains install-swifttools
+
+install-rust:
+    just core install-rust
 
 install-typeshare:
     @echo "==> Install typeshare-cli"
@@ -17,19 +23,16 @@ install-swifttools:
     @echo "==> Install SwiftGen and SwiftFormat"
     @brew install swiftgen swiftformat
 
-bootstrap: install install-gemstone
-    @echo "<== Bootstrap done."
-
 download-wallet-core VERSION:
     @echo "==> Install wallet-core {{VERSION}}"
-    wget https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -O Packages/WalletCore/Package.swift
+    curl -L https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
 
 download-gemstone VERSION:
     #!/usr/bin/env bash
     echo "==> Install binary Gemstone {{VERSION}}"
     rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
     cd Packages/Gemstone
-    wget https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2
+    curl -L https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2 -o Gemstone-spm.tar.bz2
     tar -xvjf Gemstone-spm.tar.bz2
     rm Gemstone-spm.tar.bz2
 

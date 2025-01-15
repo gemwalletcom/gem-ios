@@ -73,7 +73,7 @@ struct ServicesFactory {
             bannerStore: storeManager.bannerStore,
             preferences: preferences
         )
-        let notificationService = NotificationService()
+        let notificationService = NotificationService.main
 
         let priceAlertService = Self.makePriceAlertService(
             priceAlertStore: storeManager.priceAlertStore,
@@ -115,7 +115,6 @@ struct ServicesFactory {
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            subscriptionService: subscriptionService,
             bannerSetupService: bannerSetupService
         )
 
@@ -131,7 +130,6 @@ struct ServicesFactory {
             priceAlertService: priceAlertService,
             priceService: priceService,
             stakeService: stakeService,
-            subscriptionService: subscriptionService,
             transactionsService: transactionsService,
             transactionService: transactionService,
             walletService: walletService,
@@ -318,7 +316,6 @@ extension ServicesFactory {
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        subscriptionService: SubscriptionService,
         bannerSetupService: BannerSetupService
     ) -> OnstartAsyncService {
         OnstartAsyncService(
@@ -328,7 +325,6 @@ extension ServicesFactory {
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            subscriptionService: subscriptionService,
             bannerSetupService: bannerSetupService
         )
     }

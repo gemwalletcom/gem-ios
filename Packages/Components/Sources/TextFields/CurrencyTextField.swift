@@ -37,7 +37,6 @@ public struct CurrencyTextField: View {
             if currencyPosition == .leading {
                 currencySymbolView
             }
-
             TextField(placeholder, text: $text)
                 .keyboardType(keyboardType)
                 .foregroundStyle(Colors.black)

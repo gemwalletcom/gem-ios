@@ -26,7 +26,6 @@ extension EnvironmentValues {
     @Entry var walletsService: WalletsService = .main
     @Entry var walletService: WalletService = .main
     @Entry var priceAlertService: PriceAlertService = .main
-    @Entry var subscriptionService: SubscriptionService = .main
     @Entry var deviceService: DeviceService = .main
     @Entry var balanceService: BalanceService = .main
     @Entry var bannerService: BannerService = .main

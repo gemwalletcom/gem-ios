@@ -148,7 +148,7 @@ extension EthereumService: ChainBalanceable {
         default:
             break
         }
-        return AssetBalance.make(for: chain.chain.assetId)
+        return .none
     }
 }
 

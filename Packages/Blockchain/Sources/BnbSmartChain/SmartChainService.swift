@@ -66,7 +66,6 @@ extension SmartChainService: ChainStakable {
         return AssetBalance(
             assetId: Chain.smartChain.assetId,
             balance: Balance(
-                available: .zero,
                 staked: staked,
                 pending: pending
             )

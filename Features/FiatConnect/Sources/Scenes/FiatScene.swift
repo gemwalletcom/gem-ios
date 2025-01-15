@@ -49,19 +49,35 @@ public struct FiatScene: View {
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .navigationTitle(model.title)
+        .if(!model.showFiatTypePicker(assetData)) {
+            $0.navigationTitle(model.title)
+        }
+        .toolbar {
+            if model.showFiatTypePicker(assetData) {
+                ToolbarItem(placement: .principal) {
+                    Picker("", selection: $model.input.type) {
+                        Text(model.pickerTitle(type: .buy))
+                            .tag(FiatTransactionType.buy)
+                        Text(model.pickerTitle(type: .sell))
+                            .tag(FiatTransactionType.sell)
+                    }
+                    .pickerStyle(.segmented)
+                    .frame(width: 200)
+                }
+            }
+        }
+        .onChange(of: model.input.type, onChangeType)
+        .onChange(
+            of: model.amountText,
+            initial: true,
+            model.changeAmountText
+        )
         .debounce(
             value: model.input.amount,
             interval: .none,
             action: onChangeAmount
         )
-        .task {
-            await onTask()
-        }
         .onAppear {
-            focusedField = .amount
-        }
-        .onChange(of: model.input.amount) { _, _ in
             focusedField = .amount
         }
     }
@@ -72,18 +88,10 @@ public struct FiatScene: View {
 extension FiatScene {
     private var amountSelectorSection: some View {
         Section {
-            ListItemFlexibleView(
-                left: {
-                    AssetImageView(assetImage: model.assetImage)
-                },
-                primary: {
-                    VStack(alignment: .leading, spacing: Spacing.tiny) {
-                        Text(model.assetTitle)
-                            .textStyle(.headline.weight(.semibold))
-                        Text(model.assetBalance(assetData: assetData))
-                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
-                    }
-                },
+            AssetBalanceView(
+                image: model.assetImage,
+                title: model.assetTitle,
+                balance: model.assetBalance(assetData: assetData),
                 secondary: {
                     HStack(spacing: Spacing.small + Spacing.extraSmall) {
                         ForEach(model.suggestedAmounts, id: \.self) { amount in
@@ -143,11 +151,6 @@ extension FiatScene {
 // MARK: - Actions
 
 extension FiatScene {
-    private func onTask() async {
-        guard model.input.quote == nil else { return }
-        await model.fetch(for: assetData)
-    }
-
     private func onSelectContinue() {
         guard let quote = model.input.quote,
               let url = URL(string: quote.redirectUrl) else { return }
@@ -163,25 +166,14 @@ extension FiatScene {
         model.selectTypeAmount(assetData: assetData)
     }
 
-    private func onSelectQuote(_ quote: FiatQuote) {
-        model.input.quote = quote
-    }
-
     private func onChangeAmount(_ amount: Double) async {
         await model.fetch(for: assetData)
     }
-}
 
-// MARK: - Previews
-
-#Preview {
-    @Previewable @State var model = FiatSceneViewModel(
-        assetAddress: .init(asset: .init(.algorand), address: .empty),
-        walletId: .zero,
-        type: .buy
-    )
-    NavigationStack {
-        FiatScene(model: model)
-            .navigationBarTitleDisplayMode(.inline)
+    func onChangeType(_: FiatTransactionType, type: FiatTransactionType) {
+        // reset focus on type switch
+        focusedField = .none
+        focusedField = .amount
+        model.selectType(type)
     }
 }

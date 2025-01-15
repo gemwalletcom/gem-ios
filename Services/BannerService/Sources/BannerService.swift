@@ -44,10 +44,6 @@ public struct BannerService: Sendable {
         try store.clear()
     }
 
-    private func closeBanner(id: String) throws {
-        try updateState(id: id, state: .cancelled)
-    }
-
     private func updateState(id: String, state: BannerState) throws {
         let _ = try store.updateState(id, state: state)
     }
@@ -57,6 +53,10 @@ public struct BannerService: Sendable {
 // MARK: - Actions
 
 extension BannerService {
+    public func closeBanner(id: String) throws {
+        try updateState(id: id, state: .cancelled)
+    }
+
     public func onClose(_ banner: Banner) {
         Task { try closeBanner(id: banner.id) }
     }

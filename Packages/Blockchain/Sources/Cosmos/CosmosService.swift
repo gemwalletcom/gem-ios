@@ -140,9 +140,8 @@ extension CosmosService: ChainBalanceable {
         
         switch chain {
         case .thorchain, .noble:
-            let balances = try await getBalance(address: address);
+            let balances = try await getBalance(address: address)
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
-            
             return Primitives.AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
@@ -176,39 +175,49 @@ extension CosmosService: ChainBalanceable {
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let denom = chain.denom
-        async let getDelegations = getDelegations(address: address)
-        async let getUnboundingDelegations = getUnboundingDelegations(address: address)
-        async let getRewards = getRewards(address: address)
+        
+        switch chain {
+        case .thorchain, .noble:
+            return .none
+        case .cosmos,
+            .osmosis,
+            .celestia,
+            .injective,
+            .sei:
+            
+            async let getDelegations = getDelegations(address: address)
+            async let getUnboundingDelegations = getUnboundingDelegations(address: address)
+            async let getRewards = getRewards(address: address)
 
-        let (delegations, unboundingDelegations, rewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
+            let (delegations, unboundingDelegations, delegationsRewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
 
-        let delegationsBalance = delegations
-            .filter { $0.balance.denom == denom.rawValue }
-            .compactMap { BigInt($0.balance.amount) }
-            .reduce(0, +)
+            let staked = delegations
+                .filter { $0.balance.denom == denom.rawValue }
+                .compactMap { BigInt($0.balance.amount) }
+                .reduce(0, +)
 
-        let unboundingDelegationsBalance = unboundingDelegations.compactMap {
-            $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
-        }.reduce(0, +)
+            let pending = unboundingDelegations.compactMap {
+                $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
+            }.reduce(0, +)
 
-        let rewardsBalance = rewards
-            .map {
-                $0.reward
-                    .filter { $0.denom == denom.rawValue }
-                    .compactMap { BigInt($0.amount) }
-                    .reduce(0, +)
-            }
-            .reduce(0, +)
+            let rewards = delegationsRewards
+                .map {
+                    $0.reward
+                        .filter { $0.denom == denom.rawValue }
+                        .compactMap { BigInt($0.amount) }
+                        .reduce(0, +)
+                }
+                .reduce(0, +)
 
-        return AssetBalance(
-            assetId: chain.chain.assetId,
-            balance: Balance(
-                available: .zero, // will be merged into
-                staked: delegationsBalance,
-                pending: unboundingDelegationsBalance,
-                rewards: rewardsBalance
+            return AssetBalance(
+                assetId: chain.chain.assetId,
+                balance: Balance(
+                    staked: staked,
+                    pending: pending,
+                    rewards: rewards
+                )
             )
-        )
+        }
     }
 }
 

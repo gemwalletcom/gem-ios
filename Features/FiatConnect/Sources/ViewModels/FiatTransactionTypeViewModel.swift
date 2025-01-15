@@ -35,4 +35,11 @@ public extension FiatTransactionTypeViewModel {
         case .sell: .none
         }
     }
+
+    var title: String {
+        switch type {
+        case .buy: Localized.Wallet.buy
+        case .sell: Localized.Wallet.sell
+        }
+    }
 }

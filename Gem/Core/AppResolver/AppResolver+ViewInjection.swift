@@ -16,7 +16,6 @@ extension View {
             .environment(\.walletService, services.walletService)
             .environment(\.walletsService, services.walletsService)
             .environment(\.deviceService, services.deviceService)
-            .environment(\.subscriptionService, services.subscriptionService)
             .environment(\.transactionsService, services.transactionsService)
             .environment(\.assetsService, services.assetsService)
             .environment(\.stakeService, services.stakeService)
