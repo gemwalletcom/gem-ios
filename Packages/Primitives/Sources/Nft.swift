@@ -8,6 +8,7 @@ public enum NFTType: String, Codable, Sendable {
 	case erc721
 	case erc1155
 	case spl
+	case jetton
 }
 
 public struct NFTImage: Codable, Sendable {
