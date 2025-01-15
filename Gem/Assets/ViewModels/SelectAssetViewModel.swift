@@ -105,7 +105,11 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage, .receive, .buy, .priceAlert:
             await searchAssets(query: query)
-        case .send, .stake, .swap:
+        case let .swap(type):
+            if case .receive = type {
+                await searchAssets(query: query)
+            }
+        case .send, .stake:
             break
         }
     }
