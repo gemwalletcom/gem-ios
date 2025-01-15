@@ -9,6 +9,7 @@ import BannerService
 import DeviceService
 import SwapService
 import NodeService
+import Preferences
 
 class OnstartAsyncService {
     

@@ -259,6 +259,7 @@
 		830FDA442C224316003DA605 /* NavigationStateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationStateManager.swift; sourceTree = "<group>"; };
 		830FDA472C22EEC4003DA605 /* TabItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabItem.swift; sourceTree = "<group>"; };
 		832553972C0F27F000C9CA0C /* ChartScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChartScene.swift; sourceTree = "<group>"; };
+		832F57E92D36A6D50066024D /* Preferences */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Preferences; sourceTree = "<group>"; };
 		833185282CF74D6A007ED64F /* TransactionsFilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsFilterType.swift; sourceTree = "<group>"; };
 		8331852A2CF75139007ED64F /* TransactionsFilterTypeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsFilterTypeViewModel.swift; sourceTree = "<group>"; };
 		8331852C2CF752DC007ED64F /* TransactionTypesFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionTypesFilterViewModel.swift; sourceTree = "<group>"; };
@@ -806,6 +807,7 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				832F57E92D36A6D50066024D /* Preferences */,
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				487A27E82B632CCE00BEEADB /* Gemstone */,
 				D8EFE3EA2BAB580300608363 /* GemstonePrimitives */,

@@ -14,6 +14,7 @@ import Store
 import GemAPI
 import Keystore
 import PriceService
+import Preferences
 
 struct ServicesFactory {
     @MainActor
@@ -83,7 +84,7 @@ struct ServicesFactory {
         let priceService = PriceService(
             priceStore: storeManager.priceStore
         )
-        let explorerService = ExplorerService(storage: storages.explorerStore)
+        let explorerService = ExplorerService(preferences: storages.explorerStore)
 
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
@@ -258,7 +259,7 @@ extension ServicesFactory {
     private static func makePriceAlertService(
         priceAlertStore: PriceAlertStore,
         deviceService: DeviceService,
-        preferences: Store.Preferences
+        preferences: Preferences
     ) -> PriceAlertService {
         PriceAlertService(
             store: priceAlertStore,

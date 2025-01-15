@@ -7,6 +7,7 @@ import Store
 import PrimitivesComponents
 import PriceAlerts
 import WalletConnector
+import Preferences
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -29,7 +30,7 @@ struct SettingsNavigationStack: View {
     let walletId: WalletId
 
     init(walletId: WalletId,
-         preferences: Preferences
+         preferences: Preferences = .standard
     ) {
         self.walletId = walletId
         _currencyModel = State(initialValue: CurrencySceneViewModel(currencyStorage: preferences))
@@ -60,7 +61,6 @@ struct SettingsNavigationStack: View {
                 NotificationsScene(
                     model: NotificationsViewModel(
                         deviceService: deviceService,
-                        preferences: .main,
                         bannerService: bannerService
                     )
                 )
@@ -119,15 +119,15 @@ struct SettingsNavigationStack: View {
     }
 }
 
-// MARK: - Previews
-
-#Preview {
-    SettingsNavigationStack(
-        walletId: .main,
-        preferences: .main
-    )
-}
-
-// MARK: - Preferences extensions
-
+//// MARK: - Previews
+//
+//#Preview {
+//    SettingsNavigationStack(
+//        walletId: .main,
+//        preferences: .main
+//    )
+//}
+//
+//// MARK: - Preferences extensions
+//
 extension Preferences: @retroactive CurrencyStorable {}

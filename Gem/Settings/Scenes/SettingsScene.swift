@@ -177,19 +177,19 @@ extension SettingsScene {
     }
 }
 
-// MARK: - Previews
-
-#Preview {
-   let model: SettingsViewModel = .init(
-       walletId: .main,
-       walletsService: .main,
-       currencyModel: .init(currencyStorage: Preferences.main)
-   )
-    NavigationStack {
-       SettingsScene(
-        model: model, isPresentingWallets: .constant(false)
-       )
-       .navigationBarTitleDisplayMode(.inline)
-   }
-}
-
+//// MARK: - Previews
+//
+//#Preview {
+//   let model: SettingsViewModel = .init(
+//       walletId: .main,
+//       walletsService: .main,
+//       currencyModel: .init(currencyStorage: Preferences.main)
+//   )
+//    NavigationStack {
+//       SettingsScene(
+//        model: model, isPresentingWallets: .constant(false)
+//       )
+//       .navigationBarTitleDisplayMode(.inline)
+//   }
+//}
+//

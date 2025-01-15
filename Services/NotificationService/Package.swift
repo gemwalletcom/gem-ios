@@ -15,12 +15,14 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Store", path: "../Store"),
+        .package(name: "Preferences", path: "../Preferences"),
     ],
     targets: [
         .target(
             name: "NotificationService",
             dependencies: [
-                "Store"
+                "Store",
+                "Preferences"
             ],
             path: "Sources"
         ),

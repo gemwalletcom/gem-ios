@@ -7,13 +7,14 @@ import SwiftUI
 import Style
 import GemstonePrimitives
 import Store
+import Preferences
 
 public struct StakeDelegationViewModel {
     
     public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
-    private let exploreService: ExplorerService = ExplorerService(storage: ExplorerStorage(preferences: .standard))
+    private let exploreService: ExplorerService = ExplorerService(preferences: ExplorerPreferences())
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
@@ -22,6 +23,7 @@ public struct StakeDelegationViewModel {
         formatter.unitsStyle = .full
         return formatter
     }()
+    
     private static let dateFormatterDay: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.hour, .minute]

@@ -9,6 +9,7 @@ import GemstonePrimitives
 import BigInt
 import Localization
 import PrimitivesComponents
+import Preferences
 
 struct TransactionViewModel {
     let transaction: TransactionExtended

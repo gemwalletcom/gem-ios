@@ -6,6 +6,7 @@ import Primitives
 import Store
 import Keystore
 import Combine
+import Preferences
 
 class TransactionsService {
 
@@ -28,7 +29,7 @@ class TransactionsService {
 
     func updateAll(deviceId: String, walletId: WalletId) async throws {
         let wallet = try keystore.getWallet(walletId)
-        let store = WalletPreferencesStore(walletId: wallet.id)
+        let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
         let transactions = try await provider.getTransactionsAll(
@@ -43,7 +44,7 @@ class TransactionsService {
     }
     
     func updateForAsset(deviceId: String, wallet: Wallet, assetId: AssetId) async throws {
-        let store = WalletPreferencesStore(walletId: wallet.id)
+        let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         
         let transactions = try await provider.getTransactionsForAsset(

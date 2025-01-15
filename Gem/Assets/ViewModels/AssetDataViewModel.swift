@@ -6,6 +6,7 @@ import Store
 import Components
 import PrimitivesComponents
 import struct GemstonePrimitives.GemstoneConfig
+import Preferences
 
 struct AssetDataViewModel {
     private let assetData: AssetData

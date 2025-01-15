@@ -8,6 +8,7 @@ import GRDB
 import GRDBQuery
 import Keystore
 import Localization
+import Preferences
 
 @Observable
 final class TransactionsViewModel {

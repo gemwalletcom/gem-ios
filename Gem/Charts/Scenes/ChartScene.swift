@@ -72,7 +72,7 @@ struct ChartScene: View {
             
             let priceDataModel = AssetDetailsInfoViewModel(
                 priceData: priceData,
-                explorerStorage: model.explorerStorage,
+                explorerPreferences: model.explorerPreferences,
                 currencyFormatter: .currency()
             )
             

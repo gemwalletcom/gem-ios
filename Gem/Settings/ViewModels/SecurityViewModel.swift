@@ -5,6 +5,7 @@ import Keystore
 import Components
 import Localization
 import Store
+import Preferences
 
 @Observable
 class SecurityViewModel {

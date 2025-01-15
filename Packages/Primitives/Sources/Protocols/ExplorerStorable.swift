@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol ExplorerStorable: Sendable {
+public protocol ExplorerPreferencesStorable: Sendable {
     func set(chain: Chain, name: String)
     func get(chain: Chain) -> String?
 }

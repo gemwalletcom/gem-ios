@@ -10,6 +10,7 @@ import Localization
 import MarketInsight
 import PrimitivesComponents
 import PriceService
+import Preferences
 
 @MainActor
 @Observable
@@ -45,8 +46,9 @@ class ChartsViewModel {
         )
     }
 
-    var explorerStorage: ExplorerStorage {
-        ExplorerStorage(preferences: preferences)
+    var explorerPreferences: any ExplorerPreferencesStorable {
+        ExplorerPreferences(preferences: preferences)
+//        ExplorerStorage(preferences: preferences)
     }
 
     var priceRequest: PriceRequest {

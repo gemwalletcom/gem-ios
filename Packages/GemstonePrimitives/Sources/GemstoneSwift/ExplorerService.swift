@@ -8,15 +8,14 @@ import WalletCore
 import WalletCorePrimitives
 
 public struct ExplorerService {
-    
-    private let storage: ExplorerStorable
-    
-    public init(storage: ExplorerStorable) {
-        self.storage = storage
+    private let preferences: any ExplorerPreferencesStorable
+
+    public init(preferences: any ExplorerPreferencesStorable) {
+        self.preferences = preferences
     }
     
     private func explorerNameOrDefault(chain: Chain) -> String {
-        let name = storage.get(chain: chain)
+        let name = preferences.get(chain: chain)
         let explorers = Self.explorers(chain: chain)
         return explorers.first(where: { $0 == name }) ?? explorers.first!
     }
@@ -62,12 +61,12 @@ public struct ExplorerService {
 
 // MARK: - ExplorerStorable
 
-extension ExplorerService: ExplorerStorable {
+extension ExplorerService: ExplorerPreferencesStorable {
     public func set(chain: Chain, name: String) {
-        storage.set(chain: chain, name: name)
+        preferences.set(chain: chain, name: name)
     }
     
     public func get(chain: Chain) -> String? {
-        storage.get(chain: chain)
+        preferences.get(chain: chain)
     }
 }

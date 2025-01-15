@@ -11,7 +11,7 @@ import Style
 public struct AssetDetailsInfoViewModel {
     
     private let priceData: PriceData
-    private let explorerStorage: ExplorerStorable
+    private let explorerPreferences: ExplorerPreferencesStorable
     private let currencyFormatter: CurrencyFormatter
     
     public var showLinksSection: Bool { !links.isEmpty }
@@ -21,11 +21,11 @@ public struct AssetDetailsInfoViewModel {
 
     public init(
         priceData: PriceData,
-        explorerStorage: ExplorerStorable,
+        explorerPreferences: ExplorerPreferencesStorable,
         currencyFormatter: CurrencyFormatter
     ) {
         self.priceData = priceData
-        self.explorerStorage = explorerStorage
+        self.explorerPreferences = explorerPreferences
         self.currencyFormatter = currencyFormatter
     }
     
@@ -123,7 +123,7 @@ public struct AssetDetailsInfoViewModel {
     
     public var contractUrl: URL? {
         guard let contract else { return .none }
-        return ExplorerService(storage: explorerStorage)
+        return ExplorerService(preferences: explorerPreferences)
             .tokenUrl(chain: priceData.asset.chain, address: contract)?.url
     }
 }
