@@ -30,12 +30,13 @@ public struct GridPosterView: View {
                 }
             }
             .cornerRadius(15)
-            .aspectRatio(1, contentMode: .fill)
+            .aspectRatio(1, contentMode: .fit)
             
             Text(title)
                 .font(.body)
                 .lineLimit(2)
                 .multilineTextAlignment(.leading)
+            Spacer()
         }
     }
 }
