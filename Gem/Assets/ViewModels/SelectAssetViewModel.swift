@@ -77,6 +77,19 @@ class SelectAssetViewModel {
     var showFilter: Bool {
         wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
     }
+
+    var isNetworkSearchEnabled: Bool {
+        guard wallet.hasTokenSupport else { return false }
+        switch selectType {
+        case .manage, .receive, .buy, .priceAlert: return true
+        case let .swap(type):
+            switch type {
+            case .pay: return false
+            case .receive: return true
+            }
+        case .send, .stake: return false
+        }
+    }
 }
 
 // MARK: - Business Logic
@@ -99,15 +112,8 @@ extension SelectAssetViewModel {
     }
 
     func search(query: String) async {
-        guard wallet.hasTokenSupport else { return }
-        
         let query = query.trim()
-        switch selectType {
-        case .manage, .receive, .buy, .priceAlert:
-            await searchAssets(query: query)
-        case .send, .stake, .swap:
-            break
-        }
+        await searchAssets(query: query)
     }
 
     func enableAsset(assetId: AssetId, enabled: Bool) {
