@@ -72,10 +72,6 @@ extension AssetData  {
     )
 }
 
-//extension Preferences {
-//    static let main = Preferences(defaults: .standard)
-//}
-
 extension LocalKeystore {
     @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .standard)
 }
@@ -316,12 +312,8 @@ extension CurrencyFormatter {
     }
 }
 
-//extension ExplorerStorage {
-//    static let main = ExplorerStorage(preferences: .main)
-//}
-
 extension ExplorerService {
-    static let main = ExplorerService(preferences: ExplorerPreferences())//(storage: ExplorerStorage())
+    static let main = ExplorerService(preferences: ExplorerPreferences(preferences: .standard))
 }
 
 extension ChainCoreError: @retroactive LocalizedError {

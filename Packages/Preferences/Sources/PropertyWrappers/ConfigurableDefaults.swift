@@ -3,8 +3,12 @@
 import Foundation
 import Primitives
 
+public protocol ConfigurableUserDefaults {
+    func configure(with: UserDefaults)
+}
+
 @propertyWrapper
-public struct ConfigurableDefaults<T>: @unchecked Sendable {
+public final class ConfigurableDefaults<T>: @unchecked Sendable, ConfigurableUserDefaults {
     let key: String
     let defaultValue: T
 
@@ -27,7 +31,7 @@ public struct ConfigurableDefaults<T>: @unchecked Sendable {
         }
     }
 
-    public mutating func configure(with userDefaults: UserDefaults) {
+    public func configure(with userDefaults: UserDefaults) {
         self.defaults = userDefaults
     }
 }

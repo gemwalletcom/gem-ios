@@ -42,7 +42,6 @@ let package = Package(
                 "Preferences",
                 "PreferencesTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
             path: "Tests"
         )

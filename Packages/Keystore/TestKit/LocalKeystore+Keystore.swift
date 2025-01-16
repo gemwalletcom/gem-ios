@@ -2,11 +2,13 @@
 
 import Foundation
 import Keystore
+import Preferences
 import Store
+import PreferencesTestKit
 
 public extension LocalKeystore {
     static func mock(
-        preferences: Preferences = Preferences(),
+        preferences: Preferences = Preferences.mock(),
         keystorePassword: KeystorePassword = MockKeystorePassword()
     ) -> LocalKeystore {
         let id = NSUUID().uuidString

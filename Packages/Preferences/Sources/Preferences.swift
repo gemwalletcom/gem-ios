@@ -24,31 +24,6 @@ public final class Preferences: @unchecked Sendable {
         static let isHideBalanceEnabled = "is_balance_privacy_enabled"
     }
 
-    public static let standard = Preferences()
-
-    private let defaults: UserDefaults
-
-    public init(defaults: UserDefaults = UserDefaults.standard) {
-        self.defaults = defaults
-        _currency.configure(with: defaults)
-        _importFiatMappingsVersion.configure(with: defaults)
-        _importFiatPurchaseAssetsVersion.configure(with: defaults)
-        _localAssetsVersion.configure(with: defaults)
-        _fiatOnRampAssetsVersion.configure(with: defaults)
-        _fiatOffRampAssetsVersion.configure(with: defaults)
-        _swapAssetsVersion.configure(with: defaults)
-        _launchesCount.configure(with: defaults)
-        _subscriptionsVersion.configure(with: defaults)
-        _currentWalletId.configure(with: defaults)
-        _isPushNotificationsEnabled.configure(with: defaults)
-        _isPriceAlertsEnabled.configure(with: defaults)
-        _isSubscriptionsEnabled.configure(with: defaults)
-        _rateApplicationShown.configure(with: defaults)
-        _authenticationLockOption.configure(with: defaults)
-        _isDeveloperEnabled.configure(with: defaults)
-        _isHideBalanceEnabled.configure(with: defaults)
-    }
-    
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
     public var currency: String
     
@@ -99,6 +74,18 @@ public final class Preferences: @unchecked Sendable {
 
     @ConfigurableDefaults(key: Keys.isHideBalanceEnabled, defaultValue: false)
     public var isHideBalanceEnabled: Bool
+
+    public static let standard = Preferences()
+    private let defaults: UserDefaults
+
+    public init(defaults: UserDefaults = UserDefaults.standard) {
+        self.defaults = defaults
+
+        // configure each @ConfigurableDefaults with injected defaults
+        Mirror(reflecting: self).children
+            .compactMap { $0.value as? ConfigurableUserDefaults }
+            .forEach { $0.configure(with: defaults) }
+    }
 }
 
 // MARK: - Explorer

@@ -84,7 +84,7 @@ struct ServicesFactory {
         let priceService = PriceService(
             priceStore: storeManager.priceStore
         )
-        let explorerService = ExplorerService(preferences: storages.explorerStore)
+        let explorerService = ExplorerService(preferences: ExplorerPreferences(preferences: preferences))
 
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)

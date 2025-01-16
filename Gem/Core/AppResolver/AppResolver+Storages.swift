@@ -10,6 +10,5 @@ extension AppResolver {
         let db: DB = .main
         let observablePreferences: ObservablePreferences = .default
         let keystore: any Keystore = LocalKeystore.main
-        let explorerStore = ExplorerPreferences()
     }
 }

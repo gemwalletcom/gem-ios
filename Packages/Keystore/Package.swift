@@ -39,6 +39,7 @@ let package = Package(
             name: "KeystoreTestKit",
             dependencies: [
                 "Keystore",
+                .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "TestKit"
         ),
