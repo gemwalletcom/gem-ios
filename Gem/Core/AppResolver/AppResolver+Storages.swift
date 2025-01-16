@@ -3,12 +3,12 @@
 import Foundation
 import Keystore
 import Store
+import Preferences
 
 extension AppResolver {
     struct Storages {
         let db: DB = .main
         let observablePreferences: ObservablePreferences = .default
         let keystore: any Keystore = LocalKeystore.main
-        let explorerStore = ExplorerStorage.main
     }
 }

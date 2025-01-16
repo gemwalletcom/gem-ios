@@ -14,6 +14,7 @@ import Localization
 import Transfer
 import PrimitivesComponents
 import WalletConnector
+import ExplorerService
 
 @Observable
 class ConfirmTransferViewModel {
@@ -38,6 +39,7 @@ class ConfirmTransferViewModel {
     private let wallet: Wallet
     private let keystore: any Keystore
     private let service: any ChainServiceable
+    private let explorerService: ExplorerService = .standart
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
@@ -348,7 +350,7 @@ extension ConfirmTransferViewModel {
     }
 
     private var senderLink: BlockExplorerLink {
-        ExplorerService.main.addressUrl(chain: dataModel.chain, address: senderAddress)
+        explorerService.addressUrl(chain: dataModel.chain, address: senderAddress)
     }
 
     private var broadcastOptions: BroadcastOptions {

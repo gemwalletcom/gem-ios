@@ -15,7 +15,6 @@ public struct FiatConnectNavigationView: View {
     ) {
         _model = State(initialValue: model)
         _navigationPath = navigationPath
-
     }
 
     public var body: some View {
@@ -26,7 +25,7 @@ public struct FiatConnectNavigationView: View {
                         type: model.input.type,
                         asset: model.asset,
                         quotes: model.state.value ?? [],
-                        formatter: CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency),
+                        formatter: model.currencyFormatter,
                         onSelectQuote: {
                             model.selectQuote($0)
                             navigationPath.removeLast()

@@ -18,6 +18,8 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Store", path: "../Store"),
+        .package(name: "ExplorerService", path: "../ExplorerService"),
+
     ],
     targets: [
         .target(
@@ -28,6 +30,7 @@ let package = Package(
                 "Gemstone",
                 "GemstonePrimitives",
                 "Store",
+                "ExplorerService"
             ],
             path: "Sources"
         ),

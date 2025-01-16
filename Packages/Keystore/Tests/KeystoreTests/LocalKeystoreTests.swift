@@ -3,6 +3,8 @@ import Store
 import WalletCore
 import Primitives
 import KeystoreTestKit
+import PreferencesTestKit
+import Preferences
 
 @testable import Keystore
 
@@ -98,7 +100,7 @@ final class LocalKeystoreTests {
             let keystore = LocalKeystore(
                 folder: id,
                 walletStore: WalletStore(db: DB(path: "\(id).sqlite")),
-                preferences: Preferences(),
+                preferences: .mock(),
                 keystorePassword: MockKeystorePassword()
             )
 

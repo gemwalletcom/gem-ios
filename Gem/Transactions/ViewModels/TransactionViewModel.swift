@@ -5,15 +5,17 @@ import Primitives
 import Components
 import SwiftUI
 import Style
-import GemstonePrimitives
+import ExplorerService
 import BigInt
 import Localization
 import PrimitivesComponents
+import Preferences
 
 struct TransactionViewModel {
     let transaction: TransactionExtended
     private let formatter: ValueFormatter
- 
+    private let explorerService: ExplorerService = .standart
+
     init(
         transaction: TransactionExtended,
         formatter: ValueFormatter
@@ -279,7 +281,7 @@ struct TransactionViewModel {
     }
     
     private var addressLink: BlockExplorerLink {
-        ExplorerService.main.addressUrl(chain: transaction.transaction.assetId.chain, address: participant)
+        explorerService.addressUrl(chain: transaction.transaction.assetId.chain, address: participant)
     }
     
     var viewOnAddressExplorerText: String {
@@ -291,7 +293,7 @@ struct TransactionViewModel {
     }
     
     private var transactionLink: BlockExplorerLink {
-        ExplorerService.main.transactionUrl(chain: transaction.transaction.assetId.chain, hash: transaction.transaction.hash)
+        explorerService.transactionUrl(chain: transaction.transaction.assetId.chain, hash: transaction.transaction.hash)
     }
     
     var viewOnTransactionExplorerText: String {

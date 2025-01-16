@@ -2,16 +2,17 @@
 
 import Testing
 import Gemstone
-import PrimitivesTestKit
 import Primitives
+import Preferences
+import PreferencesTestKit
 
-@testable import GemstonePrimitives
+@testable import ExplorerService
 
 final class ExplorerServiceTests {
 
     @Test
     func testExplorerService() {
-        let service = ExplorerService(storage: MockExplorerStorage())
+        let service = ExplorerService(preferences: ExplorerPreferences.mock())
         let chain = Chain.bitcoin
         let hash = "f9c7f0f5d34ad038cdb097902ea66a53f53bd34709569fd9a02b761288470ee2"
 

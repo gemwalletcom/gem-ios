@@ -6,7 +6,7 @@ import Keystore
 import Settings
 import Primitives
 import NodeService
-
+import Preferences
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
 
@@ -16,7 +16,7 @@ struct OnstartService {
     let assetStore: AssetStore
     let nodeStore: NodeStore
     let keystore: any Keystore
-    let preferences = Preferences()
+    let preferences: Preferences
     
     func migrations() {
         do {

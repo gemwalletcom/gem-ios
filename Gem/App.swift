@@ -7,6 +7,7 @@ import DeviceService
 import NodeService
 import GemAPI
 import LockManager
+import Preferences
 
 @main
 struct GemApp: App {
@@ -76,11 +77,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             ),
             assetStore: AssetStore(db: .main),
             nodeStore: NodeStore(db: .main),
-            keystore: keystore
+            keystore: keystore,
+            preferences: Preferences.standard
         )
         service.migrations()
         
-        Preferences.main.incrementLaunchesCount()
+        Preferences.standard.incrementLaunchesCount()
 
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
@@ -94,7 +96,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         Task {
-            let _ = try SecurePreferences().set(key: .deviceToken, value: token)
+            let _ = try SecurePreferences().set(value: token, key: .deviceToken)
             try await DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main).update()
         }
     }

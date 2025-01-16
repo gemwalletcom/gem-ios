@@ -3,6 +3,7 @@
 import Foundation
 import Keystore
 import Store
+import Preferences
 
 struct CleanUpService {
     
@@ -11,7 +12,7 @@ struct CleanUpService {
 
     init(
         keystore: any Keystore,
-        preferences: Preferences
+        preferences: Preferences = .standard
     ) {
         self.keystore = keystore
         self.preferences = preferences

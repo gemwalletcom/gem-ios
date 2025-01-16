@@ -5,7 +5,6 @@ import SwiftUI
 import GRDB
 import Store
 import Keystore
-import GemstonePrimitives
 import BannerService
 import NotificationService
 import DeviceService
@@ -16,13 +15,14 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import ExplorerService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main
     @Entry var keystore: any Keystore = LocalKeystore.main
     @Entry var nodeService: NodeService = .main
     @Entry var priceService: PriceService = .main
-    @Entry var explorerService: ExplorerService = .main
+    @Entry var explorerService: ExplorerService = .standart
     @Entry var walletsService: WalletsService = .main
     @Entry var walletService: WalletService = .main
     @Entry var priceAlertService: PriceAlertService = .main

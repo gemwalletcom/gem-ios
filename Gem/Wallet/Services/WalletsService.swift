@@ -13,6 +13,7 @@ import BannerService
 import StakeService
 import NodeService
 import PriceService
+import Preferences
 
 class WalletsService {
     
@@ -41,7 +42,7 @@ class WalletsService {
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
-        preferences: Preferences = Preferences.main
+        preferences: Preferences = .standard
     ) {
         self.keystore = keystore
         self.assetsService = assetsService
@@ -245,7 +246,7 @@ class WalletsService {
 }
 
 extension Wallet {
-    var preferences: WalletPreferencesStore {
-        return WalletPreferencesStore(walletId: id)
+    var preferences: WalletPreferences {
+        return WalletPreferences(walletId: id)
     }
 }

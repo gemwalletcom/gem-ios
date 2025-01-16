@@ -2,7 +2,7 @@
 
 import SwiftUI
 import Primitives
-import GemstonePrimitives
+import ExplorerService
 import Components
 import Style
 import Localization
@@ -19,6 +19,7 @@ struct AddressListItem: View {
     let title: String
     let style: AddressFormatter.Style
     let account: SimpleAccount
+    let explorerService: ExplorerService = .standart
 
     var body: some View {
         HStack {
@@ -40,7 +41,7 @@ struct AddressListItem: View {
     }
     
     private var addressLink: BlockExplorerLink {
-        ExplorerService.main.addressUrl(chain: account.chain, address: account.address)
+        explorerService.addressUrl(chain: account.chain, address: account.address)
     }
     var addressExplorerText: String { Localized.Transaction.viewOn(addressLink.name) }
     var addressExplorerUrl: URL { addressLink.url }

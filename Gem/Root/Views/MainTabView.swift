@@ -67,8 +67,7 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                walletId: model.wallet.walletId,
-                preferences: .main
+                walletId: model.wallet.walletId
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tags.settings)
