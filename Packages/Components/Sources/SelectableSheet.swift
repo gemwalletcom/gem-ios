@@ -52,7 +52,7 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
             .toolbar {
                 if model.isMultiSelectionEnabled && !model.selectedItems.isEmpty {
                     ToolbarItem(placement: .navigationBarLeading) {
-                        Button(model.clearButtonTitle, action: onClear)
+                        Button(model.clearButtonTitle, action: onReset)
                             .bold()
                     }
                 } else {
@@ -87,7 +87,7 @@ extension SelectableSheet {
         dismiss()
     }
 
-    private func onClear() {
-        model.clean()
+    private func onReset() {
+        model.reset()
     }
 }
