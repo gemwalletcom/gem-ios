@@ -125,8 +125,8 @@ extension FiatSceneViewModel {
     private var emptyQuotesTitle: String { Localized.Buy.noResults }
     private var emptyAmountTitle: String {
         switch input.type {
-        case .buy: Localized.Input.enterAmountTo(Localized.Input.buy)
-        case .sell: Localized.Input.enterAmountTo(Localized.Input.sell)
+        case .buy: Localized.Input.enterAmountTo(Localized.Wallet.buy)
+        case .sell: Localized.Input.enterAmountTo(Localized.Wallet.sell)
         }
     }
 
