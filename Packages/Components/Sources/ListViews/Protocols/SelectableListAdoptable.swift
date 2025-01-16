@@ -12,7 +12,7 @@ public protocol SelectableListAdoptable {
     init(items: [Item], selectedItems: [Item], isMultiSelectionEnabled: Bool)
     init(items: [Item])
 
-    mutating func clean()
+    mutating func reset()
     mutating func toggle(item: Item)
 }
 
@@ -21,7 +21,15 @@ public extension SelectableListAdoptable {
         self.init(items: items, selectedItems: [], isMultiSelectionEnabled: false)
     }
 
+    var shouldResetOnToggle: Bool {
+        !isMultiSelectionEnabled && !selectedItems.isEmpty
+    }
+
     mutating func toggle(item: Item) {
+        if shouldResetOnToggle {
+            reset()
+        }
+
         if selectedItems.contains(item) {
             selectedItems.remove(item)
         } else {
@@ -29,7 +37,7 @@ public extension SelectableListAdoptable {
         }
     }
 
-    mutating func clean() {
+    mutating func reset() {
         selectedItems = []
     }
 }
