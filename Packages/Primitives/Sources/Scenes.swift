@@ -124,4 +124,31 @@ public struct Scenes {
             self.chain = chain
         }
     }
+    
+    public struct NFTCollectionScene: Hashable {
+
+        public enum SceneStep: Hashable {
+            case collections
+            case nft(collectionId: String)
+        }
+        
+        public let sceneStep: SceneStep
+
+        public init(sceneStep: SceneStep) {
+            self.sceneStep = sceneStep
+        }
+    }
+    
+    public struct NFTDetails: Hashable {
+        public let collection: NFTCollection
+        public let asset: NFTAsset
+        
+        public init(
+            collection: NFTCollection,
+            asset: NFTAsset
+        ) {
+            self.collection = collection
+            self.asset = asset
+        }
+    }
 }

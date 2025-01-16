@@ -16,6 +16,7 @@ import StakeService
 import NodeService
 import PriceService
 import WalletConnector
+import NFTService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main
@@ -35,4 +36,5 @@ extension EnvironmentValues {
     @Entry var stakeService: StakeService = .main
     @Entry var connectionsService: ConnectionsService = .main
     @Entry var chainServiceFactory: ChainServiceFactory = .main
+    @Entry var nftService: NFTService = .main
 }

@@ -62,6 +62,10 @@ public protocol GemAPIPriceService: Sendable {
     func getPrice(assetIds: [String], currency: String) async throws -> [AssetPrice]
 }
 
+public protocol GemAPINFTService: Sendable {
+    func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData]
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -256,5 +260,13 @@ extension GemAPIService: GemAPIPriceService {
         return try await provider
             .request(.getPrices(request))
             .map(as: AssetPrices.self).prices
+    }
+}
+
+extension GemAPIService: GemAPINFTService {
+    public func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData] {
+        try await provider
+            .request(.getNFTAssets(deviceId: deviceId, walletIndex: walletIndex))
+            .map(as: ResponseResult<[NFTData]>.self).data
     }
 }

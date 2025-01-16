@@ -92,6 +92,12 @@ struct WalletScene: View {
                     closeAction: bannerService.onClose
                 )
             }
+            
+            Section {
+                NavigationLink(value: Scenes.NFTCollectionScene(sceneStep: .collections)) {
+                    ListItemView(title: "NFT")
+                }
+            }
 
             if !sections.pinned.isEmpty {
                 Section {

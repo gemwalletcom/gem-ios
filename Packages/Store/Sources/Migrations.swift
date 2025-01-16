@@ -41,6 +41,9 @@ public struct Migrations {
             // others
             try BannerRecord.create(db: db)
             try PriceAlertRecord.create(db: db)
+            
+            // nft
+            try db.setupNFTSchema()
         }
 
         // delete later (after Oct 2024, as it's part of start tables)

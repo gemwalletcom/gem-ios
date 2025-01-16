@@ -12,6 +12,8 @@ struct WalletNavigationStack: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.navigationState) private var navigationState
+    @Environment(\.nftService) private var nftService
+    @Environment(\.deviceService) private var deviceService
 
     @State private var isPresentingWallets = false
     @State private var isPresentingAssetSelectType: SelectAssetInput?
@@ -54,6 +56,19 @@ struct WalletNavigationStack: View {
                         assetModel: AssetViewModel(asset: $0.asset)
                     )
                 )
+            }
+            .navigationDestination(for: Scenes.NFTCollectionScene.self) {
+                NFTCollectionScene(
+                    model: NFTCollectionViewModel(
+                        wallet: model.wallet,
+                        sceneStep: $0.sceneStep,
+                        nftService: nftService,
+                        deviceService: deviceService
+                    )
+                )
+            }
+            .navigationDestination(for: Scenes.NFTDetails.self) {
+                NFTDetailsScene(collection: $0.collection, asset: $0.asset)
             }
             .sheet(item: $isPresentingSelectType) { value in
                 SelectAssetSceneNavigationStack(
