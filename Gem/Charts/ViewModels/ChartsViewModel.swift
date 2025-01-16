@@ -48,7 +48,6 @@ class ChartsViewModel {
 
     var explorerPreferences: any ExplorerPreferencesStorable {
         ExplorerPreferences(preferences: preferences)
-//        ExplorerStorage(preferences: preferences)
     }
 
     var priceRequest: PriceRequest {

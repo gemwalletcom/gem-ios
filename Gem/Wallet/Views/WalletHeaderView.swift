@@ -85,17 +85,17 @@ struct WalletHeaderView: View {
 
 // MARK: - Previews
 
-//#Preview {
-//    let model = AssetHeaderViewModel(
-//        assetDataModel: .init(assetData: .main, formatter: .full_US),
-//        walletModel: .init(wallet: .main),
-//        bannersViewModel: HeaderBannersViewModel(banners: [])
-//    )
-//
-//    WalletHeaderView(
-//        model: model,
-//        isHideBalanceEnalbed: .constant(false),
-//        onHeaderAction: .none,
-//        onInfoSheetAction: .none
-//    )
-//}
+#Preview {
+    let model = AssetHeaderViewModel(
+        assetDataModel: .init(assetData: .main, formatter: .full_US),
+        walletModel: .init(wallet: .main),
+        bannersViewModel: HeaderBannersViewModel(banners: [])
+    )
+
+    WalletHeaderView(
+        model: model,
+        isHideBalanceEnalbed: .constant(false),
+        onHeaderAction: .none,
+        onInfoSheetAction: .none
+    )
+}

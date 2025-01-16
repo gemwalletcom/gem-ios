@@ -19,6 +19,7 @@ let package = Package(
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "StakeService", path: "../../Services/StakeService"),
+        .package(name: "Preferences", path: "../Preferences"),
     ],
     targets: [
         .target(
@@ -29,6 +30,7 @@ let package = Package(
                 "GemstonePrimitives",
                 "Localization",
                 "StakeService",
+                "Preferences"
             ],
             path: "Sources"
         ),

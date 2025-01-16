@@ -119,15 +119,4 @@ struct SettingsNavigationStack: View {
     }
 }
 
-//// MARK: - Previews
-//
-//#Preview {
-//    SettingsNavigationStack(
-//        walletId: .main,
-//        preferences: .main
-//    )
-//}
-//
-//// MARK: - Preferences extensions
-//
 extension Preferences: @retroactive CurrencyStorable {}

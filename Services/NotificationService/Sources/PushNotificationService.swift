@@ -2,7 +2,6 @@
 
 import Foundation
 import UIKit
-import Store
 import Preferences
 
 public struct PushNotificationEnablerService: Sendable {

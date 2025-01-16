@@ -17,8 +17,9 @@ public final class FiatSceneViewModel {
     private let assetAddress: AssetAddress
     private let walletId: String
 
-    private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
+
+    let currencyFormatter: CurrencyFormatter
 
     var amountText: String
     var input: FiatInput
