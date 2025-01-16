@@ -2,8 +2,6 @@
 
 import SwiftUI
 
-import SwiftUI
-
 public protocol SelectableListAdoptable {
     associatedtype Item: Hashable & Identifiable
     var isMultiSelectionEnabled: Bool { get }
