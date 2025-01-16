@@ -2,12 +2,12 @@
 
 import Foundation
 import Primitives
-import GemstonePrimitives
 import Settings
 import Localization
 import ChainService
 import ChainSettings
 import NodeService
+import ExplorerService
 
 @Observable
 class ChainSettingsViewModel {
@@ -32,7 +32,7 @@ class ChainSettingsViewModel {
 
     init(
         nodeService: NodeService,
-        explorerService: ExplorerService,
+        explorerService: ExplorerService = .standart,
         chain: Chain
     ) {
         self.nodeService = nodeService

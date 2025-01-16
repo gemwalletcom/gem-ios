@@ -5,13 +5,13 @@ import Primitives
 import Localization
 import Gemstone
 import Store
-import GemstonePrimitives
+import ExplorerService
 import Style
 
 public struct AssetDetailsInfoViewModel {
     
     private let priceData: PriceData
-    private let explorerPreferences: ExplorerPreferencesStorable
+    private let explorerService: ExplorerService
     private let currencyFormatter: CurrencyFormatter
     
     public var showLinksSection: Bool { !links.isEmpty }
@@ -21,11 +21,11 @@ public struct AssetDetailsInfoViewModel {
 
     public init(
         priceData: PriceData,
-        explorerPreferences: ExplorerPreferencesStorable,
+        explorerService: ExplorerService = .standart,
         currencyFormatter: CurrencyFormatter
     ) {
         self.priceData = priceData
-        self.explorerPreferences = explorerPreferences
+        self.explorerService = explorerService
         self.currencyFormatter = currencyFormatter
     }
     
@@ -123,7 +123,6 @@ public struct AssetDetailsInfoViewModel {
     
     public var contractUrl: URL? {
         guard let contract else { return .none }
-        return ExplorerService(preferences: explorerPreferences)
-            .tokenUrl(chain: priceData.asset.chain, address: contract)?.url
+        return explorerService.tokenUrl(chain: priceData.asset.chain, address: contract)?.url
     }
 }

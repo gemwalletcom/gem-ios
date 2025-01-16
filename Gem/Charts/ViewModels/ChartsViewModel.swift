@@ -46,10 +46,6 @@ class ChartsViewModel {
         )
     }
 
-    var explorerPreferences: any ExplorerPreferencesStorable {
-        ExplorerPreferences(preferences: preferences)
-    }
-
     var priceRequest: PriceRequest {
         PriceRequest(assetId: assetModel.asset.id.identifier)
     }

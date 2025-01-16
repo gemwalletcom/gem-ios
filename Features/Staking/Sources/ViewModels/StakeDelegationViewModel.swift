@@ -5,16 +5,17 @@ import Primitives
 import Components
 import SwiftUI
 import Style
-import GemstonePrimitives
 import Store
 import Preferences
+import ExplorerService
+import GemstonePrimitives
 
 public struct StakeDelegationViewModel {
     
     public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
-    private let exploreService: ExplorerService = ExplorerService(preferences: ExplorerPreferences())
+    private let exploreService: ExplorerService = .standart
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()

@@ -29,6 +29,7 @@
 		833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */; };
 		834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */ = {isa = PBXBuildFile; productRef = 834B38192D1D85E2009D58D4 /* LockManager */; };
 		8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */; };
+		8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352C8D42D393E05000DEDD9 /* ExplorerService */; };
 		8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8374DC592C6CDF6C00183109 /* AddTokenInput.swift */; };
 		83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83759DF62D384AF5002FECBA /* PreferencesTestKit */; };
 		837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */; };
@@ -278,6 +279,7 @@
 		834B38182D1D858D009D58D4 /* LockManager */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = LockManager; sourceTree = "<group>"; };
 		8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeystoreAuthenticationViewModel.swift; sourceTree = "<group>"; };
 		83518CCC2D1C998300B339E5 /* PrimitivesComponents */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PrimitivesComponents; sourceTree = "<group>"; };
+		8352C8D32D39391B000DEDD9 /* ExplorerService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ExplorerService; sourceTree = "<group>"; };
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
 		837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+ViewInjection.swift"; sourceTree = "<group>"; };
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
@@ -523,6 +525,7 @@
 				D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */,
 				C36679162A119C6200F1D74D /* GemAPI in Frameworks */,
 				C3CF3B7729A98C7B00E96586 /* Blockchain in Frameworks */,
+				8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */,
 				83CA4BA72D2F02440064A4AF /* NameResolver in Frameworks */,
 				D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */,
 				C3CF3B7B29A98C7B00E96586 /* Primitives in Frameworks */,
@@ -1140,6 +1143,7 @@
 		D829BF4B2CBF022700DEB2E8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8352C8D32D39391B000DEDD9 /* ExplorerService */,
 				833931A62D2D64BA0063BB6A /* PriceService */,
 				83FE37B12D2715940048D54C /* WalletConnectorService */,
 				83863EE52D19B8D8005048A7 /* NodeService */,
@@ -1562,6 +1566,7 @@
 				83EB5E2F2D2ECF00006A7CFB /* Onboarding */,
 				83CA4BA62D2F02440064A4AF /* NameResolver */,
 				83759DF62D384AF5002FECBA /* PreferencesTestKit */,
+				8352C8D42D393E05000DEDD9 /* ExplorerService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -2333,6 +2338,10 @@
 		834B38192D1D85E2009D58D4 /* LockManager */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LockManager;
+		};
+		8352C8D42D393E05000DEDD9 /* ExplorerService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ExplorerService;
 		};
 		83759DF62D384AF5002FECBA /* PreferencesTestKit */ = {
 			isa = XCSwiftPackageProductDependency;

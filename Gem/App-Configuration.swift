@@ -312,10 +312,6 @@ extension CurrencyFormatter {
     }
 }
 
-extension ExplorerService {
-    static let main = ExplorerService(preferences: ExplorerPreferences(preferences: .standard))
-}
-
 extension ChainCoreError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {

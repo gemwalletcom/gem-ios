@@ -4,16 +4,18 @@ import Foundation
 import class Gemstone.Config
 import class Gemstone.Explorer
 import Primitives
-import WalletCore
-import WalletCorePrimitives
+import GemstonePrimitives
+import Preferences
 
 public struct ExplorerService {
     private let preferences: any ExplorerPreferencesStorable
 
-    public init(preferences: any ExplorerPreferencesStorable) {
+    public static let standart: ExplorerService = ExplorerService()
+
+    public init(preferences: any ExplorerPreferencesStorable = ExplorerPreferences()) {
         self.preferences = preferences
     }
-    
+
     private func explorerNameOrDefault(chain: Chain) -> String {
         let name = preferences.get(chain: chain)
         let explorers = Self.explorers(chain: chain)

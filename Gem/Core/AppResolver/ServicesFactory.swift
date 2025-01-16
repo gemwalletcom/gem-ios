@@ -15,6 +15,7 @@ import GemAPI
 import Keystore
 import PriceService
 import Preferences
+import ExplorerService
 
 struct ServicesFactory {
     @MainActor
@@ -84,7 +85,7 @@ struct ServicesFactory {
         let priceService = PriceService(
             priceStore: storeManager.priceStore
         )
-        let explorerService = ExplorerService(preferences: ExplorerPreferences(preferences: preferences))
+        let explorerService = ExplorerService.standart
 
         let presenter = WalletConnectorPresenter()
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
