@@ -291,8 +291,6 @@
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
 "info.lock_time.description" = "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.";
 "input.enter_amount_to" = "Please enter amount to %@";
-"input.buy" = "buy";
-"input.sell" = "sell";
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "인기 있는";
@@ -313,4 +311,8 @@
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
-"banner.activate_asset.description" = "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.";
+"banner.activate_asset.description" = "%@ 자산을 사용하려면 먼저 네트워크의 특정 요구 사항을 충족하여 %@ 네트워크에서 해당 자산을 활성화해야 합니다.";
+"nft.properties" = "속성";
+"nft.collections" = "컬렉션";
+"nft.your_nfts" = "귀하의 NFT";
+"nft.description" = "설명";

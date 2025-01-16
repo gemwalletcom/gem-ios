@@ -134,7 +134,7 @@
 "swap.you_pay" = "Ви платите";
 "swap.you_receive" = "Ви отримуєте";
 "swap.approve_token" = "Затвердити %@ для обміну";
-"swap.approve_token_permission" = "Підтвердити токен %@ для доступу до свопу.";
+"swap.approve_token_permission" = "Підтвердити токен %@ для доступу до обміну.";
 "swap.provider" = "Провайдер";
 "common.phrase" = "Фраза";
 "stake.active" = "Активний";
@@ -291,8 +291,6 @@
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
 "info.lock_time.description" = "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.";
 "input.enter_amount_to" = "Будь ласка введіть суму для";
-"input.buy" = "купівлі";
-"input.sell" = "продажу";
 "input.transfer" = "переказу";
 "settings.hide_balance" = "Приховати баланс";
 "common.popular" = "Популярний";
@@ -313,4 +311,8 @@
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
-"banner.activate_asset.description" = "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.";
+"banner.activate_asset.description" = "Щоб використовувати ресурс %@, ви повинні спочатку ввімкнути його в мережі %@ виконавши спеціальні вимоги мережі.";
+"nft.properties" = "Властивості";
+"nft.collections" = "Колекції";
+"nft.your_nfts" = "Ваші NFT";
+"nft.description" = "опис";

@@ -291,8 +291,6 @@
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
 "info.lock_time.description" = "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.";
 "input.enter_amount_to" = "Please enter amount to %@";
-"input.buy" = "buy";
-"input.sell" = "sell";
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "受欢迎的";
@@ -313,4 +311,8 @@
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
-"banner.activate_asset.description" = "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.";
+"banner.activate_asset.description" = "要使用%@资产，您必须首先通过满足网络的特定要求在%@网络上启用它。";
+"nft.properties" = "特性";
+"nft.collections" = "收藏";
+"nft.your_nfts" = "你的 NFT";
+"nft.description" = "描述";
