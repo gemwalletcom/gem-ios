@@ -10,6 +10,7 @@ import Localization
 import MarketInsight
 import PrimitivesComponents
 import PriceService
+import Preferences
 
 @MainActor
 @Observable
@@ -43,10 +44,6 @@ class ChartsViewModel {
             image: assetModel.assetImage,
             showChevron: false
         )
-    }
-
-    var explorerStorage: ExplorerStorage {
-        ExplorerStorage(preferences: preferences)
     }
 
     var priceRequest: PriceRequest {

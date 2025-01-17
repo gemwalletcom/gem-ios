@@ -7,6 +7,7 @@ import Store
 import PrimitivesComponents
 import PriceAlerts
 import WalletConnector
+import Preferences
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -20,7 +21,6 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.explorerService) private var explorerService
     @Environment(\.keystore) private var keystore
 
     @State private var isPresentingWallets = false
@@ -29,7 +29,7 @@ struct SettingsNavigationStack: View {
     let walletId: WalletId
 
     init(walletId: WalletId,
-         preferences: Preferences
+         preferences: Preferences = .standard
     ) {
         self.walletId = walletId
         _currencyModel = State(initialValue: CurrencySceneViewModel(currencyStorage: preferences))
@@ -60,7 +60,6 @@ struct SettingsNavigationStack: View {
                 NotificationsScene(
                     model: NotificationsViewModel(
                         deviceService: deviceService,
-                        preferences: .main,
                         bannerService: bannerService
                     )
                 )
@@ -106,7 +105,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.ChainSettings.self) {
                 ChainSettingsScene(
-                    model: ChainSettingsViewModel(nodeService: nodeService, explorerService: explorerService, chain: $0.chain)
+                    model: ChainSettingsViewModel(nodeService: nodeService, chain: $0.chain)
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {
@@ -118,16 +117,5 @@ struct SettingsNavigationStack: View {
         }
     }
 }
-
-// MARK: - Previews
-
-#Preview {
-    SettingsNavigationStack(
-        walletId: .main,
-        preferences: .main
-    )
-}
-
-// MARK: - Preferences extensions
 
 extension Preferences: @retroactive CurrencyStorable {}

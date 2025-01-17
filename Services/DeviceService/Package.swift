@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Store", path: "../Store"),
         .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "Preferences", path: "../Preferences")
     ],
     targets: [
         .target(
@@ -24,6 +25,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
+                "Preferences",
                 "GemAPI",
             ],
             path: "Sources"

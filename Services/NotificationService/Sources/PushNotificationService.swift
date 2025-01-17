@@ -2,15 +2,13 @@
 
 import Foundation
 import UIKit
-import Store
+import Preferences
 
 public struct PushNotificationEnablerService: Sendable {
 
     private let preferences: Preferences
 
-    public init(
-        preferences: Preferences
-    ) {
+    public init(preferences: Preferences = .standard) {
         self.preferences = preferences
     }
 

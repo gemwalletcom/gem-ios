@@ -18,6 +18,7 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Store", path: "../Store"),
         .package(name: "NotificationService", path: "../NotificationService"),
+        .package(name: "Preferences", path: "../Preferences"),
     ],
     targets: [
         .target(
@@ -26,6 +27,7 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "NotificationService",
+                "Preferences"
             ],
             path: "Sources"
         ),

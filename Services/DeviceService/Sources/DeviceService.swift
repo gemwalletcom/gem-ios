@@ -5,6 +5,7 @@ import GemAPI
 import Primitives
 import Store
 import UIKit
+import Preferences
 
 public protocol DeviceServiceable: Sendable {
     func getDeviceId() async throws -> String
@@ -21,7 +22,7 @@ public final class DeviceService: DeviceServiceable {
     public init(
         deviceProvider: any GemAPIDeviceService,
         subscriptionsService: SubscriptionService,
-        preferences: Preferences = Preferences(),
+        preferences: Preferences = .standard,
         securePreferences: SecurePreferences = SecurePreferences()
     ) {
         self.deviceProvider = deviceProvider
@@ -66,7 +67,7 @@ public final class DeviceService: DeviceServiceable {
             return deviceId
         } catch {
             let newDeviceId = generateDeviceId()
-            return try securePreferences.set(key: .deviceId, value: newDeviceId)
+            return try securePreferences.set(value: newDeviceId, key: .deviceId)
         }
     }
     

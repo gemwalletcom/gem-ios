@@ -20,6 +20,7 @@ import NotificationService
 import NodeService
 import PriceService
 import WalletConnector
+import Preferences
 import NFTService
 
 extension Asset {
@@ -72,12 +73,8 @@ extension AssetData  {
     )
 }
 
-extension Preferences {
-    static let main = Preferences(defaults: .standard)
-}
-
 extension LocalKeystore {
-    @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .main)
+    @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .standard)
 }
 
 extension WalletStore {
@@ -157,7 +154,7 @@ extension WalletsService {
 }
 
 extension PriceAlertService {
-    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main, preferences: .main)
+    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main)
 }
 
 extension TransactionsService {
@@ -217,7 +214,7 @@ extension AddressStatusService {
 }
 
 extension BannerSetupService {
-    static let main = BannerSetupService(store: .main, preferences: .main)
+    static let main = BannerSetupService(store: .main)
 }
 
 extension NFTService {
@@ -324,14 +321,6 @@ extension CurrencyFormatter {
     }
 }
 
-extension ExplorerStorage {
-    static let main = ExplorerStorage(preferences: .main)
-}
-
-extension ExplorerService {
-    static let main = ExplorerService(storage: ExplorerStorage.main)
-}
-
 extension ChainCoreError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
@@ -347,7 +336,7 @@ extension ChainServiceFactory {
 }
 
 extension BannerService {
-    static let main = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService(preferences: .main))
+    static let main = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService())
 }
 
 extension NavigationStateManager {

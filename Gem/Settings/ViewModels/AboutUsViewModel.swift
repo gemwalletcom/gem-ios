@@ -5,13 +5,14 @@ import SwiftUI
 import Store
 import Style
 import Localization
+import Preferences
 
 class AboutUsViewModel {
 
     let preferences: Preferences
 
     init(
-        preferences: Preferences = Preferences()
+        preferences: Preferences = .standard
     ) {
         self.preferences = preferences
         self.isDeveloperEnabled = preferences.isDeveloperEnabled

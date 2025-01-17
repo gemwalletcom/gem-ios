@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
 
         .package(name: "Store", path: "../Store"),
+        .package(name: "Preferences", path: "../Preferences"),
         .package(name: "PriceAlertService", path: "../PriceAlertService"),
     ],
     targets: [
@@ -32,7 +33,8 @@ let package = Package(
                 "Localization",
                 "PrimitivesComponents",
                 "Store",
-                "PriceAlertService"
+                "PriceAlertService",
+                "Preferences"
             ],
             path: "Sources"
         ),

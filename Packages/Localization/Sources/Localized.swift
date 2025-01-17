@@ -393,14 +393,10 @@ public enum Localized {
     }
   }
   public enum Input {
-    /// buy
-    public static let buy = Localized.tr("Localizable", "input.buy", fallback: "buy")
     /// Please enter amount to %@
     public static func enterAmountTo(_ p1: Any) -> String {
       return Localized.tr("Localizable", "input.enter_amount_to", String(describing: p1), fallback: "Please enter amount to %@")
     }
-    /// sell
-    public static let sell = Localized.tr("Localizable", "input.sell", fallback: "sell")
     /// transfer
     public static let transfer = Localized.tr("Localizable", "input.transfer", fallback: "transfer")
   }
@@ -427,6 +423,16 @@ public enum Localized {
     public static let sixHours = Localized.tr("Localizable", "lock.six_hours", fallback: "6 hours")
     /// Unlock
     public static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
+  }
+  public enum Nft {
+    /// Collections
+    public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
+    /// Description
+    public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
+    /// Properties
+    public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
+    /// Your NFTs
+    public static let yourNfts = Localized.tr("Localizable", "nft.your_nfts", fallback: "Your NFTs")
   }
   public enum Nodes {
     /// Gem Wallet Node

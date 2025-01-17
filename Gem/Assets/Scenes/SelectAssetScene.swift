@@ -98,11 +98,13 @@ struct SelectAssetScene: View {
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
         )
-        .debounce(
-            value: $assets.searchBy.wrappedValue,
-            interval: Duration.milliseconds(250),
-            action: model.search(query:)
-        )
+        .if(model.isNetworkSearchEnabled) {
+            $0.debounce(
+                value: $assets.searchBy.wrappedValue,
+                interval: Duration.milliseconds(250),
+                action: model.search(query:)
+            )
+        }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
         .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
         .listSectionSpacing(.compact)

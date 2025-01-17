@@ -291,8 +291,6 @@
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
 "info.lock_time.description" = "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.";
 "input.enter_amount_to" = "Please enter amount to %@";
-"input.buy" = "buy";
-"input.sell" = "sell";
 "input.transfer" = "transfer";
 "settings.hide_balance" = "Hide Balance";
 "common.popular" = "Phổ biến";
@@ -313,4 +311,8 @@
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
-"banner.activate_asset.description" = "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.";
+"banner.activate_asset.description" = "Để sử dụng tài sản %@, trước tiên bạn phải bật nó trên mạng %@ bằng cách đáp ứng các yêu cầu cụ thể của mạng.";
+"nft.properties" = "Của cải";
+"nft.collections" = "Bộ sưu tập";
+"nft.your_nfts" = "NFT của bạn";
+"nft.description" = "Sự miêu tả";

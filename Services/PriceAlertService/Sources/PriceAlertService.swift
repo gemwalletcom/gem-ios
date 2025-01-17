@@ -6,6 +6,7 @@ import GemAPI
 import Primitives
 import NotificationService
 import DeviceService
+import Preferences
 
 public struct PriceAlertService: Sendable {
 
@@ -19,7 +20,7 @@ public struct PriceAlertService: Sendable {
         store: PriceAlertStore,
         apiService: any GemAPIPriceAlertService = GemAPIService(),
         deviceService: any DeviceServiceable,
-        preferences: Preferences
+        preferences: Preferences = .standard
     ) {
         self.store = store
         self.apiService = apiService

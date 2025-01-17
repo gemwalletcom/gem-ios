@@ -5,8 +5,5 @@ import StoreTestKit
 
 @testable import Store
 
-final class StoreTests {
-    func testExample() {
-        #expect(Preferences.mock() != nil)
-    }
+struct StoreTests {
 }

@@ -4,9 +4,11 @@ import SwiftUI
 
 @Observable
 public final class ObservablePreferences: Sendable {
+    public static let `default` = ObservablePreferences()
+
     public let preferences: Preferences
 
-    public init(preferences: Preferences) {
+    private init(preferences: Preferences = .standard) {
         self.preferences = preferences
     }
 
@@ -37,9 +39,7 @@ public final class ObservablePreferences: Sendable {
     }
 }
 
-extension ObservablePreferences {
-    public static let `default` = ObservablePreferences(preferences: .standard)
-}
+// MARK: - EnvironmentValues
 
 extension EnvironmentValues {
     @Entry public var observablePreferences: ObservablePreferences = .default

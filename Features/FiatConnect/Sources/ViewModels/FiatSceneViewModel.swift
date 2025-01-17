@@ -17,8 +17,9 @@ public final class FiatSceneViewModel {
     private let assetAddress: AssetAddress
     private let walletId: String
 
-    private let currencyFormatter: CurrencyFormatter
     private let valueFormatter = ValueFormatter(locale: .US, style: .medium)
+
+    let currencyFormatter: CurrencyFormatter
 
     var amountText: String
     var input: FiatInput
@@ -124,8 +125,8 @@ extension FiatSceneViewModel {
     private var emptyQuotesTitle: String { Localized.Buy.noResults }
     private var emptyAmountTitle: String {
         switch input.type {
-        case .buy: Localized.Input.enterAmountTo(Localized.Input.buy)
-        case .sell: Localized.Input.enterAmountTo(Localized.Input.sell)
+        case .buy: Localized.Input.enterAmountTo(Localized.Wallet.buy)
+        case .sell: Localized.Input.enterAmountTo(Localized.Wallet.sell)
         }
     }
 

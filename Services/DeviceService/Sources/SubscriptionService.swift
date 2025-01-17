@@ -4,19 +4,22 @@ import Foundation
 import GemAPI
 import Primitives
 import Store
+import Preferences
 
 public struct SubscriptionService: Sendable {
 
     private let subscriptionProvider: any GemAPISubscriptionService
-    private let preferences = Preferences()
+    private let preferences: Preferences
     private let walletStore: WalletStore
 
     public init(
         subscriptionProvider: any GemAPISubscriptionService,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        preferences: Preferences = .standard
     ) {
         self.subscriptionProvider = subscriptionProvider
         self.walletStore = walletStore
+        self.preferences = preferences
     }
 
     var subscriptionsVersion: Int {

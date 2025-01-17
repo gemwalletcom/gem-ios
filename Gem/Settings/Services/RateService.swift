@@ -3,6 +3,7 @@
 import Foundation
 import Store
 import StoreKit
+import Preferences
 
 struct RateService {
     

@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Store
+import Preferences
 
 public struct BannerSetupService: Sendable {
 
@@ -11,7 +12,7 @@ public struct BannerSetupService: Sendable {
 
     public init(
         store: BannerStore,
-        preferences: Preferences
+        preferences: Preferences = .standard
     ) {
         self.store = store
         self.preferences = preferences

@@ -6,6 +6,7 @@ import Primitives
 import Settings
 import GemAPI
 import NodeService
+import Preferences
 
 struct ImportAssetsService {
     let nodeService: NodeService

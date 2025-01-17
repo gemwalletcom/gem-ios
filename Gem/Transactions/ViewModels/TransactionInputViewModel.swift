@@ -7,6 +7,7 @@ import Primitives
 import GemstonePrimitives
 import PrimitivesComponents
 import Store
+import Preferences
 
 struct TransactionInputViewModel {
     let data: TransferData

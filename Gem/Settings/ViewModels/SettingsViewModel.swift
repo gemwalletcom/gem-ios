@@ -11,6 +11,7 @@ import Localization
 import Style
 import MarketInsight
 import Currency
+import Preferences
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable
@@ -21,7 +22,7 @@ class SettingsViewModel: ObservableObject {
 
     private let walletId: WalletId
     private let walletsService: WalletsService
-    private let preferences = Preferences.main
+    private let preferences = Preferences.standard
 
     init(
         walletId: WalletId,

@@ -4,14 +4,14 @@
 
 import Foundation
 
-public enum NFTType: String, Codable, Sendable {
+public enum NFTType: String, Codable, Equatable, Hashable, Sendable {
 	case erc721
 	case erc1155
 	case spl
 	case jetton
 }
 
-public struct NFTImage: Codable, Sendable {
+public struct NFTImage: Codable, Equatable, Hashable, Sendable {
 	public let imageUrl: String
 	public let previewImageUrl: String
 	public let originalSourceUrl: String
@@ -23,7 +23,7 @@ public struct NFTImage: Codable, Sendable {
 	}
 }
 
-public struct NFTAttribute: Codable, Sendable {
+public struct NFTAttribute: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let value: String
 
@@ -33,7 +33,7 @@ public struct NFTAttribute: Codable, Sendable {
 	}
 }
 
-public struct NFTAsset: Codable, Sendable {
+public struct NFTAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let id: String
 	public let collectionId: String
 	public let tokenId: String
@@ -57,7 +57,7 @@ public struct NFTAsset: Codable, Sendable {
 	}
 }
 
-public struct NFTCollection: Codable, Sendable {
+public struct NFTCollection: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let id: String
 	public let name: String
 	public let description: String?
@@ -77,7 +77,7 @@ public struct NFTCollection: Codable, Sendable {
 	}
 }
 
-public struct NFTData: Codable, Sendable {
+public struct NFTData: Codable, Equatable, Hashable, Sendable {
 	public let collection: NFTCollection
 	public let assets: [NFTAsset]
 

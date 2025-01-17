@@ -10,6 +10,7 @@ import BigInt
 import Localization
 import PrimitivesComponents
 import Store
+import Preferences
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel

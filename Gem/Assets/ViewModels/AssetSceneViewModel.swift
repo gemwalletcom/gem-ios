@@ -2,7 +2,6 @@
 
 import Foundation
 import Primitives
-import GemstonePrimitives
 import SwiftUI
 import Components
 import Store
@@ -11,6 +10,8 @@ import Localization
 import PriceAlertService
 import StakeService
 import PrimitivesComponents
+import Preferences
+import ExplorerService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService
@@ -21,7 +22,8 @@ class AssetSceneViewModel: ObservableObject {
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
-    
+    let explorerService: ExplorerService = .standart
+
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
 
@@ -175,11 +177,11 @@ extension AssetSceneViewModel {
         guard let tokenId = assetModel.asset.tokenId else {
             return .none
         }
-        return ExplorerService.main.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
+        return explorerService.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
     }
 
     private var addressLink: BlockExplorerLink {
-        ExplorerService.main.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
+        explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
     }
 
     private func fetchTransactions() async throws {

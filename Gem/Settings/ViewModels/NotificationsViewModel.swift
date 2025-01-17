@@ -9,6 +9,7 @@ import NotificationService
 import DeviceService
 import BannerService
 import Primitives
+import Preferences
 
 @Observable
 @MainActor
@@ -22,8 +23,8 @@ final class NotificationsViewModel {
 
     init(
         deviceService: DeviceService,
-        preferences: Preferences,
-        bannerService: BannerService
+        bannerService: BannerService,
+        preferences: Preferences = .standard
     ) {
         self.deviceService = deviceService
         self.preferences = preferences

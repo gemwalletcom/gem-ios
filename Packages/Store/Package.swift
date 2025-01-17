@@ -18,7 +18,6 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 29, 3)),
         .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 9, 0)),
-        .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
     ],
     targets: [
         .target(
@@ -27,7 +26,6 @@ let package = Package(
                 "Primitives",
                 .product(name: "GRDB", package: "GRDB.swift"),
                 .product(name: "GRDBQuery", package: "GRDBQuery"),
-                .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
             path: "Sources"
         ),

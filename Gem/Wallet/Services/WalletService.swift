@@ -4,11 +4,13 @@ import Foundation
 import Store
 import Primitives
 import Keystore
+import Preferences
 
 public struct WalletService {
 
     private let keystore: any Keystore
     private let walletStore: WalletStore
+    private let preferences: Preferences
 
     var currentWallet: Wallet? {
         keystore.currentWallet
@@ -16,10 +18,12 @@ public struct WalletService {
 
     init(
         keystore: any Keystore,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        preferences: Preferences = .standard
     ) {
         self.keystore = keystore
         self.walletStore = walletStore
+        self.preferences = preferences
     }
 
     func pin(wallet: Wallet) throws {
@@ -38,7 +42,7 @@ public struct WalletService {
         try keystore.deleteWallet(for: wallet)
 
         if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore, preferences: .main).onDeleteAllWallets()
+            try CleanUpService(keystore: keystore, preferences: preferences).onDeleteAllWallets()
         }
     }
 

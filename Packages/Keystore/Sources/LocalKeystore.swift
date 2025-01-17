@@ -2,6 +2,7 @@ import Foundation
 import Primitives
 import Store
 import WalletCore
+import Preferences
 
 @Observable
 public final class LocalKeystore: Keystore {

@@ -5,6 +5,7 @@ import Store
 import Localization
 import BannerService
 import StakeService
+import Preferences
 
 struct DeveloperViewModel {
     

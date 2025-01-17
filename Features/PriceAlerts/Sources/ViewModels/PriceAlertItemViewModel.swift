@@ -7,6 +7,7 @@ import Style
 import SwiftUI
 import PrimitivesComponents
 import Store
+import Preferences
 
 public struct PriceAlertItemViewModel: ListAssetItemViewable {
     public let data: PriceAlertData
@@ -14,7 +15,7 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
 
     public init(
         data: PriceAlertData,
-        preferences: Preferences = Preferences.standard
+        preferences: Preferences = .standard
     ) {
         self.data = data
         self.preferences = preferences
