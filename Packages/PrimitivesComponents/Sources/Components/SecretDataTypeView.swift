@@ -4,7 +4,7 @@ import SwiftUI
 import Style
 
 public struct SecretDataTypeView: View {
-    public let type: SecretPhraseDataType
+    private let type: SecretPhraseDataType
 
     public init(type: SecretPhraseDataType) {
         self.type = type

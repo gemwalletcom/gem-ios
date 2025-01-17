@@ -3,13 +3,11 @@
 import SwiftUI
 import Style
 import Charts
-import MarketInsight
 import Primitives
 
 struct ChartView: View {
-    
     let model: ChartValuesViewModel
-    
+
     static let date = "Date"
     static let value = "Value"
     

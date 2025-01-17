@@ -4,8 +4,8 @@ import SwiftUI
 import Style
 
 public struct SecretPhraseGridView: View {
-    let rows: [[WordIndex]]
-    let highlightIndex: Int?
+    private let rows: [[WordIndex]]
+    private let highlightIndex: Int?
 
     public init(
         rows: [[WordIndex]],

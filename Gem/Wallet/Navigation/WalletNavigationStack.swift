@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Localization
 import PrimitivesComponents
+import MarketInsight
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -50,7 +51,6 @@ struct WalletNavigationStack: View {
                 ChartScene(
                     model: ChartsViewModel(
                         priceService: walletsService.priceService,
-                        assetsService: walletsService.assetsService,
                         assetModel: AssetViewModel(asset: $0.asset)
                     )
                 )

@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Localization
+import PrimitivesComponents
 
 struct MemoListItem: View {
     

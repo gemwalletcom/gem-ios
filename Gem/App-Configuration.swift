@@ -96,10 +96,6 @@ extension NotificationService {
     static let main = NotificationService()
 }
 
-extension ChartService {
-    static let main = ChartService()
-}
-
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,

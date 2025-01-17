@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Primitives
 import Style
 
 public struct AssetBalanceView<SecondaryView: View>: View {

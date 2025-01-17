@@ -3,18 +3,17 @@
 import Foundation
 import Primitives
 import Charts
-import MarketInsight
+import Preferences
 
 public struct ChartValuesViewModel {
-
     let period: ChartPeriod
     let price: Price?
     let values: ChartValues
-    let formatter = CurrencyFormatter.currency()
-    
-    static let defaultPeriod = ChartPeriod.day
+    let formatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
 
-    init(
+    public static let defaultPeriod = ChartPeriod.day
+
+    public init(
         period: ChartPeriod,
         price: Price?,
         values: ChartValues
@@ -25,15 +24,15 @@ public struct ChartValuesViewModel {
     }
     
     public var charts: [ChartDateValue] {
-        return values.charts
+        values.charts
     }
     
     public var lowerBoundValueText: String {
-        return formatter.string(values.lowerBoundValue)
+        formatter.string(values.lowerBoundValue)
     }
     
     public var upperBoundValueText: String {
-        return formatter.string(values.upperBoundValue)
+        formatter.string(values.upperBoundValue)
     }
     
     var chartPriceModel: ChartPriceModel? {

@@ -8,9 +8,9 @@ import Components
 import GRDB
 import GRDBQuery
 import Store
-import MarketInsight
+import PrimitivesComponents
 
-struct ChartScene: View {
+public struct ChartScene: View {
     @Environment(\.openURL) private var openURL
     
     @State private var model: ChartsViewModel
@@ -18,14 +18,12 @@ struct ChartScene: View {
     @Query<PriceRequest>
     private var priceData: PriceData
 
-    init(
-        model: ChartsViewModel
-    ) {
+    public init(model: ChartsViewModel) {
         _model = State(initialValue: model)
         _priceData = Query(constant: model.priceRequest)
     }
     
-    var body: some View {
+    public var body: some View {
         List {
             Section { } header: {
                 VStack {
@@ -70,10 +68,7 @@ struct ChartScene: View {
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             
-            let priceDataModel = AssetDetailsInfoViewModel(
-                priceData: priceData,
-                currencyFormatter: .currency()
-            )
+            let priceDataModel = AssetDetailsInfoViewModel(priceData: priceData)
             
             if priceDataModel.showMarketValues {
                 Section {
