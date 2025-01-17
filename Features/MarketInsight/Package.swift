@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "ExplorerService", path: "../ExplorerService"),
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "Components", path: "../Components"),
+        .package(name: "Preferences", path: "../Preferences"),
     ],
     targets: [
         .target(
@@ -31,7 +32,8 @@ let package = Package(
                 "Store",
                 "ExplorerService",
                 "PrimitivesComponents",
-                "Components"
+                "Components",
+                "Preferences"
             ],
             path: "Sources"
         ),
