@@ -10,10 +10,6 @@ import Localization
 import PrimitivesComponents
 
 struct SelectAssetScene: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.stakeService) private var stakeService
 
     @State private var isPresentingCopyMessage: Bool = false
     @State private var isPresentingCopyMessageValue: String?  = .none
