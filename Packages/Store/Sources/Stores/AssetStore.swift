@@ -76,6 +76,11 @@ public struct AssetStore: Sendable {
         try setColumn(for: assetIds, column: Columns.Asset.isSwappable, value: value)
     }
     
+    @discardableResult
+    public func setAssetIsStakeable(for assetIds: [String], value: Bool) throws -> Int {
+        try setColumn(for: assetIds, column: Columns.Asset.isStakeable, value: value)
+    }
+    
     private func setColumn(for assetIds: [String], column: Column, value: Bool) throws -> Int {
         try db.write { db in
             return try AssetRecord
