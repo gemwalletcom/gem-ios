@@ -130,7 +130,10 @@ struct AssetDataViewModel {
     }
     
     var isStakeEnabled: Bool {
-        GemstoneConfig.shared.getChainConfig(chain: assetData.asset.chain.rawValue).isStakeSupported
+        switch asset.id.type {
+        case .native: GemstoneConfig.shared.getChainConfig(chain: assetData.asset.chain.rawValue).isStakeSupported
+        case .token: false
+        }
     }
     
     var isActive: Bool {
