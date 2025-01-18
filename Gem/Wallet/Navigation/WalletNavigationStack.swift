@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Localization
 import PrimitivesComponents
+import NFT
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore

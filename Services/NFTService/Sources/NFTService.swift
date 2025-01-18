@@ -19,6 +19,6 @@ public struct NFTService: Sendable {
     
     public func updateNFT(deviceId: String, wallet: Wallet) async throws {
         let nft = try await apiService.getNFTAssets(deviceId: deviceId, walletIndex: wallet.index.asInt)
-        try nftStore.addOrUpdateNFTResults(nft, for: wallet.id)
+        try nftStore.saveNFTData(nft, for: wallet.id)
     }
 }

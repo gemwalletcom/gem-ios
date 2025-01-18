@@ -5,44 +5,51 @@ import Primitives
 import SwiftUI
 import Style
 import Components
+import Localization
 
-struct NFTDetailsScene: View {
+public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
 
     let collection: NFTCollection
     let asset: NFTAsset
     
-    var body: some View {
+    public init(collection: NFTCollection, asset: NFTAsset) {
+        self.collection = collection
+        self.asset = asset
+    }
+    
+    public var body: some View {
         ScrollView {
             VStack(alignment: .leading) {
                 imageView
                 
                 Text(asset.name)
                     .textStyle(.headline)
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
+                    .padding(.horizontal, Spacing.medium)
+                    .padding(.top, Spacing.small)
                 
                 NftCollectionView(collection: collection)
-                    .padding(.horizontal, 16)
+                    .padding(.horizontal, Spacing.medium)
                 
-                Button("View on Magic Eden", action: {})
+                Button(Localized.Transaction.viewOn("Magic Eden"), action: {})
                     .buttonStyle(.blue())
-                    .padding(.horizontal, 16)
-                    .padding(.top, 8)
+                    .padding(.horizontal, Spacing.medium)
+                    .padding(.top, Spacing.small)
                 
                 if let description = asset.description {
-                    Text("Description")
+                    Text(Localized.Nft.description)
                         .textStyle(.subheadline)
-                        .padding(.horizontal, 16)
-                        .padding(.top, 8)
+                        .padding(.horizontal, Spacing.medium)
+                        .padding(.top, Spacing.small)
                     
                     Text(description)
                         .textStyle(.body)
-                        .padding(.horizontal, 16)
+                        .padding(.horizontal, Spacing.medium)
                 }
                 
-                NFTAttributeView(attributes: asset.attributes, horizontalPadding: 16)
-                    .padding(.top, 8)
+                NFTAttributeView(attributes: asset.attributes)
+                    .padding(.horizontal, Spacing.medium)
+                    .padding(.top, Spacing.small)
                 
                 Spacer()
             }
@@ -79,12 +86,12 @@ struct NFTDetailsScene: View {
             NavigationButton(image: Image(systemName: "chevron.left")) {
                 dismiss()
             }
-            .padding(16)
+            .padding(Spacing.medium)
             
             Spacer()
             
             NavigationButton(image: Image(systemName: "ellipsis")) {}
-            .padding(16)
+            .padding(Spacing.medium)
         }
         .padding(.top, 60)
     }
@@ -99,9 +106,9 @@ struct NFTDetailsScene: View {
             } label: {
                 VStack(alignment: .center) {
                     image
-                        .frame(width: 44, height: 44)
+                        .frame(width: Sizing.image.medium, height: Sizing.image.medium)
                         .background(Colors.grayBackground)
-                        .cornerRadius(22)
+                        .cornerRadius(Sizing.image.medium / 2)
                 }
             }
             .buttonStyle(.borderless)
@@ -119,7 +126,7 @@ struct NFTDetailsScene: View {
                         placeholder: nil,
                         chainPlaceholder: nil
                     ),
-                    size: 24
+                    size: Sizing.list.image
                 )
                 Text(collection.name)
                     .textStyle(.subheadline)

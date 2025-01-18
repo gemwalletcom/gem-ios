@@ -127,7 +127,7 @@ public struct Scenes {
     
     public struct NFTCollectionScene: Hashable {
 
-        public enum SceneStep: Hashable {
+        public enum SceneStep: Hashable, Sendable {
             case collections
             case nft(collectionId: String)
         }

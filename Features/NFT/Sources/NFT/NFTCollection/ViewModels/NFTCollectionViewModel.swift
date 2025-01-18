@@ -6,8 +6,9 @@ import NFTService
 import DeviceService
 import Primitives
 import Store
+import Localization
 
-struct NFTCollectionViewModel {
+public struct NFTCollectionViewModel: Sendable {
     struct GridItem {
         let destination: any Hashable
         let assetImage: AssetImage
@@ -18,6 +19,18 @@ struct NFTCollectionViewModel {
     let sceneStep: Scenes.NFTCollectionScene.SceneStep
     let nftService: NFTService
     let deviceService: any DeviceServiceable
+    
+    public init(
+        wallet: Wallet,
+        sceneStep: Scenes.NFTCollectionScene.SceneStep,
+        nftService: NFTService,
+        deviceService: any DeviceServiceable
+    ) {
+        self.wallet = wallet
+        self.sceneStep = sceneStep
+        self.nftService = nftService
+        self.deviceService = deviceService
+    }
     
     var nftRequest: NFTRequest {
         switch sceneStep {
@@ -40,10 +53,10 @@ struct NFTCollectionViewModel {
             if list.count == 1 {
                 fallthrough
             } else {
-                return "Collections"
+                return Localized.Nft.collections
             }
         case .nft:
-            return "Your NFTs"
+            return Localized.Nft.yourNfts
         }
     }
     

@@ -43,7 +43,11 @@ public struct Migrations {
             try PriceAlertRecord.create(db: db)
             
             // nft
-            try db.setupNFTSchema()
+            try NFTCollectionRecord.create(db: db)
+            try NFTAssetRecord.create(db: db)
+            try NFTAttributeRecord.create(db: db)
+            try NFTImageRecord.create(db: db)
+            try NFTCollectionImageRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)

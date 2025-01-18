@@ -10,11 +10,11 @@ import Components
 import DeviceService
 import Style
 
-struct NFTCollectionScene: View {
+public struct NFTCollectionScene: View {
     private var gridItems: [GridItem] {
         [
-            GridItem(spacing: 16),
-            GridItem(spacing: 16)
+            GridItem(spacing: Spacing.medium),
+            GridItem(spacing: Spacing.medium)
         ]
     }
     
@@ -23,12 +23,12 @@ struct NFTCollectionScene: View {
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
-    init(model: NFTCollectionViewModel) {
+    public init(model: NFTCollectionViewModel) {
         _nftDataList = Query(model.nftRequest)
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         ScrollView {
             LazyVGrid(columns: gridItems) {
                 switch model.sceneStep {
@@ -49,7 +49,7 @@ struct NFTCollectionScene: View {
                 LoadingView(size: .large, tint: Colors.gray)
             }
         })
-        .padding(.horizontal, 16)
+        .padding(.horizontal, Spacing.medium)
         .background(Colors.grayBackground)
         .navigationBarTitleDisplayMode(.large)
         .navigationTitle(model.title(list: nftDataList))
@@ -57,7 +57,7 @@ struct NFTCollectionScene: View {
     }
     
     private var nftCollectionView: some View {
-        ForEach(nftDataList) { item in
+        ForEach(nftDataList, id: \.collection.id) { item in
             let gridItem = model.createGridItem(from: item)
             
             NavigationLink(value: gridItem.destination) {

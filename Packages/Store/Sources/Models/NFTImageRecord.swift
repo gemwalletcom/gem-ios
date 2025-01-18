@@ -2,110 +2,135 @@ import Foundation
 import Primitives
 @preconcurrency import GRDB
 
-// MARK: - Records
+// MARK: - NFTCollectionRecord
 
-struct NFTImageRecord: Codable, FetchableRecord, PersistableRecord {
+struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
+    var walletId: String
     var id: String
-    var imageUrl: String
-    var previewImageUrl: String
-    var originalSourceUrl: String
-    
-    static let databaseTableName = "nft_image"
-}
-
-struct NFTAttributeRecord: Codable, FetchableRecord, PersistableRecord {
-    var assetId: String // Foreign Key to NFTAssetRecord
     var name: String
-    var value: String
-    
-    static let databaseTableName = "nft_attribute"
+    var description: String?
+    var chain: Chain
+    var contractAddress: String
+    var isVerified: Bool
 
-    static let asset = belongsTo(NFTAssetRecord.self)
+    static let assets = hasMany(NFTAssetRecord.self).forKey("assets")
+    static let image = hasOne(NFTCollectionImageRecord.self).forKey("image")
 }
+
+extension NFTCollectionRecord: CreateTable {
+
+    static let databaseTableName = "nft_collections"
+
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.NFT.walletId.name, .text).notNull()
+            $0.column(Columns.NFT.id.name, .text).primaryKey()
+            $0.column(Columns.NFT.name.name, .text).notNull()
+            $0.column(Columns.NFT.description.name, .text)
+            $0.column(Columns.NFT.chain.name, .text).notNull()
+            $0.column(Columns.NFT.contractAddress.name, .text).notNull()
+            $0.column(Columns.NFT.isVerified.name, .boolean).notNull()
+        }
+    }
+}
+
+extension NFTCollection {
+    func record(for walletId: String) -> NFTCollectionRecord {
+        NFTCollectionRecord(
+            walletId: walletId,
+            id: id,
+            name: name,
+            description: description,
+            chain: chain,
+            contractAddress: contractAddress,
+            isVerified: isVerified
+        )
+    }
+}
+
+// MARK: - NFTAssetRecord
 
 struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
     var id: String
-    var collectionId: String // Foreign Key to NFTCollectionRecord
+    var collectionId: String
     var tokenId: String
     var tokenType: NFTType
     var name: String
     var description: String?
     var chain: Chain
-    var imageId: String? // Foreign Key to NFTImageRecord
-
-    static let databaseTableName = "nft_asset"
 
     static let collection = belongsTo(NFTCollectionRecord.self)
-    static let image = belongsTo(NFTImageRecord.self)
-    static let attributes = hasMany(NFTAttributeRecord.self)
+    static let image = hasOne(NFTImageRecord.self).forKey("image")
+    static let attributes = hasMany(NFTAttributeRecord.self).forKey("attributes")
 }
 
-struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
-    var id: String
-    var walletId: String
-    var name: String
-    var description: String?
-    var chain: Chain
-    var contractAddress: String
-    var imageId: String // Foreign Key to NFTImageRecord
-    var isVerified: Bool
+extension NFTAssetRecord: CreateTable {
+    
+    static let databaseTableName = "nft_assets"
 
-    static let databaseTableName = "nft_collection"
-
-    static let image = belongsTo(NFTImageRecord.self)
-    static let assets = hasMany(NFTAssetRecord.self)
-}
-
-// MARK: - Database Migrations
-
-extension Database {
-    func setupNFTSchema() throws {
-        try create(table: NFTImageRecord.databaseTableName) { t in
-            t.column("id", .text).notNull().primaryKey()
-            t.column("imageUrl", .text).notNull()
-            t.column("previewImageUrl", .text).notNull()
-            t.column("originalSourceUrl", .text).notNull()
-        }
-
-        try create(table: NFTCollectionRecord.databaseTableName) { t in
-            t.column("id", .text).primaryKey()
-            t.column("walletId", .text)
-            t.column("name", .text).notNull()
-            t.column("description", .text)
-            t.column("chain", .text).notNull()
-            t.column("contractAddress", .text).notNull()
-            t.column("imageId", .text).references(NFTImageRecord.databaseTableName, onDelete: .cascade)
-            t.column("isVerified", .boolean).notNull()
-        }
-
-        try create(table: NFTAssetRecord.databaseTableName) { t in
-            t.column("id", .text).primaryKey()
-            t.column("collectionId", .text).references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
-            t.column("tokenId", .text).notNull()
-            t.column("tokenType", .text).notNull()
-            t.column("name", .text).notNull()
-            t.column("description", .text)
-            t.column("chain", .text).notNull()
-            t.column("imageId", .text).references(NFTImageRecord.databaseTableName, onDelete: .cascade)
-        }
-
-        try create(table: NFTAttributeRecord.databaseTableName) { t in
-            t.column("assetId", .text).references(NFTAssetRecord.databaseTableName, onDelete: .cascade).primaryKey()
-            t.column("name", .text).notNull()
-            t.column("value", .text).notNull()
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.NFT.id.name, .text).primaryKey()
+            $0.column(Columns.NFT.tokenId.name, .text).notNull()
+            $0.column(Columns.NFT.tokenType.name, .text).notNull()
+            $0.column(Columns.NFT.name.name, .text).notNull()
+            $0.column(Columns.NFT.description.name, .text)
+            $0.column(Columns.NFT.chain.name, .text).notNull()
+            $0.column(Columns.NFT.collectionId.name, .text)
+                .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
         }
     }
 }
 
-// MARK: - Extensions to Map to Database Records
-
-extension NFTImage {
-    func record(for id: String) -> NFTImageRecord {
-        NFTImageRecord(
+extension NFTAsset {
+    func record() -> NFTAssetRecord {
+        NFTAssetRecord(
             id: id,
-            imageUrl: imageUrl,
-            previewImageUrl: previewImageUrl,
-            originalSourceUrl: originalSourceUrl
+            collectionId: collectionId,
+            tokenId: tokenId,
+            tokenType: tokenType,
+            name: name,
+            description: description,
+            chain: chain
+        )
+    }
+}
+
+// MARK: - NFTAttributeRecord
+
+struct NFTAttributeRecord: Codable, FetchableRecord, PersistableRecord {
+    var assetId: String
+    var name: String
+    var value: String
+    
+    static let asset = belongsTo(NFTAssetRecord.self)
+}
+
+extension NFTAttributeRecord: CreateTable {
+    
+    static let databaseTableName = "nft_attributes"
+    
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.NFT.name.name, .text).notNull()
+            $0.column(Columns.NFT.value.name, .text).notNull()
+            $0.column(Columns.NFT.assetId.name, .text)
+                .notNull()
+                .references(NFTAssetRecord.databaseTableName, onDelete: .cascade)
+            $0.uniqueKey([
+                Columns.NFT.assetId.name,
+                Columns.NFT.name.name,
+                Columns.NFT.value.name
+            ])
+        }
+    }
+}
+
+extension NFTAttributeRecord {
+    func mapToNFTAttribute() -> NFTAttribute {
+        NFTAttribute(
+            name: name,
+            value: value
         )
     }
 }
@@ -120,37 +145,31 @@ extension NFTAttribute {
     }
 }
 
-extension NFTAsset {
-    func record(for collectionId: String, imageId: String) -> NFTAssetRecord {
-        NFTAssetRecord(
-            id: id,
-            collectionId: collectionId,
-            tokenId: tokenId,
-            tokenType: tokenType,
-            name: name,
-            description: description,
-            chain: chain,
-            imageId: imageId
-        )
-    }
+// MARK: - NFTImageRecord
+
+struct NFTImageRecord: Codable, FetchableRecord, PersistableRecord {
+    var id: String
+    var imageUrl: String
+    var previewImageUrl: String
+    var originalSourceUrl: String
+    
+    static let asset = belongsTo(NFTAssetRecord.self)
 }
 
-extension NFTCollection {
-    func record(walletId: String, imageId: String) -> NFTCollectionRecord {
-        NFTCollectionRecord(
-            id: id,
-            walletId: walletId,
-            name: name,
-            description: description,
-            chain: chain,
-            contractAddress: contractAddress,
-            imageId: imageId,
-            isVerified: isVerified
-        )
+extension NFTImageRecord: CreateTable {
+    
+    static let databaseTableName = "nft_images"
+
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.NFT.imageUrl.name, .text).notNull()
+            $0.column(Columns.NFT.previewImageUrl.name, .text).notNull()
+            $0.column(Columns.NFT.originalSourceUrl.name, .text).notNull()
+            $0.column(Columns.NFT.id.name, .text).notNull()
+                .references(NFTAssetRecord.databaseTableName, onDelete: .cascade)
+        }
     }
 }
-
-// MARK: - Extensions to Map from Database Records
 
 extension NFTImageRecord {
     func mapToNFTImage() -> NFTImage {
@@ -162,41 +181,58 @@ extension NFTImageRecord {
     }
 }
 
-extension NFTAttributeRecord {
-    func mapToNFTAttribute() -> NFTAttribute {
-        NFTAttribute(
-            name: name,
-            value: value
+extension NFTImage {
+    func nftRecord(for id: String) -> NFTImageRecord {
+        NFTImageRecord(
+            id: id,
+            imageUrl: imageUrl,
+            previewImageUrl: previewImageUrl,
+            originalSourceUrl: originalSourceUrl
+        )
+    }
+    
+    func collectionRecord(for id: String) -> NFTCollectionImageRecord {
+        NFTCollectionImageRecord(
+            id: id,
+            imageUrl: imageUrl,
+            previewImageUrl: previewImageUrl,
+            originalSourceUrl: originalSourceUrl
         )
     }
 }
 
-extension NFTAssetRecord {
-    func mapToNFTAsset(image: NFTImage, attributes: [NFTAttribute]) -> NFTAsset {
-        NFTAsset(
-            id: id,
-            collectionId: collectionId,
-            tokenId: tokenId,
-            tokenType: tokenType,
-            name: name,
-            description: description,
-            chain: chain,
-            image: image,
-            attributes: attributes
-        )
+// MARK: - NFTCollectionImageRecord
+
+struct NFTCollectionImageRecord: Codable, FetchableRecord, PersistableRecord {
+    var id: String
+    var imageUrl: String
+    var previewImageUrl: String
+    var originalSourceUrl: String
+
+    static let collection = belongsTo(NFTCollectionRecord.self)
+}
+
+extension NFTCollectionImageRecord: CreateTable {
+    
+    static let databaseTableName = "nft_collection_images"
+    
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.NFT.imageUrl.name, .text).notNull()
+            $0.column(Columns.NFT.previewImageUrl.name, .text).notNull()
+            $0.column(Columns.NFT.originalSourceUrl.name, .text).notNull()
+            $0.column(Columns.NFT.id.name, .text).notNull()
+                .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
+        }
     }
 }
 
-extension NFTCollectionRecord {
-    func mapToNFTCollection(image: NFTImage, assets: [NFTAsset]) -> NFTCollection {
-        NFTCollection(
-            id: id,
-            name: name,
-            description: description,
-            chain: chain,
-            contractAddress: contractAddress,
-            image: image,
-            isVerified: isVerified
+extension NFTCollectionImageRecord {
+    func mapToNFTImage() -> NFTImage {
+        NFTImage(
+            imageUrl: imageUrl,
+            previewImageUrl: previewImageUrl,
+            originalSourceUrl: originalSourceUrl
         )
     }
 }

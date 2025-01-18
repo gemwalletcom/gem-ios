@@ -140,4 +140,23 @@ struct Columns {
         static let chain = Column("chain")
         static let walletId = Column("walletId")
     }
+    
+    struct NFT {
+        static let id = Column("id")
+        static let imageUrl = Column("imageUrl")
+        static let previewImageUrl = Column("previewImageUrl")
+        static let originalSourceUrl = Column("originalSourceUrl")
+        static let assetId = Column("assetId")
+        static let name = Column("name")
+        static let value = Column("value")
+        static let collectionId = Column("collectionId")
+        static let tokenId = Column("tokenId")
+        static let tokenType = Column("tokenType")
+        static let description = Column("description")
+        static let chain = Column("chain")
+        static let imageId = Column("imageId")
+        static let walletId = Column("walletId")
+        static let contractAddress = Column("contractAddress")
+        static let isVerified = Column("isVerified")
+    }
 }
