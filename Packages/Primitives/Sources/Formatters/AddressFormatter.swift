@@ -13,7 +13,7 @@ public struct AddressFormatter {
     private let style: Self.Style
     private let address: String
     private let chain: Chain?
-    private let firstDefault = 4
+    private let shownNumberOfCharacters = 5
 
     public init(
         style: Self.Style = .short,
@@ -26,27 +26,26 @@ public struct AddressFormatter {
     }
     
     private var first: Int {
-        guard let chain = chain else { return firstDefault }
+        guard let chain = chain else { return shownNumberOfCharacters }
         if let _ = EVMChain(rawValue: chain.rawValue) {
-            return 6
+            return shownNumberOfCharacters + 2
         }
         switch chain {
         case .bitcoin,
-            .aptos:
-            return 6
+            .aptos: return 6
         default:
-            return firstDefault
+            return shownNumberOfCharacters
         }
     }
     
     public func value() -> String {
         switch style {
         case .short:
-            return address.truncate(first: first, last: 4)
+            return address.truncate(first: first, last: shownNumberOfCharacters)
         case .full:
             return address
         case .extra(let extra):
-            return address.truncate(first: first + extra, last: 4 + extra)
+            return address.truncate(first: first + extra, last: shownNumberOfCharacters + extra)
         }
     }
 }
