@@ -202,7 +202,7 @@ public final class LocalKeystore: Keystore {
     
     public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
-        return try walletKeyStore.sign(message: message, walletId: wallet.id, password: password, chain: chain)
+        return try walletKeyStore.sign(message: message, walletId: wallet.id, type: wallet.type, password: password, chain: chain)
     }
     
     public func destroy() throws {
