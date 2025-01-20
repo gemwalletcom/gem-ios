@@ -43,16 +43,18 @@ struct AmountScene: View {
                 .focused($focusedField, equals: .amount)
 
                 if model.isBalanceViewEnabled {
-                    AssetBalanceView(
-                        image: model.assetImage,
-                        title: model.assetName,
-                        balance: model.balanceText,
-                        secondary: {
-                            Button(Localized.Transfer.max, action: useMax)
-                                .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
-                                .fixedSize()
-                        }
-                    )
+                    Section {
+                        AssetBalanceView(
+                            image: model.assetImage,
+                            title: model.assetName,
+                            balance: model.balanceText,
+                            secondary: {
+                                Button(Localized.Transfer.max, action: useMax)
+                                    .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                    .fixedSize()
+                            }
+                        )
+                    }
                 }
 
                 switch model.type {
