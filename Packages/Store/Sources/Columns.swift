@@ -9,6 +9,7 @@ struct Columns {
         static let price = Column("price")
         static let priceChangePercentage24h = Column("priceChangePercentage24h")
         static let marketCap = Column("marketCap")
+        static let marketCapFdv = Column("marketCapFdv")
         static let marketCapRank = Column("marketCapRank")
         static let totalVolume = Column("totalVolume")
         static let circulatingSupply = Column("circulatingSupply")
