@@ -550,7 +550,7 @@
 		83A188472D1080F000E571F0 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D891DD3C2D3EDD7300241222 /* Stakinng */,
+				D891DD3C2D3EDD7300241222 /* Staking */,
 				83A188492D10811E00E571F0 /* Types */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 			);
@@ -1143,12 +1143,12 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
-		D891DD3C2D3EDD7300241222 /* Stakinng */ = {
+		D891DD3C2D3EDD7300241222 /* Staking */ = {
 			isa = PBXGroup;
 			children = (
 				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
-			path = Stakinng;
+			path = Staking;
 			sourceTree = "<group>";
 		};
 		D8BAC9572BD0CDBE001608BC /* Navigation */ = {
