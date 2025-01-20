@@ -174,7 +174,15 @@ public struct Migrations {
                 $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
             }
         }
-
+        
+        migrator.registerMigration("Add nft tables setup") { db in
+            try? NFTCollectionRecord.create(db: db)
+            try? NFTAssetRecord.create(db: db)
+            try? NFTAttributeRecord.create(db: db)
+            try? NFTImageRecord.create(db: db)
+            try? NFTCollectionImageRecord.create(db: db)
+        }
+    
         try migrator.migrate(dbQueue)
     }
 }
