@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 import BigInt
 
-typealias TransferDataAction = ((TransferData) -> Void)?
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 struct TransferDataMetadata {

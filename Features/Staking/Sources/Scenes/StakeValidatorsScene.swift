@@ -4,15 +4,17 @@ import SwiftUI
 import Components
 import Style
 import Primitives
-import Staking
 
-struct StakeValidatorsScene: View {
-    
+public struct StakeValidatorsScene: View {
     @Environment(\.dismiss) private var dismiss
     
-    @StateObject var model: StakeValidatorsViewModel
-    
-    var body: some View {
+    @StateObject private var model: StakeValidatorsViewModel
+
+    public init(model: StakeValidatorsViewModel) {
+        _model = StateObject(wrappedValue: model)
+    }
+
+    public var body: some View {
         List {
             ForEach(model.list) { section in
                 Section(section.section) {

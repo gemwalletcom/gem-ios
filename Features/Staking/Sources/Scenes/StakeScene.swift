@@ -1,43 +1,29 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import GRDB
 import GRDBQuery
 import Store
 import Primitives
 import Components
-import Style
 import Localization
-import ChainService
-import Staking
 import InfoSheet
 
-struct StakeScene: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.stakeService) private var stakeService
-
+public struct StakeScene: View {
     @State private var model: StakeViewModel
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    
+
     @Query<StakeDelegationsRequest>
     private var delegations: [Delegation]
     private var delegationsModel: [StakeDelegationViewModel] {
         delegations.map { StakeDelegationViewModel(delegation: $0) }
     }
-    private let onComplete: VoidAction
 
-    init(
-        model: StakeViewModel,
-        onComplete: VoidAction
-    ) {
+    public init(model: StakeViewModel) {
         _model = State(initialValue: model)
         _delegations = Query(model.request)
-        self.onComplete = onComplete
     }
-    
-    var body: some View {
+
+    public var body: some View {
         List {
             stakeInfoSection
             stakeSection
@@ -47,19 +33,6 @@ struct StakeScene: View {
             await model.fetch()
         }
         .navigationTitle(model.title)
-        .navigationDestination(for: TransferData.self) {
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    data: $0,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.recipientData.asset.chain),
-                    walletsService: walletsService,
-                    onComplete: onComplete
-                )
-            )
-        }
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
@@ -74,7 +47,6 @@ struct StakeScene: View {
 // MARK: - UI Components
 
 extension StakeScene {
-    
     private var stakeSection: some View {
         Section(Localized.Common.manage) {
             NavigationCustomLink(
@@ -151,23 +123,5 @@ extension StakeScene {
 extension StakeScene {
     private func fetch() async {
         await model.fetch()
-    }
-}
-
-// MARK: - Previwes
-
-#Preview {
-    NavigationStack {
-        StakeScene(
-            model: .init(
-                wallet: .main,
-                chain: .ethereum,
-                stakeService: .main,
-                onTransferAction: .none,
-                onAmountInputAction: .none
-            ),
-            onComplete: {}
-        )
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

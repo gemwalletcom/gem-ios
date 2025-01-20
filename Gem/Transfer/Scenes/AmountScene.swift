@@ -10,6 +10,7 @@ import Localization
 import class Staking.StakeValidatorsViewModel
 import struct Staking.StakeValidatorViewModel
 import struct Staking.ValidatorView
+import struct Staking.StakeValidatorsScene
 
 struct AmountScene: View {
 

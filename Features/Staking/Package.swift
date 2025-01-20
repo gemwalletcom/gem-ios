@@ -18,8 +18,13 @@ let package = Package(
         .package(name: "Components", path: "../Components"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
         .package(name: "Localization", path: "../Localization"),
-        .package(name: "StakeService", path: "../../Services/StakeService"),
+        .package(name: "StakeService", path: "../StakeService"),
+        .package(name: "ExplorerService", path: "../ExplorerService"),
         .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Store", path: "../Store"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
+        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
+
     ],
     targets: [
         .target(
@@ -30,7 +35,11 @@ let package = Package(
                 "GemstonePrimitives",
                 "Localization",
                 "StakeService",
-                "Preferences"
+                "ExplorerService",
+                "Preferences",
+                "Store",
+                "InfoSheet",
+                "PrimitivesComponents"
             ],
             path: "Sources"
         ),

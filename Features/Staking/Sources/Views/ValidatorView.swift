@@ -9,9 +9,7 @@ public struct ValidatorView: View {
     
     private let model: StakeValidatorViewModel
     
-    public init(
-        model: StakeValidatorViewModel
-    ) {
+    public init(model: StakeValidatorViewModel) {
         self.model = model
     }
     
