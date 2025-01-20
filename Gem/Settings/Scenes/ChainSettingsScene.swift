@@ -8,6 +8,7 @@ import Components
 import Style
 import Localization
 import ChainSettings
+import PrimitivesComponents
 
 struct ChainSettingsScene: View {
     @Environment(\.nodeService) private var nodeService

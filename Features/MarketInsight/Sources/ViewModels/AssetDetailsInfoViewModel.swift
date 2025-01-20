@@ -7,6 +7,7 @@ import Gemstone
 import Store
 import ExplorerService
 import Style
+import Preferences
 
 public struct AssetDetailsInfoViewModel {
     
@@ -22,7 +23,7 @@ public struct AssetDetailsInfoViewModel {
     public init(
         priceData: PriceData,
         explorerService: ExplorerService = .standart,
-        currencyFormatter: CurrencyFormatter
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     ) {
         self.priceData = priceData
         self.explorerService = explorerService

@@ -4,7 +4,6 @@ import SwiftUI
 import Style
 
 struct ChartPriceView: View {
-    
     let date: String?
     let price: String
     let priceChange: String?

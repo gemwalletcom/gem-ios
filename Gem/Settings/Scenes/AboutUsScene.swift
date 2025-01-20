@@ -8,6 +8,7 @@ import GemstonePrimitives
 import Components
 import Style
 import Localization
+import PrimitivesComponents
 
 struct AboutUsScene: View {
 

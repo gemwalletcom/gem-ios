@@ -4,21 +4,18 @@ import Foundation
 import Primitives
 import Components
 import Store
-import Gemstone
 import Style
 import Localization
-import MarketInsight
 import PrimitivesComponents
 import PriceService
 import Preferences
 
 @MainActor
 @Observable
-class ChartsViewModel {
+public final class ChartsViewModel {
     private let service: ChartService
     private let priceService: PriceService
     private let assetModel: AssetViewModel
-    private let assetsService: AssetsService
 
     private let preferences: Preferences = .standard
 
@@ -54,16 +51,14 @@ class ChartsViewModel {
     var emptyTitle: String { Localized.Common.notAvailable }
     var errorTitle: String { Localized.Errors.errorOccured }
 
-    init(
+    public init(
         service: ChartService = ChartService(),
         priceService: PriceService,
-        assetsService: AssetsService,
         assetModel: AssetViewModel,
         currentPeriod: ChartPeriod = ChartValuesViewModel.defaultPeriod
     ) {
         self.service = service
         self.priceService = priceService
-        self.assetsService = assetsService
         self.assetModel = assetModel
         self.currentPeriod = currentPeriod
     }
@@ -72,7 +67,7 @@ class ChartsViewModel {
 // MARK: - Business Logic
 
 extension ChartsViewModel {
-    func fetch() async {
+    public func fetch() async {
         state = .loading
         do {
             let values = try await service.getCharts(

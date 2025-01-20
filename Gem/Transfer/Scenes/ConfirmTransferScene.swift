@@ -9,6 +9,7 @@ import ChainService
 import InfoSheet
 import Transfer
 import NodeService
+import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
