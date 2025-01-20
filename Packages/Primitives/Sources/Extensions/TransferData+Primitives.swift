@@ -3,6 +3,8 @@
 import Foundation
 import BigInt
 
+public typealias TransferDataAction = ((TransferData) -> Void)?
+
 extension TransferData {
     public func updateValue(_ newValue: BigInt) -> TransferData {
         TransferData(

@@ -2,23 +2,20 @@
 
 import Foundation
 import Primitives
-import Blockchain
 import Store
 import Components
 import BigInt
 import GemstonePrimitives
 import SwiftUI
 import Localization
-import Transfer
-import Staking
 import StakeService
-import typealias Staking.AmountInputAction
 import InfoSheet
 import PrimitivesComponents
 
+@MainActor
 @Observable
-class StakeViewModel {
-    let wallet: Wallet
+public final class StakeViewModel {
+    private let wallet: Wallet
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
@@ -30,7 +27,7 @@ class StakeViewModel {
     let onTransferAction: TransferDataAction
     let onAmountInputAction: AmountInputAction
 
-    init(
+    public init(
         wallet: Wallet,
         chain: Chain,
         stakeService: StakeService,
@@ -135,21 +132,14 @@ class StakeViewModel {
 
 extension StakeViewModel {
     func fetch() async {
-        await MainActor.run { [self] in
-            delegatitonsState = .loading
-        }
-
+        delegatitonsState = .loading
         do {
             let acccount = try wallet.account(for: chain)
             try await stakeService.update(walletId: wallet.id, chain: chain, address: acccount.address)
-            await MainActor.run { [self] in
-                delegatitonsState = .loaded(true)
-            }
+            delegatitonsState = .loaded(true)
         } catch {
             print("Stake scene fetch error: \(error)")
-            await MainActor.run { [self] in
-                delegatitonsState = .error(error)
-            }
+            delegatitonsState = .error(error)
         }
     }
 

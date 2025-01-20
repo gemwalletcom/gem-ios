@@ -6,7 +6,6 @@ import SwiftUI
 import Style
 import Components
 import Localization
-import GemstonePrimitives
 import StakeService
 
 public struct StakeDetailViewModel {
