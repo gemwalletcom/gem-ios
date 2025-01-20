@@ -82,6 +82,19 @@ final class LocalKeystoreTests {
     }
 
     @Test
+    func testSignSolanaMessage() throws {
+        let keystore = LocalKeystore.mock()
+        let wallet = try keystore.importWallet(name: "Test Solana", type: .phrase(words: words, chains: [.solana]))
+
+        let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
+        let message = SignMessage(type: .base58, data: Data(text.utf8))
+        let signature = try keystore.sign(wallet: wallet, message: message, chain: .solana)
+        let encoded = Base58.encodeNoCheck(data: signature)
+
+        #expect(encoded == "5ZRaXVuDePowJjZmKaMjfcuqBVZet6e8QiCjTkGXBn7xhCvoEswUKXiGs2wmPxcqTfJUH28eCC91J1vLSjANNM9v")
+    }
+
+    @Test
     func testImportWIF() {
         #expect(throws: Never.self) {
             let wif = "L1NGZutRxaVotZSfRzGnFYUj42LjEL66ZdAeSDA8CbyASZWizHLA"
