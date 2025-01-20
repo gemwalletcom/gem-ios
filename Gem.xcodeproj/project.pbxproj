@@ -550,7 +550,7 @@
 		83A188472D1080F000E571F0 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D891DD3C2D3EDD7300241222 /* Staking */,
+				D891DD3D2D3EDDF100241222 /* Features */,
 				83A188492D10811E00E571F0 /* Types */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 			);
@@ -652,7 +652,6 @@
 			children = (
 				D85620282AAB89B000D65D81 /* Core */,
 				83E041562D0AFCA90031D4BC /* Root */,
-				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 				C3AD581A299C5E13006BC902 /* Wallet */,
 				C3340B7B2A4D03D600884D48 /* Transfer */,
 				D8DC1AF82C1139B900697D0A /* Receive */,
@@ -1149,6 +1148,15 @@
 				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
 			path = Staking;
+			sourceTree = "<group>";
+		};
+		D891DD3D2D3EDDF100241222 /* Features */ = {
+			isa = PBXGroup;
+			children = (
+				D891DD3C2D3EDD7300241222 /* Staking */,
+				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
+			);
+			path = Features;
 			sourceTree = "<group>";
 		};
 		D8BAC9572BD0CDBE001608BC /* Navigation */ = {
