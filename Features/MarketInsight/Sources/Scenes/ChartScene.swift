@@ -75,7 +75,7 @@ public struct ChartScene: View {
                     ForEach(priceDataModel.marketValues, id: \.title) { link in
                         if let url = link.url {
                             NavigationCustomLink(
-                                with: ListItemView(title: link.title)
+                                with: ListItemView(title: link.title, subtitle: link.subtitle)
                             ) {
                                 openURL(url)
                             }
