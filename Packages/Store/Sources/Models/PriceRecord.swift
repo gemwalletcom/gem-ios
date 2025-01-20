@@ -13,6 +13,7 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var priceChangePercentage24h: Double
     
     public var marketCap: Double?
+    public var marketCapFdv: Double?
     public var marketCapRank: Int?
     public var totalVolume: Double?
     public var circulatingSupply: Double?
@@ -30,6 +31,7 @@ extension PriceRecord: CreateTable {
             $0.column(Columns.Price.priceChangePercentage24h.name, .numeric)
             
             $0.column(Columns.Price.marketCap.name, .double)
+            $0.column(Columns.Price.marketCapFdv.name, .double)
             $0.column(Columns.Price.marketCapRank.name, .integer)
             $0.column(Columns.Price.totalVolume.name, .double)
             $0.column(Columns.Price.circulatingSupply.name, .double)
@@ -72,6 +74,7 @@ extension PriceRecord {
     func mapToMarket() -> AssetMarket {
         AssetMarket(
             marketCap: marketCap,
+            marketCapFdv: marketCapFdv,
             marketCapRank: marketCapRank?.asInt32,
             totalVolume: totalVolume,
             circulatingSupply: circulatingSupply,

@@ -6,14 +6,16 @@ import Foundation
 
 public struct AssetMarket: Codable, Sendable {
 	public let marketCap: Double?
+	public let marketCapFdv: Double?
 	public let marketCapRank: Int32?
 	public let totalVolume: Double?
 	public let circulatingSupply: Double?
 	public let totalSupply: Double?
 	public let maxSupply: Double?
 
-	public init(marketCap: Double?, marketCapRank: Int32?, totalVolume: Double?, circulatingSupply: Double?, totalSupply: Double?, maxSupply: Double?) {
+	public init(marketCap: Double?, marketCapFdv: Double?, marketCapRank: Int32?, totalVolume: Double?, circulatingSupply: Double?, totalSupply: Double?, maxSupply: Double?) {
 		self.marketCap = marketCap
+		self.marketCapFdv = marketCapFdv
 		self.marketCapRank = marketCapRank
 		self.totalVolume = totalVolume
 		self.circulatingSupply = circulatingSupply

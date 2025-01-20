@@ -167,6 +167,12 @@ public struct Migrations {
                 $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
             }
         }
+        
+        migrator.registerMigration("Add marketCapFdv table \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: Columns.Price.marketCapFdv.name, .double)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }
