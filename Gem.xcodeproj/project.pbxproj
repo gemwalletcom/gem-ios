@@ -550,6 +550,7 @@
 		83A188472D1080F000E571F0 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				D891DD3C2D3EDD7300241222 /* Stakinng */,
 				83A188492D10811E00E571F0 /* Types */,
 				830FDA442C224316003DA605 /* NavigationStateManager.swift */,
 			);
@@ -657,7 +658,6 @@
 				D8DC1AF82C1139B900697D0A /* Receive */,
 				D8DC1AEB2C11376000697D0A /* Wallets */,
 				D810F3752AF1AB680006D9C6 /* Swap */,
-				D810F3712AF1AB300006D9C6 /* Stake */,
 				C370288E2A996BA8009AE123 /* Asset */,
 				C3D1C4FF2A43AAD1006E8EEA /* Transactions */,
 				C3CF3B8229AB189700E96586 /* Assets */,
@@ -1026,14 +1026,6 @@
 			path = Types;
 			sourceTree = "<group>";
 		};
-		D810F3712AF1AB300006D9C6 /* Stake */ = {
-			isa = PBXGroup;
-			children = (
-				D8C4A36E2C8CE065006FABE8 /* Navigation */,
-			);
-			path = Stake;
-			sourceTree = "<group>";
-		};
 		D810F3752AF1AB680006D9C6 /* Swap */ = {
 			isa = PBXGroup;
 			children = (
@@ -1151,6 +1143,14 @@
 			path = Navigation;
 			sourceTree = "<group>";
 		};
+		D891DD3C2D3EDD7300241222 /* Stakinng */ = {
+			isa = PBXGroup;
+			children = (
+				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
+			);
+			path = Stakinng;
+			sourceTree = "<group>";
+		};
 		D8BAC9572BD0CDBE001608BC /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
@@ -1166,14 +1166,6 @@
 				D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */,
 				D8C4A3772C8D4D97006FABE8 /* RecipientNavigationView.swift */,
 				D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */,
-			);
-			path = Navigation;
-			sourceTree = "<group>";
-		};
-		D8C4A36E2C8CE065006FABE8 /* Navigation */ = {
-			isa = PBXGroup;
-			children = (
-				D8C4A3752C8CF956006FABE8 /* StakeNavigationView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
