@@ -83,9 +83,7 @@ final class LocalKeystoreTests {
 
     @Test
     func testSignSolanaMessage() throws {
-        let words = "stick legend attitude middle cave habit shy hobby round thing tilt ostrich alter sad mad moon weekend sport reflect wheat another pyramid captain broom".split(separator: " ").map(String.init)
         let keystore = LocalKeystore.mock()
-        let base58 = "5bFXeAgaUCGcCYYF1W4JgLtSk9msXeo6ponmZfZWJV5UtYZ8xsJQVaRWRwVWsn6KxUqF4Jg26DzZ8FGojZ6PHpzK"
         let wallet = try keystore.importWallet(name: "Test Solana", type: .phrase(words: words, chains: [.solana]))
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
@@ -93,7 +91,7 @@ final class LocalKeystoreTests {
         let signature = try keystore.sign(wallet: wallet, message: message, chain: .solana)
         let encoded = Base58.encodeNoCheck(data: signature)
 
-        #expect(encoded == "3hLxQP3sV5k8Lats7Ao8tvViZzGnPgdaaxMfrQnvmNx3hj9BNDXq2w1ES7ZWMtNwxYzZ6ojim4hK9FgbVXnLpETb")
+        #expect(encoded == "5ZRaXVuDePowJjZmKaMjfcuqBVZet6e8QiCjTkGXBn7xhCvoEswUKXiGs2wmPxcqTfJUH28eCC91J1vLSjANNM9v")
     }
 
     @Test
