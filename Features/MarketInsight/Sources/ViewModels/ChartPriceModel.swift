@@ -3,8 +3,8 @@
 import Foundation
 import Primitives
 import SwiftUI
-import MarketInsight
 import PrimitivesComponents
+import Preferences
 
 struct ChartPriceModel {
     
@@ -13,9 +13,9 @@ struct ChartPriceModel {
     let price: Double
     let priceChange: Double
     
-    private let formatterPrice = CurrencyFormatter.currency()
-    private let formatterPercent = CurrencyFormatter.percent()
-    
+    private let formatterPrice = CurrencyFormatter(currencyCode: Preferences.standard.currency)
+    private let formatterPercent = CurrencyFormatter(type: .percent, currencyCode: Preferences.standard.currency)
+
     var dateText: String? {
         if let date {
             return ChartDateFormatter(period: period, date: date).dateText
@@ -28,7 +28,7 @@ struct ChartPriceModel {
     }
     
     var priceChangeText: String? {
-        return formatterPercent.string(priceChange)
+        formatterPercent.string(priceChange)
     }
     
     var priceChangeTextColor: Color {

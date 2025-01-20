@@ -8,6 +8,7 @@ import PrimitivesComponents
 import PriceAlerts
 import WalletConnector
 import Preferences
+import MarketInsight
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -73,7 +74,6 @@ struct SettingsNavigationStack: View {
                 ChartScene(
                     model: ChartsViewModel(
                         priceService: walletsService.priceService,
-                        assetsService: walletsService.assetsService,
                         assetModel: AssetViewModel(asset: scene.asset)
                     )
                 )

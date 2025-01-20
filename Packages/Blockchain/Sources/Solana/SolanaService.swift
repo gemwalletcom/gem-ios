@@ -123,7 +123,7 @@ extension SolanaService {
     private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
         let gasLimit = switch type {
         case .transfer, .stake: BigInt(100_000)
-        case .generic, .swap: BigInt(1_400_000)
+        case .generic, .swap: BigInt(420_000)
         case .account: fatalError()
         }
         let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
@@ -213,12 +213,12 @@ extension SolanaService {
 extension SolanaService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         // filter out any large fees
-        let priorityFees = try await getPrioritizationFees().map { $0.asInt }
+        let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 10_000 : 100_000
-        case .stake: 100_000
-        case .generic, .swap: 250_000
+        case .transfer(let asset): asset.type == .native ? 100_000 : 1_000_000
+        case .stake: 1_500_000
+        case .generic, .swap: 2_500_000
         case .account: fatalError()
         }
         
@@ -239,9 +239,9 @@ extension SolanaService: ChainFeeRateFetchable {
         }()
         
         return [
-            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 4)),
-            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
-            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 2)),
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 5)),
         ]
     }
 }

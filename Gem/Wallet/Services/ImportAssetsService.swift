@@ -7,6 +7,7 @@ import Settings
 import GemAPI
 import NodeService
 import Preferences
+import GemstonePrimitives
 
 struct ImportAssetsService {
     let nodeService: NodeService
@@ -34,6 +35,8 @@ struct ImportAssetsService {
         if localAssetsVersion.count != assetIds.count {
             let assets = chains.map {
                 let score = AssetScore.defaultScore(chain: $0.asset.chain)
+                let isStakable = GemstoneConfig.shared.getChainConfig(chain: $0.asset.chain.rawValue).isStakeSupported
+                let isSwapable = GemstoneConfig.shared.getChainConfig(chain: $0.asset.chain.rawValue).isSwapSupported
                 
                 return AssetBasic(
                     asset: $0.asset,
@@ -41,8 +44,8 @@ struct ImportAssetsService {
                         isEnabled: true,
                         isBuyable: score.rank >= 40,
                         isSellable: false,
-                        isSwapable: false,
-                        isStakeable: false,
+                        isSwapable: isSwapable,
+                        isStakeable: isStakable,
                         stakingApr: .none
                     ),
                     score: score
@@ -50,6 +53,8 @@ struct ImportAssetsService {
             }
             try assetStore.add(assets: assets)
         }
+        
+        try assetStore.setAssetIsStakeable(for: chains.filter { $0.isStakeSupported }.map { $0.id }, value: true)
     }
 
     func updateFiatAssets() async throws {

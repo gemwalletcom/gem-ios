@@ -97,9 +97,9 @@ public final class FiatSceneViewModel {
         let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote, formatter: currencyFormatter).amountText
         return "≈ \(quoteAmount)"
     }
-
+    
     func showFiatTypePicker(_ assetData: AssetData) -> Bool {
-        !assetData.balance.available.isZero
+        assetData.balance.available > 0 && assetData.metadata.isSellEnabled
     }
 
     func rateValue(for quote: FiatQuote) -> String {

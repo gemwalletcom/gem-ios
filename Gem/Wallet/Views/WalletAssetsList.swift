@@ -6,6 +6,7 @@ import Primitives
 import Components
 import Style
 import Localization
+import PrimitivesComponents
 
 struct WalletAssetsList: View {
     let assets: [AssetData]

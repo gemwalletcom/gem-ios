@@ -30,7 +30,7 @@ class AssetsService {
             AssetBasic(
                 asset: asset,
                 properties: AssetProperties.defaultValue(assetId: asset.id),
-                score: AssetScore(rank: 10)
+                score: AssetScore.defaultValue(assetId: asset.id)
             )
         ])
         try addBalanceIfMissing(walletId: walletId, assetId: asset.id)
@@ -165,7 +165,7 @@ class AssetsService {
             AssetBasic(
                 asset: $0,
                 properties: AssetProperties.defaultValue(assetId: $0.id),
-                score: AssetScore(rank: 12)
+                score: AssetScore.defaultValue(assetId: $0.id)
             )
         }
     }

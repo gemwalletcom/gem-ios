@@ -7,11 +7,11 @@ import Style
 import Primitives
 import Localization
 
-struct ContextMenuCopy: View {
-    let title: String
-    let value: String
+public struct ContextMenuCopy: View {
+    private let title: String
+    private let value: String
 
-    init(
+    public init(
         title: String = Localized.Common.copy,
         value: String
     ) {
@@ -19,7 +19,7 @@ struct ContextMenuCopy: View {
         self.value = value
     }
 
-    var body: some View {
+    public var body: some View {
         Button(action: {
             UIPasteboard.general.string = value
         }) {
@@ -29,21 +29,30 @@ struct ContextMenuCopy: View {
     }
 }
 
-struct ContextMenuDelete: View {
-    let action: VoidAction
-    
-    var body: some View {
+public struct ContextMenuDelete: View {
+    private let action: VoidAction
+
+    public init(action: VoidAction) {
+        self.action = action
+    }
+
+    public var body: some View {
         Button(role: .destructive) { action?() } label: {
             Label(Localized.Common.delete, systemImage: SystemImage.delete)
         }
     }
 }
 
-struct ContextMenuPin: View {
-    let isPinned: Bool
-    let action: VoidAction
+public struct ContextMenuPin: View {
+    private let isPinned: Bool
+    private let action: VoidAction
 
-    var body: some View {
+    public init(isPinned: Bool, action: VoidAction) {
+        self.isPinned = isPinned
+        self.action = action
+    }
+
+    public var body: some View {
         Button { action?() } label: {
             Label(label, systemImage: image)
         }
@@ -58,12 +67,18 @@ struct ContextMenuPin: View {
     }
 }
 
-struct ContextMenuItem: View {
-    let title: String
-    let image: String
-    let action: VoidAction
-    
-    var body: some View {
+public struct ContextMenuItem: View {
+    private let title: String
+    private let image: String
+    private let action: VoidAction
+
+    public init(title: String, image: String, action: VoidAction) {
+        self.title = title
+        self.image = image
+        self.action = action
+    }
+
+    public var body: some View {
         Button(role: .none) { action?() } label: {
             Label(title, systemImage: image)
         }
