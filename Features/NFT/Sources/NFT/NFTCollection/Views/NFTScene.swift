@@ -10,7 +10,7 @@ import Components
 import DeviceService
 import Style
 
-public struct NFTCollectionScene: View {
+public struct NFTScene: View {
     private var gridItems: [GridItem] {
         [
             GridItem(spacing: Spacing.medium),
@@ -35,7 +35,9 @@ public struct NFTCollectionScene: View {
                 case .collections:
                     nftCollectionView
                 case .nft(let collectionId):
-                    buildNFTAssetView(collectionId: collectionId)
+                    if let nftData = nftDataList.first(where: { $0.collection.id == collectionId }) {
+                        buildNFTAssetView(nftData: nftData)
+                    }
                 }
             }
         }
@@ -51,9 +53,9 @@ public struct NFTCollectionScene: View {
         })
         .padding(.horizontal, Spacing.medium)
         .background(Colors.grayBackground)
-        .navigationBarTitleDisplayMode(.large)
+        .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title(list: nftDataList))
-        .taskOnce(onTaskOnce)
+        .taskOnce(fetch)
     }
     
     private var nftCollectionView: some View {
@@ -70,26 +72,22 @@ public struct NFTCollectionScene: View {
     }
     
     @ViewBuilder
-    private func buildNFTAssetView(collectionId: String) -> some View {
-        if let nftData = nftDataList.first(where: { $0.collection.id == collectionId }) {
-            ForEach(nftData.assets) { asset in
-                NavigationLink(value: Scenes.NFTDetails(collection: nftData.collection, asset: asset)) {
-                    GridPosterView(
-                        assetImage: AssetImage(
-                            imageURL: URL(string: asset.image.imageUrl),
-                            placeholder: nil,
-                            chainPlaceholder: nil
-                        ),
-                        title: asset.name
-                    )
-                }
+    private func buildNFTAssetView(nftData: NFTData) -> some View {
+        ForEach(nftData.assets) { asset in
+            NavigationLink(value: Scenes.NFTDetails(collection: nftData.collection, asset: asset)) {
+                GridPosterView(
+                    assetImage: AssetImage(
+                        imageURL: URL(string: asset.image.imageUrl),
+                        placeholder: nil,
+                        chainPlaceholder: nil
+                    ),
+                    title: asset.name
+                )
             }
-        } else {
-            EmptyView()
         }
     }
     
-    private func onTaskOnce() {
+    private func fetch() {
         Task {
             await model.taskOnce()
         }

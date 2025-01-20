@@ -59,7 +59,7 @@ struct WalletNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.NFTCollectionScene.self) {
-                NFTCollectionScene(
+                NFTScene(
                     model: NFTCollectionViewModel(
                         wallet: model.wallet,
                         sceneStep: $0.sceneStep,

@@ -23,13 +23,13 @@ extension NFTCollectionRecord: CreateTable {
 
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFT.walletId.name, .text).notNull()
-            $0.column(Columns.NFT.id.name, .text).primaryKey()
-            $0.column(Columns.NFT.name.name, .text).notNull()
-            $0.column(Columns.NFT.description.name, .text)
-            $0.column(Columns.NFT.chain.name, .text).notNull()
-            $0.column(Columns.NFT.contractAddress.name, .text).notNull()
-            $0.column(Columns.NFT.isVerified.name, .boolean).notNull()
+            $0.column(Columns.NFTCollection.walletId.name, .text).notNull()
+            $0.column(Columns.NFTCollection.id.name, .text).primaryKey()
+            $0.column(Columns.NFTCollection.name.name, .text).notNull()
+            $0.column(Columns.NFTCollection.description.name, .text)
+            $0.column(Columns.NFTCollection.chain.name, .text).notNull()
+            $0.column(Columns.NFTCollection.contractAddress.name, .text).notNull()
+            $0.column(Columns.NFTCollection.isVerified.name, .boolean).notNull()
         }
     }
 }
@@ -70,13 +70,13 @@ extension NFTAssetRecord: CreateTable {
 
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFT.id.name, .text).primaryKey()
-            $0.column(Columns.NFT.tokenId.name, .text).notNull()
-            $0.column(Columns.NFT.tokenType.name, .text).notNull()
-            $0.column(Columns.NFT.name.name, .text).notNull()
-            $0.column(Columns.NFT.description.name, .text)
-            $0.column(Columns.NFT.chain.name, .text).notNull()
-            $0.column(Columns.NFT.collectionId.name, .text)
+            $0.column(Columns.NFTAsset.id.name, .text).primaryKey()
+            $0.column(Columns.NFTAsset.tokenId.name, .text).notNull()
+            $0.column(Columns.NFTAsset.tokenType.name, .text).notNull()
+            $0.column(Columns.NFTAsset.name.name, .text).notNull()
+            $0.column(Columns.NFTAsset.description.name, .text)
+            $0.column(Columns.NFTAsset.chain.name, .text).notNull()
+            $0.column(Columns.NFTAsset.collectionId.name, .text)
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
         }
     }
@@ -112,15 +112,15 @@ extension NFTAttributeRecord: CreateTable {
     
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFT.name.name, .text).notNull()
-            $0.column(Columns.NFT.value.name, .text).notNull()
-            $0.column(Columns.NFT.assetId.name, .text)
+            $0.column(Columns.NFTAttribute.name.name, .text).notNull()
+            $0.column(Columns.NFTAttribute.value.name, .text).notNull()
+            $0.column(Columns.NFTAttribute.assetId.name, .text)
                 .notNull()
                 .references(NFTAssetRecord.databaseTableName, onDelete: .cascade)
             $0.uniqueKey([
-                Columns.NFT.assetId.name,
-                Columns.NFT.name.name,
-                Columns.NFT.value.name
+                Columns.NFTAttribute.assetId.name,
+                Columns.NFTAttribute.name.name,
+                Columns.NFTAttribute.value.name
             ])
         }
     }
@@ -162,10 +162,10 @@ extension NFTImageRecord: CreateTable {
 
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFT.imageUrl.name, .text).notNull()
-            $0.column(Columns.NFT.previewImageUrl.name, .text).notNull()
-            $0.column(Columns.NFT.originalSourceUrl.name, .text).notNull()
-            $0.column(Columns.NFT.id.name, .text).notNull()
+            $0.column(Columns.NFTImage.imageUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.previewImageUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.originalSourceUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.id.name, .text).notNull()
                 .references(NFTAssetRecord.databaseTableName, onDelete: .cascade)
         }
     }
@@ -218,10 +218,10 @@ extension NFTCollectionImageRecord: CreateTable {
     
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFT.imageUrl.name, .text).notNull()
-            $0.column(Columns.NFT.previewImageUrl.name, .text).notNull()
-            $0.column(Columns.NFT.originalSourceUrl.name, .text).notNull()
-            $0.column(Columns.NFT.id.name, .text).notNull()
+            $0.column(Columns.NFTImage.imageUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.previewImageUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.originalSourceUrl.name, .text).notNull()
+            $0.column(Columns.NFTImage.id.name, .text).notNull()
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
         }
     }

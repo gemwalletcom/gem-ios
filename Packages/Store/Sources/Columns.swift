@@ -141,22 +141,39 @@ struct Columns {
         static let walletId = Column("walletId")
     }
     
-    struct NFT {
+    struct NFTCollection {
+        static let walletId = Column("walletId")
+        static let id = Column("id")
+        static let name = Column("name")
+        static let description = Column("description")
+        static let chain = Column("chain")
+        static let contractAddress = Column("contractAddress")
+        static let image = Column("image")
+        static let isVerified = Column("isVerified")
+    }
+    
+    struct NFTAsset {
+        static let id = Column("id")
+        static let collectionId = Column("collectionId")
+        static let tokenId = Column("tokenId")
+        static let tokenType = Column("tokenType")
+        static let name = Column("name")
+        static let description = Column("description")
+        static let chain = Column("chain")
+        static let image = Column("image")
+        static let attributes = Column("attributes")
+    }
+    
+    struct NFTAttribute {
+        static let assetId = Column("assetId")
+        static let name = Column("name")
+        static let value = Column("value")
+    }
+    
+    struct NFTImage {
         static let id = Column("id")
         static let imageUrl = Column("imageUrl")
         static let previewImageUrl = Column("previewImageUrl")
         static let originalSourceUrl = Column("originalSourceUrl")
-        static let assetId = Column("assetId")
-        static let name = Column("name")
-        static let value = Column("value")
-        static let collectionId = Column("collectionId")
-        static let tokenId = Column("tokenId")
-        static let tokenType = Column("tokenType")
-        static let description = Column("description")
-        static let chain = Column("chain")
-        static let imageId = Column("imageId")
-        static let walletId = Column("walletId")
-        static let contractAddress = Column("contractAddress")
-        static let isVerified = Column("isVerified")
     }
 }

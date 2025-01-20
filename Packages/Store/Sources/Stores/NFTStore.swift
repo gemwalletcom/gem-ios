@@ -43,7 +43,7 @@ public struct NFTStore: Sendable {
     public func getNFTResults(for walletId: String) throws -> [NFTData] {
         try db.read { db in
             try NFTCollectionRecord
-                .filter(Columns.NFT.walletId == walletId)
+                .filter(Columns.NFTCollection.walletId == walletId)
                 .including(
                     all: NFTCollectionRecord.assets
                         .including(required: NFTAssetRecord.image)
@@ -67,7 +67,7 @@ public struct NFTStore: Sendable {
         let idsToDelete = existingCollectionIds.subtracting(newCollectionIds).asArray()
         return try db.write { db in
             try NFTCollectionRecord
-                .filter(idsToDelete.contains(Columns.NFT.id) && Columns.NFT.walletId == walletId)
+                .filter(idsToDelete.contains(Columns.NFTCollection.id) && Columns.NFTCollection.walletId == walletId)
                 .deleteAll(db)
         }
     }

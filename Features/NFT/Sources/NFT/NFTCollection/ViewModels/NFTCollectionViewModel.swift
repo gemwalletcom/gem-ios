@@ -50,13 +50,12 @@ public struct NFTCollectionViewModel: Sendable {
     func title(list: [NFTData]) -> String {
         switch sceneStep {
         case .collections:
-            if list.count == 1 {
-                fallthrough
-            } else {
-                return Localized.Nft.collections
-            }
-        case .nft:
             return Localized.Nft.yourNfts
+        case .nft(let collectionId):
+            guard let collectionName = list.first(where: { $0.collection.id == collectionId})?.collection.name else {
+                return .empty
+            }
+            return collectionName
         }
     }
     
