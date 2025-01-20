@@ -19,6 +19,12 @@ extension SignMessage {
             }
             return EthereumAbi.encodeTyped(messageJson: jsonString)
         case .base58:
+            guard
+                let string = String(data: data, encoding: .utf8),
+                let data = Base58.decodeNoCheck(string: string)
+            else {
+                return Data()
+            }
             return data
         }
     }

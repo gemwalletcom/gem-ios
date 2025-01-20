@@ -87,11 +87,12 @@ final class LocalKeystoreTests {
         let base58 = "4UzFMkVbk1q6ApxvDS8inUxg4cMBxCQRVXRx5msqQyktbi1QkJkt574Jda6BjZThSJi54CHfVoLFdVFX8XFn233L" // 0xae2f9a10cac1ce71c7be3585a9af1f38de358abde0d875ad0a95352d49fbedf6
         let wallet = try keystore.importWallet(name: "Test Solana", type: .privateKey(text: base58, chain: .solana))
 
-        let text = "Linking wallet to email: annex_deviator960@simplelogin.com"
-        let message = SignMessage(type: .base58, data: text.data(using: .utf8)!)
+        let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
+        let message = SignMessage(type: .base58, data: Data(text.utf8))
         let signature = try keystore.sign(wallet: wallet, message: message, chain: .solana)
+        let encoded = Base58.encodeNoCheck(data: signature)
 
-        #expect(signature.hexString == "1e8c381e97b78d1cc76367713a6c1587509ea5f8ce67344cefa5907d248db53b9b5f20e3bb268b119e93f7ad4381b3612a74e9100077a03722468f7da2624f0d")
+        #expect(encoded == "4XW3xB7PxuUhboDUzX3qsfkB7v7XN6HaieE8KhtidzgF22wZsY5qFonCStxvpmnAMP4R9dxeFUuMcd2NJo7QeGNw")
     }
 
     @Test
