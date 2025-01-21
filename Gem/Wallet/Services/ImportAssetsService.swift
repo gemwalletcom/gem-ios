@@ -28,7 +28,7 @@ struct ImportAssetsService {
         preferences.localAssetsVersion = releaseVersionNumber
         #endif
         
-        let chains = Settings.AssetConfiguration.allChains
+        let chains = AssetConfiguration.allChains
         let assetIds = chains.map { $0.id }
         let localAssetsVersion = try assetStore.getAssets(for: assetIds).map { $0.id }
         

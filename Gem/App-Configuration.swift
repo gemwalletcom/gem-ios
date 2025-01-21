@@ -22,6 +22,7 @@ import PriceService
 import WalletConnector
 import Preferences
 import NFTService
+import BalanceService
 
 extension Asset {
     static let main = Asset.bitcoin

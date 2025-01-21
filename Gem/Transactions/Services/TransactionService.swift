@@ -8,6 +8,7 @@ import Gemstone
 import Combine
 import ChainService
 import StakeService
+import BalanceService
 
 class TransactionService {
     

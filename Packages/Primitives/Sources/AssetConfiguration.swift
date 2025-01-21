@@ -1,8 +1,6 @@
 import Foundation
-import Primitives
 
 public struct AssetConfiguration: Sendable {
-
     public static let supportedChainsWithTokens: [Chain] = [
         [
             .solana,

@@ -10,6 +10,7 @@ import NodeService
 import PriceService
 import WalletConnector
 import ExplorerService
+import BalanceService
 
 extension AppResolver {
     struct Services {
