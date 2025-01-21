@@ -37,6 +37,8 @@ public enum GemAPI: TargetType {
     case getSearchAssets(query: String, chains: [Chain])
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
     
+    case getNFTAssets(deviceId: String, walletIndex: Int)
+    
     public var baseUrl: URL {
         return URL(string: "https://api.gemwallet.com")!
     }
@@ -59,7 +61,8 @@ public enum GemAPI: TargetType {
             .getAsset,
             .getSearchAssets,
             .getAssetsList,
-            .getPriceAlerts:
+            .getPriceAlerts,
+            .getNFTAssets:
             return .GET
         case .getPrices,
             .addSubscriptions,
@@ -124,6 +127,8 @@ public enum GemAPI: TargetType {
             return "/v1/assets/by_device_id/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
         case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
             return "/v1/price_alerts/\(deviceId)"
+        case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
+            return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
         }
     }
     
@@ -140,7 +145,8 @@ public enum GemAPI: TargetType {
             .deleteDevice,
             .getAssetsList,
             .getAsset,
-            .getPriceAlerts:
+            .getPriceAlerts,
+            .getNFTAssets:
             return .plain
         case .getPrice(_, let currency):
             return .params([

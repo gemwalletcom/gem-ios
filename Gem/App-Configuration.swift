@@ -21,6 +21,7 @@ import NodeService
 import PriceService
 import WalletConnector
 import Preferences
+import NFTService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -210,6 +211,14 @@ extension AddressStatusService {
 
 extension BannerSetupService {
     static let main = BannerSetupService(store: .main)
+}
+
+extension NFTService {
+    static let main = NFTService(nftStore: .main)
+}
+
+extension NFTStore {
+    static let main = NFTStore(db: .main)
 }
 
 extension WalletConnectorSigner {

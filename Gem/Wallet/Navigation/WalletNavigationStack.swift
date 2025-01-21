@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import PrimitivesComponents
 import MarketInsight
+import NFT
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore

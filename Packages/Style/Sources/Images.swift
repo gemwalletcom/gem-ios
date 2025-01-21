@@ -113,8 +113,9 @@ public struct Images {
         public static let facebook = Image("") //TODO
     }
 
-    public struct Tags {
+    public struct Tabs {
         public static let settings = Image(.tabSettings)
+        public static let collections = Image(.tabCollections)
         public static let activity = Image(.tabActivity)
         public static let wallet = Image(.tabWallet)
     }
@@ -233,9 +234,9 @@ public struct Images {
             (Images.Social.youtube, "YouTube")
         ]),
         ("Tags", [
-            (Images.Tags.settings, "Settings"),
-            (Images.Tags.activity, "Activity"),
-            (Images.Tags.wallet, "Wallet")
+            (Images.Tabs.settings, "Settings"),
+            (Images.Tabs.activity, "Activity"),
+            (Images.Tabs.wallet, "Wallet")
         ]),
         ("Transaction", [
             (Images.Transaction.outgoing, "Outgoing"),

@@ -92,7 +92,7 @@ struct WalletScene: View {
                     closeAction: bannerService.onClose
                 )
             }
-
+            
             if !sections.pinned.isEmpty {
                 Section {
                     WalletAssetsList(
