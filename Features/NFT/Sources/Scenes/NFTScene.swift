@@ -11,6 +11,7 @@ import DeviceService
 import Style
 
 public struct NFTScene: View {
+    
     private var gridItems: [GridItem] {
         [
             GridItem(spacing: Spacing.medium),

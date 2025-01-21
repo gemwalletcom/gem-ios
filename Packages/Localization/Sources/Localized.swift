@@ -431,6 +431,8 @@ public enum Localized {
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
+    /// Collections
+    public static let title = Localized.tr("Localizable", "nft.title", fallback: "Collections")
     /// Your NFTs
     public static let yourNfts = Localized.tr("Localizable", "nft.your_nfts", fallback: "Your NFTs")
   }

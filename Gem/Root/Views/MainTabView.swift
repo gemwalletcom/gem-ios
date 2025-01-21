@@ -9,6 +9,7 @@ import Store
 import Localization
 import Style
 import Currency
+import NFT
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -17,6 +18,8 @@ struct MainTabView: View {
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.notificationService) private var notificationService
     @Environment(\.navigationState) private var navigationState
+    @Environment(\.nftService) private var nftService
+    @Environment(\.deviceService) private var deviceService
 
     let model: MainTabViewModel
 
@@ -49,10 +52,25 @@ struct MainTabView: View {
                 )
             )
             .tabItem {
-                tabItem(Localized.Wallet.title, Images.Tags.wallet)
+                tabItem(Localized.Wallet.title, Images.Tabs.wallet)
             }
             .tag(TabItem.wallet)
-
+            
+            #if targetEnvironment(simulator)
+            CollectionsNavigationStack(
+                model: NFTCollectionViewModel(
+                    wallet: model.wallet,
+                    sceneStep: .collections,
+                    nftService: nftService,
+                    deviceService: deviceService
+                )
+            )
+            .tabItem {
+                tabItem(Localized.Nft.title, Images.Tabs.collections)
+            }
+            .tag(TabItem.collections)
+            #endif
+            
             TransactionsNavigationStack(
                 model: .init(
                     wallet: model.wallet,
@@ -61,7 +79,7 @@ struct MainTabView: View {
                 )
             )
             .tabItem {
-                tabItem(Localized.Activity.title, Images.Tags.activity)
+                tabItem(Localized.Activity.title, Images.Tabs.activity)
             }
             .badge(transactions)
             .tag(TabItem.activity)
@@ -70,7 +88,7 @@ struct MainTabView: View {
                 walletId: model.wallet.walletId
             )
             .tabItem {
-                tabItem(Localized.Settings.title, Images.Tags.settings)
+                tabItem(Localized.Settings.title, Images.Tabs.settings)
             }
             .tag(TabItem.settings)
         }

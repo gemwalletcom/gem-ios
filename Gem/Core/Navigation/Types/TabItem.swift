@@ -4,6 +4,7 @@ import Foundation
 
 enum TabItem: Identifiable {
     case wallet
+    case collections
     case activity
     case settings
 

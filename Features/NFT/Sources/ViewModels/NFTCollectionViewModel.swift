@@ -15,7 +15,8 @@ public struct NFTCollectionViewModel: Sendable {
         let title: String
     }
 
-    let wallet: Wallet
+    public let wallet: Wallet
+
     let sceneStep: Scenes.NFTCollectionScene.SceneStep
     let nftService: NFTService
     let deviceService: any DeviceServiceable

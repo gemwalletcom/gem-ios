@@ -7,7 +7,7 @@ import Style
 import Localization
 import Components
 
-public struct NFTAttributeView: View {
+public struct NFTAttributesView: View {
     private let spacing = Spacing.small
     
     let attributes: [NFTAttribute]
@@ -16,17 +16,15 @@ public struct NFTAttributeView: View {
 
     public var body: some View {
         VStack(alignment: .leading, spacing: Spacing.small) {
-            if !attributes.isEmpty {
-                Text(Localized.Nft.properties)
-                    .textStyle(.subheadline)
-            }
+            Text(Localized.Nft.properties)
+                .textStyle(.subheadline)
             DynamicGridView(items: attributes.map { DynamicGridViewItem(title: $0.name, subtitle: $0.value)})
         }
     }
 }
 
 #Preview {
-    NFTAttributeView(attributes: [
+    NFTAttributesView(attributes: [
         .init(name: "Background", value: "Deep Space"),
         .init(name: "Body", value: "Blue"),
         .init(name: "Clothes", value: "Yellow Fuzzy Sweater"),

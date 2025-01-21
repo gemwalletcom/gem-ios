@@ -174,6 +174,7 @@
 		D890F7A32C7FC03800C26819 /* WalletSelectImageScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A22C7FC03800C26819 /* WalletSelectImageScene.swift */; };
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D890F7A72C7FCAD100C26819 /* WalletSelectImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A62C7FCAD100C26819 /* WalletSelectImageViewModel.swift */; };
+		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
 		D89BB5EC2D161EAA00C7E510 /* SwapProviderViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5EB2D161EAA00C7E510 /* SwapProviderViewModel.swift */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
 		D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */; };
@@ -416,6 +417,7 @@
 		D890F7A22C7FC03800C26819 /* WalletSelectImageScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSelectImageScene.swift; sourceTree = "<group>"; };
 		D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsNavigationStack.swift; sourceTree = "<group>"; };
 		D890F7A62C7FCAD100C26819 /* WalletSelectImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletSelectImageViewModel.swift; sourceTree = "<group>"; };
+		D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsNavigationStack.swift; sourceTree = "<group>"; };
 		D89BB5EB2D161EAA00C7E510 /* SwapProviderViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderViewModel.swift; sourceTree = "<group>"; };
 		D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferNavigationStack.swift; sourceTree = "<group>"; };
 		D89CD7A72CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectedAssetNavigationStack.swift; sourceTree = "<group>"; };
@@ -1161,10 +1163,19 @@
 		D891DD3D2D3EDDF100241222 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				D891DD3F2D3F359A00241222 /* NFT */,
 				D891DD3C2D3EDD7300241222 /* Staking */,
 				D8C4A3812C9388AC006FABE8 /* Price Alerts */,
 			);
 			path = Features;
+			sourceTree = "<group>";
+		};
+		D891DD3F2D3F359A00241222 /* NFT */ = {
+			isa = PBXGroup;
+			children = (
+				D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */,
+			);
+			path = NFT;
 			sourceTree = "<group>";
 		};
 		D8BAC9572BD0CDBE001608BC /* Navigation */ = {
@@ -1669,6 +1680,7 @@
 				8331852B2CF75139007ED64F /* TransactionsFilterTypeViewModel.swift in Sources */,
 				D8B978002AAA4B97009933B5 /* NotificationsScene.swift in Sources */,
 				83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */,
+				D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */,
 				C36678FA2A09791C00F1D74D /* ImportAssetsService.swift in Sources */,
 				C3E99BC32A73182E005DF35F /* TransactionScene.swift in Sources */,
 				C3CF3BC929B803F900E96586 /* RecipientScene.swift in Sources */,
