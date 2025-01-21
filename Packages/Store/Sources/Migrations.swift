@@ -174,7 +174,13 @@ public struct Migrations {
                 $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
             }
         }
-        
+      
+        migrator.registerMigration("Add marketCapFdv table \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: Columns.Price.marketCapFdv.name, .double)
+            }
+        }
+      
         migrator.registerMigration("Add nft tables setup") { db in
             try? NFTCollectionRecord.create(db: db)
             try? NFTAssetRecord.create(db: db)
@@ -182,7 +188,7 @@ public struct Migrations {
             try? NFTImageRecord.create(db: db)
             try? NFTCollectionImageRecord.create(db: db)
         }
-    
+
         try migrator.migrate(dbQueue)
     }
 }

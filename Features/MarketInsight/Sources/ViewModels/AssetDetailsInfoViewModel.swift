@@ -40,6 +40,7 @@ public struct AssetDetailsInfoViewModel {
         case "facebook": .facebook
         case "website": .website
         case "coingecko": .coingecko
+        case "github": .gitHub
         default: .none
         }
     }

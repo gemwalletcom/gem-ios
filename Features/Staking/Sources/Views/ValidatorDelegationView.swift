@@ -9,9 +9,7 @@ public struct ValidatorDelegationView: View {
     
     private let delegation: StakeDelegationViewModel
     
-    public init(
-        delegation: StakeDelegationViewModel
-    ) {
+    public init(delegation: StakeDelegationViewModel) {
         self.delegation = delegation
     }
     

@@ -5,14 +5,17 @@ import Primitives
 import SwiftUI
 import Transfer
 import Staking
+import ChainService
+import NodeService
 
 struct StakeNavigationView: View {
-
+    @Environment(\.keystore) private var keystore
+    @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
 
-    let wallet: Wallet
-    let assetId: AssetId
+    private let wallet: Wallet
+    private let assetId: AssetId
 
     @Binding private var navigationPath: NavigationPath
 
@@ -42,9 +45,21 @@ struct StakeNavigationView: View {
                 onAmountInputAction: {
                     navigationPath.append($0)
                 }
-            ),
-            onComplete: onComplete
+            )
         )
+        .navigationDestination(for: TransferData.self) {
+            ConfirmTransferScene(
+                model: ConfirmTransferViewModel(
+                    wallet: wallet,
+                    keystore: keystore,
+                    data: $0,
+                    service: ChainServiceFactory(nodeProvider: nodeService)
+                        .service(for: $0.recipientData.asset.chain),
+                    walletsService: walletsService,
+                    onComplete: onComplete
+                )
+            )
+        }
         .navigationDestination(for: AmountInput.self) {
             AmountScene(
                 model: AmounViewModel(

@@ -12,7 +12,7 @@ public struct PrivacyText: View {
     public init(
         _ text: String,
         isEnabled: Binding<Bool>,
-        placeholder: String = "*****"
+        placeholder: String = "∗∗∗∗∗"
     ) {
         self.text = text
         self.placeholder = placeholder

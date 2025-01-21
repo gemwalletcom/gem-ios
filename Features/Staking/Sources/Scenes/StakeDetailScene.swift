@@ -2,17 +2,15 @@
 
 import SwiftUI
 import Components
-import Staking
 
-struct StakeDetailScene: View {
-    
-    @Environment(\.keystore) private var keystore
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.stakeService) private var stakeService
+public struct StakeDetailScene: View {
+    private let model: StakeDetailViewModel
 
-    let model: StakeDetailViewModel
+    public init(model: StakeDetailViewModel) {
+        self.model = model
+    }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 if let url = model.validatorUrl {
@@ -74,7 +72,3 @@ struct StakeDetailScene: View {
         .navigationTitle(model.title)
     }
 }
-
-//#Preview {
-//    StakeDetailScene()
-//}

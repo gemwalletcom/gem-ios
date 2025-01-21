@@ -8,7 +8,7 @@ public extension Wallet {
     var isViewOnly: Bool {
         return type == .view
     }
-    
+
     var isMultiCoins: Bool {
         return type == .multicoin
     }
@@ -16,13 +16,20 @@ public extension Wallet {
     var walletId: WalletId {
         WalletId(id: id)
     }
+
+    func account(for chain: Chain) throws -> Account {
+        guard let account = accounts.filter({ $0.chain == chain }).first else {
+            throw AnyError("account not found for chain: \(chain.rawValue)")
+        }
+        return account
+    }
 }
 
 extension Wallet: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
-    
+
     public static func == (lhs: Wallet, rhs: Wallet) -> Bool {
         return lhs.id == rhs.id
     }
