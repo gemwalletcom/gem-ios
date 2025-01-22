@@ -50,7 +50,7 @@ class SwapViewModel {
 
     var swapState: SwapState = SwapState()
 
-    let explorerService: any ExplorerLinkFetchable = ExplorerService.standart
+    let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)

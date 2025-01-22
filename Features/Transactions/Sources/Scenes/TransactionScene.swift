@@ -18,7 +18,7 @@ public struct TransactionScene: View {
     private var model: TransactionDetailViewModel {
         return TransactionDetailViewModel(
             model: TransactionViewModel(
-                explorerService: ExplorerService.standart,
+                explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
                 formatter: .medium
             )
@@ -61,7 +61,7 @@ public struct TransactionScene: View {
                             title: participantField,
                             style: .short,
                             account: account,
-                            explorerService: ExplorerService.standart
+                            explorerService: ExplorerService.standard
                         )
                     }
                     

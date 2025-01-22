@@ -20,7 +20,7 @@ public final class TransactionsViewModel {
     public var filterModel: TransactionsFilterViewModel
     public var request: TransactionsRequest
 
-    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standart
+    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
 
     public init(
         wallet: Wallet,

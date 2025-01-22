@@ -18,7 +18,7 @@ class WalletDetailViewModel {
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
         keystore: any Keystore,
-        explorerService: any ExplorerLinkFetchable = ExplorerService.standart
+        explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet

@@ -41,7 +41,6 @@ class ConfirmTransferViewModel {
     private let wallet: Wallet
     private let keystore: any Keystore
     private let service: any ChainServiceable
-    private let explorerService: ExplorerService
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
@@ -53,7 +52,7 @@ class ConfirmTransferViewModel {
         data: TransferData,
         service: any ChainServiceable,
         walletsService: WalletsService,
-        explorerService: any ExplorerLinkFetchable = ExplorerService.standart,
+        explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
         onComplete: VoidAction
     ) {
