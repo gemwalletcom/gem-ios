@@ -24,13 +24,24 @@ public struct NftImageView: View {
             case .success(let image):
                 image.resizable()
             case .failure:
-                //Add custom preview
-                Rectangle()
-                    .foregroundStyle(Colors.grayLight)
+                errorView
             @unknown default:
-                Rectangle()
-                    .foregroundStyle(Colors.grayLight)
+                errorView
             }
         }
+    }
+    
+    private var errorView: some View {
+        ZStack {
+            Rectangle()
+                .foregroundStyle(Colors.grayLight)
+            if let type = assetImage.type {
+                Text(type)
+                    .font(.title)
+                    .lineLimit(1)
+                    .foregroundStyle(Colors.black.opacity(0.8))
+            }
+        }
+        .frame(maxWidth: .infinity)
     }
 }

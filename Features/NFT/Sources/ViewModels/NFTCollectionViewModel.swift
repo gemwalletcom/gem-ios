@@ -80,6 +80,7 @@ public struct NFTCollectionViewModel: Sendable {
             GridItem(
                 destination: Scenes.NFTDetails(collection: data.collection, asset: asset),
                 assetImage: AssetImage(
+                    type: data.collection.name,
                     imageURL: URL(string: asset.image.imageUrl),
                     placeholder: nil,
                     chainPlaceholder: nil
@@ -90,6 +91,7 @@ public struct NFTCollectionViewModel: Sendable {
             GridItem(
                 destination: Scenes.NFTCollectionScene(sceneStep: .collection(data.collection)),
                 assetImage: AssetImage(
+                    type: data.collection.name,
                     imageURL: URL(string: data.collection.image.imageUrl),
                     placeholder: nil,
                     chainPlaceholder: nil

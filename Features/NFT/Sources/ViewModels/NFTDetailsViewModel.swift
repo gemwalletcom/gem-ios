@@ -36,7 +36,11 @@ public struct NFTDetailsViewModel {
     }
     
     public var collectionAssetImage: AssetImage {
-        AssetImage(imageURL: URL(string: collection.image.previewImageUrl), placeholder: .none, chainPlaceholder: .none)
+        AssetImage(
+            imageURL: URL(string: collection.image.previewImageUrl),
+            placeholder: .none,
+            chainPlaceholder: .none
+        )
     }
     
     public var networkTitle: String {
@@ -85,6 +89,7 @@ public struct NFTDetailsViewModel {
     
     public var assetImage: AssetImage {
         AssetImage(
+            type: asset.name,
             imageURL: URL(string: asset.image.imageUrl),
             placeholder: .none,
             chainPlaceholder: .none

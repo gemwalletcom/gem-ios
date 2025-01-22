@@ -58,25 +58,6 @@ public struct NFTDetailsScene: View {
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
     }
-    
-    private struct NftCollectionView: View {
-        let collection: NFTCollection
-        
-        var body: some View {
-            HStack(spacing: Spacing.small) {
-                AssetImageView(
-                    assetImage: AssetImage(
-                        imageURL: URL(string: collection.image.previewImageUrl),
-                        placeholder: nil,
-                        chainPlaceholder: nil
-                    ),
-                    size: Sizing.list.image
-                )
-                Text(collection.name)
-                    .textStyle(.subheadline)
-            }
-        }
-    }
 }
 
 //#Preview {

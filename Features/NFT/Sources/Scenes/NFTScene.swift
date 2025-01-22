@@ -77,6 +77,7 @@ public struct NFTScene: View {
             NavigationLink(value: Scenes.NFTDetails(collection: nftData.collection, asset: asset)) {
                 GridPosterView(
                     assetImage: AssetImage(
+                        type: nftData.collection.name,
                         imageURL: URL(string: asset.image.imageUrl),
                         placeholder: nil,
                         chainPlaceholder: nil
