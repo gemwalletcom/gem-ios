@@ -11,63 +11,36 @@ public struct NFTStore: Sendable {
     
     // MARK: - Public methods
 
-    public func saveNFTData(_ data: [NFTData], for walletId: String) throws {
-        try removeStaleNFTCollections(new: data, walletId: walletId)
-
+    public func save(_ data: [NFTData], for walletId: String) throws {
         try db.write { db in
+            let assetsAssociationsRequest = NFTAssetAssociationRecord
+                .filter(Columns.NFTAssetsAssociation.walletId == walletId)
+            let existingIds = try assetsAssociationsRequest.fetchAll(db).map { $0.id }
+            
+            var newIds: [String] = []
+            
             for nftData in data {
                 let collection = nftData.collection
                 
-                let nftCollectionRecord = collection.record(for: walletId)
-                try nftCollectionRecord.insert(db, onConflict: .replace)
-                
-                let collectionImageRecord = collection.image.collectionRecord(for: collection.id)
-                try collectionImageRecord.insert(db, onConflict: .replace)
+                try collection.record().upsert(db)
                 
                 for asset in nftData.assets {
-                    let assetRecord = asset.record()
-                    try assetRecord.insert(db, onConflict: .replace)
-                    
-                    let imageRecord = asset.image.nftRecord(for: asset.id)
-                    try imageRecord.insert(db, onConflict: .replace)
+                    try asset.record().upsert(db)
                     
                     for attribute in asset.attributes {
-                        let attributeRecord = attribute.record(for: asset.id)
-                        try attributeRecord.insert(db, onConflict: .replace)
+                        try attribute.record(for: asset.id).upsert(db)
                     }
+                    let assetAssociation = NFTAssetAssociationRecord(walletId: walletId, collectionId: collection.id, assetId: asset.id)
+                    try assetAssociation.upsert(db)
+                    
+                    newIds.append(assetAssociation.id)
                 }
             }
-        }
-    }
-    
-    public func getNFTResults(for walletId: String) throws -> [NFTData] {
-        try db.read { db in
-            try NFTCollectionRecord
-                .filter(Columns.NFTCollection.walletId == walletId)
-                .including(
-                    all: NFTCollectionRecord.assets
-                        .including(required: NFTAssetRecord.image)
-                        .including(all: NFTAssetRecord.attributes)
-                )
-                .including(required: NFTCollectionRecord.image)
-                .asRequest(of: NFTCollectionRecordInfo.self)
-                .fetchAll(db)
-                .map { $0.mapToNFTData() }
-        }
-    }
-    
-    // MARK: - Private methods
-    
-    private func removeStaleNFTCollections(new data: [NFTData], walletId: String) throws {
-        let existing = try getNFTResults(for: walletId)
-        let existingCollectionIds = existing.map { $0.collection.id }.asSet()
-        
-        let newCollectionIds = data.map { $0.collection.id }.asSet()
-        
-        let idsToDelete = existingCollectionIds.subtracting(newCollectionIds).asArray()
-        return try db.write { db in
-            try NFTCollectionRecord
-                .filter(idsToDelete.contains(Columns.NFTCollection.id) && Columns.NFTCollection.walletId == walletId)
+            
+            // delete outdated
+            let deletIds = existingIds.asSet().subtracting(newIds.asSet()).asArray()
+            try assetsAssociationsRequest
+                .filter(deletIds.contains(Columns.NFTAssetsAssociation.id))
                 .deleteAll(db)
         }
     }

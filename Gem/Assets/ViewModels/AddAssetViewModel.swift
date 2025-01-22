@@ -7,7 +7,7 @@ import ExplorerService
 
 struct AddAssetViewModel {
     let asset: Asset
-    let explorerService: ExplorerService = .standart
+    let explorerService: ExplorerService = .standard
 
     var nameTitle: String { Localized.Asset.name }
     var symbolTitle: String { Localized.Asset.symbol }

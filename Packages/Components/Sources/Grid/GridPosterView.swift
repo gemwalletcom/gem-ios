@@ -19,22 +19,13 @@ public struct GridPosterView: View {
     
     public var body: some View {
         VStack(alignment: .leading) {
-            
-            CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
-                $0.resizable()
-            } placeholder: {
-                ZStack {
-                    Rectangle()
-                        .foregroundStyle(Colors.white)
-                    LoadingView()
-                }
-            }
-            .cornerRadius(15)
-            .aspectRatio(1, contentMode: .fit)
+            NftImageView(assetImage: assetImage)
+                .cornerRadius(Spacing.medium)
+                .aspectRatio(1, contentMode: .fit)
             
             Text(title)
                 .font(.body)
-                .lineLimit(2)
+                .lineLimit(1)
                 .multilineTextAlignment(.leading)
             Spacer()
         }

@@ -124,7 +124,7 @@ public enum GemAPI: TargetType {
         case .getSearchAssets:
             return "/v1/assets/search"
         case .getAssetsList(let deviceId, let walletIndex, let fromTimestamp):
-            return "/v1/assets/by_device_id/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+            return "/v1/assets/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
         case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
             return "/v1/price_alerts/\(deviceId)"
         case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):

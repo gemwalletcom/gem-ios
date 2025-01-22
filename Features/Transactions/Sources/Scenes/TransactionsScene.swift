@@ -37,6 +37,7 @@ public struct TransactionsScene: View {
         .refreshable {
             await model.fetch()
         }
+        .background(Colors.grayBackground)
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {

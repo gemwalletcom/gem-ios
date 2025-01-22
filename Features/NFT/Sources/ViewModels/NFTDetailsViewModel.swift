@@ -2,6 +2,9 @@
 
 import Foundation
 import Primitives
+import Localization
+import Components
+import Style
 
 public struct NFTDetailsViewModel {
     public let collection: NFTCollection
@@ -15,7 +18,7 @@ public struct NFTDetailsViewModel {
         self.asset = asset
     }
     
-    public var name: String {
+    public var title: String {
         asset.name
     }
     
@@ -23,11 +26,51 @@ public struct NFTDetailsViewModel {
         asset.description
     }
     
+    public var collectionTitle: String {
+        Localized.Nft.collection
+    }
+    
+    public var collectionText: String {
+        collection.name
+    }
+    
+    public var collectionAssetImage: AssetImage {
+        AssetImage(imageURL: URL(string: collection.image.previewImageUrl), placeholder: .none, chainPlaceholder: .none)
+    }
+    
+    public var contractTitle: String {
+        Localized.Asset.contract
+    }
+
+    public var contractText: String {
+        AddressFormatter(address: contractValue, chain: asset.chain).value()
+    }
+    
+    public var contractValue: String {
+        collection.contractAddress
+    }
+    
+    public var tokenIdTitle: String {
+        Localized.Asset.tokenId
+    }
+    
+    public var tokenIdText: String {
+        "#\(asset.tokenId)"
+    }
+    
+    public var attributesTitle: String {
+        Localized.Nft.properties
+    }
+    
     public var attributes: [NFTAttribute] {
         asset.attributes
     }
     
-    public var imageURL: URL? {
-        URL(string: asset.image.imageUrl)
+    public var assetImage: AssetImage {
+        AssetImage(
+            imageURL: URL(string: asset.image.imageUrl),
+            placeholder: Images.Chains.algorand,
+            chainPlaceholder: .none
+        )
     }
 }

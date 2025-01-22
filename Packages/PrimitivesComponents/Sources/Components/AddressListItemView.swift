@@ -11,7 +11,11 @@ public struct AddressListItemView: View {
     let title: String
     let style: AddressFormatter.Style
     let account: SimpleAccount
+<<<<<<< HEAD:Packages/PrimitivesComponents/Sources/Components/AddressListItemView.swift
     let explorerService: any ExplorerLinkFetchable
+=======
+    let explorerService: ExplorerService = .standard
+>>>>>>> main:Gem/Root/Views/AddressListItem.swift
 
     public init(
         title: String,

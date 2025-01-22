@@ -66,8 +66,8 @@ extension NavigationStateManager {
     }
 
     func clearAll() {
-        backToRoot(tab: .wallet)
-        backToRoot(tab: .activity)
-        backToRoot(tab: .settings)
+        for tabItem in TabItem.allCases {
+            backToRoot(tab: tabItem)
+        }
     }
 }

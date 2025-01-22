@@ -15,6 +15,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Components", path: "../Components"),
+        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "Style", path: "../Style"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "DeviceService", path: "../DeviceService"),
@@ -27,11 +28,12 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Components",
+                "PrimitivesComponents",
                 "Style",
                 "Localization",
                 "DeviceService",
                 "NFTService",
-                "Store"
+                "Store",
             ],
             path: "Sources"
         ),

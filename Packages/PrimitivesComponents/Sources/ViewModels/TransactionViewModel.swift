@@ -12,7 +12,11 @@ public struct TransactionViewModel {
     public let transaction: TransactionExtended
 
     private let formatter: ValueFormatter
+<<<<<<< HEAD:Packages/PrimitivesComponents/Sources/ViewModels/TransactionViewModel.swift
     private let explorerService: any ExplorerLinkFetchable
+=======
+    private let explorerService: ExplorerService = .standard
+>>>>>>> main:Gem/Transactions/ViewModels/TransactionViewModel.swift
 
     public init(
         explorerService: any ExplorerLinkFetchable,

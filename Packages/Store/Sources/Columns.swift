@@ -149,8 +149,16 @@ struct Columns {
         static let description = Column("description")
         static let chain = Column("chain")
         static let contractAddress = Column("contractAddress")
-        static let image = Column("image")
         static let isVerified = Column("isVerified")
+        static let imageUrl = Column("imageUrl")
+        static let previewImageUrl = Column("previewImageUrl")
+    }
+    
+    struct NFTAssetsAssociation {
+        static let id = Column("id")
+        static let walletId = Column("walletId")
+        static let collectionId = Column("collectionId")
+        static let assetId = Column("assetId")
     }
     
     struct NFTAsset {
@@ -161,14 +169,16 @@ struct Columns {
         static let name = Column("name")
         static let description = Column("description")
         static let chain = Column("chain")
-        static let image = Column("image")
         static let attributes = Column("attributes")
+        static let imageUrl = Column("imageUrl")
+        static let previewImageUrl = Column("previewImageUrl")
     }
     
     struct NFTAttribute {
         static let assetId = Column("assetId")
         static let name = Column("name")
         static let value = Column("value")
+        static let percentage = Column("percentage")
     }
     
     struct NFTImage {

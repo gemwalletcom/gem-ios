@@ -7,6 +7,7 @@ import NFT
 
 public struct CollectionsNavigationStack: View {
     
+    @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
@@ -23,22 +24,30 @@ public struct CollectionsNavigationStack: View {
     public var body: some View   {
         NavigationStack(path: navigationPath) {
             NFTScene(model: model)
-                .navigationDestination(for: Scenes.NFTCollectionScene.self) {
-                    NFTScene(
-                        model: NFTCollectionViewModel(
-                            wallet: model.wallet,
-                            sceneStep: $0.sceneStep,
-                            nftService: nftService,
-                            deviceService: deviceService
-                        )
+            .navigationDestination(for: Scenes.NFTCollectionScene.self) {
+                NFTScene(
+                    model: NFTCollectionViewModel(
+                        wallet: model.wallet,
+                        sceneStep: $0.sceneStep,
+                        nftService: nftService,
+                        deviceService: deviceService
                     )
-                }
-                .navigationDestination(for: Scenes.NFTDetails.self) {
-                    NFTDetailsScene(
-                        model: NFTDetailsViewModel(collection: $0.collection, asset: $0.asset)
-                    )
-                }
+                )
+            }
+            .navigationDestination(for: Scenes.NFTDetails.self) {
+                NFTDetailsScene(
+                    model: NFTDetailsViewModel(collection: $0.collection, asset: $0.asset)
+                )
+            }
         }
-        
+        .onChange(of: keystore.currentWallet, onWalletChange)
+    }
+}
+
+extension CollectionsNavigationStack {
+    private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
+        Task {
+            await model.fetch()
+        }
     }
 }

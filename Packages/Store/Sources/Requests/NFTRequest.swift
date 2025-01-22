@@ -22,15 +22,18 @@ public struct NFTRequest: ValueObservationQueryable {
     
     public func fetch(_ db: Database) throws -> [NFTData] {
         try NFTCollectionRecord
-            .filter(Columns.NFTCollection.walletId == walletId || Columns.NFTCollection.id == collectionId)
             .including(
                 all: NFTCollectionRecord.assets
-                    .including(required: NFTAssetRecord.image)
+                    .joining(
+                        required: NFTAssetRecord.assetAssociations
+                            .filter(Columns.NFTAssetsAssociation.walletId == walletId)
+                    )
                     .including(all: NFTAssetRecord.attributes)
             )
-            .including(required: NFTCollectionRecord.image)
+            .distinct()
             .asRequest(of: NFTCollectionRecordInfo.self)
             .fetchAll(db)
             .map { $0.mapToNFTData() }
+            .filter { $0.assets.count > 0 }
     }
 }

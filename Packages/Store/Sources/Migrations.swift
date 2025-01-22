@@ -42,12 +42,13 @@ public struct Migrations {
             try BannerRecord.create(db: db)
             try PriceAlertRecord.create(db: db)
             
+            #if targetEnvironment(simulator)
             // nft
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAttributeRecord.create(db: db)
-            try NFTImageRecord.create(db: db)
-            try NFTCollectionImageRecord.create(db: db)
+            try NFTAssetAssociationRecord.create(db: db)
+            #endif
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -181,12 +182,21 @@ public struct Migrations {
             }
         }
       
-        migrator.registerMigration("Add nft tables setup") { db in
-            try? NFTCollectionRecord.create(db: db)
-            try? NFTAssetRecord.create(db: db)
-            try? NFTAttributeRecord.create(db: db)
-            try? NFTImageRecord.create(db: db)
-            try? NFTCollectionImageRecord.create(db: db)
+        // not revelevant for new users, only debug
+        migrator.registerMigration("Add initial nft setup tables drop") { db in
+            try? db.drop(table: NFTCollectionRecord.databaseTableName)
+            try? db.drop(table: NFTAssetRecord.databaseTableName)
+            try? db.drop(table: NFTAttributeRecord.databaseTableName)
+            try? db.drop(table: NFTAssetAssociationRecord.databaseTableName)
+            try? db.drop(table: "nft_collection_images")
+            try? db.drop(table: "nft_images")
+        }
+        
+        migrator.registerMigration("Add initial nft tables setup") { db in
+            try NFTCollectionRecord.create(db: db)
+            try NFTAssetRecord.create(db: db)
+            try NFTAttributeRecord.create(db: db)
+            try NFTAssetAssociationRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)
