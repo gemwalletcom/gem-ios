@@ -42,7 +42,8 @@ extension Transaction: Equatable {
     public static func == (lhs: Transaction, rhs: Transaction) -> Bool {
         lhs.id == rhs.id &&
         lhs.state == rhs.state &&
-        lhs.createdAt == rhs.createdAt
+        lhs.createdAt == rhs.createdAt &&
+        lhs.direction == rhs.direction
     }
 }
 

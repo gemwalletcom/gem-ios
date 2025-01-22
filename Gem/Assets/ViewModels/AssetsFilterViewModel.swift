@@ -5,6 +5,7 @@ import Store
 import Primitives
 import Settings
 import Localization
+import PrimitivesComponents
 
 struct AssetsFilterViewModel {
     private let type: SelectAssetType

@@ -4,6 +4,7 @@ import Primitives
 import Store
 import Settings
 import UIKit
+import BalanceService
 
 struct WalletSceneViewModel {
 

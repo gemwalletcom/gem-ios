@@ -6,6 +6,7 @@ import Keystore
 import Settings
 import Primitives
 import NodeService
+import AssetsService
 import Preferences
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start

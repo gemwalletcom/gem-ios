@@ -72,3 +72,7 @@ extension ExplorerService: ExplorerPreferencesStorable {
         preferences.get(chain: chain)
     }
 }
+
+// MARK: - ExplorerLinkFetchable
+
+extension ExplorerService: ExplorerLinkFetchable { }

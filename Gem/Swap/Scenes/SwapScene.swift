@@ -11,6 +11,7 @@ import Keystore
 import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
+import PrimitivesComponents
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -165,7 +166,11 @@ extension SwapScene {
                         AssetImageView(assetImage: providerImage, size: Sizing.list.image)
                     }
                 }
-                TransactionsList(tokenApprovals, showSections: false)
+                TransactionsList(
+                    explorerService: model.explorerService,
+                    tokenApprovals,
+                    showSections: false
+                )
             }
 
             if case let .error(error) = model.swapState.availability {

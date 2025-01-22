@@ -7,6 +7,7 @@ import Components
 import Style
 import Primitives
 import Localization
+import PrimitivesComponents
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -75,7 +76,12 @@ struct WalletDetailScene: View {
                 Section {
                     switch model.address {
                     case .account(let account):
-                        AddressListItem(title: Localized.Common.address, style: .short, account: account)
+                        AddressListItemView(
+                            title: Localized.Common.address,
+                            style: .short,
+                            account: account,
+                            explorerService: model.explorerService
+                        )
                     case .none:
                         EmptyView()
                     }

@@ -3,7 +3,6 @@
 import Foundation
 import BigInt
 
-
 public struct TransferDataExtra: Equatable, Sendable {
     public let gasLimit: BigInt?
     public let gasPrice: GasPriceType?

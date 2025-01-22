@@ -8,6 +8,7 @@ import GemAPI
 import NodeService
 import Preferences
 import GemstonePrimitives
+import AssetsService
 
 struct ImportAssetsService {
     let nodeService: NodeService
@@ -28,7 +29,7 @@ struct ImportAssetsService {
         preferences.localAssetsVersion = releaseVersionNumber
         #endif
         
-        let chains = Settings.AssetConfiguration.allChains
+        let chains = AssetConfiguration.allChains
         let assetIds = chains.map { $0.id }
         let localAssetsVersion = try assetStore.getAssets(for: assetIds).map { $0.id }
         

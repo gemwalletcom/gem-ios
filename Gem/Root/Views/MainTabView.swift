@@ -10,6 +10,7 @@ import Localization
 import Style
 import Currency
 import NFT
+import TransactionsService
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore

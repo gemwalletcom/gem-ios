@@ -7,6 +7,8 @@ import GemstonePrimitives
 import Localization
 import PrimitivesComponents
 
+typealias RecipientDataAction = ((RecipientData) -> Void)?
+
 enum RecipientAddressType {
     case wallets
     case view

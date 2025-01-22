@@ -12,6 +12,8 @@ import StakeService
 import PrimitivesComponents
 import Preferences
 import ExplorerService
+import AssetsService
+import TransactionsService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

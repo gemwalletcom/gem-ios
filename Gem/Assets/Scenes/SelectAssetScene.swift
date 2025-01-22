@@ -9,6 +9,7 @@ import Keystore
 import Localization
 import PrimitivesComponents
 
+
 struct SelectAssetScene: View {
 
     @State private var isPresentingCopyMessage: Bool = false
@@ -162,22 +163,6 @@ private struct ListAssetItemSelectionView: View {
                     action($0, assetData)
                 }
             )
-        )
-    }
-}
-
-#Preview {
-    @Previewable @State var present: Bool = false
-    return NavigationStack {
-        SelectAssetScene(
-            model: SelectAssetViewModel(
-                wallet: .main,
-                keystore: LocalKeystore.main,
-                selectType: .receive,
-                assetsService: .main,
-                walletsService: .main
-            ),
-            isPresentingAddToken: $present
         )
     }
 }

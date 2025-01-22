@@ -6,6 +6,8 @@ import Localization
 import BannerService
 import StakeService
 import Preferences
+import AssetsService
+import TransactionsService
 
 struct DeveloperViewModel {
     

@@ -14,6 +14,8 @@ import StakeService
 import NodeService
 import PriceService
 import Preferences
+import BalanceService
+import AssetsService
 
 class WalletsService {
     
