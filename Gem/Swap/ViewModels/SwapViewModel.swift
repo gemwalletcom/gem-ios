@@ -131,8 +131,8 @@ class SwapViewModel {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
 
-    var isQuoteLoading: Bool {
-        swapState.availability.isLoading
+    func showToValueLoading(isApprovalProcessInProgress: Bool) -> Bool {
+        isApprovalProcessInProgress || swapState.availability.isLoading
     }
 
     func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
@@ -207,7 +207,8 @@ extension SwapViewModel {
             await fetch(
                 fromAsset: fromAsset.asset,
                 toAsset: toAsset.asset,
-                amount: input.amount
+                amount: input.amount,
+                isApprovalInProgress: input.isApprovalInProgress
             )
         case .idle: break
         }
@@ -269,10 +270,15 @@ extension SwapViewModel {
         return amount > 0
     }
 
-    private func fetch(fromAsset: Asset, toAsset: Asset, amount: String) async {
+    private func fetch(
+        fromAsset: Asset,
+        toAsset: Asset,
+        amount: String,
+        isApprovalInProgress: Bool
+    ) async {
         let shouldFetch: Bool = await MainActor.run { [self] in
             resetToValue()
-            if !self.isValidValue(fromAsset: fromAsset) {
+            if !self.isValidValue(fromAsset: fromAsset) || isApprovalInProgress {
                 self.swapState.availability = .noData
                 return false
             }

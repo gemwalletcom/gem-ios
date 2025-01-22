@@ -136,7 +136,7 @@ extension SwapScene {
                     SwapTokenView(
                         model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
                         text: $model.toValue,
-                        showLoading: model.isQuoteLoading,
+                        showLoading: model.showToValueLoading(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
                         disabledTextField: true,
                         onBalanceAction: {},
                         onSelectAssetAction: onSelectAssetReceiveAction
@@ -238,7 +238,8 @@ extension SwapScene {
         let input = SwapQuoteInput(
             fromAsset: fromAsset,
             toAsset: toAsset,
-            amount: model.fromValue
+            amount: model.fromValue,
+            isApprovalInProgress: !tokenApprovals.isEmpty
         )
         model.swapState.fetch = .fetch(input: input, delay: delay)
     }
