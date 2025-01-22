@@ -32,7 +32,7 @@ class ChainSettingsViewModel {
 
     init(
         nodeService: NodeService,
-        explorerService: ExplorerService = .standart,
+        explorerService: ExplorerService = .standard,
         chain: Chain
     ) {
         self.nodeService = nodeService

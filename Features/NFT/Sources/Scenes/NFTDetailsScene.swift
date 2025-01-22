@@ -5,7 +5,7 @@ import Primitives
 import SwiftUI
 import Style
 import Components
-import Localization
+import PrimitivesComponents
 
 public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
@@ -17,102 +17,41 @@ public struct NFTDetailsScene: View {
     }
     
     public var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
-                imageView
-                
-                Text(model.name)
-                    .textStyle(.headline)
-                    .padding(.horizontal, Spacing.medium)
-                    .padding(.top, Spacing.small)
-                
-                NftCollectionView(collection: model.collection)
-                    .padding(.horizontal, Spacing.medium)
-                
-//                Button(Localized.Transaction.viewOn("Magic Eden"), action: {})
-//                    .buttonStyle(.blue())
-//                    .padding(.horizontal, Spacing.medium)
-//                    .padding(.top, Spacing.small)
-                
-                if let description = model.description {
-                    Text(Localized.Nft.description)
-                        .textStyle(.subheadline)
-                        .padding(.horizontal, Spacing.medium)
-                        .padding(.top, Spacing.small)
-                    
-                    Text(description)
-                        .textStyle(.body)
-                        .padding(.horizontal, Spacing.medium)
+        List {
+            Section { } header: {
+                NftImageView(assetImage: model.assetImage)
+                    .cornerRadius(Spacing.medium)
+                    .aspectRatio(1, contentMode: .fill)
+            }
+            .frame(maxWidth: .infinity)
+            .textCase(nil)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+            
+            Section {
+                HStack {
+                    ListItemView(title: model.collectionTitle, subtitle: model.collectionText)
+                    Spacer()
+                    AssetImageView(assetImage: model.collectionAssetImage, size: Sizing.image.small)
                 }
-                
-                if !model.attributes.isEmpty {
-                    NFTAttributesView(attributes: model.attributes)
-                        .padding(.horizontal, Spacing.medium)
-                        .padding(.top, Spacing.small)
+                ListItemView(title: model.contractTitle, subtitle: model.contractText)
+                    .contextMenu {
+                        ContextMenuCopy(value: model.contractValue)
+                    }
+                ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
+            }
+            
+            if !model.attributes.isEmpty {
+                Section(model.attributesTitle) {
+                    ForEach(model.attributes) {
+                        ListItemView(title: $0.name, subtitle: $0.value)
+                    }
                 }
-                
-                Spacer()
             }
         }
-        .overlay(content: {
-            VStack {
-                navigationButtonView
-                Spacer()
-            }
-        })
-        .ignoresSafeArea(edges: .top)
-        .navigationBarHidden(true)
+        .listSectionSpacing(.compact)
+        .navigationTitle(model.title)
         .background(Colors.grayBackground)
-    }
-    
-    private var imageView: some View {
-        CachedAsyncImage(
-            url: model.imageURL,
-            scale: UIScreen.main.scale
-        ) {
-            $0.resizable()
-        } placeholder: {
-            ZStack {
-                Rectangle()
-                    .foregroundStyle(Colors.white)
-                LoadingView()
-            }
-        }
-        .aspectRatio(1, contentMode: .fill)
-    }
-    
-    private var navigationButtonView: some View {
-        HStack {
-            NavigationButton(image: Image(systemName: "chevron.left")) {
-                dismiss()
-            }
-            .padding(Spacing.medium)
-            
-            Spacer()
-            
-            NavigationButton(image: Image(systemName: "ellipsis")) {}
-            .padding(Spacing.medium)
-        }
-        .padding(.top, 60)
-    }
-    
-    private struct NavigationButton: View {
-        let image: Image
-        let action: (() -> Void)?
-        
-        var body: some View {
-            Button {
-                action?()
-            } label: {
-                VStack(alignment: .center) {
-                    image
-                        .frame(width: Sizing.image.medium, height: Sizing.image.medium)
-                        .background(Colors.grayBackground)
-                        .cornerRadius(Sizing.image.small)
-                }
-            }
-            .buttonStyle(.borderless)
-        }
     }
     
     private struct NftCollectionView: View {

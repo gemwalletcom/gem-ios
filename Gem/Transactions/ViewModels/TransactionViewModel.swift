@@ -14,7 +14,7 @@ import Preferences
 struct TransactionViewModel {
     let transaction: TransactionExtended
     private let formatter: ValueFormatter
-    private let explorerService: ExplorerService = .standart
+    private let explorerService: ExplorerService = .standard
 
     init(
         transaction: TransactionExtended,

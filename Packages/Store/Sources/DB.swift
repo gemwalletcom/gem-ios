@@ -40,7 +40,7 @@ public final class DB: ObservableObject, Sendable {
                     let sql = statement.sql
 
                     if ignoreMethods.filter({ sql.description.contains($0) }).isEmpty {
-                        //NSLog("SQL> \(sql)")
+                        // NSLog("SQL> \(sql)")
                     }
                 }
             }

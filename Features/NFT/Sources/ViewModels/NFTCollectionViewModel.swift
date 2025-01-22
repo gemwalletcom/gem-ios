@@ -7,6 +7,8 @@ import DeviceService
 import Primitives
 import Store
 import Localization
+import Style
+import SwiftUI
 
 public struct NFTCollectionViewModel: Sendable {
     struct GridItem {
@@ -15,7 +17,7 @@ public struct NFTCollectionViewModel: Sendable {
         let title: String
     }
 
-    public let wallet: Wallet
+    public var wallet: Wallet
 
     let sceneStep: Scenes.NFTCollectionScene.SceneStep
     let nftService: NFTService
@@ -33,54 +35,49 @@ public struct NFTCollectionViewModel: Sendable {
         self.deviceService = deviceService
     }
     
-    var nftRequest: NFTRequest {
+    public var nftRequest: NFTRequest {
         switch sceneStep {
         case .collections:
             return NFTRequest(
                 walletId: wallet.id,
                 collectionId: nil
             )
-        case .nft(let collectionId):
+        case .collection(let collection):
             return NFTRequest(
                 walletId: wallet.id,
-                collectionId: collectionId
+                collectionId: collection.id
             )
         }
     }
     
-    func title(list: [NFTData]) -> String {
+    var title: String {
         switch sceneStep {
-        case .collections:
-            return Localized.Nft.yourNfts
-        case .nft(let collectionId):
-            guard let collectionName = list.first(where: { $0.collection.id == collectionId})?.collection.name else {
-                return .empty
-            }
-            return collectionName
+        case .collections: Localized.Nft.collections
+        case .collection(let collection): collection.name
         }
     }
     
-    func taskOnce() async {
+    public func fetch() async {
         switch sceneStep {
         case .collections:
-            await updateNFT()
-        case .nft:
+            await updateCollection()
+        case .collection:
             break
         }
     }
     
-    func updateNFT() async {
+    func updateCollection() async {
         do {
             let deviceId = try await deviceService.getDeviceId()
-            try await nftService.updateNFT(deviceId: deviceId, wallet: wallet)
+            try await nftService.updateAssets(deviceId: deviceId, wallet: wallet)
         } catch {
-            NSLog("updateNFT error \(error)")
+            NSLog("updateCollection error \(error)")
         }
     }
     
     func createGridItem(from data: NFTData) -> GridItem {
         if data.assets.count == 1, let asset = data.assets.first {
-            return GridItem(
+            GridItem(
                 destination: Scenes.NFTDetails(collection: data.collection, asset: asset),
                 assetImage: AssetImage(
                     imageURL: URL(string: asset.image.imageUrl),
@@ -90,8 +87,8 @@ public struct NFTCollectionViewModel: Sendable {
                 title: asset.name
             )
         } else {
-            return GridItem(
-                destination: Scenes.NFTCollectionScene(sceneStep: .nft(collectionId: data.collection.id)),
+            GridItem(
+                destination: Scenes.NFTCollectionScene(sceneStep: .collection(data.collection)),
                 assetImage: AssetImage(
                     imageURL: URL(string: data.collection.image.imageUrl),
                     placeholder: nil,
@@ -100,5 +97,13 @@ public struct NFTCollectionViewModel: Sendable {
                 title: data.collection.name
             )
         }
+    }
+}
+
+extension NFTCollectionViewModel {
+    func refresh(for wallet: Wallet) {
+        //self.wallet = wallet
+        //self.filterModel = TransactionsFilterViewModel(wallet: wallet)
+        //self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 }

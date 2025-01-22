@@ -9,6 +9,7 @@ import NFTService
 import Components
 import DeviceService
 import Style
+import Localization
 
 public struct NFTScene: View {
     
@@ -25,42 +26,40 @@ public struct NFTScene: View {
     private var nftDataList: [NFTData]
     
     public init(model: NFTCollectionViewModel) {
-        _nftDataList = Query(model.nftRequest)
+        _nftDataList = Query(constant: model.nftRequest)
         self.model = model
     }
-
+    
     public var body: some View {
         ScrollView {
             LazyVGrid(columns: gridItems) {
                 switch model.sceneStep {
                 case .collections:
                     nftCollectionView
-                case .nft(let collectionId):
-                    if let nftData = nftDataList.first(where: { $0.collection.id == collectionId }) {
+                case .collection(let collection):
+                    if let nftData = nftDataList.first(where: { $0.collection.id == collection.id }) {
                         buildNFTAssetView(nftData: nftData)
                     }
                 }
             }
         }
-        .refreshable {
-            Task {
-                await model.updateNFT()
+        .refreshable(action: fetch)
+        .overlay {
+            // TODO: - migrate to StateEmptyView + Overlay, when we will have image
+            if nftDataList.isEmpty {
+                Text(Localized.Activity.EmptyState.message)
+                    .textStyle(.body)
             }
         }
-        .overlay(content: {
-            if nftDataList.isEmpty {
-                LoadingView(size: .large, tint: Colors.gray)
-            }
-        })
         .padding(.horizontal, Spacing.medium)
         .background(Colors.grayBackground)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationTitle(model.title(list: nftDataList))
+        .navigationTitle(model.title)
         .taskOnce(fetch)
     }
     
     private var nftCollectionView: some View {
-        ForEach(nftDataList, id: \.collection.id) { item in
+        ForEach(nftDataList) { item in
             let gridItem = model.createGridItem(from: item)
             
             NavigationLink(value: gridItem.destination) {
@@ -90,7 +89,7 @@ public struct NFTScene: View {
     
     private func fetch() {
         Task {
-            await model.taskOnce()
+            await model.fetch()
         }
     }
 }

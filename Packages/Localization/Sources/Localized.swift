@@ -425,14 +425,14 @@ public enum Localized {
     public static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
   }
   public enum Nft {
+    /// Collection
+    public static let collection = Localized.tr("Localizable", "nft.collection", fallback: "Collection")
     /// Collections
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
     /// Description
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
-    /// Collections
-    public static let title = Localized.tr("Localizable", "nft.title", fallback: "Collections")
     /// Your NFTs
     public static let yourNfts = Localized.tr("Localizable", "nft.your_nfts", fallback: "Your NFTs")
   }

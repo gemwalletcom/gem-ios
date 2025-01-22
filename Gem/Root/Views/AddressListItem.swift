@@ -20,7 +20,7 @@ struct AddressListItem: View {
     let title: String
     let style: AddressFormatter.Style
     let account: SimpleAccount
-    let explorerService: ExplorerService = .standart
+    let explorerService: ExplorerService = .standard
 
     var body: some View {
         HStack {

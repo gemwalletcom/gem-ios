@@ -24,7 +24,7 @@ public struct AsyncImageView: View {
     }
 
     public var body: some View {
-        CachedAsyncImage(url: url, scale: 1) {
+        CachedAsyncImage(url: url, scale: UIScreen.main.scale) {
             $0.resizable()
         } placeholder: {
             switch placeholder {

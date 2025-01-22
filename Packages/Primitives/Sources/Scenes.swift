@@ -129,7 +129,7 @@ public struct Scenes {
 
         public enum SceneStep: Hashable, Sendable {
             case collections
-            case nft(collectionId: String)
+            case collection(NFTCollection)
         }
         
         public let sceneStep: SceneStep

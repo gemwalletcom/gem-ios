@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum TabItem: Identifiable {
+enum TabItem: Identifiable, CaseIterable {
     case wallet
     case collections
     case activity

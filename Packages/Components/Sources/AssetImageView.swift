@@ -46,7 +46,7 @@ public struct AssetImageView: View {
                 image.resizable()
                 .cornerRadius(cornerRadius)
             } else {
-                CachedAsyncImage(url: assetImage.imageURL, scale: 1) {
+                CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
                     $0.resizable()
                 } placeholder: {
                     if let type = assetImage.type {

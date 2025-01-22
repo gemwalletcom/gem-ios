@@ -56,20 +56,20 @@ struct MainTabView: View {
             }
             .tag(TabItem.wallet)
             
-            #if targetEnvironment(simulator)
-            CollectionsNavigationStack(
-                model: NFTCollectionViewModel(
-                    wallet: model.wallet,
-                    sceneStep: .collections,
-                    nftService: nftService,
-                    deviceService: deviceService
+            if model.isCollectionsEnabled {
+                CollectionsNavigationStack(
+                    model: NFTCollectionViewModel(
+                        wallet: model.wallet,
+                        sceneStep: .collections,
+                        nftService: nftService,
+                        deviceService: deviceService
+                    )
                 )
-            )
-            .tabItem {
-                tabItem(Localized.Nft.title, Images.Tabs.collections)
+                .tabItem {
+                    tabItem(Localized.Nft.collections, Images.Tabs.collections)
+                }
+                .tag(TabItem.collections)
             }
-            .tag(TabItem.collections)
-            #endif
             
             TransactionsNavigationStack(
                 model: .init(

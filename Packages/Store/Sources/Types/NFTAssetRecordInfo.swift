@@ -5,22 +5,25 @@ import Primitives
 import GRDB
 
 struct NFTAssetRecordInfo: Codable, FetchableRecord {
-    let nftAsset: NFTAssetRecord
-    let image: NFTImageRecord
+    let asset: NFTAssetRecord
     let attributes: [NFTAttributeRecord]
 }
 
 extension NFTAssetRecordInfo {
     func mapToNFTAsset() -> NFTAsset {
         NFTAsset(
-            id: nftAsset.id,
-            collectionId: nftAsset.collectionId,
-            tokenId: nftAsset.tokenId,
-            tokenType: nftAsset.tokenType,
-            name: nftAsset.name,
-            description: nftAsset.description,
-            chain: nftAsset.chain,
-            image: image.mapToNFTImage(),
+            id: asset.id,
+            collectionId: asset.collectionId,
+            tokenId: asset.tokenId,
+            tokenType: asset.tokenType,
+            name: asset.name,
+            description: asset.description,
+            chain: asset.chain,
+            image: NFTImage(
+                imageUrl: asset.imageUrl,
+                previewImageUrl: asset.previewImageUrl,
+                originalSourceUrl: asset.imageUrl
+            ),
             attributes: attributes.map { $0.mapToNFTAttribute() }
         )
     }

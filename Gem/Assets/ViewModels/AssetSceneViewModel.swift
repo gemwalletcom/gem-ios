@@ -22,7 +22,7 @@ class AssetSceneViewModel: ObservableObject {
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
-    let explorerService: ExplorerService = .standart
+    let explorerService: ExplorerService = .standard
 
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50

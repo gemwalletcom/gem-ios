@@ -10,7 +10,7 @@ import Preferences
 public struct ExplorerService {
     private let preferences: any ExplorerPreferencesStorable
 
-    public static let standart: ExplorerService = ExplorerService()
+    public static let standard: ExplorerService = ExplorerService()
 
     public init(preferences: any ExplorerPreferencesStorable = ExplorerPreferences()) {
         self.preferences = preferences

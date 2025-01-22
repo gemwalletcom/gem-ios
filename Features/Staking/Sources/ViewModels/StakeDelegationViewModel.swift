@@ -14,7 +14,7 @@ public struct StakeDelegationViewModel {
     public let delegation: Delegation
     private let formatter = ValueFormatter(style: .medium)
     private let validatorImageFormatter = AssetImageFormatter()
-    private let exploreService: ExplorerService = .standart
+    private let exploreService: ExplorerService = .standard
 
     private static let dateFormatterDefault: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
