@@ -42,13 +42,11 @@ public struct Migrations {
             try BannerRecord.create(db: db)
             try PriceAlertRecord.create(db: db)
             
-            #if targetEnvironment(simulator)
             // nft
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAttributeRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
-            #endif
         }
 
         // delete later (after Oct 2024, as it's part of start tables)

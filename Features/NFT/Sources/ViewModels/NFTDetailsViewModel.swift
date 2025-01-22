@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import PrimitivesComponents
 import Localization
 import Components
 import Style
@@ -38,8 +39,24 @@ public struct NFTDetailsViewModel {
         AssetImage(imageURL: URL(string: collection.image.previewImageUrl), placeholder: .none, chainPlaceholder: .none)
     }
     
+    public var networkTitle: String {
+        Localized.Transfer.network
+    }
+    
+    public var networkText: String {
+        asset.chain.asset.name
+    }
+    
     public var contractTitle: String {
         Localized.Asset.contract
+    }
+    
+    public var networkAssetImage: AssetImage {
+        AssetImage(
+            imageURL: .none,
+            placeholder: ChainImage(chain: asset.chain).image,
+            chainPlaceholder: .none
+        )
     }
 
     public var contractText: String {
@@ -69,7 +86,7 @@ public struct NFTDetailsViewModel {
     public var assetImage: AssetImage {
         AssetImage(
             imageURL: URL(string: asset.image.imageUrl),
-            placeholder: Images.Chains.algorand,
+            placeholder: .none,
             chainPlaceholder: .none
         )
     }

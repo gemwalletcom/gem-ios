@@ -34,6 +34,11 @@ public struct NFTDetailsScene: View {
                     Spacer()
                     AssetImageView(assetImage: model.collectionAssetImage, size: Sizing.image.small)
                 }
+                HStack {
+                    ListItemView(title: model.networkTitle, subtitle: model.networkText)
+                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                }
+                
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
                     .contextMenu {
                         ContextMenuCopy(value: model.contractValue)
