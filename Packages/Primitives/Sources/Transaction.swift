@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct Transaction: Codable, Sendable {
+public struct Transaction: Codable, Equatable, Sendable {
 	public let id: String
 	public let hash: String
 	public let assetId: AssetId
@@ -48,7 +48,7 @@ public struct Transaction: Codable, Sendable {
 	}
 }
 
-public struct TransactionsFetchOption: Codable, Sendable {
+public struct TransactionsFetchOption: Codable, Equatable, Sendable {
 	public let wallet_index: Int32
 	public let asset_id: String?
 	public let from_timestamp: UInt32?

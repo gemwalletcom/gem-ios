@@ -38,13 +38,20 @@ extension Transaction {
     }
 }
 
-extension Transaction: Equatable {
-    public static func == (lhs: Transaction, rhs: Transaction) -> Bool {
-        lhs.id == rhs.id &&
-        lhs.state == rhs.state &&
-        lhs.createdAt == rhs.createdAt &&
-        lhs.direction == rhs.direction
+extension Transaction: Identifiable { }
+
+extension TransactionMetadata: Equatable {
+    public static func == (lhs: TransactionMetadata, rhs: TransactionMetadata) -> Bool {
+        switch (lhs, rhs) {
+        case (.null, .null):
+            return true
+        case (.swap(let lhsSwap), .swap(let rhsSwap)):
+            return lhsSwap.fromAsset == rhsSwap.fromAsset &&
+            lhsSwap.toAsset == rhsSwap.toAsset &&
+            lhsSwap.toValue == rhsSwap.toValue &&
+            lhsSwap.fromValue == rhsSwap.fromValue
+        default:
+            return false
+        }
     }
 }
-
-extension Transaction: Identifiable { }
