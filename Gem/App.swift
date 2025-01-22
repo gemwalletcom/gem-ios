@@ -8,6 +8,7 @@ import NodeService
 import GemAPI
 import LockManager
 import Preferences
+import AssetsService
 
 @main
 struct GemApp: App {

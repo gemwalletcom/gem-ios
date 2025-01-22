@@ -95,11 +95,16 @@ extension ConfirmTransferScene {
                 }
                 
                 if model.shouldShowRecipientField {
-                    AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+                    AddressListItemView(
+                        title: model.recipientTitle,
+                        style: .full,
+                        account: model.recipientValue,
+                        explorerService: model.explorerService
+                    )
                 }
 
                 if model.shouldShowMemo {
-                    MemoListItem(memo: model.memo)
+                    MemoListItemView(memo: model.memo)
                 }
                 
                 if let slippage = model.slippageText {

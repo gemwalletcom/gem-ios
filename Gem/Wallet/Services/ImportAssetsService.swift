@@ -8,6 +8,7 @@ import GemAPI
 import NodeService
 import Preferences
 import GemstonePrimitives
+import AssetsService
 
 struct ImportAssetsService {
     let nodeService: NodeService

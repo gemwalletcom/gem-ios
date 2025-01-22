@@ -10,6 +10,7 @@ import DeviceService
 import SwapService
 import NodeService
 import Preferences
+import AssetsService
 
 class OnstartAsyncService {
     

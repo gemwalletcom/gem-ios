@@ -5,21 +5,25 @@ import Components
 import Style
 import Localization
 import PrimitivesComponents
+import ExplorerService
 
 class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
     let keystore: any Keystore
+    let explorerService: any ExplorerLinkFetchable
 
     init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        keystore: any Keystore
+        keystore: any Keystore,
+        explorerService: any ExplorerLinkFetchable = ExplorerService.standart
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet
         self.keystore = keystore
+        self.explorerService = explorerService
     }
 
     var image: AssetImage {

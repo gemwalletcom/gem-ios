@@ -17,6 +17,8 @@ import PriceService
 import Preferences
 import ExplorerService
 import BalanceService
+import AssetsService
+import TransactionsService
 
 struct ServicesFactory {
     @MainActor

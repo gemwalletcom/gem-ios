@@ -18,6 +18,8 @@ import WalletConnector
 import ExplorerService
 import NFTService
 import BalanceService
+import AssetsService
+import TransactionsService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main

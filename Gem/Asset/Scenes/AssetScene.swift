@@ -138,7 +138,10 @@ struct AssetScene: View {
             }
 
             if transactions.count > 0 {
-                TransactionsList(transactions)
+                TransactionsList(
+                    explorerService: model.explorerService,
+                    transactions
+                )
             } else {
                 Section {
                     StateEmptyView(title: Localized.Activity.EmptyState.message)

@@ -14,6 +14,7 @@ import Style
 import SwapService
 import SwiftUI
 import Transfer
+import ExplorerService
 
 import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
@@ -49,6 +50,8 @@ class SwapViewModel {
 
     var swapState: SwapState = SwapState()
 
+    let explorerService: any ExplorerLinkFetchable = ExplorerService.standart
+    
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
 
