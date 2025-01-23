@@ -8,6 +8,7 @@ import Primitives
 import Style
 import Components
 import Localization
+import PrimitivesComponents
 
 public struct PriceAlertsScene: View {
     @State private var model: PriceAlertsViewModel
@@ -33,21 +34,22 @@ public struct PriceAlertsScene: View {
             }
 
             Section {
-                if priceAlerts.isEmpty {
-                    StateEmptyView(title: Localized.PriceAlerts.EmptyState.message)
-                } else {
-                    ForEach(priceAlerts) { alert in
-                        NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                            ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
-                                .swipeActions(edge: .trailing) {
-                                    Button(Localized.Common.delete, role: .destructive) {
-                                        onDelete(alert: alert)
-                                    }
-                                    .tint(Colors.red)
+                ForEach(priceAlerts) { alert in
+                    NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                        ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                            .swipeActions(edge: .trailing) {
+                                Button(Localized.Common.delete, role: .destructive) {
+                                    onDelete(alert: alert)
                                 }
-                        }
+                                .tint(Colors.red)
+                            }
                     }
                 }
+            }
+        }
+        .overlay {
+            if priceAlerts.isEmpty {
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)
