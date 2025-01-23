@@ -30,7 +30,7 @@ struct SelectedAssetNavigationStack: View  {
         self.wallet = wallet
         _isPresentingAssetSelectType = isPresentingAssetSelectType
     }
-    
+
     var body: some View {
         NavigationStack(path: $navigationPath) {
             switch selectType.type {

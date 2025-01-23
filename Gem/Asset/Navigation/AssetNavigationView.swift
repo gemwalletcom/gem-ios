@@ -48,7 +48,7 @@ struct AssetNavigationView: View {
             ConfirmTransferNavigationStack(
                 wallet: wallet,
                 transferData: data
-            ) {
+            ) { _ in
                 transferData = .none
             }
         }

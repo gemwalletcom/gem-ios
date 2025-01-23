@@ -203,9 +203,9 @@ extension SolanaService {
                     options: options
                 )
             }
-        case .swap, .stake:
+        case .swap, .stake, .generic:
             return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .generic, .account: fatalError()
+        case .account: fatalError()
         }
     }
 }

@@ -19,13 +19,13 @@ struct StakeNavigationView: View {
 
     @Binding private var navigationPath: NavigationPath
 
-    private let onComplete: VoidAction
-    
+    private let onComplete: StringsAction
+
     init(
         wallet: Wallet,
         assetId: AssetId,
         navigationPath: Binding<NavigationPath>,
-        onComplete: VoidAction
+        onComplete: StringsAction
     ) {
         self.wallet = wallet
         self.assetId = assetId

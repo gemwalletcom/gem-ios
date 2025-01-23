@@ -60,7 +60,9 @@ struct RecipientNavigationView: View {
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: data.recipientData.asset.chain),
                     walletsService: walletsService,
-                    onComplete: onComplete
+                    onComplete: { _ in
+                        self.onComplete?()
+                    }
                 )
             )
         }

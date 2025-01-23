@@ -89,28 +89,55 @@ public struct SolanaSigner: Signable {
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        guard case .generic(_, _, let extra) = input.type,
-              let string = String(data: extra.data!, encoding: .utf8),
-              let bytes = Base64.decode(string: string) else {
+        guard
+            case .generic(_, _, let extra) = input.type,
+            let string = String(data: extra.data!, encoding: .utf8),
+            let bytes = Base64.decode(string: string)
+        else {
             throw AnyError("not data input")
         }
-        return try signData(bytes: bytes, privateKey: privateKey)
+        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType ?? .encodedTx)
     }
     
-    func signData(bytes: Data, privateKey: Data) throws -> String {
-        if bytes[0] != 1 {
-            throw AnyError("only support one signature")
+    func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
+        var offset = 0
+        // read number of signature neede
+        let numRequiredSignatures = bytes[offset]
+        offset = 1
+
+        // read all the signatures
+        var signatures: [Data] = []
+        for _ in 0..<Int(numRequiredSignatures) {
+            signatures.append(Data(bytes[offset..<offset+64]))
+            offset += 64
         }
-        
-        let message = bytes[65...]
-        guard let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519) else {
+
+        assert(offset == 1 + 64 * numRequiredSignatures)
+        guard signatures[0] == Data(repeating: 0x0, count: 64) else {
+            throw AnyError("user signature should be first")
+        }
+
+        // read message to sign
+        let message = bytes[offset...]
+        guard
+            let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519)
+        else {
             throw AnyError("fail to sign data")
         }
-        
-        var signed = Data([0x1])
-        signed.append(signature)
-        signed.append(message)
-        return signed.base64EncodedString()
+
+        switch outputType {
+        case .signature:
+            return signature.base64EncodedString()
+        case .encodedTx:
+            // update user's signature
+            signatures[0] = signature
+
+            var signed = Data([numRequiredSignatures])
+            for sig in signatures {
+                signed.append(sig)
+            }
+            return signed.base64EncodedString()
+        }
     }
     
     public func swap(input: SignerInput, privateKey: Data) throws -> String {

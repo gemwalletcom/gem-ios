@@ -105,4 +105,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             [asset.id]
         }
     }
+
+    public var outputSignature: Bool {
+        return switch self {
+        case .generic(_, _, let extra): extra.outputType == .signature
+        default: false
+        }
+    }
 }
