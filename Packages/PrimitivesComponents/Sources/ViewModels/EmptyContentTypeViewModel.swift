@@ -6,6 +6,7 @@ import SwiftUI
 import Style
 import Components
 
+// TODO: - add localizations, add actions ( now they are empty ), review texts, review images
 public struct EmptyContentTypeViewModel: EmptyContentViewable {
     public let type: EmptyContentType
 
