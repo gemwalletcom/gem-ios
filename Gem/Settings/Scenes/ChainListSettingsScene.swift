@@ -9,7 +9,6 @@ import Localization
 import PrimitivesComponents
 
 struct ChainListSettingsScene: View {
-
     let model = ChainListSettingsViewModel()
 
     var body: some View {
@@ -22,10 +21,7 @@ struct ChainListSettingsScene: View {
                 }
             },
             emptyContent: {
-                StateEmptyView(
-                    title: Localized.Common.noResultsFound,
-                    image: Images.System.searchNoResults
-                )
+                EmptyContentView(model: model.emptyContent)
             }
         )
         .navigationTitle(model.title)
