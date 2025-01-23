@@ -8,6 +8,7 @@ import Localization
 import Preferences
 import TransactionsService
 import ExplorerService
+import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -37,6 +38,10 @@ public final class TransactionsViewModel {
     public var title: String { Localized.Activity.title }
     public var walletId: WalletId {
         WalletId(id: wallet.id)
+    }
+
+    public var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .activity())
     }
 }
 

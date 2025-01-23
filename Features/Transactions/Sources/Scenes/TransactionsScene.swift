@@ -39,10 +39,8 @@ public struct TransactionsScene: View {
         }
         .background(Colors.grayBackground)
         .overlay {
-            // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {
-                Text(Localized.Activity.EmptyState.message)
-                    .textStyle(.body)
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .task {
