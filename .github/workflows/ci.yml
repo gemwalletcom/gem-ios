@@ -37,9 +37,7 @@ jobs:
         run: cargo install just
 
       - name: Install dependencies
-        run: |
-          rustc --version
-          just install-typeshare && just install-toolchains && just install-swifttools
+        run: just install-toolchains && just install-swifttools
 
       - name: Build Core
         run: just install-gemstone
