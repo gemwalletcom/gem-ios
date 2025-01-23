@@ -181,7 +181,7 @@ class ConfirmTransferViewModel {
     
     private var slippage: Double? {
         if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action {
-            Double(Double(quote.request.options.slippageBps) / 100).rounded(toPlaces: 2)
+            Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
         }

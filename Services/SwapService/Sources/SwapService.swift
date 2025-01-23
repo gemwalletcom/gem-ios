@@ -57,7 +57,7 @@ public final class SwapService {
             value: value,
             mode: .exactIn,
             options: GemSwapOptions(
-                slippageBps: swapConfig.defaultSlippageBps,
+                slippage: .init(bps: swapConfig.defaultSlippageBps, mode: .exact),
                 fee: getReferralFees(),
                 preferredProviders: []
             )
