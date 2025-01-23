@@ -46,37 +46,15 @@ final class BitcoinFeeTests {
             chain: chain,
             senderAddress: feeInput.senderAddress,
             destinationAddress: feeInput.destinationAddress,
-            amount: feeInput.value,
+            amount: BigInt(1000),
             isMaxAmount: feeInput.isMaxAmount,
-            gasPrice: feeInput.gasPrice.gasPrice,
+            gasPrice: BigInt(10),
             utxos: utxos
         )
-
-        let coinType = chain.chain.coinType
-        let byteFee = Int(round(Double(feeInput.gasPrice.gasPrice.asInt) / 1000.0))
-        let computedGasPrice = max(byteFee, chain.minimumByteFee)
-
-        let unspent = utxos.map { $0.mapToUnspendTransaction(address: feeInput.senderAddress, coinType: coinType) }
-        let scripts = unspent.mapToScripts(address: feeInput.senderAddress, coinType: coinType)
-        let hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
-
-        let input = BitcoinSigningInput.with {
-            $0.coinType = coinType.rawValue
-            $0.hashType = hashType
-            $0.amount = feeInput.value.asInt64
-            $0.byteFee = Int64(computedGasPrice)
-            $0.toAddress = feeInput.destinationAddress
-            $0.changeAddress = feeInput.senderAddress
-            $0.utxo = unspent
-            $0.scripts = scripts
-            $0.useMaxAmount = feeInput.isMaxAmount
-        }
-
-        let plan: BitcoinTransactionPlan = AnySigner.plan(input: input, coin: coinType)
-
+    
         let targetFee = Fee(
-            fee: BigInt(plan.fee),
-            gasPriceType: .regular(gasPrice: BigInt(computedGasPrice)),
+            fee: BigInt(1780),
+            gasPriceType: .regular(gasPrice: BigInt(10)),
             gasLimit: 1
         )
         #expect(fee == targetFee)

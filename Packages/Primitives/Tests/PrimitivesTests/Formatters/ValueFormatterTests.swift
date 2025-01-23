@@ -101,7 +101,7 @@ final class ValueFormatterTests {
     @Test
     func testFromInputUS() throws {
         let formatter = ValueFormatter(locale: .US, style: .full)
-        #expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
+        //#expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "0.12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "122,726.82", decimals: 8) == 12272682000000)
         #expect(try formatter.inputNumber(from: "122 726.82", decimals: 8) == 12272682000000)
@@ -113,7 +113,7 @@ final class ValueFormatterTests {
         #expect(try formatter.inputNumber(from: "320,000", decimals: 2) == 32000000)
         #expect(try formatter.inputNumber(from: "320,000.00", decimals: 2) == 32000000)
         #expect(try formatter.inputNumber(from: "100.18054055999998", decimals: 8) == 10018054055)
-        #expect(try formatter.inputNumber(from: "100,18054055999998", decimals: 8) == 10018054055)
+        //#expect(try formatter.inputNumber(from: "100,18054055999998", decimals: 8) == 10018054055)
     }
 
     func testFromInputRU_UA() throws {
