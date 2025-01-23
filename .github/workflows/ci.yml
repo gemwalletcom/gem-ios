@@ -42,8 +42,7 @@ jobs:
         run: just install-toolchains && just install-swifttools
 
       - name: Build Core
-        run: just install-gemstone
+        run: just generate-stone
 
       - name: Unit Tests
-        run: |
-          just test
+        run: just test
