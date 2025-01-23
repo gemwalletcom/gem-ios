@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Store
 import Localization
+import PrimitivesComponents
 @preconcurrency import Keystore
 
 public struct ConnectionsViewModel: Sendable {
@@ -20,9 +21,12 @@ public struct ConnectionsViewModel: Sendable {
 
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
-    var emptyStateTitle: String { Localized.WalletConnect.noActiveConnections }
 
     var request: ConnectionsRequest { ConnectionsRequest() }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .walletConnect)
+    }
 
     func addConnectionURI(uri: String) async throws {
         let wallet = try keystore.getCurrentWallet()
