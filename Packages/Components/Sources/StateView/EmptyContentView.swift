@@ -2,13 +2,12 @@
 
 import SwiftUI
 import Primitives
-import Components
 import Style
 
 public struct EmptyContentView: View {
-    public let model: EmptyContentTypeViewModel
+    public let model: any EmptyContentViewable
 
-    public init(model: EmptyContentTypeViewModel) {
+    public init(model: any EmptyContentViewable) {
         self.model = model
     }
 
@@ -38,11 +37,11 @@ public struct EmptyContentView: View {
 
 // simple wrapper to store inside a list as section
 public struct EmptyContentSection: View {
-    public let model: EmptyContentTypeViewModel
+    public let model: any EmptyContentViewable
     public let botomPadding: CGFloat
 
     public init(
-        model: EmptyContentTypeViewModel,
+        model: any EmptyContentViewable,
         botomPadding: CGFloat = Spacing.large
     ) {
         self.model = model
@@ -59,14 +58,4 @@ public struct EmptyContentSection: View {
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
     }
-}
-
-#Preview {
-    EmptyContentView(
-        model: .init(
-            type: .activity(
-                receive: {},
-                buy: {})
-        )
-    )
 }

@@ -4,22 +4,16 @@ import Foundation
 import Primitives
 import SwiftUI
 import Style
+import Components
 
-public struct EmptyAction: Identifiable {
-    let title: String
-    let action: VoidAction
-
-    public var id: String { title }
-}
-
-public struct EmptyContentTypeViewModel {
+public struct EmptyContentTypeViewModel: EmptyContentViewable {
     public let type: EmptyContentType
 
     public init(type: EmptyContentType) {
         self.type = type
     }
 
-    var title: String {
+    public var title: String {
         switch type {
         case .nfts: "Your NFTs will appear here️"
         case .priceAlerts: "Your alerts will appear here️"
@@ -35,7 +29,7 @@ public struct EmptyContentTypeViewModel {
         }
     }
 
-    var description: String? {
+    public var description: String? {
         switch type {
         case .nfts: "Collect your first NFT"
         case .priceAlerts: "Enable them by adding coins to track"
@@ -51,7 +45,7 @@ public struct EmptyContentTypeViewModel {
         }
     }
 
-    var image: Image? {
+    public var image: Image? {
         switch type {
         case .nfts: Images.EmptyContent.nft
         case .priceAlerts: Images.EmptyContent.priceAlerts
@@ -62,7 +56,7 @@ public struct EmptyContentTypeViewModel {
         }
     }
 
-    var buttons: [EmptyAction] {
+    public var buttons: [EmptyAction] {
         switch type {
         case .nfts, .priceAlerts, .asset, .stake, .walletConnect:
             return []
