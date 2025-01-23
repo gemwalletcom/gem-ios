@@ -36,6 +36,31 @@ public struct EmptyContentView: View {
     }
 }
 
+// simple wrapper to store inside a list as section
+public struct EmptyContentSection: View {
+    public let model: EmptyContentTypeViewModel
+    public let botomPadding: CGFloat
+
+    public init(
+        model: EmptyContentTypeViewModel,
+        botomPadding: CGFloat = Spacing.large
+    ) {
+        self.model = model
+        self.botomPadding = botomPadding
+    }
+
+    public var body: some View {
+        Section { } header: {
+            EmptyContentView(model: model)
+                .padding(.top, Spacing.large)
+        }
+        .frame(maxWidth: .infinity)
+        .textCase(nil)
+        .listRowSeparator(.hidden)
+        .listRowInsets(EdgeInsets())
+    }
+}
+
 #Preview {
     EmptyContentView(
         model: .init(

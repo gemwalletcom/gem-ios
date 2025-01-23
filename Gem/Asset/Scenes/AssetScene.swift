@@ -143,9 +143,7 @@ struct AssetScene: View {
                     transactions
                 )
             } else {
-                Section {
-                    StateEmptyView(title: Localized.Activity.EmptyState.message)
-                }
+                EmptyContentSection(model: model.emptyConentModel)
             }
         }
         .refreshable {
