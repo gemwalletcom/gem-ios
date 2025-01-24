@@ -127,7 +127,7 @@ public struct SolanaSigner: Signable {
 
         switch outputType {
         case .signature:
-            return signature.base64EncodedString()
+            return Base58.encodeNoCheck(data: signature)
         case .encodedTx:
             // update user's signature
             signatures[0] = signature
