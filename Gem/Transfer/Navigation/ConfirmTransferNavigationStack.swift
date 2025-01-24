@@ -16,12 +16,12 @@ struct ConfirmTransferNavigationStack: View {
     
     private let wallet: Wallet
     private let transferData: TransferData
-    private let onComplete: StringsAction
+    private let onComplete: VoidAction
 
     public init(
         wallet: Wallet,
         transferData: TransferData,
-        onComplete: StringsAction
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.transferData = transferData
@@ -44,7 +44,7 @@ struct ConfirmTransferNavigationStack: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {
-                        onComplete?([])
+                        onComplete?()
                     }
                     .bold()
                 }

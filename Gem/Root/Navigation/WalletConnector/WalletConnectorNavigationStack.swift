@@ -36,7 +36,7 @@ struct WalletConnectorNavigationStack: View {
                                 .service(for: data.payload.tranferData.recipientData.asset.chain),
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
-                            onComplete: { _ in presenter.complete(type: type) }
+                            onComplete: { presenter.complete(type: type) }
                         )
                     )
                 case .signMessage(let data):

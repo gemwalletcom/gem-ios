@@ -44,7 +44,7 @@ class ConfirmTransferViewModel {
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
-    private let onComplete: StringsAction
+    private let onComplete: VoidAction
 
     init(
         wallet: Wallet,
@@ -54,7 +54,7 @@ class ConfirmTransferViewModel {
         walletsService: WalletsService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
-        onComplete: StringsAction
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.keystore = keystore
@@ -301,7 +301,7 @@ extension ConfirmTransferViewModel {
         }
     }
 
-    func process(input: TransactionPreload, amount: TransferAmount) async -> [String] {
+    func process(input: TransactionPreload, amount: TransferAmount) async -> Void {
         await MainActor.run { [self] in
             self.confirmingState = .loading
         }
@@ -309,6 +309,7 @@ extension ConfirmTransferViewModel {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
             for data in signedData {
                 if self.data.type.outputSignature {
+                    confirmTransferDelegate?(.success(data))
                     continue
                 }
                 let hash = try await broadcast(data: data, options: broadcastOptions)
@@ -324,18 +325,16 @@ extension ConfirmTransferViewModel {
             await MainActor.run { [self] in
                 self.confirmingState = .loaded(true)
             }
-            return signedData
         } catch {
             await MainActor.run { [self] in
                 self.confirmingState = .error(error)
             }
             NSLog("confirm transaction error: \(error)")
-            return []
         }
     }
     
-    func onCompleteAction(data: [String]) {
-        self.onComplete?(data)
+    func onCompleteAction() {
+        self.onComplete?()
     }
 }
 

@@ -203,10 +203,10 @@ extension ConfirmTransferScene {
 
     private func process(input: TransactionPreload, amount: TransferAmount) {
         Task {
-            let data = await model.process(input: input, amount: amount)
+            await model.process(input: input, amount: amount)
             await MainActor.run {
                 if case .loaded(_) = model.confirmingState {
-                    model.onCompleteAction(data: data)
+                    model.onCompleteAction()
                 }
             }
         }
@@ -222,6 +222,6 @@ extension ConfirmTransferScene {
         data: .main,
         service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
         walletsService: .main,
-        onComplete: { _ in }
+        onComplete: { }
     ))
 }

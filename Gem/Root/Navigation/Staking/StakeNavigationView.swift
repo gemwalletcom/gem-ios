@@ -56,9 +56,7 @@ struct StakeNavigationView: View {
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
                     walletsService: walletsService,
-                    onComplete: { _ in
-                        self.onComplete?()
-                    }
+                    onComplete: onComplete
                 )
             )
         }
