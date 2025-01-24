@@ -19,13 +19,13 @@ struct StakeNavigationView: View {
 
     @Binding private var navigationPath: NavigationPath
 
-    private let onComplete: StringsAction
+    private let onComplete: VoidAction
 
     init(
         wallet: Wallet,
         assetId: AssetId,
         navigationPath: Binding<NavigationPath>,
-        onComplete: StringsAction
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.assetId = assetId
@@ -56,7 +56,9 @@ struct StakeNavigationView: View {
                     service: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.recipientData.asset.chain),
                     walletsService: walletsService,
-                    onComplete: onComplete
+                    onComplete: { _ in
+                        self.onComplete?()
+                    }
                 )
             )
         }

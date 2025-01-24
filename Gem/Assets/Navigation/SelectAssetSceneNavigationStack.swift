@@ -68,7 +68,7 @@ struct SelectAssetSceneNavigationStack: View {
                         wallet: model.wallet,
                         asset: input.asset,
                         navigationPath: $navigationPath,
-                        onComplete: { _ in
+                        onComplete: {
                             isPresentingSelectType = nil
                         }
                     )
