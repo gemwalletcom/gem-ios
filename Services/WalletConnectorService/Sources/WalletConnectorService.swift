@@ -282,7 +282,8 @@ extension WalletConnectorService {
     private func solanaSignTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
         let tx = try request.params.get(WCSolanaTransaction.self)
         let signature = try await signer.signTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(tx.transaction))
-        return .response(AnyCodable(signature))
+        let result = WCSolanaSignMessageResult(signature: signature)
+        return .response(AnyCodable(result))
     }
 
     private func solanaSendTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
