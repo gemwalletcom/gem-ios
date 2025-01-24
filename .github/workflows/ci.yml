@@ -59,15 +59,7 @@ jobs:
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
-      
-      - name: Cache sccache
-        uses: actions/cache@v4
-        with:
-          path: ~/.cache/sccache
-          key: ${{ runner.os }}-sccache
-          restore-keys: |
-            ${{ runner.os }}-
-
+    
       - name: Install just
         run: brew install just
 

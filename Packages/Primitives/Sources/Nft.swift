@@ -26,10 +26,12 @@ public struct NFTImage: Codable, Equatable, Hashable, Sendable {
 public struct NFTAttribute: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let value: String
+	public let percentage: Double?
 
-	public init(name: String, value: String) {
+	public init(name: String, value: String, percentage: Double?) {
 		self.name = name
 		self.value = value
+		self.percentage = percentage
 	}
 }
 

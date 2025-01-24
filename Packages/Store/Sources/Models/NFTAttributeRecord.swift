@@ -40,7 +40,8 @@ extension NFTAttributeRecord {
     func mapToNFTAttribute() -> NFTAttribute {
         NFTAttribute(
             name: name,
-            value: value
+            value: value,
+            percentage: percentage
         )
     }
 }
@@ -51,7 +52,7 @@ extension NFTAttribute {
             assetId: assetId,
             name: name,
             value: value,
-            percentage: .none
+            percentage: percentage
         )
     }
 }
