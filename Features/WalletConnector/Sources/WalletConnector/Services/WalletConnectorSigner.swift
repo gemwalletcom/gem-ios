@@ -153,9 +153,9 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             )
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
-        case .solana(let data):
+        case .solana(let tx):
             let transferData = TransferData(
-                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: data.data(using: .utf8))),
+                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8))),
                 recipientData: RecipientData(
                     asset: chain.asset,
                     recipient: Recipient(name: .none, address: "", memo: .none),
