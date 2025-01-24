@@ -48,6 +48,14 @@ jobs:
           key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-build-
+      
+      - name: Cache build artifacts (gemstone target directory)
+        uses: actions/cache@v4
+        with:
+          path: core/gemstone/target
+          key: ${{ runner.os }}-cargo-gemstone-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-gemstone-build-
 
       # - uses: actions/cache@v4
       #   with:
