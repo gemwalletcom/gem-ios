@@ -106,10 +106,10 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         }
     }
 
-    public var outputSignature: Bool {
+    public var outputType: TransferDataExtra.OutputType {
         return switch self {
-        case .generic(_, _, let extra): extra.outputType == .signature
-        default: false
+        case .generic(_, _, let extra): extra.outputType
+        default: .encodedTransaction
         }
     }
 }

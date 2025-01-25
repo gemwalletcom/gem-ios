@@ -96,7 +96,7 @@ public struct SolanaSigner: Signable {
         else {
             throw AnyError("not data input")
         }
-        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType ?? .encodedTx)
+        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType ?? .encodedTransaction)
     }
     
     func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
@@ -128,7 +128,7 @@ public struct SolanaSigner: Signable {
         switch outputType {
         case .signature:
             return Base58.encodeNoCheck(data: signature)
-        case .encodedTx:
+        case .encodedTransaction:
             // update user's signature
             signatures[0] = signature
 

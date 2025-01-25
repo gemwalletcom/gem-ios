@@ -308,17 +308,20 @@ extension ConfirmTransferViewModel {
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
             for data in signedData {
-                if self.data.type.outputSignature {
-                    confirmTransferDelegate?(.success(data))
-                    continue
-                }
-                let hash = try await broadcast(data: data, options: broadcastOptions)
-                let transaction = try getTransaction(input: input, amount: amount, hash: hash)
-                try addTransaction(transaction: transaction)
+                switch self.data.type.outputType {
+                case .encodedTransaction:
+                    let hash = try await broadcast(data: data, options: broadcastOptions)
+                    let transaction = try getTransaction(input: input, amount: amount, hash: hash)
+                    try addTransaction(transaction: transaction)
 
-                // delay if multiple transaction should be exectured
-                if signedData.count > 1 && data != signedData.last {
-                    try await Task.sleep(for: transactionDelay)
+                    // delay if multiple transaction should be exectured
+                    if signedData.count > 1 && data != signedData.last {
+                        try await Task.sleep(for: transactionDelay)
+                    }
+                case .signature:
+                    await MainActor.run { [self] in
+                        confirmTransferDelegate?(.success(data))
+                    }
                 }
             }
 
