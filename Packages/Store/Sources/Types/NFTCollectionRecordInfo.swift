@@ -6,7 +6,7 @@ import Primitives
 
 struct NFTCollectionRecordInfo: Codable, FetchableRecord {
     let collection: NFTCollectionRecord
-    let assets: [NFTAssetRecordInfo]
+    let assets: [NFTAssetRecord]
 }
 
 extension NFTCollectionRecordInfo {
@@ -23,9 +23,10 @@ extension NFTCollectionRecordInfo {
                     previewImageUrl: collection.previewImageUrl,
                     originalSourceUrl: collection.imageUrl
                 ),
-                isVerified: collection.isVerified
+                isVerified: collection.isVerified,
+                links: collection.links ?? []
             ),
-            assets: assets.map { $0.mapToNFTAsset() }
+            assets: assets.map { $0.mapToAsset() }
         )
     }
 }

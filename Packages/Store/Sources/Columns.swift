@@ -150,6 +150,7 @@ struct Columns {
         static let chain = Column("chain")
         static let contractAddress = Column("contractAddress")
         static let isVerified = Column("isVerified")
+        static let links = Column("links")
         static let imageUrl = Column("imageUrl")
         static let previewImageUrl = Column("previewImageUrl")
     }

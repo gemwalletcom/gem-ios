@@ -45,7 +45,6 @@ public struct Migrations {
             // nft
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
-            try NFTAttributeRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
         }
 
@@ -184,17 +183,29 @@ public struct Migrations {
         migrator.registerMigration("Add initial nft setup tables drop") { db in
             try? db.drop(table: NFTCollectionRecord.databaseTableName)
             try? db.drop(table: NFTAssetRecord.databaseTableName)
-            try? db.drop(table: NFTAttributeRecord.databaseTableName)
             try? db.drop(table: NFTAssetAssociationRecord.databaseTableName)
             try? db.drop(table: "nft_collection_images")
             try? db.drop(table: "nft_images")
+            try? db.drop(table: "nft_attributes")
         }
         
         migrator.registerMigration("Add initial nft tables setup") { db in
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
-            try NFTAttributeRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
+        }
+        
+        migrator.registerMigration("Add links to \(NFTCollectionRecord.databaseTableName)") { db in
+            try? db.alter(table: NFTCollectionRecord.databaseTableName) {
+                $0.add(column: Columns.NFTCollection.links.name, .jsonText)
+            }
+        }
+        
+        migrator.registerMigration("Add attributes to \(NFTAssetRecord.databaseTableName)") { db in
+            try? db.drop(table: "nft_attributes")
+            try? db.alter(table: NFTAssetRecord.databaseTableName) {
+                $0.add(column: Columns.NFTAsset.attributes.name, .jsonText)
+            }
         }
 
         try migrator.migrate(dbQueue)

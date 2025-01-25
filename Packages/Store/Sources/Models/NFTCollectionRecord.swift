@@ -11,7 +11,8 @@ struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
     var chain: Chain
     var contractAddress: String
     var isVerified: Bool
-    
+    var links: [AssetLink]?
+
     var imageUrl: String
     var previewImageUrl: String
 
@@ -34,6 +35,7 @@ extension NFTCollectionRecord: CreateTable {
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
             $0.column(Columns.NFTCollection.contractAddress.name, .text).notNull()
             $0.column(Columns.NFTCollection.isVerified.name, .boolean).notNull()
+            $0.column(Columns.NFTCollection.links.name, .jsonText)
             $0.column(Columns.NFTCollection.imageUrl.name, .text)
             $0.column(Columns.NFTCollection.previewImageUrl.name, .text)
         }
@@ -49,6 +51,7 @@ extension NFTCollection {
             chain: chain,
             contractAddress: contractAddress,
             isVerified: isVerified,
+            links: links,
             imageUrl: image.imageUrl,
             previewImageUrl: image.previewImageUrl
         )

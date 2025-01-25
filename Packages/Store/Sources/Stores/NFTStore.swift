@@ -27,9 +27,6 @@ public struct NFTStore: Sendable {
                 for asset in nftData.assets {
                     try asset.record().upsert(db)
                     
-                    for attribute in asset.attributes {
-                        try attribute.record(for: asset.id).upsert(db)
-                    }
                     let assetAssociation = NFTAssetAssociationRecord(walletId: walletId, collectionId: collection.id, assetId: asset.id)
                     try assetAssociation.upsert(db)
                     

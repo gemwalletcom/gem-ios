@@ -12,12 +12,12 @@ struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
     var name: String
     var description: String?
     var chain: Chain
-    
+    var attributes: [NFTAttribute]?
+
     var imageUrl: String
     var previewImageUrl: String
     
     static let collection = belongsTo(NFTCollectionRecord.self)
-    static let attributes = hasMany(NFTAttributeRecord.self).forKey("attributes")
     static let assetAssociations = hasMany(NFTAssetAssociationRecord.self)
 }
 
@@ -40,6 +40,7 @@ extension NFTAssetRecord: CreateTable {
                 .notNull()
                 .indexed()
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
+            $0.column(Columns.NFTAsset.attributes.name, .jsonText)
             $0.column(Columns.NFTCollection.imageUrl.name, .text)
             $0.column(Columns.NFTCollection.previewImageUrl.name, .text)
         }
@@ -56,8 +57,29 @@ extension NFTAsset {
             name: name,
             description: description,
             chain: chain,
+            attributes: attributes,
             imageUrl: image.imageUrl,
             previewImageUrl: image.previewImageUrl
+        )
+    }
+}
+
+extension NFTAssetRecord {
+    func mapToAsset() -> NFTAsset {
+        NFTAsset(
+            id: id,
+            collectionId: collectionId,
+            tokenId: tokenId,
+            tokenType: tokenType,
+            name: name,
+            description: description,
+            chain: chain,
+            image: NFTImage(
+                imageUrl: imageUrl,
+                previewImageUrl: previewImageUrl,
+                originalSourceUrl: imageUrl
+            ),
+            attributes: attributes ?? []
         )
     }
 }
