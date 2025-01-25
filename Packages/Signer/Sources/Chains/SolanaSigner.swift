@@ -136,6 +136,7 @@ public struct SolanaSigner: Signable {
             for sig in signatures {
                 signed.append(sig)
             }
+            signed.append(message)
             return signed.base64EncodedString()
         }
     }
