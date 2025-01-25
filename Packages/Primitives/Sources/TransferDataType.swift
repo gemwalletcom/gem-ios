@@ -105,4 +105,11 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             [asset.id]
         }
     }
+
+    public var outputType: TransferDataExtra.OutputType {
+        return switch self {
+        case .generic(_, _, let extra): extra.outputType
+        default: .encodedTransaction
+        }
+    }
 }

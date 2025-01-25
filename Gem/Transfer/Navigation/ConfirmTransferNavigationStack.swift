@@ -17,7 +17,7 @@ struct ConfirmTransferNavigationStack: View {
     private let wallet: Wallet
     private let transferData: TransferData
     private let onComplete: VoidAction
-    
+
     public init(
         wallet: Wallet,
         transferData: TransferData,

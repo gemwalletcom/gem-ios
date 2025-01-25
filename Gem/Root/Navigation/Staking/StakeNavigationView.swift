@@ -20,7 +20,7 @@ struct StakeNavigationView: View {
     @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
-    
+
     init(
         wallet: Wallet,
         assetId: AssetId,

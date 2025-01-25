@@ -170,8 +170,9 @@ extension WalletConnectorService {
         case .solanaSignMessage:
             return try await solanaSignMessage(request: request)
         case .solanaSignTransaction:
-            return .error(.invalidRequest)
-            //return try await solanaSignTransaction(request: request)
+            return try await solanaSignTransaction(request: request)
+        case .solanaSignAndSendTransaction:
+            return try await solanaSendTransaction(request: request)
         }
     }
 
@@ -279,9 +280,16 @@ extension WalletConnectorService {
 
     // solana
     private func solanaSignTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
-        let transaction = try request.params.get(WCSolanaTransaction.self)
-        let transactionId = try await signer.sendTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(transaction.transaction))
-        return .response(AnyCodable(transactionId))
+        let tx = try request.params.get(WCSolanaTransaction.self)
+        let signature = try await signer.signTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(tx.transaction))
+        let result = WCSolanaSignMessageResult(signature: signature)
+        return .response(AnyCodable(result))
+    }
+
+    private func solanaSendTransaction(request: WalletConnectSign.Request) async throws -> RPCResult {
+        let tx = try request.params.get(WCSolanaTransaction.self)
+        let txId = try await signer.sendTransaction(sessionId: request.topic, chain: .solana, transaction: .solana(tx.transaction))
+        return .response(AnyCodable(txId))
     }
 
     private func solanaSignMessage(request: WalletConnectSign.Request) async throws -> RPCResult {

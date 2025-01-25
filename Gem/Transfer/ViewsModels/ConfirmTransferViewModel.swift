@@ -45,7 +45,7 @@ class ConfirmTransferViewModel {
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
     private let onComplete: VoidAction
-    
+
     init(
         wallet: Wallet,
         keystore: any Keystore,
@@ -301,20 +301,27 @@ extension ConfirmTransferViewModel {
         }
     }
 
-    func process(input: TransactionPreload, amount: TransferAmount) async {
+    func process(input: TransactionPreload, amount: TransferAmount) async -> Void {
         await MainActor.run { [self] in
             self.confirmingState = .loading
         }
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
             for data in signedData {
-                let hash = try await broadcast(data: data, options: broadcastOptions)
-                let transaction = try getTransaction(input: input, amount: amount, hash: hash)
-                try addTransaction(transaction: transaction)
+                switch self.data.type.outputType {
+                case .encodedTransaction:
+                    let hash = try await broadcast(data: data, options: broadcastOptions)
+                    let transaction = try getTransaction(input: input, amount: amount, hash: hash)
+                    try addTransaction(transaction: transaction)
 
-                // delay if multiple transaction should be exectured
-                if signedData.count > 1 && data != signedData.last {
-                    try await Task.sleep(for: transactionDelay)
+                    // delay if multiple transaction should be exectured
+                    if signedData.count > 1 && data != signedData.last {
+                        try await Task.sleep(for: transactionDelay)
+                    }
+                case .signature:
+                    await MainActor.run { [self] in
+                        confirmTransferDelegate?(.success(data))
+                    }
                 }
             }
 
@@ -485,11 +492,13 @@ extension ConfirmTransferViewModel {
 // MARK: - Static
 
 extension ConfirmTransferViewModel {
-    static func sign(signer: Signer,
-                     senderAddress: String,
-                     transferData: TransferData,
-                     input: TransactionPreload,
-                     amount: TransferAmount) async throws -> [String] {
+    static func sign(
+        signer: Signer,
+        senderAddress: String,
+        transferData: TransferData,
+        input: TransactionPreload,
+        amount: TransferAmount
+    ) async throws -> [String] {
         let destinationAddress = transferData.recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
 
