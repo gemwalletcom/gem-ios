@@ -19,23 +19,26 @@ public struct NFTDetailsScene: View {
     public var body: some View {
         List {
             Section { } header: {
-                NftImageView(assetImage: model.assetImage)
-                    .cornerRadius(Spacing.medium)
-                    .aspectRatio(1, contentMode: .fill)
+                VStack {
+                    NftImageView(assetImage: model.assetImage)
+                        .cornerRadius(Spacing.medium)
+                        .aspectRatio(1, contentMode: .fill)
+                    
+                    Spacer()
+                    
+//                    HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
+//                    .padding(.top, Spacing.small)
+                }
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
             
+            
+            
             Section {
-                HStack {
-                    ListItemView(title: model.collectionTitle, subtitle: model.collectionText)
-                    Spacer()
-                    NftImageView(assetImage: model.collectionAssetImage)
-                        .frame(width: Sizing.image.small, height: Sizing.image.small)
-                        .cornerRadius(Spacing.tiny)
-                }
+                ListItemView(title: model.collectionTitle, subtitle: model.collectionText)
                 HStack {
                     ListItemView(title: model.networkTitle, subtitle: model.networkText)
                     AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)

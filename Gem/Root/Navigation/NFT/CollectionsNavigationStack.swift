@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import NFT
+import Components
 
 public struct CollectionsNavigationStack: View {
     
@@ -36,11 +37,26 @@ public struct CollectionsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.NFTDetails.self) {
                 NFTDetailsScene(
-                    model: NFTDetailsViewModel(collection: $0.collection, asset: $0.asset)
+                    model: NFTDetailsViewModel(
+                        collection: $0.collection,
+                        asset: $0.asset,
+                        headerButtonAction: onHeaderButtonAction
+                    )
                 )
             }
         }
         .onChange(of: keystore.currentWallet, onWalletChange)
+    }
+    
+    private func onHeaderButtonAction(type: HeaderButtonType) {
+        switch type {
+        case .send:
+            fatalError()
+        case .more:
+            fatalError()
+        case .buy, .receive, .swap:
+            break
+        }
     }
 }
 

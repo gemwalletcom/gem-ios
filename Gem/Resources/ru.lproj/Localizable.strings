@@ -281,11 +281,11 @@
 "swap.price_impact" = "Влияние цены";
 "wallet.sell" = "Продавать";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Узнать больше";
 "info.network_fee.title" = "Сетевая плата";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Кошелек, к которому у вас нет доступа, но вы можете следить за его транзакциями и движениями.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@ сеть взимает комиссию за транзакцию, которая варьируется в зависимости от использования сети. Выплачивается майнерам за обработку вашей транзакции.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,7 @@
 "banner.activate_asset.description" = "Чтобы использовать актив %@, необходимо сначала включить его в сети %@ выполнив особые требования сети.";
 "nft.properties" = "Характеристики";
 "nft.collections" = "Коллекции";
-"nft.your_nfts" = "Ваши NFT";
 "nft.description" = "Описание";
 "nft.collection" = "Коллекция";
+"wallet.receive_collection" = "Получить коллекцию";
+"wallet.more" = "Более";

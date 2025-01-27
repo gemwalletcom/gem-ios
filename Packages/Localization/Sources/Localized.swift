@@ -433,8 +433,6 @@ public enum Localized {
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
-    /// Your NFTs
-    public static let yourNfts = Localized.tr("Localizable", "nft.your_nfts", fallback: "Your NFTs")
   }
   public enum Nodes {
     /// Gem Wallet Node
@@ -812,12 +810,16 @@ public enum Localized {
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
     /// Manage Token List
     public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Token List")
+    /// More
+    public static let more = Localized.tr("Localizable", "wallet.more", fallback: "More")
     /// Multi-Coin
     public static let multicoin = Localized.tr("Localizable", "wallet.multicoin", fallback: "Multi-Coin")
     /// Name
     public static let name = Localized.tr("Localizable", "wallet.name", fallback: "Name")
     /// Receive
     public static let receive = Localized.tr("Localizable", "wallet.receive", fallback: "Receive")
+    /// Receive Collection
+    public static let receiveCollection = Localized.tr("Localizable", "wallet.receive_collection", fallback: "Receive Collection")
     /// Scan
     public static let scan = Localized.tr("Localizable", "wallet.scan", fallback: "Scan")
     /// Scan QR Code
