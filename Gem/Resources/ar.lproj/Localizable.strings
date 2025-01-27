@@ -314,6 +314,6 @@
 "banner.activate_asset.description" = "لاستخدام الأصل %@ ، يجب عليك أولاً تمكينه على شبكة %@ من خلال استيفاء المتطلبات المحددة للشبكة.";
 "nft.properties" = "ملكيات";
 "nft.collections" = "المجموعات";
-"nft.your_nfts" = "رموزك غير القابلة للاستبدال";
 "nft.description" = "وصف";
 "nft.collection" = "مجموعة";
+"wallet.receive_collection" = "استلام المجموعة";

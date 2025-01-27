@@ -314,6 +314,6 @@
 "banner.activate_asset.description" = "To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.";
 "nft.properties" = "Properties";
 "nft.collections" = "Collections";
-"nft.your_nfts" = "Your NFTs";
 "nft.description" = "Description";
 "nft.collection" = "Collection";
+"wallet.receive_collection" = "Receive Collection";

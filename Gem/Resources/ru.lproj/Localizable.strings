@@ -314,6 +314,6 @@
 "banner.activate_asset.description" = "Чтобы использовать актив %@, необходимо сначала включить его в сети %@ выполнив особые требования сети.";
 "nft.properties" = "Характеристики";
 "nft.collections" = "Коллекции";
-"nft.your_nfts" = "Ваши NFT";
 "nft.description" = "Описание";
 "nft.collection" = "Коллекция";
+"wallet.receive_collection" = "Получить коллекцию";

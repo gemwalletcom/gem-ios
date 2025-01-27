@@ -314,6 +314,6 @@
 "banner.activate_asset.description" = "برای استفاده از دارایی %@ ، ابتدا باید آن را در شبکه %@ با انجام الزامات خاص شبکه فعال کنید.";
 "nft.properties" = "خواص";
 "nft.collections" = "مجموعه ها";
-"nft.your_nfts" = "NFT های شما";
 "nft.description" = "توضیحات";
 "nft.collection" = "مجموعه";
+"wallet.receive_collection" = "دریافت مجموعه";

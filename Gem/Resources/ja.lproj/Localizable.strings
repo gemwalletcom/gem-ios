@@ -314,6 +314,6 @@
 "banner.activate_asset.description" = "%@アセットを使用するには、まずネットワークの特定の要件を満たして%@ネットワーク上でアセットを有効にする必要があります。";
 "nft.properties" = "プロパティ";
 "nft.collections" = "コレクション";
-"nft.your_nfts" = "あなたのNFT";
 "nft.description" = "説明";
 "nft.collection" = "コレクション";
+"wallet.receive_collection" = "コレクションを受け取る";
