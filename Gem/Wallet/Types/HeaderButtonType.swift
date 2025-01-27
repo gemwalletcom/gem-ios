@@ -15,7 +15,7 @@ enum HeaderButtonType: String, Identifiable, CaseIterable {
 extension HeaderButtonType {
     var selectType: SelectAssetType {
         switch self {
-        case .receive: .receive
+        case .receive: .receive(.regular)
         case .send: .send
         case .buy: .buy
         case .swap: .swap(.pay)

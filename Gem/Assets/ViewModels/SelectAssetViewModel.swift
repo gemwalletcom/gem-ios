@@ -55,7 +55,11 @@ class SelectAssetViewModel {
     var title: String {
         switch selectType {
         case .send: Localized.Wallet.send
-        case .receive: Localized.Wallet.receive
+        case .receive(let type):
+            switch type {
+            case .regular: Localized.Wallet.receive
+            case .collections: Localized.Wallet.receiveCollection
+            }
         case .buy: Localized.Wallet.buy
         case .swap(let type):
             switch type {
@@ -77,7 +81,16 @@ class SelectAssetViewModel {
     }
 
     var showFilter: Bool {
-        wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        switch selectType {
+        case .receive(let type):
+            switch type {
+            case .regular:
+                wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+            case .collections: false
+            }
+        default:
+            wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        }
     }
 
     var isNetworkSearchEnabled: Bool {
