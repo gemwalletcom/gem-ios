@@ -203,6 +203,8 @@ public enum Localized {
     public static func requiredField(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.required_field", String(describing: p1), fallback: "%@ is required")
     }
+    /// Save
+    public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
     /// Secret Recovery Phrase
     public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Recovery Phrase")
     /// See All
