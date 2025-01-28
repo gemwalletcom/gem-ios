@@ -36,10 +36,12 @@ public struct NFTDetailsScene: View {
                         .frame(width: Sizing.image.small, height: Sizing.image.small)
                         .cornerRadius(Spacing.tiny)
                 }
-                HStack {
-                    ListItemView(title: model.networkTitle, subtitle: model.networkText)
-                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
-                }
+                
+                ListItemImageView(
+                    title: model.networkTitle,
+                    subtitle: model.networkText,
+                    assetImage: model.networkAssetImage
+                )
                 
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
                     .contextMenu {

@@ -26,12 +26,12 @@ public struct AddressListItemView: View {
     }
 
     public var body: some View {
-        HStack {
-            ListItemView(title: title, subtitle: subtitle)
-            if let assetImage = account.assetImage {
-                AssetImageView(assetImage: assetImage, size: Sizing.list.image)
-            }
-        }.contextMenu {
+        ListItemImageView(
+            title: title,
+            subtitle: subtitle,
+            assetImage: account.assetImage
+        )
+        .contextMenu {
             ContextMenuCopy(title: Localized.Common.copy, value: account.address)
             ContextMenuViewURL(title: addressExplorerText, url: addressExplorerUrl, image: SystemImage.globe)
         }
