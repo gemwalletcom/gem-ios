@@ -38,11 +38,17 @@ public struct NFTDetailsScene: View {
             
             
             Section {
-                ListItemView(title: model.collectionTitle, subtitle: model.collectionText)
-                HStack {
-                    ListItemView(title: model.networkTitle, subtitle: model.networkText)
-                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
-                }
+                ListItemImageView(
+                    title: model.collectionTitle,
+                    subtitle: model.collectionText,
+                    assetImage: model.collectionAssetImage
+                )
+                
+                ListItemImageView(
+                    title: model.networkTitle,
+                    subtitle: model.networkText,
+                    assetImage: model.networkAssetImage
+                )
                 
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
                     .contextMenu {

@@ -117,6 +117,10 @@ public final class FiatSceneViewModel {
     func assetBalance(assetData: AssetData) -> String {
         balanceModel(assetData: assetData).availableBalanceText
     }
+    
+    func providerAssetImage(_ provider: FiatProvider) -> AssetImage? {
+        .resourceImage(image: provider.name.lowercased().replacing(" ", with: "_"))
+    }
 }
 
 // MARK: - Private
