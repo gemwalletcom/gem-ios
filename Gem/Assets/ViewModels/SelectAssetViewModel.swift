@@ -88,7 +88,7 @@ class SelectAssetViewModel {
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collections: false
             }
-        default:
+        case .buy, .manage, .priceAlert, .send, .stake, .swap:
             wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
         }
     }

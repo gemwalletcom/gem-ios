@@ -281,11 +281,11 @@
 "swap.price_impact" = "Preisauswirkungen";
 "wallet.sell" = "Verkaufen";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Mehr erfahren";
 "info.network_fee.title" = "Netzwerk-Gebühr";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Eine Brieftasche, auf die Sie keinen Zugriff haben, deren Transaktionen und Bewegungen Sie jedoch beobachten können.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@ Das Netzwerk erhebt eine Transaktionsgebühr, die je nach Netzwerknutzung variiert. Wird an die Miner gezahlt, die Ihre Transaktion verarbeiten.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -317,3 +317,4 @@
 "nft.description" = "Beschreibung";
 "nft.collection" = "Sammlung";
 "wallet.receive_collection" = "Sammlung empfangen";
+"wallet.more" = "Mehr";
