@@ -6,8 +6,9 @@ import PrimitivesComponents
 import Localization
 import Components
 import Style
+import ImageSaverService
 
-public struct NFTDetailsViewModel {
+public struct NFTDetailsViewModel: Sendable {
     public let collection: NFTCollection
     public let asset: NFTAsset
     private let headerButtonAction: HeaderButtonAction?
@@ -108,5 +109,13 @@ public struct NFTDetailsViewModel {
     
     func onHeaderAction(type: HeaderButtonType) {
         headerButtonAction?(type)
+    }
+    
+    func saveImageToGallery() async throws {
+        guard let url = URL(string: asset.image.imageUrl) else {
+            throw AnyError("Wrong asset image url")
+        }
+        let saver = ImageSaverService()
+        try await saver.saveImageFromURL(url)
     }
 }

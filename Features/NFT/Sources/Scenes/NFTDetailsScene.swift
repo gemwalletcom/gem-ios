@@ -6,6 +6,7 @@ import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
+import Localization
 
 public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
@@ -18,24 +19,27 @@ public struct NFTDetailsScene: View {
     
     public var body: some View {
         List {
-            Section { } header: {
-                VStack {
-                    NftImageView(assetImage: model.assetImage)
-                        .cornerRadius(Spacing.medium)
-                        .aspectRatio(1, contentMode: .fill)
-                    
-                    Spacer()
-                    
-//                    HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
-//                    .padding(.top, Spacing.small)
-                }
+            Section {
+                NftImageView(assetImage: model.assetImage)
+                    .aspectRatio(1, contentMode: .fill)
+            } header: {
+                Spacer()
+            } footer: {
+//                HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
+//                .padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            
-            
+            .contextMenu {
+                ContextMenuItem(
+                    title: Localized.Common.save,
+                    image: SystemImage.gallery
+                ) {
+                    saveImage()
+                }
+            }
             
             Section {
                 ListItemImageView(
@@ -65,9 +69,20 @@ public struct NFTDetailsScene: View {
                 }
             }
         }
+        .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
+    }
+    
+    private func saveImage() {
+        Task {
+            do {
+                try await model.saveImageToGallery()
+            } catch {
+                NSLog("Save error: \(error)")
+            }
+        }
     }
 }
 

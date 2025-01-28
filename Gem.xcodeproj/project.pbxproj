@@ -51,6 +51,7 @@
 		83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */; };
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83F8C3E62D241FEB0042CE22 /* SwapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F8C3E52D241FEB0042CE22 /* SwapState.swift */; };
+		B66DEDAD2D49121A00309D53 /* ImageSaverService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAC2D49121A00309D53 /* ImageSaverService */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C30952C6299C39D80004C0F9 /* walletTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952C5299C39D80004C0F9 /* walletTests.swift */; };
 		C3340B742A4A920100884D48 /* ChainListSettingsScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3340B732A4A920100884D48 /* ChainListSettingsScene.swift */; };
@@ -257,6 +258,7 @@
 		83F8C3E52D241FEB0042CE22 /* SwapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapState.swift; sourceTree = "<group>"; };
 		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
+		B66DEDAB2D49120D00309D53 /* ImageSaverService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageSaverService; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -451,6 +453,7 @@
 				07A9FE3D2D3565CD00ACDB94 /* NFTService in Frameworks */,
 				C3CF3B7B29A98C7B00E96586 /* Primitives in Frameworks */,
 				C3CF3BDB29BBE45D00E96586 /* Style in Frameworks */,
+				B66DEDAD2D49121A00309D53 /* ImageSaverService in Frameworks */,
 				C35DA07C2A9C3B4B008CCEFA /* Settings in Frameworks */,
 				83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */,
 				839C794D2D1C42AE00E32072 /* ChainSettings in Frameworks */,
@@ -957,6 +960,7 @@
 		D829BF4B2CBF022700DEB2E8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				B66DEDAB2D49120D00309D53 /* ImageSaverService */,
 				8361BB6B2D400DF1008D89CF /* AssetsService */,
 				8361BB682D400CA6008D89CF /* TransactionsService */,
 				8361BB5D2D3FDD7C008D89CF /* BalanceService */,
@@ -1301,6 +1305,7 @@
 				8361BB602D3FE5F2008D89CF /* Transactions */,
 				8361BB692D400DB6008D89CF /* TransactionsService */,
 				8361BB6C2D400E4F008D89CF /* AssetsService */,
+				B66DEDAC2D49121A00309D53 /* ImageSaverService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1771,6 +1776,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Gem Wallet needs access to your Camera to scan QR Codes.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Enabling Face ID helps Gem Wallet keep your assets secure.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to your photo library to save NFTs.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -1822,6 +1828,7 @@
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Gem Wallet needs access to your Camera to scan QR Codes.";
 				INFOPLIST_KEY_NSFaceIDUsageDescription = "Enabling Face ID helps Gem Wallet keep your assets secure.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "This app requires access to your photo library to save NFTs.";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -2088,6 +2095,10 @@
 		83FE37B32D273CC80048D54C /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletConnector;
+		};
+		B66DEDAC2D49121A00309D53 /* ImageSaverService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ImageSaverService;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;

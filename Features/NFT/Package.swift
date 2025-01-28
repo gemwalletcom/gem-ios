@@ -21,6 +21,7 @@ let package = Package(
         .package(name: "DeviceService", path: "../DeviceService"),
         .package(name: "NFTService", path: "../NFTService"),
         .package(name: "Store", path: "../Store"),
+        .package(name: "ImageSaverService", path: "../ImageSaverService")
     ],
     targets: [
         .target(
@@ -34,6 +35,7 @@ let package = Package(
                 "DeviceService",
                 "NFTService",
                 "Store",
+                "ImageSaverService"
             ],
             path: "Sources"
         ),
