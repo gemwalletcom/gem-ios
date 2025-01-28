@@ -12,6 +12,9 @@ public struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
+    @Environment(\.walletsService) private var walletsService
+    
+    @State private var isPresentingSelectType: SelectAssetType?
     
     let model: NFTCollectionViewModel
     
@@ -24,7 +27,7 @@ public struct CollectionsNavigationStack: View {
     
     public var body: some View   {
         NavigationStack(path: navigationPath) {
-            NFTScene(model: model)
+            NFTScene(model: model, isPresentingSelectType: $isPresentingSelectType)
             .navigationDestination(for: Scenes.NFTCollectionScene.self) {
                 NFTScene(
                     model: NFTCollectionViewModel(
@@ -32,7 +35,8 @@ public struct CollectionsNavigationStack: View {
                         sceneStep: $0.sceneStep,
                         nftService: nftService,
                         deviceService: deviceService
-                    )
+                    ),
+                    isPresentingSelectType: $isPresentingSelectType
                 )
             }
             .navigationDestination(for: Scenes.NFTDetails.self) {
@@ -42,6 +46,18 @@ public struct CollectionsNavigationStack: View {
                         asset: $0.asset,
                         headerButtonAction: onHeaderButtonAction
                     )
+                )
+            }
+            .sheet(item: $isPresentingSelectType) { value in
+                SelectAssetSceneNavigationStack(
+                    model: SelectAssetViewModel(
+                        wallet: model.wallet,
+                        keystore: keystore,
+                        selectType: value,
+                        assetsService: walletsService.assetsService,
+                        walletsService: walletsService
+                    ),
+                    isPresentingSelectType: $isPresentingSelectType
                 )
             }
         }
