@@ -3,18 +3,39 @@
 import Foundation
 import SwiftUI
 import Components
+import Primitives
 
-typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
+extension HeaderButtonType {
+    public var selectType: SelectAssetType {
+        switch self {
+        case .receive: .receive
+        case .send: .send
+        case .buy: .buy
+        case .swap: .swap(.pay)
+        case .more: fatalError()
+        }
+    }
+}
 
-struct HeaderButtonsView: View {
-    let buttons: [HeaderButton]
-    var action: HeaderButtonAction?
+public typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
+
+public struct HeaderButtonsView: View {
+    private let buttons: [HeaderButton]
+    private var action: HeaderButtonAction?
     
     var maxWidth: CGFloat {
         buttons.count > 3 ? 84 : 94
     }
     
-    var body: some View {
+    public init(
+        buttons: [HeaderButton],
+        action: HeaderButtonAction? = nil
+    ) {
+        self.buttons = buttons
+        self.action = action
+    }
+    
+    public var body: some View {
         HStack(alignment: .center, spacing: 2) {
             ForEach(buttons) { button in
                 RoundButton(
