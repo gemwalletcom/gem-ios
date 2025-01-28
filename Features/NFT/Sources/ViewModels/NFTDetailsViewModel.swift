@@ -8,26 +8,23 @@ import Components
 import Style
 
 public struct NFTDetailsViewModel {
-    public let collection: NFTCollection
-    public let asset: NFTAsset
+    public let assetData: NFTAssetData
     private let headerButtonAction: HeaderButtonAction?
     
     public init(
-        collection: NFTCollection,
-        asset: NFTAsset,
+        assetData: NFTAssetData,
         headerButtonAction: HeaderButtonAction?
     ) {
-        self.collection = collection
-        self.asset = asset
+        self.assetData = assetData
         self.headerButtonAction = headerButtonAction
     }
     
     public var title: String {
-        asset.name
+        assetData.asset.name
     }
     
     public var description: String? {
-        asset.description
+        assetData.asset.description
     }
     
     public var collectionTitle: String {
@@ -35,12 +32,12 @@ public struct NFTDetailsViewModel {
     }
     
     public var collectionText: String {
-        collection.name
+        assetData.collection.name
     }
     
     public var collectionAssetImage: AssetImage {
         AssetImage(
-            imageURL: URL(string: collection.image.previewImageUrl),
+            imageURL: URL(string: assetData.collection.image.previewImageUrl),
             placeholder: .none,
             chainPlaceholder: .none
         )
@@ -51,7 +48,7 @@ public struct NFTDetailsViewModel {
     }
     
     public var networkText: String {
-        asset.chain.asset.name
+        assetData.asset.chain.asset.name
     }
     
     public var contractTitle: String {
@@ -61,17 +58,17 @@ public struct NFTDetailsViewModel {
     public var networkAssetImage: AssetImage {
         AssetImage(
             imageURL: .none,
-            placeholder: ChainImage(chain: asset.chain).image,
+            placeholder: ChainImage(chain: assetData.asset.chain).image,
             chainPlaceholder: .none
         )
     }
 
     public var contractText: String {
-        AddressFormatter(address: contractValue, chain: asset.chain).value()
+        AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
     
     public var contractValue: String {
-        collection.contractAddress
+        assetData.collection.contractAddress
     }
     
     public var tokenIdTitle: String {
@@ -79,7 +76,7 @@ public struct NFTDetailsViewModel {
     }
     
     public var tokenIdText: String {
-        "#\(asset.tokenId)"
+        "#\(assetData.asset.tokenId)"
     }
     
     public var attributesTitle: String {
@@ -87,16 +84,11 @@ public struct NFTDetailsViewModel {
     }
     
     public var attributes: [NFTAttribute] {
-        asset.attributes
+        assetData.asset.attributes
     }
     
     public var assetImage: AssetImage {
-        AssetImage(
-            type: asset.name,
-            imageURL: URL(string: asset.image.imageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
+        NFTAssetViewModel(asset: assetData.asset).assetImage
     }
     
     public var headerButtons: [HeaderButton] {

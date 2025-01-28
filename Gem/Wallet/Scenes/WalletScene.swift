@@ -238,7 +238,14 @@ extension WalletScene {
     }
     
     private func onHeaderAction(type: HeaderButtonType) {
-        isPresentingSelectType = type.selectType
+        let selectType: SelectAssetType = switch type {
+        case .buy: .buy
+        case .send: .send
+        case .receive: .receive(.asset)
+        case .swap, .more, .stake:
+            fatalError()
+        }
+        isPresentingSelectType = selectType
     }
 }
 

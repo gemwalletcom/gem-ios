@@ -21,14 +21,14 @@ struct SelectAssetSceneNavigationStack: View {
 
     @State private var model: SelectAssetViewModel
     @State private var navigationPath = NavigationPath()
-    @Binding private var isPresentingSelectType: SelectAssetType?
+    @Binding private var isPresentingSelectAssetType: SelectAssetType?
     
     init(
         model: SelectAssetViewModel,
         isPresentingSelectType: Binding<SelectAssetType?>
     ) {
         _model = State(wrappedValue: model)
-        _isPresentingSelectType = isPresentingSelectType
+        _isPresentingSelectAssetType = isPresentingSelectType
     }
 
     var body: some View {
@@ -67,9 +67,10 @@ struct SelectAssetSceneNavigationStack: View {
                     RecipientNavigationView(
                         wallet: model.wallet,
                         asset: input.asset,
+                        type: .asset(input.asset),
                         navigationPath: $navigationPath,
                         onComplete: {
-                            isPresentingSelectType = nil
+                            isPresentingSelectAssetType = nil
                         }
                     )
                 case .receive:
@@ -89,7 +90,7 @@ struct SelectAssetSceneNavigationStack: View {
                             walletId: model.wallet.id
                         )
                     )
-                case .manage, .stake, .priceAlert, .swap:
+                case .manage, .priceAlert, .swap:
                     EmptyView()
                 }
             }

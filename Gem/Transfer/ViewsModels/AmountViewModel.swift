@@ -231,7 +231,6 @@ class AmounViewModel: ObservableObject {
             )
             
             return RecipientData(
-                asset: asset,
                 recipient: Recipient(
                     name: currentValidator?.name,
                     address: recipientAddress ?? "",

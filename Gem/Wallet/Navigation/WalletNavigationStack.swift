@@ -17,8 +17,8 @@ struct WalletNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
 
     @State private var isPresentingWallets = false
-    @State private var isPresentingAssetSelectType: SelectAssetInput?
-    @State private var isPresentingSelectType: SelectAssetType?
+    @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
+    @State private var isPresentingSelectAssetType: SelectAssetType?
 
     let model: WalletSceneViewModel
     
@@ -33,7 +33,7 @@ struct WalletNavigationStack: View {
         NavigationStack(path: navigationPath) {
             WalletScene(
                 model: model,
-                isPresentingSelectType: $isPresentingSelectType,
+                isPresentingSelectType: $isPresentingSelectAssetType,
                 isPresentingWallets: $isPresentingWallets
             )
             .navigationBarTitleDisplayMode(.inline)
@@ -41,7 +41,7 @@ struct WalletNavigationStack: View {
                 AssetNavigationView(
                     wallet: model.wallet,
                     assetId: $0.asset.id,
-                    isPresentingAssetSelectType: $isPresentingAssetSelectType
+                    isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
                 )
             }
             .navigationDestination(for: TransactionExtended.self) {
@@ -57,7 +57,7 @@ struct WalletNavigationStack: View {
                     )
                 )
             }
-            .sheet(item: $isPresentingSelectType) { value in
+            .sheet(item: $isPresentingSelectAssetType) { value in
                 SelectAssetSceneNavigationStack(
                     model: SelectAssetViewModel(
                         wallet: model.wallet,
@@ -66,14 +66,14 @@ struct WalletNavigationStack: View {
                         assetsService: walletsService.assetsService,
                         walletsService: walletsService
                     ),
-                    isPresentingSelectType: $isPresentingSelectType
+                    isPresentingSelectType: $isPresentingSelectAssetType
                 )
             }
-            .sheet(item: $isPresentingAssetSelectType) {
-                SelectedAssetNavigationStack(
+            .sheet(item: $isPresentingAssetSelectedInput) {
+              SelectedAssetNavigationStack(
                     selectType: $0,
                     wallet: model.wallet,
-                    isPresentingAssetSelectType: $isPresentingAssetSelectType
+                    isPresentingSelectedAssetInput: $isPresentingAssetSelectedInput
                 )
             }
             .sheet(isPresented: $isPresentingWallets) {

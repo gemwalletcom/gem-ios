@@ -16,37 +16,38 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.walletsService) private var walletsService
 
     @State private var navigationPath = NavigationPath()
-    @Binding private var isPresentingAssetSelectType: SelectAssetInput?
+    @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
 
-    private let selectType: SelectAssetInput
+    private let selectType: SelectedAssetInput
     private let wallet: Wallet
         
     init(
-        selectType: SelectAssetInput,
+        selectType: SelectedAssetInput,
         wallet: Wallet,
-        isPresentingAssetSelectType: Binding<SelectAssetInput?>
+        isPresentingSelectedAssetInput: Binding<SelectedAssetInput?>
     ) {
         self.selectType = selectType
         self.wallet = wallet
-        _isPresentingAssetSelectType = isPresentingAssetSelectType
+        _isPresentingSelectedAssetInput = isPresentingSelectedAssetInput
     }
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
             switch selectType.type {
-            case .send:
+            case .send(let type):
                 RecipientNavigationView(
                     wallet: wallet,
                     asset: selectType.asset,
+                    type: type,
                     navigationPath: $navigationPath,
                     onComplete: {
-                        isPresentingAssetSelectType = nil
+                        isPresentingSelectedAssetInput = nil
                     }
                 )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingAssetSelectType = nil
+                            isPresentingSelectedAssetInput = nil
                         }.bold()
                     }
                 }
@@ -64,7 +65,7 @@ struct SelectedAssetNavigationStack: View  {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingAssetSelectType = nil
+                            isPresentingSelectedAssetInput = nil
                         }.bold()
                     }
                 }
@@ -80,7 +81,7 @@ struct SelectedAssetNavigationStack: View  {
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingAssetSelectType = nil
+                            isPresentingSelectedAssetInput = nil
                         }.bold()
                     }
                 }
@@ -90,14 +91,14 @@ struct SelectedAssetNavigationStack: View  {
                     asset: selectType.asset,
                     navigationPath: $navigationPath,
                     onComplete: {
-                        isPresentingAssetSelectType = nil
+                        isPresentingSelectedAssetInput = nil
                     }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingAssetSelectType = nil
+                            isPresentingSelectedAssetInput = nil
                         }.bold()
                     }
                 }
@@ -107,19 +108,17 @@ struct SelectedAssetNavigationStack: View  {
                     assetId: selectType.asset.id,
                     navigationPath: $navigationPath,
                     onComplete: {
-                        isPresentingAssetSelectType = nil
+                        isPresentingSelectedAssetInput = nil
                     }
                 )
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingAssetSelectType = nil
+                            isPresentingSelectedAssetInput = nil
                         }.bold()
                     }
                 }
-            case .manage, .priceAlert:
-                EmptyView()
             }
         }
     }

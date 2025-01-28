@@ -99,6 +99,13 @@ public struct TransactionScene: View {
                         .textCase(nil)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
+                    case .nft:
+                        HStack {
+                            Spacer()
+                            TransactionHeaderView(type: model.headerType)
+                                .padding(.bottom, 16)
+                            Spacer()
+                        }
                     }
                 }
                 

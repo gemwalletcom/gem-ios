@@ -26,16 +26,14 @@ public struct NFTDetailsScene: View {
                     
                     Spacer()
                     
-//                    HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
-//                    .padding(.top, Spacing.small)
+                    HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
+                        .padding(.top, Spacing.small)
                 }
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
-            
-            
             
             Section {
                 ListItemImageView(

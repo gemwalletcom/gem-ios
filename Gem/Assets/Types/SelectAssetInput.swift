@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 
@@ -15,7 +17,7 @@ struct SelectAssetInput: Hashable {
 
     var fiatType: FiatTransactionType  {
         switch type {
-        case .send, .receive, .swap, .stake, .manage, .priceAlert: fatalError(
+        case .send, .receive, .swap, .manage, .priceAlert: fatalError(
             "fiat operations not supported"
         )
         case .buy: .buy

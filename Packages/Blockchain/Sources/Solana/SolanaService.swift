@@ -122,7 +122,7 @@ extension SolanaService {
     // https://solana.com/docs/core/fees#compute-unit-limit
     private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
         let gasLimit = switch type {
-        case .transfer, .stake: BigInt(100_000)
+        case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
         case .account: fatalError()
         }
@@ -203,6 +203,8 @@ extension SolanaService {
                     options: options
                 )
             }
+        case .transferNft:
+            fatalError()
         case .swap, .stake, .generic:
             return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
         case .account: fatalError()
@@ -217,6 +219,7 @@ extension SolanaService: ChainFeeRateFetchable {
         
         let multipleOf = switch type {
         case .transfer(let asset): asset.type == .native ? 100_000 : 1_000_000
+        case .transferNft: 1_000_000
         case .stake: 1_500_000
         case .generic, .swap: 2_500_000
         case .account: fatalError()
@@ -277,6 +280,8 @@ extension SolanaService: ChainTransactionPreloadable {
                     fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
                 )
             }
+        case .transferNft:
+            fatalError()
         case .swap, .stake:
             return try await TransactionPreload(
                 block: SignerInputBlock(hash: blockhash), 

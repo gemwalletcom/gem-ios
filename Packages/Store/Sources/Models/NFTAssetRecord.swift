@@ -7,6 +7,7 @@ import Primitives
 struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
     var id: String
     var collectionId: String
+    var contractAddress: String?
     var tokenId: String
     var tokenType: NFTType
     var name: String
@@ -29,6 +30,7 @@ extension NFTAssetRecord: CreateTable {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.column(Columns.NFTAsset.id.name, .text)
                 .primaryKey()
+            $0.column(Columns.NFTAsset.contractAddress.name, .text)
             $0.column(Columns.NFTAsset.tokenId.name, .text).notNull()
             $0.column(Columns.NFTAsset.tokenType.name, .text).notNull()
             $0.column(Columns.NFTAsset.name.name, .text).notNull()
@@ -52,6 +54,7 @@ extension NFTAsset {
         NFTAssetRecord(
             id: id,
             collectionId: collectionId,
+            contractAddress: contractAddress,
             tokenId: tokenId,
             tokenType: tokenType,
             name: name,
@@ -69,6 +72,7 @@ extension NFTAssetRecord {
         NFTAsset(
             id: id,
             collectionId: collectionId,
+            contractAddress: contractAddress,
             tokenId: tokenId,
             tokenType: tokenType,
             name: name,

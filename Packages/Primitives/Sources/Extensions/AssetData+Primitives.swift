@@ -7,7 +7,7 @@ extension AssetData: Identifiable {
 
 public extension AssetData {
     var assetAddress: AssetAddress {
-        return AssetAddress(asset: asset, address: account.address)
+        AssetAddress(asset: asset, address: account.address)
     }
     
     var balances: [BalanceType: BigInt] {

@@ -21,23 +21,26 @@ enum RecipientScanResult {
 
 class RecipientViewModel: ObservableObject {
     let wallet: Wallet
+    let asset: Asset
+    let type: RecipientAssetType
     
     private let keystore: any Keystore
-    private let asset: Asset
     private let onRecipientDataAction: RecipientDataAction
     private let onTransferAction: TransferDataAction
     private let formatter = ValueFormatter(style: .full)
     
     init(
         wallet: Wallet,
-        keystore: any Keystore,
         asset: Asset,
+        keystore: any Keystore,
+        type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
-        self.keystore = keystore
         self.asset = asset
+        self.keystore = keystore
+        self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
     }
@@ -50,7 +53,7 @@ class RecipientViewModel: ObservableObject {
     var memoField: String { Localized.Transfer.memo }
 
     var showMemo: Bool {
-        AssetViewModel(asset: asset).supportMemo
+        asset.chain.isMemoSupported
     }
     
     var chain: Chain { asset.chain }
@@ -65,7 +68,6 @@ class RecipientViewModel: ObservableObject {
         try validateAddress(address: recipient.address)
         
         return RecipientData(
-            asset: asset,
             recipient: recipient,
             amount: amount
         )
@@ -116,11 +118,15 @@ class RecipientViewModel: ObservableObject {
             (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
             asset.chain.isValidAddress(payment.address)
         {
+            let transferType: TransferDataType = switch type {
+            case .asset(let asset): .transfer(asset)
+            case .nft(let asset): .transferNft(asset)
+            }
+            
             let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
             let data = TransferData(
-                type: .transfer(asset),
+                type: transferType,
                 recipientData: RecipientData(
-                    asset: asset,
                     recipient: Recipient(
                         name: .none,
                         address: payment.address,
@@ -142,7 +148,13 @@ class RecipientViewModel: ObservableObject {
 
 extension RecipientViewModel {
     func onRecipientDataSelect(data: RecipientData) {
-        onRecipientDataAction?(data)
+        switch type {
+        case .asset(let asset):
+            onRecipientDataAction?(data)
+        case .nft(let asset):
+            let data = TransferData(type: .transferNft(asset), recipientData: data, value: .zero, canChangeValue: false)
+            onTransferDataSelect(data: data)
+        }
     }
     
     func onTransferDataSelect(data: TransferData) {

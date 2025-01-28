@@ -26,6 +26,7 @@ public struct HeaderButton: Identifiable {
         case .receive: Localized.Wallet.receive
         case .buy: Localized.Wallet.buy
         case .swap: Localized.Wallet.swap
+        case .stake: Localized.Wallet.stake
         case .more: Localized.Wallet.more
         }
     }
@@ -36,6 +37,7 @@ public struct HeaderButton: Identifiable {
         case .receive: Images.Actions.receive
         case .buy: Images.Actions.buy
         case .swap: Images.Actions.swap
+        case .stake: Images.Actions.swap
         case .more: Images.Actions.more
         }
     }

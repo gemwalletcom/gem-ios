@@ -64,10 +64,10 @@ class ConfirmTransferViewModel {
         self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.onComplete = onComplete
-        self.feeModel = NetworkFeeSceneViewModel(chain: data.recipientData.asset.chain, service: service)
+        self.feeModel = NetworkFeeSceneViewModel(chain: data.chain, service: service)
 
         // prefetch asset metadata from local storage
-        let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.recipientData.asset, assetsIds: data.type.assetIds)
+        let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.asset, assetsIds: data.type.assetIds)
         self.metadata = metadata
     }
 
@@ -367,7 +367,7 @@ extension ConfirmTransferViewModel {
         switch dataModel.chain {
         case .solana:
             switch dataModel.type {
-            case .transfer, .stake, .account: .standard
+            case .transfer, .transferNft, .stake, .account: .standard
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
         default: .standard
@@ -378,6 +378,11 @@ extension ConfirmTransferViewModel {
         switch dataModel.type {
         case .transfer(let asset), .swap(let asset, _, _), .generic(let asset, _, _):
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            return balance.available
+        case .transferNft(let asset):
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.chain.id) else {
+                return .zero
+            }
             return balance.available
         case .stake(let asset, let stakeType):
             switch stakeType {
@@ -429,7 +434,7 @@ extension ConfirmTransferViewModel {
 
     private func sign(transferData: TransferData, input: TransactionPreload, amount: TransferAmount) async throws -> [String]  {
         let signer = Signer(wallet: wallet, keystore: keystore)
-        let senderAddress = try wallet.account(for: transferData.recipientData.asset.chain).address
+        let senderAddress = try wallet.account(for: transferData.asset.chain).address
 
         return try await Self.sign(
             signer: signer,
@@ -458,7 +463,7 @@ extension ConfirmTransferViewModel {
         amount: TransferAmount,
         hash: String
     ) throws -> Primitives.Transaction {
-        let senderAddress = try wallet.account(for: data.recipientData.asset.chain).address
+        let senderAddress = try wallet.account(for: data.asset.chain).address
         let direction: TransactionDirection = {
             if data.recipientData.recipient.address == senderAddress {
                 return .selfTransfer
@@ -466,10 +471,10 @@ extension ConfirmTransferViewModel {
             return .outgoing
         }()
         return Transaction(
-            id: Transaction.id(chain: data.recipientData.asset.chain.rawValue, hash: hash),
+            id: Transaction.id(chain: data.asset.chain.rawValue, hash: hash),
             hash: hash,
-            assetId: data.recipientData.asset.id,
-            from: try wallet.account(for: data.recipientData.asset.chain).address,
+            assetId: data.asset.id,
+            from: try wallet.account(for: data.asset.chain).address,
             to: data.recipientData.recipient.address,
             contract: .none,
             type: data.type.transactionType,
@@ -477,7 +482,7 @@ extension ConfirmTransferViewModel {
             blockNumber: String(input.block.number),
             sequence: input.sequence.asString,
             fee: amount.networkFee.description,
-            feeAssetId: data.recipientData.asset.feeAsset.id,
+            feeAssetId: data.asset.feeAsset.id,
             value: amount.value.description,
             memo: data.recipientData.recipient.memo ?? "",
             direction: direction,
@@ -504,7 +509,7 @@ extension ConfirmTransferViewModel {
 
         let input = SignerInput(
             type: transferData.type,
-            asset: transferData.recipientData.asset,
+            asset: transferData.asset,
             value: amount.value,
             fee: Fee(
                 fee: amount.networkFee,

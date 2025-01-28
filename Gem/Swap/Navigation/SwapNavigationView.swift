@@ -58,7 +58,7 @@ struct SwapNavigationView: View {
                     keystore: keystore,
                     data: data,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: data.recipientData.asset.chain),
+                        .service(for: data.chain),
                     walletsService: walletsService,
                     onComplete: {
                         onSwapComplete(type: data.type)

@@ -8,6 +8,7 @@ import GemstonePrimitives
 import PrimitivesComponents
 import Store
 import Preferences
+import NFT
 
 struct TransactionInputViewModel {
     let data: TransferData
@@ -38,11 +39,11 @@ struct TransactionInputViewModel {
     }
 
     var asset: Asset {
-        dataModel.asset
+        data.asset
     }
     
     var feeAsset: Asset {
-        dataModel.asset.feeAsset
+        asset.feeAsset
     }
     
     var value: BigInt {
@@ -107,6 +108,8 @@ struct TransactionInputViewModel {
             .generic,
             .stake:
             return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
+        case .transferNft(let asset):
+            return .nft(name: asset.name, image: NFTAssetViewModel(asset: asset).assetImage)
         case .account(_, let type):
             switch type {
             case .activate: return TransactionHeaderType.amount(title: asset.symbol, subtitle: .none)

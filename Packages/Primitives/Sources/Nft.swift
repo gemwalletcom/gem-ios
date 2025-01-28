@@ -38,6 +38,7 @@ public struct NFTAttribute: Codable, Equatable, Hashable, Sendable {
 public struct NFTAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let id: String
 	public let collectionId: String
+	public let contractAddress: String?
 	public let tokenId: String
 	public let tokenType: NFTType
 	public let name: String
@@ -46,9 +47,10 @@ public struct NFTAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let image: NFTImage
 	public let attributes: [NFTAttribute]
 
-	public init(id: String, collectionId: String, tokenId: String, tokenType: NFTType, name: String, description: String?, chain: Chain, image: NFTImage, attributes: [NFTAttribute]) {
+	public init(id: String, collectionId: String, contractAddress: String?, tokenId: String, tokenType: NFTType, name: String, description: String?, chain: Chain, image: NFTImage, attributes: [NFTAttribute]) {
 		self.id = id
 		self.collectionId = collectionId
+		self.contractAddress = contractAddress
 		self.tokenId = tokenId
 		self.tokenType = tokenType
 		self.name = name
@@ -78,6 +80,16 @@ public struct NFTCollection: Codable, Equatable, Hashable, Identifiable, Sendabl
 		self.image = image
 		self.isVerified = isVerified
 		self.links = links
+	}
+}
+
+public struct NFTAssetData: Codable, Equatable, Hashable, Sendable {
+	public let collection: NFTCollection
+	public let asset: NFTAsset
+
+	public init(collection: NFTCollection, asset: NFTAsset) {
+		self.collection = collection
+		self.asset = asset
 	}
 }
 
