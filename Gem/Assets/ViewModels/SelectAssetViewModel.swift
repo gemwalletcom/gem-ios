@@ -57,7 +57,7 @@ class SelectAssetViewModel {
         case .send: Localized.Wallet.send
         case .receive(let type):
             switch type {
-            case .regular: Localized.Wallet.receive
+            case .asset: Localized.Wallet.receive
             case .collections: Localized.Wallet.receiveCollection
             }
         case .buy: Localized.Wallet.buy
@@ -84,7 +84,7 @@ class SelectAssetViewModel {
         switch selectType {
         case .receive(let type):
             switch type {
-            case .regular:
+            case .asset:
                 wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
             case .collections: false
             }

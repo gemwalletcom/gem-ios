@@ -8,7 +8,7 @@ import Primitives
 extension HeaderButtonType {
     public var selectType: SelectAssetType {
         switch self {
-        case .receive: .receive
+        case .receive: .receive(.asset)
         case .send: .send
         case .buy: .buy
         case .swap: .swap(.pay)

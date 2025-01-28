@@ -28,7 +28,7 @@ struct AssetsFilterViewModel {
         case .send: [.hasBalance]
         case .receive(let type):
             switch type {
-            case .regular: [.includeNewAssets]
+            case .asset: [.includeNewAssets]
             case .collections: [.chains(Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
             }
         case .buy: [.buyable, .includeNewAssets]

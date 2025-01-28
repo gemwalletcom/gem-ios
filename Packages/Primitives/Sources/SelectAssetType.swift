@@ -34,7 +34,7 @@ public enum SelectAssetSwapType: Identifiable, Hashable {
 }
 
 public enum ReceiveAssetType: String, Hashable, Identifiable {
-    case regular
+    case asset
     case collections
 
     public var id: String {
