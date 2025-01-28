@@ -58,6 +58,7 @@ public struct AssetConfiguration: Sendable {
         .algorand,
         .polkadot,
         .cardano,
+        .abstract,
     ]
 
     public static let enabledByDefault: [AssetId] =  [

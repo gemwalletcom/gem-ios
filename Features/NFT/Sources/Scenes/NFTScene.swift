@@ -20,14 +20,20 @@ public struct NFTScene: View {
         ]
     }
     
+    @Binding var isPresentingSelectType: SelectAssetType?
+    
     private var model: NFTCollectionViewModel
     
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
-    public init(model: NFTCollectionViewModel) {
-        _nftDataList = Query(constant: model.nftRequest)
+    public init(
+        model: NFTCollectionViewModel,
+        isPresentingSelectType: Binding<SelectAssetType?>
+    ) {
         self.model = model
+        _isPresentingSelectType = isPresentingSelectType
+        _nftDataList = Query(constant: model.nftRequest)
     }
     
     public var body: some View {
@@ -40,6 +46,15 @@ public struct NFTScene: View {
                     if let nftData = nftDataList.first(where: { $0.collection.id == collection.id }) {
                         buildNFTAssetView(nftData: nftData)
                     }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingSelectType = .receive(.collections)
+                } label: {
+                    Images.System.plus
                 }
             }
         }

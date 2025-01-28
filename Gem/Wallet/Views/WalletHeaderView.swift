@@ -6,6 +6,7 @@ import Components
 import Localization
 import InfoSheet
 import Primitives
+import PrimitivesComponents
 
 struct WalletHeaderView: View {
     let model: any HeaderViewModel

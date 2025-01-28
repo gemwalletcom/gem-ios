@@ -10,13 +10,16 @@ import Style
 public struct NFTDetailsViewModel {
     public let collection: NFTCollection
     public let asset: NFTAsset
+    private let headerButtonAction: HeaderButtonAction?
     
     public init(
         collection: NFTCollection,
-        asset: NFTAsset
+        asset: NFTAsset,
+        headerButtonAction: HeaderButtonAction?
     ) {
         self.collection = collection
         self.asset = asset
+        self.headerButtonAction = headerButtonAction
     }
     
     public var title: String {
@@ -94,5 +97,16 @@ public struct NFTDetailsViewModel {
             placeholder: .none,
             chainPlaceholder: .none
         )
+    }
+    
+    public var headerButtons: [HeaderButton] {
+        [
+            HeaderButton(type: .send, isEnabled: true),
+            HeaderButton(type: .more, isEnabled: true),
+        ]
+    }
+    
+    func onHeaderAction(type: HeaderButtonType) {
+        headerButtonAction?(type)
     }
 }

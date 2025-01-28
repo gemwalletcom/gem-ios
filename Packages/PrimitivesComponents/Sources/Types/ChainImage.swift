@@ -53,6 +53,7 @@ public struct ChainImage: Sendable {
         case .algorand: Images.Chains.algorand
         case .polkadot: Images.Chains.polkadot
         case .cardano: Images.Chains.cardano
+        case .abstract: Images.Chains.abstract
         }
     }
 }

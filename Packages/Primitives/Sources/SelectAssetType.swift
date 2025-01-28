@@ -4,7 +4,7 @@ import Foundation
 
 public enum SelectAssetType: Identifiable, Hashable {
     case send
-    case receive
+    case receive(ReceiveAssetType)
     case buy
     case swap(SelectAssetSwapType)
     case stake
@@ -14,7 +14,7 @@ public enum SelectAssetType: Identifiable, Hashable {
     public var id: String {
         switch self {
         case .send: "send"
-        case .receive: "receive"
+        case .receive(let type): "receive_\(type.id)"
         case .buy: "buy"
         case .swap(let type): "swap_\(type.id)"
         case .stake: "stake"
@@ -30,5 +30,14 @@ public enum SelectAssetSwapType: Identifiable, Hashable {
     
     public var id: String {
         return "rawValue" //FIX
+    }
+}
+
+public enum ReceiveAssetType: String, Hashable, Identifiable {
+    case asset
+    case collections
+
+    public var id: String {
+        rawValue
     }
 }

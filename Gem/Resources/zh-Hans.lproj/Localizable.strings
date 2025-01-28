@@ -281,11 +281,11 @@
 "swap.price_impact" = "价格影响";
 "wallet.sell" = "卖";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "了解更多";
 "info.network_fee.title" = "网络费用";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "您无权访问钱包，但可以查看其交易和动向。";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@网络收取交易费，具体费用取决于网络使用情况。支付给矿工以处理您的交易。";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,7 @@
 "banner.activate_asset.description" = "要使用%@资产，您必须首先通过满足网络的特定要求在%@网络上启用它。";
 "nft.properties" = "特性";
 "nft.collections" = "收藏";
-"nft.your_nfts" = "你的 NFT";
 "nft.description" = "描述";
 "nft.collection" = "收藏";
+"wallet.receive_collection" = "接收收藏";
+"wallet.more" = "更多的";

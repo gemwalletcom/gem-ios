@@ -281,11 +281,11 @@
 "swap.price_impact" = "Impatto sul prezzo";
 "wallet.sell" = "Vendere";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Saperne di più";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Un portafoglio a cui non hai accesso, ma di cui puoi monitorare le transazioni e i movimenti.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@ la rete addebita una commissione di transazione, che varia in base all'utilizzo della rete. Pagata ai minatori per elaborare la tua transazione.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,7 @@
 "banner.activate_asset.description" = "Per utilizzare la risorsa %@, è necessario prima abilitarla sulla rete %@ soddisfacendo i requisiti specifici della rete.";
 "nft.properties" = "Proprietà";
 "nft.collections" = "Collezioni";
-"nft.your_nfts" = "I tuoi NFT";
 "nft.description" = "Descrizione";
 "nft.collection" = "Collezione";
+"wallet.receive_collection" = "Ricevi la raccolta";
+"wallet.more" = "Di più";

@@ -281,11 +281,11 @@
 "swap.price_impact" = "Dampak Harga";
 "wallet.sell" = "Menjual";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Pelajari lebih lanjut";
 "info.network_fee.title" = "Biaya Jaringan";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Dompet yang tidak dapat Anda akses, tetapi Anda dapat memantau transaksi dan pergerakannya.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "Jaringan %@ mengenakan biaya transaksi, yang bervariasi berdasarkan penggunaan jaringan. Dibayar kepada penambang untuk memproses transaksi Anda.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,7 @@
 "banner.activate_asset.description" = "Untuk menggunakan aset %@, Anda harus terlebih dahulu mengaktifkannya di jaringan %@ dengan memenuhi persyaratan khusus jaringan.";
 "nft.properties" = "Properti";
 "nft.collections" = "Koleksi";
-"nft.your_nfts" = "NFT Anda";
 "nft.description" = "Keterangan";
 "nft.collection" = "Koleksi";
+"wallet.receive_collection" = "Terima Koleksi";
+"wallet.more" = "Lagi";
