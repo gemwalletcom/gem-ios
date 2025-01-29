@@ -35,14 +35,6 @@ public struct NFTDetailsViewModel {
         assetData.collection.name
     }
     
-    public var collectionAssetImage: AssetImage {
-        AssetImage(
-            imageURL: URL(string: assetData.collection.image.previewImageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
-    }
-    
     public var networkTitle: String {
         Localized.Transfer.network
     }
@@ -63,6 +55,10 @@ public struct NFTDetailsViewModel {
         )
     }
 
+    public var showContract: Bool {
+        assetData.collection.contractAddress != assetData.asset.tokenId
+    }
+    
     public var contractText: String {
         AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
@@ -80,6 +76,10 @@ public struct NFTDetailsViewModel {
             return assetData.asset.tokenId
         }
         return "#\(assetData.asset.tokenId)"
+    }
+    
+    public var tokenIdValue: String {
+        assetData.asset.tokenId
     }
     
     public var attributesTitle: String {
