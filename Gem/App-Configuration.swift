@@ -122,6 +122,7 @@ extension TransactionService {
     static let main = TransactionService(
         transactionStore: .main,
         stakeService: .main,
+        nftService: .main,
         chainServiceFactory: .main,
         balanceUpdater: BalanceService.main
     )
@@ -283,7 +284,7 @@ extension Recipient {
 }
 
 extension RecipientData {
-    static let main = RecipientData(asset: .main, recipient: .main, amount: .none)
+    static let main = RecipientData(recipient: .main, amount: .none)
 }
 
 extension TransferData {

@@ -22,7 +22,7 @@ struct AssetScene: View {
     @State private var showingPriceAlertMessage = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
-    @Binding private var isPresentingAssetSelectType: SelectAssetInput?
+    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
     @Query<TransactionsRequest>
     private var transactions: [TransactionExtended]
@@ -58,12 +58,12 @@ struct AssetScene: View {
     init(
         wallet: Wallet,
         input: AssetSceneInput,
-        isPresentingAssetSelectType: Binding<SelectAssetInput?>,
+        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>,
         onAssetActivate: AssetAction
     ) {
         self.walletModel = WalletViewModel(wallet: wallet)
         self.onAssetActivate = onAssetActivate
-        _isPresentingAssetSelectType = isPresentingAssetSelectType
+        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
         _assetData = Query(constant: input.assetRequest)
         _transactions = Query(constant: input.transactionsRequest)
         _banners = Query(constant: input.bannersRequest)
@@ -198,10 +198,7 @@ extension AssetScene {
     private var stakeView: some View {
         NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
             .accessibilityIdentifier("stake")) {
-                isPresentingAssetSelectType = SelectAssetInput(
-                    type: .stake,
-                    assetAddress: assetData.assetAddress
-                )
+                onSelectHeader(.stake)
             }
     }
 }
@@ -211,8 +208,17 @@ extension AssetScene {
 extension AssetScene {
     @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
-        isPresentingAssetSelectType = SelectAssetInput(
-            type: buttonType.selectType,
+        let selectType: SelectedAssetType = switch buttonType {
+        case .buy: .buy(assetData.asset)
+        case .send: .send(.asset(assetData.asset))
+        case .swap: .swap(assetData.asset)
+        case .receive: .receive(.asset)
+        case .stake: .stake(assetData.asset)
+        case .more:
+            fatalError()
+        }
+        isPresentingAssetSelectedInput = SelectedAssetInput(
+            type: selectType,
             assetAddress: assetData.assetAddress
         )
     }
@@ -245,10 +251,7 @@ extension AssetScene {
         let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake:
-            isPresentingAssetSelectType = SelectAssetInput(
-                type: .stake,
-                assetAddress: assetData.assetAddress
-            )
+            onSelectHeader(.stake)
         case .activateAsset:
             onAssetActivate?(model.assetDataModel.asset)
         case .enableNotifications,

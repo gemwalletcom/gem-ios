@@ -36,7 +36,7 @@ struct ConfirmTransferNavigationStack: View {
                     keystore: keystore,
                     data: transferData,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: transferData.recipientData.asset.chain),
+                        .service(for: transferData.chain),
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

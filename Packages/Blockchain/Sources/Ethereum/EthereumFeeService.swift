@@ -20,6 +20,25 @@ extension EthereumService {
                 function.addParamUInt256(val: input.value.magnitude.serialize(), isOutput: false)
                 return EthereumAbi.encode(fn: function)
             }
+        case .transferNft(let asset):
+            switch asset.tokenType {
+            case .erc721:
+                let function = EthereumAbiFunction(name: "safeTransferFrom")
+                function.addParamAddress(val: Data(hexString: input.senderAddress.remove0x)!, isOutput: false)
+                function.addParamAddress(val: Data(hexString: input.destinationAddress.remove0x)!, isOutput: false)
+                function.addParamUInt256(val: BigInt(stringLiteral: asset.tokenId).magnitude.serialize(), isOutput: false)
+                return EthereumAbi.encode(fn: function)
+            case .erc1155:
+                let function = EthereumAbiFunction(name: "safeTransferFrom")
+                function.addParamAddress(val: Data(hexString: input.senderAddress.remove0x)!, isOutput: false)
+                function.addParamAddress(val: Data(hexString: input.destinationAddress.remove0x)!, isOutput: false)
+                function.addParamUInt256(val: BigInt(stringLiteral: asset.tokenId).magnitude.serialize(), isOutput: false)
+                function.addParamUInt256(val: BigInt(1).magnitude.serialize(), isOutput: false)
+                function.addParamBytes(val: Data(), isOutput: false)
+                return EthereumAbi.encode(fn: function)
+            case .spl, .jetton:
+                fatalError()
+            }
         case .swap(_, _, let type):
             switch type {
             case .approval(_, let spender, let allowance):
@@ -42,15 +61,17 @@ extension EthereumService {
         case .account: fatalError()
         }
     }
-    public func getTo(input: FeeInput) -> String {
+    public func getTo(input: FeeInput) throws -> String {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
                 return input.destinationAddress
             case .token:
-                return asset.tokenId!
+                return try asset.getTokenId()
             }
+        case .transferNft(let asset):
+            return try asset.getContractAddress()
         case .swap:
             return input.destinationAddress
         case .generic:
@@ -75,6 +96,7 @@ extension EthereumService {
             case .native: input.value
             case .token: .none
             }
+        case .transferNft: .zero
         case .swap(_, _, let type):
             switch type {
             case .approval: .zero
@@ -151,7 +173,7 @@ extension EthereumService {
         }
 
         let data = getData(input: input)
-        let to = getTo(input: input)
+        let to = try getTo(input: input)
         let value = getValue(input: input)
 
         async let getGasLimit: BigInt = {
@@ -170,7 +192,7 @@ extension EthereumService {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
-            case .generic, .swap, .stake:
+            case .transferNft, .generic, .swap, .stake:
                 gasPriceType.priorityFee
             case .account: fatalError()
             }

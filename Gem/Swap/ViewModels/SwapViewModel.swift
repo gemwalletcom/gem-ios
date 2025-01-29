@@ -342,8 +342,8 @@ extension SwapViewModel {
     ) throws -> TransferData {
         let action = SwapAction.approval(quote, spender: spender, allowance: .MAX_256)
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(quote, spender: spender, allowance: .MAX_256))
+        
         let recipientData = try RecipientData(
-            asset: fromAsset,
             recipient: Recipient(name: action.provider.name, address: fromAsset.getTokenId(), memo: .none),
             amount: .none
         )
@@ -362,7 +362,6 @@ extension SwapViewModel {
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(quote, quoteData))
         let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
-            asset: fromAsset,
             recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )

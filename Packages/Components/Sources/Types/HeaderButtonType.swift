@@ -7,6 +7,7 @@ public enum HeaderButtonType: String, Identifiable, CaseIterable, Sendable {
     case receive
     case buy
     case swap
+    case stake
     case more
     
     public var id: String { rawValue }

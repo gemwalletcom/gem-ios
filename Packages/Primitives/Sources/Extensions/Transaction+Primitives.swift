@@ -26,7 +26,8 @@ extension Transaction {
             .stakeRedelegate,
             .stakeRewards,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .transferNFT:
             return [assetId]
         case .swap:
             switch metadata {

@@ -7,7 +7,6 @@ public enum SelectAssetType: Identifiable, Hashable {
     case receive(ReceiveAssetType)
     case buy
     case swap(SelectAssetSwapType)
-    case stake
     case manage
     case priceAlert
 
@@ -17,7 +16,6 @@ public enum SelectAssetType: Identifiable, Hashable {
         case .receive(let type): "receive_\(type.id)"
         case .buy: "buy"
         case .swap(let type): "swap_\(type.id)"
-        case .stake: "stake"
         case .manage: "manage"
         case .priceAlert:"priceAlert"
         }
@@ -29,13 +27,16 @@ public enum SelectAssetSwapType: Identifiable, Hashable {
     case receive(chains: [Chain], assetIds: [AssetId])
     
     public var id: String {
-        return "rawValue" //FIX
+        switch self {
+        case .pay: "pay"
+        case .receive(let chains, let assetIds): "receive_\(chains)_\(assetIds)"
+        }
     }
 }
 
 public enum ReceiveAssetType: String, Hashable, Identifiable {
     case asset
-    case collections
+    case collection
 
     public var id: String {
         rawValue

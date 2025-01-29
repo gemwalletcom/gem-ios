@@ -92,7 +92,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8), outputType: .signature)),
                 recipientData: RecipientData(
-                    asset: chain.asset,
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
                 ),
@@ -144,7 +143,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     data: data
                 )),
                 recipientData: RecipientData(
-                    asset: chain.asset,
                     recipient: Recipient(name: .none, address: address, memo: .none),
                     amount: .none
                 ),
@@ -157,7 +155,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             let transferData = TransferData(
                 type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8))),
                 recipientData: RecipientData(
-                    asset: chain.asset,
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
                 ),

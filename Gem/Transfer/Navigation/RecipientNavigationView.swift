@@ -5,6 +5,7 @@ import SwiftUI
 import Primitives
 import Transfer
 import ChainService
+import PrimitivesComponents
 
 struct RecipientNavigationView: View {
 
@@ -14,6 +15,7 @@ struct RecipientNavigationView: View {
     
     let wallet: Wallet
     let asset: Asset
+    let type: RecipientAssetType
     private let onComplete: VoidAction
 
     @Binding private var navigationPath: NavigationPath
@@ -21,21 +23,24 @@ struct RecipientNavigationView: View {
     init(
         wallet: Wallet,
         asset: Asset,
+        type: RecipientAssetType,
         navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.asset = asset
+        self.type = type
         _navigationPath = navigationPath
         self.onComplete = onComplete
     }
-
+    
     var body: some View {
         RecipientScene(
             model: RecipientViewModel(
                 wallet: wallet,
-                keystore: keystore,
                 asset: asset,
+                keystore: keystore,
+                type: type,
                 onRecipientDataAction: {
                     navigationPath.append($0)
                 },
@@ -46,7 +51,7 @@ struct RecipientNavigationView: View {
         )
         .navigationDestination(for: RecipientData.self) { data in
             AmountNavigationView(
-                input: AmountInput(type: .transfer(recipient: data), asset: data.asset),
+                input: AmountInput(type: .transfer(recipient: data), asset: asset),
                 wallet: wallet,
                 navigationPath: $navigationPath
             )
@@ -58,7 +63,7 @@ struct RecipientNavigationView: View {
                     keystore: keystore,
                     data: data,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: data.recipientData.asset.chain),
+                        .service(for: data.chain),
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

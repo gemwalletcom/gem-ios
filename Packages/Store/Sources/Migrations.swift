@@ -207,6 +207,12 @@ public struct Migrations {
                 $0.add(column: Columns.NFTAsset.attributes.name, .jsonText)
             }
         }
+        
+        migrator.registerMigration("Add contractAddress to \(NFTAssetRecord.databaseTableName)") { db in
+            try? db.alter(table: NFTAssetRecord.databaseTableName) {
+                $0.add(column: Columns.NFTAsset.contractAddress.name, .text)
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

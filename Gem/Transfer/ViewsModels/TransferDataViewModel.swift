@@ -16,15 +16,15 @@ struct TransferDataViewModel {
     var type: TransferDataType { data.type }
     var recipientData: RecipientData { data.recipientData }
     var recipient: Recipient { recipientData.recipient }
-    var asset: Asset { recipientData.asset }
+    var asset: Asset { data.asset }
     var memo: String? { recipientData.recipient.memo }
-    var chain: Chain { asset.chain }
+    var chain: Chain { data.chain }
     var chainType: ChainType { chain.type }
     var chainAsset: Asset { chain.asset }
 
     var title: String {
         switch type {
-        case .transfer: Localized.Transfer.Send.title
+        case .transfer, .transferNft: Localized.Transfer.Send.title
         case .swap(_, _, let type):
             switch type {
             case .approval: Localized.Transfer.Approve.title
@@ -73,6 +73,7 @@ struct TransferDataViewModel {
     var appValue: String? {
         switch type {
         case .transfer,
+            .transferNft,
             .swap,
             .stake,
             .account: .none
@@ -84,6 +85,7 @@ struct TransferDataViewModel {
     var websiteURL: URL? {
         switch type {
         case .transfer,
+            .transferNft,
             .swap,
             .stake,
             .account: .none
@@ -94,10 +96,8 @@ struct TransferDataViewModel {
 
     var shouldShowMemo: Bool {
         switch type {
-        case .transfer:
-            return AssetViewModel(asset: asset).supportMemo
-        case .swap, .generic, .stake, .account:
-            return false
+        case .transfer, .transferNft: chain.isMemoSupported
+        case .swap, .generic, .stake, .account: false
         }
     }
 
@@ -121,6 +121,7 @@ extension TransferDataViewModel {
     private var recipientName: String? {
         switch type {
         case .transfer,
+                .transferNft,
                 .swap,
                 .generic,
                 .account:

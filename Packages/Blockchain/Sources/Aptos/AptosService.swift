@@ -43,7 +43,7 @@ public struct AptosService: Sendable {
             case .token: BigInt(1000)
             }
             case .swap: BigInt(1000)
-            case .stake, .generic, .account: fatalError()
+            case .transferNft, .stake, .generic, .account: fatalError()
         }
          
         return Fee(

@@ -165,6 +165,7 @@ struct Columns {
     struct NFTAsset {
         static let id = Column("id")
         static let collectionId = Column("collectionId")
+        static let contractAddress = Column("contractAddress")
         static let tokenId = Column("tokenId")
         static let tokenType = Column("tokenType")
         static let name = Column("name")

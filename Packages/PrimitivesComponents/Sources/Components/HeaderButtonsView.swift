@@ -5,18 +5,6 @@ import SwiftUI
 import Components
 import Primitives
 
-extension HeaderButtonType {
-    public var selectType: SelectAssetType {
-        switch self {
-        case .receive: .receive(.asset)
-        case .send: .send
-        case .buy: .buy
-        case .swap: .swap(.pay)
-        case .more: fatalError()
-        }
-    }
-}
-
 public typealias HeaderButtonAction = @Sendable (HeaderButtonType) -> Void
 
 public struct HeaderButtonsView: View {

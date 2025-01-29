@@ -19,6 +19,7 @@ import ExplorerService
 import BalanceService
 import AssetsService
 import TransactionsService
+import NFTService
 
 struct ServicesFactory {
     @MainActor
@@ -60,7 +61,10 @@ struct ServicesFactory {
             balanceStore: storeManager.balanceStore,
             chainFactory: chainServiceFactory
         )
-
+        let nftService = Self.makeNftService(
+            apiService: apiService,
+            nftStore: storeManager.nftStore
+        )
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
@@ -69,6 +73,7 @@ struct ServicesFactory {
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
             stakeService: stakeService,
+            nftService: nftService,
             chainFactory: chainServiceFactory,
             balanceService: balanceService
         )
@@ -239,12 +244,14 @@ extension ServicesFactory {
     private static func makeTransactionService(
         transactionStore: TransactionStore,
         stakeService: StakeService,
+        nftService: NFTService,
         chainFactory: ChainService.ChainServiceFactory,
         balanceService: BalanceService
     ) -> TransactionService {
         TransactionService(
             transactionStore: transactionStore,
             stakeService: stakeService,
+            nftService: nftService,
             chainServiceFactory: chainFactory,
             balanceUpdater: balanceService
         )
@@ -331,6 +338,16 @@ extension ServicesFactory {
             assetsService: assetsService,
             deviceService: deviceService,
             bannerSetupService: bannerSetupService
+        )
+    }
+    
+    private static func makeNftService(
+        apiService: GemAPIService,
+        nftStore: NFTStore
+    ) -> NFTService {
+        NFTService(
+            apiService: apiService,
+            nftStore: nftStore
         )
     }
 }

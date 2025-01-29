@@ -13,7 +13,7 @@ struct TransactionTypeViewModel {
 
     var title: String {
         switch type {
-        case .transfer: Localized.Transfer.title
+        case .transfer, .transferNFT: Localized.Transfer.title
         case .swap: Localized.Wallet.swap
         case .tokenApproval: Localized.Transfer.Approve.title
         case .stakeDelegate: Localized.Transfer.Stake.title

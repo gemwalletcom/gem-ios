@@ -10,28 +10,27 @@ struct AssetNavigationView: View {
     let wallet: Wallet
     let assetId: AssetId
 
-    @Binding private var isPresentingAssetSelectType: SelectAssetInput?
+    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
     @State private var transferData: TransferData?
     
     init(
         wallet: Wallet,
         assetId: AssetId,
-        isPresentingAssetSelectType: Binding<SelectAssetInput?>
+        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
     ) {
         self.wallet = wallet
         self.assetId = assetId
-        _isPresentingAssetSelectType = isPresentingAssetSelectType
+        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 
     var body: some View {
         AssetScene(
             wallet: wallet,
             input: AssetSceneInput(walletId: wallet.walletId, assetId: assetId),
-            isPresentingAssetSelectType: $isPresentingAssetSelectType) { asset in
+            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput) { asset in
                 transferData = TransferData(
                     type: .account(asset, .activate),
                     recipientData: RecipientData(
-                        asset: asset,
                         recipient: Recipient(
                             name: .none,
                             address: "",
