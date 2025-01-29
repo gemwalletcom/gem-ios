@@ -318,4 +318,7 @@
 "nft.collection" = "コレクション";
 "wallet.receive_collection" = "コレクションを受け取る";
 "wallet.more" = "もっと";
-"common.save" = "保存";
+"nft.save_to_photos" = "写真に保存";
+"nft.success_saved_to_photos" = "画像が写真に保存されました。";
+"nft.photo_access_denied" = "写真ライブラリへのアクセスが拒否されました";
+"nft.photo_access_denied_description" = "このアプリには写真ライブラリにアクセスする権限がありません。写真を保存するには、デバイスの設定でアクセスを有効にしてください。";

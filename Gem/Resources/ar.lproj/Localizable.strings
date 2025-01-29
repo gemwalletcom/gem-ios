@@ -318,4 +318,7 @@
 "nft.collection" = "مجموعة";
 "wallet.receive_collection" = "استلام المجموعة";
 "wallet.more" = "أكثر";
-"common.save" = "يحفظ";
+"nft.save_to_photos" = "حفظ في الصور";
+"nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
+"nft.photo_access_denied" = "تم رفض الوصول إلى مكتبة الصور";
+"nft.photo_access_denied_description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. لحفظ الصور، يرجى تمكين الوصول في إعدادات جهازك.";

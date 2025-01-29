@@ -203,8 +203,6 @@ public enum Localized {
     public static func requiredField(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.required_field", String(describing: p1), fallback: "%@ is required")
     }
-    /// Save
-    public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
     /// Secret Recovery Phrase
     public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Recovery Phrase")
     /// See All
@@ -433,8 +431,16 @@ public enum Localized {
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
     /// Description
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
+    /// Photo Library Access Denied
+    public static let photoAccessDenied = Localized.tr("Localizable", "nft.photo_access_denied", fallback: "Photo Library Access Denied")
+    /// This app does not have permission to access your photo library. To save photos, please enable access in your device settings.
+    public static let photoAccessDeniedDescription = Localized.tr("Localizable", "nft.photo_access_denied_description", fallback: "This app does not have permission to access your photo library. To save photos, please enable access in your device settings.")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
+    /// Save to Photos
+    public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
+    /// Your image has been saved to Photos!
+    public static let successSavedToPhotos = Localized.tr("Localizable", "nft.success_saved_to_photos", fallback: "Your image has been saved to Photos!")
   }
   public enum Nodes {
     /// Gem Wallet Node

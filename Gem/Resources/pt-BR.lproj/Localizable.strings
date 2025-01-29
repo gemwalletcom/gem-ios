@@ -318,4 +318,7 @@
 "nft.collection" = "Coleção";
 "wallet.receive_collection" = "Receber coleção";
 "wallet.more" = "Mais";
-"common.save" = "Salvar";
+"nft.save_to_photos" = "Salvar em fotos";
+"nft.success_saved_to_photos" = "Sua imagem foi salva em Fotos!";
+"nft.photo_access_denied" = "Acesso negado à biblioteca de fotos";
+"nft.photo_access_denied_description" = "Este aplicativo não tem permissão para acessar sua biblioteca de fotos. Para salvar fotos, habilite o acesso nas configurações do seu dispositivo.";

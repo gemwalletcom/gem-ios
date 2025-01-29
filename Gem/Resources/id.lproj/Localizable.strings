@@ -318,4 +318,7 @@
 "nft.collection" = "Koleksi";
 "wallet.receive_collection" = "Terima Koleksi";
 "wallet.more" = "Lagi";
-"common.save" = "Menyimpan";
+"nft.save_to_photos" = "Simpan ke Foto";
+"nft.success_saved_to_photos" = "Gambar Anda telah disimpan ke Foto!";
+"nft.photo_access_denied" = "Akses Perpustakaan Foto Ditolak";
+"nft.photo_access_denied_description" = "Aplikasi ini tidak memiliki izin untuk mengakses pustaka foto Anda. Untuk menyimpan foto, harap aktifkan akses di pengaturan perangkat Anda.";

@@ -318,4 +318,7 @@
 "nft.collection" = "收藏";
 "wallet.receive_collection" = "接收收藏";
 "wallet.more" = "更多的";
-"common.save" = "節省";
+"nft.save_to_photos" = "儲存到照片";
+"nft.success_saved_to_photos" = "您的影像已儲存到照片中！";
+"nft.photo_access_denied" = "照片庫存取被拒絕";
+"nft.photo_access_denied_description" = "此應用程式無權存取您的照片庫。若要儲存照片，請在您的裝置設定中啟用存取權限。";

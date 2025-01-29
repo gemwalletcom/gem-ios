@@ -318,4 +318,7 @@
 "nft.collection" = "संग्रह";
 "wallet.receive_collection" = "संग्रह प्राप्त करें";
 "wallet.more" = "अधिक";
-"common.save" = "बचाना";
+"nft.save_to_photos" = "फ़ोटो में सहेजें";
+"nft.success_saved_to_photos" = "आपकी छवि फ़ोटो में सहेज ली गई है!";
+"nft.photo_access_denied" = "फोटो लाइब्रेरी तक पहुंच अस्वीकृत";
+"nft.photo_access_denied_description" = "इस ऐप को आपकी फोटो लाइब्रेरी तक पहुंचने की अनुमति नहीं है। फ़ोटो सहेजने के लिए, कृपया अपनी डिवाइस सेटिंग में पहुंच सक्षम करें।";

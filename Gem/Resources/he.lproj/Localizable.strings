@@ -318,4 +318,7 @@
 "nft.collection" = "גְבִיָה";
 "wallet.receive_collection" = "קבלת אוסף";
 "wallet.more" = "יוֹתֵר";
-"common.save" = "לְהַצִיל";
+"nft.save_to_photos" = "שמור בתמונות";
+"nft.success_saved_to_photos" = "התמונה שלך נשמרה בתמונות!";
+"nft.photo_access_denied" = "הגישה לספריית תמונות נדחתה";
+"nft.photo_access_denied_description" = "לאפליקציה הזו אין הרשאה לגשת לספריית התמונות שלך. כדי לשמור תמונות, הפעל גישה בהגדרות המכשיר שלך.";

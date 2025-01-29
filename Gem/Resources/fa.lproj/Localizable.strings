@@ -318,4 +318,7 @@
 "nft.collection" = "مجموعه";
 "wallet.receive_collection" = "دریافت مجموعه";
 "wallet.more" = "بیشتر";
-"common.save" = "ذخیره کنید";
+"nft.save_to_photos" = "ذخیره در عکس ها";
+"nft.success_saved_to_photos" = "تصویر شما در Photos ذخیره شده است!";
+"nft.photo_access_denied" = "دسترسی به کتابخانه عکس رد شد";
+"nft.photo_access_denied_description" = "این برنامه اجازه دسترسی به کتابخانه عکس شما را ندارد. برای ذخیره عکس‌ها، لطفاً دسترسی را در تنظیمات دستگاه خود فعال کنید.";

@@ -318,4 +318,7 @@
 "nft.collection" = "수집";
 "wallet.receive_collection" = "컬렉션 수신";
 "wallet.more" = "더";
-"common.save" = "구하다";
+"nft.save_to_photos" = "사진에 저장";
+"nft.success_saved_to_photos" = "이미지가 사진에 저장되었습니다!";
+"nft.photo_access_denied" = "사진 라이브러리 접근 거부";
+"nft.photo_access_denied_description" = "이 앱은 사진 라이브러리에 액세스할 권한이 없습니다. 사진을 저장하려면 기기 설정에서 액세스를 활성화하세요.";
