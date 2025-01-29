@@ -10,6 +10,11 @@ import Localization
 
 public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.openURL) private var openURL
+
+    @State private var showSavedMessage: Bool = false
+    @State private var showPhotoPermissionMessage: Bool = false
+    @State private var isPresentingErrorMessage: String?
 
     let model: NFTDetailsViewModel
     
@@ -34,10 +39,10 @@ public struct NFTDetailsScene: View {
             .listRowInsets(EdgeInsets())
             .contextMenu {
                 ContextMenuItem(
-                    title: Localized.Common.save,
+                    title: Localized.Nft.saveToPhotos,
                     image: SystemImage.gallery
                 ) {
-                    saveImage()
+                    requestPermitionsAndTryToSave()
                 }
             }
             
@@ -73,16 +78,56 @@ public struct NFTDetailsScene: View {
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
+        .modifier(
+            ToastModifier(
+                isPresenting: $showSavedMessage,
+                value: Localized.Nft.successSavedToPhotos,
+                systemImage: SystemImage.gallery
+            )
+        )
+        .alert(Localized.Nft.photoAccessDenied, isPresented: $showPhotoPermissionMessage) {
+            Button(Localized.Common.openSettings) {
+                onSelectOpenSettings()
+            }
+            Button(Localized.Common.cancel, role: .cancel) {}
+        } message: {
+            Text(Localized.Nft.photoAccessDeniedDescription)
+        }
+        .alert("",
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(isPresentingErrorMessage ?? "")
+            }
+        )
     }
     
-    private func saveImage() {
+    private func requestPermitionsAndTryToSave() {
         Task {
-            do {
-                try await model.saveImageToGallery()
-            } catch {
-                NSLog("Save error: \(error)")
+            let permitionStatus = await model.requestAuthorizationToPhotos()
+            switch permitionStatus {
+            case .restricted, .denied:
+                showPhotoPermissionMessage = true
+            case .authorized, .limited, .notDetermined:
+                await saveImageToGallery()
+            @unknown default:
+                break
             }
         }
+    }
+
+    private func saveImageToGallery() async {
+        do {
+            try await model.saveImageToGallery()
+            showSavedMessage = true
+        } catch {
+            isPresentingErrorMessage = error.localizedDescription
+        }
+    }
+
+    private func onSelectOpenSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(settingsURL)
     }
 }
 

@@ -3,7 +3,7 @@
 import Foundation
 import UIKit
 
-public struct ImageSaverService: Sendable {
+public struct ImageGalleryService: Sendable {
     private let session: URLSession
     
     public init(session: URLSession = .shared) {

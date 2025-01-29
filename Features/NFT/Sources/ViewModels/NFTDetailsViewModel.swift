@@ -6,7 +6,8 @@ import PrimitivesComponents
 import Localization
 import Components
 import Style
-import ImageSaverService
+import ImageGalleryService
+import Photos
 
 public struct NFTDetailsViewModel: Sendable {
     public let collection: NFTCollection
@@ -115,7 +116,11 @@ public struct NFTDetailsViewModel: Sendable {
         guard let url = URL(string: asset.image.imageUrl) else {
             throw AnyError("Wrong asset image url")
         }
-        let saver = ImageSaverService()
+        let saver = ImageGalleryService()
         try await saver.saveImageFromURL(url)
+    }
+    
+    func requestAuthorizationToPhotos() async -> PHAuthorizationStatus {
+        await PHPhotoLibrary.requestAuthorization(for: .addOnly)
     }
 }

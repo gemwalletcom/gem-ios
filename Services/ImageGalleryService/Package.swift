@@ -3,18 +3,18 @@
 import PackageDescription
 
 let package = Package(
-    name: "ImageSaverService",
+    name: "ImageGalleryService",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "ImageSaverService",
-            targets: ["ImageSaverService"]),
+            name: "ImageGalleryService",
+            targets: ["ImageGalleryService"]),
     ],
     targets: [
         .target(
-            name: "ImageSaverService",
+            name: "ImageGalleryService",
             dependencies: [],
             path: "Sources"
         )
