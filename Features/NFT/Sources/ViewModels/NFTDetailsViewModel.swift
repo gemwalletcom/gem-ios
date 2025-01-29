@@ -76,7 +76,10 @@ public struct NFTDetailsViewModel {
     }
     
     public var tokenIdText: String {
-        "#\(assetData.asset.tokenId)"
+        if assetData.asset.tokenId.count > 16 {
+            return assetData.asset.tokenId
+        }
+        return "#\(assetData.asset.tokenId)"
     }
     
     public var attributesTitle: String {
@@ -92,8 +95,10 @@ public struct NFTDetailsViewModel {
     }
     
     public var headerButtons: [HeaderButton] {
-        [
-            HeaderButton(type: .send, isEnabled: true),
+        let enabledTransferChains = [Chain.ethereum]
+        
+        return [
+            HeaderButton(type: .send, isEnabled: enabledTransferChains.contains(assetData.asset.chain)),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }

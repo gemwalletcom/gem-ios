@@ -65,6 +65,10 @@ public struct SolanaSigner: Signable {
         }
     }
     
+    public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        fatalError()
+    }
+    
     private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
         let signingInput = SolanaSigningInput.with {
             $0.transactionType = type
