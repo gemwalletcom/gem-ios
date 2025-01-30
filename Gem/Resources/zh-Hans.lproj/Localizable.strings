@@ -320,5 +320,5 @@
 "wallet.more" = "更多的";
 "nft.save_to_photos" = "保存到照片";
 "nft.success_saved_to_photos" = "您的图像已保存至照片！";
-"nft.photo_access_denied" = "照片库访问被拒绝";
-"nft.photo_access_denied_description" = "此应用无权访问您的照片库。要保存照片，请在设备设置中启用访问权限。";
+"permissions.access_denied" = "拒绝访问";
+"permissions.image.photo_access.denied.description" = "此应用无权访问您的照片库。请在设备设置中启用访问权限。";

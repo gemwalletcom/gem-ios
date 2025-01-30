@@ -431,10 +431,6 @@ public enum Localized {
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
     /// Description
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
-    /// Photo Library Access Denied
-    public static let photoAccessDenied = Localized.tr("Localizable", "nft.photo_access_denied", fallback: "Photo Library Access Denied")
-    /// This app does not have permission to access your photo library. To save photos, please enable access in your device settings.
-    public static let photoAccessDeniedDescription = Localized.tr("Localizable", "nft.photo_access_denied_description", fallback: "This app does not have permission to access your photo library. To save photos, please enable access in your device settings.")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos
@@ -456,6 +452,18 @@ public enum Localized {
       public static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
       /// Add node
       public static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
+    }
+  }
+  public enum Permissions {
+    /// Access Denied
+    public static let accessDenied = Localized.tr("Localizable", "permissions.access_denied", fallback: "Access Denied")
+    public enum Image {
+      public enum PhotoAccess {
+        public enum Denied {
+          /// This app does not have permission to access your photo library. Please enable access in your device settings.
+          public static let description = Localized.tr("Localizable", "permissions.image.photo_access.denied.description", fallback: "This app does not have permission to access your photo library. Please enable access in your device settings.")
+        }
+      }
     }
   }
   public enum PriceAlerts {

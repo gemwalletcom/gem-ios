@@ -320,5 +320,5 @@
 "wallet.more" = "Daha";
 "nft.save_to_photos" = "Fotoğraflara Kaydet";
 "nft.success_saved_to_photos" = "Resminiz Fotoğraflar'a kaydedildi!";
-"nft.photo_access_denied" = "Fotoğraf Kütüphanesine Erişim Engellendi";
-"nft.photo_access_denied_description" = "Bu uygulama fotoğraf kütüphanenize erişim iznine sahip değil. Fotoğrafları kaydetmek için lütfen cihaz ayarlarınızda erişimi etkinleştirin.";
+"permissions.access_denied" = "Erişim engellendi";
+"permissions.image.photo_access.denied.description" = "Bu uygulama fotoğraf kütüphanenize erişim iznine sahip değil. Lütfen cihaz ayarlarınızda erişimi etkinleştirin.";

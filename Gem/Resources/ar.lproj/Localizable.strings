@@ -320,5 +320,5 @@
 "wallet.more" = "أكثر";
 "nft.save_to_photos" = "حفظ في الصور";
 "nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
-"nft.photo_access_denied" = "تم رفض الوصول إلى مكتبة الصور";
-"nft.photo_access_denied_description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. لحفظ الصور، يرجى تمكين الوصول في إعدادات جهازك.";
+"permissions.access_denied" = "تم الرفض";
+"permissions.image.photo_access.denied.description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. يُرجى تمكين هذا الإذن في إعدادات جهازك.";

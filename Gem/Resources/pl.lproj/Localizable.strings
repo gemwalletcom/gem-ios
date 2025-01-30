@@ -320,5 +320,5 @@
 "wallet.more" = "Więcej";
 "nft.save_to_photos" = "Zapisz w Zdjęciach";
 "nft.success_saved_to_photos" = "Twój obraz został zapisany w Zdjęciach!";
-"nft.photo_access_denied" = "Dostęp do biblioteki zdjęć zabroniony";
-"nft.photo_access_denied_description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Aby zapisać zdjęcia, włącz dostęp w ustawieniach urządzenia.";
+"permissions.access_denied" = "Odmowa dostępu";
+"permissions.image.photo_access.denied.description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Włącz dostęp w ustawieniach urządzenia.";
