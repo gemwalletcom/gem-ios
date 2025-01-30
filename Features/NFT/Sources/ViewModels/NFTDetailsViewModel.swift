@@ -96,9 +96,11 @@ public struct NFTDetailsViewModel {
     
     public var headerButtons: [HeaderButton] {
         let enabledTransferChains = [Chain.ethereum]
-        
         return [
-            HeaderButton(type: .send, isEnabled: enabledTransferChains.contains(assetData.asset.chain)),
+            HeaderButton(
+                type: .send,
+                isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
+            ),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }

@@ -100,7 +100,7 @@ public struct SolanaSigner: Signable {
         else {
             throw AnyError("not data input")
         }
-        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType ?? .encodedTransaction)
+        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
     }
     
     func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
