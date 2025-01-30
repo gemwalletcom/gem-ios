@@ -218,10 +218,9 @@ extension SolanaService: ChainFeeRateFetchable {
         let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 100_000 : 1_000_000
-        case .transferNft: 1_000_000
-        case .stake: 1_500_000
-        case .generic, .swap: 2_500_000
+        case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
+        case .stake, .transferNft: 50_000
+        case .generic, .swap: 250_000
         case .account: fatalError()
         }
         
@@ -242,9 +241,9 @@ extension SolanaService: ChainFeeRateFetchable {
         }()
         
         return [
-            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
-            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
-            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 5)),
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 2)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
         ]
     }
 }

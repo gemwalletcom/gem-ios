@@ -37,14 +37,6 @@ public struct NFTDetailsViewModel: Sendable {
         assetData.collection.name
     }
     
-    public var collectionAssetImage: AssetImage {
-        AssetImage(
-            imageURL: URL(string: assetData.collection.image.previewImageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
-    }
-    
     public var networkTitle: String {
         Localized.Transfer.network
     }
@@ -65,6 +57,10 @@ public struct NFTDetailsViewModel: Sendable {
         )
     }
 
+    public var showContract: Bool {
+        assetData.collection.contractAddress != assetData.asset.tokenId
+    }
+    
     public var contractText: String {
         AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
@@ -78,7 +74,14 @@ public struct NFTDetailsViewModel: Sendable {
     }
     
     public var tokenIdText: String {
-        "#\(assetData.asset.tokenId)"
+        if assetData.asset.tokenId.count > 16 {
+            return assetData.asset.tokenId
+        }
+        return "#\(assetData.asset.tokenId)"
+    }
+    
+    public var tokenIdValue: String {
+        assetData.asset.tokenId
     }
     
     public var attributesTitle: String {
@@ -94,8 +97,12 @@ public struct NFTDetailsViewModel: Sendable {
     }
     
     public var headerButtons: [HeaderButton] {
-        [
-            HeaderButton(type: .send, isEnabled: true),
+        let enabledTransferChains = [Chain.ethereum]
+        return [
+            HeaderButton(
+                type: .send,
+                isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
+            ),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }

@@ -48,10 +48,9 @@ public struct NFTDetailsScene: View {
             }
             
             Section {
-                ListItemImageView(
+                ListItemView(
                     title: model.collectionTitle,
-                    subtitle: model.collectionText,
-                    assetImage: model.collectionAssetImage
+                    subtitle: model.collectionText
                 )
                 
                 ListItemImageView(
@@ -60,10 +59,12 @@ public struct NFTDetailsScene: View {
                     assetImage: model.networkAssetImage
                 )
                 
-                ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu {
-                        ContextMenuCopy(value: model.contractValue)
-                    }
+                if model.showContract {
+                    ListItemView(title: model.contractTitle, subtitle: model.contractText)
+                        .contextMenu {
+                            ContextMenuCopy(value: model.contractValue)
+                        }
+                }
                 ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
             }
             
