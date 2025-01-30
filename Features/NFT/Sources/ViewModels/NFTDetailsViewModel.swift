@@ -104,15 +104,11 @@ public struct NFTDetailsViewModel: Sendable {
         headerButtonAction?(type)
     }
     
-    func saveImageToGallery() async throws {
+    func saveImageToGallery() async throws(ImageGalleryServiceError) {
         guard let url = URL(string: assetData.asset.image.imageUrl) else {
-            throw AnyError("Wrong asset image url")
+            throw ImageGalleryServiceError.wrongURL
         }
         let saver = ImageGalleryService()
         try await saver.saveImageFromURL(url)
-    }
-    
-    func requestAuthorizationToPhotos() async -> PHAuthorizationStatus {
-        await PHPhotoLibrary.requestAuthorization(for: .addOnly)
     }
 }

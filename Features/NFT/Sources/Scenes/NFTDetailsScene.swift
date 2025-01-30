@@ -7,6 +7,7 @@ import Style
 import Components
 import PrimitivesComponents
 import Localization
+import ImageGalleryService
 
 public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
@@ -42,7 +43,7 @@ public struct NFTDetailsScene: View {
                     title: Localized.Nft.saveToPhotos,
                     image: SystemImage.gallery
                 ) {
-                    requestPermitionsAndTryToSave()
+                    saveImageToGallery()
                 }
             }
             
@@ -85,13 +86,13 @@ public struct NFTDetailsScene: View {
                 systemImage: SystemImage.gallery
             )
         )
-        .alert(Localized.Nft.photoAccessDenied, isPresented: $showPhotoPermissionMessage) {
+        .alert(Localized.Permissions.accessDenied, isPresented: $showPhotoPermissionMessage) {
             Button(Localized.Common.openSettings) {
                 onSelectOpenSettings()
             }
             Button(Localized.Common.cancel, role: .cancel) {}
         } message: {
-            Text(Localized.Nft.photoAccessDeniedDescription)
+            Text(Localized.Permissions.Image.PhotoAccess.Denied.description)
         }
         .alert("",
             isPresented: $isPresentingErrorMessage.mappedToBool(),
@@ -101,27 +102,20 @@ public struct NFTDetailsScene: View {
             }
         )
     }
-    
-    private func requestPermitionsAndTryToSave() {
-        Task {
-            let permitionStatus = await model.requestAuthorizationToPhotos()
-            switch permitionStatus {
-            case .restricted, .denied:
-                showPhotoPermissionMessage = true
-            case .authorized, .limited, .notDetermined:
-                await saveImageToGallery()
-            @unknown default:
-                break
-            }
-        }
-    }
 
-    private func saveImageToGallery() async {
-        do {
-            try await model.saveImageToGallery()
-            showSavedMessage = true
-        } catch {
-            isPresentingErrorMessage = error.localizedDescription
+    private func saveImageToGallery() {
+        Task {
+            do {
+                try await model.saveImageToGallery()
+                showSavedMessage = true
+            } catch let error as ImageGalleryServiceError {
+                switch error {
+                case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
+                    isPresentingErrorMessage = Localized.Errors.errorOccured
+                case .permissionDenied:
+                    showPhotoPermissionMessage = true
+                }
+            }
         }
     }
 
