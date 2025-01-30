@@ -5,7 +5,7 @@ import SwiftUI
 import Components
 import Primitives
 
-public typealias HeaderButtonAction = ((HeaderButtonType) -> Void)
+public typealias HeaderButtonAction = @Sendable (HeaderButtonType) -> Void
 
 public struct HeaderButtonsView: View {
     private let buttons: [HeaderButton]

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum HeaderButtonType: String, Identifiable, CaseIterable {
+public enum HeaderButtonType: String, Identifiable, CaseIterable, Sendable {
     case send
     case receive
     case buy

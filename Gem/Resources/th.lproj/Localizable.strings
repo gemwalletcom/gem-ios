@@ -318,3 +318,7 @@
 "nft.collection" = "ของสะสม";
 "wallet.receive_collection" = "รับการรวบรวม";
 "wallet.more" = "มากกว่า";
+"nft.save_to_photos" = "บันทึกลงในภาพถ่าย";
+"nft.success_saved_to_photos" = "รูปภาพของคุณได้รับการบันทึกไว้ในรูปภาพแล้ว!";
+"permissions.access_denied" = "การเข้าถึงถูกปฏิเสธ";
+"permissions.image.photo_access.denied.description" = "แอพนี้ไม่มีสิทธิ์ในการเข้าถึงคลังภาพของคุณ โปรดเปิดใช้งานสิทธิ์ในการตั้งค่าอุปกรณ์ของคุณ";

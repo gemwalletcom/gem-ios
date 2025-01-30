@@ -318,3 +318,7 @@
 "nft.collection" = "Collection";
 "wallet.receive_collection" = "Recevoir la collection";
 "wallet.more" = "Plus";
+"nft.save_to_photos" = "Enregistrer dans Photos";
+"nft.success_saved_to_photos" = "Votre image a été enregistrée dans Photos !";
+"permissions.access_denied" = "Accès refusé";
+"permissions.image.photo_access.denied.description" = "Cette application n'a pas l'autorisation d'accéder à votre photothèque. Veuillez autoriser l'accès dans les paramètres de votre appareil.";

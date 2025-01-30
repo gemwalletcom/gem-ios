@@ -318,3 +318,7 @@
 "nft.collection" = "Koleksiyon";
 "wallet.receive_collection" = "Koleksiyon Al";
 "wallet.more" = "Daha";
+"nft.save_to_photos" = "Fotoğraflara Kaydet";
+"nft.success_saved_to_photos" = "Resminiz Fotoğraflar'a kaydedildi!";
+"permissions.access_denied" = "Erişim engellendi";
+"permissions.image.photo_access.denied.description" = "Bu uygulama fotoğraf kütüphanenize erişim iznine sahip değil. Lütfen cihaz ayarlarınızda erişimi etkinleştirin.";
