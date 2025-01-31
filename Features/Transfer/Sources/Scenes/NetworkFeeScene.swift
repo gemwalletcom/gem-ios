@@ -60,6 +60,7 @@ public struct NetworkFeeScene: View {
                     dismiss()
                 } label: {
                     Text(model.doneTitle)
+                        .bold()
                 }
             }
         }

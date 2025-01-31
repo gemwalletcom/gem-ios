@@ -6,8 +6,10 @@ import PrimitivesComponents
 import Localization
 import Components
 import Style
+import ImageGalleryService
+import Photos
 
-public struct NFTDetailsViewModel {
+public struct NFTDetailsViewModel: Sendable {
     public let assetData: NFTAssetData
     private let headerButtonAction: HeaderButtonAction?
     
@@ -35,14 +37,6 @@ public struct NFTDetailsViewModel {
         assetData.collection.name
     }
     
-    public var collectionAssetImage: AssetImage {
-        AssetImage(
-            imageURL: URL(string: assetData.collection.image.previewImageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
-    }
-    
     public var networkTitle: String {
         Localized.Transfer.network
     }
@@ -63,6 +57,10 @@ public struct NFTDetailsViewModel {
         )
     }
 
+    public var showContract: Bool {
+        assetData.collection.contractAddress != assetData.asset.tokenId
+    }
+    
     public var contractText: String {
         AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
@@ -76,7 +74,14 @@ public struct NFTDetailsViewModel {
     }
     
     public var tokenIdText: String {
-        "#\(assetData.asset.tokenId)"
+        if assetData.asset.tokenId.count > 16 {
+            return assetData.asset.tokenId
+        }
+        return "#\(assetData.asset.tokenId)"
+    }
+    
+    public var tokenIdValue: String {
+        assetData.asset.tokenId
     }
     
     public var attributesTitle: String {
@@ -92,13 +97,25 @@ public struct NFTDetailsViewModel {
     }
     
     public var headerButtons: [HeaderButton] {
-        [
-            HeaderButton(type: .send, isEnabled: true),
+        let enabledTransferChains = [Chain.ethereum]
+        return [
+            HeaderButton(
+                type: .send,
+                isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
+            ),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }
     
     func onHeaderAction(type: HeaderButtonType) {
         headerButtonAction?(type)
+    }
+    
+    func saveImageToGallery() async throws(ImageGalleryServiceError) {
+        guard let url = URL(string: assetData.asset.image.imageUrl) else {
+            throw ImageGalleryServiceError.wrongURL
+        }
+        let saver = ImageGalleryService()
+        try await saver.saveImageFromURL(url)
     }
 }

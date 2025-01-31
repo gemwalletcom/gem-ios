@@ -6,9 +6,16 @@ import SwiftUI
 import Style
 import Components
 import PrimitivesComponents
+import Localization
+import ImageGalleryService
 
 public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(\.openURL) private var openURL
+
+    @State private var showSavedMessage: Bool = false
+    @State private var showPhotoPermissionMessage: Bool = false
+    @State private var isPresentingErrorMessage: String?
 
     let model: NFTDetailsViewModel
     
@@ -18,28 +25,32 @@ public struct NFTDetailsScene: View {
     
     public var body: some View {
         List {
-            Section { } header: {
-                VStack {
-                    NftImageView(assetImage: model.assetImage)
-                        .cornerRadius(Spacing.medium)
-                        .aspectRatio(1, contentMode: .fill)
-                    
-                    Spacer()
-                    
-                    HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
-                        .padding(.top, Spacing.small)
-                }
+            Section {
+                NftImageView(assetImage: model.assetImage)
+                    .aspectRatio(1, contentMode: .fill)
+            } header: {
+                Spacer()
+            } footer: {
+				HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
+					.padding(.top, Spacing.small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
+            .contextMenu {
+                ContextMenuItem(
+                    title: Localized.Nft.saveToPhotos,
+                    image: SystemImage.gallery
+                ) {
+                    saveImageToGallery()
+                }
+            }
             
             Section {
-                ListItemImageView(
+                ListItemView(
                     title: model.collectionTitle,
-                    subtitle: model.collectionText,
-                    assetImage: model.collectionAssetImage
+                    subtitle: model.collectionText
                 )
                 
                 ListItemImageView(
@@ -48,10 +59,12 @@ public struct NFTDetailsScene: View {
                     assetImage: model.networkAssetImage
                 )
                 
-                ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu {
-                        ContextMenuCopy(value: model.contractValue)
-                    }
+                if model.showContract {
+                    ListItemView(title: model.contractTitle, subtitle: model.contractText)
+                        .contextMenu {
+                            ContextMenuCopy(value: model.contractValue)
+                        }
+                }
                 ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
             }
             
@@ -63,9 +76,53 @@ public struct NFTDetailsScene: View {
                 }
             }
         }
+        .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
+        .modifier(
+            ToastModifier(
+                isPresenting: $showSavedMessage,
+                value: Localized.Nft.successSavedToPhotos,
+                systemImage: SystemImage.gallery
+            )
+        )
+        .alert(Localized.Permissions.accessDenied, isPresented: $showPhotoPermissionMessage) {
+            Button(Localized.Common.openSettings) {
+                onSelectOpenSettings()
+            }
+            Button(Localized.Common.cancel, role: .cancel) {}
+        } message: {
+            Text(Localized.Permissions.Image.PhotoAccess.Denied.description)
+        }
+        .alert("",
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(isPresentingErrorMessage ?? "")
+            }
+        )
+    }
+
+    private func saveImageToGallery() {
+        Task {
+            do {
+                try await model.saveImageToGallery()
+                showSavedMessage = true
+            } catch let error as ImageGalleryServiceError {
+                switch error {
+                case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
+                    isPresentingErrorMessage = Localized.Errors.errorOccured
+                case .permissionDenied:
+                    showPhotoPermissionMessage = true
+                }
+            }
+        }
+    }
+
+    private func onSelectOpenSettings() {
+        guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
+        openURL(settingsURL)
     }
 }
 
