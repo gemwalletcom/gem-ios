@@ -29,7 +29,7 @@ struct AssetsFilterViewModel {
         case .receive(let type):
             switch type {
             case .asset: [.includeNewAssets]
-            case .collection: [.chains(Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
+            case .collection: [.chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
             }
         case .buy: [.buyable, .includeNewAssets]
 
