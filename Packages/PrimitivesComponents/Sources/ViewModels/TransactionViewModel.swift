@@ -40,7 +40,7 @@ public struct TransactionViewModel {
     
     public var overlayImage: Image? {
         switch transaction.transaction.type {
-        case .transfer, .transferNFT:
+        case .transfer, .transferNFT, .smartContractCall:
             switch transaction.transaction.direction {
             case .incoming:
                 return Images.Transaction.incoming
@@ -61,7 +61,7 @@ public struct TransactionViewModel {
 
     public var title: String {
         switch transaction.transaction.type {
-        case .transfer, .transferNFT:
+        case .transfer, .transferNFT, .smartContractCall:
             switch transaction.transaction.state {
             case .confirmed: switch transaction.transaction.direction {
             case .incoming: Localized.Transaction.Title.received
@@ -113,7 +113,7 @@ public struct TransactionViewModel {
     public var titleExtra: String? {
         let chain = transaction.transaction.assetId.chain
         switch transaction.transaction.type {
-        case .transfer, .transferNFT, .tokenApproval:
+        case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
             switch transaction.transaction.direction {
             case .incoming:
                 return String(
@@ -190,7 +190,7 @@ public struct TransactionViewModel {
     
     public var subtitle: String? {
         switch transaction.transaction.type {
-        case .transfer, .transferNFT:
+        case .transfer, .transferNFT, .smartContractCall:
             switch transaction.transaction.direction {
             case .incoming:
                 return String(format: "+%@", amountSymbolText)
@@ -227,7 +227,8 @@ public struct TransactionViewModel {
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .smartContractCall:
             switch transaction.transaction.direction {
             case .incoming:
                 return TextStyle(font: Font.system(.callout, weight: .semibold), color: Colors.green)
@@ -254,7 +255,8 @@ public struct TransactionViewModel {
             .stakeRedelegate,
             .stakeRewards,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .smartContractCall:
             return .none
         case .swap:
             switch transaction.transaction.metadata {
