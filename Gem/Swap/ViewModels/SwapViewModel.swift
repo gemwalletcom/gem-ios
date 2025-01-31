@@ -27,6 +27,7 @@ import struct Gemstone.SwapQuoteRequest
 import struct Swap.ErrorWrapper
 import struct Swap.SwapAvailabilityResult
 import class Swap.SwapPairSelectorViewModel
+import class Gemstone.Config
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
@@ -411,15 +412,16 @@ extension SwapViewModel {
     }
 
     public func permit2Single(token: String, spender: String, value: String, nonce: UInt64) -> Gemstone.PermitSingle {
+        let config = Config.shared.getSwapConfig()
         return PermitSingle(
             details: Permit2Detail(
                 token: token,
                 amount: value,
-                expiration: UInt64(Date().timeIntervalSince1970) + 60 * 60 * 30,
+                expiration: UInt64(Date().timeIntervalSince1970) + config.permit2Expiration,
                 nonce: nonce
             ),
             spender: spender,
-            sigDeadline: UInt64(Date().timeIntervalSince1970) + 60 * 30
+            sigDeadline: UInt64(Date().timeIntervalSince1970) + config.permit2SigDeadline
         )
     }
 
