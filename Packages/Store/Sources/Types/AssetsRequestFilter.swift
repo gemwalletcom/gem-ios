@@ -15,6 +15,8 @@ public enum AssetsRequestFilter {
 
     // special case
     case includeNewAssets
+    /// AssetData with empty properties
+    case priceAlerts
 }
 
 extension AssetsRequestFilter: Equatable {}

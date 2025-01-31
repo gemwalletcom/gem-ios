@@ -47,7 +47,7 @@ struct AssetsFilterViewModel {
                 ]
             }
         case .manage: [.includeNewAssets]
-        case .priceAlert: [.includeNewAssets]
+        case .priceAlert: [.priceAlerts]
         }
     }
 
