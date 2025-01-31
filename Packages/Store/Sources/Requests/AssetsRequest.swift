@@ -31,6 +31,10 @@ public struct AssetsRequest: ValueObservationQueryable {
 
             return [request1, request2].flatMap { $0 }
         }
+        if filters.contains(.priceAlerts) {
+            let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
+            return mapAssetRecordsToMockAssetData(request)
+        }
         return try assetBalancesRequest(db)
     }
 
@@ -125,7 +129,7 @@ extension AssetsRequest {
         case .chainsOrAssets(let chains, let assetIds):
             return request
                 .filter(chains.contains(Columns.Asset.chain) || assetIds.contains(Columns.Asset.id))
-        case .includeNewAssets:
+        case .includeNewAssets, .priceAlerts:
             return request
         }
     }
@@ -162,11 +166,53 @@ extension AssetsRequest {
                 .enabled,
                 .hidden,
                 .includeNewAssets,
-                .search:
+                .search,
+                .priceAlerts:
                 break
             }
         }
 
         return request.asRequest(of: AssetRecordInfo.self)
+    }
+}
+
+// Specific case for price alerts scene
+extension AssetsRequest {
+    private func fetchAllAssetRecordsRequest(
+        _ db: Database,
+        searchBy: String
+    ) throws -> [AssetRecord] {
+        var request = AssetRecord
+            .order(Columns.Asset.rank.desc)
+            .limit(50)
+        request = Self.applyFilter(request: request, .search(searchBy))
+        return try request.fetchAll(db)
+    }
+    
+    private func mapAssetRecordsToMockAssetData(_ assetRecords: [AssetRecord]) -> [AssetData] {
+        assetRecords.map {
+            AssetData(
+                asset: $0.mapToAsset(),
+                balance: .zero,
+                account: .init(
+                    chain: .ethereum,
+                    address: .empty,
+                    derivationPath: .empty,
+                    extendedPublicKey: nil
+                ),
+                price: nil,
+                price_alert: nil,
+                metadata: AssetMetaData(
+                    isEnabled: true,
+                    isBuyEnabled: $0.isBuyable,
+                    isSellEnabled: $0.isSellable,
+                    isSwapEnabled: $0.isSwappable,
+                    isStakeEnabled: $0.isStakeable,
+                    isPinned: false,
+                    isActive: false,
+                    stakingApr: $0.stakingApr
+                )
+            )
+        }
     }
 }
