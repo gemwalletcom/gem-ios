@@ -314,6 +314,8 @@ extension ConfirmTransferViewModel {
                     let transaction = try getTransaction(input: input, amount: amount, hash: hash)
                     try addTransaction(transaction: transaction)
 
+                    walletsService.enableAssetId(walletId: wallet.walletId, assets: transaction.assetIds, enabled: true)
+                    
                     // delay if multiple transaction should be exectured
                     if signedData.count > 1 && data != signedData.last {
                         try await Task.sleep(for: transactionDelay)
