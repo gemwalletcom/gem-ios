@@ -15,7 +15,7 @@ public enum AssetsRequestFilter {
 
     // special case
     case includeNewAssets
-    /// AssetData with mocked properties
+    /// AssetData with empty properties
     case priceAlerts
 }
 

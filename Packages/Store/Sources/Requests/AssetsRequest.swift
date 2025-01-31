@@ -25,16 +25,17 @@ public struct AssetsRequest: ValueObservationQueryable {
     public func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
 
+        if filters.contains(.priceAlerts) {
+            let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
+            return request.map { $0.mapToEmptyAssetData() }
+        }
         if filters.contains(.includeNewAssets) {
             let request1 = try assetBalancesRequest(db)
             let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
 
             return [request1, request2].flatMap { $0 }
         }
-        if filters.contains(.priceAlerts) {
-            let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
-            return mapAssetRecordsToMockAssetData(request)
-        }
+
         return try assetBalancesRequest(db)
     }
 
@@ -176,7 +177,9 @@ extension AssetsRequest {
     }
 }
 
-// Specific case for price alerts scene
+// Specific case for the price alerts scene:
+// This is necessary because watch-only wallets do not create accounts for other networks.
+// On the price alerts screen, we fetch all assets and fill them with empty data.
 extension AssetsRequest {
     private func fetchAllAssetRecordsRequest(
         _ db: Database,
@@ -187,32 +190,5 @@ extension AssetsRequest {
             .limit(50)
         request = Self.applyFilter(request: request, .search(searchBy))
         return try request.fetchAll(db)
-    }
-    
-    private func mapAssetRecordsToMockAssetData(_ assetRecords: [AssetRecord]) -> [AssetData] {
-        assetRecords.map {
-            AssetData(
-                asset: $0.mapToAsset(),
-                balance: .zero,
-                account: .init(
-                    chain: .ethereum,
-                    address: .empty,
-                    derivationPath: .empty,
-                    extendedPublicKey: nil
-                ),
-                price: nil,
-                price_alert: nil,
-                metadata: AssetMetaData(
-                    isEnabled: true,
-                    isBuyEnabled: $0.isBuyable,
-                    isSellEnabled: $0.isSellable,
-                    isSwapEnabled: $0.isSwappable,
-                    isStakeEnabled: $0.isStakeable,
-                    isPinned: false,
-                    isActive: false,
-                    stakingApr: $0.stakingApr
-                )
-            )
-        }
     }
 }
