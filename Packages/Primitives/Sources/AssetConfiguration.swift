@@ -17,49 +17,9 @@ public struct AssetConfiguration: Sendable {
     ]
     .flatMap { $0 }
 
-    public static let allChains: [Chain] = [
-        .bitcoin,
-        .bitcoinCash,
-        .litecoin,
-        .solana,
-        .smartChain,
-        .ethereum,
-        .polygon,
-        .thorchain,
-        .cosmos,
-        .osmosis,
-        .arbitrum,
-        .ton,
-        .tron,
-        .doge,
-        .aptos,
-        .base,
-        .avalancheC,
-        .optimism,
-        .sui,
-        .xrp,
-        .opBNB,
-        .fantom,
-        .gnosis,
-        .celestia,
-        .injective,
-        .sei,
-        .manta,
-        .blast,
-        .noble,
-        .zkSync,
-        .linea,
-        .mantle,
-        //.celo, not ready yet
-        .near,
-        .world,
-        .stellar,
-        .sonic,
-        .algorand,
-        .polkadot,
-        .cardano,
-        .abstract,
-    ]
+    public static let allChains: [Chain] = Chain.allCases.asSet()
+        .subtracting(Set<Chain>([.celo])) // Exclude unnecessary chains
+        .asArray()
 
     public static let enabledByDefault: [AssetId] =  [
         AssetId(chain: .bitcoin, tokenId: .none),
