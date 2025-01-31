@@ -7,6 +7,8 @@ import Primitives
 public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
     
+    static let defaultQueryLimit = 50
+    
     private let walletID: String
 
     public var searchBy: String
@@ -148,7 +150,7 @@ extension AssetsRequest {
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
             .order(Columns.Asset.rank.desc)
-            .limit(50)
+            .limit(Self.defaultQueryLimit)
 
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
@@ -187,7 +189,7 @@ extension AssetsRequest {
     ) throws -> [AssetRecord] {
         var request = AssetRecord
             .order(Columns.Asset.rank.desc)
-            .limit(50)
+            .limit(Self.defaultQueryLimit)
         request = Self.applyFilter(request: request, .search(searchBy))
         return try request.fetchAll(db)
     }
