@@ -2,6 +2,7 @@
 
 import Foundation
 import Components
+import PrimitivesComponents
 
 protocol HeaderViewModel {
     var isWatchWallet: Bool { get }

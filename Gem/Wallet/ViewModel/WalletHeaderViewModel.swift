@@ -8,6 +8,7 @@ import BigInt
 import Style
 import Components
 import GemstonePrimitives
+import PrimitivesComponents
 
 struct WalletHeaderViewModel {
     //Remove WalletType from here

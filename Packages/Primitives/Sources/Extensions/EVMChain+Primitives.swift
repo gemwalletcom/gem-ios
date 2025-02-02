@@ -24,6 +24,7 @@ extension EVMChain {
         case .celo: .celo
         case .world: .world
         case .sonic: .sonic
+        case .abstract: .abstract
         }
     }
     

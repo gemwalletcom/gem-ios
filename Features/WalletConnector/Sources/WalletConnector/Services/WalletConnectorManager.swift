@@ -81,10 +81,27 @@ extension WalletConnectorManager: WalletConnectorInteractable {
     }
 
     public func signTransaction(transferData: WCTransferData) async throws -> String {
-        fatalError("")
+        try await self.presentPayload(transferData)
     }
 
     public func sendRawTransaction(transferData: WCTransferData) async throws -> String {
         fatalError("")
+    }
+
+    private func presentPayload(_ payload: WCTransferData) async throws -> String  {
+        try await withCheckedThrowingContinuation { continuation in
+            let transferDataCallback = TransferDataCallback(payload: payload) { result in
+                switch result {
+                case let .success(id):
+                    continuation.resume(returning: id)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                self.presenter.isPresentingSheet = .transferData(transferDataCallback)
+            }
+        }
     }
 }

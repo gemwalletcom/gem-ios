@@ -43,7 +43,9 @@ struct TransactionDetailViewModel {
             .stakeRedelegate,
             .stakeRewards,
             .stakeWithdraw,
-            .assetActivation:
+            .assetActivation,
+            .transferNFT,
+            .smartContractCall:
             return .amount(title: amountTitle, subtitle: amountSubtitle)
         case .swap:
             switch model.transaction.transaction.metadata {
@@ -80,12 +82,14 @@ struct TransactionDetailViewModel {
 
     var amountTitle: String {
         switch model.transaction.transaction.type {
-        case .transfer, 
+        case .transfer,
+            .transferNFT,
             .stakeDelegate,
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .smartContractCall:
             return model.amountSymbolText
         case .swap:
             //TODO: Show ETH <> USDT swap info
@@ -97,13 +101,15 @@ struct TransactionDetailViewModel {
     
     var amountSubtitle: String? {
         switch model.transaction.transaction.type {
-        case .transfer, 
+        case .transfer,
+            .transferNFT,
             .swap,
             .stakeDelegate,
             .stakeUndelegate,
             .stakeRedelegate,
             .stakeRewards,
-            .stakeWithdraw:
+            .stakeWithdraw,
+            .smartContractCall:
             guard let price = model.transaction.price else {
                 return .none
             }
@@ -123,7 +129,7 @@ struct TransactionDetailViewModel {
     
     var participantField: String? {
         switch model.transaction.transaction.type {
-        case .transfer, .tokenApproval:
+        case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
             switch model.transaction.transaction.direction {
             case .incoming:
                 return Localized.Transaction.sender
@@ -143,7 +149,7 @@ struct TransactionDetailViewModel {
     
     var participant: String? {
         switch model.transaction.transaction.type {
-        case .transfer, .tokenApproval:
+        case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
             return model.participant
         case .swap,
             .stakeDelegate,
@@ -222,7 +228,7 @@ struct TransactionDetailViewModel {
     }
 
     var showMemoField: Bool {
-        AssetViewModel(asset: model.transaction.asset).supportMemo
+        model.transaction.asset.chain.isMemoSupported
     }
     
     var memo: String? {

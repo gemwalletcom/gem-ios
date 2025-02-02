@@ -281,6 +281,8 @@ extension TronService {
 
                     return isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
                 }
+            case .transferNft:
+                fatalError()
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getBalance = accountBalance(address: input.senderAddress)

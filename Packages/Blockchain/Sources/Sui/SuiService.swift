@@ -76,7 +76,8 @@ extension SuiService {
                     value: input.value
                 ).data
             }
-
+        case .transferNft:
+            fatalError()
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake(let validator):

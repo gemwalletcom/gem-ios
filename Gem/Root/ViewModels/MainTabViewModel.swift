@@ -20,11 +20,7 @@ struct MainTabViewModel {
         switch wallet.type {
         case .multicoin: true
         case .single, .privateKey, .view:
-            if let chain = wallet.accounts.first?.chain {
-                GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isNftSupported
-            } else {
-                false
-            }
+            wallet.accounts.first?.chain.isNFTSupported ?? false
         }
     }
 }

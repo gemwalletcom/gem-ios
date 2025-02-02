@@ -281,11 +281,11 @@
 "swap.price_impact" = "تاثیر قیمت";
 "wallet.sell" = "فروش";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "بیشتر بدانید";
 "info.network_fee.title" = "کارمزد شبکه";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "کیف پولی که به آن دسترسی ندارید اما می توانید تراکنش ها و حرکات آن را تماشا کنید.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "شبکه %@ کارمزد تراکنش را دریافت می کند که بر اساس میزان استفاده از شبکه متفاوت است. برای پردازش تراکنش شما به ماینرها پرداخت می شود.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,11 @@
 "banner.activate_asset.description" = "برای استفاده از دارایی %@ ، ابتدا باید آن را در شبکه %@ با انجام الزامات خاص شبکه فعال کنید.";
 "nft.properties" = "خواص";
 "nft.collections" = "مجموعه ها";
-"nft.your_nfts" = "NFT های شما";
 "nft.description" = "توضیحات";
 "nft.collection" = "مجموعه";
+"wallet.receive_collection" = "دریافت مجموعه";
+"wallet.more" = "بیشتر";
+"nft.save_to_photos" = "ذخیره در عکس ها";
+"nft.success_saved_to_photos" = "تصویر شما در Photos ذخیره شده است!";
+"permissions.access_denied" = "دسترسی ممنوع شد";
+"permissions.image.photo_access.denied.description" = "این برنامه اجازه دسترسی به کتابخانه عکس شما را ندارد. لطفاً دسترسی را در تنظیمات دستگاه خود فعال کنید.";

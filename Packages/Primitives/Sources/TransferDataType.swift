@@ -8,6 +8,7 @@ public enum AccountDataType: Hashable, Equatable, Sendable {
 
 public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
+    case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapAction)
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
@@ -15,7 +16,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var data: Data? {
         switch self {
-        case .transfer:
+        case .transfer, .transferNft:
             return .none
         case .swap(_, _, let extra):
             switch extra {
@@ -49,7 +50,9 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
 
     public var transactionType: TransactionType {
         switch self {
-        case .transfer, .generic: .transfer
+        case .transfer: .transfer
+        case .generic: .smartContractCall
+        case .transferNft: .transferNFT
         case .swap(_, _, let type):
             switch type {
             case .approval: .tokenApproval
@@ -86,7 +89,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .generic,
             .transfer,
             .stake,
-            .account:
+            .account,
+            .transferNft:
             return .null
         }
     }
@@ -103,6 +107,14 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             [asset.id]
         case .account(let asset, _):
             [asset.id]
+        case .transferNft: []
+        }
+    }
+
+    public var outputType: TransferDataExtra.OutputType {
+        return switch self {
+        case .generic(_, _, let extra): extra.outputType
+        default: .encodedTransaction
         }
     }
 }

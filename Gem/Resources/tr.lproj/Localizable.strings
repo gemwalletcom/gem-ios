@@ -281,11 +281,11 @@
 "swap.price_impact" = "Fiyat Etkisi";
 "wallet.sell" = "Satmak";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Daha fazla bilgi edin";
 "info.network_fee.title" = "Ağ";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Erişiminizin olmadığı, ancak işlemlerini ve hareketlerini izleyebileceğiniz bir cüzdan.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@ ağı, ağ kullanımına bağlı olarak değişen işlem ücreti alır. İşleminizi gerçekleştirmek için madencilere ödenir.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,11 @@
 "banner.activate_asset.description" = "%@ varlığını kullanmak için, öncelikle ağın özel gereksinimlerini karşılayarak %@ ağında etkinleştirmeniz gerekir.";
 "nft.properties" = "Özellikler";
 "nft.collections" = "Koleksiyonlar";
-"nft.your_nfts" = "NFT'leriniz";
 "nft.description" = "Tanım";
 "nft.collection" = "Koleksiyon";
+"wallet.receive_collection" = "Koleksiyon Al";
+"wallet.more" = "Daha";
+"nft.save_to_photos" = "Fotoğraflara Kaydet";
+"nft.success_saved_to_photos" = "Resminiz Fotoğraflar'a kaydedildi!";
+"permissions.access_denied" = "Erişim engellendi";
+"permissions.image.photo_access.denied.description" = "Bu uygulama fotoğraf kütüphanenize erişim iznine sahip değil. Lütfen cihaz ayarlarınızda erişimi etkinleştirin.";

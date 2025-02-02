@@ -281,11 +281,11 @@
 "swap.price_impact" = "Impact sur les prix";
 "wallet.sell" = "Vendre";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Apprendre encore plus";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Un portefeuille auquel vous n'avez pas accès, mais dont vous pouvez surveiller les transactions et les mouvements.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "Le réseau %@ facture des frais de transaction, qui varient en fonction de l'utilisation du réseau. Payé aux mineurs pour traiter votre transaction.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,11 @@
 "banner.activate_asset.description" = "Pour utiliser la ressource %@, vous devez d'abord l'activer sur le réseau %@ en remplissant les exigences spécifiques du réseau.";
 "nft.properties" = "Propriétés";
 "nft.collections" = "Collections";
-"nft.your_nfts" = "Vos NFT";
 "nft.description" = "Description";
 "nft.collection" = "Collection";
+"wallet.receive_collection" = "Recevoir la collection";
+"wallet.more" = "Plus";
+"nft.save_to_photos" = "Enregistrer dans Photos";
+"nft.success_saved_to_photos" = "Votre image a été enregistrée dans Photos !";
+"permissions.access_denied" = "Accès refusé";
+"permissions.image.photo_access.denied.description" = "Cette application n'a pas l'autorisation d'accéder à votre photothèque. Veuillez autoriser l'accès dans les paramètres de votre appareil.";

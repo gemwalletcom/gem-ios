@@ -49,6 +49,7 @@ public struct Images {
         public static let algorand = Image(.algorand)
         public static let polkadot = Image(.polkadot)
         public static let cardano = Image(.cardano)
+        public static let abstract = Image(.abstract)
     }
     
     public struct SwapProviders {
@@ -81,6 +82,7 @@ public struct Images {
         public static let buy = Image(.buy)
         public static let manage = Image(.manage)
         public static let sell = Image(.sell)
+        public static let more = Image(.ellipsis)
     }
 
     public struct Settings {

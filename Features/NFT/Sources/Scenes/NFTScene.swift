@@ -21,14 +21,20 @@ public struct NFTScene: View {
         ]
     }
     
+    @Binding var isPresentingSelectAssetType: SelectAssetType?
+    
     private var model: NFTCollectionViewModel
     
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
-    public init(model: NFTCollectionViewModel) {
-        _nftDataList = Query(constant: model.nftRequest)
+    public init(
+        model: NFTCollectionViewModel,
+        isPresentingSelectAssetType: Binding<SelectAssetType?>
+    ) {
         self.model = model
+        _isPresentingSelectAssetType = isPresentingSelectAssetType
+        _nftDataList = Query(constant: model.nftRequest)
     }
     
     public var body: some View {
@@ -41,6 +47,15 @@ public struct NFTScene: View {
                     if let nftData = nftDataList.first(where: { $0.collection.id == collection.id }) {
                         buildNFTAssetView(nftData: nftData)
                     }
+                }
+            }
+        }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingSelectAssetType = .receive(.collection)
+                } label: {
+                    Images.System.plus
                 }
             }
         }
@@ -73,7 +88,9 @@ public struct NFTScene: View {
     @ViewBuilder
     private func buildNFTAssetView(nftData: NFTData) -> some View {
         ForEach(nftData.assets) { asset in
-            NavigationLink(value: Scenes.NFTDetails(collection: nftData.collection, asset: asset)) {
+            NavigationLink(
+                value: Scenes.NFTDetails(assetData: NFTAssetData(collection: nftData.collection, asset: asset))
+            ) {
                 GridPosterView(
                     assetImage: AssetImage(
                         type: nftData.collection.name,

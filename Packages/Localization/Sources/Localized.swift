@@ -433,8 +433,10 @@ public enum Localized {
     public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
-    /// Your NFTs
-    public static let yourNfts = Localized.tr("Localizable", "nft.your_nfts", fallback: "Your NFTs")
+    /// Save to Photos
+    public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
+    /// Your image has been saved to Photos!
+    public static let successSavedToPhotos = Localized.tr("Localizable", "nft.success_saved_to_photos", fallback: "Your image has been saved to Photos!")
   }
   public enum Nodes {
     /// Gem Wallet Node
@@ -450,6 +452,18 @@ public enum Localized {
       public static let latestBlock = Localized.tr("Localizable", "nodes.import_node.latest_block", fallback: "Latest Block")
       /// Add node
       public static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
+    }
+  }
+  public enum Permissions {
+    /// Access Denied
+    public static let accessDenied = Localized.tr("Localizable", "permissions.access_denied", fallback: "Access Denied")
+    public enum Image {
+      public enum PhotoAccess {
+        public enum Denied {
+          /// This app does not have permission to access your photo library. Please enable access in your device settings.
+          public static let description = Localized.tr("Localizable", "permissions.image.photo_access.denied.description", fallback: "This app does not have permission to access your photo library. Please enable access in your device settings.")
+        }
+      }
     }
   }
   public enum PriceAlerts {
@@ -812,12 +826,16 @@ public enum Localized {
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
     /// Manage Token List
     public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Token List")
+    /// More
+    public static let more = Localized.tr("Localizable", "wallet.more", fallback: "More")
     /// Multi-Coin
     public static let multicoin = Localized.tr("Localizable", "wallet.multicoin", fallback: "Multi-Coin")
     /// Name
     public static let name = Localized.tr("Localizable", "wallet.name", fallback: "Name")
     /// Receive
     public static let receive = Localized.tr("Localizable", "wallet.receive", fallback: "Receive")
+    /// Receive Collection
+    public static let receiveCollection = Localized.tr("Localizable", "wallet.receive_collection", fallback: "Receive Collection")
     /// Scan
     public static let scan = Localized.tr("Localizable", "wallet.scan", fallback: "Scan")
     /// Scan QR Code

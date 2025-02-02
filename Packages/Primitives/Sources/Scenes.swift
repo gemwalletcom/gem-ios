@@ -140,15 +140,12 @@ public struct Scenes {
     }
     
     public struct NFTDetails: Hashable {
-        public let collection: NFTCollection
-        public let asset: NFTAsset
+        public let assetData: NFTAssetData
         
         public init(
-            collection: NFTCollection,
-            asset: NFTAsset
+            assetData: NFTAssetData
         ) {
-            self.collection = collection
-            self.asset = asset
+            self.assetData = assetData
         }
     }
 }

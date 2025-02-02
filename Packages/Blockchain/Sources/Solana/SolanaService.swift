@@ -122,7 +122,7 @@ extension SolanaService {
     // https://solana.com/docs/core/fees#compute-unit-limit
     private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
         let gasLimit = switch type {
-        case .transfer, .stake: BigInt(100_000)
+        case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
         case .account: fatalError()
         }
@@ -203,9 +203,11 @@ extension SolanaService {
                     options: options
                 )
             }
-        case .swap, .stake:
+        case .transferNft:
+            fatalError()
+        case .swap, .stake, .generic:
             return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .generic, .account: fatalError()
+        case .account: fatalError()
         }
     }
 }
@@ -216,9 +218,9 @@ extension SolanaService: ChainFeeRateFetchable {
         let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
         
         let multipleOf = switch type {
-        case .transfer(let asset): asset.type == .native ? 100_000 : 1_000_000
-        case .stake: 1_500_000
-        case .generic, .swap: 2_500_000
+        case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
+        case .stake, .transferNft: 50_000
+        case .generic, .swap: 250_000
         case .account: fatalError()
         }
         
@@ -239,9 +241,9 @@ extension SolanaService: ChainFeeRateFetchable {
         }()
         
         return [
-            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
-            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
-            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 5)),
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 2)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
         ]
     }
 }
@@ -277,6 +279,8 @@ extension SolanaService: ChainTransactionPreloadable {
                     fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
                 )
             }
+        case .transferNft:
+            fatalError()
         case .swap, .stake:
             return try await TransactionPreload(
                 block: SignerInputBlock(hash: blockhash), 

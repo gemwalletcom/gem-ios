@@ -17,7 +17,7 @@ struct ConfirmTransferNavigationStack: View {
     private let wallet: Wallet
     private let transferData: TransferData
     private let onComplete: VoidAction
-    
+
     public init(
         wallet: Wallet,
         transferData: TransferData,
@@ -36,7 +36,7 @@ struct ConfirmTransferNavigationStack: View {
                     keystore: keystore,
                     data: transferData,
                     service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: transferData.recipientData.asset.chain),
+                        .service(for: transferData.chain),
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

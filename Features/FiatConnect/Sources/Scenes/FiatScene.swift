@@ -132,10 +132,18 @@ extension FiatScene {
                 if let quote = model.input.quote {
                     if quotes.count > 1 {
                         NavigationLink(value: Scenes.FiatProviders()) {
-                            ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
+                            ListItemImageView(
+                                title: model.providerTitle,
+                                subtitle: quote.provider.name,
+                                assetImage: model.providerAssetImage(quote.provider)
+                            )
                         }
                     } else {
-                        ListItemView(title: model.providerTitle, subtitle: quote.provider.name)
+                        ListItemImageView(
+                            title: model.providerTitle,
+                            subtitle: quote.provider.name,
+                            assetImage: model.providerAssetImage(quote.provider)
+                        )
                     }
                     ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
                 } else {

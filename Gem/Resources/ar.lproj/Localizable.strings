@@ -281,11 +281,11 @@
 "swap.price_impact" = "تأثير السعر";
 "wallet.sell" = "يبيع";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "يتعلم أكثر";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "محفظة لا يمكنك الوصول إليها، ولكن يمكنك مشاهدة معاملاتها وحركاتها.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "تفرض شبكة %@ رسومًا على المعاملات، والتي تختلف بناءً على استخدام الشبكة. يتم دفعها إلى عمال المناجم لمعالجة معاملتك.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,11 @@
 "banner.activate_asset.description" = "لاستخدام الأصل %@ ، يجب عليك أولاً تمكينه على شبكة %@ من خلال استيفاء المتطلبات المحددة للشبكة.";
 "nft.properties" = "ملكيات";
 "nft.collections" = "المجموعات";
-"nft.your_nfts" = "رموزك غير القابلة للاستبدال";
 "nft.description" = "وصف";
 "nft.collection" = "مجموعة";
+"wallet.receive_collection" = "استلام المجموعة";
+"wallet.more" = "أكثر";
+"nft.save_to_photos" = "حفظ في الصور";
+"nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
+"permissions.access_denied" = "تم الرفض";
+"permissions.image.photo_access.denied.description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. يُرجى تمكين هذا الإذن في إعدادات جهازك.";

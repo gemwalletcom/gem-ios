@@ -9,6 +9,7 @@ import Combine
 import ChainService
 import StakeService
 import BalanceService
+import NFTService
 
 class TransactionService {
     
@@ -16,6 +17,7 @@ class TransactionService {
     let chainServiceFactory: ChainServiceFactory
     let balanceUpdater: any BalancerUpdater
     let stakeService: StakeService
+    let nftService: NFTService
     
     private var cancellables = Set<AnyCancellable>()
     private let timer = Timer.publish(every: 5, tolerance: .none, on: .main, in: .common).autoconnect()
@@ -23,11 +25,13 @@ class TransactionService {
     init(
         transactionStore: TransactionStore,
         stakeService: StakeService,
+        nftService: NFTService,
         chainServiceFactory: ChainServiceFactory,
         balanceUpdater: any BalancerUpdater
     ) {
         self.transactionStore = transactionStore
         self.stakeService = stakeService
+        self.nftService = nftService
         self.chainServiceFactory = chainServiceFactory
         self.balanceUpdater = balanceUpdater
     }
@@ -124,6 +128,12 @@ class TransactionService {
                     if [TransactionType.stakeDelegate, .stakeUndelegate, .stakeRewards].contains(transaction.type) {
                         Task {
                             try await stakeService.update(walletId: walletId, chain: assetId.chain, address: transaction.from)
+                        }
+                    }
+                    if [TransactionType.transferNFT].contains(transaction.type) {
+                        Task {
+                            //TODO: NFT
+                            //try await nftService.updateAssets(deviceId: <#T##String#>, wallet: <#T##Wallet#>)
                         }
                     }
                 }

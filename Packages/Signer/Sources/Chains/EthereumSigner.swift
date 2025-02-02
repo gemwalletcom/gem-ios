@@ -39,6 +39,38 @@ public class EthereumSigner: Signable {
         return try sign(coinType: input.coinType, input: base)
     }
     
+    public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        guard case .transferNft(let asset) = input.type else {
+            fatalError()
+        }
+        let transaction: EthereumTransaction = switch asset.tokenType {
+        case .erc721: EthereumTransaction.with {
+            $0.erc721Transfer = .with {
+                $0.from = input.senderAddress
+                $0.to = input.destinationAddress
+                $0.tokenID = BigInt(stringLiteral: asset.tokenId).magnitude.serialize()
+            }
+        }
+        case .erc1155: EthereumTransaction.with {
+            $0.erc1155Transfer = .with {
+                $0.from = input.senderAddress
+                $0.to = input.destinationAddress
+                $0.tokenID = BigInt(stringLiteral: asset.tokenId).magnitude.serialize()
+                $0.value = BigInt(1).magnitude.serialize()
+            }
+        }
+        case .jetton, .spl: fatalError()
+        }
+        
+        let base = buildBaseInput(
+            input: input,
+            transaction: transaction,
+            toAddress: try asset.getContractAddress(),
+            privateKey: privateKey
+        )
+        return try sign(coinType: input.coinType, input: base)
+    }
+    
     internal func buildBaseInput(
         input: SignerInput,
         transaction: EthereumTransaction,

@@ -33,7 +33,7 @@ struct WalletConnectorNavigationStack: View {
                             keystore: keystore,
                             data: data.payload.tranferData,
                             service: chainServiceFactory
-                                .service(for: data.payload.tranferData.recipientData.asset.chain),
+                                .service(for: data.payload.tranferData.chain),
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }

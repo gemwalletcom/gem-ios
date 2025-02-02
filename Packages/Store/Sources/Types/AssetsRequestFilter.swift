@@ -10,11 +10,14 @@ public enum AssetsRequestFilter {
     case stakeable
     case enabled
     case hidden
+    // include all assets of these chains
     case chains([String])
     case chainsOrAssets([String], [String])
 
     // special case
     case includeNewAssets
+    /// AssetData with empty properties
+    case priceAlerts
 }
 
 extension AssetsRequestFilter: Equatable {}

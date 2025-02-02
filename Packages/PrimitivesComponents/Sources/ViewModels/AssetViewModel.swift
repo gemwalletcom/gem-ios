@@ -21,10 +21,6 @@ public struct AssetViewModel {
         asset.symbol
     }
 
-    public var supportMemo: Bool {
-        asset.chain.isMemoSupported
-    }
-
     public var assetImage: AssetImage {
         AssetIdViewModel(assetId: asset.id).assetImage
     }

@@ -83,7 +83,23 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
-        throw AnyError("Not supported yet")
+        let session = try store.getConnection(id: sessionId)
+        let wallet = try keystore.getWallet(session.wallet.walletId)
+
+        switch transaction {
+        case .ethereum: throw AnyError("Not supported yet")
+        case .solana(let tx):
+            let transferData = TransferData(
+                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8), outputType: .signature)),
+                recipientData: RecipientData(
+                    recipient: Recipient(name: .none, address: "", memo: .none),
+                    amount: .none
+                ),
+                value: .zero,
+                canChangeValue: false
+            )
+            return try await walletConnectorInteractor.signTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
+        }
     }
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
@@ -127,7 +143,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
                     data: data
                 )),
                 recipientData: RecipientData(
-                    asset: chain.asset,
                     recipient: Recipient(name: .none, address: address, memo: .none),
                     amount: .none
                 ),
@@ -136,11 +151,10 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
             )
 
             return try await walletConnectorInteractor.sendTransaction(transferData: WCTransferData(tranferData: transferData, wallet: wallet))
-        case .solana(let data):
+        case .solana(let tx):
             let transferData = TransferData(
-                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: data.data(using: .utf8))),
+                type: .generic(asset: chain.asset, metadata: session.session.metadata, extra: TransferDataExtra(data: tx.data(using: .utf8))),
                 recipientData: RecipientData(
-                    asset: chain.asset,
                     recipient: Recipient(name: .none, address: "", memo: .none),
                     amount: .none
                 ),

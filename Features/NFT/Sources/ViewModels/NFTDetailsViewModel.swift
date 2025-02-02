@@ -6,25 +6,27 @@ import PrimitivesComponents
 import Localization
 import Components
 import Style
+import ImageGalleryService
+import Photos
 
-public struct NFTDetailsViewModel {
-    public let collection: NFTCollection
-    public let asset: NFTAsset
+public struct NFTDetailsViewModel: Sendable {
+    public let assetData: NFTAssetData
+    private let headerButtonAction: HeaderButtonAction?
     
     public init(
-        collection: NFTCollection,
-        asset: NFTAsset
+        assetData: NFTAssetData,
+        headerButtonAction: HeaderButtonAction?
     ) {
-        self.collection = collection
-        self.asset = asset
+        self.assetData = assetData
+        self.headerButtonAction = headerButtonAction
     }
     
     public var title: String {
-        asset.name
+        assetData.asset.name
     }
     
     public var description: String? {
-        asset.description
+        assetData.asset.description
     }
     
     public var collectionTitle: String {
@@ -32,15 +34,7 @@ public struct NFTDetailsViewModel {
     }
     
     public var collectionText: String {
-        collection.name
-    }
-    
-    public var collectionAssetImage: AssetImage {
-        AssetImage(
-            imageURL: URL(string: collection.image.previewImageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
+        assetData.collection.name
     }
     
     public var networkTitle: String {
@@ -48,7 +42,7 @@ public struct NFTDetailsViewModel {
     }
     
     public var networkText: String {
-        asset.chain.asset.name
+        assetData.asset.chain.asset.name
     }
     
     public var contractTitle: String {
@@ -58,17 +52,21 @@ public struct NFTDetailsViewModel {
     public var networkAssetImage: AssetImage {
         AssetImage(
             imageURL: .none,
-            placeholder: ChainImage(chain: asset.chain).image,
+            placeholder: ChainImage(chain: assetData.asset.chain).image,
             chainPlaceholder: .none
         )
     }
 
+    public var showContract: Bool {
+        assetData.collection.contractAddress != assetData.asset.tokenId
+    }
+    
     public var contractText: String {
-        AddressFormatter(address: contractValue, chain: asset.chain).value()
+        AddressFormatter(address: contractValue, chain: assetData.asset.chain).value()
     }
     
     public var contractValue: String {
-        collection.contractAddress
+        assetData.collection.contractAddress
     }
     
     public var tokenIdTitle: String {
@@ -76,7 +74,14 @@ public struct NFTDetailsViewModel {
     }
     
     public var tokenIdText: String {
-        "#\(asset.tokenId)"
+        if assetData.asset.tokenId.count > 16 {
+            return assetData.asset.tokenId
+        }
+        return "#\(assetData.asset.tokenId)"
+    }
+    
+    public var tokenIdValue: String {
+        assetData.asset.tokenId
     }
     
     public var attributesTitle: String {
@@ -84,15 +89,33 @@ public struct NFTDetailsViewModel {
     }
     
     public var attributes: [NFTAttribute] {
-        asset.attributes
+        assetData.asset.attributes
     }
     
     public var assetImage: AssetImage {
-        AssetImage(
-            type: asset.name,
-            imageURL: URL(string: asset.image.imageUrl),
-            placeholder: .none,
-            chainPlaceholder: .none
-        )
+        NFTAssetViewModel(asset: assetData.asset).assetImage
+    }
+    
+    public var headerButtons: [HeaderButton] {
+        let enabledTransferChains = [Chain.ethereum]
+        return [
+            HeaderButton(
+                type: .send,
+                isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
+            ),
+            HeaderButton(type: .more, isEnabled: true),
+        ]
+    }
+    
+    func onHeaderAction(type: HeaderButtonType) {
+        headerButtonAction?(type)
+    }
+    
+    func saveImageToGallery() async throws(ImageGalleryServiceError) {
+        guard let url = URL(string: assetData.asset.image.imageUrl) else {
+            throw ImageGalleryServiceError.wrongURL
+        }
+        let saver = ImageGalleryService()
+        try await saver.saveImageFromURL(url)
     }
 }

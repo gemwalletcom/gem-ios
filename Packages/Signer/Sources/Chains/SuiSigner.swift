@@ -26,7 +26,7 @@ public struct SuiSigner: Signable {
                 .tokenApproval,
                 .stakeRewards,
                 .stakeRedelegate,
-                .stakeWithdraw, .assetActivation:
+                .stakeWithdraw, .assetActivation, .transferNFT, .smartContractCall:
             fatalError()
         case .stakeDelegate,
                 .stakeUndelegate:

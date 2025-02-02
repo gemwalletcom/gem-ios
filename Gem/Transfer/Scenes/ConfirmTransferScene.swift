@@ -89,10 +89,11 @@ extension ConfirmTransferScene {
                         ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
                     }
 
-                HStack {
-                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
-                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
-                }
+                ListItemImageView(
+                    title: model.networkTitle,
+                    subtitle: model.networkValue,
+                    assetImage: model.networkAssetImage
+                )
                 
                 if model.shouldShowRecipientField {
                     AddressListItemView(

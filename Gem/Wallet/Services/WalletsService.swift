@@ -112,10 +112,10 @@ class WalletsService {
     }
 
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
-        NSLog("fetch balances: \(assetIds.count)")
-        
-        let wallet = try keystore.getWallet(walletId)
-        balanceService.updateBalance(for: wallet, assetIds: assetIds)
+        balanceService.updateBalance(
+            for: try keystore.getWallet(walletId),
+            assetIds: assetIds
+        )
     }
     
     func storeBalances(update: BalanceUpdate) throws {
@@ -126,13 +126,12 @@ class WalletsService {
     }
     
     func updatePrices() async throws {
-        let assetIds = try assetsService.getEnabledAssets()
-        try await updatePrices(assetIds: assetIds)
+        try await updatePrices(
+            assetIds: try assetsService.getEnabledAssets()
+        )
     }
     
     func updatePrices(assetIds: [AssetId]) async throws {
-        NSLog("fetch prices. assetIds: \(assetIds.count)")
-        
         let prices = try await priceService.fetchPrices(for: assetIds.ids, currency: self.preferences.currency)
         try priceService.updatePrices(prices: prices)
     }

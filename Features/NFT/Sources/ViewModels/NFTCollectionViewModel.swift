@@ -83,7 +83,7 @@ public struct NFTCollectionViewModel: Sendable {
     func createGridItem(from data: NFTData) -> GridItem {
         if data.assets.count == 1, let asset = data.assets.first {
             GridItem(
-                destination: Scenes.NFTDetails(collection: data.collection, asset: asset),
+                destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: data.collection, asset: asset)),
                 assetImage: AssetImage(
                     type: data.collection.name,
                     imageURL: URL(string: asset.image.imageUrl),

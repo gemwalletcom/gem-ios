@@ -150,6 +150,7 @@ struct Columns {
         static let chain = Column("chain")
         static let contractAddress = Column("contractAddress")
         static let isVerified = Column("isVerified")
+        static let links = Column("links")
         static let imageUrl = Column("imageUrl")
         static let previewImageUrl = Column("previewImageUrl")
     }
@@ -164,6 +165,7 @@ struct Columns {
     struct NFTAsset {
         static let id = Column("id")
         static let collectionId = Column("collectionId")
+        static let contractAddress = Column("contractAddress")
         static let tokenId = Column("tokenId")
         static let tokenType = Column("tokenType")
         static let name = Column("name")

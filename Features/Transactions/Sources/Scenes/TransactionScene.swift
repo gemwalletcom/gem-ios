@@ -69,7 +69,11 @@ public struct TransactionScene: View {
                         MemoListItemView(memo: model.memo)
                     }
 
-                    networkView
+                    ListItemImageView(
+                        title: model.networkField,
+                        subtitle: model.network,
+                        assetImage: model.networkAssetImage
+                    )
 
                     ListItemView(
                         title: model.networkFeeField,
@@ -95,6 +99,13 @@ public struct TransactionScene: View {
                         .textCase(nil)
                         .listRowSeparator(.hidden)
                         .listRowInsets(EdgeInsets())
+                    case .nft:
+                        HStack {
+                            Spacer()
+                            TransactionHeaderView(type: model.headerType)
+                                .padding(.bottom, 16)
+                            Spacer()
+                        }
                     }
                 }
                 
@@ -123,15 +134,6 @@ public struct TransactionScene: View {
         }
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-    }
-}
-
-extension TransactionScene {
-    private var networkView: some View {
-        HStack {
-            ListItemView(title: model.networkField, subtitle: model.network)
-            AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
         }
     }
 }

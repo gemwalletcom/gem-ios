@@ -34,7 +34,7 @@ public struct AssetBasic: Codable, Sendable {
 	}
 }
 
-public struct AssetLink: Codable, Sendable {
+public struct AssetLink: Codable, Equatable, Hashable, Sendable {
 	public let name: String
 	public let url: String
 

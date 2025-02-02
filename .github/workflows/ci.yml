@@ -25,43 +25,43 @@ jobs:
         with:
           submodules: true
 
-      # Cache Cargo registry
-      - uses: actions/cache@v4
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/registry
           key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-registry-
   
-      # Cache Cargo git dependencies
-      - uses: actions/cache@v4
+      - name: Cache Cargo git dependencies
+        uses: actions/cache@v4
         with:
           path: ~/.cargo/git
           key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-git-
 
-      # Cache build artifacts (target directory)
-      - uses: actions/cache@v4
+      - name: Cache build artifacts (target directory)
+        uses: actions/cache@v4
         with:
           path: target
           key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-build-
-
-      # - uses: actions/cache@v4
-      #   with:
-      #     path: |
-      #       ~/.cargo/registry
-      #       ~/.cargo/git
-      #       target
-      #     key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      
+      - name: Cache build artifacts (gemstone target directory)
+        uses: actions/cache@v4
+        with:
+          path: core/gemstone/target
+          key: ${{ runner.os }}-cargo-gemstone-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-gemstone-build-
 
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.3
-
+        uses: mozilla-actions/sccache-action@v0.0.7
+    
       - name: Install just
-        run: cargo install just
+        run: brew install just
 
       - name: Install dependencies
         run: just install-toolchains && just install-swifttools

@@ -18,7 +18,7 @@ struct AssetsFilterViewModel {
 
     var isAnyFilterSpecified: Bool {
         switch type {
-        case .send, .receive, .buy, .swap, .stake, .priceAlert: false
+        case .send, .receive, .buy, .swap, .priceAlert: false
         case .manage: chainsFilter.isAnySelected
         }
     }
@@ -26,7 +26,11 @@ struct AssetsFilterViewModel {
     var defaultFilters: [AssetsRequestFilter] {
         switch type {
         case .send: [.hasBalance]
-        case .receive: [.includeNewAssets]
+        case .receive(let type):
+            switch type {
+            case .asset: [.includeNewAssets]
+            case .collection: [.chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
+            }
         case .buy: [.buyable, .includeNewAssets]
 
         case .swap(let type):
@@ -42,9 +46,8 @@ struct AssetsFilterViewModel {
                     .includeNewAssets,
                 ]
             }
-        case .stake: [.stakeable]
         case .manage: [.includeNewAssets]
-        case .priceAlert: [.includeNewAssets]
+        case .priceAlert: [.priceAlerts]
         }
     }
 

@@ -55,14 +55,17 @@ class SelectAssetViewModel {
     var title: String {
         switch selectType {
         case .send: Localized.Wallet.send
-        case .receive: Localized.Wallet.receive
+        case .receive(let type):
+            switch type {
+            case .asset: Localized.Wallet.receive
+            case .collection: Localized.Wallet.receiveCollection
+            }
         case .buy: Localized.Wallet.buy
         case .swap(let type):
             switch type {
             case .pay: Localized.Swap.youPay
             case .receive: Localized.Swap.youReceive
             }
-        case .stake: Localized.Wallet.stake
         case .manage: Localized.Wallet.manageTokenList
         case .priceAlert: Localized.Assets.selectAsset
         }
@@ -77,7 +80,16 @@ class SelectAssetViewModel {
     }
 
     var showFilter: Bool {
-        wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        switch selectType {
+        case .receive(let type):
+            switch type {
+            case .asset:
+                wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+            case .collection: false
+            }
+        case .buy, .manage, .priceAlert, .send, .swap:
+            wallet.isMultiCoins && !filterModel.chainsFilter.isEmpty
+        }
     }
 
     var isNetworkSearchEnabled: Bool {
@@ -89,7 +101,7 @@ class SelectAssetViewModel {
             case .pay: return false
             case .receive: return true
             }
-        case .send, .stake: return false
+        case .send: return false
         }
     }
 }
@@ -171,8 +183,7 @@ extension SelectAssetType {
         switch self {
         case .send,
             .buy,
-            .swap,
-            .stake: .view
+            .swap: .view
         case .receive: .copy
         case .manage:.manage
         case .priceAlert: .price

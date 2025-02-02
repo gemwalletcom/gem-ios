@@ -107,7 +107,6 @@ public final class StakeViewModel {
         return TransferData(
             type: .stake(chain.asset, .rewards(validators: validators)),
             recipientData: RecipientData(
-                asset: chain.asset,
                 recipient: Recipient(name: .none, address: "", memo: .none),
                 amount: .none
             ),

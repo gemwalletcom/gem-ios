@@ -27,6 +27,7 @@ import struct Gemstone.SwapQuoteRequest
 import struct Swap.ErrorWrapper
 import struct Swap.SwapAvailabilityResult
 import class Swap.SwapPairSelectorViewModel
+import class Gemstone.Config
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
@@ -342,8 +343,8 @@ extension SwapViewModel {
     ) throws -> TransferData {
         let action = SwapAction.approval(quote, spender: spender, allowance: .MAX_256)
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(quote, spender: spender, allowance: .MAX_256))
+        
         let recipientData = try RecipientData(
-            asset: fromAsset,
             recipient: Recipient(name: action.provider.name, address: fromAsset.getTokenId(), memo: .none),
             amount: .none
         )
@@ -362,7 +363,6 @@ extension SwapViewModel {
         let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(quote, quoteData))
         let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
-            asset: fromAsset,
             recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )
@@ -420,15 +420,16 @@ extension SwapViewModel {
     }
 
     public func permit2Single(token: String, spender: String, value: String, nonce: UInt64) -> Gemstone.PermitSingle {
+        let config = Config.shared.getSwapConfig()
         return PermitSingle(
             details: Permit2Detail(
                 token: token,
                 amount: value,
-                expiration: UInt64(Date().timeIntervalSince1970) + 60 * 60 * 30,
+                expiration: UInt64(Date().timeIntervalSince1970) + config.permit2Expiration,
                 nonce: nonce
             ),
             spender: spender,
-            sigDeadline: UInt64(Date().timeIntervalSince1970) + 60 * 30
+            sigDeadline: UInt64(Date().timeIntervalSince1970) + config.permit2SigDeadline
         )
     }
 

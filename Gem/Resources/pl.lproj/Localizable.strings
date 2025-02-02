@@ -281,11 +281,11 @@
 "swap.price_impact" = "Wpływ na cenę";
 "wallet.sell" = "Sprzedać";
 "sell.title" = "Sell %s";
-"common.learn_more" = "Learn More";
+"common.learn_more" = "Dowiedz się więcej";
 "info.network_fee.title" = "Network Fee";
 "info.watch_wallet.title" = "Watch Wallet";
 "info.watch_wallet.description" = "Portfel, do którego nie masz dostępu, ale możesz śledzić zawarte w nim transakcje i ruchy.";
-"info.network_fee.description" = "%@ network charges transaction fee, which varies based on network usage. Paid to miners to process your transaction.";
+"info.network_fee.description" = "%@ sieć pobiera opłatę transakcyjną, która różni się w zależności od wykorzystania sieci. Płacona górnikom za przetworzenie transakcji.";
 "info.transaction.error.description" = "The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.";
 "info.transaction.pending.description" = "The transaction has been submitted and is awaiting confirmation on the network. Processing times may vary. Please check back for updates.";
 "info.transaction.success.description" = "The transaction has been completed and confirmed on the network. You can review the details to verify its status.";
@@ -314,6 +314,11 @@
 "banner.activate_asset.description" = "Aby użyć zasobu %@, należy najpierw włączyć go w sieci %@ spełniając określone wymagania sieciowe.";
 "nft.properties" = "Właściwości";
 "nft.collections" = "Kolekcje";
-"nft.your_nfts" = "Twoje NFT";
 "nft.description" = "Opis";
 "nft.collection" = "Kolekcja";
+"wallet.receive_collection" = "Odbierz kolekcję";
+"wallet.more" = "Więcej";
+"nft.save_to_photos" = "Zapisz w Zdjęciach";
+"nft.success_saved_to_photos" = "Twój obraz został zapisany w Zdjęciach!";
+"permissions.access_denied" = "Odmowa dostępu";
+"permissions.image.photo_access.denied.description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Włącz dostęp w ustawieniach urządzenia.";

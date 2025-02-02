@@ -161,10 +161,11 @@ extension SwapScene {
             
             Section {
                 if let provider = model.providerText, let providerImage = model.providerImage {
-                    HStack {
-                        ListItemView(title: model.providerField, subtitle: provider)
-                        AssetImageView(assetImage: providerImage, size: Sizing.list.image)
-                    }
+                    ListItemImageView(
+                        title: model.providerField,
+                        subtitle: provider,
+                        assetImage: providerImage
+                    )
                 }
                 TransactionsList(
                     explorerService: model.explorerService,

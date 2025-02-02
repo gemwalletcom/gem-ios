@@ -49,7 +49,7 @@ extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
         let data = service.getData(input: input)
-        let to = service.getTo(input: input)
+        let to = try service.getTo(input: input)
         
         async let getGasLimit = try service.getGasLimit(
             from: input.senderAddress,
@@ -66,7 +66,7 @@ extension OptimismGasOracle {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
-            case .generic, .swap, .stake:
+            case .transferNft, .generic, .swap, .stake:
                 input.gasPrice.priorityFee
             case .account: fatalError()
             }
@@ -76,13 +76,13 @@ extension OptimismGasOracle {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
-            case .generic, .swap:
+            case .transferNft, .generic, .swap:
                 input.value
             case .stake, .account: fatalError()
             }
         }()
         
-        let encoded = getEncodedData(
+        let encoded = try getEncodedData(
             gasLimit: gasLimit,
             gasPrice: input.gasPrice.gasPrice,
             priorityFee: input.gasPrice.priorityFee,
@@ -112,12 +112,12 @@ extension OptimismGasOracle {
         feeInput: FeeInput,
         chainId: Int,
         value: BigInt
-    ) -> Data {
-        let input = EthereumSigningInput.with {
+    ) throws -> Data {
+        let input = try EthereumSigningInput.with {
             $0.chainID = BigInt(chainId).magnitude.serialize()
             $0.txMode = .enveloped
             $0.nonce = BigInt(nonce).magnitude.serialize()
-            $0.toAddress = service.getTo(input: feeInput)
+            $0.toAddress = try service.getTo(input: feeInput)
             $0.transaction = WalletCore.EthereumTransaction.with {
                 $0.contractGeneric = WalletCore.EthereumTransaction.ContractGeneric.with {
                     $0.amount = value.magnitude.serialize()
@@ -145,7 +145,7 @@ extension OptimismGasOracle {
             }
         case .generic, .swap:
             break
-        case .stake, .account:
+        case .transferNft, .stake, .account:
             fatalError()
         }
         

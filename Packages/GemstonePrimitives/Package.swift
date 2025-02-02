@@ -22,7 +22,8 @@ let package = Package(
                 "Gemstone",
                 "Primitives",
                 "WalletCorePrimitives",
-            ]
+            ],
+            path: "Sources"
         ),
         .testTarget(
             name: "GemstonePrimitivesTests",

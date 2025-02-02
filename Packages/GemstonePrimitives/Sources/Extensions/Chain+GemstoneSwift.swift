@@ -40,6 +40,10 @@ public extension Primitives.Chain {
         ChainConfig.config(chain: self).isStakeSupported
     }
     
+    var isNFTSupported: Bool {
+        ChainConfig.config(chain: self).isNftSupported
+    }
+    
     var type: ChainType {
         ChainType(rawValue: ChainConfig.config(chain: self).chainType)!
     }
