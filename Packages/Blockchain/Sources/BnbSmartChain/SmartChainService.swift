@@ -8,6 +8,7 @@ import WalletCore
 final public class SmartChainService: Sendable {
     let provider: Provider<EthereumProvider>
     let stakeHub: StakeHub
+    let cache = Cache<String, String>(ttl: 60 * 60 * 12)
 
     init(provider: Provider<EthereumProvider>) {
         self.provider = provider
@@ -17,18 +18,27 @@ final public class SmartChainService: Sendable {
 
 extension SmartChainService: ChainStakable {
     func getMaxElectedValidators() async throws -> UInt16 {
-        let params = [
-            "to":StakeHub.address,
-            "data": stakeHub.encodeMaxElectedValidators()
-        ]
+        let result = try await { [self] in
+            if let cached = await self.cache.get("maxElectedValidators") {
+                return cached
+            }
+            let params = [
+                "to":StakeHub.address,
+                "data": stakeHub.encodeMaxElectedValidators()
+            ]
 
-        let result = try await provider.request(.call(params)).map(as: JSONRPCResponse<String>.self).result
+            let result = try await self.provider.request(.call(params)).map(as: JSONRPCResponse<String>.self).result
+            await cache.set("maxElectedValidators", value: result)
+            return result
+        }()
+
         guard
             let data = Data(hexString: result),
             let value = UInt16(EthereumAbiValue.decodeUInt256(input: data))
         else {
             throw AnyError("Unable to get validators")
         }
+
         return value
     }
 
@@ -49,10 +59,13 @@ extension SmartChainService: ChainStakable {
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
         let limit = try await getMaxElectedValidators()
-        async let delegationsCall = try getDelegations(address: address, limit: limit)
-        async let undelegationsCall = try getUndelegations(address: address, limit: limit)
-        let (delegations, undelegations) = try await (delegationsCall, undelegationsCall)
-        return delegations + undelegations
+        let calls = [
+            try getDelegationsCall(address: address, limit: limit),
+            try getUndelegationsCall(address: address, limit: limit),
+        ]
+
+        let result = try await provider.request(.batch(requests: calls)).map(as: [JSONRPCResponse<String>].self)
+        return try decodeStakeDelegations(result)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -72,27 +85,33 @@ extension SmartChainService: ChainStakable {
         )
     }
 
-    func getDelegations(address: String, limit: UInt16) async throws -> [DelegationBase] {
-        let params = try [
-            "to": StakeHub.reader,
-            "data": stakeHub.encodeDelegationsCall(address: address, limit: limit),
-        ]
-        let result = try await provider.request(.call(params)).mapResult(String.self)
-        guard let data = Data(hexString: result) else {
+    func decodeStakeDelegations(_ result: [JSONRPCResponse<String>]) throws -> [DelegationBase] {
+        guard
+            result.count == 2,
+            let data1 = Data(hexString: result[0].result),
+            let data2 = Data(hexString: result[1].result)
+        else {
             return []
         }
-        return try stakeHub.decodeDelegationsResult(data: data)
+
+        let delegations = try stakeHub.decodeDelegationsResult(data: data1)
+        let undelegations = try stakeHub.decodeDelegationsResult(data: data2)
+
+        return delegations + undelegations
     }
 
-    func getUndelegations(address: String, limit: UInt16) async throws -> [DelegationBase] {
-        let params = try [
+
+    private func getDelegationsCall(address: String, limit: UInt16) throws -> EthereumProvider {
+        .call([
             "to": StakeHub.reader,
-            "data": stakeHub.encodeUndelegationsCall(address: address, limit: limit),
-        ]
-        let result = try await provider.request(.call(params)).mapResult(String.self)
-        guard let data = Data(hexString: result) else {
-            return []
-        }
-        return try stakeHub.decodeUnelegationsResult(data: data)
+            "data": try stakeHub.encodeDelegationsCall(address: address, limit: limit),
+        ])
+    }
+
+    private func getUndelegationsCall(address: String, limit: UInt16) throws -> EthereumProvider {
+        .call([
+            "to": StakeHub.reader,
+            "data": try stakeHub.encodeUndelegationsCall(address: address, limit: limit),
+        ])
     }
 }

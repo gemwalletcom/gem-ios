@@ -15,4 +15,22 @@ final class EthereumServiceTests {
         result = EthereumService.decodeABI(hexString: hex)
         #expect(result == "Hello World!    Hello World!    Hello World!")
     }
+
+    @Test
+    func testBatchRequests() throws {
+        let calls = [
+            EthereumProvider.call(["to": "0x1", "data": "0xdead"]),
+            EthereumProvider.call(["to": "0x2", "data": "0xbeaf"])
+        ]
+
+        let batch = EthereumProvider.batch(requests: calls)
+
+        guard case .data(let data) = batch.data else {
+            fatalError()
+        }
+
+        let string = String(data: data, encoding: .utf8)!
+        print(string)
+//        #expect(string == "[]")
+    }
 }
