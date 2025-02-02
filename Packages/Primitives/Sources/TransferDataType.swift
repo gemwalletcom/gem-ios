@@ -50,7 +50,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
 
     public var transactionType: TransactionType {
         switch self {
-        case .transfer, .generic: .transfer
+        case .transfer: .transfer
+        case .generic: .smartContractCall
         case .transferNft: .transferNFT
         case .swap(_, _, let type):
             switch type {
