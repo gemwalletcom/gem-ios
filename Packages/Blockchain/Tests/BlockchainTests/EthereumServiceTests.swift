@@ -29,8 +29,8 @@ final class EthereumServiceTests {
             fatalError()
         }
 
-        let string = String(data: data, encoding: .utf8)!
-        print(string)
-//        #expect(string == "[]")
+        let response = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
+
+        #expect(response.count == 2)
     }
 }
