@@ -7,7 +7,38 @@ import Primitives
 @testable import Gem
 
 final class PriceImpactViewModelTests: XCTestCase {
-    var viewModel: PriceImpactViewModel  = {
+    
+    func testPriceImpactValue_None_InvalidInput() {
+        let viewModel = viewModel(fromValue: "wrong", toValue: "wrong")
+        let result = viewModel.type()
+        XCTAssertEqual(result, .none)
+    }
+    
+    func testPriceImpactValue_Low() {
+        let viewModel = viewModel(fromValue: "10", toValue: "9.9")
+        let type = viewModel.type()
+        XCTAssertEqual(type, .low("-1.00%"))
+    }
+    
+    func testPriceImpactValue_Positive() {
+        let viewModel = viewModel(fromValue: "10", toValue: "10.05")
+        let type = viewModel.type()
+        XCTAssertEqual(type, .positive("+0.50%"))
+    }
+    
+    func testPriceImpactValue_Medium() {
+        let viewModel = viewModel(fromValue: "10", toValue: "9.5")
+        let type = viewModel.type()
+        XCTAssertEqual(type, .medium("-5.00%"))
+    }
+    
+    func testPriceImpactValue_High() {
+        let viewModel = viewModel(fromValue: "10", toValue: "7.0")
+        let type = viewModel.type()
+        XCTAssertEqual(type, .high("-30.00%"))
+    }
+    
+    private func viewModel(fromValue: String, toValue: String) -> PriceImpactViewModel {
         let fromAssetData = AssetData.mock(
             price: Price(price: 5, priceChangePercentage24h: 1)
         )
@@ -18,32 +49,9 @@ final class PriceImpactViewModelTests: XCTestCase {
         
         return PriceImpactViewModel(
             fromAssetData: fromAssetData,
-            toAssetData: toAssetData
+            fromValue: fromValue,
+            toAssetData: toAssetData,
+            toValue: toValue
         )
-    }()
-    
-    func testPriceImpactValue_None_InvalidInput() {
-        let result = viewModel.priceImpactValue(fromValue: "wrong", toValue: "wrong")
-        XCTAssertEqual(result, .none)
-    }
-    
-    func testPriceImpactValue_Low() {
-        let result = viewModel.priceImpactValue(fromValue: "10", toValue: "9.9")
-        XCTAssertEqual(result, .low("-1.00%"))
-    }
-    
-    func testPriceImpactValue_Positive() {
-        let result = viewModel.priceImpactValue(fromValue: "10", toValue: "10.05")
-        XCTAssertEqual(result, .positive("+0.50%"))
-    }
-    
-    func testPriceImpactValue_Medium() {
-        let result = viewModel.priceImpactValue(fromValue: "10", toValue: "9.5")
-        XCTAssertEqual(result, .medium("-5.00%"))
-    }
-    
-    func testPriceImpactValue_High() {
-        let result = viewModel.priceImpactValue(fromValue: "10", toValue: "7.0")
-        XCTAssertEqual(result, .high("-30.00%"))
     }
 }

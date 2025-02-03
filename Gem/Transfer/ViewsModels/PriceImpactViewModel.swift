@@ -3,45 +3,32 @@
 import Foundation
 import Primitives
 import Localization
-
-enum PriceImpactValue: Equatable {
-    case none
-    case low(String)
-    case medium(String)
-    case high(String)
-    case positive(String)
-}
+import BigInt
 
 struct PriceImpactViewModel {
     let fromAssetData: AssetData
+    let fromValue: String
     let toAssetData: AssetData
+    let toValue: String
     
-    var priceImpact: String { Localized.Swap.priceImpact }
+    var priceImpactTitle: String { Localized.Swap.priceImpact }
     
-    private let valueFormatter = ValueFormatter(style: .medium)
-    private var percentFormatter: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.locale = .current
-        formatter.numberStyle = .percent
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        return formatter
-    }
+    private let valueFormatter = ValueFormatter(style: .full)
+    private let percentFormatter = CurrencyFormatter(type: .percentSignLess)
     
     // MARK: - Public methods
     
-    func priceImpactValue(fromValue: String, toValue: String) -> PriceImpactValue {
+    func type() -> PriceImpactType {
         guard
             let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
             let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
-            let fromPrice = getPrice(value: fromAmount, price: fromAssetData.price?.price),
-            let toPrice = getPrice(value: toAmount, price: toAssetData.price?.price)
+            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
+            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
         else {
             return .none
         }
-        let priceImpact = calculatePriceImpact(fromPrice: fromPrice, expectedPrice: toPrice)
-        let priceImpactValue = evaluatePriceImpactValue(priceImpact: priceImpact)
-        return priceImpactValue
+        let priceImpact = calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
+        return evaluatePriceImpactType(priceImpact: priceImpact)
     }
     
     // MARK: - Private methods
@@ -56,20 +43,18 @@ struct PriceImpactViewModel {
         return amount
     }
     
-    private func getPrice(value: Double, price: Double?) -> Double? {
+    private func assetFiatValue(value: Double, price: Double?) -> Double? {
         guard let price else {
             return nil
         }
         return value * price
     }
     
-    private func evaluatePriceImpactValue(priceImpact: Double?) -> PriceImpactValue {
-        guard
-            let priceImpact,
-            let priceImpactPercentage = percentFormatter.string(from: NSNumber(value: abs(priceImpact / 100)))
-        else {
+    private func evaluatePriceImpactType(priceImpact: Double?) -> PriceImpactType {
+        guard let priceImpact else {
             return .none
         }
+        let priceImpactPercentage = percentFormatter.string(abs(priceImpact))
         
         switch priceImpact.rounded(toPlaces: 2) {
         case ..<0:
@@ -83,9 +68,8 @@ struct PriceImpactViewModel {
         }
     }
     
-    private func calculatePriceImpact(fromPrice: Double, expectedPrice: Double) -> Double? {
-        guard fromPrice > 0 else { return nil }
-        let priceImpact = (1 - (expectedPrice / fromPrice)) * 100
-        return priceImpact
+    private func calculatePriceImpact(fromValue: Double, expectedValue: Double) -> Double? {
+        guard fromValue > 0 else { return nil }
+        return (1 - (expectedValue / fromValue)) * 100
     }
 }

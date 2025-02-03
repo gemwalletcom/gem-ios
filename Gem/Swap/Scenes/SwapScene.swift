@@ -159,14 +159,8 @@ extension SwapScene {
                     )
                 }
 
-                if let fromAsset, let toAsset, case .loaded(let result) = model.swapState.availability {
-                    PriceImpactView(
-                        fromAsset: fromAsset,
-                        fromValue: result.quote.fromValue,
-                        toAsset: toAsset,
-                        toValue: result.quote.toValue,
-                        model: PriceImpactViewModel(fromAssetData: fromAsset, toAssetData: toAsset)
-                    )
+                if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
+                    PriceImpactView(model: viewModel)
                 }
 
                 TransactionsList(

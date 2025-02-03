@@ -175,6 +175,22 @@ class SwapViewModel {
     func onSelectAssetAction(type: SelectAssetSwapType) {
         onSelectAsset?(type)
     }
+    
+    func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
+        guard
+            case .loaded(let result) = swapState.availability,
+            let fromAsset,
+            let toAsset
+        else {
+            return nil
+        }
+        return PriceImpactViewModel(
+            fromAssetData: fromAsset,
+            fromValue: result.quote.fromValue,
+            toAssetData: toAsset,
+            toValue: result.quote.toValue
+        )
+    }
 }
 
 // MARK: - Business Logic
