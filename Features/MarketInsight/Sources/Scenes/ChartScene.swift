@@ -63,11 +63,8 @@ public struct ChartScene: View {
                     .padding(.bottom, Spacing.medium)
                 }
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            
+            .cleanListRow()
+
             let priceDataModel = AssetDetailsInfoViewModel(priceData: priceData)
             
             if priceDataModel.showMarketValues {

@@ -33,28 +33,3 @@ public struct EmptyContentView: View {
         )
     }
 }
-
-// simple wrapper to store inside a list as section
-public struct EmptyContentSection: View {
-    public let model: any EmptyContentViewable
-    public let topPadding: CGFloat
-
-    public init(
-        model: any EmptyContentViewable,
-        topPadding: CGFloat = Spacing.large
-    ) {
-        self.model = model
-        self.topPadding = topPadding
-    }
-
-    public var body: some View {
-        Section { } header: {
-            EmptyContentView(model: model)
-                .padding(.top, topPadding)
-        }
-        .frame(maxWidth: .infinity)
-        .textCase(nil)
-        .listRowSeparator(.hidden)
-        .listRowInsets(EdgeInsets())
-    }
-}

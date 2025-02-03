@@ -73,10 +73,7 @@ extension StakeScene {
             switch state {
             case .noData:
                 EmptyContentView(model: model.emptyContentModel)
-                    .frame(maxWidth: .infinity)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(EdgeInsets())
-                    .listRowBackground(Color.clear)
+                    .cleanListRow()
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())

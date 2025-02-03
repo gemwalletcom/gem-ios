@@ -95,10 +95,7 @@ public struct TransactionScene: View {
                             TransactionHeaderView(type: model.headerType)
                                 .padding()
                         }
-                        .frame(maxWidth: .infinity)
-                        .textCase(nil)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets())
+                        .cleanListRow()
                     case .nft:
                         HStack {
                             Spacer()

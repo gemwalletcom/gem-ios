@@ -81,10 +81,7 @@ struct AssetScene: View {
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(.zero)
+            .cleanListRow()
 
             Section {
                 BannerView(banners: model.banners, action: onBannerAction, closeAction: bannerService.onClose)
@@ -137,13 +134,14 @@ struct AssetScene: View {
                 stakeView
             }
 
-            if transactions.count > 0 {
+            if !transactions.isEmpty {
                 TransactionsList(
                     explorerService: model.explorerService,
                     transactions
                 )
             } else {
-                EmptyContentSection(model: model.emptyConentModel)
+                EmptyContentView(model: model.emptyConentModel)
+                    .cleanListRow(topOffset: Spacing.extraLarge)
             }
         }
         .refreshable {
