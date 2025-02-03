@@ -50,7 +50,7 @@ public struct EmptyContentSection: View {
     public var body: some View {
         Section { } header: {
             EmptyContentView(model: model)
-                .padding(.top, Spacing.large)
+                .padding(.top, botomPadding)
         }
         .frame(maxWidth: .infinity)
         .textCase(nil)
