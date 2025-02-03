@@ -157,7 +157,7 @@ class RecipientViewModel: ObservableObject {
         async let labelResult = try solanaPay.getLabel(link: link)
         async let txResult = try solanaPay.postAccount(link: link, account: wallet.account(for: .solana).address)
         let (label, tx) = try await (labelResult, txResult)
-        return PaymentLinkData(label: label.label, logo: label.icon, chain: .solana, transaction: tx.transaction)
+        return PaymentLinkData(label: label.label, logo: label.iconUrl, chain: .solana, transaction: tx.transaction ?? "")
     }
 }
 
