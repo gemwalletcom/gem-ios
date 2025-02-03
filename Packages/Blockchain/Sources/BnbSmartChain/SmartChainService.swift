@@ -8,7 +8,6 @@ import WalletCore
 final public class SmartChainService: Sendable {
     let provider: Provider<EthereumProvider>
     let stakeHub: StakeHub
-    let cache = Cache<String, String>(ttl: 60 * 60 * 12)
 
     init(provider: Provider<EthereumProvider>) {
         self.provider = provider
@@ -18,19 +17,11 @@ final public class SmartChainService: Sendable {
 
 extension SmartChainService: ChainStakable {
     func getMaxElectedValidators() async throws -> UInt16 {
-        let result = try await { [self] in
-            if let cached = await self.cache.get("maxElectedValidators") {
-                return cached
-            }
-            let params = [
-                "to":StakeHub.address,
-                "data": stakeHub.encodeMaxElectedValidators()
-            ]
-
-            let result = try await self.provider.request(.call(params)).map(as: JSONRPCResponse<String>.self).result
-            await cache.set("maxElectedValidators", value: result)
-            return result
-        }()
+        let params = [
+            "to":StakeHub.address,
+            "data": stakeHub.encodeMaxElectedValidators()
+        ]
+        let result = try await self.provider.request(.call(params)).map(as: JSONRPCResponse<String>.self).result
 
         guard
             let data = Data(hexString: result),
@@ -75,7 +66,7 @@ extension SmartChainService: ChainStakable {
             .filter { $0.state == .undelegating || $0.state == .awaitingWithdrawal }
             .map { $0.balanceValue }
             .reduce(0, +)
-    
+
         return AssetBalance(
             assetId: Chain.smartChain.assetId,
             balance: Balance(
