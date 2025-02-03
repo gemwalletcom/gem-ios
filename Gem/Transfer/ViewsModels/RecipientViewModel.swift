@@ -7,6 +7,12 @@ import GemstonePrimitives
 import Localization
 import PrimitivesComponents
 
+import enum Gemstone.PaymentType
+import enum Gemstone.PaymentLinkType
+import class Gemstone.SolanaPay
+import NativeProviderService
+import NodeService
+
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 enum RecipientAddressType {
@@ -16,6 +22,7 @@ enum RecipientAddressType {
 
 enum RecipientScanResult {
     case recipient(address: String, memo: String?, amount: String?)
+    case paymentLink(link: PaymentLinkType)
     case transferData(TransferData)
 }
 
@@ -23,26 +30,32 @@ class RecipientViewModel: ObservableObject {
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
-    
+    let nodeService: NodeService
+
     private let keystore: any Keystore
     private let onRecipientDataAction: RecipientDataAction
     private let onTransferAction: TransferDataAction
+    private let onPaymentLinkAction: PaymentLinkAction
     private let formatter = ValueFormatter(style: .full)
     
     init(
         wallet: Wallet,
         asset: Asset,
         keystore: any Keystore,
+        nodeService: NodeService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
-        onTransferAction: TransferDataAction
+        onTransferAction: TransferDataAction,
+        onPaymentLinkAction: PaymentLinkAction
     ) {
         self.wallet = wallet
         self.asset = asset
         self.keystore = keystore
+        self.nodeService = nodeService
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
+        self.onPaymentLinkAction = onPaymentLinkAction
     }
 
     var tittle: String {
@@ -102,45 +115,49 @@ class RecipientViewModel: ObservableObject {
     }
     
     //TODO: Add unit tests
-    func getPaymentScanResult(string: String) throws -> PaymentScanResult {
-        let payment = try PaymentURLDecoder.decode(string)
-
-        return PaymentScanResult(
-            address: payment.address,
-            amount: payment.amount,
-            memo: payment.memo
-        )
+    func getPaymentType(string: String) throws -> PaymentType {
+        try PaymentURLDecoder.decode(string)
     }
     
-    func getRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
-        if
-            let amount = payment.amount,
-            (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
-            asset.chain.isValidAddress(payment.address)
-        {
-            let transferType: TransferDataType = switch type {
-            case .asset(let asset): .transfer(asset)
-            case .nft(let asset): .transferNft(asset)
-            }
-            
-            let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
-            let data = TransferData(
-                type: transferType,
-                recipientData: RecipientData(
-                    recipient: Recipient(
-                        name: .none,
-                        address: payment.address,
-                        memo: payment.memo
+    func getRecipientScanResult(paymentType: PaymentType) throws -> RecipientScanResult {
+        switch paymentType {
+        case .payment(let payment):
+            if let amount = payment.amount,
+               (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
+               asset.chain.isValidAddress(payment.address) {
+                let transferType: TransferDataType = switch type {
+                case .asset(let asset): .transfer(asset)
+                case .nft(let asset): .transferNft(asset)
+                }
+
+                let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
+                let data = TransferData(
+                    type: transferType,
+                    recipientData: RecipientData(
+                        recipient: Recipient(
+                            name: .none,
+                            address: payment.address,
+                            memo: payment.memo
+                        ),
+                        amount: .none
                     ),
-                    amount: .none
-                ),
-                value: value,
-                canChangeValue: false
-            )
-            return .transferData(data)
+                    value: value,
+                    canChangeValue: false
+                )
+                return .transferData(data)
+            }
+            return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
+        case .paymentLink(let link):
+            return .paymentLink(link: link)
         }
-        
-        return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
+    }
+
+    func getSolanaPayLabel(link: String) async throws -> PaymentLinkData {
+        let solanaPay = SolanaPay(provider: NativeProvider(nodeProvider: nodeService))
+        async let labelResult = try solanaPay.getLabel(link: link)
+        async let txResult = try solanaPay.postAccount(link: link, account: wallet.account(for: .solana).address)
+        let (label, tx) = try await (labelResult, txResult)
+        return PaymentLinkData(label: label.label, logo: label.icon, chain: .solana, transaction: tx.transaction)
     }
 }
 
@@ -149,7 +166,7 @@ class RecipientViewModel: ObservableObject {
 extension RecipientViewModel {
     func onRecipientDataSelect(data: RecipientData) {
         switch type {
-        case .asset(let asset):
+        case .asset(_):
             onRecipientDataAction?(data)
         case .nft(let asset):
             let data = TransferData(type: .transferNft(asset), recipientData: data, value: .zero, canChangeValue: false)
@@ -159,6 +176,10 @@ extension RecipientViewModel {
     
     func onTransferDataSelect(data: TransferData) {
         onTransferAction?(data)
+    }
+
+    func onPaymentLinkDataSelect(data: PaymentLinkData) {
+        onPaymentLinkAction?(data)
     }
 }
 

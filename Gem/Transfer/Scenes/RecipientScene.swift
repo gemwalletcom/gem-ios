@@ -11,7 +11,8 @@ import Transfer
 import NameResolver
 
 struct RecipientScene: View {
-    
+    @Environment(\.nodeService) private var nodeService
+
     @StateObject var model: RecipientViewModel
     
     @State private var address: String = ""
@@ -124,6 +125,8 @@ extension RecipientScene {
         switch field {
         case .address, .memo:
             self.address = string.trim()
+            // FIXME: remove this test code
+            onHandleScan(string.trim(), for: .address)
         }
     }
     
@@ -131,19 +134,26 @@ extension RecipientScene {
         switch field {
         case .address:
             do {
-                let payment = try model.getPaymentScanResult(string: result)
-                let scanResult = try model.getRecipientScanResult(payment: payment)
+                let payment = try model.getPaymentType(string: result)
+                let scanResult = try model.getRecipientScanResult(paymentType: payment)
                 switch scanResult {
                 case .transferData(let data):
                     model.onTransferDataSelect(data: data)
                 case .recipient(let address, let memo, let amount):
                     self.address = address
-                    
                     if let memo = memo {
                         self.memo = memo
                     }
                     if let amount = amount {
                         self.amount = amount
+                    }
+                case .paymentLink(let link):
+                    switch link {
+                    case .solanaPay(let url):
+                        Task {
+                            let data = try await model.getSolanaPayLabel(link: url)
+                            model.onPaymentLinkDataSelect(data: data)
+                        }
                     }
                 }
             } catch {

@@ -40,11 +40,15 @@ struct RecipientNavigationView: View {
                 wallet: wallet,
                 asset: asset,
                 keystore: keystore,
+                nodeService: nodeService,
                 type: type,
                 onRecipientDataAction: {
                     navigationPath.append($0)
                 },
                 onTransferAction: {
+                    navigationPath.append($0)
+                },
+                onPaymentLinkAction: {
                     navigationPath.append($0)
                 }
             )
@@ -67,6 +71,11 @@ struct RecipientNavigationView: View {
                     walletsService: walletsService,
                     onComplete: onComplete
                 )
+            )
+        }
+        .navigationDestination(for: PaymentLinkData.self) {
+            PaymentLinkScene(
+                model: PaymentLinkViewModel(data: $0)
             )
         }
     }
