@@ -19,11 +19,11 @@ final class EthereumServiceTests {
     @Test
     func testBatchRequests() throws {
         let calls = [
-            EthereumProvider.call(["to": "0x1", "data": "0xdead"]),
-            EthereumProvider.call(["to": "0x2", "data": "0xbeaf"])
+            EthereumTarget.call(["to": "0x1", "data": "0xdead"]),
+            EthereumTarget.call(["to": "0x2", "data": "0xbeaf"])
         ]
 
-        let batch = EthereumProvider.batch(requests: calls)
+        let batch = EthereumTarget.batch(requests: calls)
 
         guard case .data(let data) = batch.data else {
             fatalError()
