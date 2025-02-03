@@ -3,7 +3,7 @@
 import Foundation
 import SwiftHTTPClient
 
-public enum EthereumProvider: TargetType, Hashable {
+public enum EthereumTarget: TargetType, Hashable {
     case chainId
     case gasPrice
     case estimateGasLimit(from: String, to: String, value: String?, data: String?)
@@ -17,7 +17,7 @@ public enum EthereumProvider: TargetType, Hashable {
     case maxPriorityFeePerGas
     case syncing
     case latestBlock
-    case batch(requests: [EthereumProvider])
+    case batch(requests: [EthereumTarget])
 
     public var baseUrl: URL {
         return URL(string: "")!

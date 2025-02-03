@@ -6,10 +6,10 @@ import SwiftHTTPClient
 import WalletCore
 
 final public class SmartChainService: Sendable {
-    let provider: Provider<EthereumProvider>
+    let provider: Provider<EthereumTarget>
     let stakeHub: StakeHub
 
-    init(provider: Provider<EthereumProvider>) {
+    init(provider: Provider<EthereumTarget>) {
         self.provider = provider
         self.stakeHub = StakeHub()
     }
@@ -92,14 +92,14 @@ extension SmartChainService: ChainStakable {
     }
 
 
-    private func getDelegationsCall(address: String, limit: UInt16) throws -> EthereumProvider {
+    private func getDelegationsCall(address: String, limit: UInt16) throws -> EthereumTarget {
         .call([
             "to": StakeHub.reader,
             "data": try stakeHub.encodeDelegationsCall(address: address, limit: limit),
         ])
     }
 
-    private func getUndelegationsCall(address: String, limit: UInt16) throws -> EthereumProvider {
+    private func getUndelegationsCall(address: String, limit: UInt16) throws -> EthereumTarget {
         .call([
             "to": StakeHub.reader,
             "data": try stakeHub.encodeUndelegationsCall(address: address, limit: limit),

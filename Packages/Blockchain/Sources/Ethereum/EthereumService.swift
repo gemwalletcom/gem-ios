@@ -12,11 +12,11 @@ public struct EthereumService: Sendable {
     static let historyBlocks = 10
 
     let chain: EVMChain
-    let provider: Provider<EthereumProvider>
+    let provider: Provider<EthereumTarget>
 
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumProvider>
+        provider: Provider<EthereumTarget>
     ) {
         self.chain = chain
         self.provider = provider
@@ -79,37 +79,52 @@ extension EthereumService {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 
-    private func getERC20Decimals(contract: String) async throws -> BigInt {
+    private func getERC20DecimalsCall(contract: String) -> EthereumTarget {
         let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "decimals"))
         let params = [
             "to": contract,
             "data": data.hexString.append0x,
         ]
+        return .call(params)
+    }
+
+    private func getERC20Decimals(contract: String) async throws -> BigInt {
+        let call = getERC20DecimalsCall(contract: contract)
         return try await provider
-            .request(.call(params))
+            .request(call)
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 
-    private func getERC20Name(contract: String) async throws -> String {
+    private func getERC20NameCall(contract: String) -> EthereumTarget {
         let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "name"))
         let params = [
             "to": contract,
             "data": data.hexString.append0x,
         ]
+        return .call(params)
+    }
+
+    private func getERC20Name(contract: String) async throws -> String {
+        let call = getERC20NameCall(contract: contract)
         let response = try await provider
-            .request(.call(params))
+            .request(call)
             .map(as: JSONRPCResponse<String>.self).result
         return Self.decodeABI(hexString: response) ?? ""
     }
 
-    private func getERC20Symbol(contract: String) async throws -> String {
-        let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "symbol")).hexString.append0x
+    private func getERC20SymbolCall(contract: String) -> EthereumTarget {
+        let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "symbol"))
         let params = [
             "to": contract,
-            "data": data,
+            "data": data.hexString.append0x,
         ]
+        return .call(params)
+    }
+
+    private func getERC20Symbol(contract: String) async throws -> String {
+        let call = getERC20SymbolCall(contract: contract)
         let response = try await provider
-            .request(.call(params))
+            .request(call)
             .map(as: JSONRPCResponse<String>.self).result
         return Self.decodeABI(hexString: response) ?? ""
     }
@@ -117,6 +132,17 @@ extension EthereumService {
     private func getBalance(address: String) async throws -> BigInt {
         try await provider.request(.balance(address: address))
            .mapResult(BigIntable.self).value
+    }
+
+    private func decodeERC20Data(results: [JSONRPCResponse<String>]) throws -> (name: String, symbol: String, decimals: BigInt) {
+        guard results.count == 3 else {
+            throw AnyError("unable to decode ERC20 data")
+        }
+        let name = Self.decodeABI(hexString: results[0].result) ?? ""
+        let symbol = Self.decodeABI(hexString: results[1].result) ?? ""
+        let data = Data(hexString: results[2].result) ?? Data()
+        let decimals = EthereumAbiValue.decodeUInt256(input: data)
+        return (name, symbol, BigInt(stringLiteral: decimals))
     }
 }
 
@@ -255,11 +281,13 @@ extension EthereumService: ChainTokenable {
         }
         let assetId = AssetId(chain: chain.chain, tokenId: address)
 
-        async let getName = getERC20Name(contract: address)
-        async let getSymbol = getERC20Symbol(contract: address)
-        async let getDecimals = getERC20Decimals(contract: address)
-
-        let (name, symbol, decimals) = try await (getName, getSymbol, getDecimals)
+        let calls = [
+            getERC20NameCall(contract: address),
+            getERC20SymbolCall(contract: address),
+            getERC20DecimalsCall(contract: address)
+        ]
+        let results = try await provider.request(.batch(requests: calls)).map(as: [JSONRPCResponse<String>].self)
+        let (name, symbol, decimals) = try decodeERC20Data(results: results)
 
         return Asset(
             id: assetId,
