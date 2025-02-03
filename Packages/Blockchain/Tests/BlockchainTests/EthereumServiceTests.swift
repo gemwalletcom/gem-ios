@@ -29,8 +29,8 @@ final class EthereumServiceTests {
             fatalError()
         }
 
-        let response = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
+        let requests = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
 
-        #expect(response.count == 2)
+        #expect(requests.count == 2)
     }
 }

@@ -86,7 +86,7 @@ extension SmartChainService: ChainStakable {
         }
 
         let delegations = try stakeHub.decodeDelegationsResult(data: data1)
-        let undelegations = try stakeHub.decodeDelegationsResult(data: data2)
+        let undelegations = try stakeHub.decodeUnelegationsResult(data: data2)
 
         return delegations + undelegations
     }
