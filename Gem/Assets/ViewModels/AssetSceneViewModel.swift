@@ -105,7 +105,7 @@ class AssetSceneViewModel: ObservableObject {
     }
 
     var emptyConentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .asset(ticker: assetModel.symbol))
+        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol))
     }
 
     var stakeAprText: String {

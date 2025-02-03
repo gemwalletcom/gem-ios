@@ -37,20 +37,20 @@ public struct EmptyContentView: View {
 // simple wrapper to store inside a list as section
 public struct EmptyContentSection: View {
     public let model: any EmptyContentViewable
-    public let botomPadding: CGFloat
+    public let topPadding: CGFloat
 
     public init(
         model: any EmptyContentViewable,
-        botomPadding: CGFloat = Spacing.large
+        topPadding: CGFloat = Spacing.large
     ) {
         self.model = model
-        self.botomPadding = botomPadding
+        self.topPadding = topPadding
     }
 
     public var body: some View {
         Section { } header: {
             EmptyContentView(model: model)
-                .padding(.top, botomPadding)
+                .padding(.top, topPadding)
         }
         .frame(maxWidth: .infinity)
         .textCase(nil)

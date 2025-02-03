@@ -38,9 +38,9 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .activity: "Make your first transacton"
         case let .stake(ticker): "Stake your first \(ticker)"
         case .walletConnect: "Scan or paste code to connect to the DApp"
-        case let .search(searchType, _):
+        case let .search(searchType, action):
             switch searchType {
-            case .assets: "You can try add it manually"
+            case .assets: action != nil ? "You can try add it manually" : "Check the spelling or try a new search"
             case .networks: "Check the spelling or try a new search"
             }
         }

@@ -72,7 +72,7 @@ extension StakeScene {
         return Section {
             switch state {
             case .noData:
-                EmptyContentView(model: EmptyContentTypeViewModel(type: .stake(ticker: model.assetTitle)))
+                EmptyContentView(model: model.emptyContentModel)
                     .frame(maxWidth: .infinity)
                     .listRowSeparator(.hidden)
                     .listRowInsets(EdgeInsets())
