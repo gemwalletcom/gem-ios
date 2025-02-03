@@ -202,7 +202,7 @@ extension AssetScene {
 // MARK: - Actions
 
 extension AssetScene {
-    @MainActor
+
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
@@ -219,17 +219,17 @@ extension AssetScene {
         )
     }
     
-    @MainActor
+
     private func onInfoSheetAction(type: InfoSheetType) {
         isPresentingInfoSheet = type
     }
 
-    @MainActor
+
     private func onOpenLink(_ url: URL) {
         UIApplication.shared.open(url)
     }
 
-    @MainActor
+
     private func onSelectOptions() {
         showingOptions = true
     }
