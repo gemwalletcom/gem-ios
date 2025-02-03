@@ -35,7 +35,7 @@ struct PriceImpactViewModel {
     
     private func getSwapAmount(value: String, decimals: Int) -> Double? {
         guard
-            let value = try? valueFormatter.inputNumber(from: value, decimals: decimals),
+            let value = try? BigInt.from(string: value),
             let amount = try? valueFormatter.double(from: value, decimals: decimals)
         else {
             return nil
