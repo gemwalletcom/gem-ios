@@ -22,6 +22,7 @@ public final class TransactionsViewModel {
     public var request: TransactionsRequest
 
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
+    public var isPresentingSelectAssetType: SelectAssetType?
 
     public init(
         wallet: Wallet,
@@ -41,7 +42,11 @@ public final class TransactionsViewModel {
     }
 
     public var emptyContentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .activity())
+        if !filterModel.isAnyFilterSpecified {
+            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy))
+        } else {
+            EmptyContentTypeViewModel(type: .search(type: .transactions, action: onSelectCleanFilters))
+        }
     }
 }
 
@@ -67,5 +72,21 @@ extension TransactionsViewModel {
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }
+    }
+}
+
+// MARK: - Private
+
+extension TransactionsViewModel {
+    private func onSelectCleanFilters() {
+        refresh(for: wallet)
+    }
+
+    private func onSelectReceive() {
+        isPresentingSelectAssetType = .receive(.asset)
+    }
+
+    private func onSelectBuy() {
+        isPresentingSelectAssetType = .buy
     }
 }

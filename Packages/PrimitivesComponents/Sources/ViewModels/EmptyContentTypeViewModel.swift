@@ -26,6 +26,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             switch searchType {
             case .assets: "No assets found"
             case .networks: "No networks found"
+            case .transactions: "No transactions found"
             }
         }
     }
@@ -42,6 +43,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             switch searchType {
             case .assets: action != nil ? "You can try add it manually" : "Check the spelling or try a new search"
             case .networks: "Check the spelling or try a new search"
+            case .transactions: "Clear filters to refresh your transactions"
             }
         }
     }
@@ -74,6 +76,9 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
                 return [custom].filter { $0.action != nil }
             case .networks:
                 return []
+            case .transactions:
+                let clean = EmptyAction(title: "Clear", action: action)
+                return [clean]
             }
         }
     }
