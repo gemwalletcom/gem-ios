@@ -8,7 +8,7 @@ import Store
 import ExplorerService
 import Style
 import Preferences
-import Components
+import PrimitivesComponents
 
 public struct AssetDetailsInfoViewModel {
     
@@ -93,6 +93,6 @@ public struct AssetDetailsInfoViewModel {
     
     public var linksViewModel: SocialLinksViewModel? {
         guard priceData.links.isEmpty == false else { return .none }
-        return SocialLinksViewModel(links: priceData.links, linksSectionText: Localized.Social.links)
+        return SocialLinksViewModel(links: priceData.links)
     }
 }

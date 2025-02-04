@@ -9,6 +9,7 @@ import GRDB
 import GRDBQuery
 import Store
 import PrimitivesComponents
+import Localization
 
 public struct ChartScene: View {
     @Environment(\.openURL) private var openURL
@@ -97,7 +98,9 @@ public struct ChartScene: View {
             }
 
             if let linksViewModel = priceDataModel.linksViewModel {
-                SocialLinksView(model: linksViewModel)
+                Section(Localized.Social.links) {
+                    SocialLinksView(model: linksViewModel)
+                }
             }
         }
         .refreshable {
