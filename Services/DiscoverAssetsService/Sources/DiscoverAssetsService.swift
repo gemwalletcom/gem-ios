@@ -1,9 +1,8 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
-import Blockchain
 import Combine
-import Store
-import Settings
 import GemAPI
 import ChainService
 import BalanceService
@@ -13,14 +12,14 @@ public struct AssetUpdate {
     public let assets: [String]
 }
 
-public struct DiscoverAssetsService {
-    
-    private var assetSubject = PassthroughSubject<AssetUpdate, Never>()
-    
+public struct DiscoverAssetsService: @unchecked Sendable {
     private let balanceService: BalanceService
     private let assetsService: any GemAPIAssetsListService
     private let chainServiceFactory: ChainServiceFactory
-    
+
+    // TODO: - omit combine and cancellables to confirm Sendable
+    private var assetSubject = PassthroughSubject<AssetUpdate, Never>()
+
     public init(
         balanceService: BalanceService,
         assetsService: any GemAPIAssetsListService = GemAPIService.shared,
@@ -30,14 +29,14 @@ public struct DiscoverAssetsService {
         self.assetsService = assetsService
         self.chainServiceFactory = chainServiceFactory
     }
-    
+
     public func updateTokens(deviceId: String, wallet: Wallet, fromTimestamp: Int) async throws {
         let assetIds = try await assetsService.getAssetsByDeviceId(
             deviceId: deviceId,
             walletIndex: wallet.index.asInt,
             fromTimestamp: fromTimestamp
         )
-        
+
         for assetId in assetIds {
             if let address = try? wallet.account(for: assetId.chain).address, assetId.type == .token {
                 Task {
@@ -49,7 +48,7 @@ public struct DiscoverAssetsService {
             }
         }
     }
-    
+
     public func updateCoins(wallet: Wallet) async {
         guard wallet.isMultiCoins else {
             return
@@ -64,7 +63,7 @@ public struct DiscoverAssetsService {
             }
         }
     }
-    
+
     public func observeAssets() -> AnyPublisher<AssetUpdate, Never> {
         return assetSubject.eraseToAnyPublisher()
     }

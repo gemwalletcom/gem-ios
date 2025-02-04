@@ -26,6 +26,7 @@ import BalanceService
 import AssetsService
 import TransactionsService
 import TransactionService
+import DiscoverAssetsService
 
 extension Asset {
     static let main = Asset.bitcoin

@@ -21,6 +21,7 @@ import AssetsService
 import TransactionsService
 import TransactionService
 import NFTService
+import DiscoverAssetsService
 
 struct ServicesFactory {
     @MainActor

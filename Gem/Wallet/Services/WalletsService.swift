@@ -17,6 +17,7 @@ import Preferences
 import BalanceService
 import AssetsService
 import TransactionService
+import DiscoverAssetsService
 
 class WalletsService {
     
