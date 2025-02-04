@@ -110,17 +110,8 @@ extension SettingsScene {
     }
 
     private var communitySection: some View {
-        Section(model.commutinyTitle) {
-            ForEach(model.communityLinks) { link in
-                NavigationCustomLink(
-                    with: ListItemView(
-                        title: link.type.name,
-                        image: link.type.image
-                    ),
-                    action: { onSelectCommutity(link: link) }
-                )
-            }
-        }
+        let model = model.communityViewModel
+        return SocialLinksView(model: model)
     }
 
     private var aboutSection: some View {

@@ -95,15 +95,9 @@ public struct ChartScene: View {
                     }
                 }
             }
-            if priceDataModel.showLinksSection {
-                Section(priceDataModel.linksSectionText) {
-                    ForEach(priceDataModel.links) {
-                        NavigationOpenLink(
-                            url: $0.url,
-                            with: ListItemView(title: $0.title, subtitle: $0.subtitle, image: $0.image)
-                        )
-                    }
-                }
+
+            if let linksViewModel = priceDataModel.linksViewModel {
+                SocialLinksView(model: linksViewModel)
             }
         }
         .refreshable {
