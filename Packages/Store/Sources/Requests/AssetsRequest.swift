@@ -7,6 +7,8 @@ import Primitives
 public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
     
+    static let defaultQueryLimit = 50
+    
     private let walletID: String
 
     public var searchBy: String
@@ -25,12 +27,17 @@ public struct AssetsRequest: ValueObservationQueryable {
     public func fetch(_ db: Database) throws -> [AssetData] {
         let searchBy = searchBy.trim()
 
+        if filters.contains(.priceAlerts) {
+            let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
+            return request.map { $0.mapToEmptyAssetData() }
+        }
         if filters.contains(.includeNewAssets) {
             let request1 = try assetBalancesRequest(db)
             let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
 
             return [request1, request2].flatMap { $0 }
         }
+
         return try assetBalancesRequest(db)
     }
 
@@ -125,7 +132,7 @@ extension AssetsRequest {
         case .chainsOrAssets(let chains, let assetIds):
             return request
                 .filter(chains.contains(Columns.Asset.chain) || assetIds.contains(Columns.Asset.id))
-        case .includeNewAssets:
+        case .includeNewAssets, .priceAlerts:
             return request
         }
     }
@@ -143,7 +150,7 @@ extension AssetsRequest {
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
             .order(Columns.Asset.rank.desc)
-            .limit(50)
+            .limit(Self.defaultQueryLimit)
 
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
@@ -162,11 +169,28 @@ extension AssetsRequest {
                 .enabled,
                 .hidden,
                 .includeNewAssets,
-                .search:
+                .search,
+                .priceAlerts:
                 break
             }
         }
 
         return request.asRequest(of: AssetRecordInfo.self)
+    }
+}
+
+// Specific case for the price alerts scene:
+// This is necessary because watch-only wallets do not create accounts for other networks.
+// On the price alerts screen, we fetch all assets and fill them with empty data.
+extension AssetsRequest {
+    private func fetchAllAssetRecordsRequest(
+        _ db: Database,
+        searchBy: String
+    ) throws -> [AssetRecord] {
+        var request = AssetRecord
+            .order(Columns.Asset.rank.desc)
+            .limit(Self.defaultQueryLimit)
+        request = Self.applyFilter(request: request, .search(searchBy))
+        return try request.fetchAll(db)
     }
 }
