@@ -9,6 +9,7 @@ import Store
 import Keystore
 import Localization
 import MarketInsight
+import PrimitivesComponents
 
 struct SettingsScene: View {
     @Environment(\.openURL) private var openURL
@@ -110,8 +111,9 @@ extension SettingsScene {
     }
 
     private var communitySection: some View {
-        let model = model.communityViewModel
-        return SocialLinksView(model: model)
+        Section(Localized.Settings.community) {
+            SocialLinksView(model: model.communityViewModel)
+        }
     }
 
     private var aboutSection: some View {
@@ -148,10 +150,6 @@ extension SettingsScene {
 // MARK: - Actions
 
 extension SettingsScene {
-    private func onSelectCommutity(link: CommunityLink) {
-        openURL(link.url)
-    }
-
     private func onSelectLanguages() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(settingsURL)

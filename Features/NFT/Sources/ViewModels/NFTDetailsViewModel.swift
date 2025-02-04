@@ -111,10 +111,7 @@ public struct NFTDetailsViewModel: Sendable {
         guard assetData.collection.links.isEmpty == false else {
             return nil
         }
-        return SocialLinksViewModel(
-            links: assetData.collection.links,
-            linksSectionText: Localized.Social.links
-        )
+        return SocialLinksViewModel(links: assetData.collection.links)
     }
     
     func onHeaderAction(type: HeaderButtonType) {
