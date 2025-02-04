@@ -25,6 +25,7 @@ import NFTService
 import BalanceService
 import AssetsService
 import TransactionsService
+import TransactionService
 
 extension Asset {
     static let main = Asset.bitcoin

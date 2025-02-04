@@ -19,6 +19,7 @@ import ExplorerService
 import BalanceService
 import AssetsService
 import TransactionsService
+import TransactionService
 import NFTService
 
 struct ServicesFactory {

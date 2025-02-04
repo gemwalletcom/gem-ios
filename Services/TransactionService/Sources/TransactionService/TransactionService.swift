@@ -4,25 +4,26 @@ import Foundation
 import Primitives
 import Store
 import Blockchain
-import Gemstone
-import Combine
 import ChainService
 import StakeService
 import BalanceService
 import NFTService
+import GemstonePrimitives
+import Combine
 
-class TransactionService {
-    
-    let transactionStore: TransactionStore
-    let chainServiceFactory: ChainServiceFactory
-    let balanceUpdater: any BalancerUpdater
-    let stakeService: StakeService
-    let nftService: NFTService
-    
+// TODO: - confirm to sendable
+public final class TransactionService: @unchecked Sendable {
+    private let transactionStore: TransactionStore
+    private let chainServiceFactory: ChainServiceFactory
+    private let balanceUpdater: any BalancerUpdater
+    private let stakeService: StakeService
+    private let nftService: NFTService
+
+    // TODO: - omit combine and cancellables to confirm Sendable
     private var cancellables = Set<AnyCancellable>()
     private let timer = Timer.publish(every: 5, tolerance: .none, on: .main, in: .common).autoconnect()
 
-    init(
+    public init(
         transactionStore: TransactionStore,
         stakeService: StakeService,
         nftService: NFTService,
@@ -36,9 +37,8 @@ class TransactionService {
         self.balanceUpdater = balanceUpdater
     }
 
-    func setup() {
+    public func setup() {
         timer.sink { _ in self.runPendingTransactions() }.store(in: &cancellables)
-        
         runPendingTransactions()
     }
 
@@ -48,20 +48,20 @@ class TransactionService {
         }
     }
 
-    func addTransaction(walletId: String, transaction: Transaction) throws {
+    public func addTransaction(walletId: String, transaction: Transaction) throws {
         try transactionStore.addTransactions(walletId: walletId, transactions: [transaction])
     }
-    
-    func updatePendingTransactions() async throws {
+
+    private func updatePendingTransactions() async throws {
         let transactions = try transactionStore.getTransactions(state: .pending)
-        
+
         for transaction in transactions {
             Task {
                 do {
                     NSLog("pending transactions request: chain \(transaction.assetId.chain.rawValue), for: (\(transaction.hash))")
                     try await updateState(for: transaction)
                 } catch {
-                    let timeout = Config.shared.getChainConfig(chain: transaction.assetId.chain.rawValue).transactionTimeout
+                    let timeout = ChainConfig.config(chain: transaction.assetId.chain).transactionTimeout
                     let interval = Date.now.timeIntervalSince(transaction.createdAt)
                     if interval > timeout {
                         let _ = try transactionStore.updateState(id: transaction.id, state: .failed)
@@ -71,12 +71,12 @@ class TransactionService {
             }
         }
     }
-    
-    func updateState(for transaction: Transaction) async throws {
+
+    private func updateState(for transaction: Transaction) async throws {
         let assetId = transaction.assetId
         let provider = chainServiceFactory.service(for: assetId.chain)
         var transactionId = transaction.id
-        
+
         let request = TransactionStateRequest(
             id: transaction.hash,
             senderAddress: transaction.from,
@@ -85,11 +85,11 @@ class TransactionService {
         )
         let stateChanges = try await provider.transactionState(for: request)
         // update state changes
-        
+
         NSLog("stateChanges: \(stateChanges)")
-        
+
         let _ = try transactionStore.updateState(id: transactionId, state: stateChanges.state)
-        
+
         for change in stateChanges.changes {
             switch change {
             case .networkFee(let networkFee):
@@ -108,13 +108,13 @@ class TransactionService {
                 try transactionStore.updateCreatedAt(transactionId: transactionId, date: date)
             }
         }
-        
+
         NSLog("pending transactions: state: \(stateChanges.state.rawValue), chain \(assetId.chain.rawValue), for: (\(transaction.hash))")
-        
+
         if stateChanges.state != .pending  {
             let assetIds = (transaction.assetIds + [transaction.feeAssetId]).unique()
             let walletIds = try transactionStore.getWalletIds(for: transactionId)
-            
+
             assetIds.forEach { assetId in
                 for walletId in walletIds {
                     Task {
