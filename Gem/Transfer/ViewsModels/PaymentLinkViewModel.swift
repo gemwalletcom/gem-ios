@@ -1,19 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import Blockchain
 import Foundation
-import Primitives
+import Keystore
 import Localization
-import Transfer
+import Primitives
 import PrimitivesComponents
+import SwiftUI
+import Transfer
 
 public typealias PaymentLinkAction = ((PaymentLinkData) -> Void)?
-
-public struct PaymentLinkData: Hashable {
-    public let label: String
-    public let logo: String
-    public let chain: Chain
-    public let transaction: String
-}
 
 public struct PaymentLinkViewModel {
     public let data: PaymentLinkData

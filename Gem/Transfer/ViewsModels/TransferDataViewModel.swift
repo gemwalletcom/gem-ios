@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Localization
-import Transfer
+import Primitives
 import PrimitivesComponents
+import Transfer
 
 struct TransferDataViewModel {
     let data: TransferData
@@ -24,7 +24,7 @@ struct TransferDataViewModel {
 
     var title: String {
         switch type {
-        case .transfer, .transferNft: Localized.Transfer.Send.title
+        case .transfer, .transferNft, .payment: Localized.Transfer.Send.title
         case .swap(_, _, let type):
             switch type {
             case .approval: Localized.Transfer.Approve.title
@@ -57,26 +57,29 @@ struct TransferDataViewModel {
     var recepientAccount: SimpleAccount {
         switch type {
         case .swap(_, _, let action): SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: SwapProviderViewModel(provider: action.provider).providerImage
-        )
+                name: recipientName,
+                chain: chain,
+                address: recipient.address,
+                assetImage: SwapProviderViewModel(provider: action.provider).providerImage
+            )
         default: SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: .none
-        )}
+                name: recipientName,
+                chain: chain,
+                address: recipient.address,
+                assetImage: .none
+            )
+        }
     }
 
     var appValue: String? {
         switch type {
         case .transfer,
-            .transferNft,
-            .swap,
-            .stake,
-            .account: .none
+             .transferNft,
+             .swap,
+             .stake,
+             .account,
+             .payment
+             : .none
         case .generic(_, let metadata, _):
             metadata.name
         }
@@ -85,10 +88,11 @@ struct TransferDataViewModel {
     var websiteURL: URL? {
         switch type {
         case .transfer,
-            .transferNft,
-            .swap,
-            .stake,
-            .account: .none
+             .transferNft,
+             .swap,
+             .stake,
+             .account,
+             .payment: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -97,7 +101,7 @@ struct TransferDataViewModel {
     var shouldShowMemo: Bool {
         switch type {
         case .transfer, .transferNft: chain.isMemoSupported
-        case .swap, .generic, .stake, .account: false
+        case .swap, .generic, .stake, .account, .payment: false
         }
     }
 
@@ -108,12 +112,11 @@ struct TransferDataViewModel {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
             }
-        case .account: false
+        case .account, .payment: false
         default: true
         }
     }
 }
-
 
 // MARK: - Private
 
@@ -121,10 +124,11 @@ extension TransferDataViewModel {
     private var recipientName: String? {
         switch type {
         case .transfer,
-                .transferNft,
-                .swap,
-                .generic,
-                .account:
+             .transferNft,
+             .swap,
+             .generic,
+             .account,
+             .payment:
             recipient.name ?? recipient.address
         case .stake(_, let stakeType):
             switch stakeType {
@@ -137,7 +141,7 @@ extension TransferDataViewModel {
             case .withdraw(let delegation):
                 delegation.validator.name
             case .rewards:
-                    .none
+                .none
             }
         }
     }

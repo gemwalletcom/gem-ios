@@ -106,7 +106,8 @@ struct TransactionInputViewModel {
         switch data.type {
         case .transfer,
             .generic,
-            .stake:
+            .stake,
+            .payment:
             return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
         case .transferNft(let asset):
             return .nft(name: asset.name, image: NFTAssetViewModel(asset: asset).assetImage)

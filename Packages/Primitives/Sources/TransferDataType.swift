@@ -13,7 +13,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
-    
+    case payment(PaymentLinkData)
+
     public var data: Data? {
         switch self {
         case .transfer, .transferNft:
@@ -31,6 +32,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             return .none
         case .generic(_, _, let extra):
             return extra.data
+        case .payment(let data):
+            return try? data.transaction.base64Encoded()
         }
     }
 
@@ -50,7 +53,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
 
     public var transactionType: TransactionType {
         switch self {
-        case .transfer: .transfer
+        case .transfer, .payment: .transfer
         case .generic: .smartContractCall
         case .transferNft: .transferNFT
         case .swap(_, _, let type):
@@ -90,7 +93,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             .transfer,
             .stake,
             .account,
-            .transferNft:
+            .transferNft,
+            .payment:
             return .null
         }
     }
@@ -108,6 +112,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .account(let asset, _):
             [asset.id]
         case .transferNft: []
+        case .payment: []
         }
     }
 

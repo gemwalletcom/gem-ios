@@ -1,24 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import SwiftHTTPClient
-import BigInt
 import WalletCore
 
 public struct OptimismGasOracle: Sendable {
-    
     // https://optimistic.etherscan.io/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://basescan.org/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://opbnbscan.com/address/0x420000000000000000000000000000000000000F?p=1&tab=Contract
     static let contract = "0x420000000000000000000000000000000000000F"
     // v,r,s
     static let signatureLenInRlp = 67 // 1 + 32 + 1 + 32 + 1
-    
+
     let chain: EVMChain
     let provider: Provider<EthereumProvider>
     let service: EthereumService
-    
+
     public init(
         chain: EVMChain,
         provider: Provider<EthereumProvider>
@@ -33,9 +32,9 @@ public struct OptimismGasOracle: Sendable {
         fn.addParamBytes(val: data, isOutput: false)
         let data = EthereumAbi.encode(fn: fn)
         return try await call(data: data)
-                    .map(as: JSONRPCResponse<BigIntable>.self).result.value
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
-    
+
     func call(data: Data) async throws -> Response {
         let params = [
             "to": Self.contract,
@@ -50,7 +49,7 @@ extension OptimismGasOracle {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
         let data = service.getData(input: input)
         let to = try service.getTo(input: input)
-        
+
         async let getGasLimit = try service.getGasLimit(
             from: input.senderAddress,
             to: to,
@@ -59,16 +58,16 @@ extension OptimismGasOracle {
         )
         async let getNonce = try service.getNonce(senderAddress: input.senderAddress)
         async let getChainId = try service.getChainId()
-        
+
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
-        
+
         let priorityFee = {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
             case .transferNft, .generic, .swap, .stake:
                 input.gasPrice.priorityFee
-            case .account: fatalError()
+            case .account, .payment: fatalError()
             }
         }()
 
@@ -78,10 +77,10 @@ extension OptimismGasOracle {
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
             case .transferNft, .generic, .swap:
                 input.value
-            case .stake, .account: fatalError()
+            case .stake, .account, .payment: fatalError()
             }
         }()
-        
+
         let encoded = try getEncodedData(
             gasLimit: gasLimit,
             gasPrice: input.gasPrice.gasPrice,
@@ -92,7 +91,7 @@ extension OptimismGasOracle {
             chainId: chainId,
             value: value
         )
-        
+
         let l2fee = input.gasPrice.totalFee * gasLimit
         let l1fee = try await getL1Fee(data: encoded)
 
@@ -102,7 +101,7 @@ extension OptimismGasOracle {
             gasLimit: gasLimit
         )
     }
-    
+
     private func getEncodedData(
         gasLimit: BigInt,
         gasPrice: BigInt,
@@ -129,10 +128,10 @@ extension OptimismGasOracle {
             $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             $0.privateKey = PrivateKey().data
         }
-        
+
         let signed: EthereumSigningOutput = AnySigner.sign(input: input, coin: feeInput.chain.coinType)
         var encoded = signed.encoded.dropLast(Self.signatureLenInRlp)
-        
+
         switch feeInput.type {
         case .transfer(let asset):
             switch asset.id.type {
@@ -145,10 +144,10 @@ extension OptimismGasOracle {
             }
         case .generic, .swap:
             break
-        case .transferNft, .stake, .account:
+        case .transferNft, .stake, .account, .payment:
             fatalError()
         }
-        
+
         return encoded
     }
 }

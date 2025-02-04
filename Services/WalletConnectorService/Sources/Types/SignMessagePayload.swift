@@ -8,7 +8,7 @@ public struct SignMessagePayload: Sendable {
     public let session: WalletConnectionSession
     public let wallet: Wallet
     public let message: SignMessage
-    
+
     public init(
         chain: Chain,
         session: WalletConnectionSession,

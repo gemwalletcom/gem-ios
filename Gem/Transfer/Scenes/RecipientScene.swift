@@ -1,41 +1,41 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Style
-import Components
-import QRScanner
 import Blockchain
-import Primitives
+import Components
 import Localization
-import Transfer
 import NameResolver
+import Primitives
+import QRScanner
+import Style
+import SwiftUI
+import Transfer
 
 struct RecipientScene: View {
     @Environment(\.nodeService) private var nodeService
 
     @StateObject var model: RecipientViewModel
-    
+
     @State private var address: String = ""
     @State private var memo: String = ""
     @State private var amount: String = ""
     @State private var nameResolveState: NameRecordState = .none
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingScanner: RecipientScene.Field?
-    
+
     enum Field: Int, Hashable, Identifiable {
         case address
         case memo
         var id: String { String(rawValue) }
     }
-    
+
     @FocusState private var focusedField: Field?
-    
+
     var body: some View {
         VStack {
             List {
                 Section {
                     FloatTextField(model.recipientField, text: $address, allowClean: false) {
-                        HStack(spacing: Spacing.large/2) {
+                        HStack(spacing: Spacing.large / 2) {
                             NameRecordView(
                                 model: NameRecordViewModel(chain: model.chain),
                                 state: $nameResolveState,
@@ -66,7 +66,7 @@ struct RecipientScene: View {
                         .autocorrectionDisabled()
                     }
                 }
-                
+
                 if !model.getRecipient(by: .wallets).isEmpty {
                     Section {
                         ForEach(model.getRecipient(by: .wallets)) { recipient in
@@ -92,23 +92,23 @@ struct RecipientScene: View {
                     }
                 }
             }
-            
+
             Spacer()
             Button(Localized.Common.continue, action: next)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .buttonStyle(.blue())
+                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .buttonStyle(.blue())
         }
         .background(Colors.grayBackground)
         .navigationTitle(model.tittle)
         .sheet(item: $isPresentingScanner) { value in
-            ScanQRCodeNavigationStack() {
+            ScanQRCodeNavigationStack {
                 onHandleScan($0, for: value)
             }
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
-        .onChange(of: address) { oldValue, newValue in
+        .onChange(of: address) { _, _ in
             // sometimes amount scanned from QR, pass it over, only address is not changed
             if !amount.isEmpty {
                 amount = .empty
@@ -124,12 +124,12 @@ extension RecipientScene {
         guard let string = UIPasteboard.general.string else { return }
         switch field {
         case .address, .memo:
-            self.address = string.trim()
+            address = string.trim()
             // FIXME: remove this test code
             onHandleScan(string.trim(), for: .address)
         }
     }
-    
+
     private func onHandleScan(_ result: String, for field: Self.Field) {
         switch field {
         case .address:
@@ -163,7 +163,7 @@ extension RecipientScene {
             memo = result
         }
     }
-    
+
     func next() {
         do {
             let data = try model.getRecipientData(
@@ -179,7 +179,7 @@ extension RecipientScene {
     }
 }
 
-//struct TransferScene_Previews: PreviewProvider {
+// struct TransferScene_Previews: PreviewProvider {
 //    static var previews: some View {
 //        RecipientScene(
 //            model: RecipientViewModel(
@@ -190,4 +190,4 @@ extension RecipientScene {
 //            )
 //        )
 //    }
-//}
+// }

@@ -1,25 +1,24 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import SwiftUI
-import Primitives
-import Transfer
 import ChainService
+import Foundation
+import Primitives
 import PrimitivesComponents
+import SwiftUI
+import Transfer
 
 struct RecipientNavigationView: View {
-
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
-    
+
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
     private let onComplete: VoidAction
 
     @Binding private var navigationPath: NavigationPath
-    
+
     init(
         wallet: Wallet,
         asset: Asset,
@@ -33,7 +32,7 @@ struct RecipientNavigationView: View {
         _navigationPath = navigationPath
         self.onComplete = onComplete
     }
-    
+
     var body: some View {
         RecipientScene(
             model: RecipientViewModel(
@@ -75,7 +74,10 @@ struct RecipientNavigationView: View {
         }
         .navigationDestination(for: PaymentLinkData.self) {
             PaymentLinkScene(
-                model: PaymentLinkViewModel(data: $0)
+                model: PaymentLinkViewModel(
+                    data: $0
+                ),
+                navigationPath: $navigationPath
             )
         }
     }

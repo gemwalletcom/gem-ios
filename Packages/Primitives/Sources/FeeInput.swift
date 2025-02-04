@@ -47,6 +47,8 @@ public struct FeeInput: Sendable {
             return asset.chain
         case .stake(let asset, _), .account(let asset, _):
             return asset.chain
+        case .payment(let data):
+            return data.chain
         }
     }
 }

@@ -12,6 +12,7 @@ extension TransferData {
         case .stake(let asset, _): asset
         case .account(let asset, _): asset
         case .generic(let asset, _, _): asset
+        case .payment(let data): data.chain.asset
         }
     }
 }

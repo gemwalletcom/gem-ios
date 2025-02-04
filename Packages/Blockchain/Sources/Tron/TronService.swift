@@ -1,16 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import SwiftHTTPClient
-import BigInt
 import WalletCore
 
 public struct TronService: Sendable {
-    
     let chain: Chain
     let provider: Provider<TronProvider>
-    
+
     public init(
         chain: Chain,
         provider: Provider<TronProvider>
@@ -52,7 +51,7 @@ extension TronService {
         let call = TronSmartContractCall(
             contract_address: contractAddress,
             function_selector: "balanceOf(address)",
-            //TODO: Add padding if address has empty zeros in the begining.
+            // TODO: Add padding if address has empty zeros in the begining.
             parameter: ownerAddress.addPadding(number: 64, padding: "0"),
             fee_limit: 1_000_000,
             call_value: 0,
@@ -150,7 +149,7 @@ extension TronService {
     }
 
     private func smartContractCallFunction(contract: String, function: String) async throws -> String {
-        let contract = "41" + (try addressHex(address: contract))
+        let contract = try "41" + addressHex(address: contract)
         let call = TronSmartContractCall(
             contract_address: contract,
             function_selector: function,
@@ -165,8 +164,9 @@ extension TronService {
             .map(as: TronSmartContractResult.self)
 
         guard
-            let constantResult = result.constant_result.first  else {
-                throw AnyError("Invalid value")
+            let constantResult = result.constant_result.first
+        else {
+            throw AnyError("Invalid value")
         }
         return constantResult
     }
@@ -206,20 +206,21 @@ extension TronService: ChainBalanceable {
             )
         )
     }
-    
+
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         var result: [AssetBalance] = []
         for tokenId in tokenIds {
             guard
                 let address = Base58.decode(string: address),
                 let token = tokenId.tokenId,
-                let contract = Base58.decode(string: token) else {
+                let contract = Base58.decode(string: token)
+            else {
                 break
             }
             let balance = try await tokenBalance(ownerAddress: address.hexString, contractAddress: contract.hexString)
             result.append(AssetBalance(assetId: tokenId, balance: Balance(available: balance)))
         }
-        
+
         return result
     }
 
@@ -242,13 +243,13 @@ extension TronService: ChainBalanceable {
     }
 }
 
-extension TronService {
-    public func fee(input: FeeInput) async throws -> Fee {
+public extension TronService {
+    func fee(input: FeeInput) async throws -> Fee {
         let fee = try await {
             let baseFee = BigInt(280_000)
 
             switch input.type {
-            case .transfer(let asset):
+            case let .transfer(asset):
                 async let getParameters = parameters()
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getIsNewAccount = isNewAccount(address: input.destinationAddress)
@@ -261,7 +262,8 @@ extension TronService {
                 guard
                     let newAccountFeeInSmartContract = parameters.first(where: { $0.key == TronChainParameterKey.getCreateNewAccountFeeInSystemContract.rawValue })?.value,
                     let newAccountFee = parameters.first(where: { $0.key == TronChainParameterKey.getCreateAccountFee.rawValue })?.value,
-                    let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value else {
+                    let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value
+                else {
                     throw AnyError("unknown key")
                 }
 
@@ -274,7 +276,7 @@ extension TronService {
                     let gasLimit = try await estimateTRC20Transfer(
                         ownerAddress: input.senderAddress,
                         recipientAddress: input.destinationAddress,
-                        contractAddress: try asset.getTokenId(),
+                        contractAddress: asset.getTokenId(),
                         value: input.value
                     )
                     let tokenTransferFee = BigInt(energyFee) * gasLimit.increase(byPercentage: 20)
@@ -301,11 +303,11 @@ extension TronService {
                 case .rewards, .withdraw, .redelegate:
                     return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
-            case .generic, .swap, .account:
+            case .generic, .swap, .account, .payment:
                 fatalError()
             }
         }()
-        
+
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: fee),
@@ -350,13 +352,13 @@ extension TronService: ChainTransactionPreloadable {
                 result[stakeType.validatorId, default: 0] += currentVote
             case .unstake:
                 result[stakeType.validatorId, default: 0] -= currentVote
-            case .redelegate(_, let newValidator):
+            case let .redelegate(_, newValidator):
                 result[stakeType.validatorId, default: 0] -= currentVote
                 result[newValidator.id, default: 0] += currentVote
             case .rewards, .withdraw:
                 return nil
             }
-            return .vote(result.filter { $1 > 0 } )
+            return .vote(result.filter { $1 > 0 })
         }()
 
         return TransactionPreload(
@@ -394,22 +396,22 @@ extension TronService: ChainTransactionStateFetchable {
         let transaction = try await provider
             .request(.transactionReceipt(id: request.id))
             .map(as: TronTransactionReceipt.self)
-    
+
         if let receipt = transaction.receipt {
             if receipt.result == "OUT_OF_ENERGY" {
                 return TransactionChanges(state: .reverted)
             }
         }
-    
+
         if let result = transaction.result, result == "FAILED" {
             return TransactionChanges(state: .reverted)
         }
-        
+
         if transaction.blockNumber > 0 {
             let fee = transaction.fee ?? 0
             return TransactionChanges(state: .confirmed, changes: [.networkFee(BigInt(fee))])
         }
-        
+
         return TransactionChanges(state: .pending)
     }
 }
@@ -418,7 +420,7 @@ extension TronService: ChainTransactionStateFetchable {
 
 extension TronService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
+        // TODO: Add getInSync check later
         true
     }
 }
@@ -436,9 +438,9 @@ extension TronService: ChainStakable {
             .request(.listwitnesses)
             .map(as: WitnessesList.self).witnesses
             .map {
-                DelegationValidator(
+                try DelegationValidator(
                     chain: chain,
-                    id: try addressBase58(hex: $0.address),
+                    id: addressBase58(hex: $0.address),
                     name: .empty,
                     isActive: $0.isJobs ?? false,
                     commision: 0,
@@ -506,10 +508,10 @@ extension TronService: ChainStakable {
 }
 
 // MARK: - ChainIDFetchable
- 
+
 extension TronService: ChainIDFetchable {
     public func getChainID() async throws -> String {
-        //TODO: Add getChainID check later
+        // TODO: Add getChainID check later
         return ""
     }
 }
@@ -530,22 +532,22 @@ extension TronService: ChainTokenable {
             throw TokenValidationError.invalidTokenId
         }
         let assetId = AssetId(chain: chain, tokenId: address)
-        
+
         async let getName = tokenName(contract: address)
         async let getSymbol = tokenSymbol(contract: address)
         async let getDecimals = tokenDecimals(contract: address)
-        
+
         let (name, symbol, decimals) = try await (getName, getSymbol, getDecimals)
-        
-        return Asset(
+
+        return try Asset(
             id: assetId,
             name: name,
             symbol: symbol,
             decimals: decimals.asInt.asInt32,
-            type: try assetId.getAssetType()
+            type: assetId.getAssetType()
         )
     }
-    
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.hasPrefix("T") && tokenId.count.isBetween(30, and: 50)
     }

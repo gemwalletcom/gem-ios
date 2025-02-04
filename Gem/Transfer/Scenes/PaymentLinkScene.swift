@@ -1,16 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Style
 import Components
 import Localization
+import Style
+import SwiftUI
+import Primitives
+import BigInt
 
 struct PaymentLinkScene: View {
     static let iconSize: CGFloat = 64
     let model: PaymentLinkViewModel
+    @Binding private var navigationPath: NavigationPath
 
-    init(model: PaymentLinkViewModel) {
+    init(
+        model: PaymentLinkViewModel,
+        navigationPath: Binding<NavigationPath>
+    ) {
         self.model = model
+        _navigationPath = navigationPath
     }
 
     var body: some View {
@@ -34,9 +41,8 @@ struct PaymentLinkScene: View {
                 }
             }
 
-            Text("Amount: \(model.data.label) SOL")
-                .font(.title2)
-                .bold()
+            Text("\(model.data.label)")
+                .font(.title3)
                 .foregroundColor(.primary)
 
             Spacer()
@@ -51,24 +57,14 @@ struct PaymentLinkScene: View {
     }
 
     func next() {
-
-    }
-}
-
-
-#if DEBUG
-struct PaymentLinkScene_Previews: PreviewProvider {
-    static var previews: some View {
-        PaymentLinkScene(
-            model: PaymentLinkViewModel(
-                data: PaymentLinkData(
-                    label: "1.23",
-                    logo: "",
-                    chain: .solana,
-                    transaction: ""
-                )
-            )
+        // FIXME, decode and verify tx
+        let transferData = TransferData(
+            type: .payment(model.data),
+            recipientData: RecipientData(
+                recipient: Recipient(name: model.data.label, address: "", memo: nil), amount: nil),
+            value: BigInt(0),
+            canChangeValue: false
         )
+        navigationPath.append(transferData)
     }
 }
-#endif

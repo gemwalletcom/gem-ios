@@ -1,17 +1,16 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import Primitives
-import SwiftHTTPClient
 import BigInt
+import Foundation
 import Gemstone
 import GemstonePrimitives
+import Primitives
+import SwiftHTTPClient
 
 public struct SuiService: Sendable {
-    
     let chain: Primitives.Chain
     let provider: Provider<SuiProvider>
-    
+
     private static let coinId = "0x2::sui::SUI"
 
     public init(
@@ -97,20 +96,20 @@ extension SuiService {
                 fatalError()
             }
         case .swap(_, _, let action): try {
-            guard
-                case .swap(_, let swapData) = action
-            else {
-                return ""
-            }
-            let output = try Gemstone.suiValidateAndHash(encoded: swapData.data)
-            return SuiTxData(txData: output.txData, digest: output.hash).data
-        }()
-        case .generic, .account: fatalError()
+                guard
+                    case .swap(_, let swapData) = action
+                else {
+                    return ""
+                }
+                let output = try Gemstone.suiValidateAndHash(encoded: swapData.data)
+                return SuiTxData(txData: output.txData, digest: output.hash).data
+            }()
+        case .generic, .account, .payment: fatalError()
         }
     }
 
     private func gasBudget(coinType: String) -> BigInt {
-        BigInt(25_000_000)
+        BigInt(25000000)
     }
 
     private func fetcGasPrice() async throws -> UInt64 {
@@ -128,8 +127,8 @@ extension SuiService {
         coinType: String,
         value: BigInt,
         sendMax: Bool
-    ) async throws -> SuiTxData  {
-        let (coins, price) = try await(
+    ) async throws -> SuiTxData {
+        let (coins, price) = try await (
             getCoins(senderAddress: sender, coinType: coinType),
             fetcGasPrice()
         )
@@ -156,8 +155,8 @@ extension SuiService {
         coinType: String,
         gasCoinType: String,
         value: BigInt
-    ) async throws -> SuiTxData  {
-        let (gasCoins, coins, price) = try await(
+    ) async throws -> SuiTxData {
+        let (gasCoins, coins, price) = try await (
             getCoins(senderAddress: sender, coinType: gasCoinType),
             getCoins(senderAddress: sender, coinType: coinType),
             fetcGasPrice()
@@ -174,7 +173,8 @@ extension SuiService {
                 budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
-            gasCoin: gas.toGemstone())
+            gasCoin: gas.toGemstone()
+        )
         let output = try suiEncodeTokenTransfer(input: input)
         return SuiTxData(txData: output.txData, digest: output.hash)
     }
@@ -185,9 +185,9 @@ extension SuiService {
         coinType: String,
         value: BigInt
     ) async throws -> SuiTxData {
-        let (coins, price) = try await(
+        let (coins, price) = try await (
             getCoins(senderAddress: senderAddress, coinType: coinType),
-            self.fetcGasPrice()
+            fetcGasPrice()
         )
         let suiCoins = coins.map { $0.toGemstone() }
         let stakeInput = SuiStakeInput(
@@ -209,7 +209,7 @@ extension SuiService {
         stakedId: String,
         coinType: String
     ) async throws -> SuiTxData {
-        let (coins, price, object) = try await(
+        let (coins, price, object) = try await (
             getCoins(senderAddress: sender, coinType: coinType),
             fetcGasPrice(),
             fetchObject(id: stakedId)
@@ -234,7 +234,7 @@ extension SuiService {
         try await provider.request(.coinMetadata(id: id))
             .map(as: JSONRPCResponse<SuiCoinMetadata>.self).result
     }
-    
+
     private func getLatestCheckpoint() async throws -> BigInt {
         try await provider
             .request(.latestCheckpoint)
@@ -255,11 +255,11 @@ extension SuiService: ChainBalanceable {
             )
         )
     }
-    
+
     public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
         let balances = try await provider.request(.balances(address: address))
             .map(as: JSONRPCResponse<[SuiCoinBalance]>.self).result
-        
+
         return tokenIds.compactMap { tokenId in
             if let balance = balances.first(where: { $0.coinType == tokenId.tokenId }) {
                 return AssetBalance(
@@ -276,11 +276,10 @@ extension SuiService: ChainBalanceable {
         }
     }
 
-
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let delegations = try await getDelegations(address: address)
         let staked = delegations.map { $0.stakes.map { $0.total }.reduce(0, +) }.reduce(0, +)
-        
+
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
@@ -292,13 +291,13 @@ extension SuiService: ChainBalanceable {
 
 // MARK: - ChainFeeCalculateable
 
-extension SuiService {
-    public func fee(input: FeeInput) async throws -> Fee {
+public extension SuiService {
+    func fee(input: FeeInput) async throws -> Fee {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])
         return try await fee(data: data)
     }
 
-    public func fee(data: String) async throws -> Fee {
+    func fee(data: String) async throws -> Fee {
         let gasUsed = try await provider
             .request(.dryRun(data: data))
             .map(as: JSONRPCResponse<SuiTransaction>.self).result.effects.gasUsed
@@ -343,7 +342,7 @@ extension SuiService: ChainBroadcastable {
         let parts = data.split(separator: "_")
         let data = String(parts[0])
         let signature = String(parts[1])
-        
+
         return try await provider
             .request(.broadcast(data: data, signature: signature))
             .mapOrError(
@@ -374,7 +373,7 @@ extension SuiService: ChainTransactionStateFetchable {
 
 extension SuiService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
+        // TODO: Add getInSync check later
         true
     }
 }
@@ -402,15 +401,15 @@ extension SuiService: ChainStakable {
         async let getSystemState = getSystemState()
         async let getDelegations = getDelegations(address: address)
         let (systemState, delegations) = try await (getSystemState, getDelegations)
-        
+
         return delegations.map { delegation in
             delegation.stakes.map { stake in
-                
+
                 let completionDate: Date? = switch stake.state {
                 case .activating: systemState.epochStartDate.addingTimeInterval(systemState.epochDuration)
-                    default: .none
+                default: .none
                 }
-                
+
                 return DelegationBase(
                     assetId: chain.assetId,
                     state: stake.state,
@@ -422,13 +421,13 @@ extension SuiService: ChainStakable {
                     validatorId: delegation.validatorAddress
                 )
             }
-            
+
         }.flatMap { $0 }
     }
 }
 
 // MARK: - ChainIDFetchable
- 
+
 extension SuiService: ChainIDFetchable {
     public func getChainID() async throws -> String {
         try await provider
@@ -436,6 +435,7 @@ extension SuiService: ChainIDFetchable {
             .map(as: JSONRPCResponse<String>.self).result
     }
 }
+
 // MARK: - ChainLatestBlockFetchable
 
 extension SuiService: ChainLatestBlockFetchable {
@@ -450,16 +450,16 @@ extension SuiService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         let data = try await getCoinMetadata(id: tokenId)
         let assetId = AssetId(chain: chain, tokenId: tokenId)
-        
-        return Asset(
+
+        return try Asset(
             id: assetId,
             name: data.name,
             symbol: data.symbol,
             decimals: data.decimals,
-            type: try assetId.getAssetType()
+            type: assetId.getAssetType()
         )
     }
-    
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.hasPrefix("0x") && tokenId.count.isBetween(66, and: 100)
     }
@@ -475,7 +475,7 @@ extension SuiStake {
         default: return .pending
         }
     }
-    
+
     var total: BigInt {
         BigInt(stringLiteral: principal) + BigInt(stringLiteral: estimatedReward ?? .zero)
     }

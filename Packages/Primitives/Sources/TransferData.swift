@@ -32,6 +32,7 @@ public struct TransferData: Sendable, Hashable {
         case .stake(let asset, _):  asset.chain
         case .account(let asset, _): asset.chain
         case .generic(let asset, _, _): asset.chain
+        case .payment(let data): data.chain
         }
     }
 }

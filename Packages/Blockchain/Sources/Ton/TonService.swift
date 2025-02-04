@@ -1,19 +1,18 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
+import func Gemstone.tonDecodeJettonAddress
+import func Gemstone.tonEncodeGetWalletAddress
 import Primitives
 import SwiftHTTPClient
-import BigInt
-import func Gemstone.tonEncodeGetWalletAddress
-import func Gemstone.tonDecodeJettonAddress
 
 public struct TonService: Sendable {
-    
     let chain: Chain
     let provider: Provider<TonProvider>
-    
+
     private let baseFee = BigInt(10_000_000)
-    
+
     public init(
         chain: Chain,
         provider: Provider<TonProvider>
@@ -59,18 +58,19 @@ extension TonService {
 
         guard
             let value = responce.stack.first?.last,
-            case let .cell(cell) = value else {
+            case .cell(let cell) = value
+        else {
             throw AnyError("invalid stack")
         }
         return try Gemstone.tonDecodeJettonAddress(base64Data: cell.object.data.b64, len: cell.object.data.len.asUInt64)
     }
-    
+
     private func masterChainInfo() async throws -> TonMasterChainBlock {
         try await provider
             .request(.masterChainInfo)
             .map(as: TonResult<TonMasterChainBlock>.self).result
     }
-    
+
     private func fee(input: FeeInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
@@ -88,8 +88,8 @@ extension TonService {
 
                 // https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons
                 let jettonAccountFee: BigInt = switch state {
-                    case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
-                    case false: BigInt(300_000_000) // 0.3 TON
+                case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
+                case false: BigInt(300_000_000) // 0.3 TON
                 }
                 return Fee(
                     fee: baseFee,
@@ -98,7 +98,7 @@ extension TonService {
                     options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
                 )
             }
-        case .transferNft, .swap, .generic, .stake, .account:
+        case .transferNft, .swap, .generic, .stake, .account, .payment:
             fatalError()
         }
     }
@@ -117,14 +117,14 @@ extension TonService: ChainBalanceable {
             balance: Balance(available: BigInt(balance) ?? .zero)
         )
     }
-    
+
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         var result: [AssetBalance] = []
-        
+
         for tokenId in tokenIds {
             let jettonAddress = try await jettonAddress(tokenId: tokenId.tokenId ?? "", address: address)
             let state = try await addressState(address: jettonAddress)
-            
+
             switch state {
             case true:
                 let balance = try await tokenBalance(address: jettonAddress)
@@ -139,7 +139,7 @@ extension TonService: ChainBalanceable {
                 ))
             }
         }
-        
+
         return result
     }
 
@@ -161,19 +161,19 @@ extension TonService: ChainTransactionPreloadable {
         switch input.asset.id.type {
         case .native:
             async let getWallet = walletInformation(address: input.senderAddress)
-            async let getFee = fee(input: input.feeInput);
+            async let getFee = fee(input: input.feeInput)
             let (wallet, fee) = try await (getWallet, getFee)
-            
+
             return TransactionPreload(
                 sequence: wallet.sequence,
                 fee: fee
             )
         case .token:
             async let getWallet = walletInformation(address: input.senderAddress)
-            async let getJettonAddress = jettonAddress(tokenId: try input.asset.getTokenId(), address: input.senderAddress)
+            async let getJettonAddress = try jettonAddress(tokenId: input.asset.getTokenId(), address: input.senderAddress)
             async let getFee = fee(input: input.feeInput)
             let (wallet, jettonAddress, fee) = try await (getWallet, getJettonAddress, getFee)
-            
+
             return TransactionPreload(
                 sequence: wallet.sequence,
                 token: SignerInputToken(senderTokenAddress: jettonAddress),
@@ -203,17 +203,18 @@ extension TonService: ChainTransactionStateFetchable {
         let transactions = try await provider
             .request(.transaction(hash: data.hexString))
             .map(as: [TonTransactionMessage].self)
-        
+
         guard
             let transaction = transactions.first,
-            let newTransactionId = Data(base64Encoded: transaction.hash)?.hexString else {
+            let newTransactionId = Data(base64Encoded: transaction.hash)?.hexString
+        else {
             throw AnyError("transaction not found")
         }
-        
+
         return TransactionChanges(
             state: .confirmed,
             changes: [
-                .hashChange(old: request.id, new: newTransactionId)
+                .hashChange(old: request.id, new: newTransactionId),
             ]
         )
     }
@@ -223,7 +224,7 @@ extension TonService: ChainTransactionStateFetchable {
 
 extension TonService: ChainSyncable {
     public func getInSync() async throws -> Bool {
-        //TODO: Add getInSync check later
+        // TODO: Add getInSync check later
         true
     }
 }
@@ -247,9 +248,9 @@ extension TonService: ChainTokenable {
         let token = try await provider
             .request(.tokenData(id: tokenId))
             .map(as: TonResult<TonJettonToken>.self).result
-        
+
         let assetId = AssetId(chain: chain, tokenId: tokenId)
-        
+
         let data = token.jetton_content.data
         let decimals = Int(data.decimals)?.asInt32 ?? 0
 
@@ -261,14 +262,14 @@ extension TonService: ChainTokenable {
             type: .jetton
         )
     }
-    
+
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.hasPrefix("EQ") && tokenId.count.isBetween(40, and: 60)
     }
 }
 
 // MARK: - ChainIDFetchable
- 
+
 extension TonService: ChainIDFetchable {
     public func getChainID() async throws -> String {
         try await masterChainInfo().initial.root_hash
