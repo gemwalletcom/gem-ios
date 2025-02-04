@@ -14,6 +14,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.navigationState) private var navigationState
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -86,9 +87,14 @@ struct SelectedAssetNavigationStack: View  {
                     }
                 }
             case .swap:
-                SwapNavigationView(
-                    wallet: wallet,
-                    asset: selectType.asset,
+                SwapNavigationStack(
+                    model: SwapViewModel(
+                        wallet: wallet,
+                        pairSelectorModel: SwapNavigationStack.defaultSwapPair(for: selectType.asset),
+                        walletsService: walletsService,
+                        swapService: SwapService(nodeProvider: nodeService),
+                        keystore: keystore
+                    ),
                     navigationPath: $navigationPath,
                     onComplete: {
                         isPresentingSelectedAssetInput = nil

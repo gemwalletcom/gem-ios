@@ -11,6 +11,7 @@ import Style
 import Currency
 import NFT
 import TransactionsService
+import SwapService
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -21,6 +22,7 @@ struct MainTabView: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
+    @Environment(\.nodeService) private var nodeService
 
     let model: MainTabViewModel
 
@@ -71,6 +73,26 @@ struct MainTabView: View {
                 }
                 .tag(TabItem.collections)
             }
+
+            SwapNavigationStack(
+                model: SwapViewModel(
+                    wallet: model.wallet,
+                    pairSelectorModel: SwapNavigationStack.defaultSwapPair(for: nil),
+                    walletsService: walletsService,
+                    swapService: SwapService(nodeProvider: nodeService),
+                    keystore: keystore
+                ),
+                navigationPath: Binding {
+                    navigationState.swap
+                } set: { new in
+                    navigationState.swap = new
+                },
+                onComplete: nil
+            )
+            .tabItem {
+                tabItem(Localized.Wallet.swap, Images.Tabs.swap)
+            }
+            .tag(TabItem.swap)
             
             TransactionsNavigationStack(
                 model: .init(

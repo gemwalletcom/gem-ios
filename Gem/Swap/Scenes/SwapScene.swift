@@ -35,17 +35,41 @@ struct SwapScene: View {
     private var tokenApprovals: [TransactionExtended]
 
     @State private var model: SwapViewModel
+    @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
+    private let onTransferAction: TransferDataAction
 
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
 
     init(
-        model: SwapViewModel
+        model: SwapViewModel,
+        isPresentingAssetSwapType: Binding<SelectAssetSwapType?>,
+        onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
-        _fromAsset = Query(model.fromAssetRequest)
-        _toAsset = Query(model.toAssetRequest)
-        _tokenApprovals = Query(model.tokenApprovalsRequest)
+        _isPresentingAssetSwapType = isPresentingAssetSwapType
+        self.onTransferAction = onTransferAction
+        
+        let fromAssetRequest = Binding {
+            model.fromAssetRequest
+        } set: { new in
+            model.fromAssetRequest = new
+        }
+        _fromAsset = Query(fromAssetRequest)
+
+        let toAssetRequest = Binding {
+            model.toAssetRequest
+        } set: { new in
+            model.toAssetRequest = new
+        }
+        _toAsset = Query(toAssetRequest)
+        
+        let tokenApprovalsRequest = Binding {
+            model.tokenApprovalsRequest
+        } set: { new in
+            model.tokenApprovalsRequest = new
+        }
+        _tokenApprovals = Query(tokenApprovalsRequest)
     }
 
     var body: some View {
@@ -68,6 +92,7 @@ struct SwapScene: View {
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .navigationTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
         .background(Colors.grayBackground)
         .debounce(
             value: model.swapState.fetch,
@@ -84,10 +109,10 @@ struct SwapScene: View {
         .onChange(of: fromAsset, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)
-        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
@@ -191,14 +216,13 @@ extension SwapScene {
     }
 
     private func onSelectAssetPayAction() {
-        model.onSelectAssetAction(type: .pay)
+        isPresentingAssetSwapType = .pay
     }
 
     private func onSelectAssetReceiveAction() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = model.getAssetsForPayAssetId(assetId: fromAsset.asset.id)
-        
-        model.onSelectAssetAction(type: .receive(chains: chains, assetIds: assetIds))
+        isPresentingAssetSwapType = .receive(chains: chains, assetIds: assetIds)
     }
 
     private func onSelectActionButton() {
@@ -247,8 +271,14 @@ extension SwapScene {
 
     func swap() {
         Task {
-            guard let fromAsset, let toAsset else { return }
-            await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            guard
+                let fromAsset,
+                let toAsset,
+                let swapData = await model.swapData(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            else {
+                return
+            }
+            onTransferAction?(swapData)
         }
     }
 }
