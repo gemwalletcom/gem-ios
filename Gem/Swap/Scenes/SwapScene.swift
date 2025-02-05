@@ -176,22 +176,18 @@ extension SwapScene {
             }
             
             Section {
-                if let priceImpactValue = model.priceImpactValue {
-                    ListItemView(
-                        title: model.priceImpact,
-                        subtitle: priceImpactValue
-                    )
-                }
-            }
-            
-            Section {
-                if let provider = model.providerText, let providerImage = model.providerImage {
+                if let provider = model.providerText {
                     ListItemImageView(
                         title: model.providerField,
                         subtitle: provider,
-                        assetImage: providerImage
+                        assetImage: model.providerImage
                     )
                 }
+
+                if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
+                    PriceImpactView(model: viewModel)
+                }
+
                 TransactionsList(
                     explorerService: model.explorerService,
                     tokenApprovals,

@@ -8,11 +8,29 @@ final class EthereumServiceTests {
     @Test
     func testDecodeABIHex() {
         var hex = "0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000000855534420436f696e000000000000000000000000000000000000000000000000"
-        var result = EthereumService.decodeABI(hexString: hex)
+        var result = try! ERC20Service.decodeABI(hexString: hex)
         #expect(result == "USD Coin")
 
         hex = "0x0000000000000000000000000000000000000000000000000000000000000020000000000000000000000000000000000000000000000000000000000000002c48656c6c6f20576f726c64212020202048656c6c6f20576f726c64212020202048656c6c6f20576f726c64210000000000000000000000000000000000000000"
-        result = EthereumService.decodeABI(hexString: hex)
+        result = try! ERC20Service.decodeABI(hexString: hex)
         #expect(result == "Hello World!    Hello World!    Hello World!")
+    }
+
+    @Test
+    func testBatchRequests() throws {
+        let calls = [
+            EthereumTarget.call(["to": "0x1", "data": "0xdead"]),
+            EthereumTarget.call(["to": "0x2", "data": "0xbeaf"])
+        ]
+
+        let batch = EthereumTarget.batch(requests: calls)
+
+        guard case .data(let data) = batch.data else {
+            fatalError()
+        }
+
+        let requests = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
+
+        #expect(requests.count == 2)
     }
 }

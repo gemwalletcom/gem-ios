@@ -107,6 +107,14 @@ public struct NFTDetailsViewModel: Sendable {
         ]
     }
     
+    public var showLinks: Bool {
+        !assetData.collection.links.isEmpty
+    }
+    
+    public var socialLinksViewModel: SocialLinksViewModel {
+        SocialLinksViewModel(assetLinks: assetData.collection.links)
+    }
+    
     func onHeaderAction(type: HeaderButtonType) {
         headerButtonAction?(type)
     }

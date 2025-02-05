@@ -12,6 +12,7 @@ import Style
 import MarketInsight
 import Currency
 import Preferences
+import PrimitivesComponents
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable
@@ -70,16 +71,13 @@ class SettingsViewModel: ObservableObject {
     var walletConnectTitle: String { Localized.WalletConnect.title }
     var walletConnectImage: Image { Images.Settings.walletConnect }
 
-    var commutinyTitle: String { Localized.Settings.community }
-    var communityLinks: [CommunityLink] {
+    var linksViewModel: SocialLinksViewModel {
         let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
-
-        return links.compactMap {
-            if let url = Social.url($0) {
-                return CommunityLink(type: $0, url: url)
-            }
-            return .none
+        let assetLinks: [AssetLink] = links.compactMap {
+            guard let url = Social.url($0) else { return nil }
+            return AssetLink(name: $0.name, url: url.absoluteString)
         }
+        return SocialLinksViewModel(assetLinks: assetLinks)
     }
     
     var aboutUsTitle: String { Localized.Settings.aboutus }
