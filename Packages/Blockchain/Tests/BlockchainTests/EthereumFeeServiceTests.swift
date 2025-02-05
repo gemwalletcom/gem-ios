@@ -12,7 +12,7 @@ import SwiftUI
 class EthereumFeeServiceTests {
     static let chain: EVMChain = .ethereum
     static let config = GemstoneConfig.shared.config(for: chain)
-    static let provider: Provider<EthereumProvider> = ProviderFactory.create(with: chain.chain.defaultBaseUrl)
+    static let provider: Provider<EthereumTarget> = ProviderFactory.create(with: chain.chain.defaultBaseUrl)
     static let service = EthereumService(chain: chain, provider: provider)
 
     @Test
