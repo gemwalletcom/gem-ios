@@ -54,4 +54,15 @@ public extension Primitives.Chain {
         }
         return feeUnitType
     }
+    
+    var namespace: String? {
+        switch type {
+        case .ethereum:
+            "eip155"
+        case .solana:
+            "solana"
+        case .cosmos, .ton, .tron, .aptos, .sui, .xrp, .near, .stellar, .algorand, .polkadot, .cardano, .bitcoin:
+            nil
+        }
+    }
 }
