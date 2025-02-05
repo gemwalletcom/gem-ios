@@ -177,7 +177,7 @@ extension WalletConnectorService {
     }
 
     private func processSession(proposal: Session.Proposal) async throws {
-        let wallets = try signer.getSuppertedWallets(for: proposal)
+        let wallets = try signer.getWallets(for: proposal)
         guard
             wallets.isEmpty == false,
             let preselectedWallet = wallets.first
