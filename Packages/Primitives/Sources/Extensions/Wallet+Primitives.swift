@@ -17,6 +17,10 @@ public extension Wallet {
         WalletId(id: id)
     }
 
+    var hasTokenSupport: Bool {
+        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
+    }
+
     func account(for chain: Chain) throws -> Account {
         guard let account = accounts.filter({ $0.chain == chain }).first else {
             throw AnyError("account not found for chain: \(chain.rawValue)")

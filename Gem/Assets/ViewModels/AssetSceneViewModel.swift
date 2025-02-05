@@ -14,6 +14,7 @@ import Preferences
 import ExplorerService
 import AssetsService
 import TransactionsService
+import WalletsService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService

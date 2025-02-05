@@ -7,6 +7,8 @@ import Primitives
 import SwiftUI
 import LockManager
 import WalletConnector
+import TransactionsService
+import TransactionService
 
 @Observable
 @MainActor
