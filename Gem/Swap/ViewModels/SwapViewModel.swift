@@ -97,14 +97,6 @@ class SwapViewModel {
     var swapToTitle: String { Localized.Swap.youReceive }
     var errorTitle: String { Localized.Errors.errorOccured }
 
-    var priceImpact: String { Localized.Swap.priceImpact }
-    var priceImpactValue: String? {
-        switch swapState.availability {
-        case .loaded: .none // return "1%"
-        default: .none
-        }
-    }
-
     var providerField: String { Localized.Common.provider }
     var providerText: String? {
         if case .loaded(let result) = swapState.availability {
@@ -182,6 +174,22 @@ class SwapViewModel {
 
     func onSelectAssetAction(type: SelectAssetSwapType) {
         onSelectAsset?(type)
+    }
+    
+    func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
+        guard
+            case .loaded(let result) = swapState.availability,
+            let fromAsset,
+            let toAsset
+        else {
+            return nil
+        }
+        return PriceImpactViewModel(
+            fromAssetData: fromAsset,
+            fromValue: result.quote.fromValue,
+            toAssetData: toAsset,
+            toValue: result.quote.toValue
+        )
     }
 }
 
