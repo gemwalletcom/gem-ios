@@ -7,7 +7,7 @@ public enum EmptyContentType {
     public enum SearchType {
         case assets
         case networks
-        case transactions
+        case activity
     }
 
     case nfts
