@@ -9,15 +9,13 @@ struct PriceImpactView: View {
     let model: PriceImpactViewModel
     
     var body: some View {
-        let type = model.type()
-
-        if let value = type.value {
+        if let priceImpactValue = model.value() {
             ListItemView(
                 title: model.priceImpactTitle,
-                subtitle: value,
+                subtitle: priceImpactValue.value,
                 subtitleStyle: TextStyle(
                     font: .callout,
-                    color: type.color
+                    color: model.priceImpactColor(for: priceImpactValue.type)
                 )
             )
         }

@@ -8,37 +8,37 @@ import Primitives
 
 final class PriceImpactViewModelTests: XCTestCase {
     
-    func testPriceImpactValue_None_InvalidInput() {
-        let viewModel = viewModel(fromValue: "wrong", toValue: "wrong")
-        let result = viewModel.type()
-        XCTAssertEqual(result, .none)
-    }
-    
     func testPriceImpactValue_Low() {
-        let viewModel = viewModel(fromValue: "10", toValue: "9.9")
-        let type = viewModel.type()
-        XCTAssertEqual(type, .low("-1.00%"))
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "990000000")
+        let value = viewModel.value()
+        let expectedValue = PriceImpactValue(type: .low, value: "-1.00%")
+        XCTAssertEqual(value, expectedValue)
     }
     
     func testPriceImpactValue_Positive() {
-        let viewModel = viewModel(fromValue: "10", toValue: "10.05")
-        let type = viewModel.type()
-        XCTAssertEqual(type, .positive("+0.50%"))
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "1005000000")
+        let value = viewModel.value()
+        let expectedValue = PriceImpactValue(type: .positive, value: "+0.50%")
+        XCTAssertEqual(value, expectedValue)
     }
     
     func testPriceImpactValue_Medium() {
-        let viewModel = viewModel(fromValue: "10", toValue: "9.5")
-        let type = viewModel.type()
-        XCTAssertEqual(type, .medium("-5.00%"))
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "950000000")
+        let value = viewModel.value()
+        let expectedValue = PriceImpactValue(type: .medium, value: "-5.00%")
+        XCTAssertEqual(value, expectedValue)
     }
     
     func testPriceImpactValue_High() {
-        let viewModel = viewModel(fromValue: "10", toValue: "7.0")
-        let type = viewModel.type()
-        XCTAssertEqual(type, .high("-30.00%"))
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "700000000")
+        let value = viewModel.value()
+        let expectedValue = PriceImpactValue(type: .high, value: "-30.00%")
+        XCTAssertEqual(value, expectedValue)
     }
-    
-    private func viewModel(fromValue: String, toValue: String) -> PriceImpactViewModel {
+}
+
+extension PriceImpactViewModel {
+    static func mock(fromValue: String, toValue: String) -> PriceImpactViewModel {
         let fromAssetData = AssetData.mock(
             price: Price(price: 5, priceChangePercentage24h: 1)
         )
