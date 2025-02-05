@@ -8,11 +8,11 @@ import WalletCore
 
 public struct EthereumSwapService {
     let chain: EVMChain
-    let provider: Provider<EthereumProvider>
+    let provider: Provider<EthereumTarget>
     
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumProvider>
+        provider: Provider<EthereumTarget>
     ) {
         self.chain = chain
         self.provider = provider

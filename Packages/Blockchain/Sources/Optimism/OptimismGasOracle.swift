@@ -16,12 +16,12 @@ public struct OptimismGasOracle: Sendable {
     static let signatureLenInRlp = 67 // 1 + 32 + 1 + 32 + 1
     
     let chain: EVMChain
-    let provider: Provider<EthereumProvider>
+    let provider: Provider<EthereumTarget>
     let service: EthereumService
     
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumProvider>
+        provider: Provider<EthereumTarget>
     ) {
         self.chain = chain
         self.provider = provider

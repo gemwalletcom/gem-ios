@@ -15,7 +15,7 @@ public struct ProviderFactory {
 }
 
 public struct ProviderEvmFactory {
-    public static func create(with baseUrl: URL) -> Provider<EthereumProvider> {
+    public static func create(with baseUrl: URL) -> Provider<EthereumTarget> {
         return Provider(options: ProviderOptions(baseUrl: baseUrl))
     }
 }
