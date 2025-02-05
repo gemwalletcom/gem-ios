@@ -3,15 +3,8 @@
 import Foundation
 import Primitives
 
-public enum WalletSupportedChains {
-    case all
-    case withTokens
-}
-
-// MARK: - Model extensions
-
-extension Primitives.Wallet {
-    public func chains(type: WalletSupportedChains) -> [Chain] {
+public extension Wallet {
+    func chains(type: WalletSupportedChains) -> [Chain] {
         let supportedChains: [Chain]
         switch type {
         case .all:

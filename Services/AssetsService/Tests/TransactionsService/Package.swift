@@ -1,0 +1,41 @@
+// swift-tools-version: 6.0
+
+import PackageDescription
+
+let package = Package(
+    name: "TransactionsService",
+    platforms: [
+        .iOS(.v17)
+    ],
+    products: [
+        .library(
+            name: "TransactionsService",
+            targets: ["TransactionsService"]),
+    ],
+    dependencies: [
+        .package(name: "Primitives", path: "../Primitives"),
+        .package(name: "Store", path: "../Store"),
+        .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "AssetsService", path: "../AssetsService"),
+    ],
+    targets: [
+        .target(
+            name: "TransactionsService",
+            dependencies: [
+                "Primitives",
+                "GemAPI",
+                "Store",
+                "Preferences",
+                "Keystore",
+                "AssetsService"
+            ],
+            path: "Sources"
+        ),
+        .testTarget(
+            name: "TransactionsServiceTests",
+            dependencies: ["TransactionsService"]
+        ),
+    ]
+)

@@ -15,6 +15,7 @@ import SwapService
 import SwiftUI
 import Transfer
 import ExplorerService
+import WalletsService
 
 import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json

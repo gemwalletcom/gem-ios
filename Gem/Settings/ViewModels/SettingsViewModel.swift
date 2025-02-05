@@ -12,6 +12,7 @@ import Style
 import MarketInsight
 import Currency
 import Preferences
+import WalletsService
 
 // TODO: - #1 think about to create some builder for List sections
 // TODO: - #2 review observation migrate to @Observable

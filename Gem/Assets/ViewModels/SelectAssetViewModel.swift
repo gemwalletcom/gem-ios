@@ -9,6 +9,7 @@ import Localization
 import Settings
 import PrimitivesComponents
 import AssetsService
+import WalletsService
 
 @Observable
 class SelectAssetViewModel {
@@ -188,11 +189,5 @@ extension SelectAssetType {
         case .manage:.manage
         case .priceAlert: .price
         }
-    }
-}
-
-public extension Wallet {
-    var hasTokenSupport: Bool {
-        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
     }
 }

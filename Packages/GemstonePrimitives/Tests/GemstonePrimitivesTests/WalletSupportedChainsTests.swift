@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Testing
+import PrimitivesTestKit
 
 final class WalletSupportedChainsTests {
     @Test
