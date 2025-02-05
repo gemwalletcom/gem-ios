@@ -112,7 +112,7 @@ extension SettingsScene {
 
     private var communitySection: some View {
         Section(Localized.Settings.community) {
-            SocialLinksView(model: model.communityViewModel)
+            SocialLinksView(model: model.linksViewModel)
         }
     }
 

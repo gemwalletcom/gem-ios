@@ -71,13 +71,13 @@ class SettingsViewModel: ObservableObject {
     var walletConnectTitle: String { Localized.WalletConnect.title }
     var walletConnectImage: Image { Images.Settings.walletConnect }
 
-    var communityViewModel: SocialLinksViewModel {
+    var linksViewModel: SocialLinksViewModel {
         let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
         let assetLinks: [AssetLink] = links.compactMap {
             guard let url = Social.url($0) else { return nil }
             return AssetLink(name: $0.name, url: url.absoluteString)
         }
-        return SocialLinksViewModel(links: assetLinks)
+        return SocialLinksViewModel(assetLinks: assetLinks)
     }
     
     var aboutUsTitle: String { Localized.Settings.aboutus }

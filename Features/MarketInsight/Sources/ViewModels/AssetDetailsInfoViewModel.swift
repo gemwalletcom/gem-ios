@@ -91,8 +91,11 @@ public struct AssetDetailsInfoViewModel {
         return explorerService.tokenUrl(chain: priceData.asset.chain, address: contract)?.url
     }
     
-    public var linksViewModel: SocialLinksViewModel? {
-        guard priceData.links.isEmpty == false else { return .none }
-        return SocialLinksViewModel(links: priceData.links)
+    public var showLinks: Bool {
+        !priceData.links.isEmpty
+    }
+    
+    public var linksViewModel: SocialLinksViewModel {
+        return SocialLinksViewModel(assetLinks: priceData.links)
     }
 }

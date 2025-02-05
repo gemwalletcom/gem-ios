@@ -97,9 +97,9 @@ public struct ChartScene: View {
                 }
             }
 
-            if let linksViewModel = priceDataModel.linksViewModel {
+            if priceDataModel.showLinks {
                 Section(Localized.Social.links) {
-                    SocialLinksView(model: linksViewModel)
+                    SocialLinksView(model: priceDataModel.linksViewModel)
                 }
             }
         }

@@ -76,9 +76,9 @@ public struct NFTDetailsScene: View {
                 }
             }
             
-            if let linksViewModel = model.socialLinksViewModel {
+            if model.showLinks {
                 Section(Localized.Social.links) {
-                    SocialLinksView(model: linksViewModel)
+                    SocialLinksView(model: model.socialLinksViewModel)
                 }
             }
         }

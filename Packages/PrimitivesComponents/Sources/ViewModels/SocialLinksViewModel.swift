@@ -3,14 +3,14 @@ import Foundation
 import Primitives
 
 public struct SocialLinksViewModel {
-    public let links: [AssetLink]
+    public let assetLinks: [AssetLink]
     
-    public init(links: [AssetLink]) {
-        self.links = links
+    public init(assetLinks: [AssetLink]) {
+        self.assetLinks = assetLinks
     }
 
-    var insightLinks: [InsightLink] {
-        links
+    var links: [InsightLink] {
+        assetLinks
             .sorted(by: { $0.socialUrl?.order ?? 0 > $1.socialUrl?.order ?? 0 })
             .compactMap {
                 guard let type = $0.socialUrl,
