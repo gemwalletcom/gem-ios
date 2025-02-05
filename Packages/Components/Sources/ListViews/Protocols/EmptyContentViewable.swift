@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import Primitives
 
 public protocol EmptyContentViewable {
     var type: EmptyContentType { get }
