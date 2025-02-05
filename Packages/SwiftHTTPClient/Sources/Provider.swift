@@ -1,5 +1,4 @@
 import Foundation
-import Combine
 
 public protocol ProviderType: Sendable {
     associatedtype Target: TargetType
@@ -10,7 +9,7 @@ public struct Provider<T: TargetType>: ProviderType {
 
     public let session: URLSession
     public let options: ProviderOptions
-    
+
     public init(
         session: URLSession = .shared,
         options: ProviderOptions = ProviderOptions.defaultOptions
