@@ -4,17 +4,15 @@ import Foundation
 import Primitives
 
 public extension Wallet {
-    func chains(type: WalletSupportedChains) -> [Chain] {
-        let supportedChains: [Chain]
-        switch type {
-        case .all:
-            supportedChains = AssetConfiguration.allChains
-        case .withTokens:
-            supportedChains = AssetConfiguration.supportedChainsWithTokens
-        }
-
+    var chains: [Chain] {
         let walletChains = accounts.map { $0.chain }.asSet()
-        return walletChains.intersection(supportedChains).asArray()
+        return walletChains.intersection(AssetConfiguration.allChains).asArray()
+            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
+    }
+
+    var chainsWithTokens: [Chain] {
+        let walletChains = accounts.map { $0.chain }.asSet()
+        return walletChains.intersection(AssetConfiguration.supportedChainsWithTokens).asArray()
             .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
     }
 }

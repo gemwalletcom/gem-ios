@@ -43,7 +43,7 @@ class SelectAssetViewModel {
         let filter = AssetsFilterViewModel(
             type: selectType,
             model: ChainsFilterViewModel(
-                chains: wallet.chains(type: .all)
+                chains: wallet.chains
             )
         )
         self.filterModel = filter

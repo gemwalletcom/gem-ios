@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 import Testing
 import PrimitivesTestKit
+import Primitives
 
-final class WalletSupportedChainsTests {
+final class WalletChainsTests {
     @Test
     func testChainsAll() {
         let wallet = Wallet.mock(accounts: [
@@ -14,7 +14,7 @@ final class WalletSupportedChainsTests {
             .mock(chain: .ethereum)
         ])
 
-        let result = wallet.chains(type: .all)
+        let result = wallet.chains
         let expectedChains: [Chain] = [.bitcoin, .ethereum, .doge]
         #expect(result == expectedChains)
     }
@@ -27,7 +27,7 @@ final class WalletSupportedChainsTests {
             .mock(chain: .ethereum)
         ])
 
-        let result = wallet.chains(type: .withTokens)
+        let result = wallet.chainsWithTokens
         let expectedChains: [Chain] = [.ethereum]
         #expect(result == expectedChains)
     }
@@ -40,7 +40,7 @@ final class WalletSupportedChainsTests {
             .mock(chain: .bitcoin)
         ])
 
-        let result = wallet.chains(type: .all)
+        let result = wallet.chains
         let expectedChains: [Chain] = [.bitcoin, .ethereum, .doge]
         #expect(result == expectedChains)
     }

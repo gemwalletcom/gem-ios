@@ -113,8 +113,7 @@ public final class WalletsService: @unchecked Sendable {
     }
 
     public func setupWallet(_ wallet: Wallet) throws {
-        let chains = wallet.chains(type: .all)
-        try enableAssetBalances(wallet: wallet, chains: chains)
+        try enableAssetBalances(wallet: wallet, chains: wallet.chains)
     }
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
