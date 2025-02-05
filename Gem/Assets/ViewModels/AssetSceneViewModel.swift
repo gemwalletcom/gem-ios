@@ -104,7 +104,11 @@ class AssetSceneViewModel: ObservableObject {
             )
         )
     }
-    
+
+    var emptyConentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol))
+    }
+
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))

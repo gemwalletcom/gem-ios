@@ -9,6 +9,7 @@ import Transactions
 struct TransactionsNavigationStack: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
+    @Environment(\.walletsService) private var walletsService
 
     @State private var isPresentingFilteringView: Bool = false
     @State private var model: TransactionsViewModel
@@ -47,6 +48,18 @@ struct TransactionsNavigationStack: View {
                         input: AssetSceneInput(walletId: model.walletId, assetId: $0.asset.id),
                         isPresentingAssetSelectedInput: Binding.constant(.none),
                         onAssetActivate: .none
+                    )
+                }
+                .sheet(item: $model.isPresentingSelectAssetType) { value in
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            keystore: keystore,
+                            selectType: value,
+                            assetsService: walletsService.assetsService,
+                            walletsService: walletsService
+                        ),
+                        isPresentingSelectType: $model.isPresentingSelectAssetType
                     )
                 }
         }

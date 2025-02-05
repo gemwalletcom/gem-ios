@@ -7,6 +7,7 @@ import Primitives
 import Components
 import QRScanner
 import Style
+import PrimitivesComponents
 
 public struct ConnectionsScene: View {
     @State private var isPresentingScanner: Bool = false
@@ -44,20 +45,21 @@ public struct ConnectionsScene: View {
                     action: onScan
                 )
             }
-            if headers.isEmpty {
-                StateEmptyView(title: model.emptyStateTitle)
-            } else {
-                ForEach(headers, id: \.self) { header in
-                    Section(
-                        header: Text(header.name)
-                    ) {
-                        ForEach(groupedByWallet[header]!) { connection in
-                            NavigationLink(value: connection) {
-                                ConnectionView(model: WalletConnectionViewModel(connection: connection))
-                            }
+            ForEach(headers, id: \.self) { header in
+                Section(
+                    header: Text(header.name)
+                ) {
+                    ForEach(groupedByWallet[header]!) { connection in
+                        NavigationLink(value: connection) {
+                            ConnectionView(model: WalletConnectionViewModel(connection: connection))
                         }
                     }
                 }
+            }
+        }
+        .overlay {
+            if headers.isEmpty {
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .navigationDestination(for: WalletConnection.self) { connection in

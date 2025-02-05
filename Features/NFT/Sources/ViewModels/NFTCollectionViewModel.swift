@@ -9,6 +9,7 @@ import Store
 import Localization
 import Style
 import SwiftUI
+import PrimitivesComponents
 
 public struct NFTCollectionViewModel: Sendable {
     struct GridItem {
@@ -56,7 +57,11 @@ public struct NFTCollectionViewModel: Sendable {
         case .collection(let collection): collection.name
         }
     }
-    
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .nfts)
+    }
+
     public func fetch() async {
         switch sceneStep {
         case .collections:
