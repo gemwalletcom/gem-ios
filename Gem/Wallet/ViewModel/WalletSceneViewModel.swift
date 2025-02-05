@@ -5,9 +5,9 @@ import Store
 import Settings
 import UIKit
 import BalanceService
+import WalletsService
 
 struct WalletSceneViewModel {
-
     let wallet: Wallet
     private let balanceService: BalanceService
     private let walletsService: WalletsService

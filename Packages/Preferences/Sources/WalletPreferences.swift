@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public class WalletPreferences {
+public final class WalletPreferences: @unchecked Sendable {
     private struct Keys {
         static let assetsTimestamp = "assets_timestamp"
         static let transactionsForAsset = "transactions_for_asset_v1"
