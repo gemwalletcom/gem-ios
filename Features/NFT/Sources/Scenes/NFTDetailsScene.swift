@@ -75,6 +75,12 @@ public struct NFTDetailsScene: View {
                     }
                 }
             }
+            
+            if model.showLinks {
+                Section(Localized.Social.links) {
+                    SocialLinksView(model: model.socialLinksViewModel)
+                }
+            }
         }
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)

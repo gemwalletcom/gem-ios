@@ -128,6 +128,9 @@ extension SelectAssetViewModel {
 
     func search(query: String) async {
         let query = query.trim()
+        if query.isEmpty {
+            return
+        }
         await searchAssets(query: query)
     }
 

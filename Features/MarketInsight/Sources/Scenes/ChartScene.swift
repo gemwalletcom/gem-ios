@@ -9,6 +9,7 @@ import GRDB
 import GRDBQuery
 import Store
 import PrimitivesComponents
+import Localization
 
 public struct ChartScene: View {
     @Environment(\.openURL) private var openURL
@@ -95,14 +96,10 @@ public struct ChartScene: View {
                     }
                 }
             }
-            if priceDataModel.showLinksSection {
-                Section(priceDataModel.linksSectionText) {
-                    ForEach(priceDataModel.links) {
-                        NavigationOpenLink(
-                            url: $0.url,
-                            with: ListItemView(title: $0.title, subtitle: $0.subtitle, image: $0.image)
-                        )
-                    }
+
+            if priceDataModel.showLinks {
+                Section(Localized.Social.links) {
+                    SocialLinksView(model: priceDataModel.linksViewModel)
                 }
             }
         }

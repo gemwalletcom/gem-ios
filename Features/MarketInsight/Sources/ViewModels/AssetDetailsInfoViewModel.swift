@@ -8,17 +8,15 @@ import Store
 import ExplorerService
 import Style
 import Preferences
+import PrimitivesComponents
 
 public struct AssetDetailsInfoViewModel {
     
     private let priceData: PriceData
     private let explorerService: ExplorerService
     private let currencyFormatter: CurrencyFormatter
-    
-    public var showLinksSection: Bool { !links.isEmpty }
+
     public var showMarketValues: Bool { !marketValues.isEmpty }
-    
-    public var linksSectionText: String { Localized.Social.links }
 
     public init(
         priceData: PriceData,
@@ -28,41 +26,6 @@ public struct AssetDetailsInfoViewModel {
         self.priceData = priceData
         self.explorerService = explorerService
         self.currencyFormatter = currencyFormatter
-    }
-    
-    private func communityLink(for value: String) -> SocialUrl? {
-        switch value {
-        case "x": .x
-        case "discord": .discord
-        case "reddit": .reddit
-        case "telegram": .telegram
-        case "youTube": .youTube
-        case "facebook": .facebook
-        case "website": .website
-        case "coingecko": .coingecko
-        case "github": .gitHub
-        default: .none
-        }
-    }
-    
-    public var links: [InsightLink] {
-        return priceData.links.map {
-            if let type = communityLink(for: $0.name),
-               let url = URL(string: $0.url) {
-                return CommunityLink(type: type, url: url)
-            }
-            return .none
-        }
-        .compactMap { $0 }
-        .sorted()
-        .map {
-            InsightLink(
-                title: $0.type.name,
-                subtitle: $0.host,
-                url: $0.url,
-                image: $0.type.image
-            )
-        }
     }
     
     public var marketCapViewModel: MarketValueViewModel {
@@ -126,5 +89,13 @@ public struct AssetDetailsInfoViewModel {
     public var contractUrl: URL? {
         guard let contract else { return .none }
         return explorerService.tokenUrl(chain: priceData.asset.chain, address: contract)?.url
+    }
+    
+    public var showLinks: Bool {
+        !priceData.links.isEmpty
+    }
+    
+    public var linksViewModel: SocialLinksViewModel {
+        return SocialLinksViewModel(assetLinks: priceData.links)
     }
 }
