@@ -139,10 +139,11 @@ public enum EthereumTarget: TargetType, Hashable {
                     return nil
                 }
                 return try? encoder.encode(req)
-            }.map {
-                try! JSONSerialization.jsonObject(with: $0)
+            }.compactMap {
+                try? JSONSerialization.jsonObject(with: $0)
             }
-            return .data(try! JSONSerialization.data(withJSONObject: array))
+            let data = try? JSONSerialization.data(withJSONObject: array)
+            return .data(data ?? Data())
         }
     }
     

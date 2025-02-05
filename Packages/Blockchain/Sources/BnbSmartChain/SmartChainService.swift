@@ -44,12 +44,11 @@ extension SmartChainService: ChainStakable {
         guard let data = Data(hexString: result) else {
             return []
         }
-        let validators = try stakeHub.decodeValidatorsReturn(data: data)
-        return validators
+        return try stakeHub.decodeValidatorsReturn(data: data)
     }
 
     public func getStakeDelegations(address: String) async throws -> [DelegationBase] {
-        let limit = try await getMaxElectedValidators()
+        let limit = UInt16(128)
         let calls = [
             try getDelegationsCall(address: address, limit: limit),
             try getUndelegationsCall(address: address, limit: limit),
@@ -77,17 +76,12 @@ extension SmartChainService: ChainStakable {
     }
 
     func decodeStakeDelegations(_ result: [JSONRPCResponse<String>]) throws -> [DelegationBase] {
-        guard
-            result.count == 2,
-            let data1 = Data(hexString: result[0].result),
-            let data2 = Data(hexString: result[1].result)
-        else {
-            return []
-        }
-
-        let delegations = try stakeHub.decodeDelegationsResult(data: data1)
-        let undelegations = try stakeHub.decodeUnelegationsResult(data: data2)
-
+        let delegations = try stakeHub.decodeDelegationsResult(
+            data: try Data.from(hex: result.getElement(safe: 0).result)
+        )
+        let undelegations = try stakeHub.decodeUnelegationsResult(
+            data: try Data.from(hex: result.getElement(safe: 1).result)
+        )
         return delegations + undelegations
     }
 

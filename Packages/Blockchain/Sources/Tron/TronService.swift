@@ -173,10 +173,7 @@ extension TronService {
 
     private func tokenString(contract: String, function: String) async throws -> String {
         let result = try await smartContractCallFunction(contract: contract, function: function)
-        guard let value = EthereumService.decodeABI(hexString: result) else {
-            throw AnyError("Invalid value")
-        }
-        return value
+        return try ERC20Service.decodeABI(hexString: result)
     }
 
     private func tokenName(contract: String) async throws -> String {
