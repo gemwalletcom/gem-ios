@@ -12,11 +12,11 @@ public struct EthereumService: Sendable {
     static let historyBlocks = 10
 
     let chain: EVMChain
-    let provider: Provider<EthereumProvider>
+    let provider: Provider<EthereumTarget>
 
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumProvider>
+        provider: Provider<EthereumTarget>
     ) {
         self.chain = chain
         self.provider = provider
@@ -26,18 +26,7 @@ public struct EthereumService: Sendable {
 // MARK: - Business Logic
 
 extension EthereumService {
-    // MARK: - Internal
-    static func decodeABI(hexString: String) -> String? {
-        // WalletCore decodeValue doesn't work as expected, need to drop first offset byte
-        guard
-            let data = Data(fromHex: hexString),
-            data.count > 32
-        else {
-            return nil
-        }
-        return EthereumAbiValue.decodeValue(input: data.dropFirst(32), type: "string")
-    }
-
+    
     func getGasLimit(from: String, to: String, value: String?, data: String?) async throws -> BigInt {
         do {
             let gasLimit = try await provider
@@ -79,41 +68,6 @@ extension EthereumService {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 
-    private func getERC20Decimals(contract: String) async throws -> BigInt {
-        let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "decimals"))
-        let params = [
-            "to": contract,
-            "data": data.hexString.append0x,
-        ]
-        return try await provider
-            .request(.call(params))
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value
-    }
-
-    private func getERC20Name(contract: String) async throws -> String {
-        let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "name"))
-        let params = [
-            "to": contract,
-            "data": data.hexString.append0x,
-        ]
-        let response = try await provider
-            .request(.call(params))
-            .map(as: JSONRPCResponse<String>.self).result
-        return Self.decodeABI(hexString: response) ?? ""
-    }
-
-    private func getERC20Symbol(contract: String) async throws -> String {
-        let data = EthereumAbi.encode(fn: EthereumAbiFunction(name: "symbol")).hexString.append0x
-        let params = [
-            "to": contract,
-            "data": data,
-        ]
-        let response = try await provider
-            .request(.call(params))
-            .map(as: JSONRPCResponse<String>.self).result
-        return Self.decodeABI(hexString: response) ?? ""
-    }
-    
     private func getBalance(address: String) async throws -> BigInt {
         try await provider.request(.balance(address: address))
            .mapResult(BigIntable.self).value
@@ -255,19 +209,7 @@ extension EthereumService: ChainTokenable {
         }
         let assetId = AssetId(chain: chain.chain, tokenId: address)
 
-        async let getName = getERC20Name(contract: address)
-        async let getSymbol = getERC20Symbol(contract: address)
-        async let getDecimals = getERC20Decimals(contract: address)
-
-        let (name, symbol, decimals) = try await (getName, getSymbol, getDecimals)
-
-        return Asset(
-            id: assetId,
-            name: name,
-            symbol: symbol,
-            decimals: decimals.asInt.asInt32,
-            type: try assetId.getAssetType()
-        )
+        return try await ERC20Service(provider: provider).decode(assetId: assetId, address: address)
     }
 
     public func getIsTokenAddress(tokenId: String) -> Bool {
@@ -284,7 +226,6 @@ extension EthereumService: ChainIDFetchable {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value.description
     }
 }
-
 
 // MARK: - ChainLatestBlockFetchable
 
