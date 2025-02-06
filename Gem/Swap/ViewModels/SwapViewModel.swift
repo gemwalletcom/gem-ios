@@ -39,7 +39,7 @@ class SwapViewModel {
     let keystore: any Keystore
     let walletsService: WalletsService
 
-    let wallet: Wallet
+    var wallet: Wallet
 
     var fromAssetRequest: AssetRequestOptional
     var toAssetRequest: AssetRequestOptional
@@ -179,6 +179,22 @@ class SwapViewModel {
             fromValue: result.quote.fromValue,
             toAssetData: toAsset,
             toValue: result.quote.toValue
+        )
+    }
+    
+    func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        pairSelectorModel.fromAssetId = nil
+        pairSelectorModel.toAssetId = nil
+        fromAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .pay
+        )
+        toAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .receive
         )
     }
 }

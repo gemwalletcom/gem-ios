@@ -19,6 +19,7 @@ struct SwapScene: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.keystore) private var keystore
 
     enum Field: Int, Hashable {
         case from, to
@@ -106,6 +107,7 @@ struct SwapScene: View {
             action: model.onAssetIdsChange
         )
         .scrollDismissesKeyboard(.immediately)
+        .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, initial: true, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
@@ -253,6 +255,11 @@ extension SwapScene {
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
         fetch()
+    }
+    
+    private func onChangeWallet(_ _: Wallet?, wallet: Wallet?) {
+        guard let wallet else { return }
+        model.refresh(for: wallet)
     }
 }
 
