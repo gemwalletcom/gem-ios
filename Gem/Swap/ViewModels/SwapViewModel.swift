@@ -44,7 +44,7 @@ class SwapViewModel {
     var toAssetRequest: AssetRequestOptional
     var tokenApprovalsRequest: TransactionsRequest
 
-    var pairSelectorModel: SwapPairSelectorViewModel?
+    var pairSelectorModel: SwapPairSelectorViewModel
 
     var fromValue: String = ""
     var toValue: String = ""
@@ -58,7 +58,7 @@ class SwapViewModel {
 
     init(
         wallet: Wallet,
-        pairSelectorModel: SwapPairSelectorViewModel?,
+        pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
         swapService: SwapService,
         keystore: any Keystore
@@ -69,10 +69,18 @@ class SwapViewModel {
         self.walletsService = walletsService
         self.swapService = swapService
         
-        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.fromAssetId?.identifier)
-        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.toAssetId?.identifier)
+        fromAssetRequest = AssetRequestOptional(
+            walletId: wallet.walletId.id,
+            assetId: pairSelectorModel.fromAssetId?.identifier,
+            type: .pay
+        )
+        toAssetRequest = AssetRequestOptional(
+            walletId: wallet.walletId.id,
+            assetId: pairSelectorModel.toAssetId?.identifier,
+            type: .receive
+        )
         
-        let assetsIds = [pairSelectorModel?.fromAssetId, pairSelectorModel?.toAssetId]
+        let assetsIds = [pairSelectorModel.fromAssetId, pairSelectorModel.toAssetId]
         
         tokenApprovalsRequest = TransactionsRequest(
             walletId: wallet.walletId.id,
@@ -245,7 +253,6 @@ extension SwapViewModel {
     
     func reset() {
         swapState = .init()
-        pairSelectorModel = nil
         resetValues()
     }
 }

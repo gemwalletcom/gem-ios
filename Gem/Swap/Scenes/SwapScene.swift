@@ -105,14 +105,15 @@ struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
+        .scrollDismissesKeyboard(.immediately)
         .onChange(of: model.fromValue, onChangeFromValue)
-        .onChange(of: fromAsset, onChangeFromAsset)
+        .onChange(of: fromAsset, initial: true, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
         .onChange(of: tokenApprovals, onChangeTokenApprovals)
-        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
@@ -241,6 +242,9 @@ extension SwapScene {
     }
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
+        if let fromAsset, toAsset == nil {
+            model.pairSelectorModel = SwapNavigationStack.defaultSwapPair(for: fromAsset.asset)
+        }
         model.resetValues()
         focusedField = .from
         fetch()

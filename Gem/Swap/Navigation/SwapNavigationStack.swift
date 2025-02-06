@@ -73,19 +73,18 @@ struct SwapNavigationStack: View {
         }
     }
     
-    static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel? {
-        guard let asset else { return nil }
-        if asset.type == .native {
+    static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel {
+        if asset?.type == .native {
             return SwapPairSelectorViewModel(
-                fromAssetId: asset.chain.assetId,
+                fromAssetId: asset?.chain.assetId,
                 toAssetId: Chain.allCases
                     .sorted( by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
                     .dropFirst().first?.assetId
             )
         }
         return SwapPairSelectorViewModel(
-            fromAssetId: asset.id,
-            toAssetId: asset.chain.assetId
+            fromAssetId: asset?.id,
+            toAssetId: asset?.chain.assetId
         )
     }
 }
@@ -111,18 +110,15 @@ extension SwapNavigationStack {
     private func onSelectAssetComplete(type: SelectAssetSwapType, asset: Asset) {
         switch type {
         case .pay:
-            if model.pairSelectorModel == nil {
-                model.pairSelectorModel = Self.defaultSwapPair(for: asset)
+            if asset.id == model.pairSelectorModel.toAssetId {
+                model.pairSelectorModel.toAssetId = model.pairSelectorModel.fromAssetId
             }
-            if asset.id == model.pairSelectorModel?.toAssetId {
-                model.pairSelectorModel?.toAssetId = model.pairSelectorModel?.fromAssetId
-            }
-            model.pairSelectorModel?.fromAssetId = asset.id
+            model.pairSelectorModel.fromAssetId = asset.id
         case .receive:
-            if asset.id == model.pairSelectorModel?.fromAssetId {
-                model.pairSelectorModel?.fromAssetId = model.pairSelectorModel?.toAssetId
+            if asset.id == model.pairSelectorModel.fromAssetId {
+                model.pairSelectorModel.fromAssetId = model.pairSelectorModel.toAssetId
             }
-            model.pairSelectorModel?.toAssetId = asset.id
+            model.pairSelectorModel.toAssetId = asset.id
         }
         isPresentingAssetSwapType = .none
     }
