@@ -39,7 +39,11 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletConnectorTests",
-            dependencies: ["WalletConnector"]
+            dependencies: [
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+                "WalletConnector"
+            ],
+            resources: [.process("Proposal.json")]
         ),
     ]
 )
