@@ -213,7 +213,6 @@ extension WalletScene {
     }
 
     private func runUpdatePrices() {
-        NSLog("runUpdatePrices")
         Task {
             try await walletsService.updatePrices()
         }
