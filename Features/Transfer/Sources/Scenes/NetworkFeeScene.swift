@@ -66,11 +66,3 @@ public struct NetworkFeeScene: View {
         }
     }
 }
-
-// MARK: - Previews
-
-//#Preview {
-//    NetworkFeeScene(
-//        model: .init(chain: .aptos, service: ChainSer)
-//    ) { _ in }
-//}

@@ -18,7 +18,8 @@ import ExplorerService
 import WalletsService
 
 @Observable
-class ConfirmTransferViewModel {
+@MainActor
+final class ConfirmTransferViewModel {
     var state: StateViewType<TransactionInputViewModel> = .loading
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
@@ -235,20 +236,18 @@ class ConfirmTransferViewModel {
 
 extension ConfirmTransferViewModel {
     func fetch() async {
-        await MainActor.run { [self] in
-            self.state = .loading
-            self.feeModel.reset()
-        }
+        state = .loading
+        feeModel.reset()
 
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
             let rates = try await feeModel.getFeeRates(type: data.type)
-            
+
             guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
                 throw ChainCoreError.feeRateMissed
             }
-            
+
             let transactionInput = TransactionInput(
                 type: data.type,
                 asset: dataModel.asset,
@@ -284,28 +283,21 @@ extension ConfirmTransferViewModel {
                 transferAmountResult: transferAmountResult
             )
 
-            await MainActor.run { [self] in
-                self.feeModel.update(
-                    value: transactionInputModel.networkFeeText,
-                    fiatValue: transactionInputModel.networkFeeFiatText
-                )
-                self.state = .loaded(transactionInputModel)
-            }
-
+            feeModel.update(
+                value: transactionInputModel.networkFeeText,
+                fiatValue: transactionInputModel.networkFeeFiatText
+            )
+            state = .loaded(transactionInputModel)
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.state = .error(error)
-                    NSLog("preload transaction error: \(error)")
-                }
+            if !error.isCancelled {
+                state = .error(error)
+                NSLog("preload transaction error: \(error)")
             }
         }
     }
 
     func process(input: TransactionPreload, amount: TransferAmount) async -> Void {
-        await MainActor.run { [self] in
-            self.confirmingState = .loading
-        }
+        confirmingState = .loading
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
             for data in signedData {
@@ -322,19 +314,12 @@ extension ConfirmTransferViewModel {
                         try await Task.sleep(for: transactionDelay)
                     }
                 case .signature:
-                    await MainActor.run { [self] in
-                        confirmTransferDelegate?(.success(data))
-                    }
+                    confirmTransferDelegate?(.success(data))
                 }
             }
-
-            await MainActor.run { [self] in
-                self.confirmingState = .loaded(true)
-            }
+            confirmingState = .loaded(true)
         } catch {
-            await MainActor.run { [self] in
-                self.confirmingState = .error(error)
-            }
+            confirmingState = .error(error)
             NSLog("confirm transaction error: \(error)")
         }
     }
