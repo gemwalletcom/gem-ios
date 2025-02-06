@@ -39,7 +39,7 @@ class SwapViewModel {
     let keystore: any Keystore
     let walletsService: WalletsService
 
-    let wallet: Wallet
+    var wallet: Wallet
 
     var fromAssetRequest: AssetRequestOptional
     var toAssetRequest: AssetRequestOptional
@@ -57,34 +57,32 @@ class SwapViewModel {
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
 
-    private let onComplete: VoidAction
-    private let onSelectAsset: SelectAssetSwapTypeAction
-    private let onTransferAction: TransferDataAction
-
     init(
         wallet: Wallet,
         pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
         swapService: SwapService,
-        keystore: any Keystore,
-        onSelectAsset: SelectAssetSwapTypeAction,
-        onTransferAction: TransferDataAction,
-        onComplete: VoidAction
+        keystore: any Keystore
     ) {
         self.wallet = wallet
         self.pairSelectorModel = pairSelectorModel
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
-        self.onSelectAsset = onSelectAsset
-        self.onTransferAction = onTransferAction
-        self.onComplete = onComplete
-
-        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier)
-        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier)
-
+        
+        fromAssetRequest = AssetRequestOptional(
+            walletId: wallet.walletId.id,
+            assetId: pairSelectorModel.fromAssetId?.identifier,
+            type: .pay
+        )
+        toAssetRequest = AssetRequestOptional(
+            walletId: wallet.walletId.id,
+            assetId: pairSelectorModel.toAssetId?.identifier,
+            type: .receive
+        )
+        
         let assetsIds = [pairSelectorModel.fromAssetId, pairSelectorModel.toAssetId]
-
+        
         tokenApprovalsRequest = TransactionsRequest(
             walletId: wallet.walletId.id,
             type: .assetsTransactionType(assetIds: assetsIds.compactMap { $0 }, type: .tokenApproval, states: [.pending]),
@@ -168,15 +166,6 @@ class SwapViewModel {
     func assetIds(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> [AssetId] {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
-
-    func onCompleteAction() {
-        onComplete?()
-    }
-
-    func onSelectAssetAction(type: SelectAssetSwapType) {
-        onSelectAsset?(type)
-    }
-    
     func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
         guard
             case .loaded(let result) = swapState.availability,
@@ -190,6 +179,22 @@ class SwapViewModel {
             fromValue: result.quote.fromValue,
             toAssetData: toAsset,
             toValue: result.quote.toValue
+        )
+    }
+    
+    func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        pairSelectorModel.fromAssetId = nil
+        pairSelectorModel.toAssetId = nil
+        fromAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .pay
+        )
+        toAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .receive
         )
     }
 }
@@ -228,9 +233,9 @@ extension SwapViewModel {
         await updateAssets(assetIds: assetIds)
     }
 
-    func swap(fromAsset: Asset, toAsset: Asset) async {
+    func swapData(fromAsset: Asset, toAsset: Asset) async -> TransferData? {
         guard case .loaded(let swapAvailability) = swapState.availability else {
-            return
+            return nil
         }
         do {
             if swapAvailability.allowance {
@@ -241,20 +246,17 @@ extension SwapViewModel {
                     quote: swapAvailability.quote
                 )
                 swapState.getQuoteData = .noData
-                onTransfer(data: data)
-                return
+                return data
             } else {
                 switch swapAvailability.quote.approval {
                 case .approve(let data):
-                    try await MainActor.run { [self] in
-                        let data = try getSwapDataOnApprove(
-                            fromAsset: fromAsset,
-                            toAsset: toAsset,
-                            quote: swapAvailability.quote,
-                            spender: data.spender
-                        )
-                        onTransfer(data: data)
-                    }
+                    let data = try getSwapDataOnApprove(
+                        fromAsset: fromAsset,
+                        toAsset: toAsset,
+                        quote: swapAvailability.quote,
+                        spender: data.spender
+                    )
+                    return data
                 case .permit2, .none:
                     break
                 }
@@ -263,10 +265,12 @@ extension SwapViewModel {
             swapState.getQuoteData = .error(ErrorWrapper(error))
             swapState.availability = .error(ErrorWrapper(error))
         }
+        return nil
     }
-
-    func onTransfer(data: TransferData) {
-        onTransferAction?(data)
+    
+    func reset() {
+        swapState = .init()
+        resetValues()
     }
 }
 
