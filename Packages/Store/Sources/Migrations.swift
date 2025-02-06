@@ -213,7 +213,12 @@ public struct Migrations {
                 $0.add(column: Columns.NFTAsset.contractAddress.name, .text)
             }
         }
-
+        
+        migrator.registerMigration("Add 1 \(AssetSearchRecord.databaseTableName)") { db in
+            try? db.drop(table: AssetSearchRecord.databaseTableName)
+            try? AssetSearchRecord.create(db: db)
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }
