@@ -9,6 +9,7 @@ import Localization
 import Settings
 import PrimitivesComponents
 import AssetsService
+import WalletsService
 
 @Observable
 class SelectAssetViewModel {
@@ -42,7 +43,7 @@ class SelectAssetViewModel {
         let filter = AssetsFilterViewModel(
             type: selectType,
             model: ChainsFilterViewModel(
-                chains: wallet.chains(type: .all)
+                chains: wallet.chains
             )
         )
         self.filterModel = filter
@@ -191,11 +192,5 @@ extension SelectAssetType {
         case .manage:.manage
         case .priceAlert: .price
         }
-    }
-}
-
-public extension Wallet {
-    var hasTokenSupport: Bool {
-        accounts.map { $0.chain }.asSet().intersection(AssetConfiguration.supportedChainsWithTokens).count > 0
     }
 }

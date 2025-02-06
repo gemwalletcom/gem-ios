@@ -61,7 +61,7 @@ extension TransactionsFilterViewModel {
     init(wallet: Wallet) {
         self.init(
             chainsFilterModel: ChainsFilterViewModel(
-                chains: wallet.chains(type: .all)
+                chains: wallet.chains
             ),
             transactionTypesFilter: TransacionTypesFilterViewModel(
                 types: TransactionType.allCases

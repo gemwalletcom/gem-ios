@@ -14,6 +14,7 @@ import Transfer
 import enum Staking.StakeValidatorsType
 import StakeService
 import PrimitivesComponents
+import WalletsService
 
 class AmounViewModel: ObservableObject {
     let input: AmountInput
