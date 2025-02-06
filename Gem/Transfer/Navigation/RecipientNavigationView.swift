@@ -6,6 +6,7 @@ import Primitives
 import Transfer
 import ChainService
 import PrimitivesComponents
+import WalletsService
 
 struct RecipientNavigationView: View {
 

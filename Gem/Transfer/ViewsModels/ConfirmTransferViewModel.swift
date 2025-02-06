@@ -15,6 +15,7 @@ import Transfer
 import PrimitivesComponents
 import WalletConnector
 import ExplorerService
+import WalletsService
 
 @Observable
 class ConfirmTransferViewModel {

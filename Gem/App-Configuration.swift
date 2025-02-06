@@ -25,6 +25,9 @@ import NFTService
 import BalanceService
 import AssetsService
 import TransactionsService
+import TransactionService
+import DiscoverAssetsService
+import WalletsService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -142,7 +145,6 @@ extension NodeService {
 extension WalletsService {
     static let main = WalletsService(
         keystore: LocalKeystore.main,
-        priceStore: .main,
         assetsService: .main,
         balanceService: .main,
         priceService: .main,

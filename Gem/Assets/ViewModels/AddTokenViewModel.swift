@@ -20,8 +20,7 @@ class AddTokenViewModel {
 
     init(wallet: Wallet, service: AddTokenService) {
         self.service = service
-        let chains = wallet.chains(type: .withTokens)
-        self.input = AddTokenInput(chains: chains)
+        self.input = AddTokenInput(chains: wallet.chainsWithTokens)
     }
 
     var title: String { Localized.Wallet.AddToken.title }
