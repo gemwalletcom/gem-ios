@@ -18,7 +18,7 @@ extension AssetLink {
         case "website": .website
         case "coingecko": .coingecko
         case "github": .gitHub
-        default: .none
+        default: .website
         }
     }
     
