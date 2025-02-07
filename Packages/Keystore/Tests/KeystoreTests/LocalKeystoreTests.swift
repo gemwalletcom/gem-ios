@@ -150,7 +150,10 @@ final class LocalKeystoreTests {
                      .celo,
                      .world,
                      .sonic,
-                     .abstract:
+                     .abstract,
+                     .berachain,
+                     .ink,
+                     .unichain:
                     expected = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                 case .solana:
                     expected = "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71"
