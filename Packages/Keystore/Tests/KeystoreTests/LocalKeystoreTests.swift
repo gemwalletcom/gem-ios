@@ -1,10 +1,10 @@
-import Testing
-import Store
-import WalletCore
-import Primitives
 import KeystoreTestKit
-import PreferencesTestKit
 import Preferences
+import PreferencesTestKit
+import Primitives
+import Store
+import Testing
+import WalletCore
 
 @testable import Keystore
 
@@ -26,7 +26,7 @@ final class LocalKeystoreTests {
             let words = keystore.createWallet()
             #expect(keystore.wallets.count == 0)
 
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.ethereum]))
+            _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.ethereum]))
             #expect(keystore.wallets.count == 1)
         }
     }
@@ -35,7 +35,7 @@ final class LocalKeystoreTests {
     func testImportSolanaWallet() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.solana]))
+            _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.solana]))
 
             #expect(keystore.wallets.count == 1)
             #expect(keystore.wallets.first?.accounts.count == 1)
@@ -49,7 +49,7 @@ final class LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let chains: [Chain] = [.ethereum, .smartChain, .blast]
 
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: chains))
+            _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: chains))
             #expect(keystore.wallets.count == 1)
             #expect(keystore.wallets.first?.accounts == chains.map {
                 Account(chain: $0,
@@ -101,7 +101,7 @@ final class LocalKeystoreTests {
             let decoded = Base58.decode(string: wif)!
             #expect(decoded.count == 34)
 
-            let key = decoded[1...32]
+            let key = decoded[1 ... 32]
             #expect(PrivateKey.isValid(data: key, curve: .secp256k1))
         }
     }
@@ -150,7 +150,9 @@ final class LocalKeystoreTests {
                      .celo,
                      .world,
                      .sonic,
-                     .abstract:
+                     .abstract,
+                     .berachain,
+                     .ink:
                     expected = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                 case .solana:
                     expected = "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71"

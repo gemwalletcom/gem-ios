@@ -30,8 +30,7 @@ public extension Chain {
              .sonic,
              .abstract,
              .ink,
-             .berachain,
-             .unichain: .ethereum
+             .berachain: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos

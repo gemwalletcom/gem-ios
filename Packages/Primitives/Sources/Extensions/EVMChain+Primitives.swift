@@ -26,7 +26,6 @@ public extension EVMChain {
         case .abstract: .abstract
         case .ink: .ink
         case .berachain: .berachain
-        case .unichain: .unichain
         }
     }
 
