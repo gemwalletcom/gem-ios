@@ -41,6 +41,7 @@ let package = Package(
             name: "WalletConnectorTests",
             dependencies: [
                 .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "WalletConnector"
             ],
             resources: [.process("Proposal.json")]
