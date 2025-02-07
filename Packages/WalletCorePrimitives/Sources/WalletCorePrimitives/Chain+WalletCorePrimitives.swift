@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletCore
 import Primitives
+import WalletCore
 
 public extension Chain {
     var coinType: WalletCore.CoinType {
@@ -11,24 +11,27 @@ public extension Chain {
         case .bitcoinCash: .bitcoinCash
         case .litecoin: .litecoin
         case .ethereum,
-            .arbitrum,
-            .polygon,
-            .optimism,
-            .base,
-            .avalancheC,
-            .opBNB,
-            .fantom,
-            .gnosis,
-            .manta,
-            .smartChain,
-            .blast,
-            .zkSync,
-            .linea,
-            .mantle,
-            .celo,
-            .world,
-            .sonic,
-            .abstract: .ethereum
+             .arbitrum,
+             .polygon,
+             .optimism,
+             .base,
+             .avalancheC,
+             .opBNB,
+             .fantom,
+             .gnosis,
+             .manta,
+             .smartChain,
+             .blast,
+             .zkSync,
+             .linea,
+             .mantle,
+             .celo,
+             .world,
+             .sonic,
+             .abstract,
+             .ink,
+             .berachain,
+             .unichain: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos

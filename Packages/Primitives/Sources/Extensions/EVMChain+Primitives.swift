@@ -2,9 +2,8 @@
 
 import Foundation
 
-extension EVMChain {
-    
-    public var chain: Chain {
+public extension EVMChain {
+    var chain: Chain {
         switch self {
         case .ethereum: .ethereum
         case .smartChain: .smartChain
@@ -25,10 +24,13 @@ extension EVMChain {
         case .world: .world
         case .sonic: .sonic
         case .abstract: .abstract
+        case .ink: .ink
+        case .berachain: .berachain
+        case .unichain: .unichain
         }
     }
-    
-    public init(from chain: Chain) throws {
+
+    init(from chain: Chain) throws {
         guard let evmChain = EVMChain(rawValue: chain.rawValue) else {
             throw AnyError("Not EVM compatible chain!")
         }

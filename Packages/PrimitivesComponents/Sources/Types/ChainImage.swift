@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
 import Primitives
 import Style
+import SwiftUI
 
 public struct ChainImage: Sendable {
     private let chain: Chain
@@ -54,6 +54,9 @@ public struct ChainImage: Sendable {
         case .polkadot: Images.Chains.polkadot
         case .cardano: Images.Chains.cardano
         case .abstract: Images.Chains.abstract
+        case .ink: Images.Chains.ink
+        case .berachain: Images.Chains.berachain
+        case .unichain: Images.Chains.unichain
         }
     }
 }
