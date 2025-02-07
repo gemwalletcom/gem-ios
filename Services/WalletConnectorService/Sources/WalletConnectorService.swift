@@ -177,14 +177,16 @@ extension WalletConnectorService {
     }
 
     private func processSession(proposal: Session.Proposal) async throws {
-        let currentWallet = try signer.getCurrentWallet()
-
-        let chains = signer.getChains(wallet: currentWallet)
-        let accounts = signer.getAccounts(wallet: currentWallet, chains: chains)
-
+        let wallets = try signer.getWallets(for: proposal)
+        guard
+            wallets.isEmpty == false,
+            let preselectedWallet = wallets.first
+        else {
+            throw AnyError("Doesn't have any supported wallets")
+        }
         let payload = WalletConnectionSessionProposal(
-            wallet: currentWallet,
-            accounts: accounts,
+            preselectedWallet: preselectedWallet,
+            wallets: wallets,
             metadata: proposal.proposer.metadata
         )
 
