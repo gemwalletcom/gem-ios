@@ -32,7 +32,7 @@ public struct Signer {
         case .transferNft:
             return [try signer.signNftTransfer(input: input, privateKey: privateKey)]
         case .swap:
-            return try [signer.swap(input: input, privateKey: privateKey)]
+            return try signer.swap(input: input, privateKey: privateKey)
         case .generic:
             return try [signer.signData(input: input, privateKey: privateKey)]
         case .stake:

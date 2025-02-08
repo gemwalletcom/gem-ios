@@ -40,7 +40,7 @@ public struct FeeInput: Sendable {
             return asset.chain
         case .transferNft(let asset):
             return asset.chain
-        case .swap(let fromAsset, _, _):
+        case .swap(let fromAsset, _, _, _):
             // support multiple
             return fromAsset.chain
         case .generic(let asset, _, _):

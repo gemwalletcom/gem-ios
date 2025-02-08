@@ -15,8 +15,8 @@ public struct SuiSigner: Signable {
         signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
+    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
+        [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {

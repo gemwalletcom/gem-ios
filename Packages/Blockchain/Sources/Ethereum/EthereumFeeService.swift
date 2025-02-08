@@ -39,16 +39,8 @@ extension EthereumService {
             case .spl, .jetton:
                 fatalError()
             }
-        case .swap(_, _, let type):
-            switch type {
-            case .approval(_, let spender, let allowance):
-                let function = EthereumAbiFunction(name: "approve")
-                function.addParamAddress(val: Data(hexString: spender.remove0x)!, isOutput: false)
-                function.addParamUInt256(val: allowance.magnitude.serialize(), isOutput: false)
-                return EthereumAbi.encode(fn: function)
-            case .swap(_, let data):
-                return Data(fromHex: data.data)
-            }
+        case .swap(_, _, _, let data):
+            return Data(fromHex: data.data)
         case .generic(_, _, let extra):
             return extra.data
         case .stake(_, let stakeType):
@@ -97,11 +89,8 @@ extension EthereumService {
             case .token: .none
             }
         case .transferNft: .zero
-        case .swap(_, _, let type):
-            switch type {
-            case .approval: .zero
-            case .swap(_, let data): BigInt(stringLiteral: data.value)
-            }
+        case .swap(_, _, _, let data):
+            BigInt(stringLiteral: data.value)
         case .generic: input.value
         case .stake(_, let type):
             switch input.chain {
@@ -166,6 +155,10 @@ extension EthereumService {
         }
     }
 
+    public func limit() async throws -> BigInt {
+        BigInt(450_000)
+    }
+    
     public func fee(input: FeeInput) async throws -> Fee {
         if chain.isOpStack {
             // gas oracle estimates for enveloped tx only
@@ -177,15 +170,20 @@ extension EthereumService {
         let value = getValue(input: input)
 
         async let getGasLimit: BigInt = {
-            try await self.getGasLimit(
-                from: input.senderAddress,
-                to: to,
-                value: value?.hexString.append0x,
-                data: data?.hexString.append0x
-            )
+            switch input.type {
+            case .swap(_, _, _, _):
+                try await self.limit()
+            default:
+                try await self.getGasLimit(
+                    from: input.senderAddress,
+                    to: to,
+                    value: value?.hexString.append0x,
+                    data: data?.hexString.append0x
+                )
+            }
         }()
 
-        let (gasLimit) = try await (getGasLimit)
+        let gasLimit = try await (getGasLimit)
         let gasPriceType = input.gasPrice
         
         let priorityFee = {
