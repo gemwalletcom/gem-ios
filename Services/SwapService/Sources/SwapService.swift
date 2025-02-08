@@ -69,4 +69,8 @@ public final class SwapService {
         try Task.checkCancellation()
         return quoteData
     }
+    
+    public func getPermit2Approval(quote: Gemstone.SwapQuote) async throws -> ApprovalType {
+        try await swapper.fetchPermit2ForQuote(quote: quote)
+    }
 }
