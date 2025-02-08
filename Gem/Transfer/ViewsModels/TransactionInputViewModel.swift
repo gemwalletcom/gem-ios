@@ -114,30 +114,27 @@ struct TransactionInputViewModel {
             switch type {
             case .activate: return TransactionHeaderType.amount(title: asset.symbol, subtitle: .none)
             }
-        case .swap(let fromAsset, let toAsset, let action):
-            switch action {
-            case .swap(let quote, _):
-                let formatter = ValueFormatter(style: TransactionHeaderType.swapValueFormatterStyle)
-                let fromValue = BigInt(stringLiteral: quote.fromValue)
-                let toValue = BigInt(stringLiteral: quote.toValue)
-                
-                let fromPrice = metaData?.assetPrices[fromAsset.id.identifier]
-                let toPrice = metaData?.assetPrices[toAsset.id.identifier]
-                
-                let from = SwapAmountField(
-                    assetImage: AssetIdViewModel(assetId: fromAsset.id).assetImage,
-                    amount: formatter.string(fromValue, decimals: fromAsset.decimals.asInt, currency: fromAsset.symbol),
-                    fiatAmount: fiatAmountText(price: fromPrice, value: fromValue, decimals: fromAsset.decimals.asInt)
-                )
-                let to = SwapAmountField(
-                    assetImage: AssetIdViewModel(assetId: toAsset.id).assetImage,
-                    amount: formatter.string(toValue, decimals: toAsset.decimals.asInt, currency: toAsset.symbol),
-                    fiatAmount: fiatAmountText(price: toPrice, value: toValue, decimals: toAsset.decimals.asInt)
-                )
-                return TransactionHeaderType.swap(from: from, to: to)
-            case .approval:
-                return TransactionHeaderType.amount(title: asset.symbol, subtitle: amountSecondText)
-            }
+        case .swap(let fromAsset, let toAsset, let quote, let data):
+            let formatter = ValueFormatter(style: TransactionHeaderType.swapValueFormatterStyle)
+            let fromValue = BigInt(stringLiteral: quote.fromValue)
+            let toValue = BigInt(stringLiteral: quote.toValue)
+            
+            let fromPrice = metaData?.assetPrices[fromAsset.id.identifier]
+            let toPrice = metaData?.assetPrices[toAsset.id.identifier]
+            
+            let from = SwapAmountField(
+                assetImage: AssetIdViewModel(assetId: fromAsset.id).assetImage,
+                amount: formatter.string(fromValue, decimals: fromAsset.decimals.asInt, currency: fromAsset.symbol),
+                fiatAmount: fiatAmountText(price: fromPrice, value: fromValue, decimals: fromAsset.decimals.asInt)
+            )
+            let to = SwapAmountField(
+                assetImage: AssetIdViewModel(assetId: toAsset.id).assetImage,
+                amount: formatter.string(toValue, decimals: toAsset.decimals.asInt, currency: toAsset.symbol),
+                fiatAmount: fiatAmountText(price: toPrice, value: toValue, decimals: toAsset.decimals.asInt)
+            )
+            return TransactionHeaderType.swap(from: from, to: to)
+//        case .approval:
+//            return TransactionHeaderType.amount(title: asset.symbol, subtitle: amountSecondText)
         }
     }
 }

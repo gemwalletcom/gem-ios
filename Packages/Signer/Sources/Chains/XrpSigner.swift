@@ -67,7 +67,7 @@ public struct XrpSigner: Signable {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
         fatalError()
     }
     

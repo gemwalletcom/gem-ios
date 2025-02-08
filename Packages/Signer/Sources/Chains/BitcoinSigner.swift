@@ -19,16 +19,13 @@ public struct BitcoinSigner: Signable {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        guard case .swap(_, _, let action) = input.type else {
+    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .swap(_, _, _, let data) = input.type else {
             throw AnyError("invalid type")
         }
-        switch action {
-        case .swap(_, let data):
-            return try sign(input: input, privateKey: privateKey, opreturn: data.data)
-        case .approval:
-            fatalError()
-        }
+        return [
+            try sign(input: input, privateKey: privateKey, opreturn: data.data),
+        ]
     }
     
     func sign(input: SignerInput, privateKey: Data, opreturn: String?) throws -> String {

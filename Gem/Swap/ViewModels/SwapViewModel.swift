@@ -256,24 +256,12 @@ extension SwapViewModel {
         guard shouldFetch else { return }
 
         do {
-            switch fromAsset.type {
-            case .trc20, .ibc, .jetton, .synth, .asa:
-                fatalError("Unsupported asset type")
-            case .native, .spl, .token:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
-                let value = try BigInt.from(string: swapQuote.toValue)
-                await MainActor.run {
-                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
-            case .bep20, .erc20:
-                let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
-                let value = try BigInt.from(string: swapQuote.toValue)
+            let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+            let value = try BigInt.from(string: swapQuote.toValue)
 
-                await MainActor.run {
-                    swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote))
-                    toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
-                }
+            await MainActor.run {
+                swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote))
+                toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
             }
         } catch {
             await MainActor.run { [self] in
@@ -297,32 +285,9 @@ extension SwapViewModel {
         }
     }
 
-    private func getSwapDataOnApprove(
-        fromAsset: Asset,
-        toAsset: Asset,
-        quote: SwapQuote,
-        spender: String
-    ) throws -> TransferData {
-        let action = SwapAction.approval(quote, spender: spender, allowance: .MAX_256)
-        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, SwapAction.approval(quote, spender: spender, allowance: .MAX_256))
-        
-        let recipientData = try RecipientData(
-            recipient: Recipient(name: action.provider.name, address: fromAsset.getTokenId(), memo: .none),
-            amount: .none
-        )
-
-        return TransferData(
-            type: transferDataType,
-            recipientData: recipientData,
-            value: BigInt.zero,
-            canChangeValue: false,
-            ignoreValueCheck: true
-        )
-    }
-
     private func getSwapData(fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
         let quoteData = try await getQuoteData(quote: quote)
-        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, .swap(quote, quoteData))
+        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, quote, quoteData)
         let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
             recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),

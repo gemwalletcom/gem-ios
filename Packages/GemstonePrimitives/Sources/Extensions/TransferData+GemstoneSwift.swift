@@ -8,7 +8,7 @@ extension TransferData {
         switch type {
         case .transfer(let asset): asset
         case .transferNft(let asset): asset.chain.asset
-        case .swap(let asset, _, _): asset
+        case .swap(let asset, _, _, _): asset
         case .stake(let asset, _): asset
         case .account(let asset, _): asset
         case .generic(let asset, _, _): asset

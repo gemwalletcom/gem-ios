@@ -96,13 +96,8 @@ extension SuiService {
             case .redelegate, .rewards, .withdraw:
                 fatalError()
             }
-        case .swap(_, _, let action): try {
-            guard
-                case .swap(_, let swapData) = action
-            else {
-                return ""
-            }
-            let output = try Gemstone.suiValidateAndHash(encoded: swapData.data)
+        case .swap(_, _, _, let data): try {
+            let output = try Gemstone.suiValidateAndHash(encoded: data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
         case .generic, .account: fatalError()

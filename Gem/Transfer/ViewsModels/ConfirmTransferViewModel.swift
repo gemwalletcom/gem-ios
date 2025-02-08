@@ -182,7 +182,7 @@ final class ConfirmTransferViewModel {
     }
     
     private var slippage: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action {
+        if case .swap(_, _, let quote, _) = dataModel.type {
             Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
@@ -198,7 +198,7 @@ final class ConfirmTransferViewModel {
     }
     
     private var quoteFee: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let fee = quote.request.options.fee {
+        if case .swap(_, _, let quote, _) = dataModel.type, let fee = quote.request.options.fee {
              Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
@@ -364,7 +364,7 @@ extension ConfirmTransferViewModel {
 
     private var availableValue: BigInt {
         switch dataModel.type {
-        case .transfer(let asset), .swap(let asset, _, _), .generic(let asset, _, _):
+        case .transfer(let asset), .swap(let asset, _, _, _), .generic(let asset, _, _):
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .transferNft(let asset):

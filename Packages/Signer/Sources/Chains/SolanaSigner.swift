@@ -145,10 +145,9 @@ public struct SolanaSigner: Signable {
         }
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard 
-            case .swap(_, _, let action) = input.type,
-            case .swap(_, let swapData) = action else {
+            case .swap(_, _, _, let swapData) = input.type else {
             throw AnyError("not swap SignerInput")
         }
         let price = input.fee.priorityFee
@@ -177,7 +176,7 @@ public struct SolanaSigner: Signable {
             throw AnyError(output.errorMessage)
         }
         
-        return output.encoded
+        return [output.encoded]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {

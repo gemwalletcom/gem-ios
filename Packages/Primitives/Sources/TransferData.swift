@@ -28,7 +28,7 @@ public struct TransferData: Sendable, Hashable {
         switch type {
         case .transfer(let asset): asset.chain
         case .transferNft(let asset):  asset.chain
-        case .swap(let asset, _, _): asset.chain
+        case .swap(let asset, _, _, _): asset.chain
         case .stake(let asset, _):  asset.chain
         case .account(let asset, _): asset.chain
         case .generic(let asset, _, _): asset.chain
