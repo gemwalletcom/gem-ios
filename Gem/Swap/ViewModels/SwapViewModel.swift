@@ -43,6 +43,7 @@ class SwapViewModel {
 
     var fromAssetRequest: AssetRequestOptional
     var toAssetRequest: AssetRequestOptional
+    var tokenApprovalsRequest: TransactionsRequest
 
     var pairSelectorModel: SwapPairSelectorViewModel
 
@@ -81,6 +82,14 @@ class SwapViewModel {
 
         fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier)
         toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier)
+
+        let assetsIds = [pairSelectorModel.fromAssetId, pairSelectorModel.toAssetId]
+
+        tokenApprovalsRequest = TransactionsRequest(
+            walletId: wallet.walletId.id,
+            type: .assetsTransactionType(assetIds: assetsIds.compactMap { $0 }, type: .tokenApproval, states: [.pending]),
+            limit: 2
+        )
     }
 
     var title: String { Localized.Wallet.swap }
@@ -116,23 +125,37 @@ class SwapViewModel {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
 
-    func showToValueLoading() -> Bool {
-        swapState.availability.isLoading
+    func showToValueLoading(isApprovalProcessInProgress: Bool) -> Bool {
+        isApprovalProcessInProgress || swapState.availability.isLoading
     }
 
-    func actionButtonTitle(fromAsset: Asset) -> String {
+    func actionButtonTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String {
         switch swapState.availability {
         case .noData, .loading:
             return Localized.Wallet.swap
-        case .loaded:
-            return Localized.Wallet.swap
+        case .loaded(let result):
+            return result.allowance && !isApprovalProcessInProgress ? Localized.Wallet.swap : Localized.Swap.approveToken(fromAsset.symbol)
         case .error:
             return Localized.Common.tryAgain
         }
     }
 
-    func shouldDisableActionButton(fromAsset: Asset) -> Bool {
-        !isValidValue(fromAsset: fromAsset)
+    func actionButtonInfoTitle(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> String? {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
+            return result.allowance ? nil : Localized.Swap.approveTokenPermission(fromAsset.symbol)
+        }
+        return nil
+    }
+
+    func actionButtonImage(isApprovalProcessInProgress: Bool) -> Image? {
+        if case .loaded(let result) = swapState.availability, !isApprovalProcessInProgress {
+            return result.allowance ? nil : Images.System.lock
+        }
+        return nil
+    }
+
+    func shouldDisableActionButton(fromAsset: Asset, isApprovalProcessInProgress: Bool) -> Bool {
+        !isValidValue(fromAsset: fromAsset) || isApprovalProcessInProgress
     }
 
     func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
@@ -194,7 +217,8 @@ extension SwapViewModel {
             await fetch(
                 fromAsset: fromAsset.asset,
                 toAsset: toAsset.asset,
-                amount: input.amount
+                amount: input.amount,
+                isApprovalInProgress: input.isApprovalInProgress
             )
         case .idle: break
         }
@@ -209,14 +233,32 @@ extension SwapViewModel {
             return
         }
         do {
-            swapState.getQuoteData = .loading
-            let data = try await getSwapData(
-                fromAsset: fromAsset,
-                toAsset: toAsset,
-                quote: swapAvailability.quote
-            )
-            swapState.getQuoteData = .noData
-            onTransfer(data: data)
+            if swapAvailability.allowance {
+                swapState.getQuoteData = .loading
+                let data = try await getSwapData(
+                    fromAsset: fromAsset,
+                    toAsset: toAsset,
+                    quote: swapAvailability.quote
+                )
+                swapState.getQuoteData = .noData
+                onTransfer(data: data)
+                return
+            } else {
+                switch swapAvailability.quote.approval {
+                case .approve(let data):
+                    try await MainActor.run { [self] in
+                        let data = try getSwapDataOnApprove(
+                            fromAsset: fromAsset,
+                            toAsset: toAsset,
+                            quote: swapAvailability.quote,
+                            spender: data.spender
+                        )
+                        onTransfer(data: data)
+                    }
+                case .permit2, .none:
+                    break
+                }
+            }
         } catch {
             swapState.getQuoteData = .error(ErrorWrapper(error))
             swapState.availability = .error(ErrorWrapper(error))
@@ -241,11 +283,12 @@ extension SwapViewModel {
     private func fetch(
         fromAsset: Asset,
         toAsset: Asset,
-        amount: String
+        amount: String,
+        isApprovalInProgress: Bool
     ) async {
         let shouldFetch: Bool = await MainActor.run { [self] in
             resetToValue()
-            if !self.isValidValue(fromAsset: fromAsset) {
+            if !self.isValidValue(fromAsset: fromAsset) || isApprovalInProgress {
                 self.swapState.availability = .noData
                 return false
             }
@@ -258,9 +301,8 @@ extension SwapViewModel {
         do {
             let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
             let value = try BigInt.from(string: swapQuote.toValue)
-
             await MainActor.run {
-                swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote))
+                swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote, allowance: true))
                 toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
             }
         } catch {
@@ -318,9 +360,9 @@ extension SwapViewModel {
     }
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
-        switch try await swapService.getPermit2Approval(quote: quote) {
-        case .approve:
-            throw AnyError("No permit2")
+        switch quote.approval {
+        case .approve, .none:
+            return try await swapService.getQuoteData(quote, data: .none)
         case .permit2(let data):
             let chain = try AssetId(id: quote.request.fromAsset).chain
             let permit2Single = permit2Single(
@@ -343,8 +385,6 @@ extension SwapViewModel {
             let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)
 
             return try await swapService.getQuoteData(quote, data: .permit2(permitData))
-        case .none:
-            return try await swapService.getQuoteData(quote, data: .none)
         }
     }
 

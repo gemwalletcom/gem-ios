@@ -7,6 +7,7 @@ struct SwapQuoteInput: Hashable, Sendable {
     let fromAsset: AssetData?
     let toAsset: AssetData?
     let amount: String
+    let isApprovalInProgress: Bool
 }
 
 // MARK: - Identifiable
