@@ -5,8 +5,10 @@ import struct Gemstone.SwapQuote
 
 public struct SwapAvailabilityResult: Sendable {
     public let quote: SwapQuote
+    public let allowance: Bool
     
-    public init(quote: SwapQuote) {
+    public init(quote: SwapQuote, allowance: Bool) {
         self.quote = quote
+        self.allowance = allowance
     }
 }
