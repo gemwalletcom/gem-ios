@@ -167,7 +167,6 @@ extension ConfirmTransferScene {
         process(input: input, amount: amount)
     }
 
-    @MainActor
     private func onSelectFeePriority(_ priority: FeePriority) {
         model.feeModel.priority = priority
     }

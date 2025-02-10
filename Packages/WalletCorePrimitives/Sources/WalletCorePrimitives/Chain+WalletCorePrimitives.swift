@@ -28,7 +28,10 @@ public extension Chain {
             .celo,
             .world,
             .sonic,
-            .abstract: .ethereum
+            .abstract,
+            .berachain,
+            .ink,
+            .unichain: .ethereum
         case .solana: .solana
         case .thorchain: .thorchain
         case .cosmos: .cosmos

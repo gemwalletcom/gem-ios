@@ -46,4 +46,7 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Sendable {
 	case polkadot
 	case cardano
 	case abstract
+	case berachain
+	case ink
+	case unichain
 }

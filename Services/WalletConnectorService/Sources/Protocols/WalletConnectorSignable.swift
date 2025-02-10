@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import WalletConnectSign
 
 public protocol WalletConnectorSignable: Sendable {
     var allChains: [Primitives.Chain] { get }
@@ -12,11 +13,11 @@ public protocol WalletConnectorSignable: Sendable {
     func getWallet(id: WalletId) throws -> Primitives.Wallet
     func getChains(wallet: Wallet) -> [Primitives.Chain]
     func getAccounts(wallet: Wallet, chains: [Primitives.Chain]) -> [Primitives.Account]
+    func getWallets(for proposal: Session.Proposal) throws -> [Wallet]
     func getMethods() -> [WalletConnectionMethods]
     func getEvents() -> [WalletConnectionEvents]
     func sessionApproval(payload: WCPairingProposal) async throws -> WalletId
     func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String
-    
     func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String
     func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String
     func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String

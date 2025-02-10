@@ -18,7 +18,7 @@ public struct AssetConfiguration: Sendable {
     .flatMap { $0 }
 
     public static let allChains: [Chain] = Chain.allCases.asSet()
-        .subtracting(Set<Chain>([.celo])) // Exclude unnecessary chains
+        .subtracting(Set<Chain>([.celo, .unichain])) // Exclude unnecessary chains
         .asArray()
 
     public static let enabledByDefault: [AssetId] =  [
