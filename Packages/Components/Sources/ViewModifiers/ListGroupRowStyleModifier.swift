@@ -8,10 +8,7 @@ public struct ListGroupRowStyleModifier: ViewModifier {
 
     public func body(content: Content) -> some View {
         content
-            .frame(maxWidth: .infinity)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
-            .listRowBackground(color)
+            .cleanListRow(listRowBackground: color)
     }
 }
 

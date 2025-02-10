@@ -7,6 +7,7 @@ import Primitives
 import Components
 import Localization
 import InfoSheet
+import PrimitivesComponents
 
 public struct StakeScene: View {
     @State private var model: StakeViewModel
@@ -71,7 +72,8 @@ extension StakeScene {
         return Section {
             switch state {
             case .noData:
-                StateEmptyView(title: model.emptyDelegationsTitle)
+                EmptyContentView(model: model.emptyContentModel)
+                    .cleanListRow()
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())

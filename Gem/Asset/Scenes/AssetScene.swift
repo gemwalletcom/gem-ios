@@ -81,10 +81,7 @@ struct AssetScene: View {
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(.zero)
+            .cleanListRow()
 
             Section {
                 BannerView(banners: model.banners, action: onBannerAction, closeAction: bannerService.onClose)
@@ -137,15 +134,14 @@ struct AssetScene: View {
                 stakeView
             }
 
-            if transactions.count > 0 {
+            if !transactions.isEmpty {
                 TransactionsList(
                     explorerService: model.explorerService,
                     transactions
                 )
             } else {
-                Section {
-                    StateEmptyView(title: Localized.Activity.EmptyState.message)
-                }
+                EmptyContentView(model: model.emptyConentModel)
+                    .cleanListRow(topOffset: Spacing.extraLarge)
             }
         }
         .refreshable {
@@ -206,7 +202,7 @@ extension AssetScene {
 // MARK: - Actions
 
 extension AssetScene {
-    @MainActor
+
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
@@ -223,17 +219,17 @@ extension AssetScene {
         )
     }
     
-    @MainActor
+
     private func onInfoSheetAction(type: InfoSheetType) {
         isPresentingInfoSheet = type
     }
 
-    @MainActor
+
     private func onOpenLink(_ url: URL) {
         UIApplication.shared.open(url)
     }
 
-    @MainActor
+
     private func onSelectOptions() {
         showingOptions = true
     }
