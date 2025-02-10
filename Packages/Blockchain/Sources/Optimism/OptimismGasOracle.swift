@@ -1,14 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import SwiftHTTPClient
-import BigInt
 import WalletCore
-import GemstonePrimitives
 
 public struct OptimismGasOracle: Sendable {
-    
     // https://optimistic.etherscan.io/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://basescan.org/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://opbnbscan.com/address/0x420000000000000000000000000000000000000F?p=1&tab=Contract
@@ -34,7 +32,7 @@ public struct OptimismGasOracle: Sendable {
         fn.addParamBytes(val: data, isOutput: false)
         let data = EthereumAbi.encode(fn: fn)
         return try await call(data: data)
-                    .map(as: JSONRPCResponse<BigIntable>.self).result.value
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
     
     func call(data: Data) async throws -> Response {
@@ -63,18 +61,7 @@ extension OptimismGasOracle {
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
 
-        var priorityFee = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
-            case .transferNft, .generic, .swap, .stake:
-                input.gasPrice.priorityFee
-            case .account: fatalError()
-            }
-        }()
-
-        let config = GemstoneConfig.shared.config(for: chain)
-        priorityFee = max(priorityFee, config.minPriorityFee.asBigInt)
+        let priorityFee = EthereumService.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
 
         let value = {
             switch input.type {
@@ -154,11 +141,5 @@ extension OptimismGasOracle {
         }
         
         return encoded
-    }
-}
-
-extension OptimismGasOracle: ChainFeeRateFetchable {
-    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await service.feeRates(type: type)
     }
 }
