@@ -7,6 +7,7 @@ import Store
 import Primitives
 import BigInt
 import class Gemstone.Config
+import WalletConnectSign
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let store: ConnectionsStore
@@ -41,6 +42,17 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public func getAccounts(wallet: Wallet, chains: [Primitives.Chain]) -> [Primitives.Account] {
         wallet.accounts.filter { chains.contains($0.chain) }
+    }
+    
+    public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
+        let wallets = keystore.wallets.filter { !$0.isViewOnly }
+        let namespaces = proposal.requiredBlockchains.map { $0.namespace }.asSet()
+        
+        return wallets.filter {
+            $0.accounts.contains {
+                namespaces.contains($0.chain.namespace ?? "")
+            }
+        }
     }
 
     public func getEvents() -> [WalletConnectionEvents] {
@@ -167,5 +179,16 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     
     public func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String {
         throw AnyError("Not supported yet")
+    }
+}
+
+extension Session.Proposal {
+    var requiredBlockchains: [Blockchain] {
+        requiredNamespaces.values.compactMap { namespace in
+            namespace.chains
+        }
+        .reduce([], +)
+        .asSet()
+        .asArray()
     }
 }

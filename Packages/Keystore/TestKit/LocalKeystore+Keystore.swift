@@ -7,6 +7,8 @@ import Store
 import PreferencesTestKit
 
 public extension LocalKeystore {
+    static let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
+
     static func mock(
         preferences: Preferences = Preferences.mock(),
         keystorePassword: KeystorePassword = MockKeystorePassword()
