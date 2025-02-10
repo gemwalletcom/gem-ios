@@ -39,13 +39,9 @@ extension AssetLink {
     }
     
     private func cleanHost(host: String?) -> String? {
-        guard let host else { return host}
-        let values = ["www.", "https://", "http://"]
-        for value in values {
-            if host.hasPrefix(value) {
-                return host.replacingOccurrences(of: value, with: "")
-            }
+        guard let host, let url = URL(string: host) else {
+            return host
         }
-        return host
+        return url.host()
     }
 }
