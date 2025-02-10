@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import WalletCore
+import GemstonePrimitives
 
 public struct OptimismGasOracle: Sendable {
     
@@ -61,8 +62,8 @@ extension OptimismGasOracle {
         async let getChainId = try service.getChainId()
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
-        
-        let priorityFee = {
+
+        var priorityFee = {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
@@ -71,6 +72,9 @@ extension OptimismGasOracle {
             case .account: fatalError()
             }
         }()
+
+        let config = GemstoneConfig.shared.config(for: chain)
+        priorityFee = max(priorityFee, config.minPriorityFee.asBigInt)
 
         let value = {
             switch input.type {
