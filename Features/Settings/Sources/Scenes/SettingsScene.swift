@@ -17,7 +17,7 @@ public struct SettingsScene: View {
         model: SettingsViewModel,
         isPresentingWallets: Binding<Bool>
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         _isPresentingWallets = isPresentingWallets
     }
 
