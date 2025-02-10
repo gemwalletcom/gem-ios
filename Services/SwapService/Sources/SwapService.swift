@@ -70,7 +70,7 @@ public final class SwapService {
         return quoteData
     }
     
-    public func getPermit2Approval(quote: Gemstone.SwapQuote) async throws -> ApprovalType {
+    public func getPermit2Approval(quote: Gemstone.SwapQuote) async throws -> Permit2ApprovalData? {
         try await swapper.fetchPermit2ForQuote(quote: quote)
     }
 }

@@ -319,9 +319,7 @@ extension SwapViewModel {
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
         switch try await swapService.getPermit2Approval(quote: quote) {
-        case .approve:
-            throw AnyError("No permit2")
-        case .permit2(let data):
+        case .some(let data):
             let chain = try AssetId(id: quote.request.fromAsset).chain
             let permit2Single = permit2Single(
                 token: data.token,

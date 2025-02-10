@@ -147,8 +147,7 @@ public class EthereumSigner: Signable {
         }
         var transactions: [String] = []
         
-        switch swapData.approval {
-        case .approve(let approvalData):
+        if let approvalData = swapData.approval {
             let approvalTransaction = try sign(coinType: input.coinType, input: buildBaseInputCustom(
                 input: input,
                 transaction: .with {
@@ -163,8 +162,6 @@ public class EthereumSigner: Signable {
                 privateKey: privateKey
             ))
             transactions.append(approvalTransaction)
-        case .none, .permit2:
-            break
         }
         
         let swapTransaction = try sign(coinType: input.coinType, input: buildBaseInputCustom(
