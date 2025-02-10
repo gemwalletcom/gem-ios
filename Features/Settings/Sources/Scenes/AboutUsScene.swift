@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import Settings
 import Components
 import GemstonePrimitives
 import Components
@@ -10,11 +9,14 @@ import Style
 import Localization
 import PrimitivesComponents
 
-struct AboutUsScene: View {
+public struct AboutUsScene: View {
+    @State private var model = AboutUsViewModel()
 
-    let model = AboutUsViewModel()
+    public init(model: AboutUsViewModel = AboutUsViewModel()) {
+        self.model = model
+    }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 NavigationCustomLink(with: ListItemView(title: Localized.Settings.termsOfServices)) {

@@ -5,7 +5,8 @@ import Keystore
 import Localization
 
 @Observable
-class LockPeriodSelectionViewModel {
+@MainActor
+final class LockPeriodSelectionViewModel {
     private let service: any BiometryAuthenticatable
 
     var selectedPeriod: LockPeriod

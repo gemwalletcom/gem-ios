@@ -3,23 +3,19 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Settings
 import Components
 import Style
 import Localization
-import ChainSettings
 import PrimitivesComponents
 
-struct ChainSettingsScene: View {
-    @Environment(\.nodeService) private var nodeService
-
+public struct ChainSettingsScene: View {
     @State private var model: ChainSettingsViewModel
 
-    init(model: ChainSettingsViewModel) {
+    public init(model: ChainSettingsViewModel) {
         _model = State(initialValue: model)
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section(model.nodesTitle) {
                 ForEach(model.nodesModels) { nodeModel in
@@ -50,7 +46,7 @@ struct ChainSettingsScene: View {
                 }
             }
             Section(model.explorerTitle) {
-                ForEach(model.explorers) { explorer in
+                ForEach(model.explorers, id: \.self) { explorer in
                     ListItemSelectionView(
                         title: explorer,
                         titleExtra: .none,
@@ -91,7 +87,9 @@ struct ChainSettingsScene: View {
         .sheet(isPresented: $model.isPresentingImportNode) {
             NavigationStack {
                 AddNodeScene(
-                    model: AddNodeSceneViewModel(chain: model.chain, nodeService: nodeService),
+                    model: AddNodeSceneViewModel(
+                        chain: model.chain,
+                        nodeService: model.nodeService),
                     onDismiss: onDismissAddCustomNode
                 )
             }

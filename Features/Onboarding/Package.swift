@@ -21,8 +21,6 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "QRScanner", path: "../QRScanner"),
-        .package(name: "Settings", path: "../Settings"),
-
     ],
     targets: [
         .target(
@@ -35,8 +33,7 @@ let package = Package(
                 "Keystore",
                 "PrimitivesComponents",
                 "NameResolver",
-                "QRScanner",
-                "Settings"
+                "QRScanner"
             ],
             path: "Sources"
         ),

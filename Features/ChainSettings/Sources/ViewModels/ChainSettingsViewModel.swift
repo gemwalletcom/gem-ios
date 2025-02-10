@@ -2,15 +2,14 @@
 
 import Foundation
 import Primitives
-import Settings
 import Localization
 import ChainService
-import ChainSettings
 import NodeService
 import ExplorerService
 
 @Observable
-class ChainSettingsViewModel {
+@MainActor
+public final class ChainSettingsViewModel {
     let explorerService: ExplorerService
     let nodeService: NodeService
 
@@ -30,7 +29,7 @@ class ChainSettingsViewModel {
 
     private static let formatter = ValueFormatter.full_US
 
-    init(
+    public init(
         nodeService: NodeService,
         explorerService: ExplorerService = .standard,
         chain: Chain
@@ -79,17 +78,17 @@ extension ChainSettingsViewModel {
     }
 
     func fetchNodesStatusInfo() async {
-        await withTaskGroup(of: (ChainNode, NodeStatus?).self) { group in
-            for node in nodes {
-                group.addTask { [self] in
+        await withTaskGroup(of: (ChainNode, NodeStatus?).self) { [weak self] group in
+            guard let self else { return }
+            for node in self.nodes {
+                group.addTask { [weak self] in
+                    guard let self else { return (node, nil) }
                     return (node, await fetchNodeStatusInfo(for: node))
                 }
             }
 
             for await (node, data) in group {
-                await MainActor.run {
-                    nodeStatusByNodeId[node.id] = data
-                }
+                nodeStatusByNodeId[node.id] = data
             }
         }
     }

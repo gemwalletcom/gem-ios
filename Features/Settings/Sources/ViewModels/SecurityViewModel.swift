@@ -8,7 +8,8 @@ import Store
 import Preferences
 
 @Observable
-class SecurityViewModel {
+@MainActor
+public final class SecurityViewModel {
     private let service: any BiometryAuthenticatable
     private let preferences: ObservablePreferences
 
@@ -28,7 +29,7 @@ class SecurityViewModel {
 
     var lockPeriodModel: LockPeriodSelectionViewModel
 
-    init(service: any BiometryAuthenticatable = BiometryAuthenticationService(),
+    public init(service: any BiometryAuthenticatable = BiometryAuthenticationService(),
          preferences: ObservablePreferences = .default) {
 
         self.service = service

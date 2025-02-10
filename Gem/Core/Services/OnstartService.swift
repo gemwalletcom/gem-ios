@@ -3,7 +3,6 @@
 import Foundation
 import Store
 import Keystore
-import Settings
 import Primitives
 import NodeService
 import AssetsService
