@@ -2,11 +2,12 @@
 
 import Foundation
 import Primitives
-import Settings
 import Localization
 import PrimitivesComponents
 
-struct ChainListSettingsViewModel {
+public struct ChainListSettingsViewModel {
+    public init() { }
+    
     var title: String {
         Localized.Settings.Networks.title
     }
@@ -15,7 +16,7 @@ struct ChainListSettingsViewModel {
 // MARK: - ChainFilterable
 
 extension ChainListSettingsViewModel: ChainFilterable {
-    var chains: [Chain] {
+    public var chains: [Chain] {
         AssetConfiguration.allChains
     }
 }

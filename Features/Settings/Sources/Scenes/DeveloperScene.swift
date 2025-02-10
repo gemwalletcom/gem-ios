@@ -4,11 +4,14 @@ import Components
 import Localization
 import PrimitivesComponents
 
-struct DeveloperScene: View {
-    
-    let model: DeveloperViewModel
-    
-    var body: some View {
+public struct DeveloperScene: View {
+    private let model: DeveloperViewModel
+
+    public init(model: DeveloperViewModel) {
+        self.model = model
+    }
+
+    public var body: some View {
         List {
             Section("Device") {
                 ListItemView(title: "Device ID", subtitle: model.deviceId)

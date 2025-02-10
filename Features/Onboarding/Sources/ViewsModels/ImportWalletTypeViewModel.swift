@@ -1,6 +1,5 @@
 import Foundation
 import Primitives
-import Settings
 import Keystore
 import SwiftUI
 import Localization

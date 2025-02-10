@@ -8,11 +8,14 @@ import Style
 import Localization
 import PrimitivesComponents
 
-struct ChainListSettingsScene: View {
+public struct ChainListSettingsScene: View {
+    private let model: ChainListSettingsViewModel
 
-    let model = ChainListSettingsViewModel()
+    public init(model: ChainListSettingsViewModel = ChainListSettingsViewModel()) {
+        self.model = model
+    }
 
-    var body: some View {
+    public var body: some View {
         SearchableListView(
             items: model.chains,
             filter: model.filter(_:query:),

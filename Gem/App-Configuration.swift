@@ -1,5 +1,4 @@
 import Foundation
-import Settings
 import Primitives
 import Keystore
 import Components

@@ -2,31 +2,27 @@
 
 import Foundation
 import SwiftUI
-import Store
-import Keystore
 import GemstonePrimitives
 import Gemstone
 import Primitives
 import Localization
 import Style
-import MarketInsight
 import Currency
 import Preferences
 import WalletsService
 import PrimitivesComponents
 
-// TODO: - #1 think about to create some builder for List sections
-// TODO: - #2 review observation migrate to @Observable
-class SettingsViewModel: ObservableObject {
+@Observable
+@MainActor
+public final class SettingsViewModel {
     var currencyModel: CurrencySceneViewModel
-
-    @Published var isDeveloperEnabled: Bool
+    var isDeveloperEnabled: Bool
 
     private let walletId: WalletId
     private let walletsService: WalletsService
     private let preferences = Preferences.standard
 
-    init(
+    public init(
         walletId: WalletId,
         walletsService: WalletsService,
         currencyModel: CurrencySceneViewModel

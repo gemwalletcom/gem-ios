@@ -6,7 +6,6 @@ import Primitives
 import Store
 import Components
 import Localization
-import Settings
 import PrimitivesComponents
 import AssetsService
 import WalletsService

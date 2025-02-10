@@ -1,9 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import UserNotifications
-import UIKit
-import Store
 import Localization
 import NotificationService
 import DeviceService
@@ -13,7 +10,7 @@ import Preferences
 
 @Observable
 @MainActor
-final class NotificationsViewModel {
+public final class NotificationsViewModel {
     private let deviceService: DeviceService
     private let preferences: Preferences
     private let pushNotificationService: PushNotificationEnablerService
@@ -21,7 +18,7 @@ final class NotificationsViewModel {
 
     var isEnabled: Bool
 
-    init(
+    public init(
         deviceService: DeviceService,
         bannerService: BannerService,
         preferences: Preferences = .standard

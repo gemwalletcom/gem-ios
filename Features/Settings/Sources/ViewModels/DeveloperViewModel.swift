@@ -1,23 +1,34 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Store
 import Localization
+import Preferences
 import BannerService
 import StakeService
-import Preferences
 import AssetsService
 import TransactionsService
 
-struct DeveloperViewModel {
-    
-    let transactionsService: TransactionsService
-    let assetService: AssetsService
-    let stakeService: StakeService
-    let bannerService: BannerService
+@MainActor
+public struct DeveloperViewModel {
+    private let transactionsService: TransactionsService
+    private let assetService: AssetsService
+    private let stakeService: StakeService
+    private let bannerService: BannerService
+
+    public init(
+        transactionsService: TransactionsService,
+        assetService: AssetsService,
+        stakeService: StakeService,
+        bannerService: BannerService
+    ) {
+        self.transactionsService = transactionsService
+        self.assetService = assetService
+        self.stakeService = stakeService
+        self.bannerService = bannerService
+    }
 
     var title: String {
-        return Localized.Settings.developer
+        Localized.Settings.developer
     }
     
     var deviceId: String {
@@ -46,7 +57,7 @@ struct DeveloperViewModel {
             try FileManager.default.removeItem(at: fileURL)
         }
     }
-    
+
     func clearCache() {
         URLCache.shared.removeAllCachedResponses()
     }

@@ -2,16 +2,16 @@
 
 import Foundation
 import SwiftUI
-import Store
 import Style
 import Localization
 import Preferences
 
-class AboutUsViewModel {
+@Observable
+@MainActor
+public final class AboutUsViewModel {
+    private let preferences: Preferences
 
-    let preferences: Preferences
-
-    init(
+    public init(
         preferences: Preferences = .standard
     ) {
         self.preferences = preferences
