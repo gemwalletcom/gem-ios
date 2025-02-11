@@ -41,6 +41,6 @@ extension ImportWalletTypeViewModel: Hashable {
 
 extension ImportWalletTypeViewModel: ChainFilterable {
     public var chains: [Chain] {
-        AssetConfiguration.allChains
+        AssetConfiguration.allChains.sortByRank()
     }
 }
