@@ -11,7 +11,8 @@ public struct ConnectionSceneViewModel: Sendable {
     var title: String {
         Localized.WalletConnect.Connection.title
     }
-    
+    var disconnectTitle: String { Localized.WalletConnect.disconnect }
+
     var walletField: String { Localized.Common.wallet }
     var walletText: String { model.connection.wallet.name }
     

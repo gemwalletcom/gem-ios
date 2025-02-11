@@ -52,11 +52,12 @@ public struct ConnectionsScene: View {
                         header: Text(header.name)
                     ) {
                         ForEach(groupedByWallet[header]!) { connection in
+                            let connectionModel = model.connectionSceneModel(connection: connection)
                             NavigationLink(value: connection) {
-                                ConnectionView(model: WalletConnectionViewModel(connection: connection))
+                                ConnectionView(model: connectionModel.model)
                                     .swipeActions(edge: .trailing) {
                                         Button(
-                                            model.disconnectTitle,
+                                            connectionModel.disconnectTitle,
                                             role: .destructive,
                                             action: { onSelectDisconnect(connection) }
                                         )
@@ -69,12 +70,7 @@ public struct ConnectionsScene: View {
             }
         }
         .navigationDestination(for: WalletConnection.self) { connection in
-            ConnectionScene(
-                model: ConnectionSceneViewModel(
-                    model: WalletConnectionViewModel(connection: connection),
-                    service: model.service
-                )
-            )
+            ConnectionScene(model: model.connectionSceneModel(connection: connection))
         }
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
@@ -115,7 +111,8 @@ private extension ConnectionsScene {
     private func onSelectDisconnect(_ connection: WalletConnection) {
         Task {
             do {
-                try await model.disconnect(connection: connection)
+                try await model.connectionSceneModel(connection: connection)
+                    .disconnect()
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
                 NSLog("disconnect error: \(error)")

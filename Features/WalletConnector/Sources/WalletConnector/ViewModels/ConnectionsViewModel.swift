@@ -7,8 +7,8 @@ import Localization
 @preconcurrency import Keystore
 
 public struct ConnectionsViewModel: Sendable {
-    let service: ConnectionsService
-    let keystore: any Keystore
+    private let service: ConnectionsService
+    private let keystore: any Keystore
 
     public init(service: ConnectionsService,
          keystore: any Keystore) {
@@ -17,26 +17,21 @@ public struct ConnectionsViewModel: Sendable {
     }
 
     var title: String { Localized.WalletConnect.title }
-    var disconnectTitle: String { Localized.WalletConnect.disconnect }
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     var emptyStateTitle: String { Localized.WalletConnect.noActiveConnections }
 
     var request: ConnectionsRequest { ConnectionsRequest() }
 
+    func connectionSceneModel(connection: WalletConnection) -> ConnectionSceneViewModel {
+        ConnectionSceneViewModel(
+            model: WalletConnectionViewModel(connection: connection),
+            service: service
+        )
+    }
+
     func addConnectionURI(uri: String) async throws {
         let wallet = try keystore.getCurrentWallet()
         try await service.addConnectionURI(uri: uri, wallet: wallet)
-    }
-
-    func disconnect(connection: WalletConnection) async throws {
-        let sessionId = connection.session.sessionId
-        let pairingId = connection.session.id
-        if sessionId == pairingId {
-            try await service.disconnectPairing(pairingId: pairingId)
-        } else {
-            try await service.disconnect(sessionId: sessionId)
-            try await service.disconnectPairing(pairingId: pairingId)
-        }
     }
 }
