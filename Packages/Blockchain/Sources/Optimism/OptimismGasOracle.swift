@@ -61,7 +61,8 @@ extension OptimismGasOracle {
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
         let priorityFee = EthereumService.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
-
+        let extraFeeGasLimit = try service.extraFeeGasLimit(input: input)
+        
         let value = {
             switch input.type {
             case .transfer(let asset):
@@ -83,7 +84,7 @@ extension OptimismGasOracle {
             value: value
         )
         
-        let l2fee = input.gasPrice.totalFee * gasLimit
+        let l2fee = input.gasPrice.totalFee * (gasLimit + extraFeeGasLimit)
         let l1fee = try await getL1Fee(data: encoded)
 
         return Fee(

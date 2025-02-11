@@ -449,9 +449,8 @@ extension ConfirmTransferViewModel {
 
     private func broadcast(data: String, options: BroadcastOptions) async throws -> String  {
         NSLog("broadcast data \(data)")
-        //let hash = try await service.broadcast(data: data, options: options)
         
-        let hash = UUID().uuidString
+        let hash = try await service.broadcast(data: data, options: options)
         
         NSLog("broadcast response \(hash)")
         confirmTransferDelegate?(.success(hash))

@@ -130,6 +130,18 @@ extension EthereumService {
         case .account: fatalError()
         }
     }
+    
+    // Special case for sending two transactions approve + swap (calculating total gas limit fee)
+    public func extraFeeGasLimit(input: FeeInput) throws -> BigInt {
+        switch input.type {
+        case .swap(_, _, _, let data):
+            switch data.approval {
+            case .some: try data.gasLimit()
+            case .none: .zero
+            }
+        default: .zero
+        }
+    }
 
     internal static func getPriorityFeeByType(_ type: TransferDataType, isMaxAmount: Bool, gasPriceType: GasPriceType) -> BigInt {
         return switch type {
@@ -197,6 +209,7 @@ extension EthereumService {
         let data = try getData(input: input)
         let to = try getTo(input: input)
         let value = getValue(input: input)
+        let extraFeeGasLimit = try extraFeeGasLimit(input: input)
 
         let gasLimit = try await self.getGasLimit(
             from: input.senderAddress,
@@ -207,7 +220,7 @@ extension EthereumService {
         let priorityFee = Self.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
 
         return Fee(
-            fee: input.gasPrice.totalFee * gasLimit,
+            fee: input.gasPrice.totalFee * (gasLimit + extraFeeGasLimit),
             gasPriceType: .eip1559(
                 gasPrice: input.gasPrice.totalFee,
                 priorityFee: priorityFee

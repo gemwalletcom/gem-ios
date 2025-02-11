@@ -166,11 +166,11 @@ public class EthereumSigner: Signable {
                     input: input,
                     transaction: .with {
                         $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
-                            $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
+                            $0.amount = swapData.value().magnitude.serialize()
                             $0.data = try Data.from(hex: swapData.data)
                         }
                     },
-                    toAddress: input.destinationAddress,
+                    toAddress: swapData.to,
                     nonce: input.sequence.asBigInt + 1,
                     gasLimit: swapData.gasLimit(),
                     privateKey: privateKey
@@ -182,11 +182,11 @@ public class EthereumSigner: Signable {
                     input: input,
                     transaction: .with {
                         $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
-                            $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
+                            $0.amount = swapData.value().magnitude.serialize()
                             $0.data = try Data.from(hex: swapData.data)
                         }
                     },
-                    toAddress: input.destinationAddress,
+                    toAddress: swapData.to,
                     privateKey: privateKey
                 ))
             ]

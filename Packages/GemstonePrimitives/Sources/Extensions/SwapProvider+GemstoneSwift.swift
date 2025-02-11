@@ -18,4 +18,8 @@ extension SwapQuoteData {
         }
         throw AnyError("No gas limit")
     }
+    
+    public func value() -> BigInt {
+        BigInt(stringLiteral: value)
+    }
 }
