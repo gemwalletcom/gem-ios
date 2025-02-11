@@ -104,13 +104,8 @@ struct SwapNavigationView: View {
 extension SwapNavigationView {
     private func onSwapComplete(type: TransferDataType) {
         switch type {
-        case .swap(_, _, let action):
-            switch action {
-            case .approval:
-                navigationPath.removeLast()
-            case .swap:
-                onComplete?()
-            }
+        case .swap, .tokenApprove:
+            onComplete?()
         default: break
         }
     }

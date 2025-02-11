@@ -5,8 +5,8 @@ import BigInt
 
 extension Transaction {
     
-    public static func id(chain: String, hash: String) -> String {
-        return String(format: "%@_%@", chain, hash)
+    public static func id(chain: Chain, hash: String) -> String {
+        return String(format: "%@_%@", chain.rawValue, hash)
     }
     
     public var valueBigInt: BigInt {

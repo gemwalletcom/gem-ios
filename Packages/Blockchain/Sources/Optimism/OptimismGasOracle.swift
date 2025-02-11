@@ -47,7 +47,7 @@ public struct OptimismGasOracle: Sendable {
 extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
-        let data = service.getData(input: input)
+        let data = try service.getData(input: input)
         let to = try service.getTo(input: input)
         
         async let getGasLimit = try service.getGasLimit(
@@ -60,14 +60,14 @@ extension OptimismGasOracle {
         async let getChainId = try service.getChainId()
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
-
         let priorityFee = EthereumService.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
-
+        let extraFeeGasLimit = try service.extraFeeGasLimit(input: input)
+        
         let value = {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
-            case .transferNft, .generic, .swap:
+            case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
             case .stake, .account: fatalError()
             }
@@ -84,7 +84,7 @@ extension OptimismGasOracle {
             value: value
         )
         
-        let l2fee = input.gasPrice.totalFee * gasLimit
+        let l2fee = input.gasPrice.totalFee * (gasLimit + extraFeeGasLimit)
         let l1fee = try await getL1Fee(data: encoded)
 
         return Fee(
@@ -134,7 +134,7 @@ extension OptimismGasOracle {
             default:
                 break
             }
-        case .generic, .swap:
+        case .generic, .swap, .tokenApprove:
             break
         case .transferNft, .stake, .account:
             fatalError()

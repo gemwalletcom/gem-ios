@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Localization
 import PrimitivesComponents
+import GemstonePrimitives
 
 public struct ChainListSettingsViewModel {
     public init() { }
@@ -18,6 +19,7 @@ public struct ChainListSettingsViewModel {
 extension ChainListSettingsViewModel: ChainFilterable {
     public var chains: [Chain] {
         AssetConfiguration.allChains
+            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
     }
 }
 

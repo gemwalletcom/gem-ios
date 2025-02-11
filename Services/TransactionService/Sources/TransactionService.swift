@@ -48,8 +48,8 @@ public final class TransactionService: @unchecked Sendable {
         }
     }
 
-    public func addTransaction(walletId: String, transaction: Transaction) throws {
-        try transactionStore.addTransactions(walletId: walletId, transactions: [transaction])
+    public func addTransactions(walletId: String, transactions: [Transaction]) throws {
+        try transactionStore.addTransactions(walletId: walletId, transactions: transactions)
     }
 
     private func updatePendingTransactions() async throws {
@@ -95,7 +95,7 @@ public final class TransactionService: @unchecked Sendable {
             case .networkFee(let networkFee):
                 try transactionStore.updateNetworkFee(transactionId: transactionId, networkFee: networkFee.description)
             case .hashChange(_, let newHash):
-                let newTransactionId = Primitives.Transaction.id(chain: assetId.chain.rawValue, hash: newHash)
+                let newTransactionId = Primitives.Transaction.id(chain: assetId.chain, hash: newHash)
                 try transactionStore.updateTransactionId(
                     oldTransactionId: transactionId,
                     transactionId: newTransactionId,
