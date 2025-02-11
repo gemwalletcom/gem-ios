@@ -47,7 +47,6 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
         let wallets = keystore.wallets
             .filter { !$0.isViewOnly }
-            .sorted { $0.order > $1.order }
 
         let requiredBlockchains = proposal.requiredBlockchains
 

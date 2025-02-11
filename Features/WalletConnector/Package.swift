@@ -44,7 +44,7 @@ let package = Package(
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "WalletConnector"
             ],
-            resources: [.process("Proposal.json")]
+            resources: [.process("Resources")]
         ),
     ]
 )
