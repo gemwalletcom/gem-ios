@@ -54,6 +54,14 @@ public struct ConnectionsScene: View {
                         ForEach(groupedByWallet[header]!) { connection in
                             NavigationLink(value: connection) {
                                 ConnectionView(model: WalletConnectionViewModel(connection: connection))
+                                    .swipeActions(edge: .trailing) {
+                                        Button(
+                                            model.disconnectTitle,
+                                            role: .destructive,
+                                            action: { onSelectDisconnect(connection) }
+                                        )
+                                        .tint(Colors.red)
+                                    }
                             }
                         }
                     }
@@ -90,7 +98,7 @@ public struct ConnectionsScene: View {
         .navigationTitle(model.title)
     }
 
-    func connectURI(uri: String) async {
+    private func connectURI(uri: String) async {
         do {
             try await model.addConnectionURI(uri: uri)
         } catch {
@@ -103,6 +111,18 @@ public struct ConnectionsScene: View {
 // MARK: Actions
 
 private extension ConnectionsScene {
+
+    private func onSelectDisconnect(_ connection: WalletConnection) {
+        Task {
+            do {
+                try await model.disconnect(connection: connection)
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+                NSLog("disconnect error: \(error)")
+            }
+        }
+    }
+
     private func onHandleScan(_ result: String) {
         Task {
             await connectURI(uri: result)

@@ -2,6 +2,7 @@
 
 import Foundation
 import Localization
+import Primitives
 
 public struct ConnectionSceneViewModel: Sendable {
     let model: WalletConnectionViewModel

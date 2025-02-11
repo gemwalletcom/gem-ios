@@ -17,7 +17,7 @@ public struct ConnectionsViewModel: Sendable {
     }
 
     var title: String { Localized.WalletConnect.title }
-
+    var disconnectTitle: String { Localized.WalletConnect.disconnect }
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     var emptyStateTitle: String { Localized.WalletConnect.noActiveConnections }
@@ -27,5 +27,16 @@ public struct ConnectionsViewModel: Sendable {
     func addConnectionURI(uri: String) async throws {
         let wallet = try keystore.getCurrentWallet()
         try await service.addConnectionURI(uri: uri, wallet: wallet)
+    }
+
+    func disconnect(connection: WalletConnection) async throws {
+        let sessionId = connection.session.sessionId
+        let pairingId = connection.session.id
+        if sessionId == pairingId {
+            try await service.disconnectPairing(pairingId: pairingId)
+        } else {
+            try await service.disconnect(sessionId: sessionId)
+            try await service.disconnectPairing(pairingId: pairingId)
+        }
     }
 }
