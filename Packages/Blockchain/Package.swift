@@ -38,11 +38,7 @@ let package = Package(
                 "Blockchain",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
-            resources: [
-                .process("SolanaAccountMPLRawData.json"),
-                .process("SolanaAccountSPLTokenInfo.json"),
-                .process("EthereumFeeHistory.json"),
-            ]
+            resources: [.process("Resources")]
         )
     ]
 )
