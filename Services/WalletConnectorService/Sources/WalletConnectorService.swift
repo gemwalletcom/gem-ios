@@ -187,7 +187,7 @@ extension WalletConnectorService {
             throw AnyError("Doesn't have any supported wallets")
         }
         let payload = WalletConnectionSessionProposal(
-            preselectedWallet: preselectedWallet,
+            defaultWallet: preselectedWallet,
             wallets: wallets,
             metadata: proposal.proposer.metadata
         )
