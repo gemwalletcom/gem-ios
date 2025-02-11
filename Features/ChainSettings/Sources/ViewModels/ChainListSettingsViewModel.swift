@@ -18,8 +18,7 @@ public struct ChainListSettingsViewModel {
 
 extension ChainListSettingsViewModel: ChainFilterable {
     public var chains: [Chain] {
-        AssetConfiguration.allChains
-            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
+        AssetConfiguration.allChains.sortByRank()
     }
 }
 

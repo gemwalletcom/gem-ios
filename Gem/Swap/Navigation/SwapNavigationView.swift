@@ -88,7 +88,7 @@ struct SwapNavigationView: View {
             return SwapPairSelectorViewModel(
                 fromAssetId: asset.chain.assetId,
                 toAssetId: Chain.allCases
-                    .sorted( by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
+                    .sortByRank()
                     .dropFirst().first?.assetId
             )
         }
