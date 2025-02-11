@@ -45,9 +45,17 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
-        let wallets = keystore.wallets.filter { !$0.isViewOnly }
-        let namespaces = proposal.requiredBlockchains.map { $0.namespace }.asSet()
-        
+        let wallets = keystore.wallets
+            .filter { !$0.isViewOnly }
+
+        let requiredBlockchains = proposal.requiredBlockchains
+
+        // return all wallets if there are no requiredBlockchains
+        if requiredBlockchains.isEmpty {
+            return wallets
+        }
+
+        let namespaces = requiredBlockchains.map { $0.namespace }.asSet()
         return wallets.filter {
             $0.accounts.contains {
                 namespaces.contains($0.chain.namespace ?? "")

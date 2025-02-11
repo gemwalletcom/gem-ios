@@ -124,7 +124,7 @@ extension SolanaService {
         let gasLimit = switch type {
         case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
         let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
         
@@ -207,7 +207,7 @@ extension SolanaService {
             fatalError()
         case .swap, .stake, .generic:
             return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
     }
 }
@@ -221,7 +221,7 @@ extension SolanaService: ChainFeeRateFetchable {
         case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
         case .stake, .transferNft: 50_000
         case .generic, .swap: 250_000
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
         
         let priorityFee = {
@@ -286,7 +286,7 @@ extension SolanaService: ChainTransactionPreloadable {
                 block: SignerInputBlock(hash: blockhash), 
                 fee: fee
             )
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
     }
 }

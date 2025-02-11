@@ -12,7 +12,6 @@ public enum EthereumTarget: TargetType, Hashable {
     case broadcast(data: String)
     case call([String: String])
     case transactionReceipt(id: String)
-    case blockByNumber(block: String)
     case feeHistory(blocks: Int, rewardPercentiles: [Int])
     case maxPriorityFeePerGas
     case syncing
@@ -41,8 +40,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return "eth_call"
         case .transactionReceipt:
             return "eth_getTransactionReceipt"
-        case .blockByNumber:
-            return "eth_getBlockByNumber"
         case .feeHistory:
             return "eth_feeHistory"
         case .maxPriorityFeePerGas:
@@ -103,15 +100,6 @@ public enum EthereumTarget: TargetType, Hashable {
                 JSONRPCRequest(
                     method: rpc_method,
                     params: json,
-                    id: 1
-                )
-            )
-        case .blockByNumber(let block):
-            let params: [JSON] = [.value(block), .bool(false)]
-            return .encodable(
-                JSONRPCRequest(
-                    method: rpc_method,
-                    params: params,
                     id: 1
                 )
             )

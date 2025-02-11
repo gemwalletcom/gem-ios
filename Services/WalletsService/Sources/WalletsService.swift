@@ -148,8 +148,8 @@ public final class WalletsService: @unchecked Sendable {
 
     // transactions
 
-    public func addTransaction(walletId: String, transaction: Primitives.Transaction) throws {
-        try transactionService.addTransaction(walletId: walletId, transaction: transaction)
+    public func addTransactions(walletId: String, transactions: [Primitives.Transaction]) throws {
+        try transactionService.addTransactions(walletId: walletId, transactions: transactions)
     }
 
     // In the future move into separate service
