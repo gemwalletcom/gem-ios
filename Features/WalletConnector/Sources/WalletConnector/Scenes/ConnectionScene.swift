@@ -18,7 +18,7 @@ struct ConnectionScene: View {
                 ListItemView(title: model.dateField, subtitle: model.dateText)
             }
             Section {
-                Button(Localized.WalletConnect.disconnect, role: .destructive) {
+                Button(model.disconnectTitle, role: .destructive) {
                     Task {
                         await disconnect()
                     }
