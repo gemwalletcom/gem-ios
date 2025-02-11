@@ -51,7 +51,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
         let requiredBlockchains = proposal.requiredBlockchains
 
-        // retrun all wallets if thre is no requiredBlockchains
+        // return all wallets if there are no requiredBlockchains
         if requiredBlockchains.isEmpty {
             return wallets
         }
