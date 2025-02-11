@@ -2,7 +2,6 @@ import Foundation
 import Keystore
 import Primitives
 import Store
-import Settings
 import UIKit
 import BalanceService
 import WalletsService

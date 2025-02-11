@@ -3,14 +3,14 @@
 import SwiftUI
 import Style
 
-struct NotificationsScene: View {
+public struct NotificationsScene: View {
     @State private var model: NotificationsViewModel
 
-    init(model: NotificationsViewModel) {
+    public init(model: NotificationsViewModel) {
         _model = State(initialValue: model)
     }
-    
-    var body: some View {
+
+    public var body: some View {
         List {
             Toggle(
                 model.title,

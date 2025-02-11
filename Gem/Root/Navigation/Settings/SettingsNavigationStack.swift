@@ -9,6 +9,8 @@ import PriceAlerts
 import WalletConnector
 import Preferences
 import MarketInsight
+import Settings
+import ChainSettings
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

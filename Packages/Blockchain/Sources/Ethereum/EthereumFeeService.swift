@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
-import WalletCore
 import BigInt
-import Primitives
-import GemstonePrimitives
+import Foundation
 import Gemstone
+import GemstonePrimitives
+import Primitives
+import WalletCore
 
 extension EthereumService {
     public func getData(input: FeeInput) throws -> Data? {
@@ -100,7 +100,7 @@ extension EthereumService {
         }
     }
 
-    public func getValue(input: FeeInput) -> BigInt? {
+    func getValue(input: FeeInput) -> BigInt? {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
@@ -118,7 +118,7 @@ extension EthereumService {
         case .stake(_, let type):
             switch input.chain {
             case .smartChain,
-                    .ethereum:
+                 .ethereum:
                 switch type {
                 case .stake: input.value
                 case .unstake, .redelegate, .withdraw: .none
@@ -131,7 +131,17 @@ extension EthereumService {
         }
     }
 
-    func getBasePriorityFees(
+    internal static func getPriorityFeeByType(_ type: TransferDataType, isMaxAmount: Bool, gasPriceType: GasPriceType) -> BigInt {
+        return switch type {
+        case .transfer(let asset):
+            asset.type == .native && isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
+        case .transferNft, .generic, .swap, .tokenApprove, .stake:
+            gasPriceType.priorityFee
+        case .account: fatalError()
+        }
+    }
+
+    internal func getBasePriorityFees(
         blocks: Int,
         rewardsPercentiles: EvmHistoryRewardPercentiles,
         minPriorityFee: BigInt
@@ -157,7 +167,7 @@ extension EthereumService {
         return (baseFeePerGas, priorityFees)
     }
 
-    func calculatePriorityFees(
+    internal func calculatePriorityFees(
         rewards: [[BigInt]],
         rewardsPercentiles: EvmHistoryRewardPercentiles,
         minPriorityFee: BigInt
@@ -177,10 +187,6 @@ extension EthereumService {
             result[priority] = average
         }
     }
-
-    public func limit() async throws -> BigInt {
-        BigInt(450_000)
-    }
     
     public func fee(input: FeeInput) async throws -> Fee {
         if chain.isOpStack {
@@ -198,19 +204,8 @@ extension EthereumService {
             value: value?.hexString.append0x,
             data: data?.hexString.append0x
         )
-        
-        let gasPriceType = input.gasPrice
-        
-        let priorityFee = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? gasPriceType.totalFee : gasPriceType.priorityFee
-            case .transferNft, .generic, .swap, .tokenApprove, .stake:
-                gasPriceType.priorityFee
-            case .account: fatalError()
-            }
-        }()
-    
+        let priorityFee = Self.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
+
         return Fee(
             fee: input.gasPrice.totalFee * gasLimit,
             gasPriceType: .eip1559(
@@ -245,7 +240,7 @@ extension EthereumService: ChainFeeRateFetchable {
 // MARK: - Model extensions
 
 extension EvmHistoryRewardPercentiles {
-    var all: [Int] { [slow, normal, fast].map {Int($0)} }
+    var all: [Int] { [slow, normal, fast].map { Int($0) } }
 }
 
 extension Array where Element == [String] {

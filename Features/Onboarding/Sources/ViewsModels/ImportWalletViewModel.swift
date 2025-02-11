@@ -1,7 +1,6 @@
 import Foundation
 import Keystore
 import Primitives
-import Settings
 import Style
 import Localization
 

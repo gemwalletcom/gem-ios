@@ -3,7 +3,6 @@
 import Foundation
 import Store
 import Primitives
-import Settings
 import GemAPI
 import NodeService
 import Preferences

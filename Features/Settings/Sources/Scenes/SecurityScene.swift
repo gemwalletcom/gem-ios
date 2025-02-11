@@ -5,14 +5,14 @@ import Components
 import Style
 import Keystore
 
-struct SecurityScene: View {
+public struct SecurityScene: View {
     @State private var model: SecurityViewModel
 
-    init(model: SecurityViewModel) {
+    public init(model: SecurityViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 Toggle(model.authenticationTitle, isOn: $model.isEnabled)
@@ -38,9 +38,11 @@ struct SecurityScene: View {
         }
         .onChange(of: model.isEnabled, onToggleBiometrics)
         .onChange(of: model.isPrivacyLockEnabled, onToggleSecurityLock)
-        .alert(item: $model.isPresentingError) {
-            Alert(title: Text(model.errorTitle), message: Text($0))
-        }
+        .alert("",
+               isPresented: $model.isPresentingError.mappedToBool(),
+               actions: {},
+               message: { Text(model.errorTitle) }
+        )
         .navigationDestination(for: LockPeriod.self) { _ in
             LockPeriodSelectionScene(model: $model.lockPeriodModel)
         }

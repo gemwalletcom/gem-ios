@@ -3,7 +3,6 @@
 import SwiftUI
 import Components
 import Primitives
-import Settings
 import Keystore
 import Store
 import GRDBQuery

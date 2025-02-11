@@ -20,8 +20,8 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "NodeService", path: "../NodeService"),
+        .package(name: "ExplorerService", path: "../ExplorerService"),
         .package(name: "QRScanner", path: "../QRScanner"),
-
     ],
     targets: [
         .target(
@@ -34,6 +34,7 @@ let package = Package(
                 "PrimitivesComponents",
                 "ChainService",
                 "NodeService",
+                "ExplorerService",
                 "QRScanner",
             ],
             path: "Sources"

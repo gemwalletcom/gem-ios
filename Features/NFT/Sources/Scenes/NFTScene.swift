@@ -67,7 +67,7 @@ public struct NFTScene: View {
             }
         }
         .padding(.horizontal, Spacing.medium)
-        .background(Colors.grayBackground)
+        .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
         .taskOnce(fetch)

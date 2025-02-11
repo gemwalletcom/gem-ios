@@ -2,30 +2,26 @@
 
 import SwiftUI
 import Components
-import Settings
-import Style
 import Primitives
-import Store
-import Keystore
 import Localization
-import MarketInsight
 import PrimitivesComponents
 
-struct SettingsScene: View {
+public struct SettingsScene: View {
     @Environment(\.openURL) private var openURL
 
-    @ObservedObject private var model: SettingsViewModel
+    @State private var model: SettingsViewModel
+
     @Binding private var isPresentingWallets: Bool
 
-    init(
+    public init(
         model: SettingsViewModel,
         isPresentingWallets: Binding<Bool>
     ) {
-        self.model = model
+        _model = State(initialValue: model)
         _isPresentingWallets = isPresentingWallets
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             walletsSection
             deviceSection
