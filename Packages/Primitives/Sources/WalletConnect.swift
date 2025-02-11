@@ -58,7 +58,7 @@ public struct WCSolanaTransaction: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public enum WallletConnectCAIP2: String, Codable, Sendable {
+public enum WalletConnectCAIP2: String, Codable, Sendable {
 	case eip155
 	case solana
 	case cosmos
