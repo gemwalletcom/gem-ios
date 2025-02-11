@@ -103,7 +103,7 @@ extension TransactionRecord {
         let assetId = try! AssetId(id: assetId)
         let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
-            id: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            id: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             assetId: assetId,
             from: from,
@@ -130,7 +130,7 @@ extension Transaction {
     func record(walletId: String) -> TransactionRecord {
         return TransactionRecord(
             walletId: walletId,
-            transactionId: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            transactionId: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             type: type,
             from: from,

@@ -75,12 +75,12 @@ public struct AptosSigner: Signable {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .swap(_, _, _, let data) = input.type else {
             throw AnyError("invalid type")
         }
         return [
-            try sign(payload: .anyData(data.data), input: input, privateKey: privateKey),
+            try sign(payload: .anyData(data.data), input: input, privateKey: privateKey)
         ]
     }
 }

@@ -5,6 +5,7 @@ import Primitives
 import Settings
 import Localization
 import PrimitivesComponents
+import GemstonePrimitives
 
 struct ChainListSettingsViewModel {
     var title: String {
@@ -17,6 +18,7 @@ struct ChainListSettingsViewModel {
 extension ChainListSettingsViewModel: ChainFilterable {
     var chains: [Chain] {
         AssetConfiguration.allChains
+            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
     }
 }
 

@@ -16,7 +16,7 @@ struct TransferDataViewModel {
     var type: TransferDataType { data.type }
     var recipientData: RecipientData { data.recipientData }
     var recipient: Recipient { recipientData.recipient }
-    var asset: Asset { data.asset }
+    var asset: Asset { data.type.asset }
     var memo: String? { recipientData.recipient.memo }
     var chain: Chain { data.chain }
     var chainType: ChainType { chain.type }
@@ -25,7 +25,7 @@ struct TransferDataViewModel {
     var title: String {
         switch type {
         case .transfer, .transferNft: Localized.Transfer.Send.title
-        case .swap: Localized.Wallet.swap
+        case .swap, .tokenApprove: Localized.Wallet.swap
         //case .approval: Localized.Transfer.Approve.title
         case .generic: Localized.Transfer.Approve.title
         case .stake(_, let type):
@@ -72,6 +72,7 @@ struct TransferDataViewModel {
         case .transfer,
             .transferNft,
             .swap,
+            .tokenApprove,
             .stake,
             .account: .none
         case .generic(_, let metadata, _):
@@ -84,6 +85,7 @@ struct TransferDataViewModel {
         case .transfer,
             .transferNft,
             .swap,
+            .tokenApprove,
             .stake,
             .account: .none
         case .generic(_, let metadata, _):
@@ -94,7 +96,7 @@ struct TransferDataViewModel {
     var shouldShowMemo: Bool {
         switch type {
         case .transfer, .transferNft: chain.isMemoSupported
-        case .swap, .generic, .stake, .account: false
+        case .swap, .tokenApprove, .generic, .stake, .account: false
         }
     }
 
@@ -120,6 +122,7 @@ extension TransferDataViewModel {
         case .transfer,
                 .transferNft,
                 .swap,
+                .tokenApprove,
                 .generic,
                 .account:
             recipient.name ?? recipient.address

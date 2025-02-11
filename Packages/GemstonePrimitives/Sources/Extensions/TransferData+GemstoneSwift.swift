@@ -3,15 +3,16 @@
 import Foundation
 import Primitives
 
-extension TransferData {
+extension TransferDataType {
     public var asset: Asset {
-        switch type {
-        case .transfer(let asset): asset
+        switch self {
+        case .transfer(let asset),
+            .swap(let asset, _, _, _),
+            .tokenApprove(let asset, _),
+            .stake(let asset, _),
+            .account(let asset, _),
+            .generic(let asset, _, _): asset
         case .transferNft(let asset): asset.chain.asset
-        case .swap(let asset, _, _, _): asset
-        case .stake(let asset, _): asset
-        case .account(let asset, _): asset
-        case .generic(let asset, _, _): asset
         }
     }
 }

@@ -48,7 +48,7 @@ public struct OptimismGasOracle: Sendable {
 extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
-        let data = service.getData(input: input)
+        let data = try service.getData(input: input)
         let to = try service.getTo(input: input)
         
         async let getGasLimit = try service.getGasLimit(
@@ -66,7 +66,7 @@ extension OptimismGasOracle {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
-            case .transferNft, .generic, .swap, .stake:
+            case .transferNft, .generic, .swap, .tokenApprove, .stake:
                 input.gasPrice.priorityFee
             case .account: fatalError()
             }
@@ -76,7 +76,7 @@ extension OptimismGasOracle {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
-            case .transferNft, .generic, .swap:
+            case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
             case .stake, .account: fatalError()
             }
@@ -143,7 +143,7 @@ extension OptimismGasOracle {
             default:
                 break
             }
-        case .generic, .swap:
+        case .generic, .swap, .tokenApprove:
             break
         case .transferNft, .stake, .account:
             fatalError()

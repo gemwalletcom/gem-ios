@@ -39,7 +39,7 @@ struct TransactionInputViewModel {
     }
 
     var asset: Asset {
-        data.asset
+        data.type.asset
     }
     
     var feeAsset: Asset {
@@ -114,7 +114,9 @@ struct TransactionInputViewModel {
             switch type {
             case .activate: return TransactionHeaderType.amount(title: asset.symbol, subtitle: .none)
             }
-        case .swap(let fromAsset, let toAsset, let quote, let data):
+        case .tokenApprove:
+            return TransactionHeaderType.amount(title: amountText, subtitle: amountSecondText)
+        case .swap(let fromAsset, let toAsset, let quote, _):
             let formatter = ValueFormatter(style: TransactionHeaderType.swapValueFormatterStyle)
             let fromValue = BigInt(stringLiteral: quote.fromValue)
             let toValue = BigInt(stringLiteral: quote.toValue)

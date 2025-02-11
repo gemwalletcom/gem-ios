@@ -100,7 +100,7 @@ extension SuiService {
             let output = try Gemstone.suiValidateAndHash(encoded: data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
-        case .generic, .account: fatalError()
+        case .generic, .account, .tokenApprove: fatalError()
         }
     }
 

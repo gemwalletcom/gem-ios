@@ -2,6 +2,8 @@
 
 import Foundation
 import Gemstone
+import BigInt
+import Primitives
 
 extension SwapProvider {
     public var name: String {
@@ -9,4 +11,11 @@ extension SwapProvider {
     }
 }
 
-
+extension SwapQuoteData {
+    public func gasLimit() throws -> BigInt {
+        if let gasLimit = self.gasLimit {
+            return BigInt(stringLiteral: gasLimit)
+        }
+        throw AnyError("No gas limit")
+    }
+}

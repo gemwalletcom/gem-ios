@@ -4,6 +4,7 @@ import Foundation
 import struct Gemstone.SwapQuote
 import enum Gemstone.SwapProvider
 import struct Gemstone.SwapQuoteData
+import struct Gemstone.ApprovalData
 
 public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate
@@ -13,43 +14,17 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case transfer(Asset)
     case transferNft(NFTAsset)
     case swap(Asset, Asset, SwapQuote, SwapQuoteData)
+    case tokenApprove(Asset, ApprovalData)
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
     
-    public var data: Data? {
-        switch self {
-        case .transfer, .transferNft:
-            return .none
-        case .swap(_, _, _, let data):
-            return Data(fromHex: data.data)
-        case .stake, .account:
-            // singer needs to setup correctly
-            return .none
-        case .generic(_, _, let extra):
-            return extra.data
-        }
-    }
-
-    public var stakeChain: StakeChain? {
-        guard case let .stake(asset, _) = self else {
-            return nil
-        }
-        return asset.chain.stakeChain
-    }
-
-    public var stakeType: StakeType? {
-        guard case let .stake(_, type) = self else {
-            return nil
-        }
-        return type
-    }
-
     public var transactionType: TransactionType {
         switch self {
         case .transfer: .transfer
         case .generic: .smartContractCall
         case .transferNft: .transferNFT
+        case .tokenApprove: .tokenApproval
         case .swap: .swap
         case .stake(_, let type):
             switch type {
@@ -59,7 +34,19 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             case .rewards: .stakeRewards
             case .withdraw: .stakeWithdraw
             }
-        case .account(_, _): .assetActivation
+        case .account: .assetActivation
+        }
+    }
+    
+    public var chain: Chain {
+        switch self {
+        case .transfer(let asset),
+            .swap(let asset, _, _, _),
+            .stake(let asset, _),
+            .account(let asset, _),
+            .tokenApprove(let asset, _),
+            .generic(let asset, _, _): asset.chain
+        case .transferNft(let asset): asset.chain
         }
     }
     
@@ -76,6 +63,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
             )
         case .generic,
             .transfer,
+            .tokenApprove,
             .stake,
             .account,
             .transferNft:
@@ -85,16 +73,14 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     
     public var assetIds: [AssetId] {
         switch self {
-        case .transfer(let asset):
+        case .transfer(let asset),
+            .tokenApprove(let asset, _),
+            .stake(let asset, _),
+            .generic(let asset, _, _),
+            .account(let asset, _):
             [asset.id]
         case .swap(let from, let to, _, _):
             [from.id, to.id]
-        case .stake(let asset, _):
-            [asset.id]
-        case .generic(let asset, _, _):
-            [asset.id]
-        case .account(let asset, _):
-            [asset.id]
         case .transferNft: []
         }
     }

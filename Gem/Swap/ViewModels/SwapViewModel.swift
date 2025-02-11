@@ -287,13 +287,12 @@ extension SwapViewModel {
 
     private func getSwapData(fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
         let quoteData = try await getQuoteData(quote: quote)
-        let transferDataType: TransferDataType = .swap(fromAsset, toAsset, quote, quoteData)
         let value = BigInt(stringLiteral: quote.request.value)
         let recepientData = RecipientData(
             recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )
-        return TransferData(type: transferDataType, recipientData: recepientData, value: value, canChangeValue: true)
+        return TransferData(type: .swap(fromAsset, toAsset, quote, quoteData), recipientData: recepientData, value: value, canChangeValue: true)
     }
 
     private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
@@ -319,6 +318,8 @@ extension SwapViewModel {
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
         switch try await swapService.getPermit2Approval(quote: quote) {
+        case .none:
+            return try await swapService.getQuoteData(quote, data: .none)
         case .some(let data):
             let chain = try AssetId(id: quote.request.fromAsset).chain
             let permit2Single = permit2Single(
@@ -341,8 +342,6 @@ extension SwapViewModel {
             let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)
 
             return try await swapService.getQuoteData(quote, data: .permit2(permitData))
-        case .none:
-            return try await swapService.getQuoteData(quote, data: .none)
         }
     }
 

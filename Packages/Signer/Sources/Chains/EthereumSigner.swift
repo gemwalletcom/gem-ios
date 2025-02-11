@@ -7,6 +7,7 @@ import BigInt
 import Keystore
 import Primitives
 import Blockchain
+import GemstonePrimitives
 
 public class EthereumSigner: Signable {
 
@@ -125,14 +126,15 @@ public class EthereumSigner: Signable {
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
+        guard case .generic(_, _, let extra) = input.type else {
+            fatalError()
+        }
         let base = buildBaseInput(
             input: input,
             transaction: .with {
                 $0.contractGeneric = EthereumTransaction.ContractGeneric.with {
                     $0.amount = input.value.magnitude.serialize()
-                    if let data = input.type.data {
-                        $0.data = data
-                    }
+                    $0.data = extra.data ?? Data()
                 }
             },
             toAddress: input.destinationAddress,
@@ -141,49 +143,75 @@ public class EthereumSigner: Signable {
         return try sign(coinType: input.coinType, input: base)
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .swap(_, _, _, let swapData) = input.type else {
             fatalError()
         }
-        var transactions: [String] = []
-        
-        if let approvalData = swapData.approval {
-            let approvalTransaction = try sign(coinType: input.coinType, input: buildBaseInputCustom(
-                input: input,
-                transaction: .with {
-                    $0.erc20Approve = EthereumTransaction.ERC20Approve.with {
-                        $0.spender = approvalData.spender
-                        $0.amount = BigInt.MAX_256.magnitude.serialize()
-                    }
-                },
-                toAddress: try input.asset.getTokenId(),
-                nonce: input.sequence.asBigInt,
-                gasLimit: input.fee.gasLimit,
-                privateKey: privateKey
-            ))
-            transactions.append(approvalTransaction)
+        switch swapData.approval {
+            
+        case .some(let approvalData):
+            return [
+                try sign(coinType: input.coinType, input: buildBaseInput(
+                    input: input,
+                    transaction: .with {
+                        $0.erc20Approve = EthereumTransaction.ERC20Approve.with {
+                            $0.spender = approvalData.spender
+                            $0.amount = BigInt.MAX_256.magnitude.serialize()
+                        }
+                    },
+                    toAddress: approvalData.token,
+                    privateKey: privateKey
+                )),
+                try sign(coinType: input.coinType, input: buildBaseInputCustom(
+                    input: input,
+                    transaction: .with {
+                        $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
+                            $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
+                            $0.data = try Data.from(hex: swapData.data)
+                        }
+                    },
+                    toAddress: input.destinationAddress,
+                    nonce: input.sequence.asBigInt + 1,
+                    gasLimit: swapData.gasLimit(),
+                    privateKey: privateKey
+                )),
+            ]
+        case .none:
+            return [
+                try sign(coinType: input.coinType, input: buildBaseInput(
+                    input: input,
+                    transaction: .with {
+                        $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
+                            $0.amount = BigInt(stringLiteral: swapData.value).magnitude.serialize()
+                            $0.data = try Data.from(hex: swapData.data)
+                        }
+                    },
+                    toAddress: input.destinationAddress,
+                    privateKey: privateKey
+                ))
+            ]
         }
-        
-        let swapTransaction = try sign(coinType: input.coinType, input: buildBaseInputCustom(
-            input: input,
-            transaction: .with {
-                $0.contractGeneric = try EthereumTransaction.ContractGeneric.with {
-                    $0.amount = BigInt(stringLiteral: swapData.value.remove0x).magnitude.serialize()
-                    $0.data = try Data.from(hex: swapData.data)
-                }
-            },
-            toAddress: input.destinationAddress,
-            nonce: input.sequence.asBigInt + 1,
-            gasLimit: input.fee.gasLimit,
-            privateKey: privateKey
-        ))
-        transactions.append(swapTransaction)
-        
-        return transactions
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        switch input.type.stakeChain {
+    public func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String {
+        guard case .tokenApprove(_, let approvalData) = input.type else {
+            fatalError()
+        }
+        return try sign(coinType: input.coinType, input: buildBaseInput(
+            input: input,
+            transaction: .with {
+                $0.erc20Approve = EthereumTransaction.ERC20Approve.with {
+                    $0.spender = approvalData.spender
+                    $0.amount = BigInt.MAX_256.magnitude.serialize()
+                }
+            },
+            toAddress: approvalData.token,
+            privateKey: privateKey
+        ))
+    }
+    
+    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+        switch input.asset.chain {
         case .smartChain:
             return try SmartChainSigner().signStake(input: input, privateKey: privateKey)
         default:

@@ -15,11 +15,11 @@ public struct SuiSigner: Signable {
         signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> [String] {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
         switch input.type.transactionType {
         case .transfer,
                 .swap,
@@ -30,7 +30,7 @@ public struct SuiSigner: Signable {
             fatalError()
         case .stakeDelegate,
                 .stakeUndelegate:
-            return [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
+            return signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
         }
     }
     

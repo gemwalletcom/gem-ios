@@ -104,7 +104,7 @@ struct SwapNavigationView: View {
 extension SwapNavigationView {
     private func onSwapComplete(type: TransferDataType) {
         switch type {
-        case .swap(_, _, _, _):
+        case .swap, .tokenApprove:
             onComplete?()
         default: break
         }
