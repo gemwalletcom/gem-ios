@@ -52,12 +52,11 @@ public struct ConnectionsScene: View {
                         header: Text(header.name)
                     ) {
                         ForEach(groupedByWallet[header]!) { connection in
-                            let connectionModel = model.connectionSceneModel(connection: connection)
                             NavigationLink(value: connection) {
-                                ConnectionView(model: connectionModel.model)
+                                ConnectionView(model: WalletConnectionViewModel(connection: connection))
                                     .swipeActions(edge: .trailing) {
                                         Button(
-                                            connectionModel.disconnectTitle,
+                                            model.disconnectTitle,
                                             role: .destructive,
                                             action: { onSelectDisconnect(connection) }
                                         )
@@ -85,11 +84,11 @@ public struct ConnectionsScene: View {
             }
         }
         .alert("",
-            isPresented: $isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(isPresentingErrorMessage ?? "")
-            }
+               isPresented: $isPresentingErrorMessage.mappedToBool(),
+               actions: {},
+               message: {
+            Text(isPresentingErrorMessage ?? "")
+        }
         )
         .navigationTitle(model.title)
     }
@@ -111,8 +110,7 @@ private extension ConnectionsScene {
     private func onSelectDisconnect(_ connection: WalletConnection) {
         Task {
             do {
-                try await model.connectionSceneModel(connection: connection)
-                    .disconnect()
+                try await model.disconnect(connection: connection)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
                 NSLog("disconnect error: \(error)")

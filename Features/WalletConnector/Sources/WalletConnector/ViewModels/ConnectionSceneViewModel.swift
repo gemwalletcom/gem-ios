@@ -22,13 +22,7 @@ public struct ConnectionSceneViewModel: Sendable {
     }
 
     func disconnect() async throws {
-        let sessionId = model.connection.session.sessionId
-        let pairingId = model.connection.session.id
-        if sessionId == pairingId {
-            try await service.disconnectPairing(pairingId: pairingId)
-        } else {
-            try await service.disconnect(sessionId: sessionId)
-            try await service.disconnectPairing(pairingId: pairingId)
-        }
+        try await service.disconnect(session: model.connection.session)
     }
 }
+
