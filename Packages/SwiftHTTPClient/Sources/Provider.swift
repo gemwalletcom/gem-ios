@@ -43,7 +43,7 @@ extension Provider where T: BatchTargetType {
             try? JSONSerialization.jsonObject(with: $0)
         })
         guard let baseUrl = options.baseUrl else {
-            fatalError("Cannot batch requests without a base URL")
+            throw ProviderError.missingBaseUrl
         }
         // Predefined method, path, improve if needed
         let request = TargetRequestBuilder(
