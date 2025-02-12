@@ -368,6 +368,7 @@ extension Gemstone.SwapProvider {
     var image: Image {
         switch self {
         case .uniswapV3: Images.SwapProviders.uniswap
+        case .uniswapV4: Images.SwapProviders.uniswap
         case .jupiter: Images.SwapProviders.jupiter
         case .orca: Images.SwapProviders.orca
         case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap
