@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          submodules: true
+          submodules: recursive
 
       - name: Cache Cargo registry
         uses: actions/cache@v4
@@ -59,12 +59,15 @@ jobs:
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
+      
+      - name: Verify sccache usage
+        run: sccache --show-stats
     
       - name: Install just
         run: brew install just
 
       - name: Install dependencies
-        run: just install-toolchains && just install-swifttools
+        run: just install-toolchains
 
       - name: Build Core
         run: just generate-stone
