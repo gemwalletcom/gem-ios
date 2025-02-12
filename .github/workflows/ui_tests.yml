@@ -13,7 +13,6 @@ concurrency:
 env:
   SCCACHE_GHA_ENABLED: "true"
   RUSTC_WRAPPER: "sccache"
-  CARGO_INCREMENTAL: 1
 
 jobs:
   unit_test:
@@ -26,8 +25,15 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@v2.7.7
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-deps-
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
@@ -43,7 +49,6 @@ jobs:
 
       - name: Build Core
         run: just generate-stone
-
         
-      # - name: UI Tests
-      #   run: just test_ui
+      - name: UI Tests
+        run: just test_ui
