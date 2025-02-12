@@ -2,27 +2,27 @@
 
 import Foundation
 import SwiftUI
-import Store
 import Primitives
 import BigInt
 import Style
 import Components
 import GemstonePrimitives
-import PrimitivesComponents
 
-struct WalletHeaderViewModel {
+public struct WalletHeaderViewModel {
     //Remove WalletType from here
     let walletType: WalletType
     let value: Double
     
-    let currencyFormatter = CurrencyFormatter.currency()
-    
+    let currencyFormatter: CurrencyFormatter
+
     public init(
         walletType: WalletType,
-        value: Double
+        value: Double,
+        currencyCode: String
     ) {
         self.walletType = walletType
         self.value = value
+        self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
     }
     
     public var totalValueText: String {
@@ -30,14 +30,16 @@ struct WalletHeaderViewModel {
     }
 }
 
-extension WalletHeaderViewModel: HeaderViewModel {
-    var allowHiddenBalance: Bool { true }
-    var isWatchWallet: Bool { walletType == .view }
-    var title: String { totalValueText }
-    var assetImage: AssetImage? { .none }
-    var subtitle: String? { .none }
+// MARK: - HeaderViewModel
 
-    var buttons: [HeaderButton] {
+extension WalletHeaderViewModel: HeaderViewModel {
+    public var allowHiddenBalance: Bool { true }
+    public var isWatchWallet: Bool { walletType == .view }
+    public var title: String { totalValueText }
+    public var assetImage: AssetImage? { .none }
+    public var subtitle: String? { .none }
+
+    public var buttons: [HeaderButton] {
         let values: [(type: HeaderButtonType, isShown: Bool)] = [
             (.send, true),
             (.receive, true),

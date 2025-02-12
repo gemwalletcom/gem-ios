@@ -1,151 +1,154 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import SwiftUI
 import Style
-import Store
 import Components
-import PrimitivesComponents
-import struct GemstonePrimitives.GemstoneConfig
-import Preferences
 
-struct AssetDataViewModel {
+public struct AssetDataViewModel {
     private let assetData: AssetData
     private let balanceViewModel: BalanceViewModel
 
-    let priceViewModel: PriceViewModel
+    public let priceViewModel: PriceViewModel
+    let currencyCode: String
 
-    init(
+    public init(
         assetData: AssetData,
         formatter: ValueFormatter,
-        preferences: Preferences = Preferences.standard
+        currencyCode: String
     ) {
         self.assetData = assetData
         self.priceViewModel = PriceViewModel(
             price: assetData.price,
-            currencyCode: preferences.currency
+            currencyCode: currencyCode
         )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
             balance: assetData.balance,
             formatter: formatter
         )
+        self.currencyCode = currencyCode
     }
-    
+
     // asset
-    
+
     public var assetImage: AssetImage {
-        return AssetIdViewModel(assetId: asset.id).assetImage
+        AssetIdViewModel(assetId: asset.id).assetImage
     }
-    
-    var asset: Asset {
+
+    public var asset: Asset {
         assetData.asset
     }
-    
-    var name: String {
+
+    public var name: String {
         assetData.asset.name
     }
-    
-    var symbol: String {
+
+    public var symbol: String {
         assetData.asset.symbol
     }
 
     // price
-    
-    var isPriceAvailable: Bool {
+
+    public var isPriceAvailable: Bool {
         priceViewModel.isPriceAvailable
     }
-    
-    var priceAmountText: String {
+
+    public var priceAmountText: String {
         priceViewModel.priceAmountText
     }
 
-    var priceChangeText: String {
+    public var priceChangeText: String {
         priceViewModel.priceChangeText
     }
-    
-    var priceChangeTextColor: Color {
+
+    public var priceChangeTextColor: Color {
         priceViewModel.priceChangeTextColor
     }
-    
+
     // balance
-    
-    var balanceText: String {
+
+    public var balanceText: String {
         balanceViewModel.balanceText
     }
-    
-    var availableBalanceText: String {
+
+    public var availableBalanceText: String {
         balanceViewModel.availableBalanceText
     }
-    
-    var totalBalanceTextWithSymbol: String {
+
+    public var totalBalanceTextWithSymbol: String {
         balanceViewModel.totalBalanceTextWithSymbol
     }
-    
-    var availableBalanceTextWithSymbol: String {
+
+    public var availableBalanceTextWithSymbol: String {
         balanceViewModel.availableBalanceTextWithSymbol
     }
-    
-    var stakeBalanceTextWithSymbol: String {
+
+    public var stakeBalanceTextWithSymbol: String {
         balanceViewModel.stakingBalanceTextWithSymbol
     }
-    
-    var hasReservedBalance: Bool {
+
+    public var hasReservedBalance: Bool {
         balanceViewModel.hasReservedBalance
     }
 
-    var hasAvailableBalance: Bool {
+    public var hasAvailableBalance: Bool {
         balanceViewModel.availableBalanceAmount > 0
     }
 
-    var reservedBalanceTextWithSymbol: String {
+    public var reservedBalanceTextWithSymbol: String {
         balanceViewModel.reservedBalanceTextWithSymbol
     }
-    
-    var balanceTextColor: Color {
+
+    public var balanceTextColor: Color {
         balanceViewModel.balanceTextColor
     }
-    
-    var fiatBalanceText: String {
+
+    public var fiatBalanceText: String {
         guard let price = priceViewModel.price else {
             return .empty
         }
         let value = balanceViewModel.balanceAmount * price.price
-        return CurrencyFormatter.currency().string(value)
+        return CurrencyFormatter(
+            type: .currency,
+            currencyCode: currencyCode
+        ).string(value)
     }
-    
-    var isEnabled: Bool {
+
+    public var isEnabled: Bool {
         assetData.metadata.isEnabled
     }
-    
-    var isBuyEnabled: Bool {
+
+    public var isBuyEnabled: Bool {
         assetData.metadata.isBuyEnabled
     }
 
-    var isSellEnabled: Bool {
+    public var isSellEnabled: Bool {
         assetData.metadata.isSellEnabled
     }
 
-    var isSwapEnabled: Bool {
+    public var isSwapEnabled: Bool {
         assetData.metadata.isSwapEnabled
     }
-    
-    var isStakeEnabled: Bool {
+
+    public var isStakeEnabled: Bool {
         assetData.metadata.isStakeEnabled
     }
-    
-    var isActive: Bool {
+
+    public var isActive: Bool {
         assetData.metadata.isActive
     }
-    
-    var address: String {
-        return assetData.account.address
+
+    public var address: String {
+        assetData.account.address
     }
-    
-    var showBalances: Bool {
-        return assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
+
+    public var showBalances: Bool {
+        assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
     }
-    
-    var stakeApr: Double? {
+
+    public var stakeApr: Double? {
         assetData.metadata.stakingApr
     }
 }

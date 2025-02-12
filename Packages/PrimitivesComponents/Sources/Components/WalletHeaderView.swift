@@ -4,19 +4,29 @@ import SwiftUI
 import Style
 import Components
 import Localization
-import InfoSheet
 import Primitives
-import PrimitivesComponents
 
-struct WalletHeaderView: View {
-    let model: any HeaderViewModel
+public struct WalletHeaderView: View {
+    private let model: any HeaderViewModel
 
     @Binding var isHideBalanceEnalbed: Bool
 
-    var onHeaderAction: HeaderButtonAction?
-    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+    private let onHeaderAction: HeaderButtonAction?
+    private let onInfoAction: VoidAction
 
-    var body: some View {
+    public init(
+        model: any HeaderViewModel,
+        isHideBalanceEnalbed: Binding<Bool>,
+        onHeaderAction: HeaderButtonAction?,
+        onInfoAction: VoidAction
+    ) {
+        self.model = model
+        _isHideBalanceEnalbed = isHideBalanceEnalbed
+        self.onHeaderAction = onHeaderAction
+        self.onInfoAction = onInfoAction
+    }
+
+    public var body: some View {
         VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
@@ -54,7 +64,7 @@ struct WalletHeaderView: View {
             switch model.isWatchWallet {
             case true:
                 Button {
-                    onInfoSheetAction?(.watchWallet)
+                    onInfoAction?()
                 } label: {
                     HStack {
                         Images.System.eye
@@ -87,16 +97,16 @@ struct WalletHeaderView: View {
 // MARK: - Previews
 
 #Preview {
-    let model = AssetHeaderViewModel(
-        assetDataModel: .init(assetData: .main, formatter: .full_US),
-        walletModel: .init(wallet: .main),
-        bannersViewModel: HeaderBannersViewModel(banners: [])
+    let model = WalletHeaderViewModel(
+        walletType: .multicoin,
+        value: 1_000,
+        currencyCode: Currency.usd.rawValue
     )
 
     WalletHeaderView(
         model: model,
         isHideBalanceEnalbed: .constant(false),
         onHeaderAction: .none,
-        onInfoSheetAction: .none
+        onInfoAction: .none
     )
 }

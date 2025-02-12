@@ -6,14 +6,23 @@ import Primitives
 import Components
 import Style
 
-struct BannerView: View {
+public struct BannerView: View {
+    private let banners: [Banner]
 
-    let banners: [Primitives.Banner]
+    private let action: ((Banner) -> Void)
+    private let closeAction: ((Banner) -> Void)
 
-    var action: ((Banner) -> Void)
-    var closeAction: ((Banner) -> Void)
+    public init(
+        banners: [Banner],
+        action: @escaping (Banner) -> Void,
+        closeAction: @escaping (Banner) -> Void
+    ) {
+        self.banners = banners
+        self.action = action
+        self.closeAction = closeAction
+    }
 
-    var body: some View {
+    public var body: some View {
         if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
             Button(action: {
                 action(banner.banner)

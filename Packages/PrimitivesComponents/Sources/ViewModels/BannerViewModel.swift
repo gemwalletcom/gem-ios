@@ -6,13 +6,15 @@ import SwiftUI
 import GemstonePrimitives
 import Style
 import Localization
-import struct BannerService.BannerAction
 
-struct BannerViewModel {
+public struct BannerViewModel {
+    public  let banner: Banner
 
-    let banner: Banner
+    public init(banner: Banner) {
+        self.banner = banner
+    }
 
-    var image: Image? {
+    public var image: Image? {
         switch banner.event {
         case .stake, .accountActivation, .activateAsset:
             guard let asset = asset else {
@@ -33,7 +35,7 @@ struct BannerViewModel {
         return banner.chain?.asset
     }
 
-    var title: String? {
+    public var title: String? {
         switch banner.event {
         case .stake:
             guard let asset = asset else {
@@ -54,7 +56,7 @@ struct BannerViewModel {
         }
     }
 
-    var description: String? {
+    public var description: String? {
         switch banner.event {
         case .stake:
             guard let asset = asset else {
@@ -80,15 +82,15 @@ struct BannerViewModel {
         }
     }
 
-    var canClose: Bool {
+    public var canClose: Bool {
         banner.state != .alwaysActive
     }
 
-    var imageSize: CGFloat {
+    public var imageSize: CGFloat {
         28
     }
 
-    var cornerRadius: CGFloat {
+    public var cornerRadius: CGFloat {
         switch banner.event {
         case .stake,
             .accountActivation,
@@ -98,11 +100,11 @@ struct BannerViewModel {
         }
     }
     
-    var action: BannerAction {
+    public var action: BannerAction {
         BannerAction(id: banner.id, event: banner.event, url: url)
     }
     
-    var url: URL? {
+    public var url: URL? {
         switch banner.event {
         case .stake,
             .enableNotifications,
@@ -117,5 +119,5 @@ struct BannerViewModel {
 }
 
 extension BannerViewModel: Identifiable {
-    var id: String { banner.id }
+    public var id: String { banner.id }
 }

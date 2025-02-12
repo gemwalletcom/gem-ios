@@ -2,11 +2,10 @@
 
 import SwiftUI
 import Primitives
-import Localization
 import PrimitivesComponents
 import MarketInsight
-import NFT
 import Transactions
+import Wallet
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore

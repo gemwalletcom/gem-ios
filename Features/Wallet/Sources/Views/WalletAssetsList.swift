@@ -13,6 +13,7 @@ struct WalletAssetsList: View {
     let copyAssetAddress: StringAction
     let hideAsset: AssetIdAction
     let pinAsset: AssetIdBoolAction
+    let currencyCode: String
 
     @Binding var showBalancePrivacy: Bool
 
@@ -21,12 +22,14 @@ struct WalletAssetsList: View {
         copyAssetAddress: StringAction,
         hideAsset: @escaping AssetIdAction,
         pinAsset: AssetIdBoolAction,
+        currencyCode: String,
         showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
         self.copyAssetAddress = copyAssetAddress
         self.hideAsset = hideAsset
         self.pinAsset = pinAsset
+        self.currencyCode = currencyCode
         _showBalancePrivacy = showBalancePrivacy
     }
 
@@ -37,7 +40,8 @@ struct WalletAssetsList: View {
                     model: ListAssetItemViewModel(
                         showBalancePrivacy: $showBalancePrivacy,
                         assetData: asset,
-                        formatter: .short
+                        formatter: .short,
+                        currencyCode: currencyCode
                     )
                 )
                 .contextMenu {

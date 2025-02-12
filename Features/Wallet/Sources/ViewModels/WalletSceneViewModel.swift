@@ -1,24 +1,62 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
-import Keystore
-import Primitives
-import Store
+import Localization
 import UIKit
+import SwiftUI
+import Style
+import Primitives
 import BalanceService
 import WalletsService
+import BannerService
+import Store
+import Preferences
+@preconcurrency import Keystore
 
-struct WalletSceneViewModel {
-    let wallet: Wallet
+// TODO: - services to private,
+// use on instance of wallet, now we use wallet + keysotre getting wallet
+// move business logic from view to view model
+
+public struct WalletSceneViewModel: Sendable {
+    public let wallet: Wallet
+
+    let observablePreferences: ObservablePreferences
+    let keystore: any Keystore
+    let walletsService: WalletsService
+    let bannerService: BannerService
+
     private let balanceService: BalanceService
-    private let walletsService: WalletsService
-    
-    init(
+
+    public init(
         wallet: Wallet,
         balanceService: BalanceService,
-        walletsService: WalletsService
+        walletsService: WalletsService,
+        bannerService: BannerService,
+        observablePreferences: ObservablePreferences,
+        keystore: any Keystore
     ) {
         self.wallet = wallet
         self.balanceService = balanceService
         self.walletsService = walletsService
+        self.bannerService = bannerService
+        self.observablePreferences = observablePreferences
+        self.keystore = keystore
+    }
+
+    var pinImage: Image {
+        Images.System.pin
+    }
+
+    var pinnedTitle: String {
+        Localized.Common.pinned
+    }
+
+    var manageTokenTitle: String {
+        Localized.Wallet.manageTokenList
+    }
+
+    var manageImage: Image {
+        Images.Actions.manage
     }
 
     var assetsRequest: AssetsRequest {
