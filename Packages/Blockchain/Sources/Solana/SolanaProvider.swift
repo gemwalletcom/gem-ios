@@ -3,7 +3,7 @@
 import Foundation
 import SwiftHTTPClient
 
-public enum SolanaProvider: TargetType {
+public enum SolanaProvider: TargetType, BatchTargetType {
     
     public struct Options: Sendable {
         let skipPreflight: Bool

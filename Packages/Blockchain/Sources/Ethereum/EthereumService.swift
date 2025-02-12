@@ -83,13 +83,11 @@ extension EthereumService: ChainBalanceable {
                 "data": "0x70a08231000000000000000000000000\(address.remove0x)",
             ])
         }
-        let balances = try await provider.request(.batch(requests: requests))
+        let balances = try await provider.requestBatch(requests)
             .map(as: [JSONRPCResponse<BigIntable>].self)
             .map(\.result.value)
         
-        return zip(tokenIds, balances).map {
-            AssetBalance(assetId: $0, balance: Balance(available: $1))
-        }
+        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
     
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {

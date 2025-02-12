@@ -70,6 +70,12 @@ extension AssetBalance {
             isActive: isActive
         )
     }
+    
+    public static func merge(assetIds: [AssetId], balances: [BigInt]) -> [AssetBalance] {
+        return zip(assetIds, balances).map {
+            AssetBalance(assetId: $0, balance: Balance(available: $1))
+        }
+    }
 }
 
 public struct WalletAssetBalance: Codable {

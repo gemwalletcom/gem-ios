@@ -3,7 +3,7 @@
 import Foundation
 import SwiftHTTPClient
 
-public enum EthereumTarget: TargetType, Hashable {
+public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     case chainId
     case gasPrice
     case estimateGasLimit(from: String, to: String, value: String?, data: String?)
@@ -16,7 +16,6 @@ public enum EthereumTarget: TargetType, Hashable {
     case maxPriorityFeePerGas
     case syncing
     case latestBlock
-    case batch(requests: [EthereumTarget])
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -48,8 +47,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return "eth_syncing"
         case .latestBlock:
             return "eth_blockNumber"
-        case .batch:
-            return ""
         }
     }
     
@@ -120,18 +117,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [id] as [String], id: 1)
             )
-        case .batch(let targets):
-            let encoder = JSONEncoder()
-            let array: [Any] = targets.compactMap {
-                guard case .encodable(let req) = $0.data else {
-                    return nil
-                }
-                return try? encoder.encode(req)
-            }.compactMap {
-                try? JSONSerialization.jsonObject(with: $0)
-            }
-            let data = try? JSONSerialization.data(withJSONObject: array)
-            return .data(data ?? Data())
         }
     }
     
