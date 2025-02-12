@@ -105,6 +105,7 @@ extension NotificationService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
+        assertStore: .main,
         chainServiceFactory: .main
     )
 }

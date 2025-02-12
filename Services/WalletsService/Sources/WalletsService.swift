@@ -29,8 +29,6 @@ public final class WalletsService: @unchecked Sendable {
 
     // TODO: - omit combine
     private var assetObserver: AnyCancellable?
-    private var balanceObserver: AnyCancellable?
-    private var balanceErrorsObserver: AnyCancellable?
 
     public init(
         keystore: any Keystore,
@@ -54,12 +52,6 @@ public final class WalletsService: @unchecked Sendable {
         self.preferences = preferences
 
         defer {
-            self.balanceObserver = balanceService.observeBalance().sink { update in
-                for balance in update.balances {
-                    NSLog("observe balance: \(balance.assetId.identifier): \(balance.type)")
-                }
-                try? self.storeBalances(update: update)
-            }
             self.assetObserver = discoverAssetService.observeAssets().sink { update in
                 NSLog("discover assets: \(update.wallet.name): \(update.assets)")
 
@@ -68,9 +60,6 @@ public final class WalletsService: @unchecked Sendable {
                 } catch {
                     NSLog("newAssetUpdate error: \(error)")
                 }
-            }
-            self.balanceErrorsObserver = balanceService.observeBalanceErrors().sink { update in
-                NSLog("observe balance error: \(update.chain.id): \(update.error.localizedDescription)")
             }
         }
     }
@@ -142,10 +131,6 @@ public final class WalletsService: @unchecked Sendable {
         try priceService.updatePrices(prices: prices)
     }
 
-    public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
-        try balanceService.hideAsset(walletId: walletId, assetId: assetId)
-    }
-
     // transactions
 
     public func addTransactions(walletId: String, transactions: [Primitives.Transaction]) throws {
@@ -175,13 +160,6 @@ public final class WalletsService: @unchecked Sendable {
             .getAssets(walletID: walletId.id, filters: [.enabled])
             .map { $0.asset.id }
         try await fetch(walletId: walletId, assetIds: assetIds)
-    }
-
-    func storeBalances(update: BalanceUpdate) throws {
-        let assetIds = update.balances.map { $0.assetId }
-        let assets = try assetsService.getAssets(for: assetIds)
-        let updates = balanceService.createBalanceUpdate(assets: assets, balances: update.balances)
-        try? balanceService.updateBalances(updates, walletId: update.walletId)
     }
 
     // add asset to asset store and create balance store record
