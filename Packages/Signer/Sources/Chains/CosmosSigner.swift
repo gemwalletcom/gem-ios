@@ -81,7 +81,7 @@ public struct CosmosSigner: Signable {
         ]
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }
@@ -115,7 +115,9 @@ public struct CosmosSigner: Signable {
             fatalError()
         }
         
-        return try sign(input: input, messages: messages, chain: chain, memo: input.memo, privateKey: privateKey)
+        return [
+            try sign(input: input, messages: messages, chain: chain, memo: input.memo, privateKey: privateKey),
+        ]
     }
     
     func getUnstakeMessage(delegatorAddress: String, validatorAddress: String, amount: CosmosAmount) -> CosmosMessage {
