@@ -1,0 +1,73 @@
+name: UI Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
+jobs:
+  unit_test:
+    name: Build and UI Test iPhone simulator
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Cache Cargo registry
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+  
+      - name: Cache Cargo git dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cargo/git
+          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-git-
+
+      - name: Cache build artifacts (target directory)
+        uses: actions/cache@v4
+        with:
+          path: target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+      
+      - name: Cache build artifacts (gemstone target directory)
+        uses: actions/cache@v4
+        with:
+          path: core/gemstone/target
+          key: ${{ runner.os }}-cargo-gemstone-build-${{ hashFiles('**/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-gemstone-build-
+
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.7
+    
+      - name: Install just
+        run: brew install just
+
+      - name: Install dependencies
+        run: just install-toolchains && just install-swifttools
+
+      - name: Build Core
+        run: just generate-stone
+
+      - name: UI Tests
+        run: just test_ui
