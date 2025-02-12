@@ -39,16 +39,17 @@ struct WalletConnectorSignerTests {
     }
 
     @Test
-    func testGetWalletsNoRequiredBlockhain() throws {
-        var proposal = try Session.Proposal.emptyRequiredNamespaces()
-        let wallet = try keystore.importWallet(
+    func testGetWalletsOptionalsBlockhain() throws {
+        let proposal = try Session.Proposal.optionalNamespaces()
+    
+        let _ = try keystore.importWallet(
             name: "test",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         let signer = WalletConnectorSigner.mock(keystore: keystore)
         let wallets = try signer.getWallets(for: proposal)
 
-        #expect(wallets.contains(wallet))
+        #expect(wallets.count == 1)
     }
 }
 
@@ -70,5 +71,9 @@ extension Session.Proposal {
 
     static func emptyRequiredNamespaces() throws -> Session.Proposal {
         try Bundle.decode(from: "EmptyRequiredNamespacesProposal", withExtension: "json", in: .module)
+    }
+    
+    static func optionalNamespaces() throws -> Session.Proposal {
+        try Bundle.decode(from: "OptionalNamespacesProposal", withExtension: "json", in: .module)
     }
 }

@@ -47,18 +47,11 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
         let wallets = keystore.wallets
             .filter { !$0.isViewOnly }
-
-        let requiredBlockchains = proposal.requiredBlockchains
-
-        // return all wallets if there are no requiredBlockchains
-        if requiredBlockchains.isEmpty {
-            return wallets
-        }
-
-        let namespaces = requiredBlockchains.map { $0.namespace }.asSet()
+        let blockchains = (proposal.requiredBlockchains + proposal.optionalBlockchains).asSet()
+        
         return wallets.filter {
-            $0.accounts.contains {
-                namespaces.contains($0.chain.namespace ?? "")
+            $0.accounts.compactMap { $0.chain.blockchain }.contains {
+                blockchains.contains($0)
             }
         }
     }
@@ -198,5 +191,14 @@ extension Session.Proposal {
         .reduce([], +)
         .asSet()
         .asArray()
+    }
+    
+    var optionalBlockchains: [Blockchain] {
+        optionalNamespaces?.values.compactMap { namespace in
+            namespace.chains
+        }
+        .reduce([], +)
+        .asSet()
+        .asArray() ?? []
     }
 }

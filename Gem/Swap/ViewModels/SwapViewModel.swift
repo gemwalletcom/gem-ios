@@ -2,6 +2,7 @@
 
 import BigInt
 import Components
+import ExplorerService
 import Foundation
 import GemstonePrimitives
 import GRDBQuery
@@ -14,9 +15,9 @@ import Style
 import SwapService
 import SwiftUI
 import Transfer
-import ExplorerService
 import WalletsService
 
+import class Gemstone.Config
 import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
@@ -28,7 +29,6 @@ import struct Gemstone.SwapQuoteRequest
 import struct Swap.ErrorWrapper
 import struct Swap.SwapAvailabilityResult
 import class Swap.SwapPairSelectorViewModel
-import class Gemstone.Config
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
@@ -49,10 +49,10 @@ class SwapViewModel {
     var fromValue: String = ""
     var toValue: String = ""
 
-    var swapState: SwapState = SwapState()
+    var swapState: SwapState = .init()
 
     let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
-    
+
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
 
@@ -153,7 +153,7 @@ class SwapViewModel {
     func onSelectAssetAction(type: SelectAssetSwapType) {
         onSelectAsset?(type)
     }
-    
+
     func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
         guard
             case .loaded(let result) = swapState.availability,
@@ -189,7 +189,7 @@ extension SwapViewModel {
 
     func onFetchStateChange(state: SwapFetchState) async {
         switch state {
-        case let .fetch(input, _):
+        case .fetch(let input, _):
             guard let fromAsset = input.fromAsset, let toAsset = input.toAsset else { return }
             await fetch(
                 fromAsset: fromAsset.asset,
@@ -367,7 +367,7 @@ extension SwapViewModel {
 extension Gemstone.SwapProvider {
     var image: Image {
         switch self {
-        case .uniswapV3: Images.SwapProviders.uniswap
+        case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
         case .jupiter: Images.SwapProviders.jupiter
         case .orca: Images.SwapProviders.orca
         case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap

@@ -57,4 +57,11 @@ public extension AssetId {
     static func subTokenId(_ ids: [String]) -> String {
         ids.joined(separator: subTokenSeparator)
     }
+    
+    func getTokenId() throws -> String {
+        guard let tokenId = tokenId else {
+            throw AnyError("tokenId is null")
+        }
+        return tokenId
+    }
 }
