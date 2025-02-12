@@ -7,7 +7,7 @@ extension AssetData: Identifiable {
 
 public extension AssetData {
     var assetAddress: AssetAddress {
-        return AssetAddress(asset: asset, address: account.address)
+        AssetAddress(asset: asset, address: account.address)
     }
     
     var balances: [BalanceType: BigInt] {
@@ -20,6 +20,10 @@ public extension AssetData {
             BalanceType.rewards: balance.rewards,
             BalanceType.reserved: balance.reserved,
         ]
+    }
+
+    var isPriceAlertsEnabled: Bool {
+        price_alert != nil
     }
 }
 

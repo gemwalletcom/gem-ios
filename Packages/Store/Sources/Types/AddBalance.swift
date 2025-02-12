@@ -13,22 +13,11 @@ public struct AddBalance {
 }
 
 extension AddBalance {
-    func mapToAssetBalanceRecord(walletId: String) -> AssetBalanceRecord {
-        return AssetBalanceRecord(
+    func mapToAssetBalanceRecord(walletId: String) -> AssetBalanceNewRecord {
+        return AssetBalanceNewRecord(
             assetId: assetId,
             walletId: walletId,
-            available: .zero,
-            frozen: .zero,
-            locked: .zero,
-            staked: .zero,
-            pending: .zero,
-            rewards: .zero,
-            reserved: .zero,
-            isEnabled: isEnabled,
-            isHidden: false,
-            isPinned: false,
-            total: 0,
-            fiatValue: 0
+            isEnabled: isEnabled
         )
     }
 }

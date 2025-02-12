@@ -5,7 +5,7 @@ import Style
 
 public enum TitleTagType {
     case none
-    case progressView
+    case progressView(scale: CGFloat = 1.0)
     case image(Image)
 }
 
@@ -113,6 +113,7 @@ public struct ListItemView: View {
                     titleTagType: titleTagType,
                     infoAction: infoAction
                 )
+                .listRowInsets(.zero)
             }
 
             if showPlaceholderProgress(for: .subtitle, value: subtitle) {
@@ -153,6 +154,7 @@ extension ListItemView {
         var body: some View {
             return image
                 .resizable()
+                .aspectRatio(contentMode: .fit)
                 .frame(width: imageSize, height: imageSize)
                 .cornerRadius(cornerRadius)
         }
@@ -179,26 +181,24 @@ extension ListItemView {
 
                     if let infoAction {
                         Button(action: infoAction) {
-                            Image(systemName: SystemImage.info)
+                            Images.System.info
                                 .font(title.style.font)
                                 .foregroundStyle(Colors.gray)
                         }
                         .buttonStyle(.plain)
                     }
 
-                    if let tag = titleTag {
-                        TitleTagView(titleTag: tag, titleTagType: titleTagType)
+                    if let titleTag {
+                        TitleTagView(titleTag: titleTag, titleTagType: titleTagType)
                     }
                 }
-                .padding(.trailing, Spacing.small)
 
                 if let extra = titleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)
-                        .padding(.trailing, Spacing.medium)
-
                 }
             }
+            .padding(.trailing, Spacing.small)
         }
     }
 }
@@ -220,8 +220,9 @@ extension ListItemView {
                 switch titleTagType {
                 case .none:
                     EmptyView()
-                case .progressView:
+                case let .progressView(scale):
                     LoadingView(size: .small, tint: titleTag.style.color)
+                        .scaleEffect(scale)
                 case .image(let image):
                     image
                 }
@@ -338,7 +339,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Loading",
                 titleTagStyle: tagTextStyleWhite,
-                titleTagType: .progressView,
+                titleTagType: .progressView(),
                 subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle
             )
@@ -346,7 +347,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Image",
                 titleTagStyle: tagTextStyleWhite,
-                titleTagType: .image(Image(systemName: SystemImage.faceid)),
+                titleTagType: .image(Images.System.faceid),
                 subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle
             )
@@ -361,14 +362,14 @@ extension ListItemView {
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: "Subtitle Extra",
-                subtitleStyleExtra: extraTextStyle, image: Image(systemName: SystemImage.faceid),
+                subtitleStyleExtra: extraTextStyle, image: Images.System.faceid,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )
             ListItemView(
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle, image: Image(systemName: SystemImage.eye),
+                subtitleStyle: defaultTextStyle, image: Images.System.eye,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )
@@ -379,7 +380,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Loading",
                 titleTagStyle: tagTextStyleBlue,
-                titleTagType: .progressView,
+                titleTagType: .progressView(),
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: longSubtitle,
                 subtitleStyle: defaultTextStyle
@@ -388,7 +389,7 @@ extension ListItemView {
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, titleTag: "Image",
                 titleTagStyle: tagTextStyleBlue,
-                titleTagType: .image(Image(systemName: SystemImage.faceid)),
+                titleTagType: .image(Images.System.faceid),
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: longSubtitleExtra,
@@ -411,7 +412,7 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, image: Image(systemName: SystemImage.eye),
+                titleStyle: defaultTextStyle, image: Images.System.eye,
                 imageSize: Sizing.list.image,
                 cornerRadius: 0
             )

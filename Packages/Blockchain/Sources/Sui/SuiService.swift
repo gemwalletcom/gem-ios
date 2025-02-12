@@ -7,15 +7,15 @@ import BigInt
 import Gemstone
 import GemstonePrimitives
 
-public struct SuiService {
+public struct SuiService: Sendable {
     
-    let chain: Chain
+    let chain: Primitives.Chain
     let provider: Provider<SuiProvider>
     
     private static let coinId = "0x2::sui::SUI"
 
     public init(
-        chain: Chain,
+        chain: Primitives.Chain,
         provider: Provider<SuiProvider>
     ) {
         self.chain = chain
@@ -76,7 +76,8 @@ extension SuiService {
                     value: input.value
                 ).data
             }
-
+        case .transferNft:
+            fatalError()
         case .stake(_, let stakeType):
             switch stakeType {
             case .stake(let validator):
@@ -95,19 +96,11 @@ extension SuiService {
             case .redelegate, .rewards, .withdraw:
                 fatalError()
             }
-        case .swap(_, _, let action): try {
-            guard
-                case .swap(let swapData) = action,
-                let data = swapData.quote.data?.data
-            else {
-                return ""
-            }
-            let output = try suiValidateAndHash(encoded: data)
+        case .swap(_, _, _, let data): try {
+            let output = try Gemstone.suiValidateAndHash(encoded: data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
-
-        case .generic:
-            fatalError()
+        case .generic, .account, .tokenApprove: fatalError()
         }
     }
 
@@ -140,11 +133,11 @@ extension SuiService {
         let input = SuiTransferInput(
             sender: sender,
             recipient: recipient,
-            amount: value.UInt,
+            amount: value.asUInt,
             coins: suiCoins,
             sendMax: sendMax,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             )
         )
@@ -170,10 +163,10 @@ extension SuiService {
         let input = SuiTokenTransferInput(
             sender: sender,
             recipient: recipient,
-            amount: value.UInt,
+            amount: value.asUInt,
             tokens: coins.map { $0.toGemstone() },
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             gasCoin: gas.toGemstone())
@@ -195,9 +188,9 @@ extension SuiService {
         let stakeInput = SuiStakeInput(
             sender: senderAddress,
             validator: validatorAddress,
-            stakeAmount: value.UInt,
+            stakeAmount: value.asUInt,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             coins: suiCoins
@@ -223,7 +216,7 @@ extension SuiService {
             sender: sender,
             stakedSui: object.objectRef,
             gas: SuiGas(
-                budget: gasBudget(coinType: coinType).UInt,
+                budget: gasBudget(coinType: coinType).asUInt,
                 price: price
             ),
             gasCoin: gas.toGemstone()
@@ -248,19 +241,17 @@ extension SuiService {
 
 extension SuiService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getBalance = getBalance(address: address)
-
-        let (balance, staked) = try await (getBalance, getStakeBalance(address: address))
+        let getBalance = try await getBalance(address: address)
 
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: BigInt(stringLiteral: balance.totalBalance)
-            ).merge(staked.balance)
+                available: BigInt(stringLiteral: getBalance.totalBalance)
+            )
         )
     }
     
-    public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
+    public func tokenBalance(for address: String, tokenIds: [Primitives.AssetId]) async throws -> [AssetBalance] {
         let balances = try await provider.request(.balances(address: address))
             .map(as: JSONRPCResponse<[SuiCoinBalance]>.self).result
         
@@ -281,14 +272,13 @@ extension SuiService: ChainBalanceable {
     }
 
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let delegations = try await getDelegations(address: address)
         let staked = delegations.map { $0.stakes.map { $0.total }.reduce(0, +) }.reduce(0, +)
         
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: .zero,
                 staked: staked
             )
         )
@@ -297,9 +287,7 @@ extension SuiService: ChainBalanceable {
 
 // MARK: - ChainFeeCalculateable
 
-extension SuiService: ChainFeeCalculateable {
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    
+extension SuiService {
     public func fee(input: FeeInput) async throws -> Fee {
         let data: String = try await String(getData(input: input).split(separator: "_")[0])
         return try await fee(data: data)
@@ -318,10 +306,14 @@ extension SuiService: ChainFeeCalculateable {
         return Fee(
             fee: fee,
             gasPriceType: .regular(gasPrice: 1),
-            gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
+            gasLimit: 1
         )
+    }
+}
+
+extension SuiService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        FeeRate.defaultRates()
     }
 }
 
@@ -360,9 +352,9 @@ extension SuiService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension SuiService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: JSONRPCResponse<SuiTransaction>.self).result
         let state: TransactionState = switch transaction.effects.status.status {
         case "success": .confirmed
@@ -459,7 +451,7 @@ extension SuiService: ChainTokenable {
             name: data.name,
             symbol: data.symbol,
             decimals: data.decimals,
-            type: assetId.assetType!
+            type: try assetId.getAssetType()
         )
     }
     
@@ -500,12 +492,20 @@ extension Blockchain.SuiCoin {
     func toGemstone() -> Gemstone.SuiCoin {
         Gemstone.SuiCoin(
             coinType: coinType,
-            balance: BigInt(stringLiteral: balance).UInt,
+            balance: BigInt(stringLiteral: balance).asUInt,
             objectRef: SuiObjectRef(
                 objectId: coinObjectId,
                 digest: digest,
-                version: BigInt(stringLiteral: version).UInt
+                version: BigInt(stringLiteral: version).asUInt
             )
         )
+    }
+}
+
+// MARK: - ChainAddressStatusFetchable
+
+extension SuiService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
     }
 }

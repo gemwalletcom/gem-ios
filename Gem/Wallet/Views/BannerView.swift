@@ -10,26 +10,38 @@ struct BannerView: View {
 
     let banners: [Primitives.Banner]
 
+    var action: ((Banner) -> Void)
     var closeAction: ((Banner) -> Void)
 
     var body: some View {
-        ForEach(banners.map { BannerViewModel(banner: $0) }) { banner in
-            HStack(spacing: 0) {
-                ListItemView(title: banner.title, titleExtra: banner.description, image: banner.image, imageSize: 28, cornerRadius: 14)
-
-                Spacer()
-
-                if banner.canClose {
-                    ListButton(
-                        image: Image(systemName: SystemImage.xmark),
-                        action: {
-                            closeAction(banner.banner)
-                        }
+        if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
+            Button(action: {
+                action(banner.banner)
+            }, label: {
+                HStack(spacing: 0) {
+                    ListItemView(
+                        title: banner.title,
+                        titleExtra: banner.description,
+                        image: banner.image,
+                        imageSize: banner.imageSize,
+                        cornerRadius: banner.cornerRadius
                     )
-                    .padding(.vertical, Spacing.small)
-                    .foregroundColor(Colors.gray)
+
+                    if banner.canClose {
+                        Spacer()
+                        
+                        ListButton(
+                            image: Images.System.xmarkCircle,
+                            action: {
+                                closeAction(banner.banner)
+                            }
+                        )
+                        .padding(.vertical, Spacing.small)
+                        .foregroundColor(Colors.gray)
+                    }
                 }
-            }
+            })
         }
     }
 }
+

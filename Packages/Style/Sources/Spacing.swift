@@ -10,7 +10,7 @@ public struct Spacing {
     
     public struct scene {
         public static let top: CGFloat = 16
-        public static let bottom: CGFloat = 16
+        public static let bottom: CGFloat = 8
         public struct button {
             public static let maxWidth: CGFloat = 340
         }
@@ -22,10 +22,16 @@ public struct Spacing {
 
 public struct Sizing {
     public struct image {
-        public static let chain: CGFloat = 44
+        public static let small: CGFloat = 22
+        public static let medium: CGFloat = 44
+        public static let large: CGFloat = 88
+        public static let extraLarge: CGFloat = 120
     }
     
     public struct list {
         public static let image: CGFloat = 22
+        public struct selected {
+            public static let image: CGFloat = 20
+        }
     }
 }

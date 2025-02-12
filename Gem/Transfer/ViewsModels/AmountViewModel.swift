@@ -9,41 +9,34 @@ import Store
 import SwiftUI
 import Gemstone
 import GemstonePrimitives
-
-enum AmountType: Equatable, Hashable {
-    case transfer
-    case stake(validators: [DelegationValidator])
-    case unstake(delegation: Delegation)
-    case redelegate(delegation: Delegation, validators: [DelegationValidator])
-    case withdraw(delegation: Delegation)
-}
+import Localization
+import Transfer
+import enum Staking.StakeValidatorsType
+import StakeService
+import PrimitivesComponents
+import WalletsService
 
 class AmounViewModel: ObservableObject {
-    let amountRecipientData: AmountRecipientData
+    let input: AmountInput
     let wallet: Wallet
-    let keystore: any Keystore
     let walletsService: WalletsService
     let stakeService: StakeService
+    let onTransferAction: TransferDataAction
 
     public init(
-        amountRecipientData: AmountRecipientData,
+        input: AmountInput,
         wallet: Wallet,
-        keystore: any Keystore,
         walletsService: WalletsService,
         stakeService: StakeService,
-        currentValidator: DelegationValidator? = .none
+        onTransferAction: TransferDataAction
     ) {
-        self.amountRecipientData = amountRecipientData
+        self.input = input
         self.wallet = wallet
-        self.keystore = keystore
         self.walletsService = walletsService
         self.stakeService = stakeService
-        
-        if let validator = currentValidator {
-            self.currentValidator = validators.contains(validator) ? validator : validators.first
-        } else {
-            self.currentValidator = validators.first
-        }
+        self.onTransferAction = onTransferAction
+
+        self.currentValidator = defaultValidator
     }
     
     private let formatter = ValueFormatter(style: .full)
@@ -52,60 +45,79 @@ class AmounViewModel: ObservableObject {
     @Published var currentValidator: DelegationValidator? = .none
     @Published var currentDelegation: Delegation? = .none
 
+    var defaultValidator: DelegationValidator? {
+        let recommended: DelegationValidator? = switch type {
+        case .stake(_, let recommendedValidator): recommendedValidator
+        case .redelegate(_, _, let recommendedValidator): recommendedValidator
+        case .transfer, .unstake, .withdraw: .none
+        }
+        return recommended ?? validators.first
+    }
+
+    var type: AmountType {
+        input.type
+    }
+
+    var asset: Asset {
+        input.asset
+    }
+
     var validators: [DelegationValidator] {
-        switch amountRecipientData.type {
+        switch type {
         case .transfer: []
-        case .stake(let validators): validators
+        case .stake(let validators, _): validators
         case .unstake(let delegation): [delegation.validator]
-        case .redelegate(_, let validators): validators
+        case .redelegate(_, let validators, _): validators
         case .withdraw(let delegation): [delegation.validator]
         }
     }
     
     var stakeValidatorsType: StakeValidatorsType {
-        switch amountRecipientData.type {
+        switch type {
         case .transfer, .stake, .redelegate: .stake
         case .unstake, .withdraw: .unstake
         }
     }
     
     var delegations: [Delegation] {
-        switch amountRecipientData.type {
+        switch type {
         case .transfer, .stake: []
         case .unstake(let delegation): [delegation]
-        case .redelegate(let delegation, _): [delegation]
+        case .redelegate(let delegation, _, _): [delegation]
         case .withdraw(let delegation): [delegation]
         }
     }
     
     var title: String {
-        return Localized.Transfer.Amount.title
+        switch type {
+        case .transfer: Localized.Transfer.Send.title
+        case .stake: Localized.Transfer.Stake.title
+        case .unstake: Localized.Transfer.Unstake.title
+        case .redelegate: Localized.Transfer.Redelegate.title
+        case .withdraw: Localized.Transfer.Withdraw.title
+        }
     }
-    
-    var asset: Asset {
-        amountRecipientData.data.asset
-    }
-    
+
     var assetSymbol: String {
-        return amountRecipientData.data.asset.symbol
+        asset.symbol
     }
     
     var assetImage: AssetImage {
-        return AssetViewModel(asset: asset).assetImage
+        AssetViewModel(asset: asset).assetImage
     }
     
     var assetName: String {
-        return asset.name
+        asset.name
     }
     
     var availableValue: BigInt {
-        switch amountRecipientData.type {
+        switch input.type {
         case .transfer, .stake:
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .unstake(let delegation):
             return delegation.base.balanceValue
-        case .redelegate(let delegation, _):
+        case .redelegate(let delegation, _, _):
             return delegation.base.balanceValue
         case .withdraw(let delegation):
             return delegation.base.balanceValue
@@ -133,7 +145,7 @@ class AmounViewModel: ObservableObject {
     }
     
     var isAmountChangable: Bool {
-        switch amountRecipientData.type {
+        switch type {
         case .transfer,
             .stake,
             .redelegate:
@@ -149,7 +161,7 @@ class AmounViewModel: ObservableObject {
     }
     
     var isSelectValidatorEnabled: Bool {
-        switch amountRecipientData.type {
+        switch type {
         case .transfer, .stake, .redelegate:
             return true
         case .unstake, .withdraw:
@@ -158,8 +170,8 @@ class AmounViewModel: ObservableObject {
     }
     
     var minimumValue: BigInt {
-        let stakeChain = amountRecipientData.data.asset.chain.stakeChain
-        switch amountRecipientData.type {
+        let stakeChain = asset.chain.stakeChain
+        switch type {
         case .stake:
             return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
         case .redelegate:
@@ -204,41 +216,75 @@ class AmounViewModel: ObservableObject {
         return try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
     }
     
-    func getTransferData(value: BigInt) throws -> TransferData {
-        let recipientAddress = stakeService.getRecipientAddress(chain: amountRecipientData.data.asset.chain.stakeChain, type: amountRecipientData.type, validatorId: currentValidator?.id)
-
-        // make sure validator address is correct
-        // FIXME. Refactor and add tests
-        let stakeRecipientData = RecipientData(
-            asset: amountRecipientData.data.asset,
-            recipient: Recipient(
-                name: currentValidator?.name,
-                address: recipientAddress ?? "",
-                memo: amountRecipientData.data.recipient.memo
+    var recipientData: RecipientData {
+        switch type {
+        case .transfer(recipient: let recipient):
+            return recipient
+        case .stake,
+            .unstake,
+            .redelegate,
+            .withdraw:
+            
+            let recipientAddress = self.stakeService.getRecipientAddress(
+                chain: asset.chain.stakeChain,
+                type: type,
+                validatorId: currentValidator?.id
             )
-        )
-        
-        switch amountRecipientData.type {
+            
+            return RecipientData(
+                recipient: Recipient(
+                    name: currentValidator?.name,
+                    address: recipientAddress ?? "",
+                    memo: Localized.Stake.viagem
+                ),
+                amount: .none
+            )
+        }
+    }
+    
+    func getTransferData(recipientData: RecipientData, value: BigInt, canChangeValue: Bool) throws -> TransferData {
+        switch type {
         case .transfer:
-            return TransferData(type: .transfer(asset), recipientData: amountRecipientData.data, value: value)
+            return TransferData(type: .transfer(asset), recipientData: recipientData, value: value, canChangeValue: canChangeValue)
         case .stake:
             guard let validator = currentValidator else {
                 throw TransferError.invalidAmount
             }
-            return TransferData(type: .stake(asset, .stake(validator: validator)), recipientData: stakeRecipientData, value: value)
+            return TransferData(
+                type: .stake(asset, .stake(validator: validator)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         case .unstake(let delegation):
-            return TransferData(type: .stake(asset, .unstake(delegation: delegation)), recipientData: stakeRecipientData, value: value)
-        case .redelegate(let delegation, _):
+            return TransferData(
+                type: .stake(asset, .unstake(delegation: delegation)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
+        case .redelegate(let delegation, _, _):
             guard let validator = currentValidator else {
                 throw TransferError.invalidAmount
             }
-            return TransferData(type: .stake(asset, .redelegate(delegation: delegation, toValidator: validator)), recipientData: stakeRecipientData, value: value)
+            return TransferData(
+                type: .stake(asset, .redelegate(delegation: delegation, toValidator: validator)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         case .withdraw(let delegation):
-            return TransferData(type: .stake(asset, .withdraw(delegation: delegation)), recipientData: stakeRecipientData, value: value)
+            return TransferData(
+                type: .stake(asset, .withdraw(delegation: delegation)),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         }
     }
-    
+
     func fiatAmount(amount: String) -> String {
+        // simplify by adding priceService.getAmount(:amount, asset)
         guard
             let value = try? value(for: amount),
             let fiatValue = try? formatter.double(from: value, decimals: asset.decimals.asInt),

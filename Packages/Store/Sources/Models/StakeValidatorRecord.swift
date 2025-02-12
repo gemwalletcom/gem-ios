@@ -6,7 +6,7 @@ import GRDB
 
 public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "stake_validators"
+    public static let databaseTableName: String = "stake_validators"
 
     public var id: String
     public var assetId: String
@@ -43,7 +43,7 @@ extension StakeValidatorRecord: CreateTable {
 extension StakeValidatorRecord {
     var validator: DelegationValidator {
         DelegationValidator(
-            chain: AssetId(id: assetId)!.chain,
+            chain: try! AssetId(id: assetId).chain,
             id: validatorId,
             name: name,
             isActive: isActive,

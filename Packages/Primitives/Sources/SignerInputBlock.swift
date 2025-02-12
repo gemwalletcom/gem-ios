@@ -2,14 +2,14 @@
 
 import Foundation
 
-public struct SignerInputBlock {
+public struct SignerInputBlock: Sendable {
     public let number: Int
     public let hash: String
     public let version: Int
     public let timestamp: Int
     public let transactionTreeRoot: String
     public let parentHash: String
-    public let widnessAddress: String
+    public let witnessAddress: String
     
     public init(
         number: Int = 0,
@@ -26,6 +26,6 @@ public struct SignerInputBlock {
         self.timestamp = timestamp
         self.transactionTreeRoot = transactionTreeRoot
         self.parentHash = parentHash
-        self.widnessAddress = widnessAddress
+        self.witnessAddress = widnessAddress
     }
 }

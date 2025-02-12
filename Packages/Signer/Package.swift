@@ -1,5 +1,4 @@
-// swift-tools-version: 5.9
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -33,6 +32,11 @@ let package = Package(
         ),
         .testTarget(
             name: "SignerTests",
-            dependencies: ["Signer"]),
+            dependencies: [
+                "Signer",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+            ]
+        ),
     ]
 )

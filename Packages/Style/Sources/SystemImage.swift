@@ -18,7 +18,6 @@ public struct SystemImage {
     public static let globe = "globe"
     public static let share = "square.and.arrow.up"
     public static let lock = "lock"
-    public static let none = ""
     public static let delete = "trash"
     public static let checkmark = "checkmark"
     public static let ellipsis = "ellipsis"
@@ -28,12 +27,25 @@ public struct SystemImage {
     public static let plus = "plus"
     public static let eye = "eye.fill"
     public static let searchNoResults = "exclamationmark.magnifyingglass"
-    public static let errorOccurred = "exclamationmark.triangle.fill"
+    public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"
+    public static let exclamationmarkTriangle = "exclamationmark.triangle"
     public static let gallery = "photo.artframe"
-    public static let xmark = "xmark.circle.fill"
+    public static let photo = "photo"
+    public static let xmarkCircle = "xmark.circle.fill"
+    public static let xmark = "xmark"
     public static let bell = "bell"
+    public static let bellFill = "bell.fill"
     public static let pin = "pin"
     public static let unpin = "pin.slash"
+    public static let filter = "line.horizontal.3.decrease.circle"
+    public static let filterFill = "line.horizontal.3.decrease.circle.fill"
+    public static let book = "book"
+    public static let starFill = "star.fill"
+    public static let textPageFill = "text.page.fill"
+
+
+    // specific to Gem style
+    public static let errorOccurred = exclamationmarkTriangleFill
 }
 
 // MARK: - Previews
@@ -55,7 +67,6 @@ public struct SystemImage {
         (SystemImage.globe, "Globe"),
         (SystemImage.share, "Share"),
         (SystemImage.lock, "Lock"),
-        (SystemImage.none, "None"),
         (SystemImage.delete, "Delete"),
         (SystemImage.checkmark, "Checkmark"),
         (SystemImage.ellipsis, "Ellipsis"),
@@ -67,10 +78,14 @@ public struct SystemImage {
         (SystemImage.searchNoResults, "No Results"),
         (SystemImage.errorOccurred, "Error Ocurred"),
         (SystemImage.gallery, "Gallery"),
+        (SystemImage.xmarkCircle, "X MarkCircle"),
         (SystemImage.xmark, "X Mark"),
         (SystemImage.bell, "Bell"),
         (SystemImage.pin, "Pin"),
         (SystemImage.unpin, "Unpin"),
+        (SystemImage.filter, "Filter"),
+        (SystemImage.filterFill, "Filter Fill"),
+        (SystemImage.book, "book"),
     ]
 
     return List {

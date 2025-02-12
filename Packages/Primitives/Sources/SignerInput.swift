@@ -15,12 +15,14 @@ public struct SignerInput {
     public let sequence: Int
     public let senderAddress: String
     public let destinationAddress: String
-    public let block: SignerInputBlock
+
     // token: Solana only
+    public let data: SigningData
     public let token: SignerInputToken
     public let utxos: [UTXO]
     public let messageBytes: String
     public let extra: SigningdExtra?
+    public let block: SignerInputBlock
 
     public init(
         type: TransferDataType,
@@ -34,6 +36,7 @@ public struct SignerInput {
         sequence: Int,
         senderAddress: String,
         destinationAddress: String,
+        data: SigningData,
         block: SignerInputBlock,
         token: SignerInputToken,
         utxos: [UTXO],
@@ -51,6 +54,7 @@ public struct SignerInput {
         self.sequence = sequence
         self.senderAddress = senderAddress
         self.destinationAddress = destinationAddress
+        self.data = data
         self.block = block
         self.token = token
         self.utxos = utxos

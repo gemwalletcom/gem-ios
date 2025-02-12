@@ -1,24 +1,21 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Store
 import Style
 import Components
-import GemstonePrimitives
-
-protocol HeaderViewModel {
-    var isWatchWallet: Bool { get }
-    var assetImage: AssetImage? { get }
-    var title: String { get }
-    var subtitle: String? { get }
-    var buttons: [HeaderButton] { get }
-}
+import Localization
+import InfoSheet
+import Primitives
+import PrimitivesComponents
 
 struct WalletHeaderView: View {
-    
-    let model: HeaderViewModel
-    var action: HeaderButtonAction?
-    
+    let model: any HeaderViewModel
+
+    @Binding var isHideBalanceEnalbed: Bool
+
+    var onHeaderAction: HeaderButtonAction?
+    var onInfoSheetAction: ((InfoSheetType) -> Void)?
+
     var body: some View {
         VStack(spacing: Spacing.large/2) {
             if let assetImage = model.assetImage {
@@ -28,53 +25,78 @@ struct WalletHeaderView: View {
                     overlayImageSize: 26
                 )
             }
-            
-            Text(model.title)
-                .minimumScaleFactor(0.5)
-                .font(.system(size: 42))
-                .fontWeight(.semibold)
-                .foregroundColor(Colors.black)
-                .lineLimit(1)
-                
-            if let subtitle = model.subtitle {
-                Text(subtitle)
-                    .font(.system(size: 18))
-                    .fontWeight(.semibold)
-                    .foregroundColor(Colors.gray)
+            ZStack {
+                if model.allowHiddenBalance {
+                    PrivacyToggleView(
+                        model.title,
+                        isEnabled: $isHideBalanceEnalbed
+                    )
+                } else {
+                    Text(model.title)
+                }
             }
-            
+            .minimumScaleFactor(0.5)
+            .font(.system(size: 42))
+            .fontWeight(.semibold)
+            .foregroundStyle(Colors.black)
+            .lineLimit(1)
+
+            if let subtitle = model.subtitle {
+                PrivacyText(
+                    subtitle,
+                    isEnabled: isEnabled
+                )
+                .font(.system(size: 18))
+                .fontWeight(.semibold)
+                .foregroundStyle(Colors.gray)
+            }
+
             switch model.isWatchWallet {
             case true:
-                HStack {
-                    Image(systemName: SystemImage.eye)
-                    
-                    Text(Localized.Wallet.Watch.Tooltip.title)
-                        .foregroundColor(Colors.black)
-                        .font(.callout)
-                    
-                    Button {
-                        UIApplication.shared.open(Docs.url(.whatIsWatchWallet))
-                    } label: {
-                        Image(systemName: SystemImage.info)
+                Button {
+                    onInfoSheetAction?(.watchWallet)
+                } label: {
+                    HStack {
+                        Images.System.eye
+
+                        Text(Localized.Wallet.Watch.Tooltip.title)
+                            .foregroundColor(Colors.black)
+                            .font(.callout)
+
+                        Images.System.info
                             .tint(Colors.black)
                     }
+                    .padding()
+                    .background(Colors.grayDarkBackground)
+                    .cornerRadius(Spacing.medium)
+                    .padding(.top, Spacing.medium)
                 }
-                .padding()
-                .background(Colors.grayDarkBackground)
-                .cornerRadius(Spacing.medium)
-                .padding(.top, Spacing.medium)
+
             case false:
-                HeaderButtonsView(buttons: model.buttons, action: action)
+                HeaderButtonsView(buttons: model.buttons, action: onHeaderAction)
                     .padding(.top, Spacing.small)
             }
         }
+    }
+
+    private var isEnabled: Binding<Bool> {
+        return model.allowHiddenBalance ? $isHideBalanceEnalbed : .constant(false)
     }
 }
 
 // MARK: - Previews
 
 #Preview {
-    let model = AssetHeaderViewModel(assetDataModel: .init(assetData: .main, formatter: .full_US),
-                                     walletModel: .init(wallet: .main))
-    return WalletHeaderView(model: model, action: nil)
+    let model = AssetHeaderViewModel(
+        assetDataModel: .init(assetData: .main, formatter: .full_US),
+        walletModel: .init(wallet: .main),
+        bannersViewModel: HeaderBannersViewModel(banners: [])
+    )
+
+    WalletHeaderView(
+        model: model,
+        isHideBalanceEnalbed: .constant(false),
+        onHeaderAction: .none,
+        onInfoSheetAction: .none
+    )
 }

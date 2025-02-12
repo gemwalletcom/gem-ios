@@ -1,0 +1,48 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import SwiftUI
+
+public extension Images {
+    struct System {
+        public static let settings = Image(systemName: SystemImage.settings)
+        public static let qrCode = Image(systemName: SystemImage.qrCode)
+        public static let paste = Image(systemName: SystemImage.paste)
+        public static let copy = Image(systemName: SystemImage.copy)
+        public static let chevronDown = Image(systemName: SystemImage.chevronDown)
+        public static let checklist = Image(systemName: SystemImage.checklist)
+        public static let clear = Image(systemName: SystemImage.clear)
+        public static let hide = Image(systemName: SystemImage.hide)
+        public static let list = Image(systemName: SystemImage.list)
+        public static let faceid = Image(systemName: SystemImage.faceid)
+        public static let touchid = Image(systemName: SystemImage.touchid)
+        public static let network = Image(systemName: SystemImage.network)
+        public static let globe = Image(systemName: SystemImage.globe)
+        public static let share = Image(systemName: SystemImage.share)
+        public static let lock = Image(systemName: SystemImage.lock)
+        public static let delete = Image(systemName: SystemImage.delete)
+        public static let checkmark = Image(systemName: SystemImage.checkmark)
+        public static let ellipsis = Image(systemName: SystemImage.ellipsis)
+        public static let info = Image(systemName: SystemImage.info)
+        public static let eyeglasses = Image(systemName: SystemImage.eyeglasses)
+        public static let lockOpen = Image(systemName: SystemImage.lockOpen)
+        public static let plus = Image(systemName: SystemImage.plus)
+        public static let eye = Image(systemName: SystemImage.eye)
+        public static let searchNoResults = Image(systemName: SystemImage.searchNoResults)
+        public static let exclamationmarkTriangleFill = Image(systemName: SystemImage.exclamationmarkTriangleFill)
+        public static let exclamationmarkTriangle = Image(systemName: SystemImage.exclamationmarkTriangle)
+        public static let gallery = Image(systemName: SystemImage.gallery)
+        public static let photo = Image(systemName: SystemImage.photo)
+        public static let xmarkCircle = Image(systemName: SystemImage.xmarkCircle)
+        public static let xmark = Image(systemName: SystemImage.xmark)
+        public static let bell = Image(systemName: SystemImage.bell)
+        public static let bellFill = Image(systemName: SystemImage.bellFill)
+        public static let pin = Image(systemName: SystemImage.pin)
+        public static let unpin = Image(systemName: SystemImage.unpin)
+        public static let filter = Image(systemName: SystemImage.filter)
+        public static let filterFill = Image(systemName: SystemImage.filterFill)
+        public static let book = Image(systemName: SystemImage.book)
+        public static let starFill = Image(systemName: SystemImage.starFill)
+        public static let errorOccurred = Image(systemName: SystemImage.errorOccurred)
+        public static let textPageFill = Image(systemName: SystemImage.textPageFill)
+    }
+}

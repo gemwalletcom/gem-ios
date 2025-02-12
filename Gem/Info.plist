@@ -1,36 +1,64 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
+<dict>
+	<key>CFBundleLocalizations</key>
+	<array>
+		<string>ar</string>
+		<string>de</string>
+		<string>en</string>
+		<string>es</string>
+		<string>fa</string>
+		<string>fr</string>
+		<string>he</string>
+		<string>hi</string>
+		<string>id</string>
+		<string>it</string>
+		<string>ja</string>
+		<string>ko</string>
+		<string>pl</string>
+		<string>pt-BR</string>
+		<string>ru</string>
+		<string>th</string>
+		<string>tr</string>
+		<string>uk</string>
+		<string>vi</string>
+		<string>zh-Hans</string>
+		<string>zh-Hant</string>
+	</array>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>gem</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Viewer</string>
+			<key>CFBundleURLName</key>
+			<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>gemwallet</string>
+			</array>
+		</dict>
+	</array>
+	<key>ITSAppUsesNonExemptEncryption</key>
+	<false/>
+	<key>UILaunchScreen</key>
 	<dict>
-		<key>CFBundleURLTypes</key>
-		<array>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Viewer</string>
-				<key>CFBundleURLName</key>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>gem</string>
-				</array>
-			</dict>
-			<dict>
-				<key>CFBundleTypeRole</key>
-				<string>Viewer</string>
-				<key>CFBundleURLName</key>
-				<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
-				<key>CFBundleURLSchemes</key>
-				<array>
-					<string>gemwallet</string>
-				</array>
-			</dict>
-
-		</array>
-		<key>ITSAppUsesNonExemptEncryption</key>
+		<key>UIColorName</key>
+		<string>launchScreenBackground</string>
+		<key>UIImageName</key>
+		<string>logo</string>
+		<key>UIImageRespectsSafeAreaInsets</key>
 		<false/>
-		<key>NSCameraUsageDescription</key>
-		<string>Gem Wallet needs access to your Camera to scan QR Codes.</string>
-		<key>NSFaceIDUsageDescription</key>
-		<string>Enabling Face ID helps Gem Wallet keep your assets secure.</string>
 	</dict>
+</dict>
 </plist>

@@ -7,7 +7,7 @@ import BigInt
 import WalletCore
 import WalletCorePrimitives
 
-public struct BitcoinService {
+public struct BitcoinService: Sendable {
     
     let chain: BitcoinChain
     let provider: Provider<BitcoinProvider>
@@ -24,6 +24,13 @@ public struct BitcoinService {
 // MARK: - Business Logic
 
 extension BitcoinService {
+    private func account(address: String) async throws -> BitcoinAccount {
+        let address = chain.chain.fullAddress(address: address)
+        return try await provider
+            .request(.balance(address: address))
+            .map(as: BitcoinAccount.self)
+    }
+    
     private func block(block: Int) async throws -> BitcoinBlock {
         try await provider
             .request(.block(block: block))
@@ -40,7 +47,13 @@ extension BitcoinService {
         try await provider
             .request(.utxo(address: address))
             .map(as: [BitcoinUTXO].self)
-            .map { $0.mapToUTXO() }
+            .map { $0.mapToUTXO(address: address) }
+    }
+    
+    func getFeePriority(for blocks: Int) async throws -> String {
+        try await provider
+            .request(.fee(priority: blocks))
+            .map(as: BitcoinFeeResult.self).result
     }
 }
 
@@ -48,10 +61,8 @@ extension BitcoinService {
 
 extension BitcoinService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let account = try await provider
-            .request(.balance(address: address))
-            .map(as: BitcoinAccount.self)
-        
+        let account = try await account(address: address)
+         
         return Primitives.AssetBalance(
             assetId: chain.chain.assetId,
             balance: Balance(available: BigInt(stringLiteral: account.balance))
@@ -62,8 +73,8 @@ extension BitcoinService: ChainBalanceable {
         []
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        .none
     }
 }
 
@@ -71,11 +82,12 @@ extension BitcoinService: ChainBalanceable {
 
 extension BitcoinService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let fee = fee(input: input.feeInput)
-        async let utxos = getUtxos(address: input.senderAddress)
-        let input = try await (fee: fee, utxos: utxos)
-
-        return TransactionPreload(fee: input.fee, utxos: input.utxos)
+        let utxos = try await getUtxos(address: input.senderAddress)
+        let fee = try await fee(input: input.feeInput, utxos: utxos)
+        return TransactionPreload(
+            fee: fee,
+            utxos: utxos
+        )
     }
 }
 
@@ -101,10 +113,11 @@ extension BitcoinService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension BitcoinService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: BitcoinTransaction.self)
+        
         return TransactionChanges(
             state: transaction.blockHeight > 0 ? .confirmed : .pending
         )
@@ -192,5 +205,13 @@ public extension Array where Element == BitcoinUnspentTransaction {
                 map[scriptHash.hexString] = script.matchPayToPubkeyHash()
             }
        }
+    }
+}
+
+// MARK: - ChainAddressStatusFetchable
+
+extension BitcoinService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
     }
 }

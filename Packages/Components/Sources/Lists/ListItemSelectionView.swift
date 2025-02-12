@@ -4,76 +4,72 @@ import SwiftUI
 import Style
 
 public struct ListItemSelectionView<T: Hashable>: View {
-    public enum SelectionImageDirection: Identifiable {
-        case left
-        case right
-
-        public var id: Self { self }
-    }
-
     let title: String?
     let titleExtra: String?
     let subtitle: String?
     let subtitleExtra: String?
+
+    let titleTag: String?
+    let titleTagType: TitleTagType
+    let titleTagStyle: TextStyle
+    
+    let image: Image?
+    let imageSize: CGFloat
+    
     let value: T?
     let selection: T?
     let action: ((T) -> Void)?
 
     let placeholders: [ListItemViewPlaceholderType]
-    let selectionDirection: SelectionImageDirection
 
     public init(
         title: String?,
         titleExtra: String?,
+        titleTag: String?,
+        titleTagType: TitleTagType,
+        titleTagStyle: TextStyle = .body,
         subtitle: String?,
         subtitleExtra: String?,
+        image: Image? = nil,
+        imageSize: CGFloat = 28.0,
         placeholders: [ListItemViewPlaceholderType] = [],
-        selectionDirection: SelectionImageDirection = .right,
         value: T,
         selection: T?,
         action: ((T) -> Void)?
     ) {
         self.title = title
         self.titleExtra = titleExtra
+        self.titleTag = titleTag
+        self.titleTagType = titleTagType
+        self.titleTagStyle = titleTagStyle
         self.subtitle = subtitle
         self.subtitleExtra = subtitleExtra
+        self.image = image
+        self.imageSize = imageSize
         self.placeholders = placeholders
-        self.selectionDirection = selectionDirection
         self.value = value
         self.selection = selection
         self.action = action
     }
 
     public var body: some View {
-        Button(action: {
-            if let value = value {
-                action?(value)
-            }
-        }, label: {
-            HStack {
-                if selectionDirection == .left && selection == value {
-                    selectionImageView
-                }
-                ListItemView(
-                    title: title,
-                    titleExtra: titleExtra,
-                    subtitle: subtitle,
-                    subtitleExtra: subtitleExtra,
-                    placeholders: placeholders
-                )
-                if selectionDirection == .right && selection == value {
-                    Spacer()
-                    selectionImageView
-                }
-            }
-        })
-        .contentShape(Rectangle())
-    }
-
-    private var selectionImageView: some View {
-        ZStack {
-            Image(systemName: SystemImage.checkmark)
-        }
-        .frame(width: Sizing.list.image)
-    }
+         SelectionView(
+             value: value,
+             selection: selection,
+             action: action
+         ) {
+             ListItemView(
+                 title: title,
+                 titleTag: titleTag,
+                 titleTagStyle: titleTagStyle,
+                 titleTagType: titleTagType,
+                 titleExtra: titleExtra,
+                 subtitle: subtitle,
+                 subtitleExtra: subtitleExtra,
+                 image: image,
+                 imageSize: imageSize,
+                 placeholders: placeholders
+             )
+         }
+     }
 }

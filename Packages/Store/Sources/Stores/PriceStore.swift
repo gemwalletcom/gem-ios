@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct PriceStore {
+public struct PriceStore: Sendable {
     
     let db: DatabaseQueue
     
@@ -12,11 +12,37 @@ public struct PriceStore {
         self.db = db.dbQueue
     }
     
+    public func updatePrice(price: AssetPrice) throws {
+        try updatePrices(prices: [price])
+    }
+    
     public func updatePrices(prices: [AssetPrice]) throws {
         try db.write { db in
             for assetPrice in prices {
-                try assetPrice.record.upsert(db)
+                try assetPrice.record.insert(db, onConflict: .ignore)
+                try PriceRecord
+                    .filter(Columns.Price.assetId == assetPrice.assetId)
+                    .updateAll(db,
+                        Columns.Price.price.set(to: assetPrice.price),
+                        Columns.Price.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h)
+                    )
             }
+        }
+    }
+    
+    @discardableResult
+    public func updateMarket(assetId: String, market: AssetMarket) throws -> Int {
+        try db.write { db in
+            try PriceRecord
+                .filter(Columns.Price.assetId == assetId)
+                .updateAll(db,
+                    Columns.Price.marketCap.set(to: market.marketCap),
+                    Columns.Price.marketCapRank.set(to: market.marketCapRank),
+                    Columns.Price.totalVolume.set(to: market.totalVolume),
+                    Columns.Price.circulatingSupply.set(to: market.circulatingSupply),
+                    Columns.Price.totalSupply.set(to: market.totalSupply),
+                    Columns.Price.maxSupply.set(to: market.maxSupply)
+                )
         }
     }
     

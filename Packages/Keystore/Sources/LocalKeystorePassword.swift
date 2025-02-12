@@ -1,72 +1,59 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import KeychainAccess
+@preconcurrency import KeychainAccess
 import LocalAuthentication
 import Primitives
 
-public class LocalKeystorePassword: KeystorePassword {
-    
+public final class LocalKeystorePassword: KeystorePassword {
     private struct Keys {
         static let password = "password"
         static let passwordAuthentication = "password_authentication"
+        static let passwordAuthenticationPeriod = "password_authentication_period"
+        static let passwordAuthenticationPrivacyLock = "password_authentication_privacy_lock"
     }
     
-    let keychain = Keychain()
+    private let keychain = Keychain()
     
-    public init() {
-
-    }
+    public init() {}
     
-    public func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
-        return try setPassword(password, authentication: authentication, context: LAContext())
-    }
-    
-    public func getPassword() throws -> String {
-        return try getPassword(context: LAContext())
-    }
-    
-    public func setPassword(
-        _ password: String,
-        authentication: KeystoreAuthentication,
-        context: LAContext
-    ) throws {
-        //NSLog("setPassword")
-        try keychain
-            .set(authentication.rawValue, key: Keys.passwordAuthentication)
-        
-        try keychain
-            .accessibility(.whenPasscodeSetThisDeviceOnly, authenticationPolicy: authentication.policy)
-            .authenticationContext(context)
-            .set(password, key: Keys.password)
-    }
-    
-    public func getPassword(
-        context: LAContext
-    ) throws -> String {
-        //NSLog("getPassword")
-        
-        return try keychain
-            .authenticationContext(context)
-            .get(Keys.password) ?? ""
+    public func getAvailableAuthentication() -> KeystoreAuthentication {
+        KeystoreAuthentication.availableAuthenticationType
     }
     
     public func getAuthentication() throws -> KeystoreAuthentication {
-        //NSLog("getAuthentication")
         guard let value = try keychain.get(Keys.passwordAuthentication) else {
             return .none
         }
         return KeystoreAuthentication(rawValue: value) ?? .none
     }
-    
-    public func getAvailableAuthentication() throws -> KeystoreAuthentication {
-        return KeystoreAuthentication.availableAuthenticationType
+
+    public func getAuthenticationLockPeriod() throws -> LockPeriod? {
+        guard let option = try keychain.get(Keys.passwordAuthenticationPeriod) else {
+            return .none
+        }
+        return LockPeriod(rawValue: option)
     }
-    
-    public func enableAuthentication(_ value: Bool, context: LAContext) throws {
-        switch value {
+
+    public func getPrivacyLockStatus() throws -> PrivacyLockStatus? {
+        guard let value = try keychain.get(Keys.passwordAuthenticationPrivacyLock) else {
+            return .none
+        }
+        return PrivacyLockStatus(rawValue: value) ?? .none
+    }
+
+    public func setPrivacyLockStatus(_ status: PrivacyLockStatus) throws {
+        try keychain.set(status.rawValue, key: Keys.passwordAuthenticationPrivacyLock)
+    }
+
+    public func setAuthenticationLockPeriod(period: LockPeriod) throws {
+        try keychain.set(period.rawValue, key: Keys.passwordAuthenticationPeriod)
+    }
+
+    public func enableAuthentication(_ enable: Bool, context: LAContext) throws {
+        switch enable {
         case true:
-            let authentication = try getAvailableAuthentication()
+            let authentication = getAvailableAuthentication()
             switch authentication {
             case .biometrics, .passcode:
                 try changeAuthentication(authentication: authentication, context: context)
@@ -78,18 +65,52 @@ public class LocalKeystorePassword: KeystorePassword {
         }
     }
     
-    public func changeAuthentication(authentication: KeystoreAuthentication, context: LAContext) throws {
-        //NSLog("changeAuthentication \(authentication)")
-        
-        let password = try getPassword(context: context)
-        try setPassword(password, authentication: authentication, context: context)
+    public func getPassword() throws -> String {
+        try getPassword(context: LAContext())
+    }
+    
+    public func getPassword(context: LAContext) throws -> String {
+        try keychain
+            .authenticationContext(context)
+            .get(Keys.password) ?? ""
+    }
+    
+    public func setPassword(_ password: String, authentication: KeystoreAuthentication) throws {
+        try setPassword(password, authentication: authentication, context: LAContext())
     }
     
     public func remove() throws {
-        try keychain
-            .remove(Keys.password)
+        try keychain.remove(Keys.password)
+        try keychain.remove(Keys.passwordAuthentication)
+        try keychain.remove(Keys.passwordAuthenticationPeriod)
+        try keychain.remove(Keys.passwordAuthenticationPrivacyLock)
     }
 }
+
+// MARK: - Private
+
+extension LocalKeystorePassword {
+    private func setPassword(
+        _ password: String,
+        authentication: KeystoreAuthentication,
+        context: LAContext
+    ) throws {
+        try keychain
+            .set(authentication.rawValue, key: Keys.passwordAuthentication)
+
+        try keychain
+            .accessibility(.whenUnlockedThisDeviceOnly, authenticationPolicy: authentication.policy)
+            .authenticationContext(context)
+            .set(password, key: Keys.password)
+    }
+
+    private func changeAuthentication(authentication: KeystoreAuthentication, context: LAContext) throws {
+        let password = try getPassword(context: context)
+        try setPassword(password, authentication: authentication, context: context)
+    }
+}
+
+// MARK: - Models extensions
 
 extension LAContext {
     public func canEvaluatePolicyThrowing(policy: LAPolicy) throws {

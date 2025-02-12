@@ -1,8 +1,10 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import BigInt
 
-public struct Balance: Codable {
-	
+public struct Balance: Codable, Sendable {
+
     public var available: BigInt
     public var frozen: BigInt
     public var locked: BigInt
@@ -12,7 +14,7 @@ public struct Balance: Codable {
     public var reserved: BigInt
 
     public init(
-        available: BigInt,
+        available: BigInt = .zero,
         frozen: BigInt = .zero,
         locked: BigInt = .zero,
         staked: BigInt = .zero,
@@ -27,19 +29,5 @@ public struct Balance: Codable {
         self.pending = pending
         self.rewards = rewards
         self.reserved = reserved
-    }
-}
-
-public extension Balance {
-    func merge(_ balance: Balance) -> Balance {
-        return Self(
-            available: self.available + balance.available,
-            frozen: self.frozen + balance.frozen,
-            locked: self.locked + balance.locked,
-            staked: self.staked + balance.staked,
-            pending: self.pending + balance.pending,
-            rewards: self.rewards + balance.rewards,
-            reserved: self.reserved + balance.reserved
-        )
     }
 }

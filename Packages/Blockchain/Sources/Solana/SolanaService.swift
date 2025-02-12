@@ -4,21 +4,21 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
-import Gemstone
-import GemstonePrimitives
+import func Gemstone.solanaDeriveMetadataPda
+import func Gemstone.solanaDecodeMetadata
+import struct GemstonePrimitives.SolanaConfig
 import WalletCore
 
-public struct SolanaService {
+public struct SolanaService: Sendable {
     
-    let chain: Chain
+    let chain: Primitives.Chain
     let provider: Provider<SolanaProvider>
     
-    let staticBaseFee = BigInt(50000)
-    let priorityFeeMultipler = 5
+    let staticBaseFee = BigInt(5000)
     let tokenAccountSize = 165
     
     public init(
-        chain: Chain,
+        chain: Primitives.Chain,
         provider: Provider<SolanaProvider>
     ) {
         self.chain = chain
@@ -76,27 +76,28 @@ extension SolanaService {
     }
 
     private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
-        var result: [Primitives.AssetBalance] = []
-        for tokenId in tokenIds {
-            guard let token = tokenId.tokenId else { break }
-            let balance = try await getTokenBalance(token: token, owner: address)
-            result.append(
-                AssetBalance(assetId: tokenId, balance: Balance(available: balance))
-            )
-        }
-        return result
+        let accounts = try await provider.requestBatch(
+            tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
+            .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
+            .compactMap { $0.result.value.first }
+        
+        let balances = try await provider.requestBatch(
+            accounts.map { .getTokenAccountBalance(token: $0.pubkey) })
+            .map(as: [JSONRPCResponse<SolanaValue<SolanaBalanceValue>>].self)
+            .map { BigInt(stringLiteral: $0.result.value.amount) }
+        
+        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
-    private func getPrioritizationFee() async throws -> BigInt {
+    private func getPrioritizationFees() async throws -> [Int32] {
         let fees = try await provider
             .request(.fees)
             .map(as: JSONRPCResponse<[SolanaPrioritizationFee]>.self)
             .result
-
-        return BigInt(fees.map { $0.prioritizationFee }.reduce(0, { $0 + Int($1) }) / fees.count)
+        return fees.map { $0.prioritizationFee }
     }
 
-    private func getCoinBalance(address: String) async throws -> BigInt {
+    private func getBalance(address: String) async throws -> BigInt {
         try await provider
             .request(.balance(address: address))
             .map(as: JSONRPCResponse<SolanaBalance>.self).result.value.asBigInt
@@ -120,9 +121,16 @@ extension SolanaService {
             .map(as: JSONRPCResponse<Int>.self).result.asBigInt
     }
 
-    private func getBaseFee() async throws -> BigInt {
-        let priorityFee = try await getPrioritizationFee()
-        return staticBaseFee + (priorityFee * BigInt(priorityFeeMultipler))
+    // https://solana.com/docs/core/fees#compute-unit-limit
+    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
+        let gasLimit = switch type {
+        case .transfer, .stake, .transferNft: BigInt(100_000)
+        case .generic, .swap: BigInt(420_000)
+        case .account, .tokenApprove: fatalError()
+        }
+        let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
+        
+        return Fee(fee: totalFee, gasPriceType: gasPrice, gasLimit: gasLimit)
     }
     
     private func getSlot() async throws -> BigInt {
@@ -142,15 +150,12 @@ extension SolanaService {
 
 extension SolanaService: ChainBalanceable {    
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        async let getBalance = getCoinBalance(address: address)
-
-        let (available, staked) = try await (getBalance, getStakeBalance(address: address))
-
+        let balance = try await getBalance(address: address)
         return AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
-                available: available
-            ).merge(staked.balance)
+                available: balance
+            )
         )
     }
     
@@ -158,44 +163,34 @@ extension SolanaService: ChainBalanceable {
         return try await getTokenBalances(tokenIds: tokenIds, address: address)
     }
 
-
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let staked = try await getDelegations(address: address)
             .map { $0.account.lamports }
             .reduce(0, +)
+
         return AssetBalance(
             assetId: chain.assetId,
-            balance: Balance(available: .zero, staked: BigInt(staked))
+            balance: Balance(staked: BigInt(staked))
         )
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension SolanaService: ChainFeeCalculateable {
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
-    public func fee(input: FeeInput) async throws -> Fee {
+extension SolanaService {
+    public func fee(input: TransactionInput) async throws -> Fee {
         switch input.type {
         case .transfer(let asset):
             switch asset.id.type {
             case .native:
-                let fee = try await getBaseFee()
-                return Fee(
-                    fee: fee,
-                    gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1,
-                    feeRates: [],
-                    selectedFeeRate: nil
-                )
+                return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
             case .token:
-                async let getBaseFee = getBaseFee()
+                async let getFee = getBaseFee(type: input.type, gasPrice: input.gasPrice)
                 async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
                 async let getToken = try await getTokenTransferType(
                     tokenId: try asset.getTokenId(),
                     senderAddress: input.senderAddress,
                     destinationAddress: input.destinationAddress
                 )
-                let (fee, tokenAccountCreationFee, token) = try await (getBaseFee, getTokenAccountCreationFee, getToken)
+                let (fee, tokenAccountCreationFee, token) = try await (getFee, getTokenAccountCreationFee, getToken)
                 
                 let options: FeeOptionMap = switch token.recipientTokenAddress {
                 case .some: [:]
@@ -203,26 +198,54 @@ extension SolanaService: ChainFeeCalculateable {
                 }
                 
                 return Fee(
-                    fee: fee,
-                    gasPriceType: .regular(gasPrice: fee),
-                    gasLimit: 1,
-                    options: options,
-                    feeRates: [],
-                    selectedFeeRate: nil
+                    fee: fee.fee,
+                    gasPriceType: fee.gasPriceType,
+                    gasLimit: fee.gasLimit,
+                    options: options
                 )
             }
-        case .swap, .stake:
-            let fee = try await getBaseFee()
-            return Fee(
-                fee: fee,
-                gasPriceType: .regular(gasPrice: fee),
-                gasLimit: 1,
-                feeRates: [],
-                selectedFeeRate: nil
-            )
-        case .generic:
+        case .transferNft:
             fatalError()
+        case .swap, .stake, .generic:
+            return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
+        case .account, .tokenApprove: fatalError()
         }
+    }
+}
+
+extension SolanaService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        // filter out any large fees
+        let priorityFees = try await getPrioritizationFees().map { $0.asInt }.sorted(by: >).prefix(5)
+        
+        let multipleOf = switch type {
+        case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
+        case .stake, .transferNft: 50_000
+        case .generic, .swap: 250_000
+        case .account, .tokenApprove: fatalError()
+        }
+        
+        let priorityFee = {
+            if priorityFees.isEmpty {
+                BigInt(multipleOf)
+            } else {
+                BigInt(
+                    max(
+                        (priorityFees.reduce(0, +) / priorityFees.count).roundToNearest(
+                            multipleOf: multipleOf,
+                            mode: .up
+                        ),
+                        multipleOf
+                    )
+                )
+            }
+        }()
+        
+        return [
+            FeeRate(priority: .slow, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee / 2)),
+            FeeRate(priority: .normal, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee)),
+            FeeRate(priority: .fast, gasPriceType: .eip1559(gasPrice: staticBaseFee, priorityFee: priorityFee * 3)),
+        ]
     }
 }
 
@@ -233,7 +256,7 @@ extension SolanaService: ChainTransactionPreloadable {
         async let blockhash = provider
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
-        async let fee = fee(input: input.feeInput)
+        async let fee = fee(input: input)
 
         switch input.type {
         case .generic, .transfer:
@@ -257,11 +280,14 @@ extension SolanaService: ChainTransactionPreloadable {
                     fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
                 )
             }
+        case .transferNft:
+            fatalError()
         case .swap, .stake:
             return try await TransactionPreload(
                 block: SignerInputBlock(hash: blockhash), 
                 fee: fee
             )
+        case .account, .tokenApprove: fatalError()
         }
     }
 }
@@ -286,9 +312,9 @@ extension SolanaService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension SolanaService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: JSONRPCResponse<SolanaTransaction>.self).result
         
         if transaction.slot > 0 {
@@ -443,3 +469,10 @@ extension SolanaService: ChainLatestBlockFetchable {
     }
 }
 
+// MARK: - ChainAddressStatusFetchable
+
+extension SolanaService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

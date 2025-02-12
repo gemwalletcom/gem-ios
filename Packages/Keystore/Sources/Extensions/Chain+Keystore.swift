@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import WalletCore
@@ -10,18 +12,11 @@ public extension Chain {
     }
 
     var keyEncodingTypes: [EncodingType] {
-        switch self.type {
+        //TODO: Use chain type in the future
+        switch self {
         case .solana:
             [.base58, .hex]
-        case .ethereum,
-            .cosmos,
-            .ton,
-            .tron,
-            .aptos,
-            .sui,
-            .xrp,
-            .near,
-            .bitcoin:
+        default:
             [.hex]
         }
     }

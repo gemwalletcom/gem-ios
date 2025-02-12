@@ -159,10 +159,12 @@ public struct WalletKeyStore {
         return MnemonicFormatter.toArray(string: hdwallet.mnemonic)
     }
     
-    public func sign(message: SignMessage, walletId: String, password: String, chain: Chain) throws -> Data {
-        let wallet = try getWallet(id: walletId)
-        let key = try wallet.privateKey(password: password, coin: chain.coinType)
-        guard var signature = key.sign(digest: message.hash, curve: chain.coinType.curve) else {
+    public func sign(message: SignMessage, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
+        let key = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
+        guard
+            let privateKey = PrivateKey(data: key),
+            var signature = privateKey.sign(digest: message.hash, curve: chain.coinType.curve)
+        else {
             throw AnyError("no data signed")
         }
         switch message.type {
@@ -189,6 +191,11 @@ extension WalletCore.Wallet {
 
 extension WalletCore.Account {
     func mapToAccount(chain: Chain) -> Primitives.Account {
-        return Account(chain: chain, address: address, derivationPath: derivationPath, extendedPublicKey: extendedPublicKey)
+        return Account(
+            chain: chain,
+            address: chain.shortAddress(address: address),
+            derivationPath: derivationPath,
+            extendedPublicKey: extendedPublicKey
+        )
     }
 }

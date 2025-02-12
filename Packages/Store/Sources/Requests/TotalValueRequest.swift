@@ -1,42 +1,31 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import GRDB
 import GRDBQuery
 import Combine
 import Primitives
 
-public struct TotalValueRequest: Queryable {
+public struct TotalValueRequest: ValueObservationQueryable {
     public static var defaultValue: Double { 0 }
 
     public var walletId: String
     
-    public init(
-        walletID: String
-    ) {
+    public init(walletID: String) {
         self.walletId = walletID
     }
-    
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<Double, Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            // The `.immediate` scheduling feeds the view right on subscription,
-            // and avoids an initial rendering with an empty list:
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-    
-    private func fetch(_ db: Database) throws -> Double {
-        //TODO: Refactor to calculate total price
-        return try AssetRecord
+
+    public func fetch(_ db: Database) throws -> Double {
+        try AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .joining(required: AssetRecord.balance
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(Columns.Balance.isEnabled == true)
-                .filter(Columns.Balance.fiatValue > 0)
             )
             .asRequest(of: AssetRecordInfoMinimal.self)
             .fetchAll(db)
-            .map { $0.balance.total * ($0.price?.price ?? 0) }
+            .map { $0.totalFiatAmount }
             .reduce(0, +)
     }
 }

@@ -2,11 +2,11 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "wallets"
+    public static let databaseTableName: String = "wallets"
 
     public var id: String
     public var name: String
@@ -22,20 +22,20 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
 extension WalletRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName) {
-            $0.column("id", .text)
+            $0.column(Columns.Wallet.id.name, .text)
                 .primaryKey()
                 .notNull()
-            $0.column("name", .text)
+            $0.column(Columns.Wallet.name.name, .text)
                 .notNull()
-            $0.column("type", .text)
+            $0.column(Columns.Wallet.type.name, .text)
                 .notNull()
-            $0.column("index", .numeric)
-                .notNull()
-                .defaults(to: 0)
-            $0.column("order", .numeric)
+            $0.column(Columns.Wallet.index.name, .numeric)
                 .notNull()
                 .defaults(to: 0)
-            $0.column("isPinned", .boolean)
+            $0.column(Columns.Wallet.order.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
+            $0.column(Columns.Wallet.isPinned.name, .boolean)
                 .defaults(to: false)
         }
     }

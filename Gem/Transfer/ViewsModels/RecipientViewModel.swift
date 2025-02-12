@@ -1,68 +1,82 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import Keystore
-import Blockchain
 import GemstonePrimitives
+import Localization
+import PrimitivesComponents
+
+typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 enum RecipientAddressType {
     case wallets
     case view
 }
 
-struct RecipientViewModel {
+enum RecipientScanResult {
+    case recipient(address: String, memo: String?, amount: String?)
+    case transferData(TransferData)
+}
+
+class RecipientViewModel: ObservableObject {
     let wallet: Wallet
+    let asset: Asset
+    let type: RecipientAssetType
     
     private let keystore: any Keystore
-    private let walletsService: WalletsService
-    private let assetModel: AssetViewModel
+    private let onRecipientDataAction: RecipientDataAction
+    private let onTransferAction: TransferDataAction
     private let formatter = ValueFormatter(style: .full)
     
-    init(wallet: Wallet, keystore: any Keystore, walletsService: WalletsService, assetModel: AssetViewModel) {
+    init(
+        wallet: Wallet,
+        asset: Asset,
+        keystore: any Keystore,
+        type: RecipientAssetType,
+        onRecipientDataAction: RecipientDataAction,
+        onTransferAction: TransferDataAction
+    ) {
         self.wallet = wallet
+        self.asset = asset
         self.keystore = keystore
-        self.walletsService = walletsService
-        self.assetModel = assetModel
+        self.type = type
+        self.onRecipientDataAction = onRecipientDataAction
+        self.onTransferAction = onTransferAction
     }
-    
-    var asset: Asset {
-        return assetModel.asset
-    }
-    
+
     var tittle: String {
         return Localized.Transfer.Recipient.title
     }
     
-    var recipientField: String {
-        return Localized.Transfer.Recipient.addressField
-    }
-    
-    var memoField: String {
-        return Localized.Transfer.memo
-    }
-    
-    func isValidAddress(address: String) -> Bool {
-        return asset.chain.isValidAddress(address)
-    }
-    
+    var recipientField: String { Localized.Transfer.Recipient.addressField }
+    var memoField: String { Localized.Transfer.memo }
+
     var showMemo: Bool {
-        return assetModel.supportMemo
+        asset.chain.isMemoSupported
     }
     
-    func getRecipientData(
-        asset: Asset,
-        recipient: Recipient
-    ) throws -> AmountRecipientData {
-        guard isValidAddress(address: recipient.address) else {
+    var chain: Chain { asset.chain }
+
+    func getRecipientData(name: NameRecord?, address: String, memo: String?, amount: String?) throws -> RecipientData {
+        let recipient: Recipient = {
+            if let result = name {
+                return Recipient(name: result.name, address: result.address, memo: memo)
+            }
+            return Recipient(name: .none, address: address, memo: memo)
+        }()
+        try validateAddress(address: recipient.address)
+        
+        return RecipientData(
+            recipient: recipient,
+            amount: amount
+        )
+    }
+    
+    private func validateAddress(address: String) throws {
+        guard asset.chain.isValidAddress(address) else {
             throw TransferError.invalidAddress(asset: asset)
         }
-        
-        return AmountRecipientData(
-            type: .transfer,
-            data: RecipientData(
-                asset: asset,
-                recipient: recipient
-            )
-        )
     }
     
     func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
@@ -88,52 +102,63 @@ struct RecipientViewModel {
     }
     
     //TODO: Add unit tests
-    func getTransferDataFromScan(string: String) throws -> ScanRecipientResult {
+    func getPaymentScanResult(string: String) throws -> PaymentScanResult {
         let payment = try PaymentURLDecoder.decode(string)
-        
-        if payment.amount == .none {
-            return .address(address: payment.address, memo: payment.memo)
-        }
-        
-        guard 
+
+        return PaymentScanResult(
+            address: payment.address,
+            amount: payment.amount,
+            memo: payment.memo
+        )
+    }
+    
+    func getRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
+        if
             let amount = payment.amount,
-            let value = try? formatter.inputNumber(from: amount, decimals: asset.decimals.asInt) else {
-                throw AnyError("")
-        }
-        
-        // not supported memo, bitcoin, ethereum cases
-        if !assetModel.supportMemo {
-            let transferData = TransferData(
-                type: .transfer(asset),
+            (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
+            asset.chain.isValidAddress(payment.address)
+        {
+            let transferType: TransferDataType = switch type {
+            case .asset(let asset): .transfer(asset)
+            case .nft(let asset): .transferNft(asset)
+            }
+            
+            let value = try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
+            let data = TransferData(
+                type: transferType,
                 recipientData: RecipientData(
-                    asset: asset,
                     recipient: Recipient(
                         name: .none,
                         address: payment.address,
-                        memo: .none
-                    )
+                        memo: payment.memo
+                    ),
+                    amount: .none
                 ),
-                value: value
+                value: value,
+                canChangeValue: false
             )
-            return .transfer(transferData)
-        } else if let memo = payment.memo, assetModel.supportMemo  {
-            // ton, cosmos cases
-            let transferData = TransferData(
-                type: .transfer(asset),
-                recipientData: RecipientData(
-                    asset: asset,
-                    recipient: Recipient(
-                        name: .none,
-                        address: payment.address,
-                        memo: memo
-                    )
-                ),
-                value: value
-            )
-            return .transfer(transferData)
+            return .transferData(data)
         }
         
-        return .address(address: payment.address, memo: .none)
+        return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
+    }
+}
+
+// MARK: - Actions
+
+extension RecipientViewModel {
+    func onRecipientDataSelect(data: RecipientData) {
+        switch type {
+        case .asset:
+            onRecipientDataAction?(data)
+        case .nft(let asset):
+            let data = TransferData(type: .transferNft(asset), recipientData: data, value: .zero, canChangeValue: false)
+            onTransferDataSelect(data: data)
+        }
+    }
+    
+    func onTransferDataSelect(data: TransferData) {
+        onTransferAction?(data)
     }
 }
 

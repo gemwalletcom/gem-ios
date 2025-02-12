@@ -4,18 +4,26 @@ import SwiftUI
 import Style
 import Store
 import Components
+import PrimitivesComponents
+import struct GemstonePrimitives.GemstoneConfig
+import Preferences
 
 struct AssetDataViewModel {
     private let assetData: AssetData
-    let priceViewModel: PriceViewModel
     private let balanceViewModel: BalanceViewModel
+
+    let priceViewModel: PriceViewModel
 
     init(
         assetData: AssetData,
-        formatter: ValueFormatter
+        formatter: ValueFormatter,
+        preferences: Preferences = Preferences.standard
     ) {
         self.assetData = assetData
-        self.priceViewModel = PriceViewModel(price: assetData.price)
+        self.priceViewModel = PriceViewModel(
+            price: assetData.price,
+            currencyCode: preferences.currency
+        )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
             balance: assetData.balance,
@@ -44,7 +52,7 @@ struct AssetDataViewModel {
     // price
     
     var isPriceAvailable: Bool {
-        return priceViewModel.isPriceAvailable
+        priceViewModel.isPriceAvailable
     }
     
     var priceAmountText: String {
@@ -84,13 +92,17 @@ struct AssetDataViewModel {
     var hasReservedBalance: Bool {
         balanceViewModel.hasReservedBalance
     }
-    
+
+    var hasAvailableBalance: Bool {
+        balanceViewModel.availableBalanceAmount > 0
+    }
+
     var reservedBalanceTextWithSymbol: String {
         balanceViewModel.reservedBalanceTextWithSymbol
     }
     
     var balanceTextColor: Color {
-        return balanceViewModel.balanceTextColor
+        balanceViewModel.balanceTextColor
     }
     
     var fiatBalanceText: String {
@@ -102,32 +114,27 @@ struct AssetDataViewModel {
     }
     
     var isEnabled: Bool {
-        return assetData.metadata.isEnabled
+        assetData.metadata.isEnabled
     }
     
     var isBuyEnabled: Bool {
-        return assetData.metadata.isBuyEnabled
+        assetData.metadata.isBuyEnabled
     }
-    
+
+    var isSellEnabled: Bool {
+        assetData.metadata.isSellEnabled
+    }
+
     var isSwapEnabled: Bool {
-        return assetData.metadata.isSwapEnabled
+        assetData.metadata.isSwapEnabled
     }
     
     var isStakeEnabled: Bool {
-        if [
-            Chain.cosmos.assetId,
-            Chain.osmosis.assetId,
-            Chain.injective.assetId,
-            Chain.sei.assetId,
-            Chain.celestia.assetId,
-            Chain.solana.assetId,
-            Chain.sui.assetId,
-            Chain.smartChain.assetId,
-//            Chain.ethereum.assetId disabled
-        ].contains(asset.id) {
-            return true
-        }
-        return false //assetData.metadata.isStakeEnabled
+        assetData.metadata.isStakeEnabled
+    }
+    
+    var isActive: Bool {
+        assetData.metadata.isActive
     }
     
     var address: String {
@@ -135,10 +142,10 @@ struct AssetDataViewModel {
     }
     
     var showBalances: Bool {
-        return assetData.balances.filter { $0.value > 0 }.count > 1
+        return assetData.balances.contains(where: { $0.key != .available && $0.value > 0 })
     }
     
     var stakeApr: Double? {
-        assetData.details?.details.stakingApr
+        assetData.metadata.stakingApr
     }
 }

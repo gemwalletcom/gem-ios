@@ -3,33 +3,37 @@ import Primitives
 import Components
 import Style
 import SwiftUI
+import PrimitivesComponents
 
 enum AssetListType {
     case wallet
     case manage
     case view
     case copy
+    case price
 }
 
 struct ListAssetItemViewModel: ListAssetItemViewable {
-
+    let showBalancePrivacy: Binding<Bool>
     let assetDataModel: AssetDataViewModel
     let type: AssetListType
     var action: ((ListAssetItemAction) -> Void)?
 
     init(
+        showBalancePrivacy: Binding<Bool>,
         assetDataModel: AssetDataViewModel,
         type: AssetListType = .wallet,
         action: (((ListAssetItemAction)) -> Void)? = nil
     ) {
+        self.showBalancePrivacy = showBalancePrivacy
         self.assetDataModel = assetDataModel
         self.type = type
         self.action = action
     }
 
-    init(assetData: AssetData, formatter: ValueFormatter) {
+    init(showBalancePrivacy: Binding<Bool>, assetData: AssetData, formatter: ValueFormatter) {
         let model = AssetDataViewModel(assetData: assetData, formatter: formatter)
-        self.init(assetDataModel: model, type: .wallet, action: nil)
+        self.init(showBalancePrivacy: showBalancePrivacy, assetDataModel: model, type: .wallet, action: nil)
     }
 
     var name: String {
@@ -39,7 +43,8 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
     var symbol: String? {
         switch type {
         case .wallet,
-            .view:
+            .view,
+            .price:
             return .none
         case .manage,
             .copy:
@@ -52,15 +57,15 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
     
     var subtitleView: ListAssetItemSubtitleView {
         switch type {
-        case .wallet:
+        case .wallet, .price:
             return .price(
                 price: TextValue(
                     text: assetDataModel.priceAmountText,
-                    style: TextStyle(font: .caption, color: Colors.gray)
+                    style: TextStyle(font: .footnote, color: Colors.gray)
                 ),
                 priceChangePercentage24h: TextValue(
                     text: assetDataModel.priceChangeText,
-                    style: TextStyle(font: .caption, color: assetDataModel.priceChangeTextColor)
+                    style: TextStyle(font: .footnote, color: assetDataModel.priceChangeTextColor)
                 )
             )
         case .manage, .view, .copy:
@@ -88,13 +93,15 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
                 ),
                 totalFiat: TextValue(
                     text: assetDataModel.fiatBalanceText,
-                    style: TextStyle(font: .caption, color: Colors.gray)
+                    style: TextStyle(font: .footnote, color: Colors.gray)
                 )
             )
         case .manage:
             return .toggle(assetDataModel.isEnabled)
         case .copy:
             return .copy
+        case .price:
+            return .none
         }
     }
     

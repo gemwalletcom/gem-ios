@@ -6,7 +6,7 @@ import SwiftHTTPClient
 import BigInt
 import WalletCore
 
-public struct NearService {
+public struct NearService: Sendable {
     let chain: Chain
     let provider: Provider<NearProvider>
     
@@ -83,40 +83,39 @@ extension NearService: ChainBalanceable {
         []
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        .none
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension NearService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        fatalError()
-        //let gasPrice = try await gasPrice()
-        //let fee = gasPrice
-        //return Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1)
+extension NearService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let gasPrice = try await gasPrice()
+        return [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: gasPrice))
+        ]
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
-
+// https://docs.near.org/concepts/protocol/gas#cost-for-common-actions
 extension NearService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let getAccount = try await accountAccessKey(for: input.senderAddress)
         async let getBlock = try await latestBlock()
-        async let getGasPrice = try await gasPrice()
+        let (account, block) = try await (getAccount, getBlock)
         
-        let (account, block, gasPrice) = try await (getAccount, getBlock, getGasPrice)
-        //TODO: Fix calculation. Fix max transfer
-        let fee = BigInt(stringLiteral: "900000000000000000000") //StaticFee.transfer * 2
+        let transferGasLimit = BigInt(stringLiteral: "9000000000000") // BigInt(stringLiteral: "4174947687500") * 2
+        let fee = Fee(
+            fee: input.gasPrice.gasPrice * transferGasLimit,
+            gasPriceType: .regular(gasPrice: input.gasPrice.gasPrice),
+            gasLimit: 1
+        )
         
         return TransactionPreload(
             sequence: account.nonce + 1,
             block: SignerInputBlock(hash: block.header.hash),
-            fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: gasPrice), gasLimit: 1, feeRates: [], selectedFeeRate: nil)
+            fee: fee
         )
     }
 }
@@ -137,9 +136,9 @@ extension NearService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension NearService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id, senderAddress: senderAddress))
+            .request(.transaction(id: request.id, senderAddress: request.senderAddress))
             .map(as: JSONRPCResponse<NearBroadcastResult>.self).result
         
         switch transaction.final_execution_status {
@@ -208,5 +207,13 @@ extension NearRPCError: LocalizedError {
             return data
         }
         return error.message
+    }
+}
+
+// MARK: - ChainAddressStatusFetchable
+
+extension NearService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
     }
 }

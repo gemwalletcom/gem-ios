@@ -2,11 +2,11 @@
 
 import Foundation
 import Primitives
-import GRDB
+@preconcurrency import GRDB
 
 public struct TransactionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "transactions_v23"
+    public static let databaseTableName: String = "transactions_v23"
 
     public var id: Int? = .none
     public var walletId: String
@@ -100,10 +100,10 @@ extension TransactionRecord: CreateTable {
 
 extension TransactionRecord {
     func mapToTransaction() -> Transaction {
-        let assetId = AssetId(id: assetId)!
-        let feeAssetId = AssetId(id: feeAssetId)!
+        let assetId = try! AssetId(id: assetId)
+        let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
-            id: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            id: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             assetId: assetId,
             from: from,
@@ -130,7 +130,7 @@ extension Transaction {
     func record(walletId: String) -> TransactionRecord {
         return TransactionRecord(
             walletId: walletId,
-            transactionId: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            transactionId: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             type: type,
             from: from,

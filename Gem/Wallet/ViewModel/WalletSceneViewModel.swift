@@ -2,11 +2,11 @@ import Foundation
 import Keystore
 import Primitives
 import Store
-import Settings
 import UIKit
+import BalanceService
+import WalletsService
 
 struct WalletSceneViewModel {
-
     let wallet: Wallet
     private let balanceService: BalanceService
     private let walletsService: WalletsService
@@ -21,15 +21,11 @@ struct WalletSceneViewModel {
         self.walletsService = walletsService
     }
 
-    var assetsPinnedRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(true)])
-    }
-
     var assetsRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, filters: [.enabled, .includePinned(false)])
+        AssetsRequest(walletID: wallet.id, filters: [.enabled])
     }
 
-    var fiatValueRequest: TotalValueRequest {
+    var totalFiatValueRequest: TotalValueRequest {
         TotalValueRequest(walletID: wallet.id)
     }
 
@@ -42,7 +38,15 @@ struct WalletSceneViewModel {
     }
 
     var bannersRequest: BannersRequest {
-        BannersRequest(walletId: wallet.walletId.id, assetId: .none, events: [.enableNotifications])
+        BannersRequest(
+            walletId: wallet.walletId.id,
+            assetId: .none,
+            chain: .none,
+            events: [
+                .enableNotifications,
+                .accountBlockedMultiSignature,
+            ]
+        )
     }
 
     func setupWallet() throws {

@@ -3,6 +3,8 @@
 import SwiftUI
 import Style
 import Components
+import Primitives
+import Swap
 
 struct SwapTokenView: View {
     
@@ -10,22 +12,20 @@ struct SwapTokenView: View {
     @Binding var text: String
     var showLoading: Bool = false
     var disabledTextField: Bool = false
-    var balanceAction: (() -> Void)
+    var onBalanceAction: (() -> Void)
+    var onSelectAssetAction: (() -> Void)
     
     var body: some View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 VStack(alignment: .center) {
                     Button(role: .none) {
-                        //
+                        onSelectAssetAction()
                     } label: {
                         HStack {
                             AssetImageView(assetImage: model.assetImage)
                             Text(model.symbol)
-                            Image(.arrowDown)
-                                .colorMultiply(Colors.gray)
-                                .frame(width: 12, height: 12)
-                                .opacity(0.8)
+                            SwapChevronView()
                         }
                     }
                 }
@@ -45,7 +45,7 @@ struct SwapTokenView: View {
                 }
             }.padding(.bottom, 2)
                 HStack {
-                    Button(action: balanceAction) {
+                    Button(action: onBalanceAction) {
                         Text(model.availableBalanceText)
                             .font(.system(size: 13))
                             .fontWeight(.medium)
@@ -58,6 +58,12 @@ struct SwapTokenView: View {
                         .foregroundColor(Colors.secondaryText)
             }
         }
+    }
+    var chevronView: some View {
+        Images.Actions.receive
+            .colorMultiply(Colors.gray)
+            .frame(width: 12, height: 12)
+            .opacity(0.8)
     }
 }
 

@@ -1,19 +1,20 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
 import WalletCorePrimitives
 import Primitives
 import WalletCore
+import Testing
 
-final class Chain_WalletCorePrimitiveTests: XCTestCase {
-
-    func testChainToCoinType() {
-        for chain in Chain.allCases {
-            let coinType = chain.coinType
-            switch chain {
-            case .bitcoin: XCTAssertEqual(coinType, .bitcoin)
-            case .litecoin: XCTAssertEqual(coinType, .litecoin)
-            case .ethereum,
+final class Chain_WalletCorePrimitiveTests {
+    @Test(arguments: Chain.allCases)
+       func testChainToCoinType(chain: Chain) {
+           let coinType = chain.coinType
+           switch chain {
+           case .bitcoin:
+               #expect(coinType == .bitcoin)
+           case .litecoin:
+               #expect(coinType == .litecoin)
+           case .ethereum,
                 .smartChain,
                 .polygon,
                 .arbitrum,
@@ -28,31 +29,54 @@ final class Chain_WalletCorePrimitiveTests: XCTestCase {
                 .zkSync,
                 .linea,
                 .mantle,
-                .celo: XCTAssertEqual(coinType, .ethereum)
-            case .solana: XCTAssertEqual(coinType, .solana)
-            case .thorchain: XCTAssertEqual(coinType, .thorchain)
-            case .cosmos: XCTAssertEqual(coinType, .cosmos)
-            case .osmosis: XCTAssertEqual(coinType, .osmosis)
-            case .ton: XCTAssertEqual(coinType, .ton)
-            case .tron: XCTAssertEqual(coinType, .tron)
-            case .doge: XCTAssertEqual(coinType, .dogecoin)
-            case .aptos: XCTAssertEqual(coinType, .aptos)
-            case .sui: XCTAssertEqual(coinType, .sui)
-            case .xrp: XCTAssertEqual(coinType, .xrp)
-            case .celestia: XCTAssertEqual(coinType, .tia)
-            case .injective: XCTAssertEqual(coinType, .nativeInjective)
-            case .sei: XCTAssertEqual(coinType, .sei)
-            case .noble: XCTAssertEqual(coinType, .noble)
-            case .near: XCTAssertEqual(coinType, .near)
-            }
-        }
-    }
-    
-    func testCoinTypeToChain() {
-        XCTAssertEqual(WalletCore.CoinType.ethereum.chain, .ethereum)
-        XCTAssertEqual(WalletCore.CoinType.bitcoin.chain, .bitcoin)
-        
-        XCTAssertNil(WalletCore.CoinType.smartChain.chain)
-        XCTAssertNil(WalletCore.CoinType.arbitrum.chain)
-    }
+                .celo,
+                .world,
+                .sonic,
+                .abstract,
+                .berachain,
+                .ink,
+                .unichain:
+               #expect(coinType == .ethereum)
+           case .solana:
+               #expect(coinType == .solana)
+           case .thorchain:
+               #expect(coinType == .thorchain)
+           case .cosmos:
+               #expect(coinType == .cosmos)
+           case .osmosis:
+               #expect(coinType == .osmosis)
+           case .ton:
+               #expect(coinType == .ton)
+           case .tron:
+               #expect(coinType == .tron)
+           case .doge:
+               #expect(coinType == .dogecoin)
+           case .aptos:
+               #expect(coinType == .aptos)
+           case .sui:
+               #expect(coinType == .sui)
+           case .xrp:
+               #expect(coinType == .xrp)
+           case .celestia:
+               #expect(coinType == .tia)
+           case .injective:
+               #expect(coinType == .nativeInjective)
+           case .sei:
+               #expect(coinType == .sei)
+           case .noble:
+               #expect(coinType == .noble)
+           case .near:
+               #expect(coinType == .near)
+           case .stellar:
+               #expect(coinType == .stellar)
+           case .bitcoinCash:
+               #expect(coinType == .bitcoinCash)
+           case .algorand:
+               #expect(coinType == .algorand)
+           case .polkadot:
+               #expect(coinType == .polkadot)
+           case .cardano:
+               #expect(coinType == .cardano)
+           }
+       }
 }

@@ -5,8 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-public struct AptosService {
-    
+public struct AptosService: Sendable {
     let chain: Chain
     let provider: Provider<AptosProvider>
     
@@ -18,9 +17,75 @@ public struct AptosService {
         self.provider = provider
     }
     
-    func getLedger() async throws -> AptosLedger {
+    private func getLedger() async throws -> AptosLedger {
         try await provider.request(.ledger)
             .map(as: AptosLedger.self)
+    }
+
+    private func getAptosAccount(address: String) async throws -> AptosAccount {
+        try await provider
+            .request(.account(address: address))
+            .mapOrCatch(as: AptosAccount.self, codes: [404], result: .empty)
+    }
+    
+    private func simulateTransaction(sender: String, recipient: String, sequence: String, value: BigInt, gasPrice: BigInt, maxGasAmount: BigInt) async throws -> AptosTransaction {
+        let transaction = AptosTransactionSimulation(
+            expiration_timestamp_secs: String(Int(Date.now.timeIntervalSince1970) + 1_000_000),
+            gas_unit_price: gasPrice.description,
+            max_gas_amount: maxGasAmount.description,
+            payload: AptosTransactionPayload(
+                arguments: [
+                    recipient,
+                    value.description,
+                ],
+                function: "0x1::aptos_account::transfer",
+                type: "entry_function_payload",
+                type_arguments: []
+            ),
+            sender: sender,
+            sequence_number: String(sequence),
+            signature: AptosSignature(
+                type: "no_account_signature",
+                public_key: .none,
+                signature: .none
+            )
+        )
+        guard let transaction = try await provider.request(.simulate(transaction)).map(as: [AptosTransaction].self).first else {
+            throw AnyError("No aptos transaction")
+        }
+        return transaction
+    }
+    
+    public func gasLimit(input: TransactionInput, sequence: Int) async throws -> BigInt {
+        switch input.type {
+        case .transfer(let asset):
+            switch asset.id.type {
+            case .native:
+                let transaction = try await simulateTransaction(
+                    sender: input.senderAddress,
+                    recipient: input.destinationAddress,
+                    sequence: String(sequence),
+                    value: input.value,
+                    gasPrice: input.gasPrice.gasPrice,
+                    maxGasAmount: BigInt(1500)
+                )
+                return BigInt(stringLiteral: transaction.gas_used)
+            case .token:
+                return BigInt(1500)
+            }
+        case .swap: return BigInt(1500)
+        case .transferNft, .stake, .generic, .account, .tokenApprove: fatalError()
+        }
+    }
+    
+    public func fee(input: TransactionInput, gasPrice: GasPriceType, transferType: TransferDataType, sequence: Int) async throws -> Fee {
+        let gasLimit = try await self.gasLimit(input: input, sequence: sequence)
+         
+        return Fee(
+            fee: gasPrice.gasPrice  * gasLimit,
+            gasPriceType: .regular(gasPrice: gasPrice.gasPrice),
+            gasLimit: gasLimit
+        )
     }
 }
 
@@ -28,60 +93,69 @@ public struct AptosService {
 
 extension AptosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let resource = try await provider.request(.balance(address: address))
-            .map(as: AptosResource<AptosResourceBalance>.self)
+        let resourceName = "0x1::coin::CoinStore<0x1::aptos_coin::AptosCoin>"
+        let resource = try await provider.request(.resource(address: address, resource: resourceName))
+            .mapOrCatch(
+                as: AptosResource<AptosResourceBalance>.self,
+                codes: [404],
+                result: AptosResource(type: resourceName, data: AptosResourceBalance(coin: AptosResourceCoin(value: "0")))
+            )
         
         let balance = BigInt(stringLiteral: resource.data.coin.value)
         return AssetBalance(assetId: chain.assetId, balance: Balance(available: balance))
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        let resources = try await provider.request(.resources(address: address))
+            .map(as: [AptosResource<AptosResourceBalanceOptional>].self)
+        
+        return tokenIds.compactMap { assetId in
+            if let tokenId = assetId.tokenId, let resource = resources.first(where: { $0.type == "0x1::coin::CoinStore<\(tokenId)>" }), let balance = resource.data.coin {
+                return AssetBalance(
+                    assetId: assetId,
+                    balance: Balance(available: BigInt(stringLiteral: balance.value))
+                )
+            }
+            return .none
+        }
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        .none
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension AptosService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        async let getGasPrice = provider
+extension AptosService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let gasPrice = try await provider
             .request(.gasPrice)
-            .map(as: AptosGasFee.self).prioritized_gas_estimate
-        //Magic number for gas usage when account exist or not.
-        //gasLimit * 2 for safety
-        async let getDestinationAccount = try await provider
-            .request(.account(address: input.destinationAddress))
-            .mapOrCatch( as: AptosAccount.self, codes: [404], result: AptosAccount(sequence_number: .empty))
-        let (gasPrice, destinationAccount) = try await (getGasPrice, getDestinationAccount)
+            .map(as: AptosGasFee.self)
         
-        let gasLimit = Int32(destinationAccount.sequence_number == .empty ? 676 : 6)
-
-        return Fee(
-            fee: BigInt(gasPrice * gasLimit),
-            gasPriceType: .regular(gasPrice: BigInt(gasPrice)),
-            gasLimit: BigInt(gasLimit * 2),
-            feeRates: [],
-            selectedFeeRate: nil
-        )
+        return [
+            FeeRate(priority: .slow, gasPriceType: .regular(gasPrice: BigInt(gasPrice.gas_estimate))),
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: BigInt(gasPrice.prioritized_gas_estimate))),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: BigInt(gasPrice.prioritized_gas_estimate * 2))),
+        ]
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
 
 extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let account = provider.request(.account(address: input.senderAddress))
+        let account = try await provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
-        async let fee =  fee(input: input.feeInput)
+        let sequence = Int(account.sequence_number) ?? 0
         
-        return try await TransactionPreload(
-            sequence: Int(account.sequence_number) ?? 0,
+        let fee = try await fee(
+            input: input,
+            gasPrice: input.gasPrice,
+            transferType: input.type,
+            sequence: sequence
+        )
+        
+        return TransactionPreload(
+            sequence: sequence,
             fee: fee
         )
     }
@@ -100,13 +174,17 @@ extension AptosService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension AptosService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: AptosTransaction.self)
 
+        let state: TransactionState = transaction.success ? .confirmed : .reverted
+        let fee = BigInt(stringLiteral: transaction.gas_used) * BigInt(stringLiteral: transaction.gas_unit_price)
+
         return TransactionChanges(
-            state: transaction.success ? .confirmed : .pending
+            state: state,
+            changes: [.networkFee(fee)]
         )
     }
 }
@@ -136,11 +214,25 @@ extension AptosService: ChainStakable {
 
 extension AptosService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let parts: [String] = tokenId.split(separator: "::").map { String($0) }
+        let address = try parts.getElement(safe: 0)
+        let resource = "0x1::coin::CoinInfo<\(tokenId)>"
+        
+        let tokenInfo = try await provider
+            .request(.resource(address: address, resource: resource))
+            .map(as: AptosResource<AptosCoinInfo>.self).data
+        
+        return Asset(
+            id: AssetId(chain: .aptos, tokenId: tokenId),
+            name: tokenInfo.name,
+            symbol: tokenInfo.symbol,
+            decimals: tokenInfo.decimals,
+            type: .token
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
-        false
+        tokenId.hasPrefix("0x") && tokenId.contains("::")
     }
 }
 
@@ -159,4 +251,16 @@ extension AptosService: ChainLatestBlockFetchable {
         let ledger = try await getLedger()
         return BigInt(stringLiteral: ledger.ledger_version)
     }
+}
+
+// MARK: - ChainAddressStatusFetchable
+
+extension AptosService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}
+
+extension AptosAccount {
+    static let empty = AptosAccount(sequence_number: "")
 }

@@ -7,71 +7,93 @@ import BigInt
 
 public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    public static var databaseTableName: String = "balances"
+    public static let databaseTableName: String = "balances"
 
     public var assetId: String
     public var walletId: String
     
     public var available: String
+    public var availableAmount: Double
+    
     public var frozen: String
+    public var frozenAmount: Double
+    
     public var locked: String
+    public var lockedAmount: Double
+    
     public var staked: String
+    public var stakedAmount: Double
+    
     public var pending: String
+    public var pendingAmount: Double
+    
     public var rewards: String
+    public var rewardsAmount: Double
+    
     public var reserved: String
+    public var reservedAmount: Double
+    
+    public var totalAmount: Double
     
     public var isEnabled: Bool
     public var isHidden: Bool
     public var isPinned: Bool
-
-    public var total: Double
-    public var fiatValue: Double
+    public var isActive: Bool
     
+    public var lastUsedAt: Date?
     public var updatedAt: Date?
 }
 
 extension AssetBalanceRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column("assetId", .text)
+            $0.column(Columns.Balance.assetId.name, .text)
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("walletId", .text)
+            $0.column(Columns.Balance.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column("available", .text)
-                .defaults(to: "0")
-            $0.column("frozen", .text)
-                .defaults(to: "0")
-            $0.column("locked", .text)
-                .defaults(to: "0")
-            $0.column("staked", .text)
-                .defaults(to: "0")
-            $0.column("pending", .text)
-                .defaults(to: "0")
-            $0.column("rewards", .text)
-                .defaults(to: "0")
-            $0.column("reserved", .text)
-                .defaults(to: "0")
-            $0.column("isEnabled", .boolean)
-                .defaults(to: true)
-                .indexed()
-            $0.column("isHidden", .boolean)
-                .defaults(to: false)
-                .indexed()
-            $0.column("isPinned", .boolean)
-                .defaults(to: false)
-            $0.column("total", .numeric)
-                .defaults(to: 0)
-                .indexed()
-            $0.column("fiatValue", .numeric)
-                .defaults(to: 0)
-                .indexed()
-            $0.column("updatedAt", .date)
-            $0.uniqueKey(["assetId", "walletId"])
+            
+            // balances
+            $0.column(Columns.Balance.available.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.availableAmount.name, .numeric).defaults(to: 0)
+            
+            $0.column(Columns.Balance.frozen.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
+            
+            $0.column(Columns.Balance.locked.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
+            
+            $0.column(Columns.Balance.staked.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.stakedAmount.name, .double).defaults(to: 0)
+            
+            $0.column(Columns.Balance.pending.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
+            
+            $0.column(Columns.Balance.rewards.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
+            
+            $0.column(Columns.Balance.reserved.name, .text).defaults(to: "0")
+            $0.column(Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
+            
+            $0.column(sql: totalAmountSQlCreation)
+            
+            $0.column(Columns.Balance.isEnabled.name, .boolean).defaults(to: true).indexed()
+            $0.column(Columns.Balance.isHidden.name, .boolean).defaults(to: false).indexed()
+            $0.column(Columns.Balance.isPinned.name, .boolean).defaults(to: false).indexed()
+            $0.column(Columns.Balance.isActive.name, .boolean).defaults(to: true).indexed()
+            
+            $0.column(Columns.Balance.lastUsedAt.name, .date)
+            $0.column(Columns.Balance.updatedAt.name, .date)
+            $0.uniqueKey([
+                Columns.Balance.assetId.name,
+                Columns.Balance.walletId.name,
+            ])
         }
     }
+    
+    static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount)"
 }
 
 extension AssetBalanceRecord: Identifiable {
@@ -92,7 +114,7 @@ extension AssetBalanceRecord {
     
     func mapToAssetBalance() -> AssetBalance {
         return AssetBalance(
-            assetId: AssetId(id: assetId)!,
+            assetId: try! AssetId(id: assetId),
             balance: mapToBalance()
         )
     }

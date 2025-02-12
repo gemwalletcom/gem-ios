@@ -1,6 +1,8 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 
-public protocol TargetType {
+public protocol TargetType: Sendable {
     var baseUrl: URL { get }
     var method: HTTPMethod { get }
     var path: String { get }
@@ -12,6 +14,8 @@ public protocol TargetType {
 public enum ContentType: String {
     case json = "application/json"
     case plainText = "text/plain"
+    case URLEncoded = "application/x-www-form-urlencoded"
+    case XBinary = "application/x-binary"
 }
 
 public extension TargetType {

@@ -4,14 +4,18 @@ import Style
 import Blockchain
 import Primitives
 import Keystore
-
-typealias ConfirmTransferDelegate = (Result<String, Error>) -> Void
-typealias ConfirmMessageDelegate = (Result<String, Error>) -> Void
+import Localization
+import ChainService
+import InfoSheet
+import Transfer
+import NodeService
+import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State var model: ConfirmTransferViewModel
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     var body: some View {
         VStack {
@@ -32,17 +36,14 @@ struct ConfirmTransferScene: View {
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)
         .debounce(
-            value: $model.feePriority,
+            value: model.feeModel.priority,
             interval: nil,
             action: onChangeFeePriority
         )
         .taskOnce { fetch() }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
-                NetworkFeeScene(
-                    model: model.feeRatesModel,
-                    action: onSelectFeePriority
-                )
+                NetworkFeeScene(model: model.feeModel)
             }
         }
         .alert(item: $model.confirmingErrorMessage) {
@@ -85,19 +86,28 @@ extension ConfirmTransferScene {
                         ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
                     }
 
+                ListItemImageView(
+                    title: model.networkTitle,
+                    subtitle: model.networkValue,
+                    assetImage: model.networkAssetImage
+                )
+                
                 if model.shouldShowRecipientField {
-                    AddressListItem(title: model.recipientTitle, style: .full, account: model.recipientValue)
+                    AddressListItemView(
+                        title: model.recipientTitle,
+                        style: .full,
+                        account: model.recipientValue,
+                        explorerService: model.explorerService
+                    )
                 }
 
                 if model.shouldShowMemo {
-                    MemoListItem(memo: model.memo)
+                    MemoListItemView(memo: model.memo)
                 }
-
-                HStack {
-                    ListItemView(title: model.networkTitle, subtitle: model.networkValue)
-                    AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+                
+                if let slippage = model.slippageText {
+                    ListItemView(title: model.slippageField, subtitle: slippage)
                 }
-
             } header: {
                 HStack {
                     Spacer(minLength: 0)
@@ -117,11 +127,19 @@ extension ConfirmTransferScene {
                 } else {
                     networkFeeView
                 }
+            } footer: {
+                if let footer = model.networkFeeFooterText {
+                    Text(footer)
+                }
             }
 
             if case let .error(error) = model.state {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
+        }
+        .listSectionSpacing(.compact)
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
 
@@ -130,7 +148,8 @@ extension ConfirmTransferScene {
             title: model.networkFeeTitle,
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
-            placeholders: [.subtitle]
+            placeholders: [.subtitle],
+            infoAction: onNetworkFeeInfo
         )
     }
 }
@@ -143,11 +162,6 @@ extension ConfirmTransferScene {
               let input = value.input,
               case .amount(let amount) = value.transferAmountResult else { return }
         process(input: input, amount: amount)
-    }
-
-    @MainActor
-    private func onSelectFeePriority(_ priority: FeePriority) {
-        model.feePriority = priority
     }
 
     private func onSelectFeePicker() {
@@ -165,6 +179,10 @@ extension ConfirmTransferScene {
             onSelectConfirmTransfer()
         }
     }
+
+    private func onNetworkFeeInfo() {
+        isPresentingInfoSheet = .networkFee(model.dataModel.chain)
+    }
 }
 
 // MARK: - Effects
@@ -181,10 +199,7 @@ extension ConfirmTransferScene {
             await model.process(input: input, amount: amount)
             await MainActor.run {
                 if case .loaded(_) = model.confirmingState {
-                    // TODO: - that's crazy, TODO for later
-                    for _ in 0..<model.dismissAmount {
-                        dismiss()
-                    }
+                    model.onCompleteAction()
                 }
             }
         }
@@ -194,11 +209,12 @@ extension ConfirmTransferScene {
 // MARK: - Previews
 
 #Preview {
-    ConfirmTransferScene(model:
-            .init(wallet: .main,
-                  keystore: LocalKeystore.main,
-                  data: .main,
-                  service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
-                  walletsService: .main)
-    )
+    ConfirmTransferScene(model: .init(
+        wallet: .main,
+        keystore: LocalKeystore.main,
+        data: .main,
+        service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
+        walletsService: .main,
+        onComplete: { }
+    ))
 }

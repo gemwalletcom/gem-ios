@@ -1,5 +1,4 @@
-// swift-tools-version: 5.9
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -17,6 +16,7 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Store", path: "../Store"),
+        .package(name: "Preferences", path: "../Preferences"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
@@ -27,6 +27,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Store",
+                "Preferences",
                 "WalletCorePrimitives",
                 .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "SwiftProtobuf", package: "WalletCore"),
@@ -38,6 +39,7 @@ let package = Package(
             name: "KeystoreTestKit",
             dependencies: [
                 "Keystore",
+                .product(name: "PreferencesTestKit", package: "Preferences")
             ],
             path: "TestKit"
         ),

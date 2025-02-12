@@ -9,6 +9,7 @@ public struct ColorButtonStyle: ButtonStyle {
     let foregroundStylePressed: Color
     let background: Color
     let backgroundPressed: Color
+    let corernerRadius: CGFloat
 
     public init(
         paddingHorizontal: CGFloat,
@@ -16,7 +17,8 @@ public struct ColorButtonStyle: ButtonStyle {
         foregroundStyle: Color,
         foregroundStylePressed: Color,
         background: Color,
-        backgroundPressed: Color
+        backgroundPressed: Color,
+        corernerRadius: CGFloat
     ) {
         self.paddingHorizontal = paddingHorizontal
         self.paddingVertical = paddingVertical
@@ -24,6 +26,7 @@ public struct ColorButtonStyle: ButtonStyle {
         self.foregroundStylePressed = foregroundStylePressed
         self.background = background
         self.backgroundPressed = backgroundPressed
+        self.corernerRadius = corernerRadius
     }
 
     public func makeBody(configuration: Configuration) -> some View {
@@ -37,12 +40,12 @@ public struct ColorButtonStyle: ButtonStyle {
     }
 
     private func background(configuration: Configuration) -> some View {
-        return RoundedRectangle(cornerRadius: 12)
+        RoundedRectangle(cornerRadius: corernerRadius)
             .fill(configuration.isPressed ? backgroundPressed : background)
     }
 
     private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        configuration.isPressed ? foregroundStylePressed : foregroundStyle
     }
 }
 
@@ -51,67 +54,90 @@ public struct ColorButtonStyle: ButtonStyle {
 extension ButtonStyle where Self == ColorButtonStyle {
     public static func blue(
         paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle
-    {
-        return ColorButtonStyle(
-            paddingHorizontal: paddingHorizontal,
-            paddingVertical: paddingVertical,
-            foregroundStyle: Colors.whiteSolid,
-            foregroundStylePressed: Colors.whiteSolid,
-            background: Colors.blue,
-            backgroundPressed: Colors.blueDark
-        )
-    }
-
-    public static func blueGrayPressed(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-            return ColorButtonStyle(
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
+            ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
                 foregroundStyle: Colors.whiteSolid,
                 foregroundStylePressed: Colors.whiteSolid,
                 background: Colors.blue,
-                backgroundPressed: Colors.gray
+                backgroundPressed: Colors.blueDark,
+                corernerRadius: corernerRadius
+            )
+        }
+
+    public static func blueGrayPressed(
+        paddingHorizontal: CGFloat = Spacing.medium,
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
+            ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.whiteSolid,
+                foregroundStylePressed: Colors.whiteSolid,
+                background: Colors.blue,
+                backgroundPressed: Colors.gray,
+                corernerRadius: corernerRadius
             )
         }
 
     public static func gray(
         paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-            return ColorButtonStyle(
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
+            ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
                 foregroundStyle: Colors.whiteSolid,
                 foregroundStylePressed: Colors.whiteSolid,
                 background: Colors.grayLight,
-                backgroundPressed: Colors.gray
+                backgroundPressed: Colors.gray,
+                corernerRadius: corernerRadius
             )
         }
 
     public static func lightGray(
         paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-            return ColorButtonStyle(
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
+            ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
                 foregroundStyle: Colors.gray,
                 foregroundStylePressed: Colors.whiteSolid,
                 background: Colors.grayVeryLight,
-                backgroundPressed: Colors.grayLight
+                backgroundPressed: Colors.grayLight,
+                corernerRadius: corernerRadius
             )
         }
 
     public static func white(
         paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium) -> ColorButtonStyle {
-            return ColorButtonStyle(
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
+            ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
                 paddingVertical: paddingVertical,
                 foregroundStyle: Colors.whiteSolid,
                 foregroundStylePressed: Colors.whiteSolid,
                 background: Colors.white,
-                backgroundPressed: Colors.grayVeryLight
+                backgroundPressed: Colors.grayVeryLight,
+                corernerRadius: corernerRadius
+            )
+        }
+    public static func amount(
+        paddingHorizontal: CGFloat = Spacing.small,
+        paddingVertical: CGFloat = Spacing.small,
+        corernerRadius: CGFloat = 8) -> ColorButtonStyle {
+            ColorButtonStyle(
+                paddingHorizontal: paddingHorizontal,
+                paddingVertical: paddingVertical,
+                foregroundStyle: Colors.black,
+                foregroundStylePressed: Colors.black.opacity(0.5),
+                background: Colors.grayVeryLight,
+                backgroundPressed: Colors.grayVeryLight.opacity(0.5),
+                corernerRadius: corernerRadius
             )
         }
 }
@@ -142,8 +168,17 @@ extension ButtonStyle where Self == ClearButtonStyle {
 public struct StateButtonStyle: ButtonStyle {
     public static let maxButtonHeight: CGFloat = 50
 
-    public enum State {
-        case normal, loading, disabled
+    public enum State: Hashable, Equatable {
+        case normal
+        case loading(showProgress: Bool)
+        case disabled
+
+        var showProgress: Bool {
+            switch self {
+            case .normal, .disabled: false
+            case .loading(let showProgress): showProgress
+            }
+        }
     }
 
     var state: State
@@ -152,14 +187,6 @@ public struct StateButtonStyle: ButtonStyle {
     let background: Color
     let backgroundPressed: Color
     let backgroundDisabled: Color
-
-    private var shouldDisableInteractions: Bool {
-        isGrayBackgroundState || state == .loading
-    }
-
-    private var isGrayBackgroundState: Bool {
-        state == .disabled
-    }
 
     public init(
         state: State,
@@ -179,47 +206,44 @@ public struct StateButtonStyle: ButtonStyle {
 
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            backgroundView
+            RoundedRectangle(cornerRadius: 12)
+                .fill(backgroundColor(configuration: configuration))
                 .frame(height: StateButtonStyle.maxButtonHeight)
-            switch state {
-            case .normal, .disabled:
+
+            if state.showProgress {
+                ProgressView()
+                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
+            } else {
                 configuration.label
                     .lineLimit(1)
                     .foregroundStyle(foregroundStyle(configuration: configuration))
                     .padding(.horizontal, Spacing.medium)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .frame(height: StateButtonStyle.maxButtonHeight)
-                    .background(labelBackground(configuration: configuration))
-            case .loading:
-                ProgressView()
-                    .progressViewStyle(CircularProgressViewStyle(tint: Colors.whiteSolid))
             }
         }
         .frame(maxWidth: .infinity)
-        .disabled(shouldDisableInteractions)
+    }
+
+    private func backgroundColor(configuration: Configuration) -> Color {
+        switch state {
+        case .normal:
+            configuration.isPressed ? backgroundPressed : background
+        case .loading(let showProgress):
+            showProgress ? background : backgroundDisabled
+        case .disabled:
+            backgroundDisabled
+        }
     }
 
     private func foregroundStyle(configuration: Configuration) -> some ShapeStyle {
-        return configuration.isPressed ? foregroundStylePressed : foregroundStyle
-    }
-
-    private var backgroundView: some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(isGrayBackgroundState ? backgroundDisabled : background)
-    }
-
-    private func backgroundPressedView(configuration: Configuration) -> some View {
-        RoundedRectangle(cornerRadius: 12)
-            .fill(configuration.isPressed ? backgroundPressed : background)
-    }
-
-    private func labelBackground(configuration: Configuration) -> some View {
-        Group {
-            if !isGrayBackgroundState && state != .loading {
-                backgroundPressedView(configuration: configuration)
-            } else {
-                backgroundView
-            }
+        switch state {
+        case .normal:
+            configuration.isPressed ? foregroundStylePressed : foregroundStyle
+        case .loading(let showProgress):
+            foregroundStylePressed.opacity(showProgress ? 1.0 : 0.65)
+        case .disabled:
+            foregroundStyle
         }
     }
 }
@@ -234,7 +258,7 @@ extension ButtonStyle where Self == StateButtonStyle {
             foregroundStylePressed: Colors.whiteSolid,
             background: Colors.blue,
             backgroundPressed: Colors.blueDark,
-            backgroundDisabled: Colors.gray
+            backgroundDisabled: Colors.blueDark.opacity(0.6)
         )
     }
 }
@@ -249,7 +273,7 @@ extension ButtonStyle where Self == StateButtonStyle {
 
         var body: some View {
             Button(action: {
-                state = .loading
+                state = .loading(showProgress: state.showProgress)
                 Task {
                     try await Task.sleep(nanoseconds: 1000000000 * 3)
                     state = .normal
@@ -315,7 +339,10 @@ extension ButtonStyle where Self == StateButtonStyle {
             StatefulButtonPreviewWrapper(text: "Stateful Button", state: .disabled)
                 .disabled(true)
 
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading)
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: true))
+                .disabled(false)
+
+            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: false))
                 .disabled(false)
         }
     }

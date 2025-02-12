@@ -2,6 +2,9 @@
 
 import Foundation
 import Primitives
+import Localization
+import Transfer
+import PrimitivesComponents
 
 struct TransferDataViewModel {
     let data: TransferData
@@ -13,20 +16,17 @@ struct TransferDataViewModel {
     var type: TransferDataType { data.type }
     var recipientData: RecipientData { data.recipientData }
     var recipient: Recipient { recipientData.recipient }
-    var asset: Asset { recipientData.asset }
+    var asset: Asset { data.type.asset }
     var memo: String? { recipientData.recipient.memo }
-    var chain: Chain { asset.chain }
+    var chain: Chain { data.chain }
     var chainType: ChainType { chain.type }
     var chainAsset: Asset { chain.asset }
 
     var title: String {
         switch type {
-        case .transfer: Localized.Transfer.Send.title
-        case .swap(_, _, let type):
-            switch type {
-            case .approval: Localized.Transfer.Approve.title
-            case .swap: Localized.Wallet.swap
-            }
+        case .transfer, .transferNft: Localized.Transfer.Send.title
+        case .swap, .tokenApprove: Localized.Wallet.swap
+        //case .approval: Localized.Transfer.Approve.title
         case .generic: Localized.Transfer.Approve.title
         case .stake(_, let type):
             switch type {
@@ -35,6 +35,10 @@ struct TransferDataViewModel {
             case .redelegate: Localized.Transfer.Redelegate.title
             case .rewards: Localized.Transfer.ClaimRewards.title
             case .withdraw: Localized.Transfer.Withdraw.title
+            }
+        case .account(_, let type):
+            switch type {
+            case .activate: Localized.Transfer.ActivateAsset.title
             }
         }
     }
@@ -48,16 +52,29 @@ struct TransferDataViewModel {
     }
 
     var recepientAccount: SimpleAccount {
-        SimpleAccount(name: recipientName,
-                      chain: chain,
-                      address: recipient.address)
+        switch type {
+        case .swap(_, _, let quote, _): SimpleAccount(
+            name: recipientName,
+            chain: chain,
+            address: recipient.address,
+            assetImage: SwapProviderViewModel(provider: quote.data.provider).providerImage
+        )
+        default: SimpleAccount(
+            name: recipientName,
+            chain: chain,
+            address: recipient.address,
+            assetImage: .none
+        )}
     }
 
     var appValue: String? {
         switch type {
         case .transfer,
+            .transferNft,
             .swap,
-            .stake: .none
+            .tokenApprove,
+            .stake,
+            .account: .none
         case .generic(_, let metadata, _):
             metadata.name
         }
@@ -66,8 +83,11 @@ struct TransferDataViewModel {
     var websiteURL: URL? {
         switch type {
         case .transfer,
+            .transferNft,
             .swap,
-            .stake: .none
+            .tokenApprove,
+            .stake,
+            .account: .none
         case .generic(_, let metadata, _):
             URL(string: metadata.url)
         }
@@ -75,10 +95,8 @@ struct TransferDataViewModel {
 
     var shouldShowMemo: Bool {
         switch type {
-        case .transfer:
-            return AssetViewModel(asset: asset).supportMemo
-        case .swap, .generic, .stake:
-            return false
+        case .transfer, .transferNft: chain.isMemoSupported
+        case .swap, .tokenApprove, .generic, .stake, .account: false
         }
     }
 
@@ -89,6 +107,7 @@ struct TransferDataViewModel {
             case .stake, .unstake, .redelegate, .withdraw: true
             case .rewards: false
             }
+        case .account: false
         default: true
         }
     }
@@ -101,8 +120,11 @@ extension TransferDataViewModel {
     private var recipientName: String? {
         switch type {
         case .transfer,
+                .transferNft,
                 .swap,
-                .generic:
+                .tokenApprove,
+                .generic,
+                .account:
             recipient.name ?? recipient.address
         case .stake(_, let stakeType):
             switch stakeType {

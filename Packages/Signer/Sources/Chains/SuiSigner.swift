@@ -15,26 +15,22 @@ public struct SuiSigner: Signable {
         signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
     }
     
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         switch input.type.transactionType {
         case .transfer,
                 .swap,
                 .tokenApproval,
                 .stakeRewards,
                 .stakeRedelegate,
-                .stakeWithdraw:
+                .stakeWithdraw, .assetActivation, .transferNFT, .smartContractCall:
             fatalError()
         case .stakeDelegate,
                 .stakeUndelegate:
-            return signTxDataDigest(data: input.messageBytes, privateKey: privateKey)
+            return [signTxDataDigest(data: input.messageBytes, privateKey: privateKey)]
         }
     }
     

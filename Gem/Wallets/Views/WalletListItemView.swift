@@ -5,11 +5,13 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import Localization
+import PrimitivesComponents
 
 struct WalletListItemView: View {
 
     let model: WalletViewModel
-    let currentWallet: Wallet
+    let currentWallet: Wallet?
 
     let onSelect: (@MainActor (Wallet) -> Void)
     let onEdit: (@MainActor (Wallet) -> Void)
@@ -18,7 +20,7 @@ struct WalletListItemView: View {
 
     init(
         wallet: Wallet,
-        currentWallet: Wallet,
+        currentWallet: Wallet?,
         onSelect: @escaping (Wallet) -> Void,
         onEdit: @escaping (Wallet) -> Void,
         onPin: @escaping (Wallet) -> Void,
@@ -43,19 +45,19 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AssetImageView(assetImage: model.assetImage, size: Sizing.image.chain)
+                AssetImageView(assetImage: model.assetImage, size: Sizing.image.medium)
                 ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()
 
                 if currentWallet == model.wallet {
-                    Image(.walletSelected)
+                    SelectionImageView()
                 }
 
                 Button(
                     action: { onEdit(model.wallet) },
                     label: {
-                        Image(systemName: SystemImage.settings)
+                        Images.System.settings
                             .padding(.vertical, 8)
                             .padding(.leading, Spacing.small)
                     }

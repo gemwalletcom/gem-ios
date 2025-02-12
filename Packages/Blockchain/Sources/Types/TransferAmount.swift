@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct TransferAmount: Equatable {
+public struct TransferAmount: Equatable, Sendable {
     public let value: BigInt
     public let networkFee: BigInt
     public let useMaxAmount: Bool

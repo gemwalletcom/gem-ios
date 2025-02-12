@@ -1,20 +1,31 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
-import GemstonePrimitives
 import SwiftUI
 import Components
 import Store
 import Style
+import Localization
+import PriceAlertService
+import StakeService
+import PrimitivesComponents
+import Preferences
+import ExplorerService
+import AssetsService
+import TransactionsService
+import WalletsService
 
 class AssetSceneViewModel: ObservableObject {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
-    private let stakeService: StakeService
+    private let priceAlertService: PriceAlertService
 
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
+    let explorerService: ExplorerService = .standard
 
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
@@ -23,14 +34,14 @@ class AssetSceneViewModel: ObservableObject {
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
-        stakeService: StakeService,
+        priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
         walletModel: WalletViewModel
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
-        self.stakeService = stakeService
+        self.priceAlertService = priceAlertService
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
@@ -38,13 +49,6 @@ class AssetSceneViewModel: ObservableObject {
     }
 
     var title: String { assetModel.name }
-
-    var headerViewModel: AssetHeaderViewModel {
-        AssetHeaderViewModel(
-            assetDataModel: assetDataModel, 
-            walletModel: walletModel
-        )
-    }
     
     var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
     var addressExplorerUrl: URL { addressLink.url }
@@ -62,15 +66,13 @@ class AssetSceneViewModel: ObservableObject {
     }
     
     var showNetwork: Bool { true }
+    var openNetwork: Bool { assetDataModel.asset.type != .native }
     var showBalances: Bool { assetDataModel.showBalances }
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
     var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
 
     var reservedBalanceUrl: URL? {
-        switch assetModel.asset.chain {
-        case .xrp: URL(string: "https://xrpl.org/reserves.html")!
-        default: .none
-        }
+        assetModel.asset.chain.accountActivationFeeUrl
     }
     
     var networkField: String { Localized.Transfer.network }
@@ -83,7 +85,7 @@ class AssetSceneViewModel: ObservableObject {
     }
     
     var networkAssetImage: AssetImage {
-        AssetIdViewModel(assetId: assetModel.asset.chain.assetId).assetImage
+        AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
     
     var priceView: TextValue {
@@ -106,6 +108,23 @@ class AssetSceneViewModel: ObservableObject {
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+    }
+    
+    // locally comouted banners
+    var banners: [Primitives.Banner] {
+        if !assetDataModel.isActive {
+            return [
+                Primitives
+                    .Banner(
+                        wallet: .none,
+                        asset: assetDataModel.asset,
+                        chain: .none,
+                        event: .activateAsset,
+                        state: .alwaysActive
+                    ),
+            ]
+        }
+        return []
     }
 }
 
@@ -134,6 +153,24 @@ extension AssetSceneViewModel {
             print("asset scene: updateWallet error \(error)")
         }
     }
+
+    func enablePriceAlert() async {
+        do {
+            try await priceAlertService.addPriceAlert(for: assetModel.asset.id)
+            try await priceAlertService.requestPermissions()
+            try await priceAlertService.enablePriceAlerts()
+        } catch {
+            NSLog("enablePriceAlert error \(error)")
+        }
+    }
+
+    func disablePriceAlert() async {
+        do {
+            try await priceAlertService.deletePriceAlert(assetIds: [assetModel.asset.id.identifier])
+        } catch {
+            NSLog("disablePriceAlert error \(error)")
+        }
+    }
 }
 
 // MARK: - Private
@@ -143,11 +180,11 @@ extension AssetSceneViewModel {
         guard let tokenId = assetModel.asset.tokenId else {
             return .none
         }
-        return ExplorerService.main.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
+        return explorerService.tokenUrl(chain: assetModel.asset.chain, address: tokenId)
     }
 
     private var addressLink: BlockExplorerLink {
-        ExplorerService.main.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
+        explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
     }
 
     private func fetchTransactions() async throws {

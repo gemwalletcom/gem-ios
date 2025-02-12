@@ -5,48 +5,52 @@ import WalletCore
 import WalletCorePrimitives
 import Keystore
 import Primitives
+import BigInt
 
 public struct SolanaSigner: Signable {
     
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
-        let input = SolanaSigningInput.with {
-            $0.transferTransaction = SolanaTransfer.with {
-                $0.recipient = input.destinationAddress
-                $0.value = input.value.UInt
-                $0.memo = input.memo.valueOrEmpty
-            }
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
-        }
-        return try sign(input: input, coinType: coinType, privateKey: privateKey)
+        let type = SolanaSigningInput.OneOf_TransactionType.transferTransaction(.with {
+            $0.recipient = input.destinationAddress
+            $0.value = input.value.asUInt
+            $0.memo = input.memo.valueOrEmpty
+        })
+                                                                                
+        return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let decimals = UInt32(input.asset.decimals)
         let tokenId = try input.asset.getTokenId()
-        let amount = input.value.UInt
+        let amount = input.value.asUInt
         let destinationAddress = input.destinationAddress
         let tokenProgram: WalletCore.SolanaTokenProgramId = switch input.token.tokenProgram {
         case .token: .tokenProgram
         case .token2022: .token2022Program
         }
-        let input = SolanaSigningInput.with {
-            switch input.token.recipientTokenAddress {
-            case .some(let recipientTokenAddress):
-                $0.tokenTransferTransaction = SolanaTokenTransfer.with {
-                    $0.amount = amount
-                    $0.decimals = decimals
-                    $0.tokenMintAddress = input.asset.tokenId!
-                    $0.senderTokenAddress = input.token.senderTokenAddress
-                    $0.recipientTokenAddress = recipientTokenAddress
-                    $0.memo = input.memo.valueOrEmpty
-                    $0.tokenProgramID = tokenProgram
-                }
-            case .none:
-                let recipientTokenAddress = SolanaAddress(string: destinationAddress)!.defaultTokenAddress(tokenMintAddress: tokenId)!
-                $0.createAndTransferTokenTransaction = SolanaCreateAndTransferToken.with {
+        switch input.token.recipientTokenAddress {
+        case .some(let recipientTokenAddress):
+            let type = SolanaSigningInput.OneOf_TransactionType.tokenTransferTransaction(.with {
+                $0.amount = amount
+                $0.decimals = decimals
+                $0.tokenMintAddress = tokenId
+                $0.senderTokenAddress = input.token.senderTokenAddress
+                $0.recipientTokenAddress = recipientTokenAddress
+                $0.memo = input.memo.valueOrEmpty
+                $0.tokenProgramID = tokenProgram
+            })
+            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
+        case .none:
+            let walletAddress = SolanaAddress(string: destinationAddress)!
+            let recipientTokenAddress = switch input.token.tokenProgram {
+            case .token:
+                walletAddress.defaultTokenAddress(tokenMintAddress: tokenId)!
+            case .token2022:
+                walletAddress.token2022Address(tokenMintAddress: tokenId)!
+            }
+            let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
                     $0.amount = amount
                     $0.decimals = decimals
                     $0.recipientMainAddress = destinationAddress
@@ -56,55 +60,126 @@ public struct SolanaSigner: Signable {
                     $0.memo = input.memo.valueOrEmpty
                     $0.tokenProgramID = tokenProgram
                 }
-            }
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
+            )
+            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
         }
-        return try sign(input: input, coinType: coinType, privateKey: privateKey)
     }
     
-    private func sign(input: SolanaSigningInput, coinType: CoinType, privateKey: Data) throws -> String {
-        let output: SolanaSigningOutput = AnySigner.sign(input: input, coin: coinType)
+    public func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        fatalError()
+    }
+    
+    private func sign(input: SignerInput, type: SolanaSigningInput.OneOf_TransactionType, coinType: CoinType, privateKey: Data) throws -> String {
+        let signingInput = SolanaSigningInput.with {
+            $0.transactionType = type
+            $0.recentBlockhash = input.block.hash
+            $0.priorityFeeLimit = .with {
+                $0.limit = UInt32(input.fee.gasLimit)
+            }
+            if input.fee.priorityFee > 0 {
+                $0.priorityFeePrice = .with {
+                    $0.price = input.fee.priorityFee.asUInt
+                }
+            }
+            $0.privateKey = privateKey
+        }
+        let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: coinType)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
         return try transcodeBase58ToBase64(output.encoded)
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        guard case .generic(_, _, let extra) = input.type,
-              let string = String(data: extra.data!, encoding: .utf8),
-              let bytes = Base64.decode(string: string) else {
+        guard
+            case .generic(_, _, let extra) = input.type,
+            let string = String(data: extra.data!, encoding: .utf8),
+            let bytes = Base64.decode(string: string)
+        else {
             throw AnyError("not data input")
         }
-        return try signData(bytes: bytes, privateKey: privateKey)
+        return try signData(bytes: bytes, privateKey: privateKey, outputType: extra.outputType)
     }
     
-    func signData(bytes: Data, privateKey: Data) throws -> String {
-        if bytes[0] != 1 {
-            throw AnyError("only support one signature")
+    func signData(bytes: Data, privateKey: Data, outputType: TransferDataExtra.OutputType) throws -> String {
+        var offset = 0
+        // read number of signature neede
+        let numRequiredSignatures = bytes[offset]
+        offset = 1
+
+        // read all the signatures
+        var signatures: [Data] = []
+        for _ in 0..<Int(numRequiredSignatures) {
+            signatures.append(Data(bytes[offset..<offset+64]))
+            offset += 64
         }
-        
-        let message = bytes[65...]
-        guard let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519) else {
+
+        assert(offset == 1 + 64 * numRequiredSignatures)
+        guard signatures[0] == Data(repeating: 0x0, count: 64) else {
+            throw AnyError("user signature should be first")
+        }
+
+        // read message to sign
+        let message = bytes[offset...]
+        guard
+            let signature = PrivateKey(data: privateKey)?.sign(digest: message, curve: .ed25519)
+        else {
             throw AnyError("fail to sign data")
         }
-        
-        var signed = Data([0x1])
-        signed.append(signature)
-        signed.append(message)
-        return signed.base64EncodedString()
+
+        switch outputType {
+        case .signature:
+            return Base58.encodeNoCheck(data: signature)
+        case .encodedTransaction:
+            // update user's signature
+            signatures[0] = signature
+
+            var signed = Data([numRequiredSignatures])
+            for sig in signatures {
+                signed.append(sig)
+            }
+            signed.append(message)
+            return signed.base64EncodedString()
+        }
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard 
-            case .swap(_, _, let action) = input.type,
-            case .swap(let swapData) = action,
-            let string = swapData.quote.data?.data,
-            let bytes = Base64.decode(string: string) else {
+            case .swap(_, _, _, let swapData) = input.type else {
             throw AnyError("not swap SignerInput")
         }
-        return try signData(bytes: bytes, privateKey: privateKey)
+        let price = input.fee.priorityFee
+        let limit = input.fee.gasLimit
+        
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
+            throw AnyError("Unable to set compute unit price")
+        }
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
+            throw AnyError("Unable to set compute unit limit")
+        }
+        guard let transactionData = Base64.decode(string: transaction) else {
+            throw AnyError("not swap SignerInput")
+        }
+        let decodeOutputData = TransactionDecoder.decode(coinType: .solana, encodedTx: transactionData)
+        let decodeOutput = try SolanaDecodingTransactionOutput(serializedData: decodeOutputData)
+        
+        let signingInput = SolanaSigningInput.with {
+            $0.privateKey = privateKey
+            $0.rawMessage = decodeOutput.transaction
+            $0.txEncoding = .base64
+        }
+        let output: SolanaSigningOutput = AnySigner.sign(input: signingInput, coin: .solana)
+        
+        if !output.errorMessage.isEmpty {
+            throw AnyError(output.errorMessage)
+        }
+        
+        return [output.encoded]
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }
@@ -113,7 +188,7 @@ public struct SolanaSigner: Signable {
         case .stake(let validator):
             transactionType = .delegateStakeTransaction(.with {
                 $0.validatorPubkey = validator.id
-                $0.value = input.value.UInt
+                $0.value = input.value.asUInt
             })
         case .unstake(let delegation):
             transactionType = .deactivateStakeTransaction(.with {
@@ -122,25 +197,25 @@ public struct SolanaSigner: Signable {
         case .withdraw(let delegation):
             transactionType = .withdrawTransaction(.with {
                 $0.stakeAccount = delegation.base.delegationId
-                $0.value = delegation.base.balanceValue.UInt
+                $0.value = delegation.base.balanceValue.asUInt
             })
         case .redelegate,
             .rewards:
             fatalError()
         }
-        let signingInput = SolanaSigningInput.with {
-            $0.transactionType = transactionType
-            $0.recentBlockhash = input.block.hash
-            $0.privateKey = privateKey
-        }
-        return try sign(input: signingInput, coinType: input.coinType, privateKey: privateKey)
+        return [
+            try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),
+        ]
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {
-        guard let data = Base58.decodeNoCheck(string: string) else {
-            throw AnyError("string is not Base58 encoding!");
-        }
-        return data.base64EncodedString().paddded
+        return try Base58.decodeNoCheck(string: string)
+            .base64EncodedString()
+            .paddded
+    }
+    
+    public func signMessage(message: SignMessage, privateKey: Data) throws -> String {
+        fatalError()
     }
 }
 

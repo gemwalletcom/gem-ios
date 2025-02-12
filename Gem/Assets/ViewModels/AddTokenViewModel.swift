@@ -3,10 +3,11 @@
 import Foundation
 import Primitives
 import SwiftUI
-import Settings
 import Blockchain
 import Components
 import Style
+import Localization
+import ChainService
 
 @Observable
 class AddTokenViewModel {
@@ -16,16 +17,10 @@ class AddTokenViewModel {
     var input: AddTokenInput
 
     var isPresentingScanner = false
-    var isPresentingSelectNetwork = false
 
     init(wallet: Wallet, service: AddTokenService) {
         self.service = service
-
-        let availableChains = AssetConfiguration.supportedChainsWithTokens.asSet()
-            .intersection(wallet.accounts.map { $0.chain }.asSet())
-            .asArray()
-            .sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
-        self.input = AddTokenInput(chains: availableChains)
+        self.input = AddTokenInput(chains: wallet.chainsWithTokens)
     }
 
     var title: String { Localized.Wallet.AddToken.title }
@@ -34,8 +29,8 @@ class AddTokenViewModel {
     var actionButtonTitlte: String { Localized.Wallet.Import.action }
     var addressTitleField: String { Localized.Wallet.Import.contractAddressField }
 
-    var pasteImage: Image { Image(systemName: SystemImage.paste) }
-    var qrImage: Image { Image(systemName: SystemImage.qrCode) }
+    var pasteImage: Image { Images.System.paste }
+    var qrImage: Image { Images.System.qrCode }
     var errorSystemImage: String { SystemImage.errorOccurred }
 
     var chains: [Chain] { input.chains }
@@ -82,7 +77,7 @@ extension AddTokenViewModel {
 
 // MARK: - Models extensions
 
-extension TokenValidationError: LocalizedError {
+extension TokenValidationError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidTokenId: Localized.Errors.Token.invalidId

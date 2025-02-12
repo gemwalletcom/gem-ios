@@ -2,11 +2,13 @@ import Foundation
 
 public extension AssetId {
 
-    init?(id: String) {
+    static let subTokenSeparator = "::"
+    
+    init(id: String) throws {
         if let (chain, tokenID) = AssetId.getData(id: id) {
             self.init(chain: chain, tokenId: tokenID)
         } else {
-            return nil
+            throw AnyError("invalid asset id: \(id)")
         }
     }
     
@@ -42,48 +44,24 @@ public extension AssetId {
         }
     }
     
-    var assetType: AssetType? {
-        switch chain {
-        case .ethereum,
-            .polygon,
-            .arbitrum,
-            .optimism,
-            .base,
-            .avalancheC,
-            .fantom,
-            .gnosis,
-            .manta,
-            .blast,
-            .zkSync,
-            .linea,
-            .mantle,
-            .celo:
-            return .erc20
-        case .smartChain, .opBNB:
-            return .bep20
-        case .solana:
-            return .spl
-        case .tron:
-            return .trc20
-        case .cosmos,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei,
-            .noble:
-            return .ibc
-        case .sui:
-            return .token
-        case .ton:
-            return .jetton
-        case .bitcoin,
-            .litecoin,
-            .thorchain,
-            .doge,
-            .aptos,
-            .xrp,
-            .near:
-            return .none
+    func twoSubTokenIds() throws -> (String, String) {
+        guard let split = tokenId?.split(separator: Self.subTokenSeparator).map ({ String($0) }), split.count == 2 else {
+            throw AnyError("invalid token id: \(tokenId ?? "")")
         }
+        return (
+            try split.getElement(safe: 0),
+            try split.getElement(safe: 1)
+        )
+    }
+    
+    static func subTokenId(_ ids: [String]) -> String {
+        ids.joined(separator: subTokenSeparator)
+    }
+    
+    func getTokenId() throws -> String {
+        guard let tokenId = tokenId else {
+            throw AnyError("tokenId is null")
+        }
+        return tokenId
     }
 }

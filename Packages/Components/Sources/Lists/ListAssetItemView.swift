@@ -27,7 +27,7 @@ public struct ListAssetItemView: View {
 extension ListAssetItemView {
     @ViewBuilder
     private var primaryContent: some View {
-        VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+        VStack(alignment: .leading, spacing: Spacing.tiny) {
             headerView
             subtitleView
         }
@@ -50,11 +50,13 @@ extension ListAssetItemView {
     private var subtitleView: some View {
         switch model.subtitleView {
         case .price(let price, let priceChangePercentage24h):
-            HStack(spacing: Spacing.extraSmall) {
-                Text(price.text)
-                    .textStyle(price.style)
-                Text(priceChangePercentage24h.text)
-                    .textStyle(priceChangePercentage24h.style)
+            if !price.text.isEmpty {
+                HStack(spacing: Spacing.extraSmall) {
+                    Text(price.text)
+                        .textStyle(price.style)
+                    Text(priceChangePercentage24h.text)
+                        .textStyle(priceChangePercentage24h.style)
+                }
             }
         case .type(let textValue):
             Text(textValue.text)
@@ -75,7 +77,7 @@ extension ListAssetItemView {
                 .toggleStyle(AppToggleStyle())
         case .copy:
             ListButton(
-                image: Image(systemName: SystemImage.copy),
+                image: Images.System.copy,
                 padding: Spacing.small,
                 action: {
                     model.action?(.copy)
@@ -84,15 +86,17 @@ extension ListAssetItemView {
             .background(Colors.grayVeryLight)
             .foregroundStyle(Colors.gray)
             .clipShape(RoundedRectangle(cornerRadius: 24))
+        case .none:
+            EmptyView()
         }
     }
 
     private func balanceView(balance: TextValue, totalFiat: TextValue) -> some View {
-        VStack(alignment: .trailing, spacing: Spacing.extraSmall) {
-            Text(balance.text)
+        VStack(alignment: .trailing, spacing: Spacing.tiny) {
+            PrivacyText(balance.text, isEnabled: model.showBalancePrivacy)
                 .textStyle(balance.style)
             if !totalFiat.text.isEmpty {
-                Text(totalFiat.text)
+                PrivacyText(totalFiat.text, isEnabled: model.showBalancePrivacy)
                     .textStyle(totalFiat.style)
             }
         }
@@ -104,6 +108,7 @@ extension ListAssetItemView {
 
 #Preview {
     struct AssetListViewPreviewable: ListAssetItemViewable {
+        let showBalancePrivacy: Binding<Bool>
         let name: String
         let symbol: String?
         let assetImage: AssetImage
@@ -115,6 +120,7 @@ extension ListAssetItemView {
     return List {
         ListAssetItemView(
             model: AssetListViewPreviewable(
+                showBalancePrivacy: .constant(false),
                 name: "Bitcoin",
                 symbol: "BTC",
                 assetImage: AssetImage(

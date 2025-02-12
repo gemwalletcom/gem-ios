@@ -4,13 +4,16 @@ import GRDBQuery
 import Combine
 import Primitives
 
-public struct AssetsRequest: Queryable {
+public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
     
-    public var walletID: String
+    static let defaultQueryLimit = 50
+    
+    private let walletID: String
+
     public var searchBy: String
     public var filters: [AssetsRequestFilter]
-    
+
     public init(
         walletID: String,
         searchBy: String = "",
@@ -20,22 +23,60 @@ public struct AssetsRequest: Queryable {
         self.searchBy = searchBy
         self.filters = filters
     }
-    
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<[AssetData], Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .map { $0.map{ $0 } }
-            .eraseToAnyPublisher()
+
+    public func fetch(_ db: Database) throws -> [AssetData] {
+        let searchBy = searchBy.trim()
+
+        if filters.contains(.priceAlerts) {
+            let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
+            return request.map { $0.mapToEmptyAssetData() }
+        }
+        if filters.contains(.includeNewAssets) {
+            let request1 = try assetBalancesRequest(db)
+            let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
+
+            return [request1, request2].flatMap { $0 }
+        }
+
+        return try assetBalancesRequest(db)
     }
-    
-    func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
+
+    func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
+        var request = AssetRecord
+            .including(optional: AssetRecord.price)
+            .including(optional: AssetRecord.balance)
+            .including(optional: AssetRecord.account)
+            .joining(required: AssetRecord.balance
+                .filter(Columns.Balance.walletId == walletID)
+                //.order(Columns.Balance.totalAmount.desc)
+                //.order((Columns.Balance.totalAmount * Columns.Price.price).desc)
+            )
+            .joining(required: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+            .order((
+                TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
+            )
+            
+        if !searchBy.isEmpty {
+            request = Self.applyFilter(request: request, .search(searchBy))
+        }
+
+        filters.forEach {
+            request = Self.applyFilter(request: request, $0)
+        }
+        return request.asRequest(of: AssetRecordInfo.self)
+    }
+}
+
+// MARK: - Private
+
+extension AssetsRequest {
+    private func assetBalancesRequest(_ db: Database) throws -> [AssetData] {
         try fetchAssets(filters: filters)
-        .fetchAll(db).map { $0.assetData }
+            .fetchAll(db).map { $0.assetData }
     }
-    
-    func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
-        return try Self.fetchAssetsSearch(
+
+    private func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
+        try Self.fetchAssetsSearch(
             walletId: walletID,
             searchBy: searchBy,
             filters: filters,
@@ -43,42 +84,8 @@ public struct AssetsRequest: Queryable {
         )
         .fetchAll(db).map { $0.assetData }
     }
-    
-    private func fetch(_ db: Database) throws -> [AssetData] {
-        let searchBy = searchBy.trim()
-        if filters.contains(.includeNewAssets) {
-            let request1 = try assetBalancesRequest(db)
-            let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
-            
-            return [request1, request2].flatMap { $0 }
-        } else {
-            return try assetBalancesRequest(db)
-        }
-    }
-    
-    func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
-        var request = AssetRecord
-            .including(optional: AssetRecord.price)
-            .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.details)
-            .including(optional: AssetRecord.account)
-            .joining(required: AssetRecord.balance
-                .filter(Columns.Balance.walletId == walletID)
-                .order(Columns.Balance.fiatValue.desc)
-            )
-            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletID))
 
-        if !searchBy.isEmpty {
-            request = Self.applyFilter(request: request, .search(searchBy))
-        }
-        
-        filters.forEach {
-            request = Self.applyFilter(request: request, $0)
-        }
-        return request.asRequest(of: AssetRecordInfo.self)
-    }
-    
-    static func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
+    static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
         switch filter {
         case .search(let name):
             return request
@@ -87,15 +94,10 @@ public struct AssetsRequest: Queryable {
                     Columns.Asset.name.like("%%\(name)%%") ||
                     Columns.Asset.tokenId.like("%%\(name)%%")
                 )
-        case .hasFiatValue:
-            return request
-                .filter(
-                    SQL(stringLiteral: String(format: "%@.fiatValue > 0", AssetBalanceRecord.databaseTableName) )
-                )
         case .hasBalance:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.total > 0", AssetBalanceRecord.databaseTableName) )
+                    SQL(stringLiteral: String(format: "%@.totalAmount > 0", AssetBalanceRecord.databaseTableName) )
                 )
         case .buyable:
             return request
@@ -127,17 +129,15 @@ public struct AssetsRequest: Queryable {
                 return request
             }
             return request.filter(chains.contains(Columns.Asset.chain))
-        case .includePinned(let value):
+        case .chainsOrAssets(let chains, let assetIds):
             return request
-                .filter(
-                    SQL(stringLiteral:  String(format: "%@.isPinned == %d", AssetBalanceRecord.databaseTableName, value))
-                )
-        case .includeNewAssets:
+                .filter(chains.contains(Columns.Asset.chain) || assetIds.contains(Columns.Asset.id))
+        case .includeNewAssets, .priceAlerts:
             return request
         }
     }
-    
-    static func fetchAssetsSearch(
+
+    static private func fetchAssetsSearch(
         walletId: String,
         searchBy: String,
         filters: [AssetsRequestFilter],
@@ -149,9 +149,9 @@ public struct AssetsRequest: Queryable {
             .filter(literal:
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
-            .order(Columns.Asset.rank.asc)
-            .limit(50)
-        
+            .order(Columns.Asset.rank.desc)
+            .limit(Self.defaultQueryLimit)
+
         if !searchBy.isEmpty {
             request = Self.applyFilter(request: request, .search(searchBy))
         }
@@ -162,19 +162,35 @@ public struct AssetsRequest: Queryable {
             case .buyable,
                 .swappable,
                 .stakeable,
-                .chains:
+                .chains,
+                .chainsOrAssets:
                 request = Self.applyFilter(request: request, $0)
-            case .hasFiatValue,
-                .hasBalance,
+            case .hasBalance,
                 .enabled,
                 .hidden,
-                .includePinned,
                 .includeNewAssets,
-                .search:
+                .search,
+                .priceAlerts:
                 break
             }
         }
 
         return request.asRequest(of: AssetRecordInfo.self)
+    }
+}
+
+// Specific case for the price alerts scene:
+// This is necessary because watch-only wallets do not create accounts for other networks.
+// On the price alerts screen, we fetch all assets and fill them with empty data.
+extension AssetsRequest {
+    private func fetchAllAssetRecordsRequest(
+        _ db: Database,
+        searchBy: String
+    ) throws -> [AssetRecord] {
+        var request = AssetRecord
+            .order(Columns.Asset.rank.desc)
+            .limit(Self.defaultQueryLimit)
+        request = Self.applyFilter(request: request, .search(searchBy))
+        return try request.fetchAll(db)
     }
 }

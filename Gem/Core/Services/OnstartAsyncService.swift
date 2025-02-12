@@ -5,6 +5,12 @@ import Store
 import Keystore
 import GemAPI
 import Primitives
+import BannerService
+import DeviceService
+import SwapService
+import NodeService
+import Preferences
+import AssetsService
 
 class OnstartAsyncService {
     
@@ -12,9 +18,8 @@ class OnstartAsyncService {
     let nodeStore: NodeStore
     let keystore: any Keystore
     let preferences: Preferences
-    let configService: GemAPIConfigService = GemAPIService()
+    let configService: any GemAPIConfigService = GemAPIService()
     let service: ImportAssetsService
-    let subscriptionService: SubscriptionService
     let deviceService: DeviceService
     let bannerSetupService: BannerSetupService
 
@@ -27,7 +32,6 @@ class OnstartAsyncService {
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        subscriptionService: SubscriptionService,
         bannerSetupService: BannerSetupService,
         updateVersionAction: StringAction = .none
     ) {
@@ -41,7 +45,6 @@ class OnstartAsyncService {
             assetStore: assetStore,
             preferences: preferences
         )
-        self.subscriptionService = subscriptionService
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
         self.updateVersionAction = updateVersionAction
@@ -69,17 +72,19 @@ class OnstartAsyncService {
 
             let config = try await configService.getConfig()
             let versions = config.versions
-            if versions.fiatAssets > preferences.fiatAssetsVersion {
+            if versions.fiatOnRampAssets > preferences.fiatOnRampAssetsVersion || versions.fiatOffRampAssets > preferences.fiatOffRampAssetsVersion {
                 Task {
                     do {
                         try await service.updateFiatAssets()
-                        NSLog("Update fiat assets version: \(versions.fiatAssets)")
+                        NSLog(
+                            "Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)"
+                        )
                     } catch {
                         NSLog("Update fiat assets error: \(error)")
                     }
                 }
             }
-            
+
             if versions.swapAssets > preferences.swapAssetsVersion {
                 Task {
                     do {
@@ -90,17 +95,23 @@ class OnstartAsyncService {
                     }
                 }
             }
-            
-            let newVersion = config.app.ios.version.production
-            if VersionCheck.isVersionHigher(new: newVersion, current: Bundle.main.releaseVersionNumber) {
-                NSLog("Newer version available")
-                updateVersionAction?(newVersion)
+            if let newVersion = config.releases.first(where: { $0.store == .appStore }),
+                VersionCheck.isVersionHigher(new: newVersion.version, current: Bundle.main.releaseVersionNumber) {
+                    NSLog("Newer version available")
+                    updateVersionAction?(newVersion.version)
             }
         } catch {
             NSLog("Fetching config error: \(error)")
         }
-        
-        RateService().perform()
+
+        RateService(preferences: preferences).perform()
+
+        Task {
+            let swappper = SwapService(nodeProvider: NodeService(nodeStore: nodeStore))
+            let chains = swappper.supportedChains()
+            
+            try assetStore.setAssetIsSwappable(for: chains.map { $0.id }, value: true)
+        }
         
         Task {
             try await deviceService.update()

@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
-import Settings
 
 struct AddTokenInput {
     

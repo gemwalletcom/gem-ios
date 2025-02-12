@@ -2,7 +2,9 @@ import Foundation
 import Primitives
 import Store
 import WalletCore
+import Preferences
 
+@Observable
 public final class LocalKeystore: Keystore {
     public let directory: URL
 
@@ -13,8 +15,8 @@ public final class LocalKeystore: Keystore {
     
     let keystorePassword: KeystorePassword
     
-    @Published public var currentWalletId: Primitives.WalletId? = .none
-    @Published public var currentWallet: Primitives.Wallet? = .none
+    public var currentWalletId: Primitives.WalletId? = .none
+    public var currentWallet: Primitives.Wallet? = .none
     
     public init(
         folder: String = "keystore",
@@ -72,11 +74,19 @@ public final class LocalKeystore: Keystore {
         currentWallet = getWalletById(id: walletId.id)
     }
 
+    public func setCurrentWalletIndex(_ index: Int) {
+        setCurrentWalletId(getWalletByIndex(index: index)?.walletId)
+    }
+
     private func getWalletById(id: String) -> Primitives.Wallet? {
         return wallets.filter({ $0.id == id  }).first ?? wallets.first
     }
 
-    public func importWallet(name: String, type: KeystoreImportType) throws -> Primitives.Wallet {
+    private func getWalletByIndex(index: Int) -> Primitives.Wallet? {
+        return wallets.filter({ $0.index == index  }).first ?? wallets.first
+    }
+
+    private func getOrCreatePassword() throws -> String {
         // setup once
         var password = try keystorePassword.getPassword()
         if password.isEmpty && wallets.isEmpty {
@@ -85,15 +95,18 @@ public final class LocalKeystore: Keystore {
             try keystorePassword.setPassword(newPassword, authentication: .none)
             password = newPassword
         }
-        
+        return password
+    }
+
+    public func importWallet(name: String, type: KeystoreImportType) throws -> Primitives.Wallet {
         let result: Primitives.Wallet
         switch type {
         case .phrase(let words, let chains):
-            result = try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: password)
+            result = try walletKeyStore.importWallet(name: name, words: words, chains: chains, password: try getOrCreatePassword())
         case .single(let words, let chain):
-            result = try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: password)
+            result = try walletKeyStore.importWallet(name: name, words: words, chains: [chain], password: try getOrCreatePassword())
         case .privateKey(let text, let chain):
-            result = try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: password)
+            result = try walletKeyStore.importPrivateKey(name: name, key: text, chain: chain, password: try getOrCreatePassword())
         case .address(let chain, let address):
             result = Wallet.makeView(name: name, chain: chain, address: address)
         }
@@ -189,7 +202,7 @@ public final class LocalKeystore: Keystore {
     
     public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
         let password = try keystorePassword.getPassword()
-        return try walletKeyStore.sign(message: message, walletId: wallet.id, password: password, chain: chain)
+        return try walletKeyStore.sign(message: message, walletId: wallet.id, type: wallet.type, password: password, chain: chain)
     }
     
     public func destroy() throws {

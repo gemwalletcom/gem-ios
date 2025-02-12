@@ -4,54 +4,66 @@ import Foundation
 import SwiftHTTPClient
 import Primitives
 
-public protocol GemAPIConfigService {
+public protocol GemAPIConfigService: Sendable {
     func getConfig() async throws -> ConfigResponse
 }
 
-public protocol GemAPIFiatService {
-    func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
+public protocol GemAPIFiatService: Sendable {
+    func getBuyQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
+    func getSellQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote]
 }
 
-public protocol GemAPIAssetsListService {
+public protocol GemAPIAssetsListService: Sendable {
     func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId]
-    func getFiatAssets() async throws -> FiatAssets
+    func getBuyableFiatAssets() async throws -> FiatAssets
+    func getSellableFiatAssets() async throws -> FiatAssets
     func getSwapAssets() async throws -> FiatAssets
 }
 
-public protocol GemAPIAssetsService {
+public protocol GemAPIAssetsService: Sendable {
     func getAsset(assetId: AssetId) async throws -> AssetFull
-    func getAssets(assetIds: [AssetId]) async throws -> [AssetFull]
-    func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetFull]
+    func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic]
+    func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetBasic]
 }
 
-public protocol GemAPINameService {
+public protocol GemAPINameService: Sendable {
     func getName(name: String, chain: String) async throws -> NameRecord
 }
 
-public protocol GemAPIChartService {
+public protocol GemAPIChartService: Sendable {
     func getCharts(assetId: AssetId, currency: String, period: String) async throws -> Charts
 }
 
-public protocol GemAPIDeviceService {
+public protocol GemAPIDeviceService: Sendable {
     func getDevice(deviceId: String) async throws -> Device
     func addDevice(device: Device) async throws -> Device
     func updateDevice(device: Device) async throws -> Device
     func deleteDevice(deviceId: String) async throws
 }
 
-public protocol GemAPISubscriptionService {
+public protocol GemAPISubscriptionService: Sendable {
     func getSubscriptions(deviceId: String) async throws -> [Subscription]
     func addSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
     func deleteSubscriptions(deviceId: String, subscriptions: [Subscription]) async throws
 }
 
-public protocol GemAPITransactionService {
+public protocol GemAPITransactionService: Sendable {
     func getTransactionsAll(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [Primitives.Transaction]
     func getTransactionsForAsset(deviceId: String, walletIndex: Int, asset: AssetId, fromTimestamp: Int) async throws -> [Primitives.Transaction]
 }
 
-public protocol GemAPISwapService {
-    func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult
+public protocol GemAPIPriceAlertService: Sendable {
+    func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
+    func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
+    func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
+}
+
+public protocol GemAPIPriceService: Sendable {
+    func getPrice(assetIds: [String], currency: String) async throws -> [AssetPrice]
+}
+
+public protocol GemAPINFTService: Sendable {
+    func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData]
 }
 
 public struct GemAPIService {
@@ -69,9 +81,16 @@ public struct GemAPIService {
 }
 
 extension GemAPIService: GemAPIFiatService {
-    public func getQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
+    public func getBuyQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
         return try await provider
             .request(.getFiatOnRampQuotes(asset, request))
+            .map(as: FiatQuotes.self)
+            .quotes
+    }
+
+    public func getSellQuotes(asset: Asset, request: FiatBuyRequest) async throws -> [FiatQuote] {
+        return try await provider
+            .request(.getFiatOffRampQuotes(asset, request))
             .map(as: FiatQuotes.self)
             .quotes
     }
@@ -162,25 +181,29 @@ extension GemAPIService: GemAPITransactionService {
     }
 }
 
-extension GemAPIService: GemAPISwapService {
-    public func getSwap(request: SwapQuoteRequest) async throws -> SwapQuoteResult {
-        return try await provider
-            .request(.getSwap(request))
-            .map(as: SwapQuoteResult.self)
-    }
-}
-
 extension GemAPIService: GemAPIAssetsListService {
     public func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [Primitives.AssetId] {
         try await provider
             .request(.getAssetsList(deviceId: deviceId, walletIndex: walletIndex, fromTimestamp: fromTimestamp))
             .map(as: [String].self)
-            .compactMap { AssetId(id: $0) }
+            .compactMap { try? AssetId(id: $0) }
     }
-    
-    public func getFiatAssets() async throws -> FiatAssets {
+
+    public func getBuyableFiatAssets() async throws -> FiatAssets {
         try await provider
             .request(.getFiatOnRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
+    public func getSellableFiatAssets() async throws -> FiatAssets {
+        try await provider
+            .request(.getFiatOffRampAssets)
+            .map(as: FiatAssets.self)
+    }
+
+    public func getFiatAssets(buy: Bool) async throws -> FiatAssets {
+        try await provider
+            .request(buy ? .getFiatOnRampAssets : .getFiatOffRampAssets)
             .map(as: FiatAssets.self)
     }
     
@@ -198,15 +221,52 @@ extension GemAPIService: GemAPIAssetsService {
             .map(as: AssetFull.self)
     }
     
-    public func getAssets(assetIds: [AssetId]) async throws -> [AssetFull] {
+    public func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic] {
         return try await provider
             .request(.getAssets(assetIds))
-            .map(as: [AssetFull].self)
+            .map(as: [AssetBasic].self)
     }
     
-    public func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetFull] {
+    public func getSearchAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {
         try await provider
             .request(.getSearchAssets(query: query, chains: chains))
-            .map(as: [AssetFull].self)
+            .map(as: [AssetBasic].self)
+    }
+}
+
+extension GemAPIService: GemAPIPriceAlertService {
+    public func getPriceAlerts(deviceId: String) async throws -> [PriceAlert] {
+        return try await provider
+            .request(.getPriceAlerts(deviceId: deviceId))
+            .map(as: [PriceAlert].self)
+    }
+
+    public func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+        let _ = try await provider
+            .request(.addPriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .map(as: Int.self)
+    }
+
+    public func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws {
+        let _ = try await provider
+            .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
+            .map(as: Int.self)
+    }
+}
+
+extension GemAPIService: GemAPIPriceService {
+    public func getPrice(assetIds: [String], currency: String) async throws -> [Primitives.AssetPrice] {
+        let request = AssetPricesRequest(currency: currency, assetIds: assetIds)
+        return try await provider
+            .request(.getPrices(request))
+            .map(as: AssetPrices.self).prices
+    }
+}
+
+extension GemAPIService: GemAPINFTService {
+    public func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData] {
+        try await provider
+            .request(.getNFTAssets(deviceId: deviceId, walletIndex: walletIndex))
+            .map(as: ResponseResult<[NFTData]>.self).data
     }
 }

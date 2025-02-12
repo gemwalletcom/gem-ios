@@ -49,6 +49,38 @@ public extension String {
     func addPadding(number: Int, padding: Character) -> String {
         return String(repeatElement(padding, count: number - self.count)) + self
     }
+    
+    func addTrailing(number: Int, padding: Character) -> String {
+        return self + String(repeatElement(padding, count: number - self.count))
+    }
+    
+    func encodedData() throws -> Data {
+        guard let data = self.data(using: .utf8) else {
+            throw AnyError("Unable to encode string to data")
+        }
+        return data
+    }
+    
+    func base64Encoded() throws -> Data {
+        guard let data = Data(base64Encoded: self) else {
+            throw AnyError("Unable to base64 encode string to data")
+        }
+        return data
+    }
+    
+    func removePrefix(_ prefix: String) -> String {
+        if self.hasPrefix(prefix) {
+            return String(self.dropFirst(prefix.count))
+        }
+        return self
+    }
+    
+    func addPrefix(_ prefix: String) -> String {
+        if !self.hasPrefix(prefix) {
+            return String(prefix + self)
+        }
+        return self
+    }
 }
 
 extension Optional where Wrapped == String {

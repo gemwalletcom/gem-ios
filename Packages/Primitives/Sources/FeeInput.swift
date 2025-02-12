@@ -3,13 +3,13 @@
 import Foundation
 import BigInt
 
-public struct FeeInput {
+public struct FeeInput: Sendable {
     public let type: TransferDataType
     public let senderAddress: String
     public let destinationAddress: String
     public let value: BigInt
     public let balance: BigInt
-    public let feePriority: FeePriority
+    public let gasPrice: GasPriceType
     public let memo: String?
 
     public init(
@@ -18,7 +18,7 @@ public struct FeeInput {
         destinationAddress: String,
         value: BigInt,
         balance: BigInt,
-        feePriority: FeePriority,
+        gasPrice: GasPriceType,
         memo: String?
     ) {
         self.type = type
@@ -26,7 +26,7 @@ public struct FeeInput {
         self.destinationAddress = destinationAddress
         self.value = value
         self.balance = balance
-        self.feePriority = feePriority
+        self.gasPrice = gasPrice
         self.memo = memo
     }
     
@@ -35,16 +35,6 @@ public struct FeeInput {
     }
     
     public var chain: Chain {
-        switch type {
-        case .transfer(let asset):
-            return asset.chain
-        case .swap(let fromAsset, _, _):
-            // support multiple
-            return fromAsset.chain
-        case .generic(let asset, _, _):
-            return asset.chain
-        case .stake(let asset, _):
-            return asset.chain
-        }
+        type.chain
     }
 }

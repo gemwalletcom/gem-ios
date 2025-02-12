@@ -1,16 +1,16 @@
 import Foundation
-import Combine
 
-public protocol ProviderType {
+public protocol ProviderType: Sendable {
     associatedtype Target: TargetType
 }
+public protocol BatchTargetType: TargetType {}
 
 public struct Provider<T: TargetType>: ProviderType {
     public typealias Target = T
 
     public let session: URLSession
     public let options: ProviderOptions
-    
+
     public init(
         session: URLSession = .shared,
         options: ProviderOptions = ProviderOptions.defaultOptions
@@ -20,39 +20,42 @@ public struct Provider<T: TargetType>: ProviderType {
     }
 
     public func request(_ api: Target) async throws -> Response {
-        let request = api.request(for: options.baseUrl ?? api.baseUrl)
+        let request = TargetRequestBuilder(
+            baseUrl: options.baseUrl ?? api.baseUrl,
+            method: api.method,
+            path: api.path,
+            data: api.data,
+            contentType: api.contentType,
+            cachePolicy: api.cachePolicy
+        ).build()
         let (data, response) = try await session.data(for: request, delegate: nil)
         return try .make(data: data, response: response)
     }
 }
 
-public extension TargetType {
-    func request(for baseURL: URL) -> URLRequest {
-        let string: String
-        var httpBody: Data? = .none
-        switch data {
-        case .params(let params):
-            if method == .GET {
-                let query = params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&")
-                string = "\(path)?\(query)"
-            } else {
-                string = path
-            }
-        case .data(let data):
-            httpBody = data
-            string = path
-        case .plain:
-            string = path
-        case .encodable(let value):
-            httpBody = try! JSONEncoder().encode(value)
-            string = path
+extension Provider where T: BatchTargetType {
+    public func requestBatch(_ targets: [T]) async throws -> Response {
+        let encoder = JSONEncoder()
+        let payload = try JSONSerialization.data(withJSONObject: targets.compactMap {
+            guard case .encodable(let req) = $0.data else { return nil }
+            return try? encoder.encode(req)
+        }.compactMap {
+            try? JSONSerialization.jsonObject(with: $0)
+        })
+        guard let baseUrl = options.baseUrl else {
+            throw ProviderError.missingBaseUrl
         }
-        let url = URL(string: baseURL.absoluteString + string)!
-        var request =  URLRequest(url: url)
-        request.httpBody = httpBody
-        request.httpMethod = method.rawValue
-        request.setValue(contentType, forHTTPHeaderField: "Content-Type")
-        request.cachePolicy = cachePolicy
-        return request
+        // Predefined method, path, improve if needed
+        let request = TargetRequestBuilder(
+            baseUrl: baseUrl,
+            method: .POST,
+            path: "",
+            data: .data(payload),
+            contentType: ContentType.json.rawValue,
+            cachePolicy: .useProtocolCachePolicy
+        ).build()
+
+        let (data, response) = try await session.data(for: request, delegate: nil)
+        return try .make(data: data, response: response)
     }
 }

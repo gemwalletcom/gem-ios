@@ -1,13 +1,32 @@
 import Foundation
-import Settings
 import Primitives
 import Keystore
 import Components
 import Store
 import BigInt
-import WalletConnector
+import WalletConnectorService
 import GemstonePrimitives
 import Blockchain
+import Localization
+import DeviceService
+import PriceAlertService
+import GemAPI
+import Transfer
+import ChainService
+import BannerService
+import StakeService
+import NotificationService
+import NodeService
+import PriceService
+import WalletConnector
+import Preferences
+import NFTService
+import BalanceService
+import AssetsService
+import TransactionsService
+import TransactionService
+import DiscoverAssetsService
+import WalletsService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -24,33 +43,43 @@ extension Price {
     static let main = Price(price: 10, priceChangePercentage24h: 21)
 }
 
+extension PriceAlert {
+    static let main = PriceAlert(assetId: AssetId.main.identifier, price: .none, pricePercentChange: .none, priceDirection: .none)
+}
+
 extension AssetMetaData {
     static let main = AssetMetaData(
         isEnabled: true,
         isBuyEnabled: true,
+        isSellEnabled: true,
         isSwapEnabled: true,
         isStakeEnabled: false,
-        isPinned: false
+        isPinned: false,
+        isActive: true,
+        stakingApr: .none
     )
 }
 
 extension AssetId {
     static let main = Self.ethereum
-    static let ethereum = AssetId(id: "ethereum")!
-    static let bitcoin = AssetId(id: "bitcoin")!
-    static let binance = AssetId(id: "smartchain")!
+    static let ethereum = Chain.ethereum.assetId
+    static let bitcoin = Chain.bitcoin.assetId
+    static let smartChain = Chain.smartChain.assetId
 }
 
 extension AssetData  {
-    static let main = AssetData(asset: .main, balance: .main, account: .main, price: .main, details: .none, metadata: .main)
-}
-
-extension Preferences {
-    static let main = Preferences(defaults: .standard)
+    static let main = AssetData(
+        asset: .main,
+        balance: .main,
+        account: .main,
+        price: .main,
+        price_alert: .none,
+        metadata: .main
+    )
 }
 
 extension LocalKeystore {
-    static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .main)
+    @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .standard)
 }
 
 extension WalletStore {
@@ -65,25 +94,25 @@ extension AssetsService {
     static let main = AssetsService(
         assetStore: .main,
         balanceStore: .main, 
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
-extension ChartService {
-    static let main = ChartService()
+extension NotificationService {
+    static let main = NotificationService()
 }
 
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
 extension StakeService {
     static let main = StakeService(
         store: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
@@ -95,7 +124,8 @@ extension TransactionService {
     static let main = TransactionService(
         transactionStore: .main,
         stakeService: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main),
+        nftService: .main,
+        chainServiceFactory: .main,
         balanceUpdater: BalanceService.main
     )
 }
@@ -103,7 +133,7 @@ extension TransactionService {
 extension DiscoverAssetsService {
     static let main = DiscoverAssetsService(
         balanceService: .main,
-        chainServiceFactory: .init(nodeProvider: NodeService.main)
+        chainServiceFactory: .main
     )
 }
 
@@ -111,27 +141,29 @@ extension NodeService {
     static let main = NodeService(nodeStore: .main)
 }
 
-extension NameService {
-    static let main = NameService()
-}
-
 extension WalletsService {
     static let main = WalletsService(
         keystore: LocalKeystore.main,
-        priceStore: .main,
         assetsService: .main,
         balanceService: .main,
-        stakeService: .main,
         priceService: .main,
         discoverAssetService: .main,
         transactionService: .main,
-        nodeService: NodeService.main,
-        connectionsService: ConnectionsService.main
+        bannerSetupService: .main,
+        addressStatusService: .main
     )
+}
+
+extension PriceAlertService {
+    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main)
 }
 
 extension TransactionsService {
     static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
+}
+
+extension DeviceService {
+    static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
 extension WalletService {
@@ -144,6 +176,10 @@ extension AssetStore {
 
 extension PriceStore {
     static let main = PriceStore(db: .main)
+}
+
+extension PriceAlertStore {
+    static let main = PriceAlertStore(db: .main)
 }
 
 extension BalanceStore {
@@ -167,23 +203,35 @@ extension ConnectionsStore {
 }
 
 extension SubscriptionService {
-    static let main = SubscriptionService(walletStore: .main)
-}
-
-extension WalletConnector {
-    static let main = WalletConnector(signer: WalletConnectorSigner.main)
+    static let main = SubscriptionService(subscriptionProvider: GemAPIService.shared, walletStore: .main)
 }
 
 extension ConnectionsService {
     static let main = ConnectionsService(store: .main, signer: WalletConnectorSigner.main)
 }
 
-extension WalletConnectorSigner {
-    static let main = WalletConnectorSigner(store: .main, keystore: LocalKeystore.main, walletConnectorInteractor: WalletConnectorInteractor.main)
+extension AddressStatusService {
+    static let main = AddressStatusService(chainServiceFactory: .main)
 }
 
-extension WalletConnectorInteractor {
-    static let main = WalletConnectorInteractor()
+extension BannerSetupService {
+    static let main = BannerSetupService(store: .main)
+}
+
+extension NFTService {
+    static let main = NFTService(nftStore: .main)
+}
+
+extension NFTStore {
+    static let main = NFTStore(db: .main)
+}
+
+extension WalletConnectorSigner {
+    static let main = WalletConnectorSigner(
+        store: .main,
+        keystore: LocalKeystore.main,
+        walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
+    )
 }
  
 extension DB {
@@ -200,7 +248,12 @@ extension WalletId {
 }
 
 extension Account {
-    static let main = Account(chain: .bitcoin, address: "btc123123", derivationPath: "", extendedPublicKey: "")
+    static let main = Account(
+        chain: .bitcoin,
+        address: "btc123123",
+        derivationPath: "",
+        extendedPublicKey: .none
+    )
 }
 
 extension Transaction {
@@ -232,11 +285,11 @@ extension Recipient {
 }
 
 extension RecipientData {
-    static let main = RecipientData(asset: .main, recipient: .main)
+    static let main = RecipientData(recipient: .main, amount: .none)
 }
 
 extension TransferData {
-    static let main = TransferData(type: .transfer(.main), recipientData: .main, value: .zero)
+    static let main = TransferData(type: .transfer(.main), recipientData: .main, value: .zero, canChangeValue: true)
 }
 
 extension TransferDataMetadata {
@@ -253,34 +306,10 @@ extension Wallet {
 }
 
 extension BigNumberFormatter {
-    static let full: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        return formatter
-    }()
-    static let medium: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.maximumFractionDigits = 6
-        return formatter
-    }()
-    static let short: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.maximumFractionDigits = 2
-        return formatter
-    }()
-    // no group separator
-    static let simple: BigNumberFormatter = {
-        let formatter = BigNumberFormatter()
-        formatter.groupingSeparator = ""
-        return formatter
-    }()
-}
-
-extension ValueFormatter {
-    static let short = ValueFormatter(style: .short)
-    static let medium = ValueFormatter(style: .medium)
-    static let full = ValueFormatter(style: .full)
-    
-    static let full_US = ValueFormatter(locale: Locale.US, style: .full)
+    static let full: BigNumberFormatter = BigNumberFormatter()
+    static let medium: BigNumberFormatter = BigNumberFormatter(maximumFractionDigits: 6)
+    static let short: BigNumberFormatter = BigNumberFormatter(maximumFractionDigits: 2)
+    static let simple: BigNumberFormatter = BigNumberFormatter(groupingSeparator: "")
 }
 
 extension CurrencyFormatter {
@@ -293,19 +322,24 @@ extension CurrencyFormatter {
     }
 }
 
-extension ExplorerStorage {
-    static let main = ExplorerStorage(preferences: .main)
-}
-
-extension ExplorerService {
-    static let main = ExplorerService(storage: ExplorerStorage.main)
-}
-
-extension BitcoinFeeCalculatorError: LocalizedError {
+extension ChainCoreError: @retroactive LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .cantEstimateFee, .feeRateMissed: Localized.Errors.unableEstimateNetworkFee
         case .incorrectAmount: Localized.Errors.invalidAmount
+        case .dustThreshold(let chain): Localized.Errors.dustThreshold(chain.asset.name)
         }
     }
+}
+
+extension ChainServiceFactory {
+    static let main = ChainServiceFactory(nodeProvider: NodeService.main)
+}
+
+extension BannerService {
+    static let main = BannerService(store: .main, pushNotificationService: PushNotificationEnablerService())
+}
+
+extension NavigationStateManager {
+    static let main = NavigationStateManager(initialSelecedTab: .wallet)
 }

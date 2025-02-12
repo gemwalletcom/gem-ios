@@ -9,7 +9,7 @@ import BigInt
 
 public struct NearSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let signingInput = NEARSigningInput.with {
+        let signingInput = try NEARSigningInput.with {
             $0.signerID = input.senderAddress
             $0.nonce = input.sequence.asUInt64
             $0.receiverID = input.destinationAddress
@@ -20,7 +20,7 @@ public struct NearSigner: Signable {
                     }
                 }),
             ]
-            $0.blockHash = Base58.decodeNoCheck(string: input.block.hash)!
+            $0.blockHash = try Base58.decodeNoCheck(string: input.block.hash)
             $0.privateKey = privateKey
         }
         let output: NEARSigningOutput = AnySigner.sign(input: signingInput, coin: input.asset.chain.coinType)
@@ -30,22 +30,6 @@ public struct NearSigner: Signable {
         }
         
         return output.signedTransaction.base64EncodedString()
-    }
-    
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
-    }
-    
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
     }
 }
     

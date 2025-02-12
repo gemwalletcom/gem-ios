@@ -23,3 +23,5 @@ extension TransactionsRequestType: Identifiable {
         }
     }
 }
+
+extension TransactionsRequestType: Sendable {}

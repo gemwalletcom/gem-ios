@@ -3,21 +3,27 @@ import Primitives
 import Keystore
 import Components
 import Style
+import Localization
+import PrimitivesComponents
+import ExplorerService
 
 class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
     let keystore: any Keystore
+    let explorerService: any ExplorerLinkFetchable
 
     init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        keystore: any Keystore
+        keystore: any Keystore,
+        explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet
         self.keystore = keystore
+        self.explorerService = explorerService
     }
 
     var image: AssetImage {
@@ -47,7 +53,8 @@ class WalletDetailViewModel {
                 SimpleAccount(
                     name: .none,
                     chain: account.chain,
-                    address: account.address
+                    address: account.address,
+                    assetImage: .none
                 )
             )
         }
@@ -83,8 +90,6 @@ extension WalletDetailViewModel {
     }
 
     func onSelectImage() {
-        #if DEBUG
-        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
-        #endif
+        //navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
     }
 }

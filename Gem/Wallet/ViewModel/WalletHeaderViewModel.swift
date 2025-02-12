@@ -7,11 +7,14 @@ import Primitives
 import BigInt
 import Style
 import Components
+import GemstonePrimitives
+import PrimitivesComponents
 
 struct WalletHeaderViewModel {
     //Remove WalletType from here
     let walletType: WalletType
     let value: Double
+    
     let currencyFormatter = CurrencyFormatter.currency()
     
     public init(
@@ -23,28 +26,17 @@ struct WalletHeaderViewModel {
     }
     
     public var totalValueText: String {
-        return currencyFormatter.string(value)
+        currencyFormatter.string(value)
     }
 }
 
 extension WalletHeaderViewModel: HeaderViewModel {
-    
-    var isWatchWallet: Bool {
-        walletType == .view
-    }
-    
-    var assetImage: AssetImage? {
-        return .none
-    }
-    
-    var title: String {
-        return totalValueText
-    }
-    
-    var subtitle: String? {
-        return .none
-    }
-    
+    var allowHiddenBalance: Bool { true }
+    var isWatchWallet: Bool { walletType == .view }
+    var title: String { totalValueText }
+    var assetImage: AssetImage? { .none }
+    var subtitle: String? { .none }
+
     var buttons: [HeaderButton] {
         let values: [(type: HeaderButtonType, isShown: Bool)] = [
             (.send, true),
@@ -53,7 +45,7 @@ extension WalletHeaderViewModel: HeaderViewModel {
         ]
         return values.compactMap {
             if $0.isShown {
-                return HeaderButton(type: $0.type)
+                return HeaderButton(type: $0.type, isEnabled: true)
             }
             return .none
         }

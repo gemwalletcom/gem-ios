@@ -2,6 +2,7 @@ import Foundation
 import Keystore
 import Primitives
 import SwiftUI
+import Localization
 
 class WalletsViewModel {
 
@@ -20,8 +21,8 @@ class WalletsViewModel {
         Localized.Wallets.title
     }
     
-    var currentWallet: Wallet {
-        walletService.currentWallet!
+    var currentWallet: Wallet? {
+        walletService.currentWallet
     }
 }
 

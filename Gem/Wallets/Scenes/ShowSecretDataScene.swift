@@ -4,10 +4,12 @@ import SwiftUI
 import Primitives
 import Components
 import Style
+import Localization
+import PrimitivesComponents
 
 struct ShowSecretDataScene: View {
     
-    let model: SecretPhraseViewableModel
+    let model: any SecretPhraseViewableModel
     @State private var showCopyMessage = false
 
     var body: some View {
@@ -35,11 +37,5 @@ struct ShowSecretDataScene: View {
         ))
         .frame(maxWidth: Spacing.scene.content.maxWidth)
         .navigationTitle(model.title)
-    }
-}
-
-struct ShowSecretPhraseScene_Previews: PreviewProvider {
-    static var previews: some View {
-        ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: ["test"]))
     }
 }

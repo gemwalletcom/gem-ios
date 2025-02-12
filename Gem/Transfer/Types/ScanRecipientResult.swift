@@ -2,7 +2,8 @@
 
 import Foundation
 
-enum ScanRecipientResult {
-    case address(address: String, memo: String?)
-    case transfer(TransferData)
+struct PaymentScanResult {
+    let address: String
+    let amount: String?
+    let memo: String?
 }

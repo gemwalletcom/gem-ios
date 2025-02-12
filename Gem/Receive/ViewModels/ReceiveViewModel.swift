@@ -1,5 +1,8 @@
 import Foundation
 import Primitives
+import Localization
+import PrimitivesComponents
+import WalletsService
 
 struct ReceiveViewModel {
     
@@ -13,17 +16,21 @@ struct ReceiveViewModel {
     }
     
     var addressShort: String {
-        return AddressFormatter(style: .short, address: address, chain: assetModel.asset.chain).value()
+        AddressFormatter(style: .short, address: address, chain: assetModel.asset.chain).value()
     }
-    
-    var sharableText: String {
-        return address
+
+    var youAddressTitle: String {
+        Localized.Receive.yourAddress
     }
-    
-    var footerMessage: String {
-        return "This address can only be used to receive ETH and ETH tokens on Ethereum"
+
+    var shareTitle: String {
+        Localized.Common.share
     }
-    
+
+    var copyTitle: String {
+        Localized.Common.copy
+    }
+
     func enableAsset() {
         walletsService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
     }

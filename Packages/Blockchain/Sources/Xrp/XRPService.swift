@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 import SwiftHTTPClient
 import BigInt
+import GemstonePrimitives
 
-public struct XRPService {
+public struct XRPService: Sendable {
     
     let chain: Chain
     let provider: Provider<XRPProvider>
-    private let reservedBalance = BigInt(10_000_000)
     
     public init(
         chain: Chain,
@@ -23,10 +23,10 @@ public struct XRPService {
 // MARK: - Business Logic
 
 extension XRPService {
-    private func account(address: String) async throws -> XRPAccountResult {
+    private func account(address: String) async throws -> XRPAccount? {
         return try await provider
             .request(.account(address: address))
-            .map(as: XRPResult<XRPAccountResult>.self).result
+            .map(as: XRPResult<XRPAccountResult>.self).result.account_data
     }
     
     private func latestBlock() async throws -> BigInt {
@@ -34,20 +34,46 @@ extension XRPService {
             .request(.latestBlock)
             .map(as: XRPResult<XRPLatestBlock>.self).result.ledger_current_index.asBigInt
     }
+    
+    private func asset(address: String) async throws -> XRPAssetLine {
+        let objects = try await provider
+            .request(.accountObjects(address: address))
+            .map(as: XRPResult<XRPAccountObjects<[XRPAccountAsset]>>.self).result.account_objects
+        guard let asset = objects.first else {
+            throw AnyError("Unknown asset")
+        }
+        return asset.LowLimit
+    }
+    
+    private func reservedBalance() -> BigInt {
+        BigInt(chain.accountActivationFee ?? 0)
+    }
 }
 
 // MARK: - ChainBalanceable
 
 extension XRPService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let balance = try await account(address: address).account_data.Balance
-        let available = BigInt(stringLiteral: balance) - reservedBalance
+        let account = try await account(address: address)
+        
+        let (available, reserved): (BigInt, BigInt) = {
+            if let account = account {
+                let balance = BigInt(stringLiteral: account.Balance)
+                let reserved = reservedBalance()
+                return (
+                    max(balance - reserved, .zero),
+                    reserved
+                )
+            } else {
+                return (.zero, .zero)
+            }
+        }()
         
         return Primitives.AssetBalance(
             assetId: chain.assetId,
             balance: Balance(
                 available: available,
-                reserved: reservedBalance
+                reserved: reserved
             )
         )
     }
@@ -56,42 +82,38 @@ extension XRPService: ChainBalanceable {
         []
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
-        fatalError()
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
+        .none
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension XRPService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        let medianFee = try await provider
+extension XRPService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let fees = try await provider
             .request(.fee)
-            .map(as: XRPResult<XRPFee>.self).result.drops.median_fee
-        let fee = BigInt(stringLiteral: medianFee)
+            .map(as: XRPResult<XRPFee>.self).result
         
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1,
-            feeRates: [],
-            selectedFeeRate: nil
-        )
-    }
+        let minimumFee = BigInt(stringLiteral: fees.drops.minimum_fee)
+        let medianFee = BigInt(stringLiteral: fees.drops.median_fee)
     
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
+        return [
+            FeeRate(priority: .slow, gasPriceType: .regular(gasPrice: max(medianFee / 10, minimumFee))),
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: medianFee)),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: medianFee * 2)),
+        ]
+    }
 }
 
 // MARK: - ChainTransactionPreloadable
 
 extension XRPService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let account = account(address: input.senderAddress)
-        async let fee = fee(input: input.feeInput)
-
-        return try await TransactionPreload(
-            sequence: Int(account.account_data.Sequence),
-            fee: fee
+        guard let account = try await account(address: input.senderAddress) else {
+            throw AnyError("Invalid account")
+        }
+        return TransactionPreload(
+            sequence: Int(account.Sequence),
+            fee: input.defaultFee
         )
     }
 }
@@ -104,7 +126,9 @@ extension XRPService: ChainBroadcastable {
             .request(.broadcast(data: data))
             .map(as: XRPResult<XRPTransactionBroadcast>.self).result
         
-        if let message = result.engine_result_message, !message.isEmpty, !result.accepted  {
+        if let message = result.engine_result_message, !message.isEmpty, result.accepted == false  {
+            throw AnyError(message)
+        } else if let message = result.error_exception {
             throw AnyError(message)
         }
         guard let hash = result.tx_json?.hash else {
@@ -118,9 +142,9 @@ extension XRPService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension XRPService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let status = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: XRPResult<XRPTransactionStatus>.self).result.status
         let state: TransactionState = status == "success" ? .confirmed : .pending
         return TransactionChanges(state: state)
@@ -152,11 +176,24 @@ extension XRPService: ChainStakable {
 
 extension XRPService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
-        throw AnyError("Not Implemented")
+        let asset = try await asset(address: tokenId)
+        let currency = try Data.from(hex: asset.currency.trimmingCharacters(in: CharacterSet(charactersIn: "0")))
+        guard let symbol = String(data: currency, encoding: .ascii) else {
+            throw AnyError("invalid symbol")
+        }
+        
+        return Asset(
+            id: AssetId(chain: chain, tokenId: tokenId),
+            name: symbol,
+            symbol: symbol,
+            decimals: 15, //TODO: Default?
+            type: .token
+        )
     }
     
     public func getIsTokenAddress(tokenId: String) -> Bool {
         false
+        //tokenId.hasPrefix("r")
     }
 }
 
@@ -177,3 +214,11 @@ extension XRPService: ChainLatestBlockFetchable {
     }
 }
 
+
+// MARK: - ChainAddressStatusFetchable
+
+extension XRPService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
+    }
+}

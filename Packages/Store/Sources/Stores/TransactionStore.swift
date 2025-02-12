@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct TransactionStore {
+public struct TransactionStore: Sendable {
     
     let db: DatabaseQueue
     
@@ -60,6 +60,14 @@ public struct TransactionStore {
     
     public func updateNetworkFee(transactionId: String, networkFee: String) throws {
         try updateValues(id: transactionId, values: [Columns.Transaction.fee.set(to: networkFee)])
+    }
+    
+    public func updateBlockNumber(transactionId: String, block: Int) throws {
+        try updateValues(id: transactionId, values: [Columns.Transaction.blockNumber.set(to: block)])
+    }
+    
+    public func updateCreatedAt(transactionId: String, date: Date) throws {
+        try updateValues(id: transactionId, values: [Columns.Transaction.createdAt.set(to: date)])
     }
     
     public func updateTransactionId(oldTransactionId: String, transactionId: String, hash: String) throws {

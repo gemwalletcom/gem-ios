@@ -44,8 +44,8 @@ public struct ListButton: View {
 struct ListButton_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            ListButton(title: "Paste", image: Image(systemName: SystemImage.paste))
-            ListButton(title: "Scan", image: Image(systemName: SystemImage.qrCode))
+            ListButton(title: "Paste", image: Images.System.paste)
+            ListButton(title: "Scan", image: Images.System.qrCode)
         }
     }
 }

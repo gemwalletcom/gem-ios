@@ -5,17 +5,17 @@ import Primitives
 import GRDBQuery
 import Store
 import Style
+import Localization
 
 struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.db) private var DB
     @Environment(\.keystore) private var keystore
 
     @State private var isPresentingErrorMessage: String?
     @State private var showingDeleteAlert = false
-    
-    @State private var isPresentingCreateWalletSheet = false
-    @State private var isPresentingImportWalletSheet = false
+
+    @Binding private var isPresentingCreateWalletSheet: Bool
+    @Binding private var isPresentingImportWalletSheet: Bool
 
     @State var walletDelete: Wallet? = .none
 
@@ -28,11 +28,16 @@ struct WalletsScene: View {
     private var wallets: [Wallet]
 
     init(
-        model: WalletsViewModel
+        model: WalletsViewModel,
+        isPresentingCreateWalletSheet: Binding<Bool>,
+        isPresentingImportWalletSheet: Binding<Bool>
     ) {
         self.model = model
-        _pinnedWallets = Query(WalletsRequest(isPinned: true), in: \.db.dbQueue)
-        _wallets = Query(WalletsRequest(isPinned: false), in: \.db.dbQueue)
+        _pinnedWallets = Query(WalletsRequest(isPinned: true))
+        _wallets = Query(WalletsRequest(isPinned: false))
+        
+        _isPresentingCreateWalletSheet = isPresentingCreateWalletSheet
+        _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
     var body: some View {
@@ -42,7 +47,7 @@ struct WalletsScene: View {
                     action: onSelectCreateWallet,
                     label: {
                         HStack {
-                            Image(.createWallet)
+                            Images.Wallets.create
                             Text(Localized.Wallet.createNewWallet)
                         }
                     }
@@ -51,7 +56,7 @@ struct WalletsScene: View {
                     action: onSelectImportWallet,
                     label: {
                         HStack {
-                            Image(.importWallet)
+                            Images.Wallets.import
                             Text(Localized.Wallet.importExistingWallet)
                         }
                     }
@@ -72,7 +77,7 @@ struct WalletsScene: View {
                     .onMove(perform: onMovePinned)
                 } header: {
                     HStack {
-                        Image(systemName: SystemImage.pin)
+                        Images.System.pin
                         Text(Localized.Common.pinned)
                     }
                 }
@@ -95,12 +100,6 @@ struct WalletsScene: View {
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
-        .sheet(isPresented: $isPresentingCreateWalletSheet) {
-            CreateWalletNavigationStack(isPresenting: $isPresentingCreateWalletSheet)
-        }
-        .sheet(isPresented: $isPresentingImportWalletSheet) {
-            ImportWalletNavigationStack(isPresenting: $isPresentingImportWalletSheet)
-        }
         .confirmationDialog(
             Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
             presenting: $walletDelete,
@@ -111,7 +110,8 @@ struct WalletsScene: View {
                     role: .destructive,
                     action: { delete(wallet: wallet) }
                 )
-            })
+            }
+        )
         .navigationBarTitle(model.title)
     }
 }
@@ -219,7 +219,9 @@ extension WalletsScene {
             model: .init(
                 navigationPath: Binding.constant(NavigationPath()),
                 walletService: .main
-            )
+            ),
+            isPresentingCreateWalletSheet: Binding.constant(false),
+            isPresentingImportWalletSheet: Binding.constant(false)
         )
         .navigationBarTitleDisplayMode(.inline)
     }

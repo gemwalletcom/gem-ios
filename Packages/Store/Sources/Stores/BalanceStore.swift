@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct BalanceStore {
+public struct BalanceStore: Sendable {
     
     let db: DatabaseQueue
 
@@ -30,20 +30,44 @@ public struct BalanceStore {
     ) throws {
         try db.write { (db: Database) in
             for balance in balances {
+                let balanceFields: [ColumnAssignment] = switch balance.type {
+                case .coin(let balance):
+                    [
+                        Columns.Balance.available.set(to: balance.available.value),
+                        Columns.Balance.availableAmount.set(to: balance.available.amount),
+                        Columns.Balance.reserved.set(to: balance.reserved.value),
+                        Columns.Balance.reservedAmount.set(to: balance.reserved.amount)
+                    ]
+                case .token(let balance):
+                    [
+                        Columns.Balance.available.set(to: balance.available.value),
+                        Columns.Balance.availableAmount.set(to: balance.available.amount),
+                    ]
+                case .stake(let balance):
+                    [
+                        Columns.Balance.staked.set(to: balance.staked.value),
+                        Columns.Balance.stakedAmount.set(to: balance.staked.amount),
+                        Columns.Balance.frozen.set(to: balance.frozen.value),
+                        Columns.Balance.frozenAmount.set(to: balance.frozen.amount),
+                        Columns.Balance.locked.set(to: balance.locked.value),
+                        Columns.Balance.lockedAmount.set(to: balance.locked.amount),
+                        Columns.Balance.pending.set(to: balance.pending.value),
+                        Columns.Balance.pendingAmount.set(to: balance.pending.amount),
+                        Columns.Balance.rewards.set(to: balance.rewards.value),
+                        Columns.Balance.rewardsAmount.set(to: balance.rewards.amount),
+                    ]
+                }
+                
+                let defaultFields: [ColumnAssignment] = [
+                    Columns.Balance.updatedAt.set(to: balance.updatedAt),
+                    Columns.Balance.isActive.set(to: balance.isActive),
+                ]
+                let assignments = balanceFields + defaultFields
+                
                 try AssetBalanceRecord
                     .filter(Columns.Balance.walletId == walletId)
                     .filter(Columns.Balance.assetId == balance.assetID)
-                    .updateAll(db,[
-                        Columns.Balance.available.set(to: balance.available),
-                        Columns.Balance.frozen.set(to: balance.frozen),
-                        Columns.Balance.locked.set(to: balance.locked),
-                        Columns.Balance.staked.set(to: balance.staked),
-                        Columns.Balance.pending.set(to: balance.pending),
-                        Columns.Balance.reserved.set(to: balance.reserved),
-                        Columns.Balance.total.set(to: balance.total),
-                        Columns.Balance.fiatValue.set(to: balance.fiatValue),
-                        Columns.Balance.updatedAt.set(to: balance.updatedAt),
-                    ])
+                    .updateAll(db, assignments)
             }
         }
     }
@@ -74,7 +98,7 @@ public struct BalanceStore {
             return try AssetBalanceRecord
                 .filter(Columns.Balance.isEnabled == true)
                 .fetchAll(db)
-                .compactMap { AssetId(id: $0.assetId) }
+                .compactMap { try? AssetId(id: $0.assetId) }
         }
     }
     
@@ -103,17 +127,25 @@ public struct BalanceStore {
     @discardableResult
     public func setIsEnabled(walletId: String, assetIds: [String], value: Bool) throws -> Int {
         try db.write { db in
+            let assigments = switch value {
+            case true: [
+                Columns.Balance.isEnabled.set(to: true),
+                Columns.Balance.isHidden.set(to: false),
+            ]
+            case false: [
+                Columns.Balance.isEnabled.set(to: false),
+                Columns.Balance.isHidden.set(to: true),
+                Columns.Balance.isPinned.set(to: false)
+            ]}
+            
             return try AssetBalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(assetIds.contains(Columns.Balance.assetId))
-                .updateAll(db, 
-                    Columns.Balance.isEnabled.set(to: value),
-                    Columns.Balance.isHidden.set(to: !value),
-                    Columns.Balance.isPinned.set(to: false)
-                )
+                .updateAll(db, assigments)
         }
     }
 
+    @discardableResult
     public func pinAsset(walletId: String, assetId: String, value: Bool) throws -> Int {
         try db.write { db in
             return try AssetBalanceRecord

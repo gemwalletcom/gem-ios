@@ -1,150 +1,138 @@
 import SwiftUI
 import Primitives
 import Components
-import Settings
 import Store
 import GRDBQuery
 import Style
+import Keystore
+import Localization
+import PrimitivesComponents
+
 
 struct SelectAssetScene: View {
 
-    @Environment(\.db) private var DB
-    @Environment(\.keystore) private var keystore
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.nodeService) private var nodeService
-
-    @State var isPresentingAddToken: Binding<Bool>
     @State private var isPresentingCopyMessage: Bool = false
     @State private var isPresentingCopyMessageValue: String?  = .none
+
+    @Binding private var isPresentingAddToken: Bool
+
+    @Query<AssetsRequest> 
+    private var assets: [AssetData]
+
+    @State private var model: SelectAssetViewModel
     
-    @Query<AssetsRequest>
-    var assets: [AssetData]
-    
-    @Query<AssetsInfoRequest>
-    var assetInfo: AssetsInfo
-    
-    @StateObject var model: SelectAssetViewModel
-    
+    private var sections: AssetsSections {
+        AssetsSections.from(assets)
+    }
+
     init(
         model: SelectAssetViewModel,
         isPresentingAddToken: Binding<Bool>
     ) {
-        _model = StateObject(wrappedValue: model)
-        _assets = Query(model.assetRequest, in: \.db.dbQueue)
-        _assetInfo =  Query(model.assetsInfoRequest, in: \.db.dbQueue)
-        self.isPresentingAddToken = isPresentingAddToken
+        _model = State(wrappedValue: model)
+        _isPresentingAddToken = isPresentingAddToken
+
+        let request = Binding {
+            model.request
+        } set: { new in
+            model.request = new
+        }
+        _assets = Query(request)
     }
-    
+
     var body: some View {
         List {
-            if model.showAssetsInfo {
-                if assetInfo.hidden > 0 && $assets.searchBy.wrappedValue.isEmpty {
-                    NavigationLink {
-                        SelectAssetScene(
-                            model: SelectAssetViewModel(
-                                wallet: model.wallet,
-                                keystore: model.keystore,
-                                selectType: .hidden,
-                                assetsService: model.assetsService,
-                                walletsService: model.walletsService
-                            ),
-                            isPresentingAddToken: isPresentingAddToken
-                        )
-                    } label: {
-                        ListItemView(title: Localized.Assets.hidden, subtitle: "\(assetInfo.hidden)")
+            if model.enablePopularSection && !sections.popular.isEmpty {
+                Section {
+                    assetsList(assets: sections.popular)
+                } header: {
+                    HStack {
+                        Images.System.starFill
+                        Text(Localized.Common.popular)
+                    }
+                }
+            }
+            
+            if !sections.pinned.isEmpty {
+                Section {
+                    assetsList(assets: sections.pinned)
+                } header: {
+                    HStack {
+                        Images.System.pin
+                        Text(Localized.Common.pinned)
                     }
                 }
             }
             
             Section {
-                ForEach(assets) { assetData in
-                    switch model.selectType {
-                    case .buy, .receive, .send, .swap, .stake:
-                        NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                            ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
-                        }
-                    case .manage, .hidden:
-                        ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: assetAction)
-                    }
-                }
+                assetsList(assets: sections.assets)
             } footer: {
-                VStack {
-                    if model.isLoading {
-                        HStack {
-                            LoadingView()
+                if model.state.isLoading || assets.isEmpty {
+                    VStack {
+                        if model.state.isLoading {
+                            HStack {
+                                LoadingView()
+                            }
+                        } else if assets.isEmpty {
+                            Text(Localized.Assets.noAssetsFound)
                         }
-                    } else if assets.isEmpty {
-                        Text(Localized.Assets.noAssetsFound)
                     }
+                    .frame(height: 22)
                 }
-                .frame(height: 22)
             }
             
             if model.showAddToken {
                 Section {
                     NavigationCustomLink(with: Text(Localized.Assets.addCustomToken)) {
-                        isPresentingAddToken.wrappedValue = true
+                        isPresentingAddToken = true
                     }
                 }
             }
         }
+        .listSectionSpacing(.compact)
         .searchable(
             text: $assets.searchBy,
             placement: .navigationBarDrawer(displayMode: .always)
         )
-        .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
-        .navigationBarTitle(model.title)
-        .onChange(of: $assets.searchBy.wrappedValue) { _, query in
-            Task {
-                await model.searchQuery(query: query)
-            }
+        .if(model.isNetworkSearchEnabled) {
+            $0.debounce(
+                value: $assets.searchBy.wrappedValue,
+                interval: Duration.milliseconds(250),
+                action: model.search(query:)
+            )
         }
-        .navigationDestination(for: SelectAssetInput.self) { input in
-            switch input.type {
-            case .send:
-                RecipientScene(model: RecipientViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    walletsService: walletsService,
-                    assetModel: AssetViewModel(asset: input.asset))
-                )
-            case .receive:
-                ReceiveScene(
-                    model: ReceiveViewModel(
-                        assetModel: AssetViewModel(asset: input.asset),
-                        walletId: model.wallet.walletId,
-                        address: input.assetAddress.address,
-                        walletsService: walletsService
-                    )
-                )
-            case .buy:
-                BuyAssetScene(
-                    model: BuyAssetViewModel(
-                        assetAddress: input.assetAddress,
-                        input: .default)
-                    )
-            case .swap:
-                SwapScene(model: SwapViewModel(
-                        wallet: model.wallet,
-                        assetId: input.asset.id,
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
-                    )
-                )
-            case .stake:
-                StakeScene(model: StakeViewModel(
-                    wallet: model.wallet,
-                    chain: input.asset.id.chain,
-                    stakeService: walletsService.stakeService)
-                )
-            case .manage, .hidden:
-                EmptyView()
+        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
+        .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
+        .listSectionSpacing(.compact)
+        .navigationBarTitle(model.title)
+    }
+    
+    func assetsList(assets: [AssetData]) -> some View {
+        ForEach(assets) { assetData in
+            switch model.selectType {
+            case .buy, .receive, .send:
+                NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
+                    ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+                }
+            case .manage:
+                ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+            case .priceAlert, .swap:
+                NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
+                    model.selectAsset(asset: assetData.asset)
+                }
             }
         }
     }
+}
+
+// MARK: - Actions
+
+extension SelectAssetScene {
+    private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
+        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
+    }
     
-    func assetAction(_ action: ListAssetItemAction, assetData: AssetData) {
+    private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
         case .enabled(let enabled):
@@ -154,7 +142,6 @@ struct SelectAssetScene: View {
             isPresentingCopyMessage = true
             isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
             UIPasteboard.general.string = address
-            
             model.enableAsset(assetId: asset.id, enabled: true)
         }
     }
@@ -168,6 +155,7 @@ private struct ListAssetItemSelectionView: View {
     var body: some View {
         ListAssetItemView(
             model: ListAssetItemViewModel(
+                showBalancePrivacy: .constant(false),
                 assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .short),
                 type: type,
                 action: {
@@ -177,17 +165,3 @@ private struct ListAssetItemSelectionView: View {
         )
     }
 }
-
-//struct SelectAssetScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        SelectAssetScene(
-//            model: SelectAssetViewModel(
-//                wallet: .main,
-//                keystore: .main,
-//                selectType: .receive,
-//                assetsService: .main,
-//                walletsService: .main
-//            )
-//        )
-//    }
-//}

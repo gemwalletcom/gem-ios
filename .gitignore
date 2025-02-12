@@ -1,13 +1,47 @@
-target
-xcuserdata
-.build/
+# Xcode
+*.xcworkspace/
+*.xcworkspace/xcuserdata/
+*.xcworkspace/contents.xcworkspacedata
+*.xcodeproj/project.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
 xcuserdata/
 DerivedData/
+build/
+.xcframework/
+
+# Swift Package Manager
+.swiftpm/
+.build/
+**/.swiftpm/**/package.xcworkspace/contents.xcworkspacedata
 .swiftpm/config/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
-.netrc
+
+# General macOS files
 .DS_Store
+.AppleDouble
+.LSOverride
+
+# General backup and temporary files
 *~
-Packages/Gemstone/
+*.swp
+*.swo
+*.orig
+*.temp
+*.tmp
+*.bak
+
+# VSCode settings
+.vscode/
 .vscode/settings.json
-build
+
+# Dependency Management
+Packages/Gemstone/
+
+# Compressed files
+*.tar.bz2
+
+# PlantUML files
+sources.txt
+sources.png
+
+# Git-specific
+*.orig

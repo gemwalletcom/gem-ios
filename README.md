@@ -1,6 +1,10 @@
 # 💎 Gem Wallet - iOS
 
-[![iOS Unit Tests](https://github.com/gemwalletcom/gem-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/gemwalletcom/gem-ios/actions/workflows/ci.yml)
+[![Unit Tests](https://github.com/gemwalletcom/gem-ios/actions/workflows/ci.yml/badge.svg)](https://github.com/gemwalletcom/gem-ios/actions/workflows/ci.yml)
+[![License](https://badgen.net/github/license/gemwalletcom/gem-android)](https://github.com/gemwalletcom/gem-android/blob/main/LICENSE)
+[![Gem Wallet Discord](https://img.shields.io/discord/974531300394434630?style=plastic)](https://discord.gg/aWkq5sj7SY)
+[![X (formerly Twitter) Follow](https://img.shields.io/twitter/follow/GemWalletApp)](https://x.com/GemWalletApp)
+[![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=flat&logo=telegram&logoColor=white)](https://t.me/gemwallet_developers)
 
 <b>Gem Wallet</b> is a powerful and secure mobile application designed for iOS and [Android](https://github.com/gemwalletcom/gem-android). It provides users with a seamless and intuitive experience to manage their digital assets and cryptocurrencies.
 
@@ -9,18 +13,6 @@ The app is developed using SwiftUI. The codebase also includes a [Core](https://
 📲️ [iOS available on the App Store.](https://apps.apple.com/app/apple-store/id6448712670?ct=github&mt=8)
 
 🤖 [Android available on the Google Play Store.](https://play.google.com/store/apps/details?id=com.gemwallet.android&utm_campaign=github&utm_source=referral&utm_medium=github)
-
-<div align="left">
-    <a href="https://github.com/gemwalletcom/gem-ios/blob/main/LICENSE">
-        <img src="https://badgen.net/github/license/gemwalletcom/gem-ios" alt="License">
-    </a>
-    <a href="https://twitter.com/GemWalletApp">
-        <img src="https://img.shields.io/twitter/follow/GemWalletApp?label=GemWalletApp&style=flat&logo=twitter&color=1DA1F2" alt="Degen Wallet Twitter">
-    </a>
-    <a href="https://discord.gg/aWkq5sj7SY">
-        <img src="https://img.shields.io/discord/974531300394434630?style=plastic" alt="Degen Wallet Discord">
-    </a>
-</div>
 
 ## ✨ Features
 
@@ -38,7 +30,7 @@ The app is developed using SwiftUI. The codebase also includes a [Core](https://
 - 🔔 **Customizable Notifications:** Set alerts for transactions, price changes, and important events.
 - 🛡️ **Advanced Security:** Encryption and secure key management.
 
-<img src="https://assets.gemwallet.com/screenshots/wallet.png" alt="" width="250" height="540" /> <img src="https://assets.gemwallet.com/screenshots/buy.png" alt="" width="250" height="540" /> <img src="https://assets.gemwallet.com/screenshots/collectibles.png" alt="" width="250" height="540" />
+<img src="https://assets.gemwallet.com/screenshots/github_preview.png" />
 
 ## 🏄‍♂️ Contributing
 
@@ -66,8 +58,14 @@ If you want to contribute, you can use our [developers telegram](https://t.me/ge
 
 ### iOS Development
 
+> [!NOTE]
+> Gem iOS needs [Apple silicon Mac](https://support.apple.com/en-us/116943) to build by default.
+
 1. Setup [Xcode](https://developer.apple.com/xcode)
-2. Run `make bootstrap` to install all nessesary tools.
+2. Clone the repo `git clone https://github.com/gemwalletcom/gem-ios.git --recursive`
+3. Run `just bootstrap` to install all necessary tools. Make sure you have `just` installed `brew install just`. 
+
+If you're using a legacy Intel Mac, you need to pull latest `core` submodule and run `just generate-stone` to build `x86_64` arch Gemstone, the core library used by Gem iOS.
 
 ## 👨‍👧‍👦 Contributors
 

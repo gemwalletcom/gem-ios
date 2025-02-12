@@ -5,7 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 
-public struct CosmosService {
+public struct CosmosService: Sendable {
     
     let chain: CosmosChain
     let provider: Provider<CosmosProvider>
@@ -81,29 +81,54 @@ extension CosmosService {
 
     private func getFee(chain: CosmosChain, type: TransferDataType) -> BigInt {
         switch chain {
-        case .thorchain: BigInt(4_000_000)
+        case .thorchain:
+            BigInt(2_000_000)
         case .cosmos: switch type {
             case .transfer, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(25_000)
+            case .transferNft, .account, .tokenApprove: fatalError()
         }
         case .osmosis: switch type {
             case .transfer, .swap, .generic: BigInt(10_000)
             case .stake: BigInt(100_000)
+            case .transferNft, .account, .tokenApprove: fatalError()
         }
         case .celestia: switch type {
             case .transfer, .swap, .generic: BigInt(3_000)
             case .stake: BigInt(10_000)
+            case .transferNft, .account, .tokenApprove: fatalError()
         }
         case .sei: switch type {
             case .transfer, .swap, .generic: BigInt(100_000)
             case .stake: BigInt(200_000)
+            case .transferNft, .account, .tokenApprove: fatalError()
         }
         case .injective: switch type {
             case .transfer, .swap, .generic: BigInt(100_000_000_000_000)
             case .stake: BigInt(1_000_000_000_000_000)
+            case .transferNft, .account, .tokenApprove: fatalError()
         }
         case .noble: BigInt(25_000)
         }
+    }
+    
+    private func getGasLimit(type: TransactionType) -> BigInt {
+        return {
+            switch type {
+            case .transfer: BigInt(200_000)
+            case .stakeDelegate,
+                .stakeUndelegate: BigInt(1_000_000)
+            case .stakeRedelegate: BigInt(1_250_000)
+            case .stakeRewards: BigInt(750_000)
+            case .swap:
+                switch chain {
+                case .thorchain, .cosmos: BigInt(200_000)
+                default: fatalError()
+                }
+            case .transferNFT, .tokenApproval, .stakeWithdraw, .assetActivation, .smartContractCall:
+                fatalError()
+            }
+        }()
     }
 }
 
@@ -114,10 +139,9 @@ extension CosmosService: ChainBalanceable {
         let denom = chain.denom
         
         switch chain {
-        case .thorchain:
-            let balances = try await getBalance(address: address);
+        case .thorchain, .noble:
+            let balances = try await getBalance(address: address)
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
-            
             return Primitives.AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
@@ -128,23 +152,15 @@ extension CosmosService: ChainBalanceable {
             .osmosis,
             .celestia,
             .injective,
-            .sei,
-            .noble:
+            .sei:
 
-            async let getBalance = getBalance(address: address)
-            async let getStakeBalance = getStakeBalance(address: address)
-
-            let (balances, stakeBalance) = try await (
-                getBalance,
-                getStakeBalance
-            )
-            
+            let balances = try await getBalance(address: address)
             let balance = balances.balances.filter ({ $0.denom == denom.rawValue }).compactMap { BigInt($0.amount) }.reduce(0, +)
             return AssetBalance(
                 assetId: chain.chain.assetId,
                 balance: Balance(
                     available: balance
-                ).merge(stakeBalance.balance)
+                )
             )
         }
     }
@@ -157,72 +173,68 @@ extension CosmosService: ChainBalanceable {
         }
     }
 
-    public func getStakeBalance(address: String) async throws -> AssetBalance {
+    public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let denom = chain.denom
-        async let getDelegations = getDelegations(address: address)
-        async let getUnboundingDelegations = getUnboundingDelegations(address: address)
-        async let getRewards = getRewards(address: address)
+        
+        switch chain {
+        case .thorchain, .noble:
+            return .none
+        case .cosmos,
+            .osmosis,
+            .celestia,
+            .injective,
+            .sei:
+            
+            async let getDelegations = getDelegations(address: address)
+            async let getUnboundingDelegations = getUnboundingDelegations(address: address)
+            async let getRewards = getRewards(address: address)
 
-        let (delegations, unboundingDelegations, rewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
+            let (delegations, unboundingDelegations, delegationsRewards) = try await(getDelegations, getUnboundingDelegations, getRewards)
 
-        let delegationsBalance = delegations
-            .filter { $0.balance.denom == denom.rawValue }
-            .compactMap { BigInt($0.balance.amount) }
-            .reduce(0, +)
+            let staked = delegations
+                .filter { $0.balance.denom == denom.rawValue }
+                .compactMap { BigInt($0.balance.amount) }
+                .reduce(0, +)
 
-        let unboundingDelegationsBalance = unboundingDelegations.compactMap {
-            $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
-        }.reduce(0, +)
+            let pending = unboundingDelegations.compactMap {
+                $0.entries.compactMap { BigInt($0.balance)}.reduce(0, +)
+            }.reduce(0, +)
 
-        let rewardsBalance = rewards
-            .map {
-                $0.reward
-                    .filter { $0.denom == denom.rawValue }
-                    .compactMap { BigInt($0.amount) }
-                    .reduce(0, +)
-            }
-            .reduce(0, +)
+            let rewards = delegationsRewards
+                .map {
+                    $0.reward
+                        .filter { $0.denom == denom.rawValue }
+                        .compactMap { BigInt($0.amount) }
+                        .reduce(0, +)
+                }
+                .reduce(0, +)
 
-        return AssetBalance(
-            assetId: chain.chain.assetId,
-            balance: Balance(
-                available: .zero, // will be merged into
-                staked: delegationsBalance,
-                pending: unboundingDelegationsBalance,
-                rewards: rewardsBalance
+            return AssetBalance(
+                assetId: chain.chain.assetId,
+                balance: Balance(
+                    staked: staked,
+                    pending: pending,
+                    rewards: rewards
+                )
             )
-        )
+        }
     }
 }
 
-// MARK: - ChainFeeCalculateable
-
-extension CosmosService: ChainFeeCalculateable {
-    public func fee(input: FeeInput) async throws -> Fee {
-        //TODO: Estimate it
-        let fee: BigInt = getFee(chain: chain, type: input.type)
-        let gasLimit: BigInt = {
-            switch input.type.transactionType {
-            case .transfer: BigInt(200_000)
-            case .stakeDelegate,
-                .stakeUndelegate: BigInt(1_000_000)
-            case .stakeRedelegate: BigInt(1_250_000)
-            case .stakeRewards: BigInt(750_000)
-            case .swap, .tokenApproval, .stakeWithdraw:
-                fatalError()
-            }
-        }()
-            
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: 1),
-            gasLimit: gasLimit,
-            feeRates: [],
-            selectedFeeRate: nil
-        )
+extension CosmosService: ChainFeeRateFetchable {
+    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
+        let fee = getFee(chain: chain, type: type)
+        if chain.chain == .thorchain {
+            // thorchain has fixed fee
+            return [
+                FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: fee)),
+            ]
+        }
+        return [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: fee)),
+            FeeRate(priority: .fast, gasPriceType: .regular(gasPrice: fee * 2)),
+        ]
     }
-
-    public func feeRates() async throws -> [FeeRate] { fatalError("not implemented") }
 }
 
 // MARK: - ChainTransactionPreloadable
@@ -231,13 +243,12 @@ extension CosmosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
         async let account = getAccount(address: input.senderAddress)
         async let block = getLatestCosmosBlock()
-        async let fee = fee(input: input.feeInput)
 
         return try await TransactionPreload(
             accountNumber: Int(account.account_number) ?? 0,
             sequence: Int(account.sequence) ?? 0,
             chainId: block.header.chain_id,
-            fee: fee
+            fee: input.defaultFee(gasLimit: getGasLimit(type: input.type.transactionType))
         )
     }
 }
@@ -261,9 +272,9 @@ extension CosmosService: ChainBroadcastable {
 // MARK: - ChainTransactionStateFetchable
 
 extension CosmosService: ChainTransactionStateFetchable {
-    public func transactionState(for id: String, senderAddress: String) async throws -> TransactionChanges {
+    public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
         let transaction = try await provider
-            .request(.transaction(id: id))
+            .request(.transaction(id: request.id))
             .map(as: CosmosTransactionResponse.self).tx_response
         if transaction.txhash.isEmpty {
             return TransactionChanges(state: .pending)
@@ -401,5 +412,13 @@ extension CosmosService: ChainIDFetchable {
 extension CosmosService: ChainLatestBlockFetchable {
     public func getLatestBlock() async throws -> BigInt {
         BigInt(stringLiteral: try await getLatestCosmosBlock().header.height)
+    }
+}
+
+// MARK: - ChainAddressStatusFetchable
+
+extension CosmosService: ChainAddressStatusFetchable {
+    public func getAddressStatus(address: String) async throws -> [AddressStatus] {
+        []
     }
 }

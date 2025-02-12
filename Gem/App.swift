@@ -3,25 +3,39 @@ import Keystore
 import Style
 import Store
 import Primitives
+import DeviceService
+import NodeService
+import GemAPI
+import LockManager
+import Preferences
+import AssetsService
 
 @main
 struct GemApp: App {
-    
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    
-    @State var db = DB.main
-    
-    init(){
+
+    private let resolver: AppResolver = AppResolver()
+
+    init() {
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
     var body: some Scene {
         WindowGroup {
-            WalletCoordinator(
-                db: db
+            RootScene(
+                model: RootSceneViewModel(
+                    keystore: resolver.storages.keystore,
+                    walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
+                    onstartService: resolver.services.onstartService,
+                    transactionService: resolver.services.transactionService,
+                    connectionsService: resolver.services.connectionsService,
+                    deviceObserverService: resolver.services.deviceObserverService,
+                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel())
+                )
             )
+            .inject(resolver: resolver)
             .navigationBarTitleDisplayMode(.inline)
-            .tint(Colors.blue)
+            .tint(Colors.black)
         }
     }
 }
@@ -55,14 +69,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         //NSLog("User Defaults: \(UserDefaults.standard.dictionaryRepresentation())")
         
         #endif
-        
-        // screenshots
-        if ProcessInfo().arguments.contains("SKIP_ANIMATIONS") {
-            UIView.setAnimationsEnabled(false)
-            // set device
-            try! SecurePreferences().set(key: .deviceId, value: "screenshots")
-        }
-        
+
         let service = OnstartService(
             assetsService: AssetsService(
                 assetStore: .main,
@@ -71,21 +78,18 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             ),
             assetStore: AssetStore(db: .main),
             nodeStore: NodeStore(db: .main),
-            keystore: keystore
+            keystore: keystore,
+            preferences: Preferences.standard
         )
         service.migrations()
         
-        PreferencesStore.main.incrementLaunchesCount()
-        
-        if let userInfo = launchOptions?[.remoteNotification] as? [String: AnyObject] {
-            NSLog("didFinishLaunchingWithOptions userInfo \(userInfo)")
-        }
-        
+        Preferences.standard.incrementLaunchesCount()
+
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
             fatalError()
         }
-        
+
         return true
     }
     
@@ -93,17 +97,20 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         Task {
-            let _ = try SecurePreferences().set(key: .deviceToken, value: token)
-            try await DeviceService(subscriptionsService: .main, walletStore: .main).update()
+            let _ = try SecurePreferences().set(value: token, key: .deviceToken)
+            try await DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main).update()
         }
     }
-    
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: any Error) {
         NSLog("didFailToRegisterForRemoteNotificationsWithError error: \(error)")
     }
-    
+
+    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
+        NotificationService.main.handleUserInfo(userInfo)
+    }
+
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
-        
         NSLog("url \(url)")
         return true
     }
@@ -122,12 +129,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
 }
 
 extension AppDelegate: UNUserNotificationCenterDelegate {
-    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
-        //let userInfo = notification.request.content.userInfo
     }
     
-    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        //let userInfo = response.notification.request.content.userInfo
+    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        NotificationService.main.handleUserInfo(response.notification.request.content.userInfo)
+        completionHandler()
     }
 }

@@ -4,7 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public struct ConnectionsStore {
+public struct ConnectionsStore: Sendable {
     
     let db: DatabaseQueue
     
@@ -52,7 +52,14 @@ public struct ConnectionsStore {
                 .map { $0.session }
         }
     }
-    
+
+    public func updateConnection(id: String, with wallet: WalletId) throws {
+        let connection = try getConnectionRecord(id: id).update(with: wallet)
+        try db.write { db in
+            try connection.upsert(db)
+        }
+    }
+
     public func updateConnectionSession(_ session: WalletConnectionSession) throws {
         let connection = try getConnectionRecord(id: session.id).update(with: session)
         try db.write { db in

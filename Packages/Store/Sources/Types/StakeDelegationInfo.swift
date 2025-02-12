@@ -12,7 +12,7 @@ public struct StakeDelegationInfo: Codable, FetchableRecord {
 
 extension StakeDelegationInfo {
     func mapToDelegation() -> Delegation {
-        let assetId = AssetId(id: delegation.assetId)!
+        let assetId = try! AssetId(id: delegation.assetId)
         return Delegation(
             base: DelegationBase(
                 assetId: assetId,

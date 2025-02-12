@@ -4,8 +4,6 @@ import SwiftUI
 import Style
 
 public struct ListItemErrorView: View {
-    private let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
-
     let errorTitle: String?
     let errorSystemNameImage: String
     let error: Error
@@ -32,11 +30,13 @@ public struct ListItemErrorView: View {
         retryTitle: String? = nil,
         retryAction: (() -> Void)? = nil
     ) {
-        self.init(errorTitle: errorTitle,
-                  errorSystemNameImage: SystemImage.errorOccurred,
-                  error: error,
-                  retryTitle: retryTitle,
-                  retryAction: retryAction)
+        self.init(
+            errorTitle: errorTitle,
+            errorSystemNameImage: SystemImage.errorOccurred,
+            error: error,
+            retryTitle: retryTitle,
+            retryAction: retryAction
+        )
     }
 
     public var body: some View {
@@ -59,7 +59,7 @@ public struct ListItemErrorView: View {
             }
         }
         .padding()
-        .background(listStyleColor)
+        .background(Colors.listStyleColor)
         .cornerRadius(8)
         .frame(maxWidth: .infinity)
         .listRowInsets(EdgeInsets())
@@ -68,7 +68,7 @@ public struct ListItemErrorView: View {
 
 // MARK: - Preview
 
-#Preview {
+#Preview("Error States") {
     List {
         Section(header: Text("General Error")) {
             ListItemErrorView(
@@ -119,5 +119,4 @@ public struct ListItemErrorView: View {
     }
     .listStyle(InsetGroupedListStyle())
     .background(Colors.grayBackground)
-    .previewDisplayName("Error States")
 }

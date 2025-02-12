@@ -1,5 +1,4 @@
-// swift-tools-version: 5.9
-// The swift-tools-version declares the minimum version of Swift required to build this package.
+// swift-tools-version: 6.0
 
 import PackageDescription
 
@@ -15,13 +14,15 @@ let package = Package(
             targets: ["PrimitivesTestKit"]),
     ],
     dependencies: [
-        .package(url: "https://github.com/gemwalletcom/BigInt.git", exact: Version(5, 3, 0)),
+        .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 4, 1)),
+        .package(name: "Gemstone", path: "../Gemstone"),
     ],
     targets: [
         .target(
             name: "Primitives",
             dependencies: [
                 .product(name: "BigInt", package: "BigInt"),
+                "Gemstone",
             ],
             path: "Sources"
         ),

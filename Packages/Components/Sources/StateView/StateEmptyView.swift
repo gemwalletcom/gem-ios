@@ -40,7 +40,7 @@ public struct StateEmptyView: View {
              image?
                  .resizable()
                  .aspectRatio(contentMode: .fit)
-                 .frame(width: Sizing.image.chain, height: Sizing.image.chain, alignment: .center)
+                 .frame(width: Sizing.image.medium, height: Sizing.image.medium, alignment: .center)
                  .foregroundStyle(Colors.gray)
 
              VStack(spacing: description == nil ? 0 : Spacing.tiny) {
@@ -73,14 +73,14 @@ public struct StateEmptyView: View {
             StateEmptyView(
                 title: "No Results Found",
                 description: "Try adjusting your search or filter to find what you're looking for.",
-                image: Image(systemName: SystemImage.searchNoResults)
+                image: Images.System.searchNoResults
             )
         }
 
         Section(header: Text("View with Title and Image")) {
             StateEmptyView(
                 title: "No Results Found",
-                image: Image(systemName: SystemImage.searchNoResults)
+                image: Images.System.searchNoResults
             )
         }
 
@@ -90,7 +90,7 @@ public struct StateEmptyView: View {
                 titleTextStyle: .title,
                 description: "Try adjusting your search or filter to find what you're looking for.",
                 descriptionTextStyle: .body,
-                image: Image(systemName: SystemImage.searchNoResults)
+                image: Images.System.searchNoResults
             )
         }
 

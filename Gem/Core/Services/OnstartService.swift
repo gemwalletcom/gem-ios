@@ -3,9 +3,10 @@
 import Foundation
 import Store
 import Keystore
-import Settings
 import Primitives
-
+import NodeService
+import AssetsService
+import Preferences
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
 
@@ -15,13 +16,11 @@ struct OnstartService {
     let assetStore: AssetStore
     let nodeStore: NodeStore
     let keystore: any Keystore
-    let preferences = Preferences()
+    let preferences: Preferences
     
     func migrations() {
-        let preferences = PreferencesStore()
-        
         do {
-            try CleanUpService(keystore: keystore).initialSetup()
+            try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
         } catch {
             NSLog("destroy initial files error: \(error)")
         }

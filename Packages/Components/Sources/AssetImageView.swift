@@ -8,21 +8,34 @@ public struct AssetImageView: View {
     
     let assetImage: AssetImage
     let cornerRadius: CGFloat
-    let size: CGFloat
+    let imageSize: CGFloat
     
     let overlayImageSize: CGFloat
-    let overlayImageSizePadding: CGFloat = 2
-    var overlayImageOffset: CGFloat {
-        size/2-overlayImageSize/2
+    public static let defaultImageSize: CGFloat = 40
+    
+    private var overlayImageOffset: CGFloat {
+        imageSize/2-overlayImageSize/2
+    }
+    private var overlayImageCornerRadiusInside: CGFloat {
+        overlayImageSize / 2
+    }
+    private var overlayImagePadding: CGFloat {
+        (imageSize / Self.defaultImageSize).rounded(.up)
+    }
+    private var overlayImageCornerRadiusOutside: CGFloat {
+        overlayImageSize / 2 + overlayImagePadding
+    }
+    private var overlayImageOffsetXY: CGFloat {
+        overlayImageOffset + (imageSize / overlayImageSize)
     }
     
     public init(
         assetImage: AssetImage,
-        size: CGFloat = 40,
+        size: CGFloat = Self.defaultImageSize,
         overlayImageSize: CGFloat = 16
     ) {
         self.assetImage = assetImage
-        self.size = size
+        self.imageSize = size
         self.cornerRadius = size / 2
         self.overlayImageSize = overlayImageSize
     }
@@ -33,18 +46,20 @@ public struct AssetImageView: View {
                 image.resizable()
                 .cornerRadius(cornerRadius)
             } else {
-                CachedAsyncImage(url: assetImage.imageURL, scale: 1) {
+                CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
                     $0.resizable()
                 } placeholder: {
-                    ZStack {
-                        Text(assetImage.type)
-                            .lineLimit(1)
-                            .minimumScaleFactor(0.3)
-                            .padding(4)
+                    if let type = assetImage.type {
+                        ZStack {
+                            Text(type)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.3)
+                                .padding(4)
+                        }
+                        .frame(width: imageSize, height: imageSize)
+                        .cornerRadius(cornerRadius)
+                        .background(Colors.grayBackground)
                     }
-                    .frame(width: size, height: size)
-                    .cornerRadius(cornerRadius)
-                    .background(Colors.grayBackground)
                 }
                 .cornerRadius(cornerRadius)
             }
@@ -52,14 +67,14 @@ public struct AssetImageView: View {
         .overlay(
             assetImage.chainPlaceholder?
                 .resizable()
-                .cornerRadius(overlayImageSize/2)
+                .cornerRadius(overlayImageCornerRadiusInside)
                 .aspectRatio(contentMode: .fit)
                 .frame(width: overlayImageSize, height: overlayImageSize)
-                .padding(1)
+                .padding(overlayImagePadding)
                 .background(Colors.white)
-                .cornerRadius(overlayImageSize+overlayImageSizePadding*2/2)
-                .offset(x: overlayImageOffset + 2, y: overlayImageOffset + 2)
+                .cornerRadius(overlayImageCornerRadiusOutside)
+                .offset(x: overlayImageOffsetXY, y: overlayImageOffsetXY)
         )
-        .frame(width: size, height: size)
+        .frame(width: imageSize, height: imageSize)
     }
 }

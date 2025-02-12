@@ -6,9 +6,15 @@ import SwiftUI
 import Components
 import Style
 import Primitives
+import Localization
+import PrimitivesComponents
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
+
+    enum Field: Int, Hashable {
+        case name
+    }
 
     @Environment(\.dismiss) private var dismiss
 
@@ -18,6 +24,7 @@ struct WalletDetailScene: View {
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
+    @FocusState private var focusedField: Field?
 
     init(model: WalletDetailViewModel) {
         self.model = model
@@ -28,17 +35,18 @@ struct WalletDetailScene: View {
         VStack {
             List {
                 Section {
-                    FloatTextField(Localized.Wallet.name, text: $name)
+                    FloatTextField(Localized.Wallet.name, text: $name, allowClean: focusedField == .name)
+                        .focused($focusedField, equals: .name)
                 } header: {
                     HStack {
                         Spacer()
                         Button(action: onSelectImage) {
                             AssetImageView(
                                 assetImage: model.image,
-                                size: Sizing.image.chain * 1.6,
+                                size: Sizing.image.medium * 1.6,
                                 overlayImageSize: Spacing.large
                             )
-                                .padding(.bottom, Spacing.extraLarge)
+                            .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()
                     }
@@ -68,7 +76,12 @@ struct WalletDetailScene: View {
                 Section {
                     switch model.address {
                     case .account(let account):
-                        AddressListItem(title: Localized.Common.address, style: .short, account: account)
+                        AddressListItemView(
+                            title: Localized.Common.address,
+                            style: .short,
+                            account: account,
+                            explorerService: model.explorerService
+                        )
                     case .none:
                         EmptyView()
                     }

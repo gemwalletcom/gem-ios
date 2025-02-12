@@ -5,8 +5,8 @@ import GRDB
 import Combine
 import Primitives
 
-public class SubscriptionsObserver {
-    
+public final class SubscriptionsObserver {
+
     private let dbQueue: DatabaseQueue
     private var walletsObserver: AnyDatabaseCancellable?
     private let observation = ValueObservation.tracking(AccountRecord.fetchAll)
@@ -16,7 +16,7 @@ public class SubscriptionsObserver {
     public init(dbQueue: DatabaseQueue) {
         self.dbQueue = dbQueue
         self.walletsObserver = observation.start(in: dbQueue, scheduling: .immediate) { error in
-            
+
         } onChange: { value in
             //TODO: figure out how to set scheduling to update on changes without initial values
             self.count += 1

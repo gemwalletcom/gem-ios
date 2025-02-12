@@ -13,30 +13,42 @@ public struct CosmosSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let message = getTransferMessage(input: input, chain: chain, denom: chain.denom.rawValue)
-        return try sign(input: input, messages: [message], chain: chain, privateKey: privateKey)
+        return try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
         let denom = try input.asset.getTokenId()
         let message = getTransferMessage(input: input, chain: chain, denom: denom)
-        return try sign(input: input, messages: [message], chain: chain, privateKey: privateKey)
+        return try sign(input: input, messages: [message], chain: chain, memo: input.memo, privateKey: privateKey)
     }
     
-    private func sign(input: SignerInput, messages: [CosmosMessage], chain: CosmosChain, privateKey: Data) throws -> String {
-        let fee = CosmosFee.with {
-            $0.gas = UInt64(messages.count * input.fee.gasLimit.int)
-            $0.amounts = [CosmosAmount.with {
-                $0.amount = input.fee.fee.description
-                $0.denom = chain.denom.rawValue
-            }]
+    private func sign(input: SignerInput, messages: [CosmosMessage], chain: CosmosChain, memo: String?, privateKey: Data) throws -> String {
+        let fee = switch chain {
+        case .cosmos,
+                .osmosis,
+                .celestia,
+                .injective,
+                .sei,
+                .noble:
+            CosmosFee.with {
+                $0.gas = UInt64(messages.count * input.fee.gasLimit.asInt)
+                $0.amounts = [CosmosAmount.with {
+                    $0.amount = input.fee.fee.description
+                    $0.denom = chain.denom.rawValue
+                }]
+            }
+        case .thorchain:
+            CosmosFee.with {
+                $0.gas = UInt64(messages.count * input.fee.gasLimit.asInt)
+            }
         }
-        
+
         let signerInput = CosmosSigningInput.with {
             $0.mode = .sync
             $0.accountNumber = UInt64(input.accountNumber)
             $0.chainID = input.chainId
-            $0.memo = input.memo.valueOrEmpty
+            $0.memo = memo.valueOrEmpty
             $0.sequence = UInt64(input.sequence)
             $0.messages = messages
             $0.fee = fee
@@ -57,11 +69,19 @@ public struct CosmosSigner: Signable {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .swap(_, _, _, let data) = input.type else {
+            throw AnyError("invalid type")
+        }
+        let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
+        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: "RUNE", memo: data.data)]
+        
+        return [
+            try sign(input: input, messages: messages, chain: chain, memo: data.data, privateKey: privateKey),
+        ]
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }
@@ -95,7 +115,9 @@ public struct CosmosSigner: Signable {
             fatalError()
         }
         
-        return try sign(input: input, messages: messages, chain: chain, privateKey: privateKey)
+        return [
+            try sign(input: input, messages: messages, chain: chain, memo: input.memo, privateKey: privateKey),
+        ]
     }
     
     func getUnstakeMessage(delegatorAddress: String, validatorAddress: String, amount: CosmosAmount) -> CosmosMessage {
@@ -170,6 +192,43 @@ public struct CosmosSigner: Signable {
                     $0.fromAddress = AnyAddress(string: input.senderAddress, coin: chain.chain.coinType)!.data
                     $0.toAddress = AnyAddress(string: input.destinationAddress, coin: chain.chain.coinType)!.data
                     $0.amounts = amounts
+                }
+            }
+        }
+    }
+    
+    func getSwapMessage(input: SignerInput, chain: CosmosChain, chainName: String, symbol: String, memo: String) -> CosmosMessage {
+        switch chain {
+        case .cosmos,
+            .osmosis,
+            .celestia,
+            .injective,
+            .sei,
+            .noble:
+            return CosmosMessage.with {
+                $0.sendCoinsMessage = CosmosMessage.Send.with {
+                    $0.fromAddress = input.senderAddress
+                    $0.toAddress = input.destinationAddress
+                    $0.amounts = [
+                        getAmount(input: input, denom: chain.denom.rawValue)
+                    ]
+                }
+            }
+        case .thorchain:
+            return CosmosMessage.with {
+                $0.thorchainDepositMessage = CosmosMessage.THORChainDeposit.with {
+                    $0.coins = [
+                        CosmosTHORChainCoin.with {
+                            $0.amount = input.value.description
+                            $0.asset = CosmosTHORChainAsset.with {
+                                $0.chain = chainName
+                                $0.symbol = symbol
+                                $0.ticker = symbol
+                            }
+                        }
+                    ]
+                    $0.memo = memo
+                    $0.signer = AnyAddress(string: input.senderAddress, coin: chain.chain.coinType)!.data
                 }
             }
         }

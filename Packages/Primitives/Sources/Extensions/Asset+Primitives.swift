@@ -32,10 +32,14 @@ extension Asset {
     }
     
     public func getTokenId() throws -> String {
-        guard let tokenId = tokenId else {
+        try id.getTokenId()
+    }
+    
+    public func getTokenIdAsInt() throws -> Int {
+        guard let tokenId = tokenId, let tokenId = UInt64(tokenId) else {
             throw AnyError("tokenId is null")
         }
-        return tokenId
+        return Int(tokenId)
     }
 }
 
@@ -57,6 +61,16 @@ public extension Array where Element == AssetId {
 
 public extension Array where Element == Chain {
     var ids: [AssetId] {
-        return self.compactMap { AssetId(id: $0.id) }
+        return self.compactMap { $0.assetId }
+    }
+}
+
+public extension AssetFull {
+    var basic: AssetBasic {
+        AssetBasic(
+            asset: asset,
+            properties: properties,
+            score: score
+        )
     }
 }

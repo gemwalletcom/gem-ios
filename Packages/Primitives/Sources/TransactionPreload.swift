@@ -2,13 +2,14 @@
 
 import Foundation
 
-public enum SigningdExtra {
-    case lidoPermitNonce(String) // dapp specific extra data
+public enum SigningdExtra: Sendable {
+    case vote([String: UInt64])
 }
 
-public struct TransactionPreload {
+public struct TransactionPreload: Sendable {
     public let accountNumber: Int
     public let sequence: Int
+    public let data: SigningData
     public let block: SignerInputBlock
     // Solana only
     public let token: SignerInputToken
@@ -21,6 +22,7 @@ public struct TransactionPreload {
     public init(
         accountNumber: Int = 0,
         sequence: Int = 0,
+        data: SigningData = .none,
         block: SignerInputBlock = SignerInputBlock(),
         token: SignerInputToken = SignerInputToken(),
         chainId: String = "",
@@ -31,6 +33,7 @@ public struct TransactionPreload {
     ) {
         self.accountNumber = accountNumber
         self.sequence = sequence
+        self.data = data
         self.block = block
         self.token = token
         self.chainId = chainId
@@ -42,7 +45,7 @@ public struct TransactionPreload {
 }
 
 // Solana only
-public struct SignerInputToken {
+public struct SignerInputToken: Sendable {
     public let senderTokenAddress: String
     public let recipientTokenAddress: String?
     public let tokenProgram: SolanaTokenProgramId

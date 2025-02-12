@@ -6,9 +6,12 @@ import Primitives
 
 public enum GemAPI: TargetType {
     case getIpAddress
+    case getPrice(AssetId, currency: String)
     case getPrices(AssetPricesRequest)
     case getFiatOnRampQuotes(Asset, FiatBuyRequest)
     case getFiatOnRampAssets
+    case getFiatOffRampAssets
+    case getFiatOffRampQuotes(Asset, FiatBuyRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
@@ -23,13 +26,18 @@ public enum GemAPI: TargetType {
     case addSubscriptions(deviceId: String, subscriptions: [Subscription])
     case deleteSubscriptions(deviceId: String, subscriptions: [Subscription])
     
+    case getPriceAlerts(deviceId: String)
+    case addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
+    case deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert])
+
     case getTransactions(deviceId: String, options: TransactionsFetchOption)
     
     case getAsset(AssetId)
     case getAssets([AssetId])
-    case getSwap(SwapQuoteRequest)
     case getSearchAssets(query: String, chains: [Chain])
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
+    
+    case getNFTAssets(deviceId: String, walletIndex: Int)
     
     public var baseUrl: URL {
         return URL(string: "https://api.gemwallet.com")!
@@ -38,8 +46,11 @@ public enum GemAPI: TargetType {
     public var method: HTTPMethod {
         switch self {
         case .getIpAddress,
+            .getPrice,
             .getFiatOnRampQuotes,
             .getFiatOnRampAssets,
+            .getFiatOffRampAssets,
+            .getFiatOffRampQuotes,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -49,18 +60,21 @@ public enum GemAPI: TargetType {
             .getTransactions,
             .getAsset,
             .getSearchAssets,
-            .getAssetsList:
+            .getAssetsList,
+            .getPriceAlerts,
+            .getNFTAssets:
             return .GET
         case .getPrices,
             .addSubscriptions,
             .addDevice,
-            .getSwap,
-            .getAssets:
+            .getAssets,
+            .addPriceAlerts:
             return .POST
         case .updateDevice:
             return .PUT
         case .deleteSubscriptions,
-            .deleteDevice:
+            .deleteDevice,
+            .deletePriceAlerts:
             return .DELETE
         }
     }
@@ -69,12 +83,18 @@ public enum GemAPI: TargetType {
         switch self {
         case .getIpAddress:
             return "/v1/ip_address"
+        case .getPrice(let assetId, _):
+            return "/v1/prices/\(assetId.identifier)"
         case .getPrices:
             return "/v1/prices"
         case .getFiatOnRampQuotes(let asset, _):
             return "/v1/fiat/on_ramp/quotes/\(asset.id.identifier)"
         case .getFiatOnRampAssets:
             return "/v1/fiat/on_ramp/assets"
+        case .getFiatOffRampAssets:
+            return "/v1/fiat/off_ramp/assets"
+        case .getFiatOffRampQuotes(let asset, _):
+            return "/v1/fiat/off_ramp/quotes/\(asset.id.identifier)"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -96,17 +116,19 @@ public enum GemAPI: TargetType {
         case .updateDevice(let device):
             return "/v1/devices/\(device.id)"
         case .getTransactions(let deviceId, _):
-            return "/v1/transactions/by_device_id/\(deviceId)"
+            return "/v1/transactions/device/\(deviceId)"
         case .getAsset(let id):
             return "/v1/assets/\(id.identifier.replacingOccurrences(of: "/", with: "%2F"))"
-        case .getSwap:
-            return "/v1/swap/quote"
         case .getAssets:
             return "/v1/assets"
         case .getSearchAssets:
             return "/v1/assets/search"
         case .getAssetsList(let deviceId, let walletIndex, let fromTimestamp):
-            return "/v1/assets/by_device_id/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+            return "/v1/assets/device/\(deviceId)?wallet_index=\(walletIndex)&from_timestamp=\(fromTimestamp)"
+        case .getPriceAlerts(let deviceId), .addPriceAlerts(let deviceId, _), .deletePriceAlerts(let deviceId, _):
+            return "/v1/price_alerts/\(deviceId)"
+        case .getNFTAssets(deviceId: let deviceId, walletIndex: let walletIndex):
+            return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
         }
     }
     
@@ -114,6 +136,7 @@ public enum GemAPI: TargetType {
         switch self {
         case .getIpAddress,
             .getFiatOnRampAssets,
+            .getFiatOffRampAssets,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -121,17 +144,24 @@ public enum GemAPI: TargetType {
             .getDevice,
             .deleteDevice,
             .getAssetsList,
-            .getAsset:
+            .getAsset,
+            .getPriceAlerts,
+            .getNFTAssets:
             return .plain
+        case .getPrice(_, let currency):
+            return .params([
+                "currency": currency
+            ])
         case .getPrices(let value):
             return .encodable(value)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
-        case .getFiatOnRampQuotes(_, let value):
+        case let .getFiatOffRampQuotes(_, value),
+            let .getFiatOnRampQuotes(_, value):
             return .params([
                 "amount": value.fiatAmount,
                 "currency": value.fiatCurrency,
-                "wallet_address": value.walletAddress,
+                "wallet_address": value.walletAddress
             ])
         case .getCharts(_, let currency, let period):
             return .params([
@@ -141,6 +171,9 @@ public enum GemAPI: TargetType {
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):
             return .encodable(subscriptions)
+        case .addPriceAlerts(_, let priceAlerts),
+            .deletePriceAlerts(_, let priceAlerts):
+            return .encodable(priceAlerts)
         case .addDevice(let device),
             .updateDevice(let device):
             return .encodable(device)
@@ -152,8 +185,6 @@ public enum GemAPI: TargetType {
             ].compactMapValues { $0 }
             
             return .params(params)
-        case .getSwap(let request):
-            return .encodable(request)
         case .getSearchAssets(let query, let chains):
             return .params([
                 "query": query,

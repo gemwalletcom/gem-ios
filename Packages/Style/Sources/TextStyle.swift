@@ -3,7 +3,7 @@
 import Foundation
 import SwiftUI
 
-public struct TextStyle {
+public struct TextStyle: Sendable {
     public let font: Font
     public let fontWeight: Font.Weight?
     public let color: Color
@@ -35,9 +35,12 @@ public struct TextStyle {
 
 extension TextStyle {
     public static let title = TextStyle(font: .title, color: Colors.black)
+    public static let title2 = TextStyle(font: .title2, color: Colors.black)
+    public static let title3 = TextStyle(font: .title3, color: Colors.black)
     public static let headline = TextStyle(font: .headline, color: Colors.black)
     public static let subheadline = TextStyle(font: .subheadline, color: Colors.secondaryText)
     public static let body = TextStyle(font: .body, color: Colors.black)
+    public static let bodySecondary = TextStyle(font: .body, color: Colors.secondaryText)
     public static let callout = TextStyle(font: .callout, color: Colors.black)
     public static let calloutSecondary = TextStyle(font: .callout, color: Colors.secondaryText)
     public static let footnote = TextStyle(font: .footnote, color: Colors.secondaryText)
@@ -61,6 +64,12 @@ struct TextStyleModifier: ViewModifier {
 }
 
 // MARK: -
+
+extension View {
+    public func textStyle(_ style: TextStyle) -> some View {
+        self.modifier(TextStyleModifier(style: style))
+    }
+}
 
 extension Text {
     public func textStyle(_ style: TextStyle) -> some View {

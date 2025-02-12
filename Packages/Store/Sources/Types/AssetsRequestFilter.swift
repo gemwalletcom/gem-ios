@@ -5,17 +5,20 @@ import Foundation
 public enum AssetsRequestFilter {
     case search(String)
     case hasBalance
-    case hasFiatValue
     case buyable // available to buy
     case swappable
     case stakeable
     case enabled
     case hidden
+    // include all assets of these chains
     case chains([String])
-    case includePinned(Bool)
+    case chainsOrAssets([String], [String])
 
     // special case
     case includeNewAssets
+    /// AssetData with empty properties
+    case priceAlerts
 }
 
 extension AssetsRequestFilter: Equatable {}
+extension AssetsRequestFilter: Sendable {}

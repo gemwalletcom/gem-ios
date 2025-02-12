@@ -4,56 +4,31 @@ import Foundation
 import BigInt
 
 extension Chain {
+    public init(id: String) throws {
+        if let chain = Chain(rawValue: id) {
+            self = chain
+        } else {
+            throw AnyError("invalid chain id: \(id)")
+        }
+    }
+    
     public var assetId: AssetId {
         return AssetId(chain: self, tokenId: .none)
     }
     
-    public var type: ChainType {
+    // in most cases address is the case, except bitcoin cash
+    // short and full simplifies bitcoincash address
+    public func shortAddress(address: String) -> String {
         switch self {
-        case .bitcoin,
-            .doge,
-            .litecoin:
-            return .bitcoin
-        case .ethereum,
-            .smartChain,
-            .arbitrum,
-            .optimism,
-            .base,
-            .avalancheC,
-            .opBNB,
-            .fantom,
-            .gnosis,
-            .manta,
-            .blast,
-            .zkSync,
-            .linea,
-            .mantle,
-            .celo:
-            return .ethereum
-        case .solana:
-            return .solana
-        case .polygon:
-            return .ethereum
-        case .cosmos,
-            .thorchain,
-            .osmosis,
-            .celestia,
-            .injective,
-            .sei,
-            .noble:
-            return .cosmos
-        case .ton:
-            return .ton
-        case .tron:
-            return .tron
-        case .aptos:
-            return .aptos
-        case .sui:
-            return .sui
-        case .xrp:
-            return .xrp
-        case .near:
-            return .near
+        case .bitcoinCash: address.removePrefix("\(self.rawValue):")
+        default: address
+        }
+    }
+    
+    public func fullAddress(address: String) -> String {
+        switch self {
+        case .bitcoinCash: address.addPrefix("\(self.rawValue):")
+        default: address
         }
     }
 }
@@ -65,14 +40,5 @@ extension Chain: Identifiable {
 extension Chain {
     public var stakeChain: StakeChain? {
         StakeChain(rawValue: rawValue)
-    }
-
-    public var feeUnitType: FeeUnitType? {
-        switch self.type {
-        case .bitcoin:
-            BitcoinChain(rawValue: rawValue)?.feeUnitType
-        case .ethereum, .aptos, .solana, .cosmos, .ton, .tron, .sui, .xrp, .near:
-            nil
-        }
     }
 }

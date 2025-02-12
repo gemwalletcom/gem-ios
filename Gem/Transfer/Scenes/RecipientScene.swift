@@ -6,73 +6,66 @@ import Components
 import QRScanner
 import Blockchain
 import Primitives
+import Localization
+import Transfer
+import NameResolver
 
 struct RecipientScene: View {
     
-    let model: RecipientViewModel
+    @StateObject var model: RecipientViewModel
     
-    @Environment(\.keystore) private var keystore
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.stakeService) private var stakeService
-
-    @State var address: String = ""
-    @State var memo: String = ""
+    @State private var address: String = ""
+    @State private var memo: String = ""
+    @State private var amount: String = ""
+    @State private var nameResolveState: NameRecordState = .none
     @State private var isPresentingErrorMessage: String?
-    @State private var isPresentingScanner: Field?
-
-    // focus
-    private enum Field: Int, Hashable, Identifiable {
-        case address, memo
+    @State private var isPresentingScanner: RecipientScene.Field?
+    
+    enum Field: Int, Hashable, Identifiable {
+        case address
+        case memo
         var id: String { String(rawValue) }
     }
+    
     @FocusState private var focusedField: Field?
-    
-    // next scene
-    @State var recipientData: AmountRecipientData?
-    @State var transferData: TransferData?
-    
-    @State var nameResolveState: NameRecordState = .none
     
     var body: some View {
         VStack {
             List {
                 Section {
-                    HStack {
-                        FloatTextField(model.recipientField, text: $address)
-                            .textFieldStyle(.plain)
-                            .focused($focusedField, equals: .address)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        Spacer()
-                        HStack(spacing: 12) {
+                    FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                        HStack(spacing: Spacing.large/2) {
                             NameRecordView(
-                                model: NameRecordViewModel(chain: model.asset.chain),
+                                model: NameRecordViewModel(chain: model.chain),
                                 state: $nameResolveState,
                                 address: $address
                             )
-                            ListButton(image: Image(systemName: SystemImage.paste)) {
-                                paste()
+                            ListButton(image: Images.System.paste) {
+                                paste(field: .address)
                             }
-                            ListButton(image: Image(systemName: SystemImage.qrCode)) {
+                            ListButton(image: Images.System.qrCode) {
                                 isPresentingScanner = .address
                             }
                         }
                     }
-                    
-                }
-                if model.showMemo {
-                    HStack {
-                        FloatTextField(model.memoField, text: $memo)
-                            .focused($focusedField, equals: .memo)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                        Spacer()
-                        ListButton(image: Image(systemName: SystemImage.qrCode)) {
-                            isPresentingScanner = .memo
+                    .focused($focusedField, equals: .address)
+                    .keyboardType(.alphabet)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+
+                    if model.showMemo {
+                        FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
+                            ListButton(image: Images.System.qrCode) {
+                                isPresentingScanner = .memo
+                            }
                         }
+                        .focused($focusedField, equals: .memo)
+                        .keyboardType(.alphabet)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
                     }
                 }
+                
                 if !model.getRecipient(by: .wallets).isEmpty {
                     Section {
                         ForEach(model.getRecipient(by: .wallets)) { recipient in
@@ -98,99 +91,78 @@ struct RecipientScene: View {
                     }
                 }
             }
-            Button(Localized.Common.continue, action: {
-                Task { next() }
-            })
-            .buttonStyle(.blue())
-            .padding(.bottom, Spacing.scene.bottom)
+            
+            Spacer()
+            Button(Localized.Common.continue, action: next)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .buttonStyle(.blue())
         }
         .background(Colors.grayBackground)
+        .navigationTitle(model.tittle)
         .sheet(item: $isPresentingScanner) { value in
             ScanQRCodeNavigationStack() {
                 onHandleScan($0, for: value)
             }
         }
-        .navigationDestination(for: $transferData) {
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    data: $0,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: $0.recipientData.asset.chain),
-                    walletsService: walletsService
-                )
-            )
-        }
-        .navigationDestination(for: $recipientData) { data in
-            AmountScene(
-                model: AmounViewModel(
-                    amountRecipientData: data,
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    walletsService: walletsService,
-                    stakeService: stakeService
-                )
-            )
-        }
         .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text(Localized.Errors.transfer("")), message: Text($0))
+            Alert(title: Text(""), message: Text($0))
         }
-        .navigationTitle(model.tittle)
+        .onChange(of: address) { oldValue, newValue in
+            // sometimes amount scanned from QR, pass it over, only address is not changed
+            if !amount.isEmpty {
+                amount = .empty
+            }
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension RecipientScene {
+    private func paste(field: Self.Field) {
+        guard let string = UIPasteboard.general.string else { return }
+        switch field {
+        case .address, .memo:
+            self.address = string.trim()
+        }
     }
     
-    private func onHandleScan(_ result: String, for field: RecipientScene.Field) {
+    private func onHandleScan(_ result: String, for field: Self.Field) {
         switch field {
         case .address:
             do {
-                let result = try model.getTransferDataFromScan(string: result)
-                switch result {
-                case .address(let address, let memo):
+                let payment = try model.getPaymentScanResult(string: result)
+                let scanResult = try model.getRecipientScanResult(payment: payment)
+                switch scanResult {
+                case .transferData(let data):
+                    model.onTransferDataSelect(data: data)
+                case .recipient(let address, let memo, let amount):
                     self.address = address
+                    
                     if let memo = memo {
                         self.memo = memo
                     }
-                case .transfer(let data):
-                    self.address = data.recipientData.recipient.address
-                    if let memo = data.recipientData.recipient.memo {
-                        self.memo = memo
+                    if let amount = amount {
+                        self.amount = amount
                     }
-                    self.transferData = data
-                    return
                 }
             } catch {
-                NSLog("getTransferDataFromScan error: \(error)")
+                isPresentingErrorMessage = error.localizedDescription
             }
         case .memo:
             memo = result
         }
-        
-        if !model.showMemo {
-            next()
-        }
-    }
-    
-    func paste() {
-        guard let string = UIPasteboard.general.string else { return }
-        self.address = string.trim()
     }
     
     func next() {
-        //TODO: Move validation per field on demand
-        let recipient: Recipient = {
-            if let result = nameResolveState.result {
-                return Recipient(name: result.name, address: result.address, memo: memo)
-            }
-            return Recipient(name: .none, address: address, memo: memo)
-        }()
-        
         do {
-            let transfer = try model.getRecipientData(
-                asset: model.asset,
-                recipient: recipient
+            let data = try model.getRecipientData(
+                name: nameResolveState.result,
+                address: address,
+                memo: memo,
+                amount: amount.isEmpty ? .none : amount
             )
-            recipientData = transfer
+            model.onRecipientDataSelect(data: data)
         } catch {
             isPresentingErrorMessage = error.localizedDescription
         }

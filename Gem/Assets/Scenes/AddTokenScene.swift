@@ -5,9 +5,13 @@ import Components
 import QRScanner
 import Primitives
 import Style
+import ChainService
+import NodeService
+import PrimitivesComponents
 
 struct AddTokenScene: View {
-    @State var model: AddTokenViewModel
+    @State private var model: AddTokenViewModel
+    @State private var networksModel: NetworkSelectorViewModel
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -15,6 +19,12 @@ struct AddTokenScene: View {
     }
 
     var action: ((Asset) -> Void)?
+
+    init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
+        _model = State(initialValue: model)
+        _networksModel = State(initialValue: NetworkSelectorViewModel(items: model.chains))
+        self.action = action
+    }
 
     var body: some View {
         VStack {
@@ -27,20 +37,22 @@ struct AddTokenScene: View {
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .onAppear {
+            focusedField = .address
+        }
         .onChange(of: model.input.address, onAddressClean)
         .padding(.bottom, Spacing.scene.bottom)
         .background(Colors.grayBackground)
+        .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
+            NetworkSelectorScene(
+                model: $networksModel,
+                onFinishSelection: onFinishChainSelection(chains:)
+            )
+        }
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
-        }
-        .sheet(isPresented: $model.isPresentingSelectNetwork) {
-            if let chain = model.input.chain {
-                NetworkSelectorNavigationStack(
-                    model: NetworkSelectorViewModel(chains: model.chains, selectedChain: chain),
-                    onSelectChain: onSelectNewChain(_:)
-                )
-            }
         }
     }
 }
@@ -54,29 +66,26 @@ extension AddTokenScene {
             if let chain = model.input.chain {
                 Section(model.networkTitle) {
                     if model.input.hasManyChains {
-                        NavigationCustomLink(with: ChainView(chain: chain), action: onSelectChain)
+                        NavigationLink(value: Scenes.NetworksSelector()) {
+                            ChainView(model: ChainViewModel(chain: chain))
+                        }
                     } else {
-                        ChainView(chain: chain)
+                        ChainView(model: ChainViewModel(chain: chain))
                     }
                 }
             }
             Section {
-                VStack {
-                    HStack {
-                        FloatTextField(model.addressTitleField, text: model.addressBinding)
-                            .textFieldStyle(.plain)
-                            .focused($focusedField, equals: .address)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .submitLabel(.search)
-                            .onSubmit(fetch)
-                        Spacer()
-                        HStack(spacing: Spacing.medium) {
-                            ListButton(image: model.pasteImage, action: onSelectPaste)
-                            ListButton(image: model.qrImage, action: onSelectScan)
-                        }
+                FloatTextField(model.addressTitleField, text: model.addressBinding) {
+                    HStack(spacing: Spacing.medium) {
+                        ListButton(image: model.pasteImage, action: onSelectPaste)
+                        ListButton(image: model.qrImage, action: onSelectScan)
                     }
                 }
+                .focused($focusedField, equals: .address)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .submitLabel(.search)
+                .onSubmit(fetch)
             }
             switch model.state {
             case .noData:
@@ -93,9 +102,7 @@ extension AddTokenScene {
                 }
                 if let url = asset.explorerUrl {
                     Section {
-                        NavigationCustomLink(with: ListItemView(title: asset.explorerText)) {
-                            UIApplication.shared.open(url)
-                        }
+                        NavigationOpenLink(url: url, with: ListItemView(title: asset.explorerText))
                     }
                 }
             case .error(let error):
@@ -112,42 +119,31 @@ extension AddTokenScene {
 // MARK: - Actions
 
 extension AddTokenScene {
-    @MainActor
-    private func onSelectNewChain(_ chain: Chain) {
-        model.input.chain = chain
+    private func onFinishChainSelection(chains: [Chain]) {
+        model.input.chain = chains.first
         onAddressClean(nil, nil)
     }
 
-    @MainActor
     private func onSelectImportToken() {
         guard case let .loaded(asset) = model.state else { return }
         action?(asset.asset)
     }
 
-    @MainActor
-    private func onSelectChain() {
-        model.isPresentingSelectNetwork = true
-    }
-
-    @MainActor
     private func onSelectScan() {
         model.isPresentingScanner = true
     }
 
-    @MainActor
     private func onSelectPaste() {
         guard let address = UIPasteboard.general.string else { return }
         model.input.address = address
         fetch()
     }
 
-    @MainActor
     private func onHandleScan(_ result: String) {
         model.input.address = result
         fetch()
     }
 
-    @MainActor
     private func onAddressClean(_ oldValue: String?, _ newValue: String?) {
         guard newValue == nil else { return }
         model.input.address = newValue

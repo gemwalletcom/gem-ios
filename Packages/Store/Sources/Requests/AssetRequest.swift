@@ -6,12 +6,11 @@ import GRDBQuery
 import Combine
 import Primitives
 
-public struct AssetRequest: Queryable {
-    
+public struct AssetRequest: ValueObservationQueryable {
     public static var defaultValue: AssetData { AssetData.empty }
     
-    public let walletId: String
     public var assetId: String
+    private let walletId: String
 
     public init(
         walletId: String,
@@ -20,20 +19,13 @@ public struct AssetRequest: Queryable {
         self.walletId = walletId
         self.assetId = assetId
     }
-    
-    public func publisher(in dbQueue: DatabaseQueue) -> AnyPublisher<AssetData, Error> {
-        ValueObservation
-            .tracking { db in try fetch(db) }
-            .publisher(in: dbQueue, scheduling: .immediate)
-            .eraseToAnyPublisher()
-    }
-    
-    private func fetch(_ db: Database) throws -> AssetData {
-        return try AssetRecord
+
+    public func fetch(_ db: Database) throws -> AssetData {
+        try AssetRecord
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
-            .including(optional: AssetRecord.details)
             .including(optional: AssetRecord.account)
+            .including(optional: AssetRecord.priceAlert)
             .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))
             .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletId))
             .filter(Columns.Asset.id == assetId)
@@ -43,21 +35,32 @@ public struct AssetRequest: Queryable {
     }
 }
 
+// MARK: - Models Exttensions
+
 //TODO: Find a way to remove .empty
+
 extension AssetData {
-    static let empty: AssetData = {
+    public static let empty: AssetData = {
         return AssetData(
             asset: Asset(id: .init(chain: .bitcoin, tokenId: .none), name: "", symbol: "", decimals: 0, type: .native),
             balance: Balance.zero,
-            account: Account(chain: .bitcoin, address: "", derivationPath: "", extendedPublicKey: .none),
+            account: Account(
+                chain: .bitcoin,
+                address: "",
+                derivationPath: "",
+                extendedPublicKey: .none
+            ),
             price: .none,
-            details: .none,
+            price_alert: .none,
             metadata: AssetMetaData(
                 isEnabled: false,
                 isBuyEnabled: false,
+                isSellEnabled: false,
                 isSwapEnabled: false,
                 isStakeEnabled: false,
-                isPinned: false
+                isPinned: false,
+                isActive: true,
+                stakingApr: .none
             )
         )
     }()

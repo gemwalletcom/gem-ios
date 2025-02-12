@@ -2,9 +2,10 @@
 
 import Foundation
 import Primitives
+import Localization
+import PrimitivesComponents
 
 struct ShowPrivateKeyViewModel {
-
     let text: String
     let encoding: EncodingType
 
