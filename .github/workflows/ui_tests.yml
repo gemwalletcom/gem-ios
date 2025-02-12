@@ -31,7 +31,16 @@ jobs:
           path: |
             ~/.cargo/registry
             ~/.cargo/git
-          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('**/Cargo.lock') }}
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-deps-
+      
+      - name: Cache Cargo Target
+        uses: actions/cache@v4
+        with:
+          path: |
+            core/target
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-deps-
 
