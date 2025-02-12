@@ -28,28 +28,63 @@ public struct AptosService: Sendable {
             .mapOrCatch(as: AptosAccount.self, codes: [404], result: .empty)
     }
     
-    public func fee(gasPrice: GasPriceType, transferType: TransferDataType, destinationAddress: String) async throws -> Fee {
-        async let getDestinationAccount = getAptosAccount(address: destinationAddress)
-
-        let destinationAccount = try await getDestinationAccount
-        let isDestinationAccNew = destinationAccount.sequence_number.isEmpty
-        
-        // TODO: - gas limit for isDestinationAccNew - not corretcly calculated, when using (max) some dust left
-
-        let gasLimit = switch transferType {
-            case .transfer(let asset):
-            switch asset.id.type {
-            case .native: isDestinationAccNew ? BigInt(679) : BigInt(9)
-            case .token: BigInt(1000)
-            }
-            case .swap: BigInt(1000)
-            case .transferNft, .stake, .generic, .account: fatalError()
+    private func simulateTransaction(sender: String, recipient: String, sequence: String, value: BigInt, gasPrice: BigInt, maxGasAmount: BigInt) async throws -> AptosTransaction {
+        let transaction = AptosTransactionSimulation(
+            expiration_timestamp_secs: String(Int(Date.now.timeIntervalSince1970) + 1_000_000),
+            gas_unit_price: gasPrice.description,
+            max_gas_amount: maxGasAmount.description,
+            payload: AptosTransactionPayload(
+                arguments: [
+                    recipient,
+                    value.description,
+                ],
+                function: "0x1::aptos_account::transfer",
+                type: "entry_function_payload",
+                type_arguments: []
+            ),
+            sender: sender,
+            sequence_number: String(sequence),
+            signature: AptosSignature(
+                type: "no_account_signature",
+                public_key: .none,
+                signature: .none
+            )
+        )
+        guard let transaction = try await provider.request(.simulate(transaction)).map(as: [AptosTransaction].self).first else {
+            throw AnyError("No aptos transaction")
         }
+        return transaction
+    }
+    
+    public func gasLimit(input: TransactionInput, sequence: Int) async throws -> BigInt {
+        switch input.type {
+        case .transfer(let asset):
+            switch asset.id.type {
+            case .native:
+                let transaction = try await simulateTransaction(
+                    sender: input.senderAddress,
+                    recipient: input.destinationAddress,
+                    sequence: String(sequence),
+                    value: input.value,
+                    gasPrice: input.gasPrice.gasPrice,
+                    maxGasAmount: BigInt(1500)
+                )
+                return BigInt(stringLiteral: transaction.gas_used)
+            case .token:
+                return BigInt(1500)
+            }
+        case .swap: return BigInt(1500)
+        case .transferNft, .stake, .generic, .account, .tokenApprove: fatalError()
+        }
+    }
+    
+    public func fee(input: TransactionInput, gasPrice: GasPriceType, transferType: TransferDataType, sequence: Int) async throws -> Fee {
+        let gasLimit = try await self.gasLimit(input: input, sequence: sequence)
          
         return Fee(
             fee: gasPrice.gasPrice  * gasLimit,
             gasPriceType: .regular(gasPrice: gasPrice.gasPrice),
-            gasLimit: gasLimit * 2 // * 2 for safety
+            gasLimit: gasLimit
         )
     }
 }
@@ -108,17 +143,19 @@ extension AptosService: ChainFeeRateFetchable {
 
 extension AptosService: ChainTransactionPreloadable {
     public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let account = provider.request(.account(address: input.senderAddress))
+        let account = try await provider.request(.account(address: input.senderAddress))
             .map(as: AptosAccount.self)
+        let sequence = Int(account.sequence_number) ?? 0
         
-        async let fee = fee(
+        let fee = try await fee(
+            input: input,
             gasPrice: input.gasPrice,
             transferType: input.type,
-            destinationAddress: input.feeInput.destinationAddress
+            sequence: sequence
         )
         
-        return try await TransactionPreload(
-            sequence: Int(account.sequence_number) ?? 0,
+        return TransactionPreload(
+            sequence: sequence,
             fee: fee
         )
     }

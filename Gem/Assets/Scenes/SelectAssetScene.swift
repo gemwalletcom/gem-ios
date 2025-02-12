@@ -1,7 +1,6 @@
 import SwiftUI
 import Primitives
 import Components
-import Settings
 import Store
 import GRDBQuery
 import Style

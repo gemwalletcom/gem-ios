@@ -298,7 +298,7 @@ extension TronService {
                 case .rewards, .withdraw, .redelegate:
                     return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
-            case .generic, .swap, .account:
+            case .generic, .swap, .tokenApprove, .account:
                 fatalError()
             }
         }()

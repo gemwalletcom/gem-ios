@@ -98,7 +98,7 @@ extension TonService {
                     options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
                 )
             }
-        case .transferNft, .swap, .generic, .stake, .account:
+        case .transferNft, .swap, .tokenApprove, .generic, .stake, .account:
             fatalError()
         }
     }

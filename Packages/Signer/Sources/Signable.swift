@@ -10,7 +10,8 @@ public protocol Signable {
     func signTransfer(input: SignerInput, privateKey: Data) throws -> String
     func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String
     func signNftTransfer(input: SignerInput, privateKey: Data) throws -> String
-    func swap(input: SignerInput, privateKey: Data) throws -> String
+    func signSwap(input: SignerInput, privateKey: Data) throws -> [String]
+    func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String
     func signStake(input: SignerInput, privateKey: Data) throws -> [String]
     func signMessage(message: SignMessage, privateKey: Data) throws -> String
     func signAccountAction(input: SignerInput, privateKey: Data) throws -> String
@@ -33,7 +34,11 @@ extension Signable {
         throw AnyError("unimplemented")
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        throw AnyError("unimplemented")
+    }
+    
+    public func signTokenApproval(input: SignerInput, privateKey: Data) throws -> String {
         throw AnyError("unimplemented")
     }
     

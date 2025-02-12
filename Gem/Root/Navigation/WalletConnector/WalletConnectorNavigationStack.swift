@@ -53,8 +53,7 @@ struct WalletConnectorNavigationStack: View {
                         model: ConnectionProposalViewModel(
                             connectionsService: connectionsService,
                             confirmTransferDelegate: data.delegate,
-                            pairingProposal: data.payload,
-                            wallets: keystore.wallets
+                            pairingProposal: data.payload
                         )
                     )
                 }

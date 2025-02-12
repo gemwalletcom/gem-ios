@@ -20,7 +20,7 @@ public struct ERC20Service: Sendable {
             getERC20SymbolCall(contract: address),
             getERC20DecimalsCall(contract: address)
         ]
-        let results = try await provider.request(.batch(requests: calls)).map(as: [JSONRPCResponse<String>].self)
+        let results = try await provider.requestBatch(calls).map(as: [JSONRPCResponse<String>].self)
         let (name, symbol, decimals) = try decodeERC20Data(results: results)
 
         return Asset(

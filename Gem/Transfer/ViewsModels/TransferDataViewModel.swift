@@ -16,7 +16,7 @@ struct TransferDataViewModel {
     var type: TransferDataType { data.type }
     var recipientData: RecipientData { data.recipientData }
     var recipient: Recipient { recipientData.recipient }
-    var asset: Asset { data.asset }
+    var asset: Asset { data.type.asset }
     var memo: String? { recipientData.recipient.memo }
     var chain: Chain { data.chain }
     var chainType: ChainType { chain.type }
@@ -25,11 +25,8 @@ struct TransferDataViewModel {
     var title: String {
         switch type {
         case .transfer, .transferNft: Localized.Transfer.Send.title
-        case .swap(_, _, let type):
-            switch type {
-            case .approval: Localized.Transfer.Approve.title
-            case .swap: Localized.Wallet.swap
-            }
+        case .swap, .tokenApprove: Localized.Wallet.swap
+        //case .approval: Localized.Transfer.Approve.title
         case .generic: Localized.Transfer.Approve.title
         case .stake(_, let type):
             switch type {
@@ -56,11 +53,11 @@ struct TransferDataViewModel {
 
     var recepientAccount: SimpleAccount {
         switch type {
-        case .swap(_, _, let action): SimpleAccount(
+        case .swap(_, _, let quote, _): SimpleAccount(
             name: recipientName,
             chain: chain,
             address: recipient.address,
-            assetImage: SwapProviderViewModel(provider: action.provider).providerImage
+            assetImage: SwapProviderViewModel(provider: quote.data.provider).providerImage
         )
         default: SimpleAccount(
             name: recipientName,
@@ -75,6 +72,7 @@ struct TransferDataViewModel {
         case .transfer,
             .transferNft,
             .swap,
+            .tokenApprove,
             .stake,
             .account: .none
         case .generic(_, let metadata, _):
@@ -87,6 +85,7 @@ struct TransferDataViewModel {
         case .transfer,
             .transferNft,
             .swap,
+            .tokenApprove,
             .stake,
             .account: .none
         case .generic(_, let metadata, _):
@@ -97,7 +96,7 @@ struct TransferDataViewModel {
     var shouldShowMemo: Bool {
         switch type {
         case .transfer, .transferNft: chain.isMemoSupported
-        case .swap, .generic, .stake, .account: false
+        case .swap, .tokenApprove, .generic, .stake, .account: false
         }
     }
 
@@ -123,6 +122,7 @@ extension TransferDataViewModel {
         case .transfer,
                 .transferNft,
                 .swap,
+                .tokenApprove,
                 .generic,
                 .account:
             recipient.name ?? recipient.address

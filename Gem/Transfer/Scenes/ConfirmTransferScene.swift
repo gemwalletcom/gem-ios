@@ -43,10 +43,7 @@ struct ConfirmTransferScene: View {
         .taskOnce { fetch() }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
-                NetworkFeeScene(
-                    model: model.feeModel,
-                    action: onSelectFeePriority
-                )
+                NetworkFeeScene(model: model.feeModel)
             }
         }
         .alert(item: $model.confirmingErrorMessage) {
@@ -165,11 +162,6 @@ extension ConfirmTransferScene {
               let input = value.input,
               case .amount(let amount) = value.transferAmountResult else { return }
         process(input: input, amount: amount)
-    }
-
-    @MainActor
-    private func onSelectFeePriority(_ priority: FeePriority) {
-        model.feeModel.priority = priority
     }
 
     private func onSelectFeePicker() {

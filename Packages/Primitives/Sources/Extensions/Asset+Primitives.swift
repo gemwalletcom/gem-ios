@@ -32,10 +32,7 @@ extension Asset {
     }
     
     public func getTokenId() throws -> String {
-        guard let tokenId = tokenId else {
-            throw AnyError("tokenId is null")
-        }
-        return tokenId
+        try id.getTokenId()
     }
     
     public func getTokenIdAsInt() throws -> Int {

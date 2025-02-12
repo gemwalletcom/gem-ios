@@ -1,6 +1,5 @@
 import Foundation
 import Primitives
-import Settings
 import Keystore
 import SwiftUI
 import Localization
@@ -42,6 +41,6 @@ extension ImportWalletTypeViewModel: Hashable {
 
 extension ImportWalletTypeViewModel: ChainFilterable {
     public var chains: [Chain] {
-        AssetConfiguration.allChains
+        AssetConfiguration.allChains.sortByRank()
     }
 }

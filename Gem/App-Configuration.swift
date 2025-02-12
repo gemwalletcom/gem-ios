@@ -1,5 +1,4 @@
 import Foundation
-import Settings
 import Primitives
 import Keystore
 import Components
@@ -106,6 +105,7 @@ extension NotificationService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
+        assertStore: .main,
         chainServiceFactory: .main
     )
 }
