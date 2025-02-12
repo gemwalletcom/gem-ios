@@ -77,10 +77,9 @@ extension SolanaService {
 
     private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
         let accounts = try await provider.requestBatch(
-            try tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
+            tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
             .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
-            .map { $0.result.value }
-            .compactMap { $0.first }
+            .compactMap { $0.result.value.first }
         
         let balances = try await provider.requestBatch(
             accounts.map { .getTokenAccountBalance(token: $0.pubkey) })
