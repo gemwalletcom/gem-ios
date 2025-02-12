@@ -9,7 +9,7 @@ import Primitives
 import Blockchain
 
 public class SmartChainSigner: EthereumSigner {
-    override public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    override public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let stakeType) = input.type else {
             throw AnyError("invalid type")
         }
@@ -33,6 +33,6 @@ public class SmartChainSigner: EthereumSigner {
             toAddress: input.destinationAddress,
             privateKey: privateKey
         ))
-        return data
+        return [data]
     }
 }

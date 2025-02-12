@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct TransferDataMetadata {
+public struct TransferDataMetadata: Sendable {
     public let assetBalance: BigInt
     public let assetFeeBalance: BigInt
 

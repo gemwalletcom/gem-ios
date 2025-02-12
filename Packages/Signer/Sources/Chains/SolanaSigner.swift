@@ -179,7 +179,7 @@ public struct SolanaSigner: Signable {
         return [output.encoded]
     }
     
-    public func signStake(input: SignerInput, privateKey: Data) throws -> String {
+    public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case .stake(_, let type) = input.type else {
             throw AnyError("invalid type")
         }
@@ -203,7 +203,9 @@ public struct SolanaSigner: Signable {
             .rewards:
             fatalError()
         }
-        return try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey)
+        return [
+            try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),
+        ]
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {
