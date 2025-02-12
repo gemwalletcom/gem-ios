@@ -149,7 +149,7 @@ class RecipientViewModel: ObservableObject {
 extension RecipientViewModel {
     func onRecipientDataSelect(data: RecipientData) {
         switch type {
-        case .asset(let asset):
+        case .asset:
             onRecipientDataAction?(data)
         case .nft(let asset):
             let data = TransferData(type: .transferNft(asset), recipientData: data, value: .zero, canChangeValue: false)

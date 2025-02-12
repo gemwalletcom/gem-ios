@@ -35,7 +35,7 @@ public struct Signer {
         case .generic:
             return [try signer.signData(input: input, privateKey: privateKey)]
         case .stake:
-            return [try signer.signStake(input: input, privateKey: privateKey)]
+            return try signer.signStake(input: input, privateKey: privateKey)
         case .account:
             return [try signer.signAccountAction(input: input, privateKey: privateKey)]
         }
