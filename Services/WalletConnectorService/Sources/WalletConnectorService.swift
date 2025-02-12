@@ -308,15 +308,6 @@ extension WalletConnectorService {
 
 // MARK: - Models extensions
 
-extension Chain {
-    var blockchain: WalletConnectUtils.Blockchain? {
-        if let namespace = namespace, let reference = reference {
-            return Blockchain(namespace: namespace, reference: reference)
-        }
-        return .none
-    }
-}
-
 extension Session {
     var asSession: Primitives.WalletConnectionSession {
         WalletConnectionSession(
