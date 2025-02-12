@@ -26,7 +26,7 @@ jobs:
         with:
           submodules: recursive
 
-      - name: Rust Cache 
+      - name: Rust Cache
         uses: Swatinem/rust-cache@v2.7.7
 
       - name: Run sccache-cache
