@@ -24,7 +24,7 @@ extension AssetLink {
     
     public func host(for social: SocialUrl?) -> String? {
         switch social {
-        case .website: cleanHost(host: url)
+        case .website: cleanHost(host: URL(string: url)?.host())
         case .x,
             .discord,
             .telegram,
@@ -37,11 +37,15 @@ extension AssetLink {
             nil
         }
     }
-    
+
     private func cleanHost(host: String?) -> String? {
-        guard let host, let url = URL(string: host) else {
-            return host
-        }
-        return url.host()
-    }
+         guard let host else { return host}
+         let values = ["www."]
+         for value in values {
+             if host.hasPrefix(value) {
+                 return host.replacingOccurrences(of: value, with: "")
+             }
+         }
+         return host
+     }
 }
