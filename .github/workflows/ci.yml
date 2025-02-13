@@ -46,9 +46,6 @@ jobs:
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
-
-      - name: Verify sccache usage
-        run: sccache --show-stats
     
       - name: Install just
         run: brew install just
