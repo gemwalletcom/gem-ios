@@ -53,6 +53,7 @@ struct ServicesFactory {
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
+            assetsStore: storeManager.assetStore,
             chainFactory: chainServiceFactory
         )
         let stakeService = Self.makeStakeService(
@@ -201,10 +202,12 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
+        assetsStore: AssetStore,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
+            assertStore: assetsStore,
             chainServiceFactory: chainFactory
         )
     }

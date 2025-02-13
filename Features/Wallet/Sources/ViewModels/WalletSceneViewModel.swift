@@ -129,7 +129,7 @@ public struct WalletSceneViewModel: Sendable {
     }
 
     func hideAsset(_ assetId: AssetId) throws {
-        try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+        try balanceService.hideAsset(walletId: wallet.walletId, assetId: assetId)
     }
 
     func pinAsset(_ assetId: AssetId, value: Bool) throws {
