@@ -9,7 +9,6 @@ import WalletTab
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore
-    @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService

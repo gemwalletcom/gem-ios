@@ -7,14 +7,14 @@ import Localization
 import PrimitivesComponents
 import ExplorerService
 
-class WalletDetailViewModel {
+public class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
     let keystore: any Keystore
     let explorerService: any ExplorerLinkFetchable
 
-    init(
+    public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
         keystore: any Keystore,
@@ -84,9 +84,12 @@ extension WalletDetailViewModel {
     func delete() throws {
         try keystore.deleteWallet(for: wallet)
 
+        // TODO: - enable once will be enabled in CleanUpService
+        /*
         if keystore.wallets.isEmpty {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
+         */
     }
 
     func onSelectImage() {

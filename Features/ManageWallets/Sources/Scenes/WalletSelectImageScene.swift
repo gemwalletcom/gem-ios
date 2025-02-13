@@ -3,15 +3,15 @@
 import Foundation
 import SwiftUI
 
-struct WalletSelectImageScene: View {
-    
+public struct WalletSelectImageScene: View {
+
     let model: WalletSelectImageViewModel
 
-    init(model: WalletSelectImageViewModel) {
+    public init(model: WalletSelectImageViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         Text(model.wallet.name)
     }
 }

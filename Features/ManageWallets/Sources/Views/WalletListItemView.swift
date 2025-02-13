@@ -13,10 +13,10 @@ struct WalletListItemView: View {
     let model: WalletViewModel
     let currentWallet: Wallet?
 
-    let onSelect: (@MainActor (Wallet) -> Void)
-    let onEdit: (@MainActor (Wallet) -> Void)
-    let onPin: (@MainActor (Wallet) -> Void)
-    let onDelete: (@MainActor (Wallet) -> Void)
+    let onSelect: ((Wallet) -> Void)
+    let onEdit: ((Wallet) -> Void)
+    let onPin: ((Wallet) -> Void)
+    let onDelete: ((Wallet) -> Void)
 
     init(
         wallet: Wallet,

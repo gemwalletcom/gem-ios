@@ -1,15 +1,13 @@
 import SwiftUI
 import Components
-import Keystore
 import Primitives
 import GRDBQuery
 import Store
 import Style
 import Localization
 
-struct WalletsScene: View {
+public struct WalletsScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.keystore) private var keystore
 
     @State private var isPresentingErrorMessage: String?
     @State private var showingDeleteAlert = false
@@ -19,7 +17,7 @@ struct WalletsScene: View {
 
     @State var walletDelete: Wallet? = .none
 
-    var model: WalletsViewModel
+    var model: WalletsSceneViewModel
 
     @Query<WalletsRequest>
     private var pinnedWallets: [Wallet]
@@ -27,8 +25,8 @@ struct WalletsScene: View {
     @Query<WalletsRequest>
     private var wallets: [Wallet]
 
-    init(
-        model: WalletsViewModel,
+    public init(
+        model: WalletsSceneViewModel,
         isPresentingCreateWalletSheet: Binding<Bool>,
         isPresentingImportWalletSheet: Binding<Bool>
     ) {
@@ -40,7 +38,7 @@ struct WalletsScene: View {
         _isPresentingImportWalletSheet = isPresentingImportWalletSheet
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section {
                 Button(
@@ -97,9 +95,13 @@ struct WalletsScene: View {
                 .onMove(perform: onMove)
             }
         }
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text(""), message: Text($0))
-        }
+        .alert("",
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(isPresentingErrorMessage ?? "")
+            }
+        )
         .confirmationDialog(
             Localized.Common.deleteConfirmation(walletDelete?.name ?? ""),
             presenting: $walletDelete,
@@ -208,21 +210,5 @@ extension WalletsScene {
                 isPresentingErrorMessage = error.localizedDescription
             }
         }
-    }
-}
-
-// MARK: - Previews
-
-#Preview {
-    NavigationStack {
-        WalletsScene(
-            model: .init(
-                navigationPath: Binding.constant(NavigationPath()),
-                walletService: .main
-            ),
-            isPresentingCreateWalletSheet: Binding.constant(false),
-            isPresentingImportWalletSheet: Binding.constant(false)
-        )
-        .navigationBarTitleDisplayMode(.inline)
     }
 }

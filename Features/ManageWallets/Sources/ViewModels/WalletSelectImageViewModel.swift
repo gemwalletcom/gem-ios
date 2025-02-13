@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 import SwiftUI
 
-class WalletSelectImageViewModel {
+public class WalletSelectImageViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
 
-    init(
+    public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet
     ) {

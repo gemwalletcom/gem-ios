@@ -1,14 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
-import Foundation
-import Style
-import SwiftUICore
 
-struct PriceImpactValue: Equatable {
+import Foundation
+
+public struct PriceImpactValue: Equatable {
     let type: PriceImpactType
     let value: String
 }
 
-enum PriceImpactType: Equatable {
+public enum PriceImpactType: Equatable {
     case low
     case medium
     case high

@@ -13,6 +13,7 @@ import Signer
 import Store
 import Style
 import SwapService
+import Swap
 import SwiftUI
 import Transfer
 import WalletsService

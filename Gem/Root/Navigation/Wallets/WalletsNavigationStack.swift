@@ -5,9 +5,10 @@ import SwiftUI
 import Localization
 import Primitives
 import Onboarding
+import ManageWallets
 
 struct WalletsNavigationStack: View {
-    @Environment(\.walletService) private var walletService
+    @Environment(\.manageWalletService) private var manageWalletService
     @Environment(\.keystore) private var keystore
 
     @State private var navigationPath = NavigationPath()
@@ -23,7 +24,10 @@ struct WalletsNavigationStack: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             WalletsScene(
-                model: WalletsViewModel(navigationPath: $navigationPath, walletService: walletService),
+                model: WalletsSceneViewModel(
+                    navigationPath: $navigationPath,
+                    manageWalletService: manageWalletService
+                ),
                 isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
                 isPresentingImportWalletSheet: $isPresentingImportWalletSheet
             )
