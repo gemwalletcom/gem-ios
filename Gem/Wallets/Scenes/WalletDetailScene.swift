@@ -8,6 +8,7 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
+import AvatarToolkit
 
 struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -41,12 +42,8 @@ struct WalletDetailScene: View {
                     HStack {
                         Spacer()
                         Button(action: onSelectImage) {
-                            AssetImageView(
-                                assetImage: model.image,
-                                size: Sizing.image.medium * 1.6,
-                                overlayImageSize: Spacing.large
-                            )
-                            .padding(.bottom, Spacing.extraLarge)
+                            AvatarView(model: model.avatarViewModel, size: Sizing.image.extraLarge)
+                                .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()
                     }
@@ -185,11 +182,12 @@ extension WalletDetailScene {
 
 #Preview {
     NavigationStack {
-        WalletDetailScene(model: .init(
-            navigationPath: Binding.constant(NavigationPath()),
-            wallet: .main,
-            keystore: LocalKeystore.main)
-        )
-            .navigationBarTitleDisplayMode(.inline)
+        WalletDetailScene(
+            model: .init(
+                navigationPath: Binding.constant(NavigationPath()),
+                wallet: .main,
+                walletService: .main
+            ))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }

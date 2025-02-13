@@ -86,6 +86,7 @@ public struct Images {
         public static let manage = Image(.manage)
         public static let sell = Image(.sell)
         public static let more = Image(.ellipsis)
+        public static let avatar = Image(.avatar)
     }
 
     public struct Settings {
@@ -210,7 +211,8 @@ public struct Images {
             (Images.Actions.swap, "Swap"),
             (Images.Actions.receive, "Receive"),
             (Images.Actions.buy, "Buy"),
-            (Images.Actions.manage, "Manage")
+            (Images.Actions.manage, "Manage"),
+            (Images.Actions.avatar, "Avatar")
         ]),
         ("Settings", [
             (Images.Settings.priceAlerts, "Price Alerts"),

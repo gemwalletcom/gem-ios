@@ -1,4 +1,5 @@
 import SwiftUI
+import AvatarToolkit
 import Style
 import Components
 import Primitives
@@ -6,20 +7,19 @@ import PrimitivesComponents
 
 struct WalletBarViewViewModel {
     let name: String
-    let image: AssetImage?
+    var avatarViewModel: AvatarViewModel
     let showChevron: Bool
 }
 
-extension WalletBarViewViewModel {
-    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
-        let model = WalletViewModel(wallet: wallet)
-        return WalletBarViewViewModel(
-            name: model.name,
-            image: model.assetImage,
-            showChevron: showChevron
-        )
-    }
-}
+//extension WalletBarViewViewModel {
+//    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
+//        WalletBarViewViewModel(
+//            name: WalletViewModel(wallet: wallet).name,
+//            avatarViewModel: AvatarViewModel(wallet: wallet, allowEditing: false),
+//            showChevron: showChevron
+//        )
+//    }
+//}
 
 struct WalletBarView: View {
     
@@ -41,6 +41,8 @@ struct WalletBarView: View {
             HStack(spacing: 8) {
                 if let image = model.image {
                     AssetImageView(assetImage: image, size: 24, overlayImageSize: 10)
+                } else {
+                    AvatarView(model: model.avatarViewModel, size: 24)
                 }
                 Text(model.name)
                     .foregroundColor(Colors.black)
@@ -67,7 +69,14 @@ struct WalletBarView_Previews: PreviewProvider {
         WalletBarView(
             model: WalletBarViewViewModel(
                 name: WalletViewModel(wallet: .main).name,
-                image: .none,
+                avatarViewModel: AvatarViewModel(
+                    wallet: .makeView(
+                        name: .empty,
+                        chain: .ethereum,
+                        address: .empty
+                    ),
+                    allowEditing: false
+                ),
                 showChevron: false
             )
         )

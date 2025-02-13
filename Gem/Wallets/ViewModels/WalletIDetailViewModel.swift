@@ -1,4 +1,5 @@
 import SwiftUI
+import AvatarToolkit
 import Primitives
 import Keystore
 import Components
@@ -11,18 +12,18 @@ class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
-    let keystore: any Keystore
+    let walletService: WalletService
     let explorerService: any ExplorerLinkFetchable
 
     init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        keystore: any Keystore,
+        walletService: WalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet
-        self.keystore = keystore
+        self.walletService = walletService
         self.explorerService = explorerService
     }
 
@@ -59,22 +60,26 @@ class WalletDetailViewModel {
             )
         }
     }
+    
+    var avatarViewModel: AvatarViewModel {
+        AvatarViewModel(wallet: wallet, allowEditing: false)
+    }
 }
 
 // MARK: - Business Logic
 
 extension WalletDetailViewModel {
     func rename(name: String) throws {
-        try keystore.renameWallet(wallet: wallet, newName: name)
+        try walletService.renameWallet(wallet: wallet, newName: name)
     }
     
     func getMnemonicWords() throws -> [String] {
-        try keystore.getMnemonic(wallet: wallet)
+        try walletService.getMnemonic(wallet: wallet)
     }
     
     func getPrivateKey(for chain: Chain) throws -> String {
         let encoding = getEncodingType(for: chain)
-        return try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+        return try walletService.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
     
     func getEncodingType(for chain: Chain) -> EncodingType {
@@ -82,14 +87,10 @@ extension WalletDetailViewModel {
     }
 
     func delete() throws {
-        try keystore.deleteWallet(for: wallet)
-
-        if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore).onDeleteAllWallets()
-        }
+        try walletService.delete(wallet)
     }
 
     func onSelectImage() {
-        //navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
+        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
     }
 }

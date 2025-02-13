@@ -28,6 +28,7 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
+import AvatarService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -168,7 +169,7 @@ extension DeviceService {
 }
 
 extension WalletService {
-    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main)
+    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main, avatarService: .main)
 }
 
 extension AssetStore {
@@ -225,6 +226,14 @@ extension NFTService {
 
 extension NFTStore {
     static let main = NFTStore(db: .main)
+}
+
+extension AvatarService {
+    static let main = AvatarService(store: .main)
+}
+
+extension AvatarStore {
+    static let main = AvatarStore(db: .main)
 }
 
 extension WalletConnectorSigner {

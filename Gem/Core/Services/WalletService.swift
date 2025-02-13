@@ -5,12 +5,14 @@ import Store
 import Primitives
 import Keystore
 import Preferences
+import AvatarService
 
 public struct WalletService {
 
     private let keystore: any Keystore
     private let walletStore: WalletStore
     private let preferences: Preferences
+    private let avatarService: AvatarService
 
     var currentWallet: Wallet? {
         keystore.currentWallet
@@ -19,11 +21,13 @@ public struct WalletService {
     init(
         keystore: any Keystore,
         walletStore: WalletStore,
-        preferences: Preferences = .standard
+        preferences: Preferences = .standard,
+        avatarService: AvatarService
     ) {
         self.keystore = keystore
         self.walletStore = walletStore
         self.preferences = preferences
+        self.avatarService = avatarService
     }
 
     func pin(wallet: Wallet) throws {
@@ -39,6 +43,7 @@ public struct WalletService {
     }
 
     func delete(_ wallet: Wallet) throws {
+        try? avatarService.remove(for: wallet.id)
         try keystore.deleteWallet(for: wallet)
 
         if keystore.wallets.isEmpty {
@@ -48,5 +53,17 @@ public struct WalletService {
 
     func swapOrder(from: WalletId, to: WalletId) throws {
         try walletStore.swapOrder(from: from, to: to)
+    }
+    
+    func renameWallet(wallet: Wallet, newName: String) throws {
+        try keystore.renameWallet(wallet: wallet, newName: newName)
+    }
+    
+    func getMnemonic(wallet: Wallet) throws -> [String] {
+        try keystore.getMnemonic(wallet: wallet)
+    }
+    
+    func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
+        try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 }

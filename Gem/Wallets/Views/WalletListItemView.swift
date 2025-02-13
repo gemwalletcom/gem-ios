@@ -7,6 +7,7 @@ import Components
 import Primitives
 import Localization
 import PrimitivesComponents
+import AvatarToolkit
 
 struct WalletListItemView: View {
 
@@ -45,7 +46,7 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AssetImageView(assetImage: model.assetImage, size: Sizing.image.medium)
+                AvatarView(model: AvatarViewModel(wallet: model.wallet, allowEditing: false), size: Sizing.image.medium)
                 ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()

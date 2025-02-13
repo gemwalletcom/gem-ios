@@ -63,6 +63,29 @@ public struct Emoji {
             "SEK": "🇸🇪"
         ]
     }
+    
+    public enum WalletAvatar: String, CaseIterable {
+        case gem = "💎"
+        case unicorn = "🦄"
+        case rocket = "🚀"
+        case heart = "❤️"
+        case heartEyes = "😍"
+        case fire = "🔥"
+        case poo = "💩"
+        case crying = "😭"
+        case trophy = "🏆"
+        case pirateFlag = "🏴‍☠️"
+        case check = "✅"
+        case warning = "⚠️"
+        case moneyBag = "💰"
+        case gift = "🎁"
+        case balloon = "🎈"
+        case rainbow = "🌈"
+        case star = "⭐️"
+        case crown = "👑"
+        case brokenHeart = "💔"
+        case lock = "🔒"
+    }
 }
 
 // MARK: - Previews

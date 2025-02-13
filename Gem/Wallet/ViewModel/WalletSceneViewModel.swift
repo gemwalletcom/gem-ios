@@ -1,4 +1,6 @@
 import Foundation
+import AvatarToolkit
+import PrimitivesComponents
 import Keystore
 import Primitives
 import Store
@@ -47,6 +49,14 @@ struct WalletSceneViewModel {
                 .enableNotifications,
                 .accountBlockedMultiSignature,
             ]
+        )
+    }
+    
+    func walletBarViewModel(for wallet: Wallet) -> WalletBarViewViewModel {
+        WalletBarViewViewModel(
+            name: WalletViewModel(wallet: wallet).name,
+            avatarViewModel: AvatarViewModel(wallet: wallet, allowEditing: false),
+            showChevron: true
         )
     }
 

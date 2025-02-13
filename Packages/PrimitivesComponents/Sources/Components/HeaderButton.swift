@@ -7,8 +7,8 @@ import Style
 import Components
 
 public struct HeaderButton: Identifiable {
-    let type: HeaderButtonType
-    let isEnabled: Bool
+    public let type: HeaderButtonType
+    public let isEnabled: Bool
     
     public init(
         type: HeaderButtonType,
@@ -28,6 +28,12 @@ public struct HeaderButton: Identifiable {
         case .swap: Localized.Wallet.swap
         case .stake: Localized.Wallet.stake
         case .more: Localized.Wallet.more
+        case .avatar: "Avatar"
+        case .gallery:
+            "Photo"
+        case .emoji:
+            "Emoji"
+        case .nft: Localized.Nft.collections
         }
     }
     
@@ -39,6 +45,12 @@ public struct HeaderButton: Identifiable {
         case .swap: Images.Actions.swap
         case .stake: Images.Actions.swap
         case .more: Images.Actions.more
+        case .avatar: Images.Actions.avatar
+        case .gallery:
+            Image(systemName: "photo")
+        case .emoji:
+            Image(systemName: "face.smiling")
+        case .nft: Images.Tabs.collections
         }
     }
 }

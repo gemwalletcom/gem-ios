@@ -9,6 +9,7 @@ import Style
 import Components
 import GemstonePrimitives
 import PrimitivesComponents
+import AvatarToolkit
 
 struct WalletHeaderViewModel {
     //Remove WalletType from here
@@ -35,6 +36,7 @@ extension WalletHeaderViewModel: HeaderViewModel {
     var isWatchWallet: Bool { walletType == .view }
     var title: String { totalValueText }
     var assetImage: AssetImage? { .none }
+    var avatarViewModel: AvatarViewModel? { .none }
     var subtitle: String? { .none }
 
     var buttons: [HeaderButton] {

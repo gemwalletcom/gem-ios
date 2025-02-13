@@ -46,6 +46,9 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
+            
+            // avatar
+            try AvatarValueRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -212,6 +215,17 @@ public struct Migrations {
             try? db.alter(table: NFTAssetRecord.databaseTableName) {
                 $0.add(column: Columns.NFTAsset.contractAddress.name, .text)
             }
+        }
+        
+        #if DEBUG
+        let _ = try? dbQueue.write { db in
+            try? AvatarValueRecord
+                .deleteAll(db)
+        }
+        #endif
+
+        migrator.registerMigration("Create \(AvatarValueRecord.databaseTableName)") { db in
+            try? AvatarValueRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

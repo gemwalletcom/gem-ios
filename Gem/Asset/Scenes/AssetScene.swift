@@ -214,7 +214,7 @@ extension AssetScene {
         case .swap: .swap(assetData.asset)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
-        case .more:
+        case .more, .avatar, .gallery, .emoji, .nft:
             fatalError()
         }
         isPresentingAssetSelectedInput = SelectedAssetInput(

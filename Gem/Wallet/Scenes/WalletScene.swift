@@ -146,9 +146,7 @@ struct WalletScene: View {
             ToolbarItem(placement: .principal) {
                 if let wallet = dbWallet {
                     HStack {
-                        WalletBarView(
-                            model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)
-                        ) {
+                        WalletBarView(model: model.walletBarViewModel(for: wallet)) {
                             isPresentingWallets.toggle()
                         }
                     }
@@ -242,7 +240,7 @@ extension WalletScene {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake:
+        case .swap, .more, .stake, .avatar, .gallery, .emoji, .nft:
             fatalError()
         }
         isPresentingSelectType = selectType
