@@ -7,7 +7,7 @@ import BigInt
 import SwiftUI
 import Style
 
-struct PriceImpactViewModel {
+public struct PriceImpactViewModel {
     let fromAssetData: AssetData
     let fromValue: String
     let toAssetData: AssetData
@@ -17,7 +17,14 @@ struct PriceImpactViewModel {
     
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
-    
+
+    public init(fromAssetData: AssetData, fromValue: String, toAssetData: AssetData, toValue: String) {
+        self.fromAssetData = fromAssetData
+        self.fromValue = fromValue
+        self.toAssetData = toAssetData
+        self.toValue = toValue
+    }
+
     // MARK: - Public methods
     
     func value() -> PriceImpactValue? {

@@ -1,39 +1,48 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import XCTest
+import Testing
 import PrimitivesTestKit
 import Primitives
-@testable import Gem
 
-final class PriceImpactViewModelTests: XCTestCase {
-    
+@testable import Swap
+
+struct PriceImpactViewModelTests {
+
+    @Test
     func testPriceImpactValue_Low() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "990000000")
         let value = viewModel.value()
         let expectedValue = PriceImpactValue(type: .low, value: "-1.00%")
-        XCTAssertEqual(value, expectedValue)
+
+        #expect(value == expectedValue)
     }
-    
+
+    @Test
     func testPriceImpactValue_Positive() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "1005000000")
         let value = viewModel.value()
         let expectedValue = PriceImpactValue(type: .positive, value: "+0.50%")
-        XCTAssertEqual(value, expectedValue)
+
+        #expect(value == expectedValue)
     }
-    
+
+    @Test
     func testPriceImpactValue_Medium() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "950000000")
         let value = viewModel.value()
         let expectedValue = PriceImpactValue(type: .medium, value: "-5.00%")
-        XCTAssertEqual(value, expectedValue)
+
+        #expect(value == expectedValue)
     }
-    
+
+    @Test
     func testPriceImpactValue_High() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "700000000")
         let value = viewModel.value()
         let expectedValue = PriceImpactValue(type: .high, value: "-30.00%")
-        XCTAssertEqual(value, expectedValue)
+
+        #expect(value == expectedValue)
     }
 }
 
