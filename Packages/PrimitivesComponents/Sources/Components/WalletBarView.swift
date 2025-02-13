@@ -19,7 +19,7 @@ public struct WalletBarView: View {
         Button {
             action?()
         } label: {
-            HStack(spacing: Spacing.extraSmall) {
+            HStack(spacing: Spacing.small) {
                 if let image = model.image {
                     AssetImageView(assetImage: image, size: 24, overlayImageSize: 10)
                 }

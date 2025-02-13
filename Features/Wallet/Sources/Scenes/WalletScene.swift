@@ -3,24 +3,13 @@
 import SwiftUI
 import Components
 import Primitives
-import Keystore
 import Store
 import GRDBQuery
 import Style
-import Localization
 import InfoSheet
+import PrimitivesComponents
 
-struct WalletScene: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.assetsService) private var assetsService
-    @Environment(\.transactionsService) private var transactionsService
-    @Environment(\.connectionsService) private var connectionsService
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.nodeService) private var nodeService
-    @Environment(\.bannerService) private var bannerService
-    @Environment(\.stakeService) private var stakeService
-    @Environment(\.observablePreferences) private var observablePreferences
-
+public struct WalletScene: View {
     @Query<TotalValueRequest>
     private var totalFiatValue: Double
 
@@ -39,7 +28,7 @@ struct WalletScene: View {
     @Binding var isPresentingWallets: Bool
 
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    
+
     let model: WalletSceneViewModel
 
     public init(
@@ -58,24 +47,25 @@ struct WalletScene: View {
         _dbWallet = Query(constant: model.walletRequest)
         _banners = Query(constant: model.bannersRequest)
     }
-    
+
     private var sections: AssetsSections {
         AssetsSections.from(assets)
     }
 
-    var body: some View {
-        @Bindable var preferences = observablePreferences
+    public var body: some View {
+        @Bindable var preferences = model.observablePreferences
 
         List {
-           Section { } header: {
+            Section { } header: {
                 WalletHeaderView(
                     model: WalletHeaderViewModel(
                         walletType: model.wallet.type,
-                        value: totalFiatValue
+                        value: totalFiatValue,
+                        currencyCode: preferences.preferences.currency
                     ),
                     isHideBalanceEnalbed: $preferences.isHideBalanceEnabled,
                     onHeaderAction: onHeaderAction,
-                    onInfoSheetAction: onInfoSheetAction
+                    onInfoAction: onSelectWalletHeaderInfo
                 )
                 .padding(.top, Spacing.small)
             }
@@ -88,10 +78,10 @@ struct WalletScene: View {
                 BannerView(
                     banners: banners,
                     action: onBannerAction,
-                    closeAction: bannerService.onClose
+                    closeAction: model.closeBanner(banner:)
                 )
             }
-            
+
             if !sections.pinned.isEmpty {
                 Section {
                     WalletAssetsList(
@@ -101,12 +91,13 @@ struct WalletScene: View {
                         pinAsset: { (assetId, value) in
                             try? model.pinAsset(assetId, value: value)
                         },
+                        currencyCode: preferences.preferences.currency,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
                 } header: {
                     HStack {
-                        Images.System.pin
-                        Text(Localized.Common.pinned)
+                        model.pinImage
+                        Text(model.pinnedTitle)
                     }
                 }
             }
@@ -123,12 +114,13 @@ struct WalletScene: View {
                     pinAsset: { (assetId, value) in
                         try? model.pinAsset(assetId, value: value)
                     },
+                    currencyCode: preferences.preferences.currency,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
             } footer: {
                 ListButton(
-                    title: Localized.Wallet.manageTokenList,
-                    image: Images.Actions.manage,
+                    title: model.manageTokenTitle,
+                    image: model.manageImage,
                     action: {
                         isPresentingSelectType = .manage
                     }
@@ -157,7 +149,7 @@ struct WalletScene: View {
                 Button {
                     isPresentingSelectType = .manage
                 } label: {
-                    Images.Actions.manage
+                    model.manageImage
                 }
             }
         }
@@ -178,7 +170,7 @@ struct WalletScene: View {
 extension WalletScene {
 
     func refreshable() async {
-        if let walletId = keystore.currentWalletId {
+        if let walletId = model.keystoreWalletId {
             Task {
                 do {
                     try await model.fetch(walletId: walletId, assets: assets)
@@ -187,7 +179,7 @@ extension WalletScene {
                 }
             }
         }
-        
+
         runAddressStatusCheck()
     }
 
@@ -199,42 +191,42 @@ extension WalletScene {
                 NSLog("fetch error: \(error)")
             }
         }
-        
+
         runAddressStatusCheck()
     }
-    
+
     func runAddressStatusCheck() {
-        if let wallet = keystore.currentWallet {
+        if let wallet = model.keystoreWallet {
             Task {
-                await walletsService.runAddressStatusCheck(wallet)
+                await model.runAddressStatusCheck(wallet: wallet)
             }
         }
     }
 
     private func runUpdatePrices() {
         Task {
-            try await walletsService.updatePrices()
+            try await model.updatePrices()
         }
     }
-    
+
     private func onBannerAction(banner: Banner) {
         let action = BannerViewModel(banner: banner).action
         switch banner.event {
         case .stake,
-            .enableNotifications,
-            .accountActivation,
-            .accountBlockedMultiSignature,
-            .activateAsset:
+                .enableNotifications,
+                .accountActivation,
+                .accountBlockedMultiSignature,
+                .activateAsset:
             Task {
-                try await bannerService.handleAction(action)
+                try await model.handleBanner(action: action)
             }
         }
     }
-    
-    private func onInfoSheetAction(type: InfoSheetType) {
-        isPresentingInfoSheet = type
+
+    private func onSelectWalletHeaderInfo() {
+        isPresentingInfoSheet = .watchWallet
     }
-    
+
     private func onHeaderAction(type: HeaderButtonType) {
         let selectType: SelectAssetType = switch type {
         case .buy: .buy
@@ -247,3 +239,15 @@ extension WalletScene {
     }
 }
 
+// MARK: - Models extensions
+
+extension WalletBarViewViewModel {
+    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
+        let model = WalletViewModel(wallet: wallet)
+        return WalletBarViewViewModel(
+            name: model.name,
+            image: model.assetImage,
+            showChevron: showChevron
+        )
+    }
+}

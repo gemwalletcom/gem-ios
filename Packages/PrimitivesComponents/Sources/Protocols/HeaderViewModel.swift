@@ -2,9 +2,8 @@
 
 import Foundation
 import Components
-import PrimitivesComponents
 
-protocol HeaderViewModel {
+public protocol HeaderViewModel {
     var isWatchWallet: Bool { get }
     var assetImage: AssetImage? { get }
     var title: String { get }

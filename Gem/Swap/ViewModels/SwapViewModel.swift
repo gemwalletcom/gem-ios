@@ -16,6 +16,8 @@ import SwapService
 import SwiftUI
 import Transfer
 import WalletsService
+import PrimitivesComponents
+import Preferences
 
 import class Gemstone.Config
 import struct Gemstone.Permit2Data
@@ -53,6 +55,7 @@ class SwapViewModel {
 
     let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
 
+    private let preferences: Preferences
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
 
@@ -61,6 +64,7 @@ class SwapViewModel {
     private let onTransferAction: TransferDataAction
 
     init(
+        preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
@@ -70,6 +74,7 @@ class SwapViewModel {
         onTransferAction: TransferDataAction,
         onComplete: VoidAction
     ) {
+        self.preferences = preferences
         self.wallet = wallet
         self.pairSelectorModel = pairSelectorModel
         self.keystore = keystore
@@ -137,7 +142,7 @@ class SwapViewModel {
 
     func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
         SwapTokenViewModel(
-            model: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            model: AssetDataViewModel(assetData: assetData, formatter: .medium, currencyCode: preferences.currency),
             type: type
         )
     }

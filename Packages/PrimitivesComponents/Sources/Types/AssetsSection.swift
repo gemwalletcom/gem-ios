@@ -3,15 +3,15 @@
 import Foundation
 import Primitives
 
-struct AssetsSections {
-    let pinned: [AssetData]
-    let assets: [AssetData]
-    let popular: [AssetData]
+public struct AssetsSections {
+    public let pinned: [AssetData]
+    public let assets: [AssetData]
+    public let popular: [AssetData]
     
     private static let popularChains = Set<AssetId>(arrayLiteral: Chain.bitcoin.assetId, Chain.ethereum.assetId, Chain.solana.assetId)
 }
 
-extension AssetsSections {
+public extension AssetsSections {
     static func from(_ assets: [AssetData]) -> AssetsSections {
         AssetsSections(
             pinned: assets.filter { $0.metadata.isPinned },

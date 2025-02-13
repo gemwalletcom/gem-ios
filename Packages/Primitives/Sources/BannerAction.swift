@@ -1,9 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
 
-public struct BannerAction: Sendable {
+public struct BannerAction: Identifiable, Sendable {
     public let id: String
     public let event: BannerEvent
     public let url: URL?
@@ -16,17 +15,5 @@ public struct BannerAction: Sendable {
         self.id = id
         self.event = event
         self.url = url
-    }
-}
-
-extension BannerAction {
-    public var closeOnAction: Bool {
-        switch event {
-        case .stake,
-            .accountActivation,
-            .accountBlockedMultiSignature,
-            .activateAsset: false
-        case .enableNotifications: true
-        }
     }
 }

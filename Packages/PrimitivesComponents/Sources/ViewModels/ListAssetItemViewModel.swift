@@ -1,25 +1,19 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Primitives
 import Components
 import Style
 import SwiftUI
-import PrimitivesComponents
 
-enum AssetListType {
-    case wallet
-    case manage
-    case view
-    case copy
-    case price
-}
-
-struct ListAssetItemViewModel: ListAssetItemViewable {
-    let showBalancePrivacy: Binding<Bool>
+public struct ListAssetItemViewModel: ListAssetItemViewable {
     let assetDataModel: AssetDataViewModel
     let type: AssetListType
-    var action: ((ListAssetItemAction) -> Void)?
 
-    init(
+    public let showBalancePrivacy: Binding<Bool>
+    public var action: ((ListAssetItemAction) -> Void)?
+
+    public init(
         showBalancePrivacy: Binding<Bool>,
         assetDataModel: AssetDataViewModel,
         type: AssetListType = .wallet,
@@ -31,16 +25,30 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
         self.action = action
     }
 
-    init(showBalancePrivacy: Binding<Bool>, assetData: AssetData, formatter: ValueFormatter) {
-        let model = AssetDataViewModel(assetData: assetData, formatter: formatter)
-        self.init(showBalancePrivacy: showBalancePrivacy, assetDataModel: model, type: .wallet, action: nil)
+    public init(
+        showBalancePrivacy: Binding<Bool>,
+        assetData: AssetData,
+        formatter: ValueFormatter,
+        currencyCode: String
+    ) {
+        let model = AssetDataViewModel(
+            assetData: assetData,
+            formatter: formatter,
+            currencyCode: currencyCode
+        )
+        self.init(
+            showBalancePrivacy: showBalancePrivacy,
+            assetDataModel: model,
+            type: .wallet,
+            action: nil
+        )
     }
 
-    var name: String {
+    public var name: String {
         assetDataModel.name
     }
-    
-    var symbol: String? {
+
+    public var symbol: String? {
         switch type {
         case .wallet,
             .view,
@@ -54,8 +62,8 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
             return assetDataModel.symbol
         }
     }
-    
-    var subtitleView: ListAssetItemSubtitleView {
+
+    public var subtitleView: ListAssetItemSubtitleView {
         switch type {
         case .wallet, .price:
             return .price(
@@ -82,8 +90,8 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
             }
         }
     }
-    
-    var rightView: ListAssetItemRightView {
+
+    public var rightView: ListAssetItemRightView {
         switch type {
         case .wallet, .view:
             return .balance(
@@ -104,7 +112,7 @@ struct ListAssetItemViewModel: ListAssetItemViewable {
             return .none
         }
     }
-    
+
     public var assetImage: AssetImage {
         return AssetViewModel(asset: assetDataModel.asset).assetImage
     }
