@@ -60,4 +60,6 @@ jobs:
         run: just generate-stone
 
       - name: UI Tests
-        run: just test_ui
+        run: |
+          defaults write com.apple.dt.XCTest IDESuppressCrashOnExceptions -bool YES
+          just test_ui
