@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "Wallet",
+    name: "WalletTab",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "Wallet",
-            targets: ["Wallet"]),
+            name: "WalletTab",
+            targets: ["WalletTab"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -28,7 +28,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "Wallet",
+            name: "WalletTab",
             dependencies: [
                 "Primitives",
                 "Localization",
@@ -45,8 +45,8 @@ let package = Package(
             path: "Sources"
         ),
         .testTarget(
-            name: "WalletTests",
-            dependencies: ["Wallet"]
+            name: "WalletTabTests",
+            dependencies: ["WalletTab"]
         ),
     ]
 )

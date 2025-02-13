@@ -5,7 +5,7 @@ import Primitives
 import PrimitivesComponents
 import MarketInsight
 import Transactions
-import Wallet
+import WalletTab
 
 struct WalletNavigationStack: View {
     @Environment(\.keystore) private var keystore
