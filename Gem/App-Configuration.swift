@@ -27,6 +27,7 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
+import ManageWalletService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -167,8 +168,8 @@ extension DeviceService {
     static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
-extension WalletService {
-    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main)
+extension ManageWalletService {
+    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main)
 }
 
 extension AssetStore {

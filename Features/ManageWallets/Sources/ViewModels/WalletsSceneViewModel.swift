@@ -1,20 +1,21 @@
 import Foundation
-import Keystore
 import Primitives
 import SwiftUI
 import Localization
+import Keystore
+import Preferences
+import ManageWalletService
 
-class WalletsViewModel {
-
+public class WalletsSceneViewModel {
     @Binding var navigationPath: NavigationPath
-    let walletService: WalletService
+    let manageWalletService: ManageWalletService
 
-    init(
+    public init(
         navigationPath: Binding<NavigationPath>,
-        walletService: WalletService
+        manageWalletService: ManageWalletService
     ) {
         _navigationPath = navigationPath
-        self.walletService = walletService
+        self.manageWalletService = manageWalletService
     }
     
     var title: String {
@@ -22,15 +23,15 @@ class WalletsViewModel {
     }
     
     var currentWallet: Wallet? {
-        walletService.currentWallet
+        manageWalletService.currentWallet
     }
 }
 
 // MARK: - Business Logic
 
-extension WalletsViewModel {
+extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
-        walletService.setCurrent(walletId)
+        manageWalletService.setCurrent(walletId)
     }
 
     func onEdit(wallet: Wallet) {
@@ -38,18 +39,18 @@ extension WalletsViewModel {
     }
 
     func delete(_ wallet: Wallet) throws {
-        try walletService.delete(wallet)
+        try manageWalletService.delete(wallet)
     }
 
     func pin(_ wallet: Wallet) throws {
         if wallet.isPinned {
-            try walletService.unpin(wallet: wallet)
+            try manageWalletService.unpin(wallet: wallet)
         } else {
-            try walletService.pin(wallet: wallet)
+            try manageWalletService.pin(wallet: wallet)
         }
     }
 
     func swapOrder(from: WalletId, to: WalletId) throws {
-        try walletService.swapOrder(from: from, to: to)
+        try manageWalletService.swapOrder(from: from, to: to)
     }
 }

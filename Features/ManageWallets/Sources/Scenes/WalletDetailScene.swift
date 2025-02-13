@@ -9,7 +9,7 @@ import Primitives
 import Localization
 import PrimitivesComponents
 
-struct WalletDetailScene: View {
+public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
 
     enum Field: Int, Hashable {
@@ -26,12 +26,12 @@ struct WalletDetailScene: View {
     @State private var isPresentingDeleteConfirmation: Bool?
     @FocusState private var focusedField: Field?
 
-    init(model: WalletDetailViewModel) {
+    public init(model: WalletDetailViewModel) {
         self.model = model
         _name = State(initialValue: self.model.name)
     }
     
-    var body: some View {
+    public var body: some View {
         VStack {
             List {
                 Section {
@@ -115,9 +115,14 @@ struct WalletDetailScene: View {
                 )
             }
         )
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text(Localized.Errors.transfer("")), message: Text($0))
-        }
+        .alert(
+            Localized.Errors.transfer(""),
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(isPresentingErrorMessage ?? "")
+            }
+        )
         .navigationDestination(for: $words) { words in
             ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: words))
         }
@@ -178,18 +183,5 @@ extension WalletDetailScene {
 
     private func onSelectImage() {
         model.onSelectImage()
-    }
-}
-
-// MARK: - Previews
-
-#Preview {
-    NavigationStack {
-        WalletDetailScene(model: .init(
-            navigationPath: Binding.constant(NavigationPath()),
-            wallet: .main,
-            keystore: LocalKeystore.main)
-        )
-            .navigationBarTitleDisplayMode(.inline)
     }
 }

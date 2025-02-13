@@ -13,7 +13,7 @@ extension View {
     private func inject(services: AppResolver.Services) -> some View {
         self
             .environment(\.nodeService, services.nodeService)
-            .environment(\.walletService, services.walletService)
+            .environment(\.manageWalletService, services.manageWalletService)
             .environment(\.walletsService, services.walletsService)
             .environment(\.deviceService, services.deviceService)
             .environment(\.transactionsService, services.transactionsService)
