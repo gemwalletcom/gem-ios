@@ -60,6 +60,8 @@ test_ui:
     -scheme GemUITests \
     -sdk iphonesimulator \
     -destination "platform=iOS Simulator,name=iPhone 16" \
+    -allowProvisioningUpdates \
+    -allowProvisioningDeviceRegistration \
     test | xcbeautify
 
 localize:
