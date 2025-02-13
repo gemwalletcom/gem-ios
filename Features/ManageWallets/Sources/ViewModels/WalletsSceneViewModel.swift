@@ -8,14 +8,14 @@ import ManageWalletService
 
 public class WalletsSceneViewModel {
     @Binding var navigationPath: NavigationPath
-    let manageWalletService: ManageWalletService
+    let service: ManageWalletService
 
     public init(
         navigationPath: Binding<NavigationPath>,
         manageWalletService: ManageWalletService
     ) {
         _navigationPath = navigationPath
-        self.manageWalletService = manageWalletService
+        self.service = manageWalletService
     }
     
     var title: String {
@@ -23,7 +23,7 @@ public class WalletsSceneViewModel {
     }
     
     var currentWallet: Wallet? {
-        manageWalletService.currentWallet
+        service.currentWallet
     }
 }
 
@@ -31,7 +31,7 @@ public class WalletsSceneViewModel {
 
 extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
-        manageWalletService.setCurrent(walletId)
+        service.setCurrent(walletId)
     }
 
     func onEdit(wallet: Wallet) {
@@ -39,18 +39,18 @@ extension WalletsSceneViewModel {
     }
 
     func delete(_ wallet: Wallet) throws {
-        try manageWalletService.delete(wallet)
+        try service.delete(wallet)
     }
 
     func pin(_ wallet: Wallet) throws {
         if wallet.isPinned {
-            try manageWalletService.unpin(wallet: wallet)
+            try service.unpin(wallet: wallet)
         } else {
-            try manageWalletService.pin(wallet: wallet)
+            try service.pin(wallet: wallet)
         }
     }
 
     func swapOrder(from: WalletId, to: WalletId) throws {
-        try manageWalletService.swapOrder(from: from, to: to)
+        try service.swapOrder(from: from, to: to)
     }
 }

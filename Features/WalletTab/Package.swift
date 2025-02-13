@@ -3,7 +3,7 @@
 import PackageDescription
 
 let package = Package(
-    name: "Wallet",
+    name: "WalletTab",
     platforms: [
         .iOS(.v17)
     ],
