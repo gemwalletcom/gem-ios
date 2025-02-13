@@ -78,7 +78,7 @@ public struct WalletScene: View {
                 BannerView(
                     banners: banners,
                     action: onBannerAction,
-                    closeAction: model.bannerService.onClose
+                    closeAction: model.closeBanner(banner:)
                 )
             }
 
@@ -170,7 +170,7 @@ public struct WalletScene: View {
 extension WalletScene {
 
     func refreshable() async {
-        if let walletId = model.keystore.currentWalletId {
+        if let walletId = model.keystoreWalletId {
             Task {
                 do {
                     try await model.fetch(walletId: walletId, assets: assets)
@@ -196,9 +196,9 @@ extension WalletScene {
     }
 
     func runAddressStatusCheck() {
-        if let wallet = model.keystore.currentWallet {
+        if let wallet = model.keystoreWallet {
             Task {
-                await model.walletsService.runAddressStatusCheck(wallet)
+                await model.runAddressStatusCheck(wallet: wallet)
             }
         }
     }
@@ -206,7 +206,7 @@ extension WalletScene {
     private func runUpdatePrices() {
         NSLog("runUpdatePrices")
         Task {
-            try await model.walletsService.updatePrices()
+            try await model.updatePrices()
         }
     }
 
@@ -219,7 +219,7 @@ extension WalletScene {
                 .accountBlockedMultiSignature,
                 .activateAsset:
             Task {
-                try await model.bannerService.handleAction(action)
+                try await model.handleBanner(action: action)
             }
         }
     }

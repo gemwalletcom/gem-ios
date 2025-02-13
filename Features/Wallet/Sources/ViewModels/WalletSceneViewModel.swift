@@ -13,19 +13,17 @@ import Store
 import Preferences
 @preconcurrency import Keystore
 
-// TODO: - services to private,
-// use on instance of wallet, now we use wallet + keysotre getting wallet
-// move business logic from view to view model
+// TODO: - use one instance of wallet, now we use wallet + keysotre getting wallet
 
 public struct WalletSceneViewModel: Sendable {
     public let wallet: Wallet
 
-    let observablePreferences: ObservablePreferences
-    let keystore: any Keystore
-    let walletsService: WalletsService
-    let bannerService: BannerService
-
+    private let keystore: any Keystore
+    private let walletsService: WalletsService
+    private let bannerService: BannerService
     private let balanceService: BalanceService
+
+    let observablePreferences: ObservablePreferences
 
     public init(
         wallet: Wallet,
@@ -87,6 +85,18 @@ public struct WalletSceneViewModel: Sendable {
         )
     }
 
+    var keystoreWalletId: WalletId? {
+        keystore.currentWalletId
+    }
+
+    var keystoreWallet: Wallet? {
+        keystore.currentWallet
+    }
+
+    func closeBanner(banner: Banner) {
+        bannerService.onClose(banner)
+    }
+
     func setupWallet() throws {
         try walletsService.setupWallet(wallet)
     }
@@ -104,6 +114,18 @@ public struct WalletSceneViewModel: Sendable {
         } catch {
             NSLog("fetch error: \(error)")
         }
+    }
+
+    func handleBanner(action: BannerAction) async throws {
+        try await bannerService.handleAction(action)
+    }
+
+    func updatePrices() async throws {
+        try await walletsService.updatePrices()
+    }
+
+    func runAddressStatusCheck(wallet: Wallet) async {
+        await walletsService.runAddressStatusCheck(wallet)
     }
 
     func hideAsset(_ assetId: AssetId) throws {
