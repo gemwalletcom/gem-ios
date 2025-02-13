@@ -89,7 +89,7 @@ struct SwapNavigationView: View {
                 fromAssetId: asset.chain.assetId,
                 toAssetId: Chain.allCases
                     .sortByRank()
-                    .dropFirst().first?.assetId
+                    .first(where: { $0.asset != asset })?.assetId
             )
         }
         return SwapPairSelectorViewModel(
