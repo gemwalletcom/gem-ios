@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 70;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -194,6 +194,13 @@
 			remoteGlobalIDString = C30952AF299C39D70004C0F9;
 			remoteInfo = wallet;
 		};
+		D83096B22D5D4F1E00FFEE3E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C30952AF299C39D70004C0F9;
+			remoteInfo = Gem;
+		};
 		D8A1F8792B17F21E00B15F54 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = C30952A8299C39D70004C0F9 /* Project object */;
@@ -324,6 +331,7 @@
 		D829BF4F2CBF2BDA00DEB2E8 /* NotificationService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NotificationService; sourceTree = "<group>"; };
 		D829BF522CBF30A900DEB2E8 /* PriceAlertService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceAlertService; sourceTree = "<group>"; };
 		D829BF552CBF317300DEB2E8 /* DeviceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DeviceService; sourceTree = "<group>"; };
+		D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GemUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D848B5A22AE843B800814FB4 /* AssetTitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetTitleView.swift; sourceTree = "<group>"; };
 		D852CAFC2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddAssetPriceAlertNavigationStack.swift; sourceTree = "<group>"; };
 		D852CB002C9CC315004121D3 /* PriceAlertsNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceAlertsNavigationView.swift; sourceTree = "<group>"; };
@@ -382,6 +390,10 @@
 		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 		DFCB242D2D1A5223000A12CC /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		D83096AD2D5D4F1E00FFEE3E /* GemUITests */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = GemUITests; sourceTree = "<group>"; };
+/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		C30952AD299C39D70004C0F9 /* Frameworks */ = {
@@ -455,6 +467,13 @@
 			files = (
 				C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */,
 				D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D83096A92D5D4F1E00FFEE3E /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -591,6 +610,7 @@
 				C3CF3B6E29A98BFD00E96586 /* Packages */,
 				C30952B2299C39D70004C0F9 /* Gem */,
 				C30952C4299C39D80004C0F9 /* GemTests */,
+				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
 				C30952B1299C39D70004C0F9 /* Products */,
 				C3CF3B6429A9628100E96586 /* Frameworks */,
 			);
@@ -602,6 +622,7 @@
 				C30952B0299C39D70004C0F9 /* Gem.app */,
 				C30952C1299C39D80004C0F9 /* GemTests.xctest */,
 				D8A1F8732B17F21E00B15F54 /* Screenshots.xctest */,
+				D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -630,6 +651,7 @@
 		C30952C4299C39D80004C0F9 /* GemTests */ = {
 			isa = PBXGroup;
 			children = (
+				D83096A22D5D4DFF00FFEE3E /* UI Tests */,
 				D8D726BF2C716C5B00A6B559 /* Screenshots */,
 				C3549B2E29C42E6C00B4BE01 /* Wallet */,
 				C36679082A0B1E4200F1D74D /* unit_app.xctestplan */,
@@ -923,6 +945,13 @@
 				D8F5B8702CCD6C010007E615 /* StakeService */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		D83096A22D5D4DFF00FFEE3E /* UI Tests */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "UI Tests";
 			sourceTree = "<group>";
 		};
 		D848B5A12AE843A900814FB4 /* Views */ = {
@@ -1274,6 +1303,29 @@
 			productReference = C30952C1299C39D80004C0F9 /* GemTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		D83096AB2D5D4F1E00FFEE3E /* GemUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D83096B42D5D4F1E00FFEE3E /* Build configuration list for PBXNativeTarget "GemUITests" */;
+			buildPhases = (
+				D83096A82D5D4F1E00FFEE3E /* Sources */,
+				D83096A92D5D4F1E00FFEE3E /* Frameworks */,
+				D83096AA2D5D4F1E00FFEE3E /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D83096B32D5D4F1E00FFEE3E /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				D83096AD2D5D4F1E00FFEE3E /* GemUITests */,
+			);
+			name = GemUITests;
+			packageProductDependencies = (
+			);
+			productName = GemUITests;
+			productReference = D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
 		D8A1F8722B17F21E00B15F54 /* Screenshots */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = D8A1F87B2B17F21E00B15F54 /* Build configuration list for PBXNativeTarget "Screenshots" */;
@@ -1302,7 +1354,7 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1500;
+				LastSwiftUpdateCheck = 1620;
 				LastUpgradeCheck = 1600;
 				TargetAttributes = {
 					C30952AF299C39D70004C0F9 = {
@@ -1310,6 +1362,10 @@
 					};
 					C30952C0299C39D80004C0F9 = {
 						CreatedOnToolsVersion = 14.2;
+						TestTargetID = C30952AF299C39D70004C0F9;
+					};
+					D83096AB2D5D4F1E00FFEE3E = {
+						CreatedOnToolsVersion = 16.2;
 						TestTargetID = C30952AF299C39D70004C0F9;
 					};
 					D8A1F8722B17F21E00B15F54 = {
@@ -1358,6 +1414,7 @@
 			targets = (
 				C30952AF299C39D70004C0F9 /* Gem */,
 				C30952C0299C39D80004C0F9 /* GemTests */,
+				D83096AB2D5D4F1E00FFEE3E /* GemUITests */,
 				D8A1F8722B17F21E00B15F54 /* Screenshots */,
 			);
 		};
@@ -1378,6 +1435,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D83096AA2D5D4F1E00FFEE3E /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1517,6 +1581,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		D83096A82D5D4F1E00FFEE3E /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		D8A1F86F2B17F21E00B15F54 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1532,6 +1603,11 @@
 			isa = PBXTargetDependency;
 			target = C30952AF299C39D70004C0F9 /* Gem */;
 			targetProxy = C30952C2299C39D80004C0F9 /* PBXContainerItemProxy */;
+		};
+		D83096B32D5D4F1E00FFEE3E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C30952AF299C39D70004C0F9 /* Gem */;
+			targetProxy = D83096B22D5D4F1E00FFEE3E /* PBXContainerItemProxy */;
 		};
 		D8A1F87A2B17F21E00B15F54 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1828,6 +1904,48 @@
 			};
 			name = Release;
 		};
+		D83096B52D5D4F1E00FFEE3E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.GemUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gem;
+			};
+			name = Debug;
+		};
+		D83096B62D5D4F1E00FFEE3E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios.GemUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = Gem;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		D8A1F87C2B17F21E00B15F54 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1900,6 +2018,15 @@
 			buildConfigurations = (
 				C30952D9299C39D80004C0F9 /* Debug */,
 				C30952DA299C39D80004C0F9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D83096B42D5D4F1E00FFEE3E /* Build configuration list for PBXNativeTarget "GemUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D83096B52D5D4F1E00FFEE3E /* Debug */,
+				D83096B62D5D4F1E00FFEE3E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
