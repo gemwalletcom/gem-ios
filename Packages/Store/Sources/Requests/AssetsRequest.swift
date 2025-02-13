@@ -145,11 +145,18 @@ extension AssetsRequest {
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
             .including(optional: AssetRecord.account)
+            .joining(optional: AssetRecord.priorityAssets
+                .filter(Columns.AssetSearch.query == searchBy)
+            )
             .filter(!excludeAssetIds.contains(Columns.Asset.id))
             .filter(literal:
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
-            .order(Columns.Asset.rank.desc)
+            .order(sql: "\"priority\" ASC NULLS LAST, \"assets\".\"rank\" DESC")
+//            .order(
+//                Columns.AssetSearch.priority.ascNullsLast, // Use priority from assets_search
+//                Columns.Asset.rank.desc
+//            )
             .limit(Self.defaultQueryLimit)
 
         if !searchBy.isEmpty {
