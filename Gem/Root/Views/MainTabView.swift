@@ -18,9 +18,11 @@ struct MainTabView: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.notificationService) private var notificationService
+    @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
+    @Environment(\.observablePreferences) private var observablePreferences
 
     let model: MainTabViewModel
 
@@ -49,7 +51,10 @@ struct MainTabView: View {
                 model: .init(
                     wallet: model.wallet,
                     balanceService: balanceService,
-                    walletsService: walletsService
+                    walletsService: walletsService,
+                    bannerService: bannerService,
+                    observablePreferences: observablePreferences,
+                    keystore: keystore
                 )
             )
             .tabItem {

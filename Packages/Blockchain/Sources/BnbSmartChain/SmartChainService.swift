@@ -54,7 +54,7 @@ extension SmartChainService: ChainStakable {
             try getUndelegationsCall(address: address, limit: limit),
         ]
 
-        let result = try await provider.request(.batch(requests: calls)).map(as: [JSONRPCResponse<String>].self)
+        let result = try await provider.requestBatch(calls).map(as: [JSONRPCResponse<String>].self)
         return try decodeStakeDelegations(result)
     }
 

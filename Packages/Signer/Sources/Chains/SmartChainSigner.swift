@@ -10,8 +10,8 @@ import Blockchain
 
 public class SmartChainSigner: EthereumSigner {
     override public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard let stakeType = input.type.stakeType else {
-            throw AnyError("Invalid stake type")
+        guard case .stake(_, let stakeType) = input.type else {
+            throw AnyError("invalid type")
         }
 
         let valueData: Data = switch stakeType {

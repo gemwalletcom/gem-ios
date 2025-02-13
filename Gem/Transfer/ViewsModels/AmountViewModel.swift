@@ -251,7 +251,7 @@ class AmounViewModel: ObservableObject {
                 throw TransferError.invalidAmount
             }
             return TransferData(
-                type: .stake(asset, .stake(validator: validator)), 
+                type: .stake(asset, .stake(validator: validator)),
                 recipientData: recipientData,
                 value: value,
                 canChangeValue: canChangeValue
