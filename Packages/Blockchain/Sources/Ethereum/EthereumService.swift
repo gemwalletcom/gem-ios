@@ -44,7 +44,7 @@ extension EthereumService {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value.asInt
     }
 
-    func getChainId() async throws -> Int {
+    func getChainId() throws -> Int {
         if let networkId = Int(GemstoneConfig.shared.getChainConfig(chain: chain.chain.rawValue).networkId) {
             return networkId
         }
@@ -104,14 +104,20 @@ extension EthereumService: ChainBalanceable {
 // MARK: - ChainTransactionPreloadable
 
 extension EthereumService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        try await TransactionPreload(
+            sequence: getNonce(senderAddress: input.senderAddress)
+        )
+    }
+}
+
+extension EthereumService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         async let fee = fee(input: input.feeInput)
-        async let sequence = getNonce(senderAddress: input.senderAddress)
-        async let chainId = getChainId()
         
-        return try await TransactionPreload(
-            sequence: sequence,
-            chainId: chainId.asString,
+        return try await TransactionLoad(
+            sequence: input.preload.sequence,
+            chainId: getChainId().asString,
             fee: fee,
             extra: .none
         )

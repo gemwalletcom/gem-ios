@@ -154,17 +154,23 @@ extension TonService: ChainFeeRateFetchable {
     }
 }
 
+extension TonService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        .none
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension TonService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+extension TonService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         switch input.asset.id.type {
         case .native:
             async let getWallet = walletInformation(address: input.senderAddress)
             async let getFee = fee(input: input.feeInput);
             let (wallet, fee) = try await (getWallet, getFee)
             
-            return TransactionPreload(
+            return TransactionLoad(
                 sequence: wallet.sequence,
                 fee: fee
             )
@@ -174,7 +180,7 @@ extension TonService: ChainTransactionPreloadable {
             async let getFee = fee(input: input.feeInput)
             let (wallet, jettonAddress, fee) = try await (getWallet, getJettonAddress, getFee)
             
-            return TransactionPreload(
+            return TransactionLoad(
                 sequence: wallet.sequence,
                 token: SignerInputToken(senderTokenAddress: jettonAddress),
                 fee: fee

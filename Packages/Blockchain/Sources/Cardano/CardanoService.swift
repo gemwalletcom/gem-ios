@@ -143,14 +143,20 @@ extension CardanoService: ChainFeeRateFetchable {
     }
 }
 
+extension CardanoService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        .none
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension CardanoService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+extension CardanoService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         let utxos = try await utxos(address: input.senderAddress)
         let fee = try calculateFee(input: input, utxos: utxos)
         
-        return TransactionPreload(
+        return TransactionLoad(
             fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: 1), gasLimit: 1),
             utxos: utxos
         )

@@ -103,12 +103,22 @@ extension AlgorandService: ChainFeeRateFetchable {
 // MARK: - ChainTransactionPreloadable
 
 extension AlgorandService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
         let params = try await transactionsParams()
         return TransactionPreload(
+            blockhash: params.genesis_hash,
             sequence: params.last_round.asInt,
-            block: SignerInputBlock(hash: params.genesis_hash),
-            chainId: params.genesis_id,
+            chainId: params.genesis_id
+        )
+    }
+}
+
+extension AlgorandService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
+        TransactionLoad(
+            sequence: input.preload.sequence,
+            block: SignerInputBlock(hash: input.preload.blockhash),
+            chainId: input.preload.chainId,
             fee: input.defaultFee
         )
     }

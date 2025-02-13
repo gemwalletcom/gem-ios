@@ -123,10 +123,8 @@ extension StellarService: ChainFeeRateFetchable {
     }
 }
 
-// MARK: - ChainTransactionPreloadable
-
 extension StellarService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
         async let getAccount = account(address: input.senderAddress)
         async let getIsDestinationAccountExist = isAccountExists(address: input.destinationAddress)
         
@@ -135,8 +133,20 @@ extension StellarService: ChainTransactionPreloadable {
         guard let sequence = Int(account.sequence) else {
             throw AnyError("invalid sequence")
         }
+        
+        return TransactionPreload(
+            sequence: sequence + 1,
+            isDestinationAddressExist: isDestinationAccountExist
+        )
+    }
+}
+
+// MARK: - ChainTransactionPreloadable
+
+extension StellarService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         let fee: Fee = {
-            if isDestinationAccountExist { input.defaultFee } else {
+            if input.preload.isDestinationAddressExist { input.defaultFee } else {
                 Fee(
                     fee: input.defaultFee.fee,
                     gasPriceType: input.defaultFee.gasPriceType,
@@ -146,8 +156,8 @@ extension StellarService: ChainTransactionPreloadable {
             }
         }()
         
-        return TransactionPreload(
-            sequence: sequence + 1,
+        return TransactionLoad(
+            sequence: input.preload.sequence,
             fee: fee
         )
     }

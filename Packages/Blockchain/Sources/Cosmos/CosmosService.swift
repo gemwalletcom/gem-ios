@@ -134,6 +134,12 @@ extension CosmosService {
 
 // MARK: - ChainBalanceable
 
+extension CosmosService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        .none
+    }
+}
+
 extension CosmosService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
         let denom = chain.denom
@@ -239,12 +245,12 @@ extension CosmosService: ChainFeeRateFetchable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension CosmosService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+extension CosmosService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         async let account = getAccount(address: input.senderAddress)
         async let block = getLatestCosmosBlock()
 
-        return try await TransactionPreload(
+        return try await TransactionLoad(
             accountNumber: Int(account.account_number) ?? 0,
             sequence: Int(account.sequence) ?? 0,
             chainId: block.header.chain_id,

@@ -78,13 +78,21 @@ extension BitcoinService: ChainBalanceable {
     }
 }
 
+extension BitcoinService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        return try await TransactionPreload(
+            utxos: getUtxos(address: input.senderAddress)
+        )
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension BitcoinService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
-        let utxos = try await getUtxos(address: input.senderAddress)
-        let fee = try await fee(input: input.feeInput, utxos: utxos)
-        return TransactionPreload(
+extension BitcoinService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
+        let utxos = input.preload.utxos
+        let fee = try fee(input: input.feeInput, utxos: utxos)
+        return TransactionLoad(
             fee: fee,
             utxos: utxos
         )

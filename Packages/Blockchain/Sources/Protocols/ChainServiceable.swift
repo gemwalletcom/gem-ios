@@ -5,6 +5,7 @@ import BigInt
 public typealias ChainServiceable = ChainBalanceable &
     ChainBroadcastable &
     ChainTransactionPreloadable &
+    ChainTransactionLoadable &
     ChainFeeRateFetchable &
     ChainTransactionStateFetchable &
     ChainSyncable &
@@ -27,7 +28,11 @@ public protocol ChainFeeRateFetchable: Sendable {
 }
 
 public protocol ChainTransactionPreloadable: Sendable  {
-    func load(input: TransactionInput) async throws -> TransactionPreload
+    func preload(input: TransactionPreloadInput) async throws -> TransactionPreload
+}
+
+public protocol ChainTransactionLoadable: Sendable  {
+    func load(input: TransactionInput) async throws -> TransactionLoad
 }
 
 public protocol ChainBroadcastable: Sendable {
