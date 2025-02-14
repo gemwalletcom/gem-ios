@@ -72,7 +72,7 @@ extension SuiService {
                 try await encodeTokenTransfer(
                     sender: input.senderAddress,
                     recipient: input.destinationAddress,
-                    coinType: asset.id.tokenId!,
+                    coinType: try asset.id.getTokenId(),
                     gasCoinType: Self.coinId,
                     value: input.value,
                     gasPrice: input.gasPrice.gasPrice
