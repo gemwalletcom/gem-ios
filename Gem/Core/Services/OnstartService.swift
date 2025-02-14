@@ -20,12 +20,6 @@ struct OnstartService {
     
     func migrations() {
         do {
-            try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
-        } catch {
-            NSLog("destroy initial files error: \(error)")
-        }
-        
-        do {
             try keystore.setupChains(chains: AssetConfiguration.allChains)
         } catch {
             NSLog("keystore setup Chains error: \(error)")

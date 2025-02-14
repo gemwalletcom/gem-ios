@@ -12,7 +12,7 @@ import GemstonePrimitives
 // MARK: - ChainFeeCalculateable
 
 extension BitcoinService {
-    public func fee(input: FeeInput, utxos: [UTXO]) async throws -> Fee {
+    public func fee(input: FeeInput, utxos: [UTXO]) throws -> Fee {
         return try BitcoinFeeCalculator.calculate(chain: chain, feeInput: input, utxos: utxos)
     }
 

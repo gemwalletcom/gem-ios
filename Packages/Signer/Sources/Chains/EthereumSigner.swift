@@ -34,7 +34,7 @@ public class EthereumSigner: Signable {
                     $0.amount = input.value.magnitude.serialize()
                 }
             },
-            toAddress: input.asset.tokenId!,
+            toAddress: try input.asset.getTokenId(),
             privateKey: privateKey
         )
         return try sign(coinType: input.coinType, input: base)

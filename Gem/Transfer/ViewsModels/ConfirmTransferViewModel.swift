@@ -241,9 +241,19 @@ extension ConfirmTransferViewModel {
 
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
+            let destinationAddress = dataModel.recipient.address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            let rates = try await feeModel.getFeeRates(type: data.type)
-
+            
+            async let getRates = feeModel.getFeeRates(type: data.type)
+            async let getPreload = service.preload(
+                input: TransactionPreloadInput(
+                    senderAddress: senderAddress,
+                    destinationAddress: destinationAddress
+                )
+            )
+            
+            let (rates, preload) = try await (getRates, getPreload)
+            
             guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
                 throw ChainCoreError.feeRateMissed
             }
@@ -256,7 +266,8 @@ extension ConfirmTransferViewModel {
                 value: dataModel.data.value,
                 balance: metaData.assetBalance,
                 gasPrice: rate.gasPriceType,
-                memo: dataModel.memo
+                memo: dataModel.memo,
+                preload: preload
             )
 
             let preloadInput = try await service.load(input: transactionInput)
@@ -296,7 +307,7 @@ extension ConfirmTransferViewModel {
         }
     }
 
-    func process(input: TransactionPreload, amount: TransferAmount) async -> Void {
+    func process(input: TransactionLoad, amount: TransferAmount) async -> Void {
         confirmingState = .loading
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
@@ -435,7 +446,7 @@ extension ConfirmTransferViewModel {
         )
     }
 
-    private func sign(transferData: TransferData, input: TransactionPreload, amount: TransferAmount) async throws -> [String]  {
+    private func sign(transferData: TransferData, input: TransactionLoad, amount: TransferAmount) async throws -> [String]  {
         let signer = Signer(wallet: wallet, keystore: keystore)
         return try await Self.sign(
             signer: signer,
@@ -464,7 +475,7 @@ extension ConfirmTransferViewModel {
 
     private func getTransaction(
         wallet: Wallet,
-        input: TransactionPreload,
+        input: TransactionLoad,
         transferDataType: TransferDataType,
         recipientData: RecipientData,
         amount: TransferAmount,
@@ -520,7 +531,7 @@ extension ConfirmTransferViewModel {
         wallet: Wallet,
         type: TransferDataType,
         recipientData: RecipientData,
-        input: TransactionPreload,
+        input: TransactionLoad,
         amount: TransferAmount
     ) async throws -> [String] {
         let destinationAddress = recipientData.recipient.address

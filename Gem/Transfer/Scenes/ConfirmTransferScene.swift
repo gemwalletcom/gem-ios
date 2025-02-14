@@ -194,7 +194,7 @@ extension ConfirmTransferScene {
         }
     }
 
-    private func process(input: TransactionPreload, amount: TransferAmount) {
+    private func process(input: TransactionLoad, amount: TransferAmount) {
         Task {
             await model.process(input: input, amount: amount)
             await MainActor.run {

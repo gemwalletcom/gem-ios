@@ -12,6 +12,7 @@ import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
+import Swap
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss

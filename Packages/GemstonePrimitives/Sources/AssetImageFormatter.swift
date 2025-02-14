@@ -12,7 +12,7 @@ public struct AssetImageFormatter: Sendable {
         URL(string: Config.shared.imageFormatterAssetUrl(chain: assetId.chain.rawValue, tokenId: assetId.tokenId))
     }
     
-    public func getValidatorUrl(chain: Primitives.Chain, id: String) -> URL {
-        URL(string: Config.shared.imageFormatterValidatorUrl(chain: chain.rawValue, id: id))!
+    public func getValidatorUrl(chain: Primitives.Chain, id: String) -> URL? {
+        URL(string: Config.shared.imageFormatterValidatorUrl(chain: chain.rawValue, id: id))
     }
 }
