@@ -7,11 +7,13 @@ import Foundation
 public struct SolanaAccount<T: Codable & Sendable>: Codable, Sendable {
 	public let lamports: Int
 	public let space: Int32
+	public let owner: String
 	public let data: T
 
-	public init(lamports: Int, space: Int32, data: T) {
+	public init(lamports: Int, space: Int32, owner: String, data: T) {
 		self.lamports = lamports
 		self.space = space
+		self.owner = owner
 		self.data = data
 	}
 }
@@ -84,9 +86,11 @@ public struct SolanaStakeInfo: Codable, Sendable {
 
 public struct SolanaTokenAccount: Codable, Sendable {
 	public let account: SolanaAccount<SolanaAccountParsed<SolanaAccountParsedInfo<SolanaTokenInfo>>>
+	public let pubkey: String
 
-	public init(account: SolanaAccount<SolanaAccountParsed<SolanaAccountParsedInfo<SolanaTokenInfo>>>) {
+	public init(account: SolanaAccount<SolanaAccountParsed<SolanaAccountParsedInfo<SolanaTokenInfo>>>, pubkey: String) {
 		self.account = account
+		self.pubkey = pubkey
 	}
 }
 

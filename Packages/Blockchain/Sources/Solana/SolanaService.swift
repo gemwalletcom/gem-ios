@@ -34,21 +34,34 @@ extension SolanaService {
             .request(.getTokenAccountsByOwner(owner: owner, token: token))
             .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccountPubkey]>>.self).result.value
     }
+    
+    private func getTokenAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
+        return try await provider
+            .request(.getTokenAccountsByOwner(owner: owner, token: token))
+            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>.self).result.value
+    }
 
     private func getTokenTransferType(
         tokenId: String,
         senderAddress: String,
         destinationAddress: String
     ) async throws -> SignerInputToken {
-        async let getSenderTokenAccounts = getAccounts(token: tokenId, owner: senderAddress)
-        async let getRecipientTokenAccounts = getAccounts(token: tokenId, owner: destinationAddress)
-        async let getSplProgram = getTokenProgram(tokenId: tokenId)
-        let (senderTokenAccounts, recipientTokenAccounts, splProgram) = try await (getSenderTokenAccounts, getRecipientTokenAccounts, getSplProgram)
-
-        guard let senderTokenAddress = senderTokenAccounts.first?.pubkey else {
+        let accounts = try await provider.requestBatch([
+            .getTokenAccountsByOwner(owner: senderAddress, token: tokenId),
+            .getTokenAccountsByOwner(owner: destinationAddress, token: tokenId)
+        ])
+        .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
+        
+        guard let senderToken = try accounts.getElement(safe: 0).result.value.first else {
             throw AnyError("Sender token address is empty")
         }
-
+        let recipientTokenAccounts = try accounts.getElement(safe: 1).result.value
+        let senderTokenAddress = senderToken.pubkey
+        
+        guard let splProgram = SolanaConfig.tokenProgramId(owner: senderToken.account.owner) else {
+            throw AnyError("Unknow token program id")
+        }
+        
         if let recipientTokenAddress = recipientTokenAccounts.first?.pubkey {
             return SignerInputToken(
                 senderTokenAddress: senderTokenAddress,
@@ -110,7 +123,7 @@ extension SolanaService {
     }
 
     // https://solana.com/docs/core/fees#compute-unit-limit
-    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
+    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) throws -> Fee {
         let gasLimit = switch type {
         case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
@@ -160,44 +173,6 @@ extension SolanaService: ChainBalanceable {
             assetId: chain.assetId,
             balance: Balance(staked: BigInt(staked))
         )
-    }
-}
-
-extension SolanaService {
-    public func fee(input: TransactionInput) async throws -> Fee {
-        switch input.type {
-        case .transfer(let asset):
-            switch asset.id.type {
-            case .native:
-                return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-            case .token:
-                async let getFee = getBaseFee(type: input.type, gasPrice: input.gasPrice)
-                async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
-                async let getToken = try await getTokenTransferType(
-                    tokenId: try asset.getTokenId(),
-                    senderAddress: input.senderAddress,
-                    destinationAddress: input.destinationAddress
-                )
-                let (fee, tokenAccountCreationFee, token) = try await (getFee, getTokenAccountCreationFee, getToken)
-                
-                let options: FeeOptionMap = switch token.recipientTokenAddress {
-                case .some: [:]
-                case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
-                }
-                
-                return Fee(
-                    fee: fee.fee,
-                    gasPriceType: fee.gasPriceType,
-                    gasLimit: fee.gasLimit,
-                    options: options
-                )
-            }
-        case .transferNft:
-            fatalError()
-        case .swap, .stake, .generic:
-            return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .account, .tokenApprove: fatalError()
-        }
     }
 }
 
@@ -251,33 +226,45 @@ extension SolanaService: ChainTransactionPreloadable {
 
 extension SolanaService: ChainTransactionLoadable {
     public func load(input: TransactionInput) async throws -> TransactionLoad {
-        async let fee = fee(input: input)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                return try await TransactionLoad(
+                let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
+                return TransactionLoad(
                     block: SignerInputBlock(hash: input.preload.blockhash),
                     fee: fee
                 )
             case .token:
-                //TODO: Get tokenID from the fee
-                async let token = try await getTokenTransferType(
+                async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
+                async let getToken = try await getTokenTransferType(
                     tokenId: try input.asset.getTokenId(),
                     senderAddress: input.senderAddress,
                     destinationAddress: input.destinationAddress
                 )
+                let (tokenAccountCreationFee, token) = try await (getTokenAccountCreationFee, getToken)
+                let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
+                let options: FeeOptionMap = switch token.recipientTokenAddress {
+                case .some: [:]
+                case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
+                }
                 
-                return try await TransactionLoad(
+                return TransactionLoad(
                     block: SignerInputBlock(hash: input.preload.blockhash),
                     token: token,
-                    fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
+                    fee: Fee(
+                        fee: fee.fee,
+                        gasPriceType: fee.gasPriceType,
+                        gasLimit: fee.gasLimit,
+                        options: options
+                    )
                 )
             }
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            return try await TransactionLoad(
+            let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
+            return TransactionLoad(
                 block: SignerInputBlock(hash: input.preload.blockhash),
                 fee: fee
             )
