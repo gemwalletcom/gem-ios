@@ -18,7 +18,7 @@ struct SelectWalletScene: View {
         List {
             ForEach(model.walletModels) { wallet in
                 HStack {
-                    AssetImageView(assetImage: wallet.assetImage, size: Sizing.image.medium)
+                    AssetImageView(assetImage: wallet.avatarImage, size: Sizing.image.medium)
                     ListItemSelectionView(
                         title: wallet.name,
                         titleExtra: .none,

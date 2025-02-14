@@ -24,6 +24,7 @@ import NFTService
 import DiscoverAssetsService
 import WalletsService
 import ManageWalletService
+import AvatarService
 
 struct ServicesFactory {
     @MainActor
@@ -50,7 +51,10 @@ struct ServicesFactory {
 
         let manageWalletService = Self.makeManageWalletService(
             keystore: storages.keystore,
-            walletStore: storeManager.walletStore
+            walletStore: storeManager.walletStore,
+            avatarService: AvatarService(
+                store: storeManager.walletStore
+            )
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -193,11 +197,13 @@ extension ServicesFactory {
 
     private static func makeManageWalletService(
         keystore: any Keystore,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        avatarService: AvatarService
     ) -> ManageWalletService {
         ManageWalletService(
             keystore: keystore,
-            walletStore: walletStore
+            walletStore: walletStore,
+            avatarService: avatarService
         )
     }
 

@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Localization
 import UIKit
 import SwiftUI
 import Style
@@ -11,6 +10,7 @@ import WalletsService
 import BannerService
 import Store
 import Preferences
+import Localization
 @preconcurrency import Keystore
 
 // TODO: - use one instance of wallet, now we use wallet + keysotre getting wallet

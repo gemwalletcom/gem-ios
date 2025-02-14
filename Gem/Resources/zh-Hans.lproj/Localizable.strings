@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "您的图像已保存至照片！";
 "permissions.access_denied" = "拒绝访问";
 "permissions.image.photo_access.denied.description" = "此应用无权访问您的照片库。请在设备设置中启用访问权限。";
+"avatar.change_background" = "点击更改背景";
+"common.magic_button" = "魔术按钮";
+"common.emoji" = "表情符号";
+"common.style" = "风格";
+"avatar.change_avatar" = "点击更改头像";
+"common.avatar" = "阿凡达";
+"common.photo" = "照片";

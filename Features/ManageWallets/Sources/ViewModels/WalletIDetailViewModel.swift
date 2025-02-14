@@ -1,4 +1,6 @@
 import SwiftUI
+import ManageWalletService
+import AvatarToolkit
 import Primitives
 import Keystore
 import Components
@@ -11,28 +13,19 @@ public class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
-    let keystore: any Keystore
+    let walletService: ManageWalletService
     let explorerService: any ExplorerLinkFetchable
 
     public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        keystore: any Keystore,
+        walletService: ManageWalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet
-        self.keystore = keystore
+        self.walletService = walletService
         self.explorerService = explorerService
-    }
-
-    var image: AssetImage {
-        AssetImage(
-            type: .empty,
-            imageURL: .none,
-            placeholder: WalletViewModel(wallet: wallet).image,
-            chainPlaceholder: .none //Image(systemName: SystemImage.settings)
-        )
     }
 
     var name: String {
@@ -65,16 +58,16 @@ public class WalletDetailViewModel {
 
 extension WalletDetailViewModel {
     func rename(name: String) throws {
-        try keystore.renameWallet(wallet: wallet, newName: name)
+        try walletService.renameWallet(wallet: wallet, newName: name)
     }
     
     func getMnemonicWords() throws -> [String] {
-        try keystore.getMnemonic(wallet: wallet)
+        try walletService.getMnemonic(wallet: wallet)
     }
     
     func getPrivateKey(for chain: Chain) throws -> String {
         let encoding = getEncodingType(for: chain)
-        return try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
+        return try walletService.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
     
     func getEncodingType(for chain: Chain) -> EncodingType {
@@ -82,17 +75,10 @@ extension WalletDetailViewModel {
     }
 
     func delete() throws {
-        try keystore.deleteWallet(for: wallet)
-
-        // TODO: - enable once will be enabled in CleanUpService
-        /*
-        if keystore.wallets.isEmpty {
-            try CleanUpService(keystore: keystore).onDeleteAllWallets()
-        }
-         */
+        try walletService.delete(wallet)
     }
 
     func onSelectImage() {
-        //navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
+        navigationPath.append(Scenes.WalletSelectImage(wallet: wallet))
     }
 }

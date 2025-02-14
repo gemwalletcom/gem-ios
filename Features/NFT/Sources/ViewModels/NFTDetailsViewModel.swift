@@ -103,6 +103,7 @@ public struct NFTDetailsViewModel: Sendable {
                 type: .send,
                 isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
             ),
+            HeaderButton(type: .avatar, isEnabled: true),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }

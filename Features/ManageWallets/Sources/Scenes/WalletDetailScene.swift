@@ -8,6 +8,7 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
+import AvatarToolkit
 
 public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -40,12 +41,19 @@ public struct WalletDetailScene: View {
                 } header: {
                     HStack {
                         Spacer()
-                        Button(action: onSelectImage) {
-                            AssetImageView(
-                                assetImage: model.image,
-                                size: Sizing.image.medium * 1.6,
-                                overlayImageSize: Spacing.large
-                            )
+                        VStack(spacing: Spacing.medium) {
+                            Button(action: onSelectImage) {
+                                AvatarView(
+                                    walletId: model.wallet.id,
+                                    size: Sizing.image.medium * 1.6
+                                )
+                            }
+                            
+                            Button(action: onSelectImage) {
+                                Text(Localized.Avatar.changeAvatar)
+                                    .textCase(nil)
+                            }
+                            .buttonStyle(.clearBlue)
                             .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()

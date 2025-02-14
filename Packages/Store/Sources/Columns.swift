@@ -46,6 +46,7 @@ struct Columns {
         static let type = Column("type")
         static let order = Column("order")
         static let isPinned = Column("isPinned")
+        static let imageUrl = Column("imageUrl")
     }
     
     struct Account {
@@ -188,5 +189,10 @@ struct Columns {
         static let imageUrl = Column("imageUrl")
         static let previewImageUrl = Column("previewImageUrl")
         static let originalSourceUrl = Column("originalSourceUrl")
+    }
+    
+    struct Avatar {
+        static let walletId = Column("walletId")
+        static let avatarValue = Column("avatarValue")
     }
 }

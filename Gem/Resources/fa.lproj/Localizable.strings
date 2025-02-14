@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "تصویر شما در Photos ذخیره شده است!";
 "permissions.access_denied" = "دسترسی ممنوع شد";
 "permissions.image.photo_access.denied.description" = "این برنامه اجازه دسترسی به کتابخانه عکس شما را ندارد. لطفاً دسترسی را در تنظیمات دستگاه خود فعال کنید.";
+"avatar.change_background" = "برای تغییر پس زمینه ضربه بزنید";
+"common.magic_button" = "دکمه جادویی";
+"common.emoji" = "ایموجی";
+"common.style" = "سبک";
+"avatar.change_avatar" = "برای تغییر آواتار ضربه بزنید";
+"common.avatar" = "آواتار";
+"common.photo" = "عکس";

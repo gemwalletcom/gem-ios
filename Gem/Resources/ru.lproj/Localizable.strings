@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Ваше изображение сохранено в разделе «Фотографии»!";
 "permissions.access_denied" = "Доступ запрещен";
 "permissions.image.photo_access.denied.description" = "У этого приложения нет разрешения на доступ к вашей библиотеке фотографий. Пожалуйста, включите доступ в настройках вашего устройства.";
+"avatar.change_background" = "Нажмите, чтобы изменить фон";
+"common.magic_button" = "Волшебная кнопка";
+"common.emoji" = "Эмодзи";
+"common.style" = "Стиль";
+"avatar.change_avatar" = "Нажмите, чтобы изменить аватар";
+"common.avatar" = "Аватар";
+"common.photo" = "Фото";

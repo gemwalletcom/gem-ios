@@ -6,10 +6,12 @@ import Localization
 import Primitives
 import Onboarding
 import ManageWallets
+import AvatarToolkit
 
 struct WalletsNavigationStack: View {
     @Environment(\.manageWalletService) private var manageWalletService
     @Environment(\.keystore) private var keystore
+    @Environment(\.avatarService) private var avatarService
 
     @State private var navigationPath = NavigationPath()
 
@@ -36,15 +38,15 @@ struct WalletsNavigationStack: View {
                     model: WalletDetailViewModel(
                         navigationPath: $navigationPath,
                         wallet: $0.wallet,
-                        keystore: keystore
+                        walletService: manageWalletService
                     )
                 )
             }
             .navigationDestination(for: Scenes.WalletSelectImage.self) {
-                WalletSelectImageScene(
-                    model: WalletSelectImageViewModel(
-                        navigationPath: $navigationPath,
-                        wallet: $0.wallet
+                AvatarNavigationView(
+                    model: AvatarCustomizationViewModel(
+                        wallet: $0.wallet,
+                        avatarService: avatarService
                     )
                 )
             }
