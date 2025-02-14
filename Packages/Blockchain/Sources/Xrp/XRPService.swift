@@ -104,15 +104,20 @@ extension XRPService: ChainFeeRateFetchable {
     }
 }
 
+extension XRPService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        try await TransactionPreload(
+            sequence: (account(address: input.senderAddress)?.Sequence)?.asInt ?? 0
+        )
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension XRPService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
-        guard let account = try await account(address: input.senderAddress) else {
-            throw AnyError("Invalid account")
-        }
-        return TransactionPreload(
-            sequence: Int(account.Sequence),
+extension XRPService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
+        return TransactionLoad(
+            sequence: input.preload.sequence,
             fee: input.defaultFee
         )
     }

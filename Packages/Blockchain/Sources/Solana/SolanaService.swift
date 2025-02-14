@@ -76,15 +76,17 @@ extension SolanaService {
     }
 
     private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
-        var result: [Primitives.AssetBalance] = []
-        for tokenId in tokenIds {
-            guard let token = tokenId.tokenId else { break }
-            let balance = try await getTokenBalance(token: token, owner: address)
-            result.append(
-                AssetBalance(assetId: tokenId, balance: Balance(available: balance))
-            )
-        }
-        return result
+        let accounts = try await provider.requestBatch(
+            tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
+            .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
+            .compactMap { $0.result.value.first }
+        
+        let balances = try await provider.requestBatch(
+            accounts.map { .getTokenAccountBalance(token: $0.pubkey) })
+            .map(as: [JSONRPCResponse<SolanaValue<SolanaBalanceValue>>].self)
+            .map { BigInt(stringLiteral: $0.result.value.amount) }
+        
+        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
     private func getPrioritizationFees() async throws -> [Int32] {
@@ -124,7 +126,7 @@ extension SolanaService {
         let gasLimit = switch type {
         case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
         let totalFee = gasPrice.gasPrice + (gasPrice.priorityFee * gasLimit / BigInt(1_000_000))
         
@@ -160,7 +162,6 @@ extension SolanaService: ChainBalanceable {
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
         return try await getTokenBalances(tokenIds: tokenIds, address: address)
     }
-
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
         let staked = try await getDelegations(address: address)
@@ -207,7 +208,7 @@ extension SolanaService {
             fatalError()
         case .swap, .stake, .generic:
             return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
     }
 }
@@ -221,7 +222,7 @@ extension SolanaService: ChainFeeRateFetchable {
         case .transfer(let asset): asset.type == .native ? 50_000 : 100_000
         case .stake, .transferNft: 50_000
         case .generic, .swap: 250_000
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
         
         let priorityFee = {
@@ -251,18 +252,24 @@ extension SolanaService: ChainFeeRateFetchable {
 // MARK: - ChainTransactionPreloadable
 
 extension SolanaService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let blockhash = provider
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        let blockhash = try await provider
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
-        async let fee = fee(input: input)
+        
+        return TransactionPreload(blockhash: blockhash)
+    }
+}
 
+extension SolanaService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
+        async let fee = fee(input: input)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                return try await TransactionPreload(
-                    block: SignerInputBlock(hash: blockhash),
+                return try await TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockhash),
                     fee: fee
                 )
             case .token:
@@ -273,8 +280,8 @@ extension SolanaService: ChainTransactionPreloadable {
                     destinationAddress: input.destinationAddress
                 )
                 
-                return try await TransactionPreload(
-                    block: SignerInputBlock(hash: blockhash),
+                return try await TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockhash),
                     token: token,
                     fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
                 )
@@ -282,11 +289,11 @@ extension SolanaService: ChainTransactionPreloadable {
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            return try await TransactionPreload(
-                block: SignerInputBlock(hash: blockhash), 
+            return try await TransactionLoad(
+                block: SignerInputBlock(hash: input.preload.blockhash),
                 fee: fee
             )
-        case .account: fatalError()
+        case .account, .tokenApprove: fatalError()
         }
     }
 }

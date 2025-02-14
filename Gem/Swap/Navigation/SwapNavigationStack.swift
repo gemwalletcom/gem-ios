@@ -94,15 +94,10 @@ struct SwapNavigationStack: View {
 extension SwapNavigationStack {
     private func onSwapComplete(type: TransferDataType) {
         switch type {
-        case .swap(_, _, let action):
-            switch action {
-            case .approval:
-                navigationPath.wrappedValue.removeLast()
-            case .swap:
-                model.reset()
-                onComplete?()
-                navigationPath.wrappedValue.removeAll()
-            }
+        case .swap, .tokenApprove:
+            model.reset()
+            onComplete?()
+            navigationPath.wrappedValue.removeAll()
         default: break
         }
     }
@@ -110,14 +105,8 @@ extension SwapNavigationStack {
     private func onSelectAssetComplete(type: SelectAssetSwapType, asset: Asset) {
         switch type {
         case .pay:
-            if asset.id == model.pairSelectorModel.toAssetId {
-                model.pairSelectorModel.toAssetId = model.pairSelectorModel.fromAssetId
-            }
             model.pairSelectorModel.fromAssetId = asset.id
         case .receive:
-            if asset.id == model.pairSelectorModel.fromAssetId {
-                model.pairSelectorModel.fromAssetId = model.pairSelectorModel.toAssetId
-            }
             model.pairSelectorModel.toAssetId = asset.id
         }
         isPresentingAssetSwapType = .none

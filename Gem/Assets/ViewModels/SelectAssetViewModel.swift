@@ -6,13 +6,14 @@ import Primitives
 import Store
 import Components
 import Localization
-import Settings
 import PrimitivesComponents
 import AssetsService
 import WalletsService
+import Preferences
 
 @Observable
 class SelectAssetViewModel {
+    let preferences: Preferences
     let wallet: Wallet
     let keystore: any Keystore
     let selectType: SelectAssetType
@@ -26,6 +27,7 @@ class SelectAssetViewModel {
     var selectAssetAction: AssetAction
 
     init(
+        preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         keystore: any Keystore,
         selectType: SelectAssetType,
@@ -33,6 +35,7 @@ class SelectAssetViewModel {
         walletsService: WalletsService,
         selectAssetAction: AssetAction = .none
     ) {
+        self.preferences = preferences
         self.wallet = wallet
         self.keystore = keystore
         self.selectType = selectType
@@ -104,6 +107,10 @@ class SelectAssetViewModel {
             }
         case .send: return false
         }
+    }
+
+    var currencyCode: String {
+        preferences.currency
     }
 }
 

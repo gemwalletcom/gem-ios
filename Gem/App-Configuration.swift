@@ -1,5 +1,4 @@
 import Foundation
-import Settings
 import Primitives
 import Keystore
 import Components
@@ -28,6 +27,7 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
+import ManageWalletService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -106,6 +106,7 @@ extension NotificationService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
+        assertStore: .main,
         chainServiceFactory: .main
     )
 }
@@ -167,8 +168,8 @@ extension DeviceService {
     static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
-extension WalletService {
-    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main)
+extension ManageWalletService {
+    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main)
 }
 
 extension AssetStore {

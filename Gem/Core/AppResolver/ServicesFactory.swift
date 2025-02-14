@@ -23,6 +23,7 @@ import TransactionService
 import NFTService
 import DiscoverAssetsService
 import WalletsService
+import ManageWalletService
 
 struct ServicesFactory {
     @MainActor
@@ -47,12 +48,13 @@ struct ServicesFactory {
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
-        let walletService = Self.makeWalletService(
+        let manageWalletService = Self.makeManageWalletService(
             keystore: storages.keystore,
             walletStore: storeManager.walletStore
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
+            assetsStore: storeManager.assetStore,
             chainFactory: chainServiceFactory
         )
         let stakeService = Self.makeStakeService(
@@ -144,7 +146,7 @@ struct ServicesFactory {
             stakeService: stakeService,
             transactionsService: transactionsService,
             transactionService: transactionService,
-            walletService: walletService,
+            manageWalletService: manageWalletService,
             walletsService: walletsService,
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
@@ -189,11 +191,11 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeWalletService(
+    private static func makeManageWalletService(
         keystore: any Keystore,
         walletStore: WalletStore
-    ) -> WalletService {
-        WalletService(
+    ) -> ManageWalletService {
+        ManageWalletService(
             keystore: keystore,
             walletStore: walletStore
         )
@@ -201,10 +203,12 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
+        assetsStore: AssetStore,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
             balanceStore: balanceStore,
+            assertStore: assetsStore,
             chainServiceFactory: chainFactory
         )
     }

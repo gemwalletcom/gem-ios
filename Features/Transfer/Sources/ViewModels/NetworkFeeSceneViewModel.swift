@@ -5,8 +5,9 @@ import Primitives
 import Localization
 import Blockchain
 
-public struct NetworkFeeSceneViewModel {
-    
+@Observable
+@MainActor
+public final class NetworkFeeSceneViewModel {
     private let chain: Chain
     private var rates: [FeeRate] = []
 
@@ -41,7 +42,7 @@ public struct NetworkFeeSceneViewModel {
         }.sorted()
     }
 
-    public var selectedFreeRateViewModel: FeeRateViewModel? {
+    public var selectedFeeRateViewModel: FeeRateViewModel? {
         feeRatesViewModels.first(where: { $0.feeRate.priority == priority })
     }
 
@@ -49,7 +50,7 @@ public struct NetworkFeeSceneViewModel {
         rates.count > 1
     }
     
-    public mutating func getFeeRates(type: TransferDataType) async throws -> [FeeRate] {
+    public func getFeeRates(type: TransferDataType) async throws -> [FeeRate] {
         if rates.isEmpty {
             self.rates = try await service.feeRates(type: type)
         }
@@ -60,12 +61,12 @@ public struct NetworkFeeSceneViewModel {
 // MARK: - Business Logic
 
 extension NetworkFeeSceneViewModel {
-    public mutating func update(value: String?, fiatValue: String?) {
+    public func update(value: String?, fiatValue: String?) {
         self.value = value
         self.fiatValue = fiatValue
     }
 
-    public mutating func reset() {
+    public func reset() {
         self.value = nil
         self.fiatValue = nil
     }

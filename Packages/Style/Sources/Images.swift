@@ -50,6 +50,9 @@ public struct Images {
         public static let polkadot = Image(.polkadot)
         public static let cardano = Image(.cardano)
         public static let abstract = Image(.abstract)
+        public static let berachain = Image(.berachain)
+        public static let ink = Image(.ink)
+        public static let unichain = Image(.unichain)
     }
     
     public struct SwapProviders {

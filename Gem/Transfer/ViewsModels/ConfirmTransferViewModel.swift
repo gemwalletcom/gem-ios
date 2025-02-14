@@ -18,7 +18,8 @@ import ExplorerService
 import WalletsService
 
 @Observable
-class ConfirmTransferViewModel {
+@MainActor
+final class ConfirmTransferViewModel {
     var state: StateViewType<TransactionInputViewModel> = .loading
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
@@ -68,7 +69,7 @@ class ConfirmTransferViewModel {
         self.feeModel = NetworkFeeSceneViewModel(chain: data.chain, service: service)
 
         // prefetch asset metadata from local storage
-        let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.asset, assetsIds: data.type.assetIds)
+        let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.type.asset, assetsIds: data.type.assetIds)
         self.metadata = metadata
     }
 
@@ -181,7 +182,7 @@ class ConfirmTransferViewModel {
     }
     
     private var slippage: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action {
+        if case .swap(_, _, let quote, _) = dataModel.type {
             Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
@@ -197,7 +198,7 @@ class ConfirmTransferViewModel {
     }
     
     private var quoteFee: Double? {
-        if case .swap(_, _, let action) = dataModel.type, case .swap(let quote, _) = action, let fee = quote.request.options.fee {
+        if case .swap(_, _, let quote, _) = dataModel.type, let fee = quote.request.options.fee {
              Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
         } else {
             .none
@@ -235,20 +236,28 @@ class ConfirmTransferViewModel {
 
 extension ConfirmTransferViewModel {
     func fetch() async {
-        await MainActor.run { [self] in
-            self.state = .loading
-            self.feeModel.reset()
-        }
+        state = .loading
+        feeModel.reset()
 
         do {
             let senderAddress = try wallet.account(for: dataModel.chain).address
+            let destinationAddress = dataModel.recipient.address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            let rates = try await feeModel.getFeeRates(type: data.type)
+            
+            async let getRates = feeModel.getFeeRates(type: data.type)
+            async let getPreload = service.preload(
+                input: TransactionPreloadInput(
+                    senderAddress: senderAddress,
+                    destinationAddress: destinationAddress
+                )
+            )
+            
+            let (rates, preload) = try await (getRates, getPreload)
             
             guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
                 throw ChainCoreError.feeRateMissed
             }
-            
+
             let transactionInput = TransactionInput(
                 type: data.type,
                 asset: dataModel.asset,
@@ -257,7 +266,8 @@ extension ConfirmTransferViewModel {
                 value: dataModel.data.value,
                 balance: metaData.assetBalance,
                 gasPrice: rate.gasPriceType,
-                memo: dataModel.memo
+                memo: dataModel.memo,
+                preload: preload
             )
 
             let preloadInput = try await service.load(input: transactionInput)
@@ -276,65 +286,59 @@ extension ConfirmTransferViewModel {
                     ignoreValueCheck: dataModel.data.ignoreValueCheck
                 )
             )
-
+            
             let transactionInputModel = TransactionInputViewModel(
                 data: data,
                 input: preloadInput,
                 metaData: metaData,
                 transferAmountResult: transferAmountResult
             )
-
-            await MainActor.run { [self] in
-                self.feeModel.update(
-                    value: transactionInputModel.networkFeeText,
-                    fiatValue: transactionInputModel.networkFeeFiatText
-                )
-                self.state = .loaded(transactionInputModel)
-            }
-
+            
+            feeModel.update(
+                value: transactionInputModel.networkFeeText,
+                fiatValue: transactionInputModel.networkFeeFiatText
+            )
+            state = .loaded(transactionInputModel)
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.state = .error(error)
-                    NSLog("preload transaction error: \(error)")
-                }
+            if !error.isCancelled {
+                state = .error(error)
+                NSLog("preload transaction error: \(error)")
             }
         }
     }
 
-    func process(input: TransactionPreload, amount: TransferAmount) async -> Void {
-        await MainActor.run { [self] in
-            self.confirmingState = .loading
-        }
+    func process(input: TransactionLoad, amount: TransferAmount) async -> Void {
+        confirmingState = .loading
         do {
             let signedData = try await sign(transferData: data, input: input, amount: amount)
-            for data in signedData {
+            for (index, transactionData) in signedData.enumerated() {
                 switch self.data.type.outputType {
                 case .encodedTransaction:
-                    let hash = try await broadcast(data: data, options: broadcastOptions)
-                    let transaction = try getTransaction(input: input, amount: amount, hash: hash)
-                    try addTransaction(transaction: transaction)
-
+                    let hash = try await broadcast(data: transactionData, options: broadcastOptions)
+                    let transaction = try getTransaction(
+                        wallet: wallet,
+                        input: input,
+                        transferDataType: self.data.type,
+                        recipientData: self.data.recipientData,
+                        amount: amount,
+                        hash: hash,
+                        index: index
+                    )
+                    try addTransactions(transactions: [transaction])
+                    
                     walletsService.enableAssetId(walletId: wallet.walletId, assets: transaction.assetIds, enabled: true)
                     
                     // delay if multiple transaction should be exectured
-                    if signedData.count > 1 && data != signedData.last {
+                    if signedData.count > 1 && transactionData != signedData.last {
                         try await Task.sleep(for: transactionDelay)
                     }
                 case .signature:
-                    await MainActor.run { [self] in
-                        confirmTransferDelegate?(.success(data))
-                    }
+                    confirmTransferDelegate?(.success(transactionData))
                 }
             }
-
-            await MainActor.run { [self] in
-                self.confirmingState = .loaded(true)
-            }
+            confirmingState = .loaded(true)
         } catch {
-            await MainActor.run { [self] in
-                self.confirmingState = .error(error)
-            }
+            confirmingState = .error(error)
             NSLog("confirm transaction error: \(error)")
         }
     }
@@ -354,7 +358,11 @@ extension ConfirmTransferViewModel {
 
 extension ConfirmTransferViewModel {
     private var transactionDelay: Duration {
-        .milliseconds(500)
+        switch data.chain.type {
+        case .ethereum: .milliseconds(0)
+        case .tron: .milliseconds(500)
+        default: .milliseconds(500)
+        }
     }
 
     private enum AssetMetadataError: Error {
@@ -370,7 +378,7 @@ extension ConfirmTransferViewModel {
         switch dataModel.chain {
         case .solana:
             switch dataModel.type {
-            case .transfer, .transferNft, .stake, .account: .standard
+            case .transfer, .transferNft, .stake, .account, .tokenApprove: .standard
             case .swap, .generic: BroadcastOptions(skipPreflight: true)
             }
         default: .standard
@@ -379,7 +387,10 @@ extension ConfirmTransferViewModel {
 
     private var availableValue: BigInt {
         switch dataModel.type {
-        case .transfer(let asset), .swap(let asset, _, _), .generic(let asset, _, _):
+        case .transfer(let asset),
+            .swap(let asset, _, _, _),
+            .tokenApprove(let asset, _),
+            .generic(let asset, _, _):
             guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
             return balance.available
         case .transferNft(let asset):
@@ -435,14 +446,13 @@ extension ConfirmTransferViewModel {
         )
     }
 
-    private func sign(transferData: TransferData, input: TransactionPreload, amount: TransferAmount) async throws -> [String]  {
+    private func sign(transferData: TransferData, input: TransactionLoad, amount: TransferAmount) async throws -> [String]  {
         let signer = Signer(wallet: wallet, keystore: keystore)
-        let senderAddress = try wallet.account(for: transferData.asset.chain).address
-
         return try await Self.sign(
             signer: signer,
-            senderAddress: senderAddress,
-            transferData: transferData,
+            wallet: wallet,
+            type: transferData.type,
+            recipientData: transferData.recipientData,
             input: input,
             amount: amount
         )
@@ -450,48 +460,64 @@ extension ConfirmTransferViewModel {
 
     private func broadcast(data: String, options: BroadcastOptions) async throws -> String  {
         NSLog("broadcast data \(data)")
+        
         let hash = try await service.broadcast(data: data, options: options)
+        
         NSLog("broadcast response \(hash)")
         confirmTransferDelegate?(.success(hash))
 
         return hash
     }
 
-    private func addTransaction(transaction: Primitives.Transaction) throws {
-        try walletsService.addTransaction(walletId: wallet.id, transaction: transaction)
+    private func addTransactions(transactions: [Primitives.Transaction]) throws {
+        try walletsService.addTransactions(walletId: wallet.id, transactions: transactions)
     }
 
     private func getTransaction(
-        input: TransactionPreload,
+        wallet: Wallet,
+        input: TransactionLoad,
+        transferDataType: TransferDataType,
+        recipientData: RecipientData,
         amount: TransferAmount,
-        hash: String
+        hash: String,
+        index: Int
     ) throws -> Primitives.Transaction {
-        let senderAddress = try wallet.account(for: data.asset.chain).address
+        let senderAddress = try wallet.account(for: transferDataType.chain).address
         let direction: TransactionDirection = {
-            if data.recipientData.recipient.address == senderAddress {
+            if recipientData.recipient.address == senderAddress {
                 return .selfTransfer
             }
             return .outgoing
         }()
+        
+        let transactionType: TransactionType = switch transferDataType {
+        case .swap(_, _, _, let data):
+            switch data.approval {
+            case .some: index == 0 ? .tokenApproval : .swap
+            case .none: .swap
+            }
+        default: transferDataType.transactionType
+        }
+        
         return Transaction(
-            id: Transaction.id(chain: data.asset.chain.rawValue, hash: hash),
+            id: Transaction.id(chain: transferDataType.chain, hash: hash),
             hash: hash,
-            assetId: data.asset.id,
-            from: try wallet.account(for: data.asset.chain).address,
-            to: data.recipientData.recipient.address,
+            assetId: transferDataType.asset.id,
+            from: senderAddress,
+            to: recipientData.recipient.address,
             contract: .none,
-            type: data.type.transactionType,
+            type: transactionType,
             state: .pending,
             blockNumber: String(input.block.number),
             sequence: input.sequence.asString,
             fee: amount.networkFee.description,
-            feeAssetId: data.asset.feeAsset.id,
+            feeAssetId: transferDataType.asset.feeAsset.id,
             value: amount.value.description,
-            memo: data.recipientData.recipient.memo ?? "",
+            memo: recipientData.recipient.memo ?? "",
             direction: direction,
             utxoInputs: [],
             utxoOutputs: [],
-            metadata: data.type.metadata,
+            metadata: transferDataType.metadata,
             createdAt: Date()
         )
     }
@@ -502,17 +528,20 @@ extension ConfirmTransferViewModel {
 extension ConfirmTransferViewModel {
     static func sign(
         signer: Signer,
-        senderAddress: String,
-        transferData: TransferData,
-        input: TransactionPreload,
+        wallet: Wallet,
+        type: TransferDataType,
+        recipientData: RecipientData,
+        input: TransactionLoad,
         amount: TransferAmount
     ) async throws -> [String] {
-        let destinationAddress = transferData.recipientData.recipient.address
+        let destinationAddress = recipientData.recipient.address
         let isMaxAmount = amount.useMaxAmount
-
+        
+        let senderAddress = try wallet.account(for: type.chain).address
+        
         let input = SignerInput(
-            type: transferData.type,
-            asset: transferData.asset,
+            type: type,
+            asset: type.asset,
             value: amount.value,
             fee: Fee(
                 fee: amount.networkFee,
@@ -522,7 +551,7 @@ extension ConfirmTransferViewModel {
             ),
             isMaxAmount: isMaxAmount,
             chainId: input.chainId,
-            memo: transferData.recipientData.recipient.memo,
+            memo: recipientData.recipient.memo,
             accountNumber: input.accountNumber,
             sequence: input.sequence,
             senderAddress: senderAddress,

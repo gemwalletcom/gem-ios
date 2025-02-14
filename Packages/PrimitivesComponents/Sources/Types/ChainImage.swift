@@ -54,6 +54,9 @@ public struct ChainImage: Sendable {
         case .polkadot: Images.Chains.polkadot
         case .cardano: Images.Chains.cardano
         case .abstract: Images.Chains.abstract
+        case .berachain: Images.Chains.berachain
+        case .ink: Images.Chains.ink
+        case .unichain: Images.Chains.unichain
         }
     }
 }

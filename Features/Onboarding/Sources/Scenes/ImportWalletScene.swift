@@ -4,7 +4,6 @@ import Primitives
 import Style
 import Components
 import QRScanner
-import Settings
 import Localization
 import NameResolver
 

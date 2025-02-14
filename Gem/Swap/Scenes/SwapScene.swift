@@ -12,6 +12,7 @@ import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
+import Swap
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -31,9 +32,6 @@ struct SwapScene: View {
 
     @Query<AssetRequestOptional>
     private var toAsset: AssetData?
-
-    @Query<TransactionsRequest>
-    private var tokenApprovals: [TransactionExtended]
 
     @State private var model: SwapViewModel
     @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
@@ -64,13 +62,6 @@ struct SwapScene: View {
             model.toAssetRequest = new
         }
         _toAsset = Query(toAssetRequest)
-        
-        let tokenApprovalsRequest = Binding {
-            model.tokenApprovalsRequest
-        } set: { new in
-            model.tokenApprovalsRequest = new
-        }
-        _tokenApprovals = Query(tokenApprovalsRequest)
     }
 
     var body: some View {
@@ -80,11 +71,9 @@ struct SwapScene: View {
             VStack {
                 if let fromAsset {
                     StateButton(
-                        text: model.actionButtonTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        text: model.actionButtonTitle(fromAsset: fromAsset.asset),
                         viewState: model.actionButtonState,
-                        image: model.actionButtonImage(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                        infoTitle: model.actionButtonInfoTitle(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
-                        disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset, isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset),
                         action: onSelectActionButton
                     )
                 }
@@ -94,7 +83,6 @@ struct SwapScene: View {
         }
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
-        .background(Colors.grayBackground)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,
@@ -111,7 +99,6 @@ struct SwapScene: View {
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, initial: true, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
-        .onChange(of: tokenApprovals, onChangeTokenApprovals)
         .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
@@ -164,7 +151,7 @@ extension SwapScene {
                     SwapTokenView(
                         model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
                         text: $model.toValue,
-                        showLoading: model.showToValueLoading(isApprovalProcessInProgress: !tokenApprovals.isEmpty),
+                        showLoading: model.showToValueLoading(),
                         disabledTextField: true,
                         onBalanceAction: {},
                         onSelectAssetAction: onSelectAssetReceiveAction
@@ -190,12 +177,6 @@ extension SwapScene {
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
                     PriceImpactView(model: viewModel)
                 }
-
-                TransactionsList(
-                    explorerService: model.explorerService,
-                    tokenApprovals,
-                    showSections: false
-                )
             }
 
             if case let .error(error) = model.swapState.availability {
@@ -232,13 +213,6 @@ extension SwapScene {
         }
     }
 
-    private func onChangeTokenApprovals(_: [TransactionExtended], _: [TransactionExtended]) {
-        if tokenApprovals.isEmpty {
-            focusedField = .from
-        }
-        fetch()
-    }
-
     private func onChangeFromValue(_: String, _: String) {
         fetch(delay: SwapViewModel.quoteTaskDebounceTimeout)
     }
@@ -270,8 +244,7 @@ extension SwapScene {
         let input = SwapQuoteInput(
             fromAsset: fromAsset,
             toAsset: toAsset,
-            amount: model.fromValue,
-            isApprovalInProgress: !tokenApprovals.isEmpty
+            amount: model.fromValue
         )
         model.swapState.fetch = .fetch(input: input, delay: delay)
     }

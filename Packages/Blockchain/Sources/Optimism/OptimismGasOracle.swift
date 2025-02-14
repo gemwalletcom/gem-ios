@@ -1,13 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
 import Foundation
 import Primitives
 import SwiftHTTPClient
-import BigInt
 import WalletCore
 
 public struct OptimismGasOracle: Sendable {
-    
     // https://optimistic.etherscan.io/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://basescan.org/address/0x420000000000000000000000000000000000000F#readProxyContract
     // https://opbnbscan.com/address/0x420000000000000000000000000000000000000F?p=1&tab=Contract
@@ -33,7 +32,7 @@ public struct OptimismGasOracle: Sendable {
         fn.addParamBytes(val: data, isOutput: false)
         let data = EthereumAbi.encode(fn: fn)
         return try await call(data: data)
-                    .map(as: JSONRPCResponse<BigIntable>.self).result.value
+            .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
     
     func call(data: Data) async throws -> Response {
@@ -48,7 +47,7 @@ public struct OptimismGasOracle: Sendable {
 extension OptimismGasOracle {
     public func fee(input: FeeInput) async throws -> Fee {
         // https://github.com/ethereum-optimism/optimism/blob/develop/packages/fee-estimation/src/estimateFees.ts#L230
-        let data = service.getData(input: input)
+        let data = try service.getData(input: input)
         let to = try service.getTo(input: input)
         
         async let getGasLimit = try service.getGasLimit(
@@ -61,22 +60,14 @@ extension OptimismGasOracle {
         async let getChainId = try service.getChainId()
         
         let (gasLimit, nonce, chainId) = try await (getGasLimit, getNonce, getChainId)
+        let priorityFee = EthereumService.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
+        let extraFeeGasLimit = try service.extraFeeGasLimit(input: input)
         
-        let priorityFee = {
-            switch input.type {
-            case .transfer(let asset):
-                asset.type == .native && input.isMaxAmount ? input.gasPrice.gasPrice : input.gasPrice.priorityFee
-            case .transferNft, .generic, .swap, .stake:
-                input.gasPrice.priorityFee
-            case .account: fatalError()
-            }
-        }()
-
         let value = {
             switch input.type {
             case .transfer(let asset):
                 asset.type == .native && input.isMaxAmount ? input.balance - gasLimit * input.gasPrice.gasPrice : input.value
-            case .transferNft, .generic, .swap:
+            case .transferNft, .generic, .swap, .tokenApprove:
                 input.value
             case .stake, .account: fatalError()
             }
@@ -93,7 +84,7 @@ extension OptimismGasOracle {
             value: value
         )
         
-        let l2fee = input.gasPrice.totalFee * gasLimit
+        let l2fee = input.gasPrice.totalFee * (gasLimit + extraFeeGasLimit)
         let l1fee = try await getL1Fee(data: encoded)
 
         return Fee(
@@ -143,18 +134,12 @@ extension OptimismGasOracle {
             default:
                 break
             }
-        case .generic, .swap:
+        case .generic, .swap, .tokenApprove:
             break
         case .transferNft, .stake, .account:
             fatalError()
         }
         
         return encoded
-    }
-}
-
-extension OptimismGasOracle: ChainFeeRateFetchable {
-    public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        try await service.feeRates(type: type)
     }
 }
