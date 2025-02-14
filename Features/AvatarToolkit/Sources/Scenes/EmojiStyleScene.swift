@@ -108,7 +108,7 @@ public struct EmojiStyleScene: View {
                             .overlay {
                                 Text(item.emoji)
                                     .font(.system(size: 40))
-                                    .foregroundColor(.white)
+                                    .foregroundColor(Colors.white)
                                     .minimumScaleFactor(0.5)
                             }
                     }

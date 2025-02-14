@@ -1,10 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import AvatarToolkit
-import PrimitivesComponents
-import Primitives
-import Store
 import UIKit
 import SwiftUI
 import Style

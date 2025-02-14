@@ -7,8 +7,8 @@ import Style
 import Components
 
 public struct HeaderButton: Identifiable {
-    public let type: HeaderButtonType
-    public let isEnabled: Bool
+    let type: HeaderButtonType
+    let isEnabled: Bool
     
     public init(
         type: HeaderButtonType,
