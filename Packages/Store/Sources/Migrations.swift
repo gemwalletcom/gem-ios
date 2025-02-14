@@ -46,9 +46,6 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
-            
-            // avatar
-            try AvatarValueRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -217,16 +214,20 @@ public struct Migrations {
             }
         }
         
+        migrator.registerMigration("Add imageUrl to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: Columns.Wallet.imageUrl.name, .text)
+            }
+        }
+        
         #if DEBUG
+        // Clears the imageUrl field in the database when running in Debug mode,
+        // because the file path changes on the simulator, preventing the wallet avatar from loading.
         let _ = try? dbQueue.write { db in
-            try? AvatarValueRecord
-                .deleteAll(db)
+            try? WalletRecord
+                .updateAll(db, Columns.Wallet.imageUrl.set(to: nil))
         }
         #endif
-
-        migrator.registerMigration("Create \(AvatarValueRecord.databaseTableName)") { db in
-            try? AvatarValueRecord.create(db: db)
-        }
 
         try migrator.migrate(dbQueue)
     }

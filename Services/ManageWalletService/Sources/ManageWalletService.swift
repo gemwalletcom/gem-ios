@@ -41,7 +41,7 @@ public struct ManageWalletService: Sendable {
         keystore.setCurrentWalletId(walletId)
     }
 
-    func delete(_ wallet: Wallet) throws {
+    public func delete(_ wallet: Wallet) throws {
         try? avatarService.remove(for: wallet.id)
         try keystore.deleteWallet(for: wallet)
 
@@ -57,15 +57,15 @@ public struct ManageWalletService: Sendable {
         try walletStore.swapOrder(from: from, to: to)
     }
     
-    func renameWallet(wallet: Wallet, newName: String) throws {
+    public func renameWallet(wallet: Wallet, newName: String) throws {
         try keystore.renameWallet(wallet: wallet, newName: newName)
     }
     
-    func getMnemonic(wallet: Wallet) throws -> [String] {
+    public func getMnemonic(wallet: Wallet) throws -> [String] {
         try keystore.getMnemonic(wallet: wallet)
     }
     
-    func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
+    public func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String {
         try keystore.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
     }
 }

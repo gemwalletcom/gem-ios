@@ -46,7 +46,7 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AvatarView(model: AvatarViewModel(wallet: model.wallet, allowEditing: false), size: Sizing.image.medium)
+                AvatarView(walletId: model.wallet.id, size: Sizing.image.medium)
                 ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()

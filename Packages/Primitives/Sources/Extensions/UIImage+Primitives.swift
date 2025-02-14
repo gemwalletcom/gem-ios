@@ -17,7 +17,7 @@ public extension UIImage {
         /// Highest quality (least compression) - 1.0
         case highest = 1
     }
-
+    
     /// Converts the `UIImage` to JPEG data with the specified compression quality.
     ///
     /// - Parameter jpegQuality: The desired quality level for JPEG compression.
@@ -38,13 +38,17 @@ public extension UIImage {
     ///     imageView.image = resizedImage
     /// }
     /// ```
+    @MainActor
     func resizeImageAspectFit(targetWidth: CGFloat) -> UIImage? {
         let scale = targetWidth / size.width
         let targetHeight = size.height * scale
         let targetSize = CGSize(width: targetWidth, height: targetHeight)
 
-        let renderer = UIGraphicsImageRenderer(size: targetSize)
-        return renderer.image { _ in
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+        
+        return UIGraphicsImageRenderer(size: targetSize, format: format).image { _ in
             draw(in: CGRect(origin: .zero, size: targetSize))
         }
-    }}
+    }
+}

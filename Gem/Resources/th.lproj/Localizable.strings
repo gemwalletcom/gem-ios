@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "รูปภาพของคุณได้รับการบันทึกไว้ในรูปภาพแล้ว!";
 "permissions.access_denied" = "การเข้าถึงถูกปฏิเสธ";
 "permissions.image.photo_access.denied.description" = "แอพนี้ไม่มีสิทธิ์ในการเข้าถึงคลังภาพของคุณ โปรดเปิดใช้งานสิทธิ์ในการตั้งค่าอุปกรณ์ของคุณ";
+"avatar.change_background" = "แตะเพื่อเปลี่ยนพื้นหลัง";
+"common.magic_button" = "ปุ่มมหัศจรรย์";
+"common.emoji" = "อิโมจิ";
+"common.style" = "สไตล์";
+"avatar.change_avatar" = "แตะเพื่อเปลี่ยนอวาตาร์";
+"common.avatar" = "อวตาร";
+"common.photo" = "รูปถ่าย";

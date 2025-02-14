@@ -6,26 +6,38 @@ import Style
 
 @Observable
 final class EmojiViewModel {
-    init() {}
-
-    var color: Color = .random()
+    var color: Color = Colors.listStyleColor
     var text: String = .empty
+    var emojiList: [EmojiValue]
+    var colorList: [Color]
     
+    init() {
+        emojiList = Self.shuffleList()
+        colorList = Self.shuffleColorList()
+    }
+
     var emojiColumns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
     }
-    
-    var emojiList: [EmojiValue] = {
-        Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: .random()) }
-    }()
     
     var colorColumns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
     }
     
-    var colorList: [Color] = {
+    static func shuffleList() -> [EmojiValue] {
+        Array(
+            Emoji
+                .WalletAvatar
+                .allCases
+                .shuffled()
+                .map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) }
+                .prefix(20)
+        )
+    }
+    
+    static func shuffleColorList() -> [Color] {
         (0..<20).map { count in
             .random()
         }
-    }()
+    }
 }

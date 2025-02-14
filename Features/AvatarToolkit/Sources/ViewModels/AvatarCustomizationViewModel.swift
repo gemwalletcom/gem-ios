@@ -12,8 +12,9 @@ import AvatarService
 @Observable
 public final class AvatarCustomizationViewModel {
     public let wallet: Wallet
-    public let avatarViewModel: AvatarViewModel
+    public let avatarAssetImage: AssetImage
     private let avatarService: AvatarService
+    private(set) var isVisibleClearButton: Bool
     
     public var image: UIImage?
     
@@ -23,13 +24,8 @@ public final class AvatarCustomizationViewModel {
     ) {
         self.wallet = wallet
         self.avatarService = avatarService
-        self.avatarViewModel = AvatarViewModel(
-            wallet: wallet,
-            allowEditing: true,
-            onClear: {
-                try? avatarService.remove(for: wallet.id)
-            }
-        )
+        self.avatarAssetImage = WalletViewModel(wallet: wallet).avatarImage
+        self.isVisibleClearButton = wallet.imageUrl != nil
     }
     
     let headerButtons: [HeaderButton] = [
@@ -39,21 +35,20 @@ public final class AvatarCustomizationViewModel {
     ]
     
     var emojiColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: 16), count: 5)
+        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
     }
     
     var emojiList: [EmojiValue] = {
-        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: .random()) }.prefix(10))
+        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) }.prefix(10))
     }()
     
     // MARK: - Public methods
     
     public func setImage(from url: URL?) async {
         do {
-            guard let url else {
-                throw AnyError("Wrong nft asset url")
-            }
+            guard let url else { return }
             try await avatarService.save(url: url, walletId: wallet.id)
+            isVisibleClearButton = true
         } catch {
             print("Set nft image error:", error)
         }
@@ -62,9 +57,19 @@ public final class AvatarCustomizationViewModel {
     public func setImage(_ image: UIImage?) {
         do {
             guard let image else { return }
-            try avatarService.save(image: image, walletId: wallet.id)
+            try avatarService.save(image: image, walletId: wallet.id, targetWidth: Sizing.image.extraLarge)
+            isVisibleClearButton = true
         } catch {
             print("Set image error:", error)
+        }
+    }
+    
+    public func setDefaultAvatar() {
+        do {
+            try avatarService.remove(for: wallet.id)
+            isVisibleClearButton = false
+        } catch {
+            print("Setting default avatar error:", error)
         }
     }
 }

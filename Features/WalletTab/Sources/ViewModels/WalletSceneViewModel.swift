@@ -3,7 +3,6 @@
 import Foundation
 import AvatarToolkit
 import PrimitivesComponents
-import Keystore
 import Primitives
 import Store
 import UIKit
@@ -15,6 +14,7 @@ import WalletsService
 import BannerService
 import Store
 import Preferences
+import Localization
 @preconcurrency import Keystore
 
 // TODO: - use one instance of wallet, now we use wallet + keysotre getting wallet
@@ -86,14 +86,6 @@ public struct WalletSceneViewModel: Sendable {
                 .enableNotifications,
                 .accountBlockedMultiSignature,
             ]
-        )
-    }
-    
-    func walletBarViewModel(for wallet: Wallet) -> WalletBarViewViewModel {
-        WalletBarViewViewModel(
-            name: WalletViewModel(wallet: wallet).name,
-            avatarViewModel: AvatarViewModel(wallet: wallet, allowEditing: false),
-            showChevron: true
         )
     }
 

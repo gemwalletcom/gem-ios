@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Twój obraz został zapisany w Zdjęciach!";
 "permissions.access_denied" = "Odmowa dostępu";
 "permissions.image.photo_access.denied.description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Włącz dostęp w ustawieniach urządzenia.";
+"avatar.change_background" = "Kliknij, aby zmienić tło";
+"common.magic_button" = "Magiczny przycisk";
+"common.emoji" = "Emotikony";
+"common.style" = "Styl";
+"avatar.change_avatar" = "Kliknij, aby zmienić awatar";
+"common.avatar" = "Awatara";
+"common.photo" = "Zdjęcie";

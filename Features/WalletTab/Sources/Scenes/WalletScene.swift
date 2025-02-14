@@ -136,10 +136,8 @@ public struct WalletScene: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 if let wallet = dbWallet {
-                    HStack {
-                        WalletBarView(model: model.walletBarViewModel(for: wallet)) {
-                            isPresentingWallets.toggle()
-                        }
+                    WalletBarView(model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)) {
+                        isPresentingWallets.toggle()
                     }
                 }
             }
@@ -244,7 +242,7 @@ extension WalletBarViewViewModel {
         let model = WalletViewModel(wallet: wallet)
         return WalletBarViewViewModel(
             name: model.name,
-            image: model.assetImage,
+            image: model.avatarImage,
             showChevron: showChevron
         )
     }

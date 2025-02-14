@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Ihr Bild wurde unter Fotos gespeichert!";
 "permissions.access_denied" = "Zugriff verweigert";
 "permissions.image.photo_access.denied.description" = "Diese App hat keine Berechtigung, auf Ihre Fotobibliothek zuzugreifen. Bitte aktivieren Sie den Zugriff in Ihren Geräteeinstellungen.";
+"avatar.change_background" = "Tippen, um den Hintergrund zu ändern";
+"common.magic_button" = "Magischer Knopf";
+"common.emoji" = "Emoji";
+"common.style" = "Stil";
+"avatar.change_avatar" = "Tippen, um Avatar zu ändern";
+"common.avatar" = "Avatar";
+"common.photo" = "Foto";

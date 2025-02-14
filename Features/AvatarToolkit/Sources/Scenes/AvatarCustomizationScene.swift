@@ -11,8 +11,8 @@ public struct AvatarCustomizationScene: View {
     @State private var model: AvatarCustomizationViewModel
     private var onHeaderAction: HeaderButtonAction?
 
-    @State private var isExpandedEmojiSection = false
     private let emojiViewRenderSize = Sizing.image.extraLarge
+    private var offset: CGFloat { Sizing.image.extraLarge / (2 * sqrt(2)) }
     
     public init(
         model: AvatarCustomizationViewModel,
@@ -43,9 +43,33 @@ public struct AvatarCustomizationScene: View {
     
     private var headerView: some View {
         VStack {
-            AvatarView(model: model.avatarViewModel, size: Sizing.image.extraLarge)
+            ZStack() {
+                AvatarView(
+                    walletId: model.wallet.id,
+                    size: emojiViewRenderSize
+                )
                 .padding(.vertical, Spacing.large)
-
+                
+                if model.isVisibleClearButton {
+                    Button(action: {
+                        withAnimation {
+                            model.setDefaultAvatar()
+                        }
+                    }) {
+                        Image(systemName: SystemImage.xmark)
+                            .foregroundColor(Colors.black)
+                            .padding(Spacing.small)
+                            .background(Colors.grayVeryLight)
+                            .clipShape(Circle())
+                            .background(
+                                Circle().stroke(Colors.white, lineWidth: Spacing.extraSmall)
+                            )
+                    }
+                    .offset(x: offset, y: -offset)
+                    .transition(.opacity)
+                }
+            }
+            
             HeaderButtonsView(
                 buttons: model.headerButtons,
                 action: onHeaderAction

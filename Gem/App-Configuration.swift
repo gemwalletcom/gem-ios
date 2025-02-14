@@ -170,10 +170,7 @@ extension DeviceService {
 }
 
 extension ManageWalletService {
-    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main)
-
-extension WalletService {
-    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main, avatarService: .main)
+    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main, avatarService: .main)
 }
 
 extension AssetStore {
@@ -236,10 +233,6 @@ extension AvatarService {
     static let main = AvatarService(store: .main)
 }
 
-extension AvatarStore {
-    static let main = AvatarStore(db: .main)
-}
-
 extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         store: .main,
@@ -253,8 +246,8 @@ extension DB {
 }
 
 extension Wallet {
-    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main], order: 0, isPinned: false)
-    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main], order: 0, isPinned: false)
+    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main], order: 0, isPinned: false, imageUrl: nil)
+    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main], order: 0, isPinned: false, imageUrl: nil)
 }
 
 extension WalletId {

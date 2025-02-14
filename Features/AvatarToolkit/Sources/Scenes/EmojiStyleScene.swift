@@ -13,10 +13,11 @@ public struct EmojiStyleScene: View {
     @Environment(\.dismiss) private var dismiss
     
     private let emojiViewSize = Sizing.image.extraLarge
-    @State private var model = EmojiViewModel()
     @State private var selectedTab: Tab = .emoji
     @Binding private var image: UIImage?
     
+    @State private var model = EmojiViewModel()
+
     public init(image: Binding<UIImage?>) {
         _image = image
     }
@@ -26,6 +27,8 @@ public struct EmojiStyleScene: View {
             VStack {
                 emojiView
                     .frame(width: emojiViewSize, height: emojiViewSize)
+                
+                changeBackgroundButton
 
                 picker
                     .padding(.horizontal, Spacing.medium)
@@ -41,6 +44,9 @@ public struct EmojiStyleScene: View {
                 }
                 .padding(.horizontal, Spacing.medium)
                 .padding(.top, Spacing.medium)
+                
+                magicButton
+                    .padding(.horizontal, Spacing.medium)
 
                 Spacer()
             }
@@ -64,14 +70,24 @@ public struct EmojiStyleScene: View {
     
     private var picker: some View {
         Picker("", selection: $selectedTab.animation()) {
-            Text("Emoji").tag(Tab.emoji)
-            Text("Style").tag(Tab.style)
+            Text(Localized.Common.emoji).tag(Tab.emoji)
+            Text(Localized.Common.style).tag(Tab.style)
         }
         .pickerStyle(SegmentedPickerStyle())
     }
     
     private var emojiView: some View {
         EmojiView(color: model.color, emoji: model.text)
+    }
+    
+    private var changeBackgroundButton: some View {
+        Button(action: {
+            model.color = .random()
+        }) {
+            Text(Localized.Avatar.changeBackground + Emoji.WalletAvatar.magic.rawValue)
+                .textCase(nil)
+        }
+        .buttonStyle(.clear)
     }
     
     private var emojiListView: some View {
@@ -126,6 +142,28 @@ public struct EmojiStyleScene: View {
                 
             }
         }
+    }
+    
+    private var magicButton: some View {
+        Button(action: {
+            withAnimation {
+                switch selectedTab {
+                case .emoji:
+                    model.emojiList = EmojiViewModel.shuffleList()
+                case .style:
+                    model.colorList = EmojiViewModel.shuffleColorList()
+                }
+            }
+        }) {
+            Text(
+                [
+                    Emoji.WalletAvatar.magic.rawValue,
+                    Localized.Common.magicButton,
+                    Emoji.WalletAvatar.magic.rawValue
+                ].joined(separator: " ")
+            )
+        }
+        .buttonStyle(.listStyleColor())
     }
 }
 

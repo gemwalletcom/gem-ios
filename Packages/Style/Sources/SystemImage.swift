@@ -42,6 +42,7 @@ public struct SystemImage {
     public static let book = "book"
     public static let starFill = "star.fill"
     public static let textPageFill = "text.page.fill"
+    public static let emoji = "face.smiling"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill

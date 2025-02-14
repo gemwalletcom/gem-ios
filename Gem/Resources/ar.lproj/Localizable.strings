@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
 "permissions.access_denied" = "تم الرفض";
 "permissions.image.photo_access.denied.description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. يُرجى تمكين هذا الإذن في إعدادات جهازك.";
+"avatar.change_background" = "انقر لتغيير الخلفية";
+"common.magic_button" = "الزر السحري";
+"common.emoji" = "الرموز التعبيرية";
+"common.style" = "أسلوب";
+"avatar.change_avatar" = "انقر لتغيير الصورة الرمزية";
+"common.avatar" = "الصورة الرمزية";
+"common.photo" = "صورة";

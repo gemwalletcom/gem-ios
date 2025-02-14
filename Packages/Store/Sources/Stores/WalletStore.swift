@@ -108,6 +108,14 @@ public struct WalletStore: Sendable {
     public func observer() -> SubscriptionsObserver {
         return SubscriptionsObserver(dbQueue: db)
     }
+    
+    public func setWalletAvatar(_ walletId: String, url: URL?) throws {
+        let _ = try db.write { db in
+            return try WalletRecord
+                .filter(Columns.Wallet.id == walletId)
+                .updateAll(db, Columns.Wallet.imageUrl.set(to: url))
+        }
+    }
 }
 
 extension WalletRecord {
@@ -119,7 +127,8 @@ extension WalletRecord {
             type: WalletType(rawValue: type)!,
             accounts: [],
             order: order.asInt32,
-            isPinned: isPinned
+            isPinned: isPinned,
+            imageUrl: imageUrl
         )
     }
 }
@@ -132,7 +141,8 @@ extension Wallet {
             type: type.rawValue, 
             index: index.asInt,
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: imageUrl
         )
     }
 }

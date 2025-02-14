@@ -41,9 +41,20 @@ public struct WalletDetailScene: View {
                 } header: {
                     HStack {
                         Spacer()
-                        Button(action: onSelectImage) {
-                            AvatarView(model: model.avatarViewModel, size: Sizing.image.extraLarge)
-                                .padding(.bottom, Spacing.extraLarge)
+                        VStack(spacing: Spacing.medium) {
+                            Button(action: onSelectImage) {
+                                AvatarView(
+                                    walletId: model.wallet.id,
+                                    size: Sizing.image.medium * 1.6
+                                )
+                            }
+                            
+                            Button(action: onSelectImage) {
+                                Text(Localized.Avatar.changeAvatar)
+                                    .textCase(nil)
+                            }
+                            .buttonStyle(.clearBlue)
+                            .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()
                     }

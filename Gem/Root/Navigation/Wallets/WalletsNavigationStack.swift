@@ -38,7 +38,7 @@ struct WalletsNavigationStack: View {
                     model: WalletDetailViewModel(
                         navigationPath: $navigationPath,
                         wallet: $0.wallet,
-                        walletService: walletService
+                        walletService: manageWalletService
                     )
                 )
             }

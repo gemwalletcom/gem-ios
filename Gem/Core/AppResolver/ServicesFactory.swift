@@ -53,7 +53,7 @@ struct ServicesFactory {
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: AvatarService(
-                store: storeManager.avatarStore
+                store: storeManager.walletStore
             )
         )
         let balanceService = Self.makeBalanceService(
@@ -197,7 +197,8 @@ extension ServicesFactory {
 
     private static func makeManageWalletService(
         keystore: any Keystore,
-        walletStore: WalletStore
+        walletStore: WalletStore,
+        avatarService: AvatarService
     ) -> ManageWalletService {
         ManageWalletService(
             keystore: keystore,

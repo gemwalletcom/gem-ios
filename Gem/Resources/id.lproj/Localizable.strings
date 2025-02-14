@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Gambar Anda telah disimpan ke Foto!";
 "permissions.access_denied" = "Akses ditolak";
 "permissions.image.photo_access.denied.description" = "Aplikasi ini tidak memiliki izin untuk mengakses pustaka foto Anda. Harap aktifkan akses di pengaturan perangkat Anda.";
+"avatar.change_background" = "Ketuk untuk mengubah latar belakang";
+"common.magic_button" = "Tombol Ajaib";
+"common.emoji" = "EMOJI";
+"common.style" = "Gaya";
+"avatar.change_avatar" = "Ketuk untuk mengubah avatar";
+"common.avatar" = "Gambar avatarnya";
+"common.photo" = "Foto";

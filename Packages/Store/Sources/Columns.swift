@@ -46,6 +46,7 @@ struct Columns {
         static let type = Column("type")
         static let order = Column("order")
         static let isPinned = Column("isPinned")
+        static let imageUrl = Column("imageUrl")
     }
     
     struct Account {

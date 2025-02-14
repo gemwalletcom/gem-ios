@@ -1,4 +1,5 @@
 import SwiftUI
+import ManageWalletService
 import AvatarToolkit
 import Primitives
 import Keystore
@@ -12,28 +13,19 @@ public class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
-    let walletService: WalletService
+    let walletService: ManageWalletService
     let explorerService: any ExplorerLinkFetchable
 
     public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        walletService: WalletService,
+        walletService: ManageWalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath
         self.wallet = wallet
         self.walletService = walletService
         self.explorerService = explorerService
-    }
-
-    var image: AssetImage {
-        AssetImage(
-            type: .empty,
-            imageURL: .none,
-            placeholder: WalletViewModel(wallet: wallet).image,
-            chainPlaceholder: .none //Image(systemName: SystemImage.settings)
-        )
     }
 
     var name: String {
@@ -59,10 +51,6 @@ public class WalletDetailViewModel {
                 )
             )
         }
-    }
-    
-    var avatarViewModel: AvatarViewModel {
-        AvatarViewModel(wallet: wallet, allowEditing: false)
     }
 }
 
