@@ -25,8 +25,7 @@ public struct EmojiStyleScene: View {
     public var body: some View {
         NavigationStack {
             VStack {
-                emojiView
-                    .frame(width: emojiViewSize, height: emojiViewSize)
+                emojiView(color: model.color, emoji: model.text)
                 
                 changeBackgroundButton
 
@@ -58,7 +57,8 @@ public struct EmojiStyleScene: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(Localized.Common.done) {
-                        image = emojiView.render(for: CGSize(width: emojiViewSize, height: emojiViewSize))
+                        image = emojiView(color: model.color, emoji: model.text)
+                            .render(for: CGSize(width: emojiViewSize, height: emojiViewSize))
                         dismiss()
                     }
                     .bold()
@@ -68,16 +68,17 @@ public struct EmojiStyleScene: View {
         }
     }
     
+    private func emojiView(color: Color, emoji: String) -> some View {
+        EmojiView(color: color, emoji: emoji)
+            .frame(width: emojiViewSize, height: emojiViewSize)
+    }
+    
     private var picker: some View {
         Picker("", selection: $selectedTab.animation()) {
             Text(Localized.Common.emoji).tag(Tab.emoji)
             Text(Localized.Common.style).tag(Tab.style)
         }
         .pickerStyle(SegmentedPickerStyle())
-    }
-    
-    private var emojiView: some View {
-        EmojiView(color: model.color, emoji: model.text)
     }
     
     private var changeBackgroundButton: some View {
