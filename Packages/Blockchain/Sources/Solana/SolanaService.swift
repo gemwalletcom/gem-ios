@@ -226,11 +226,11 @@ extension SolanaService: ChainTransactionPreloadable {
 
 extension SolanaService: ChainTransactionLoadable {
     public func load(input: TransactionInput) async throws -> TransactionLoad {
+        let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
                 return TransactionLoad(
                     block: SignerInputBlock(hash: input.preload.blockhash),
                     fee: fee
@@ -243,7 +243,7 @@ extension SolanaService: ChainTransactionLoadable {
                     destinationAddress: input.destinationAddress
                 )
                 let (tokenAccountCreationFee, token) = try await (getTokenAccountCreationFee, getToken)
-                let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
+                
                 let options: FeeOptionMap = switch token.recipientTokenAddress {
                 case .some: [:]
                 case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
@@ -252,18 +252,12 @@ extension SolanaService: ChainTransactionLoadable {
                 return TransactionLoad(
                     block: SignerInputBlock(hash: input.preload.blockhash),
                     token: token,
-                    fee: Fee(
-                        fee: fee.fee,
-                        gasPriceType: fee.gasPriceType,
-                        gasLimit: fee.gasLimit,
-                        options: options
-                    )
+                    fee: fee.withOptions(options)
                 )
             }
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
             return TransactionLoad(
                 block: SignerInputBlock(hash: input.preload.blockhash),
                 fee: fee
