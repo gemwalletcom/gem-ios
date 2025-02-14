@@ -116,6 +116,7 @@ public struct NFTDetailsViewModel: Sendable {
         SocialLinksViewModel(assetLinks: assetData.collection.links)
     }
     
+    @MainActor
     func onHeaderAction(type: HeaderButtonType) {
         headerButtonAction?(type)
     }

@@ -15,22 +15,4 @@ final class EthereumServiceTests {
         result = try! ERC20Service.decodeABI(hexString: hex)
         #expect(result == "Hello World!    Hello World!    Hello World!")
     }
-
-    @Test
-    func testBatchRequests() throws {
-        let calls = [
-            EthereumTarget.call(["to": "0x1", "data": "0xdead"]),
-            EthereumTarget.call(["to": "0x2", "data": "0xbeaf"])
-        ]
-
-        let batch = EthereumTarget.batch(requests: calls)
-
-        guard case .data(let data) = batch.data else {
-            fatalError()
-        }
-
-        let requests = try JSONSerialization.jsonObject(with: data) as! [[String: Any]]
-
-        #expect(requests.count == 2)
-    }
 }

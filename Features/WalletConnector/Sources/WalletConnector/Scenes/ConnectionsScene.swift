@@ -54,6 +54,14 @@ public struct ConnectionsScene: View {
                         ForEach(groupedByWallet[header]!) { connection in
                             NavigationLink(value: connection) {
                                 ConnectionView(model: WalletConnectionViewModel(connection: connection))
+                                    .swipeActions(edge: .trailing) {
+                                        Button(
+                                            model.disconnectTitle,
+                                            role: .destructive,
+                                            action: { onSelectDisconnect(connection) }
+                                        )
+                                        .tint(Colors.red)
+                                    }
                             }
                         }
                     }
@@ -61,12 +69,7 @@ public struct ConnectionsScene: View {
             }
         }
         .navigationDestination(for: WalletConnection.self) { connection in
-            ConnectionScene(
-                model: ConnectionSceneViewModel(
-                    model: WalletConnectionViewModel(connection: connection),
-                    service: model.service
-                )
-            )
+            ConnectionScene(model: model.connectionSceneModel(connection: connection))
         }
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
@@ -81,16 +84,16 @@ public struct ConnectionsScene: View {
             }
         }
         .alert("",
-            isPresented: $isPresentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(isPresentingErrorMessage ?? "")
-            }
+               isPresented: $isPresentingErrorMessage.mappedToBool(),
+               actions: {},
+               message: {
+            Text(isPresentingErrorMessage ?? "")
+        }
         )
         .navigationTitle(model.title)
     }
 
-    func connectURI(uri: String) async {
+    private func connectURI(uri: String) async {
         do {
             try await model.addConnectionURI(uri: uri)
         } catch {
@@ -103,6 +106,18 @@ public struct ConnectionsScene: View {
 // MARK: Actions
 
 private extension ConnectionsScene {
+
+    private func onSelectDisconnect(_ connection: WalletConnection) {
+        Task {
+            do {
+                try await model.disconnect(connection: connection)
+            } catch {
+                isPresentingErrorMessage = error.localizedDescription
+                NSLog("disconnect error: \(error)")
+            }
+        }
+    }
+
     private func onHandleScan(_ result: String) {
         Task {
             await connectURI(uri: result)

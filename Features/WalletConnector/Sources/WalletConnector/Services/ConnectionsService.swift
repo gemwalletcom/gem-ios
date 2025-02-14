@@ -20,18 +20,13 @@ public final class ConnectionsService: Sendable {
             signer: signer
         )
     }
-    
+
     public func setup() {
         Task {
             try await configure()
         }
     }
 
-    private func configure() async throws {
-        try connector.configure()
-        await connector.setup()
-    }
-    
     public func addConnectionURI(uri: String, wallet: Wallet) async throws {
         let id = try await connector.addConnectionURI(uri: uri)
         let chains = signer.getChains(wallet: wallet)
@@ -47,13 +42,36 @@ public final class ConnectionsService: Sendable {
         try store.updateConnection(id: id, with: wallet)
     }
 
-    func disconnect(sessionId: String) async throws {
+    public func disconnect(session: WalletConnectionSession) async throws {
+        try await disconnect(
+            sessionId: session.sessionId,
+            pairingId: session.id
+        )
+    }
+    
+    private func configure() async throws {
+        try connector.configure()
+        await connector.setup()
+    }
+
+    private func disconnect(sessionId: String) async throws {
         try store.delete(ids: [sessionId])
         try await connector.disconnect(sessionId: sessionId)
     }
-    
-    func disconnectPairing(pairingId: String) async throws {
+
+    private func disconnectPairing(pairingId: String) async throws {
         try store.delete(ids: [pairingId])
         await connector.disconnectPairing(pairingId: pairingId)
     }
+
+    private func disconnect(sessionId: String, pairingId: String) async throws {
+        if sessionId == pairingId {
+            try await disconnectPairing(pairingId: pairingId)
+        } else {
+            try await disconnect(sessionId: sessionId)
+            try await disconnectPairing(pairingId: pairingId)
+        }
+    }
+
 }
+

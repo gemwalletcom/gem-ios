@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import Keystore
-import Settings
 import SwiftUI
 import Style
 import Localization

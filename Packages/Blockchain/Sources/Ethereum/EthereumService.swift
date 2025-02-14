@@ -57,16 +57,6 @@ extension EthereumService {
             .map(as: JSONRPCResponse<BigIntable>.self).result.value
     }
 
-    private func getTokenBalance(contract: String, address: String) async throws -> BigInt {
-        let data = "0x70a08231000000000000000000000000\(address.remove0x)"
-        let params = [
-            "to": contract,
-            "data": data,
-        ]
-        return try await provider
-            .request(.call(params))
-            .map(as: JSONRPCResponse<BigIntable>.self).result.value
-    }
 
     private func getBalance(address: String) async throws -> BigInt {
         try await provider.request(.balance(address: address))
@@ -87,12 +77,17 @@ extension EthereumService: ChainBalanceable {
     }
 
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        var result: [AssetBalance] = []
-        for tokenId in tokenIds {
-            let balance = try await getTokenBalance(contract: tokenId.tokenId ?? "", address: address)
-            result.append(AssetBalance(assetId: tokenId, balance: Balance(available: balance)))
+        let requests = try tokenIds.map {
+            EthereumTarget.call([
+                "to": try $0.getTokenId(),
+                "data": "0x70a08231000000000000000000000000\(address.remove0x)",
+            ])
         }
-        return result
+        let balances = try await provider.requestBatch(requests)
+            .map(as: [JSONRPCResponse<BigIntable>].self)
+            .map(\.result.value)
+        
+        return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
     
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {

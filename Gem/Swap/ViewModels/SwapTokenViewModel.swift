@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Components
 import Localization
+import PrimitivesComponents
 
 struct SwapTokenViewModel {
     

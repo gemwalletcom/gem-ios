@@ -10,6 +10,7 @@ import Style
 import Localization
 import InfoSheet
 import PrimitivesComponents
+import Preferences
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
@@ -38,7 +39,11 @@ struct AssetScene: View {
 
     private var headerModel: AssetHeaderViewModel {
         AssetHeaderViewModel(
-            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            assetDataModel: AssetDataViewModel(
+                assetData: assetData,
+                formatter: .medium,
+                currencyCode: Preferences.standard.currency
+            ),
             walletModel: walletModel,
             bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
         )
@@ -50,7 +55,11 @@ struct AssetScene: View {
             assetsService: assetsService,
             transactionsService: transactionsService,
             priceAlertService: priceAlertService,
-            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            assetDataModel: AssetDataViewModel(
+                assetData: assetData,
+                formatter: .medium,
+                currencyCode: Preferences.standard.currency
+            ),
             walletModel: walletModel
         )
     }
@@ -76,7 +85,7 @@ struct AssetScene: View {
                     model: headerModel,
                     isHideBalanceEnalbed: .constant(false),
                     onHeaderAction: onSelectHeader(_:),
-                    onInfoSheetAction: onInfoSheetAction
+                    onInfoAction: onSelectWalletHeaderInfo
                 )
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
@@ -206,7 +215,6 @@ extension AssetScene {
 // MARK: - Actions
 
 extension AssetScene {
-    @MainActor
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
@@ -222,18 +230,15 @@ extension AssetScene {
             assetAddress: assetData.assetAddress
         )
     }
-    
-    @MainActor
-    private func onInfoSheetAction(type: InfoSheetType) {
-        isPresentingInfoSheet = type
+
+    private func onSelectWalletHeaderInfo() {
+        isPresentingInfoSheet = .watchWallet
     }
 
-    @MainActor
     private func onOpenLink(_ url: URL) {
         UIApplication.shared.open(url)
     }
 
-    @MainActor
     private func onSelectOptions() {
         showingOptions = true
     }

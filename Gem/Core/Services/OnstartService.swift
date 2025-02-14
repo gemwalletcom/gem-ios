@@ -3,7 +3,6 @@
 import Foundation
 import Store
 import Keystore
-import Settings
 import Primitives
 import NodeService
 import AssetsService
@@ -20,12 +19,6 @@ struct OnstartService {
     let preferences: Preferences
     
     func migrations() {
-        do {
-            try CleanUpService(keystore: keystore, preferences: preferences).initialSetup()
-        } catch {
-            NSLog("destroy initial files error: \(error)")
-        }
-        
         do {
             try keystore.setupChains(chains: AssetConfiguration.allChains)
         } catch {

@@ -1,0 +1,65 @@
+name: UI Tests
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  SCCACHE_GHA_ENABLED: "true"
+  RUSTC_WRAPPER: "sccache"
+
+jobs:
+  unit_test:
+    name: Build and UI Test iPhone simulator
+    runs-on: macos-15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Cache Cargo Dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-deps-
+      
+      - name: Cache Cargo Target
+        uses: actions/cache@v4
+        with:
+          path: |
+            core/target
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-deps-
+
+      - name: Run sccache-cache
+        uses: mozilla-actions/sccache-action@v0.0.7
+      
+      - name: Verify sccache usage
+        run: sccache --show-stats
+    
+      - name: Install just
+        run: brew install just
+
+      - name: Install dependencies
+        run: just install-toolchains
+
+      - name: Build Core
+        run: just generate-stone
+
+      - name: UI Tests
+        run: |
+          defaults write com.apple.dt.XCTest IDESuppressCrashOnExceptions -bool YES
+          just test_ui

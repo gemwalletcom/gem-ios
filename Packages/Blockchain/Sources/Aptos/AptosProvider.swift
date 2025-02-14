@@ -10,7 +10,7 @@ public enum AptosProvider: TargetType {
     case resource(address: String, resource: String)
     case resources(address: String)
     case gasPrice
-    case estimateFee(data: Data)
+    case simulate(AptosTransactionSimulation)
     case broadcast(data: String)
     case batchBroadcast(data: String)
     
@@ -27,7 +27,7 @@ public enum AptosProvider: TargetType {
             .resource,
             .resources:
             return .GET
-        case .estimateFee,
+        case .simulate,
             .broadcast,
             .batchBroadcast:
             return .POST
@@ -40,7 +40,7 @@ public enum AptosProvider: TargetType {
         case .account(let address): "/v1/accounts/\(address)"
         case .transaction(let id): "/v1/transactions/by_hash/\(id)"
         case .gasPrice: "/v1/estimate_gas_price"
-        case .estimateFee: "/v1/transactions/simulate?estimate_max_gas_amount=true&estimate_gas_unit_price=true&estimate_prioritized_gas_unit_price=false"
+        case .simulate: "/v1/transactions/simulate?estimate_max_gas_amount=true"
         case .resource(let address, let resource): "/v1/accounts/\(address)/resource/\(resource)"
         case .resources(let address): "/v1/accounts/\(address)/resources"
         case .broadcast: "/v1/transactions"
@@ -57,8 +57,8 @@ public enum AptosProvider: TargetType {
             .resource,
             .resources:
             return .plain
-        case .estimateFee(let data):
-            return .data(data)
+        case .simulate(let data):
+            return .encodable(data)
         case .broadcast(let data), .batchBroadcast(let data):
             return .data(Data(data.utf8))
         }
