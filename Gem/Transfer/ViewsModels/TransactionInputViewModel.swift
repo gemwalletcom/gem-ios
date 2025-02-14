@@ -12,7 +12,7 @@ import NFT
 
 struct TransactionInputViewModel {
     let data: TransferData
-    let input: TransactionPreload?
+    let input: TransactionLoad?
     let metaData: TransferDataMetadata?
     let transferAmountResult: TransferAmountResult?
 
@@ -22,7 +22,7 @@ struct TransactionInputViewModel {
 
     init(
         data: TransferData,
-        input: TransactionPreload?,
+        input: TransactionLoad?,
         metaData: TransferDataMetadata?,
         transferAmountResult: TransferAmountResult?,
         preferences: Preferences = Preferences.standard

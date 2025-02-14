@@ -252,18 +252,24 @@ extension SolanaService: ChainFeeRateFetchable {
 // MARK: - ChainTransactionPreloadable
 
 extension SolanaService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
-        async let blockhash = provider
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        let blockhash = try await provider
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
-        async let fee = fee(input: input)
+        
+        return TransactionPreload(blockhash: blockhash)
+    }
+}
 
+extension SolanaService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
+        async let fee = fee(input: input)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                return try await TransactionPreload(
-                    block: SignerInputBlock(hash: blockhash),
+                return try await TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockhash),
                     fee: fee
                 )
             case .token:
@@ -274,8 +280,8 @@ extension SolanaService: ChainTransactionPreloadable {
                     destinationAddress: input.destinationAddress
                 )
                 
-                return try await TransactionPreload(
-                    block: SignerInputBlock(hash: blockhash),
+                return try await TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockhash),
                     token: token,
                     fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
                 )
@@ -283,8 +289,8 @@ extension SolanaService: ChainTransactionPreloadable {
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            return try await TransactionPreload(
-                block: SignerInputBlock(hash: blockhash), 
+            return try await TransactionLoad(
+                block: SignerInputBlock(hash: input.preload.blockhash),
                 fee: fee
             )
         case .account, .tokenApprove: fatalError()

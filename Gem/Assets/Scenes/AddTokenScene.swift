@@ -100,9 +100,9 @@ extension AddTokenScene {
                     ListItemView(title: asset.decimalsTitle, subtitle: asset.decimals)
                     ListItemView(title: asset.typeTitle, subtitle: asset.type)
                 }
-                if let url = asset.explorerUrl {
+                if let url = asset.explorerUrl, let text = asset.explorerText {
                     Section {
-                        NavigationOpenLink(url: url, with: ListItemView(title: asset.explorerText))
+                        NavigationOpenLink(url: url, with: ListItemView(title: text))
                     }
                 }
             case .error(let error):

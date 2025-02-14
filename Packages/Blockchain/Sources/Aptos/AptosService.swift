@@ -22,7 +22,7 @@ public struct AptosService: Sendable {
             .map(as: AptosLedger.self)
     }
 
-    private func getAptosAccount(address: String) async throws -> AptosAccount {
+    private func getAccount(address: String) async throws -> AptosAccount {
         try await provider
             .request(.account(address: address))
             .mapOrCatch(as: AptosAccount.self, codes: [404], result: .empty)
@@ -139,23 +139,27 @@ extension AptosService: ChainFeeRateFetchable {
     }
 }
 
+extension AptosService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        try await TransactionPreload(
+            sequence: getAccount(address: input.senderAddress).sequence
+        )
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension AptosService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
-        let account = try await provider.request(.account(address: input.senderAddress))
-            .map(as: AptosAccount.self)
-        let sequence = Int(account.sequence_number) ?? 0
-        
+extension AptosService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         let fee = try await fee(
             input: input,
             gasPrice: input.gasPrice,
             transferType: input.type,
-            sequence: sequence
+            sequence: input.preload.sequence
         )
         
-        return TransactionPreload(
-            sequence: sequence,
+        return TransactionLoad(
+            sequence: input.preload.sequence,
             fee: fee
         )
     }
@@ -263,4 +267,7 @@ extension AptosService: ChainAddressStatusFetchable {
 
 extension AptosAccount {
     static let empty = AptosAccount(sequence_number: "")
+    var sequence: Int {
+        Int(sequence_number) ?? 0
+    }
 }

@@ -36,7 +36,7 @@ public struct NFTScene: View {
                 nftCollectionView
             }
         }
-        .refreshable(action: fetch)
+        .refreshable(action: model.fetch)
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if nftDataList.isEmpty {

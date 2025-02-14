@@ -13,6 +13,7 @@ public struct TransactionInput: Sendable {
     public let balance: BigInt
     public let gasPrice: GasPriceType
     public let memo: String?
+    public let preload: TransactionPreload
 
     public init(
         type: TransferDataType,
@@ -22,7 +23,8 @@ public struct TransactionInput: Sendable {
         value: BigInt,
         balance: BigInt,
         gasPrice: GasPriceType,
-        memo: String?
+        memo: String?,
+        preload: TransactionPreload
     ) {
         self.type = type
         self.asset = asset
@@ -32,6 +34,7 @@ public struct TransactionInput: Sendable {
         self.balance = balance
         self.gasPrice = gasPrice
         self.memo = memo
+        self.preload = preload
     }
 }
 

@@ -317,10 +317,16 @@ extension TronService: ChainFeeRateFetchable {
     }
 }
 
+extension TronService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        .none
+    }
+}
+
 // MARK: - ChainTransactionPreloadable
 
-extension TronService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+extension TronService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         async let getBlock = latestBlock().block_header.raw_data
         async let getFee = fee(input: input.feeInput)
         async let getVotes: [TronVote]? = {
@@ -356,7 +362,7 @@ extension TronService: ChainTransactionPreloadable {
             return .vote(result.filter { $1 > 0 } )
         }()
 
-        return TransactionPreload(
+        return TransactionLoad(
             block: SignerInputBlock(
                 number: Int(block.number),
                 version: Int(block.version),
