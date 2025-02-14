@@ -79,7 +79,7 @@ struct MainTabView: View {
                 .tag(TabItem.collections)
             }
 
-            if !model.wallet.isViewOnly {
+            if model.isSwapEnabled {
                 SwapNavigationStack(
                     model: SwapViewModel(
                         wallet: model.wallet,
