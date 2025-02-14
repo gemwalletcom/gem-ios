@@ -29,10 +29,10 @@ public struct SolanaService: Sendable {
 // MARK: - Business Logic
 
 extension SolanaService {
-    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
+    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccountPubkey] {
         return try await provider
             .request(.getTokenAccountsByOwner(owner: owner, token: token))
-            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>.self).result.value
+            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccountPubkey]>>.self).result.value
     }
 
     private func getTokenTransferType(
@@ -63,29 +63,17 @@ extension SolanaService {
         )
     }
 
-    private func getTokenBalance(token: String, owner: String) async throws -> BigInt {
-        let accounts = try await getAccounts(token: token, owner: owner)
-        guard let account = accounts.first else {
-            return .zero
-        }
-        let balance = try await provider
-            .request(.getTokenAccountBalance(token: account.pubkey))
-            .map(as: JSONRPCResponse<SolanaValue<SolanaBalanceValue>>.self).result.value.amount
-
-        return BigInt(balance) ?? .zero
-    }
-
     private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
-        let accounts = try await provider.requestBatch(
+        let balances = try await provider.requestBatch(
             tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
             .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
-            .compactMap { $0.result.value.first }
-        
-        let balances = try await provider.requestBatch(
-            accounts.map { .getTokenAccountBalance(token: $0.pubkey) })
-            .map(as: [JSONRPCResponse<SolanaValue<SolanaBalanceValue>>].self)
-            .map { BigInt(stringLiteral: $0.result.value.amount) }
-        
+            .map {
+                if let account = $0.result.value.first {
+                    return BigInt(stringLiteral: account.account.data.parsed.info.tokenAmount.amount)
+                }
+                return BigInt.zero
+            }
+    
         return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
@@ -109,10 +97,10 @@ extension SolanaService {
             .map(as: JSONRPCResponse<SolanaEpoch>.self).result
     }
 
-    private func getDelegations(address: String) async throws -> [SolanaTokenAccountResult<SolanaStakeAccount>] {
+    private func getDelegations(address: String) async throws -> [SolanaStakeAccount] {
         try await provider
             .request(.stakeDelegations(address: address))
-            .map(as: JSONRPCResponse<[SolanaTokenAccountResult<SolanaStakeAccount>]>.self).result
+            .map(as: JSONRPCResponse<[SolanaStakeAccount]>.self).result
     }
 
     private func getRentExemption(size: Int) async throws -> BigInt {
@@ -160,7 +148,7 @@ extension SolanaService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        return try await getTokenBalances(tokenIds: tokenIds, address: address)
+        try await getTokenBalances(tokenIds: tokenIds, address: address)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
