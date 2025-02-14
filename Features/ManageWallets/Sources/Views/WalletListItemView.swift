@@ -7,7 +7,7 @@ import Components
 import Primitives
 import Localization
 import PrimitivesComponents
-import AvatarToolkit
+import WalletAvatar
 
 struct WalletListItemView: View {
 

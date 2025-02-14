@@ -57,7 +57,6 @@
 		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
 		B6382C922D59EF8A009C05B8 /* AvatarNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6382C912D59EF8A009C05B8 /* AvatarNavigationView.swift */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
-		B6756BF12D552C7300BD944C /* AvatarToolkit in Frameworks */ = {isa = PBXBuildFile; productRef = B6756BF02D552C7300BD944C /* AvatarToolkit */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */; };
 		C3549B3729C439DF00B4BE01 /* AssetSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */; };
@@ -227,9 +226,9 @@
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		83FEE7FC2D5E632300E7B2DA /* ManageWalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWalletService; sourceTree = "<group>"; };
 		B617D6092D5B73B7001697A6 /* AvatarService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarService; sourceTree = "<group>"; };
+		B61C5C152D5FB899007699EC /* WalletAvatar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletAvatar; sourceTree = "<group>"; };
 		B6382C912D59EF8A009C05B8 /* AvatarNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarNavigationView.swift; sourceTree = "<group>"; };
 		B66DEDAE2D49F0C600309D53 /* ImageGalleryService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageGalleryService; sourceTree = "<group>"; };
-		B6756BEF2D55230600BD944C /* AvatarToolkit */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarToolkit; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -347,7 +346,6 @@
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
 				DFA0B51E2D16C94400355594 /* Currency in Frameworks */,
 				83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */,
-				B6756BF12D552C7300BD944C /* AvatarToolkit in Frameworks */,
 				C3A7CB8429CBA9E700431341 /* GRDBQuery in Frameworks */,
 				839C794B2D1C42A500E32072 /* PrimitivesComponents in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
@@ -786,9 +784,9 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				B61C5C152D5FB899007699EC /* WalletAvatar */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
 				8349F1452D5E4D04003A0A93 /* ManageWallets */,
-				B6756BEF2D55230600BD944C /* AvatarToolkit */,
 				8361BB5C2D3FDBF1008D89CF /* Transactions */,
 				074168342D3AF81E00AC26A4 /* NFT */,
 				83A4F8042D30434E000E09BB /* Onboarding */,
@@ -977,38 +975,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		D8DC1AEB2C11376000697D0A /* Wallets */ = {
-			isa = PBXGroup;
-			children = (
-				D8DC1B002C113C5900697D0A /* Types */,
-				D8DC1AF62C11392A00697D0A /* Views */,
-				D8DC1AED2C1137AB00697D0A /* ViewModels */,
-				D8DC1AEC2C11376700697D0A /* Scenes */,
-			);
-			path = Wallets;
-			sourceTree = "<group>";
-		};
-		D8DC1AEC2C11376700697D0A /* Scenes */ = {
-			isa = PBXGroup;
-			children = (
-				C3CF3BA029B2FFF600E96586 /* WalletsScene.swift */,
-				C3549B3A29C5167100B4BE01 /* WalletDetailScene.swift */,
-				C3D1C4E92A2D5223006E8EEA /* ShowSecretDataScene.swift */,
-			);
-			path = Scenes;
-			sourceTree = "<group>";
-		};
-		D8DC1AED2C1137AB00697D0A /* ViewModels */ = {
-			isa = PBXGroup;
-			children = (
-				DF88688A2C50F27D00005AEA /* ShowPrivateKeyViewModel.swift */,
-				C3D1C4E42A2D4EEF006E8EEA /* ShowSecretPhraseViewModel.swift */,
-				C3CF3BE229BE4C3200E96586 /* WalletsViewModel.swift */,
-				C3549B3C29C5170000B4BE01 /* WalletIDetailViewModel.swift */,
-			);
-			path = ViewModels;
-			sourceTree = "<group>";
-		};
 		D8DC1AF12C11384F00697D0A /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -1119,7 +1085,6 @@
 				8361BB692D400DB6008D89CF /* TransactionsService */,
 				8361BB6C2D400E4F008D89CF /* AssetsService */,
 				B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */,
-				B6756BF02D552C7300BD944C /* AvatarToolkit */,
 				83245B602D529A26003A6220 /* TransactionService */,
 				83F645052D52C31D00C18881 /* DiscoverAssetsService */,
 				8352B1032D52C73B0059EB27 /* WalletsService */,
@@ -1336,7 +1301,6 @@
 				C3CF3BC929B803F900E96586 /* RecipientScene.swift in Sources */,
 				C3D1C4F02A2EBB0C006E8EEA /* RecipientAddress.swift in Sources */,
 				D8C4A3AF2C9696FE006FABE8 /* AssetScene.swift in Sources */,
-				D85620272AAAAD9A00D65D81 /* DeveloperViewModel.swift in Sources */,
 				D8F5B8622CCC33F90007E615 /* HeaderBannersViewModel.swift in Sources */,
 				83B08BDB2D0B4AE200CA1B33 /* AppResolver+Storages.swift in Sources */,
 				C3D1C4D52A24171B006E8EEA /* OnstartAsyncService.swift in Sources */,
@@ -1992,10 +1956,6 @@
 		B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = ImageGalleryService;
-		};
-		B6756BF02D552C7300BD944C /* AvatarToolkit */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = AvatarToolkit;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;

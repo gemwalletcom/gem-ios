@@ -2,7 +2,7 @@
 
 import Foundation
 import SwiftUI
-import AvatarToolkit
+import WalletAvatar
 import Primitives
 import PrimitivesComponents
 import Components

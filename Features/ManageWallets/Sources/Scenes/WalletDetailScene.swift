@@ -8,7 +8,7 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
-import AvatarToolkit
+import WalletAvatar
 
 public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
