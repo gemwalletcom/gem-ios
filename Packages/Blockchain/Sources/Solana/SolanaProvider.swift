@@ -5,6 +5,8 @@ import SwiftHTTPClient
 
 public enum SolanaProvider: TargetType, BatchTargetType {
     
+    static let defaultCommitment = "confirmed"
+    
     public struct Options: Sendable {
         let skipPreflight: Bool
     }
@@ -69,14 +71,23 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
             )
         case .balance(let address):
+            let params: [JSON] = [
+                .value(address),
+                .dictionary([
+                    "commitment": .value(Self.defaultCommitment),
+                ]),
+            ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address], id: 1)
+                JSONRPCRequest(method: rpc_method, params: params, id: 1)
             )
         case .getTokenAccountsByOwner(let owner, let token):
             let params: [JSON] = [
                 .value(owner),
                 .dictionary(["mint": .value(token)]),
-                .dictionary(["encoding": .value("jsonParsed")]),
+                .dictionary([
+                    "commitment": .value(Self.defaultCommitment),
+                    "encoding": .value("jsonParsed"),
+                ]),
             ]
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: params, id: 1)
@@ -115,7 +126,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 .value(id),
                 .dictionary([
                     "encoding": .value("jsonParsed"),
-                    "commitment": .value("confirmed"),
+                    "commitment": .value(Self.defaultCommitment),
                     "maxSupportedTransactionVersion": .integer(0)
                 ]),
             ]
@@ -127,7 +138,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 .value("Stake11111111111111111111111111111111111111"),
                 .dictionary([
                     "encoding": .value("jsonParsed"),
-                    "commitment": .value("confirmed"),
+                    "commitment": .value(Self.defaultCommitment),
                     "filters": .array([
                         .dictionary([
                             "memcmp": .dictionary([
@@ -144,7 +155,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
         case .stakeValidators:
             let params: [JSON<String>] = [
                 .dictionary([
-                    "commitment": .string("confirmed"),
+                    "commitment": .string(Self.defaultCommitment),
                     "keepUnstakedDelinquents": .bool(false)
                 ])
             ]
