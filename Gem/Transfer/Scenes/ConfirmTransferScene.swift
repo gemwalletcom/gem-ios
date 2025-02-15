@@ -31,7 +31,6 @@ struct ConfirmTransferScene: View {
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
-        .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .navigationTitle(model.title)

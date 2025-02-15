@@ -42,7 +42,7 @@ class SwapViewModel {
     let keystore: any Keystore
     let walletsService: WalletsService
 
-    let wallet: Wallet
+    var wallet: Wallet
 
     var fromAssetRequest: AssetRequestOptional
     var toAssetRequest: AssetRequestOptional
@@ -60,20 +60,13 @@ class SwapViewModel {
     private let swapService: SwapService
     private let formatter = ValueFormatter(style: .full)
 
-    private let onComplete: VoidAction
-    private let onSelectAsset: SelectAssetSwapTypeAction
-    private let onTransferAction: TransferDataAction
-
     init(
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
         swapService: SwapService,
-        keystore: any Keystore,
-        onSelectAsset: SelectAssetSwapTypeAction,
-        onTransferAction: TransferDataAction,
-        onComplete: VoidAction
+        keystore: any Keystore
     ) {
         self.preferences = preferences
         self.wallet = wallet
@@ -81,12 +74,9 @@ class SwapViewModel {
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
-        self.onSelectAsset = onSelectAsset
-        self.onTransferAction = onTransferAction
-        self.onComplete = onComplete
 
-        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier)
-        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier)
+        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier, type: .pay)
+        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier, type: .receive)
     }
 
     var title: String { Localized.Wallet.swap }
@@ -152,14 +142,6 @@ class SwapViewModel {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
 
-    func onCompleteAction() {
-        onComplete?()
-    }
-
-    func onSelectAssetAction(type: SelectAssetSwapType) {
-        onSelectAsset?(type)
-    }
-
     func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
         guard
             case .loaded(let result) = swapState.availability,
@@ -173,6 +155,22 @@ class SwapViewModel {
             fromValue: result.quote.fromValue,
             toAssetData: toAsset,
             toValue: result.quote.toValue
+        )
+    }
+    
+    func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        pairSelectorModel.fromAssetId = nil
+        pairSelectorModel.toAssetId = nil
+        fromAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .pay
+        )
+        toAssetRequest = AssetRequestOptional(
+            walletId: wallet.id,
+            assetId: nil,
+            type: .receive
         )
     }
 }
@@ -210,9 +208,9 @@ extension SwapViewModel {
         await updateAssets(assetIds: assetIds)
     }
 
-    func swap(fromAsset: Asset, toAsset: Asset) async {
+    func swapData(fromAsset: Asset, toAsset: Asset) async -> TransferData? {
         guard case .loaded(let swapAvailability) = swapState.availability else {
-            return
+            return nil
         }
         do {
             swapState.getQuoteData = .loading
@@ -222,15 +220,17 @@ extension SwapViewModel {
                 quote: swapAvailability.quote
             )
             swapState.getQuoteData = .noData
-            onTransfer(data: data)
+            return data
         } catch {
             swapState.getQuoteData = .error(ErrorWrapper(error))
             swapState.availability = .error(ErrorWrapper(error))
         }
+        return nil
     }
-
-    func onTransfer(data: TransferData) {
-        onTransferAction?(data)
+    
+    func reset() {
+        swapState = .init()
+        resetValues()
     }
 }
 
