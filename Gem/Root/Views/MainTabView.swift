@@ -149,7 +149,7 @@ extension MainTabView {
             case .priceAlert(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Price(asset: asset))
-            case .buyAsset(let assetId):
+            case .asset(let assetId), .buyAsset(let assetId):
                 let asset = try walletsService.assetsService.getAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .swapAsset(_, _):
@@ -179,7 +179,7 @@ extension MainTabView {
 extension PushNotification {
     var selectTab: TabItem? {
         switch self {
-        case .transaction, .priceAlert, .buyAsset, .swapAsset: .wallet
+        case .transaction, .asset, .priceAlert, .buyAsset, .swapAsset: .wallet
         case .test, .unknown: nil
         }
     }

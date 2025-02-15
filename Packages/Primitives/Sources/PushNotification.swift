@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct PushNotificationBuyAsset: Codable, Equatable, Sendable {
+public struct PushNotificationAsset: Codable, Equatable, Sendable {
 	public let assetId: String
 
 	public init(assetId: String) {
@@ -15,6 +15,7 @@ public struct PushNotificationBuyAsset: Codable, Equatable, Sendable {
 public enum PushNotificationTypes: String, Codable, Equatable, Sendable {
 	case test
 	case transaction
+	case asset
 	case priceAlert
 	case buyAsset
 	case swapAsset
@@ -25,14 +26,6 @@ public struct PushNotificationPayloadType: Codable, Equatable, Sendable {
 
 	public init(type: PushNotificationTypes) {
 		self.type = type
-	}
-}
-
-public struct PushNotificationPriceAlert: Codable, Equatable, Sendable {
-	public let assetId: String
-
-	public init(assetId: String) {
-		self.assetId = assetId
 	}
 }
 

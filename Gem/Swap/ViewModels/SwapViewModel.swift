@@ -25,6 +25,7 @@ import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
 import struct Gemstone.PermitSingle
+import struct Gemstone.Permit2ApprovalData
 import enum Gemstone.SwapProvider
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
@@ -328,40 +329,46 @@ extension SwapViewModel {
             return try await swapService.getQuoteData(quote, data: .none)
         case .some(let data):
             let chain = try AssetId(id: quote.request.fromAsset).chain
-            let permit2Single = permit2Single(
-                token: data.token,
-                spender: data.spender,
-                value: data.value,
-                nonce: data.permit2Nonce
-            )
-            let permit2JSON = try Gemstone.permit2DataToEip712Json(
-                chain: chain.rawValue,
-                data: permit2Single,
-                contract: data.permit2Contract
-            )
-            let signer = Signer(wallet: wallet, keystore: keystore)
-            let signature = try signer.signMessage(
-                chain: chain,
-                message: .typed(permit2JSON)
-            )
-            let signatureData = try Data.from(hex: signature)
-            let permitData = Permit2Data(permitSingle: permit2Single, signature: signatureData)
-
-            return try await swapService.getQuoteData(quote, data: .permit2(permitData))
+            let data = try permitData(chain: chain, data: data)
+            return try await swapService.getQuoteData(quote, data: .permit2(data))
         }
+    }
+    
+    public func permitData(chain: Chain, data: Permit2ApprovalData) throws -> Permit2Data {
+        let permit2Single = permit2Single(
+            token: data.token,
+            spender: data.spender,
+            value: data.value,
+            nonce: data.permit2Nonce
+        )
+        let permit2JSON = try Gemstone.permit2DataToEip712Json(
+            chain: chain.rawValue,
+            data: permit2Single,
+            contract: data.permit2Contract
+        )
+        let signer = Signer(wallet: wallet, keystore: keystore)
+        let signature = try signer.signMessage(
+            chain: chain,
+            message: .typed(permit2JSON)
+        )
+        return Permit2Data(
+            permitSingle: permit2Single,
+            signature: try Data.from(hex: signature)
+        )
     }
 
     public func permit2Single(token: String, spender: String, value: String, nonce: UInt64) -> Gemstone.PermitSingle {
         let config = Config.shared.getSwapConfig()
+        let now = Date().timeIntervalSince1970
         return PermitSingle(
             details: Permit2Detail(
                 token: token,
                 amount: value,
-                expiration: UInt64(Date().timeIntervalSince1970) + config.permit2Expiration,
+                expiration: UInt64(now) + config.permit2Expiration,
                 nonce: nonce
             ),
             spender: spender,
-            sigDeadline: UInt64(Date().timeIntervalSince1970) + config.permit2SigDeadline
+            sigDeadline: UInt64(now) + config.permit2SigDeadline
         )
     }
 
