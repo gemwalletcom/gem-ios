@@ -385,16 +385,14 @@ extension SolanaService: ChainStakable {
 extension SolanaService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         let metadataKey = try Gemstone.solanaDeriveMetadataPda(mint: tokenId)
-
-        let tokenInfo = try await provider.request(.getAccountInfo(account: tokenId))
+    
+        async let getTokenInfo = provider.request(.getAccountInfo(account: tokenId))
             .map(as: JSONRPCResponse<SolanaSplTokenInfo>.self)
-            .result.value.data.parsed.info
-
-        guard
-            let base64Str = try await provider.request(.getAccountInfo(account: metadataKey))
+        async let getMetadata = provider.request(.getAccountInfo(account: metadataKey))
             .map(as: JSONRPCResponse<SolanaMplRawData>.self)
-            .result.value.data.first
-        else {
+        
+        let (tokenInfo, metadataEncoded) = try await (getTokenInfo, getMetadata)
+        guard let base64Str = metadataEncoded.result.value.data.first else {
             throw AnyError("no meta account found")
         }
         let metadata = try Gemstone.solanaDecodeMetadata(base64Str: base64Str)
@@ -403,7 +401,7 @@ extension SolanaService: ChainTokenable {
             id: AssetId(chain: chain, tokenId: tokenId),
             name: metadata.name,
             symbol: metadata.symbol,
-            decimals: tokenInfo.decimals,
+            decimals: tokenInfo.result.value.data.parsed.info.decimals,
             type: .spl
         )
     }
