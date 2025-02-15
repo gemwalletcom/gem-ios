@@ -115,6 +115,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 .value(id),
                 .dictionary([
                     "encoding": .value("jsonParsed"),
+                    "commitment": .value("confirmed"),
                     "maxSupportedTransactionVersion": .integer(0)
                 ]),
             ]
@@ -126,7 +127,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 .value("Stake11111111111111111111111111111111111111"),
                 .dictionary([
                     "encoding": .value("jsonParsed"),
-                    "commitment": .value("finalized"),
+                    "commitment": .value("confirmed"),
                     "filters": .array([
                         .dictionary([
                             "memcmp": .dictionary([
@@ -143,7 +144,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
         case .stakeValidators:
             let params: [JSON<String>] = [
                 .dictionary([
-                    "commitment": .string("finalized"),
+                    "commitment": .string("confirmed"),
                     "keepUnstakedDelinquents": .bool(false)
                 ])
             ]
