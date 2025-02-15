@@ -13,6 +13,6 @@ struct URLParserTests {
         
         let tokenAction = try URLParser.from(url: URL(string: "https://gemwallet.com/tokens/ethereum/0xdAC17F958D2ee523a2206206994597C13D831ec7")!)
         
-        #expect(tokenAction == URLAction.asset(AssetId(chain: .bitcoin, tokenId: .none)) )
+        #expect(tokenAction == URLAction.asset(AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7")) )
     }
 }
