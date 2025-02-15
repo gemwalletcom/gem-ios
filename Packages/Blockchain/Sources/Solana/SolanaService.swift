@@ -408,21 +408,6 @@ extension SolanaService: ChainTokenable {
         )
     }
 
-    public func getTokenProgram(tokenId: String) async throws -> Primitives.SolanaTokenProgramId {
-        do {
-            let owner = try await provider.request(.getAccountInfo(account: tokenId))
-                .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
-                .result.value.owner
-
-            guard let id = SolanaConfig.tokenProgramId(owner: owner) else {
-                throw AnyError("Unknow token program id")
-            }
-            return id
-        } catch {
-            return .token
-        }
-    }
-
     public func getIsTokenAddress(tokenId: String) -> Bool {
         tokenId.count.isBetween(40, and: 60) && Base58.decodeNoCheck(string: tokenId) != nil
     }

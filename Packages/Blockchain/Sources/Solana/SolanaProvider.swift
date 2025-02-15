@@ -93,8 +93,14 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 JSONRPCRequest(method: rpc_method, params: params, id: 1)
             )
         case .getTokenAccountBalance(let token):
+            let params: [JSON] = [
+                .value(token),
+                .dictionary([
+                    "commitment": .value(Self.defaultCommitment),
+                ]),
+            ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [token], id: 1)
+                JSONRPCRequest(method: rpc_method, params: params, id: 1)
             )
         case .rentExemption(let size):
             return .encodable(
@@ -165,7 +171,10 @@ public enum SolanaProvider: TargetType, BatchTargetType {
         case .getAccountInfo(let account):
             let params: [JSON] = [
                 .string(account),
-                .dictionary(["encoding": .value("jsonParsed")]),
+                .dictionary([
+                    "encoding": .value("jsonParsed"),
+                    "commitment": .value(Self.defaultCommitment),
+                ]),
             ]
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: params, id: 1)
