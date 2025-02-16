@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "התמונה שלך נשמרה בתמונות!";
 "permissions.access_denied" = "הגִישָׁה נִדחֲתָה";
 "permissions.image.photo_access.denied.description" = "לאפליקציה הזו אין הרשאה לגשת לספריית התמונות שלך. אפשר גישה בהגדרות המכשיר שלך.";
+"avatar.change_background" = "הקש כדי לשנות רקע";
+"common.magic_button" = "כפתור קסם";
+"common.emoji" = "אימוג'י";
+"common.style" = "סִגְנוֹן";
+"avatar.change_avatar" = "הקש כדי לשנות דמות";
+"common.avatar" = "גִלגוּל";
+"common.photo" = "תַצלוּם";

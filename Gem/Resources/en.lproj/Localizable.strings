@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Your image has been saved to Photos!";
 "permissions.access_denied" = "Access Denied";
 "permissions.image.photo_access.denied.description" = "This app does not have permission to access your photo library. Please enable access in your device settings.";
+"avatar.change_background" = "Tap to change background";
+"common.magic_button" = "Magic Button";
+"common.emoji" = "Emoji";
+"common.style" = "Style";
+"avatar.change_avatar" = "Tap to change avatar";
+"common.avatar" = "Avatar";
+"common.photo" = "Photo";

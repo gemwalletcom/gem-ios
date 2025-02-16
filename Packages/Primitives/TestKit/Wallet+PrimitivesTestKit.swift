@@ -14,7 +14,8 @@ public extension Wallet {
             type: .multicoin,
             accounts: accounts,
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
 }

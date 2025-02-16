@@ -43,12 +43,19 @@ public struct WalletViewModel {
         }
     }
     
-    public var assetImage: AssetImage {
-        AssetImage(
+    public var avatarImage: AssetImage {
+        guard let imageUrl = wallet.imageUrl else {
+            return AssetImage(
+                imageURL: nil,
+                placeholder: image,
+                chainPlaceholder: subImage
+            )
+        }
+        return AssetImage(
             type: .empty,
-            imageURL: .none,
-            placeholder: image,
-            chainPlaceholder: subImage
+            imageURL: URL(string: imageUrl),
+            placeholder: nil,
+            chainPlaceholder: WalletViewModel(wallet: wallet).subImage
         )
     }
 }

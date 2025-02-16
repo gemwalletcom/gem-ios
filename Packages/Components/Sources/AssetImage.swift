@@ -22,10 +22,19 @@ public struct AssetImage: Sendable {
     }
 
     public static func resourceImage(image: String) -> AssetImage {
-        return AssetImage(
+        AssetImage(
             type: .none,
             imageURL: .none,
             placeholder: Images.name(image),
+            chainPlaceholder: .none
+        )
+    }
+    
+    public static func image(_ image: Image) -> AssetImage {
+        AssetImage(
+            type: .none,
+            imageURL: .none,
+            placeholder: image,
             chainPlaceholder: .none
         )
     }

@@ -5,6 +5,8 @@ import SwiftUI
 import Primitives
 import NFT
 import Components
+import Localization
+import Style
 
 public struct CollectionsNavigationStack: View {
     
@@ -13,67 +15,96 @@ public struct CollectionsNavigationStack: View {
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.avatarService) private var avatarService
     @Environment(\.openURL) private var openURL
-    
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.presentationMode) var presentationMode
+
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
+    @State private var isPresentingAvatarSuccessToast = false
     
     let model: NFTCollectionViewModel
+
+    private var navigationPath: Binding<NavigationPath>
     
-    private var navigationPath: Binding<NavigationPath> {
-        Binding(
-            get: { navigationState.collections },
-            set: { navigationState.collections = $0 }
-        )
+    init(
+        model: NFTCollectionViewModel,
+        navigationPath: Binding<NavigationPath>
+    ) {
+        self.model = model
+        self.navigationPath = navigationPath
     }
     
     public var body: some View   {
         NavigationStack(path: navigationPath) {
-            NFTScene(
-                model: model,
-                isPresentingSelectAssetType: $isPresentingReceiveSelectAssetType
-            )
-            .navigationDestination(for: Scenes.NFTCollectionScene.self) {
-                NFTScene(
-                    model: NFTCollectionViewModel(
-                        wallet: model.wallet,
-                        sceneStep: $0.sceneStep,
-                        nftService: nftService,
-                        deviceService: deviceService
-                    ),
-                    isPresentingSelectAssetType: $isPresentingReceiveSelectAssetType
-                )
-            }
-            .navigationDestination(for: Scenes.NFTDetails.self) { assetData in
-                NFTDetailsScene(
-                    model: NFTDetailsViewModel(
-                        assetData: assetData.assetData,
-                        headerButtonAction: { type in
-                            onHeaderButtonAction(type: type, assetData: assetData.assetData)
-                        }
+            NFTScene(model: model)
+                .navigationDestination(for: Scenes.NFTCollectionScene.self) {
+                    NFTScene(
+                        model: NFTCollectionViewModel(
+                            wallet: model.wallet,
+                            sceneStep: $0.sceneStep,
+                            nftService: nftService,
+                            deviceService: deviceService,
+                            avatarService: avatarService,
+                            onSelect: model.onSelect
+                        )
                     )
-                )
-            }
-            .sheet(item: $isPresentingReceiveSelectAssetType) { value in
-                SelectAssetSceneNavigationStack(
-                    model: SelectAssetViewModel(
+                }
+                .navigationDestination(for: Scenes.NFTDetails.self) { assetData in
+                    NFTDetailsScene(
+                        model: NFTDetailsViewModel(
+                            assetData: assetData.assetData,
+                            headerButtonAction: { type in
+                                Task { @MainActor [assetData] in
+                                    onHeaderButtonAction(type: type, assetData: assetData.assetData)
+                                }
+                            }
+                        )
+                    )
+                }
+                .sheet(item: $isPresentingReceiveSelectAssetType) { value in
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            keystore: keystore,
+                            selectType: value,
+                            assetsService: walletsService.assetsService,
+                            walletsService: walletsService
+                        ),
+                        isPresentingSelectType: $isPresentingReceiveSelectAssetType
+                    )
+                }
+                .sheet(item: $isPresentingSelectedAssetInput) {
+                    SelectedAssetNavigationStack(
+                        selectType: $0,
                         wallet: model.wallet,
-                        keystore: keystore,
-                        selectType: value,
-                        assetsService: walletsService.assetsService,
-                        walletsService: walletsService
-                    ),
-                    isPresentingSelectType: $isPresentingReceiveSelectAssetType
-                )
-            }
-            .sheet(item: $isPresentingSelectedAssetInput) {
-                SelectedAssetNavigationStack(
-                    selectType: $0,
-                    wallet: model.wallet,
-                    isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                )
-            }
+                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
+                    )
+                }
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button {
+                            isPresentingReceiveSelectAssetType = .receive(.collection)
+                        } label: {
+                            Images.System.plus
+                        }
+                    }
+                    
+                    if presentationMode.wrappedValue.isPresented {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(Localized.Common.done) {
+                                dismiss()
+                            }.bold()
+                        }
+                    }
+                }
         }
+        .toast(
+            isPresenting: $isPresentingAvatarSuccessToast,
+            title: Localized.Common.done,
+            systemImage: SystemImage.checkmark
+        )
         .onChange(of: keystore.currentWallet, onWalletChange)
     }
     
@@ -85,7 +116,9 @@ public struct CollectionsNavigationStack: View {
                 type: .send(.nft(assetData.asset)),
                 assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
             )
-        case .buy, .receive, .swap, .stake:
+        case .avatar:
+            setAsWalletAvatar(assetData: assetData)
+        case .buy, .receive, .swap, .stake, .gallery, .emoji, .nft:
             fatalError()
         case .more:
             if let url = assetData.collection.links.first?.url, let url = URL(string: url) {
@@ -99,6 +132,17 @@ extension CollectionsNavigationStack {
     private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
         Task {
             await model.fetch()
+        }
+    }
+    
+    private func setAsWalletAvatar(assetData: NFTAssetData) {
+        Task {
+            do {
+                try await model.setWalletAvatar(assetData.asset)
+                isPresentingAvatarSuccessToast = true
+            } catch {
+                print("Set nft avatar error: \(error)")
+            }
         }
     }
 }

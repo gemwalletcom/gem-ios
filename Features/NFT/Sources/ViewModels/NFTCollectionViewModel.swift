@@ -9,43 +9,52 @@ import Store
 import Localization
 import Style
 import SwiftUI
+import AvatarService
 
 public struct NFTCollectionViewModel: Sendable {
-    struct GridItem {
-        let destination: any Hashable
+    struct GridItem: Identifiable {
+        let id = UUID()
+        let destination: (any Hashable)?
         let assetImage: AssetImage
         let title: String
+        let asset: NFTAsset?
     }
 
     public var wallet: Wallet
+    public let onSelect: (@Sendable (NFTAsset?) -> Void)?
 
     let sceneStep: Scenes.NFTCollectionScene.SceneStep
     let nftService: NFTService
     let deviceService: any DeviceServiceable
+    let avatarService: AvatarService
     
     public init(
         wallet: Wallet,
         sceneStep: Scenes.NFTCollectionScene.SceneStep,
         nftService: NFTService,
-        deviceService: any DeviceServiceable
+        deviceService: any DeviceServiceable,
+        avatarService: AvatarService,
+        onSelect: (@Sendable (NFTAsset?) -> Void)? = nil
     ) {
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.nftService = nftService
         self.deviceService = deviceService
+        self.avatarService = avatarService
+        self.onSelect = onSelect
     }
     
     public var nftRequest: NFTRequest {
         switch sceneStep {
         case .collections:
-            return NFTRequest(
+            NFTRequest(
                 walletId: wallet.id,
                 collectionId: nil
             )
-        case .collection(let collection):
-            return NFTRequest(
+        case .collection(let data):
+            NFTRequest(
                 walletId: wallet.id,
-                collectionId: collection.id
+                collectionId: data.collection.id
             )
         }
     }
@@ -53,9 +62,11 @@ public struct NFTCollectionViewModel: Sendable {
     var title: String {
         switch sceneStep {
         case .collections: Localized.Nft.collections
-        case .collection(let collection): collection.name
+        case .collection(let data): data.collection.name
         }
     }
+    
+    // MARK: - Public methods
     
     public func fetch() async {
         switch sceneStep {
@@ -65,6 +76,13 @@ public struct NFTCollectionViewModel: Sendable {
             break
         }
     }
+
+    public func setWalletAvatar(_ asset: NFTAsset) async throws {
+        guard let url = URL(string: asset.image.previewImageUrl) else { return }
+        try await avatarService.save(url: url, walletId: wallet.id)
+    }
+    
+    // MARK: - Internal methods
     
     func updateCollection() async {
         do {
@@ -75,30 +93,55 @@ public struct NFTCollectionViewModel: Sendable {
         }
     }
     
-    func createGridItem(from data: NFTData) -> GridItem {
-        if data.assets.count == 1, let asset = data.assets.first {
-            GridItem(
-                destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: data.collection, asset: asset)),
-                assetImage: AssetImage(
-                    type: data.collection.name,
-                    imageURL: URL(string: asset.image.imageUrl),
-                    placeholder: nil,
-                    chainPlaceholder: nil
-                ),
-                title: asset.name
-            )
-        } else {
-            GridItem(
-                destination: Scenes.NFTCollectionScene(sceneStep: .collection(data.collection)),
-                assetImage: AssetImage(
-                    type: data.collection.name,
-                    imageURL: URL(string: data.collection.image.imageUrl),
-                    placeholder: nil,
-                    chainPlaceholder: nil
-                ),
-                title: data.collection.name
-            )
+    func createGridItems(from list: [NFTData]) -> [GridItem] {
+        switch sceneStep {
+        case .collections:
+            list.map { data in
+                buildCollectionsGridItem(from: data)
+            }
+        case .collection(let data):
+            data.assets.map { asset in
+                buildAssetDetailsGridItem(collection: data.collection, asset: asset)
+            }
         }
+    }
+    
+    // MARK: - Private methods
+    
+    private func buildCollectionsGridItem(from data: NFTData) -> GridItem {
+        if data.assets.count == 1, let asset = data.assets.first {
+            buildAssetDetailsGridItem(collection: data.collection, asset: asset)
+        } else {
+            buildCollectionGridItem(from: data)
+        }
+    }
+    
+    private func buildCollectionGridItem(from data: NFTData) -> GridItem {
+        GridItem(
+            destination: Scenes.NFTCollectionScene(sceneStep: .collection(data)),
+            assetImage: AssetImage(
+                type: data.collection.name,
+                imageURL: URL(string: data.collection.image.imageUrl),
+                placeholder: nil,
+                chainPlaceholder: nil
+            ),
+            title: data.collection.name,
+            asset: nil
+        )
+    }
+    
+    private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridItem {
+        GridItem(
+            destination: onSelect == nil ? Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)) : nil,
+            assetImage: AssetImage(
+                type: collection.name,
+                imageURL: URL(string: asset.image.imageUrl),
+                placeholder: nil,
+                chainPlaceholder: nil
+            ),
+            title: asset.name,
+            asset: asset
+        )
     }
 }
 

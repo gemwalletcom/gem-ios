@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Hình ảnh của bạn đã được lưu vào Ảnh!";
 "permissions.access_denied" = "Truy cập bị từ chối";
 "permissions.image.photo_access.denied.description" = "Ứng dụng này không có quyền truy cập vào thư viện ảnh của bạn. Vui lòng bật quyền truy cập trong cài đặt thiết bị của bạn.";
+"avatar.change_background" = "Nhấn để thay đổi hình nền";
+"common.magic_button" = "Nút ma thuật";
+"common.emoji" = "Biểu tượng cảm xúc";
+"common.style" = "Phong cách";
+"avatar.change_avatar" = "Nhấn để thay đổi hình đại diện";
+"common.avatar" = "Hình đại diện";
+"common.photo" = "Ảnh";
