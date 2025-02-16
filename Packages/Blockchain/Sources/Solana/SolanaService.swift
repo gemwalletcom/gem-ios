@@ -220,7 +220,7 @@ extension SolanaService: ChainTransactionPreloadable {
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
         
-        return TransactionPreload(blockhash: blockhash)
+        return TransactionPreload(blockHash: blockhash)
     }
 }
 
@@ -232,7 +232,7 @@ extension SolanaService: ChainTransactionLoadable {
             switch input.asset.id.type {
             case .native:
                 return TransactionLoad(
-                    block: SignerInputBlock(hash: input.preload.blockhash),
+                    block: SignerInputBlock(hash: input.preload.blockHash),
                     fee: fee
                 )
             case .token:
@@ -250,7 +250,7 @@ extension SolanaService: ChainTransactionLoadable {
                 }
                 
                 return TransactionLoad(
-                    block: SignerInputBlock(hash: input.preload.blockhash),
+                    block: SignerInputBlock(hash: input.preload.blockHash),
                     token: token,
                     fee: fee.withOptions(options)
                 )
@@ -259,7 +259,7 @@ extension SolanaService: ChainTransactionLoadable {
             fatalError()
         case .swap, .stake:
             return TransactionLoad(
-                block: SignerInputBlock(hash: input.preload.blockhash),
+                block: SignerInputBlock(hash: input.preload.blockHash),
                 fee: fee
             )
         case .account, .tokenApprove: fatalError()

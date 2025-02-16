@@ -30,6 +30,26 @@ public struct XRPAccountAsset: Codable, Sendable {
 	}
 }
 
+public struct XRPAccountLine: Codable, Sendable {
+	public let account: String
+	public let balance: String
+	public let currency: String
+
+	public init(account: String, balance: String, currency: String) {
+		self.account = account
+		self.balance = balance
+		self.currency = currency
+	}
+}
+
+public struct XRPAccountLinesResult: Codable, Sendable {
+	public let lines: [XRPAccountLine]?
+
+	public init(lines: [XRPAccountLine]?) {
+		self.lines = lines
+	}
+}
+
 public struct XRPAccountObjects<T: Codable & Sendable>: Codable, Sendable {
 	public let account_objects: T
 
@@ -40,9 +60,11 @@ public struct XRPAccountObjects<T: Codable & Sendable>: Codable, Sendable {
 
 public struct XRPAccountResult: Codable, Sendable {
 	public let account_data: XRPAccount?
+	public let ledger_current_index: Int32
 
-	public init(account_data: XRPAccount?) {
+	public init(account_data: XRPAccount?, ledger_current_index: Int32) {
 		self.account_data = account_data
+		self.ledger_current_index = ledger_current_index
 	}
 }
 
