@@ -44,7 +44,7 @@ struct WalletsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.WalletSelectImage.self) {
                 AvatarNavigationView(
-                    model: AvatarCustomizationViewModel(
+                    model: WalletImageViewModel(
                         wallet: $0.wallet,
                         avatarService: avatarService
                     )

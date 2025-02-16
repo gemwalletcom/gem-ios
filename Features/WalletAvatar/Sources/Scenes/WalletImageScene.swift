@@ -7,15 +7,12 @@ import PrimitivesComponents
 import Components
 import Localization
 
-public struct AvatarCustomizationScene: View {
-    @State private var model: AvatarCustomizationViewModel
+public struct WalletImageScene: View {
+    @State private var model: WalletImageViewModel
     private var onHeaderAction: HeaderButtonAction?
-
-    private let emojiViewRenderSize = Sizing.image.extraLarge
-    private var offset: CGFloat { Sizing.image.extraLarge / (2 * sqrt(2)) }
     
     public init(
-        model: AvatarCustomizationViewModel,
+        model: WalletImageViewModel,
         onHeaderAction: HeaderButtonAction?
     ) {
         _model = State(initialValue: model)
@@ -46,7 +43,7 @@ public struct AvatarCustomizationScene: View {
             ZStack() {
                 AvatarView(
                     walletId: model.wallet.id,
-                    size: emojiViewRenderSize
+                    size: model.emojiViewRenderSize
                 )
                 .padding(.vertical, Spacing.large)
                 
@@ -65,7 +62,7 @@ public struct AvatarCustomizationScene: View {
                                 Circle().stroke(Colors.white, lineWidth: Spacing.extraSmall)
                             )
                     }
-                    .offset(x: offset, y: -offset)
+                    .offset(x: model.offset, y: -model.offset)
                     .transition(.opacity)
                 }
             }
@@ -81,8 +78,7 @@ public struct AvatarCustomizationScene: View {
         ForEach(model.emojiList, id: \.self) { value in
             Button(action: {
                 withAnimation {
-                    model.image = emojiViewForRender(color: value.color, emoji: value.emoji)
-                        .render(for: CGSize(width: emojiViewRenderSize, height: emojiViewRenderSize))
+                    model.setAvatarImage(color: value.color.uiColor, text: value.emoji)
                 }
             }) {
                 Circle()
@@ -96,10 +92,5 @@ public struct AvatarCustomizationScene: View {
             .frame(maxWidth: .infinity)
             .transition(.opacity)
         }
-    }
-    
-    private func emojiViewForRender(color: Color, emoji: String) -> some View {
-        EmojiView(color: color, emoji: emoji)
-            .frame(width: emojiViewRenderSize, height: emojiViewRenderSize)
     }
 }

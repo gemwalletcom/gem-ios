@@ -48,12 +48,6 @@ public struct WalletDetailScene: View {
                                     size: Sizing.image.medium * 1.6
                                 )
                             }
-                            
-                            Button(action: onSelectImage) {
-                                Text(Localized.Avatar.changeAvatar)
-                                    .textCase(nil)
-                            }
-                            .buttonStyle(.clearBlue)
                             .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()

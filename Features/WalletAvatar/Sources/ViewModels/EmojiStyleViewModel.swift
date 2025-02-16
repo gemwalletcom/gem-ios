@@ -5,13 +5,16 @@ import Primitives
 import Style
 
 @Observable
-final class EmojiViewModel {
+public final class EmojiStyleViewModel {
     var color: Color = Colors.listStyleColor
     var text: String = .empty
     var emojiList: [EmojiValue]
     var colorList: [Color]
     
-    init() {
+    let onDone: (EmojiValue) -> Void
+    
+    init(onDone: @escaping (EmojiValue) -> Void) {
+        self.onDone = onDone
         emojiList = Self.shuffleList()
         colorList = Self.shuffleColorList()
     }
@@ -22,6 +25,14 @@ final class EmojiViewModel {
     
     var colorColumns: [GridItem] {
         Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+    }
+    
+    func setRandomEmoji() {
+        text = Self.shuffleList().first?.emoji ?? .empty
+    }
+    
+    func onDoneEmojiValue() {
+        onDone(EmojiValue(emoji: text, color: color))
     }
     
     static func shuffleList() -> [EmojiValue] {

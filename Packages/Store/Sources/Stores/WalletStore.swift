@@ -62,9 +62,13 @@ public struct WalletStore: Sendable {
     
     public func renameWallet(_ walletId: String, name: String) throws {
         let _ = try db.write { db in
+            let assignments = [
+                Columns.Wallet.name.set(to: name),
+                Columns.Wallet.updatedAt.set(to: Date.now)
+            ]
             return try WalletRecord
                 .filter(Columns.Wallet.id == walletId)
-                .updateAll(db, Columns.Wallet.name.set(to: name))
+                .updateAll(db, assignments)
         }
     }
     
@@ -111,9 +115,13 @@ public struct WalletStore: Sendable {
     
     public func setWalletAvatar(_ walletId: String, url: URL?) throws {
         let _ = try db.write { db in
+            let assignments = [
+                Columns.Wallet.imageUrl.set(to: url),
+                Columns.Wallet.updatedAt.set(to: Date.now)
+            ]
             return try WalletRecord
                 .filter(Columns.Wallet.id == walletId)
-                .updateAll(db, Columns.Wallet.imageUrl.set(to: url))
+                .updateAll(db, assignments)
         }
     }
 }

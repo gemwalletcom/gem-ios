@@ -15,16 +15,13 @@ public struct AvatarService: Sendable {
     // MARK: - Store
 
     @MainActor
-    public func save(image: UIImage, walletId: String, targetWidth: CGFloat) throws {
-        guard
-            let resizedImage = image.resizeImageAspectFit(targetWidth: targetWidth),
-            let data = resizedImage.compress(.highest)
-        else {
+    public func save(image: UIImage, walletId: String) throws {
+        guard let data = image.compress(.highest) else {
             throw AnyError("Compression image failed")
         }
         
         let path = try preparePath(for: walletId)
-        try data.write(to: path)
+        try data.write(to: path, options: .atomic)
         try store.setWalletAvatar(walletId, url: path)
     }
     
@@ -32,7 +29,7 @@ public struct AvatarService: Sendable {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         let path = try preparePath(for: walletId)
-        try data.write(to: path)
+        try data.write(to: path, options: .atomic)
         try store.setWalletAvatar(walletId, url: path)
     }
     
@@ -45,9 +42,8 @@ public struct AvatarService: Sendable {
     // MARK: - FileManager Private Methods
     
     private func preparePath(for walletId: String) throws -> URL {
-        try removeIfExist(at: try folder(for: walletId))
         let rootPath = try folder(for: walletId)
-        return rootPath.appendingPathComponent(UUID().uuidString + ".jpg")
+        return rootPath.appendingPathComponent(UUID().uuidString + ".png")
     }
     
     private func folder(for walletId: String) throws -> URL {

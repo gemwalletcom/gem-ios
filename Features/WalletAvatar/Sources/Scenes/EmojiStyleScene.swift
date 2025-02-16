@@ -14,20 +14,17 @@ public struct EmojiStyleScene: View {
     
     private let emojiViewSize = Sizing.image.extraLarge
     @State private var selectedTab: Tab = .emoji
-    @Binding private var image: UIImage?
     
-    @State private var model = EmojiViewModel()
+    @State private var model: EmojiStyleViewModel
 
-    public init(image: Binding<UIImage?>) {
-        _image = image
+    public init(model: EmojiStyleViewModel) {
+        _model = State(initialValue: model)
     }
     
     public var body: some View {
         NavigationStack {
             VStack {
                 emojiView(color: model.color, emoji: model.text)
-                
-                changeBackgroundButton
 
                 picker
                     .padding(.horizontal, Spacing.medium)
@@ -57,8 +54,7 @@ public struct EmojiStyleScene: View {
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(Localized.Common.done) {
-                        image = emojiView(color: model.color, emoji: model.text)
-                            .render(for: CGSize(width: emojiViewSize, height: emojiViewSize))
+                        model.onDoneEmojiValue()
                         dismiss()
                     }
                     .bold()
@@ -79,16 +75,6 @@ public struct EmojiStyleScene: View {
             Text(Localized.Common.style).tag(Tab.style)
         }
         .pickerStyle(SegmentedPickerStyle())
-    }
-    
-    private var changeBackgroundButton: some View {
-        Button(action: {
-            model.color = .random()
-        }) {
-            Text(Localized.Avatar.changeBackground + Emoji.WalletAvatar.magic.rawValue)
-                .textCase(nil)
-        }
-        .buttonStyle(.clear)
     }
     
     private var emojiListView: some View {
@@ -147,13 +133,11 @@ public struct EmojiStyleScene: View {
     
     private var magicButton: some View {
         Button(action: {
-            withAnimation {
-                switch selectedTab {
-                case .emoji:
-                    model.emojiList = EmojiViewModel.shuffleList()
-                case .style:
-                    model.colorList = EmojiViewModel.shuffleColorList()
-                }
+            switch selectedTab {
+            case .emoji:
+                model.setRandomEmoji()
+            case .style:
+                model.colorList = EmojiStyleViewModel.shuffleColorList()
             }
         }) {
             Text(
@@ -164,10 +148,6 @@ public struct EmojiStyleScene: View {
                 ].joined(separator: " ")
             )
         }
-        .buttonStyle(.listStyleColor())
+        .buttonStyle(.blue())
     }
-}
-
-#Preview {
-    EmojiStyleScene(image: .constant(nil))
 }

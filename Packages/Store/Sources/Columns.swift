@@ -47,6 +47,7 @@ struct Columns {
         static let order = Column("order")
         static let isPinned = Column("isPinned")
         static let imageUrl = Column("imageUrl")
+        static let updatedAt = Column("updatedAt")
     }
     
     struct Account {

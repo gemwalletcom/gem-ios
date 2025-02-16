@@ -217,6 +217,7 @@ public struct Migrations {
         migrator.registerMigration("Add imageUrl to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
                 $0.add(column: Columns.Wallet.imageUrl.name, .text)
+                $0.add(column: Columns.Wallet.updatedAt.name, .date)
             }
         }
         

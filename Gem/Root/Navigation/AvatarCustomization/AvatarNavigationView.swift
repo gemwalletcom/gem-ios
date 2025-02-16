@@ -15,14 +15,13 @@ struct AvatarNavigationView: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.avatarService) private var avatarService
 
-    @State private(set) var model: AvatarCustomizationViewModel
+    @State private(set) var model: WalletImageViewModel
     
     @State private var isPresentingCollectionScene = false
     @State private var isPresentingEmojiScene = false
-    @State private var isPresentingPhotosPickerScene = false
     
     var body: some View {
-        AvatarCustomizationScene(
+        WalletImageScene(
             model: model,
             onHeaderAction: {
                 onHeaderAction(type: $0)
@@ -47,12 +46,8 @@ struct AvatarNavigationView: View {
             )
         }
         .sheet(isPresented: $isPresentingEmojiScene) {
-            EmojiStyleScene(image: $model.image)
+            EmojiStyleScene(model: model.emojiStyleViewModel())
         }
-        .sheet(isPresented: $isPresentingPhotosPickerScene) {
-            ImagePicker(image: $model.image)
-        }
-        .onChange(of: model.image, onChangeImage)
     }
     
     private func onHeaderAction(type: HeaderButtonType) {
@@ -61,15 +56,9 @@ struct AvatarNavigationView: View {
             isPresentingCollectionScene = true
         case .emoji:
             isPresentingEmojiScene = true
-        case .gallery:
-            isPresentingPhotosPickerScene = true
-        case .send, .receive, .buy, .swap, .stake, .more, .avatar:
+        case .send, .receive, .buy, .swap, .stake, .more, .avatar, .gallery:
             fatalError()
         }
-    }
-    
-    private func onChangeImage(oldValue: UIImage?, newValue: UIImage?) {
-        model.setImage(newValue)
     }
     
     private func setImage(for asset: NFTAsset?) {
