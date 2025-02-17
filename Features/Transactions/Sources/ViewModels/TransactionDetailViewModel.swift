@@ -13,27 +13,32 @@ import Preferences
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
-    private let preferences: Preferences
 
-    init(model: TransactionViewModel, preferences: Preferences = Preferences.standard) {
+    private let valueFormatter = ValueFormatter(style: .full)
+    private let preferences: Preferences
+    private let priceStore: PriceStore
+
+    init(
+        model: TransactionViewModel,
+        priceStore: PriceStore,
+        preferences: Preferences = Preferences.standard
+    ) {
         self.model = model
         self.preferences = preferences
-    }
-
-    var priceModel: PriceViewModel {
-        PriceViewModel(price: model.transaction.price, currencyCode: preferences.currency)
+        self.priceStore = priceStore
     }
     
-    var title: String {
-        return model.title
-    }
-    
+    var title: String { model.title }
     var statusField: String { Localized.Transaction.status }
     var networkField: String { Localized.Transfer.network }
     var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
-    
+
+    var priceModel: PriceViewModel {
+        PriceViewModel(price: model.transaction.price, currencyCode: preferences.currency)
+    }
+
     var headerType: TransactionHeaderType {
         switch model.transaction.transaction.type {
         case .transfer,
@@ -52,24 +57,36 @@ struct TransactionDetailViewModel {
             case .null, .none:
                 fatalError()
             case .swap(let metadata):
-                let formatter = ValueFormatter(style: TransactionHeaderType.swapValueFormatterStyle)
                 guard
                     let fromAsset = model.transaction.assets.first(where: { $0.id == metadata.fromAsset }),
                     let toAsset = model.transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
                     fatalError()
                 }
-                let fromValue = formatter.string(BigInt(stringLiteral: metadata.fromValue), decimals: fromAsset.decimals.asInt, currency: fromAsset.symbol)
-                let toValue = formatter.string(BigInt(stringLiteral: metadata.toValue), decimals: toAsset.decimals.asInt, currency: toAsset.symbol)
-                
+
+                let fromValue = model.swapFormatter(asset: fromAsset, value: BigInt(stringLiteral: metadata.fromValue))
+                let toValue = model.swapFormatter(asset: toAsset, value: BigInt(stringLiteral: metadata.toValue))
+
+                let prices = (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? []
+                let fromPrice = prices.first(where: { $0.assetId == fromAsset.id.identifier })?.mapToPrice()
+                let toPrice = prices.first(where: { $0.assetId == toAsset.id.identifier })?.mapToPrice()
+
                 let from = SwapAmountField(
                     assetImage: AssetIdViewModel(assetId: fromAsset.id).assetImage,
                     amount: fromValue,
-                    fiatAmount: .none
+                    fiatAmount: fiatAmountText(
+                        price: fromPrice,
+                        value: BigInt(stringLiteral: metadata.fromValue),
+                        decimals: fromAsset.decimals.asInt
+                    )
                 )
                 let to = SwapAmountField(
                     assetImage: AssetIdViewModel(assetId: toAsset.id).assetImage,
                     amount: toValue,
-                    fiatAmount: .none
+                    fiatAmount: fiatAmountText(
+                        price: toPrice,
+                        value: BigInt(stringLiteral: metadata.toValue),
+                        decimals: toAsset.decimals.asInt
+                    )
                 )
                 
                 return .swap(
@@ -78,6 +95,18 @@ struct TransactionDetailViewModel {
                 )
             }
         }
+    }
+    
+    private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {
+        guard
+            let price = price,
+            let fiatValue = try? valueFormatter.double(from: value, decimals: decimals) else {
+            return .none
+        }
+        return PriceViewModel(
+            price: price,
+            currencyCode: preferences.currency
+        ).fiatAmountText(amount: fiatValue * price.price)
     }
 
     var amountTitle: String {
@@ -124,7 +153,7 @@ struct TransactionDetailViewModel {
     }
     
     var date: String {
-        return TransactionDateFormatter(date: model.transaction.transaction.createdAt).row
+        TransactionDateFormatter(date: model.transaction.transaction.createdAt).row
     }
     
     var participantField: String? {
@@ -205,19 +234,19 @@ struct TransactionDetailViewModel {
     }
 
     var network: String {
-        return model.transaction.asset.chain.asset.name
+        model.transaction.asset.chain.asset.name
     }
     
     var assetImage: AssetImage {
-        return AssetIdViewModel(assetId: model.transaction.asset.id).assetImage
+        AssetIdViewModel(assetId: model.transaction.asset.id).assetImage
     }
     
     var networkAssetImage: AssetImage {
-        return AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).networkAssetImage
+        AssetIdViewModel(assetId: model.transaction.asset.chain.assetId).networkAssetImage
     }
     
     var networkFeeText: String {
-        return model.networkFeeSymbolText
+        model.networkFeeSymbolText
     }
     
     var networkFeeFiatText: String? {
@@ -232,15 +261,15 @@ struct TransactionDetailViewModel {
     }
     
     var memo: String? {
-        return model.transaction.transaction.memo
+        model.transaction.transaction.memo
     }
     
     var transactionExplorerUrl: URL {
-        return model.transactionExplorerUrl
+        model.transactionExplorerUrl
     }
     
     var transactionExplorerText: String {
-        return model.viewOnTransactionExplorerText
+        model.viewOnTransactionExplorerText
     }
 }
 

@@ -48,23 +48,17 @@ struct TransactionInputViewModel {
     
     var value: BigInt {
         switch transferAmountResult {
-        case .amount(let amount):
-            return amount.value
-        case .error(let amount, _):
-            return amount.value
-        case .none:
-            return data.value
+        case .amount(let amount): amount.value
+        case .error(let amount, _): amount.value
+        case .none: data.value
         }
     }
     
     var feeValue: BigInt? {
         switch transferAmountResult {
-        case .amount(let amount):
-            return amount.networkFee
-        case .error(let amount, _):
-            return amount.networkFee
-        case .none:
-            return nil
+        case .amount(let amount): amount.networkFee
+        case .error(let amount, _): amount.networkFee
+        case .none: .none
         }
     }
 
