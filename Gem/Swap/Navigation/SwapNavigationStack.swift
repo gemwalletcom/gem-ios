@@ -55,6 +55,14 @@ struct SwapNavigationStack: View {
                     )
                 )
             }
+            .navigationDestination(for: Scenes.SwapProviders.self) {
+                SwapProvidersScene(
+                    model: model.swapProvidersViewModel(
+                        asset: $0.asset,
+                        swapQuotes: $0.swapQuotes
+                    )
+                )
+            }
             .sheet(item: $isPresentingAssetSwapType) { selectType in
                 SelectAssetSceneNavigationStack(
                     model: SelectAssetViewModel(

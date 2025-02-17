@@ -168,11 +168,21 @@ extension SwapScene {
             
             Section {
                 if let provider = model.providerText {
-                    ListItemImageView(
-                        title: model.providerField,
-                        subtitle: provider,
-                        assetImage: model.providerImage
-                    )
+                    if model.allowSelectProvider, let toAsset {
+                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset, swapQuotes: model.swapQuotes)) {
+                            ListItemImageView(
+                                title: model.providerField,
+                                subtitle: provider,
+                                assetImage: model.providerImage
+                            )
+                        }
+                    } else  {
+                        ListItemImageView(
+                            title: model.providerField,
+                            subtitle: provider,
+                            assetImage: model.providerImage
+                        )
+                    }
                 }
 
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {

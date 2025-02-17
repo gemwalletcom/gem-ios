@@ -49,7 +49,7 @@ class SwapViewModel {
     var toAssetRequest: AssetRequestOptional
 
     var pairSelectorModel: SwapPairSelectorViewModel
-
+    var selectedProvider: SwapProvider?
     var fromValue: String = ""
     var toValue: String = ""
 
@@ -88,15 +88,17 @@ class SwapViewModel {
 
     var providerField: String { Localized.Common.provider }
     var providerText: String? {
-        if case .loaded(let result) = swapState.availability {
-            return SwapProviderViewModel(provider: result.quote.data.provider).providerText
+        if case .loaded(let result) = swapState.availability,
+            let quote = result.quotes.first(where: { $0.data.provider == selectedProvider }) {
+            return SwapProviderViewModel(provider: quote.data.provider).providerText
         }
         return .none
     }
 
     var providerImage: AssetImage? {
-        if case .loaded(let result) = swapState.availability {
-            return SwapProviderViewModel(provider: result.quote.data.provider).providerImage
+        if case .loaded(let result) = swapState.availability,
+            let quote = result.quotes.first(where: { $0.data.provider == selectedProvider }) {
+            return SwapProviderViewModel(provider: quote.data.provider).providerImage
         }
         return .none
     }
@@ -111,6 +113,20 @@ class SwapViewModel {
 
     var isSwitchAssetButtonDisabled: Bool {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
+    }
+    
+    var allowSelectProvider: Bool {
+        if case .loaded(let result) = swapState.availability {
+            return result.quotes.count > 1
+        }
+        return false
+    }
+    
+    var swapQuotes: [SwapQuote] {
+        if case .loaded(let result) = swapState.availability {
+            return result.quotes
+        }
+        return []
     }
 
     func showToValueLoading() -> Bool {
@@ -146,6 +162,7 @@ class SwapViewModel {
     func priceImpactViewModel(_ fromAsset: AssetData?, _ toAsset: AssetData?) -> PriceImpactViewModel? {
         guard
             case .loaded(let result) = swapState.availability,
+            let quote = result.quotes.first(where: { $0.data.provider == selectedProvider }),
             let fromAsset,
             let toAsset
         else {
@@ -153,9 +170,9 @@ class SwapViewModel {
         }
         return PriceImpactViewModel(
             fromAssetData: fromAsset,
-            fromValue: result.quote.fromValue,
+            fromValue: quote.fromValue,
             toAssetData: toAsset,
-            toValue: result.quote.toValue
+            toValue: quote.toValue
         )
     }
     
@@ -173,6 +190,19 @@ class SwapViewModel {
             assetId: nil,
             type: .receive
         )
+    }
+    
+    func swapProvidersViewModel(
+        asset: Asset,
+        swapQuotes: [SwapQuote]
+    ) -> SwapProvidersViewModel {
+        SwapProvidersViewModel(
+            asset: asset,
+            swapQuotes: swapQuotes
+        ) { quote in
+            self.selectedProvider = quote.data.provider
+            self.fillForSelectedProvider(quote.data.provider, asset: asset)
+        }
     }
 }
 
@@ -210,7 +240,10 @@ extension SwapViewModel {
     }
 
     func swapData(fromAsset: Asset, toAsset: Asset) async -> TransferData? {
-        guard case .loaded(let swapAvailability) = swapState.availability else {
+        guard
+            case .loaded(let swapAvailability) = swapState.availability,
+            let quote = swapAvailability.quotes.first(where: { $0.data.provider == selectedProvider })
+        else {
             return nil
         }
         do {
@@ -218,7 +251,7 @@ extension SwapViewModel {
             let data = try await getSwapData(
                 fromAsset: fromAsset,
                 toAsset: toAsset,
-                quote: swapAvailability.quote
+                quote: quote
             )
             swapState.getQuoteData = .noData
             return data
@@ -263,12 +296,11 @@ extension SwapViewModel {
         guard shouldFetch else { return }
 
         do {
-            let swapQuote = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
-            let value = try BigInt.from(string: swapQuote.toValue)
+            let swapQuotes = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
 
             await MainActor.run {
-                swapState.availability = .loaded(SwapAvailabilityResult(quote: swapQuote))
-                toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+                swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
+                fillForBestRate(toAsset: toAsset)
             }
         } catch {
             await MainActor.run { [self] in
@@ -302,25 +334,46 @@ extension SwapViewModel {
         return TransferData(type: .swap(fromAsset, toAsset, quote, quoteData), recipientData: recepientData, value: value, canChangeValue: true)
     }
 
-    private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> SwapQuote {
+    private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> [SwapQuote] {
         let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
         let walletAddress = try wallet.account(for: fromAsset.chain).address
         let destinationAddress = try wallet.account(for: toAsset.chain).address
-        let quotes = try await swapService.getQuotes(
+        return try await swapService.getQuotes(
             fromAsset: fromAsset.id,
             toAsset: toAsset.id,
             value: value.description,
             walletAddress: walletAddress,
             destinationAddress: destinationAddress
-        ).sorted {
-            try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)
+        )
+    }
+    
+    private func fillForBestRate(toAsset: Asset) {
+        guard
+            case .loaded(let result) = swapState.availability,
+            let bestRate = try? result.quotes.sorted(by: {
+                try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)
+            }).first,
+            let value = try? BigInt.from(string: bestRate.toValue)
+        else {
+            return
         }
-
-        guard let quote = quotes.first else {
-            throw AnyError("No quotes")
+        
+        toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
+        selectedProvider = bestRate.data.provider
+    }
+    
+    private func fillForSelectedProvider(
+        _ provider: SwapProvider,
+        asset: Asset
+    ) {
+        guard
+            case .loaded(let result) = swapState.availability,
+            let bestRate = result.quotes.first(where: { $0.data.provider == provider }),
+            let value = try? BigInt.from(string: bestRate.toValue)
+        else {
+            return
         }
-
-        return quote
+        toValue = formatter.string(value, decimals: asset.decimals.asInt)
     }
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {
