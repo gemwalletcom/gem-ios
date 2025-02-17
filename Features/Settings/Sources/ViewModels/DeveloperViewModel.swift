@@ -1,5 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import SwiftUI
 import Foundation
 import Localization
 import Preferences
@@ -7,6 +8,7 @@ import BannerService
 import StakeService
 import AssetsService
 import TransactionsService
+import Primitives
 
 @MainActor
 public struct DeveloperViewModel {
@@ -105,5 +107,11 @@ public struct DeveloperViewModel {
     
     func clearAssetsVersion() {
         Preferences.standard.swapAssetsVersion = 0
+    }
+    
+    func deeplink(deeplink: DeepLink) {
+        Task {
+            await UIApplication.shared.open(deeplink.localUrl, options: [:])
+        }
     }
 }

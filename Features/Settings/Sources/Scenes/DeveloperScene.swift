@@ -1,7 +1,10 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import SwiftUI
 import Components
 import Localization
+import Primitives
 import PrimitivesComponents
 
 public struct DeveloperScene: View {
@@ -54,6 +57,15 @@ public struct DeveloperScene: View {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Banners"),
                     action: model.clearBanners
+                )
+            }
+            
+            Section("Deeplinks") {
+                NavigationCustomLink(
+                    with: ListItemView(title: "Open Asset (Bitcoin)"),
+                    action: {
+                        model.deeplink(deeplink: .asset(AssetId(chain: .bitcoin, tokenId: .none)))
+                    }
                 )
             }
             

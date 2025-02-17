@@ -4,6 +4,7 @@ import Foundation
 
 public enum PushNotification: Equatable, Sendable {
     case transaction(walletIndex: Int, AssetId)
+    case asset(AssetId)
     case priceAlert(AssetId)
     case buyAsset(AssetId)
     case swapAsset(AssetId, AssetId)
@@ -26,14 +27,15 @@ public enum PushNotification: Equatable, Sendable {
             let transaction = try decoder.decode(PushNotificationTransaction.self, from: data)
             let assetId = try AssetId(id: transaction.assetId)
             self = .transaction(walletIndex: transaction.walletIndex.asInt, assetId)
+        case .asset:
+            let asset = try decoder.decode(PushNotificationAsset.self, from: data)
+            self = .asset(try AssetId(id: asset.assetId))
         case .priceAlert:
-            let priceAlert = try decoder.decode(PushNotificationPriceAlert.self, from: data)
-            let assetId = try AssetId(id: priceAlert.assetId)
-            self = .priceAlert(assetId) 
+            let asset = try decoder.decode(PushNotificationAsset.self, from: data)
+            self = .priceAlert(try AssetId(id: asset.assetId))
         case .buyAsset:
-            let buyAsset = try decoder.decode(PushNotificationBuyAsset.self, from: data)
-            let assetId = try AssetId(id: buyAsset.assetId)
-            self = .buyAsset(assetId)
+            let asset = try decoder.decode(PushNotificationAsset.self, from: data)
+            self = .buyAsset(try AssetId(id: asset.assetId))
         case .swapAsset:
             let swapAsset = try decoder.decode(PushNotificationSwapAsset.self, from: data)
             let fromAssetId = try AssetId(id: swapAsset.fromAssetId)

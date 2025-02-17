@@ -80,4 +80,8 @@ public extension Array {
         }
         return self[index]
     }
+    
+    func element(at index: Int) -> Element? {
+        return indices.contains(index) ? self[index] : nil
+    }
 }

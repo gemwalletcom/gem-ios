@@ -2,7 +2,6 @@
 
 import Foundation
 import Primitives
-import Combine
 
 @Observable
 class NotificationService {
@@ -16,11 +15,14 @@ class NotificationService {
     func clear() {
         notifications = []
     }
-
+    
+    func notify(notification: PushNotification) {
+        notifications.append(notification)
+    }
+    
     func handleUserInfo(_ userInfo: [AnyHashable : Any]) {
         do {
-            let notification = try PushNotification(from: userInfo)
-            notifications.append(notification)
+            notify(notification: try PushNotification(from: userInfo))
         } catch {
             NSLog("handleUserInfo error \(error)")
         }

@@ -21,6 +21,7 @@ struct AssetScene: View {
 
     @State private var showingOptions = false
     @State private var showingPriceAlertMessage = false
+    @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
@@ -181,9 +182,15 @@ struct AssetScene: View {
                         if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
                             Button(title) { onOpenLink(url) }
                         }
+                        Button(Localized.Common.share) {
+                            isPresentingShareAssetSheet = true
+                        }
                     }
                 }
             }
+        }
+        .sheet(isPresented: $isPresentingShareAssetSheet) {
+            ShareSheet(activityItems: [model.shareAssetUrl.absoluteString])
         }
         .taskOnce(onTaskOnce)
         .listSectionSpacing(.compact)

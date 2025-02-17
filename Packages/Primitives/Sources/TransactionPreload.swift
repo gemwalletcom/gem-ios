@@ -3,20 +3,23 @@
 import Foundation
 
 public struct TransactionPreload: Sendable {
-    public let blockhash: String
+    public let blockHash: String
+    public let blockNumber: Int
     public let utxos: [UTXO]
     public let sequence: Int
     public let chainId: String
     public let isDestinationAddressExist: Bool
     
     public init(
-        blockhash: String = "",
+        blockHash: String = "",
+        blockNumber: Int = 0,
         utxos: [UTXO] = [],
         sequence: Int = 0,
         chainId: String = "",
         isDestinationAddressExist: Bool = false
     ) {
-        self.blockhash = blockhash
+        self.blockHash = blockHash
+        self.blockNumber = blockNumber
         self.utxos = utxos
         self.sequence = sequence
         self.chainId = chainId

@@ -29,7 +29,13 @@ public struct SolanaService: Sendable {
 // MARK: - Business Logic
 
 extension SolanaService {
-    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
+    private func getAccounts(token: String, owner: String) async throws -> [SolanaTokenAccountPubkey] {
+        return try await provider
+            .request(.getTokenAccountsByOwner(owner: owner, token: token))
+            .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccountPubkey]>>.self).result.value
+    }
+    
+    private func getTokenAccounts(token: String, owner: String) async throws -> [SolanaTokenAccount] {
         return try await provider
             .request(.getTokenAccountsByOwner(owner: owner, token: token))
             .map(as: JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>.self).result.value
@@ -40,15 +46,22 @@ extension SolanaService {
         senderAddress: String,
         destinationAddress: String
     ) async throws -> SignerInputToken {
-        async let getSenderTokenAccounts = getAccounts(token: tokenId, owner: senderAddress)
-        async let getRecipientTokenAccounts = getAccounts(token: tokenId, owner: destinationAddress)
-        async let getSplProgram = getTokenProgram(tokenId: tokenId)
-        let (senderTokenAccounts, recipientTokenAccounts, splProgram) = try await (getSenderTokenAccounts, getRecipientTokenAccounts, getSplProgram)
-
-        guard let senderTokenAddress = senderTokenAccounts.first?.pubkey else {
+        let accounts = try await provider.requestBatch([
+            .getTokenAccountsByOwner(owner: senderAddress, token: tokenId),
+            .getTokenAccountsByOwner(owner: destinationAddress, token: tokenId)
+        ])
+        .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
+        
+        guard let senderToken = try accounts.getElement(safe: 0).result.value.first else {
             throw AnyError("Sender token address is empty")
         }
-
+        let recipientTokenAccounts = try accounts.getElement(safe: 1).result.value
+        let senderTokenAddress = senderToken.pubkey
+        
+        guard let splProgram = SolanaConfig.tokenProgramId(owner: senderToken.account.owner) else {
+            throw AnyError("Unknow token program id")
+        }
+        
         if let recipientTokenAddress = recipientTokenAccounts.first?.pubkey {
             return SignerInputToken(
                 senderTokenAddress: senderTokenAddress,
@@ -63,29 +76,17 @@ extension SolanaService {
         )
     }
 
-    private func getTokenBalance(token: String, owner: String) async throws -> BigInt {
-        let accounts = try await getAccounts(token: token, owner: owner)
-        guard let account = accounts.first else {
-            return .zero
-        }
-        let balance = try await provider
-            .request(.getTokenAccountBalance(token: account.pubkey))
-            .map(as: JSONRPCResponse<SolanaValue<SolanaBalanceValue>>.self).result.value.amount
-
-        return BigInt(balance) ?? .zero
-    }
-
     private func getTokenBalances(tokenIds: [AssetId], address: String) async throws -> [Primitives.AssetBalance] {
-        let accounts = try await provider.requestBatch(
+        let balances = try await provider.requestBatch(
             tokenIds.map { .getTokenAccountsByOwner(owner: address, token: try $0.getTokenId()) })
             .map(as: [JSONRPCResponse<SolanaValue<[SolanaTokenAccount]>>].self)
-            .compactMap { $0.result.value.first }
-        
-        let balances = try await provider.requestBatch(
-            accounts.map { .getTokenAccountBalance(token: $0.pubkey) })
-            .map(as: [JSONRPCResponse<SolanaValue<SolanaBalanceValue>>].self)
-            .map { BigInt(stringLiteral: $0.result.value.amount) }
-        
+            .map {
+                if let account = $0.result.value.first {
+                    return BigInt(stringLiteral: account.account.data.parsed.info.tokenAmount.amount)
+                }
+                return BigInt.zero
+            }
+    
         return AssetBalance.merge(assetIds: tokenIds, balances: balances)
     }
 
@@ -109,10 +110,10 @@ extension SolanaService {
             .map(as: JSONRPCResponse<SolanaEpoch>.self).result
     }
 
-    private func getDelegations(address: String) async throws -> [SolanaTokenAccountResult<SolanaStakeAccount>] {
+    private func getDelegations(address: String) async throws -> [SolanaStakeAccount] {
         try await provider
             .request(.stakeDelegations(address: address))
-            .map(as: JSONRPCResponse<[SolanaTokenAccountResult<SolanaStakeAccount>]>.self).result
+            .map(as: JSONRPCResponse<[SolanaStakeAccount]>.self).result
     }
 
     private func getRentExemption(size: Int) async throws -> BigInt {
@@ -122,7 +123,7 @@ extension SolanaService {
     }
 
     // https://solana.com/docs/core/fees#compute-unit-limit
-    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) async throws -> Fee {
+    private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) throws -> Fee {
         let gasLimit = switch type {
         case .transfer, .stake, .transferNft: BigInt(100_000)
         case .generic, .swap: BigInt(420_000)
@@ -160,7 +161,7 @@ extension SolanaService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        return try await getTokenBalances(tokenIds: tokenIds, address: address)
+        try await getTokenBalances(tokenIds: tokenIds, address: address)
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -172,44 +173,6 @@ extension SolanaService: ChainBalanceable {
             assetId: chain.assetId,
             balance: Balance(staked: BigInt(staked))
         )
-    }
-}
-
-extension SolanaService {
-    public func fee(input: TransactionInput) async throws -> Fee {
-        switch input.type {
-        case .transfer(let asset):
-            switch asset.id.type {
-            case .native:
-                return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-            case .token:
-                async let getFee = getBaseFee(type: input.type, gasPrice: input.gasPrice)
-                async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
-                async let getToken = try await getTokenTransferType(
-                    tokenId: try asset.getTokenId(),
-                    senderAddress: input.senderAddress,
-                    destinationAddress: input.destinationAddress
-                )
-                let (fee, tokenAccountCreationFee, token) = try await (getFee, getTokenAccountCreationFee, getToken)
-                
-                let options: FeeOptionMap = switch token.recipientTokenAddress {
-                case .some: [:]
-                case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
-                }
-                
-                return Fee(
-                    fee: fee.fee,
-                    gasPriceType: fee.gasPriceType,
-                    gasLimit: fee.gasLimit,
-                    options: options
-                )
-            }
-        case .transferNft:
-            fatalError()
-        case .swap, .stake, .generic:
-            return try await getBaseFee(type: input.type, gasPrice: input.gasPrice)
-        case .account, .tokenApprove: fatalError()
-        }
     }
 }
 
@@ -257,40 +220,46 @@ extension SolanaService: ChainTransactionPreloadable {
             .request(.latestBlockhash)
             .map(as: JSONRPCResponse<SolanaBlockhashResult>.self).result.value.blockhash
         
-        return TransactionPreload(blockhash: blockhash)
+        return TransactionPreload(blockHash: blockhash)
     }
 }
 
 extension SolanaService: ChainTransactionLoadable {
     public func load(input: TransactionInput) async throws -> TransactionLoad {
-        async let fee = fee(input: input)
+        let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                return try await TransactionLoad(
-                    block: SignerInputBlock(hash: input.preload.blockhash),
+                return TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockHash),
                     fee: fee
                 )
             case .token:
-                //TODO: Get tokenID from the fee
-                async let token = try await getTokenTransferType(
+                async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
+                async let getToken = try await getTokenTransferType(
                     tokenId: try input.asset.getTokenId(),
                     senderAddress: input.senderAddress,
                     destinationAddress: input.destinationAddress
                 )
+                let (tokenAccountCreationFee, token) = try await (getTokenAccountCreationFee, getToken)
                 
-                return try await TransactionLoad(
-                    block: SignerInputBlock(hash: input.preload.blockhash),
+                let options: FeeOptionMap = switch token.recipientTokenAddress {
+                case .some: [:]
+                case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
+                }
+                
+                return TransactionLoad(
+                    block: SignerInputBlock(hash: input.preload.blockHash),
                     token: token,
-                    fee: token.recipientTokenAddress == nil ? fee.withOptions([.tokenAccountCreation]) : fee
+                    fee: fee.withOptions(options)
                 )
             }
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            return try await TransactionLoad(
-                block: SignerInputBlock(hash: input.preload.blockhash),
+            return TransactionLoad(
+                block: SignerInputBlock(hash: input.preload.blockHash),
                 fee: fee
             )
         case .account, .tokenApprove: fatalError()
@@ -416,16 +385,14 @@ extension SolanaService: ChainStakable {
 extension SolanaService: ChainTokenable {
     public func getTokenData(tokenId: String) async throws -> Asset {
         let metadataKey = try Gemstone.solanaDeriveMetadataPda(mint: tokenId)
-
-        let tokenInfo = try await provider.request(.getAccountInfo(account: tokenId))
+    
+        async let getTokenInfo = provider.request(.getAccountInfo(account: tokenId))
             .map(as: JSONRPCResponse<SolanaSplTokenInfo>.self)
-            .result.value.data.parsed.info
-
-        guard
-            let base64Str = try await provider.request(.getAccountInfo(account: metadataKey))
+        async let getMetadata = provider.request(.getAccountInfo(account: metadataKey))
             .map(as: JSONRPCResponse<SolanaMplRawData>.self)
-            .result.value.data.first
-        else {
+        
+        let (tokenInfo, metadataEncoded) = try await (getTokenInfo, getMetadata)
+        guard let base64Str = metadataEncoded.result.value.data.first else {
             throw AnyError("no meta account found")
         }
         let metadata = try Gemstone.solanaDecodeMetadata(base64Str: base64Str)
@@ -434,24 +401,9 @@ extension SolanaService: ChainTokenable {
             id: AssetId(chain: chain, tokenId: tokenId),
             name: metadata.name,
             symbol: metadata.symbol,
-            decimals: tokenInfo.decimals,
+            decimals: tokenInfo.result.value.data.parsed.info.decimals,
             type: .spl
         )
-    }
-
-    public func getTokenProgram(tokenId: String) async throws -> Primitives.SolanaTokenProgramId {
-        do {
-            let owner = try await provider.request(.getAccountInfo(account: tokenId))
-                .map(as: JSONRPCResponse<SolanaSplTokenOwner>.self)
-                .result.value.owner
-
-            guard let id = SolanaConfig.tokenProgramId(owner: owner) else {
-                throw AnyError("Unknow token program id")
-            }
-            return id
-        } catch {
-            return .token
-        }
     }
 
     public func getIsTokenAddress(tokenId: String) -> Bool {

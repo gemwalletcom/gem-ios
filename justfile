@@ -53,6 +53,7 @@ test:
     -scheme Gem \
     -sdk iphonesimulator \
     -destination "platform=iOS Simulator,name=iPhone 16" \
+    -parallel-testing-enabled YES \
     test | xcbeautify
 
 test_ui:
