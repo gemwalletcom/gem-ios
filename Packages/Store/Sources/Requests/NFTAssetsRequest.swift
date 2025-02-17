@@ -12,7 +12,7 @@ public struct NFTAssetsRequest: ValueObservationQueryable {
     public init() {}
     
     public func fetch(_ db: Database) throws -> [NFTAsset] {
-        return try NFTAssetRecord
+        try NFTAssetRecord
             .fetchAll(db)
             .map { $0.mapToAsset() }
     }

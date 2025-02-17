@@ -53,7 +53,7 @@ public struct WalletViewModel {
         }
         return AssetImage(
             type: .empty,
-            imageURL: URL(string: imageUrl),
+            imageURL: imageUrl.asURL,
             placeholder: nil,
             chainPlaceholder: WalletViewModel(wallet: wallet).subImage
         )
