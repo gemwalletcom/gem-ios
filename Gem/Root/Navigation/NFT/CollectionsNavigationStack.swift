@@ -46,8 +46,7 @@ public struct CollectionsNavigationStack: View {
                             sceneStep: $0.sceneStep,
                             nftService: nftService,
                             deviceService: deviceService,
-                            avatarService: avatarService,
-                            onSelect: model.onSelect
+                            avatarService: avatarService
                         )
                     )
                 }

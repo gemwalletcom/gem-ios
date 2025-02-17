@@ -53,18 +53,11 @@ public struct NFTScene: View {
     
     private var nftCollectionView: some View {
         ForEach(model.createGridItems(from: nftDataList)) { gridItem in
-            let view = GridPosterView(
-                assetImage: gridItem.assetImage,
-                title: gridItem.title
-            )
-            if let destination = gridItem.destination {
-                NavigationLink(value: destination) {
-                    view
-                }
-            } else {
-                NavigationCustomLink(with: view) {
-                    model.onSelect?(gridItem.asset)
-                }
+            NavigationLink(value: gridItem.destination) {
+                GridPosterView(
+                    assetImage: gridItem.assetImage,
+                    title: gridItem.title
+                )
             }
         }
     }

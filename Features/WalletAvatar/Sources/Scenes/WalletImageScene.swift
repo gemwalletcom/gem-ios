@@ -6,35 +6,40 @@ import Style
 import PrimitivesComponents
 import Components
 import Localization
+import GRDBQuery
+import Primitives
+import Store
 
 public struct WalletImageScene: View {
-    @State private var model: WalletImageViewModel
-    private var onHeaderAction: HeaderButtonAction?
+    enum Tab: Equatable {
+        case emoji, collections
+    }
     
-    public init(
-        model: WalletImageViewModel,
-        onHeaderAction: HeaderButtonAction?
-    ) {
+    @State private var selectedTab: Tab = .emoji
+
+    @State private var model: WalletImageViewModel
+    
+    @Query<NFTAssetsRequest>
+    private var nftAssets: [NFTAsset]
+    
+    public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
-        self.onHeaderAction = onHeaderAction
+        _nftAssets = Query(constant: NFTAssetsRequest())
     }
 
     public var body: some View {
         VStack {
             headerView
-                .padding(.bottom, Spacing.extraLarge)
+                .padding(.bottom, Spacing.large)
             
-            LazyVGrid(
-                columns: model.emojiColumns,
-                alignment: .center,
-                spacing: Spacing.medium
-            ) {
-                emojiList
-            }
+            pickerView
+                .padding(.bottom, Spacing.medium)
+                .padding(.horizontal, Spacing.medium)
+            
+            listView
             
             Spacer()
         }
-        .padding(.horizontal, Spacing.medium)
         .background(Colors.grayBackground)
     }
     
@@ -66,15 +71,38 @@ public struct WalletImageScene: View {
                     .transition(.opacity)
                 }
             }
-            
-            HeaderButtonsView(
-                buttons: model.headerButtons,
-                action: onHeaderAction
-            )
         }
     }
     
-    private var emojiList: some View {
+    private var pickerView: some View {
+        Picker("", selection: $selectedTab.animation()) {
+            Text(Localized.Common.emoji).tag(Tab.emoji)
+            Text(Localized.Nft.collections).tag(Tab.collections)
+        }
+        .pickerStyle(SegmentedPickerStyle())
+    }
+    
+    @ViewBuilder
+    private var listView: some View {
+        ScrollView {
+            LazyVGrid(
+                columns: model.getColumns(for: selectedTab),
+                alignment: .center,
+                spacing: Spacing.medium
+            ) {
+                switch selectedTab {
+                case .emoji:
+                    emojiListView
+                case .collections:
+                    nftAssetListView
+                }
+            }
+            .padding(.horizontal, Spacing.medium)
+        }
+        .highPriorityGesture(DragGesture())
+    }
+    
+    private var emojiListView: some View {
         ForEach(model.emojiList, id: \.self) { value in
             Button(action: {
                 withAnimation {
@@ -91,6 +119,25 @@ public struct WalletImageScene: View {
             }
             .frame(maxWidth: .infinity)
             .transition(.opacity)
+        }
+    }
+    
+    private var nftAssetListView: some View {
+        ForEach(model.buildNftAssetsItems(from: nftAssets), id: \.imageURL) { assetImage in
+            let view = GridPosterView(assetImage: assetImage, title: nil)
+            NavigationCustomLink(with: view) {
+                onSelectNftAsset(url: assetImage.imageURL)
+            }
+        }
+    }
+}
+
+// MARK: - Actions
+
+extension WalletImageScene {
+    func onSelectNftAsset(url: URL?) {
+        Task {
+            await model.setImage(from: url)
         }
     }
 }

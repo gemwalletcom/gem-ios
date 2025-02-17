@@ -13,15 +13,13 @@ import AvatarService
 
 public struct NFTCollectionViewModel: Sendable {
     struct GridItem: Identifiable {
-        let id = UUID()
-        let destination: (any Hashable)?
+        let id: String
+        let destination: any Hashable
         let assetImage: AssetImage
         let title: String
-        let asset: NFTAsset?
     }
 
     public var wallet: Wallet
-    public let onSelect: (@Sendable (NFTAsset?) -> Void)?
 
     let sceneStep: Scenes.NFTCollectionScene.SceneStep
     let nftService: NFTService
@@ -33,15 +31,13 @@ public struct NFTCollectionViewModel: Sendable {
         sceneStep: Scenes.NFTCollectionScene.SceneStep,
         nftService: NFTService,
         deviceService: any DeviceServiceable,
-        avatarService: AvatarService,
-        onSelect: (@Sendable (NFTAsset?) -> Void)? = nil
+        avatarService: AvatarService
     ) {
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.nftService = nftService
         self.deviceService = deviceService
         self.avatarService = avatarService
-        self.onSelect = onSelect
     }
     
     public var nftRequest: NFTRequest {
@@ -118,6 +114,7 @@ public struct NFTCollectionViewModel: Sendable {
     
     private func buildCollectionGridItem(from data: NFTData) -> GridItem {
         GridItem(
+            id: data.id,
             destination: Scenes.NFTCollectionScene(sceneStep: .collection(data)),
             assetImage: AssetImage(
                 type: data.collection.name,
@@ -125,22 +122,21 @@ public struct NFTCollectionViewModel: Sendable {
                 placeholder: nil,
                 chainPlaceholder: nil
             ),
-            title: data.collection.name,
-            asset: nil
+            title: data.collection.name
         )
     }
     
     private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridItem {
         GridItem(
-            destination: onSelect == nil ? Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)) : nil,
+            id: asset.id,
+            destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)),
             assetImage: AssetImage(
                 type: collection.name,
                 imageURL: URL(string: asset.image.imageUrl),
                 placeholder: nil,
                 chainPlaceholder: nil
             ),
-            title: asset.name,
-            asset: asset
+            title: asset.name
         )
     }
 }

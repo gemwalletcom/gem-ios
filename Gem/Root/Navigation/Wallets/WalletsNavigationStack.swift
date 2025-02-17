@@ -43,12 +43,10 @@ struct WalletsNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.WalletSelectImage.self) {
-                AvatarNavigationView(
-                    model: WalletImageViewModel(
-                        wallet: $0.wallet,
-                        avatarService: avatarService
-                    )
-                )
+                WalletImageScene(model: WalletImageViewModel(
+                    wallet: $0.wallet,
+                    avatarService: avatarService
+                ))
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(

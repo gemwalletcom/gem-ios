@@ -24,7 +24,8 @@ public struct EmojiStyleScene: View {
     public var body: some View {
         NavigationStack {
             VStack {
-                emojiView(color: model.color, emoji: model.text)
+                EmojiView(color: model.color, emoji: model.text)
+                    .frame(width: emojiViewSize, height: emojiViewSize)
 
                 picker
                     .padding(.horizontal, Spacing.medium)
@@ -62,11 +63,6 @@ public struct EmojiStyleScene: View {
                 }
             }
         }
-    }
-    
-    private func emojiView(color: Color, emoji: String) -> some View {
-        EmojiView(color: color, emoji: emoji)
-            .frame(width: emojiViewSize, height: emojiViewSize)
     }
     
     private var picker: some View {

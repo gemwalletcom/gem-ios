@@ -29,22 +29,27 @@ public final class WalletImageViewModel {
     let emojiViewRenderSize = Sizing.image.extraLarge
     var offset: CGFloat { emojiViewRenderSize / (2 * sqrt(2)) }
     
-    let headerButtons: [HeaderButton] = [
-        .init(type: .emoji, isEnabled: true),
-        .init(type: .nft, isEnabled: true)
-    ]
-    
-    var emojiColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
-    }
-    
     var emojiList: [EmojiValue] = {
         Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) }.prefix(20))
     }()
     
-    public func emojiStyleViewModel() -> EmojiStyleViewModel {
-        EmojiStyleViewModel { [weak self] value in
-            self?.setAvatarImage(color: value.color.uiColor, text: value.emoji)
+    func buildNftAssetsItems(from assets: [NFTAsset]) -> [AssetImage] {
+        assets.map {
+            AssetImage(
+                type: $0.name,
+                imageURL: $0.image.imageUrl.asURL,
+                placeholder: nil,
+                chainPlaceholder: nil
+            )
+        }
+    }
+    
+    func getColumns(for tab: WalletImageScene.Tab) -> [GridItem] {
+        switch tab {
+        case .emoji:
+            Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+        case .collections:
+            Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
         }
     }
     
@@ -103,6 +108,12 @@ public final class WalletImageViewModel {
         }
         
         setImage(image)
+    }
+    
+    public func emojiStyleViewModel() -> EmojiStyleViewModel {
+        EmojiStyleViewModel { [weak self] value in
+            self?.setAvatarImage(color: value.color.uiColor, text: value.emoji)
+        }
     }
     
     // MARK: - Private methods
