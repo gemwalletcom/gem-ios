@@ -12,6 +12,7 @@ public struct AssetConfiguration: Sendable {
             .algorand,
             // .xrp, Not complete
             .stellar,
+            .xrp,
         ],
         EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) },
     ]

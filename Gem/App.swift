@@ -30,6 +30,7 @@ struct GemApp: App {
                     transactionService: resolver.services.transactionService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
+                    notificationService: resolver.services.notificationService,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel())
                 )
             )

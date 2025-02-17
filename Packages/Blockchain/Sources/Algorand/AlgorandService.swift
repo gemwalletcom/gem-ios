@@ -106,7 +106,7 @@ extension AlgorandService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
         let params = try await transactionsParams()
         return TransactionPreload(
-            blockhash: params.genesis_hash,
+            blockHash: params.genesis_hash,
             sequence: params.last_round.asInt,
             chainId: params.genesis_id
         )
@@ -117,7 +117,7 @@ extension AlgorandService: ChainTransactionLoadable {
     public func load(input: TransactionInput) async throws -> TransactionLoad {
         TransactionLoad(
             sequence: input.preload.sequence,
-            block: SignerInputBlock(hash: input.preload.blockhash),
+            block: SignerInputBlock(hash: input.preload.blockHash),
             chainId: input.preload.chainId,
             fee: input.defaultFee
         )

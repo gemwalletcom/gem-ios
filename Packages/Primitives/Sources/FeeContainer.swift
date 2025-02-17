@@ -32,11 +32,12 @@ public struct Fee: Sendable {
     public var totalFee: BigInt { fee + optionsFee }
     public var optionsFee: BigInt { options.map { $0.value }.reduce(0, +) }
 
-    public func withOptions(_ feeOptions: [FeeOption]) -> Fee {
+    public func withOptions(_ options: FeeOptionMap) -> Fee {
         return Fee(
-            fee: fee + options.filter { feeOptions.contains($0.key) }.map { $0.value }.reduce(0, +),
+            fee: fee,
             gasPriceType: gasPriceType,
-            gasLimit: gasLimit
+            gasLimit: gasLimit,
+            options: options
         )
     }
 }

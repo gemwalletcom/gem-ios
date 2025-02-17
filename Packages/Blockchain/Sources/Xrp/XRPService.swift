@@ -8,6 +8,8 @@ import GemstonePrimitives
 
 public struct XRPService: Sendable {
     
+    static let defaultTokenDecimals = 15
+    
     let chain: Chain
     let provider: Provider<XRPProvider>
     
@@ -23,10 +25,16 @@ public struct XRPService: Sendable {
 // MARK: - Business Logic
 
 extension XRPService {
-    private func account(address: String) async throws -> XRPAccount? {
+    private func account(address: String) async throws -> XRPAccountResult? {
         return try await provider
             .request(.account(address: address))
-            .map(as: XRPResult<XRPAccountResult>.self).result.account_data
+            .map(as: XRPResult<XRPAccountResult>.self).result
+    }
+    
+    private func accountLines(address: String) async throws -> [XRPAccountLine] {
+        return try await provider
+            .request(.accountLines(address: address))
+            .map(as: XRPResult<XRPAccountLinesResult>.self).result.lines ?? []
     }
     
     private func latestBlock() async throws -> BigInt {
@@ -54,7 +62,7 @@ extension XRPService {
 
 extension XRPService: ChainBalanceable {
     public func coinBalance(for address: String) async throws -> AssetBalance {
-        let account = try await account(address: address)
+        let account = try await account(address: address)?.account_data
         
         let (available, reserved): (BigInt, BigInt) = {
             if let account = account {
@@ -79,7 +87,22 @@ extension XRPService: ChainBalanceable {
     }
     
     public func tokenBalance(for address: String, tokenIds: [AssetId]) async throws -> [AssetBalance] {
-        []
+        let lines = try await accountLines(address: address)
+        let formatter = ValueFormatter.full
+        return try tokenIds.map { assetId in
+            let (issuer, tokenSymbol) = try assetId.twoSubTokenIds()
+            if let line = lines.first(where: { $0.account == issuer && $0.symbol == tokenSymbol }) {
+                return AssetBalance(
+                    assetId: assetId,
+                    balance: Balance(
+                        available: try formatter.inputNumber(from: line.balance, decimals: Self.defaultTokenDecimals)
+                    ),
+                    isActive: true
+                )
+            } else {
+                return AssetBalance(assetId: assetId, balance: Balance(available: 0), isActive: false)
+            }
+        }
     }
 
     public func getStakeBalance(for address: String) async throws -> AssetBalance? {
@@ -106,8 +129,12 @@ extension XRPService: ChainFeeRateFetchable {
 
 extension XRPService: ChainTransactionPreloadable {
     public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
-        try await TransactionPreload(
-            sequence: (account(address: input.senderAddress)?.Sequence)?.asInt ?? 0
+        guard let account = try await account(address: input.senderAddress) else {
+            throw AnyError("No account found")
+        }
+        return TransactionPreload(
+            blockNumber: account.ledger_current_index.asInt,
+            sequence: account.account_data?.Sequence.asInt ?? 0
         )
     }
 }
@@ -118,6 +145,7 @@ extension XRPService: ChainTransactionLoadable {
     public func load(input: TransactionInput) async throws -> TransactionLoad {
         return TransactionLoad(
             sequence: input.preload.sequence,
+            block: SignerInputBlock(number: input.preload.blockNumber),
             fee: input.defaultFee
         )
     }
@@ -186,12 +214,12 @@ extension XRPService: ChainTokenable {
         guard let symbol = String(data: currency, encoding: .ascii) else {
             throw AnyError("invalid symbol")
         }
-        
+        let tokenId = AssetId.subTokenId([tokenId, symbol])
         return Asset(
             id: AssetId(chain: chain, tokenId: tokenId),
             name: symbol,
             symbol: symbol,
-            decimals: 15, //TODO: Default?
+            decimals: Self.defaultTokenDecimals.asInt32,
             type: .token
         )
     }
@@ -225,5 +253,15 @@ extension XRPService: ChainLatestBlockFetchable {
 extension XRPService: ChainAddressStatusFetchable {
     public func getAddressStatus(address: String) async throws -> [AddressStatus] {
         []
+    }
+}
+
+extension XRPAccountLine {
+    var symbol: String {
+        guard let currencyData = try? Data.from(hex: currency.trimmingCharacters(in: CharacterSet(charactersIn: "0"))),
+            let currency = String(data: currencyData, encoding: .ascii) else {
+            return currency
+        }
+        return currency
     }
 }

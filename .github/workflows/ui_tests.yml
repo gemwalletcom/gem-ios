@@ -43,6 +43,16 @@ jobs:
           key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
             ${{ runner.os }}-cargo-deps-
+      
+      - name: Cache Swift Package Manager
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.swiftpm
+            .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
+          restore-keys: |
+            ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
