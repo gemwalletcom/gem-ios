@@ -130,12 +130,14 @@ extension MainTabView {
 
     private func onReceiveNotifications(_ notifications: [PushNotification]) {
         if let notification = notifications.first {
-            onReceiveNotification(notification: notification)
+            Task {
+                await onReceiveNotification(notification: notification)
+            }
         }
         notificationService.clear()
     }
 
-    private func onReceiveNotification(notification: PushNotification) {
+    private func onReceiveNotification(notification: PushNotification) async {
         do {
             switch notification {
             case .transaction(let walletIndex, let assetId):
@@ -144,13 +146,13 @@ extension MainTabView {
                     keystore.setCurrentWalletIndex(walletIndex)
                 }
 
-                let asset = try walletsService.assetsService.getAsset(for: assetId)
+                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .priceAlert(let assetId):
-                let asset = try walletsService.assetsService.getAsset(for: assetId)
+                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Price(asset: asset))
             case .asset(let assetId), .buyAsset(let assetId):
-                let asset = try walletsService.assetsService.getAsset(for: assetId)
+                let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)
                 navigationState.wallet.append(Scenes.Asset(asset: asset))
             case .swapAsset(_, _):
                 //let fromAsset = try walletsService.assetsService.getAsset(for: fromAssetId)
