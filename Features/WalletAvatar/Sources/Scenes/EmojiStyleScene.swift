@@ -81,20 +81,13 @@ public struct EmojiStyleScene: View {
                 spacing: Spacing.medium
             ) {
                 ForEach(model.emojiList, id: \.self) { item in
-                    Button(action: {
-                        withAnimation {
+                    EmojiButton(
+                        color: item.color,
+                        emoji: item.emoji,
+                        action: {
                             model.text = item.emoji
                         }
-                    }) {
-                        Circle()
-                            .fill(item.color)
-                            .overlay {
-                                Text(item.emoji)
-                                    .font(.system(size: 40))
-                                    .foregroundColor(Colors.white)
-                                    .minimumScaleFactor(0.5)
-                            }
-                    }
+                    )
                     .frame(maxWidth: .infinity)
                     .transition(.opacity)
                 }

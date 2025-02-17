@@ -24,7 +24,7 @@ public struct WalletImageScene: View {
     
     public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
-        _nftAssets = Query(constant: NFTAssetsRequest())
+        _nftAssets = Query(constant: model.nftAssetsRequest)
     }
 
     public var body: some View {
@@ -48,7 +48,7 @@ public struct WalletImageScene: View {
             ZStack() {
                 AvatarView(
                     walletId: model.wallet.id,
-                    size: model.emojiViewRenderSize
+                    size: model.emojiViewSize
                 )
                 .padding(.vertical, Spacing.large)
                 
@@ -104,19 +104,13 @@ public struct WalletImageScene: View {
     
     private var emojiListView: some View {
         ForEach(model.emojiList, id: \.self) { value in
-            Button(action: {
-                withAnimation {
+            EmojiButton(
+                color: value.color,
+                emoji: value.emoji,
+                action: {
                     model.setAvatarImage(color: value.color.uiColor, text: value.emoji)
                 }
-            }) {
-                Circle()
-                    .fill(value.color)
-                    .overlay {
-                        Text(value.emoji)
-                            .font(.system(size: 40))
-                            .minimumScaleFactor(0.5)
-                    }
-            }
+            )
             .frame(maxWidth: .infinity)
             .transition(.opacity)
         }
