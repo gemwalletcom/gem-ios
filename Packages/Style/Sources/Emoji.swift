@@ -139,6 +139,7 @@ public struct Emoji {
         case anchor = "⚓️"
         case ferrisWheel = "🎡"
         case rollerCoaster = "🎢"
+        case pumpkin = "🎃"
     }
 }
 

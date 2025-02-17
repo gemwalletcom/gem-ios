@@ -30,7 +30,7 @@ public final class WalletImageViewModel {
     var offset: CGFloat { emojiViewRenderSize / (2 * sqrt(2)) }
     
     var emojiList: [EmojiValue] = {
-        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) }.prefix(20))
+        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) })
     }()
     
     func buildNftAssetsItems(from assets: [NFTAsset]) -> [AssetImage] {
