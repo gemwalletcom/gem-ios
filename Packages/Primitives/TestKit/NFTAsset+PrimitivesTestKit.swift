@@ -5,10 +5,10 @@ import Primitives
 
 public extension NFTAsset {
     static func mock(
-        id: String = UUID().uuidString,
-        collectionId: String = UUID().uuidString,
+        id: String = .empty,
+        collectionId: String = .empty,
         contractAddress: String? = nil,
-        tokenId: String = UUID().uuidString,
+        tokenId: String = .empty,
         tokenType: NFTType = .erc721,
         name: String = "Test Name",
         description: String? = nil,
