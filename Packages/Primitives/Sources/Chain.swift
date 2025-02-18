@@ -49,4 +49,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Sendable {
 	case berachain
 	case ink
 	case unichain
+	case hyperliquid
 }

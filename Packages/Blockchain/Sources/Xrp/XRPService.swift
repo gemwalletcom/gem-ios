@@ -90,8 +90,7 @@ extension XRPService: ChainBalanceable {
         let lines = try await accountLines(address: address)
         let formatter = ValueFormatter.full
         return try tokenIds.map { assetId in
-            let (issuer, tokenSymbol) = try assetId.twoSubTokenIds()
-            if let line = lines.first(where: { $0.account == issuer && $0.symbol == tokenSymbol }) {
+            if let line = lines.first(where: { $0.account == assetId.tokenId && $0.currency.count == 40 }) {
                 return AssetBalance(
                     assetId: assetId,
                     balance: Balance(
@@ -214,7 +213,6 @@ extension XRPService: ChainTokenable {
         guard let symbol = String(data: currency, encoding: .ascii) else {
             throw AnyError("invalid symbol")
         }
-        let tokenId = AssetId.subTokenId([tokenId, symbol])
         return Asset(
             id: AssetId(chain: chain, tokenId: tokenId),
             name: symbol,

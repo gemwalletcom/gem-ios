@@ -54,6 +54,14 @@ public final class AssetsService: Sendable {
         throw AnyError("asset not found")
     }
 
+    public func getOrFetchAsset(for assetId: AssetId) async throws -> Asset {
+        if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
+            return asset
+        }
+        try await prefetchAssets(assetIds: [assetId])
+        return try getAsset(for: assetId)
+    }
+    
     public func getAssets(for assetIds: [AssetId]) throws -> [Asset] {
         return try assetStore.getAssets(for: assetIds.ids)
     }
