@@ -74,37 +74,10 @@ struct TransactionInputViewModel {
     }
     
     var headerType: TransactionHeaderType {
-        let inputType: TransacitonHeaderInputType = {
-            switch data.type {
-            case .transfer,
-                .generic,
-                .stake,
-                .tokenApprove:
-                return .amount(
-                    showFiatSubtitle: true
-                )
-            case .transferNft(let asset):
-                return .nft(asset)
-            case .account(_, let type):
-                switch type {
-                case .activate:
-                    return .amount(
-                        showFiatSubtitle: false
-                    )
-                }
-            case .swap(let fromAsset, let toAsset, let quote, _):
-                return .swap(
-                    .init(
-                        fromAsset: fromAsset,
-                        fromValue: BigInt(stringLiteral: quote.fromValue),
-                        fromPrice: metaData?.assetPrices[fromAsset.id.identifier],
-                        toAsset: toAsset,
-                        toValue: BigInt(stringLiteral: quote.toValue),
-                        toPrice: metaData?.assetPrices[toAsset.id.identifier]
-                    )
-                )
-            }
-        }()
-        return infoModel.headerType(input: inputType)
+        TransactionHeaderTypeBuilder.build(
+            infoModel: infoModel,
+            dataType: data.type,
+            metadata: metaData
+        )
     }
 }

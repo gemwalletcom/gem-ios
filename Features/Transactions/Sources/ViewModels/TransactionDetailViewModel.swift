@@ -35,46 +35,21 @@ struct TransactionDetailViewModel {
     var memoField: String { Localized.Transfer.memo }
 
     var headerType: TransactionHeaderType {
-        let inputType: TransacitonHeaderInputType = {
-            switch model.transaction.transaction.type {
-            case .transfer,
-                    .tokenApproval,
-                    .stakeDelegate,
-                    .stakeUndelegate,
-                    .stakeRedelegate,
-                    .stakeRewards,
-                    .stakeWithdraw,
-                    .assetActivation,
-                    .transferNFT,
-                    .smartContractCall:
-                return .amount(showFiatSubtitle: true)
-            case .swap:
-                switch model.transaction.transaction.metadata {
-                case .null, .none:
-                    fatalError()
-                case .swap(let metadata):
-                    guard
-                        let fromAsset = model.transaction.assets.first(where: { $0.id == metadata.fromAsset }),
-                        let toAsset = model.transaction.assets.first(where: { $0.id == metadata.toAsset })
-                    else {
-                        fatalError()
-                    }
-                    let prices = (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? []
-                    return .swap(
-                        .init(
-                            fromAsset: fromAsset,
-                            fromValue: BigInt(stringLiteral: metadata.fromValue),
-                            fromPrice: prices.first(where: { $0.assetId == fromAsset.id.identifier })?.mapToPrice(),
-                            toAsset: toAsset,
-                            toValue: BigInt(stringLiteral: metadata.toValue),
-                            toPrice: prices.first(where: { $0.assetId == toAsset.id.identifier })?.mapToPrice()
-                        )
-                    )
-                }
+        let swapContext: TransactionHeaderInputType.SwapContext? = {
+            if let metadata = model.transaction.transaction.metadata?.swap {
+                return TransactionHeaderInputType.SwapContext(
+                    assets: model.transaction.assets,
+                    assetPrices: (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? [],
+                    metada: metadata
+                )
             }
+            return nil
         }()
-
-        return infoModel.headerType(input: inputType)
+        return TransactionHeaderTypeBuilder.build(
+            infoModel: infoModel,
+            type: model.transaction.transaction.type,
+            swapContext: swapContext
+        )
     }
 
     var amountTitle: String {
