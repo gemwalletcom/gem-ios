@@ -191,9 +191,4 @@ struct Columns {
         static let previewImageUrl = Column("previewImageUrl")
         static let originalSourceUrl = Column("originalSourceUrl")
     }
-    
-    struct Avatar {
-        static let walletId = Column("walletId")
-        static let avatarValue = Column("avatarValue")
-    }
 }

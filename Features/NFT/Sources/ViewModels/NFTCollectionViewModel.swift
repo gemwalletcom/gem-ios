@@ -74,7 +74,7 @@ public struct NFTCollectionViewModel: Sendable {
     }
 
     public func setWalletAvatar(_ asset: NFTAsset) async throws {
-        guard let url = URL(string: asset.image.previewImageUrl) else { return }
+        guard let url = asset.image.previewImageUrl.asURL else { return }
         try await avatarService.save(url: url, walletId: wallet.id)
     }
     
@@ -92,9 +92,7 @@ public struct NFTCollectionViewModel: Sendable {
     func createGridItems(from list: [NFTData]) -> [GridItem] {
         switch sceneStep {
         case .collections:
-            list.map { data in
-                buildCollectionsGridItem(from: data)
-            }
+            list.map { buildCollectionsGridItem(from: $0) }
         case .collection(let data):
             data.assets.map { asset in
                 buildAssetDetailsGridItem(collection: data.collection, asset: asset)
@@ -118,7 +116,7 @@ public struct NFTCollectionViewModel: Sendable {
             destination: Scenes.NFTCollectionScene(sceneStep: .collection(data)),
             assetImage: AssetImage(
                 type: data.collection.name,
-                imageURL: URL(string: data.collection.image.imageUrl),
+                imageURL: data.collection.image.imageUrl.asURL,
                 placeholder: nil,
                 chainPlaceholder: nil
             ),
@@ -132,7 +130,7 @@ public struct NFTCollectionViewModel: Sendable {
             destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)),
             assetImage: AssetImage(
                 type: collection.name,
-                imageURL: URL(string: asset.image.imageUrl),
+                imageURL: asset.image.imageUrl.asURL,
                 placeholder: nil,
                 chainPlaceholder: nil
             ),

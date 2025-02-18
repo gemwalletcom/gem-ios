@@ -140,6 +140,7 @@ public struct Emoji {
         case ferrisWheel = "🎡"
         case rollerCoaster = "🎢"
         case pumpkin = "🎃"
+        case package = "📦"
     }
 }
 

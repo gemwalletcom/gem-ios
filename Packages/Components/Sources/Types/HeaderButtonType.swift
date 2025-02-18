@@ -10,9 +10,6 @@ public enum HeaderButtonType: String, Identifiable, CaseIterable, Sendable {
     case stake
     case more
     case avatar
-    case gallery
-    case emoji
-    case nft
     
     public var id: String { rawValue }
 }

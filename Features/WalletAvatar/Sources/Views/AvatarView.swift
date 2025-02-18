@@ -14,25 +14,30 @@ public struct AvatarView: View {
     private var wallet: Wallet?
     
     private let imageSize: CGFloat
-    private var overlayImageSize: CGFloat { imageSize / (2 * sqrt(2)) }
+    private let overlayImageSize: CGFloat
 
     public init(
         walletId: String,
-        size: CGFloat
+        imageSize: CGFloat,
+        overlayImageSize: CGFloat
     ) {
-        self.imageSize = size
+        self.imageSize = imageSize
+        self.overlayImageSize = overlayImageSize
         _wallet = Query(WalletRequest(walletId: walletId))
     }
     
     public var body: some View {
-        if let wallet {
-            AssetImageView(
-                assetImage: WalletViewModel(wallet: wallet).avatarImage,
-                size: imageSize,
-                overlayImageSize: overlayImageSize
-            )
-            .frame(width: imageSize, height: imageSize)
-            .transition(.opacity)
+        VStack {
+            if let wallet {
+                AssetImageView(
+                    assetImage: WalletViewModel(wallet: wallet).avatarImage,
+                    size: imageSize,
+                    overlayImageSize: overlayImageSize
+                )
+                .id(wallet.imageUrl)
+            }
         }
+        .frame(width: imageSize, height: imageSize)
+        .animation(.default, value: wallet?.imageUrl)
     }
 }

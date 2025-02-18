@@ -27,8 +27,7 @@ public struct WalletDetailScene: View {
     @State private var isPresentingDeleteConfirmation: Bool?
     @FocusState private var focusedField: Field?
     
-    let avatarSize = Sizing.image.medium * 1.6
-    var editButtonOffset: CGFloat { avatarSize / (2 * sqrt(2)) }
+    let avatarSize = Sizing.image.extraLarge
 
     public init(model: WalletDetailViewModel) {
         self.model = model
@@ -45,8 +44,15 @@ public struct WalletDetailScene: View {
                     HStack {
                         Spacer()
                         VStack(spacing: Spacing.medium) {
-                            avatarView
-                                .padding(.bottom, Spacing.extraLarge)
+                            AvatarActionView(
+                                walletId: model.wallet.id,
+                                imageSize: avatarSize,
+                                overlayImageSize: Sizing.image.medium,
+                                action: {
+                                    onSelectImage()
+                                }
+                            )
+                            .padding(.bottom, Spacing.extraLarge)
                         }
                         Spacer()
                     }
@@ -128,31 +134,6 @@ public struct WalletDetailScene: View {
         }
         .navigationDestination(for: $privateKey) {
             ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: $0.key, encoding: model.getEncodingType(for: $0.chain)))
-        }
-    }
-    
-    private var avatarView: some View {
-        ZStack {
-            Button(action: onSelectImage) {
-                AvatarView(
-                    walletId: model.wallet.id,
-                    size: avatarSize
-                )
-            }
-            
-            Button(action: {
-                onSelectImage()
-            }) {
-                Image(systemName: SystemImage.pencil)
-                    .foregroundColor(Colors.black)
-                    .padding(Spacing.small)
-                    .background(Colors.grayVeryLight)
-                    .clipShape(Circle())
-                    .background(
-                        Circle().stroke(Colors.white, lineWidth: Spacing.extraSmall)
-                    )
-            }
-            .offset(x: editButtonOffset, y: editButtonOffset)
         }
     }
 }

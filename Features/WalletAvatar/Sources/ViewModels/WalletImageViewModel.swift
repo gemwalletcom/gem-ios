@@ -8,14 +8,14 @@ import Primitives
 import Components
 import AvatarService
 import Store
+import Localization
 
 @MainActor
 @Observable
 public final class WalletImageViewModel: Sendable {
-    public private(set) var wallet: Wallet
+    public let wallet: Wallet
     public let avatarAssetImage: AssetImage
     private let avatarService: AvatarService
-    private(set) var isVisibleClearButton: Bool
     
     public init(
         wallet: Wallet,
@@ -24,27 +24,34 @@ public final class WalletImageViewModel: Sendable {
         self.wallet = wallet
         self.avatarService = avatarService
         self.avatarAssetImage = WalletViewModel(wallet: wallet).avatarImage
-        self.isVisibleClearButton = wallet.imageUrl != nil
     }
+    
+    var title: String { Localized.Common.avatar }
     
     let emojiViewSize = Sizing.image.extraLarge
-    var offset: CGFloat { emojiViewSize / (2 * sqrt(2)) }
     
-    var nftAssetsRequest: NFTAssetsRequest {
-        NFTAssetsRequest()
+    var walletRequest: WalletRequest {
+        WalletRequest(walletId: wallet.id)
     }
     
-    var emojiList: [EmojiValue] = {
-        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.listStyleColor) })
+    var nftAssetsRequest: NFTAssetsRequest {
+        NFTAssetsRequest(walletId: wallet.id)
+    }
+    
+    let emojiList: [EmojiValue] = {
+        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
     }()
     
-    func buildNftAssetsItems(from assets: [NFTAsset]) -> [AssetImage] {
+    func buildNftAssetsItems(from assets: [NFTAsset]) -> [(id: String, assetImage: AssetImage)] {
         assets.map {
-            AssetImage(
-                type: $0.name,
-                imageURL: $0.image.imageUrl.asURL,
-                placeholder: nil,
-                chainPlaceholder: nil
+            (
+                id: $0.id,
+                assetImage: AssetImage(
+                    type: $0.name,
+                    imageURL: $0.image.imageUrl.asURL,
+                    placeholder: nil,
+                    chainPlaceholder: nil
+                )
             )
         }
     }
@@ -52,7 +59,7 @@ public final class WalletImageViewModel: Sendable {
     func getColumns(for tab: WalletImageScene.Tab) -> [GridItem] {
         switch tab {
         case .emoji:
-            Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+            Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 4)
         case .collections:
             Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
         }
@@ -64,7 +71,6 @@ public final class WalletImageViewModel: Sendable {
         do {
             guard let url else { return }
             try await avatarService.save(url: url, walletId: wallet.id)
-            isVisibleClearButton = true
         } catch {
             print("Set nft image error:", error)
         }
@@ -73,35 +79,43 @@ public final class WalletImageViewModel: Sendable {
     public func setDefaultAvatar() {
         do {
             try avatarService.remove(for: wallet.id)
-            isVisibleClearButton = false
         } catch {
             print("Setting default avatar error:", error)
         }
     }
     
     public func setAvatarImage(color: UIColor, text: String) {
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = UIScreen.main.scale
+
         let renderer = UIGraphicsImageRenderer(
-            size: CGSize(
-                width: emojiViewSize,
-                height: emojiViewSize
-            )
+            size: CGSize(width: emojiViewSize, height: emojiViewSize),
+            format: format
         )
-        
+
         let image = renderer.image { context in
             let rect = CGRect(x: 0, y: 0, width: emojiViewSize, height: emojiViewSize)
 
-            let path = UIBezierPath(ovalIn: rect.insetBy(dx: -1, dy: -1))
+            let path = UIBezierPath(ovalIn: rect.insetBy(dx: -0.5, dy: -0.5))
+            UIColor.clear.setFill()
+            context.fill(rect)
+            
             color.setFill()
             path.fill()
-            
+
             let fontSize = emojiViewSize * 0.7
-            let font = UIFont.systemFont(ofSize: fontSize)
+            let font = UIFont.boldSystemFont(ofSize: fontSize)
+
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.alignment = .center
+
             let attributes: [NSAttributedString.Key: Any] = [
                 .font: font,
-                .foregroundColor: UIColor.white
+                .paragraphStyle: paragraphStyle
             ]
-            
-            let textSize = text.size(withAttributes: attributes)
+            let attributedString = NSAttributedString(string: text, attributes: attributes)
+
+            let textSize = attributedString.size()
             let textRect = CGRect(
                 x: (emojiViewSize - textSize.width) / 2,
                 y: (emojiViewSize - textSize.height) / 2,
@@ -109,9 +123,9 @@ public final class WalletImageViewModel: Sendable {
                 height: textSize.height
             )
 
-            text.draw(in: textRect, withAttributes: attributes)
+            attributedString.draw(in: textRect)
         }
-        
+
         setImage(image)
     }
     
@@ -127,7 +141,6 @@ public final class WalletImageViewModel: Sendable {
         do {
             guard let image else { return }
             try avatarService.save(image: image, walletId: wallet.id)
-            isVisibleClearButton = true
         } catch {
             print("Set image error:", error)
         }

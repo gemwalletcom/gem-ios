@@ -18,7 +18,6 @@ public struct CollectionsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.presentationMode) var presentationMode
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -89,14 +88,6 @@ public struct CollectionsNavigationStack: View {
                             Images.System.plus
                         }
                     }
-                    
-                    if presentationMode.wrappedValue.isPresented {
-                        ToolbarItem(placement: .navigationBarLeading) {
-                            Button(Localized.Common.done) {
-                                dismiss()
-                            }.bold()
-                        }
-                    }
                 }
         }
         .toast(
@@ -117,7 +108,7 @@ public struct CollectionsNavigationStack: View {
             )
         case .avatar:
             setAsWalletAvatar(assetData: assetData)
-        case .buy, .receive, .swap, .stake, .gallery, .emoji, .nft:
+        case .buy, .receive, .swap, .stake:
             fatalError()
         case .more:
             if let url = assetData.collection.links.first?.url, let url = URL(string: url) {

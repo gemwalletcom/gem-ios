@@ -20,11 +20,11 @@ public final class EmojiStyleViewModel {
     }
 
     var emojiColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+        Self.createColumns()
     }
     
     var colorColumns: [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+        Self.createColumns()
     }
     
     func setRandomEmoji() {
@@ -50,5 +50,9 @@ public final class EmojiStyleViewModel {
         (0..<20).map { count in
             .random()
         }
+    }
+    
+    static func createColumns() -> [GridItem] {
+        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
     }
 }

@@ -19,57 +19,43 @@ public struct WalletImageScene: View {
 
     @State private var model: WalletImageViewModel
     
+    @Query<WalletRequest>
+    var dbWallet: Wallet?
+    
     @Query<NFTAssetsRequest>
     private var nftAssets: [NFTAsset]
     
     public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
         _nftAssets = Query(constant: model.nftAssetsRequest)
+        _dbWallet = Query(constant: model.walletRequest)
     }
 
     public var body: some View {
         VStack {
-            headerView
-                .padding(.bottom, Spacing.large)
+            AvatarView(
+                walletId: model.wallet.id,
+                imageSize: model.emojiViewSize,
+                overlayImageSize: Sizing.image.medium
+            )
+            .padding(.top, Spacing.medium)
+            .padding(.bottom, Spacing.extraLarge)
             
             pickerView
                 .padding(.bottom, Spacing.medium)
                 .padding(.horizontal, Spacing.medium)
             
             listView
-            
-            Spacer()
         }
+        .navigationTitle(model.title)
         .background(Colors.grayBackground)
-    }
-    
-    private var headerView: some View {
-        VStack {
-            ZStack() {
-                AvatarView(
-                    walletId: model.wallet.id,
-                    size: model.emojiViewSize
-                )
-                .padding(.vertical, Spacing.large)
-                
-                if model.isVisibleClearButton {
-                    Button(action: {
-                        withAnimation {
-                            model.setDefaultAvatar()
-                        }
-                    }) {
-                        Image(systemName: SystemImage.xmark)
-                            .foregroundColor(Colors.black)
-                            .padding(Spacing.small)
-                            .background(Colors.grayVeryLight)
-                            .clipShape(Circle())
-                            .background(
-                                Circle().stroke(Colors.white, lineWidth: Spacing.extraSmall)
-                            )
-                    }
-                    .offset(x: model.offset, y: -model.offset)
-                    .transition(.opacity)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(Localized.Filter.clear) {
+                    model.setDefaultAvatar()
                 }
+                .bold()
+                .disabled(dbWallet?.imageUrl == nil)
             }
         }
     }
@@ -99,6 +85,12 @@ public struct WalletImageScene: View {
             }
             .padding(.horizontal, Spacing.medium)
         }
+        .overlay(content: {
+            if nftAssets.isEmpty, case .collections = selectedTab {
+                Text(Localized.Activity.EmptyState.message)
+                    .textStyle(.body)
+            }
+        })
         .highPriorityGesture(DragGesture())
     }
     
@@ -117,10 +109,10 @@ public struct WalletImageScene: View {
     }
     
     private var nftAssetListView: some View {
-        ForEach(model.buildNftAssetsItems(from: nftAssets), id: \.imageURL) { assetImage in
-            let view = GridPosterView(assetImage: assetImage, title: nil)
+        ForEach(model.buildNftAssetsItems(from: nftAssets), id: \.id) { item in
+            let view = GridPosterView(assetImage: item.assetImage, title: nil)
             NavigationCustomLink(with: view) {
-                onSelectNftAsset(url: assetImage.imageURL)
+                onSelectNftAsset(url: item.assetImage.imageURL)
             }
         }
     }

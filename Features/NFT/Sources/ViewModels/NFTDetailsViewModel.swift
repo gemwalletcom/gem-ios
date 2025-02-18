@@ -122,7 +122,7 @@ public struct NFTDetailsViewModel: Sendable {
     }
     
     func saveImageToGallery() async throws(ImageGalleryServiceError) {
-        guard let url = URL(string: assetData.asset.image.imageUrl) else {
+        guard let url = assetData.asset.image.imageUrl.asURL else {
             throw ImageGalleryServiceError.wrongURL
         }
         let saver = ImageGalleryService()

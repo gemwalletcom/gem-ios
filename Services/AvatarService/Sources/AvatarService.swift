@@ -42,6 +42,7 @@ public struct AvatarService: Sendable {
     // MARK: - FileManager Private Methods
     
     private func preparePath(for walletId: String) throws -> URL {
+        try removeIfExist(at: try folder(for: walletId))
         let rootPath = try folder(for: walletId)
         return rootPath.appendingPathComponent(UUID().uuidString + ".png")
     }
