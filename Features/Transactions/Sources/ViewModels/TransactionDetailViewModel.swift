@@ -14,7 +14,6 @@ import Preferences
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
 
-    private let valueFormatter = ValueFormatter(style: .full)
     private let preferences: Preferences
     private let priceStore: PriceStore
 
@@ -35,78 +34,47 @@ struct TransactionDetailViewModel {
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
 
-    var priceModel: PriceViewModel {
-        PriceViewModel(price: model.transaction.price, currencyCode: preferences.currency)
-    }
-
     var headerType: TransactionHeaderType {
-        switch model.transaction.transaction.type {
-        case .transfer,
-            .tokenApproval,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRedelegate,
-            .stakeRewards,
-            .stakeWithdraw,
-            .assetActivation,
-            .transferNFT,
-            .smartContractCall:
-            return .amount(title: amountTitle, subtitle: amountSubtitle)
-        case .swap:
-            switch model.transaction.transaction.metadata {
-            case .null, .none:
-                fatalError()
-            case .swap(let metadata):
-                guard
-                    let fromAsset = model.transaction.assets.first(where: { $0.id == metadata.fromAsset }),
-                    let toAsset = model.transaction.assets.first(where: { $0.id == metadata.toAsset }) else {
+        let inputType: TransacitonHeaderInputType = {
+            switch model.transaction.transaction.type {
+            case .transfer,
+                    .tokenApproval,
+                    .stakeDelegate,
+                    .stakeUndelegate,
+                    .stakeRedelegate,
+                    .stakeRewards,
+                    .stakeWithdraw,
+                    .assetActivation,
+                    .transferNFT,
+                    .smartContractCall:
+                return .amount(showFiatSubtitle: true)
+            case .swap:
+                switch model.transaction.transaction.metadata {
+                case .null, .none:
                     fatalError()
+                case .swap(let metadata):
+                    guard
+                        let fromAsset = model.transaction.assets.first(where: { $0.id == metadata.fromAsset }),
+                        let toAsset = model.transaction.assets.first(where: { $0.id == metadata.toAsset })
+                    else {
+                        fatalError()
+                    }
+                    let prices = (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? []
+                    return .swap(
+                        .init(
+                            fromAsset: fromAsset,
+                            fromValue: BigInt(stringLiteral: metadata.fromValue),
+                            fromPrice: prices.first(where: { $0.assetId == fromAsset.id.identifier })?.mapToPrice(),
+                            toAsset: toAsset,
+                            toValue: BigInt(stringLiteral: metadata.toValue),
+                            toPrice: prices.first(where: { $0.assetId == toAsset.id.identifier })?.mapToPrice()
+                        )
+                    )
                 }
-
-                let fromValue = model.swapFormatter(asset: fromAsset, value: BigInt(stringLiteral: metadata.fromValue))
-                let toValue = model.swapFormatter(asset: toAsset, value: BigInt(stringLiteral: metadata.toValue))
-
-                let prices = (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? []
-                let fromPrice = prices.first(where: { $0.assetId == fromAsset.id.identifier })?.mapToPrice()
-                let toPrice = prices.first(where: { $0.assetId == toAsset.id.identifier })?.mapToPrice()
-
-                let from = SwapAmountField(
-                    assetImage: AssetIdViewModel(assetId: fromAsset.id).assetImage,
-                    amount: fromValue,
-                    fiatAmount: fiatAmountText(
-                        price: fromPrice,
-                        value: BigInt(stringLiteral: metadata.fromValue),
-                        decimals: fromAsset.decimals.asInt
-                    )
-                )
-                let to = SwapAmountField(
-                    assetImage: AssetIdViewModel(assetId: toAsset.id).assetImage,
-                    amount: toValue,
-                    fiatAmount: fiatAmountText(
-                        price: toPrice,
-                        value: BigInt(stringLiteral: metadata.toValue),
-                        decimals: toAsset.decimals.asInt
-                    )
-                )
-                
-                return .swap(
-                    from: from,
-                    to: to
-                )
             }
-        }
-    }
-    
-    private func fiatAmountText(price: Price?, value: BigInt, decimals: Int) -> String? {
-        guard
-            let price = price,
-            let fiatValue = try? valueFormatter.double(from: value, decimals: decimals) else {
-            return .none
-        }
-        return PriceViewModel(
-            price: price,
-            currencyCode: preferences.currency
-        ).fiatAmountText(amount: fiatValue * price.price)
+        }()
+
+        return infoModel.headerType(input: inputType)
     }
 
     var amountTitle: String {
@@ -139,10 +107,7 @@ struct TransactionDetailViewModel {
             .stakeRewards,
             .stakeWithdraw,
             .smartContractCall:
-            guard let price = model.transaction.price else {
-                return .none
-            }
-            return priceModel.fiatAmountText(amount: model.amount * price.price)
+            return infoModel.amountFiatValueText
         case .tokenApproval, .assetActivation:
             return .none
         }
@@ -250,10 +215,7 @@ struct TransactionDetailViewModel {
     }
     
     var networkFeeFiatText: String? {
-        guard let price = model.transaction.feePrice else {
-            return .empty
-        }
-        return priceModel.fiatAmountText(amount: model.networkFeeAmount * price.price)
+        infoModel.feeFiatValueText
     }
 
     var showMemoField: Bool {
@@ -270,6 +232,18 @@ struct TransactionDetailViewModel {
     
     var transactionExplorerText: String {
         model.viewOnTransactionExplorerText
+    }
+
+    var infoModel: TransactionInfoViewModel {
+        TransactionInfoViewModel(
+            currency: preferences.currency,
+            asset: model.transaction.asset,
+            assetPrice: model.transaction.price,
+            feeAsset: model.transaction.feeAsset,
+            feeAssetPrice: model.transaction.feePrice,
+            value: model.transaction.transaction.valueBigInt,
+            feeValue: model.transaction.transaction.feeBigInt
+        )
     }
 }
 

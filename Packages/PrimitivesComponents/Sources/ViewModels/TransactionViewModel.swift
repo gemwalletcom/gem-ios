@@ -8,7 +8,7 @@ import Style
 import BigInt
 import Localization
 
-public struct TransactionViewModel {
+public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
 
     private let formatter: ValueFormatter
@@ -153,14 +153,6 @@ public struct TransactionViewModel {
         TextStyle(font: Font.system(.footnote), color: .secondary)
     }
     
-    public var amount: Double  {
-        do {
-            return try formatter.double(from: transaction.transaction.valueBigInt, decimals: transaction.asset.decimals.asInt)
-        } catch {
-            return .zero
-        }
-    }
-    
     public var amountSymbolText: String {
         formatter.string(
             transaction.transaction.valueBigInt,
@@ -171,14 +163,6 @@ public struct TransactionViewModel {
     
     public var networkFeeText: String {
         formatter.string(transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
-    }
-    
-    public var networkFeeAmount: Double {
-        do {
-            return try formatter.double(from: transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
-        } catch {
-            return .zero
-        }
     }
     
     public var networkFeeSymbolText: String {
