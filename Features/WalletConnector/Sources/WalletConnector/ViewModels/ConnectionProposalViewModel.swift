@@ -61,9 +61,7 @@ public struct ConnectionProposalViewModel {
 extension ConnectionProposalViewModel {
     func accept() throws {
         let selectedWalletId = walletSelectorModel.walletModel.wallet.walletId
-        if payload.defaultWallet.walletId != selectedWalletId {
-            try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
-        }
+        try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
         confirmTransferDelegate(.success(selectedWalletId.id))
     }
 }
