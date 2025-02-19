@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "أصل غير مدعوم.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "موقع إلكتروني";
 "asset.contract" = "عقد";
@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
 "permissions.access_denied" = "تم الرفض";
 "permissions.image.photo_access.denied.description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. يُرجى تمكين هذا الإذن في إعدادات جهازك.";
+"common.magic_button" = "الزر السحري";
+"common.emoji" = "الرموز التعبيرية";
+"common.style" = "أسلوب";
+"common.avatar" = "الصورة الرمزية";
+"common.photo" = "صورة";
+"info.price_impact.title" = "تأثير السعر";
+"info.price_impact.description" = "تأثير السعر هو التغيير في سعر الرمز المميز الناتج عن حجم تداولك. يعني ارتفاع تأثير السعر أنك ستتلقى عددًا أقل من الرموز المميزة بسبب انخفاض السيولة أو حجم الطلب الكبير. ";

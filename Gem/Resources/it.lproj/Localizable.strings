@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "Attività non supportata.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Sito web";
 "asset.contract" = "Contrarre";
@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "La tua immagine è stata salvata in Foto!";
 "permissions.access_denied" = "Accesso negato";
 "permissions.image.photo_access.denied.description" = "Questa app non ha l'autorizzazione per accedere alla tua libreria di foto. Abilita l'accesso nelle impostazioni del tuo dispositivo.";
+"common.magic_button" = "Pulsante magico";
+"common.emoji" = "Emoji";
+"common.style" = "Stile";
+"common.avatar" = "L'Avatar";
+"common.photo" = "Foto";
+"info.price_impact.title" = "Impatto sul prezzo";
+"info.price_impact.description" = "L'impatto sul prezzo è la variazione del prezzo del token causata dalla dimensione del tuo trade. Un impatto sul prezzo più elevato significa che ricevi meno token a causa della bassa liquidità o di una grande dimensione dell'ordine. ";

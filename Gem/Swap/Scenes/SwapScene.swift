@@ -13,6 +13,7 @@ import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
+import InfoSheet
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -33,6 +34,8 @@ struct SwapScene: View {
     private var toAsset: AssetData?
 
     @State private var model: SwapViewModel
+    
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
@@ -154,13 +157,18 @@ extension SwapScene {
                 }
 
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
-                    PriceImpactView(model: viewModel)
+                    PriceImpactView(model: viewModel) {
+                        isPresentingInfoSheet = .priceImpact
+                    }
                 }
             }
 
             if case let .error(error) = model.swapState.availability {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
+        }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
 }

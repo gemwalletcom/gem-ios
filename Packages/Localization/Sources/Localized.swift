@@ -141,6 +141,8 @@ public enum Localized {
     public static let address = Localized.tr("Localizable", "common.address", fallback: "Address")
     /// All
     public static let all = Localized.tr("Localizable", "common.all", fallback: "All")
+    /// Avatar
+    public static let avatar = Localized.tr("Localizable", "common.avatar", fallback: "Avatar")
     /// Back
     public static let back = Localized.tr("Localizable", "common.back", fallback: "Back")
     /// Cancel
@@ -161,6 +163,8 @@ public enum Localized {
     }
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
+    /// Emoji
+    public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
     /// Hide
     public static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
     /// %d ms
@@ -171,6 +175,8 @@ public enum Localized {
     public static let learnMore = Localized.tr("Localizable", "common.learn_more", fallback: "Learn More")
     /// Loading
     public static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
+    /// Magic Button
+    public static let magicButton = Localized.tr("Localizable", "common.magic_button", fallback: "Magic Button")
     /// Manage
     public static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
@@ -185,6 +191,8 @@ public enum Localized {
     public static let openSettings = Localized.tr("Localizable", "common.open_settings", fallback: "Open settings")
     /// Paste
     public static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
+    /// Photo
+    public static let photo = Localized.tr("Localizable", "common.photo", fallback: "Photo")
     /// Phrase
     public static let phrase = Localized.tr("Localizable", "common.phrase", fallback: "Phrase")
     /// Pin
@@ -217,6 +225,8 @@ public enum Localized {
     }
     /// Skip
     public static let skip = Localized.tr("Localizable", "common.skip", fallback: "Skip")
+    /// Style
+    public static let style = Localized.tr("Localizable", "common.style", fallback: "Style")
     /// Try Again
     public static let tryAgain = Localized.tr("Localizable", "common.try_again", fallback: "Try Again")
     /// Type
@@ -370,6 +380,12 @@ public enum Localized {
       }
       /// Network Fee
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
+    }
+    public enum PriceImpact {
+      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. 
+      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ")
+      /// Price Impact
+      public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
     public enum Transaction {
       public enum Error {
