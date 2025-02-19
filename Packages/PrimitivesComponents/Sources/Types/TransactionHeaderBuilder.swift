@@ -8,7 +8,7 @@ public struct TransactionHeaderTypeBuilder {
     public static func build(
         infoModel: TransactionInfoViewModel,
         type: TransactionType,
-        swapContext: TransactionHeaderInputType.SwapContext?
+        swapMetadata: SwapMetadata?
     ) -> TransactionHeaderType {
         let inputType: TransactionHeaderInputType = {
             switch type {
@@ -24,18 +24,19 @@ public struct TransactionHeaderTypeBuilder {
                     .smartContractCall:
                 return .amount(showFiatSubtitle: true)
             case .swap:
-                guard let swapContext = swapContext else {
-                    fatalError("Swap context missed")
+                guard let swapMetadata else {
+                    fatalError("swapMetadata is missed")
                 }
-                guard let metadata = swapContext.swapMetadata else {
-                    fatalError("Swap metadata missed")
+                let model = SwapMetadataViewModel(metadata: swapMetadata)
+                guard let input = model.headerInput else {
+                    fatalError("fromAsset & toAsset missed")
                 }
-                return .swap(metadata)
+                return .swap(input)
             }
         }()
         return infoModel.headerType(input: inputType)
     }
-    
+
     public static func build(
         infoModel: TransactionInfoViewModel,
         dataType: TransferDataType,
@@ -60,20 +61,26 @@ public struct TransactionHeaderTypeBuilder {
                     )
                 }
             case .swap(let fromAsset, let toAsset, let quote, _):
-                let context = TransactionHeaderInputType.SwapContext(
-                    assets: [fromAsset, toAsset],
-                    prices: metadata?.assetPrices ?? [:],
-                    metadata: TransactionSwapMetadata(
-                        fromAsset: fromAsset.id,
-                        fromValue: quote.fromValue,
-                        toAsset: toAsset.id,
-                        toValue: quote.toValue
+                let assetPrices: [AssetPrice] = (metadata?.assetPrices ?? [:]).map { (key, price) in
+                    AssetPrice(assetId: key, price: price.price, priceChangePercentage24h: price.priceChangePercentage24h)
+                }
+                let model = SwapMetadataViewModel(
+                    metadata: SwapMetadata(
+                        assets: [fromAsset, toAsset],
+                        assetPrices: assetPrices,
+                        transactionMetadata: TransactionSwapMetadata(
+                            fromAsset: fromAsset.id,
+                            fromValue: quote.fromValue,
+                            toAsset: toAsset.id,
+                            toValue: quote.toValue
+                        )
                     )
                 )
-                guard let metadata = context.swapMetadata else {
-                    fatalError("Swap metadata missed")
+
+                guard let input = model.headerInput else {
+                    fatalError("fromAsset & toAsset missed")
                 }
-                return .swap(metadata)
+                return .swap(input)
             }
         }()
         return infoModel.headerType(input: inputType)

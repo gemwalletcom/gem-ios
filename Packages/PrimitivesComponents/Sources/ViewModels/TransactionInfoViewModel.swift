@@ -77,30 +77,28 @@ public struct TransactionInfoViewModel: Sendable {
     public func headerType(input: TransactionHeaderInputType) -> TransactionHeaderType {
         switch input {
         case let .amount(showFiat):
-            return .amount(
-                title: amountValueText,
-                subtitle: showFiat ? amountFiatValueText : .none
-            )
-        case .nft(let nftAsset):
-            return .nft(
-                name: asset.name,
-                image: NFTAssetViewModel(asset: nftAsset).assetImage
-            )
-        case .swap(let swapInput):
-            let from = swapAmountField(
-                asset: swapInput.fromAsset,
-                value: swapInput.fromValue,
-                price: swapInput.fromPrice
-            )
-            let to = swapAmountField(
-                asset: swapInput.toAsset,
-                value: swapInput.toValue,
-                price: swapInput.toPrice
-            )
-            return .swap(
-                from: from,
-                to: to
-            )
+                .amount(
+                    title: amountValueText,
+                    subtitle: showFiat ? amountFiatValueText : .none
+                )
+        case let .nft(nftAsset):
+                .nft(
+                    name: asset.name,
+                    image: NFTAssetViewModel(asset: nftAsset).assetImage
+                )
+        case let .swap(swapInput):
+                .swap(
+                    from: swapAmountField(
+                        asset: swapInput.fromAsset,
+                        value: swapInput.fromValue,
+                        price: swapInput.fromPrice
+                    ),
+                    to: swapAmountField(
+                        asset: swapInput.toAsset,
+                        value: swapInput.toValue,
+                        price: swapInput.toPrice
+                    )
+                )
         }
     }
 }

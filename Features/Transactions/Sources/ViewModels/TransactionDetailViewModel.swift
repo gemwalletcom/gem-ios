@@ -34,24 +34,6 @@ struct TransactionDetailViewModel {
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
 
-    var headerType: TransactionHeaderType {
-        let swapContext: TransactionHeaderInputType.SwapContext? = {
-            if let metadata = model.transaction.transaction.metadata?.swap {
-                return TransactionHeaderInputType.SwapContext(
-                    assets: model.transaction.assets,
-                    assetPrices: (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? [],
-                    metada: metadata
-                )
-            }
-            return nil
-        }()
-        return TransactionHeaderTypeBuilder.build(
-            infoModel: infoModel,
-            type: model.transaction.transaction.type,
-            swapContext: swapContext
-        )
-    }
-
     var amountTitle: String {
         switch model.transaction.transaction.type {
         case .transfer,
@@ -207,6 +189,24 @@ struct TransactionDetailViewModel {
     
     var transactionExplorerText: String {
         model.viewOnTransactionExplorerText
+    }
+
+    var headerType: TransactionHeaderType {
+        let swapMetadata: SwapMetadata? = {
+            guard let transactionSwapMetadata = model.transaction.transaction.metadata?.swap else {
+                return .none
+            }
+            return SwapMetadata(
+                assets: model.transaction.assets,
+                assetPrices: (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? [],
+                transactionMetadata: transactionSwapMetadata
+            )
+        }()
+        return TransactionHeaderTypeBuilder.build(
+            infoModel: infoModel,
+            type: model.transaction.transaction.type,
+            swapMetadata: swapMetadata
+        )
     }
 
     var infoModel: TransactionInfoViewModel {
