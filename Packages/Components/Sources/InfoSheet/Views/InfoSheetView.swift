@@ -71,6 +71,7 @@ struct InfoSheetView: View {
                 Text(description.text)
                     .textStyle(description.style)
             }
+            .minimumScaleFactor(0.5)
             .multilineTextAlignment(.center)
         }
     }
