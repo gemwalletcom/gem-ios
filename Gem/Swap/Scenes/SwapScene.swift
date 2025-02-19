@@ -13,6 +13,7 @@ import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
+import InfoSheet
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -34,6 +35,8 @@ struct SwapScene: View {
     private var toAsset: AssetData?
 
     @State private var model: SwapViewModel
+    
+    @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
     private let onTransferAction: TransferDataAction
 
@@ -176,13 +179,18 @@ extension SwapScene {
                 }
 
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
-                    PriceImpactView(model: viewModel)
+                    PriceImpactView(model: viewModel) {
+                        isPresentingInfoSheet = .priceImpact
+                    }
                 }
             }
 
             if case let .error(error) = model.swapState.availability {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
+        }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
 }

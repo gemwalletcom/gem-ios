@@ -51,16 +51,15 @@ public struct SolanaSigner: Signable {
                 walletAddress.token2022Address(tokenMintAddress: tokenId)!
             }
             let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
-                    $0.amount = amount
-                    $0.decimals = decimals
-                    $0.recipientMainAddress = destinationAddress
-                    $0.tokenMintAddress = tokenId
-                    $0.senderTokenAddress = input.token.senderTokenAddress
-                    $0.recipientTokenAddress = recipientTokenAddress
-                    $0.memo = input.memo.valueOrEmpty
-                    $0.tokenProgramID = tokenProgram
-                }
-            )
+                $0.amount = amount
+                $0.decimals = decimals
+                $0.recipientMainAddress = destinationAddress
+                $0.tokenMintAddress = tokenId
+                $0.senderTokenAddress = input.token.senderTokenAddress
+                $0.recipientTokenAddress = recipientTokenAddress
+                $0.memo = input.memo.valueOrEmpty
+                $0.tokenProgramID = tokenProgram
+            })
             return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
         }
     }

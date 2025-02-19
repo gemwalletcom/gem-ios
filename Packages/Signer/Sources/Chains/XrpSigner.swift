@@ -41,14 +41,31 @@ public struct XrpSigner: Signable {
         )
     }
     
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        return try sign(
+            input: input,
+            operation: .opPayment(.with {
+                $0.destination = input.destinationAddress
+                $0.currencyAmount = try .with {
+                    $0.issuer = try input.asset.getTokenId()
+                    $0.currency = hexSymbol(symbol: input.asset.symbol)
+                    $0.value = ValueFormatter.full.string(input.value, decimals: 15)
+                }
+                if let memo = input.memo, let destinationTag = UInt32(memo) {
+                    $0.destinationTag = destinationTag
+                }
+            }),
+            privateKey: privateKey
+        )
+    }
+    
     public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
-        let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
         return try sign(
             input: input,
             operation: .opTrustSet(.with {
-                $0.limitAmount = .with {
-                    $0.issuer = issuer
-                    $0.currency = hexSymbol(symbol: symbol)
+                $0.limitAmount = try .with {
+                    $0.issuer = try input.asset.getTokenId()
+                    $0.currency = hexSymbol(symbol: input.asset.symbol)
                     $0.value = "690000000000"
                 }
             }),
@@ -58,25 +75,6 @@ public struct XrpSigner: Signable {
     
     public func hexSymbol(symbol: String) -> String {
         Data(symbol.utf8).hexString.capitalized.addTrailing(number: 40, padding: "0")
-    }
-    
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let (issuer, symbol) = try input.asset.id.twoSubTokenIds()
-        return try sign(
-            input: input,
-            operation: .opPayment(.with {
-                $0.destination = input.destinationAddress
-                $0.currencyAmount = .with {
-                    $0.issuer = issuer
-                    $0.currency = hexSymbol(symbol: symbol)
-                    $0.value = ValueFormatter.full.string(input.value, decimals: 15)
-                }
-                if let memo = input.memo, let destinationTag = UInt32(memo) {
-                    $0.destinationTag = destinationTag
-                }
-            }),
-            privateKey: privateKey
-        )
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {

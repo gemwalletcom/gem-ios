@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "Nieobsługiwany zasób.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Strona internetowa";
 "asset.contract" = "Umowa";
@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Twój obraz został zapisany w Zdjęciach!";
 "permissions.access_denied" = "Odmowa dostępu";
 "permissions.image.photo_access.denied.description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Włącz dostęp w ustawieniach urządzenia.";
+"common.magic_button" = "Magiczny przycisk";
+"common.emoji" = "Emotikony";
+"common.style" = "Styl";
+"common.avatar" = "Awatara";
+"common.photo" = "Zdjęcie";
+"info.price_impact.title" = "Wpływ na cenę";
+"info.price_impact.description" = "Wpływ ceny to zmiana ceny tokena spowodowana rozmiarem transakcji. Większy wpływ ceny oznacza, że otrzymujesz mniej tokenów z powodu niskiej płynności lub dużego rozmiaru zamówienia. ";
