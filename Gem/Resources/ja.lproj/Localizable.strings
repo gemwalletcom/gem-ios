@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "サポートされていないアセット。";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Webサイト";
 "asset.contract" = "契約";
@@ -322,10 +322,10 @@
 "nft.success_saved_to_photos" = "画像が写真に保存されました。";
 "permissions.access_denied" = "アクセスが拒否されました";
 "permissions.image.photo_access.denied.description" = "このアプリには写真ライブラリにアクセスする権限がありません。デバイスの設定でアクセスを有効にしてください。";
-"avatar.change_background" = "背景を変更するにはタップしてください";
 "common.magic_button" = "魔法のボタン";
 "common.emoji" = "絵文字";
 "common.style" = "スタイル";
-"avatar.change_avatar" = "タップしてアバターを変更";
 "common.avatar" = "アバター";
 "common.photo" = "写真";
+"info.price_impact.title" = "価格の影響";
+"info.price_impact.description" = "価格影響とは、取引サイズによって生じるトークン価格の変化です。価格影響が大きいということは、流動性が低いか注文サイズが大きいために受け取るトークンが少なくなることを意味します。 ";

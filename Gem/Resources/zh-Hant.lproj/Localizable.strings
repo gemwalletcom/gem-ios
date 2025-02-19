@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "不支持的資產。";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "網站";
 "asset.contract" = "合約";
@@ -322,10 +322,10 @@
 "nft.success_saved_to_photos" = "您的影像已儲存到照片中！";
 "permissions.access_denied" = "拒絕訪問";
 "permissions.image.photo_access.denied.description" = "此應用程式無權存取您的照片庫。請在您的裝置設定中啟用存取。";
-"avatar.change_background" = "點選更改背景";
 "common.magic_button" = "魔術按鈕";
 "common.emoji" = "表情符號";
 "common.style" = "風格";
-"avatar.change_avatar" = "點擊更改頭像";
 "common.avatar" = "阿凡達";
 "common.photo" = "照片";
+"info.price_impact.title" = "價格影響";
+"info.price_impact.description" = "價格影響是由於您的交易規模而導致的代幣價格的變化。價格影響越大意味著由於流動性低或訂單規模大，您收到的代幣就越少。 ";

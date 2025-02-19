@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "समर्थित परिसंपत्ति नहीं.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "वेबसाइट";
 "asset.contract" = "अनुबंध";
@@ -322,10 +322,10 @@
 "nft.success_saved_to_photos" = "आपकी छवि फ़ोटो में सहेज ली गई है!";
 "permissions.access_denied" = "पहुंच अस्वीकृत";
 "permissions.image.photo_access.denied.description" = "इस ऐप को आपकी फोटो लाइब्रेरी तक पहुंचने की अनुमति नहीं है। कृपया अपनी डिवाइस सेटिंग में पहुंच सक्षम करें।";
-"avatar.change_background" = "पृष्ठभूमि बदलने के लिए टैप करें";
 "common.magic_button" = "जादुई बटन";
 "common.emoji" = "इमोजी";
 "common.style" = "शैली";
-"avatar.change_avatar" = "अवतार बदलने के लिए टैप करें";
 "common.avatar" = "अवतार";
 "common.photo" = "तस्वीर";
+"info.price_impact.title" = "मूल्य प्रभाव";
+"info.price_impact.description" = "मूल्य प्रभाव आपके व्यापार आकार के कारण टोकन मूल्य में होने वाला परिवर्तन है। उच्च मूल्य प्रभाव का मतलब है कि आपको कम तरलता या बड़े ऑर्डर आकार के कारण कम टोकन प्राप्त होते हैं। ";

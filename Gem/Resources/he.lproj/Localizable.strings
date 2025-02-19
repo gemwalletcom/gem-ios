@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "נכס לא נתמך.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "אֲתַר אִינטֶרנֶט";
 "asset.contract" = "חוֹזֶה";
@@ -322,10 +322,10 @@
 "nft.success_saved_to_photos" = "התמונה שלך נשמרה בתמונות!";
 "permissions.access_denied" = "הגִישָׁה נִדחֲתָה";
 "permissions.image.photo_access.denied.description" = "לאפליקציה הזו אין הרשאה לגשת לספריית התמונות שלך. אפשר גישה בהגדרות המכשיר שלך.";
-"avatar.change_background" = "הקש כדי לשנות רקע";
 "common.magic_button" = "כפתור קסם";
 "common.emoji" = "אימוג'י";
 "common.style" = "סִגְנוֹן";
-"avatar.change_avatar" = "הקש כדי לשנות דמות";
 "common.avatar" = "גִלגוּל";
 "common.photo" = "תַצלוּם";
+"info.price_impact.title" = "השפעת המחיר";
+"info.price_impact.description" = "השפעת המחיר היא השינוי במחיר האסימון שנגרם על ידי גודל המסחר שלך. השפעה גבוהה יותר על המחיר פירושה שאתה מקבל פחות אסימונים עקב נזילות נמוכה או גודל הזמנה גדול. ";

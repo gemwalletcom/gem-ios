@@ -74,12 +74,6 @@ public enum Localized {
     /// Select Asset
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
   }
-  public enum Avatar {
-    /// Tap to change avatar
-    public static let changeAvatar = Localized.tr("Localizable", "avatar.change_avatar", fallback: "Tap to change avatar")
-    /// Tap to change background
-    public static let changeBackground = Localized.tr("Localizable", "avatar.change_background", fallback: "Tap to change background")
-  }
   public enum Banner {
     public enum AccountActivation {
       /// The %@ network requires a one time fee of %@.
@@ -386,6 +380,12 @@ public enum Localized {
       }
       /// Network Fee
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
+    }
+    public enum PriceImpact {
+      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. 
+      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ")
+      /// Price Impact
+      public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
     public enum Transaction {
       public enum Error {
