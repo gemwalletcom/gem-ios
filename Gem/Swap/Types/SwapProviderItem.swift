@@ -7,14 +7,10 @@ import Components
 import BigInt
 import SwiftUI
 
-struct SwapProviderItem {
+public struct SwapProviderItem {
     let asset: Asset
     let swapQuote: SwapQuote
     let formatter = ValueFormatter(style: .full)
-    
-    private var rateText: String {
-        [amount, asset.symbol].joined(separator: " ")
-    }
     
     private var amount: String {
         let value = (try? BigInt.from(string: swapQuote.toValue)) ?? .zero
@@ -22,22 +18,42 @@ struct SwapProviderItem {
     }
 }
 
+// MARK: - SimpleListItemViewable
+
 extension SwapProviderItem: SimpleListItemViewable {
-    var title: String {
+    public var title: String {
         swapQuote.data.provider.name
     }
     
-    var subtitle: String? {
-        rateText
+    public var subtitle: String? {
+        [amount, asset.symbol].joined(separator: " ")
     }
     
-    var image: Image {
+    public var image: Image {
         swapQuote.data.provider.image
     }
 }
 
+// MARK: - Identifiable
+
 extension SwapProviderItem: Identifiable {
-    var id: String {
-        [swapQuote.toValue, swapQuote.fromValue, swapQuote.data.provider.name].joined(separator: ":")
+    public var id: String {
+        [
+            swapQuote.toValue,
+            swapQuote.fromValue,
+            swapQuote.data.provider.name
+        ].joined(separator: "_")
+    }
+}
+
+// MARK: - Hashable
+
+extension SwapProviderItem: Hashable {
+    public static func == (lhs: SwapProviderItem, rhs: SwapProviderItem) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        id.hash(into: &hasher)
     }
 }

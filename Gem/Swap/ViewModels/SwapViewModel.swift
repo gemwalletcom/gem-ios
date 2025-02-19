@@ -192,17 +192,8 @@ class SwapViewModel {
         )
     }
     
-    func swapProvidersViewModel(
-        asset: Asset,
-        swapQuotes: [SwapQuote]
-    ) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(
-            asset: asset,
-            swapQuotes: swapQuotes
-        ) { quote in
-            self.selectedProvider = quote.data.provider
-            self.fillForSelectedProvider(quote.data.provider, asset: asset)
-        }
+    func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
+        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
     }
 }
 
@@ -266,6 +257,20 @@ extension SwapViewModel {
         swapState = .init()
         resetValues()
     }
+    
+    func updateToValue(
+        for provider: SwapProvider,
+        asset: Asset
+    ) {
+        guard
+            case .loaded(let result) = swapState.availability,
+            let bestRate = result.quotes.first(where: { $0.data.provider == provider }),
+            let value = try? BigInt.from(string: bestRate.toValue)
+        else {
+            return
+        }
+        toValue = formatter.string(value, decimals: asset.decimals.asInt)
+    }
 }
 
 // MARK: - Private
@@ -300,7 +305,11 @@ extension SwapViewModel {
 
             await MainActor.run {
                 swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
-                fillForBestRate(toAsset: toAsset)
+                if let selectedProvider {
+                    updateToValue(for: selectedProvider, asset: toAsset)
+                } else {
+                    setBestProvider(toAsset: toAsset)
+                }
             }
         } catch {
             await MainActor.run { [self] in
@@ -347,7 +356,7 @@ extension SwapViewModel {
         )
     }
     
-    private func fillForBestRate(toAsset: Asset) {
+    private func setBestProvider(toAsset: Asset) {
         guard
             case .loaded(let result) = swapState.availability,
             let bestRate = try? result.quotes.sorted(by: {
@@ -360,20 +369,6 @@ extension SwapViewModel {
         
         toValue = formatter.string(value, decimals: toAsset.decimals.asInt)
         selectedProvider = bestRate.data.provider
-    }
-    
-    private func fillForSelectedProvider(
-        _ provider: SwapProvider,
-        asset: Asset
-    ) {
-        guard
-            case .loaded(let result) = swapState.availability,
-            let bestRate = result.quotes.first(where: { $0.data.provider == provider }),
-            let value = try? BigInt.from(string: bestRate.toValue)
-        else {
-            return
-        }
-        toValue = formatter.string(value, decimals: asset.decimals.asInt)
     }
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {

@@ -3,27 +3,21 @@
 import Foundation
 import Primitives
 import Gemstone
+import Components
 
-struct SwapProvidersViewModel {
-    typealias SelectQuote = (@MainActor @Sendable (SwapQuote) -> Void)
-
-    let asset: Asset
-    let swapQuotes: [SwapQuote]
-    let onSelectQuote: SelectQuote?
+struct SwapProvidersViewModel: SelectableListAdoptable {
+    public typealias Item = SwapProviderItem
+    public var items: [SwapProviderItem]
+    public var selectedItems: Set<SwapProviderItem>
+    public var isMultiSelectionEnabled: Bool
     
     init(
-        asset: Asset,
-        swapQuotes: [SwapQuote],
-        onSelectQuote: SelectQuote?
+        items: [SwapProviderItem],
+        selectedItems: [SwapProviderItem],
+        isMultiSelectionEnabled: Bool
     ) {
-        self.asset = asset
-        self.swapQuotes = swapQuotes
-        self.onSelectQuote = onSelectQuote
-    }
-    
-    var items: [SwapProviderItem] {
-        swapQuotes.map {
-            SwapProviderItem(asset: asset, swapQuote: $0)
-        }
+        self.items = items
+        self.selectedItems = Set(selectedItems)
+        self.isMultiSelectionEnabled = isMultiSelectionEnabled
     }
 }

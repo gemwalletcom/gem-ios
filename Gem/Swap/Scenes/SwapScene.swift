@@ -14,6 +14,7 @@ import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
 import InfoSheet
+import Gemstone
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -109,6 +110,7 @@ struct SwapScene: View {
         .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
+        .onChange(of: model.selectedProvider, onChangeProvider)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
@@ -172,7 +174,7 @@ extension SwapScene {
             Section {
                 if let provider = model.providerText {
                     if model.allowSelectProvider, let toAsset {
-                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset, swapQuotes: model.swapQuotes)) {
+                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
                             ListItemImageView(
                                 title: model.providerField,
                                 subtitle: provider,
@@ -256,6 +258,11 @@ extension SwapScene {
     private func onChangeWallet(_ _: Wallet?, wallet: Wallet?) {
         guard let wallet else { return }
         model.refresh(for: wallet)
+    }
+    
+    private func onChangeProvider(_: SwapProvider?, provider: SwapProvider?) {
+        guard let provider, let toAsset else { return }
+        model.updateToValue(for: provider, asset: toAsset.asset)
     }
 }
 

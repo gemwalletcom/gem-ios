@@ -3,6 +3,8 @@
 import SwiftUI
 import Primitives
 import Store
+import Components
+import Localization
 
 public struct FiatConnectNavigationView: View {
     @Binding private var navigationPath: NavigationPath
@@ -20,18 +22,22 @@ public struct FiatConnectNavigationView: View {
     public var body: some View {
         FiatScene(model: model)
             .navigationDestination(for: Scenes.FiatProviders.self) { _ in
-                FiatProvidersScene(
-                    model: FiatProvidersViewModel(
-                        type: model.input.type,
-                        asset: model.asset,
-                        quotes: model.state.value ?? [],
-                        formatter: model.currencyFormatter,
-                        onSelectQuote: {
-                            model.selectQuote($0)
-                            navigationPath.removeLast()
-                        }
-                    )
+                SelectableListView(
+                    model: .constant(model.fiatProviderViewModel()),
+                    onFinishSelection: onSelectQuote,
+                    listContent: { SimpleListItemView(model: $0) }
                 )
+                .navigationTitle(Localized.Buy.Providers.title)
             }
+    }
+}
+
+// MARK: - Actions
+
+extension FiatConnectNavigationView {
+    func onSelectQuote(_ list: [FiatQuoteViewModel]) {
+        guard let quoteModel = list.first else { return }
+        model.selectQuote(quoteModel.quote)
+        navigationPath.removeLast()
     }
 }

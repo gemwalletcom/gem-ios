@@ -150,14 +150,9 @@ public struct Scenes {
     
     public struct SwapProviders: Hashable {
         public let asset: Primitives.Asset
-        public let swapQuotes: [SwapQuote]
-        
-        public init(
-            asset: Primitives.Asset,
-            swapQuotes: [SwapQuote]
-        ) {
+
+        public init(asset: Primitives.Asset) {
             self.asset = asset
-            self.swapQuotes = swapQuotes
         }
     }
 }

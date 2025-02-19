@@ -5,6 +5,8 @@ import Primitives
 import SwapService
 import ChainService
 import class Swap.SwapPairSelectorViewModel
+import Components
+import Localization
 
 struct SwapNavigationStack: View {
     @Environment(\.keystore) private var keystore
@@ -56,12 +58,12 @@ struct SwapNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.SwapProviders.self) {
-                SwapProvidersScene(
-                    model: model.swapProvidersViewModel(
-                        asset: $0.asset,
-                        swapQuotes: $0.swapQuotes
-                    )
+                SelectableListView(
+                    model: .constant(model.swapProvidersViewModel(asset: $0.asset)),
+                    onFinishSelection: onSelectProvider,
+                    listContent: { SimpleListItemView(model: $0) }
                 )
+                .navigationTitle(Localized.Buy.Providers.title)
             }
             .sheet(item: $isPresentingAssetSwapType) { selectType in
                 SelectAssetSceneNavigationStack(
@@ -118,5 +120,10 @@ extension SwapNavigationStack {
             model.pairSelectorModel.toAssetId = asset.id
         }
         isPresentingAssetSwapType = .none
+    }
+    
+    private func onSelectProvider(_ list: [SwapProviderItem]) {
+        model.selectedProvider = list.first?.swapQuote.data.provider
+        navigationPath.wrappedValue.removeLast()
     }
 }
