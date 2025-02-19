@@ -8,9 +8,11 @@ import Style
 
 public struct PriceImpactView: View {
     private let model: PriceImpactViewModel
+    private let infoAction: VoidAction
 
-    public init(model: PriceImpactViewModel) {
+    public init(model: PriceImpactViewModel, infoAction: VoidAction) {
         self.model = model
+        self.infoAction = infoAction
     }
 
     public var body: some View {
@@ -21,7 +23,8 @@ public struct PriceImpactView: View {
                 subtitleStyle: TextStyle(
                     font: .callout,
                     color: model.priceImpactColor(for: priceImpactValue.type)
-                )
+                ),
+                infoAction: infoAction
             )
         }
     }
