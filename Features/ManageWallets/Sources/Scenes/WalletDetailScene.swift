@@ -9,6 +9,8 @@ import Primitives
 import Localization
 import PrimitivesComponents
 import WalletAvatar
+import GRDBQuery
+import Store
 
 public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -27,11 +29,13 @@ public struct WalletDetailScene: View {
     @State private var isPresentingDeleteConfirmation: Bool?
     @FocusState private var focusedField: Field?
     
-    let avatarSize = Sizing.image.extraLarge
+    @Query<WalletRequest>
+    var dbWallet: Wallet?
 
     public init(model: WalletDetailViewModel) {
         self.model = model
         _name = State(initialValue: self.model.name)
+        _dbWallet = Query(constant: model.walletRequest)
     }
     
     public var body: some View {
@@ -44,15 +48,17 @@ public struct WalletDetailScene: View {
                     HStack {
                         Spacer()
                         VStack(spacing: Spacing.medium) {
-                            AvatarActionView(
-                                walletId: model.wallet.id,
-                                imageSize: avatarSize,
-                                overlayImageSize: Sizing.image.medium,
-                                action: {
+                            if let dbWallet {
+                                AssetImageView(
+                                    assetImage: model.avatarAssetImage(for: dbWallet),
+                                    size: Sizing.image.extraLarge,
+                                    overlayImageSize: Sizing.image.medium
+                                )
+                                .padding(.bottom, Spacing.extraLarge)
+                                .onTapGesture {
                                     onSelectImage()
                                 }
-                            )
-                            .padding(.bottom, Spacing.extraLarge)
+                            }
                         }
                         Spacer()
                     }

@@ -8,8 +8,10 @@ import Style
 public final class EmojiStyleViewModel {
     var color: Color = Colors.listStyleColor
     var text: String = .empty
-    var emojiList: [EmojiValue]
+    let emojiList: [EmojiValue]
     var colorList: [Color]
+    let emojiColumns: [GridItem]
+    let colorColumns: [GridItem]
     
     let onDone: (EmojiValue) -> Void
     
@@ -17,14 +19,8 @@ public final class EmojiStyleViewModel {
         self.onDone = onDone
         emojiList = Self.shuffleList()
         colorList = Self.shuffleColorList()
-    }
-
-    var emojiColumns: [GridItem] {
-        Self.createColumns()
-    }
-    
-    var colorColumns: [GridItem] {
-        Self.createColumns()
+        emojiColumns = Self.createColumns()
+        colorColumns = Self.createColumns()
     }
     
     func setRandomEmoji() {

@@ -4,7 +4,7 @@ import Foundation
 import UIKit
 
 public extension UIImage {    
-    func compress(_ jpegQuality: JPEGQuality) -> Data? {
-        jpegData(compressionQuality: jpegQuality.rawValue)
+    func compress(compressionQuality: CGFloat = 1.0) -> Data? {
+        jpegData(compressionQuality: compressionQuality)
     }
 }

@@ -16,7 +16,7 @@ public struct AvatarService: Sendable {
 
     @MainActor
     public func save(image: UIImage, walletId: String) throws {
-        guard let data = image.compress(.highest) else {
+        guard let data = image.compress() else {
             throw AnyError("Compression image failed")
         }
         

@@ -22,24 +22,20 @@ public struct WalletImageScene: View {
     @Query<WalletRequest>
     var dbWallet: Wallet?
     
-    @Query<NFTAssetsRequest>
-    private var nftAssets: [NFTAsset]
+    @Query<NFTRequest>
+    private var nftDataList: [NFTData]
     
     public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
-        _nftAssets = Query(constant: model.nftAssetsRequest)
+        _nftDataList = Query(constant: model.nftAssetsRequest)
         _dbWallet = Query(constant: model.walletRequest)
     }
 
     public var body: some View {
         VStack {
-            AvatarView(
-                walletId: model.wallet.id,
-                imageSize: model.emojiViewSize,
-                overlayImageSize: Sizing.image.medium
-            )
-            .padding(.top, Spacing.medium)
-            .padding(.bottom, Spacing.extraLarge)
+            avatar
+                .padding(.top, Spacing.medium)
+                .padding(.bottom, Spacing.extraLarge)
             
             pickerView
                 .padding(.bottom, Spacing.medium)
@@ -58,6 +54,20 @@ public struct WalletImageScene: View {
                 .disabled(dbWallet?.imageUrl == nil)
             }
         }
+    }
+    
+    private var avatar: some View {
+        VStack {
+            if let dbWallet {
+                AssetImageView(
+                    assetImage: WalletViewModel(wallet: dbWallet).avatarImage,
+                    size: model.emojiViewSize,
+                    overlayImageSize: Sizing.image.medium
+                )
+                .id(dbWallet.imageUrl)
+            }
+        }
+        .animation(.default, value: dbWallet?.imageUrl)
     }
     
     private var pickerView: some View {
@@ -86,7 +96,7 @@ public struct WalletImageScene: View {
             .padding(.horizontal, Spacing.medium)
         }
         .overlay(content: {
-            if nftAssets.isEmpty, case .collections = selectedTab {
+            if nftDataList.isEmpty, case .collections = selectedTab {
                 Text(Localized.Activity.EmptyState.message)
                     .textStyle(.body)
             }
@@ -109,7 +119,7 @@ public struct WalletImageScene: View {
     }
     
     private var nftAssetListView: some View {
-        ForEach(model.buildNftAssetsItems(from: nftAssets), id: \.id) { item in
+        ForEach(model.buildNftAssetsItems(from: nftDataList)) { item in
             let view = GridPosterView(assetImage: item.assetImage, title: nil)
             NavigationCustomLink(with: view) {
                 onSelectNftAsset(url: item.assetImage.imageURL)

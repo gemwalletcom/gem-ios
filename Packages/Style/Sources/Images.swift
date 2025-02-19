@@ -144,6 +144,7 @@ public struct Images {
         public static let `import` = Image(.import)
         public static let watch = Image(.watch)
         public static let selected = Image(.selected)
+        public static let editFilled = Image(.editFilled)
     }
 
     public struct NameResolve {
@@ -258,7 +259,8 @@ public struct Images {
             (Images.Wallets.create, "Create"),
             (Images.Wallets.import, "Import"),
             (Images.Wallets.watch, "Watch"),
-            (Images.Wallets.selected, "Selected")
+            (Images.Wallets.selected, "Selected"),
+            (Images.Wallets.editFilled, "Filled")
         ]),
         ("Name Resolve", [
             (Images.NameResolve.success, "Success"),

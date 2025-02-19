@@ -8,6 +8,7 @@ import Style
 import Localization
 import PrimitivesComponents
 import ExplorerService
+import Store
 
 public class WalletDetailViewModel {
 
@@ -52,6 +53,27 @@ public class WalletDetailViewModel {
             )
         }
     }
+    
+    var walletRequest: WalletRequest {
+        WalletRequest(walletId: wallet.id)
+    }
+    
+    func avatarAssetImage(for dbWallet: Wallet) -> AssetImage {
+        guard let imageUrl = dbWallet.imageUrl else {
+            return AssetImage(
+                imageURL: nil,
+                placeholder: WalletViewModel(wallet: dbWallet).image,
+                chainPlaceholder: Images.Wallets.editFilled
+            )
+        }
+        return AssetImage(
+            type: .empty,
+            imageURL: imageUrl.asURL,
+            placeholder: nil,
+            chainPlaceholder: Images.Wallets.editFilled
+        )
+    }
+        
 }
 
 // MARK: - Business Logic

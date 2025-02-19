@@ -46,10 +46,9 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AvatarView(
-                    walletId: model.wallet.id,
-                    imageSize: Sizing.image.medium,
-                    overlayImageSize: 16
+                AssetImageView(
+                    assetImage: model.avatarImage,
+                    size: Sizing.image.medium
                 )
                 ListItemView(title: model.name, titleExtra: model.subType)
 

@@ -13,8 +13,12 @@ import Localization
 @MainActor
 @Observable
 public final class WalletImageViewModel: Sendable {
+    struct NFTAssetImageItem: Identifiable {
+        let id: String
+        let assetImage: AssetImage
+    }
+
     public let wallet: Wallet
-    public let avatarAssetImage: AssetImage
     private let avatarService: AvatarService
     
     public init(
@@ -23,7 +27,6 @@ public final class WalletImageViewModel: Sendable {
     ) {
         self.wallet = wallet
         self.avatarService = avatarService
-        self.avatarAssetImage = WalletViewModel(wallet: wallet).avatarImage
     }
     
     var title: String { Localized.Common.avatar }
@@ -34,26 +37,29 @@ public final class WalletImageViewModel: Sendable {
         WalletRequest(walletId: wallet.id)
     }
     
-    var nftAssetsRequest: NFTAssetsRequest {
-        NFTAssetsRequest(walletId: wallet.id)
+    var nftAssetsRequest: NFTRequest {
+        NFTRequest(walletId: wallet.id, collectionId: nil)
     }
     
     let emojiList: [EmojiValue] = {
         Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
     }()
     
-    func buildNftAssetsItems(from assets: [NFTAsset]) -> [(id: String, assetImage: AssetImage)] {
-        assets.map {
-            (
-                id: $0.id,
-                assetImage: AssetImage(
-                    type: $0.name,
-                    imageURL: $0.image.imageUrl.asURL,
-                    placeholder: nil,
-                    chainPlaceholder: nil
+    func buildNftAssetsItems(from list: [NFTData]) -> [NFTAssetImageItem] {
+        list
+            .map { $0.assets }
+            .reduce([], +)
+            .map {
+                NFTAssetImageItem(
+                    id: $0.id,
+                    assetImage: AssetImage(
+                        type: $0.name,
+                        imageURL: $0.image.imageUrl.asURL,
+                        placeholder: nil,
+                        chainPlaceholder: nil
+                    )
                 )
-            )
-        }
+            }
     }
     
     func getColumns(for tab: WalletImageScene.Tab) -> [GridItem] {
@@ -85,6 +91,19 @@ public final class WalletImageViewModel: Sendable {
     }
     
     public func setAvatarImage(color: UIColor, text: String) {
+        let image = drawImage(color: color, text: text)
+        setImage(image)
+    }
+    
+    public func emojiStyleViewModel() -> EmojiStyleViewModel {
+        EmojiStyleViewModel { [weak self] value in
+            self?.setAvatarImage(color: value.color.uiColor, text: value.emoji)
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func drawImage(color: UIColor, text: String) -> UIImage? {
         let format = UIGraphicsImageRendererFormat()
         format.scale = UIScreen.main.scale
 
@@ -93,7 +112,7 @@ public final class WalletImageViewModel: Sendable {
             format: format
         )
 
-        let image = renderer.image { context in
+        return renderer.image { context in
             let rect = CGRect(x: 0, y: 0, width: emojiViewSize, height: emojiViewSize)
 
             let path = UIBezierPath(ovalIn: rect.insetBy(dx: -0.5, dy: -0.5))
@@ -125,17 +144,7 @@ public final class WalletImageViewModel: Sendable {
 
             attributedString.draw(in: textRect)
         }
-
-        setImage(image)
     }
-    
-    public func emojiStyleViewModel() -> EmojiStyleViewModel {
-        EmojiStyleViewModel { [weak self] value in
-            self?.setAvatarImage(color: value.color.uiColor, text: value.emoji)
-        }
-    }
-    
-    // MARK: - Private methods
     
     private func setImage(_ image: UIImage?) {
         do {
