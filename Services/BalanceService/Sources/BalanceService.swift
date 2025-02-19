@@ -69,31 +69,34 @@ extension BalanceService {
         }
     }
 
-    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) {
-        for account in wallet.accounts {
-            let chain = account.chain
-            let address = account.address
-            let ids = assetIds.filter { $0.identifier.hasPrefix(chain.rawValue) }
-            let tokenIds = ids.filter { $0.identifier != chain.id }
+    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
+        await withTaskGroup(of: Void.self) { group in
+            for account in wallet.accounts {
+                let chain = account.chain
+                let address = account.address
+                let ids = assetIds.filter { $0.identifier.hasPrefix(chain.rawValue) }
+                let tokenIds = ids.filter { $0.identifier != chain.id }
 
-            guard !ids.isEmpty else {
-                continue
-            }
-            // coin balance
-            if ids.contains(chain.assetId) {
-                Task {
-                    await updateCoinBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                // If no assets match this chain, skip.
+                guard !ids.isEmpty else { continue }
+
+                // If the native coin asset exists, update coin & stake balances.
+                if ids.contains(chain.assetId) {
+                    group.addTask {
+                        await self.updateCoinBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                    }
+                    group.addTask {
+                        await self.updateCoinStakeBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                    }
                 }
-                Task {
-                    await updateCoinStakeBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                // If there are token assets, update token balances.
+                if !tokenIds.isEmpty {
+                    group.addTask {
+                        await self.updateTokenBalances(walletId: wallet.id, chain: chain, tokenIds: tokenIds, address: address)
+                    }
                 }
             }
-            // token balance
-           if !tokenIds.isEmpty {
-                Task {
-                    await updateTokenBalances(walletId: wallet.id, chain: chain, tokenIds: tokenIds, address: address)
-                }
-            }
+            for await _ in group { }
         }
     }
 

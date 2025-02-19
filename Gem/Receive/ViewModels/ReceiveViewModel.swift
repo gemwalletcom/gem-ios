@@ -31,7 +31,7 @@ struct ReceiveViewModel {
         Localized.Common.copy
     }
 
-    func enableAsset() {
-        walletsService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
+    func enableAsset() async {
+        await walletsService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
     }
 }
