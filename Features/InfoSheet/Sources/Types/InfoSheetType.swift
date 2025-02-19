@@ -9,6 +9,8 @@ public enum InfoSheetType: Identifiable, Sendable {
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet
     case stakeLockTime(Image?)
+    // swaps
+    case priceImpact
 
     public var id: String {
         switch self {
@@ -16,6 +18,7 @@ public enum InfoSheetType: Identifiable, Sendable {
         case .transactionState(_, _, let state): state.id
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"
+        case .priceImpact: "priceImpact"
         }
     }
 }
