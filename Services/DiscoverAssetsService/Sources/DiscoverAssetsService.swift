@@ -6,7 +6,7 @@ import GemAPI
 import ChainService
 import BalanceService
 
-public struct DiscoverAssetsService: Sendable {
+public final class DiscoverAssetsService: Sendable {
     private let balanceService: BalanceService
     private let assetsService: any GemAPIAssetsListService
     private let chainServiceFactory: ChainServiceFactory
@@ -37,7 +37,8 @@ public struct DiscoverAssetsService: Sendable {
             for assetId in assetIds {
                 if let address = try? wallet.account(for: assetId.chain).address,
                    assetId.type == .token {
-                    group.addTask {
+                    group.addTask { [weak self] in
+                        guard let self else { return .none }
                         do {
                             let balance = try await self.balanceService.getBalance(assetId: assetId, address: address)
                             if balance.balance.available > 0 {
@@ -65,9 +66,10 @@ public struct DiscoverAssetsService: Sendable {
         guard wallet.isMultiCoins else { return [] }
 
         var updates: [AssetUpdate] = []
-        await withTaskGroup(of: AssetUpdate?.self) { group in
+        await withTaskGroup(of: AssetUpdate?.self) { [weak self] group in
+            guard let self else { return }
             for account in wallet.accounts {
-                let service = chainServiceFactory.service(for: account.chain)
+                let service = self.chainServiceFactory.service(for: account.chain)
                 group.addTask {
                     do {
                         let balance = try await service.coinBalance(for: account.address)

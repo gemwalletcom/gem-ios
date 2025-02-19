@@ -12,7 +12,7 @@ import TransactionService
 import DiscoverAssetsService
 import struct ChainService.AddressStatusService
 
-public struct WalletsService: Sendable {
+public final class WalletsService: Sendable {
     public let assetsService: AssetsService
     public let priceService: PriceService
     public let keystore: any Keystore
@@ -177,7 +177,8 @@ public struct WalletsService: Sendable {
     private func processAssetUpdates(_ updates: [AssetUpdate]) async {
         await withTaskGroup(of: Void.self) { group in
             for update in updates {
-                group.addTask {
+                group.addTask { [weak self] in
+                    guard let self else { return }
                     NSLog("discover assets: \(update.wallet.name): \(update.assets)")
                     do {
                         try await self.addNewAssets(
@@ -201,7 +202,8 @@ public struct WalletsService: Sendable {
         async let enableExisting: () = enableAssetId(walletId: walletId, assets: assets.assetIds, enabled: true)
         async let processMissing: () = withThrowingTaskGroup(of: Void.self) { group in
             for assetId in missingIds {
-                group.addTask {
+                group.addTask { [weak self] in
+                    guard let self else { return }
                     try await self.assetsService.updateAsset(assetId: assetId)
                     await self.enableAssetId(walletId: walletId, assets: [assetId], enabled: true)
                 }
