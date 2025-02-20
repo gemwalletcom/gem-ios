@@ -40,6 +40,8 @@ public struct Sizing {
         public static let medium: CGFloat = 44
         /// 88
         public static let large: CGFloat = 88
+        /// 112
+        public static let semiLarge: CGFloat = 112
         /// 120
         public static let extraLarge: CGFloat = 120
     }
