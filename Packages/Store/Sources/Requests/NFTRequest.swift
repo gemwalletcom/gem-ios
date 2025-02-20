@@ -21,7 +21,7 @@ public struct NFTRequest: ValueObservationQueryable {
     }
     
     public func fetch(_ db: Database) throws -> [NFTData] {
-        try NFTCollectionRecord
+        var request = NFTCollectionRecord
             .including(
                 all: NFTCollectionRecord.assets
                     .joining(
@@ -31,6 +31,12 @@ public struct NFTRequest: ValueObservationQueryable {
             )
             .distinct()
             .asRequest(of: NFTCollectionRecordInfo.self)
+
+        if let collectionId {
+            request = request.filter(Columns.NFTCollection.id == collectionId)
+        }
+
+        return try request
             .fetchAll(db)
             .map { $0.mapToNFTData() }
             .filter { $0.assets.count > 0 }
