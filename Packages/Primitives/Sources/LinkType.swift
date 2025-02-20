@@ -17,4 +17,6 @@ public enum LinkType: String, Codable, Equatable, Hashable, Sendable {
 	case openSea = "opensea"
 	case instagram
 	case magicEden = "magiceden"
+	case coinMarketCap = "coinmarketcap"
+	case tikTok = "tiktok"
 }

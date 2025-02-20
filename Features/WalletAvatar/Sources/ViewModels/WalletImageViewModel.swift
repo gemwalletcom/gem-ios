@@ -13,7 +13,7 @@ import Localization
 @MainActor
 @Observable
 public final class WalletImageViewModel: Sendable {
-    struct NFTAssetImageItem: Identifiable {
+    struct NFTAssetImageItem: Identifiable, Sendable {
         let id: String
         let assetImage: AssetImage
     }
@@ -73,9 +73,8 @@ public final class WalletImageViewModel: Sendable {
     
     // MARK: - Public methods
     
-    public func setImage(from url: URL?) async {
+    public func setImage(from url: URL) async {
         do {
-            guard let url else { return }
             try await avatarService.save(url: url, for: wallet.id)
         } catch {
             print("Set nft image error:", error)
@@ -90,14 +89,15 @@ public final class WalletImageViewModel: Sendable {
         }
     }
     
-    public func setAvatarImage(color: UIColor, text: String) {
-        let image = drawImage(color: color, text: text)
-        setImage(image)
+    public func setAvatarEmoji(value: EmojiValue) {
+        if let image = drawImage(color: value.color.uiColor, text: value.emoji) {
+            setImage(image)
+        }
     }
     
     public func emojiStyleViewModel() -> EmojiStyleViewModel {
         EmojiStyleViewModel { [weak self] value in
-            self?.setAvatarImage(color: value.color.uiColor, text: value.emoji)
+            self?.setAvatarEmoji(value: value)
         }
     }
     
@@ -146,9 +146,8 @@ public final class WalletImageViewModel: Sendable {
         }
     }
     
-    private func setImage(_ image: UIImage?) {
+    private func setImage(_ image: UIImage) {
         do {
-            guard let image else { return }
             try avatarService.save(image: image, for: wallet.id)
         } catch {
             print("Set image error:", error)

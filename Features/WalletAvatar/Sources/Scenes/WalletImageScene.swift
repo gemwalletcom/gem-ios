@@ -104,11 +104,12 @@ public struct WalletImageScene: View {
     }
     
     private var emojiListView: some View {
-        ForEach(model.emojiList, id: \.self) { value in
-            let view = EmojiView(color: value.color, emoji: value.emoji)
-            NavigationCustomLink(with: view, action: {
-                model.setAvatarImage(color: value.color.uiColor, text: value.emoji)
-            })
+        ForEach(model.emojiList) { value in
+            NavigationCustomLink(
+                with: EmojiView(color: value.color, emoji: value.emoji)
+            ) {
+                model.setAvatarEmoji(value: value)
+            }
             .frame(maxWidth: .infinity)
             .transition(.opacity)
         }
@@ -118,7 +119,7 @@ public struct WalletImageScene: View {
         ForEach(model.buildNftAssetsItems(from: nftDataList)) { item in
             let view = GridPosterView(assetImage: item.assetImage, title: nil)
             NavigationCustomLink(with: view) {
-                onSelectNftAsset(url: item.assetImage.imageURL)
+                onSelectNftAsset(item)
             }
         }
     }
@@ -127,7 +128,10 @@ public struct WalletImageScene: View {
 // MARK: - Actions
 
 extension WalletImageScene {
-    func onSelectNftAsset(url: URL?) {
+    func onSelectNftAsset(_ item: WalletImageViewModel.NFTAssetImageItem) {
+        guard let url = item.assetImage.imageURL else {
+            return
+        }
         Task {
             await model.setImage(from: url)
         }
