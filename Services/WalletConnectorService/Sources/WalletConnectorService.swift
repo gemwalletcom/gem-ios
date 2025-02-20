@@ -101,14 +101,14 @@ extension WalletConnectorService {
     }
 
     private func handleSessionProposals() async {
-        for await session in interactor.sessionProposalStream {
-            NSLog("Session proposal received: \(session)")
+        for await proposal in interactor.sessionProposalStream {
+            NSLog("Session proposal received: \(proposal)")
             Task {
                 do {
-                    try await processSession(proposal: session.proposal)
+                    let session = try await processSession(proposal: proposal.proposal)
                 } catch {
                     NSLog("Error accepting proposal: \(error)")
-                    try await signer.sessionReject(id: session.proposal.pairingTopic, error: error)
+                    try await signer.sessionReject(id: proposal.proposal.pairingTopic, error: error)
                 }
             }
         }
@@ -176,7 +176,7 @@ extension WalletConnectorService {
         }
     }
 
-    private func processSession(proposal: Session.Proposal) async throws {
+    private func processSession(proposal: Session.Proposal) async throws -> Session {
         let wallets = try signer.getWallets(for: proposal)
         let currentWalletId = try signer.getCurrentWallet().walletId
 
@@ -188,15 +188,15 @@ extension WalletConnectorService {
             wallets: wallets,
             metadata: proposal.proposer.metadata
         )
-
+        
         let payloadTopic = WCPairingProposal(pairingId: proposal.pairingTopic, proposal: payload)
         let approvedWalletId = try await signer.sessionApproval(payload: payloadTopic)
         let selectedWallet = try signer.getWallet(id: approvedWalletId)
 
-        try await acceptProposal(proposal: proposal, wallet: selectedWallet)
+        return try await acceptProposal(proposal: proposal, wallet: selectedWallet)
     }
 
-    private func acceptProposal(proposal: Session.Proposal, wallet: Wallet) async throws {
+    private func acceptProposal(proposal: Session.Proposal, wallet: Wallet) async throws -> Session {
         let chains = signer.getChains(wallet: wallet)
         let accounts = signer.getAccounts(wallet: wallet, chains: chains)
         let events = signer.getEvents()
@@ -211,7 +211,7 @@ extension WalletConnectorService {
             events: events.map { $0.rawValue },
             accounts: supportedAccounts
         )
-        let _ = try await WalletKit.instance.approve(
+        return try await WalletKit.instance.approve(
             proposalId: proposal.id,
             namespaces: sessionNamespaces,
             sessionProperties: proposal.sessionProperties
@@ -308,7 +308,7 @@ extension WalletConnectorService {
 extension Session {
     var asSession: Primitives.WalletConnectionSession {
         WalletConnectionSession(
-            id: pairingTopic,
+            id: topic,
             sessionId: topic,
             state: .active,
             chains: [],
