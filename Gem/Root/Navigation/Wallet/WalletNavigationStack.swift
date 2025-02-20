@@ -47,8 +47,7 @@ struct WalletNavigationStack: View {
                 TransactionScene(
                     input: TransactionSceneInput(
                         transactionId: $0.id,
-                        walletId: model.wallet.walletId,
-                        priceStore: priceService.priceStore
+                        walletId: model.wallet.walletId
                     )
                 )
             }

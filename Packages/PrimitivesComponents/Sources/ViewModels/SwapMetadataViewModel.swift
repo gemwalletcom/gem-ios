@@ -11,33 +11,28 @@ public struct SwapMetadataViewModel: Sendable {
         self.metadata = metadata
     }
 
-    var transactionMetada: TransactionSwapMetadata {
+    private var transactionMetadata: TransactionSwapMetadata {
         metadata.transactionMetadata
     }
 
-    var from: SwapAssetInput? {
-        guard let fromAsset = metadata.assets.first(where: { $0.id == transactionMetada.fromAsset }) else { return .none }
-        return SwapAssetInput(
-            asset: fromAsset,
-            value: BigInt(stringLiteral: transactionMetada.fromValue),
-            price: metadata.assetPrices.first(where: { $0.assetId == transactionMetada.fromAsset.identifier })?.mapToPrice()
-        )
-    }
-
-    var to: SwapAssetInput? {
-        guard let toAsset = metadata.assets.first(where: { $0.id == transactionMetada.toAsset }) else { return .none }
-        return SwapAssetInput(
-            asset: toAsset,
-            value: BigInt(stringLiteral: transactionMetada.toValue),
-            price: metadata.assetPrices.first(where: { $0.assetId == transactionMetada.toAsset.identifier })?.mapToPrice()
-        )
-    }
-
     var headerInput: SwapHeaderInput? {
-        guard let from, let to else { return .none }
+        guard
+            let fromAsset = metadata.asset(for: transactionMetadata.fromAsset),
+            let toAsset = metadata.asset(for: transactionMetadata.toAsset) else {
+            return .none
+        }
+        
         return SwapHeaderInput(
-            from: from,
-            to: to
+            from: SwapAssetInput(
+                asset: fromAsset,
+                value: BigInt(stringLiteral: transactionMetadata.fromValue),
+                price: metadata.price(for: transactionMetadata.fromAsset)
+            ),
+            to: SwapAssetInput(
+                asset: toAsset,
+                value: BigInt(stringLiteral: transactionMetadata.toValue),
+                price: metadata.price(for: transactionMetadata.toAsset)
+            )
         )
     }
 }

@@ -7,12 +7,10 @@ import Store
 public struct TransactionSceneInput {
     let transactionId: String
     let walletId: WalletId
-    let priceStore: PriceStore
 
-    public init(transactionId: String, walletId: WalletId, priceStore: PriceStore) {
+    public init(transactionId: String, walletId: WalletId) {
         self.transactionId = transactionId
         self.walletId = walletId
-        self.priceStore = priceStore
     }
 
     var transactionRequest: TransactionsRequest {

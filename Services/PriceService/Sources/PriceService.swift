@@ -7,7 +7,7 @@ import Store
 
 public struct PriceService: Sendable {
     private let apiService: any GemAPIPriceService
-    public let priceStore: PriceStore
+    private let priceStore: PriceStore
     
     public init(
         apiService: any GemAPIPriceService = GemAPIService(),

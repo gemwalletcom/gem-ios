@@ -21,8 +21,7 @@ public struct TransactionScene: View {
                 explorerService: ExplorerService.standard,
                 transaction: transactions.first!,
                 formatter: .medium
-            ),
-            priceStore: input.priceStore
+            )
         )
     }
     private let input: TransactionSceneInput

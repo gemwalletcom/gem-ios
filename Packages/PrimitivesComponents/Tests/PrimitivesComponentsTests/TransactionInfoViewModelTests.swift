@@ -26,6 +26,7 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.amountValueText.contains(asset.symbol))
         #expect(!model.amountValueText.isEmpty)
         #expect(model.amountValueText == "1 BTC")
@@ -42,6 +43,7 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.amountFiatValueText != nil)
         if let fiatText = model.amountFiatValueText {
             #expect(!fiatText.isEmpty)
@@ -60,11 +62,10 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.feeValueText != nil)
-        if let feeText = model.feeValueText {
-            #expect(feeText.contains(feeAsset.symbol))
-            #expect(feeText == "0.10 BTC")
-        }
+        #expect(model.feeValueText!.contains(feeAsset.symbol))
+        #expect(model.feeValueText! == "0.10 BTC")
     }
 
     @Test
@@ -78,11 +79,10 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.feeFiatValueText != nil)
-        if let feeFiatText = model.feeFiatValueText {
-            #expect(!feeFiatText.isEmpty)
-            #expect(feeFiatText == "$0.05")
-        }
+        #expect(!model.feeFiatValueText!.isEmpty)
+        #expect(model.feeFiatValueText! == "$0.05")
     }
 
     @Test
@@ -97,15 +97,15 @@ struct TransactionInfoModelTests {
             feeValue: feeValue
         )
         let header = model.headerType(input: .amount(showFiatSubtitle: true))
-        switch header {
-        case .amount(let title, let subtitle):
-            #expect(title == model.amountValueText)
-            #expect(subtitle == model.amountFiatValueText)
-            #expect(title == "1 BTC")
-            #expect(subtitle == "$1.50")
-        default:
+        guard case .amount(let title, let subtitle) = header else {
             Issue.record("Expected header type .amount")
+            return
         }
+    
+        #expect(title == model.amountValueText)
+        #expect(subtitle == model.amountFiatValueText)
+        #expect(title == "1 BTC")
+        #expect(subtitle == "$1.50")
     }
 
     @Test

@@ -16,4 +16,12 @@ public struct SwapMetadata: Sendable {
         self.assetPrices = assetPrices
         self.transactionMetadata = transactionMetadata
     }
+    
+    public func asset(for assetId: AssetId) -> Asset? {
+        assets.first(where: { $0.id == assetId })
+    }
+    
+    public func price(for assetId: AssetId) -> Price? {
+        assetPrices.first(where: { $0.assetId == assetId.identifier })?.mapToPrice()
+    }
 }

@@ -15,16 +15,13 @@ struct TransactionDetailViewModel {
     let model: TransactionViewModel
 
     private let preferences: Preferences
-    private let priceStore: PriceStore
 
     init(
         model: TransactionViewModel,
-        priceStore: PriceStore,
         preferences: Preferences = Preferences.standard
     ) {
         self.model = model
         self.preferences = preferences
-        self.priceStore = priceStore
     }
     
     var title: String { model.title }
@@ -198,7 +195,7 @@ struct TransactionDetailViewModel {
             }
             return SwapMetadata(
                 assets: model.transaction.assets,
-                assetPrices: (try? priceStore.getPrices(for: model.transaction.assets.map(\.id.identifier))) ?? [],
+                assetPrices: model.transaction.prices,
                 transactionMetadata: transactionSwapMetadata
             )
         }()
