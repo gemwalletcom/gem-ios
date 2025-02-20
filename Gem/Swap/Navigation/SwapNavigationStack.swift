@@ -72,21 +72,6 @@ struct SwapNavigationStack: View {
             }
         }
     }
-    
-    static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel {
-        if asset?.type == .native {
-            return SwapPairSelectorViewModel(
-                fromAssetId: asset?.chain.assetId,
-                toAssetId: Chain.allCases
-                    .sorted( by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
-                    .dropFirst().first?.assetId
-            )
-        }
-        return SwapPairSelectorViewModel(
-            fromAssetId: asset?.id,
-            toAssetId: asset?.chain.assetId
-        )
-    }
 }
 
 // MARK: - Actions
@@ -105,9 +90,9 @@ extension SwapNavigationStack {
     private func onSelectAssetComplete(type: SelectAssetSwapType, asset: Asset) {
         switch type {
         case .pay:
-            model.pairSelectorModel.fromAssetId = asset.id
+            model.pairSelectorModel?.fromAssetId = asset.id
         case .receive:
-            model.pairSelectorModel.toAssetId = asset.id
+            model.pairSelectorModel?.toAssetId = asset.id
         }
         isPresentingAssetSwapType = .none
     }

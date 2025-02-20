@@ -12,6 +12,7 @@ import Currency
 import NFT
 import TransactionsService
 import SwapService
+import Swap
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore
@@ -25,6 +26,7 @@ struct MainTabView: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.assetsService) private var assetsService
 
     let model: MainTabViewModel
 
@@ -83,10 +85,11 @@ struct MainTabView: View {
                 SwapNavigationStack(
                     model: SwapViewModel(
                         wallet: model.wallet,
-                        pairSelectorModel: SwapNavigationStack.defaultSwapPair(for: nil),
+                        pairSelectorModel: nil,
                         walletsService: walletsService,
                         swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
+                        keystore: keystore,
+                        assetService: assetsService
                     ),
                     navigationPath: Binding {
                         navigationState.swap
