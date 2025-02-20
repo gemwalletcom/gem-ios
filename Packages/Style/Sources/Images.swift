@@ -87,6 +87,7 @@ public struct Images {
         public static let manage = Image(.manage)
         public static let sell = Image(.sell)
         public static let more = Image(.ellipsis)
+        public static let avatar = Image(.avatar)
     }
 
     public struct Settings {
@@ -143,6 +144,7 @@ public struct Images {
         public static let `import` = Image(.import)
         public static let watch = Image(.watch)
         public static let selected = Image(.selected)
+        public static let editFilled = Image(.editFilled)
     }
 
     public struct NameResolve {
@@ -211,7 +213,8 @@ public struct Images {
             (Images.Actions.swap, "Swap"),
             (Images.Actions.receive, "Receive"),
             (Images.Actions.buy, "Buy"),
-            (Images.Actions.manage, "Manage")
+            (Images.Actions.manage, "Manage"),
+            (Images.Actions.avatar, "Avatar")
         ]),
         ("Settings", [
             (Images.Settings.priceAlerts, "Price Alerts"),
@@ -256,7 +259,8 @@ public struct Images {
             (Images.Wallets.create, "Create"),
             (Images.Wallets.import, "Import"),
             (Images.Wallets.watch, "Watch"),
-            (Images.Wallets.selected, "Selected")
+            (Images.Wallets.selected, "Selected"),
+            (Images.Wallets.editFilled, "Filled")
         ]),
         ("Name Resolve", [
             (Images.NameResolve.success, "Success"),

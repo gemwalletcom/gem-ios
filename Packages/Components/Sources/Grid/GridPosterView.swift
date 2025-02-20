@@ -7,11 +7,11 @@ import Style
 public struct GridPosterView: View {
     
     private let assetImage: AssetImage
-    private let title: String
+    private let title: String?
     
     public init(
         assetImage: AssetImage,
-        title: String
+        title: String?
     ) {
         self.assetImage = assetImage
         self.title = title
@@ -23,10 +23,12 @@ public struct GridPosterView: View {
                 .cornerRadius(Spacing.medium)
                 .aspectRatio(1, contentMode: .fit)
             
-            Text(title)
-                .font(.body)
-                .lineLimit(1)
-                .multilineTextAlignment(.leading)
+            if let title {            
+                Text(title)
+                    .font(.body)
+                    .lineLimit(1)
+                    .multilineTextAlignment(.leading)
+            }
             Spacer()
         }
     }
