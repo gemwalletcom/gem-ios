@@ -15,39 +15,29 @@ public struct SwapMetadataViewModel: Sendable {
         metadata.transactionMetadata
     }
 
-    var fromValue: BigInt {
-        BigInt(stringLiteral: transactionMetada.fromValue)
+    var from: SwapAssetInput? {
+        guard let fromAsset = metadata.assets.first(where: { $0.id == transactionMetada.fromAsset }) else { return .none }
+        return SwapAssetInput(
+            asset: fromAsset,
+            value: BigInt(stringLiteral: transactionMetada.fromValue),
+            price: metadata.assetPrices.first(where: { $0.assetId == transactionMetada.fromAsset.identifier })?.mapToPrice()
+        )
     }
 
-    var toValue: BigInt {
-        BigInt(stringLiteral: transactionMetada.toValue)
-    }
-
-    var fromAsset: Asset? {
-        metadata.assets.first(where: { $0.id == transactionMetada.fromAsset })
-    }
-
-    var toAsset: Asset? {
-        metadata.assets.first(where: { $0.id == transactionMetada.toAsset })
-    }
-
-    var fromPrice: Price? {
-        metadata.assetPrices.first(where: { $0.assetId == transactionMetada.fromAsset.identifier })?.mapToPrice()
-    }
-
-    var toPrice: Price? {
-        metadata.assetPrices.first(where: { $0.assetId == transactionMetada.toAsset.identifier })?.mapToPrice()
+    var to: SwapAssetInput? {
+        guard let toAsset = metadata.assets.first(where: { $0.id == transactionMetada.toAsset }) else { return .none }
+        return SwapAssetInput(
+            asset: toAsset,
+            value: BigInt(stringLiteral: transactionMetada.toValue),
+            price: metadata.assetPrices.first(where: { $0.assetId == transactionMetada.toAsset.identifier })?.mapToPrice()
+        )
     }
 
     var headerInput: SwapHeaderInput? {
-        guard let fromAsset, let toAsset else { return .none }
+        guard let from, let to else { return .none }
         return SwapHeaderInput(
-            fromAsset: fromAsset,
-            fromValue: fromValue,
-            fromPrice: fromPrice,
-            toAsset: toAsset,
-            toValue: toValue,
-            toPrice: toPrice
+            from: from,
+            to: to
         )
     }
 }

@@ -7,11 +7,10 @@ import Primitives
 public struct TransactionInfoViewModel: Sendable {
     private let asset: Asset
     private let assetPrice: Price?
+    private let value: BigInt
 
     private let feeAsset: Asset
     private let feeAssetPrice: Price?
-
-    private let value: BigInt
     private let feeValue: BigInt?
 
     private let fullFormatter = ValueFormatter(style: .full)
@@ -88,34 +87,26 @@ public struct TransactionInfoViewModel: Sendable {
                 )
         case let .swap(swapInput):
                 .swap(
-                    from: swapAmountField(
-                        asset: swapInput.fromAsset,
-                        value: swapInput.fromValue,
-                        price: swapInput.fromPrice
-                    ),
-                    to: swapAmountField(
-                        asset: swapInput.toAsset,
-                        value: swapInput.toValue,
-                        price: swapInput.toPrice
-                    )
+                    from: swapAmountField(input: swapInput.from),
+                    to: swapAmountField(input: swapInput.to)
                 )
         }
     }
 }
 
 extension TransactionInfoViewModel {
-    private func swapAmountField(asset: Asset, value: BigInt, price: Price?) -> SwapAmountField  {
+    private func swapAmountField(input: SwapAssetInput) -> SwapAmountField  {
         SwapAmountField(
-            assetImage: AssetIdViewModel(assetId: asset.id).assetImage,
+            assetImage: AssetIdViewModel(assetId: input.asset.id).assetImage,
             amount: mediumFormatter.string(
-                value,
-                decimals: asset.decimals.asInt,
-                currency: asset.symbol
+                input.value,
+                decimals: input.asset.decimals.asInt,
+                currency: input.asset.symbol
             ),
             fiatAmount: formattedFiatText(
-                price: price,
-                value: value,
-                decimals: asset.decimals.asInt)
+                price: input.price,
+                value: input.value,
+                decimals: input.asset.decimals.asInt)
         )
     }
 
