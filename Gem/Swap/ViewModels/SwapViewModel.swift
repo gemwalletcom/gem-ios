@@ -166,15 +166,15 @@ class SwapViewModel {
     func refresh(for wallet: Wallet) {
         self.wallet = wallet
         pairSelectorModel = nil
+        setupSwapPairSelector()
         fromAssetRequest = AssetRequestOptional(
             walletId: wallet.id,
-            assetId: nil
+            assetId: pairSelectorModel?.fromAssetId?.identifier
         )
         toAssetRequest = AssetRequestOptional(
             walletId: wallet.id,
-            assetId: nil
+            assetId: pairSelectorModel?.toAssetId?.identifier
         )
-        setupSwapPairSelector()
     }
     
     func setupSwapPairSelector() {
