@@ -48,6 +48,7 @@ public struct AssetImageView: View {
             } else {
                 CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
                     $0.resizable()
+                        .animation(.default)
                 } placeholder: {
                     if let type = assetImage.type {
                         ZStack {

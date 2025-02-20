@@ -17,6 +17,7 @@ let package = Package(
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "Store", path: "../Store"),
         .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "AvatarService", path: "../AvatarService")
     ],
     targets: [
         .target(
@@ -25,7 +26,8 @@ let package = Package(
                 "Primitives",
                 "Keystore",
                 "Store",
-                "Preferences"
+                "Preferences",
+                "AvatarService"
             ],
             path: "Sources"
         ),
