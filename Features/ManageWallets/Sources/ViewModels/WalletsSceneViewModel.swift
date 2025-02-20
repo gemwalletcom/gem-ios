@@ -2,7 +2,6 @@ import Foundation
 import Primitives
 import SwiftUI
 import Localization
-import Keystore
 import Preferences
 import ManageWalletService
 
