@@ -9,9 +9,8 @@ import Localization
 import Style
 
 public struct CollectionsNavigationStack: View {
-    
-    @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
+    @Environment(\.keystore) private var keystore
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
@@ -23,16 +22,17 @@ public struct CollectionsNavigationStack: View {
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
     @State private var isPresentingAvatarSuccessToast = false
     
-    let model: NFTCollectionViewModel
+    @State private var model: NFTCollectionViewModel
 
-    private var navigationPath: Binding<NavigationPath>
-    
-    init(
-        model: NFTCollectionViewModel,
-        navigationPath: Binding<NavigationPath>
-    ) {
-        self.model = model
-        self.navigationPath = navigationPath
+    private var navigationPath: Binding<NavigationPath> {
+        Binding(
+            get: { navigationState.collections },
+            set: { navigationState.collections = $0 }
+        )
+    }
+
+    init(model: NFTCollectionViewModel) {
+        _model = State(initialValue: model)
     }
     
     public var body: some View   {
@@ -54,9 +54,7 @@ public struct CollectionsNavigationStack: View {
                         model: NFTDetailsViewModel(
                             assetData: assetData.assetData,
                             headerButtonAction: { type in
-                                Task { @MainActor [assetData] in
-                                    onHeaderButtonAction(type: type, assetData: assetData.assetData)
-                                }
+                                onHeaderButtonAction(type: type, assetData: assetData.assetData)
                             }
                         )
                     )
@@ -97,7 +95,11 @@ public struct CollectionsNavigationStack: View {
         )
         .onChange(of: keystore.currentWallet, onWalletChange)
     }
-    
+}
+
+// MARK: - Actions
+
+extension CollectionsNavigationStack {
     private func onHeaderButtonAction(type: HeaderButtonType, assetData: NFTAssetData) {
         let account = try! model.wallet.account(for: assetData.asset.chain)
         switch type {
@@ -116,13 +118,10 @@ public struct CollectionsNavigationStack: View {
             }
         }
     }
-}
 
-extension CollectionsNavigationStack {
     private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
-        Task {
-            await model.fetch()
-        }
+        guard let wallet else { return }
+        model.refresh(for: wallet)
     }
     
     private func setAsWalletAvatar(assetData: NFTAssetData) {

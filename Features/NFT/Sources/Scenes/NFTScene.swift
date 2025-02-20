@@ -12,7 +12,6 @@ import Style
 import Localization
 
 public struct NFTScene: View {
-    
     private var gridItems: [GridItem] {
         [
             GridItem(spacing: Spacing.medium),
@@ -20,14 +19,19 @@ public struct NFTScene: View {
         ]
     }
     
-    private var model: NFTCollectionViewModel
-    
+    private let model: NFTCollectionViewModel
+
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
     public init(model: NFTCollectionViewModel) {
         self.model = model
-        _nftDataList = Query(constant: model.nftRequest)
+        let request = Binding {
+            model.request
+        } set: { new in
+            model.request = new
+        }
+        _nftDataList = Query(request)
     }
     
     public var body: some View {
@@ -36,7 +40,6 @@ public struct NFTScene: View {
                 nftCollectionView
             }
         }
-        .refreshable(action: model.fetch)
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if nftDataList.isEmpty {
@@ -48,7 +51,12 @@ public struct NFTScene: View {
         .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .taskOnce(fetch)
+        .refreshable {
+            await model.refresh()
+        }
+        .task {
+            await model.fetch()
+        }
     }
     
     private var nftCollectionView: some View {
@@ -59,12 +67,6 @@ public struct NFTScene: View {
                     title: gridItem.title
                 )
             }
-        }
-    }
-    
-    private func fetch() {
-        Task {
-            await model.fetch()
         }
     }
 }

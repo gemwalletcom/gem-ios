@@ -65,18 +65,13 @@ struct MainTabView: View {
             
             if model.isCollectionsEnabled {
                 CollectionsNavigationStack(
-                    model: NFTCollectionViewModel(
+                    model: .init(
                         wallet: model.wallet,
                         sceneStep: .collections,
                         nftService: nftService,
                         deviceService: deviceService,
                         avatarService: avatarService
-                    ),
-                    navigationPath: Binding {
-                        navigationState.collections
-                    } set: { new in
-                        navigationState.collections = new
-                    }
+                    )
                 )
                 .tabItem {
                     tabItem(Localized.Nft.collections, Images.Tabs.collections)
