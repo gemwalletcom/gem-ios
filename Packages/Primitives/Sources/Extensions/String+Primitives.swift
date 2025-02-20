@@ -21,6 +21,9 @@ public extension String {
         }
         return "0x" + self
     }
+    var asURL: URL? {
+        URL(string: self)
+    }
     
     func index(from: Int) -> Index {
         return self.index(startIndex, offsetBy: from)
