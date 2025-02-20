@@ -177,14 +177,15 @@ extension WalletConnectorService {
     }
 
     private func processSession(proposal: Session.Proposal) async throws {
-        let currentWallet = try signer.getCurrentWallet()
+        let wallets = try signer.getWallets(for: proposal)
+        let currentWalletId = try signer.getCurrentWallet().walletId
 
-        let chains = signer.getChains(wallet: currentWallet)
-        let accounts = signer.getAccounts(wallet: currentWallet, chains: chains)
-
+        guard let preselectedWallet = wallets.first(where: { $0.walletId ==  currentWalletId }) ?? wallets.first else {
+            throw AnyError("Doesn't have any supported wallets")
+        }
         let payload = WalletConnectionSessionProposal(
-            wallet: currentWallet,
-            accounts: accounts,
+            defaultWallet: preselectedWallet,
+            wallets: wallets,
             metadata: proposal.proposer.metadata
         )
 
@@ -303,15 +304,6 @@ extension WalletConnectorService {
 }
 
 // MARK: - Models extensions
-
-extension Chain {
-    var blockchain: WalletConnectUtils.Blockchain? {
-        if let namespace = namespace, let reference = reference {
-            return Blockchain(namespace: namespace, reference: reference)
-        }
-        return .none
-    }
-}
 
 extension Session {
     var asSession: Primitives.WalletConnectionSession {

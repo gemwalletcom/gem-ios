@@ -70,6 +70,17 @@
                ReferencedContainer = "container:Gem.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO"
+            parallelizable = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "D83096AB2D5D4F1E00FFEE3E"
+               BuildableName = "GemUITests.xctest"
+               BlueprintName = "GemUITests"
+               ReferencedContainer = "container:Gem.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

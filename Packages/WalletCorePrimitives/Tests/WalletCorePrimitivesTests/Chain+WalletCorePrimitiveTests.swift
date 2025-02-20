@@ -32,7 +32,11 @@ final class Chain_WalletCorePrimitiveTests {
                 .celo,
                 .world,
                 .sonic,
-                .abstract:
+                .abstract,
+                .berachain,
+                .ink,
+                .unichain,
+                .hyperliquid:
                #expect(coinType == .ethereum)
            case .solana:
                #expect(coinType == .solana)

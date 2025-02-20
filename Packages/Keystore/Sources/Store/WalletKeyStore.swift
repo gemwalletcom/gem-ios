@@ -1,8 +1,8 @@
 import Foundation
-import WalletCore
+@preconcurrency import WalletCore
 import Primitives
 
-public struct WalletKeyStore {
+public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
     private let directory: URL
     
@@ -70,7 +70,8 @@ public struct WalletKeyStore {
             type: .privateKey,
             accounts: [account],
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
 
@@ -107,7 +108,8 @@ public struct WalletKeyStore {
             type: type,
             accounts: accounts,
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
     

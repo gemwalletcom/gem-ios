@@ -5,6 +5,7 @@ import SwiftHTTPClient
 
 public enum XRPProvider: TargetType {
     case account(address: String)
+    case accountLines(address: String)
     case accountObjects(address: String)
     case fee
     case transaction(id: String)
@@ -18,6 +19,7 @@ public enum XRPProvider: TargetType {
     public var rpc_method: String {
         switch self {
         case .account: "account_info"
+        case .accountLines: "account_lines"
         case .fee: "fee"
         case .transaction: "tx"
         case .accountObjects: "account_objects"
@@ -36,7 +38,7 @@ public enum XRPProvider: TargetType {
     
     public var data: RequestData {
         switch self {
-        case .account(let address):
+        case .account(let address), .accountLines(let address):
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [[
                     "account":address,

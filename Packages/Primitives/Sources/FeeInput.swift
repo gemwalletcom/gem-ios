@@ -35,18 +35,6 @@ public struct FeeInput: Sendable {
     }
     
     public var chain: Chain {
-        switch type {
-        case .transfer(let asset):
-            return asset.chain
-        case .transferNft(let asset):
-            return asset.chain
-        case .swap(let fromAsset, _, _):
-            // support multiple
-            return fromAsset.chain
-        case .generic(let asset, _, _):
-            return asset.chain
-        case .stake(let asset, _), .account(let asset, _):
-            return asset.chain
-        }
+        type.chain
     }
 }

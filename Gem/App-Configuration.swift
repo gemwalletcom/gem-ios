@@ -1,5 +1,4 @@
 import Foundation
-import Settings
 import Primitives
 import Keystore
 import Components
@@ -28,6 +27,8 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
+import ManageWalletService
+import AvatarService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -106,6 +107,7 @@ extension NotificationService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
+        assertStore: .main,
         chainServiceFactory: .main
     )
 }
@@ -167,8 +169,8 @@ extension DeviceService {
     static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
-extension WalletService {
-    static let main = WalletService(keystore: LocalKeystore.main, walletStore: .main)
+extension ManageWalletService {
+    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main, avatarService: .main)
 }
 
 extension AssetStore {
@@ -227,6 +229,10 @@ extension NFTStore {
     static let main = NFTStore(db: .main)
 }
 
+extension AvatarService {
+    static let main = AvatarService(store: .main)
+}
+
 extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         store: .main,
@@ -240,8 +246,8 @@ extension DB {
 }
 
 extension Wallet {
-    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main], order: 0, isPinned: false)
-    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main], order: 0, isPinned: false)
+    static let main = Wallet(id: "1", name: "Test", index: 0, type: .multicoin, accounts: [.main], order: 0, isPinned: false, imageUrl: nil)
+    static let view = Wallet(id: "1", name: "Test", index: 0, type: .view, accounts: [.main], order: 0, isPinned: false, imageUrl: nil)
 }
 
 extension WalletId {

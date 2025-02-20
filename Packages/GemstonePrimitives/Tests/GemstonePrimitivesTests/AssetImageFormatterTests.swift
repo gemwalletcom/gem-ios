@@ -6,6 +6,7 @@ import Primitives
 @testable import GemstonePrimitives
 
 final class AssetImageFormatterTests {
+    @Test
     func testGetURL() {
         let formatter = AssetImageFormatter()
         #expect(formatter.getURL(for: AssetId(chain: .ethereum, tokenId: .none))?.absoluteString == "https://assets.gemwallet.com/blockchains/ethereum/logo.png")

@@ -14,7 +14,7 @@ import ExplorerService
 public struct TransactionScene: View {
     @Query<TransactionsRequest>
     private var transactions: [Primitives.TransactionExtended]
-    
+
     private var model: TransactionDetailViewModel {
         return TransactionDetailViewModel(
             model: TransactionViewModel(
@@ -25,15 +25,15 @@ public struct TransactionScene: View {
         )
     }
     private let input: TransactionSceneInput
-    
+
     @State private var showShareSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    
+
     public init(input: TransactionSceneInput) {
         self.input = input
         _transactions = Query(input.transactionRequest)
     }
-    
+
     public var body: some View {
         VStack {
             List {
@@ -55,7 +55,7 @@ public struct TransactionScene: View {
                             image
                         }
                     }
-                    
+
                     if let participantField = model.participantField, let account = model.participantAccount {
                         AddressListItemView(
                             title: participantField,
@@ -64,7 +64,7 @@ public struct TransactionScene: View {
                             explorerService: ExplorerService.standard
                         )
                     }
-                    
+
                     if model.showMemoField {
                         MemoListItemView(memo: model.memo)
                     }
@@ -98,39 +98,40 @@ public struct TransactionScene: View {
                         .cleanListRow()
                     case .nft:
                         HStack {
-                            Spacer()
+                            Spacer(minLength: 0)
                             TransactionHeaderView(type: model.headerType)
-                                .padding(.bottom, 16)
-                            Spacer()
+                                .padding(.bottom, Spacing.medium)
+                            Spacer(minLength: 0)
                         }
+                        .headerProminence(.increased)
+                    }
+
+                    Section {
+                        NavigationOpenLink(
+                            url: model.transactionExplorerUrl,
+                            with: Text(model.transactionExplorerText)
+                                .tint(Colors.black)
+                        )
                     }
                 }
-                
-                Section {
-                    NavigationOpenLink(
-                        url: model.transactionExplorerUrl,
-                        with: Text(model.transactionExplorerText)
-                            .tint(Colors.black)
-                    )
+            }
+            .background(Colors.grayBackground)
+            .navigationTitle(model.title)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button {
+                        showShareSheet.toggle()
+                    } label: {
+                        Images.System.share
+                    }
                 }
             }
-        }
-        .background(Colors.grayBackground)
-        .navigationTitle(model.title)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    showShareSheet.toggle()
-                } label: {
-                    Images.System.share
-                }
+            .sheet(isPresented: $showShareSheet) {
+                ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
             }
-        }
-        .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
-        }
-        .sheet(item: $isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            .sheet(item: $isPresentingInfoSheet) {
+                InfoSheetScene(model: InfoSheetViewModel(type: $0))
+            }
         }
     }
 }

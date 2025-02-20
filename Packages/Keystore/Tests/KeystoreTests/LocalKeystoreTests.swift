@@ -9,8 +9,6 @@ import Preferences
 @testable import Keystore
 
 final class LocalKeystoreTests {
-    // testing only phrase (from Wallet Core)
-    let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
 
     @Test
     func testCreateWallet() {
@@ -35,7 +33,7 @@ final class LocalKeystoreTests {
     func testImportSolanaWallet() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.solana]))
+            let _ = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: [.solana]))
 
             #expect(keystore.wallets.count == 1)
             #expect(keystore.wallets.first?.accounts.count == 1)
@@ -49,7 +47,7 @@ final class LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let chains: [Chain] = [.ethereum, .smartChain, .blast]
 
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: chains))
+            let _ = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: chains))
             #expect(keystore.wallets.count == 1)
             #expect(keystore.wallets.first?.accounts == chains.map {
                 Account(chain: $0,
@@ -84,7 +82,7 @@ final class LocalKeystoreTests {
     @Test
     func testSignSolanaMessage() throws {
         let keystore = LocalKeystore.mock()
-        let wallet = try keystore.importWallet(name: "Test Solana", type: .phrase(words: words, chains: [.solana]))
+        let wallet = try keystore.importWallet(name: "Test Solana", type: .phrase(words: LocalKeystore.words, chains: [.solana]))
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
         let message = SignMessage(type: .base58, data: Data(text.utf8))
@@ -118,7 +116,7 @@ final class LocalKeystoreTests {
             )
 
             let chains = Chain.allCases
-            let wallet = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: chains))
+            let wallet = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: chains))
 
             #expect(keystore.wallets.count == 1)
             #expect(wallet.accounts.count == chains.count)
@@ -150,7 +148,11 @@ final class LocalKeystoreTests {
                      .celo,
                      .world,
                      .sonic,
-                     .abstract:
+                     .abstract,
+                     .berachain,
+                     .ink,
+                     .unichain,
+                     .hyperliquid:
                     expected = "0x8f348F300873Fd5DA36950B2aC75a26584584feE"
                 case .solana:
                     expected = "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71"

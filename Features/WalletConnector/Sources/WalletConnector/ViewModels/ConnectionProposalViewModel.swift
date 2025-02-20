@@ -15,15 +15,14 @@ public struct ConnectionProposalViewModel {
     public init(
         connectionsService: ConnectionsService,
         confirmTransferDelegate: @escaping TransferDataCallback.ConfirmTransferDelegate,
-        pairingProposal: WCPairingProposal,
-        wallets: [Wallet]
+        pairingProposal: WCPairingProposal
     ) {
         self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.pairingProposal = pairingProposal
         self.walletSelectorModel = SellectWalletViewModel(
-            wallets: wallets,
-            selectedWallet: pairingProposal.proposal.wallet
+            wallets: pairingProposal.proposal.wallets,
+            selectedWallet: pairingProposal.proposal.defaultWallet
         )
     }
     
@@ -62,9 +61,7 @@ public struct ConnectionProposalViewModel {
 extension ConnectionProposalViewModel {
     func accept() throws {
         let selectedWalletId = walletSelectorModel.walletModel.wallet.walletId
-        if payload.wallet.walletId != selectedWalletId {
-            try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
-        }
+        try connectionsService.updateConnection(id: pairingProposal.id, wallet: selectedWalletId)
         confirmTransferDelegate(.success(selectedWalletId.id))
     }
 }

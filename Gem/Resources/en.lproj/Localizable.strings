@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Your image has been saved to Photos!";
 "permissions.access_denied" = "Access Denied";
 "permissions.image.photo_access.denied.description" = "This app does not have permission to access your photo library. Please enable access in your device settings.";
+"common.magic_button" = "Magic Button";
+"common.emoji" = "Emoji";
+"common.style" = "Style";
+"common.avatar" = "Avatar";
+"common.photo" = "Photo";
+"info.price_impact.title" = "Price Impact";
+"info.price_impact.description" = "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ";

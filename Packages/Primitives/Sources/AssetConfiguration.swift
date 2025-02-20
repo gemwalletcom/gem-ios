@@ -10,10 +10,11 @@ public struct AssetConfiguration: Sendable {
             .tron,
             .aptos,
             .algorand,
-            //.xrp, Not complete
+            // .xrp, Not complete
             .stellar,
+            .xrp,
         ],
-        EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) }
+        EVMChain.allCases.compactMap { Chain(rawValue: $0.rawValue) },
     ]
     .flatMap { $0 }
 
@@ -21,7 +22,7 @@ public struct AssetConfiguration: Sendable {
         .subtracting(Set<Chain>([.celo])) // Exclude unnecessary chains
         .asArray()
 
-    public static let enabledByDefault: [AssetId] =  [
+    public static let enabledByDefault: [AssetId] = [
         AssetId(chain: .bitcoin, tokenId: .none),
         AssetId(chain: .ethereum, tokenId: .none),
         AssetId(chain: .solana, tokenId: .none),

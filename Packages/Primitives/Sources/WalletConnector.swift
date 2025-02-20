@@ -76,13 +76,13 @@ public struct WalletConnection: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct WalletConnectionSessionProposal: Codable, Equatable, Hashable, Sendable {
-	public let wallet: Wallet
-	public let accounts: [Account]
+	public let defaultWallet: Wallet
+	public let wallets: [Wallet]
 	public let metadata: WalletConnectionSessionAppMetadata
 
-	public init(wallet: Wallet, accounts: [Account], metadata: WalletConnectionSessionAppMetadata) {
-		self.wallet = wallet
-		self.accounts = accounts
+	public init(defaultWallet: Wallet, wallets: [Wallet], metadata: WalletConnectionSessionAppMetadata) {
+		self.defaultWallet = defaultWallet
+		self.wallets = wallets
 		self.metadata = metadata
 	}
 }

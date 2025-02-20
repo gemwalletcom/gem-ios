@@ -103,6 +103,7 @@ public struct NFTDetailsViewModel: Sendable {
                 type: .send,
                 isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
             ),
+            HeaderButton(type: .avatar, isEnabled: true),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }
@@ -115,12 +116,13 @@ public struct NFTDetailsViewModel: Sendable {
         SocialLinksViewModel(assetLinks: assetData.collection.links)
     }
     
+    @MainActor
     func onHeaderAction(type: HeaderButtonType) {
         headerButtonAction?(type)
     }
     
     func saveImageToGallery() async throws(ImageGalleryServiceError) {
-        guard let url = URL(string: assetData.asset.image.imageUrl) else {
+        guard let url = assetData.asset.image.imageUrl.asURL else {
             throw ImageGalleryServiceError.wrongURL
         }
         let saver = ImageGalleryService()

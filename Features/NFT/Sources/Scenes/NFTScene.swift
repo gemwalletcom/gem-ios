@@ -13,7 +13,6 @@ import Localization
 import PrimitivesComponents
 
 public struct NFTScene: View {
-    
     private var gridItems: [GridItem] {
         [
             GridItem(spacing: Spacing.medium),
@@ -21,92 +20,50 @@ public struct NFTScene: View {
         ]
     }
     
-    @Binding var isPresentingSelectAssetType: SelectAssetType?
-    
-    private var model: NFTCollectionViewModel
-    
+    private let model: NFTCollectionViewModel
+
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
-    public init(
-        model: NFTCollectionViewModel,
-        isPresentingSelectAssetType: Binding<SelectAssetType?>
-    ) {
+    public init(model: NFTCollectionViewModel) {
         self.model = model
-        _isPresentingSelectAssetType = isPresentingSelectAssetType
-        _nftDataList = Query(constant: model.nftRequest)
+        let request = Binding {
+            model.request
+        } set: { new in
+            model.request = new
+        }
+        _nftDataList = Query(request)
     }
     
     public var body: some View {
         ScrollView {
             LazyVGrid(columns: gridItems) {
-                switch model.sceneStep {
-                case .collections:
-                    nftCollectionView
-                case .collection(let collection):
-                    if let nftData = nftDataList.first(where: { $0.collection.id == collection.id }) {
-                        buildNFTAssetView(nftData: nftData)
-                    }
-                }
+                nftCollectionView
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    isPresentingSelectAssetType = .receive(.collection)
-                } label: {
-                    Images.System.plus
-                }
-            }
-        }
-        .refreshable(action: fetch)
         .overlay {
             if nftDataList.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
         .padding(.horizontal, Spacing.medium)
-        .background(Colors.grayBackground)
+        .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .taskOnce(fetch)
+        .refreshable(action: model.fetch)
+        .task {
+            await model.fetch()
+        }
     }
     
     private var nftCollectionView: some View {
-        ForEach(nftDataList) { item in
-            let gridItem = model.createGridItem(from: item)
-            
+        ForEach(model.createGridItems(from: nftDataList)) { gridItem in
             NavigationLink(value: gridItem.destination) {
                 GridPosterView(
                     assetImage: gridItem.assetImage,
                     title: gridItem.title
                 )
             }
-        }
-    }
-    
-    @ViewBuilder
-    private func buildNFTAssetView(nftData: NFTData) -> some View {
-        ForEach(nftData.assets) { asset in
-            NavigationLink(
-                value: Scenes.NFTDetails(assetData: NFTAssetData(collection: nftData.collection, asset: asset))
-            ) {
-                GridPosterView(
-                    assetImage: AssetImage(
-                        type: nftData.collection.name,
-                        imageURL: URL(string: asset.image.imageUrl),
-                        placeholder: nil,
-                        chainPlaceholder: nil
-                    ),
-                    title: asset.name
-                )
-            }
-        }
-    }
-    
-    private func fetch() {
-        Task {
-            await model.fetch()
         }
     }
 }

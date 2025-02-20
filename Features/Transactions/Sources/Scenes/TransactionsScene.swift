@@ -34,9 +34,7 @@ public struct TransactionsScene: View {
         }
         .onChange(of: model.filterModel, model.onChangeFilter)
         .listSectionSpacing(.compact)
-        .refreshable {
-            await model.fetch()
-        }
+        .refreshable(action: model.fetch)
         .background(Colors.grayBackground)
         .overlay {
             if transactions.isEmpty {

@@ -19,7 +19,7 @@ public struct WalletBarView: View {
         Button {
             action?()
         } label: {
-            HStack(spacing: Spacing.extraSmall) {
+            HStack(spacing: Spacing.small) {
                 if let image = model.image {
                     AssetImageView(assetImage: image, size: 24, overlayImageSize: 10)
                 }
@@ -56,7 +56,8 @@ public struct WalletBarView: View {
                     type: .multicoin,
                     accounts: [.init(chain: .algorand, address: "", derivationPath: "", extendedPublicKey: "")],
                     order: 1,
-                    isPinned: true
+                    isPinned: true,
+                    imageUrl: nil
                 )
             ).name,
             image: .none,

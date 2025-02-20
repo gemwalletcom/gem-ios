@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "Actif non pris en charge.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Site web";
 "asset.contract" = "Contracter";
@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "Votre image a été enregistrée dans Photos !";
 "permissions.access_denied" = "Accès refusé";
 "permissions.image.photo_access.denied.description" = "Cette application n'a pas l'autorisation d'accéder à votre photothèque. Veuillez autoriser l'accès dans les paramètres de votre appareil.";
+"common.magic_button" = "Bouton magique";
+"common.emoji" = "Émoji";
+"common.style" = "Style";
+"common.avatar" = "Avatar";
+"common.photo" = "Photo";
+"info.price_impact.title" = "Impact sur les prix";
+"info.price_impact.description" = "L'impact sur le prix est la variation du prix du jeton causée par la taille de votre transaction. Un impact sur le prix plus élevé signifie que vous recevez moins de jetons en raison d'une faible liquidité ou d'une taille de commande importante. ";

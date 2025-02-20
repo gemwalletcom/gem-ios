@@ -301,7 +301,7 @@
 "rootcheck.exit" = "Exit";
 "errors.swap.no_quote_available" = "No quote available.";
 "errors.swap.not_supported_chain" = "Not supported chain.";
-"errors.swap.not_supported_asset" = "Not supported asset.";
+"errors.swap.not_supported_asset" = "지원되지 않는 자산입니다.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "웹사이트";
 "asset.contract" = "계약";
@@ -322,3 +322,10 @@
 "nft.success_saved_to_photos" = "이미지가 사진에 저장되었습니다!";
 "permissions.access_denied" = "접근 불가";
 "permissions.image.photo_access.denied.description" = "이 앱은 사진 라이브러리에 액세스할 권한이 없습니다. 기기 설정에서 액세스를 활성화하세요.";
+"common.magic_button" = "마법의 버튼";
+"common.emoji" = "이모티콘";
+"common.style" = "스타일";
+"common.avatar" = "화신";
+"common.photo" = "사진";
+"info.price_impact.title" = "가격 영향";
+"info.price_impact.description" = "가격 영향은 거래 규모로 인해 발생하는 토큰 가격의 변화입니다. 가격 영향이 클수록 유동성이 낮거나 주문 규모가 커서 토큰을 덜 받는다는 의미입니다. ";

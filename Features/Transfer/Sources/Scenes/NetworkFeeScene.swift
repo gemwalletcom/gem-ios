@@ -4,21 +4,15 @@ import SwiftUI
 import Components
 import Primitives
 import Localization
+import Style
 
 public struct NetworkFeeScene: View {
-    public typealias SelectFeePriority = ((FeePriority) -> Void)
-
     @Environment(\.dismiss) private var dismiss
 
     private var model: NetworkFeeSceneViewModel
-    private var action: SelectFeePriority
 
-    public init(
-        model: NetworkFeeSceneViewModel,
-        action: @escaping SelectFeePriority
-    ) {
+    public init(model: NetworkFeeSceneViewModel) {
         self.model = model
-        self.action = action
     }
 
     public var body: some View {
@@ -36,7 +30,10 @@ public struct NetworkFeeScene: View {
                         imageSize: 28,
                         value: feeRate.feeRate.priority,
                         selection: model.priority,
-                        action: action
+                        action: {
+                            model.priority = $0
+                            dismiss()
+                        }
                     )
                 }
             } footer: {
@@ -66,11 +63,3 @@ public struct NetworkFeeScene: View {
         }
     }
 }
-
-// MARK: - Previews
-
-//#Preview {
-//    NetworkFeeScene(
-//        model: .init(chain: .aptos, service: ChainSer)
-//    ) { _ in }
-//}

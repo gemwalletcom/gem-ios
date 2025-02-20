@@ -55,3 +55,9 @@ public extension Primitives.Chain {
         return feeUnitType
     }
 }
+
+extension Array where Element == Primitives.Chain {
+    public func sortByRank() -> [Primitives.Chain] {
+        self.sorted { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) }
+    }
+}

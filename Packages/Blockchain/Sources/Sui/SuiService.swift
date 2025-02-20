@@ -65,15 +65,17 @@ extension SuiService {
                     recipient: input.destinationAddress,
                     coinType: Self.coinId,
                     value: input.value,
+                    gasPrice: input.gasPrice.gasPrice,
                     sendMax: input.isMaxAmount
                 ).data
             case .token:
                 try await encodeTokenTransfer(
                     sender: input.senderAddress,
                     recipient: input.destinationAddress,
-                    coinType: asset.id.tokenId!,
+                    coinType: try asset.id.getTokenId(),
                     gasCoinType: Self.coinId,
-                    value: input.value
+                    value: input.value,
+                    gasPrice: input.gasPrice.gasPrice
                 ).data
             }
         case .transferNft:
@@ -85,37 +87,29 @@ extension SuiService {
                     senderAddress: input.senderAddress,
                     validatorAddress: validator.id,
                     coinType: Self.coinId,
-                    value: input.value
+                    value: input.value,
+                    gasPrice: input.gasPrice.gasPrice
                 ).data
             case .unstake(let delegation):
                 try await encodeUnstake(
                     sender: input.senderAddress,
                     stakedId: delegation.base.delegationId,
-                    coinType: Self.coinId
+                    coinType: Self.coinId,
+                    gasPrice: input.gasPrice.gasPrice
                 ).data
             case .redelegate, .rewards, .withdraw:
                 fatalError()
             }
-        case .swap(_, _, let action): try {
-            guard
-                case .swap(_, let swapData) = action
-            else {
-                return ""
-            }
-            let output = try Gemstone.suiValidateAndHash(encoded: swapData.data)
+        case .swap(_, _, _, let data): try {
+            let output = try Gemstone.suiValidateAndHash(encoded: data.data)
             return SuiTxData(txData: output.txData, digest: output.hash).data
         }()
-        case .generic, .account: fatalError()
+        case .generic, .account, .tokenApprove: fatalError()
         }
     }
 
     private func gasBudget(coinType: String) -> BigInt {
         BigInt(25_000_000)
-    }
-
-    private func fetcGasPrice() async throws -> UInt64 {
-        let price = try await provider.request(.gasPrice).map(as: JSONRPCResponse<String>.self).result
-        return UInt64(price) ?? 750
     }
 
     private func fetchObject(id: String) async throws -> SuiObject {
@@ -127,12 +121,10 @@ extension SuiService {
         recipient: String,
         coinType: String,
         value: BigInt,
+        gasPrice: BigInt,
         sendMax: Bool
     ) async throws -> SuiTxData  {
-        let (coins, price) = try await(
-            getCoins(senderAddress: sender, coinType: coinType),
-            fetcGasPrice()
-        )
+        let coins = try await getCoins(senderAddress: sender, coinType: coinType)
 
         let suiCoins = coins.map { $0.toGemstone() }
         let input = SuiTransferInput(
@@ -143,7 +135,7 @@ extension SuiService {
             sendMax: sendMax,
             gas: SuiGas(
                 budget: gasBudget(coinType: coinType).asUInt,
-                price: price
+                price: gasPrice.asUInt
             )
         )
         let output = try suiEncodeTransfer(input: input)
@@ -155,13 +147,13 @@ extension SuiService {
         recipient: String,
         coinType: String,
         gasCoinType: String,
-        value: BigInt
+        value: BigInt,
+        gasPrice: BigInt
     ) async throws -> SuiTxData  {
-        let (gasCoins, coins, price) = try await(
-            getCoins(senderAddress: sender, coinType: gasCoinType),
-            getCoins(senderAddress: sender, coinType: coinType),
-            fetcGasPrice()
-        )
+        async let getGasCoins = getCoins(senderAddress: sender, coinType: gasCoinType)
+        async let getCoins = getCoins(senderAddress: sender, coinType: coinType)
+        let (gasCoins, coins) = try await(getGasCoins, getCoins)
+        
         guard let gas = gasCoins.first else {
             throw AnyError("no gas coin")
         }
@@ -172,7 +164,7 @@ extension SuiService {
             tokens: coins.map { $0.toGemstone() },
             gas: SuiGas(
                 budget: gasBudget(coinType: coinType).asUInt,
-                price: price
+                price: gasPrice.asUInt
             ),
             gasCoin: gas.toGemstone())
         let output = try suiEncodeTokenTransfer(input: input)
@@ -183,12 +175,10 @@ extension SuiService {
         senderAddress: String,
         validatorAddress: String,
         coinType: String,
-        value: BigInt
+        value: BigInt,
+        gasPrice: BigInt
     ) async throws -> SuiTxData {
-        let (coins, price) = try await(
-            getCoins(senderAddress: senderAddress, coinType: coinType),
-            self.fetcGasPrice()
-        )
+        let coins = try await getCoins(senderAddress: senderAddress, coinType: coinType)
         let suiCoins = coins.map { $0.toGemstone() }
         let stakeInput = SuiStakeInput(
             sender: senderAddress,
@@ -196,7 +186,7 @@ extension SuiService {
             stakeAmount: value.asUInt,
             gas: SuiGas(
                 budget: gasBudget(coinType: coinType).asUInt,
-                price: price
+                price: gasPrice.asUInt
             ),
             coins: suiCoins
         )
@@ -207,13 +197,13 @@ extension SuiService {
     private func encodeUnstake(
         sender: String,
         stakedId: String,
-        coinType: String
+        coinType: String,
+        gasPrice: BigInt
     ) async throws -> SuiTxData {
-        let (coins, price, object) = try await(
-            getCoins(senderAddress: sender, coinType: coinType),
-            fetcGasPrice(),
-            fetchObject(id: stakedId)
-        )
+        async let getCoins = getCoins(senderAddress: sender, coinType: coinType)
+        async let getObject = fetchObject(id: stakedId)
+        let (coins, object) = try await(getCoins, getObject)
+
         guard let gas = coins.first else {
             throw AnyError("no gas coin")
         }
@@ -222,7 +212,7 @@ extension SuiService {
             stakedSui: object.objectRef,
             gas: SuiGas(
                 budget: gasBudget(coinType: coinType).asUInt,
-                price: price
+                price: gasPrice.asUInt
             ),
             gasCoin: gas.toGemstone()
         )
@@ -318,18 +308,26 @@ extension SuiService {
 
 extension SuiService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        FeeRate.defaultRates()
+        [
+            FeeRate(priority: .normal, gasPriceType: .regular(gasPrice: try await getGasPrice()))
+        ]
+    }
+}
+
+extension SuiService: ChainTransactionPreloadable {
+    public func preload(input: TransactionPreloadInput) async throws -> TransactionPreload {
+        .none
     }
 }
 
 // MARK: - ChainTransactionPreloadable
 
-extension SuiService: ChainTransactionPreloadable {
-    public func load(input: TransactionInput) async throws -> TransactionPreload {
+extension SuiService: ChainTransactionLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionLoad {
         let data: String = try await getData(input: input.feeInput)
         let fee = try await fee(data: String(data.split(separator: "_")[0]))
 
-        return TransactionPreload(
+        return TransactionLoad(
             fee: fee,
             messageBytes: data
         )

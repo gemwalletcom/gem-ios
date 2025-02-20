@@ -31,6 +31,7 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     public var createdAt: Date
     public var updatedAt: Date
     
+    // delete asset / price properties as they could be fetched from assets / prics
     static let asset = belongsTo(AssetRecord.self, key: "asset", using: ForeignKey(["assetId"], to: ["id"]))
     static let feeAsset = belongsTo(AssetRecord.self, key: "feeAsset", using: ForeignKey(["feeAssetId"], to: ["id"]))
     
@@ -38,7 +39,13 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     static let feePrice = belongsTo(PriceRecord.self, key: "feePrice", using: ForeignKey(["feeAssetId"], to: ["assetId"]))
     
     static let assetsAssociation = hasMany(TransactionAssetAssociationRecord.self)
+    static let pricesAssociation = hasMany(TransactionAssetAssociationRecord.self)
     static let assets = hasMany(AssetRecord.self, through: assetsAssociation, using: TransactionAssetAssociationRecord.asset)
+    static let prices = hasMany(
+        PriceRecord.self,
+        through: pricesAssociation,
+        using: TransactionAssetAssociationRecord.price
+    )
 }
 
 extension TransactionRecord: CreateTable {
@@ -103,7 +110,7 @@ extension TransactionRecord {
         let assetId = try! AssetId(id: assetId)
         let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
-            id: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            id: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             assetId: assetId,
             from: from,
@@ -130,7 +137,7 @@ extension Transaction {
     func record(walletId: String) -> TransactionRecord {
         return TransactionRecord(
             walletId: walletId,
-            transactionId: Transaction.id(chain: assetId.chain.rawValue, hash: hash),
+            transactionId: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
             type: type,
             from: from,

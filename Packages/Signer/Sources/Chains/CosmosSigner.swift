@@ -69,19 +69,16 @@ public struct CosmosSigner: Signable {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
-        guard case .swap(_, _, let action) = input.type else {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .swap(_, _, _, let data) = input.type else {
             throw AnyError("invalid type")
         }
-        switch action {
-        case .swap(_, let data):
-            let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-            let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: "RUNE", memo: data.data)]
-            
-            return try sign(input: input, messages: messages, chain: chain, memo: data.data, privateKey: privateKey)
-        case .approval:
-            fatalError()
-        }
+        let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
+        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: "RUNE", memo: data.data)]
+        
+        return [
+            try sign(input: input, messages: messages, chain: chain, memo: data.data, privateKey: privateKey),
+        ]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -118,7 +115,9 @@ public struct CosmosSigner: Signable {
             fatalError()
         }
         
-        return [try sign(input: input, messages: messages, chain: chain, memo: input.memo, privateKey: privateKey)]
+        return [
+            try sign(input: input, messages: messages, chain: chain, memo: input.memo, privateKey: privateKey),
+        ]
     }
     
     func getUnstakeMessage(delegatorAddress: String, validatorAddress: String, amount: CosmosAmount) -> CosmosMessage {

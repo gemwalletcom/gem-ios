@@ -51,16 +51,15 @@ public struct SolanaSigner: Signable {
                 walletAddress.token2022Address(tokenMintAddress: tokenId)!
             }
             let type = SolanaSigningInput.OneOf_TransactionType.createAndTransferTokenTransaction(.with {
-                    $0.amount = amount
-                    $0.decimals = decimals
-                    $0.recipientMainAddress = destinationAddress
-                    $0.tokenMintAddress = tokenId
-                    $0.senderTokenAddress = input.token.senderTokenAddress
-                    $0.recipientTokenAddress = recipientTokenAddress
-                    $0.memo = input.memo.valueOrEmpty
-                    $0.tokenProgramID = tokenProgram
-                }
-            )
+                $0.amount = amount
+                $0.decimals = decimals
+                $0.recipientMainAddress = destinationAddress
+                $0.tokenMintAddress = tokenId
+                $0.senderTokenAddress = input.token.senderTokenAddress
+                $0.recipientTokenAddress = recipientTokenAddress
+                $0.memo = input.memo.valueOrEmpty
+                $0.tokenProgramID = tokenProgram
+            })
             return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
         }
     }
@@ -145,10 +144,9 @@ public struct SolanaSigner: Signable {
         }
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         guard 
-            case .swap(_, _, let action) = input.type,
-            case .swap(_, let swapData) = action else {
+            case .swap(_, _, _, let swapData) = input.type else {
             throw AnyError("not swap SignerInput")
         }
         let price = input.fee.priorityFee
@@ -177,7 +175,7 @@ public struct SolanaSigner: Signable {
             throw AnyError(output.errorMessage)
         }
         
-        return output.encoded
+        return [output.encoded]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -204,7 +202,9 @@ public struct SolanaSigner: Signable {
             .rewards:
             fatalError()
         }
-        return [try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey)]
+        return [
+            try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),
+        ]
     }
     
     private func transcodeBase58ToBase64(_ string: String) throws -> String {

@@ -3,7 +3,7 @@
 import Foundation
 import SwiftHTTPClient
 
-public enum EthereumTarget: TargetType, Hashable {
+public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     case chainId
     case gasPrice
     case estimateGasLimit(from: String, to: String, value: String?, data: String?)
@@ -12,12 +12,10 @@ public enum EthereumTarget: TargetType, Hashable {
     case broadcast(data: String)
     case call([String: String])
     case transactionReceipt(id: String)
-    case blockByNumber(block: String)
     case feeHistory(blocks: Int, rewardPercentiles: [Int])
     case maxPriorityFeePerGas
     case syncing
     case latestBlock
-    case batch(requests: [EthereumTarget])
 
     public var baseUrl: URL {
         return URL(string: "")!
@@ -41,8 +39,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return "eth_call"
         case .transactionReceipt:
             return "eth_getTransactionReceipt"
-        case .blockByNumber:
-            return "eth_getBlockByNumber"
         case .feeHistory:
             return "eth_feeHistory"
         case .maxPriorityFeePerGas:
@@ -51,8 +47,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return "eth_syncing"
         case .latestBlock:
             return "eth_blockNumber"
-        case .batch:
-            return ""
         }
     }
     
@@ -106,15 +100,6 @@ public enum EthereumTarget: TargetType, Hashable {
                     id: 1
                 )
             )
-        case .blockByNumber(let block):
-            let params: [JSON] = [.value(block), .bool(false)]
-            return .encodable(
-                JSONRPCRequest(
-                    method: rpc_method,
-                    params: params,
-                    id: 1
-                )
-            )
         case .feeHistory(let blocks, let rewardPercentiles):
             let params: [JSON] = [
                 .string("\(blocks)"),
@@ -132,18 +117,6 @@ public enum EthereumTarget: TargetType, Hashable {
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [id] as [String], id: 1)
             )
-        case .batch(let targets):
-            let encoder = JSONEncoder()
-            let array: [Any] = targets.compactMap {
-                guard case .encodable(let req) = $0.data else {
-                    return nil
-                }
-                return try? encoder.encode(req)
-            }.compactMap {
-                try? JSONSerialization.jsonObject(with: $0)
-            }
-            let data = try? JSONSerialization.data(withJSONObject: array)
-            return .data(data ?? Data())
         }
     }
     

@@ -12,7 +12,8 @@ public struct XrpSigner: Signable {
     func sign(input: SignerInput, operation: RippleSigningInput.OneOf_OperationOneof, privateKey: Data) throws -> String {
         let signingInput = RippleSigningInput.with {
             $0.fee = input.fee.fee.asInt64
-            $0.sequence = Int32(input.sequence)
+            $0.sequence = input.sequence.asUInt32
+            $0.lastLedgerSequence = (input.block.number + 10).asUInt32
             $0.account = input.senderAddress
             $0.privateKey = privateKey
             $0.operationOneof = operation
@@ -32,7 +33,25 @@ public struct XrpSigner: Signable {
             operation: .opPayment(RippleOperationPayment.with {
                 $0.destination = input.destinationAddress
                 $0.amount = input.value.asInt64
-                if let memo = input.memo, let destinationTag = Int64(memo) {
+                if let memo = input.memo, let destinationTag = UInt32(memo) {
+                    $0.destinationTag = destinationTag
+                }
+            }),
+            privateKey: privateKey
+        )
+    }
+    
+    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
+        return try sign(
+            input: input,
+            operation: .opPayment(.with {
+                $0.destination = input.destinationAddress
+                $0.currencyAmount = try .with {
+                    $0.issuer = try input.asset.getTokenId()
+                    $0.currency = hexSymbol(symbol: input.asset.symbol)
+                    $0.value = ValueFormatter.full.string(input.value, decimals: 15)
+                }
+                if let memo = input.memo, let destinationTag = UInt32(memo) {
                     $0.destinationTag = destinationTag
                 }
             }),
@@ -41,33 +60,28 @@ public struct XrpSigner: Signable {
     }
     
     public func signAccountAction(input: SignerInput, privateKey: Data) throws -> String {
-        let tokenId = try input.asset.getTokenId()
-        let hexTokenId = Data(input.asset.symbol.utf8).hexString.capitalized
-        //Wallet Core does not support non native codes:
-        //https://github.com/trustwallet/wallet-core/blob/7b1bee59813f2d93e15e20c8e331cb0b1fafc51b/src/XRP/Transaction.cpp#L267
-        
         return try sign(
             input: input,
-            operation: .opTrustSet(RippleOperationTrustSet.with {
-                $0.limitAmount = RippleCurrencyAmount.with {
-                    $0.issuer = tokenId
-                    $0.currency = hexTokenId.addTrailing(number: 40, padding: "0")
-                    $0.value = "690000000"
+            operation: .opTrustSet(.with {
+                $0.limitAmount = try .with {
+                    $0.issuer = try input.asset.getTokenId()
+                    $0.currency = hexSymbol(symbol: input.asset.symbol)
+                    $0.value = "690000000000"
                 }
             }),
             privateKey: privateKey
         )
     }
     
-    public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        fatalError()
+    public func hexSymbol(symbol: String) -> String {
+        Data(symbol.utf8).hexString.capitalized.addTrailing(number: 40, padding: "0")
     }
     
     public func signData(input: Primitives.SignerInput, privateKey: Data) throws -> String {
         fatalError()
     }
     
-    public func swap(input: SignerInput, privateKey: Data) throws -> String {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         fatalError()
     }
     

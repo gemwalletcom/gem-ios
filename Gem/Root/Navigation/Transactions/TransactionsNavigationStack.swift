@@ -39,7 +39,10 @@ struct TransactionsNavigationStack: View {
                 .navigationTitle(model.title)
                 .navigationDestination(for: TransactionExtended.self) {
                     TransactionScene(
-                        input: TransactionSceneInput(transactionId: $0.id, walletId: model.walletId)
+                        input: TransactionSceneInput(
+                            transactionId: $0.id,
+                            walletId: model.walletId
+                        )
                     )
                 }
                 .navigationDestination(for: Scenes.Asset.self) {

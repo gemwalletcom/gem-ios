@@ -25,37 +25,34 @@ jobs:
         with:
           submodules: true
 
-      - name: Cache Cargo registry
+      - name: Cache Cargo Dependencies
         uses: actions/cache@v4
         with:
-          path: ~/.cargo/registry
-          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-registry-
-  
-      - name: Cache Cargo git dependencies
+            ${{ runner.os }}-cargo-deps-
+        
+      - name: Cache Cargo Target
         uses: actions/cache@v4
         with:
-          path: ~/.cargo/git
-          key: ${{ runner.os }}-cargo-git-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            core/target
+          key: ${{ runner.os }}-cargo-deps-${{ hashFiles('core/Cargo.lock') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-git-
+            ${{ runner.os }}-cargo-deps-
 
-      - name: Cache build artifacts (target directory)
+      - name: Cache Swift Package Manager
         uses: actions/cache@v4
         with:
-          path: target
-          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.lock') }}
+          path: |
+            ~/.swiftpm
+            .build
+          key: ${{ runner.os }}-spm-${{ hashFiles('Package.resolved') }}
           restore-keys: |
-            ${{ runner.os }}-cargo-build-
-      
-      - name: Cache build artifacts (gemstone target directory)
-        uses: actions/cache@v4
-        with:
-          path: core/gemstone/target
-          key: ${{ runner.os }}-cargo-gemstone-build-${{ hashFiles('**/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-gemstone-build-
+            ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
         uses: mozilla-actions/sccache-action@v0.0.7
@@ -64,7 +61,7 @@ jobs:
         run: brew install just
 
       - name: Install dependencies
-        run: just install-toolchains && just install-swifttools
+        run: just install-toolchains
 
       - name: Build Core
         run: just generate-stone

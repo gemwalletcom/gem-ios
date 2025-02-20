@@ -48,8 +48,7 @@ public struct InfoSheetScene: View {
             }
         }
         .presentationDetents([.medium])
-        .presentationCornerRadius(24)
-        .presentationDragIndicator(.hidden)
+        .presentationCornerRadius(Sizing.Presentation.cornerRadius)
     }
 }
 

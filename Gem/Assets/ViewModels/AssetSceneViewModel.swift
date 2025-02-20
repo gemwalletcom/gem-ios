@@ -114,6 +114,10 @@ class AssetSceneViewModel: ObservableObject {
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
     }
     
+    var shareAssetUrl: URL {
+        DeepLink.asset(assetDataModel.asset.id).url
+    }
+    
     // locally comouted banners
     var banners: [Primitives.Banner] {
         if !assetDataModel.isActive {

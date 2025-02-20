@@ -101,12 +101,29 @@ struct SelectAssetScene: View {
             switch model.selectType {
             case .buy, .receive, .send:
                 NavigationLink(value: SelectAssetInput(type: model.selectType, assetAddress: assetData.assetAddress)) {
-                    ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+                    ListAssetItemSelectionView(
+                        assetData: assetData,
+                        currencyCode: model.currencyCode,
+                        type: model.selectType.listType,
+                        action: onAsset
+                    )
                 }
             case .manage:
-                ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)
+                ListAssetItemSelectionView(
+                    assetData: assetData,
+                    currencyCode: model.currencyCode,
+                    type: model.selectType.listType,
+                    action: onAsset
+                )
             case .priceAlert, .swap:
-                NavigationCustomLink(with: ListAssetItemSelectionView(assetData: assetData, type: model.selectType.listType, action: onAsset)) {
+                NavigationCustomLink(
+                    with: ListAssetItemSelectionView(
+                        assetData: assetData,
+                        currencyCode: model.currencyCode,
+                        type: model.selectType.listType,
+                        action: onAsset
+                    )
+                ) {
                     model.selectAsset(asset: assetData.asset)
                 }
             }
@@ -142,14 +159,19 @@ extension SelectAssetScene {
 
 private struct ListAssetItemSelectionView: View {
     let assetData: AssetData
+    let currencyCode: String
     let type: AssetListType
     let action: (ListAssetItemAction, AssetData) -> Void
-    
+
     var body: some View {
         ListAssetItemView(
             model: ListAssetItemViewModel(
                 showBalancePrivacy: .constant(false),
-                assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .short),
+                assetDataModel: AssetDataViewModel(
+                    assetData: assetData,
+                    formatter: .short,
+                    currencyCode: currencyCode
+                ),
                 type: type,
                 action: {
                     action($0, assetData)

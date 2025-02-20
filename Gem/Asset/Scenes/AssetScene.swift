@@ -10,6 +10,7 @@ import Style
 import Localization
 import InfoSheet
 import PrimitivesComponents
+import Preferences
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
@@ -20,6 +21,7 @@ struct AssetScene: View {
 
     @State private var showingOptions = false
     @State private var showingPriceAlertMessage = false
+    @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
@@ -38,7 +40,11 @@ struct AssetScene: View {
 
     private var headerModel: AssetHeaderViewModel {
         AssetHeaderViewModel(
-            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            assetDataModel: AssetDataViewModel(
+                assetData: assetData,
+                formatter: .medium,
+                currencyCode: Preferences.standard.currency
+            ),
             walletModel: walletModel,
             bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
         )
@@ -50,7 +56,11 @@ struct AssetScene: View {
             assetsService: assetsService,
             transactionsService: transactionsService,
             priceAlertService: priceAlertService,
-            assetDataModel: AssetDataViewModel(assetData: assetData, formatter: .medium),
+            assetDataModel: AssetDataViewModel(
+                assetData: assetData,
+                formatter: .medium,
+                currencyCode: Preferences.standard.currency
+            ),
             walletModel: walletModel
         )
     }
@@ -76,7 +86,7 @@ struct AssetScene: View {
                     model: headerModel,
                     isHideBalanceEnalbed: .constant(false),
                     onHeaderAction: onSelectHeader(_:),
-                    onInfoSheetAction: onInfoSheetAction
+                    onInfoAction: onSelectWalletHeaderInfo
                 )
                     .padding(.top, Spacing.small)
                     .padding(.bottom, Spacing.medium)
@@ -168,9 +178,15 @@ struct AssetScene: View {
                         if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
                             Button(title) { onOpenLink(url) }
                         }
+                        Button(Localized.Common.share) {
+                            isPresentingShareAssetSheet = true
+                        }
                     }
                 }
             }
+        }
+        .sheet(isPresented: $isPresentingShareAssetSheet) {
+            ShareSheet(activityItems: [model.shareAssetUrl.absoluteString])
         }
         .taskOnce(onTaskOnce)
         .listSectionSpacing(.compact)
@@ -202,7 +218,6 @@ extension AssetScene {
 // MARK: - Actions
 
 extension AssetScene {
-
     private func onSelectHeader(_ buttonType: HeaderButtonType) {
         let selectType: SelectedAssetType = switch buttonType {
         case .buy: .buy(assetData.asset)
@@ -210,7 +225,7 @@ extension AssetScene {
         case .swap: .swap(assetData.asset)
         case .receive: .receive(.asset)
         case .stake: .stake(assetData.asset)
-        case .more:
+        case .more, .avatar:
             fatalError()
         }
         isPresentingAssetSelectedInput = SelectedAssetInput(
@@ -218,17 +233,14 @@ extension AssetScene {
             assetAddress: assetData.assetAddress
         )
     }
-    
 
-    private func onInfoSheetAction(type: InfoSheetType) {
-        isPresentingInfoSheet = type
+    private func onSelectWalletHeaderInfo() {
+        isPresentingInfoSheet = .watchWallet
     }
-
 
     private func onOpenLink(_ url: URL) {
         UIApplication.shared.open(url)
     }
-
 
     private func onSelectOptions() {
         showingOptions = true
@@ -251,8 +263,8 @@ extension AssetScene {
         case .activateAsset:
             onAssetActivate?(model.assetDataModel.asset)
         case .enableNotifications,
-            .accountActivation,
-            .accountBlockedMultiSignature:
+                .accountActivation,
+                .accountBlockedMultiSignature:
             Task {
                 try await bannerService.handleAction(action)
             }
