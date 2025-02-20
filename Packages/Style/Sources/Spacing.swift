@@ -55,4 +55,9 @@ public struct Sizing {
             public static let image: CGFloat = 20
         }
     }
+    
+    public struct Presentation {
+        /// 24
+        public static let cornerRadius: CGFloat = 24
+    }
 }
