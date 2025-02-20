@@ -136,7 +136,7 @@ public struct WalletScene: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 if let wallet = dbWallet {
-                    WalletBarView(model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)) {
+                    WalletBarView(model: .from(wallet: wallet)) {
                         isPresentingWallets.toggle()
                     }
                 }
@@ -238,12 +238,11 @@ extension WalletScene {
 // MARK: - Models extensions
 
 extension WalletBarViewViewModel {
-    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
+    static func from(wallet: Wallet) -> WalletBarViewViewModel {
         let model = WalletViewModel(wallet: wallet)
         return WalletBarViewViewModel(
             name: model.name,
-            image: model.avatarImage,
-            showChevron: showChevron
+            image: model.avatarImage
         )
     }
 }
