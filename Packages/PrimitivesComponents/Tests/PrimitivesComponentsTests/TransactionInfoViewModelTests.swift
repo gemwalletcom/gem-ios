@@ -132,12 +132,12 @@ struct TransactionInfoModelTests {
     @Test
     func testHeaderTypeSwap() {
         let swapMetadata = SwapHeaderInput(
-            from: SwapAssetInput(
+            from: AssetValuePrice(
                 asset: asset,
                 value: value,
                 price: assetPrice
             ),
-            to: SwapAssetInput(
+            to: AssetValuePrice(
                 asset: feeAsset,
                 value: feeValue,
                 price: feeAssetPrice

@@ -5,10 +5,10 @@ import Primitives
 import BigInt
 
 public struct SwapHeaderInput: Sendable {
-    let from: SwapAssetInput
-    let to: SwapAssetInput
+    let from: AssetValuePrice
+    let to: AssetValuePrice
 
-    public init(from: SwapAssetInput, to: SwapAssetInput) {
+    public init(from: AssetValuePrice, to: AssetValuePrice) {
         self.from = from
         self.to = to
     }

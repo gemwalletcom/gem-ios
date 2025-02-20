@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct SwapAssetInput: Sendable {
+public struct AssetValuePrice: Sendable {
     public let asset: Asset
     public let value: BigInt
     public let price: Price?

@@ -23,12 +23,12 @@ public struct SwapMetadataViewModel: Sendable {
         }
         
         return SwapHeaderInput(
-            from: SwapAssetInput(
+            from: AssetValuePrice(
                 asset: fromAsset,
                 value: BigInt(stringLiteral: transactionMetadata.fromValue),
                 price: metadata.price(for: transactionMetadata.fromAsset)
             ),
-            to: SwapAssetInput(
+            to: AssetValuePrice(
                 asset: toAsset,
                 value: BigInt(stringLiteral: transactionMetadata.toValue),
                 price: metadata.price(for: transactionMetadata.toAsset)

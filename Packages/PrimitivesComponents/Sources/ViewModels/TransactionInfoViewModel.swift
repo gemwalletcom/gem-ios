@@ -95,7 +95,7 @@ public struct TransactionInfoViewModel: Sendable {
 }
 
 extension TransactionInfoViewModel {
-    private func swapAmountField(input: SwapAssetInput) -> SwapAmountField  {
+    private func swapAmountField(input: AssetValuePrice) -> SwapAmountField  {
         SwapAmountField(
             assetImage: AssetIdViewModel(assetId: input.asset.id).assetImage,
             amount: mediumFormatter.string(
