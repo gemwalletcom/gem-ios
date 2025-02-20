@@ -47,25 +47,25 @@ struct InfoSheetView: View {
     }
 
     var body: some View {
-        VStack(spacing: Spacing.large) {
+        VStack(spacing: Spacing.medium) {
             ZStack {
                 switch image {
                 case .image(let image):
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: Sizing.image.extraLarge, height: Sizing.image.extraLarge)
+                        .frame(width: Sizing.image.semiLarge, height: Sizing.image.semiLarge)
                 case .assetImage(let assetImage):
                     AssetImageView(
                         assetImage: assetImage,
-                        size: Sizing.image.extraLarge,
-                        overlayImageSize: Sizing.image.extraLarge / 2.5
+                        size: Sizing.image.semiLarge,
+                        overlayImageSize: Sizing.image.semiLarge / 2.5
                     )
                 case nil: EmptyView()
                 }
             }
             
-            VStack(spacing: Spacing.medium) {
+            VStack(spacing: Spacing.small) {
                 Text(title.text)
                     .textStyle(title.style)
                 Text(description.text)

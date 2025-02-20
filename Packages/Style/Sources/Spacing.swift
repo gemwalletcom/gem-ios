@@ -25,6 +25,7 @@ public struct Sizing {
         public static let small: CGFloat = 22
         public static let medium: CGFloat = 44
         public static let large: CGFloat = 88
+        public static let semiLarge: CGFloat = 112
         public static let extraLarge: CGFloat = 120
     }
     
