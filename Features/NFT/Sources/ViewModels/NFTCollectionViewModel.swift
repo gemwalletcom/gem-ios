@@ -29,7 +29,6 @@ public final class NFTCollectionViewModel: Sendable {
     var request: NFTRequest
 
     public var wallet: Wallet
-    public var shoudRefreshData: Bool = true
 
     public init(
         wallet: Wallet,
@@ -54,14 +53,8 @@ public final class NFTCollectionViewModel: Sendable {
     }
 
     // MARK: - Public methods
-    public func refresh() async {
-        shoudRefreshData = true
-        await fetch()
-    }
 
     public func fetch() async {
-        guard shoudRefreshData else { return }
-        shoudRefreshData = false
         switch sceneStep {
         case .collections:
             await updateCollection()
@@ -78,7 +71,6 @@ public final class NFTCollectionViewModel: Sendable {
     public func refresh(for wallet: Wallet) {
         self.wallet = wallet
         self.request = Self.createNftReqeust(for: wallet, sceneStep: sceneStep)
-        self.shoudRefreshData = true
     }
 
     // MARK: - Internal methods

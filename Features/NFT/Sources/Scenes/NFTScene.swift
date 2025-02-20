@@ -51,9 +51,7 @@ public struct NFTScene: View {
         .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
-        .refreshable {
-            await model.refresh()
-        }
+        .refreshable(action: model.fetch)
         .task {
             await model.fetch()
         }
