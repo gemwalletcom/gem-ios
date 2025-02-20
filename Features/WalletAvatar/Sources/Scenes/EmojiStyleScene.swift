@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Style
 import Localization
+import Components
 
 public struct EmojiStyleScene: View {
     private enum Tab: Equatable {
@@ -81,13 +82,10 @@ public struct EmojiStyleScene: View {
                 spacing: Spacing.medium
             ) {
                 ForEach(model.emojiList, id: \.self) { item in
-                    EmojiButton(
-                        color: item.color,
-                        emoji: item.emoji,
-                        action: {
-                            model.text = item.emoji
-                        }
-                    )
+                    let view = EmojiView(color: item.color, emoji: item.emoji)
+                    NavigationCustomLink(with: view, action: {
+                        model.text = item.emoji
+                    })
                     .frame(maxWidth: .infinity)
                     .transition(.opacity)
                 }

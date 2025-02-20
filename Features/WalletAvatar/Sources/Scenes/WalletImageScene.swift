@@ -101,18 +101,14 @@ public struct WalletImageScene: View {
                     .textStyle(.body)
             }
         })
-        .highPriorityGesture(DragGesture())
     }
     
     private var emojiListView: some View {
         ForEach(model.emojiList, id: \.self) { value in
-            EmojiButton(
-                color: value.color,
-                emoji: value.emoji,
-                action: {
-                    model.setAvatarImage(color: value.color.uiColor, text: value.emoji)
-                }
-            )
+            let view = EmojiView(color: value.color, emoji: value.emoji)
+            NavigationCustomLink(with: view, action: {
+                model.setAvatarImage(color: value.color.uiColor, text: value.emoji)
+            })
             .frame(maxWidth: .infinity)
             .transition(.opacity)
         }

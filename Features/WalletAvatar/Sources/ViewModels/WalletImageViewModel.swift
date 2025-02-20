@@ -76,7 +76,7 @@ public final class WalletImageViewModel: Sendable {
     public func setImage(from url: URL?) async {
         do {
             guard let url else { return }
-            try await avatarService.save(url: url, walletId: wallet.id)
+            try await avatarService.save(url: url, for: wallet.id)
         } catch {
             print("Set nft image error:", error)
         }
@@ -149,7 +149,7 @@ public final class WalletImageViewModel: Sendable {
     private func setImage(_ image: UIImage?) {
         do {
             guard let image else { return }
-            try avatarService.save(image: image, walletId: wallet.id)
+            try avatarService.save(image: image, for: wallet.id)
         } catch {
             print("Set image error:", error)
         }

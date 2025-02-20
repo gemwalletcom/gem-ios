@@ -75,7 +75,7 @@ public struct NFTCollectionViewModel: Sendable {
 
     public func setWalletAvatar(_ asset: NFTAsset) async throws {
         guard let url = asset.image.previewImageUrl.asURL else { return }
-        try await avatarService.save(url: url, walletId: wallet.id)
+        try await avatarService.save(url: url, for: wallet.id)
     }
     
     // MARK: - Internal methods

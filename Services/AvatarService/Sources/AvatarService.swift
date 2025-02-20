@@ -15,7 +15,7 @@ public struct AvatarService: Sendable {
     // MARK: - Store
 
     @MainActor
-    public func save(image: UIImage, walletId: String) throws {
+    public func save(image: UIImage, for walletId: String) throws {
         guard let data = image.compress() else {
             throw AnyError("Compression image failed")
         }
@@ -25,7 +25,7 @@ public struct AvatarService: Sendable {
         try store.setWalletAvatar(walletId, url: path)
     }
     
-    public func save(url: URL, walletId: String) async throws {
+    public func save(url: URL, for walletId: String) async throws {
         let (data, _) = try await URLSession.shared.data(from: url)
         
         let path = try preparePath(for: walletId)
