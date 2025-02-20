@@ -120,13 +120,14 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         let header = model.headerType(input: .nft(nftAsset))
-        switch header {
-        case .nft(let name, _):
-            #expect(name == asset.name)
-        default:
-            Issue.record("Engine is not electric")
+        guard case .nft(let name, _) = header else {
+            Issue.record("Expected header type .nft")
+            return
         }
+
+        #expect(name == asset.name)
     }
 
     @Test
@@ -153,16 +154,17 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         let header = model.headerType(input: .swap(swapMetadata))
-        switch header {
-        case .swap(let fromField, let toField):
-            #expect(fromField.amount.contains(asset.symbol))
-            #expect(toField.amount.contains(feeAsset.symbol))
-            #expect(fromField.amount == "1.00 BTC")
-            #expect(toField.amount == "0.10 BTC")
-        default:
+        guard case .swap(let fromField, let toField) = header else {
             Issue.record("Expected header type .swap")
+            return
         }
+
+        #expect(fromField.amount.contains(asset.symbol))
+        #expect(toField.amount.contains(feeAsset.symbol))
+        #expect(fromField.amount == "1.00 BTC")
+        #expect(toField.amount == "0.10 BTC")
     }
 
     @Test
@@ -176,6 +178,7 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.amountFiatValueText == nil)
     }
 
@@ -190,6 +193,7 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: nil
         )
+
         #expect(model.feeValueText == nil)
     }
 
@@ -204,6 +208,7 @@ struct TransactionInfoModelTests {
             value: value,
             feeValue: feeValue
         )
+
         #expect(model.feeFiatValueText == nil)
     }
 
@@ -219,12 +224,12 @@ struct TransactionInfoModelTests {
             feeValue: feeValue
         )
         let header = model.headerType(input: .amount(showFiatSubtitle: false))
-        switch header {
-        case .amount(let title, let subtitle):
-            #expect(title == model.amountValueText)
-            #expect(subtitle == nil || subtitle?.isEmpty == true)
-        default:
+        guard case .amount(let title, let subtitle) = header else {
             Issue.record("Expected header type .amount")
+            return
         }
+
+        #expect(title == model.amountValueText)
+        #expect(subtitle == nil || subtitle?.isEmpty == true)
     }
 }
