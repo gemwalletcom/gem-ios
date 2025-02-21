@@ -95,7 +95,6 @@ public struct WalletImageScene: View {
             }
             .padding(.horizontal, Spacing.medium)
         }
-        .animation(.linear(duration: AnimationDuration.fast), value: selectedTab)
         .overlay(content: {
             if nftDataList.isEmpty, case .collections = selectedTab {
                 Text(Localized.Activity.EmptyState.message)
