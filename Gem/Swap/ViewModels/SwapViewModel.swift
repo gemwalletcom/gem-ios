@@ -219,6 +219,10 @@ extension SwapViewModel {
     func resetToValue() {
         toValue = ""
     }
+    
+    func resetSelectedProvider() {
+        selectedProvider = nil
+    }
 
     func setMaxFromValue(asset: Asset, value: BigInt) {
         fromValue = formatter.string(value, decimals: asset.decimals.asInt)

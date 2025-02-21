@@ -85,6 +85,7 @@ struct SwapScene: View {
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
+        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .debounce(
@@ -239,12 +240,14 @@ extension SwapScene {
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
+        model.resetSelectedProvider()
         focusedField = .from
         fetch()
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
+        model.resetSelectedProvider()
         fetch()
     }
     
