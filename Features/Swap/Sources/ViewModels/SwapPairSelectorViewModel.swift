@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import GemstonePrimitives
 
 @Observable
 public class SwapPairSelectorViewModel {
@@ -14,5 +15,32 @@ public class SwapPairSelectorViewModel {
     ) {
         self.fromAssetId = fromAssetId
         self.toAssetId = toAssetId
+    }
+}
+
+extension SwapPairSelectorViewModel {
+    public static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel {
+        guard let asset else {
+            let sortedChains = Chain.allCases
+                .sorted(by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
+            return SwapPairSelectorViewModel(
+                fromAssetId: sortedChains.first?.assetId,
+                toAssetId: sortedChains.dropFirst().first?.assetId
+            )
+        }
+
+        if asset.type == .native {
+            return SwapPairSelectorViewModel(
+                fromAssetId: asset.chain.assetId,
+                toAssetId: Chain.allCases
+                    .sorted( by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
+                    .filter { $0.assetId != asset.chain.assetId }
+                    .first?.assetId
+            )
+        }
+        return SwapPairSelectorViewModel(
+            fromAssetId: asset.id,
+            toAssetId: asset.chain.assetId
+        )
     }
 }

@@ -102,12 +102,11 @@ struct SwapScene: View {
         .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
-        .onChange(of: fromAsset, initial: true, onSetToAsset)
         .onChange(of: toAsset, onChangeToAsset)
-        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
         .onChange(of: model.selectedProvider, onChangeProvider)
@@ -115,6 +114,7 @@ struct SwapScene: View {
             fetch()
         }
         .onAppear {
+            model.setupSwapPairSelector()
             if model.toValue.isEmpty {
                 focusedField = .from
             }
@@ -242,12 +242,6 @@ extension SwapScene {
         model.resetValues()
         focusedField = .from
         fetch()
-    }
-    
-    private func onSetToAsset(_: AssetData?, _: AssetData?) {
-        if let fromAsset, toAsset == nil {
-            model.pairSelectorModel = SwapNavigationStack.defaultSwapPair(for: fromAsset.asset)
-        }
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
