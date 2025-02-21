@@ -8,9 +8,9 @@ import BigInt
 import SwiftUI
 
 public struct SwapProviderItem {
-    let asset: Asset
-    let swapQuote: SwapQuote
-    let formatter = ValueFormatter(style: .full)
+    public let asset: Asset
+    public let swapQuote: SwapQuote
+    public let formatter = ValueFormatter(style: .full)
     
     private var amount: String {
         let value = (try? BigInt.from(string: swapQuote.toValue)) ?? .zero

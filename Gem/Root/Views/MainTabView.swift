@@ -26,7 +26,6 @@ struct MainTabView: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.avatarService) private var avatarService
-    @Environment(\.nodeService) private var nodeService
 
     let model: MainTabViewModel
 

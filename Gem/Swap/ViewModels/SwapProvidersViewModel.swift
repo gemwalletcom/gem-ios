@@ -5,13 +5,13 @@ import Primitives
 import Gemstone
 import Components
 
-struct SwapProvidersViewModel: SelectableListAdoptable {
+public struct SwapProvidersViewModel: SelectableListAdoptable {
     public typealias Item = SwapProviderItem
     public var items: [SwapProviderItem]
     public var selectedItems: Set<SwapProviderItem>
     public var isMultiSelectionEnabled: Bool
     
-    init(
+    public init(
         items: [SwapProviderItem],
         selectedItems: [SwapProviderItem],
         isMultiSelectionEnabled: Bool

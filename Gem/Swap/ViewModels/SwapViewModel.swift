@@ -121,18 +121,15 @@ class SwapViewModel {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
     
-    var allowSelectProvider: Bool {
-        if case .loaded(let result) = swapState.availability {
-            return result.quotes.count > 1
-        }
-        return false
-    }
-    
     var swapQuotes: [SwapQuote] {
         if case .loaded(let result) = swapState.availability {
             return result.quotes
         }
         return []
+    }
+    
+    var allowSelectProvider: Bool {
+        swapQuotes.count > 1
     }
 
     func showToValueLoading() -> Bool {
@@ -200,7 +197,8 @@ class SwapViewModel {
         guard pairSelectorModel == nil else { return }
         let asset = try? assetService.getAssets(walletID: wallet.id, filters: [.hasBalance]).first
         pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset?.asset)
-}
+    }
+
     func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
         SwapProvidersViewModel(
             items: swapQuotes.sorted(by: {
@@ -321,7 +319,7 @@ extension SwapViewModel {
                 if let selectedProvider {
                     updateToValue(for: selectedProvider, asset: toAsset)
                 } else {
-                    setBestProvider(toAsset: toAsset)
+                    setBestProvider(for: toAsset)
                 }
             }
         } catch {
@@ -369,7 +367,7 @@ extension SwapViewModel {
         )
     }
     
-    private func setBestProvider(toAsset: Asset) {
+    private func setBestProvider(for toAsset: Asset) {
         guard
             case .loaded(let result) = swapState.availability,
             let bestRate = try? result.quotes.sorted(by: {

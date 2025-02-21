@@ -98,7 +98,6 @@ struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
-        .scrollDismissesKeyboard(.immediately)
         .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
