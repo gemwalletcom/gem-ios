@@ -71,7 +71,7 @@ public struct WalletImageScene: View {
     }
     
     private var pickerView: some View {
-        Picker("", selection: $selectedTab.animation()) {
+        Picker("", selection: $selectedTab) {
             Text(Localized.Common.emoji).tag(Tab.emoji)
             Text(Localized.Nft.collections).tag(Tab.collections)
         }

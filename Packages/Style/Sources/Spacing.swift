@@ -34,6 +34,8 @@ public struct Spacing {
 
 public struct Sizing {
     public struct image {
+        /// 4
+        public static let tiny: CGFloat = 10
         /// 22
         public static let small: CGFloat = 22
         /// 44
