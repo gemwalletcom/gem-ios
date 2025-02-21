@@ -193,7 +193,11 @@ class SwapViewModel {
     }
     
     func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+        SwapProvidersViewModel(
+            items: swapQuotes.sorted(by: {
+                (try? BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)) == true
+            }).map { SwapProviderItem(asset: asset, swapQuote: $0) }
+        )
     }
 }
 
