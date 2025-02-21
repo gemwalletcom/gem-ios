@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol ExplorerLinkFetchable {
+public protocol ExplorerLinkFetchable: Sendable {
     func addressUrl(chain: Chain, address: String) -> BlockExplorerLink
     func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink
 }

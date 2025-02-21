@@ -13,7 +13,8 @@ public extension TransactionExtended {
             feeAsset: .mock(),
             price: .none,
             feePrice: .none,
-            assets: []
+            assets: [],
+            prices: []
         )
     }
 }

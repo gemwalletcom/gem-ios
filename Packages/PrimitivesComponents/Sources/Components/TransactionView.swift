@@ -74,7 +74,8 @@ private struct ExplorerMock: ExplorerLinkFetchable {
         feeAsset: .init(.smartChain),
         price: nil,
         feePrice: nil,
-        assets: []
+        assets: [],
+        prices: []
     )
 
     let transactionVMMock = TransactionViewModel(

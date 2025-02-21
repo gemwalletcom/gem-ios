@@ -92,14 +92,14 @@ extension WalletConnectorService {
     }
 
     private func handleSessionProposals() async {
-        for await session in interactor.sessionProposalStream {
-            NSLog("Session proposal received: \(session)")
+        for await proposal in interactor.sessionProposalStream {
+            NSLog("Session proposal received: \(proposal)")
             Task {
                 do {
-                    try await processSession(proposal: session.proposal)
+                    let session = try await processSession(proposal: proposal.proposal)
                 } catch {
                     NSLog("Error accepting proposal: \(error)")
-                    try await signer.sessionReject(id: session.proposal.pairingTopic, error: error)
+                    try await signer.sessionReject(id: proposal.proposal.pairingTopic, error: error)
                 }
             }
         }
