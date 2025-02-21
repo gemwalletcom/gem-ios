@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Ricevi la raccolta";
 "wallet.more" = "Di più";
 "nft.save_to_photos" = "Salva in Foto";
-"nft.success_saved_to_photos" = "La tua immagine è stata salvata in Foto!";
 "permissions.access_denied" = "Accesso negato";
 "permissions.image.photo_access.denied.description" = "Questa app non ha l'autorizzazione per accedere alla tua libreria di foto. Abilita l'accesso nelle impostazioni del tuo dispositivo.";
 "common.magic_button" = "Pulsante magico";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

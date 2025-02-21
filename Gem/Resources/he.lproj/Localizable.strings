@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "קבלת אוסף";
 "wallet.more" = "יוֹתֵר";
 "nft.save_to_photos" = "שמור בתמונות";
-"nft.success_saved_to_photos" = "התמונה שלך נשמרה בתמונות!";
 "permissions.access_denied" = "הגִישָׁה נִדחֲתָה";
 "permissions.image.photo_access.denied.description" = "לאפליקציה הזו אין הרשאה לגשת לספריית התמונות שלך. אפשר גישה בהגדרות המכשיר שלך.";
 "common.magic_button" = "כפתור קסם";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

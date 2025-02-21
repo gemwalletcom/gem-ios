@@ -19,8 +19,6 @@ public struct CollectionsNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
-    @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
-    @State private var isPresentingAvatarSuccessToast = false
     
     @State private var model: NFTCollectionViewModel
 
@@ -44,18 +42,15 @@ public struct CollectionsNavigationStack: View {
                             wallet: model.wallet,
                             sceneStep: $0.sceneStep,
                             nftService: nftService,
-                            deviceService: deviceService,
-                            avatarService: avatarService
+                            deviceService: deviceService
                         )
                     )
                 }
                 .navigationDestination(for: Scenes.NFTDetails.self) { assetData in
-                    NFTDetailsScene(
-                        model: NFTDetailsViewModel(
-                            assetData: assetData.assetData,
-                            headerButtonAction: { type in
-                                onHeaderButtonAction(type: type, assetData: assetData.assetData)
-                            }
+                    CollectibleNavigationView(
+                        model: CollectibleNavigationViewModel(
+                            wallet: model.wallet,
+                            assetData: assetData.assetData
                         )
                     )
                 }
@@ -71,13 +66,6 @@ public struct CollectionsNavigationStack: View {
                         isPresentingSelectType: $isPresentingReceiveSelectAssetType
                     )
                 }
-                .sheet(item: $isPresentingSelectedAssetInput) {
-                    SelectedAssetNavigationStack(
-                        selectType: $0,
-                        wallet: model.wallet,
-                        isPresentingSelectedAssetInput: $isPresentingSelectedAssetInput
-                    )
-                }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
@@ -88,11 +76,6 @@ public struct CollectionsNavigationStack: View {
                     }
                 }
         }
-        .toast(
-            isPresenting: $isPresentingAvatarSuccessToast,
-            title: Localized.Common.done,
-            systemImage: SystemImage.checkmark
-        )
         .onChange(of: keystore.currentWallet, onWalletChange)
     }
 }
@@ -100,38 +83,9 @@ public struct CollectionsNavigationStack: View {
 // MARK: - Actions
 
 extension CollectionsNavigationStack {
-    private func onHeaderButtonAction(type: HeaderButtonType, assetData: NFTAssetData) {
-        let account = try! model.wallet.account(for: assetData.asset.chain)
-        switch type {
-        case .send:
-            isPresentingSelectedAssetInput = SelectedAssetInput(
-                type: .send(.nft(assetData.asset)),
-                assetAddress: AssetAddress(asset: account.chain.asset, address: account.address)
-            )
-        case .avatar:
-            setAsWalletAvatar(assetData: assetData)
-        case .buy, .receive, .swap, .stake:
-            fatalError()
-        case .more:
-            if let url = assetData.collection.links.first?.url, let url = URL(string: url) {
-                openURL(url)
-            }
-        }
-    }
-
     private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
         guard let wallet else { return }
         model.refresh(for: wallet)
     }
-    
-    private func setAsWalletAvatar(assetData: NFTAssetData) {
-        Task {
-            do {
-                try await model.setWalletAvatar(assetData.asset)
-                isPresentingAvatarSuccessToast = true
-            } catch {
-                print("Set nft avatar error: \(error)")
-            }
-        }
-    }
+
 }
