@@ -32,7 +32,7 @@ public struct NFTDetailsScene: View {
                 Spacer()
             } footer: {
 				HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
-					.padding(.top, Spacing.small)
+                    .padding(.top, Spacing.medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
