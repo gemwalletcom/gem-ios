@@ -119,6 +119,10 @@ public enum Images {
         public static let youtube = Image(.youtube)
         public static let website = Image(.website)
         public static let facebook = Image("") // TODO:
+        public static let coinmarketcap = Image(.coinmarketcap)
+        public static let opensea = Image(.opensea)
+        public static let magiceden = Image(.magiceden)
+        public static let tiktok = Image(.tiktok)
     }
 
     public enum Tabs {
