@@ -71,7 +71,7 @@ public struct WalletImageScene: View {
     }
     
     private var pickerView: some View {
-        Picker("", selection: $selectedTab.animation()) {
+        Picker("", selection: $selectedTab) {
             Text(Localized.Common.emoji).tag(Tab.emoji)
             Text(Localized.Nft.collections).tag(Tab.collections)
         }
@@ -95,6 +95,7 @@ public struct WalletImageScene: View {
             }
             .padding(.horizontal, Spacing.medium)
         }
+        .animation(.linear(duration: AnimationDuration.fast), value: selectedTab)
         .overlay(content: {
             if nftDataList.isEmpty, case .collections = selectedTab {
                 Text(Localized.Activity.EmptyState.message)
