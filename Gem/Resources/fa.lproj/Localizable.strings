@@ -329,3 +329,8 @@
 "common.photo" = "عکس";
 "info.price_impact.title" = "تاثیر قیمت";
 "info.price_impact.description" = "تاثیر قیمت تغییر در قیمت توکن است که به دلیل اندازه معامله شما ایجاد می شود. تاثیر قیمت بالاتر به این معنی است که به دلیل نقدینگی کم یا حجم سفارش بزرگ، توکن های کمتری دریافت می کنید. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";

@@ -11,18 +11,22 @@ public struct SocialLinksViewModel {
 
     var links: [InsightLink] {
         assetLinks
-            .sorted(by: { $0.socialUrl?.order ?? 0 > $1.socialUrl?.order ?? 0 })
             .compactMap {
-                guard let type = $0.socialUrl,
-                      let url = URL(string: $0.url)
-                else {
+                if let link = $0.linkType {
+                    return LinkTypeViewModel(link: link)
+                }
+                return .none
+            }
+            .sorted(by: { $0.order > $1.order })
+            .compactMap {
+                guard let url = $0.url else {
                     return .none
                 }
                 return InsightLink(
-                    title: type.name,
-                    subtitle: $0.host(for: type),
+                    title: $0.name,
+                    subtitle: $0.host,
                     url: url,
-                    image: type.image
+                    image: $0.image
                 )
             }
     }

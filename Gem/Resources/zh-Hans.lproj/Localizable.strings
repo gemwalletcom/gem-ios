@@ -329,3 +329,8 @@
 "common.photo" = "照片";
 "info.price_impact.title" = "价格影响";
 "info.price_impact.description" = "价格影响是指您的交易规模导致的代币价格变化。价格影响越大意味着由于流动性低或订单规模大，您收到的代币越少。 ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";

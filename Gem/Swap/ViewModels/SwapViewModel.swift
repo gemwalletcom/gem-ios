@@ -8,12 +8,14 @@ import GemstonePrimitives
 import GRDBQuery
 import Keystore
 import Localization
+import Preferences
 import Primitives
+import PrimitivesComponents
 import Signer
 import Store
 import Style
-import SwapService
 import Swap
+import SwapService
 import SwiftUI
 import Transfer
 import WalletsService
@@ -22,11 +24,11 @@ import Preferences
 import AssetsService
 
 import class Gemstone.Config
+import struct Gemstone.Permit2ApprovalData
 import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
 import struct Gemstone.PermitSingle
-import struct Gemstone.Permit2ApprovalData
 import enum Gemstone.SwapProvider
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
@@ -341,7 +343,7 @@ extension SwapViewModel {
             return try await swapService.getQuoteData(quote, data: .permit2(data))
         }
     }
-    
+
     public func permitData(chain: Chain, data: Permit2ApprovalData) throws -> Permit2Data {
         let permit2Single = permit2Single(
             token: data.token,
@@ -359,9 +361,9 @@ extension SwapViewModel {
             chain: chain,
             message: .typed(permit2JSON)
         )
-        return Permit2Data(
+        return try Permit2Data(
             permitSingle: permit2Single,
-            signature: try Data.from(hex: signature)
+            signature: Data.from(hex: signature)
         )
     }
 
@@ -394,6 +396,7 @@ extension Gemstone.SwapProvider {
         case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap
         case .thorchain: Images.SwapProviders.thorchain
         case .across: Images.SwapProviders.across
+        case .okuTrade: Images.SwapProviders.oku
         }
     }
 }

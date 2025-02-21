@@ -8,7 +8,7 @@ import Style
 import BigInt
 import Localization
 
-public struct TransactionViewModel {
+public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
 
     private let formatter: ValueFormatter
@@ -25,7 +25,7 @@ public struct TransactionViewModel {
     }
     
     public var assetImage: AssetImage {
-        let asset = AssetIdViewModel(assetId: transaction.transaction.assetId).assetImage
+        let asset = AssetIdViewModel(assetId: assetId).assetImage
         return AssetImage(
             type: asset.type,
             imageURL: asset.imageURL,
@@ -35,7 +35,7 @@ public struct TransactionViewModel {
     }
     
     public var chainAssetImage: AssetImage {
-        AssetIdViewModel(assetId: transaction.transaction.assetId.chain.assetId).assetImage
+        AssetIdViewModel(assetId: assetId.chain.assetId).assetImage
     }
     
     public var overlayImage: Image? {
@@ -111,7 +111,7 @@ public struct TransactionViewModel {
     
     
     public var titleExtra: String? {
-        let chain = transaction.transaction.assetId.chain
+        let chain = assetId.chain
         switch transaction.transaction.type {
         case .transfer, .transferNFT, .tokenApproval, .smartContractCall:
             switch transaction.transaction.direction {
@@ -153,16 +153,8 @@ public struct TransactionViewModel {
         TextStyle(font: Font.system(.footnote), color: .secondary)
     }
     
-    public var amount: Double  {
-        do {
-            return try formatter.double(from: transaction.transaction.valueBigInt, decimals: transaction.asset.decimals.asInt)
-        } catch {
-            return .zero
-        }
-    }
-    
     public var amountSymbolText: String {
-        return formatter.string(
+        formatter.string(
             transaction.transaction.valueBigInt,
             decimals: transaction.asset.decimals.asInt,
             currency: transaction.asset.symbol
@@ -170,15 +162,7 @@ public struct TransactionViewModel {
     }
     
     public var networkFeeText: String {
-        return formatter.string(transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
-    }
-    
-    public var networkFeeAmount: Double {
-        do {
-            return try formatter.double(from: transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
-        } catch {
-            return .zero
-        }
+        formatter.string(transaction.transaction.feeBigInt, decimals: transaction.feeAsset.decimals.asInt)
     }
     
     public var networkFeeSymbolText: String {
@@ -245,7 +229,7 @@ public struct TransactionViewModel {
     }
     
     public func swapFormatter(asset: Asset, value: BigInt) -> String {
-        return formatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
+        formatter.string(value, decimals: asset.decimals.asInt, currency: asset.symbol)
     }
     
     public var subtitleExtra: String? {
@@ -274,40 +258,35 @@ public struct TransactionViewModel {
         }
     }
     
-    public var subtitleExtraStyle: TextStyle {
-        .footnote
-    }
-    
+    public var subtitleExtraStyle: TextStyle { .footnote }
+
     public var participant: String {
         switch transaction.transaction.direction {
-        case .incoming:
-            return transaction.transaction.from
-        case .outgoing, .selfTransfer:
-            return transaction.transaction.to
+        case .incoming: transaction.transaction.from
+        case .outgoing, .selfTransfer: transaction.transaction.to
         }
     }
-    
-    private var addressLink: BlockExplorerLink {
-        explorerService.addressUrl(chain: transaction.transaction.assetId.chain, address: participant)
-    }
-    
+
     public var viewOnAddressExplorerText: String {
-        return Localized.Transaction.viewOn(addressLink.name)
+        Localized.Transaction.viewOn(addressLink.name)
     }
-    
-    public var addressExplorerUrl: URL {
-        return addressLink.url
-    }
-    
-    private var transactionLink: BlockExplorerLink {
-        explorerService.transactionUrl(chain: transaction.transaction.assetId.chain, hash: transaction.transaction.hash)
-    }
-    
+
     public var viewOnTransactionExplorerText: String {
-        return Localized.Transaction.viewOn(transactionLink.name)
+        Localized.Transaction.viewOn(transactionLink.name)
     }
-    
-    public var transactionExplorerUrl: URL {
-        return transactionLink.url
+
+    public var addressExplorerUrl: URL { addressLink.url }
+    public var transactionExplorerUrl: URL { transactionLink.url }
+
+    private var assetId: AssetId {
+        transaction.transaction.assetId
+    }
+
+    private var transactionLink: BlockExplorerLink {
+        explorerService.transactionUrl(chain: assetId.chain, hash: transaction.transaction.hash)
+    }
+
+    private var addressLink: BlockExplorerLink {
+        explorerService.addressUrl(chain: assetId.chain, address: participant)
     }
 }
