@@ -13,6 +13,7 @@ struct WalletNavigationStack: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.navigationState) private var navigationState
+    @Environment(\.priceService) private var priceService
 
     @State private var isPresentingWallets = false
     @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
@@ -44,7 +45,10 @@ struct WalletNavigationStack: View {
             }
             .navigationDestination(for: TransactionExtended.self) {
                 TransactionScene(
-                    input: TransactionSceneInput(transactionId: $0.id, walletId: model.wallet.walletId)
+                    input: TransactionSceneInput(
+                        transactionId: $0.id,
+                        walletId: model.wallet.walletId
+                    )
                 )
             }
             .navigationDestination(for: Scenes.Price.self) {

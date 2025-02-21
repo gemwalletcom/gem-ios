@@ -70,7 +70,8 @@ public struct WalletKeyStore: Sendable {
             type: .privateKey,
             accounts: [account],
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
 
@@ -107,7 +108,8 @@ public struct WalletKeyStore: Sendable {
             type: type,
             accounts: accounts,
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
     

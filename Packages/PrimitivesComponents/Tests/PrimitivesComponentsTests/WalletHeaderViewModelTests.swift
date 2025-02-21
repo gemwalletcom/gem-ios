@@ -1,12 +1,18 @@
 import Testing
 import Primitives
 
-@testable import Gem
+@testable import PrimitivesComponents
 
 struct WalletHeaderViewModelTests {
 
     @Test
     func testTotalValue() {
-        #expect(WalletHeaderViewModel(walletType: .multicoin, value: 1000).totalValueText == "$1,000.00")
+        #expect(
+            WalletHeaderViewModel(
+                walletType: .multicoin,
+                value: 1000,
+                currencyCode: Currency.usd.rawValue)
+            .totalValueText == "$1,000.00"
+        )
     }
 }

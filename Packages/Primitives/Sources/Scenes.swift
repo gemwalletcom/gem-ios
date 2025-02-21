@@ -130,7 +130,7 @@ public struct Scenes {
 
         public enum SceneStep: Hashable, Sendable {
             case collections
-            case collection(NFTCollection)
+            case collection(NFTData)
         }
         
         public let sceneStep: SceneStep
@@ -140,7 +140,7 @@ public struct Scenes {
         }
     }
     
-    public struct NFTDetails: Hashable {
+    public struct NFTDetails: Hashable, Sendable {
         public let assetData: NFTAssetData
         
         public init(assetData: NFTAssetData) {

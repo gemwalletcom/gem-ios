@@ -54,6 +54,7 @@
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83F645062D52C31D00C18881 /* DiscoverAssetsService in Frameworks */ = {isa = PBXBuildFile; productRef = 83F645052D52C31D00C18881 /* DiscoverAssetsService */; };
 		83F8C3E62D241FEB0042CE22 /* SwapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F8C3E52D241FEB0042CE22 /* SwapState.swift */; };
+		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
 		B6AE4A522D636869005BF29E /* SwapProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */; };
 		B6AE4A542D6368A0005BF29E /* SwapProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */; };
@@ -225,6 +226,8 @@
 		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		83FEE7FC2D5E632300E7B2DA /* ManageWalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWalletService; sourceTree = "<group>"; };
+		B617D6092D5B73B7001697A6 /* AvatarService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarService; sourceTree = "<group>"; };
+		B61C5C152D5FB899007699EC /* WalletAvatar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletAvatar; sourceTree = "<group>"; };
 		B66DEDAE2D49F0C600309D53 /* ImageGalleryService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageGalleryService; sourceTree = "<group>"; };
 		B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProvidersViewModel.swift; sourceTree = "<group>"; };
 		B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderItem.swift; sourceTree = "<group>"; };
@@ -360,6 +363,7 @@
 				8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */,
 				8361BB612D3FE5F2008D89CF /* Transactions in Frameworks */,
 				D829BF572CBF3E1900DEB2E8 /* DeviceService in Frameworks */,
+				B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */,
 				C3CF3BA729B5317300E96586 /* Keystore in Frameworks */,
 				C366791D2A18623800F1D74D /* QRScanner in Frameworks */,
 				83863EE72D19B93E005048A7 /* NodeService in Frameworks */,
@@ -774,6 +778,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				B61C5C152D5FB899007699EC /* WalletAvatar */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
 				8349F1452D5E4D04003A0A93 /* ManageWallets */,
 				8361BB5C2D3FDBF1008D89CF /* Transactions */,
@@ -822,6 +827,7 @@
 				D829BF4F2CBF2BDA00DEB2E8 /* NotificationService */,
 				D829BF4C2CBF025400DEB2E8 /* BannerService */,
 				D8F5B8702CCD6C010007E615 /* StakeService */,
+				B617D6092D5B73B7001697A6 /* AvatarService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1079,6 +1085,7 @@
 				8352B1032D52C73B0059EB27 /* WalletsService */,
 				83B6C20F2D5E3F2600F9DF8A /* WalletTab */,
 				8349F1462D5E4FF4003A0A93 /* ManageWallets */,
+				B617D60A2D5B75F0001697A6 /* AvatarService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1937,6 +1944,10 @@
 		83FE37B32D273CC80048D54C /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletConnector;
+		};
+		B617D60A2D5B75F0001697A6 /* AvatarService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AvatarService;
 		};
 		B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */ = {
 			isa = XCSwiftPackageProductDependency;

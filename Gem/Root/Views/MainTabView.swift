@@ -24,6 +24,7 @@ struct MainTabView: View {
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
+    @Environment(\.avatarService) private var avatarService
     @Environment(\.nodeService) private var nodeService
 
     let model: MainTabViewModel
@@ -66,11 +67,12 @@ struct MainTabView: View {
             
             if model.isCollectionsEnabled {
                 CollectionsNavigationStack(
-                    model: NFTCollectionViewModel(
+                    model: .init(
                         wallet: model.wallet,
                         sceneStep: .collections,
                         nftService: nftService,
-                        deviceService: deviceService
+                        deviceService: deviceService,
+                        avatarService: avatarService
                     )
                 )
                 .tabItem {

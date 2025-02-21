@@ -12,6 +12,7 @@ public struct TransactionAssetAssociationRecord: Codable, TableRecord, Fetchable
     public var assetId: String
     
     static let asset = belongsTo(AssetRecord.self)
+    static let price = belongsTo(PriceRecord.self, using: ForeignKey(["assetId"], to: ["assetId"]))
 }
 
 extension TransactionAssetAssociationRecord: CreateTable {
