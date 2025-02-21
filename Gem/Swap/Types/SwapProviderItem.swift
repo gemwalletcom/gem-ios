@@ -10,7 +10,7 @@ import SwiftUI
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
-    public let formatter = ValueFormatter(style: .full)
+    public let formatter = ValueFormatter(style: .medium)
     
     private var amount: String {
         let value = (try? BigInt.from(string: swapQuote.toValue)) ?? .zero
