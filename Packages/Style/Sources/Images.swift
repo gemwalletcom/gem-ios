@@ -69,6 +69,7 @@ public enum Images {
         public static let stargate = Image(.stargate)
         public static let raydium = Image(.raydium)
         public static let oku = Image(.oku)
+        public static let wagmi = Image(.wagmi)
     }
 
     public enum Fiat {
