@@ -54,12 +54,4 @@ public struct LinkTypeViewModel {
         case .tikTok: Images.Social.tiktok
         }
     }
-    
-    public var url: URL? {
-        link.rawValue.asURL
-    }
-    
-    public var host: String? {
-        url?.cleanHost()
-    }
 }
