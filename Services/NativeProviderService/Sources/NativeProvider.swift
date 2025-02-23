@@ -1,16 +1,16 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import ChainService
+import CryptoKit
 import Foundation
 import Gemstone
-import ChainService
 import Primitives
-import CryptoKit
 
 public actor NativeProvider {
     let session: URLSession
     let nodeProvider: any NodeURLFetchable
     private let cache: any ProviderCache
-    
+
     public init(
         session: URLSession = .shared,
         nodeProvider: any NodeURLFetchable
@@ -32,33 +32,33 @@ extension NativeProvider: AlienProvider {
         return results[0]
     }
 
-    nonisolated public func getEndpoint(chain: Gemstone.Chain) throws -> String {
+    public nonisolated func getEndpoint(chain: Gemstone.Chain) throws -> String {
         self.nodeProvider.node(for: Primitives.Chain(rawValue: chain)!).absoluteString
     }
 
     public func batchRequest(targets: [AlienTarget]) async throws -> [Data] {
         return try await withThrowingTaskGroup(of: Data.self) { group in
             var results = [Data]()
-            
+
             for target in targets {
                 group.addTask {
                     print("==> handle request:\n\(target)")
-                    
+
                     if let data = await self.cache.get(key: target.cacheKey) {
                         return data
                     }
-                    
+
                     let (data, response) = try await self.session.data(for: target.asRequest())
                     if (response as? HTTPURLResponse)?.statusCode != 200 {
                         throw AlienError.ResponseError(msg: "invalid response: \(response)")
                     }
-                    print("<== response:\n\(String(decoding: data, as: UTF8.self))")
-                    
+                    print("<== response body size:\(data.count)")
+
                     // save cache
                     if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
                         await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
                     }
-                    
+
                     return data
                 }
             }
@@ -76,4 +76,3 @@ extension AlienTarget {
         return SHA256.hash(data: Data(string.utf8)).description
     }
 }
-
