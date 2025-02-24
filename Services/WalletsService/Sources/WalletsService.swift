@@ -12,7 +12,7 @@ import TransactionService
 import DiscoverAssetsService
 import struct ChainService.AddressStatusService
 
-public final class WalletsService: Sendable {
+public struct WalletsService: Sendable {
     public let assetsService: AssetsService
     public let priceService: PriceService
     public let keystore: any Keystore
@@ -163,6 +163,10 @@ public final class WalletsService: Sendable {
     }
 
     private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
+        // FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
+        // otherwise it would return no assets
+        try await Task.sleep(nanoseconds: 1_000_000_000)
+
         let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let tokenUpdates = try await discoverAssetService.updateTokens(
@@ -177,11 +181,10 @@ public final class WalletsService: Sendable {
     private func processAssetUpdates(_ updates: [AssetUpdate]) async {
         await withTaskGroup(of: Void.self) { group in
             for update in updates {
-                group.addTask { [weak self] in
-                    guard let self else { return }
+                group.addTask {
                     NSLog("discover assets: \(update.walletId): \(update.assets)")
                     do {
-                        try await self.addNewAssets(
+                        try await addNewAssets(
                             walletId: update.walletId,
                             assetIds: update.assets.compactMap { try? AssetId(id: $0) }
                         )
@@ -202,10 +205,9 @@ public final class WalletsService: Sendable {
         async let enableExisting: () = enableAssetId(walletId: walletId, assets: assets.assetIds, enabled: true)
         async let processMissing: () = withThrowingTaskGroup(of: Void.self) { group in
             for assetId in missingIds {
-                group.addTask { [weak self] in
-                    guard let self else { return }
-                    try await self.assetsService.updateAsset(assetId: assetId)
-                    await self.enableAssetId(walletId: walletId, assets: [assetId], enabled: true)
+                group.addTask {
+                    try await assetsService.updateAsset(assetId: assetId)
+                    await enableAssetId(walletId: walletId, assets: [assetId], enabled: true)
                 }
             }
             for try await _ in group { }
