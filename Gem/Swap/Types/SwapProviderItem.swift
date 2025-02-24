@@ -26,7 +26,11 @@ extension SwapProviderItem: SimpleListItemViewable {
     }
     
     public var subtitle: String? {
-        [amount, asset.symbol].joined(separator: " ")
+        amount
+    }
+    
+    public var subtitleExtra: String? {
+        asset.symbol
     }
     
     public var image: Image {
