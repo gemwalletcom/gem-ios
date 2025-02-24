@@ -22,7 +22,8 @@ public struct AvatarService: Sendable {
         
         let path = try preparePath(for: walletId)
         try data.write(to: path, options: .atomic)
-        try store.setWalletAvatar(walletId, url: path)
+
+        try store.setWalletAvatar(walletId, path: folderPath(for: walletId) + path.lastPathComponent)
     }
     
     public func save(url: URL, for walletId: String) async throws {
@@ -30,13 +31,14 @@ public struct AvatarService: Sendable {
         
         let path = try preparePath(for: walletId)
         try data.write(to: path, options: .atomic)
-        try store.setWalletAvatar(walletId, url: path)
+
+        try store.setWalletAvatar(walletId, path: folderPath(for: walletId) + path.lastPathComponent)
     }
     
     public func remove(for walletId: String) throws {
         let path = try folder(for: walletId)
         try removeIfExist(at: path)
-        try store.setWalletAvatar(walletId, url: nil)
+        try store.setWalletAvatar(walletId, path: nil)
     }
     
     // MARK: - FileManager Private Methods
@@ -52,11 +54,15 @@ public struct AvatarService: Sendable {
             throw AnyError("Unable to fetch URLs for the specified common directory in the requested domains.")
         }
         
-        let dataPath = documentsDirectory.appendingPathComponent("Avatars/\(walletId)")
+        let dataPath = documentsDirectory.appendingPathComponent(folderPath(for: walletId))
         if !FileManager.default.fileExists(atPath: dataPath.path) {
             try FileManager.default.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
         }
         return dataPath
+    }
+    
+    private func folderPath(for walletId: String) -> String {
+        "Avatars/\(walletId)/"
     }
     
     private func removeIfExist(at url: URL) throws {
