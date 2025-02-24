@@ -8,6 +8,7 @@ import Localization
 import Preferences
 import TransactionsService
 import ExplorerService
+import PrimitivesComponents
 
 @Observable
 @MainActor
@@ -21,6 +22,7 @@ public final class TransactionsViewModel {
     public var request: TransactionsRequest
 
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
+    public var isPresentingSelectAssetType: SelectAssetType?
 
     public init(
         wallet: Wallet,
@@ -37,6 +39,14 @@ public final class TransactionsViewModel {
     public var title: String { Localized.Activity.title }
     public var walletId: WalletId {
         WalletId(id: wallet.id)
+    }
+
+    public var emptyContentModel: EmptyContentTypeViewModel {
+        if !filterModel.isAnyFilterSpecified {
+            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy))
+        } else {
+            EmptyContentTypeViewModel(type: .search(type: .activity, action: onSelectCleanFilters))
+        }
     }
 }
 
@@ -62,5 +72,21 @@ extension TransactionsViewModel {
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }
+    }
+}
+
+// MARK: - Private
+
+extension TransactionsViewModel {
+    private func onSelectCleanFilters() {
+        refresh(for: wallet)
+    }
+
+    private func onSelectReceive() {
+        isPresentingSelectAssetType = .receive(.asset)
+    }
+
+    private func onSelectBuy() {
+        isPresentingSelectAssetType = .buy
     }
 }

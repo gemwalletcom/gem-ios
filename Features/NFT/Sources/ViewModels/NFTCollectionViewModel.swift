@@ -9,6 +9,7 @@ import Store
 import Localization
 import Style
 import SwiftUI
+import PrimitivesComponents
 import AvatarService
 
 @Observable
@@ -47,6 +48,10 @@ public final class NFTCollectionViewModel: Sendable {
         case .collections: Localized.Nft.collections
         case .collection(let data): data.collection.name
         }
+    }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .nfts)
     }
 
     // MARK: - Public methods

@@ -42,11 +42,8 @@ public struct SearchableSelectableListView<ViewModel: SelectableListAdoptable & 
                 }
             },
             emptyContent: {
-                if let title = model.noResultsTitle {
-                    StateEmptyView(
-                        title: title,
-                        image: model.noResultsImage
-                    )
+                if let model = model.emptyCotentModel {
+                    EmptyContentView(model: model)
                 }
             }
         )

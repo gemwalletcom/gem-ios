@@ -41,10 +41,7 @@ public struct NFTDetailsScene: View {
 				HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
                     .padding(.top, Spacing.medium)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
+            .cleanListRow()
             .contextMenu {
                 ContextMenuItem(
                     title: Localized.Nft.saveToPhotos,

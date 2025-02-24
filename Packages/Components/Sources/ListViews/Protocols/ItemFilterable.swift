@@ -7,14 +7,11 @@ public protocol ItemFilterable {
     var items: [Item] { get }
     func filter(_ item: Item, query: String) -> Bool
 
-    var noResultsTitle: String? { get }
-    var noResultsImage: Image? { get }
+    var emptyCotentModel: (any EmptyContentViewable)? { get }
 }
 
 public extension ItemFilterable {
     func filter(_ item: Item, query: String) -> Bool {
         fatalError("not implemented")
     }
-    var noResultsTitle: String? { .none }
-    var noResultsImage: Image? { .none }
 }

@@ -69,10 +69,7 @@ public struct WalletScene: View {
                 )
                 .padding(.top, Spacing.small)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(.zero)
+           .cleanListRow()
 
             Section {
                 BannerView(
