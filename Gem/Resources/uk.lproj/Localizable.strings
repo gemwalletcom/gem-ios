@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Отримати колекцію";
 "wallet.more" = "більше";
 "nft.save_to_photos" = "Зберегти до фотографій";
-"nft.success_saved_to_photos" = "Ваше зображення збережено в папці \"Фото\"!";
 "permissions.access_denied" = "Доступ заборонено";
 "permissions.image.photo_access.denied.description" = "Ця програма не має дозволу на доступ до вашої бібліотеки фотографій. Увімкніть доступ у налаштуваннях пристрою.";
 "common.magic_button" = "Чарівна кнопка";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

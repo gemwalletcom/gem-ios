@@ -451,8 +451,8 @@ public enum Localized {
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos
     public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
-    /// Your image has been saved to Photos!
-    public static let successSavedToPhotos = Localized.tr("Localizable", "nft.success_saved_to_photos", fallback: "Your image has been saved to Photos!")
+    /// Set as Avatar
+    public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
   }
   public enum Nodes {
     /// Gem Wallet Node

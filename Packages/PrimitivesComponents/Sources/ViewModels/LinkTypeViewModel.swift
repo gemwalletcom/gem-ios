@@ -47,20 +47,11 @@ public struct LinkTypeViewModel {
         case .facebook: Images.Social.facebook
         case .website: Images.Social.website
         case .coingecko: Images.Social.coingecko
-        //TODO: Add images
-        case .coinMarketCap: Images.Social.website
-        case .openSea: Images.Social.website
-        case .instagram: Images.Social.website
-        case .magicEden: Images.Social.website
-        case .tikTok: Images.Social.website
+        case .coinMarketCap: Images.Social.coinmarketcap
+        case .openSea: Images.Social.opensea
+        case .instagram: Images.Social.instagram
+        case .magicEden: Images.Social.magiceden
+        case .tikTok: Images.Social.tiktok
         }
-    }
-    
-    public var url: URL? {
-        link.rawValue.asURL
-    }
-    
-    public var host: String? {
-        url?.cleanHost()
     }
 }
