@@ -22,7 +22,7 @@ extension SwapPairSelectorViewModel {
     public static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel {
         guard let asset else {
             let sortedChains = Chain.allCases
-                .sorted(by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
+                .sortByRank()
             return SwapPairSelectorViewModel(
                 fromAssetId: sortedChains.first?.assetId,
                 toAssetId: sortedChains.dropFirst().first?.assetId
@@ -33,7 +33,7 @@ extension SwapPairSelectorViewModel {
             return SwapPairSelectorViewModel(
                 fromAssetId: asset.chain.assetId,
                 toAssetId: Chain.allCases
-                    .sorted( by: { AssetScore.defaultRank(chain: $0) > AssetScore.defaultRank(chain: $1) })
+                    .sortByRank()
                     .filter { $0.assetId != asset.chain.assetId }
                     .first?.assetId
             )

@@ -35,8 +35,8 @@ public struct FiatConnectNavigationView: View {
 // MARK: - Actions
 
 extension FiatConnectNavigationView {
-    func onSelectQuote(_ list: [FiatQuoteViewModel]) {
-        guard let quoteModel = list.first else { return }
+    func onSelectQuote(_ quotes: [FiatQuoteViewModel]) {
+        guard let quoteModel = quotes.first else { return }
         model.selectQuote(quoteModel.quote)
         navigationPath.removeLast()
     }

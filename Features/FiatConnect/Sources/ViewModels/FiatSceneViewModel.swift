@@ -124,9 +124,9 @@ public final class FiatSceneViewModel {
     
     func fiatProviderViewModel() -> FiatProvidersViewModel {
         FiatProvidersViewModel(
-            items: state.value?.compactMap({
+            items: state.value?.compactMap {
                 FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter)
-            }) ?? []
+            } ?? []
         )
     }
 }

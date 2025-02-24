@@ -240,14 +240,14 @@ extension SwapScene {
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
-        model.resetSelectedProvider()
+        model.resetSelectedQuote()
         focusedField = .from
         fetch()
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
-        model.resetSelectedProvider()
+        model.resetSelectedQuote()
         fetch()
     }
     

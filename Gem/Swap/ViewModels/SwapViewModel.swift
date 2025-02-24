@@ -220,7 +220,7 @@ extension SwapViewModel {
         toValue = ""
     }
     
-    func resetSelectedProvider() {
+    func resetSelectedQuote() {
         selectedProvider = nil
     }
 
