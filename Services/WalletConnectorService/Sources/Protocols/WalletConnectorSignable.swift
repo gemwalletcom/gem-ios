@@ -7,6 +7,7 @@ import WalletConnectSign
 public protocol WalletConnectorSignable: Sendable {
     var allChains: [Primitives.Chain] { get }
 
+    func addConnection(connection: WalletConnection) throws
     func updateSessions(sessions: [WalletConnectionSession]) throws
     func sessionReject(id: String, error: any Error) async throws
     func getCurrentWallet() throws -> Primitives.Wallet
@@ -21,5 +22,4 @@ public protocol WalletConnectorSignable: Sendable {
     func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String
     func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String
     func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String
-    func addConnection(connection: WalletConnection) throws
 }

@@ -45,7 +45,7 @@ public struct ConnectionsStore: Sendable {
     }
 
     public func updateConnectionSession(_ session: WalletConnectionSession) throws {
-        let connection = try getConnectionRecord(id: session.id).update(with: session)
+        let connection = try getConnection(id: session.id).update(with: session)
         try db.write { db in
             try connection.upsert(db)
         }
@@ -67,10 +67,10 @@ public struct ConnectionsStore: Sendable {
     
     // MARK: - Private methods
     
-    private func getConnectionRecord(id: String) throws -> WalletConnectionRecord {
+    private func getConnection(id: String) throws -> WalletConnectionRecord {
         try db.read { db in
             guard let connection = try WalletConnectionRecord
-                .filter(Column("sessionId") == id)
+                .filter(Columns.Connection.id == id || Columns.Connection.sessionId == id)
                 .fetchOne(db)
             else {
                 throw AnyError("wallet connection record not found")

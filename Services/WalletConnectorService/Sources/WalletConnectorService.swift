@@ -96,7 +96,7 @@ extension WalletConnectorService {
             NSLog("Session proposal received: \(proposal)")
             Task {
                 do {
-                    let session = try await processSession(proposal: proposal.proposal)
+                    try await processSession(proposal: proposal.proposal)
                 } catch {
                     NSLog("Error accepting proposal: \(error)")
                     try await signer.sessionReject(id: proposal.proposal.pairingTopic, error: error)
@@ -119,10 +119,10 @@ extension WalletConnectorService {
 
     private func handleRequest(request: WalletConnectSign.Request) async throws  {
         guard let method = WalletConnectionMethods(rawValue: request.method) else {
-            throw(AnyError("unresolved method: \(request.method)"))
+            throw WalletConnectorServiceError.unresolvedMethod(request.method)
         }
         guard let chain = signer.allChains.filter({ $0.blockchain == request.chainId }).first else {
-            throw(AnyError("unresolved chain: \(request.chainId)"))
+            throw WalletConnectorServiceError.unresolvedChainId(request.chainId.absoluteString)
         }
 
         NSLog("handleMethod received: \(method) ")
@@ -172,7 +172,7 @@ extension WalletConnectorService {
         let currentWalletId = try signer.getCurrentWallet().walletId
 
         guard let preselectedWallet = wallets.first(where: { $0.walletId ==  currentWalletId }) ?? wallets.first else {
-            throw AnyError("Doesn't have any supported wallets")
+            throw WalletConnectorServiceError.walletsUnsupported
         }
         let payload = WalletConnectionSessionProposal(
             defaultWallet: preselectedWallet,
@@ -246,7 +246,7 @@ extension WalletConnectorService {
     private func signTransaction(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([Primitives.WCEthereumTransaction].self)
         guard let transaction = params.first else {
-            throw AnyError("Wrong wallet connect sign parameters")
+            throw WalletConnectorServiceError.wrongSignParameters
         }
         let transactionId = try await signer.signTransaction(sessionId: request.topic, chain: chain, transaction: .ethereum(transaction))
         return .response(AnyCodable(transactionId))
@@ -255,7 +255,7 @@ extension WalletConnectorService {
     private func sendTransaction(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([Primitives.WCEthereumTransaction].self)
         guard let transaction = params.first else {
-            throw AnyError("Wrong wallet connect send parameters")
+            throw WalletConnectorServiceError.wrongSendParameters
         }
         let transactionId = try await signer.sendTransaction(sessionId: request.topic, chain: chain, transaction: .ethereum(transaction))
         return .response(AnyCodable(transactionId))
