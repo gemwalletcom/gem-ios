@@ -73,8 +73,7 @@ struct MainTabView: View {
                         wallet: model.wallet,
                         sceneStep: .collections,
                         nftService: nftService,
-                        deviceService: deviceService,
-                        avatarService: avatarService
+                        deviceService: deviceService
                     )
                 )
                 .tabItem {

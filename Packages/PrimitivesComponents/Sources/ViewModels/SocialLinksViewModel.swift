@@ -11,23 +11,22 @@ public struct SocialLinksViewModel {
 
     var links: [InsightLink] {
         assetLinks
-            .compactMap {
-                if let link = $0.linkType {
-                    return LinkTypeViewModel(link: link)
-                }
-                return .none
-            }
-            .sorted(by: { $0.order > $1.order })
-            .compactMap {
-                guard let url = $0.url else {
-                    return .none
-                }
-                return InsightLink(
-                    title: $0.name,
-                    subtitle: $0.host,
-                    url: url,
-                    image: $0.image
-                )
-            }
+            .sorted()
+            .compactMap { $0.asInsightLink }
+    }
+}
+
+extension AssetLink {
+    var asInsightLink: InsightLink? {
+        guard let link = linkType, let url = URL(string: url) else {
+            return .none
+        }
+        let linkModel = LinkTypeViewModel(link: link)
+        return InsightLink(
+            title: linkModel.name,
+            subtitle: url.cleanHost(),
+            url: url,
+            image: linkModel.image
+        )
     }
 }

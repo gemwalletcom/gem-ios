@@ -72,7 +72,7 @@ public struct AssetImageView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: overlayImageSize, height: overlayImageSize)
                 .padding(overlayImagePadding)
-                .background(Colors.white)
+                .background(Colors.grayBackground)
                 .cornerRadius(overlayImageCornerRadiusOutside)
                 .offset(x: overlayImageOffsetXY, y: overlayImageOffsetXY)
         )

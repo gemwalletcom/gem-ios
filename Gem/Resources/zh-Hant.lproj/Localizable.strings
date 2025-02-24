@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "接收收藏";
 "wallet.more" = "更多的";
 "nft.save_to_photos" = "儲存到照片";
-"nft.success_saved_to_photos" = "您的影像已儲存到照片中！";
 "permissions.access_denied" = "拒絕訪問";
 "permissions.image.photo_access.denied.description" = "此應用程式無權存取您的照片庫。請在您的裝置設定中啟用存取。";
 "common.magic_button" = "魔術按鈕";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

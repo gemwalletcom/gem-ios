@@ -228,7 +228,7 @@ extension WalletScene {
         case .buy: .buy
         case .send: .send
         case .receive: .receive(.asset)
-        case .swap, .more, .stake, .avatar:
+        case .swap, .more, .stake:
             fatalError()
         }
         isPresentingSelectType = selectType

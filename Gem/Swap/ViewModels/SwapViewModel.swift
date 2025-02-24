@@ -397,6 +397,7 @@ extension Gemstone.SwapProvider {
         case .thorchain: Images.SwapProviders.thorchain
         case .across: Images.SwapProviders.across
         case .okuTrade: Images.SwapProviders.oku
+        case .wagmi: Images.SwapProviders.wagmi
         }
     }
 }

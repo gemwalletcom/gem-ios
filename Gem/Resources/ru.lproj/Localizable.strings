@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Получить коллекцию";
 "wallet.more" = "Более";
 "nft.save_to_photos" = "Сохранить в фото";
-"nft.success_saved_to_photos" = "Ваше изображение сохранено в разделе «Фотографии»!";
 "permissions.access_denied" = "Доступ запрещен";
 "permissions.image.photo_access.denied.description" = "У этого приложения нет разрешения на доступ к вашей библиотеке фотографий. Пожалуйста, включите доступ в настройках вашего устройства.";
 "common.magic_button" = "Волшебная кнопка";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

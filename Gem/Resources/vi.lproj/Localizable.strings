@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Nhận bộ sưu tập";
 "wallet.more" = "Hơn";
 "nft.save_to_photos" = "Lưu vào Ảnh";
-"nft.success_saved_to_photos" = "Hình ảnh của bạn đã được lưu vào Ảnh!";
 "permissions.access_denied" = "Truy cập bị từ chối";
 "permissions.image.photo_access.denied.description" = "Ứng dụng này không có quyền truy cập vào thư viện ảnh của bạn. Vui lòng bật quyền truy cập trong cài đặt thiết bị của bạn.";
 "common.magic_button" = "Nút ma thuật";
@@ -334,3 +333,4 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

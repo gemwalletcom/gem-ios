@@ -93,10 +93,7 @@ extension RootSceneViewModel {
             switch parsedURL {
             case .walletConnect(let uri):
                 isPresentingConnectorBar = true
-                try await connectionsService.addConnectionURI(
-                    uri: uri,
-                    wallet: try keystore.getCurrentWallet()
-                )
+                try await connectionsService.pair(uri: uri)
             case .walletConnectRequest:
                 isPresentingConnectorBar = true
             case .asset(let assetId):

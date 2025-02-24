@@ -46,7 +46,6 @@ public struct WalletConnectionSessionAppMetadata: Codable, Equatable, Hashable, 
 }
 
 public struct WalletConnectionSession: Codable, Equatable, Hashable, Sendable {
-	public let id: String
 	public let sessionId: String
 	public let state: WalletConnectionState
 	public let chains: [Chain]
@@ -54,8 +53,7 @@ public struct WalletConnectionSession: Codable, Equatable, Hashable, Sendable {
 	public let expireAt: Date
 	public let metadata: WalletConnectionSessionAppMetadata
 
-	public init(id: String, sessionId: String, state: WalletConnectionState, chains: [Chain], createdAt: Date, expireAt: Date, metadata: WalletConnectionSessionAppMetadata) {
-		self.id = id
+	public init(sessionId: String, state: WalletConnectionState, chains: [Chain], createdAt: Date, expireAt: Date, metadata: WalletConnectionSessionAppMetadata) {
 		self.sessionId = sessionId
 		self.state = state
 		self.chains = chains

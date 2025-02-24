@@ -13,14 +13,21 @@ public struct NFTDetailsScene: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.openURL) private var openURL
 
-    @State private var showSavedMessage: Bool = false
     @State private var showPhotoPermissionMessage: Bool = false
     @State private var isPresentingErrorMessage: String?
-
+    
+    @State private var isPresentinSaveToPhotosToast = false
+    @State private var isPresentingSetAsAvatarToast = false
+    @Binding private var isPresentingCollectibleOptions: Bool
+    
     let model: NFTDetailsViewModel
     
-    public init(model: NFTDetailsViewModel) {
+    public init(
+        model: NFTDetailsViewModel,
+        isPresentingCollectibleOptions: Binding<Bool>
+    ) {
         self.model = model
+        _isPresentingCollectibleOptions = isPresentingCollectibleOptions
     }
     
     public var body: some View {
@@ -32,7 +39,7 @@ public struct NFTDetailsScene: View {
                 Spacer()
             } footer: {
 				HeaderButtonsView(buttons: model.headerButtons, action: model.onHeaderAction)
-					.padding(.top, Spacing.small)
+                    .padding(.top, Spacing.medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -43,7 +50,7 @@ public struct NFTDetailsScene: View {
                     title: Localized.Nft.saveToPhotos,
                     image: SystemImage.gallery
                 ) {
-                    saveImageToGallery()
+                    onSelectSetAsAvatar()
                 }
             }
             
@@ -86,13 +93,6 @@ public struct NFTDetailsScene: View {
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
-        .modifier(
-            ToastModifier(
-                isPresenting: $showSavedMessage,
-                value: Localized.Nft.successSavedToPhotos,
-                systemImage: SystemImage.gallery
-            )
-        )
         .alert(Localized.Permissions.accessDenied, isPresented: $showPhotoPermissionMessage) {
             Button(Localized.Common.openSettings) {
                 onSelectOpenSettings()
@@ -108,13 +108,27 @@ public struct NFTDetailsScene: View {
                 Text(isPresentingErrorMessage ?? "")
             }
         )
+        .toast(
+            isPresenting: $isPresentinSaveToPhotosToast,
+            title: Localized.Nft.saveToPhotos,
+            systemImage: SystemImage.checkmark
+        )
+        .toast(
+            isPresenting: $isPresentingSetAsAvatarToast,
+            title: Localized.Nft.setAsAvatar,
+            systemImage: SystemImage.checkmark
+        )
+        .confirmationDialog("", isPresented: $isPresentingCollectibleOptions, titleVisibility: .hidden) {
+            Button(Localized.Nft.saveToPhotos, action: onSelectSaveToGallery)
+            Button(Localized.Nft.setAsAvatar, action: onSelectSetAsAvatar)
+        }
     }
-
-    private func saveImageToGallery() {
+    
+    private func onSelectSaveToGallery() {
         Task {
             do {
                 try await model.saveImageToGallery()
-                showSavedMessage = true
+                isPresentinSaveToPhotosToast = true
             } catch let error as ImageGalleryServiceError {
                 switch error {
                 case .wrongURL, .invalidData, .invalidResponse, .unexpectedStatusCode, .urlSessionError:
@@ -125,49 +139,20 @@ public struct NFTDetailsScene: View {
             }
         }
     }
+    
+    private func onSelectSetAsAvatar() {
+        Task {
+            do {
+                try await model.setWalletAvatar()
+                isPresentingSetAsAvatarToast = true
+            } catch {
+                NSLog("Set nft avatar error: \(error)")
+            }
+        }
+    }
 
     private func onSelectOpenSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(settingsURL)
     }
 }
-
-//#Preview {
-//    NFTDetailsScene(
-//        collection: NFTCollection(
-//            id: "",
-//            name: "Alien Frens Evolution",
-//            description: "[**ALIEN FRENS WEBSITE**](https://alienfrens.io) **|** [**ALIEN FRENS TWITTER**](https://TWITTER.COM/ALIENFRENS)\r\n\r\nalien frens... Evolved\r\n\r\nincubators - https://incubator.alienfrens.io",
-//            chain: .ethereum,
-//            contractAddress: "",
-//            image: NFTImage(
-//                imageUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png",
-//                previewImageUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png",
-//                originalSourceUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png"
-//            ),
-//            isVerified: true
-//        ),
-//        asset: NFTAsset(
-//            id: "id",
-//            collectionId: "collection id",
-//            tokenId: "token id",
-//            tokenType: .erc1155,
-//            name: "Alien Frens Evolution #11871",
-//            description: "Alien Frens have evolved! We’re creating new Frens and partnerships along the way. Learn more at alienfrens.io/incubationchamber",
-//            chain: .ethereum,
-//            image: NFTImage(
-//                imageUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png",
-//                previewImageUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png",
-//                originalSourceUrl: "https://metadata.nftscan.com/eth/0x47a00fc8590c11be4c419d9ae50dec267b6e24ee/0x0000000000000000000000000000000000000000000000000000000000002e5f.png"
-//            ),
-//            attributes: [
-//                .init(name: "Background", value: "Deep Space"),
-//                .init(name: "Body", value: "Blue"),
-//                .init(name: "Clothes", value: "Yellow Fuzzy Sweater"),
-//                .init(name: "Eyes", value: "Baby Toon"),
-//                .init(name: "Hats ", value: "Red Bucket Hat"),
-//                .init(name: "Mouth", value: "Stoked")
-//            ]
-//        )
-//    )
-//}
