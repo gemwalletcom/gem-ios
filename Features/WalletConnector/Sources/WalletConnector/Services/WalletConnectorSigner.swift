@@ -181,6 +181,10 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     public func sendRawTransaction(sessionId: String, chain: Chain, transaction: String) async throws -> String {
         throw AnyError("Not supported yet")
     }
+    
+    public func addConnection(connection: WalletConnection) throws {
+        try store.addConnection(connection)
+    }
 }
 
 extension Session.Proposal {
