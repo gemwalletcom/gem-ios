@@ -147,9 +147,12 @@ extension SwapScene {
                 Text(model.swapFromTitle)
             } footer: {
                 SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
-                    .offset(y: Spacing.medium)
+                    .offset(y: Spacing.small + Spacing.tiny)
                     .frame(maxWidth: .infinity)
                     .disabled(model.isSwitchAssetButtonDisabled)
+                    .textCase(nil)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(.zero)
             }
 
             Section(model.swapToTitle) {
