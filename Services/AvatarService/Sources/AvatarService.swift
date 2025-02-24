@@ -19,26 +19,27 @@ public struct AvatarService: Sendable {
         guard let data = image.compress() else {
             throw AnyError("Compression image failed")
         }
-        
-        let path = try preparePath(for: walletId)
-        try data.write(to: path, options: .atomic)
-
-        try store.setWalletAvatar(walletId, path: folderPath(for: walletId) + path.lastPathComponent)
+        try write(data: data, for: walletId)
     }
     
     public func save(url: URL, for walletId: String) async throws {
         let (data, _) = try await URLSession.shared.data(from: url)
-        
-        let path = try preparePath(for: walletId)
-        try data.write(to: path, options: .atomic)
-
-        try store.setWalletAvatar(walletId, path: folderPath(for: walletId) + path.lastPathComponent)
+        try write(data: data, for: walletId)
     }
     
     public func remove(for walletId: String) throws {
         let path = try folder(for: walletId)
         try removeIfExist(at: path)
         try store.setWalletAvatar(walletId, path: nil)
+    }
+    
+    // MARK: - Private methods
+    
+    private func write(data: Data, for walletId: String) throws {
+        let path = try preparePath(for: walletId)
+        try data.write(to: path, options: .atomic)
+
+        try store.setWalletAvatar(walletId, path: folderPath(for: walletId) + path.lastPathComponent)
     }
     
     // MARK: - FileManager Private Methods
