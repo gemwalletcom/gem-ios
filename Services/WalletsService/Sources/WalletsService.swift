@@ -146,31 +146,31 @@ public final class WalletsService: Sendable {
 
     private func getNewAssets(for wallet: Wallet) async throws {
         guard wallet.hasTokenSupport else { return }
-        let prefs = wallet.preferences
+        let preferences = wallet.preferences
 
-        async let coinProcess: () = processCoinDiscovery(for: wallet, prefs: prefs)
-        async let tokenProcess: () = processTokenDiscovery(for: wallet, prefs: prefs)
+        async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
+        async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
         _ = try await (coinProcess, tokenProcess)
     }
 
-    private func processCoinDiscovery(for wallet: Wallet, prefs: WalletPreferences) async throws {
+    private func processCoinDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
         // Only perform coin discovery if it hasn’t been done before.
-        if !prefs.completeInitialLoadAssets {
+        if !preferences.completeInitialLoadAssets {
             let coinUpdates = await discoverAssetService.updateCoins(wallet: wallet)
             await processAssetUpdates(coinUpdates)
-            prefs.completeInitialLoadAssets = true
+            preferences.completeInitialLoadAssets = true
         }
     }
 
-    private func processTokenDiscovery(for wallet: Wallet, prefs: WalletPreferences) async throws {
+    private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
         let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let tokenUpdates = try await discoverAssetService.updateTokens(
             deviceId: deviceId,
             wallet: wallet,
-            fromTimestamp: prefs.assetsTimestamp
+            fromTimestamp: preferences.assetsTimestamp
         )
-        prefs.assetsTimestamp = newTimestamp
+        preferences.assetsTimestamp = newTimestamp
         await processAssetUpdates(tokenUpdates)
     }
 
