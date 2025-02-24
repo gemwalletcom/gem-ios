@@ -12,6 +12,8 @@ public struct ConnectionsStore: Sendable {
         self.db = db.dbQueue
     }
     
+    // MARK: - Public methods
+    
     public func addConnection(_ connection: WalletConnection) throws {
         try db.write { db in
             try connection.record.insert(db)
@@ -28,20 +30,9 @@ public struct ConnectionsStore: Sendable {
                 )
                 .fetchOne(db)
             guard let connection = result else {
-                throw AnyError("")
+                throw AnyError("Wallet connection not found")
             }
             return connection.mapToWalletConnection()
-        }
-    }
-    
-    public func getConnectionRecord(id: String) throws -> WalletConnectionRecord {
-        try db.read { db in
-            guard let connection = try WalletConnectionRecord
-                .filter(Column("id") == id || Column("sessionId") == id)
-                .fetchOne(db) else {
-                throw AnyError("wallet connection record not found")
-            }
-            return connection
         }
     }
     
@@ -53,15 +44,8 @@ public struct ConnectionsStore: Sendable {
         }
     }
 
-    public func updateConnection(id: String, with wallet: WalletId) throws {
-        let connection = try getConnectionRecord(id: id).update(with: wallet)
-        try db.write { db in
-            try connection.upsert(db)
-        }
-    }
-
     public func updateConnectionSession(_ session: WalletConnectionSession) throws {
-        let connection = try getConnectionRecord(id: session.id).update(with: session)
+        let connection = try getConnection(id: session.id).update(with: session)
         try db.write { db in
             try connection.upsert(db)
         }
@@ -78,6 +62,20 @@ public struct ConnectionsStore: Sendable {
     public func deleteAll() throws {
         return try db.write { db in
             try WalletConnectionRecord.deleteAll(db)
+        }
+    }
+    
+    // MARK: - Private methods
+    
+    private func getConnection(id: String) throws -> WalletConnectionRecord {
+        try db.read { db in
+            guard let connection = try WalletConnectionRecord
+                .filter(Columns.Connection.id == id || Columns.Connection.sessionId == id)
+                .fetchOne(db)
+            else {
+                throw AnyError("wallet connection record not found")
+            }
+            return connection
         }
     }
 }
