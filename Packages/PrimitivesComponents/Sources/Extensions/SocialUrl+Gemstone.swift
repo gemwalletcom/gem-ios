@@ -1,40 +1,25 @@
 // Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
 import Gemstone
 import Localization
 import Style
 import SwiftUI
+import Primitives
 
 extension SocialUrl {
-    public var name: String {
+    
+    public var linkType: LinkType {
         switch self {
-        case .x: Localized.Social.x
-        case .discord: Localized.Social.discord
-        case .telegram: Localized.Social.telegram
-        case .gitHub: Localized.Social.github
-        case .youTube: Localized.Social.youtube
-        case .reddit: Localized.Social.reddit
-        case .facebook: Localized.Social.facebook
-        case .website: Localized.Social.website
-        case .coingecko: Localized.Social.coingecko
+        case .x: .x
+        case .discord: .discord
+        case .telegram: .telegram
+        case .gitHub: .gitHub
+        case .youTube: .youTube
+        case .reddit: .reddit
+        case .facebook: .facebook
+        case .website: .website
+        case .coingecko: .coingecko
         }
-    }
-
-    public var image: Image {
-        switch self {
-        case .x: Images.Social.x
-        case .discord: Images.Social.discord
-        case .telegram: Images.Social.telegram
-        case .gitHub: Images.Social.github
-        case .youTube: Images.Social.youtube
-        case .reddit: Images.Social.reddit
-        case .facebook: Images.Social.facebook
-        case .website: Images.Social.website
-        case .coingecko: Images.Social.coingecko
-        }
-    }
-
-    public var order: Int {
-        socialUrlOrder(url: self).asInt
     }
 }

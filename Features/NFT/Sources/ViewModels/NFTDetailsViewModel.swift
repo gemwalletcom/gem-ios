@@ -8,16 +8,23 @@ import Components
 import Style
 import ImageGalleryService
 import Photos
+import AvatarService
 
 public struct NFTDetailsViewModel: Sendable {
+    public let wallet: Wallet
     public let assetData: NFTAssetData
     private let headerButtonAction: HeaderButtonAction?
+    private let avatarService: AvatarService
     
     public init(
+        wallet: Wallet,
         assetData: NFTAssetData,
+        avatarService: AvatarService,
         headerButtonAction: HeaderButtonAction?
     ) {
+        self.wallet = wallet
         self.assetData = assetData
+        self.avatarService = avatarService
         self.headerButtonAction = headerButtonAction
     }
     
@@ -103,7 +110,6 @@ public struct NFTDetailsViewModel: Sendable {
                 type: .send,
                 isEnabled: assetData.asset.chain.isNFTSupported && enabledTransferChains.contains(assetData.asset.chain) 
             ),
-            HeaderButton(type: .avatar, isEnabled: true),
             HeaderButton(type: .more, isEnabled: true),
         ]
     }
@@ -121,7 +127,12 @@ public struct NFTDetailsViewModel: Sendable {
         headerButtonAction?(type)
     }
     
-    func saveImageToGallery() async throws(ImageGalleryServiceError) {
+    public func setWalletAvatar() async throws {
+        guard let url = assetData.asset.image.previewImageUrl.asURL else { return }
+        try await avatarService.save(url: url, for: wallet.id)
+    }
+    
+    public func saveImageToGallery() async throws(ImageGalleryServiceError) {
         guard let url = assetData.asset.image.imageUrl.asURL else {
             throw ImageGalleryServiceError.wrongURL
         }

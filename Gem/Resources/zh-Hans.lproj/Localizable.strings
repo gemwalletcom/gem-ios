@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "接收收藏";
 "wallet.more" = "更多的";
 "nft.save_to_photos" = "保存到照片";
-"nft.success_saved_to_photos" = "您的图像已保存至照片！";
 "permissions.access_denied" = "拒绝访问";
 "permissions.image.photo_access.denied.description" = "此应用无权访问您的照片库。请在设备设置中启用访问权限。";
 "common.magic_button" = "魔术按钮";
@@ -329,3 +328,9 @@
 "common.photo" = "照片";
 "info.price_impact.title" = "价格影响";
 "info.price_impact.description" = "价格影响是指您的交易规模导致的代币价格变化。价格影响越大意味着由于流动性低或订单规模大，您收到的代币越少。 ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

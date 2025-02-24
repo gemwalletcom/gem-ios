@@ -20,24 +20,21 @@ public struct WalletBarView: View {
             action?()
         } label: {
             HStack(spacing: Spacing.small) {
-                if let image = model.image {
-                    AssetImageView(assetImage: image, size: 24, overlayImageSize: 10)
-                }
+                AssetImageView(assetImage: model.image, size: Spacing.large, overlayImageSize: Sizing.image.tiny)
+                
                 Text(model.name)
                     .foregroundColor(Colors.black)
                     .fontWeight(.medium)
                     .font(.body)
                     .lineLimit(1)
 
-                if model.showChevron {
-                    Images.System.chevronDown
-                        .resizable()
-                        .frame(width: 11, height: 6)
-                        .fontWeight(.medium)
-                        .foregroundColor(Colors.gray)
-                }
+                Images.System.chevronDown
+                    .resizable()
+                    .frame(width: 11, height: 6)
+                    .fontWeight(.medium)
+                    .foregroundColor(Colors.gray)
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, Spacing.tiny)
         }
         .buttonStyle(.plain)
     }
@@ -60,8 +57,7 @@ public struct WalletBarView: View {
                     imageUrl: nil
                 )
             ).name,
-            image: .none,
-            showChevron: false
+            image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)
         )
     )
 }

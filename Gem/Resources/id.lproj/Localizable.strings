@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Terima Koleksi";
 "wallet.more" = "Lagi";
 "nft.save_to_photos" = "Simpan ke Foto";
-"nft.success_saved_to_photos" = "Gambar Anda telah disimpan ke Foto!";
 "permissions.access_denied" = "Akses ditolak";
 "permissions.image.photo_access.denied.description" = "Aplikasi ini tidak memiliki izin untuk mengakses pustaka foto Anda. Harap aktifkan akses di pengaturan perangkat Anda.";
 "common.magic_button" = "Tombol Ajaib";
@@ -329,3 +328,9 @@
 "common.photo" = "Foto";
 "info.price_impact.title" = "Dampak Harga";
 "info.price_impact.description" = "Dampak harga adalah perubahan harga token yang disebabkan oleh ukuran perdagangan Anda. Dampak harga yang lebih tinggi berarti Anda menerima lebih sedikit token karena likuiditas rendah atau ukuran pesanan besar. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

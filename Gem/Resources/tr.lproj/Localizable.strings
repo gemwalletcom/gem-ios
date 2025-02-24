@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Koleksiyon Al";
 "wallet.more" = "Daha";
 "nft.save_to_photos" = "Fotoğraflara Kaydet";
-"nft.success_saved_to_photos" = "Resminiz Fotoğraflar'a kaydedildi!";
 "permissions.access_denied" = "Erişim engellendi";
 "permissions.image.photo_access.denied.description" = "Bu uygulama fotoğraf kütüphanenize erişim iznine sahip değil. Lütfen cihaz ayarlarınızda erişimi etkinleştirin.";
 "common.magic_button" = "Sihirli Düğme";
@@ -329,3 +328,9 @@
 "common.photo" = "Fotoğraf";
 "info.price_impact.title" = "Fiyat Etkisi";
 "info.price_impact.description" = "Fiyat etkisi, işlem boyutunuzdan kaynaklanan token fiyatındaki değişikliktir. Daha yüksek fiyat etkisi, düşük likidite veya büyük sipariş boyutu nedeniyle daha az token aldığınız anlamına gelir. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

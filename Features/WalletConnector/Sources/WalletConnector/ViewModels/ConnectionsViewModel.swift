@@ -12,8 +12,10 @@ public struct ConnectionsViewModel: Sendable {
 
     private let keystore: any Keystore
 
-    public init(service: ConnectionsService,
-                keystore: any Keystore) {
+    public init(
+        service: ConnectionsService,
+        keystore: any Keystore
+    ) {
         self.service = service
         self.keystore = keystore
     }
@@ -36,9 +38,8 @@ public struct ConnectionsViewModel: Sendable {
         )
     }
 
-    func addConnectionURI(uri: String) async throws {
-        let wallet = try keystore.getCurrentWallet()
-        try await service.addConnectionURI(uri: uri, wallet: wallet)
+    func pair(uri: String) async throws {
+        try await service.pair(uri: uri)
     }
 
     func disconnect(connection: WalletConnection) async throws {

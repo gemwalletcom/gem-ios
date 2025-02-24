@@ -11,3 +11,7 @@ public struct EmojiValue: Hashable {
         self.color = color
     }
 }
+
+extension EmojiValue: Identifiable {
+    public var id: String { emoji }
+}

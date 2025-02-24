@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "استلام المجموعة";
 "wallet.more" = "أكثر";
 "nft.save_to_photos" = "حفظ في الصور";
-"nft.success_saved_to_photos" = "لقد تم حفظ صورتك في الصور!";
 "permissions.access_denied" = "تم الرفض";
 "permissions.image.photo_access.denied.description" = "لا يتوفر لهذا التطبيق إذن بالوصول إلى مكتبة الصور الخاصة بك. يُرجى تمكين هذا الإذن في إعدادات جهازك.";
 "common.magic_button" = "الزر السحري";
@@ -329,3 +328,9 @@
 "common.photo" = "صورة";
 "info.price_impact.title" = "تأثير السعر";
 "info.price_impact.description" = "تأثير السعر هو التغيير في سعر الرمز المميز الناتج عن حجم تداولك. يعني ارتفاع تأثير السعر أنك ستتلقى عددًا أقل من الرموز المميزة بسبب انخفاض السيولة أو حجم الطلب الكبير. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

@@ -22,10 +22,9 @@ public final class NFTCollectionViewModel: Sendable {
         let title: String
     }
 
-    let sceneStep: Scenes.NFTCollectionScene.SceneStep
-    let nftService: NFTService
-    let deviceService: any DeviceServiceable
-    let avatarService: AvatarService
+    private let sceneStep: Scenes.NFTCollectionScene.SceneStep
+    private let nftService: NFTService
+    private let deviceService: any DeviceServiceable
 
     var request: NFTRequest
 
@@ -35,14 +34,12 @@ public final class NFTCollectionViewModel: Sendable {
         wallet: Wallet,
         sceneStep: Scenes.NFTCollectionScene.SceneStep,
         nftService: NFTService,
-        deviceService: any DeviceServiceable,
-        avatarService: AvatarService
+        deviceService: any DeviceServiceable
     ) {
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.nftService = nftService
         self.deviceService = deviceService
-        self.avatarService = avatarService
         self.request = Self.createNftReqeust(for: wallet, sceneStep: sceneStep)
     }
 
@@ -66,11 +63,6 @@ public final class NFTCollectionViewModel: Sendable {
         case .collection:
             break
         }
-    }
-
-    public func setWalletAvatar(_ asset: NFTAsset) async throws {
-        guard let url = asset.image.previewImageUrl.asURL else { return }
-        try await avatarService.save(url: url, for: wallet.id)
     }
 
     public func refresh(for wallet: Wallet) {
