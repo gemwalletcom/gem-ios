@@ -179,10 +179,10 @@ public final class WalletsService: Sendable {
             for update in updates {
                 group.addTask { [weak self] in
                     guard let self else { return }
-                    NSLog("discover assets: \(update.wallet.name): \(update.assets)")
+                    NSLog("discover assets: \(update.walletId): \(update.assets)")
                     do {
                         try await self.addNewAssets(
-                            walletId: update.wallet.walletId,
+                            walletId: update.walletId,
                             assetIds: update.assets.compactMap { try? AssetId(id: $0) }
                         )
                     } catch {

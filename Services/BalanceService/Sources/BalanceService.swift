@@ -6,7 +6,7 @@ import Combine
 import Store
 import ChainService
 
-public final class BalanceService: BalancerUpdater, Sendable {
+public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
     private let assersStore: AssetStore
     private let chainServiceFactory: ChainServiceFactory
@@ -69,31 +69,33 @@ extension BalanceService {
     }
 
     public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
-        await withTaskGroup(of: Void.self) { [weak self] group in
-            guard let self = self else { return }
+        await withTaskGroup(of: Void.self) { group in
             for account in wallet.accounts {
                 let chain = account.chain
                 let address = account.address
                 let ids = assetIds.filter { $0.identifier.hasPrefix(chain.rawValue) }
                 let tokenIds = ids.filter { $0.identifier != chain.id }
+
                 guard !ids.isEmpty else { continue }
+
+                // coin balance
                 if ids.contains(chain.assetId) {
-                    group.addTask { [weak self] in
-                        guard let self else { return }
-                        await self.updateCoinBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                    group.addTask {
+                        await updateCoinBalance(walletId: wallet.id, asset: chain.assetId, address: address)
                     }
-                    group.addTask { [weak self] in
-                        guard let self else { return }
-                        await self.updateCoinStakeBalance(walletId: wallet.id, asset: chain.assetId, address: address)
+                    group.addTask {
+                        await updateCoinStakeBalance(walletId: wallet.id, asset: chain.assetId, address: address)
                     }
                 }
+
+                // token balance
                 if !tokenIds.isEmpty {
-                    group.addTask { [weak self] in
-                        guard let self else { return }
-                        await self.updateTokenBalances(walletId: wallet.id, chain: chain, tokenIds: tokenIds, address: address)
+                    group.addTask {
+                        await updateTokenBalances(walletId: wallet.id, chain: chain, tokenIds: tokenIds, address: address)
                     }
                 }
             }
+
             for await _ in group { }
         }
     }
@@ -103,6 +105,7 @@ extension BalanceService {
             .getBalances(walletId: wallet.id, assetIds: assetIds.ids)
             .map { $0.assetId }
         let missingBalancesAssetIds = assetIds.asSet().subtracting(balancesAssetIds)
+
         try addBalance(
             walletId: wallet.id,
             balances: missingBalancesAssetIds.map {
@@ -129,10 +132,7 @@ extension BalanceService {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [weak self] in
-                guard let self else { return [] }
-                return [try await self.getCoinBalance(chain: chain, address: address).coinChange]
-            },
+            fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
             mapBalance: { $0 }
         )
     }
@@ -142,10 +142,7 @@ extension BalanceService {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [weak self] in
-                guard let self else { return [] }
-                return [try await self.getCoinStakeBalance(chain: chain, address: address)?.stakeChange]
-            },
+            fetchBalance: { [try await getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
             mapBalance: { $0 }
         )
     }
@@ -154,13 +151,9 @@ extension BalanceService {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
-            fetchBalance: { [weak self] in
-                guard let self else { return [] }
-                return try await self.getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids)
+            fetchBalance: { try await getTokenBalance(chain: chain, address: address, tokenIds: tokenIds.ids)
             },
-            mapBalance: { (balance: AssetBalance) -> AssetBalanceChange? in
-                balance.tokenChange
-            }
+            mapBalance: { $0.tokenChange }
         )
     }
 
@@ -258,11 +251,12 @@ extension BalanceService {
 
     private func createBalanceUpdate(assets: [Asset], balances: [AssetBalanceChange]) -> [UpdateBalance] {
         let assets = assets.toMap { $0.id.identifier }
-        return balances.compactMap { [weak self] balance in
+        return balances.compactMap { balance in
             guard
                 let asset = assets[balance.assetId.identifier],
-                let update = try? self?.createUpdateBalanceType(asset: asset, change: balance) else {
-                    return .none
+                let update = try? createUpdateBalanceType(asset: asset, change: balance)
+            else {
+                return .none
             }
             return UpdateBalance(
                 assetID: balance.assetId.identifier,
