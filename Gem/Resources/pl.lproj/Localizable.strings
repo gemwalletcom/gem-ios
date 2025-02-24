@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "Odbierz kolekcję";
 "wallet.more" = "Więcej";
 "nft.save_to_photos" = "Zapisz w Zdjęciach";
-"nft.success_saved_to_photos" = "Twój obraz został zapisany w Zdjęciach!";
 "permissions.access_denied" = "Odmowa dostępu";
 "permissions.image.photo_access.denied.description" = "Ta aplikacja nie ma uprawnień dostępu do Twojej biblioteki zdjęć. Włącz dostęp w ustawieniach urządzenia.";
 "common.magic_button" = "Magiczny przycisk";
@@ -329,3 +328,9 @@
 "common.photo" = "Zdjęcie";
 "info.price_impact.title" = "Wpływ na cenę";
 "info.price_impact.description" = "Wpływ ceny to zmiana ceny tokena spowodowana rozmiarem transakcji. Większy wpływ ceny oznacza, że otrzymujesz mniej tokenów z powodu niskiej płynności lub dużego rozmiaru zamówienia. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

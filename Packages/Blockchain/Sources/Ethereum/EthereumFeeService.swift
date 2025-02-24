@@ -142,7 +142,7 @@ extension EthereumService {
         default: .zero
         }
     }
-
+    
     internal static func getPriorityFeeByType(_ type: TransferDataType, isMaxAmount: Bool, gasPriceType: GasPriceType) -> BigInt {
         return switch type {
         case .transfer(let asset):
@@ -200,23 +200,26 @@ extension EthereumService {
         }
     }
     
+    public func gasLimit(input: FeeInput) async throws -> BigInt {
+        if let gasLimit = input.gasLimit {
+            return gasLimit
+        }
+        return try await getGasLimit(
+            from: input.senderAddress,
+            to: try getTo(input: input),
+            value: getValue(input: input)?.hexString.append0x,
+            data: try getData(input: input)?.hexString.append0x
+        )
+    }
+    
     public func fee(input: FeeInput) async throws -> Fee {
         if chain.isOpStack {
             // gas oracle estimates for enveloped tx only
             return try await OptimismGasOracle(chain: chain, provider: provider).fee(input: input)
         }
-
-        let data = try getData(input: input)
-        let to = try getTo(input: input)
-        let value = getValue(input: input)
+        
         let extraFeeGasLimit = try extraFeeGasLimit(input: input)
-
-        let gasLimit = try await self.getGasLimit(
-            from: input.senderAddress,
-            to: to,
-            value: value?.hexString.append0x,
-            data: data?.hexString.append0x
-        )
+        let gasLimit = try await gasLimit(input: input)
         let priorityFee = Self.getPriorityFeeByType(input.type, isMaxAmount: input.isMaxAmount, gasPriceType: input.gasPrice)
 
         return Fee(

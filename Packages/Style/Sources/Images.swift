@@ -2,13 +2,13 @@
 
 import SwiftUI
 
-public struct Images {
-    public struct Logo {
+public enum Images {
+    public enum Logo {
         public static let logo = Image(.logo)
         public static let logoDark = Image(.logoDark)
     }
 
-    public struct Chains {
+    public enum Chains {
         public static let aptos = Image(.aptos)
         public static let arbitrum = Image(.arbitrum)
         public static let avalanchec = Image(.avalanchec)
@@ -55,8 +55,8 @@ public struct Images {
         public static let unichain = Image(.unichain)
         public static let hyperliquid = Image(.hyperliquid)
     }
-    
-    public struct SwapProviders {
+
+    public enum SwapProviders {
         public static let uniswap = Image(.uniswap)
         public static let pancakeswap = Image(.pancakeswap)
         public static let across = Image(.across)
@@ -68,9 +68,11 @@ public struct Images {
         public static let orca = Image(.orca)
         public static let stargate = Image(.stargate)
         public static let raydium = Image(.raydium)
+        public static let oku = Image(.oku)
+        public static let wagmi = Image(.wagmi)
     }
 
-    public struct Fiat {
+    public enum Fiat {
         public static let kado = Image(.kado)
         public static let moonpay = Image(.moonpay)
         public static let transak = Image(.transak)
@@ -79,7 +81,7 @@ public struct Images {
         public static let ramp = Image(.ramp)
     }
 
-    public struct Actions {
+    public enum Actions {
         public static let send = Image(.send)
         public static let swap = Image(.swap)
         public static let receive = Image(.receive)
@@ -87,9 +89,10 @@ public struct Images {
         public static let manage = Image(.manage)
         public static let sell = Image(.sell)
         public static let more = Image(.ellipsis)
+        public static let avatar = Image(.avatar)
     }
 
-    public struct Settings {
+    public enum Settings {
         public static let priceAlerts = Image(.settingsPriceAlerts)
         public static let currency = Image(.settingsCurrency)
         public static let rate = Image(.settingsRate)
@@ -106,7 +109,7 @@ public struct Images {
         public static let notifications = Image(.settingsNotifications)
     }
 
-    public struct Social {
+    public enum Social {
         public static let github = Image(.github)
         public static let telegram = Image(.telegram)
         public static let coingecko = Image(.coingecko)
@@ -116,41 +119,46 @@ public struct Images {
         public static let reddit = Image(.reddit)
         public static let youtube = Image(.youtube)
         public static let website = Image(.website)
-        public static let facebook = Image("") //TODO
+        public static let facebook = Image("") // TODO:
+        public static let coinmarketcap = Image(.coinmarketcap)
+        public static let opensea = Image(.opensea)
+        public static let magiceden = Image(.magiceden)
+        public static let tiktok = Image(.tiktok)
     }
 
-    public struct Tabs {
+    public enum Tabs {
         public static let settings = Image(.tabSettings)
         public static let collections = Image(.tabCollections)
         public static let activity = Image(.tabActivity)
         public static let wallet = Image(.tabWallet)
     }
 
-    public struct Transaction {
+    public enum Transaction {
         public static let outgoing = Image(.transferOutgoing)
         public static let incoming = Image(.transferIncoming)
 
-        public struct State {
+        public enum State {
             public static let pending = Image(.transactionStatePending)
             public static let error = Image(.transactionStateError)
             public static let success = Image(.transactionStateSuccess)
         }
     }
 
-    public struct Wallets {
+    public enum Wallets {
         public static let edit = Image(.edit)
         public static let create = Image(.create)
         public static let `import` = Image(.import)
         public static let watch = Image(.watch)
         public static let selected = Image(.selected)
+        public static let editFilled = Image(.editFilled)
     }
 
-    public struct NameResolve {
+    public enum NameResolve {
         public static let success = Image(.nameResolveSuccess)
         public static let error = Image(.nameResolveError)
     }
-    
-    public struct Info {
+
+    public enum Info {
         public static let networkFee = Image(.networkFee)
     }
 }
@@ -211,7 +219,8 @@ public struct Images {
             (Images.Actions.swap, "Swap"),
             (Images.Actions.receive, "Receive"),
             (Images.Actions.buy, "Buy"),
-            (Images.Actions.manage, "Manage")
+            (Images.Actions.manage, "Manage"),
+            (Images.Actions.avatar, "Avatar")
         ]),
         ("Settings", [
             (Images.Settings.priceAlerts, "Price Alerts"),
@@ -256,7 +265,8 @@ public struct Images {
             (Images.Wallets.create, "Create"),
             (Images.Wallets.import, "Import"),
             (Images.Wallets.watch, "Watch"),
-            (Images.Wallets.selected, "Selected")
+            (Images.Wallets.selected, "Selected"),
+            (Images.Wallets.editFilled, "Filled")
         ]),
         ("Name Resolve", [
             (Images.NameResolve.success, "Success"),

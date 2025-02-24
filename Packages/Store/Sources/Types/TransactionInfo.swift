@@ -11,6 +11,7 @@ public struct TransactionInfo: Codable, FetchableRecord {
     public let price: Price?
     public let feePrice: Price?
     public let assets: [AssetRecord]
+    public let prices: [PriceRecord]
 }
 
 extension TransactionInfo {
@@ -21,7 +22,8 @@ extension TransactionInfo {
             feeAsset: feeAsset.mapToAsset(),
             price: price,
             feePrice: feePrice,
-            assets: assets.map { $0.mapToAsset() }
+            assets: assets.map { $0.mapToAsset() },
+            prices: prices.map { $0.mapToAssetPrice() }
         )
     }
 }

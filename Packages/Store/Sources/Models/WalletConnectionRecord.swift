@@ -62,7 +62,7 @@ extension WalletConnectionRecord: CreateTable {
 extension WalletConnection {
     var record: WalletConnectionRecord {
         WalletConnectionRecord(
-            id: session.id,
+            id: session.sessionId,
             sessionId: session.sessionId,
             walletId: wallet.id,
             state: session.state,
@@ -81,7 +81,6 @@ extension WalletConnection {
 extension WalletConnectionRecord {
     var session: WalletConnectionSession {
         WalletConnectionSession(
-            id: id, 
             sessionId: sessionId,
             state: state,
             chains: chains ?? [],
@@ -99,28 +98,10 @@ extension WalletConnectionRecord {
     }
     
     func update(with session: WalletConnectionSession) -> WalletConnectionRecord {
-        return WalletConnectionRecord(
-            id: session.id,
+        WalletConnectionRecord(
+            id: session.sessionId,
             sessionId: session.sessionId,
             walletId: walletId,
-            state: session.state,
-            chains: chains ?? [],
-            createdAt: createdAt,
-            expireAt: session.expireAt,
-            appName: session.metadata.name,
-            appDescription: session.metadata.description,
-            appLink: session.metadata.url,
-            appIcon: session.metadata.icon,
-            redirectNative: session.metadata.redirectNative,
-            redirectUniversal: session.metadata.redirectUniversal
-        )
-    }
-
-    func update(with wallet: WalletId) -> WalletConnectionRecord {
-        return WalletConnectionRecord(
-            id: session.id,
-            sessionId: session.sessionId,
-            walletId: wallet.id,
             state: session.state,
             chains: chains ?? [],
             createdAt: createdAt,

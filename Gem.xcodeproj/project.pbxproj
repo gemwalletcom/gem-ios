@@ -54,6 +54,7 @@
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83F645062D52C31D00C18881 /* DiscoverAssetsService in Frameworks */ = {isa = PBXBuildFile; productRef = 83F645052D52C31D00C18881 /* DiscoverAssetsService */; };
 		83F8C3E62D241FEB0042CE22 /* SwapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F8C3E52D241FEB0042CE22 /* SwapState.swift */; };
+		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */; };
@@ -96,6 +97,7 @@
 		D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004B2BBB26DD00ED770B /* TransactionsNavigationStack.swift */; };
 		D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D807004D2BBB283400ED770B /* WalletNavigationStack.swift */; };
 		D810F3782AF1AB770006D9C6 /* SwapScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = D810F3772AF1AB770006D9C6 /* SwapScene.swift */; };
+		D825E8132D693BEA00362A3A /* CollectibleNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D825E8122D693BEA00362A3A /* CollectibleNavigationView.swift */; };
 		D829BF2D2CBDBC5300DEB2E8 /* Localization in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF2C2CBDBC5300DEB2E8 /* Localization */; };
 		D829BF422CBDD65A00DEB2E8 /* MarketInsight in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF412CBDD65A00DEB2E8 /* MarketInsight */; };
 		D829BF452CBDD9F700DEB2E8 /* FiatConnect in Frameworks */ = {isa = PBXBuildFile; productRef = D829BF442CBDD9F700DEB2E8 /* FiatConnect */; };
@@ -223,6 +225,8 @@
 		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		83FEE7FC2D5E632300E7B2DA /* ManageWalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWalletService; sourceTree = "<group>"; };
+		B617D6092D5B73B7001697A6 /* AvatarService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarService; sourceTree = "<group>"; };
+		B61C5C152D5FB899007699EC /* WalletAvatar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletAvatar; sourceTree = "<group>"; };
 		B66DEDAE2D49F0C600309D53 /* ImageGalleryService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageGalleryService; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
@@ -268,6 +272,7 @@
 		D807004B2BBB26DD00ED770B /* TransactionsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionsNavigationStack.swift; sourceTree = "<group>"; };
 		D807004D2BBB283400ED770B /* WalletNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletNavigationStack.swift; sourceTree = "<group>"; };
 		D810F3772AF1AB770006D9C6 /* SwapScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapScene.swift; sourceTree = "<group>"; };
+		D825E8122D693BEA00362A3A /* CollectibleNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectibleNavigationView.swift; sourceTree = "<group>"; };
 		D829BF2B2CBDB82600DEB2E8 /* Localization */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Localization; sourceTree = "<group>"; };
 		D829BF402CBDD64D00DEB2E8 /* MarketInsight */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = MarketInsight; sourceTree = "<group>"; };
 		D829BF432CBDD9D200DEB2E8 /* FiatConnect */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = FiatConnect; sourceTree = "<group>"; };
@@ -356,6 +361,7 @@
 				8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */,
 				8361BB612D3FE5F2008D89CF /* Transactions in Frameworks */,
 				D829BF572CBF3E1900DEB2E8 /* DeviceService in Frameworks */,
+				B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */,
 				C3CF3BA729B5317300E96586 /* Keystore in Frameworks */,
 				C366791D2A18623800F1D74D /* QRScanner in Frameworks */,
 				83863EE72D19B93E005048A7 /* NodeService in Frameworks */,
@@ -769,6 +775,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				B61C5C152D5FB899007699EC /* WalletAvatar */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
 				8349F1452D5E4D04003A0A93 /* ManageWallets */,
 				8361BB5C2D3FDBF1008D89CF /* Transactions */,
@@ -817,6 +824,7 @@
 				D829BF4F2CBF2BDA00DEB2E8 /* NotificationService */,
 				D829BF4C2CBF025400DEB2E8 /* BannerService */,
 				D8F5B8702CCD6C010007E615 /* StakeService */,
+				B617D6092D5B73B7001697A6 /* AvatarService */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -868,6 +876,7 @@
 			isa = PBXGroup;
 			children = (
 				D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */,
+				D825E8122D693BEA00362A3A /* CollectibleNavigationView.swift */,
 			);
 			path = NFT;
 			sourceTree = "<group>";
@@ -1073,6 +1082,7 @@
 				8352B1032D52C73B0059EB27 /* WalletsService */,
 				83B6C20F2D5E3F2600F9DF8A /* WalletTab */,
 				8349F1462D5E4FF4003A0A93 /* ManageWallets */,
+				B617D60A2D5B75F0001697A6 /* AvatarService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1291,6 +1301,7 @@
 				D807004E2BBB283400ED770B /* WalletNavigationStack.swift in Sources */,
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				8361BB652D400B63008D89CF /* TransactionInputViewModel.swift in Sources */,
+				D825E8132D693BEA00362A3A /* CollectibleNavigationView.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
@@ -1553,7 +1564,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.121;
+				MARKETING_VERSION = 1.3.124;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1605,7 +1616,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.121;
+				MARKETING_VERSION = 1.3.124;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1929,6 +1940,10 @@
 		83FE37B32D273CC80048D54C /* WalletConnector */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = WalletConnector;
+		};
+		B617D60A2D5B75F0001697A6 /* AvatarService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = AvatarService;
 		};
 		B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */ = {
 			isa = XCSwiftPackageProductDependency;

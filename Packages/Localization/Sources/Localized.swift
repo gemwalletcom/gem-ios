@@ -451,8 +451,8 @@ public enum Localized {
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos
     public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
-    /// Your image has been saved to Photos!
-    public static let successSavedToPhotos = Localized.tr("Localizable", "nft.success_saved_to_photos", fallback: "Your image has been saved to Photos!")
+    /// Set as Avatar
+    public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
   }
   public enum Nodes {
     /// Gem Wallet Node
@@ -606,18 +606,28 @@ public enum Localized {
   public enum Social {
     /// CoinGecko
     public static let coingecko = Localized.tr("Localizable", "social.coingecko", fallback: "CoinGecko")
+    /// CoinMarketCap
+    public static let coinmarketcap = Localized.tr("Localizable", "social.coinmarketcap", fallback: "CoinMarketCap")
     /// Discord
     public static let discord = Localized.tr("Localizable", "social.discord", fallback: "Discord")
     /// Facebook
     public static let facebook = Localized.tr("Localizable", "social.facebook", fallback: "Facebook")
     /// GitHub
     public static let github = Localized.tr("Localizable", "social.github", fallback: "GitHub")
+    /// Instagram
+    public static let instagram = Localized.tr("Localizable", "social.instagram", fallback: "Instagram")
     /// Links
     public static let links = Localized.tr("Localizable", "social.links", fallback: "Links")
+    /// MagicEden
+    public static let magiceden = Localized.tr("Localizable", "social.magiceden", fallback: "MagicEden")
+    /// OpenSea
+    public static let opensea = Localized.tr("Localizable", "social.opensea", fallback: "OpenSea")
     /// Reddit
     public static let reddit = Localized.tr("Localizable", "social.reddit", fallback: "Reddit")
     /// Telegram
     public static let telegram = Localized.tr("Localizable", "social.telegram", fallback: "Telegram")
+    /// TikTok
+    public static let tiktok = Localized.tr("Localizable", "social.tiktok", fallback: "TikTok")
     /// Website
     public static let website = Localized.tr("Localizable", "social.website", fallback: "Website")
     /// X (formerly Twitter)

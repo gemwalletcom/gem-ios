@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "รับการรวบรวม";
 "wallet.more" = "มากกว่า";
 "nft.save_to_photos" = "บันทึกลงในภาพถ่าย";
-"nft.success_saved_to_photos" = "รูปภาพของคุณได้รับการบันทึกไว้ในรูปภาพแล้ว!";
 "permissions.access_denied" = "การเข้าถึงถูกปฏิเสธ";
 "permissions.image.photo_access.denied.description" = "แอพนี้ไม่มีสิทธิ์ในการเข้าถึงคลังภาพของคุณ โปรดเปิดใช้งานสิทธิ์ในการตั้งค่าอุปกรณ์ของคุณ";
 "common.magic_button" = "ปุ่มมหัศจรรย์";
@@ -329,3 +328,9 @@
 "common.photo" = "รูปถ่าย";
 "info.price_impact.title" = "ผลกระทบต่อราคา";
 "info.price_impact.description" = "ผลกระทบต่อราคาคือการเปลี่ยนแปลงของราคาโทเค็นที่เกิดจากขนาดการซื้อขายของคุณ ผลกระทบต่อราคาที่สูงขึ้นหมายความว่าคุณได้รับโทเค็นน้อยลงเนื่องจากสภาพคล่องต่ำหรือขนาดคำสั่งซื้อที่ใหญ่ ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

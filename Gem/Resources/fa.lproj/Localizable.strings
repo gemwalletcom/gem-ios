@@ -319,7 +319,6 @@
 "wallet.receive_collection" = "دریافت مجموعه";
 "wallet.more" = "بیشتر";
 "nft.save_to_photos" = "ذخیره در عکس ها";
-"nft.success_saved_to_photos" = "تصویر شما در Photos ذخیره شده است!";
 "permissions.access_denied" = "دسترسی ممنوع شد";
 "permissions.image.photo_access.denied.description" = "این برنامه اجازه دسترسی به کتابخانه عکس شما را ندارد. لطفاً دسترسی را در تنظیمات دستگاه خود فعال کنید.";
 "common.magic_button" = "دکمه جادویی";
@@ -329,3 +328,9 @@
 "common.photo" = "عکس";
 "info.price_impact.title" = "تاثیر قیمت";
 "info.price_impact.description" = "تاثیر قیمت تغییر در قیمت توکن است که به دلیل اندازه معامله شما ایجاد می شود. تاثیر قیمت بالاتر به این معنی است که به دلیل نقدینگی کم یا حجم سفارش بزرگ، توکن های کمتری دریافت می کنید. ";
+"social.opensea" = "OpenSea";
+"social.magiceden" = "MagicEden";
+"social.instagram" = "Instagram";
+"social.tiktok" = "TikTok";
+"social.coinmarketcap" = "CoinMarketCap";
+"nft.set_as_avatar" = "Set as Avatar";

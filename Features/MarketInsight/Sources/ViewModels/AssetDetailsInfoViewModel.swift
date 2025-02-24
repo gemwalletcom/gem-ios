@@ -35,7 +35,7 @@ public struct AssetDetailsInfoViewModel {
                 subtitle: marketCapText,
                 titleTag: " #\(rank) ",
                 titleTagStyle: TextStyle(
-                    font: .system(.body, weight: .regular),
+                    font: .system(.body),
                     color: Colors.grayLight,
                     background: Colors.grayVeryLight
                 )
@@ -75,10 +75,7 @@ public struct AssetDetailsInfoViewModel {
     }
     
     public var contract: String? {
-        guard let tokenId = try? priceData.asset.getTokenId() else {
-            return .none
-        }
-        return tokenId
+        try? priceData.asset.getTokenId()
     }
     
     public var contractText: String? {

@@ -140,6 +140,22 @@ extension ButtonStyle where Self == ColorButtonStyle {
                 corernerRadius: corernerRadius
             )
         }
+    
+    public static func listStyleColor(
+        paddingHorizontal: CGFloat = Spacing.medium,
+        paddingVertical: CGFloat = Spacing.medium,
+        corernerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.gray,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.listStyleColor,
+            backgroundPressed: Colors.grayVeryLight,
+            corernerRadius: corernerRadius
+        )
+    }
 }
 
 public struct ClearButtonStyle: ButtonStyle {
@@ -311,6 +327,11 @@ extension ButtonStyle where Self == StateButtonStyle {
                 Text("Light Gray Button")
             }
             .buttonStyle(.lightGray())
+            
+            Button(action: {}) {
+                Text("List Style Color Button")
+            }
+            .buttonStyle(.listStyleColor())
 
             Button(action: {}) {
                 Text("White Button")
