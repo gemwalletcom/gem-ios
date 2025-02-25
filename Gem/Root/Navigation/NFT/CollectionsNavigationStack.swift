@@ -8,15 +8,13 @@ import Components
 import Localization
 import Style
 
-public struct CollectionsNavigationStack: View {
+struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.keystore) private var keystore
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
-    @Environment(\.openURL) private var openURL
-    @Environment(\.dismiss) private var dismiss
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     
@@ -46,20 +44,20 @@ public struct CollectionsNavigationStack: View {
                         )
                     )
                 }
-                .navigationDestination(for: Scenes.NFTDetails.self) { assetData in
+                .navigationDestination(for: Scenes.NFTDetails.self) {
                     CollectibleNavigationView(
                         model: CollectibleNavigationViewModel(
                             wallet: model.wallet,
-                            assetData: assetData.assetData
+                            assetData: $0.assetData
                         )
                     )
                 }
-                .sheet(item: $isPresentingReceiveSelectAssetType) { value in
+                .sheet(item: $isPresentingReceiveSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             keystore: keystore,
-                            selectType: value,
+                            selectType: $0,
                             assetsService: walletsService.assetsService,
                             walletsService: walletsService
                         ),
