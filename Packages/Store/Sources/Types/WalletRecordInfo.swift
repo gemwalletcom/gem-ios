@@ -22,7 +22,7 @@ extension WalletRecordInfo {
             accounts: accounts.map { $0.mapToAccount() },
             order: wallet.order.asInt32,
             isPinned: wallet.isPinned,
-            imageUrl: imageUrl()
+            imageUrl: wallet.imageUrl
         )
     }
 }
@@ -38,17 +38,5 @@ extension WalletConnectionInfo {
             session: connection.session,
             wallet: wallet.mapToWallet()
         )
-    }
-}
-
-fileprivate extension WalletRecordInfo {
-    func imageUrl() -> String? {
-        guard let imageUrl = wallet.imageUrl else {
-            return nil
-        }
-        if let url = URL(string: imageUrl), url.scheme != nil {
-            return url.absoluteString
-        }
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageUrl).absoluteString
     }
 }
