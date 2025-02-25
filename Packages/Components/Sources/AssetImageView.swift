@@ -41,30 +41,26 @@ public struct AssetImageView: View {
     }
 
     public var body: some View {
-        ZStack {
+        CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
+            $0.resizable()
+                .animation(.default)
+        } placeholder: {
             if let image = assetImage.placeholder {
                 image.resizable()
-                .cornerRadius(cornerRadius)
-            } else {
-                CachedAsyncImage(url: assetImage.imageURL, scale: UIScreen.main.scale) {
-                    $0.resizable()
-                        .animation(.default)
-                } placeholder: {
-                    if let type = assetImage.type {
-                        ZStack {
-                            Text(type)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.3)
-                                .padding(4)
-                        }
-                        .frame(width: imageSize, height: imageSize)
-                        .cornerRadius(cornerRadius)
-                        .background(Colors.grayBackground)
-                    }
+                    .cornerRadius(cornerRadius)
+            } else if let type = assetImage.type {
+                ZStack {
+                    Text(type)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.3)
+                        .padding(4)
                 }
+                .frame(width: imageSize, height: imageSize)
                 .cornerRadius(cornerRadius)
+                .background(Colors.grayBackground)
             }
         }
+        .cornerRadius(cornerRadius)
         .overlay(
             assetImage.chainPlaceholder?
                 .resizable()
