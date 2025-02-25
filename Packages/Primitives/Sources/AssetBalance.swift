@@ -1,13 +1,13 @@
 import Foundation
 import BigInt
 
-public enum AssetBalanceType {
+public enum AssetBalanceType: Sendable {
     case coin(available: BigInt, reserved: BigInt)
     case token(available: BigInt)
     case stake(staked: BigInt, pending: BigInt, rewards: BigInt, reserved: BigInt, locked: BigInt, frozen: BigInt)
 }
 
-public struct AssetBalanceChange {
+public struct AssetBalanceChange: Sendable {
     public let assetId: AssetId
     public let type: AssetBalanceType
     public let isActive: Bool
@@ -23,7 +23,7 @@ public struct AssetBalanceChange {
     }
 }
 
-public struct AssetBalance: Codable {
+public struct AssetBalance: Codable, Sendable {
 	public let assetId: AssetId
 	public let balance: Balance
     public let isActive: Bool
@@ -78,7 +78,7 @@ extension AssetBalance {
     }
 }
 
-public struct WalletAssetBalance: Codable {
+public struct WalletAssetBalance: Codable, Sendable {
     public let walletId: String
     public let balance: AssetBalance
 

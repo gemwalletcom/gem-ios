@@ -26,7 +26,7 @@ public protocol Keystore: ObservableObject {
     func destroy() throws
 }
 
-public enum KeystoreImportType {
+public enum KeystoreImportType: Sendable {
     case phrase(words: [String], chains: [Chain])
     case single(words: [String], chain: Chain)
     case privateKey(text: String, chain: Chain)
