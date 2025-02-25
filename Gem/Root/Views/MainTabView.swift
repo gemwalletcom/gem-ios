@@ -81,29 +81,6 @@ struct MainTabView: View {
                 }
                 .tag(TabItem.collections)
             }
-
-            if model.isSwapEnabled {
-                SwapNavigationStack(
-                    model: SwapViewModel(
-                        wallet: model.wallet,
-                        pairSelectorModel: nil,
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore,
-                        assetService: assetsService
-                    ),
-                    navigationPath: Binding {
-                        navigationState.swap
-                    } set: { new in
-                        navigationState.swap = new
-                    },
-                    onComplete: nil
-                )
-                .tabItem {
-                    tabItem(Localized.Wallet.swap, Images.Tabs.swap)
-                }
-                .tag(TabItem.swap)
-            }
             
             TransactionsNavigationStack(
                 model: .init(

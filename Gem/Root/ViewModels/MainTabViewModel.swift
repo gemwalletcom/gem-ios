@@ -23,11 +23,4 @@ struct MainTabViewModel {
             wallet.accounts.first?.chain.isNFTSupported ?? false
         }
     }
-    
-    var isSwapEnabled: Bool {
-        switch wallet.type {
-        case .multicoin, .single, .privateKey: true
-        case .view: false
-        }
-    }
 }

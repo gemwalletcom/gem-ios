@@ -224,7 +224,7 @@ public struct StateButtonStyle: ButtonStyle {
         ZStack {
             RoundedRectangle(cornerRadius: 12)
                 .fill(backgroundColor(configuration: configuration))
-                .frame(height: StateButtonStyle.maxButtonHeight)
+                .frame(maxHeight: StateButtonStyle.maxButtonHeight)
 
             if state.showProgress {
                 ProgressView()
@@ -235,7 +235,7 @@ public struct StateButtonStyle: ButtonStyle {
                     .foregroundStyle(foregroundStyle(configuration: configuration))
                     .padding(.horizontal, Spacing.medium)
                     .frame(minWidth: 0, maxWidth: .infinity)
-                    .frame(height: StateButtonStyle.maxButtonHeight)
+                    .frame(maxHeight: StateButtonStyle.maxButtonHeight)
             }
         }
         .frame(maxWidth: .infinity)

@@ -45,7 +45,6 @@ class SwapViewModel {
 
     let keystore: any Keystore
     let walletsService: WalletsService
-    let assetService: AssetsService
 
     var wallet: Wallet
 
@@ -71,8 +70,7 @@ class SwapViewModel {
         pairSelectorModel: SwapPairSelectorViewModel?,
         walletsService: WalletsService,
         swapService: SwapService,
-        keystore: any Keystore,
-        assetService: AssetsService
+        keystore: any Keystore
     ) {
         self.preferences = preferences
         self.wallet = wallet
@@ -80,7 +78,6 @@ class SwapViewModel {
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
-        self.assetService = assetService
 
         fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.fromAssetId?.identifier)
         toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.toAssetId?.identifier)
@@ -112,6 +109,13 @@ class SwapViewModel {
         case .loading: .loading
         case .error(let error): .error(error)
         case .noData, .loaded: swapState.availability
+        }
+    }
+    
+    var isVisibleActionButton: Bool {
+        switch swapState.availability {
+        case .noData: false
+        case .loaded, .error, .loading: true
         }
     }
 
@@ -168,7 +172,6 @@ class SwapViewModel {
     func refresh(for wallet: Wallet) {
         self.wallet = wallet
         pairSelectorModel = nil
-        setupSwapPairSelector()
         fromAssetRequest = AssetRequestOptional(
             walletId: wallet.id,
             assetId: pairSelectorModel?.fromAssetId?.identifier
@@ -177,12 +180,6 @@ class SwapViewModel {
             walletId: wallet.id,
             assetId: pairSelectorModel?.toAssetId?.identifier
         )
-    }
-    
-    func setupSwapPairSelector() {
-        guard pairSelectorModel == nil else { return }
-        let asset = try? assetService.getAssets(walletID: wallet.id, filters: [.hasBalance]).first
-        pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset?.asset)
     }
 }
 
@@ -198,8 +195,12 @@ extension SwapViewModel {
         toValue = ""
     }
 
-    func setMaxFromValue(asset: Asset, value: BigInt) {
-        fromValue = formatter.string(value, decimals: asset.decimals.asInt)
+    func setFromValue(asset: AssetData?, percentage: Double) {
+        guard let asset else { return }
+        fromValue = formatter.string(
+            asset.balance.available.multiply(byPercentage: percentage),
+            decimals: asset.asset.decimals.asInt
+        )
     }
 
     func onFetchStateChange(state: SwapFetchState) async {

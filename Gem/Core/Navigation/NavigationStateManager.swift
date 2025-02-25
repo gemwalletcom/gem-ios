@@ -23,7 +23,6 @@ protocol NavigationStateManagable: Observation.Observable, AnyObject {
 final class NavigationStateManager: NavigationStateManagable {
     var wallet = NavigationPath()
     var collections = NavigationPath()
-    var swap = NavigationPath()
     var activity = NavigationPath()
     var settings = NavigationPath()
 
@@ -57,9 +56,6 @@ extension NavigationStateManager {
         case .collections:
             guard !collections.isEmpty else { return }
             collections.removeLast(collections.count)
-        case .swap:
-            guard !swap.isEmpty else { return }
-            swap.removeLast(swap.count)
         case .activity:
             guard !activity.isEmpty else { return }
             activity.removeLast(activity.count)

@@ -28,6 +28,11 @@ public extension BigInt {
         return BigInt(result.rounded())
     }
     
+    func multiply(byPercentage percentage: Double) -> BigInt {
+        let result = Double(self) * percentage
+        return BigInt(result.rounded())
+    }
+    
     var hexString: String {
         return String(self, radix: 16)
     }
