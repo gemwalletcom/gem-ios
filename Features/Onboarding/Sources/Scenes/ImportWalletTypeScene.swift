@@ -23,8 +23,8 @@ struct ImportWalletTypeScene: View {
                     ListItemView(
                         title: Localized.Wallet.multicoin,
                         image: Images.Logo.logo,
-                        imageSize: Sizing.image.medium,
-                        cornerRadius: Sizing.image.medium/2
+                        imageSize: .image.medium,
+                        cornerRadius: .image.medium/2
                     )
                 }
                 .accessibilityIdentifier("multicoin")
@@ -38,8 +38,8 @@ struct ImportWalletTypeScene: View {
                             ListItemView(
                                 title: Asset(chain).name,
                                 image: Images.name(chain.rawValue),
-                                imageSize: Sizing.image.medium,
-                                cornerRadius: Sizing.image.medium/2
+                                imageSize: .image.medium,
+                                cornerRadius: .image.medium/2
                             )
                         }
                     }

@@ -14,8 +14,8 @@ import Localization
 public struct NFTScene: View {
     private var gridItems: [GridItem] {
         [
-            GridItem(spacing: Spacing.medium),
-            GridItem(spacing: Spacing.medium)
+            GridItem(spacing: .medium),
+            GridItem(spacing: .medium)
         ]
     }
     
@@ -47,7 +47,7 @@ public struct NFTScene: View {
                     .textStyle(.body)
             }
         }
-        .padding(.horizontal, Spacing.medium)
+        .padding(.horizontal, .medium)
         .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)

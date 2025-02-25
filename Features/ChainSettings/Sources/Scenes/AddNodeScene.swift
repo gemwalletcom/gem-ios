@@ -36,12 +36,12 @@ public struct AddNodeScene: View {
                 viewState: model.state,
                 action: onSelectImport
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .onAppear {
             focusedField = .address
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
@@ -78,7 +78,7 @@ extension AddNodeScene {
     private var inputView: some View {
         Section {
             FloatTextField(model.inputFieldTitle, text: $model.urlInput) {
-                HStack(spacing: Spacing.medium) {
+                HStack(spacing: .medium) {
                     ListButton(image: Images.System.paste, action: onSelectPaste)
                     ListButton(image: Images.System.qrCode, action: onSelectScan)
                 }
