@@ -8,19 +8,17 @@ import Components
 import Localization
 import Style
 
-public struct CollectionsNavigationStack: View {
+struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.keystore) private var keystore
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
-    @Environment(\.openURL) private var openURL
-    @Environment(\.dismiss) private var dismiss
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     
-    @State private var model: NFTCollectionViewModel
+    @State private var model: CollectionsViewModel
 
     private var navigationPath: Binding<NavigationPath> {
         Binding(
@@ -29,16 +27,16 @@ public struct CollectionsNavigationStack: View {
         )
     }
 
-    init(model: NFTCollectionViewModel) {
+    init(model: CollectionsViewModel) {
         _model = State(initialValue: model)
     }
     
     public var body: some View   {
         NavigationStack(path: navigationPath) {
-            NFTScene(model: model)
-                .navigationDestination(for: Scenes.NFTCollectionScene.self) {
-                    NFTScene(
-                        model: NFTCollectionViewModel(
+            CollectionsScene(model: model)
+                .navigationDestination(for: Scenes.CollectionsScene.self) {
+                    CollectionsScene(
+                        model: CollectionsViewModel(
                             wallet: model.wallet,
                             sceneStep: $0.sceneStep,
                             nftService: nftService,
@@ -46,20 +44,20 @@ public struct CollectionsNavigationStack: View {
                         )
                     )
                 }
-                .navigationDestination(for: Scenes.NFTDetails.self) { assetData in
+                .navigationDestination(for: Scenes.Collectible.self) {
                     CollectibleNavigationView(
                         model: CollectibleNavigationViewModel(
                             wallet: model.wallet,
-                            assetData: assetData.assetData
+                            assetData: $0.assetData
                         )
                     )
                 }
-                .sheet(item: $isPresentingReceiveSelectAssetType) { value in
+                .sheet(item: $isPresentingReceiveSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
                             keystore: keystore,
-                            selectType: value,
+                            selectType: $0,
                             assetsService: walletsService.assetsService,
                             walletsService: walletsService
                         ),
