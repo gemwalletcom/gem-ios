@@ -18,7 +18,7 @@ struct CollectionsNavigationStack: View {
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     
-    @State private var model: NFTCollectionViewModel
+    @State private var model: CollectionsViewModel
 
     private var navigationPath: Binding<NavigationPath> {
         Binding(
@@ -27,16 +27,16 @@ struct CollectionsNavigationStack: View {
         )
     }
 
-    init(model: NFTCollectionViewModel) {
+    init(model: CollectionsViewModel) {
         _model = State(initialValue: model)
     }
     
     public var body: some View   {
         NavigationStack(path: navigationPath) {
-            NFTScene(model: model)
-                .navigationDestination(for: Scenes.NFTCollectionScene.self) {
-                    NFTScene(
-                        model: NFTCollectionViewModel(
+            CollectionsScene(model: model)
+                .navigationDestination(for: Scenes.CollectionsScene.self) {
+                    CollectionsScene(
+                        model: CollectionsViewModel(
                             wallet: model.wallet,
                             sceneStep: $0.sceneStep,
                             nftService: nftService,
@@ -44,7 +44,7 @@ struct CollectionsNavigationStack: View {
                         )
                     )
                 }
-                .navigationDestination(for: Scenes.NFTDetails.self) {
+                .navigationDestination(for: Scenes.Collectible.self) {
                     CollectibleNavigationView(
                         model: CollectibleNavigationViewModel(
                             wallet: model.wallet,

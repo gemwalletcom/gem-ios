@@ -11,13 +11,13 @@ import DeviceService
 import Style
 import Localization
 
-public struct NFTScene: View {
-    private let model: NFTCollectionViewModel
+public struct CollectionsScene: View {
+    private let model: CollectionsViewModel
 
     @Query<NFTRequest>
     private var nftDataList: [NFTData]
     
-    public init(model: NFTCollectionViewModel) {
+    public init(model: CollectionsViewModel) {
         self.model = model
         let request = Binding {
             model.request
@@ -30,7 +30,7 @@ public struct NFTScene: View {
     public var body: some View {
         ScrollView {
             LazyVGrid(columns: model.columns) {
-                nftCollectionView
+                collectionsView
             }
         }
         .overlay {
@@ -53,8 +53,8 @@ public struct NFTScene: View {
 
 // MARK: - UI
 
-extension NFTScene {
-    private var nftCollectionView: some View {
+extension CollectionsScene {
+    private var collectionsView: some View {
         ForEach(model.createGridItems(from: nftDataList)) { gridItem in
             NavigationLink(value: gridItem.destination) {
                 GridPosterView(

@@ -9,7 +9,7 @@ import PrimitivesComponents
 import Localization
 import ImageGalleryService
 
-public struct NFTDetailsScene: View {
+public struct CollectibleScene: View {
     @Environment(\.openURL) private var openURL
 
     @State private var isPresentingPhotoPermissionMessage: Bool = false
@@ -18,10 +18,10 @@ public struct NFTDetailsScene: View {
     @State private var isPresentingSetAsAvatarToast = false
     @Binding private var isPresentingCollectibleOptions: Bool
     
-    let model: NFTDetailsViewModel
+    let model: CollectibleViewModel
     
     public init(
-        model: NFTDetailsViewModel,
+        model: CollectibleViewModel,
         isPresentingCollectibleOptions: Binding<Bool>
     ) {
         self.model = model
@@ -77,7 +77,7 @@ public struct NFTDetailsScene: View {
 
 // MARK: - UI
 
-extension NFTDetailsScene {
+extension CollectibleScene {
     private var headerSectionView: some View {
         Section {
             NftImageView(assetImage: model.assetImage)
@@ -142,7 +142,7 @@ extension NFTDetailsScene {
 
 // MARK: - Actions
 
-extension NFTDetailsScene {
+extension CollectibleScene {
     private func onSelectSaveToGallery() {
         Task {
             do {

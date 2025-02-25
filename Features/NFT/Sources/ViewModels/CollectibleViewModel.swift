@@ -10,7 +10,7 @@ import ImageGalleryService
 import Photos
 import AvatarService
 
-public struct NFTDetailsViewModel: Sendable {
+public struct CollectibleViewModel: Sendable {
     private let wallet: Wallet
     private let assetData: NFTAssetData
     private let headerButtonAction: HeaderButtonAction?

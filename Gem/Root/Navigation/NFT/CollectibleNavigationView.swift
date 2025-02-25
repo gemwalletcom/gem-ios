@@ -23,8 +23,8 @@ struct CollectibleNavigationView: View {
     }
     
     var body: some View {
-        NFTDetailsScene(
-            model: NFTDetailsViewModel(
+        CollectibleScene(
+            model: CollectibleViewModel(
                 wallet: model.wallet,
                 assetData: model.assetData,
                 avatarService: avatarService,

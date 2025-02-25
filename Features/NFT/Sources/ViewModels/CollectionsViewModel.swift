@@ -13,18 +13,18 @@ import AvatarService
 
 @Observable
 @MainActor
-public final class NFTCollectionViewModel: Sendable {
+public final class CollectionsViewModel: Sendable {
     private let nftService: NFTService
     private let deviceService: any DeviceServiceable
 
-    let sceneStep: Scenes.NFTCollectionScene.SceneStep
+    let sceneStep: Scenes.CollectionsScene.SceneStep
     var request: NFTRequest
 
     public private(set) var wallet: Wallet
 
     public init(
         wallet: Wallet,
-        sceneStep: Scenes.NFTCollectionScene.SceneStep,
+        sceneStep: Scenes.CollectionsScene.SceneStep,
         nftService: NFTService,
         deviceService: any DeviceServiceable
     ) {
@@ -87,7 +87,7 @@ public final class NFTCollectionViewModel: Sendable {
     private func buildCollectionGridItem(from data: NFTData) -> GridPosterViewItem {
         GridPosterViewItem(
             id: data.id,
-            destination: Scenes.NFTCollectionScene(sceneStep: .collection(data)),
+            destination: Scenes.CollectionsScene(sceneStep: .collection(data)),
             assetImage: AssetImage.assetImage(type: data.collection.name, imageURL: data.collection.image.imageUrl.asURL),
             title: data.collection.name
         )
@@ -96,7 +96,7 @@ public final class NFTCollectionViewModel: Sendable {
     private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridPosterViewItem {
         GridPosterViewItem(
             id: asset.id,
-            destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)),
+            destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
             assetImage: AssetImage.assetImage(type: collection.name, imageURL: asset.image.imageUrl.asURL),
             title: asset.name
         )
@@ -113,7 +113,7 @@ public final class NFTCollectionViewModel: Sendable {
 
     private static func createNftRequest(
         for wallet: Wallet,
-        sceneStep: Scenes.NFTCollectionScene.SceneStep
+        sceneStep: Scenes.CollectionsScene.SceneStep
     ) -> NFTRequest {
         switch sceneStep {
         case .collections:
