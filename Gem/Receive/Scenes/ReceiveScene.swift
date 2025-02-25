@@ -63,7 +63,9 @@ struct ReceiveScene: View {
             await generateQRCode()
         }
         .taskOnce {
-            model.enableAsset()
+            Task {
+                await model.enableAsset()
+            }
         }
     }
 }

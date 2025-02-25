@@ -133,13 +133,6 @@ extension TransactionService {
     )
 }
 
-extension DiscoverAssetsService {
-    static let main = DiscoverAssetsService(
-        balanceService: .main,
-        chainServiceFactory: .main
-    )
-}
-
 extension NodeService {
     static let main = NodeService(nodeStore: .main)
 }
@@ -150,7 +143,7 @@ extension WalletsService {
         assetsService: .main,
         balanceService: .main,
         priceService: .main,
-        discoverAssetService: .main,
+        chainService: .main,
         transactionService: .main,
         bannerSetupService: .main,
         addressStatusService: .main
