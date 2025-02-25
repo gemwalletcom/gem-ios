@@ -36,6 +36,9 @@ public struct WalletImageScene: View {
             avatar
                 .padding(.top, Spacing.medium)
                 .padding(.bottom, Spacing.extraLarge)
+                .onTapGesture {
+                    model.setDefaultAvatar()
+                }
             
             pickerView
                 .padding(.bottom, Spacing.medium)
@@ -45,15 +48,6 @@ public struct WalletImageScene: View {
         }
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(Localized.Filter.clear) {
-                    model.setDefaultAvatar()
-                }
-                .bold()
-                .disabled(dbWallet?.imageUrl == nil)
-            }
-        }
     }
     
     private var avatar: some View {
