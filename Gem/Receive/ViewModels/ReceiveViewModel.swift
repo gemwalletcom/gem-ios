@@ -32,6 +32,6 @@ struct ReceiveViewModel {
     }
 
     func enableAsset() async {
-        await walletsService.enableAssetId(walletId: walletId, assets: [assetModel.asset.id], enabled: true)
+        await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
     }
 }

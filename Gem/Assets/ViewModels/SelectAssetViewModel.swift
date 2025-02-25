@@ -142,7 +142,7 @@ extension SelectAssetViewModel {
     }
 
     func enableAsset(assetId: AssetId, enabled: Bool) async {
-        await walletsService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
+        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
     }
 }
 
