@@ -14,6 +14,7 @@ import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
 import InfoSheet
+import Gemstone
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -21,6 +22,7 @@ struct SwapScene: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.keystore) private var keystore
 
     enum Field: Int, Hashable {
         case from, to
@@ -36,16 +38,34 @@ struct SwapScene: View {
     @State private var model: SwapViewModel
     
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
+    private let onTransferAction: TransferDataAction
 
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
 
     init(
-        model: SwapViewModel
+        model: SwapViewModel,
+        isPresentingAssetSwapType: Binding<SelectAssetSwapType?>,
+        onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
-        _fromAsset = Query(model.fromAssetRequest)
-        _toAsset = Query(model.toAssetRequest)
+        _isPresentingAssetSwapType = isPresentingAssetSwapType
+        self.onTransferAction = onTransferAction
+        
+        let fromAssetRequest = Binding {
+            model.fromAssetRequest
+        } set: { new in
+            model.fromAssetRequest = new
+        }
+        _fromAsset = Query(fromAssetRequest)
+
+        let toAssetRequest = Binding {
+            model.toAssetRequest
+        } set: { new in
+            model.toAssetRequest = new
+        }
+        _toAsset = Query(toAssetRequest)
     }
 
     var body: some View {
@@ -65,8 +85,9 @@ struct SwapScene: View {
             .padding(.bottom, Spacing.scene.bottom)
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
-        .navigationTitle(model.title)
         .background(Colors.grayBackground)
+        .navigationTitle(model.title)
+        .navigationBarTitleDisplayMode(.inline)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,
@@ -78,19 +99,22 @@ struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
+        .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
-        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
+        .onChange(of: model.selectedProvider, onChangeProvider)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
         .onAppear {
+            model.setupSwapPairSelector()
             if model.toValue.isEmpty {
                 focusedField = .from
             }
@@ -152,11 +176,21 @@ extension SwapScene {
             
             Section {
                 if let provider = model.providerText {
-                    ListItemImageView(
-                        title: model.providerField,
-                        subtitle: provider,
-                        assetImage: model.providerImage
-                    )
+                    if model.allowSelectProvider, let toAsset {
+                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
+                            ListItemImageView(
+                                title: model.providerField,
+                                subtitle: provider,
+                                assetImage: model.providerImage
+                            )
+                        }
+                    } else  {
+                        ListItemImageView(
+                            title: model.providerField,
+                            subtitle: provider,
+                            assetImage: model.providerImage
+                        )
+                    }
                 }
 
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
@@ -186,14 +220,13 @@ extension SwapScene {
     }
 
     private func onSelectAssetPayAction() {
-        model.onSelectAssetAction(type: .pay)
+        isPresentingAssetSwapType = .pay
     }
 
     private func onSelectAssetReceiveAction() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = model.getAssetsForPayAssetId(assetId: fromAsset.asset.id)
-        
-        model.onSelectAssetAction(type: .receive(chains: chains, assetIds: assetIds))
+        isPresentingAssetSwapType = .receive(chains: chains, assetIds: assetIds)
     }
 
     private func onSelectActionButton() {
@@ -210,13 +243,25 @@ extension SwapScene {
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
+        model.resetSelectedQuote()
         focusedField = .from
         fetch()
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
+        model.resetSelectedQuote()
         fetch()
+    }
+    
+    private func onChangeWallet(_ _: Wallet?, wallet: Wallet?) {
+        guard let wallet else { return }
+        model.refresh(for: wallet)
+    }
+    
+    private func onChangeProvider(_: SwapProvider?, provider: SwapProvider?) {
+        guard let provider, let toAsset else { return }
+        model.updateToValue(for: provider, asset: toAsset.asset)
     }
 }
 
@@ -234,8 +279,14 @@ extension SwapScene {
 
     func swap() {
         Task {
-            guard let fromAsset, let toAsset else { return }
-            await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            guard
+                let fromAsset,
+                let toAsset,
+                let swapData = await model.swapData(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            else {
+                return
+            }
+            onTransferAction?(swapData)
         }
     }
 }

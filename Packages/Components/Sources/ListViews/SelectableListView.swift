@@ -36,7 +36,7 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
                     )
                 } else {
                     NavigationCustomLink(with: listContent(item)) {
-                        onSelect(item: item)
+                        onFinishSelection?([item])
                     }
                 }
             }

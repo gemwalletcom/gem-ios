@@ -58,5 +58,20 @@ extension FiatQuoteViewModel: SimpleListItemViewable {
         Images.name(quote.provider.name.lowercased().replacing(" ", with: "_"))
     }
 
-    public var subtitle: String? { amountText }
+    public var subtitle: String? { amount }
+    
+    public var subtitleExtra: String? {
+        switch quote.type {
+        case .buy: asset.symbol
+        case .sell: "$"
+        }
+    }
+}
+
+// MARK: - Hashable
+
+extension FiatQuoteViewModel: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }

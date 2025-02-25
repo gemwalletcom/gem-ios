@@ -4,9 +4,9 @@ import Primitives
 import struct Gemstone.SwapQuote
 
 public struct SwapAvailabilityResult: Sendable {
-    public let quote: SwapQuote
+    public let quotes: [SwapQuote]
     
-    public init(quote: SwapQuote) {
-        self.quote = quote
+    public init(quotes: [SwapQuote]) {
+        self.quotes = quotes
     }
 }
