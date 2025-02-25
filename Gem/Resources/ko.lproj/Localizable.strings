@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "아바타로 설정";
+"errors.connections.invalid_send_parameters" = "거래를 보내기 위한 매개변수가 잘못되었습니다.";
+"errors.connections.invalid_sign_parameters" = "서명에 잘못된 매개변수가 제공되었습니다.";
+"errors.connections.no_supported_wallets" = "지원되는 지갑이 없습니다.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "요청하신 방법은 지원되지 않습니다.";

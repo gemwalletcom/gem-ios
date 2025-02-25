@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "設為頭像";
+"errors.connections.invalid_send_parameters" = "發送交易時提供的參數無效。";
+"errors.connections.invalid_sign_parameters" = "提供的簽名參數無效。";
+"errors.connections.no_supported_wallets" = "沒有可用的受支援的錢包。";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "不支援請求的方法。";
