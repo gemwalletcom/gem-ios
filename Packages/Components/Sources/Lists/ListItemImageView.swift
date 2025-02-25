@@ -14,7 +14,7 @@ public struct ListItemImageView: View {
         title: String,
         subtitle: String,
         assetImage: AssetImage?,
-        imageSize: CGFloat = Sizing.list.image
+        imageSize: CGFloat = .list.image
     ) {
         self.title = title
         self.subtitle = subtitle

@@ -14,7 +14,7 @@ public protocol SimpleListItemViewable {
 }
 
 public extension SimpleListItemViewable {
-    var imageSize: CGFloat { Sizing.image.medium }
+    var imageSize: CGFloat { .image.medium }
     var cornerRadius: CGFloat { imageSize / 2 }
     var subtitle: String? { .none }
 }

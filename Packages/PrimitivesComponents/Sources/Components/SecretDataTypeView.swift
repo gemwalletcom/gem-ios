@@ -14,10 +14,10 @@ public struct SecretDataTypeView: View {
         switch type {
         case .words(let rows):
             SecretPhraseGridView(rows: rows)
-                .padding(.top, Spacing.scene.top)
+                .padding(.top, .scene.top)
         case .privateKey(let key):
             Text(key)
-                .padding(.top, Spacing.scene.top)
+                .padding(.top, .scene.top)
         }
     }
 }

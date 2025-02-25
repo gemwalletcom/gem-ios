@@ -27,7 +27,7 @@ public struct WalletHeaderView: View {
     }
 
     public var body: some View {
-        VStack(spacing: Spacing.large/2) {
+        VStack(spacing: .large/2) {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
@@ -78,13 +78,13 @@ public struct WalletHeaderView: View {
                     }
                     .padding()
                     .background(Colors.grayDarkBackground)
-                    .cornerRadius(Spacing.medium)
-                    .padding(.top, Spacing.medium)
+                    .cornerRadius(.medium)
+                    .padding(.top, .medium)
                 }
 
             case false:
                 HeaderButtonsView(buttons: model.buttons, action: onHeaderAction)
-                    .padding(.top, Spacing.small)
+                    .padding(.top, .small)
             }
         }
     }

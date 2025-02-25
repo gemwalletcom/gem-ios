@@ -95,8 +95,8 @@ public struct SystemImage {
                 Image(systemName: symbol.0)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: Sizing.list.image, height: Sizing.list.image)
-                    .padding(Spacing.extraSmall)
+                    .frame(width: .list.image, height: .list.image)
+                    .padding(.extraSmall)
             }
         }
     }

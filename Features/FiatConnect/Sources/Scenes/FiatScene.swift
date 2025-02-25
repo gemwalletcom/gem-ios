@@ -29,7 +29,7 @@ public struct FiatScene: View {
                     text: $model.amountText,
                     config: model.currencyInputConfig
                 )
-                .padding(.top, Spacing.medium)
+                .padding(.top, .medium)
                 .listGroupRowStyle()
                 .focused($focusedField, equals: .amount)
 
@@ -44,9 +44,9 @@ public struct FiatScene: View {
                 showProgressIndicator: false,
                 action: onSelectContinue
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .if(!model.showFiatTypePicker(assetData)) {
@@ -93,7 +93,7 @@ extension FiatScene {
                 title: model.assetTitle,
                 balance: model.assetBalance(assetData: assetData),
                 secondary: {
-                    HStack(spacing: Spacing.small + Spacing.extraSmall) {
+                    HStack(spacing: .small + .extraSmall) {
                         ForEach(model.suggestedAmounts, id: \.self) { amount in
                             Button(model.buttonTitle(amount: amount)) {
                                 onSelect(amount: amount)
