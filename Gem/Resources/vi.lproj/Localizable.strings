@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "Đặt làm Avatar";
+"errors.connections.invalid_send_parameters" = "Tham số được cung cấp để gửi giao dịch không hợp lệ.";
+"errors.connections.invalid_sign_parameters" = "Các tham số được cung cấp để ký không hợp lệ.";
+"errors.connections.no_supported_wallets" = "Không có ví nào được hỗ trợ.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "Phương pháp yêu cầu không được hỗ trợ.";
