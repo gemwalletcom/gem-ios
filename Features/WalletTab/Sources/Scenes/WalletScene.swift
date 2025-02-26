@@ -67,7 +67,7 @@ public struct WalletScene: View {
                     onHeaderAction: onHeaderAction,
                     onInfoAction: onSelectWalletHeaderInfo
                 )
-                .padding(.top, Spacing.small)
+                .padding(.top, .small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -126,7 +126,7 @@ public struct WalletScene: View {
                     }
                 )
                 .accessibilityIdentifier("manage")
-                .padding(Spacing.medium)
+                .padding(.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }

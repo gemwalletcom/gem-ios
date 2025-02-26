@@ -11,9 +11,9 @@ public struct AssetImage: Sendable {
 
     public init(
         type: String? = .none, 
-        imageURL: URL?,
-        placeholder: Image?,
-        chainPlaceholder: Image?
+        imageURL: URL? = .none,
+        placeholder: Image? = .none,
+        chainPlaceholder: Image? = .none
     ) {
         self.type = type
         self.imageURL = imageURL

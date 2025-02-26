@@ -36,14 +36,14 @@ public struct StateEmptyView: View {
     }
 
      public var body: some View {
-         VStack(spacing: Spacing.medium) {
+         VStack(spacing: .medium) {
              image?
                  .resizable()
                  .aspectRatio(contentMode: .fit)
-                 .frame(width: Sizing.image.medium, height: Sizing.image.medium, alignment: .center)
+                 .frame(width: .image.medium, height: .image.medium, alignment: .center)
                  .foregroundStyle(Colors.gray)
 
-             VStack(spacing: description == nil ? 0 : Spacing.tiny) {
+             VStack(spacing: description == nil ? 0 : .tiny) {
                  HStack(spacing: 0.0) {
                      Text(title.text)
                          .textStyle(title.style)

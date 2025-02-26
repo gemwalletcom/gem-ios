@@ -56,12 +56,12 @@ public struct FloatTextField<TrailingView: View>: View {
             HStack {
                 textField
                 if shouldShowSpacer {
-                    Spacer(minLength: Spacing.small)
+                    Spacer(minLength: .small)
                 }
                 trailingContent
             }
         }
-        .padding(.vertical, Spacing.small)
+        .padding(.vertical, .small)
         .onAppear {
             UITextField.appearance().clearButtonMode = .never
         }
@@ -92,13 +92,13 @@ extension FloatTextField {
                 )
             )
             .scaleEffect(text.isEmpty ? 1 : style.placeholderScale, anchor: .leading)
-            .offset(y: text.isEmpty ? .zero : -Spacing.small - Spacing.extraSmall)
+            .offset(y: text.isEmpty ? .zero : -.small - .extraSmall)
             .animation(.smooth(duration: 0.15), value: text.isEmpty)
     }
 
     private var textField: some View {
         TextField("", text: $text)
-            .offset(y: text.isEmpty ? .zero : Spacing.small + Spacing.extraSmall)
+            .offset(y: text.isEmpty ? .zero : .small + .extraSmall)
             .animation(.smooth(duration: 0.15), value: text.isEmpty)
     }
 
@@ -121,7 +121,7 @@ extension FloatTextField {
 
 #Preview {
     ScrollView {
-        VStack(spacing: Spacing.medium) {
+        VStack(spacing: .medium) {
             FloatTextField(
                 "Enter your text",
                 text: .constant("")

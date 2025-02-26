@@ -23,7 +23,6 @@ let package = Package(
         .package(name: "TransactionService", path: "../TransactionService"),
         .package(name: "DiscoverAssetsService", path: "../DiscoverAssetsService"),
         .package(name: "ChainService", path: "../ChainService"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
     ],
     targets: [
         .target(
@@ -38,8 +37,7 @@ let package = Package(
                 "AssetsService",
                 "TransactionService",
                 "DiscoverAssetsService",
-                "ChainService",
-                "GemstonePrimitives"
+                "ChainService"
             ],
             path: "Sources"
         ),

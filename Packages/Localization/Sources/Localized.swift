@@ -302,6 +302,16 @@ public enum Localized {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
     }
     public enum Connections {
+      /// Invalid parameters provided for sending a transaction.
+      public static let invalidSendParameters = Localized.tr("Localizable", "errors.connections.invalid_send_parameters", fallback: "Invalid parameters provided for sending a transaction.")
+      /// Invalid parameters provided for signing.
+      public static let invalidSignParameters = Localized.tr("Localizable", "errors.connections.invalid_sign_parameters", fallback: "Invalid parameters provided for signing.")
+      /// No supported wallets are available.
+      public static let noSupportedWallets = Localized.tr("Localizable", "errors.connections.no_supported_wallets", fallback: "No supported wallets are available.")
+      /// The provided chain is not supported.
+      public static let unsupportedChain = Localized.tr("Localizable", "errors.connections.unsupported_chain", fallback: "The provided chain is not supported.")
+      /// The requested method is not supported.
+      public static let unsupportedMethod = Localized.tr("Localizable", "errors.connections.unsupported_method", fallback: "The requested method is not supported.")
       /// User cancelled
       public static let userCancelled = Localized.tr("Localizable", "errors.connections.user_cancelled", fallback: "User cancelled")
     }

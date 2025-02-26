@@ -14,7 +14,7 @@ public struct CalloutView: View {
     public let backgroundColor: Color
 
     public var body: some View {
-        VStack(alignment: .center, spacing: Spacing.medium) {
+        VStack(alignment: .center, spacing: .medium) {
             if let title = title {
                 Text(title)
                     .font(titleStyle.font)
@@ -30,7 +30,7 @@ public struct CalloutView: View {
         }
         .padding()
         .background(backgroundColor)
-        .cornerRadius(Spacing.small)
+        .cornerRadius(.small)
     }
 }
 

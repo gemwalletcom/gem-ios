@@ -22,7 +22,7 @@ public struct PrivacyToggleView: View {
         if isEnabled {
             Button(action: onTogglePrivacy) {
                 Text(placeholder)
-                    .offset(y: Spacing.small)
+                    .offset(y: .small)
             }
             .padding(.horizontal)
             .background(

@@ -20,7 +20,7 @@ public struct GridPosterView: View {
     public var body: some View {
         VStack(alignment: .leading) {
             NftImageView(assetImage: assetImage)
-                .cornerRadius(Spacing.medium)
+                .cornerRadius(.medium)
                 .aspectRatio(1, contentMode: .fit)
             
             if let title {            

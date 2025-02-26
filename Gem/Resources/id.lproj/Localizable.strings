@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "Tetapkan sebagai Avatar";
+"errors.connections.invalid_send_parameters" = "Parameter yang diberikan untuk mengirim transaksi tidak valid.";
+"errors.connections.invalid_sign_parameters" = "Parameter yang diberikan untuk penandatanganan tidak valid.";
+"errors.connections.no_supported_wallets" = "Tidak ada dompet yang didukung tersedia.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "Metode yang diminta tidak didukung.";

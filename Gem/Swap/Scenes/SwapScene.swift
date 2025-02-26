@@ -82,8 +82,8 @@ struct SwapScene: View {
                     )
                 }
             }
-            .padding(.bottom, Spacing.scene.bottom)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
@@ -147,7 +147,7 @@ extension SwapScene {
                 Text(model.swapFromTitle)
             } footer: {
                 SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
-                    .offset(y: Spacing.small + Spacing.tiny)
+                    .offset(y: .small + .tiny)
                     .frame(maxWidth: .infinity)
                     .disabled(model.isSwitchAssetButtonDisabled)
                     .textCase(nil)

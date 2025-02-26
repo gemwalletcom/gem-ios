@@ -53,12 +53,12 @@ public struct Colors {
                 
                 RoundedRectangle(cornerRadius: 4)
                     .fill(color.color)
-                    .padding(Spacing.extraSmall)
+                    .padding(.extraSmall)
                     .colorScheme(.light)
                 
                 RoundedRectangle(cornerRadius: 4)
                     .fill(color.color)
-                    .padding(Spacing.extraSmall)
+                    .padding(.extraSmall)
                     .colorScheme(.dark)
             }
             .listRowInsets(EdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0))
