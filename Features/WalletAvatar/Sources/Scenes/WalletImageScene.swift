@@ -16,6 +16,7 @@ public struct WalletImageScene: View {
     }
     
     @State private var selectedTab: Tab = .emoji
+
     @State private var model: WalletImageViewModel
     
     @Query<WalletRequest>
@@ -33,11 +34,7 @@ public struct WalletImageScene: View {
     public var body: some View {
         VStack {
             if let dbWallet {
-                AssetImageView(
-                    assetImage: WalletViewModel(wallet: dbWallet).avatarImage,
-                    size: model.emojiViewSize,
-                    overlayImageSize: .image.medium
-                )
+                AvatarView(model: WalletViewModel(wallet: dbWallet), size: model.emojiViewSize)
                     .padding(.top, .medium)
                     .padding(.bottom, .extraLarge)
                     .onTapGesture {
