@@ -13,25 +13,18 @@ import AvatarService
 
 @Observable
 @MainActor
-public final class NFTCollectionViewModel: Sendable {
-    struct GridItem: Identifiable {
-        let id: String
-        let destination: any Hashable
-        let assetImage: AssetImage
-        let title: String
-    }
-
-    private let sceneStep: Scenes.NFTCollectionScene.SceneStep
+public final class CollectionsViewModel: Sendable {
     private let nftService: NFTService
     private let deviceService: any DeviceServiceable
 
+    let sceneStep: Scenes.CollectionsScene.SceneStep
     var request: NFTRequest
 
-    public var wallet: Wallet
+    public private(set) var wallet: Wallet
 
     public init(
         wallet: Wallet,
-        sceneStep: Scenes.NFTCollectionScene.SceneStep,
+        sceneStep: Scenes.CollectionsScene.SceneStep,
         nftService: NFTService,
         deviceService: any DeviceServiceable
     ) {
@@ -39,8 +32,11 @@ public final class NFTCollectionViewModel: Sendable {
         self.sceneStep = sceneStep
         self.nftService = nftService
         self.deviceService = deviceService
-        self.request = Self.createNftReqeust(for: wallet, sceneStep: sceneStep)
+        self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+        self.columns = Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
     }
+    
+    let columns: [GridItem]
 
     var title: String {
         switch sceneStep {
@@ -51,7 +47,14 @@ public final class NFTCollectionViewModel: Sendable {
 
     // MARK: - Public methods
 
-    public func fetch() async {
+    public func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+    }
+
+    // MARK: - Internal methods
+    
+    func fetch() async {
         switch sceneStep {
         case .collections:
             await updateCollection()
@@ -59,24 +62,8 @@ public final class NFTCollectionViewModel: Sendable {
             break
         }
     }
-
-    public func refresh(for wallet: Wallet) {
-        self.wallet = wallet
-        self.request = Self.createNftReqeust(for: wallet, sceneStep: sceneStep)
-    }
-
-    // MARK: - Internal methods
     
-    func updateCollection() async {
-        do {
-            let deviceId = try await deviceService.getDeviceId()
-            try await nftService.updateAssets(deviceId: deviceId, wallet: wallet)
-        } catch {
-            NSLog("updateCollection error \(error)")
-        }
-    }
-    
-    func createGridItems(from list: [NFTData]) -> [GridItem] {
+    func createGridItems(from list: [NFTData]) -> [GridPosterViewItem] {
         switch sceneStep {
         case .collections:
             list.map { buildCollectionsGridItem(from: $0) }
@@ -89,7 +76,7 @@ public final class NFTCollectionViewModel: Sendable {
     
     // MARK: - Private methods
     
-    private func buildCollectionsGridItem(from data: NFTData) -> GridItem {
+    private func buildCollectionsGridItem(from data: NFTData) -> GridPosterViewItem {
         if data.assets.count == 1, let asset = data.assets.first {
             buildAssetDetailsGridItem(collection: data.collection, asset: asset)
         } else {
@@ -97,37 +84,36 @@ public final class NFTCollectionViewModel: Sendable {
         }
     }
     
-    private func buildCollectionGridItem(from data: NFTData) -> GridItem {
-        GridItem(
+    private func buildCollectionGridItem(from data: NFTData) -> GridPosterViewItem {
+        GridPosterViewItem(
             id: data.id,
-            destination: Scenes.NFTCollectionScene(sceneStep: .collection(data)),
-            assetImage: AssetImage(
-                type: data.collection.name,
-                imageURL: data.collection.image.imageUrl.asURL,
-                placeholder: nil,
-                chainPlaceholder: nil
-            ),
+            destination: Scenes.CollectionsScene(sceneStep: .collection(data)),
+            assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.image.imageUrl.asURL),
             title: data.collection.name
         )
     }
     
-    private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridItem {
-        GridItem(
+    private func buildAssetDetailsGridItem(collection: NFTCollection, asset: NFTAsset) -> GridPosterViewItem {
+        GridPosterViewItem(
             id: asset.id,
-            destination: Scenes.NFTDetails(assetData: NFTAssetData(collection: collection, asset: asset)),
-            assetImage: AssetImage(
-                type: collection.name,
-                imageURL: asset.image.imageUrl.asURL,
-                placeholder: nil,
-                chainPlaceholder: nil
-            ),
+            destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
+            assetImage: AssetImage(type: collection.name, imageURL: asset.image.imageUrl.asURL),
             title: asset.name
         )
     }
+    
+    private func updateCollection() async {
+        do {
+            let deviceId = try await deviceService.getDeviceId()
+            try await nftService.updateAssets(deviceId: deviceId, wallet: wallet)
+        } catch {
+            NSLog("updateCollection error \(error)")
+        }
+    }
 
-    private static func createNftReqeust(
+    private static func createNftRequest(
         for wallet: Wallet,
-        sceneStep: Scenes.NFTCollectionScene.SceneStep
+        sceneStep: Scenes.CollectionsScene.SceneStep
     ) -> NFTRequest {
         switch sceneStep {
         case .collections:
