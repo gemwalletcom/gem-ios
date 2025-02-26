@@ -88,7 +88,7 @@ public final class CollectionsViewModel: Sendable {
         GridPosterViewItem(
             id: data.id,
             destination: Scenes.CollectionsScene(sceneStep: .collection(data)),
-            assetImage: AssetImage.assetImage(type: data.collection.name, imageURL: data.collection.image.imageUrl.asURL),
+            assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.image.imageUrl.asURL),
             title: data.collection.name
         )
     }
@@ -97,7 +97,7 @@ public final class CollectionsViewModel: Sendable {
         GridPosterViewItem(
             id: asset.id,
             destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
-            assetImage: AssetImage.assetImage(type: collection.name, imageURL: asset.image.imageUrl.asURL),
+            assetImage: AssetImage(type: collection.name, imageURL: asset.image.imageUrl.asURL),
             title: asset.name
         )
     }
@@ -127,16 +127,5 @@ public final class CollectionsViewModel: Sendable {
                 collectionId: data.collection.id
             )
         }
-    }
-}
-
-fileprivate extension AssetImage {
-    static func assetImage(type: String, imageURL: URL?) -> AssetImage {
-        AssetImage(
-            type: type,
-            imageURL: imageURL,
-            placeholder: nil,
-            chainPlaceholder: nil
-        )
     }
 }

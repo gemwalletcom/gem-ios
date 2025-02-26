@@ -95,10 +95,9 @@ extension CollectibleScene {
         .contextMenu {
             ContextMenuItem(
                 title: Localized.Nft.saveToPhotos,
-                image: SystemImage.gallery
-            ) {
-                onSelectSetAsAvatar()
-            }
+                image: SystemImage.gallery,
+                action: onSelectSetAsAvatar
+            )
         }
     }
     
