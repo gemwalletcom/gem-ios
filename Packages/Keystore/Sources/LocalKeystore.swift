@@ -147,10 +147,6 @@ public final class LocalKeystore: Keystore {
             }
         }
     }
-
-    public func renameWallet(wallet: Primitives.Wallet, newName: String) throws {
-        return try walletStore.renameWallet(wallet.id, name: newName)
-    }
     
     public func deleteWallet(for wallet: Primitives.Wallet) throws {
         switch wallet.type {
