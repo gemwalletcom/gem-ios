@@ -40,10 +40,10 @@ public struct AvatarService: Sendable {
     // MARK: - Private methods
     
     private func write(data: Data, for walletId: String) throws {
+        try removeIfExist(for: walletId)
+
         let avatarPath = avatarPath(for: walletId)
         let fullPath = documentDirectory.appending(path: avatarPath.path())
-        try removeIfExist(for: walletId)
-        
         try createDirectory(for: fullPath.deletingLastPathComponent())
         try data.write(to: fullPath, options: .atomic)
         try store.setWalletAvatar(walletId, path: avatarPath.path())
