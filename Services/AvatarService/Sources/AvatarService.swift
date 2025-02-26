@@ -67,11 +67,11 @@ public struct AvatarService: Sendable {
     
     private func removeIfExist(for walletId: String) throws {
         guard
-            let imageUrl = try store.getWallet(id: walletId)?.imageUrl,
-            FileManager.default.fileExists(atPath: documentDirectory.appending(path: imageUrl).path())
+            let imagePath = try store.getWallet(id: walletId)?.imageUrl,
+            fileManager.fileExists(atPath: documentDirectory.appending(path: imagePath).path())
         else {
             return
         }
-        try FileManager.default.removeItem(at: documentDirectory.appending(path: imageUrl))
+        try fileManager.removeItem(at: documentDirectory.appending(path: imagePath))
     }
 }
