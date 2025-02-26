@@ -7,11 +7,13 @@ import UIKit
 
 public struct AvatarService: Sendable {
     private let store: WalletStore
-    private static let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first
     
-    public init(
-        store: WalletStore
-    ) {
+    private let documentType = "png"
+    private let avatarsFolder = URL(filePath: "Avatars")
+    private var fileManager: FileManager { FileManager.default }
+    private var documentDirectory: URL { URL.documentsDirectory }
+    
+    public init(store: WalletStore) {
         self.store = store
     }
     
@@ -31,47 +33,45 @@ public struct AvatarService: Sendable {
     }
     
     public func remove(for walletId: String) throws {
-        let path = try folderPath(for: walletId)
-        try removeIfExist(at: path)
+        try removeIfExist(for: walletId)
         try store.setWalletAvatar(walletId, path: nil)
     }
     
     // MARK: - Private methods
     
     private func write(data: Data, for walletId: String) throws {
-        let path = try preparePath(for: walletId)
-        try data.write(to: path, options: .atomic)
-
-        try store.setWalletAvatar(walletId, path: avatarsPath(for: walletId) + path.lastPathComponent)
+        let avatarPath = avatarPath(for: walletId)
+        let fullPath = documentDirectory.appending(path: avatarPath.path())
+        try removeIfExist(for: walletId)
+        
+        try createDirectory(for: fullPath.deletingLastPathComponent())
+        try data.write(to: fullPath, options: .atomic)
+        try store.setWalletAvatar(walletId, path: avatarPath.path())
+    }
+    
+    private func avatarPath(for walletId: String) -> URL {
+        avatarsFolder
+            .appendingPathComponent(walletId)
+            .appendingPathComponent(UUID().uuidString)
+            .appendingPathExtension(documentType)
     }
     
     // MARK: - FileManager Private Methods
-    
-    private func preparePath(for walletId: String) throws -> URL {
-        try removeIfExist(at: try folderPath(for: walletId))
-        let folderPath = try folderPath(for: walletId)
-        return folderPath.appendingPathComponent(UUID().uuidString + ".png")
+
+    private func createDirectory(for path: URL) throws {
+        guard !fileManager.fileExists(atPath: path.path, isDirectory: nil) else {
+            return
+        }
+        try fileManager.createDirectory(at: path, withIntermediateDirectories: true, attributes: nil)
     }
     
-    private func folderPath(for walletId: String) throws -> URL {
-        guard let documentsDirectory = Self.documentsDirectory else {
-            throw AnyError("Unable to fetch URLs for the specified common directory in the requested domains.")
+    private func removeIfExist(for walletId: String) throws {
+        guard
+            let imageUrl = try store.getWallet(id: walletId)?.imageUrl,
+            FileManager.default.fileExists(atPath: documentDirectory.appending(path: imageUrl).path())
+        else {
+            return
         }
-        let fileManager = FileManager.default
-        let dataPath = documentsDirectory.appendingPathComponent(avatarsPath(for: walletId))
-        if !fileManager.fileExists(atPath: dataPath.path) {
-            try fileManager.createDirectory(atPath: dataPath.path, withIntermediateDirectories: true, attributes: nil)
-        }
-        return dataPath
-    }
-    
-    private func avatarsPath(for walletId: String) -> String {
-        "Avatars/\(walletId)/"
-    }
-    
-    private func removeIfExist(at url: URL) throws {
-        if FileManager.default.fileExists(atPath: url.path()) {
-            try FileManager.default.removeItem(at: url)
-        }
+        try FileManager.default.removeItem(at: documentDirectory.appending(path: imageUrl))
     }
 }
