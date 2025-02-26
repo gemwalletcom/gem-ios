@@ -49,8 +49,8 @@ public struct AvatarService: Sendable {
     
     private func preparePath(for walletId: String) throws -> URL {
         try removeIfExist(at: try folderPath(for: walletId))
-        let rootPath = try folderPath(for: walletId)
-        return rootPath.appendingPathComponent(UUID().uuidString + ".png")
+        let folderPath = try folderPath(for: walletId)
+        return folderPath.appendingPathComponent(UUID().uuidString + ".png")
     }
     
     private func folderPath(for walletId: String) throws -> URL {
