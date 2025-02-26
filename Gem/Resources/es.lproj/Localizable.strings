@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "Establecer como avatar";
+"errors.connections.invalid_send_parameters" = "Parámetros proporcionados no válidos para enviar una transacción.";
+"errors.connections.invalid_sign_parameters" = "Parámetros proporcionados no válidos para la firma.";
+"errors.connections.no_supported_wallets" = "No hay billeteras compatibles disponibles.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "El método solicitado no es compatible.";

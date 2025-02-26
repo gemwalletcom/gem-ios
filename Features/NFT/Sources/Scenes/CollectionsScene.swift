@@ -40,7 +40,7 @@ public struct CollectionsScene: View {
                     .textStyle(.body)
             }
         }
-        .padding(.horizontal, Spacing.medium)
+        .padding(.horizontal, .medium)
         .background(Colors.insetGroupedListStyle)
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)

@@ -48,7 +48,7 @@ struct WalletListItemView: View {
             HStack {
                 AssetImageView(
                     assetImage: model.avatarImage,
-                    size: Sizing.image.medium
+                    size: .image.medium
                 )
                 ListItemView(title: model.name, titleExtra: model.subType)
 
@@ -63,7 +63,7 @@ struct WalletListItemView: View {
                     label: {
                         Images.System.settings
                             .padding(.vertical, 8)
-                            .padding(.leading, Spacing.small)
+                            .padding(.leading, .small)
                     }
                 )
                 .buttonStyle(.borderless)

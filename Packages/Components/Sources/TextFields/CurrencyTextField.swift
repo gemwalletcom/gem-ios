@@ -44,7 +44,7 @@ public struct CurrencyTextField: View {
                 .multilineTextAlignment(.center)
                 .textFieldStyle(.plain)
                 .lineLimit(1)
-                .padding(currencyPosition == .leading ? .leading : .trailing, Spacing.tiny)
+                .padding(currencyPosition == .leading ? .leading : .trailing, .tiny)
                 .frame(minWidth: 40, maxWidth: 260)
                 .fixedSize(horizontal: true, vertical: false)
                 .disabled(!isEnabled)

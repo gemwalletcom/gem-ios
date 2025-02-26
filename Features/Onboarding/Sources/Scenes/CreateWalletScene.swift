@@ -12,7 +12,7 @@ struct CreateWalletScene: View {
     @State private var showCopyMessage = false
     
     var body: some View {
-        VStack(spacing: Spacing.medium) {
+        VStack(spacing: .medium) {
             
             OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
             SecretDataTypeView(type: model.type)
@@ -23,9 +23,9 @@ struct CreateWalletScene: View {
             Spacer()
             Button(Localized.Common.continue, action: continueAction)
                 .buttonStyle(.blue())
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .navigationBarTitle(model.title)
         .taskOnce {
             model.words = model.generateWords()

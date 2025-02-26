@@ -45,7 +45,7 @@ public struct BannerView: View {
                                 closeAction(banner.banner)
                             }
                         )
-                        .padding(.vertical, Spacing.small)
+                        .padding(.vertical, .small)
                         .foregroundColor(Colors.gray)
                     }
                 }

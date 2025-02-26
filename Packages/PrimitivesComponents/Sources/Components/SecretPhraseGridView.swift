@@ -25,7 +25,7 @@ public struct SecretPhraseGridView: View {
                                 .fontWeight(.semibold)
                                 .foregroundColor(Colors.grayLight)
                                 .multilineTextAlignment(.leading)
-                                .padding(.leading, Spacing.small)
+                                .padding(.leading, .small)
                             Text(word.word)
                                 .fontWeight(.semibold)
                                 .foregroundColor(Colors.black)
@@ -33,8 +33,8 @@ public struct SecretPhraseGridView: View {
                                 .multilineTextAlignment(.leading)
                             Spacer()
                         }
-                        .padding(Spacing.small)
-                        .frame(maxWidth: (Spacing.scene.content.maxWidth / 2) - (Spacing.small * 2))
+                        .padding(.small)
+                        .frame(maxWidth: (.scene.content.maxWidth / 2) - (.small * 2))
                         .background(Colors.grayVeryLight)
                         .cornerRadius(10)
                         .overlay {

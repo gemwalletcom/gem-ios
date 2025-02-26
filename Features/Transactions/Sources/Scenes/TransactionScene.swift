@@ -39,7 +39,7 @@ public struct TransactionScene: View {
             List {
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
-                    HStack(spacing: Spacing.small) {
+                    HStack(spacing: .small) {
                         ListItemView(
                             title: model.statusField,
                             subtitle: model.statusText,
@@ -85,7 +85,7 @@ public struct TransactionScene: View {
                     HStack {
                         Spacer(minLength: 0)
                         TransactionHeaderView(type: model.headerType)
-                            .padding(.bottom, Spacing.medium)
+                            .padding(.bottom, .medium)
                         Spacer(minLength: 0)
                     }
                     .headerProminence(.increased)

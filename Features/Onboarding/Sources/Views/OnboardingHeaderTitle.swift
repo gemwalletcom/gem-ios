@@ -11,9 +11,9 @@ struct OnboardingHeaderTitle: View {
             .foregroundColor(Colors.secondaryText)
             .font(.system(size: 16, weight: .medium))
             .multilineTextAlignment(.center)
-            .lineSpacing(Spacing.tiny)
+            .lineSpacing(.tiny)
             .lineLimit(2)
             .fixedSize(horizontal: false, vertical: true)
-            .padding(.top, Spacing.small)
+            .padding(.top, .small)
     }
 }

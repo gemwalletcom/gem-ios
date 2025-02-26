@@ -220,15 +220,6 @@ public struct Migrations {
                 $0.add(column: Columns.Wallet.updatedAt.name, .date)
             }
         }
-        
-        #if DEBUG
-        // Clears the imageUrl field in the database when running in Debug mode,
-        // because the file path changes on the simulator, preventing the wallet avatar from loading.
-        let _ = try? dbQueue.write { db in
-            try? WalletRecord
-                .updateAll(db, Columns.Wallet.imageUrl.set(to: nil))
-        }
-        #endif
 
         try migrator.migrate(dbQueue)
     }

@@ -34,26 +34,19 @@ public struct WalletImageScene: View {
     public var body: some View {
         VStack {
             avatar
-                .padding(.top, Spacing.medium)
-                .padding(.bottom, Spacing.extraLarge)
-            
+                .padding(.top, .medium)
+                .padding(.bottom, .extraLarge)
+                .onTapGesture {
+                    model.setDefaultAvatar()
+                }
             pickerView
-                .padding(.bottom, Spacing.medium)
-                .padding(.horizontal, Spacing.medium)
+                .padding(.bottom, .medium)
+                .padding(.horizontal, .medium)
             
             listView
         }
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(Localized.Filter.clear) {
-                    model.setDefaultAvatar()
-                }
-                .bold()
-                .disabled(dbWallet?.imageUrl == nil)
-            }
-        }
     }
     
     private var avatar: some View {
@@ -62,7 +55,7 @@ public struct WalletImageScene: View {
                 AssetImageView(
                     assetImage: WalletViewModel(wallet: dbWallet).avatarImage,
                     size: model.emojiViewSize,
-                    overlayImageSize: Sizing.image.medium
+                    overlayImageSize: .image.medium
                 )
                 .id(dbWallet.imageUrl)
             }
@@ -84,7 +77,7 @@ public struct WalletImageScene: View {
             LazyVGrid(
                 columns: model.getColumns(for: selectedTab),
                 alignment: .center,
-                spacing: Spacing.medium
+                spacing: .medium
             ) {
                 switch selectedTab {
                 case .emoji:
@@ -93,7 +86,7 @@ public struct WalletImageScene: View {
                     nftAssetListView
                 }
             }
-            .padding(.horizontal, Spacing.medium)
+            .padding(.horizontal, .medium)
         }
         .overlay(content: {
             if nftDataList.isEmpty, case .collections = selectedTab {

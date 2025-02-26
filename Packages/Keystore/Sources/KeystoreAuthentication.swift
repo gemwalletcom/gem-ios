@@ -4,7 +4,7 @@ import Foundation
 import KeychainAccess
 import LocalAuthentication
 
-public enum KeystoreAuthentication: String {
+public enum KeystoreAuthentication: String, Sendable {
     case biometrics
     case passcode
     case none

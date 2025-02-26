@@ -33,10 +33,10 @@ public struct SignMessageScene: View {
                 }
             }
             .buttonStyle(.blue())
-            .padding(.bottom, Spacing.scene.bottom)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .padding(.bottom, .scene.bottom)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
     }

@@ -34,9 +34,9 @@ struct ReceiveScene: View {
                 }
                 .buttonStyle(.blue())
             }
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .frame(maxWidth: .infinity)
         .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
@@ -63,7 +63,9 @@ struct ReceiveScene: View {
             await generateQRCode()
         }
         .taskOnce {
-            model.enableAsset()
+            Task {
+                await model.enableAsset()
+            }
         }
     }
 }
@@ -97,17 +99,17 @@ extension ReceiveScene {
 extension ReceiveScene {
     @ViewBuilder
     private func qrCodeView(image: UIImage) -> some View {
-        VStack(spacing: Spacing.medium) {
+        VStack(spacing: .medium) {
             Image(uiImage: image)
                 .resizable()
                 .scaledToFit()
-                .padding(Spacing.extraSmall)
+                .padding(.extraSmall)
                 .background(Color.white)
-                .clipShape(RoundedRectangle(cornerRadius: Spacing.medium))
+                .clipShape(RoundedRectangle(cornerRadius: .medium))
 
-            HStack(spacing: Spacing.small) {
+            HStack(spacing: .small) {
                 AssetImageView(assetImage: model.assetModel.assetImage)
-                VStack(alignment: .leading, spacing: Spacing.extraSmall) {
+                VStack(alignment: .leading, spacing: .extraSmall) {
                     Text(model.youAddressTitle)
                         .font(.subheadline.weight(.semibold))
                         .minimumScaleFactor(0.8)
@@ -122,17 +124,17 @@ extension ReceiveScene {
                 Button(model.copyTitle, action: onCopyAddress)
                     .font(.subheadline.weight(.semibold))
                     .foregroundStyle(Colors.black)
-                    .padding(.all, Spacing.small)
+                    .padding(.all, .small)
                     .background(
-                        RoundedRectangle(cornerRadius: Spacing.small)
+                        RoundedRectangle(cornerRadius: .small)
                             .fill(Colors.grayVeryLight)
                     )
                     .buttonStyle(.plain)
             }
         }
-        .padding(Spacing.medium)
+        .padding(.medium)
         .background(
-            RoundedRectangle(cornerRadius: Spacing.medium)
+            RoundedRectangle(cornerRadius: .medium)
                 .fill(Colors.listStyleColor)
                 .shadow(color: Color.black.opacity(0.25), radius: 10, x: 0, y: 5)
         )

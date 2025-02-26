@@ -79,7 +79,7 @@ public final class FiatSceneViewModel {
     var typeAmountButtonStyle: ColorButtonStyle {
         switch input.type {
         case .buy: .amount()
-        case .sell: .lightGray(paddingHorizontal: Spacing.small, paddingVertical: Spacing.small)
+        case .sell: .lightGray(paddingHorizontal: .small, paddingVertical: .small)
         }
     }
 

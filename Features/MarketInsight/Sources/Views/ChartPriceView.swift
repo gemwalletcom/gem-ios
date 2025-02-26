@@ -10,8 +10,8 @@ struct ChartPriceView: View {
     let priceChangeTextColor: Color
     
     var body: some View {
-        VStack(spacing: Spacing.tiny) {
-            HStack(alignment: .center, spacing: Spacing.tiny) {
+        VStack(spacing: .tiny) {
+            HStack(alignment: .center, spacing: .tiny) {
                 Text(price)
                     .font(.title2)
                     .foregroundColor(Colors.black)

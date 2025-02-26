@@ -28,9 +28,9 @@ struct ConfirmTransferScene: View {
                 disabledRule: model.shouldDisableButton,
                 action: onAction
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
@@ -45,7 +45,7 @@ struct ConfirmTransferScene: View {
             NavigationStack {
                 NetworkFeeScene(model: model.feeModel)
                     .presentationDetents([.medium])
-                    .presentationCornerRadius(Sizing.Presentation.cornerRadius)
+                    .presentationCornerRadius(.presentation.cornerRadius)
             }
         }
         .alert(item: $model.confirmingErrorMessage) {
@@ -114,7 +114,7 @@ extension ConfirmTransferScene {
                 HStack {
                     Spacer(minLength: 0)
                     TransactionHeaderView(type: model.headerType)
-                        .padding(.bottom, Spacing.medium)
+                        .padding(.bottom, .medium)
                     Spacer(minLength: 0)
                 }
                 .headerProminence(.increased)
@@ -216,6 +216,7 @@ extension ConfirmTransferScene {
         keystore: LocalKeystore.main,
         data: .main,
         service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
+        scanService: .main,
         walletsService: .main,
         onComplete: { }
     ))

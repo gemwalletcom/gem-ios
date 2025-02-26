@@ -273,7 +273,7 @@
 "price_alerts.empty_state.message" = "Ще не додано сповіщення про ціни.";
 "assets.select_asset" = "Виберіть актив";
 "lock.privacy_lock" = "Блокування конфіденційності";
-"receive.your_address" = "Ваша адреса для отримання";
+"receive.your_address" = "Адреса для отримання";
 "verify_phrase.title" = "Підтвердити";
 "common.skip" = "Пропустити";
 "common.warning" = "УВАГА";
@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "Встановити як аватар";
+"errors.connections.invalid_send_parameters" = "Надано недійсні параметри для відправки транзакції.";
+"errors.connections.invalid_sign_parameters" = "Для підпису надано недійсні параметри.";
+"errors.connections.no_supported_wallets" = "Немає підтримуваних гаманців.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "Потрібний метод не підтримується.";

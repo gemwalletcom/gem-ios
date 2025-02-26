@@ -120,7 +120,7 @@ public struct ListItemView: View {
                 Spacer()
                 LoadingView(tint: subtitle?.style.color ?? Colors.gray)
             } else if let subtitle = subtitle {
-                Spacer(minLength: Spacing.extraSmall)
+                Spacer(minLength: .extraSmall)
                 SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
             }
         }
@@ -172,8 +172,8 @@ extension ListItemView {
         public let infoAction: (() -> Void)?
 
         var body: some View {
-            VStack(alignment: .leading, spacing: Spacing.tiny) {
-                HStack(spacing: Spacing.tiny) {
+            VStack(alignment: .leading, spacing: .tiny) {
+                HStack(spacing: .tiny) {
                     Text(title.text)
                         .textStyle(title.style)
                         .lineLimit(1)
@@ -198,7 +198,7 @@ extension ListItemView {
                         .textStyle(extra.style)
                 }
             }
-            .padding(.trailing, Spacing.small)
+            .padding(.trailing, .small)
         }
     }
 }
@@ -211,7 +211,7 @@ extension ListItemView {
         let titleTagType: TitleTagType
 
         var body: some View {
-            HStack(spacing: Spacing.tiny) {
+            HStack(spacing: .tiny) {
                 Text(titleTag.text)
                     .textStyle(titleTag.style)
                     .lineLimit(1)
@@ -227,8 +227,8 @@ extension ListItemView {
                     image
                 }
             }
-            .padding(.horizontal, Spacing.tiny)
-            .padding(.vertical, Spacing.extraSmall)
+            .padding(.horizontal, .tiny)
+            .padding(.vertical, .extraSmall)
             .background(titleTag.style.background)
             .cornerRadius(6)
         }
@@ -243,7 +243,7 @@ extension ListItemView {
         public let subtitleExtra: TextValue?
 
         var body: some View {
-            VStack(alignment: .trailing, spacing: Spacing.tiny) {
+            VStack(alignment: .trailing, spacing: .tiny) {
                 Text(subtitle.text)
                     .textStyle(subtitle.style)
                     .multilineTextAlignment(.trailing)
@@ -363,14 +363,14 @@ extension ListItemView {
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: "Subtitle Extra",
                 subtitleStyleExtra: extraTextStyle, image: Images.System.faceid,
-                imageSize: Sizing.list.image,
+                imageSize: .list.image,
                 cornerRadius: 0
             )
             ListItemView(
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, subtitle: longSubtitle,
                 subtitleStyle: defaultTextStyle, image: Images.System.eye,
-                imageSize: Sizing.list.image,
+                imageSize: .list.image,
                 cornerRadius: 0
             )
         }
@@ -413,7 +413,7 @@ extension ListItemView {
             ListItemView(
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, image: Images.System.eye,
-                imageSize: Sizing.list.image,
+                imageSize: .list.image,
                 cornerRadius: 0
             )
         }
