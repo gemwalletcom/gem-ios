@@ -56,10 +56,13 @@ public struct WalletViewModel {
     // MARK: - Private methods
     
     private func imageUrl() -> URL? {
-        guard let imageUrl = wallet.imageUrl else {
+        guard
+            let imageUrl = wallet.imageUrl,
+            let url = URL(string: imageUrl)
+        else {
             return nil
         }
-        return URL(string: imageUrl)
+        return url.scheme == nil ? nil : url
     }
 
     private func avatar() -> Image {
