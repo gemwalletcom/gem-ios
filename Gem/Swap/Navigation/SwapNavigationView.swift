@@ -18,7 +18,7 @@ struct SwapNavigationView: View {
     @State private var isPresentingAssetSwapType: SelectAssetSwapType?
 
     private let onComplete: VoidAction
-    private var navigationPath: Binding<NavigationPath>
+    @Binding private var navigationPath: NavigationPath
     
     init(
         model: SwapViewModel,
@@ -27,7 +27,7 @@ struct SwapNavigationView: View {
     ) {
         self.model = model
         self.onComplete = onComplete
-        self.navigationPath = navigationPath
+        _navigationPath = navigationPath
     }
     
     var body: some View {
@@ -35,7 +35,7 @@ struct SwapNavigationView: View {
             model: model,
             isPresentingAssetSwapType: $isPresentingAssetSwapType,
             onTransferAction: {
-                navigationPath.wrappedValue.append($0)
+                navigationPath.append($0)
             }
         )
         .navigationDestination(for: TransferData.self) { data in
@@ -107,7 +107,7 @@ extension SwapNavigationView {
     }
     
     private func onSelectProvider(_ list: [SwapProviderItem]) {
-        model.selectedProvider = list.first?.swapQuote.data.provider
-        navigationPath.wrappedValue.removeLast()
+        model.setSelectedSwapQuote(list.first?.swapQuote)
+        navigationPath.removeLast()
     }
 }

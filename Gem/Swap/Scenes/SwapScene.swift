@@ -71,9 +71,8 @@ struct SwapScene: View {
             .padding(.bottom, .scene.bottom)
             .frame(maxWidth: .scene.button.maxWidth)
         }
-        .background(Colors.grayBackground)
         .navigationTitle(model.title)
-        .navigationBarTitleDisplayMode(.inline)
+        .background(Colors.grayBackground)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,
@@ -94,7 +93,7 @@ struct SwapScene: View {
         .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.selectedProvider, onChangeProvider)
+        .onChange(of: model.selectedSwapQuote, onChangeSelectedQuote)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
@@ -235,9 +234,9 @@ extension SwapScene {
         fetch()
     }
     
-    private func onChangeProvider(_: SwapProvider?, provider: SwapProvider?) {
-        guard let provider, let toAsset else { return }
-        model.updateToValue(for: provider, asset: toAsset.asset)
+    private func onChangeSelectedQuote(_: SwapQuote?, quote: SwapQuote?) {
+        guard let quote, let toAsset else { return }
+        model.updateToValue(for: quote, asset: toAsset.asset)
     }
 }
 
