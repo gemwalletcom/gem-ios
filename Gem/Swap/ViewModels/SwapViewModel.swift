@@ -185,10 +185,6 @@ extension SwapViewModel {
     func resetToValue() {
         toValue = ""
     }
-    
-    func resetSelectedQuote() {
-        selectedSwapQuote = nil
-    }
 
     func setMaxFromValue(asset: Asset, value: BigInt) {
         fromValue = formatter.string(value, decimals: asset.decimals.asInt)
@@ -229,11 +225,6 @@ extension SwapViewModel {
             swapState.availability = .error(ErrorWrapper(error))
         }
         return nil
-    }
-    
-    func reset() {
-        swapState = .init()
-        resetValues()
     }
     
     func updateToValue(
