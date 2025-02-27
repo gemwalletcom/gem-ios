@@ -105,7 +105,9 @@ final class ConfirmTransferViewModel {
     var recipientValue: SimpleAccount { dataModel.recepientAccount }
 
     var networkTitle: String { Localized.Transfer.network }
-    var networkValue: String { dataModel.chainAsset.name }
+    var networkValue: String {
+        AssetViewModel(asset: dataModel.asset).networkFullName
+    }
 
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage
