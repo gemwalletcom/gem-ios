@@ -4,6 +4,7 @@ import Components
 import SwiftUI
 import Style
 import Localization
+import FileStore
 
 public struct WalletViewModel {
     public let wallet: Wallet
@@ -47,7 +48,7 @@ public struct WalletViewModel {
         AssetImage(
             type: wallet.name,
             imageURL: imageUrl(),
-            placeholder: image,
+            placeholder: avatar(),
             chainPlaceholder: subImage
         )
     }
@@ -58,10 +59,18 @@ public struct WalletViewModel {
         guard let imageUrl = wallet.imageUrl else {
             return nil
         }
-        if let url = URL(string: imageUrl), url.scheme != nil {
-            return url
+        return URL(string: imageUrl)
+    }
+
+    private func avatar() -> Image {
+        guard
+            let avatarId = wallet.imageUrl,
+            let data: Data = try? FileStore().value(for: .avatar(walletId: wallet.id, avatarId: avatarId)),
+            let uiImage = UIImage(data: data)
+        else {
+            return image
         }
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageUrl)
+        return Image(uiImage: uiImage)
     }
 }
 

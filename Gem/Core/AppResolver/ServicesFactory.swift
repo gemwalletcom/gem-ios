@@ -24,6 +24,7 @@ import NFTService
 import WalletsService
 import ManageWalletService
 import AvatarService
+import FileStore
 
 struct ServicesFactory {
     @MainActor
@@ -47,12 +48,14 @@ struct ServicesFactory {
 
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
+        let fileStore = FileStore()
 
         let manageWalletService = Self.makeManageWalletService(
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: AvatarService(
-                store: storeManager.walletStore
+                store: storeManager.walletStore,
+                fileStore: fileStore
             )
         )
         let balanceService = Self.makeBalanceService(
