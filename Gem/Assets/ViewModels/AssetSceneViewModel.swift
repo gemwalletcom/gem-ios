@@ -78,10 +78,7 @@ class AssetSceneViewModel: ObservableObject {
     var networkField: String { Localized.Transfer.network }
 
     var networkText: String {
-        if assetModel.asset.type == .native {
-            return assetModel.asset.chain.asset.name
-        }
-        return "\(assetModel.asset.chain.asset.name) (\(assetModel.asset.type.rawValue))"
+        assetModel.networkFullName
     }
     
     var networkAssetImage: AssetImage {
