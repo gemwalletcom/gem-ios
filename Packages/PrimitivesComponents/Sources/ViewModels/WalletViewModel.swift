@@ -8,9 +8,14 @@ import FileStore
 
 public struct WalletViewModel {
     public let wallet: Wallet
+    public let fileStore: FileStorable
 
-    public init(wallet: Wallet) {
+    public init(
+        wallet: Wallet,
+        fileStore: FileStorable
+    ) {
         self.wallet = wallet
+        self.fileStore = fileStore
     }
 
     public var name: String {
@@ -68,7 +73,7 @@ public struct WalletViewModel {
     private func avatar() -> Image {
         guard
             let avatarId = wallet.imageUrl,
-            let data: Data = try? FileStore().value(for: .avatar(walletId: wallet.id, avatarId: avatarId)),
+            let data: Data = try? fileStore.value(for: .avatar(walletId: wallet.id, avatarId: avatarId)),
             let uiImage = UIImage(data: data)
         else {
             return image
@@ -79,4 +84,12 @@ public struct WalletViewModel {
 
 extension WalletViewModel: Identifiable, Hashable {
     public var id: String { wallet.id }
+
+    public static func == (lhs: WalletViewModel, rhs: WalletViewModel) -> Bool {
+        lhs.wallet == rhs.wallet
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(wallet.id)
+    }
 }

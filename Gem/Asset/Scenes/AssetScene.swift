@@ -66,12 +66,12 @@ struct AssetScene: View {
     }
 
     init(
-        wallet: Wallet,
+        walletModel: WalletViewModel,
         input: AssetSceneInput,
         isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>,
         onAssetActivate: AssetAction
     ) {
-        self.walletModel = WalletViewModel(wallet: wallet)
+        self.walletModel = walletModel
         self.onAssetActivate = onAssetActivate
         _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
         _assetData = Query(constant: input.assetRequest)

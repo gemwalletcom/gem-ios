@@ -22,6 +22,7 @@ let package = Package(
         .package(name: "Store", path: "../Store"),
         .package(name: "ImageGalleryService", path: "../ImageGalleryService"),
         .package(name: "AvatarService", path: "../AvatarService"),
+        .package(name: "FileStore", path: "../FileStore")
     ],
     targets: [
         .target(
@@ -34,7 +35,8 @@ let package = Package(
                 "PrimitivesComponents",
                 "Store",
                 "ImageGalleryService",
-                "AvatarService"
+                "AvatarService",
+                "FileStore"
             ],
             path: "Sources"
         ),

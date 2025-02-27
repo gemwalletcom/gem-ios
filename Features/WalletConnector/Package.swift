@@ -20,6 +20,7 @@ let package = Package(
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "FileStore", path: "../FileStore")
     ],
     targets: [
         .target(
@@ -33,7 +34,8 @@ let package = Package(
                 "Store",
                 "Keystore",
                 "PrimitivesComponents",
-                "QRScanner"
+                "QRScanner",
+                "FileStore"
             ],
             path: "Sources"
         ),

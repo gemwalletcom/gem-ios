@@ -1,8 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
-public struct FileStore: Sendable {
+public struct FileStore: FileStorable {
     private let documentType = "json"
     private var fileManager: FileManager { FileManager.default }
     private let documentDirectory = URL.documentsDirectory

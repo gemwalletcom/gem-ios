@@ -9,6 +9,7 @@ import Localization
 import GRDBQuery
 import Primitives
 import Store
+import FileStore
 
 public struct WalletImageScene: View {
     enum Tab: Equatable {
@@ -34,12 +35,18 @@ public struct WalletImageScene: View {
     public var body: some View {
         VStack {
             if let dbWallet {
-                AvatarView(model: WalletViewModel(wallet: dbWallet), size: model.emojiViewSize)
-                    .padding(.top, .medium)
-                    .padding(.bottom, .extraLarge)
-                    .onTapGesture {
-                        model.setDefaultAvatar()
-                    }
+                AvatarView(
+                    model: WalletViewModel(
+                        wallet: dbWallet,
+                        fileStore: FileStore()
+                    ),
+                    size: model.emojiViewSize
+                )
+                .padding(.top, .medium)
+                .padding(.bottom, .extraLarge)
+                .onTapGesture {
+                    model.setDefaultAvatar()
+                }
             }
             pickerView
                 .padding(.bottom, .medium)

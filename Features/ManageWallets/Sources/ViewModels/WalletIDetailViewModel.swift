@@ -9,6 +9,7 @@ import Localization
 import PrimitivesComponents
 import ExplorerService
 import Store
+import FileStore
 
 public class WalletDetailViewModel {
 
@@ -59,7 +60,7 @@ public class WalletDetailViewModel {
     }
     
     func avatarAssetImage(for dbWallet: Wallet) -> AssetImage {
-        let avatar = WalletViewModel(wallet: dbWallet).avatarImage
+        let avatar = WalletViewModel(wallet: dbWallet, fileStore: FileStore()).avatarImage
         return AssetImage(
             type: avatar.type,
             imageURL: avatar.imageURL,
