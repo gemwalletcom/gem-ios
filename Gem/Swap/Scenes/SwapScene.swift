@@ -7,7 +7,6 @@ import GRDBQuery
 import Components
 import Style
 import BigInt
-import Keystore
 import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
@@ -22,7 +21,6 @@ struct SwapScene: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.keystore) private var keystore
 
     enum Field: Int, Hashable {
         case from, to
@@ -50,22 +48,10 @@ struct SwapScene: View {
         onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
+        _fromAsset = Query(model.fromAssetRequest)
+        _toAsset = Query(model.toAssetRequest)
         _isPresentingAssetSwapType = isPresentingAssetSwapType
         self.onTransferAction = onTransferAction
-        
-        let fromAssetRequest = Binding {
-            model.fromAssetRequest
-        } set: { new in
-            model.fromAssetRequest = new
-        }
-        _fromAsset = Query(fromAssetRequest)
-
-        let toAssetRequest = Binding {
-            model.toAssetRequest
-        } set: { new in
-            model.toAssetRequest = new
-        }
-        _toAsset = Query(toAssetRequest)
     }
 
     var body: some View {
@@ -99,14 +85,13 @@ struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
-        .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
-        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
         .onChange(of: model.selectedProvider, onChangeProvider)
@@ -114,7 +99,6 @@ struct SwapScene: View {
             fetch()
         }
         .onAppear {
-            model.setupSwapPairSelector()
             if model.toValue.isEmpty {
                 focusedField = .from
             }
@@ -176,20 +160,17 @@ extension SwapScene {
             
             Section {
                 if let provider = model.providerText {
+                    let view = ListItemImageView(
+                        title: model.providerField,
+                        subtitle: provider,
+                        assetImage: model.providerImage
+                    )
                     if model.allowSelectProvider, let toAsset {
                         NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
-                            ListItemImageView(
-                                title: model.providerField,
-                                subtitle: provider,
-                                assetImage: model.providerImage
-                            )
+                            view
                         }
                     } else  {
-                        ListItemImageView(
-                            title: model.providerField,
-                            subtitle: provider,
-                            assetImage: model.providerImage
-                        )
+                        view
                     }
                 }
 
@@ -252,11 +233,6 @@ extension SwapScene {
         model.resetToValue()
         model.resetSelectedQuote()
         fetch()
-    }
-    
-    private func onChangeWallet(_ _: Wallet?, wallet: Wallet?) {
-        guard let wallet else { return }
-        model.refresh(for: wallet)
     }
     
     private func onChangeProvider(_: SwapProvider?, provider: SwapProvider?) {

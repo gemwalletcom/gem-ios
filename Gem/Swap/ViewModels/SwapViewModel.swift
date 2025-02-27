@@ -19,9 +19,6 @@ import SwapService
 import SwiftUI
 import Transfer
 import WalletsService
-import PrimitivesComponents
-import Preferences
-import AssetsService
 
 import class Gemstone.Config
 import struct Gemstone.Permit2ApprovalData
@@ -43,16 +40,14 @@ typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 class SwapViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
+    let wallet: Wallet
     let keystore: any Keystore
     let walletsService: WalletsService
-    let assetService: AssetsService
-
-    var wallet: Wallet
 
     var fromAssetRequest: AssetRequestOptional
     var toAssetRequest: AssetRequestOptional
 
-    var pairSelectorModel: SwapPairSelectorViewModel?
+    var pairSelectorModel: SwapPairSelectorViewModel
     var selectedProvider: SwapProvider?
     var fromValue: String = ""
     var toValue: String = ""
@@ -68,11 +63,10 @@ class SwapViewModel {
     init(
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
-        pairSelectorModel: SwapPairSelectorViewModel?,
+        pairSelectorModel: SwapPairSelectorViewModel,
         walletsService: WalletsService,
         swapService: SwapService,
-        keystore: any Keystore,
-        assetService: AssetsService
+        keystore: any Keystore
     ) {
         self.preferences = preferences
         self.wallet = wallet
@@ -80,10 +74,9 @@ class SwapViewModel {
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
-        self.assetService = assetService
 
-        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.fromAssetId?.identifier)
-        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel?.toAssetId?.identifier)
+        fromAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.fromAssetId?.identifier)
+        toAssetRequest = AssetRequestOptional(walletId: wallet.walletId.id, assetId: pairSelectorModel.toAssetId?.identifier)
     }
 
     var title: String { Localized.Wallet.swap }
@@ -178,26 +171,6 @@ class SwapViewModel {
             toValue: quote.toValue
         )
     }
-    
-    func refresh(for wallet: Wallet) {
-        self.wallet = wallet
-        pairSelectorModel = nil
-        setupSwapPairSelector()
-        fromAssetRequest = AssetRequestOptional(
-            walletId: wallet.id,
-            assetId: pairSelectorModel?.fromAssetId?.identifier
-        )
-        toAssetRequest = AssetRequestOptional(
-            walletId: wallet.id,
-            assetId: pairSelectorModel?.toAssetId?.identifier
-        )
-    }
-    
-    func setupSwapPairSelector() {
-        guard pairSelectorModel == nil else { return }
-        let asset = try? assetService.getAssets(walletID: wallet.id, filters: [.hasBalance]).first
-        pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset?.asset)
-    }
 
     func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
         SwapProvidersViewModel(
@@ -279,8 +252,8 @@ extension SwapViewModel {
     ) {
         guard
             case .loaded(let result) = swapState.availability,
-            let bestRate = result.quotes.first(where: { $0.data.provider == provider }),
-            let value = try? BigInt.from(string: bestRate.toValue)
+            let providerQoute = result.quotes.first(where: { $0.data.provider == provider }),
+            let value = try? BigInt.from(string: providerQoute.toValue)
         else {
             return
         }

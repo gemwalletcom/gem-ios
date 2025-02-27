@@ -11,8 +11,6 @@ import Style
 import Currency
 import NFT
 import TransactionsService
-import SwapService
-import Swap
 
 struct MainTabView: View {
     @Environment(\.keystore) private var keystore

@@ -58,6 +58,7 @@
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
 		B6AE4A522D636869005BF29E /* SwapProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */; };
 		B6AE4A542D6368A0005BF29E /* SwapProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */; };
+		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
 		C30952B4299C39D70004C0F9 /* App.swift in Sources */ = {isa = PBXBuildFile; fileRef = C30952B3299C39D70004C0F9 /* App.swift */; };
 		C34C7CF829FDE942009EEC21 /* unit_frameworks.xctestplan in Resources */ = {isa = PBXBuildFile; fileRef = C34C7CF729FDE942009EEC21 /* unit_frameworks.xctestplan */; };
 		C3549B3729C439DF00B4BE01 /* AssetSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */; };
@@ -115,7 +116,6 @@
 		D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD29C2CD337BE0010DEF8 /* SwapService */; };
 		D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A22CD442A40010DEF8 /* TransferService */; };
 		D85AD2A62CD7017E0010DEF8 /* NativeProviderService in Frameworks */ = {isa = PBXBuildFile; productRef = D85AD2A52CD7017E0010DEF8 /* NativeProviderService */; };
-		D890ACF72CE30B2200A31613 /* SwapNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890ACF62CE30B2200A31613 /* SwapNavigationStack.swift */; };
 		D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */; };
 		D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */; };
 		D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */; };
@@ -233,6 +233,7 @@
 		B66DEDAE2D49F0C600309D53 /* ImageGalleryService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ImageGalleryService; sourceTree = "<group>"; };
 		B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProvidersViewModel.swift; sourceTree = "<group>"; };
 		B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderItem.swift; sourceTree = "<group>"; };
+		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
 		C30952B0299C39D70004C0F9 /* Gem.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gem.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C30952B3299C39D70004C0F9 /* App.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = App.swift; sourceTree = "<group>"; };
 		C30952B7299C39D80004C0F9 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -294,7 +295,6 @@
 		D85AD29E2CD436680010DEF8 /* ChainSettings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ChainSettings; sourceTree = "<group>"; };
 		D85AD2A12CD441D50010DEF8 /* TransferService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = TransferService; sourceTree = "<group>"; };
 		D85AD2A42CD7013D0010DEF8 /* NativeProviderService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NativeProviderService; sourceTree = "<group>"; };
-		D890ACF62CE30B2200A31613 /* SwapNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationStack.swift; sourceTree = "<group>"; };
 		D890F7A42C7FC0AC00C26819 /* WalletsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletsNavigationStack.swift; sourceTree = "<group>"; };
 		D891DD402D3F359F00241222 /* CollectionsNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionsNavigationStack.swift; sourceTree = "<group>"; };
 		D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferNavigationStack.swift; sourceTree = "<group>"; };
@@ -869,7 +869,7 @@
 		D890ACF52CE30B1F00A31613 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				D890ACF62CE30B2200A31613 /* SwapNavigationStack.swift */,
+				B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */,
 			);
 			path = Navigation;
 			sourceTree = "<group>";
@@ -1290,6 +1290,7 @@
 				837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */,
 				830FDA422C2236B6003DA605 /* MainTabView.swift in Sources */,
 				830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */,
+				B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */,
 				D89CD7A92CC70C7C007A2BAC /* SelectedAssetNavigationStack.swift in Sources */,
 				D8C4A3AD2C9696FE006FABE8 /* AssetHeaderViewModel.swift in Sources */,
 				D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */,
@@ -1361,7 +1362,6 @@
 				D810F3782AF1AB770006D9C6 /* SwapScene.swift in Sources */,
 				D852CB012C9CC315004121D3 /* PriceAlertsNavigationView.swift in Sources */,
 				833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */,
-				D890ACF72CE30B2200A31613 /* SwapNavigationStack.swift in Sources */,
 				D8D83C892CECFD560083AA53 /* SwapTokenViewModel.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -19,23 +19,13 @@ public class SwapPairSelectorViewModel {
 }
 
 extension SwapPairSelectorViewModel {
-    public static func defaultSwapPair(for asset: Asset?) -> SwapPairSelectorViewModel {
-        guard let asset else {
-            let sortedChains = Chain.allCases
-                .sortByRank()
-            return SwapPairSelectorViewModel(
-                fromAssetId: sortedChains.first?.assetId,
-                toAssetId: sortedChains.dropFirst().first?.assetId
-            )
-        }
-
+    public static func defaultSwapPair(for asset: Asset) -> SwapPairSelectorViewModel {
         if asset.type == .native {
             return SwapPairSelectorViewModel(
                 fromAssetId: asset.chain.assetId,
                 toAssetId: Chain.allCases
                     .sortByRank()
-                    .filter { $0.assetId != asset.chain.assetId }
-                    .first?.assetId
+                    .first(where: { $0.asset != asset })?.assetId
             )
         }
         return SwapPairSelectorViewModel(
