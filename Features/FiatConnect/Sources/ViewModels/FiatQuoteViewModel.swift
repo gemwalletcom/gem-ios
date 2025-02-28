@@ -60,3 +60,11 @@ extension FiatQuoteViewModel: SimpleListItemViewable {
 
     public var subtitle: String? { amountText }
 }
+
+// MARK: - Hashable
+
+extension FiatQuoteViewModel: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
+}
