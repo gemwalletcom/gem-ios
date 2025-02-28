@@ -130,7 +130,7 @@ class SwapViewModel {
         swapState.availability.isLoading
     }
 
-    func actionButtonTitle(fromAsset: Asset) -> String {
+    func actionButtonTitle() -> String {
         switch swapState.availability {
         case .noData, .loading:
             return Localized.Wallet.swap

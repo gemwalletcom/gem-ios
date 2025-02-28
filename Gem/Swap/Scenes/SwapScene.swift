@@ -199,7 +199,7 @@ extension SwapScene {
         VStack {
             if let fromAsset {
                 StateButton(
-                    text: model.actionButtonTitle(fromAsset: fromAsset.asset),
+                    text: model.actionButtonTitle(),
                     viewState: model.actionButtonState,
                     disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset),
                     action: onSelectActionButton
