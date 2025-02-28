@@ -19,9 +19,6 @@ import SwapService
 import SwiftUI
 import Transfer
 import WalletsService
-import PrimitivesComponents
-import Preferences
-import AssetsService
 
 import class Gemstone.Config
 import struct Gemstone.Permit2ApprovalData

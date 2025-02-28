@@ -33,7 +33,7 @@ public struct PercentageAccessoryView: View {
             .buttonStyle(.lightGray(paddingVertical: Spacing.tiny))
             .frame(maxWidth: .infinity)
 
-            Button(action: { onDone() }) {
+            Button(action: onDone) {
                 Text(Localized.Common.done)
             }
             .buttonStyle(.clear)

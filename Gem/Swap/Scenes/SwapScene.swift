@@ -14,14 +14,12 @@ import PrimitivesComponents
 import Swap
 import InfoSheet
 import Gemstone
-import Localization
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.keystore) private var keystore
 
     enum Field: Int, Hashable {
         case from, to
@@ -62,8 +60,7 @@ struct SwapScene: View {
             buttonView
                 .padding(.bottom, Spacing.scene.bottom)
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
-                .animation(.default, value: focusedField)
-                .isVisible(model.isVisibleActionButton)
+                .isVisible(model.isVisibleActionButton && focusedField == nil)
         }
         .ignoresSafeArea(.keyboard, edges: .bottom)
         .toolbar {
@@ -72,7 +69,6 @@ struct SwapScene: View {
             }
         }
         .navigationTitle(model.title)
-        .navigationBarTitleDisplayMode(.inline)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,

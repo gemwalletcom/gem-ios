@@ -15,7 +15,6 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
-    @Environment(\.navigationState) private var navigationState
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
