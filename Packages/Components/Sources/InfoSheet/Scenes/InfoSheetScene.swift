@@ -15,25 +15,25 @@ public struct InfoSheetScene: View {
 
     public var body: some View {
         NavigationStack {
-            VStack(spacing: Spacing.small) {
+            VStack(spacing: .small) {
                 if model.url != nil {
                     Spacer(minLength: 0)
                     InfoSheetView(model: model)
-                        .padding(.horizontal, Spacing.small)
+                        .padding(.horizontal, .small)
                     Spacer()
                     StateButton(
                         text: model.buttonTitle,
                         styleState: .normal,
                         action: onLearnMore
                     )
-                    .frame(maxWidth: Spacing.scene.button.maxWidth)
+                    .frame(maxWidth: .scene.button.maxWidth)
                 } else {
                     InfoSheetView(model: model)
                 }
             }
-            .padding(.horizontal, Spacing.medium)
+            .padding(.horizontal, .medium)
             .if(model.url != nil) {
-                $0.padding(.bottom, Spacing.scene.bottom)
+                $0.padding(.bottom, .scene.bottom)
             }
             .toolbar {
                 ToolbarItem(placement: .primaryAction) {
@@ -41,14 +41,14 @@ public struct InfoSheetScene: View {
                         Images.System.xmarkCircle
                             .symbolRenderingMode(.hierarchical)
                             .foregroundStyle(.secondary)
-                            .font(.system(size: Spacing.large).bold())
+                            .font(.system(size: .large).bold())
                     }
                     .buttonStyle(.plain)
                 }
             }
         }
         .presentationDetents([.medium])
-        .presentationCornerRadius(Sizing.Presentation.cornerRadius)
+        .presentationCornerRadius(.presentation.cornerRadius)
     }
 }
 

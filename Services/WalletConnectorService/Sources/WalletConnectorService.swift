@@ -302,6 +302,7 @@ extension WalletConnectorService {
 extension Session {
     var asSession: Primitives.WalletConnectionSession {
         WalletConnectionSession(
+            id: topic,
             sessionId: topic,
             state: .active,
             chains: [],

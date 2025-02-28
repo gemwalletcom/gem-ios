@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "تعيين كصورة رمزية";
+"errors.connections.invalid_send_parameters" = "تم توفير معلمات غير صالحة لإرسال المعاملة.";
+"errors.connections.invalid_sign_parameters" = "تم توفير معلمات غير صالحة للتوقيع.";
+"errors.connections.no_supported_wallets" = "لا تتوفر محافظ مدعومة.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "الطريقة المطلوبة غير مدعومة.";

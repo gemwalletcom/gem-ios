@@ -49,6 +49,6 @@ public final class EmojiStyleViewModel {
     }
     
     static func createColumns() -> [GridItem] {
-        Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 5)
+        Array(repeating: GridItem(.flexible(), spacing: .medium), count: 5)
     }
 }

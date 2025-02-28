@@ -31,7 +31,7 @@ public final class WalletImageViewModel: Sendable {
     
     var title: String { Localized.Common.avatar }
     
-    let emojiViewSize = Sizing.image.extraLarge
+    let emojiViewSize: Sizing = .image.extraLarge
     
     var walletRequest: WalletRequest {
         WalletRequest(walletId: wallet.id)
@@ -65,9 +65,9 @@ public final class WalletImageViewModel: Sendable {
     func getColumns(for tab: WalletImageScene.Tab) -> [GridItem] {
         switch tab {
         case .emoji:
-            Array(repeating: GridItem(.flexible(), spacing: Spacing.medium), count: 4)
+            Array(repeating: GridItem(.flexible(), spacing: .medium), count: 4)
         case .collections:
-            Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
+            Array(repeating: GridItem(spacing: .medium), count: 2)
         }
     }
     

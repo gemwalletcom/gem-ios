@@ -9,6 +9,10 @@ extension SwapProvider {
     public var name: String {
         swapProviderNameToString(provider: self)
     }
+    
+    public var protocolName: String {
+        swapProviderProtocolNameToString(provider: self)
+    }
 }
 
 extension SwapQuoteData {

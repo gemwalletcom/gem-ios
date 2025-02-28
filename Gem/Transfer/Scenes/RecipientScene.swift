@@ -34,7 +34,7 @@ struct RecipientScene: View {
             List {
                 Section {
                     FloatTextField(model.recipientField, text: $address, allowClean: false) {
-                        HStack(spacing: Spacing.large/2) {
+                        HStack(spacing: .large/2) {
                             NameRecordView(
                                 model: NameRecordViewModel(chain: model.chain),
                                 state: $nameResolveState,
@@ -94,7 +94,7 @@ struct RecipientScene: View {
             
             Spacer()
             Button(Localized.Common.continue, action: next)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
             .buttonStyle(.blue())
         }
         .background(Colors.grayBackground)

@@ -69,7 +69,7 @@ public struct CurrencyInputView: View {
 
             Text(secondaryText)
                 .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: Sizing.list.image)
+                .frame(minHeight: .list.image)
         }
     }
 }

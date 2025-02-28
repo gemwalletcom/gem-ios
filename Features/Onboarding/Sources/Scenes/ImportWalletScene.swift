@@ -62,7 +62,7 @@ struct ImportWalletScene: View {
                                         }
                                     }
                                 }
-                                .padding(.top, Spacing.small + Spacing.tiny)
+                                .padding(.top, .small + .tiny)
                                 if let chain = model.chain, importType == .address {
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
@@ -98,9 +98,9 @@ struct ImportWalletScene: View {
                 action: onImportWallet
             )
             .accessibilityIdentifier("import_wallet")
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.validation("")), message: Text($0))

@@ -7,13 +7,13 @@ import GRDBQuery
 import Components
 import Style
 import BigInt
-import Keystore
 import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
 import InfoSheet
+import Gemstone
 import Localization
 
 struct SwapScene: View {
@@ -49,22 +49,10 @@ struct SwapScene: View {
         onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
+        _fromAsset = Query(model.fromAssetRequest)
+        _toAsset = Query(model.toAssetRequest)
         _isPresentingAssetSwapType = isPresentingAssetSwapType
         self.onTransferAction = onTransferAction
-        
-        let fromAssetRequest = Binding {
-            model.fromAssetRequest
-        } set: { new in
-            model.fromAssetRequest = new
-        }
-        _fromAsset = Query(fromAssetRequest)
-
-        let toAssetRequest = Binding {
-            model.toAssetRequest
-        } set: { new in
-            model.toAssetRequest = new
-        }
-        _toAsset = Query(toAssetRequest)
     }
 
     var body: some View {
@@ -96,17 +84,16 @@ struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
-        .scrollDismissesKeyboard(.immediately)
-        .onChange(of: keystore.currentWallet, onChangeWallet)
         .onChange(of: model.fromValue, onChangeFromValue)
         .onChange(of: fromAsset, onChangeFromAsset)
         .onChange(of: toAsset, onChangeToAsset)
-        .onChange(of: model.pairSelectorModel?.fromAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.fromAssetId) { _, new in
             $fromAsset.assetId.wrappedValue = new?.identifier
         }
-        .onChange(of: model.pairSelectorModel?.toAssetId) { _, new in
+        .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
+        .onChange(of: model.selectedSwapQuote, onChangeSelectedQuote)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
@@ -190,11 +177,18 @@ extension SwapScene {
     private var additionalInfoSectionView: some View {
         Section {
             if let provider = model.providerText {
-                ListItemImageView(
+                let view = ListItemImageView(
                     title: model.providerField,
                     subtitle: provider,
                     assetImage: model.providerImage
                 )
+                if model.allowSelectProvider, let toAsset {
+                    NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
+                        view
+                    }
+                } else {
+                    view
+                }
             }
 
             if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
@@ -268,18 +262,20 @@ extension SwapScene {
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
+        model.setSelectedSwapQuote(nil)
         focusedField = .from
         fetch()
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
+        model.setSelectedSwapQuote(nil)
         fetch()
     }
     
-    private func onChangeWallet(_ _: Wallet?, wallet: Wallet?) {
-        guard let wallet else { return }
-        model.refresh(for: wallet)
+    private func onChangeSelectedQuote(_: SwapQuote?, quote: SwapQuote?) {
+        guard let quote, let toAsset else { return }
+        model.onSelectQuote(quote, asset: toAsset.asset)
     }
 }
 

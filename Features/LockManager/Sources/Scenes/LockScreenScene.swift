@@ -38,7 +38,7 @@ struct LockScreenScene: View {
 extension LockScreenScene {
     @ViewBuilder
     private var unlockButton: some View {
-        VStack(spacing: Spacing.medium) {
+        VStack(spacing: .medium) {
             if model.state == .lockedCanceled {
                 Button(action: unlock) {
                     HStack {
@@ -49,7 +49,7 @@ extension LockScreenScene {
                     }
                 }
                 .buttonStyle(.blue())
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .frame(maxWidth: .scene.button.maxWidth)
                 .padding()
             }
         }

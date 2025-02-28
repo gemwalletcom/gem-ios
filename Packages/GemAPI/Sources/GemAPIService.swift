@@ -66,6 +66,10 @@ public protocol GemAPINFTService: Sendable {
     func getNFTAssets(deviceId: String, walletIndex: Int) async throws -> [NFTData]
 }
 
+public protocol GemAPIScanService: Sendable {
+    func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -268,5 +272,13 @@ extension GemAPIService: GemAPINFTService {
         try await provider
             .request(.getNFTAssets(deviceId: deviceId, walletIndex: walletIndex))
             .map(as: ResponseResult<[NFTData]>.self).data
+    }
+}
+
+extension GemAPIService: GemAPIScanService {
+    public func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction {
+        try await provider
+            .request(.scanTransaction(payload: payload))
+            .map(as: ResponseResult<ScanTransaction>.self).data
     }
 }

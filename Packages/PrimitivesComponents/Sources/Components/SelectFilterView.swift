@@ -22,7 +22,7 @@ public struct SelectFilterView: View {
                 title: typeModel.title,
                 subtitle: typeModel.value,
                 image: typeModel.image,
-                imageSize: Sizing.list.image
+                imageSize: .list.image
             ),
             action: action
         )
