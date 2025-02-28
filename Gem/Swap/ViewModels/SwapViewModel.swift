@@ -166,11 +166,7 @@ class SwapViewModel {
     }
 
     func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(
-            items: swapQuotes.sorted(by: {
-                (try? BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)) == true
-            }).map { SwapProviderItem(asset: asset, swapQuote: $0) }
-        )
+        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
     }
 }
 
@@ -227,8 +223,8 @@ extension SwapViewModel {
         return nil
     }
     
-    func updateToValue(
-        for quote: SwapQuote,
+    func onSelectQuote(
+        _ quote: SwapQuote,
         asset: Asset
     ) {
         guard let value = try? BigInt.from(string: quote.toValue) else {
@@ -270,14 +266,15 @@ extension SwapViewModel {
         guard shouldFetch else { return }
 
         do {
-            let swapQuotes = try await getQuote(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+            let swapQuotes = try await getQuotes(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
 
             await MainActor.run {
                 swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
                 if let selectedSwapQuote {
-                    updateToValue(for: selectedSwapQuote, asset: toAsset)
-                } else {
-                    setBestQuote(for: toAsset)
+                    onSelectQuote(selectedSwapQuote, asset: toAsset)
+                } else if let bestQuote = swapQuotes.first {
+                    onSelectQuote(bestQuote, asset: toAsset)
+                    selectedSwapQuote = bestQuote
                 }
             }
         } catch {
@@ -305,38 +302,25 @@ extension SwapViewModel {
     private func getSwapData(fromAsset: Asset, toAsset: Asset, quote: SwapQuote) async throws -> TransferData {
         let quoteData = try await getQuoteData(quote: quote)
         let value = BigInt(stringLiteral: quote.request.value)
-        let recepientData = RecipientData(
+        let recipientData = RecipientData(
             recipient: Recipient(name: quote.data.provider.name, address: quoteData.to, memo: .none),
             amount: .none
         )
-        return TransferData(type: .swap(fromAsset, toAsset, quote, quoteData), recipientData: recepientData, value: value, canChangeValue: true)
+        return TransferData(type: .swap(fromAsset, toAsset, quote, quoteData), recipientData: recipientData, value: value, canChangeValue: true)
     }
 
-    private func getQuote(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> [SwapQuote] {
+    private func getQuotes(fromAsset: Asset, toAsset: Asset, amount: String) async throws -> [SwapQuote] {
         let value = try formatter.inputNumber(from: amount, decimals: Int(fromAsset.decimals))
         let walletAddress = try wallet.account(for: fromAsset.chain).address
         let destinationAddress = try wallet.account(for: toAsset.chain).address
-        return try await swapService.getQuotes(
+        let swapQuotes = try await swapService.getQuotes(
             fromAsset: fromAsset.id,
             toAsset: toAsset.id,
             value: value.description,
             walletAddress: walletAddress,
             destinationAddress: destinationAddress
         )
-    }
-    
-    private func setBestQuote(for toAsset: Asset) {
-        guard
-            case .loaded(let result) = swapState.availability,
-            let bestRate = try? result.quotes.sorted(by: {
-                try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue)
-            }).first
-        else {
-            return
-        }
-        
-        updateToValue(for: bestRate, asset: toAsset)
-        selectedSwapQuote = bestRate
+        return try swapQuotes.sorted { try BigInt.from(string: $0.toValue) > BigInt.from(string: $1.toValue) }
     }
 
     private func getQuoteData(quote: SwapQuote) async throws -> SwapQuoteData {

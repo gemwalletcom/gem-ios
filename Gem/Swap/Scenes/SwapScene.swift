@@ -236,7 +236,7 @@ extension SwapScene {
     
     private func onChangeSelectedQuote(_: SwapQuote?, quote: SwapQuote?) {
         guard let quote, let toAsset else { return }
-        model.updateToValue(for: quote, asset: toAsset.asset)
+        model.onSelectQuote(quote, asset: toAsset.asset)
     }
 }
 
