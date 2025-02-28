@@ -4,18 +4,13 @@ import Foundation
 import Store
 import Primitives
 import UIKit
-import FileStore
 
 public struct AvatarService: Sendable {
     private let store: WalletStore
-    private let fileStore: FileStore
+    private let localStore = LocalStore()
     
-    public init(
-        store: WalletStore,
-        fileStore: FileStore
-    ) {
+    public init(store: WalletStore) {
         self.store = store
-        self.fileStore = fileStore
     }
     
     // MARK: - Store
@@ -42,15 +37,14 @@ public struct AvatarService: Sendable {
     private func write(data: Data, for walletId: String) throws {
         try deleteExistingAvatar(for: walletId)
         
-        let avatarId = UUID().uuidString
-        try fileStore.store(value: data, for: .avatar(walletId: walletId, avatarId: avatarId))
-        try store.setWalletAvatar(walletId, path: avatarId)
+        let avatar = try localStore.store(data)
+        try store.setWalletAvatar(walletId, path: avatar)
     }
     
     private func deleteExistingAvatar(for walletId: String) throws {
-        guard let imagePath = try store.getWallet(id: walletId)?.imageUrl else {
+        guard let avatar = try store.getWallet(id: walletId)?.imageUrl else {
             return
         }
-        try fileStore.remove(for: .avatar(walletId: walletId, avatarId: imagePath))
+        try localStore.remove(avatar)
     }
 }
