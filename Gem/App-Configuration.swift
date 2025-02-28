@@ -229,7 +229,7 @@ extension NFTStore {
 }
 
 extension AvatarService {
-    static let main = AvatarService(store: .main, fileStore: FileStore.main)
+    static let main = AvatarService(store: .main, fileStore: .main)
 }
 
 extension FileStore {

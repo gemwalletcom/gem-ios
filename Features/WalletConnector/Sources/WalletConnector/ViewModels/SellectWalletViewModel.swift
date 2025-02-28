@@ -4,7 +4,6 @@ import Foundation
 import Primitives
 import Localization
 import PrimitivesComponents
-import FileStore
 
 struct SellectWalletViewModel {
     private var wallets: [Wallet]
@@ -18,12 +17,12 @@ struct SellectWalletViewModel {
     var title: String { Localized.Wallets.title }
 
     var walletModels: [WalletViewModel] {
-        wallets.map({ WalletViewModel(wallet: $0, fileStore: FileStore()) })
+        wallets.map({ WalletViewModel(wallet: $0) })
     }
 
     var walletModel: WalletViewModel {
         get {
-            WalletViewModel(wallet: selectedWallet, fileStore: FileStore())
+            WalletViewModel(wallet: selectedWallet)
         }
         set {
             selectedWallet = newValue.wallet

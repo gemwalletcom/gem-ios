@@ -5,13 +5,11 @@ import Primitives
 import Style
 import Components
 import Transactions
-import PrimitivesComponents
 
 struct TransactionsNavigationStack: View {
     @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
-    @Environment(\.fileStore) private var fileStore
 
     @State private var isPresentingFilteringView: Bool = false
     @State private var model: TransactionsViewModel
@@ -49,7 +47,7 @@ struct TransactionsNavigationStack: View {
                 }
                 .navigationDestination(for: Scenes.Asset.self) {
                     AssetScene(
-                        walletModel: WalletViewModel(wallet: model.wallet, fileStore: fileStore),
+                        wallet: model.wallet,
                         input: AssetSceneInput(walletId: model.walletId, assetId: $0.asset.id),
                         isPresentingAssetSelectedInput: Binding.constant(.none),
                         onAssetActivate: .none

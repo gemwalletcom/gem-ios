@@ -8,7 +8,6 @@ import Primitives
 import Localization
 import PrimitivesComponents
 import WalletAvatar
-import FileStore
 
 struct WalletListItemView: View {
 
@@ -29,7 +28,7 @@ struct WalletListItemView: View {
         onDelete: @escaping (Wallet) -> Void
     ) {
         self.currentWallet = currentWallet
-        self.model = WalletViewModel(wallet: wallet, fileStore: FileStore())
+        self.model = WalletViewModel(wallet: wallet)
         self.onSelect = onSelect
         self.onEdit = onEdit
         self.onPin = onPin

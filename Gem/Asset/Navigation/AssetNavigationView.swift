@@ -4,10 +4,8 @@ import Foundation
 import SwiftUI
 import Primitives
 import Localization
-import PrimitivesComponents
 
 struct AssetNavigationView: View {
-    @Environment(\.fileStore) var fileStore
 
     let wallet: Wallet
     let assetId: AssetId
@@ -27,7 +25,7 @@ struct AssetNavigationView: View {
 
     var body: some View {
         AssetScene(
-            walletModel: WalletViewModel(wallet: wallet, fileStore: fileStore),
+            wallet: wallet,
             input: AssetSceneInput(walletId: wallet.walletId, assetId: assetId),
             isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput) { asset in
                 transferData = TransferData(

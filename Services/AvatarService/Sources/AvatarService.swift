@@ -8,11 +8,11 @@ import FileStore
 
 public struct AvatarService: Sendable {
     private let store: WalletStore
-    private let fileStore: FileStorable
+    private let fileStore: FileStore
     
     public init(
         store: WalletStore,
-        fileStore: FileStorable
+        fileStore: FileStore
     ) {
         self.store = store
         self.fileStore = fileStore

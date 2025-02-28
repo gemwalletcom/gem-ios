@@ -8,7 +8,6 @@ import GRDBQuery
 import Style
 import InfoSheet
 import PrimitivesComponents
-import FileStore
 
 public struct WalletScene: View {
     @Query<TotalValueRequest>
@@ -240,7 +239,7 @@ extension WalletScene {
 
 extension WalletBarViewViewModel {
     static func from(wallet: Wallet) -> WalletBarViewViewModel {
-        let model = WalletViewModel(wallet: wallet, fileStore: FileStore())
+        let model = WalletViewModel(wallet: wallet)
         return WalletBarViewViewModel(
             name: model.name,
             image: model.avatarImage

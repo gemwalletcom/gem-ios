@@ -11,22 +11,15 @@ let package = Package(
             targets: ["FileStore"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives")
     ],
     targets: [
         .target(
             name: "FileStore",
-            dependencies: [
-                "Primitives"
-            ],
+            dependencies: [],
             path: "Sources"
         ),
         .testTarget(
             name: "FileStoreTests",
-            dependencies: [
-                "FileStore",
-                "Primitives"
-            ]
-        ),
+            dependencies: ["FileStore"]),
     ]
 )

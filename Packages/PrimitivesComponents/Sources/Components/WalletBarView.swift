@@ -42,23 +42,22 @@ public struct WalletBarView: View {
 
 // MARK: - Previews
 
-//#Preview {
-//    WalletBarView(
-//        model: WalletBarViewViewModel(
-//            name: WalletViewModel(
-//                wallet: .init(
-//                    id: "",
-//                    name: "Wallet #1",
-//                    index: 1,
-//                    type: .multicoin,
-//                    accounts: [.init(chain: .algorand, address: "", derivationPath: "", extendedPublicKey: "")],
-//                    order: 1,
-//                    isPinned: true,
-//                    imageUrl: nil
-//                ),
-//                fileStore: FileStoreMock()
-//            ).name,
-//            image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)
-//        )
-//    )
-//}
+#Preview {
+    WalletBarView(
+        model: WalletBarViewViewModel(
+            name: WalletViewModel(
+                wallet: .init(
+                    id: "",
+                    name: "Wallet #1",
+                    index: 1,
+                    type: .multicoin,
+                    accounts: [.init(chain: .algorand, address: "", derivationPath: "", extendedPublicKey: "")],
+                    order: 1,
+                    isPinned: true,
+                    imageUrl: nil
+                )
+            ).name,
+            image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)
+        )
+    )
+}
