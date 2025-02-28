@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Gemstone
 
 public struct Scenes {
     public struct CreateWallet: Hashable {
@@ -144,6 +145,14 @@ public struct Scenes {
         
         public init(assetData: NFTAssetData) {
             self.assetData = assetData
+        }
+    }
+    
+    public struct SwapProviders: Hashable {
+        public let asset: Primitives.Asset
+
+        public init(asset: Primitives.Asset) {
+            self.asset = asset
         }
     }
 }

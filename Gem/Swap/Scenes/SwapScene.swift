@@ -7,13 +7,13 @@ import GRDBQuery
 import Components
 import Style
 import BigInt
-import Keystore
 import ChainService
 import struct Swap.SwapTokenEmptyView
 import struct Swap.SwapChangeView
 import PrimitivesComponents
 import Swap
 import InfoSheet
+import Gemstone
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -36,16 +36,22 @@ struct SwapScene: View {
     @State private var model: SwapViewModel
     
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
+    private let onTransferAction: TransferDataAction
 
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
 
     init(
-        model: SwapViewModel
+        model: SwapViewModel,
+        isPresentingAssetSwapType: Binding<SelectAssetSwapType?>,
+        onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
         _fromAsset = Query(model.fromAssetRequest)
         _toAsset = Query(model.toAssetRequest)
+        _isPresentingAssetSwapType = isPresentingAssetSwapType
+        self.onTransferAction = onTransferAction
     }
 
     var body: some View {
@@ -87,6 +93,7 @@ struct SwapScene: View {
         .onChange(of: model.pairSelectorModel.toAssetId) { _, new in
             $toAsset.assetId.wrappedValue = new?.identifier
         }
+        .onChange(of: model.selectedSwapQuote, onChangeSelectedQuote)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
             fetch()
         }
@@ -152,11 +159,18 @@ extension SwapScene {
             
             Section {
                 if let provider = model.providerText {
-                    ListItemImageView(
+                    let view = ListItemImageView(
                         title: model.providerField,
                         subtitle: provider,
                         assetImage: model.providerImage
                     )
+                    if model.allowSelectProvider, let toAsset {
+                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
+                            view
+                        }
+                    } else  {
+                        view
+                    }
                 }
 
                 if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
@@ -186,14 +200,13 @@ extension SwapScene {
     }
 
     private func onSelectAssetPayAction() {
-        model.onSelectAssetAction(type: .pay)
+        isPresentingAssetSwapType = .pay
     }
 
     private func onSelectAssetReceiveAction() {
         guard let fromAsset = fromAsset else { return }
         let (chains, assetIds) = model.getAssetsForPayAssetId(assetId: fromAsset.asset.id)
-        
-        model.onSelectAssetAction(type: .receive(chains: chains, assetIds: assetIds))
+        isPresentingAssetSwapType = .receive(chains: chains, assetIds: assetIds)
     }
 
     private func onSelectActionButton() {
@@ -210,13 +223,20 @@ extension SwapScene {
 
     private func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         model.resetValues()
+        model.setSelectedSwapQuote(nil)
         focusedField = .from
         fetch()
     }
 
     private func onChangeToAsset(_: AssetData?, _: AssetData?) {
         model.resetToValue()
+        model.setSelectedSwapQuote(nil)
         fetch()
+    }
+    
+    private func onChangeSelectedQuote(_: SwapQuote?, quote: SwapQuote?) {
+        guard let quote, let toAsset else { return }
+        model.onSelectQuote(quote, asset: toAsset.asset)
     }
 }
 
@@ -234,8 +254,14 @@ extension SwapScene {
 
     func swap() {
         Task {
-            guard let fromAsset, let toAsset else { return }
-            await model.swap(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            guard
+                let fromAsset,
+                let toAsset,
+                let swapData = await model.swapData(fromAsset: fromAsset.asset, toAsset: toAsset.asset)
+            else {
+                return
+            }
+            onTransferAction?(swapData)
         }
     }
 }

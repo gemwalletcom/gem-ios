@@ -2,18 +2,18 @@
 
 import Foundation
 import Primitives
-import Localization
+import Gemstone
 import Components
 
-public struct FiatProvidersViewModel: SelectableListAdoptable {
-    public typealias Item = FiatQuoteViewModel
-    public var items: [FiatQuoteViewModel]
-    public var selectedItems: Set<FiatQuoteViewModel>
+public struct SwapProvidersViewModel: SelectableListAdoptable {
+    public typealias Item = SwapProviderItem
+    public var items: [SwapProviderItem]
+    public var selectedItems: Set<SwapProviderItem>
     public var isMultiSelectionEnabled: Bool
     
     public init(
-        items: [FiatQuoteViewModel],
-        selectedItems: [FiatQuoteViewModel],
+        items: [SwapProviderItem],
+        selectedItems: [SwapProviderItem],
         isMultiSelectionEnabled: Bool
     ) {
         self.items = items

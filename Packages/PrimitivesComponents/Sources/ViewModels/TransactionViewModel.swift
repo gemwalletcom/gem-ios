@@ -175,6 +175,9 @@ public struct TransactionViewModel: Sendable {
     public var subtitle: String? {
         switch transaction.transaction.type {
         case .transfer, .transferNFT, .smartContractCall:
+            guard transaction.transaction.valueBigInt.isZero == false else {
+                return amountSymbolText
+            }
             switch transaction.transaction.direction {
             case .incoming:
                 return String(format: "+%@", amountSymbolText)
