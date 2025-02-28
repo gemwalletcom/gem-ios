@@ -132,12 +132,10 @@ class SwapViewModel {
 
     func actionButtonTitle() -> String {
         switch swapState.availability {
-        case .noData, .loading:
-            return Localized.Wallet.swap
-        case .loaded:
-            return Localized.Wallet.swap
+        case .noData, .loading, .loaded:
+            Localized.Wallet.swap
         case .error:
-            return Localized.Common.tryAgain
+            Localized.Common.tryAgain
         }
     }
 
@@ -264,13 +262,14 @@ extension SwapViewModel {
         toAsset: Asset,
         amount: String
     ) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
+        let shouldFetch: Bool = await MainActor.run {
             resetToValue()
-            if !self.isValidValue(fromAsset: fromAsset) {
-                self.swapState.availability = .noData
+            if !isValidValue(fromAsset: fromAsset) {
+                swapState.availability = .noData
+                selectedSwapQuote = nil
                 return false
             }
-            self.swapState.availability = .loading
+            swapState.availability = .loading
             return true
         }
 
@@ -289,9 +288,9 @@ extension SwapViewModel {
                 }
             }
         } catch {
-            await MainActor.run { [self] in
+            await MainActor.run {
                 if !error.isCancelled {
-                    self.swapState.availability = .error(ErrorWrapper(error))
+                    swapState.availability = .error(ErrorWrapper(error))
                     NSLog("fetch asset data error: \(error)")
                 }
             }
