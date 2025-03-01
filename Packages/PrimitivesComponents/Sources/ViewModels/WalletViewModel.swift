@@ -61,7 +61,7 @@ public struct WalletViewModel {
         if let url = URL(string: imageUrl), url.scheme != nil {
             return url
         }
-        return FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(imageUrl)
+        return URL.documentsDirectory.appendingPathComponent(imageUrl)
     }
 }
 
