@@ -50,6 +50,8 @@ public extension Spacing {
         public struct button {
             /// 340
             public static let maxWidth: CGFloat = 340
+            /// 40
+            public static let accessoryHeight: CGFloat = 40
         }
 
         public struct content {

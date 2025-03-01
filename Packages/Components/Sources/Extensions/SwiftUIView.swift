@@ -12,6 +12,14 @@ public extension View {
             self
         }
     }
+    
+    @ViewBuilder func isVisible(_ isVisible: Bool) -> some View {
+        if isVisible {
+            self
+        } else {
+            self.hidden()
+        }
+    }
 
     @ViewBuilder
     func `if`<Content: View>(
