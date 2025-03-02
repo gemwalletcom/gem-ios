@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapProvider
+import struct Gemstone.SwapProviderType
 import Components
 
 public struct SwapProviderViewModel {
     
-    private let provider: SwapProvider
-    
-    init(provider: SwapProvider) {
+    private let provider: SwapProviderType
+
+    init(provider: SwapProviderType) {
         self.provider = provider
     }
     
@@ -17,6 +17,6 @@ public struct SwapProviderViewModel {
     }
     
     var providerImage: AssetImage? {
-        AssetImage(imageURL: .none, placeholder: provider.image, chainPlaceholder: .none)
+        AssetImage(imageURL: .none, placeholder: provider.id.image, chainPlaceholder: .none)
     }
 }

@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import struct Gemstone.SwapQuote
-import struct Gemstone.SwapProvider
-import struct Gemstone.SwapQuoteData
 import struct Gemstone.ApprovalData
+import enum Gemstone.SwapProvider
+import struct Gemstone.SwapQuote
+import struct Gemstone.SwapQuoteData
 
 public enum AccountDataType: Hashable, Equatable, Sendable {
     case activate
@@ -18,7 +18,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
     case stake(Asset, StakeType)
     case account(Asset, AccountDataType)
     case generic(asset: Asset, metadata: WalletConnectionSessionAppMetadata, extra: TransferDataExtra)
-    
+
     public var transactionType: TransactionType {
         switch self {
         case .transfer: .transfer
@@ -37,19 +37,19 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         case .account: .assetActivation
         }
     }
-    
+
     public var chain: Chain {
         switch self {
         case .transfer(let asset),
-            .swap(let asset, _, _, _),
-            .stake(let asset, _),
-            .account(let asset, _),
-            .tokenApprove(let asset, _),
-            .generic(let asset, _, _): asset.chain
+             .swap(let asset, _, _, _),
+             .stake(let asset, _),
+             .account(let asset, _),
+             .tokenApprove(let asset, _),
+             .generic(let asset, _, _): asset.chain
         case .transferNft(let asset): asset.chain
         }
     }
-    
+
     public var metadata: TransactionMetadata {
         switch self {
         case .swap(let fromAsset, let toAsset, let quote, _):
@@ -62,22 +62,22 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                 )
             )
         case .generic,
-            .transfer,
-            .tokenApprove,
-            .stake,
-            .account,
-            .transferNft:
+             .transfer,
+             .tokenApprove,
+             .stake,
+             .account,
+             .transferNft:
             return .null
         }
     }
-    
+
     public var assetIds: [AssetId] {
         switch self {
         case .transfer(let asset),
-            .tokenApprove(let asset, _),
-            .stake(let asset, _),
-            .generic(let asset, _, _),
-            .account(let asset, _):
+             .tokenApprove(let asset, _),
+             .stake(let asset, _),
+             .generic(let asset, _, _),
+             .account(let asset, _):
             [asset.id]
         case .swap(let from, let to, _, _):
             [from.id, to.id]
