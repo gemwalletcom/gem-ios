@@ -30,7 +30,7 @@ extension SwapProviderItem: SimpleListItemViewable {
     }
     
     public var image: Image {
-        swapQuote.data.provider.image
+        swapQuote.data.provider.id.image
     }
 }
 
