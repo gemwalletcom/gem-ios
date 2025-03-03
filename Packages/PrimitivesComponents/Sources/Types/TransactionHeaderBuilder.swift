@@ -18,7 +18,6 @@ public struct TransactionHeaderTypeBuilder {
                     .stakeRedelegate,
                     .stakeRewards,
                     .stakeWithdraw,
-                    .assetActivation,
                     .transferNFT,
                     .smartContractCall:
                 return .amount(showFiatSubtitle: true)
@@ -31,7 +30,8 @@ public struct TransactionHeaderTypeBuilder {
                     fatalError("fromAsset & toAsset missed")
                 }
                 return .swap(input)
-            case .tokenApproval: return .empty
+            case .assetActivation,
+                .tokenApproval: return .symbol
             }
         }()
         return infoModel.headerType(input: inputType)

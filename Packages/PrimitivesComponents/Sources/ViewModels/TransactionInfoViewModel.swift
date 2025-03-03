@@ -90,7 +90,11 @@ public struct TransactionInfoViewModel: Sendable {
                     from: swapAmountField(input: swapInput.from),
                     to: swapAmountField(input: swapInput.to)
                 )
-        case .empty: .empty
+        case .symbol:
+                .amount(
+                    title: asset.symbol,
+                    subtitle: .none
+                )
         }
     }
 }
