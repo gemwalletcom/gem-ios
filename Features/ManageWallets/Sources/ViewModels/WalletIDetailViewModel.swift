@@ -58,8 +58,8 @@ public class WalletDetailViewModel {
         WalletRequest(walletId: wallet.id)
     }
     
-    func avatarAssetImage(for dbWallet: Wallet) -> AssetImage {
-        let avatar = WalletViewModel(wallet: dbWallet).avatarImage
+    func avatarAssetImage(for wallet: Wallet) -> AssetImage {
+        let avatar = WalletViewModel(wallet: wallet).avatarImage
         return AssetImage(
             type: avatar.type,
             imageURL: avatar.imageURL,

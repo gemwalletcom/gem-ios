@@ -31,6 +31,14 @@ extension BitcoinService {
             .map(as: BitcoinAccount.self)
     }
     
+    func getUtxos(address: String) async throws -> [UTXO] {
+        let address = chain.chain.fullAddress(address: address)
+        return try await provider
+            .request(.utxo(address: address))
+            .map(as: [BitcoinUTXO].self)
+            .map { $0.mapToUTXO(address: address) }
+    }
+    
     private func block(block: Int) async throws -> BitcoinBlock {
         try await provider
             .request(.block(block: block))
@@ -43,13 +51,6 @@ extension BitcoinService {
             .map(as: BitcoinNodeInfo.self).blockbook.bestHeight.asBigInt
     }
 
-    func getUtxos(address: String) async throws -> [UTXO] {
-        try await provider
-            .request(.utxo(address: address))
-            .map(as: [BitcoinUTXO].self)
-            .map { $0.mapToUTXO(address: address) }
-    }
-    
     func getFeePriority(for blocks: Int) async throws -> String {
         try await provider
             .request(.fee(priority: blocks))

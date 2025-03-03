@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import enum Gemstone.SwapProvider
+import struct Gemstone.SwapProvider
 import Components
 
 public struct SwapProviderViewModel {
