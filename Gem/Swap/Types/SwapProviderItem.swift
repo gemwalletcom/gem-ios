@@ -13,8 +13,7 @@ public struct SwapProviderItem {
     public let formatter = ValueFormatter(style: .short)
     
     private var amount: String {
-        let value = (try? BigInt.from(string: swapQuote.toValue)) ?? .zero
-        return formatter.string(value, decimals: asset.decimals.asInt)
+        formatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
     }
 }
 
@@ -22,7 +21,7 @@ public struct SwapProviderItem {
 
 extension SwapProviderItem: SimpleListItemViewable {
     public var title: String {
-        swapQuote.data.provider.name
+        swapQuote.data.provider.protocol
     }
     
     public var subtitle: String? {
