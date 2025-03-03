@@ -13,7 +13,6 @@ public struct TransactionHeaderTypeBuilder {
         let inputType: TransactionHeaderInputType = {
             switch type {
             case .transfer,
-                    .tokenApproval,
                     .stakeDelegate,
                     .stakeUndelegate,
                     .stakeRedelegate,
@@ -32,6 +31,7 @@ public struct TransactionHeaderTypeBuilder {
                     fatalError("fromAsset & toAsset missed")
                 }
                 return .swap(input)
+            case .tokenApproval: return .empty
             }
         }()
         return infoModel.headerType(input: inputType)
