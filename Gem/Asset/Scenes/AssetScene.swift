@@ -46,7 +46,7 @@ struct AssetScene: View {
                 currencyCode: Preferences.standard.currency
             ),
             walletModel: walletModel,
-            bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: (model.banners + banners).map { $0.event })
         )
     }
     
