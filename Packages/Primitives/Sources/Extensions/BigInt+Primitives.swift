@@ -22,15 +22,13 @@ public extension BigInt {
         return UInt32(self)
     }
     
-    func increase(byPercentage percentage: Double) -> BigInt {
-        let multiplier = 1 + percentage / 100.0
-        let result = Double(self) * multiplier
-        return BigInt(result.rounded())
+    func increase(by bps: Int) -> BigInt {
+        let multiplier = 10_000 + bps
+        return (self * BigInt(multiplier)) / 10_000
     }
     
-    func multiply(byPercentage percentage: Double) -> BigInt {
-        let result = Double(self) * percentage
-        return BigInt(result.rounded())
+    func multiply(by bps: Int) -> BigInt {
+        (self * BigInt(bps)) / 10_000
     }
     
     var hexString: String {
