@@ -6,19 +6,27 @@ import Localization
 import SwiftUI
 import Style
 
-public struct LinkTypeViewModel {
-    public let link: LinkType
+public struct AssetLinkViewModel {
+    public let assetLink: AssetLink
     
-    public init(link: LinkType) {
-        self.link = link
+    public init(assetLink: AssetLink) {
+        self.assetLink = assetLink
     }
     
-    public var order: Int {
-        link.order
+    public var insightLink: InsightLink? {
+        guard let title = name, let url, let image else {
+            return .none
+        }
+        return InsightLink(
+            title: title,
+            subtitle: host,
+            url: url,
+            image: image
+        )
     }
     
-    public var name: String {
-        switch link {
+    public var name: String? {
+        switch assetLink.linkType {
         case .x: Localized.Social.x
         case .discord: Localized.Social.discord
         case .reddit: Localized.Social.reddit
@@ -33,11 +41,12 @@ public struct LinkTypeViewModel {
         case .instagram: Localized.Social.instagram
         case .magicEden: Localized.Social.magiceden
         case .tikTok: Localized.Social.tiktok
+        case .none: nil
         }
     }
     
-    public var image: Image {
-        switch link {
+    public var image: Image? {
+        switch assetLink.linkType {
         case .x: Images.Social.x
         case .discord: Images.Social.discord
         case .reddit: Images.Social.reddit
@@ -52,6 +61,18 @@ public struct LinkTypeViewModel {
         case .instagram: Images.Social.instagram
         case .magicEden: Images.Social.magiceden
         case .tikTok: Images.Social.tiktok
+        case .none: nil
         }
+    }
+    
+    public var url: URL? {
+        assetLink.url.asURL
+    }
+    
+    public var host: String? {
+        if case .website = assetLink.linkType {
+            return assetLink.url.asURL?.cleanHost()
+        }
+        return nil
     }
 }
