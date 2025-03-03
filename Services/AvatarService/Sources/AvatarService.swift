@@ -37,8 +37,8 @@ public struct AvatarService: Sendable {
     private func write(data: Data, for walletId: String) throws {
         try deleteExistingAvatar(for: walletId)
         
-        let avatar = try localStore.store(data)
-        try store.setWalletAvatar(walletId, path: avatar)
+        let imageUrl = try localStore.store(data, id: UUID().uuidString, documentType: "png")
+        try store.setWalletAvatar(walletId, path: imageUrl)
     }
     
     private func deleteExistingAvatar(for walletId: String) throws {
