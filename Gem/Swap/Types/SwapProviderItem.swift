@@ -22,7 +22,7 @@ public struct SwapProviderItem {
 
 extension SwapProviderItem: SimpleListItemViewable {
     public var title: String {
-        swapQuote.data.provider.protocol
+        swapQuote.data.provider.name
     }
     
     public var subtitle: String? {
