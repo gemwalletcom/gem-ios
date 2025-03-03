@@ -16,8 +16,6 @@ import InfoSheet
 import Gemstone
 
 struct SwapScene: View {
-    static let maxBps = 10_000
-
     @Environment(\.dismiss) private var dismiss
     @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
@@ -127,7 +125,7 @@ extension SwapScene {
                 SwapTokenView(
                     model: model.swapTokenModel(from: fromAsset, type: .pay),
                     text: $model.fromValue,
-                    onBalanceAction: onSelectFromBalance,
+                    onBalanceAction: onSelectFromMaxBalance,
                     onSelectAssetAction: onSelectAssetPayAction
                 )
                 .buttonStyle(.borderless)
@@ -217,7 +215,7 @@ extension SwapScene {
                 .frame(height: Spacing.scene.button.accessoryHeight)
         } else {
             PercentageAccessoryView(
-                onSelectBPS: onSelectBPS,
+                onSelectPercent: onSelectPercent,
                 onDone: { focusedField = nil }
             )
         }
@@ -227,12 +225,12 @@ extension SwapScene {
 // MARK: - Actions
 
 extension SwapScene {
-    private func onSelectFromBalance() {
-        onSelectBPS(Self.maxBps)
+    private func onSelectFromMaxBalance() {
+        onSelectPercent(100)
     }
     
-    private func onSelectBPS(_ bps: Int) {
-        model.setFromValue(asset: fromAsset, bps: bps)
+    private func onSelectPercent(_ percent: Int) {
+        model.setFromValue(asset: fromAsset, percent: percent)
         focusedField = .none
     }
 

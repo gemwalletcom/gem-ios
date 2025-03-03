@@ -8,7 +8,7 @@ import WalletCore
 import GemstonePrimitives
 
 public struct EthereumService: Sendable {
-    static let gasLimitBps = 5000
+    static let gasLimitPercent = 50
     static let historyBlocks = 10
 
     let chain: EVMChain
@@ -32,7 +32,7 @@ extension EthereumService {
             let gasLimit = try await provider
                 .request(.estimateGasLimit(from: from, to: to, value: value, data: data))
                 .mapResultOrError(as: BigIntable.self).value
-            return gasLimit == BigInt(21000) ? gasLimit : BigInt(gasLimit).increase(by: Self.gasLimitBps)
+            return gasLimit == BigInt(21000) ? gasLimit : BigInt(gasLimit).increase(byPercent: Self.gasLimitPercent)
         } catch let error {
             throw AnyError("Estimate gasLimit error: \(error.localizedDescription)")
         }

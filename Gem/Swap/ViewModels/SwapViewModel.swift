@@ -187,10 +187,10 @@ extension SwapViewModel {
         toValue = ""
     }
 
-    func setFromValue(asset: AssetData?, bps: Int) {
+    func setFromValue(asset: AssetData?, percent: Int) {
         guard let asset else { return }
         fromValue = formatter.string(
-            asset.balance.available.multiply(by: bps),
+            asset.balance.available.multiply(byPercent: percent),
             decimals: asset.asset.decimals.asInt
         )
     }

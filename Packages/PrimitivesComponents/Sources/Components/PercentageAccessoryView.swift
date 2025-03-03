@@ -6,28 +6,27 @@ import Style
 import Localization
 
 public struct PercentageAccessoryView: View {
-    public let onSelectBPS: (Int) -> Void
+    
+    let percents = [25, 50, 100]
+    
+    public let onSelectPercent: (Int) -> Void
         public let onDone: () -> Void
         
         public init(
-            onSelectBPS: @escaping (Int) -> Void,
+            onSelectPercent: @escaping (Int) -> Void,
             onDone: @escaping () -> Void
         ) {
-            self.onSelectBPS = onSelectBPS
+            self.onSelectPercent = onSelectPercent
             self.onDone = onDone
         }
     
     public var body: some View {
         HStack {
             Group {
-                Button(action: { onSelectBPS(2500) }) {
-                    Text("25%")
-                }
-                Button(action: { onSelectBPS(5000) }) {
-                    Text("50%")
-                }
-                Button(action: { onSelectBPS(10000) }) {
-                    Text("100%")
+                ForEach(percents, id: \.self) { percent in
+                    Button(action: { onSelectPercent(percent) }) {
+                        Text("\(percent)%")
+                    }
                 }
             }
             .buttonStyle(.lightGray(paddingVertical: .tiny))
@@ -37,7 +36,7 @@ public struct PercentageAccessoryView: View {
                 Text(Localized.Common.done)
             }
             .buttonStyle(.clear)
-            .padding(.horizontal, .small)
+            .padding(.leading, .medium)
         }
     }
 }
