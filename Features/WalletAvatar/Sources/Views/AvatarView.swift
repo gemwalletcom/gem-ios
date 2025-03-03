@@ -14,7 +14,7 @@ public struct AvatarView: View {
         AssetImageView(
             assetImage: model.avatarImage,
             size: size,
-            overlayImageSize: .image.medium
+            overlayImageSize: .image.semiMedium
         )
     }
 }

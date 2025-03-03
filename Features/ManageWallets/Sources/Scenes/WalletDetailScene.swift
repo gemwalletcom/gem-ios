@@ -52,7 +52,7 @@ public struct WalletDetailScene: View {
                                 AssetImageView(
                                     assetImage: model.avatarAssetImage(for: dbWallet),
                                     size: .image.extraLarge,
-                                    overlayImageSize: .image.medium
+                                    overlayImageSize: .image.semiMedium
                                 )
                                 .padding(.bottom, .extraLarge)
                                 .onTapGesture {
