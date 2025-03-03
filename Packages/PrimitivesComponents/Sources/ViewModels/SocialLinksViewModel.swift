@@ -12,6 +12,6 @@ public struct SocialLinksViewModel {
     var links: [InsightLink] {
         assetLinks
             .sorted()
-            .compactMap { AssetLinkViewModel(assetLink: $0).insightLink }
+            .compactMap { AssetLinkViewModel($0).insightLink }
     }
 }

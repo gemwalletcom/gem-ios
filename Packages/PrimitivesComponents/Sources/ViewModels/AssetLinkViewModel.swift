@@ -9,7 +9,7 @@ import Style
 public struct AssetLinkViewModel {
     public let assetLink: AssetLink
     
-    public init(assetLink: AssetLink) {
+    public init(_ assetLink: AssetLink) {
         self.assetLink = assetLink
     }
     
