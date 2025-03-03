@@ -26,7 +26,7 @@ import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
 import struct Gemstone.PermitSingle
-import struct Gemstone.SwapProvider
+import struct Gemstone.SwapProviderType
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
 import struct Gemstone.SwapQuoteRequest
@@ -373,7 +373,7 @@ extension SwapViewModel {
     }
 }
 
-extension Gemstone.SwapProvider {
+extension Gemstone.SwapProviderType {
     var image: Image {
         switch self.id {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
