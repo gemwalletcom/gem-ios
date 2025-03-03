@@ -16,6 +16,7 @@ struct SwapNavigationView: View {
     
     @State private var model: SwapViewModel
     @State private var isPresentingAssetSwapType: SelectAssetSwapType?
+    @State private var isPresentingSwapProviderSelect: Asset?
 
     private let onComplete: VoidAction
     @Binding private var navigationPath: NavigationPath
@@ -34,6 +35,7 @@ struct SwapNavigationView: View {
         SwapScene(
             model: model,
             isPresentingAssetSwapType: $isPresentingAssetSwapType,
+            isPresentingSwapProviderSelect: $isPresentingSwapProviderSelect,
             onTransferAction: {
                 navigationPath.append($0)
             }
@@ -53,14 +55,6 @@ struct SwapNavigationView: View {
                 )
             )
         }
-        .navigationDestination(for: Scenes.SwapProviders.self) {
-            SelectableListView(
-                model: .constant(model.swapProvidersViewModel(asset: $0.asset)),
-                onFinishSelection: onSelectProvider,
-                listContent: { SimpleListItemView(model: $0) }
-            )
-            .navigationTitle(Localized.Buy.Providers.title)
-        }
         .sheet(item: $isPresentingAssetSwapType) { selectType in
             SelectAssetSceneNavigationStack(
                 model: SelectAssetViewModel(
@@ -75,6 +69,25 @@ struct SwapNavigationView: View {
                 ),
                 isPresentingSelectType: .constant(.swap(selectType))
             )
+        }
+        .sheet(item: $isPresentingSwapProviderSelect) { asset in
+            NavigationStack {
+                SelectableListView(
+                    model: .constant(model.swapProvidersViewModel(asset: asset)),
+                    onFinishSelection: onSelectProvider,
+                    listContent: { SimpleListItemView(model: $0) }
+                )
+                .navigationTitle(Localized.Buy.Providers.title)
+                .navigationBarTitleDisplayMode(.inline)
+                .presentationDetents([.medium, .large])
+                .toolbar {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Button(Localized.Common.done) {
+                            isPresentingSwapProviderSelect = nil
+                        }.bold()
+                    }
+                }
+            }
         }
     }
 }
@@ -108,6 +121,6 @@ extension SwapNavigationView {
     
     private func onSelectProvider(_ list: [SwapProviderItem]) {
         model.setSelectedSwapQuote(list.first?.swapQuote)
-        navigationPath.removeLast()
+        isPresentingSwapProviderSelect = nil
     }
 }

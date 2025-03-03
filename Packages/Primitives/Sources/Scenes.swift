@@ -147,12 +147,4 @@ public struct Scenes {
             self.assetData = assetData
         }
     }
-    
-    public struct SwapProviders: Hashable {
-        public let asset: Primitives.Asset
-
-        public init(asset: Primitives.Asset) {
-            self.asset = asset
-        }
-    }
 }
