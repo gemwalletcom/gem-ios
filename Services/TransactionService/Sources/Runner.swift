@@ -2,7 +2,7 @@
 
 import Foundation
 
-public actor PeriodicRunner: Sendable {
+public actor Runner: Sendable {
     private var task: Task<Void, Never>?
 
     public func start(

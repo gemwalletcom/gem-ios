@@ -17,7 +17,7 @@ public struct TransactionService: Sendable {
     private let stakeService: StakeService
     private let nftService: NFTService
 
-    private let periodicRunner = PeriodicRunner()
+    private let runner = Runner()
 
     public init(
         transactionStore: TransactionStore,
@@ -35,7 +35,7 @@ public struct TransactionService: Sendable {
 
     public func setup() {
         Task {
-            await periodicRunner.start(
+            await runner.start(
                 every: .seconds(5),
                 runImmediately: true,
                 action: updatePendingTransactions

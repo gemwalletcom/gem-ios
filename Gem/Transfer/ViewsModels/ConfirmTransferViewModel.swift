@@ -342,7 +342,9 @@ extension ConfirmTransferViewModel {
                     )
                     try addTransactions(transactions: [transaction])
                     
-                    await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    Task {
+                        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    }
                     
                     // delay if multiple transaction should be exectured
                     if signedData.count > 1 && transactionData != signedData.last {
