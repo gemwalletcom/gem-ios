@@ -24,6 +24,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .transactionState: Docs.url(.transactionStatus)
         case .watchWallet: Docs.url(.whatIsWatchWallet)
         case .stakeLockTime: Docs.url(.stakingLockTime)
+        case .priceImpact: Docs.url(.priceImpact)
         }
     }
 
@@ -39,6 +40,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             }
         case .watchWallet: Localized.Info.WatchWallet.title
         case .stakeLockTime: Localized.Stake.lockTime
+        case .priceImpact: Localized.Info.PriceImpact.title
         }
     }
 
@@ -53,6 +55,7 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             }
         case .watchWallet: Localized.Info.WatchWallet.description
         case .stakeLockTime: Localized.Info.LockTime.description
+        case .priceImpact: Localized.Info.PriceImpact.description
         }
     }
 
@@ -86,6 +89,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
                 placeholder: image,
                 chainPlaceholder: .none
             ))
+        case .priceImpact:
+            return .image(Images.Logo.logo)
         }
     }
     

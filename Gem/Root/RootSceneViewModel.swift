@@ -18,6 +18,7 @@ final class RootSceneViewModel {
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
+    private let notificationService: NotificationService
 
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
@@ -38,13 +39,15 @@ final class RootSceneViewModel {
         set { walletConnectorPresenter.isPresentingConnectionBar = newValue }
     }
 
-    init(keystore: any Keystore,
-         walletConnectorPresenter: WalletConnectorPresenter,
-         onstartService: OnstartAsyncService,
-         transactionService: TransactionService,
-         connectionsService: ConnectionsService,
-         deviceObserverService: DeviceObserverService,
-         lockWindowManager: any LockWindowManageable
+    init(
+        keystore: any Keystore,
+        walletConnectorPresenter: WalletConnectorPresenter,
+        onstartService: OnstartAsyncService,
+        transactionService: TransactionService,
+        connectionsService: ConnectionsService,
+        deviceObserverService: DeviceObserverService,
+        notificationService: NotificationService,
+        lockWindowManager: any LockWindowManageable
     ) {
         self.keystore = keystore
         self.walletConnectorPresenter = walletConnectorPresenter
@@ -52,6 +55,7 @@ final class RootSceneViewModel {
         self.transactionService = transactionService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
+        self.notificationService = notificationService
         self.lockManager = lockWindowManager
     }
 }
@@ -89,12 +93,11 @@ extension RootSceneViewModel {
             switch parsedURL {
             case .walletConnect(let uri):
                 isPresentingConnectorBar = true
-                try await connectionsService.addConnectionURI(
-                    uri: uri,
-                    wallet: try keystore.getCurrentWallet()
-                )
+                try await connectionsService.pair(uri: uri)
             case .walletConnectRequest:
                 isPresentingConnectorBar = true
+            case .asset(let assetId):
+                notificationService.notify(notification: PushNotification.asset(assetId))
             }
         } catch {
             NSLog("handleUrl error: \(error)")

@@ -33,8 +33,8 @@ struct ChartView: View {
                 ChartPriceView.from(model: chartPriceModel)
             }
         }
-        .padding(.top, Spacing.small)
-        .padding(.bottom, Spacing.tiny)
+        .padding(.top, .small)
+        .padding(.bottom, .tiny)
         
         Chart {
             ForEach(model.charts, id: \.date) { item in
@@ -89,7 +89,7 @@ struct ChartView: View {
                     )
                 }
         }
-        .padding(.vertical, Spacing.large)
+        .padding(.vertical, .large)
         .chartXAxis(.hidden)
         .chartYAxis(.hidden)
         .chartYScale(domain: model.values.yScale)
@@ -105,7 +105,7 @@ struct ChartView: View {
                             .font(.caption2)
                             .foregroundColor(Colors.gray)
                             .frame(width: maxWidth)
-                            .offset(x: x, y: lowerBoundY1 + Spacing.extraLarge)
+                            .offset(x: x, y: lowerBoundY1 + .extraLarge)
                     }
                     // upper
                     if let lowerBoundX = proxy.position(forX: model.values.upperBoundDate) {

@@ -39,7 +39,7 @@ public struct TransactionScene: View {
             List {
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
-                    HStack(spacing: Spacing.small) {
+                    HStack(spacing: .small) {
                         ListItemView(
                             title: model.statusField,
                             subtitle: model.statusText,
@@ -82,31 +82,13 @@ public struct TransactionScene: View {
                         infoAction: onNetworkFeeInfo
                     )
                 } header: {
-                    switch model.headerType {
-                    case .amount:
-                        HStack {
-                            Spacer()
-                            TransactionHeaderView(type: model.headerType)
-                                .padding(.bottom, 16)
-                            Spacer()
-                        }
-                    case .swap:
-                        Section {
-                            TransactionHeaderView(type: model.headerType)
-                                .padding()
-                        }
-                        .frame(maxWidth: .infinity)
-                        .textCase(nil)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets())
-                    case .nft:
-                        HStack {
-                            Spacer()
-                            TransactionHeaderView(type: model.headerType)
-                                .padding(.bottom, 16)
-                            Spacer()
-                        }
+                    HStack {
+                        Spacer(minLength: 0)
+                        TransactionHeaderView(type: model.headerType)
+                            .padding(.bottom, .medium)
+                        Spacer(minLength: 0)
                     }
+                    .headerProminence(.increased)
                 }
                 
                 Section {

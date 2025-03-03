@@ -14,7 +14,16 @@ struct AddAssetViewModel {
     var decimalsTitle: String { Localized.Asset.decimals }
     var typeTitle: String { Localized.Common.type }
 
-    var explorerText: String? { Localized.Transaction.viewOn(name) }
+    private var tokenLink: BlockExplorerLink? {
+        explorerService.tokenUrl(chain: asset.chain, address: asset.tokenId ?? "")
+    }
+
+    var explorerText: String? {
+        guard let link = tokenLink else {
+            return .none
+        }
+        return Localized.Transaction.viewOn(link.name)
+    }
 
     var name: String { asset.name }
     var symbol: String { asset.symbol }
@@ -22,6 +31,6 @@ struct AddAssetViewModel {
     var type: String { asset.id.assetType?.rawValue ?? "" }
     
     var explorerUrl: URL? {
-        explorerService.tokenUrl(chain: asset.chain, address: asset.tokenId ?? "")?.url
+        tokenLink?.url
     }
 }

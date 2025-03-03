@@ -36,7 +36,10 @@ public struct AssetIdViewModel: Sendable {
     }
 
     private var imageURL: URL? {
-        assetFormatter.getURL(for: assetId)
+        switch assetId.type {
+        case .native: .none
+        case .token: assetFormatter.getURL(for: assetId)
+        }
     }
 
     private var chainImagePlaceholder: Image {

@@ -42,7 +42,8 @@ public struct SystemImage {
     public static let book = "book"
     public static let starFill = "star.fill"
     public static let textPageFill = "text.page.fill"
-
+    public static let emoji = "face.smiling"
+    public static let pencil = "pencil"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
@@ -94,8 +95,8 @@ public struct SystemImage {
                 Image(systemName: symbol.0)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-                    .frame(width: Sizing.list.image, height: Sizing.list.image)
-                    .padding(Spacing.extraSmall)
+                    .frame(width: .list.image, height: .list.image)
+                    .padding(.extraSmall)
             }
         }
     }

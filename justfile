@@ -1,9 +1,7 @@
-export GEMSTONE_VERSION := "v0.2.0"
-
 list:
     just --list
 
-bootstrap: install install-gemstone
+bootstrap: install generate-stone
     @echo "<== Bootstrap done."
 
 install: install-rust install-typeshare install-toolchains install-swifttools
@@ -27,19 +25,6 @@ download-wallet-core VERSION:
     @echo "==> Install wallet-core {{VERSION}}"
     curl -L https://github.com/trustwallet/wallet-core/releases/download/{{VERSION}}/Package.swift -o Packages/WalletCore/Package.swift
 
-download-gemstone VERSION:
-    #!/usr/bin/env bash
-    echo "==> Install binary Gemstone {{VERSION}}"
-    rm -rf Packages/Gemstone && mkdir -p Packages/Gemstone
-    cd Packages/Gemstone
-    curl -L https://github.com/gemwalletcom/core/releases/download/{{VERSION}}/Gemstone-spm.tar.bz2 -o Gemstone-spm.tar.bz2
-    tar -xvjf Gemstone-spm.tar.bz2
-    rm Gemstone-spm.tar.bz2
-
-install-gemstone:
-    @echo "==> Install binary Gemstone {{GEMSTONE_VERSION}}"
-    just download-gemstone {{GEMSTONE_VERSION}}
-
 setup-git:
     @echo "==> Setup git submodules"
     @git submodule update --init --recursive
@@ -53,6 +38,7 @@ test:
     -scheme Gem \
     -sdk iphonesimulator \
     -destination "platform=iOS Simulator,name=iPhone 16" \
+    -parallel-testing-enabled YES \
     test | xcbeautify
 
 test_ui:

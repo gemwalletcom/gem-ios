@@ -213,12 +213,19 @@ public struct Migrations {
                 $0.add(column: Columns.NFTAsset.contractAddress.name, .text)
             }
         }
-        
-        migrator.registerMigration("Add 1 \(AssetSearchRecord.databaseTableName)") { db in
+
+        migrator.registerMigration("Add imageUrl to \(WalletRecord.databaseTableName)") { db in
+            try? db.alter(table: WalletRecord.databaseTableName) {
+                $0.add(column: Columns.Wallet.imageUrl.name, .text)
+                $0.add(column: Columns.Wallet.updatedAt.name, .date)
+            }
+        }
+      
+      migrator.registerMigration("Add \(AssetSearchRecord.databaseTableName)") { db in
             try? db.drop(table: AssetSearchRecord.databaseTableName)
             try? AssetSearchRecord.create(db: db)
         }
-        
+
         try migrator.migrate(dbQueue)
     }
 }

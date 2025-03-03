@@ -29,16 +29,6 @@ public extension Wallet {
     }
 }
 
-extension Wallet: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    public static func == (lhs: Wallet, rhs: Wallet) -> Bool {
-        return lhs.id == rhs.id
-    }
-}
-
 // factory
 public extension Wallet {
     static func makeView(name: String, chain: Chain, address: String) -> Wallet {
@@ -56,7 +46,8 @@ public extension Wallet {
                 )
             ],
             order: 0,
-            isPinned: false
+            isPinned: false,
+            imageUrl: nil
         )
     }
 }

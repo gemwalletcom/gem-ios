@@ -35,13 +35,13 @@ struct AddTokenScene: View {
                 viewState: model.state,
                 action: onSelectImportToken
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .onAppear {
             focusedField = .address
         }
         .onChange(of: model.input.address, onAddressClean)
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
@@ -76,7 +76,7 @@ extension AddTokenScene {
             }
             Section {
                 FloatTextField(model.addressTitleField, text: model.addressBinding) {
-                    HStack(spacing: Spacing.medium) {
+                    HStack(spacing: .medium) {
                         ListButton(image: model.pasteImage, action: onSelectPaste)
                         ListButton(image: model.qrImage, action: onSelectScan)
                     }
@@ -100,9 +100,9 @@ extension AddTokenScene {
                     ListItemView(title: asset.decimalsTitle, subtitle: asset.decimals)
                     ListItemView(title: asset.typeTitle, subtitle: asset.type)
                 }
-                if let url = asset.explorerUrl {
+                if let url = asset.explorerUrl, let text = asset.explorerText {
                     Section {
-                        NavigationOpenLink(url: url, with: ListItemView(title: asset.explorerText))
+                        NavigationOpenLink(url: url, with: ListItemView(title: text))
                     }
                 }
             case .error(let error):

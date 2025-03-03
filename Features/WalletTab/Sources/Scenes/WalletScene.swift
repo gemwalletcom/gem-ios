@@ -67,7 +67,7 @@ public struct WalletScene: View {
                     onHeaderAction: onHeaderAction,
                     onInfoAction: onSelectWalletHeaderInfo
                 )
-                .padding(.top, Spacing.small)
+                .padding(.top, .small)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -126,7 +126,7 @@ public struct WalletScene: View {
                     }
                 )
                 .accessibilityIdentifier("manage")
-                .padding(Spacing.medium)
+                .padding(.medium)
                 .frame(maxWidth: .infinity, alignment: .center)
             }
         }
@@ -136,12 +136,8 @@ public struct WalletScene: View {
         .toolbar {
             ToolbarItem(placement: .principal) {
                 if let wallet = dbWallet {
-                    HStack {
-                        WalletBarView(
-                            model: WalletBarViewViewModel.from(wallet: wallet, showChevron: true)
-                        ) {
-                            isPresentingWallets.toggle()
-                        }
+                    WalletBarView(model: .from(wallet: wallet)) {
+                        isPresentingWallets.toggle()
                     }
                 }
             }
@@ -242,12 +238,11 @@ extension WalletScene {
 // MARK: - Models extensions
 
 extension WalletBarViewViewModel {
-    static func from(wallet: Wallet, showChevron: Bool = true) -> WalletBarViewViewModel {
+    static func from(wallet: Wallet) -> WalletBarViewViewModel {
         let model = WalletViewModel(wallet: wallet)
         return WalletBarViewViewModel(
             name: model.name,
-            image: model.assetImage,
-            showChevron: showChevron
+            image: model.avatarImage
         )
     }
 }

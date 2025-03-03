@@ -23,11 +23,11 @@ struct VerifyPhraseWalletScene: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            VStack(spacing: Spacing.medium) {
+            VStack(spacing: .medium) {
                 OnboardingHeaderTitle(title: Localized.SecretPhrase.Confirm.QuickTest.title)
                 
                 SecretPhraseGridView(rows: model.rows, highlightIndex: model.wordsIndex)
-                    .padding(.top, Spacing.small)
+                    .padding(.top, .small)
                 
                 Grid(alignment: .center) {
                     ForEach(model.rowsSections, id: \.self) { section in
@@ -37,7 +37,7 @@ struct VerifyPhraseWalletScene: View {
                                     Button { } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(.lightGray(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
+                                    .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .tiny))
                                     .disabled(true)
                                     .fixedSize()
                                 } else {
@@ -46,14 +46,14 @@ struct VerifyPhraseWalletScene: View {
                                     } label: {
                                         Text(row.word)
                                     }
-                                    .buttonStyle(.blueGrayPressed(paddingHorizontal: Spacing.small, paddingVertical: Spacing.tiny))
+                                    .buttonStyle(.blueGrayPressed(paddingHorizontal: .small, paddingVertical: .tiny))
                                     .fixedSize()
                                 }
                             }
                         }
                     }
                 }
-                .padding(.top, Spacing.small)
+                .padding(.top, .small)
                 
                 Spacer()
                 StateButton(
@@ -62,9 +62,9 @@ struct VerifyPhraseWalletScene: View {
                     action: onImportWallet
                 )
             }
-            .frame(maxWidth: Spacing.scene.content.maxWidth)
+            .frame(maxWidth: .scene.content.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .navigationTitle(model.title)
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.createWallet("")), message: Text($0))

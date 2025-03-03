@@ -19,25 +19,22 @@ public struct WalletBarView: View {
         Button {
             action?()
         } label: {
-            HStack(spacing: Spacing.small) {
-                if let image = model.image {
-                    AssetImageView(assetImage: image, size: 24, overlayImageSize: 10)
-                }
+            HStack(spacing: .small) {
+                AssetImageView(assetImage: model.image, size: .large, overlayImageSize: .image.tiny)
+                
                 Text(model.name)
                     .foregroundColor(Colors.black)
                     .fontWeight(.medium)
                     .font(.body)
                     .lineLimit(1)
 
-                if model.showChevron {
-                    Images.System.chevronDown
-                        .resizable()
-                        .frame(width: 11, height: 6)
-                        .fontWeight(.medium)
-                        .foregroundColor(Colors.gray)
-                }
+                Images.System.chevronDown
+                    .resizable()
+                    .frame(width: 11, height: 6)
+                    .fontWeight(.medium)
+                    .foregroundColor(Colors.gray)
             }
-            .padding(.horizontal, 4)
+            .padding(.horizontal, .tiny)
         }
         .buttonStyle(.plain)
     }
@@ -56,11 +53,11 @@ public struct WalletBarView: View {
                     type: .multicoin,
                     accounts: [.init(chain: .algorand, address: "", derivationPath: "", extendedPublicKey: "")],
                     order: 1,
-                    isPinned: true
+                    isPinned: true,
+                    imageUrl: nil
                 )
             ).name,
-            image: .none,
-            showChevron: false
+            image: AssetImage(imageURL: .none, placeholder: .none, chainPlaceholder: .none)
         )
     )
 }

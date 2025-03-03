@@ -53,8 +53,8 @@ public struct ColorButtonStyle: ButtonStyle {
 
 extension ButtonStyle where Self == ColorButtonStyle {
     public static func blue(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium,
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
         corernerRadius: CGFloat = 12) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -68,8 +68,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
         }
 
     public static func blueGrayPressed(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium,
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
         corernerRadius: CGFloat = 12) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -83,8 +83,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
         }
 
     public static func gray(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium,
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
         corernerRadius: CGFloat = 12) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -98,8 +98,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
         }
 
     public static func lightGray(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium,
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
         corernerRadius: CGFloat = 12) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -113,8 +113,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
         }
 
     public static func white(
-        paddingHorizontal: CGFloat = Spacing.medium,
-        paddingVertical: CGFloat = Spacing.medium,
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
         corernerRadius: CGFloat = 12) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -127,8 +127,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
             )
         }
     public static func amount(
-        paddingHorizontal: CGFloat = Spacing.small,
-        paddingVertical: CGFloat = Spacing.small,
+        paddingHorizontal: CGFloat = .small,
+        paddingVertical: CGFloat = .small,
         corernerRadius: CGFloat = 8) -> ColorButtonStyle {
             ColorButtonStyle(
                 paddingHorizontal: paddingHorizontal,
@@ -140,6 +140,22 @@ extension ButtonStyle where Self == ColorButtonStyle {
                 corernerRadius: corernerRadius
             )
         }
+    
+    public static func listStyleColor(
+        paddingHorizontal: CGFloat = .medium,
+        paddingVertical: CGFloat = .medium,
+        corernerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.gray,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.listStyleColor,
+            backgroundPressed: Colors.grayVeryLight,
+            corernerRadius: corernerRadius
+        )
+    }
 }
 
 public struct ClearButtonStyle: ButtonStyle {
@@ -217,7 +233,7 @@ public struct StateButtonStyle: ButtonStyle {
                 configuration.label
                     .lineLimit(1)
                     .foregroundStyle(foregroundStyle(configuration: configuration))
-                    .padding(.horizontal, Spacing.medium)
+                    .padding(.horizontal, .medium)
                     .frame(minWidth: 0, maxWidth: .infinity)
                     .frame(height: StateButtonStyle.maxButtonHeight)
             }
@@ -311,6 +327,11 @@ extension ButtonStyle where Self == StateButtonStyle {
                 Text("Light Gray Button")
             }
             .buttonStyle(.lightGray())
+            
+            Button(action: {}) {
+                Text("List Style Color Button")
+            }
+            .buttonStyle(.listStyleColor())
 
             Button(action: {}) {
                 Text("White Button")
@@ -321,13 +342,13 @@ extension ButtonStyle where Self == StateButtonStyle {
                 Text("Clear Button")
             }
             .buttonStyle(.clear)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
 
             Button(action: {}) {
                 Text("ClearBlue Button")
             }
             .buttonStyle(.clearBlue)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
 
         Section(header: Text("Stateful Buttons")) {

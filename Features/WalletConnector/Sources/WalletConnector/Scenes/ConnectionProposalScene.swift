@@ -44,10 +44,10 @@ public struct ConnectionProposalScene: View {
 
             Button(model.buttonTitle, action: onAccept)
                 .buttonStyle(.blue())
-                .padding(.bottom, Spacing.scene.bottom)
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .padding(.bottom, .scene.bottom)
+                .frame(maxWidth: .scene.button.maxWidth)
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .navigationDestination(for: Scenes.SelectWallet.self) { _ in

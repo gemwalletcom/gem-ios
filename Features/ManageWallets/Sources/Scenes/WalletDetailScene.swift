@@ -8,6 +8,9 @@ import Style
 import Primitives
 import Localization
 import PrimitivesComponents
+import WalletAvatar
+import GRDBQuery
+import Store
 
 public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -25,10 +28,14 @@ public struct WalletDetailScene: View {
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
     @FocusState private var focusedField: Field?
+    
+    @Query<WalletRequest>
+    var dbWallet: Wallet?
 
     public init(model: WalletDetailViewModel) {
         self.model = model
         _name = State(initialValue: self.model.name)
+        _dbWallet = Query(constant: model.walletRequest)
     }
     
     public var body: some View {
@@ -40,13 +47,18 @@ public struct WalletDetailScene: View {
                 } header: {
                     HStack {
                         Spacer()
-                        Button(action: onSelectImage) {
-                            AssetImageView(
-                                assetImage: model.image,
-                                size: Sizing.image.medium * 1.6,
-                                overlayImageSize: Spacing.large
-                            )
-                            .padding(.bottom, Spacing.extraLarge)
+                        VStack(spacing: .medium) {
+                            if let dbWallet {
+                                AssetImageView(
+                                    assetImage: model.avatarAssetImage(for: dbWallet),
+                                    size: .image.extraLarge,
+                                    overlayImageSize: .image.medium
+                                )
+                                .padding(.bottom, .extraLarge)
+                                .onTapGesture {
+                                    onSelectImage()
+                                }
+                            }
                         }
                         Spacer()
                     }
@@ -98,7 +110,7 @@ public struct WalletDetailScene: View {
                 }
             }
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .onChange(of: name, onChangeWalletName)

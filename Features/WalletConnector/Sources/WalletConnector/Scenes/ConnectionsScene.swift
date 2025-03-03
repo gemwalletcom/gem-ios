@@ -95,7 +95,7 @@ public struct ConnectionsScene: View {
 
     private func connectURI(uri: String) async {
         do {
-            try await model.addConnectionURI(uri: uri)
+            try await model.pair(uri: uri)
         } catch {
             isPresentingErrorMessage = error.localizedDescription
             NSLog("connectURI error: \(error)")

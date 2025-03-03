@@ -26,7 +26,7 @@ public struct AssetBalanceView<SecondaryView: View>: View {
             left: {
                 AssetImageView(assetImage: image)
             }, primary: {
-                VStack(alignment: .leading, spacing: Spacing.tiny) {
+                VStack(alignment: .leading, spacing: .tiny) {
                     Text(title)
                         .textStyle(.headline.weight(.semibold))
                     Text(balance)

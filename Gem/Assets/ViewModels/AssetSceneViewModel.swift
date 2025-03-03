@@ -78,10 +78,7 @@ class AssetSceneViewModel: ObservableObject {
     var networkField: String { Localized.Transfer.network }
 
     var networkText: String {
-        if assetModel.asset.type == .native {
-            return assetModel.asset.chain.asset.name
-        }
-        return "\(assetModel.asset.chain.asset.name) (\(assetModel.asset.type.rawValue))"
+        assetModel.networkFullName
     }
     
     var networkAssetImage: AssetImage {
@@ -108,6 +105,10 @@ class AssetSceneViewModel: ObservableObject {
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+    }
+    
+    var shareAssetUrl: URL {
+        DeepLink.asset(assetDataModel.asset.id).url
     }
     
     // locally comouted banners
@@ -142,9 +143,9 @@ extension AssetSceneViewModel {
 
     func updateWallet() async {
         do {
-            async let updateAsset: () = try walletsService.updateAsset(
+            async let updateAsset: () = try walletsService.updateAssets(
                 walletId: walletModel.wallet.walletId,
-                assetId: assetModel.asset.id
+                assetIds: [assetModel.asset.id]
             )
             async let updateTransactions: () = try fetchTransactions()
             let _ = try await [updateAsset, updateTransactions]

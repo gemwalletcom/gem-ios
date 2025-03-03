@@ -16,6 +16,7 @@ import PrimitivesComponents
 import WalletConnector
 import ExplorerService
 import WalletsService
+import ScanService
 
 @Observable
 @MainActor
@@ -43,6 +44,7 @@ final class ConfirmTransferViewModel {
     private let wallet: Wallet
     private let keystore: any Keystore
     private let service: any ChainServiceable
+    private let scanService: ScanService
 
     private let walletsService: WalletsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate?
@@ -53,6 +55,7 @@ final class ConfirmTransferViewModel {
         keystore: any Keystore,
         data: TransferData,
         service: any ChainServiceable,
+        scanService: ScanService = .main,
         walletsService: WalletsService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
@@ -62,6 +65,7 @@ final class ConfirmTransferViewModel {
         self.keystore = keystore
         self.data = data
         self.service = service
+        self.scanService = scanService
         self.explorerService = explorerService
         self.walletsService = walletsService
         self.confirmTransferDelegate = confirmTransferDelegate
@@ -101,7 +105,9 @@ final class ConfirmTransferViewModel {
     var recipientValue: SimpleAccount { dataModel.recepientAccount }
 
     var networkTitle: String { Localized.Transfer.network }
-    var networkValue: String { dataModel.chainAsset.name }
+    var networkValue: String {
+        AssetViewModel(asset: dataModel.asset).networkFullName
+    }
 
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: dataModel.chainAsset.id).networkAssetImage
@@ -243,6 +249,11 @@ extension ConfirmTransferViewModel {
             let senderAddress = try wallet.account(for: dataModel.chain).address
             let destinationAddress = dataModel.recipient.address
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            let scanPayload = try scanService.getTransactionPayload(
+                wallet: wallet,
+                transferType: data.type,
+                recipient: dataModel.recipientData
+            )
             
             async let getRates = feeModel.getFeeRates(type: data.type)
             async let getPreload = service.preload(
@@ -251,8 +262,13 @@ extension ConfirmTransferViewModel {
                     destinationAddress: destinationAddress
                 )
             )
+            async let getIsValidTransaction = scanService.isValidTransaction(scanPayload)
             
-            let (rates, preload) = try await (getRates, getPreload)
+            let (rates, preload, isValid) = try await (getRates, getPreload, getIsValidTransaction)
+            
+            if !isValid {
+                throw AnyError("Transaction is invalid")
+            }
             
             guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
                 throw ChainCoreError.feeRateMissed
@@ -326,7 +342,9 @@ extension ConfirmTransferViewModel {
                     )
                     try addTransactions(transactions: [transaction])
                     
-                    walletsService.enableAssetId(walletId: wallet.walletId, assets: transaction.assetIds, enabled: true)
+                    Task {
+                        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    }
                     
                     // delay if multiple transaction should be exectured
                     if signedData.count > 1 && transactionData != signedData.last {

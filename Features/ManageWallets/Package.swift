@@ -18,11 +18,11 @@ let package = Package(
         .package(name: "Style", path: "../Style"),
         .package(name: "Components", path: "../Components"),
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
-
         .package(name: "Store", path: "../Store"),
         .package(name: "Keystore", path: "../Keystore"),
         .package(name: "ExplorerService", path: "../ExplorerService"),
         .package(name: "ManageWalletService", path: "../ManageWalletService"),
+        .package(name: "WalletAvatar", path: "../WalletAvatar")
     ],
     targets: [
         .target(
@@ -36,7 +36,8 @@ let package = Package(
                 "Store",
                 "Keystore",
                 "ExplorerService",
-                "ManageWalletService"
+                "ManageWalletService",
+                "WalletAvatar"
             ],
             path: "Sources"
         ),

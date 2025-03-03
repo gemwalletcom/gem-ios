@@ -8,6 +8,7 @@ import SwapService
 import FiatConnect
 import PrimitivesComponents
 import PriceAlerts
+import Swap
 
 struct SelectedAssetNavigationStack: View  {
     
@@ -87,8 +88,13 @@ struct SelectedAssetNavigationStack: View  {
                 }
             case .swap:
                 SwapNavigationView(
-                    wallet: wallet,
-                    asset: selectType.asset,
+                    model: SwapViewModel(
+                        wallet: wallet,
+                        pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
+                        walletsService: walletsService,
+                        swapService: SwapService(nodeProvider: nodeService),
+                        keystore: keystore
+                    ),
                     navigationPath: $navigationPath,
                     onComplete: {
                         isPresentingSelectedAssetInput = nil

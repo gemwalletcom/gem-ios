@@ -7,6 +7,7 @@ import Components
 import Primitives
 import Localization
 import PrimitivesComponents
+import WalletAvatar
 
 struct WalletListItemView: View {
 
@@ -45,7 +46,10 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AssetImageView(assetImage: model.assetImage, size: Sizing.image.medium)
+                AssetImageView(
+                    assetImage: model.avatarImage,
+                    size: .image.medium
+                )
                 ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()
@@ -59,7 +63,7 @@ struct WalletListItemView: View {
                     label: {
                         Images.System.settings
                             .padding(.vertical, 8)
-                            .padding(.leading, Spacing.small)
+                            .padding(.leading, .small)
                     }
                 )
                 .buttonStyle(.borderless)

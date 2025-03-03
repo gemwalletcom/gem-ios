@@ -19,11 +19,11 @@ public struct ListItemFlexibleView<LeftView: View, PrimaryView: View, SecondaryV
     }
 
     public var body: some View {
-        HStack(spacing: Spacing.small) {
+        HStack(spacing: .small) {
             left
             HStack {
                 primary
-                Spacer(minLength: Spacing.extraSmall)
+                Spacer(minLength: .extraSmall)
                 secondary
             }
         }

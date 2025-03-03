@@ -141,6 +141,8 @@ public enum Localized {
     public static let address = Localized.tr("Localizable", "common.address", fallback: "Address")
     /// All
     public static let all = Localized.tr("Localizable", "common.all", fallback: "All")
+    /// Avatar
+    public static let avatar = Localized.tr("Localizable", "common.avatar", fallback: "Avatar")
     /// Back
     public static let back = Localized.tr("Localizable", "common.back", fallback: "Back")
     /// Cancel
@@ -161,6 +163,8 @@ public enum Localized {
     }
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
+    /// Emoji
+    public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
     /// Hide
     public static let hide = Localized.tr("Localizable", "common.hide", fallback: "Hide")
     /// %d ms
@@ -171,6 +175,8 @@ public enum Localized {
     public static let learnMore = Localized.tr("Localizable", "common.learn_more", fallback: "Learn More")
     /// Loading
     public static let loading = Localized.tr("Localizable", "common.loading", fallback: "Loading")
+    /// Magic Button
+    public static let magicButton = Localized.tr("Localizable", "common.magic_button", fallback: "Magic Button")
     /// Manage
     public static let manage = Localized.tr("Localizable", "common.manage", fallback: "Manage")
     /// Next
@@ -185,6 +191,8 @@ public enum Localized {
     public static let openSettings = Localized.tr("Localizable", "common.open_settings", fallback: "Open settings")
     /// Paste
     public static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
+    /// Photo
+    public static let photo = Localized.tr("Localizable", "common.photo", fallback: "Photo")
     /// Phrase
     public static let phrase = Localized.tr("Localizable", "common.phrase", fallback: "Phrase")
     /// Pin
@@ -217,6 +225,8 @@ public enum Localized {
     }
     /// Skip
     public static let skip = Localized.tr("Localizable", "common.skip", fallback: "Skip")
+    /// Style
+    public static let style = Localized.tr("Localizable", "common.style", fallback: "Style")
     /// Try Again
     public static let tryAgain = Localized.tr("Localizable", "common.try_again", fallback: "Try Again")
     /// Type
@@ -292,6 +302,16 @@ public enum Localized {
       return Localized.tr("Localizable", "errors.validation", p1, fallback: "Validation Error: %s")
     }
     public enum Connections {
+      /// Invalid parameters provided for sending a transaction.
+      public static let invalidSendParameters = Localized.tr("Localizable", "errors.connections.invalid_send_parameters", fallback: "Invalid parameters provided for sending a transaction.")
+      /// Invalid parameters provided for signing.
+      public static let invalidSignParameters = Localized.tr("Localizable", "errors.connections.invalid_sign_parameters", fallback: "Invalid parameters provided for signing.")
+      /// No supported wallets are available.
+      public static let noSupportedWallets = Localized.tr("Localizable", "errors.connections.no_supported_wallets", fallback: "No supported wallets are available.")
+      /// The provided chain is not supported.
+      public static let unsupportedChain = Localized.tr("Localizable", "errors.connections.unsupported_chain", fallback: "The provided chain is not supported.")
+      /// The requested method is not supported.
+      public static let unsupportedMethod = Localized.tr("Localizable", "errors.connections.unsupported_method", fallback: "The requested method is not supported.")
       /// User cancelled
       public static let userCancelled = Localized.tr("Localizable", "errors.connections.user_cancelled", fallback: "User cancelled")
     }
@@ -371,6 +391,12 @@ public enum Localized {
       /// Network Fee
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
     }
+    public enum PriceImpact {
+      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. 
+      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ")
+      /// Price Impact
+      public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
+    }
     public enum Transaction {
       public enum Error {
         /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
@@ -435,8 +461,8 @@ public enum Localized {
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos
     public static let saveToPhotos = Localized.tr("Localizable", "nft.save_to_photos", fallback: "Save to Photos")
-    /// Your image has been saved to Photos!
-    public static let successSavedToPhotos = Localized.tr("Localizable", "nft.success_saved_to_photos", fallback: "Your image has been saved to Photos!")
+    /// Set as Avatar
+    public static let setAsAvatar = Localized.tr("Localizable", "nft.set_as_avatar", fallback: "Set as Avatar")
   }
   public enum Nodes {
     /// Gem Wallet Node
@@ -590,18 +616,28 @@ public enum Localized {
   public enum Social {
     /// CoinGecko
     public static let coingecko = Localized.tr("Localizable", "social.coingecko", fallback: "CoinGecko")
+    /// CoinMarketCap
+    public static let coinmarketcap = Localized.tr("Localizable", "social.coinmarketcap", fallback: "CoinMarketCap")
     /// Discord
     public static let discord = Localized.tr("Localizable", "social.discord", fallback: "Discord")
     /// Facebook
     public static let facebook = Localized.tr("Localizable", "social.facebook", fallback: "Facebook")
     /// GitHub
     public static let github = Localized.tr("Localizable", "social.github", fallback: "GitHub")
+    /// Instagram
+    public static let instagram = Localized.tr("Localizable", "social.instagram", fallback: "Instagram")
     /// Links
     public static let links = Localized.tr("Localizable", "social.links", fallback: "Links")
+    /// MagicEden
+    public static let magiceden = Localized.tr("Localizable", "social.magiceden", fallback: "MagicEden")
+    /// OpenSea
+    public static let opensea = Localized.tr("Localizable", "social.opensea", fallback: "OpenSea")
     /// Reddit
     public static let reddit = Localized.tr("Localizable", "social.reddit", fallback: "Reddit")
     /// Telegram
     public static let telegram = Localized.tr("Localizable", "social.telegram", fallback: "Telegram")
+    /// TikTok
+    public static let tiktok = Localized.tr("Localizable", "social.tiktok", fallback: "TikTok")
     /// Website
     public static let website = Localized.tr("Localizable", "social.website", fallback: "Website")
     /// X (formerly Twitter)

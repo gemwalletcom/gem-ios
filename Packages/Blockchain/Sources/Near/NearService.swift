@@ -104,7 +104,7 @@ extension NearService: ChainTransactionPreloadable {
         let (account, block) = try await (getAccount, getBlock)
         
         return TransactionPreload(
-            blockhash: block.header.hash,
+            blockHash: block.header.hash,
             sequence: account.nonce + 1
         )
     }
@@ -123,7 +123,7 @@ extension NearService: ChainTransactionLoadable {
         
         return TransactionLoad(
             sequence: input.preload.sequence,
-            block: SignerInputBlock(hash: input.preload.blockhash),
+            block: SignerInputBlock(hash: input.preload.blockHash),
             fee: fee
         )
     }

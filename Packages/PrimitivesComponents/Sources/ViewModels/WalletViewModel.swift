@@ -43,13 +43,25 @@ public struct WalletViewModel {
         }
     }
     
-    public var assetImage: AssetImage {
+    public var avatarImage: AssetImage {
         AssetImage(
-            type: .empty,
-            imageURL: .none,
+            type: wallet.name,
+            imageURL: imageUrl(),
             placeholder: image,
             chainPlaceholder: subImage
         )
+    }
+    
+    // MARK: - Private methods
+    
+    private func imageUrl() -> URL? {
+        guard let imageUrl = wallet.imageUrl else {
+            return nil
+        }
+        if let url = URL(string: imageUrl), url.scheme != nil {
+            return url
+        }
+        return URL.documentsDirectory.appendingPathComponent(imageUrl)
     }
 }
 

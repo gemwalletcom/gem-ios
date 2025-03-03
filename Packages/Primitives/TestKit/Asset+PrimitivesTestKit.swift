@@ -19,4 +19,24 @@ public extension Asset {
             type: type
         )
     }
+    
+    static func mockEthereum() -> Asset {
+        .mock(
+            id: AssetId(chain: .ethereum, tokenId: .none),
+            name: "Ethereum",
+            symbol: "ETH",
+            decimals: 18,
+            type: .native
+        )
+    }
+    
+    static func mockEthereumUSDT() -> Asset {
+        .mock(
+            id: AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7"),
+            name: "Tether",
+            symbol: "USDT",
+            decimals: 6,
+            type: .erc20
+        )
+    }
 }

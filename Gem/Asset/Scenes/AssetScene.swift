@@ -21,6 +21,7 @@ struct AssetScene: View {
 
     @State private var showingOptions = false
     @State private var showingPriceAlertMessage = false
+    @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
@@ -45,7 +46,7 @@ struct AssetScene: View {
                 currencyCode: Preferences.standard.currency
             ),
             walletModel: walletModel,
-            bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: (model.banners + banners).map { $0.event })
         )
     }
     
@@ -87,8 +88,8 @@ struct AssetScene: View {
                     onHeaderAction: onSelectHeader(_:),
                     onInfoAction: onSelectWalletHeaderInfo
                 )
-                    .padding(.top, Spacing.small)
-                    .padding(.bottom, Spacing.medium)
+                    .padding(.top, .small)
+                    .padding(.bottom, .medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -107,7 +108,7 @@ struct AssetScene: View {
 
                         if model.showPriceView {
                             Spacer()
-                            HStack(spacing: Spacing.tiny) {
+                            HStack(spacing: .tiny) {
                                 Text(model.priceView.text)
                                     .textStyle(model.priceView.style)
                                 Text(model.priceChangeView.text)
@@ -181,9 +182,15 @@ struct AssetScene: View {
                         if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
                             Button(title) { onOpenLink(url) }
                         }
+                        Button(Localized.Common.share) {
+                            isPresentingShareAssetSheet = true
+                        }
                     }
                 }
             }
+        }
+        .sheet(isPresented: $isPresentingShareAssetSheet) {
+            ShareSheet(activityItems: [model.shareAssetUrl.absoluteString])
         }
         .taskOnce(onTaskOnce)
         .listSectionSpacing(.compact)
@@ -200,7 +207,7 @@ extension AssetScene {
     private var networkView: some View {
         HStack {
             ListItemView(title: model.networkField, subtitle: model.networkText)
-            AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+            AssetImageView(assetImage: model.networkAssetImage, size: .list.image)
         }
     }
 

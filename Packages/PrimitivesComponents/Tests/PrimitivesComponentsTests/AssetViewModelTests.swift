@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Testing
 import Primitives
 import PrimitivesTestKit
@@ -12,10 +14,12 @@ struct AssetViewModelTests {
     func testTitle() {
         #expect(AssetViewModel(asset: btc).title == "Bitcoin (BTC)")
     }
-
+    
     @Test
-    func testSupportMemo() {
-        #expect(AssetViewModel(asset: cosmos).supportMemo)
-        #expect(!AssetViewModel(asset: btc).supportMemo)
+    func testNetworkFullName() {
+        #expect(AssetViewModel(asset: Asset.mockEthereum()).networkFullName == "Ethereum")
+        #expect(
+            AssetViewModel(asset: Asset.mockEthereumUSDT()).networkFullName == "Ethereum (ERC20)"
+        )
     }
 }

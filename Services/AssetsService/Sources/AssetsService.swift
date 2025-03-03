@@ -54,6 +54,14 @@ public final class AssetsService: Sendable {
         throw AnyError("asset not found")
     }
 
+    public func getOrFetchAsset(for assetId: AssetId) async throws -> Asset {
+        if let asset = try assetStore.getAssets(for: [assetId.identifier]).first {
+            return asset
+        }
+        try await prefetchAssets(assetIds: [assetId])
+        return try getAsset(for: assetId)
+    }
+    
     public func getAssets(for assetIds: [AssetId]) throws -> [Asset] {
         return try assetStore.getAssets(for: assetIds.ids)
     }
@@ -114,10 +122,12 @@ public final class AssetsService: Sendable {
         let assets = try await withThrowingTaskGroup(of: [AssetBasic]?.self) { group in
             var assets = [AssetBasic]()
 
-            group.addTask {
+            group.addTask { [weak self] in
+                guard let self = self else { return [] }
                 return try await self.searchAPIAssets(query: query, chains: chains)
             }
-            group.addTask {
+            group.addTask { [weak self] in
+                guard let self = self else { return [] }
                 return try await self.searchNetworkAsset(tokenId: query, chains: chains.isEmpty ? Chain.allCases : chains)
             }
 
@@ -134,12 +144,12 @@ public final class AssetsService: Sendable {
     }
 
     func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {
-        return try await assetsProvider.getSearchAssets(query: query, chains: chains)
+        try await assetsProvider.getSearchAssets(query: query, chains: chains)
     }
 
     func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetBasic] {
-        let services = chains.map {
-            chainServiceFactory.service(for: $0)
+        let services = chains.compactMap { [weak self] chain in
+            self?.chainServiceFactory.service(for: chain)
         }.filter {
             $0.getIsTokenAddress(tokenId: tokenId)
         }

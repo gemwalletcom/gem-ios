@@ -7,8 +7,8 @@ import Combine
 import Primitives
 
 public struct AssetRequestOptional: ValueObservationQueryable {
-    
     public static var defaultValue: AssetData? = .none
+    
     public var assetId: String?
     private let walletId: String
 

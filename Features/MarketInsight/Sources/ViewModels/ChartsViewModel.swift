@@ -35,14 +35,6 @@ public final class ChartsViewModel {
         }
     }
 
-    var headerTitleView: WalletBarViewViewModel {
-        WalletBarViewViewModel(
-            name: assetModel.name,
-            image: assetModel.assetImage,
-            showChevron: false
-        )
-    }
-
     var priceRequest: PriceRequest {
         PriceRequest(assetId: assetModel.asset.id.identifier)
     }

@@ -68,11 +68,16 @@ public final class SettingsViewModel {
     var walletConnectTitle: String { Localized.WalletConnect.title }
     var walletConnectImage: Image { Images.Settings.walletConnect }
 
+    private let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
     var linksViewModel: SocialLinksViewModel {
-        let links: [SocialUrl] = [.x, .discord, .telegram, .gitHub, .youTube]
-        let assetLinks: [AssetLink] = links.compactMap {
-            guard let url = Social.url($0) else { return nil }
-            return AssetLink(name: $0.name, url: url.absoluteString)
+        let assetLinks = links.compactMap {
+            if let url = Social.url($0) {
+                return AssetLink(
+                    name: $0.linkType.rawValue,
+                    url: url.absoluteString
+                )
+            }
+            return .none
         }
         return SocialLinksViewModel(assetLinks: assetLinks)
     }
@@ -96,6 +101,6 @@ public final class SettingsViewModel {
 
 extension SettingsViewModel {
     func fetch() async throws {
-        try await walletsService.changeCurrency(walletId: walletId)
+        try await walletsService.changeCurrency(for: walletId)
     }
 }

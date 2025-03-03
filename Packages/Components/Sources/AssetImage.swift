@@ -11,9 +11,9 @@ public struct AssetImage: Sendable {
 
     public init(
         type: String? = .none, 
-        imageURL: URL?,
-        placeholder: Image?,
-        chainPlaceholder: Image?
+        imageURL: URL? = .none,
+        placeholder: Image? = .none,
+        chainPlaceholder: Image? = .none
     ) {
         self.type = type
         self.imageURL = imageURL
@@ -22,10 +22,19 @@ public struct AssetImage: Sendable {
     }
 
     public static func resourceImage(image: String) -> AssetImage {
-        return AssetImage(
+        AssetImage(
             type: .none,
             imageURL: .none,
             placeholder: Images.name(image),
+            chainPlaceholder: .none
+        )
+    }
+    
+    public static func image(_ image: Image) -> AssetImage {
+        AssetImage(
+            type: .none,
+            imageURL: .none,
+            placeholder: image,
             chainPlaceholder: .none
         )
     }
