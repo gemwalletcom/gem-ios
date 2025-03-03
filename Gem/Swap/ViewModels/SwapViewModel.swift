@@ -270,12 +270,8 @@ extension SwapViewModel {
 
             await MainActor.run {
                 swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
-                if let selectedSwapQuote {
-                    onSelectQuote(selectedSwapQuote, asset: toAsset)
-                } else if let bestQuote = swapQuotes.first {
-                    onSelectQuote(bestQuote, asset: toAsset)
-                    selectedSwapQuote = bestQuote
-                }
+                selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
+                selectedSwapQuote.map { onSelectQuote($0, asset: toAsset) }
             }
         } catch {
             await MainActor.run { [self] in
