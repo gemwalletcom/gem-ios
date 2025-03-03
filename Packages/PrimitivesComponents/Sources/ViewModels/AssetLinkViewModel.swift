@@ -14,11 +14,11 @@ public struct AssetLinkViewModel {
     }
     
     public var insightLink: InsightLink? {
-        guard let title = name, let url, let image else {
+        guard let name, let url, let image else {
             return .none
         }
         return InsightLink(
-            title: title,
+            title: name,
             subtitle: host,
             url: url,
             image: image
