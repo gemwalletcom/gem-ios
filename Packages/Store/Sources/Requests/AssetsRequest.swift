@@ -81,7 +81,10 @@ extension AssetsRequest {
                 return request.joining(required: AssetRecord.priorityAssets
                     .filter(Columns.AssetSearch.query == name)
                 )
-                .order(sql: "\"priority\" ASC NULLS LAST, \"assets\".\"rank\" DESC")
+                .order(
+                    TableAlias(name: AssetSearchRecord.databaseTableName)[Columns.AssetSearch.priority].ascNullsLast,
+                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.rank].desc
+                )
             }
             return request
                 .filter(
