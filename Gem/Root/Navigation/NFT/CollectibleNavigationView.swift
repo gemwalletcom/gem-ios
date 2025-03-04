@@ -7,7 +7,7 @@ import Primitives
 import Components
 import Localization
 
-public struct CollectibleNavigationView: View {
+struct CollectibleNavigationView: View {
     
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
     @State private var isPresentingCollectibleOptions = false
@@ -22,9 +22,9 @@ public struct CollectibleNavigationView: View {
         self.model = model
     }
     
-    public var body: some View {
-        NFTDetailsScene(
-            model: NFTDetailsViewModel(
+    var body: some View {
+        CollectibleScene(
+            model: CollectibleViewModel(
                 wallet: model.wallet,
                 assetData: model.assetData,
                 avatarService: avatarService,
@@ -40,7 +40,11 @@ public struct CollectibleNavigationView: View {
             )
         }
     }
-    
+}
+
+// MARK: - Actions
+
+extension CollectibleNavigationView {
     private func onHeaderButtonAction(type: HeaderButtonType) {
         guard let account = try? model.wallet.account(for: model.assetData.asset.chain) else {
             return

@@ -27,7 +27,10 @@ public final class ConfigurableDefaults<T>: @unchecked Sendable, ConfigurableUse
             return userDefaults.object(forKey: key) as? T ?? defaultValue
         }
         set {
-            defaults?.set(newValue, forKey: key)
+            defaults?.set(
+                (newValue as? AnyOptional)?.isNil == true ? nil : newValue,
+                forKey: key
+            )
         }
     }
 

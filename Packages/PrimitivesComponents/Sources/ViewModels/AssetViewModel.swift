@@ -24,4 +24,15 @@ public struct AssetViewModel {
     public var assetImage: AssetImage {
         AssetIdViewModel(assetId: asset.id).assetImage
     }
+    
+    public var networkName: String {
+        asset.chain.asset.name
+    }
+    
+    public var networkFullName: String {
+        switch asset.id.type {
+        case .native: networkName
+        case .token: "\(networkName) (\(asset.type.rawValue))"
+        }
+    }
 }

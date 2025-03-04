@@ -79,7 +79,7 @@ public final class FiatSceneViewModel {
     var typeAmountButtonStyle: ColorButtonStyle {
         switch input.type {
         case .buy: .amount()
-        case .sell: .lightGray(paddingHorizontal: Spacing.small, paddingVertical: Spacing.small)
+        case .sell: .lightGray(paddingHorizontal: .small, paddingVertical: .small)
         }
     }
 
@@ -120,6 +120,14 @@ public final class FiatSceneViewModel {
     
     func providerAssetImage(_ provider: FiatProvider) -> AssetImage? {
         .resourceImage(image: provider.name.lowercased().replacing(" ", with: "_"))
+    }
+    
+    func fiatProviderViewModel() -> FiatProvidersViewModel {
+        FiatProvidersViewModel(
+            items: state.value?.compactMap {
+                FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter)
+            } ?? []
+        )
     }
 }
 

@@ -39,7 +39,7 @@ public struct TransactionScene: View {
             List {
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
-                    HStack(spacing: Spacing.small) {
+                    HStack(spacing: .small) {
                         ListItemView(
                             title: model.statusField,
                             subtitle: model.statusText,
@@ -82,36 +82,11 @@ public struct TransactionScene: View {
                         infoAction: onNetworkFeeInfo
                     )
                 } header: {
-                    switch model.headerType {
-                    case .amount:
-                        HStack {
-                            Spacer()
-                            TransactionHeaderView(type: model.headerType)
-                                .padding(.bottom, 16)
-                            Spacer()
-                        }
-                    case .swap:
-                        Section {
-                            TransactionHeaderView(type: model.headerType)
-                                .padding()
-                        }
-                        .cleanListRow()
-                    case .nft:
-                        HStack {
-                            Spacer(minLength: 0)
-                            TransactionHeaderView(type: model.headerType)
-                                .padding(.bottom, Spacing.medium)
-                            Spacer(minLength: 0)
-                        }
-                        .headerProminence(.increased)
-                    }
-
-                    Section {
-                        NavigationOpenLink(
-                            url: model.transactionExplorerUrl,
-                            with: Text(model.transactionExplorerText)
-                                .tint(Colors.black)
-                        )
+                    HStack {
+                        Spacer(minLength: 0)
+                        TransactionHeaderView(type: model.headerType)
+                            .padding(.bottom, .medium)
+                        Spacer(minLength: 0)
                     }
                 }
             }

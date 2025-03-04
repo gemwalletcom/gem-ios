@@ -13,7 +13,7 @@ struct WordSuggestionView: View {
 
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            HStack(spacing: Spacing.small) {
+            HStack(spacing: .small) {
                 if let word = word {
                     if !word.isEmpty {
                         ForEach(suggest(word: word)) { word in

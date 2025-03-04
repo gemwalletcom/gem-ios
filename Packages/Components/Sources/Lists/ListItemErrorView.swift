@@ -40,11 +40,11 @@ public struct ListItemErrorView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .leading, spacing: Spacing.small) {
-            HStack(spacing: Spacing.small) {
+        VStack(alignment: .leading, spacing: .small) {
+            HStack(spacing: .small) {
                 Image(systemName: errorSystemNameImage)
                     .foregroundColor(Colors.red)
-                    .frame(width: Sizing.list.image, height: Sizing.list.image)
+                    .frame(width: .list.image, height: .list.image)
                 Text(errorTitle ?? error.localizedDescription)
                     .textStyle(.headline)
                 Spacer()

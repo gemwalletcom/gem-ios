@@ -81,6 +81,7 @@ extension WalletConnection {
 extension WalletConnectionRecord {
     var session: WalletConnectionSession {
         WalletConnectionSession(
+            id: sessionId,
             sessionId: sessionId,
             state: state,
             chains: chains ?? [],

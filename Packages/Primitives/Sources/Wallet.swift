@@ -11,7 +11,7 @@ public enum WalletType: String, Codable, Equatable, Hashable, Sendable {
 	case view
 }
 
-public struct Wallet: Codable, Equatable, Sendable {
+public struct Wallet: Codable, Equatable, Hashable, Sendable {
 	public let id: String
 	public let name: String
 	public let index: Int32

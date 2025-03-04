@@ -38,7 +38,7 @@ struct AmountScene: View {
                     secondaryText: model.fiatAmount(amount: amount),
                     keyboardType: .decimalPad
                 )
-                .padding(.top, Spacing.medium)
+                .padding(.top, .medium)
                 .listGroupRowStyle()
                 .disabled(model.isInputDisabled)
                 .focused($focusedField, equals: .amount)
@@ -51,7 +51,7 @@ struct AmountScene: View {
                             balance: model.balanceText,
                             secondary: {
                                 Button(Localized.Transfer.max, action: useMax)
-                                    .buttonStyle(.lightGray(paddingHorizontal: Spacing.medium, paddingVertical: Spacing.small))
+                                    .buttonStyle(.lightGray(paddingHorizontal: .medium, paddingVertical: .small))
                                     .fixedSize()
                             }
                         )
@@ -88,10 +88,10 @@ struct AmountScene: View {
 
             Spacer()
             Button(Localized.Common.continue, action: next)
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
             .buttonStyle(.blue())
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .navigationBarTitleDisplayMode(.inline)

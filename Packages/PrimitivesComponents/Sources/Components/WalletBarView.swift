@@ -19,8 +19,8 @@ public struct WalletBarView: View {
         Button {
             action?()
         } label: {
-            HStack(spacing: Spacing.small) {
-                AssetImageView(assetImage: model.image, size: Spacing.large, overlayImageSize: Sizing.image.tiny)
+            HStack(spacing: .small) {
+                AssetImageView(assetImage: model.image, size: .large, overlayImageSize: .image.tiny)
                 
                 Text(model.name)
                     .foregroundColor(Colors.black)
@@ -34,7 +34,7 @@ public struct WalletBarView: View {
                     .fontWeight(.medium)
                     .foregroundColor(Colors.gray)
             }
-            .padding(.horizontal, Spacing.tiny)
+            .padding(.horizontal, .tiny)
         }
         .buttonStyle(.plain)
     }

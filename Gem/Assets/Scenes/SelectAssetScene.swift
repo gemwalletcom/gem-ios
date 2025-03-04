@@ -146,13 +146,17 @@ extension SelectAssetScene {
         let asset = assetData.asset
         switch action {
         case .enabled(let enabled):
-            model.enableAsset(assetId: asset.id, enabled: enabled)
+            Task {
+                await model.enableAsset(assetId: asset.id, enabled: enabled)
+            }
         case .copy:
             let address = assetData.account.address
             isPresentingCopyMessage = true
             isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
             UIPasteboard.general.string = address
-            model.enableAsset(assetId: asset.id, enabled: true)
+            Task {
+                await model.enableAsset(assetId: asset.id, enabled: true)
+            }
         }
     }
 }

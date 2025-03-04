@@ -13,7 +13,7 @@ public struct EmojiStyleScene: View {
 
     @Environment(\.dismiss) private var dismiss
     
-    private let emojiViewSize = Sizing.image.extraLarge
+    private let emojiViewSize: Sizing = .image.extraLarge
     @State private var selectedTab: Tab = .emoji
     
     @State private var model: EmojiStyleViewModel
@@ -29,8 +29,8 @@ public struct EmojiStyleScene: View {
                     .frame(width: emojiViewSize, height: emojiViewSize)
 
                 picker
-                    .padding(.horizontal, Spacing.medium)
-                    .padding(.top, Spacing.medium)
+                    .padding(.horizontal, .medium)
+                    .padding(.top, .medium)
 
                 Group {
                     switch selectedTab {
@@ -40,11 +40,11 @@ public struct EmojiStyleScene: View {
                         colorsView
                     }
                 }
-                .padding(.horizontal, Spacing.medium)
-                .padding(.top, Spacing.medium)
+                .padding(.horizontal, .medium)
+                .padding(.top, .medium)
                 
                 magicButton
-                    .padding(.horizontal, Spacing.medium)
+                    .padding(.horizontal, .medium)
 
                 Spacer()
             }
@@ -79,7 +79,7 @@ public struct EmojiStyleScene: View {
             LazyVGrid(
                 columns: model.emojiColumns,
                 alignment: .center,
-                spacing: Spacing.medium
+                spacing: .medium
             ) {
                 ForEach(model.emojiList, id: \.self) { item in
                     let view = EmojiView(color: item.color, emoji: item.emoji)
@@ -99,7 +99,7 @@ public struct EmojiStyleScene: View {
             LazyVGrid(
                 columns: model.colorColumns,
                 alignment: .center,
-                spacing: Spacing.medium
+                spacing: .medium
             ) {
                 ForEach(model.colorList, id: \.self) { color in
                     Button(action: {

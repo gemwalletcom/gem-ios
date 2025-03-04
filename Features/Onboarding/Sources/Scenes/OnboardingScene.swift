@@ -35,8 +35,8 @@ public struct OnboardingScene: View {
                 .buttonStyle(.blue())
                 .accessibilityIdentifier("welcome_import")
             }
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
-            .padding(Spacing.scene.bottom * 2)
+            .frame(maxWidth: .scene.button.maxWidth)
+            .padding(.scene.bottom * 2)
         }
         .overlay(
             LogoView()
