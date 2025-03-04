@@ -27,7 +27,7 @@ public struct NumberInputNormalizer: Sendable {
             str.removeLast()
         }
         for sym in unwantedSymbols {
-            str = str.replacingOccurrences(of: sym, with: "")
+            str = str.replacingOccurrences(of: sym, with: String.empty)
         }
         str = convertToStandardDecimal(str, locale: locale)
         str = removeLeadingZeros(str)
@@ -42,17 +42,17 @@ public struct NumberInputNormalizer: Sendable {
 
         if result.contains(dot) && result.contains(comma) {
             if decSep == dot {
-                result = result.replacingOccurrences(of: comma, with: "")
+                result = result.replacingOccurrences(of: comma, with: String.empty)
                 result = keepOnlyLastOccurrence(dot, from: result)
             } else {
-                result = result.replacingOccurrences(of: dot, with: "")
+                result = result.replacingOccurrences(of: dot, with: String.empty)
                 result = keepOnlyLastOccurrence(comma, from: result)
                 result = result.replacingOccurrences(of: comma, with: dot)
             }
         } else if result.contains(dot) {
             if decSep == comma {
                 if isSingleDotUsedAsGrouping(result) {
-                    result = result.replacingOccurrences(of: dot, with: "")
+                    result = result.replacingOccurrences(of: dot, with: String.empty)
                 } else {
                     result = keepOnlyLastOccurrence(dot, from: result)
                 }
@@ -64,7 +64,7 @@ public struct NumberInputNormalizer: Sendable {
                 result = keepOnlyLastOccurrence(comma, from: result)
                 result = result.replacingOccurrences(of: comma, with: dot)
             } else {
-                result = result.replacingOccurrences(of: comma, with: "")
+                result = result.replacingOccurrences(of: comma, with: String.empty)
             }
         }
         return result
@@ -84,7 +84,7 @@ public struct NumberInputNormalizer: Sendable {
     /// Example: "1.234.56" => "1234.56" (keeping only the final '.').
     private static func keepOnlyLastOccurrence(_ symbol: String, from s: String) -> String {
         guard let lastIndex = s.lastIndex(of: Character(symbol)) else { return s }
-        let prefix = s[s.startIndex..<lastIndex].replacingOccurrences(of: symbol, with: "")
+        let prefix = s[s.startIndex..<lastIndex].replacingOccurrences(of: symbol, with: String.empty)
         let suffix = s[lastIndex..<s.endIndex]
         return prefix + suffix
     }
