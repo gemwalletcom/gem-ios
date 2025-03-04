@@ -2,7 +2,6 @@
 
 import Foundation
 import Primitives
-@preconcurrency import Keystore
 import BannerService
 import PriceService
 import Preferences
@@ -11,13 +10,15 @@ import AssetsService
 import TransactionService
 import DiscoverAssetsService
 import ChainService
+import Store
 
 public struct WalletsService: Sendable {
     // TODO: - remove public dependencies and remove them in future
     public let assetsService: AssetsService
     public let priceService: PriceService
-    public let keystore: any Keystore
     public let balanceService: BalanceService
+
+    private let walletStore: WalletStore
 
     private let discoveryProcessor: any DiscoveryAssetsProcessing
     private let assetsEnabler: any AssetsEnabler
@@ -31,7 +32,7 @@ public struct WalletsService: Sendable {
     private let bannerSetupService: BannerSetupService
 
     public init(
-        keystore: any Keystore,
+        walletStore: WalletStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -41,7 +42,7 @@ public struct WalletsService: Sendable {
         addressStatusService: AddressStatusService,
         preferences: Preferences = .standard
     ) {
-        let balanceUpdater = BalanceUpdateService(balanceService: balanceService, keystore: keystore)
+        let balanceUpdater = BalanceUpdateService(balanceService: balanceService, walletStore: walletStore)
         let priceUpdater = PriceUpdateService(priceService: priceService, preferences: preferences)
 
         let currencyUpdateService = CurrencyUpdateService(
@@ -62,7 +63,7 @@ public struct WalletsService: Sendable {
             ),
             assetsService: assetsService,
             assetsEnabler: assetsEnabler,
-            keystore: keystore
+            walletStore: walletStore
         )
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
@@ -70,7 +71,7 @@ public struct WalletsService: Sendable {
         self.currencyUpdater = currencyUpdateService
         self.discoveryProcessor = processor
 
-        self.keystore = keystore
+        self.walletStore = walletStore
         self.assetsService = assetsService
         self.balanceService = balanceService
         self.priceService = priceService

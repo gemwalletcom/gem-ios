@@ -74,7 +74,7 @@ struct ServicesFactory {
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
-            keystore: storages.keystore
+            walletStore: storeManager.walletStore
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -115,7 +115,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let walletsService = Self.makeWalletsService(
-            keystore: storages.keystore,
+            walletStore: storeManager.walletStore,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
@@ -242,12 +242,12 @@ extension ServicesFactory {
     private static func makeTransactionsService(
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        keystore: any Keystore
+        walletStore: WalletStore
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
-            keystore: keystore
+            walletStore: walletStore
         )
     }
 
@@ -308,7 +308,7 @@ extension ServicesFactory {
     }
 
     private static func makeWalletsService(
-        keystore: any Keystore,
+        walletStore: WalletStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -317,7 +317,7 @@ extension ServicesFactory {
         bannerSetupService: BannerSetupService
     ) -> WalletsService {
         WalletsService(
-            keystore: keystore,
+            walletStore: walletStore,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,

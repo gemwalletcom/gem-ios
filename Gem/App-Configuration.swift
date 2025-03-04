@@ -144,7 +144,7 @@ extension ScanService {
 
 extension WalletsService {
     static let main = WalletsService(
-        keystore: LocalKeystore.main,
+        walletStore: .main,
         assetsService: .main,
         balanceService: .main,
         priceService: .main,
@@ -160,7 +160,11 @@ extension PriceAlertService {
 }
 
 extension TransactionsService {
-    static let main = TransactionsService(transactionStore: .main, assetsService: .main, keystore: LocalKeystore.main)
+    static let main = TransactionsService(
+        transactionStore: .main,
+        assetsService: .main,
+        walletStore: .main
+    )
 }
 
 extension DeviceService {

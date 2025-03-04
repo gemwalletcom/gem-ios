@@ -5,28 +5,30 @@ import AssetsService
 import DiscoverAssetsService
 import Primitives
 import Preferences
-@preconcurrency import Keystore
+import Store
 
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     private let discoverAssetService: DiscoverAssetsService
     private let assetsService: AssetsService
     private let assetsEnabler: any AssetsEnabler
-    private let keystore: any Keystore
+    private let walletStore: WalletStore
 
     init(
         discoverAssetService: DiscoverAssetsService,
         assetsService: AssetsService,
         assetsEnabler: any AssetsEnabler,
-        keystore: any Keystore
+        walletStore: WalletStore
     ) {
         self.discoverAssetService = discoverAssetService
         self.assetsService = assetsService
         self.assetsEnabler = assetsEnabler
-        self.keystore = keystore
+        self.walletStore = walletStore
     }
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
-        let wallet = try keystore.getWallet(walletId)
+        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
+            throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
+        }
         async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
         async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
         _ = try await (coinProcess, tokenProcess)

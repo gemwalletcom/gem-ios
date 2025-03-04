@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "Store", path: "../Store"),
         .package(name: "BannerService", path: "../BannerService"),
         .package(name: "PriceService", path: "../PriceService"),
         .package(name: "Preferences", path: "../Preferences"),
@@ -29,7 +29,7 @@ let package = Package(
             name: "WalletsService",
             dependencies: [
                 "Primitives",
-                "Keystore",
+                "Store",
                 "BannerService",
                 "PriceService",
                 "Preferences",
