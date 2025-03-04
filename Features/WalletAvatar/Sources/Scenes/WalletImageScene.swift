@@ -34,12 +34,13 @@ public struct WalletImageScene: View {
     public var body: some View {
         VStack {
             if let dbWallet {
-                AvatarView(model: WalletViewModel(wallet: dbWallet), size: model.emojiViewSize)
-                    .padding(.top, .medium)
-                    .padding(.bottom, .extraLarge)
-                    .onTapGesture {
-                        model.setDefaultAvatar()
-                    }
+                AvatarView(
+                    avatarImage: WalletViewModel(wallet: dbWallet).avatarImage,
+                    size: model.emojiViewSize,
+                    action: setDefaultAvatar
+                )
+                .padding(.top, .medium)
+                .padding(.bottom, .extraLarge)
             }
             pickerView
                 .padding(.bottom, .medium)
@@ -108,7 +109,7 @@ public struct WalletImageScene: View {
 
 // MARK: - Actions
 
-extension WalletImageScene {
+private extension WalletImageScene {
     func onSelectNftAsset(_ item: WalletImageViewModel.NFTAssetImageItem) {
         guard let url = item.assetImage.imageURL else {
             return
@@ -116,5 +117,9 @@ extension WalletImageScene {
         Task {
             await model.setImage(from: url)
         }
+    }
+    
+    func setDefaultAvatar() {
+        model.setDefaultAvatar()
     }
 }
