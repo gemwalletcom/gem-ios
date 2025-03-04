@@ -105,7 +105,8 @@ struct ServicesFactory {
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
-            keystore: storages.keystore,
+            walletStore: storeManager.walletStore,
+            preferences: preferences,
             interactor: walletConnectorManager
         )
 
@@ -290,12 +291,14 @@ extension ServicesFactory {
 
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
-        keystore: any Keystore,
+        walletStore: WalletStore,
+        preferences: Preferences,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
-            store: connectionsStore,
-            keystore: keystore,
+            connectionsStore: connectionsStore,
+            walletStore: walletStore,
+            preferences: preferences,
             walletConnectorInteractor: interactor
         )
         return ConnectionsService(

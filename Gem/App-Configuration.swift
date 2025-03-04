@@ -233,8 +233,9 @@ extension AvatarService {
 
 extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
-        store: .main,
-        keystore: LocalKeystore.main,
+        connectionsStore: .main,
+        walletStore: .main,
+        preferences: .standard,
         walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
     )
 }
