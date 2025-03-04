@@ -16,7 +16,7 @@ struct SwapNavigationView: View {
     
     @State private var model: SwapViewModel
     @State private var isPresentingAssetSwapType: SelectAssetSwapType?
-    @State private var isPresentingSwapProviderSelect: Asset?
+    @State private var isPresentingSwapProviderSelect: AssetData?
 
     private let onComplete: VoidAction
     @Binding private var navigationPath: NavigationPath

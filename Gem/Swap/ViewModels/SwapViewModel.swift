@@ -170,8 +170,18 @@ class SwapViewModel {
         )
     }
 
-    func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+    func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
+        let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
+        let formatter = ValueFormatter(style: .short)
+        return SwapProvidersViewModel(
+            items: swapQuotes.map {
+                SwapProviderItem(
+                    asset: asset.asset,
+                    swapQuote: $0,
+                    priceViewModel: priceViewModel,
+                    formatter: formatter
+                )
+            })
     }
 }
 

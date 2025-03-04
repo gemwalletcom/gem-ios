@@ -6,14 +6,38 @@ import Gemstone
 import Components
 import BigInt
 import SwiftUI
+import PrimitivesComponents
 
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
-    public let formatter = ValueFormatter(style: .short)
+    public let priceViewModel: PriceViewModel
+    public let formatter: ValueFormatter
+    
+    init(
+        asset: Asset,
+        swapQuote: SwapQuote,
+        priceViewModel: PriceViewModel,
+        formatter: ValueFormatter
+    ) {
+        self.asset = asset
+        self.swapQuote = swapQuote
+        self.priceViewModel = priceViewModel
+        self.formatter = formatter
+    }
     
     private var amount: String {
         formatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
+    }
+
+    private func fiatBalance() -> String {
+        guard let value = try? formatter.inputNumber(from: amount, decimals: asset.decimals.asInt),
+              let amount = try? formatter.double(from: value, decimals: asset.decimals.asInt),
+              let price = priceViewModel.price
+        else {
+            return .empty
+        }
+        return priceViewModel.fiatAmountText(amount: price.price * amount)
     }
 }
 
@@ -30,6 +54,10 @@ extension SwapProviderItem: SimpleListItemViewable {
     
     public var image: Image {
         swapQuote.data.provider.image
+    }
+    
+    public var subtitleExtra: String? {
+        fiatBalance()
     }
 }
 
