@@ -22,25 +22,29 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
     }
 
     public var body: some View {
-        ListView(
-            items: model.items,
-            content: { item in
-                if model.isMultiSelectionEnabled {
-                    SelectionView(
-                        value: item,
-                        selection: model.selectedItems.contains(item) ? item : nil,
-                        action: onSelect(item:),
-                        content: {
-                            listContent(item)
+        if model.items.isEmpty {
+            LoadingView()
+        } else {
+            ListView(
+                items: model.items,
+                content: { item in
+                    if model.isMultiSelectionEnabled {
+                        SelectionView(
+                            value: item,
+                            selection: model.selectedItems.contains(item) ? item : nil,
+                            action: onSelect(item:),
+                            content: {
+                                listContent(item)
+                            }
+                        )
+                    } else {
+                        NavigationCustomLink(with: listContent(item)) {
+                            onFinishSelection?([item])
                         }
-                    )
-                } else {
-                    NavigationCustomLink(with: listContent(item)) {
-                        onFinishSelection?([item])
                     }
                 }
-            }
-        )
+            )
+        }
     }
 
     private func onSelect(item: ViewModel.Item) {
