@@ -9,7 +9,7 @@ public struct ColorButtonStyle: ButtonStyle {
     let foregroundStylePressed: Color
     let background: Color
     let backgroundPressed: Color
-    let corernerRadius: CGFloat
+    let cornerRadius: CGFloat
 
     public init(
         paddingHorizontal: CGFloat,
@@ -18,7 +18,7 @@ public struct ColorButtonStyle: ButtonStyle {
         foregroundStylePressed: Color,
         background: Color,
         backgroundPressed: Color,
-        corernerRadius: CGFloat
+        cornerRadius: CGFloat
     ) {
         self.paddingHorizontal = paddingHorizontal
         self.paddingVertical = paddingVertical
@@ -26,7 +26,7 @@ public struct ColorButtonStyle: ButtonStyle {
         self.foregroundStylePressed = foregroundStylePressed
         self.background = background
         self.backgroundPressed = backgroundPressed
-        self.corernerRadius = corernerRadius
+        self.cornerRadius = cornerRadius
     }
 
     public func makeBody(configuration: Configuration) -> some View {
@@ -40,7 +40,7 @@ public struct ColorButtonStyle: ButtonStyle {
     }
 
     private func background(configuration: Configuration) -> some View {
-        RoundedRectangle(cornerRadius: corernerRadius)
+        RoundedRectangle(cornerRadius: cornerRadius)
             .fill(configuration.isPressed ? backgroundPressed : background)
     }
 
@@ -55,96 +55,103 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func blue(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.whiteSolid,
-                foregroundStylePressed: Colors.whiteSolid,
-                background: Colors.blue,
-                backgroundPressed: Colors.blueDark,
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.blue,
+            backgroundPressed: Colors.blueDark,
+            cornerRadius: cornerRadius
+        )
+    }
 
     public static func blueGrayPressed(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.whiteSolid,
-                foregroundStylePressed: Colors.whiteSolid,
-                background: Colors.blue,
-                backgroundPressed: Colors.gray,
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.blue,
+            backgroundPressed: Colors.gray,
+            cornerRadius: cornerRadius
+        )
+    }
 
     public static func gray(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.whiteSolid,
-                foregroundStylePressed: Colors.whiteSolid,
-                background: Colors.grayLight,
-                backgroundPressed: Colors.gray,
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.grayLight,
+            backgroundPressed: Colors.gray,
+            cornerRadius: cornerRadius
+        )
+    }
 
     public static func lightGray(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.gray,
-                foregroundStylePressed: Colors.whiteSolid,
-                background: Colors.grayVeryLight,
-                backgroundPressed: Colors.grayLight,
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.gray,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.grayVeryLight,
+            backgroundPressed: Colors.grayLight,
+            cornerRadius: cornerRadius
+        )
+    }
 
     public static func white(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.whiteSolid,
-                foregroundStylePressed: Colors.whiteSolid,
-                background: Colors.white,
-                backgroundPressed: Colors.grayVeryLight,
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 12
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.white,
+            backgroundPressed: Colors.grayVeryLight,
+            cornerRadius: cornerRadius
+        )
+    }
+
     public static func amount(
         paddingHorizontal: CGFloat = .small,
         paddingVertical: CGFloat = .small,
-        corernerRadius: CGFloat = 8) -> ColorButtonStyle {
-            ColorButtonStyle(
-                paddingHorizontal: paddingHorizontal,
-                paddingVertical: paddingVertical,
-                foregroundStyle: Colors.black,
-                foregroundStylePressed: Colors.black.opacity(0.5),
-                background: Colors.grayVeryLight,
-                backgroundPressed: Colors.grayVeryLight.opacity(0.5),
-                corernerRadius: corernerRadius
-            )
-        }
+        cornerRadius: CGFloat = 8
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.black,
+            foregroundStylePressed: Colors.black.opacity(0.5),
+            background: Colors.grayVeryLight,
+            backgroundPressed: Colors.grayVeryLight.opacity(0.5),
+            cornerRadius: cornerRadius
+        )
+    }
     
     public static func listStyleColor(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        corernerRadius: CGFloat = 12
+        cornerRadius: CGFloat = 12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             paddingHorizontal: paddingHorizontal,
@@ -153,7 +160,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
             foregroundStylePressed: Colors.whiteSolid,
             background: Colors.listStyleColor,
             backgroundPressed: Colors.grayVeryLight,
-            corernerRadius: corernerRadius
+            cornerRadius: cornerRadius
         )
     }
 }
@@ -267,7 +274,7 @@ public struct StateButtonStyle: ButtonStyle {
 // MARK: - StatefulButtonStyle Static
 
 extension ButtonStyle where Self == StateButtonStyle {
-    public static func statefullBlue(state: StateButtonStyle.State) -> StateButtonStyle {
+    public static func statefulBlue(state: StateButtonStyle.State) -> StateButtonStyle {
         StateButtonStyle(
             state: state,
             foregroundStyle: Colors.whiteSolid,
@@ -297,7 +304,7 @@ extension ButtonStyle where Self == StateButtonStyle {
             }) {
                 Text(text)
             }
-            .buttonStyle(.statefullBlue(state: state))
+            .buttonStyle(.statefulBlue(state: state))
         }
     }
 
