@@ -146,7 +146,6 @@
 		D8D83C892CECFD560083AA53 /* SwapTokenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D83C882CECFD560083AA53 /* SwapTokenViewModel.swift */; };
 		D8D83C8B2CECFD900083AA53 /* SwapAssetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D83C8A2CECFD900083AA53 /* SwapAssetView.swift */; };
 		D8F5B8602CCA008E0007E615 /* ChainService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B85F2CCA008E0007E615 /* ChainService */; };
-		D8F5B8622CCC33F90007E615 /* HeaderBannersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5B8612CCC33F90007E615 /* HeaderBannersViewModel.swift */; };
 		D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86B2CCD52EB0007E615 /* Staking */; };
 		D8F5B86F2CCD639A0007E615 /* StakeService in Frameworks */ = {isa = PBXBuildFile; productRef = D8F5B86E2CCD639A0007E615 /* StakeService */; };
 		DF1167112BC36240000F8C8C /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */; };
@@ -325,7 +324,6 @@
 		D8D83C8A2CECFD900083AA53 /* SwapAssetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapAssetView.swift; sourceTree = "<group>"; };
 		D8EFE3EA2BAB580300608363 /* GemstonePrimitives */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemstonePrimitives; sourceTree = "<group>"; };
 		D8F5B85E2CC9FFD60007E615 /* ChainService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ChainService; sourceTree = "<group>"; };
-		D8F5B8612CCC33F90007E615 /* HeaderBannersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderBannersViewModel.swift; sourceTree = "<group>"; };
 		D8F5B8682CCD50650007E615 /* Staking */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Staking; sourceTree = "<group>"; };
 		D8F5B8702CCD6C010007E615 /* StakeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = StakeService; sourceTree = "<group>"; };
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
@@ -939,7 +937,6 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A39F2C9696FE006FABE8 /* AssetHeaderViewModel.swift */,
-				D8F5B8612CCC33F90007E615 /* HeaderBannersViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1314,7 +1311,6 @@
 				C3CF3BC929B803F900E96586 /* RecipientScene.swift in Sources */,
 				C3D1C4F02A2EBB0C006E8EEA /* RecipientAddress.swift in Sources */,
 				D8C4A3AF2C9696FE006FABE8 /* AssetScene.swift in Sources */,
-				D8F5B8622CCC33F90007E615 /* HeaderBannersViewModel.swift in Sources */,
 				83B08BDB2D0B4AE200CA1B33 /* AppResolver+Storages.swift in Sources */,
 				C3D1C4D52A24171B006E8EEA /* OnstartAsyncService.swift in Sources */,
 				C3D1C4EE2A2EA7D2006E8EEA /* AmountViewModel.swift in Sources */,
@@ -1585,7 +1581,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.127;
+				MARKETING_VERSION = 1.3.128;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
@@ -1637,7 +1633,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.0;
-				MARKETING_VERSION = 1.3.127;
+				MARKETING_VERSION = 1.3.128;
 				OTHER_LDFLAGS = "";
 				PRODUCT_BUNDLE_IDENTIFIER = com.gemwallet.ios;
 				"PRODUCT_BUNDLE_IDENTIFIER[sdk=iphoneos*]" = com.gemwallet.ios;
