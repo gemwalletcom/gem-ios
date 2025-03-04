@@ -26,7 +26,7 @@ import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
 import struct Gemstone.PermitSingle
-import struct Gemstone.SwapProvider
+import struct Gemstone.SwapProviderType
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
 import struct Gemstone.SwapQuoteRequest
@@ -280,12 +280,8 @@ extension SwapViewModel {
 
             await MainActor.run {
                 swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
-                if let selectedSwapQuote {
-                    onSelectQuote(selectedSwapQuote, asset: toAsset)
-                } else if let bestQuote = swapQuotes.first {
-                    onSelectQuote(bestQuote, asset: toAsset)
-                    selectedSwapQuote = bestQuote
-                }
+                selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
+                selectedSwapQuote.map { onSelectQuote($0, asset: toAsset) }
             }
         } catch {
             await MainActor.run {
@@ -387,7 +383,7 @@ extension SwapViewModel {
     }
 }
 
-extension Gemstone.SwapProvider {
+extension Gemstone.SwapProviderType {
     var image: Image {
         switch self.id {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap

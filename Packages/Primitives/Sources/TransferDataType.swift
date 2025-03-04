@@ -2,7 +2,7 @@
 
 import Foundation
 import struct Gemstone.SwapQuote
-import struct Gemstone.SwapProvider
+import struct Gemstone.SwapProviderType
 import struct Gemstone.SwapQuoteData
 import struct Gemstone.ApprovalData
 

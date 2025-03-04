@@ -9,8 +9,6 @@ public enum TransactionHeaderType {
     case amount(title: String, subtitle: String?)
     case swap(from: SwapAmountField, to: SwapAmountField)
     case nft(name: String, image: AssetImage)
-    
-    public static let swapValueFormatterStyle = ValueFormatter.Style.medium
 }
 
 public struct TransactionHeaderView: View {
