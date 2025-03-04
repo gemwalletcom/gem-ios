@@ -48,6 +48,10 @@ public final class FiatSceneViewModel {
         case .sell: Localized.Sell.title(asset.name)
         }
     }
+    
+    var allowSelectProvider: Bool {
+        state.value.or([]).count > 1
+    }
 
     func pickerTitle(type: FiatTransactionType) -> String {
         typeModel(type: type).title

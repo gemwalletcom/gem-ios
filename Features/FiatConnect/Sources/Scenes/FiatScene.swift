@@ -16,9 +16,14 @@ public struct FiatScene: View {
     private var assetData: AssetData
 
     @State private var model: FiatSceneViewModel
+    @Binding private var isPresentingFiatProviderSelect: Bool?
 
-    public init(model: FiatSceneViewModel) {
+    public init(
+        model: FiatSceneViewModel,
+        isPresentingFiatProviderSelect: Binding<Bool?>
+    ) {
         _model = State(initialValue: model)
+        _isPresentingFiatProviderSelect = isPresentingFiatProviderSelect
         _assetData = Query(constant: model.assetRequest)
     }
 
@@ -128,22 +133,19 @@ extension FiatScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded(let quotes):
+            case .loaded:
                 if let quote = model.input.quote {
-                    if quotes.count > 1 {
-                        NavigationLink(value: Scenes.FiatProviders()) {
-                            ListItemImageView(
-                                title: model.providerTitle,
-                                subtitle: quote.provider.name,
-                                assetImage: model.providerAssetImage(quote.provider)
-                            )
+                    let view = ListItemImageView(
+                        title: model.providerTitle,
+                        subtitle: quote.provider.name,
+                        assetImage: model.providerAssetImage(quote.provider)
+                    )
+                    if model.allowSelectProvider {
+                        NavigationCustomLink(with: view) {
+                            isPresentingFiatProviderSelect = true
                         }
                     } else {
-                        ListItemImageView(
-                            title: model.providerTitle,
-                            subtitle: quote.provider.name,
-                            assetImage: model.providerAssetImage(quote.provider)
-                        )
+                        view
                     }
                     ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
                 } else {
