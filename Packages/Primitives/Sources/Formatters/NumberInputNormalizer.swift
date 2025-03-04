@@ -13,25 +13,21 @@ public struct NumberInputNormalizer: Sendable {
     private static let unwantedSymbols = [" ", "'", "’", " ", "\u{00A0}"]
 
     /// Characters we allow to remain at the end of the string (digits, dot, comma, apostrophes, narrow space).
-    private static let allowedTrailingCharacters: CharacterSet = {
-        var set = CharacterSet.decimalDigits
-        set.insert(charactersIn: dot + comma + "'" + " " + " ")
-        return set
-    }()
+    private static let allowedTrailingCharacters = CharacterSet.decimalDigits.union(CharacterSet(charactersIn: dot + comma + "'" + " " + " "))
 
     /// Normalizes a raw `input` numeric string (with potential locale-specific separators or extra symbols)
     /// into a standard dot-based decimal format (e.g. `"1234.56"`) suitable for parsing.
     public static func normalize(_ input: String, locale: Locale) -> String {
-        var str = input.trimmingCharacters(in: .whitespacesAndNewlines)
-        while let last = str.unicodeScalars.last, !allowedTrailingCharacters.contains(last) {
-            str.removeLast()
+        var string = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        while let last = string.unicodeScalars.last, !allowedTrailingCharacters.contains(last) {
+            string.removeLast()
         }
         for sym in unwantedSymbols {
-            str = str.replacingOccurrences(of: sym, with: String.empty)
+            string = string.replacingOccurrences(of: sym, with: String.empty)
         }
-        str = convertToStandardDecimal(str, locale: locale)
-        str = removeLeadingZeros(str)
-        return str.isEmpty ? .zero : str
+        string = convertToStandardDecimal(string, locale: locale)
+        string = removeLeadingZeros(string)
+        return string.isEmpty ? .zero : string
     }
 
     /// Converts mixed usage of comma/dot separators to a single '.' decimal,
