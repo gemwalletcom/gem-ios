@@ -132,15 +132,13 @@ public final class AssetsService: Sendable {
             }
 
             for try await result in group {
-                if let result = result {
+                if let result = result, result.count > 0 {
                     assets.append(contentsOf: result)
                 }
             }
             return assets
         }
-        return assets.sorted { l, r in
-            l.score.rank > r.score.rank
-        }
+        return assets
     }
 
     func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {

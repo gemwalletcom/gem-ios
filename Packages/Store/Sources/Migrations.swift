@@ -221,7 +221,7 @@ public struct Migrations {
             }
         }
       
-      migrator.registerMigration("Add \(AssetSearchRecord.databaseTableName)") { db in
+        migrator.registerMigration("Add 3 \(AssetSearchRecord.databaseTableName)") { db in
             try? db.drop(table: AssetSearchRecord.databaseTableName)
             try? AssetSearchRecord.create(db: db)
         }

@@ -31,14 +31,16 @@ public struct AssetsRequest: ValueObservationQueryable {
             let request = try fetchAllAssetRecordsRequest(db, searchBy: searchBy)
             return request.map { $0.mapToEmptyAssetData() }
         }
-        if filters.contains(.includeNewAssets) {
-            let request1 = try assetBalancesRequest(db)
-            let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: request1.map { $0.asset.id.identifier })
-
-            return [request1, request2].flatMap { $0 }
-        }
-
-        return try assetBalancesRequest(db)
+        
+        
+//        if filters.contains(.includeNewAssets) {
+//            //let request1 = try assetBalancesRequest(db)
+//            let request2 = try assetsRequest(db, searchBy: searchBy, excludeAssetIds: []) //request1.map { $0.asset.id.identifier })
+//
+//            return [request2].flatMap { $0 }
+//        }
+//        
+        return try assetsRequest(db, searchBy: searchBy)
     }
 
     func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
@@ -75,12 +77,11 @@ extension AssetsRequest {
             .fetchAll(db).map { $0.assetData }
     }
 
-    private func assetsRequest(_ db: Database, searchBy: String, excludeAssetIds: [String]) throws -> [AssetData] {
+    private func assetsRequest(_ db: Database, searchBy: String) throws -> [AssetData] {
         try Self.fetchAssetsSearch(
             walletId: walletID,
             searchBy: searchBy,
-            filters: filters,
-            excludeAssetIds: excludeAssetIds
+            filters: filters
         )
         .fetchAll(db).map { $0.assetData }
     }
@@ -89,11 +90,12 @@ extension AssetsRequest {
         switch filter {
         case .search(let name):
             return request
-                .filter(
-                    Columns.Asset.symbol.like("%%\(name)%%") ||
-                    Columns.Asset.name.like("%%\(name)%%") ||
-                    Columns.Asset.tokenId.like("%%\(name)%%")
-                )
+//            return request
+//                .filter(
+//                    Columns.Asset.symbol.like("%%\(name)%%") ||
+//                    Columns.Asset.name.like("%%\(name)%%") ||
+//                    Columns.Asset.tokenId.like("%%\(name)%%")
+//                )
         case .hasBalance:
             return request
                 .filter(
@@ -137,18 +139,44 @@ extension AssetsRequest {
         }
     }
 
+//    func fetchAssets(filters: [AssetsRequestFilter])-> QueryInterfaceRequest<AssetRecordInfo>  {
+//        var request = AssetRecord
+//            .including(optional: AssetRecord.price)
+//            .including(optional: AssetRecord.balance)
+//            .including(optional: AssetRecord.account)
+//            .joining(required: AssetRecord.balance
+//                .filter(Columns.Balance.walletId == walletID)
+//                //.order(Columns.Balance.totalAmount.desc)
+//                //.order((Columns.Balance.totalAmount * Columns.Price.price).desc)
+//            )
+//            .joining(required: AssetRecord.account.filter(Columns.Account.walletId == walletID))
+//            .order((
+//                TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
+//            )
+//            
+//        if !searchBy.isEmpty {
+//            request = Self.applyFilter(request: request, .search(searchBy))
+//        }
+//
+//        filters.forEach {
+//            request = Self.applyFilter(request: request, $0)
+//        }
+//        return request.asRequest(of: AssetRecordInfo.self)
+//    }
+
     static private func fetchAssetsSearch(
         walletId: String,
         searchBy: String,
-        filters: [AssetsRequestFilter],
-        excludeAssetIds: [String]
+        filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
         var request = AssetRecord
             .including(optional: AssetRecord.account)
             .joining(optional: AssetRecord.priorityAssets
                 .filter(Columns.AssetSearch.query == searchBy)
             )
-            .filter(!excludeAssetIds.contains(Columns.Asset.id))
+            .joining(optional: AssetRecord.balance
+                .filter(Columns.Balance.walletId == walletId)
+            )
             .filter(literal:
                 SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
             )
