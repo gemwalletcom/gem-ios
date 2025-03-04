@@ -34,12 +34,13 @@ public struct WalletImageScene: View {
     public var body: some View {
         VStack {
             if let dbWallet {
-                AvatarView(model: WalletViewModel(wallet: dbWallet), size: model.emojiViewSize)
-                    .padding(.top, .medium)
-                    .padding(.bottom, .extraLarge)
-                    .onTapGesture {
-                        model.setDefaultAvatar()
-                    }
+                Button {
+                    model.setDefaultAvatar()
+                } label: {
+                    AvatarView(model: WalletViewModel(wallet: dbWallet), size: model.emojiViewSize)
+                        .padding(.top, .medium)
+                        .padding(.bottom, .extraLarge)
+                }
             }
             pickerView
                 .padding(.bottom, .medium)

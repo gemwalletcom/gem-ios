@@ -49,14 +49,15 @@ public struct WalletDetailScene: View {
                         Spacer()
                         VStack(spacing: .medium) {
                             if let dbWallet {
-                                AssetImageView(
-                                    assetImage: model.avatarAssetImage(for: dbWallet),
-                                    size: .image.extraLarge,
-                                    overlayImageSize: .image.semiMedium
-                                )
-                                .padding(.bottom, .extraLarge)
-                                .onTapGesture {
+                                Button {
                                     onSelectImage()
+                                } label: {
+                                    AssetImageView(
+                                        assetImage: model.avatarAssetImage(for: dbWallet),
+                                        size: .image.extraLarge,
+                                        overlayImageSize: .image.semiMedium
+                                    )
+                                    .padding(.bottom, .extraLarge)
                                 }
                             }
                         }
