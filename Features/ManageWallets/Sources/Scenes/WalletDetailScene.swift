@@ -49,16 +49,12 @@ public struct WalletDetailScene: View {
                         Spacer()
                         VStack(spacing: .medium) {
                             if let dbWallet {
-                                Button {
-                                    onSelectImage()
-                                } label: {
-                                    AssetImageView(
-                                        assetImage: model.avatarAssetImage(for: dbWallet),
-                                        size: .image.extraLarge,
-                                        overlayImageSize: .image.semiMedium
-                                    )
-                                    .padding(.bottom, .extraLarge)
-                                }
+                                AvatarView(
+                                    avatarImage: model.avatarAssetImage(for: dbWallet),
+                                    size: .image.extraLarge,
+                                    action: onSelectImage
+                                )
+                                .padding(.bottom, .extraLarge)
                             }
                         }
                         Spacer()
