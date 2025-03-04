@@ -34,7 +34,7 @@ public final class CollectionsViewModel: Sendable {
         self.nftService = nftService
         self.deviceService = deviceService
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
-        self.columns = Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
+        self.columns = Array(repeating: GridItem(spacing: .medium), count: 2)
     }
     
     let columns: [GridItem]

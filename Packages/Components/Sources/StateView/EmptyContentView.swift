@@ -16,7 +16,7 @@ public struct EmptyContentView: View {
             description: model.description,
             image: model.image,
             buttons: {
-                HStack(spacing: Spacing.small) {
+                HStack(spacing: .small) {
                     ForEach(model.buttons) { button in
                         if let action = button.action {
                             Button(button.title) {

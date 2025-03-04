@@ -44,7 +44,7 @@ public struct StateEmptyView<Content: View>: View {
     }
 
      public var body: some View {
-         VStack(spacing: Spacing.medium) {
+         VStack(spacing: .medium) {
              if let image {
                  ZStack {
                      Circle()
@@ -52,11 +52,11 @@ public struct StateEmptyView<Content: View>: View {
                      image
                          .resizable()
                          .aspectRatio(contentMode: .fit)
-                         .padding(Spacing.large)
+                         .padding(.large)
                  }
                  .frame(
-                    width: Sizing.image.extraLarge,
-                    height: Sizing.image.extraLarge
+                    width: .image.extraLarge,
+                    height: .image.extraLarge
                  )
              }
 

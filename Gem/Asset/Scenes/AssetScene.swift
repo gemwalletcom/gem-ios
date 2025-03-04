@@ -151,7 +151,7 @@ struct AssetScene: View {
                 )
             } else {
                 EmptyContentView(model: model.emptyConentModel)
-                    .cleanListRow(topOffset: Spacing.extraLarge)
+                    .cleanListRow(topOffset: .extraLarge)
             }
         }
         .refreshable {
