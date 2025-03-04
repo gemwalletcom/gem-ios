@@ -100,9 +100,6 @@ struct NumberInputNormalizerTests {
 
     @Test
     func testAdditionalVariations() throws {
-        // Removed the lines with "1'234,56" and "1'234'56,78" to avoid apostrophe issues.
-        // Also removed the +/- sign tests.
-
         let testCases: [(locale: Locale, input: String, expected: String)] = [
             (Locale.FR, "1 234,56 €", "1234.56"),
             (Locale.UA, "1 234,56 грн", "1234.56"),
@@ -116,8 +113,6 @@ struct NumberInputNormalizerTests {
             #expect(normalized == testCase.expected)
         }
     }
-
-    // Removed @Test func testNegativeNumbers() and @Test func testPositiveNumbers()
 
     @Test
     func testInternalSpaceGrouping() throws {
