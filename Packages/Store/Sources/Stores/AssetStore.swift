@@ -60,15 +60,6 @@ public struct AssetStore: Sendable {
         }
     }
     
-    public func getAssetsData(for walletId: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
-        try db.read { db in
-            return try AssetsRequest(walletID: walletId)
-                .fetchAssets(filters: filters)
-                .fetchAll(db)
-                .map { $0.assetData}
-        }
-    }
-    
     @discardableResult
     public func setAssetIsBuyable(for assetIds: [String], value: Bool) throws -> Int {
         try setColumn(for: assetIds, column: Columns.Asset.isBuyable, value: value)

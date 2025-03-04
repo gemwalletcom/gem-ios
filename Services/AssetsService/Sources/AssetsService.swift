@@ -84,10 +84,6 @@ public final class AssetsService: Sendable {
         return newAssets.map { $0.asset.id }
     }
 
-    public func getAssets(walletID: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
-        try assetStore.getAssetsData(for: walletID, filters: filters)
-    }
-
     public func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
         let exist = try balanceStore.isBalanceExist(walletId: walletId.id, assetId: assetId.identifier)
         if !exist {
