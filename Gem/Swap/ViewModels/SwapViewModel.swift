@@ -107,14 +107,14 @@ class SwapViewModel {
     var isSwitchAssetButtonDisabled: Bool {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
-    
+
     var swapQuotes: [SwapQuote] {
         if case .loaded(let result) = swapState.availability {
             return result.quotes
         }
         return []
     }
-    
+
     var allowSelectProvider: Bool {
         swapQuotes.count > 1
     }
@@ -222,7 +222,7 @@ extension SwapViewModel {
         }
         return nil
     }
-    
+
     func onSelectQuote(
         _ quote: SwapQuote,
         asset: Asset
@@ -232,7 +232,7 @@ extension SwapViewModel {
         }
         toValue = formatter.string(value, decimals: asset.decimals.asInt)
     }
-    
+
     func setSelectedSwapQuote(_ quote: SwapQuote?) {
         selectedSwapQuote = quote
     }
@@ -373,7 +373,7 @@ extension SwapViewModel {
     }
 }
 
-extension Gemstone.SwapProviderType {
+extension Gemstone.SwapProvider {
     var image: Image {
         switch self {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
