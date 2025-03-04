@@ -8,7 +8,7 @@ import Localization
 
 public struct FiatConnectNavigationView: View {
     @State private var model: FiatSceneViewModel
-    @State private var isPresentingFiatProviderSelect: Bool?
+    @State private var isPresentingFiatProviderSelect: Bool = false
 
     public init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
@@ -19,7 +19,7 @@ public struct FiatConnectNavigationView: View {
             model: model,
             isPresentingFiatProviderSelect: $isPresentingFiatProviderSelect
         )
-        .sheet(presenting: $isPresentingFiatProviderSelect) { _ in
+        .sheet(isPresented: $isPresentingFiatProviderSelect) {
             NavigationStack {
                 SelectableListView(
                     model: .constant(model.fiatProviderViewModel()),
@@ -32,7 +32,7 @@ public struct FiatConnectNavigationView: View {
                 .toolbar {
                     ToolbarItem(placement: .topBarLeading) {
                         Button(Localized.Common.done) {
-                            isPresentingFiatProviderSelect = nil
+                            isPresentingFiatProviderSelect = false
                         }.bold()
                     }
                 }
@@ -47,6 +47,6 @@ extension FiatConnectNavigationView {
     func onSelectQuote(_ quotes: [FiatQuoteViewModel]) {
         guard let quoteModel = quotes.first else { return }
         model.selectQuote(quoteModel.quote)
-        isPresentingFiatProviderSelect = nil
+        isPresentingFiatProviderSelect = false
     }
 }

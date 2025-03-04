@@ -16,11 +16,11 @@ public struct FiatScene: View {
     private var assetData: AssetData
 
     @State private var model: FiatSceneViewModel
-    @Binding private var isPresentingFiatProviderSelect: Bool?
+    @Binding private var isPresentingFiatProviderSelect: Bool
 
     public init(
         model: FiatSceneViewModel,
-        isPresentingFiatProviderSelect: Binding<Bool?>
+        isPresentingFiatProviderSelect: Binding<Bool>
     ) {
         _model = State(initialValue: model)
         _isPresentingFiatProviderSelect = isPresentingFiatProviderSelect
