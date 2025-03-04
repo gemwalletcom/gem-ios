@@ -60,9 +60,8 @@ struct SwapScene: View {
             buttonView
                 .padding(.bottom, Spacing.scene.bottom)
                 .frame(maxWidth: Spacing.scene.button.maxWidth)
-                .isVisible(model.isVisibleActionButton && focusedField == nil)
+                .isVisible(model.isVisibleActionButton)
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
         .toolbar {
             ToolbarItem(placement: .keyboard) {
                 keyboardAccessoryView
@@ -210,15 +209,10 @@ extension SwapScene {
     
     @ViewBuilder
     private var keyboardAccessoryView: some View {
-        if model.isVisibleActionButton {
-            buttonView
-                .frame(height: Spacing.scene.button.accessoryHeight)
-        } else {
-            PercentageAccessoryView(
-                onSelectPercent: onSelectPercent,
-                onDone: { focusedField = nil }
-            )
-        }
+        PercentageAccessoryView(
+            onSelectPercent: onSelectPercent,
+            onDone: { focusedField = nil }
+        )
     }
 }
 
