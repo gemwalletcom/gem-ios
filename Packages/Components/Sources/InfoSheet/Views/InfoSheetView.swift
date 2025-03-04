@@ -59,7 +59,7 @@ struct InfoSheetView: View {
                     AssetImageView(
                         assetImage: assetImage,
                         size: .image.semiExtraLarge,
-                        overlayImageSize: .image.semiExtraLarge / 2.5
+                        overlayImageSize: .image.medium
                     )
                 case nil: EmptyView()
                 }
