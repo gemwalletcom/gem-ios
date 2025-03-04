@@ -111,7 +111,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
             foregroundStyle: Colors.gray,
             foregroundStylePressed: Colors.whiteSolid,
             background: Colors.grayVeryLight,
-            backgroundPressed: Colors.grayLight,
+            backgroundPressed: Colors.grayLight.opacity(0.3),
             cornerRadius: cornerRadius
         )
     }
