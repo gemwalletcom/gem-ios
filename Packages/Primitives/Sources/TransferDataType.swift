@@ -2,7 +2,6 @@
 
 import Foundation
 import struct Gemstone.ApprovalData
-import enum Gemstone.SwapProvider
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
 
