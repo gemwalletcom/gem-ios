@@ -91,10 +91,7 @@ struct AssetScene: View {
                     .padding(.top, .small)
                     .padding(.bottom, .medium)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(.zero)
+            .cleanListRow()
 
             Section {
                 BannerView(banners: model.banners, action: onBannerAction, closeAction: bannerService.onClose)
@@ -147,15 +144,14 @@ struct AssetScene: View {
                 stakeView
             }
 
-            if transactions.count > 0 {
+            if !transactions.isEmpty {
                 TransactionsList(
                     explorerService: model.explorerService,
                     transactions
                 )
             } else {
-                Section {
-                    StateEmptyView(title: Localized.Activity.EmptyState.message)
-                }
+                EmptyContentView(model: model.emptyConentModel)
+                    .cleanListRow(topOffset: .extraLarge)
             }
         }
         .refreshable {
@@ -267,8 +263,8 @@ extension AssetScene {
         case .activateAsset:
             onAssetActivate?(model.assetDataModel.asset)
         case .enableNotifications,
-            .accountActivation,
-            .accountBlockedMultiSignature:
+                .accountActivation,
+                .accountBlockedMultiSignature:
             Task {
                 try await bannerService.handleAction(action)
             }

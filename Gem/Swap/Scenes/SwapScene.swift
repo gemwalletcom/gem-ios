@@ -61,8 +61,8 @@ struct SwapScene: View {
             swapList
             Spacer()
             buttonView
-                .padding(.bottom, Spacing.scene.bottom)
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
+                .padding(.bottom, .scene.bottom)
+                .frame(maxWidth: .scene.button.maxWidth)
                 .isVisible(model.isVisibleActionButton)
         }
         .toolbar {
@@ -142,7 +142,7 @@ extension SwapScene {
             Text(model.swapFromTitle)
         } footer: {
             SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
-                .offset(y: Spacing.small + Spacing.tiny)
+                .offset(y: .small + .tiny)
                 .frame(maxWidth: .infinity)
                 .disabled(model.isSwitchAssetButtonDisabled)
                 .textCase(nil)

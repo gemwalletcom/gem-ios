@@ -9,6 +9,7 @@ import Store
 import Localization
 import Style
 import SwiftUI
+import PrimitivesComponents
 import AvatarService
 
 @Observable
@@ -33,7 +34,7 @@ public final class CollectionsViewModel: Sendable {
         self.nftService = nftService
         self.deviceService = deviceService
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
-        self.columns = Array(repeating: GridItem(spacing: Spacing.medium), count: 2)
+        self.columns = Array(repeating: GridItem(spacing: .medium), count: 2)
     }
     
     let columns: [GridItem]
@@ -43,6 +44,10 @@ public final class CollectionsViewModel: Sendable {
         case .collections: Localized.Nft.collections
         case .collection(let data): data.collection.name
         }
+    }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .nfts)
     }
 
     // MARK: - Public methods

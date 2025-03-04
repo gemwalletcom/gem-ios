@@ -25,10 +25,7 @@ public struct ChainListSettingsScene: View {
                 }
             },
             emptyContent: {
-                StateEmptyView(
-                    title: Localized.Common.noResultsFound,
-                    image: Images.System.searchNoResults
-                )
+                EmptyContentView(model: model.emptyContent)
             }
         )
         .navigationTitle(model.title)
