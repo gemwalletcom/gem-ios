@@ -171,6 +171,8 @@ extension SelectAssetViewModel {
         do {
             let assets = try await assetsService.searchAssets(query: query, chains: chains)
             try assetsService.addAssets(assets: assets)
+            try assetsService.assetStore.addAssetsSearch(query: query, assets: assets)
+            
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
 
             await MainActor.run { [self] in
