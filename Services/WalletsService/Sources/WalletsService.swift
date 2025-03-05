@@ -80,6 +80,10 @@ public struct WalletsService: Sendable {
         self.addressStatusService = addressStatusService
     }
 
+    public var walletsCount: Int {
+        (try? walletStore.getWallets().count) ?? .zero
+    }
+
     public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
         async let balances: () = try balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
         async let prices: () = try priceUpdater.updatePrices(assetIds: assetIds)

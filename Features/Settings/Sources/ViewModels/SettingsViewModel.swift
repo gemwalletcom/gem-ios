@@ -36,7 +36,7 @@ public final class SettingsViewModel {
     var title: String { Localized.Settings.title }
 
     var walletsTitle: String { Localized.Wallets.title }
-    var walletsValue: String { "\(walletsService.keystore.wallets.count)" }
+    var walletsValue: String { "\(walletsService.walletsCount)" }
     var walletsImage: Image { Images.Settings.wallets }
 
     var securityTitle: String { Localized.Settings.security }
