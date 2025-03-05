@@ -4,7 +4,7 @@ import Foundation
 
 import SwiftUI
 
-struct StateView<Content: View, T>: View {
+struct StateView<Content: View, T: Hashable>: View {
     let state: StateViewType<T>
     let content: (T) -> Content
     let emptyView: AnyView
