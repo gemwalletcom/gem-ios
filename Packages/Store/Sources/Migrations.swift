@@ -17,12 +17,13 @@ public struct Migrations {
             try WalletRecord.create(db: db)
             try AccountRecord.create(db: db)
             try AssetRecord.create(db: db)
-            try AssetBalanceRecord.create(db: db)
+            try BalanceRecord.create(db: db)
 
             // asset
             try PriceRecord.create(db: db)
             try AssetLinkRecord.create(db: db)
-
+            try AssetSearchRecord.create(db: db)
+            
             // transactions
             try TransactionRecord.create(db: db)
             try TransactionAssetAssociationRecord.create(db: db)
@@ -46,6 +47,7 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
+            
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -72,8 +74,8 @@ public struct Migrations {
             try BannerRecord.create(db: db)
         }
         
-        migrator.registerMigration("Add balances value to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) {
+        migrator.registerMigration("Add balances value to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.add(column: Columns.Balance.availableAmount.name, .double).defaults(to: 0)
                 $0.add(column: Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
                 $0.add(column: Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
@@ -81,26 +83,26 @@ public struct Migrations {
                 $0.add(column: Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
                 $0.add(column: Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
                 $0.add(column: Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
-                $0.addColumn(sql: AssetBalanceRecord.totalAmountSQlCreation)
+                $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
             }
         }
         
-        migrator.registerMigration("Add rewards to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+        migrator.registerMigration("Add rewards to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.rewards.name, .text)
                     .defaults(to: "0")
             }
         }
         
-        migrator.registerMigration("Add reserved to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+        migrator.registerMigration("Add reserved to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.reserved.name, .text)
                     .defaults(to: "0")
             }
         }
         
-        migrator.registerMigration("Add updatedAt to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+        migrator.registerMigration("Add updatedAt to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.updatedAt.name, .date)
             }
         }
@@ -125,16 +127,16 @@ public struct Migrations {
             }
         }
         
-        migrator.registerMigration("Add isHidden to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+        migrator.registerMigration("Add isHidden to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.isHidden.name, .boolean)
                     .defaults(to: false)
                     .indexed()
             }
         }
         
-        migrator.registerMigration("Add lastUsedAt to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) { t in
+        migrator.registerMigration("Add lastUsedAt to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) { t in
                 t.add(column: Columns.Balance.lastUsedAt.name, .date)
             }
         }
@@ -161,14 +163,14 @@ public struct Migrations {
         }
         
         migrator.registerMigration("Update \(Columns.Balance.totalAmount.name) column") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) {
+            try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.drop(column: Columns.Balance.totalAmount.name)
-                $0.addColumn(sql: AssetBalanceRecord.totalAmountSQlCreation)
+                $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
             }
         }
         
-        migrator.registerMigration("Add isActive to \(AssetBalanceRecord.databaseTableName)") { db in
-            try? db.alter(table: AssetBalanceRecord.databaseTableName) {
+        migrator.registerMigration("Add isActive to \(BalanceRecord.databaseTableName)") { db in
+            try? db.alter(table: BalanceRecord.databaseTableName) {
                 $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
             }
         }
@@ -221,8 +223,7 @@ public struct Migrations {
             }
         }
       
-        migrator.registerMigration("Add 3 \(AssetSearchRecord.databaseTableName)") { db in
-            try? db.drop(table: AssetSearchRecord.databaseTableName)
+        migrator.registerMigration("Add \(AssetSearchRecord.databaseTableName)") { db in
             try? AssetSearchRecord.create(db: db)
         }
 

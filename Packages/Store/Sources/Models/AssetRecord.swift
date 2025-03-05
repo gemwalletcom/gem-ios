@@ -52,7 +52,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     
     static let price = hasOne(PriceRecord.self)
     static let links = hasMany(AssetLinkRecord.self, key: "links")
-    static let balance = hasOne(AssetBalanceRecord.self)
+    static let balance = hasOne(BalanceRecord.self)
     static let account = hasOne(AccountRecord.self, key: "account", using: ForeignKey(["chain"], to: ["chain"]))
     static let priceAlert = hasOne(PriceAlertRecord.self).forKey("priceAlert")
     static let priceAlerts = hasMany(PriceAlertRecord.self).forKey("priceAlerts")

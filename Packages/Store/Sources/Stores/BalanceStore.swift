@@ -64,7 +64,7 @@ public struct BalanceStore: Sendable {
                 ]
                 let assignments = balanceFields + defaultFields
                 
-                try AssetBalanceRecord
+                try BalanceRecord
                     .filter(Columns.Balance.walletId == walletId)
                     .filter(Columns.Balance.assetId == balance.assetID)
                     .updateAll(db, assignments)
@@ -75,7 +75,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func getBalance(walletId: String, assetId: String) throws -> Balance? {
         try db.read { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(Columns.Balance.assetId == assetId)
                 .fetchOne(db)?.mapToBalance()
@@ -85,7 +85,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func getBalances(assetIds: [String]) throws -> [WalletAssetBalance] {
         try db.read { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(assetIds.contains(Columns.Balance.assetId))
                 .fetchAll(db)
                 .map { $0.mapToWalletAssetBalanace() }
@@ -95,7 +95,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func getEnabledAssetIds() throws -> [AssetId] {
         try db.read { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.isEnabled == true)
                 .fetchAll(db)
                 .compactMap { try? AssetId(id: $0.assetId) }
@@ -105,7 +105,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func getBalances(walletId: String, assetIds: [String]) throws -> [AssetBalance] {
         try db.read { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(assetIds.contains(Columns.Balance.assetId))
                 .distinct()
@@ -117,7 +117,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func isBalanceExist(walletId: String, assetId: String) throws -> Bool {
         try db.read { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(Columns.Balance.assetId == assetId)
                 .fetchCount(db) > 0
@@ -138,7 +138,7 @@ public struct BalanceStore: Sendable {
                 Columns.Balance.isPinned.set(to: false)
             ]}
             
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(assetIds.contains(Columns.Balance.assetId))
                 .updateAll(db, assigments)
@@ -148,7 +148,7 @@ public struct BalanceStore: Sendable {
     @discardableResult
     public func pinAsset(walletId: String, assetId: String, value: Bool) throws -> Int {
         try db.write { db in
-            return try AssetBalanceRecord
+            return try BalanceRecord
                 .filter(Columns.Balance.walletId == walletId)
                 .filter(Columns.Balance.assetId == assetId)
                 .updateAll(db, Columns.Balance.isPinned.set(to: value))

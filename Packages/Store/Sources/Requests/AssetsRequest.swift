@@ -98,7 +98,7 @@ extension AssetsRequest {
         case .hasBalance:
             return request
                 .filter(
-                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] > 0
+                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] > 0
                 )
         case .buyable:
             return request
@@ -118,12 +118,12 @@ extension AssetsRequest {
         case .enabled:
             return request
                 .filter(
-                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.isEnabled] == true
+                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.isEnabled] == true
                 )
         case .hidden:
             return request
                 .filter(
-                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.isHidden] == true
+                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.isHidden] == true
                 )
         case .chains(let chains):
             if chains.isEmpty {
@@ -153,7 +153,7 @@ extension AssetsRequest {
                 TableAlias(name: AccountRecord.databaseTableName)[Columns.Balance.walletId] == walletId
             )
             .order(
-                (TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] *
+                (TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] *
                 (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
             )
             .limit(Self.defaultQueryLimit)
