@@ -71,7 +71,7 @@ struct SwapNavigationView: View {
             )
         }
         .sheet(item: $isPresentingSwapProviderSelect) { asset in
-            SelectableListNavigationView(
+            SelectableListNavigationStack(
                 model: model.swapProvidersViewModel(asset: asset),
                 onFinishSelection: onSelectProvider,
                 listContent: { SimpleListItemView(model: $0) }

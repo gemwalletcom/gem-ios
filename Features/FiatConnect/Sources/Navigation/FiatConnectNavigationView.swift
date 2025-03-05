@@ -20,7 +20,7 @@ public struct FiatConnectNavigationView: View {
             isPresentingFiatProviderSelect: $isPresentingFiatProviderSelect
         )
         .sheet(isPresented: $isPresentingFiatProviderSelect) {
-            SelectableListNavigationView(
+            SelectableListNavigationStack(
                 model: model.fiatProviderViewModel(),
                 onFinishSelection: onSelectQuote,
                 listContent: { SimpleListItemView(model: $0) }

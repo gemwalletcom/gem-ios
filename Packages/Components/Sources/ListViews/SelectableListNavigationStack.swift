@@ -7,7 +7,7 @@ public protocol SelectableListNavigationAdoptable {
     var doneTitle: String { get }
 }
 
-public struct SelectableListNavigationView<ViewModel: SelectableListAdoptable & SelectableListNavigationAdoptable, Content: View>: View {
+public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable & SelectableListNavigationAdoptable, Content: View>: View {
     public typealias ListContent = (ViewModel.Item) -> Content
     public typealias FinishSelection = (([ViewModel.Item]) -> Void)
     
