@@ -24,3 +24,8 @@ public struct SwapProvidersViewModel: SelectableListAdoptable {
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
     }
 }
+
+extension SwapProvidersViewModel: SelectableListNavigationAdoptable {
+    public var title: String { Localized.Buy.Providers.title }
+    public var doneTitle: String { Localized.Common.done }
+}

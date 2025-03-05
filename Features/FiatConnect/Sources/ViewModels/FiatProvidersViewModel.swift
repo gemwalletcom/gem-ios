@@ -21,3 +21,8 @@ public struct FiatProvidersViewModel: SelectableListAdoptable {
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
     }
 }
+
+extension FiatProvidersViewModel: SelectableListNavigationAdoptable {
+    public var title: String { Localized.Buy.Providers.title }
+    public var doneTitle: String { Localized.Common.done }
+}

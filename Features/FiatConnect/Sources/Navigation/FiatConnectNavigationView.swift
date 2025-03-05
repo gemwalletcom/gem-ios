@@ -20,23 +20,11 @@ public struct FiatConnectNavigationView: View {
             isPresentingFiatProviderSelect: $isPresentingFiatProviderSelect
         )
         .sheet(isPresented: $isPresentingFiatProviderSelect) {
-            NavigationStack {
-                SelectableListView(
-                    model: .constant(model.fiatProviderViewModel()),
-                    onFinishSelection: onSelectQuote,
-                    listContent: { SimpleListItemView(model: $0) }
-                )
-                .navigationTitle(Localized.Buy.Providers.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.medium, .large])
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingFiatProviderSelect = false
-                        }.bold()
-                    }
-                }
-            }
+            SelectableListNavigationView(
+                model: model.fiatProviderViewModel(),
+                onFinishSelection: onSelectQuote,
+                listContent: { SimpleListItemView(model: $0) }
+            )
         }
     }
 }
