@@ -26,7 +26,7 @@ public struct TransactionsFilterViewModel: Equatable {
 
     public var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
-            items: chainsFilter.allChains,
+            state: .loaded(chainsFilter.allChains),
             selectedItems: chainsFilter.selectedChains,
             isMultiSelectionEnabled: true
         )
@@ -34,7 +34,7 @@ public struct TransactionsFilterViewModel: Equatable {
 
     public var typesModel: TransactionTypesSelectorViewModel {
         TransactionTypesSelectorViewModel(
-            items: transactionTypesFilter.allTransactionsTypes,
+            state: .loaded(transactionTypesFilter.allTransactionsTypes),
             selectedItems: transactionTypesFilter.selectedTypes,
             isMultiSelectionEnabled: true
         )

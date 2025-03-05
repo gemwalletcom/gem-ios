@@ -22,11 +22,18 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
     }
 
     public var body: some View {
-        if model.items.isEmpty {
+        switch model.state {
+        case .noData:
+            if let title = model.emptyStateTitle {
+                StateEmptyView(title: title)
+            } else {
+                EmptyView()
+            }
+        case .loading:
             LoadingView()
-        } else {
+        case .loaded(let items):
             ListView(
-                items: model.items,
+                items: items,
                 content: { item in
                     if model.isMultiSelectionEnabled {
                         SelectionView(
@@ -44,12 +51,14 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
                     }
                 }
             )
+        case .error(let error):
+            ListItemErrorView(errorTitle: model.errorTitle, error: error)
         }
     }
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
         guard !model.isMultiSelectionEnabled else { return }
-        onFinishSelection?(Array(model.items))
+        onFinishSelection?(Array(model.state.value ?? []))
     }
 }

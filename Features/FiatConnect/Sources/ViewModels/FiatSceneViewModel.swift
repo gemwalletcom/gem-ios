@@ -127,11 +127,7 @@ public final class FiatSceneViewModel {
     }
     
     func fiatProviderViewModel() -> FiatProvidersViewModel {
-        FiatProvidersViewModel(
-            items: state.value?.compactMap {
-                FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter)
-            } ?? []
-        )
+        FiatProvidersViewModel(state: fiatProvidersViewModelState())
     }
 }
 
@@ -194,6 +190,15 @@ extension FiatSceneViewModel {
         switch input.type {
         case .buy: return true
         case .sell: return input.amount <= maxAmount(assetData: assetData)
+        }
+    }
+    
+    private func fiatProvidersViewModelState() -> StateViewType<[FiatQuoteViewModel]> {
+        switch state {
+        case .error(let error): .error(error)
+        case .loaded(let items): .loaded(items.map { FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter) })
+        case .loading: .loading
+        case .noData: .noData
         }
     }
 }

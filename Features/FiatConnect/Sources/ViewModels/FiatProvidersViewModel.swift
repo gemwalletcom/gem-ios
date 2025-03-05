@@ -7,16 +7,16 @@ import Components
 
 public struct FiatProvidersViewModel: SelectableListAdoptable {
     public typealias Item = FiatQuoteViewModel
-    public var items: [FiatQuoteViewModel]
+    public let state: StateViewType<[FiatQuoteViewModel]>
     public var selectedItems: Set<FiatQuoteViewModel>
-    public var isMultiSelectionEnabled: Bool
+    public let isMultiSelectionEnabled: Bool
     
     public init(
-        items: [FiatQuoteViewModel],
+        state: StateViewType<[FiatQuoteViewModel]>,
         selectedItems: [FiatQuoteViewModel],
         isMultiSelectionEnabled: Bool
     ) {
-        self.items = items
+        self.state = state
         self.selectedItems = Set(selectedItems)
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
     }

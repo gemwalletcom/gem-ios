@@ -96,7 +96,7 @@ class SwapViewModel {
         return SwapProviderViewModel(provider: selectedSwapQuote.data.provider).providerImage
     }
 
-    var actionButtonState: StateViewType<SwapAvailabilityResult> {
+    var actionButtonState: StateViewType<[SwapQuote]> {
         switch swapState.getQuoteData {
         case .loading: .loading
         case .error(let error): .error(error)
@@ -115,15 +115,8 @@ class SwapViewModel {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
     
-    var swapQuotes: [SwapQuote] {
-        if case .loaded(let result) = swapState.availability {
-            return result.quotes
-        }
-        return []
-    }
-    
     var allowSelectProvider: Bool {
-        swapQuotes.count > 1
+        swapState.availability.value.or([]).count > 1
     }
 
     func showToValueLoading() -> Bool {
@@ -171,7 +164,7 @@ class SwapViewModel {
     }
 
     func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+        SwapProvidersViewModel(state: swapProvidersViewModelState(for: asset))
     }
 }
 
@@ -279,7 +272,7 @@ extension SwapViewModel {
             let swapQuotes = try await getQuotes(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
 
             await MainActor.run {
-                swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
+                swapState.availability = .loaded(swapQuotes)
                 selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
                 selectedSwapQuote.map { onSelectQuote($0, asset: toAsset) }
             }
@@ -337,6 +330,15 @@ extension SwapViewModel {
             let chain = try AssetId(id: quote.request.fromAsset).chain
             let data = try permitData(chain: chain, data: data)
             return try await swapService.getQuoteData(quote, data: .permit2(data))
+        }
+    }
+
+    private func swapProvidersViewModelState(for asset: Asset) -> StateViewType<[SwapProvidersViewModel.Item]> {
+        switch swapState.availability {
+        case .error(let error): .error(error)
+        case .noData: .noData
+        case .loaded(let items): .loaded(items.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+        case .loading: .loading
         }
     }
 

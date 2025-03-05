@@ -6,24 +6,30 @@ public protocol SelectableListAdoptable {
     associatedtype Item: Hashable & Identifiable
     var isMultiSelectionEnabled: Bool { get }
 
-    var items: [Item] { get }
+    var state: StateViewType<[Item]> { get }
     var selectedItems: Set<Item> { get set }
+    
+    var emptyStateTitle: String? { get }
+    var errorTitle: String? { get }
 
-    init(items: [Item], selectedItems: [Item], isMultiSelectionEnabled: Bool)
-    init(items: [Item])
+    init(state: StateViewType<[Item]>, selectedItems: [Item], isMultiSelectionEnabled: Bool)
+    init(state: StateViewType<[Item]>)
 
     mutating func reset()
     mutating func toggle(item: Item)
 }
 
 public extension SelectableListAdoptable {
-    init(items: [Item]) {
-        self.init(items: items, selectedItems: [], isMultiSelectionEnabled: false)
+    init(state: StateViewType<[Item]>) {
+        self.init(state: state, selectedItems: [], isMultiSelectionEnabled: false)
     }
 
     var shouldResetOnToggle: Bool {
         !isMultiSelectionEnabled && !selectedItems.isEmpty
     }
+    
+    var emptyStateTitle: String? { nil }
+    var errorTitle: String? { nil }
 
     mutating func toggle(item: Item) {
         if shouldResetOnToggle {
