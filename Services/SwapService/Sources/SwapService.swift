@@ -12,7 +12,7 @@ import Signer
 import NativeProviderService
 import GemstonePrimitives
 
-public final class SwapService {
+public final class SwapService: Sendable {
     
     private let nodeProvider: any NodeURLFetchable
     private let swapper: GemSwapper
