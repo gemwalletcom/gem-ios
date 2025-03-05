@@ -7,6 +7,7 @@ import Components
 import BigInt
 import SwiftUI
 import PrimitivesComponents
+import Style
 
 public struct SwapProviderItem {
     public let asset: Asset
@@ -58,6 +59,14 @@ extension SwapProviderItem: SimpleListItemViewable {
     
     public var subtitleExtra: String? {
         fiatBalance()
+    }
+
+    public var subtitleStyle: TextStyle {
+        TextStyle(font: .callout, color: Colors.black)
+    }
+    
+    public var subtitleStyleExtra: TextStyle {
+        TextStyle(font: .footnote, color: Colors.gray)
     }
 }
 
