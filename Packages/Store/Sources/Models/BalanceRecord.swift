@@ -5,7 +5,7 @@ import Primitives
 import GRDB
 import BigInt
 
-public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
+public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "balances"
 
@@ -44,7 +44,7 @@ public struct AssetBalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var updatedAt: Date?
 }
 
-extension AssetBalanceRecord: CreateTable {
+extension BalanceRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
             $0.column(Columns.Balance.assetId.name, .text)
@@ -96,11 +96,11 @@ extension AssetBalanceRecord: CreateTable {
     static let totalAmountSQlCreation = "totalAmount DOUBLE AS (availableAmount + frozenAmount + lockedAmount + stakedAmount + pendingAmount + rewardsAmount)"
 }
 
-extension AssetBalanceRecord: Identifiable {
+extension BalanceRecord: Identifiable {
     public var id: String { assetId }
 }
 
-extension AssetBalanceRecord {
+extension BalanceRecord {
     func mapToBalance() -> Balance {
         return Balance(
             available: BigInt(stringLiteral: available),
