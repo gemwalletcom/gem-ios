@@ -4,7 +4,7 @@ import Foundation
 
 import SwiftUI
 
-struct StateView<Content: View, T>: View {
+struct StateView<Content: View, T: Hashable>: View {
     let state: StateViewType<T>
     let content: (T) -> Content
     let emptyView: AnyView
@@ -34,7 +34,7 @@ struct StateView<Content: View, T>: View {
             noDataView
         case .loading:
             loadingView
-        case .loaded(let model):
+        case .data(let model):
             content(model)
         case .error(let error):
             Text("Error: \(error.localizedDescription)")
