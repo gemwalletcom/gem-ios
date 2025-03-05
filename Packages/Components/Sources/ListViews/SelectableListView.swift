@@ -31,7 +31,7 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
             }
         case .loading:
             LoadingView()
-        case .loaded(let items):
+        case .data(let items):
             ListView(
                 items: items,
                 content: { item in
@@ -58,7 +58,7 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
-        guard !model.isMultiSelectionEnabled else { return }
-        onFinishSelection?(Array(model.state.value ?? []))
+        guard !model.isMultiSelectionEnabled, let items = model.state.value else { return }
+        onFinishSelection?(Array(items))
     }
 }

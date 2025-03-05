@@ -31,7 +31,6 @@ import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
 import struct Gemstone.SwapQuoteRequest
 import struct Swap.ErrorWrapper
-import struct Swap.SwapAvailabilityResult
 import class Swap.SwapPairSelectorViewModel
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
@@ -100,14 +99,14 @@ class SwapViewModel {
         switch swapState.getQuoteData {
         case .loading: .loading
         case .error(let error): .error(error)
-        case .noData, .loaded: swapState.availability
+        case .noData, .data: swapState.availability
         }
     }
     
     var isVisibleActionButton: Bool {
         switch swapState.availability {
         case .noData: false
-        case .loaded, .error, .loading: true
+        case .data, .error, .loading: true
         }
     }
 
@@ -125,7 +124,7 @@ class SwapViewModel {
 
     func actionButtonTitle() -> String {
         switch swapState.availability {
-        case .noData, .loading, .loaded:
+        case .noData, .loading, .data:
             Localized.Wallet.swap
         case .error:
             Localized.Common.tryAgain
@@ -272,7 +271,7 @@ extension SwapViewModel {
             let swapQuotes = try await getQuotes(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
 
             await MainActor.run {
-                swapState.availability = .loaded(swapQuotes)
+                swapState.availability = .data(swapQuotes)
                 selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
                 selectedSwapQuote.map { onSelectQuote($0, asset: toAsset) }
             }
@@ -337,7 +336,7 @@ extension SwapViewModel {
         switch swapState.availability {
         case .error(let error): .error(error)
         case .noData: .noData
-        case .loaded(let items): .loaded(items.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+        case .data(let items): .data(items.map { SwapProviderItem(asset: asset, swapQuote: $0) })
         case .loading: .loading
         }
     }

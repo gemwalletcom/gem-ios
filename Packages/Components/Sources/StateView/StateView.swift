@@ -34,7 +34,7 @@ struct StateView<Content: View, T: Hashable>: View {
             noDataView
         case .loading:
             loadingView
-        case .loaded(let model):
+        case .data(let model):
             content(model)
         case .error(let error):
             Text("Error: \(error.localizedDescription)")

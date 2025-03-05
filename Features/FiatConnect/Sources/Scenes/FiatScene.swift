@@ -16,14 +16,14 @@ public struct FiatScene: View {
     private var assetData: AssetData
 
     @State private var model: FiatSceneViewModel
-    @Binding private var isPresentingFiatProviderSelect: Bool
+    @Binding private var isPresentingFiatProvider: Bool
 
     public init(
         model: FiatSceneViewModel,
-        isPresentingFiatProviderSelect: Binding<Bool>
+        isPresentingFiatProvider: Binding<Bool>
     ) {
         _model = State(initialValue: model)
-        _isPresentingFiatProviderSelect = isPresentingFiatProviderSelect
+        _isPresentingFiatProvider = isPresentingFiatProvider
         _assetData = Query(constant: model.assetRequest)
     }
 
@@ -133,7 +133,7 @@ extension FiatScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded:
+            case .data:
                 if let quote = model.input.quote {
                     let view = ListItemImageView(
                         title: model.providerTitle,
@@ -142,7 +142,7 @@ extension FiatScene {
                     )
                     if model.allowSelectProvider {
                         NavigationCustomLink(with: view) {
-                            isPresentingFiatProviderSelect = true
+                            isPresentingFiatProvider = true
                         }
                     } else {
                         view

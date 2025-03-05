@@ -196,7 +196,7 @@ extension FiatSceneViewModel {
     private func fiatProvidersViewModelState() -> StateViewType<[FiatQuoteViewModel]> {
         switch state {
         case .error(let error): .error(error)
-        case .loaded(let items): .loaded(items.map { FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter) })
+        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter) })
         case .loading: .loading
         case .noData: .noData
         }
@@ -267,7 +267,7 @@ extension FiatSceneViewModel {
 
             if !quotes.isEmpty {
                 input.quote = quotes.first
-                state = .loaded(quotes)
+                state = .data(quotes)
             } else {
                 state = .noData
             }

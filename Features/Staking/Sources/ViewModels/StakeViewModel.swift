@@ -86,8 +86,8 @@ public final class StakeViewModel {
     func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
         switch delegatitonsState {
         case .noData: return .noData
-        case .loading: return delegationModels.isEmpty ? .loading : .loaded(delegationModels)
-        case .loaded: return delegationModels.isEmpty ? .noData : .loaded(delegationModels)
+        case .loading: return delegationModels.isEmpty ? .loading : .data(delegationModels)
+        case .data: return delegationModels.isEmpty ? .noData : .data(delegationModels)
         case .error(let error): return .error(error)
         }
     }
@@ -135,7 +135,7 @@ extension StakeViewModel {
         do {
             let acccount = try wallet.account(for: chain)
             try await stakeService.update(walletId: wallet.id, chain: chain, address: acccount.address)
-            delegatitonsState = .loaded(true)
+            delegatitonsState = .data(true)
         } catch {
             print("Stake scene fetch error: \(error)")
             delegatitonsState = .error(error)

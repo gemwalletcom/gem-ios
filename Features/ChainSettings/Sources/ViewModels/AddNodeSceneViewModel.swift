@@ -42,7 +42,7 @@ public final class AddNodeSceneViewModel {
 
 extension AddNodeSceneViewModel {
     public func importFoundNode() throws {
-        guard case .loaded(let model) = state else {
+        guard case .data(let model) = state else {
             throw AnyError("Unknown result")
         }
         
@@ -75,7 +75,7 @@ extension AddNodeSceneViewModel {
 
             let result = AddNodeResult(url: url, chainID: chainId, blockNumber: blockNumber, isInSync: isNodeInSync, latency: latency)
             let resultVM = AddNodeResultViewModel(addNodeResult: result)
-            state = .loaded(resultVM)
+            state = .data(resultVM)
         } catch {
             await updateStateWithError(error: error)
         }

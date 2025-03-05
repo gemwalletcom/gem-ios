@@ -22,7 +22,7 @@ struct AddTokenScene: View {
 
     init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
         _model = State(initialValue: model)
-        _networksModel = State(initialValue: NetworkSelectorViewModel(state: .loaded(model.chains)))
+        _networksModel = State(initialValue: NetworkSelectorViewModel(state: .data(model.chains)))
         self.action = action
     }
 
@@ -93,7 +93,7 @@ extension AddTokenScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded(let asset):
+            case .data(let asset):
                 Section {
                     ListItemView(title: asset.nameTitle, subtitle: asset.name)
                     ListItemView(title: asset.symbolTitle, subtitle: asset.symbol)
@@ -125,7 +125,7 @@ extension AddTokenScene {
     }
 
     private func onSelectImportToken() {
-        guard case let .loaded(asset) = model.state else { return }
+        guard case let .data(asset) = model.state else { return }
         action?(asset.asset)
     }
 
