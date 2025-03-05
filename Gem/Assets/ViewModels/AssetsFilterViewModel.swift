@@ -55,7 +55,7 @@ struct AssetsFilterViewModel {
 
     var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
-            items: chainsFilter.allChains,
+            state: .data(chainsFilter.allChains),
             selectedItems: chainsFilter.selectedChains,
             isMultiSelectionEnabled: true
         )
