@@ -5,6 +5,32 @@ import Foundation
 import Primitives
 import BigInt
 
+public struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord  {
+    
+    public var query: String
+    public var assetId: String
+    public var priority: Int
+    
+    public static let databaseTableName: String = "assets_search"
+}
+
+extension AssetSearchRecord: CreateTable {
+    static func create(db: Database) throws {
+        try db.create(table: Self.databaseTableName, ifNotExists: true) {
+            $0.column(Columns.AssetSearch.query.name, .text)
+                .notNull()
+                .indexed()
+            $0.column(Columns.AssetSearch.assetId.name, .text)
+                .indexed()
+                .notNull()
+                .references(AssetRecord.databaseTableName, onDelete: .cascade)
+            $0.column(Columns.AssetSearch.priority.name, .integer)
+                .notNull()
+            $0.uniqueKey([Columns.AssetSearch.query.name, Columns.AssetSearch.assetId.name])
+        }
+    }
+}
+
 public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
     public static let databaseTableName: String = "assets"
@@ -26,10 +52,15 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     
     static let price = hasOne(PriceRecord.self)
     static let links = hasMany(AssetLinkRecord.self, key: "links")
-    static let balance = hasOne(AssetBalanceRecord.self)
+    static let balance = hasOne(BalanceRecord.self)
     static let account = hasOne(AccountRecord.self, key: "account", using: ForeignKey(["chain"], to: ["chain"]))
     static let priceAlert = hasOne(PriceAlertRecord.self).forKey("priceAlert")
     static let priceAlerts = hasMany(PriceAlertRecord.self).forKey("priceAlerts")
+    static let priorityAssets = hasOne(AssetSearchRecord.self, using: ForeignKey(["assetId"], to: ["id"]))
+    
+    var priorityAsset: QueryInterfaceRequest<AssetSearchRecord> {
+        request(for: AssetRecord.priorityAssets)
+    }
 }
 
 extension AssetRecord: CreateTable {
