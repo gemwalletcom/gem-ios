@@ -205,8 +205,7 @@ extension SwapViewModel {
                 toAsset: toAsset.asset,
                 amount: input.amount
             )
-        case .idle: break
-        case .fetched: break
+        case .idle, .data: break
         }
     }
 
@@ -280,7 +279,7 @@ extension SwapViewModel {
                 amount: amount
             )
 
-            swapState.fetch = .fetched(quotes: swapQuotes)
+            swapState.fetch = .data(quotes: swapQuotes)
             swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
             selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
             if let quote = selectedSwapQuote {
@@ -291,7 +290,7 @@ extension SwapViewModel {
                 swapState.availability = .error(ErrorWrapper(error))
                 NSLog("fetch asset data error: \(error)")
             }
-            swapState.fetch = .fetched(quotes: [])
+            swapState.fetch = .data(quotes: [])
         }
     }
 
