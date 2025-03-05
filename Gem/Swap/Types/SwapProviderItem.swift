@@ -49,6 +49,10 @@ extension SwapProviderItem: SimpleListItemViewable {
         swapQuote.data.provider.protocol
     }
     
+    public var titleStyle: TextStyle {
+        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
+    }
+    
     public var subtitle: String? {
         [amount, asset.symbol].joined(separator: " ")
     }
@@ -62,7 +66,7 @@ extension SwapProviderItem: SimpleListItemViewable {
     }
 
     public var subtitleStyle: TextStyle {
-        TextStyle(font: .callout, color: Colors.black)
+        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
     }
     
     public var subtitleStyleExtra: TextStyle {
