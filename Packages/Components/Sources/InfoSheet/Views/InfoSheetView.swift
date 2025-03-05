@@ -54,12 +54,12 @@ struct InfoSheetView: View {
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: .image.semiLarge, height: .image.semiLarge)
+                        .frame(width: .image.semiExtraLarge, height: .image.semiExtraLarge)
                 case .assetImage(let assetImage):
                     AssetImageView(
                         assetImage: assetImage,
-                        size: .image.semiLarge,
-                        overlayImageSize: .image.semiLarge / 2.5
+                        size: .image.semiExtraLarge,
+                        overlayImageSize: .image.medium
                     )
                 case nil: EmptyView()
                 }

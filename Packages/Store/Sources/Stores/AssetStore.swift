@@ -35,6 +35,15 @@ public struct AssetStore: Sendable {
         }
     }
     
+    public func addAssetsSearch(query: String, assets: [AssetBasic]) throws {
+        try db.write { db in
+            try assets.enumerated().forEach {
+                try AssetSearchRecord(query: query, assetId: $1.asset.id.identifier, priority: $0)
+                    .upsert(db)
+            }
+        }
+    }
+    
     public func getAssets() throws -> [Asset] {
         try db.read { db in
             try AssetRecord
@@ -49,15 +58,6 @@ public struct AssetStore: Sendable {
                 .filter(assetIds.contains(Columns.Asset.id))
                 .fetchAll(db)
                 .map { $0.mapToAsset() }
-        }
-    }
-    
-    public func getAssetsData(for walletId: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
-        try db.read { db in
-            return try AssetsRequest(walletID: walletId)
-                .fetchAssets(filters: filters)
-                .fetchAll(db)
-                .map { $0.assetData}
         }
     }
     

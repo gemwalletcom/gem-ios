@@ -84,10 +84,6 @@ public final class AssetsService: Sendable {
         return newAssets.map { $0.asset.id }
     }
 
-    public func getAssets(walletID: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
-        try assetStore.getAssetsData(for: walletID, filters: filters)
-    }
-
     public func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
         let exist = try balanceStore.isBalanceExist(walletId: walletId.id, assetId: assetId.identifier)
         if !exist {
@@ -132,15 +128,13 @@ public final class AssetsService: Sendable {
             }
 
             for try await result in group {
-                if let result = result {
+                if let result = result, result.count > 0 {
                     assets.append(contentsOf: result)
                 }
             }
             return assets
         }
-        return assets.sorted { l, r in
-            l.score.rank > r.score.rank
-        }
+        return assets
     }
 
     func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {
