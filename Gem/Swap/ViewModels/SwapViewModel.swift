@@ -179,7 +179,7 @@ class SwapViewModel {
                     asset: asset.asset,
                     swapQuote: $0,
                     priceViewModel: priceViewModel,
-                    formatter: formatter
+                    valueFormatter: formatter
                 )
             })
     }

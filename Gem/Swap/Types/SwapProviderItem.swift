@@ -13,27 +13,27 @@ public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
     public let priceViewModel: PriceViewModel
-    public let formatter: ValueFormatter
+    public let valueFormatter: ValueFormatter
     
     init(
         asset: Asset,
         swapQuote: SwapQuote,
         priceViewModel: PriceViewModel,
-        formatter: ValueFormatter
+        valueFormatter: ValueFormatter
     ) {
         self.asset = asset
         self.swapQuote = swapQuote
         self.priceViewModel = priceViewModel
-        self.formatter = formatter
+        self.valueFormatter = valueFormatter
     }
     
     private var amount: String {
-        formatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
+        valueFormatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
     }
 
     private func fiatBalance() -> String {
-        guard let value = try? formatter.inputNumber(from: amount, decimals: asset.decimals.asInt),
-              let amount = try? formatter.double(from: value, decimals: asset.decimals.asInt),
+        guard let value = try? valueFormatter.inputNumber(from: amount, decimals: asset.decimals.asInt),
+              let amount = try? valueFormatter.double(from: value, decimals: asset.decimals.asInt),
               let price = priceViewModel.price
         else {
             return .empty
