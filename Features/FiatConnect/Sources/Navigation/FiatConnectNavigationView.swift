@@ -7,28 +7,25 @@ import Components
 import Localization
 
 public struct FiatConnectNavigationView: View {
-    @Binding private var navigationPath: NavigationPath
-
     @State private var model: FiatSceneViewModel
-    
-    public init(
-        navigationPath: Binding<NavigationPath>,
-        model: FiatSceneViewModel
-    ) {
+    @State private var isPresentingFiatProvider: Bool = false
+
+    public init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
-        _navigationPath = navigationPath
     }
 
     public var body: some View {
-        FiatScene(model: model)
-            .navigationDestination(for: Scenes.FiatProviders.self) { _ in
-                SelectableListView(
-                    model: .constant(model.fiatProviderViewModel()),
-                    onFinishSelection: onSelectQuote,
-                    listContent: { SimpleListItemView(model: $0) }
-                )
-                .navigationTitle(Localized.Buy.Providers.title)
-            }
+        FiatScene(
+            model: model,
+            isPresentingFiatProvider: $isPresentingFiatProvider
+        )
+        .sheet(isPresented: $isPresentingFiatProvider) {
+            SelectableListNavigationStack(
+                model: model.fiatProviderViewModel(),
+                onFinishSelection: onSelectQuote,
+                listContent: { SimpleListItemView(model: $0) }
+            )
+        }
     }
 }
 
@@ -38,6 +35,6 @@ extension FiatConnectNavigationView {
     func onSelectQuote(_ quotes: [FiatQuoteViewModel]) {
         guard let quoteModel = quotes.first else { return }
         model.selectQuote(quoteModel.quote)
-        navigationPath.removeLast()
+        isPresentingFiatProvider = false
     }
 }

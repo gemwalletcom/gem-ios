@@ -48,6 +48,10 @@ public final class FiatSceneViewModel {
         case .sell: Localized.Sell.title(asset.name)
         }
     }
+    
+    var allowSelectProvider: Bool {
+        state.value.or([]).count > 1
+    }
 
     func pickerTitle(type: FiatTransactionType) -> String {
         typeModel(type: type).title
@@ -123,11 +127,7 @@ public final class FiatSceneViewModel {
     }
     
     func fiatProviderViewModel() -> FiatProvidersViewModel {
-        FiatProvidersViewModel(
-            items: state.value?.compactMap {
-                FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter)
-            } ?? []
-        )
+        FiatProvidersViewModel(state: fiatProvidersViewModelState())
     }
 }
 
@@ -190,6 +190,15 @@ extension FiatSceneViewModel {
         switch input.type {
         case .buy: return true
         case .sell: return input.amount <= maxAmount(assetData: assetData)
+        }
+    }
+    
+    private func fiatProvidersViewModelState() -> StateViewType<[FiatQuoteViewModel]> {
+        switch state {
+        case .error(let error): .error(error)
+        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter) })
+        case .loading: .loading
+        case .noData: .noData
         }
     }
 }
@@ -258,7 +267,7 @@ extension FiatSceneViewModel {
 
             if !quotes.isEmpty {
                 input.quote = quotes.first
-                state = .loaded(quotes)
+                state = .data(quotes)
             } else {
                 state = .noData
             }

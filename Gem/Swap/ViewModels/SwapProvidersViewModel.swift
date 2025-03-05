@@ -4,20 +4,28 @@ import Foundation
 import Primitives
 import Gemstone
 import Components
+import Localization
 
 public struct SwapProvidersViewModel: SelectableListAdoptable {
     public typealias Item = SwapProviderItem
-    public var items: [SwapProviderItem]
+    public var state: StateViewType<[SwapProviderItem]>
     public var selectedItems: Set<SwapProviderItem>
     public var isMultiSelectionEnabled: Bool
+    public var emptyStateTitle: String? { Localized.Common.notAvailable }
+    public var errorTitle: String? { Localized.Errors.errorOccured }
     
     public init(
-        items: [SwapProviderItem],
+        state: StateViewType<[Item]>,
         selectedItems: [SwapProviderItem],
         isMultiSelectionEnabled: Bool
     ) {
-        self.items = items
+        self.state = state
         self.selectedItems = Set(selectedItems)
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
     }
+}
+
+extension SwapProvidersViewModel: SelectableListNavigationAdoptable {
+    public var title: String { Localized.Buy.Providers.title }
+    public var doneTitle: String { Localized.Common.done }
 }
