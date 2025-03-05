@@ -26,7 +26,7 @@ public struct ConnectionsStore: Sendable {
                 .including(required: WalletRecord.connection)
                 .asRequest(of: WalletConnectionInfo.self)
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.sessionId == '%@'", WalletConnectionRecord.databaseTableName, id))
+                    TableAlias(name: WalletConnectionRecord.databaseTableName)[Columns.Connection.sessionId] == id
                 )
                 .fetchOne(db)
             guard let connection = result else {

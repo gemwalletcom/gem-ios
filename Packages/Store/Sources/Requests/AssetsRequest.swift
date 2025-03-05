@@ -98,32 +98,32 @@ extension AssetsRequest {
         case .hasBalance:
             return request
                 .filter(
-                    SQL(stringLiteral: String(format: "%@.totalAmount > 0", AssetBalanceRecord.databaseTableName) )
+                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] > 0
                 )
         case .buyable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isBuyable == true", AssetRecord.databaseTableName))
+                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isBuyable] == true
                 )
         case .swappable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isSwappable == true", AssetRecord.databaseTableName))
+                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isSwappable] == true
                 )
         case .stakeable:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isStakeable == true", AssetRecord.databaseTableName))
+                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isStakeable] == true
                 )
         case .enabled:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isEnabled == true", AssetBalanceRecord.databaseTableName))
+                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.isEnabled] == true
                 )
         case .hidden:
             return request
                 .filter(
-                    SQL(stringLiteral:  String(format: "%@.isHidden == true", AssetBalanceRecord.databaseTableName))
+                    TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.isHidden] == true
                 )
         case .chains(let chains):
             if chains.isEmpty {
@@ -142,29 +142,24 @@ extension AssetsRequest {
         walletId: String,
         filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
-        var request = AssetRecord
+        let request = AssetRecord
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
             .joining(optional: AssetRecord.balance
                 .filter(Columns.Balance.walletId == walletId)
             )
-            .filter(literal:
-                SQL(stringLiteral: String(format:"%@.walletId = '%@'", AccountRecord.databaseTableName, walletId))
+            .filter(
+                TableAlias(name: AccountRecord.databaseTableName)[Columns.Balance.walletId] == walletId
             )
             .order(
                 (TableAlias(name: AssetBalanceRecord.databaseTableName)[Columns.Balance.totalAmount] *
                 (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
             )
-//            .order(
-//                Columns.AssetSearch.priority.ascNullsLast, // Use priority from assets_search
-//                Columns.Asset.rank.desc
-//            )
             .limit(Self.defaultQueryLimit)
         
-        request = Self.applyFilters(request: request, filters)
-        
-        return request.asRequest(of: AssetRecordInfo.self)
+        return Self.applyFilters(request: request, filters)
+            .asRequest(of: AssetRecordInfo.self)
     }
 }
 
