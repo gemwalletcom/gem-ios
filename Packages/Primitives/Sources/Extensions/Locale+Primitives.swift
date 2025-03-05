@@ -8,6 +8,7 @@ extension Locale {
     public static let UA = Locale(identifier: "ru_UA")
     public static let IT = Locale(identifier: "it_IT")
     public static let PT_BR = Locale(identifier: "pt-BR")
+    public static let DA_DK = Locale(identifier: "DA_DK")
     public static let PT_PT = Locale(identifier: "pt-PT")
     public static let FR = Locale(identifier: "fr-CA")
     public static let EN_CH = Locale(identifier: "en_CH")

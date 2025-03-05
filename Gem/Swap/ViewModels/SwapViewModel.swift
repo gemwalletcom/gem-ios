@@ -35,8 +35,9 @@ import class Swap.SwapPairSelectorViewModel
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
+@MainActor
 @Observable
-class SwapViewModel {
+public final class SwapViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
     let wallet: Wallet
@@ -196,7 +197,7 @@ extension SwapViewModel {
                 toAsset: toAsset.asset,
                 amount: input.amount
             )
-        case .idle: break
+        case .idle, .data: break
         }
     }
 
@@ -254,34 +255,34 @@ extension SwapViewModel {
         toAsset: Asset,
         amount: String
     ) async {
-        let shouldFetch: Bool = await MainActor.run {
-            resetToValue()
-            if !isValidValue(fromAsset: fromAsset) {
-                swapState.availability = .noData
-                selectedSwapQuote = nil
-                return false
-            }
-            swapState.availability = .loading
-            return true
+        resetToValue()
+        guard isValidValue(fromAsset: fromAsset) else {
+            swapState.availability = .noData
+            swapState.fetch = .idle
+            selectedSwapQuote = nil
+            return
         }
-
-        guard shouldFetch else { return }
+        swapState.availability = .loading
 
         do {
-            let swapQuotes = try await getQuotes(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+            let swapQuotes = try await getQuotes(
+                fromAsset: fromAsset,
+                toAsset: toAsset,
+                amount: amount
+            )
 
-            await MainActor.run {
-                swapState.availability = .data(swapQuotes)
-                selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
-                selectedSwapQuote.map { onSelectQuote($0, asset: toAsset) }
+            swapState.fetch = .data(quotes: swapQuotes)
+            swapState.availability = .data(swapQuotes)
+            selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
+            if let quote = selectedSwapQuote {
+                onSelectQuote(quote, asset: toAsset)
             }
         } catch {
-            await MainActor.run {
-                if !error.isCancelled {
-                    swapState.availability = .error(ErrorWrapper(error))
-                    NSLog("fetch asset data error: \(error)")
-                }
+            if !error.isCancelled {
+                swapState.availability = .error(ErrorWrapper(error))
+                NSLog("fetch asset data error: \(error)")
             }
+            swapState.fetch = .data(quotes: [])
         }
     }
 
