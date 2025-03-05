@@ -3,7 +3,7 @@
 import Foundation
 
 public enum AssetsRequestFilter {
-    case search(String)
+    case search(String, hasPriorityAssets: Bool)
     case hasBalance
     case buyable // available to buy
     case swappable
@@ -14,8 +14,6 @@ public enum AssetsRequestFilter {
     case chains([String])
     case chainsOrAssets([String], [String])
 
-    // special case
-    case includeNewAssets
     /// AssetData with empty properties
     case priceAlerts
 }
