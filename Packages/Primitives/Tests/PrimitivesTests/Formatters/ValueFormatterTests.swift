@@ -90,10 +90,10 @@ final class ValueFormatterTests {
     @Test
     func testAmountToDecimal() throws {
         let formatter = ValueFormatter(locale: .US, style: .full)
+
         #expect(try formatter.number(amount: "123.123") == (try Decimal("123.123", format: .number)))
         #expect(try formatter.number(amount: "0.000000000000004162") == (try Decimal("0.000000000000004162", format: .number)))
-        // The following line is commented out. If you need it, uncomment and update accordingly.
-        // #expect(try formatter.number(amount: "123123495455.393686411234678911") == try Decimal("123123495455.393686411234678911", format: .number))
+        #expect(try formatter.number(amount: "123123495455.393686411234678911") == (try Decimal("123123495455.393686411234678911", format: .number)))
         #expect(try formatter.number(amount: "49.393686411234678911") == (try Decimal("49.393686411234678911", format: .number)))
         #expect(try formatter.number(amount: "49.393686762065998369") == (try Decimal("49.393686762065998369", format: .number)))
     }
@@ -101,6 +101,7 @@ final class ValueFormatterTests {
     @Test
     func testFromInputUS() throws {
         let formatter = ValueFormatter(locale: .US, style: .full)
+
         //#expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "0.12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "122,726.82", decimals: 8) == 12272682000000)
@@ -116,8 +117,10 @@ final class ValueFormatterTests {
         //#expect(try formatter.inputNumber(from: "100,18054055999998", decimals: 8) == 10018054055)
     }
 
+    @Test
     func testFromInputRU_UA() throws {
         let formatter = ValueFormatter(locale: .UA, style: .full)
+
         #expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "0.12317", decimals: 8) == 12317000)
         //expect(try formatter.inputNumber(from: "122,726.82083", decimals: 8))
@@ -130,15 +133,18 @@ final class ValueFormatterTests {
         #expect(try formatter.inputNumber(from: "100,18054055999998", decimals: 8) == 10018054055)
     }
 
+    @Test
     func testFromInputBR() throws {
         let formatter = ValueFormatter(locale: .PT_BR, style: .full)
+
         #expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "0.12317", decimals: 8) == 12317000)
         #expect(try formatter.inputNumber(from: "726320,82083", decimals: 8) == 72632082083000)
-        //#expect(try formatter.inputNumber(from: "726 320,82083", decimals: 8) == 72632082083000)
+        #expect(try formatter.inputNumber(from: "726 320,82083", decimals: 8) == 72632082083000)
         #expect(try formatter.inputNumber(from: "726'320,82083", decimals: 8) == 72632082083000)
     }
 
+    @Test
     func testFromInputFR() throws {
         let formatter = ValueFormatter(locale: .FR, style: .full)
 
@@ -150,20 +156,39 @@ final class ValueFormatterTests {
         #expect(try formatter.inputNumber(from: "110'121'212,212", decimals: 8) == 11012121221200000)
     }
 
+    @Test
+    func testFromInputDA_DK() throws {
+        let formatter = ValueFormatter(locale: .DA_DK, style: .full)
+
+        #expect(try formatter.inputNumber(from: "0,12317", decimals: 8) == 12317000)
+        #expect(try formatter.inputNumber(from: "0.12317", decimals: 8) == 12317000)
+        #expect(try formatter.inputNumber(from: "726320,82083", decimals: 8) == 72632082083000)
+        #expect(try formatter.inputNumber(from: "726 320,82083", decimals: 8) == 72632082083000)
+        #expect(try formatter.inputNumber(from: "726'320,82083", decimals: 8) == 72632082083000)
+        #expect(try formatter.inputNumber(from: "100,18054055", decimals: 8) == 10018054055)
+        #expect(try formatter.inputNumber(from: "100.18054055", decimals: 8) == 10018054055)
+    }
+
+    @Test
     func testFromInputEN_CH() throws {
         let formatter = ValueFormatter(locale: .EN_CH, style: .full)
+
         #expect(try formatter.inputNumber(from: "0.005", decimals: 8) == 500000)
         #expect(try formatter.inputNumber(from: "5.123", decimals: 8) == 512300000)
     }
 
+    @Test
     func testFromInputDE_CH() throws {
         let formatter = ValueFormatter(locale: .DE_CH, style: .full)
+
         #expect(try formatter.inputNumber(from: "0.005", decimals: 8) == 500000)
         #expect(try formatter.inputNumber(from: "5.123", decimals: 8) == 512300000)
     }
 
+    @Test
     func testFromDouble() throws {
         let formatter = ValueFormatter(locale: .US, style: .full)
+
         #expect(try formatter.double(from: 122131233, decimals: 0) == Double(122131233.0))
     }
 }
