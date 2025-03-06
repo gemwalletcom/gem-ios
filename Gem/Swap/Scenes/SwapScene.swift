@@ -57,9 +57,8 @@ struct SwapScene: View {
 
     var body: some View {
         ZStack(alignment: .bottom) {
-            VStack {
-                swapList
-            }
+            swapList
+                .padding(.bottom, .scene.button.height)
             bottomActionView
         }
         .navigationTitle(model.title)
