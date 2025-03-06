@@ -12,23 +12,30 @@ import Style
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
+    public let selectedProvider: SwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
     
     init(
         asset: Asset,
         swapQuote: SwapQuote,
+        selectedProvider: SwapProvider?,
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {
         self.asset = asset
         self.swapQuote = swapQuote
+        self.selectedProvider = selectedProvider
         self.priceViewModel = priceViewModel
         self.valueFormatter = valueFormatter
     }
     
     private var amount: String {
         valueFormatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
+    }
+    
+    private var isSelected: Bool {
+        selectedProvider == swapQuote.data.provider.id
     }
 
     private func fiatBalance() -> String {
@@ -57,8 +64,11 @@ extension SwapProviderItem: SimpleListItemViewable {
         [amount, asset.symbol].joined(separator: " ")
     }
     
-    public var image: Image {
-        swapQuote.data.provider.image
+    public var assetImage: AssetImage {
+        AssetImage(
+            placeholder: swapQuote.data.provider.image,
+            chainPlaceholder: isSelected ? Images.Wallets.selected : nil
+        )
     }
     
     public var subtitleExtra: String? {

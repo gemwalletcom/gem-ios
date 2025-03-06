@@ -340,8 +340,15 @@ extension SwapViewModel {
         case .data(let items):
             let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
             let valueFormatter = ValueFormatter(style: .short)
-            return .data(items.map {
-                SwapProviderItem(asset: asset.asset, swapQuote: $0, priceViewModel: priceViewModel, valueFormatter: valueFormatter)
+            return .data(
+                items.map {
+                    SwapProviderItem(
+                        asset: asset.asset,
+                        swapQuote: $0,
+                        selectedProvider: selectedSwapQuote?.data.provider.id,
+                        priceViewModel: priceViewModel,
+                        valueFormatter: valueFormatter
+                    )
             })
         case .loading: return .loading
         }
