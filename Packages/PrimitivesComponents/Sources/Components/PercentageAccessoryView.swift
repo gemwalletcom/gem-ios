@@ -29,14 +29,14 @@ public struct PercentageAccessoryView: View {
                     }
                 }
             }
-            .buttonStyle(.lightGray(paddingVertical: .tiny))
+            .buttonStyle(.listStyleColor(paddingVertical: .tiny, cornerRadius: .small))
             .frame(maxWidth: .infinity)
 
             Button(action: onDone) {
                 Text(Localized.Common.done)
             }
             .buttonStyle(.clear)
-            .padding(.leading, .medium)
+            .padding(.horizontal, .small)
         }
     }
 }

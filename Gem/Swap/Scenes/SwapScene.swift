@@ -17,7 +17,6 @@ import Gemstone
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
 
@@ -57,18 +56,10 @@ struct SwapScene: View {
     }
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .bottom) {
             swapList
-            Spacer()
-            buttonView
-                .padding(.bottom, Spacing.scene.bottom)
-                .frame(maxWidth: Spacing.scene.button.maxWidth)
-                .isVisible(model.isVisibleActionButton)
-        }
-        .toolbar {
-            ToolbarItem(placement: .keyboard) {
-                keyboardAccessoryView
-            }
+                .padding(.bottom, .scene.button.height)
+            bottomActionView
         }
         .navigationTitle(model.title)
         .debounce(
@@ -100,6 +91,9 @@ struct SwapScene: View {
                 focusedField = .from
             }
         }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 }
 
@@ -115,9 +109,6 @@ extension SwapScene {
             if case let .error(error) = model.swapState.availability {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
-        }
-        .sheet(item: $isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
     }
     
@@ -211,11 +202,27 @@ extension SwapScene {
     }
     
     @ViewBuilder
-    private var keyboardAccessoryView: some View {
-        PercentageAccessoryView(
-            onSelectPercent: onSelectPercent,
-            onDone: { focusedField = nil }
-        )
+    private var bottomActionView: some View {
+        VStack(spacing: 0) {
+            Divider()
+                .frame(height: 1 / UIScreen.main.scale)
+                .background(Colors.grayVeryLight)
+                .isVisible(focusedField == .from)
+
+            Group {
+                if model.isVisibleActionButton {
+                    buttonView
+                        .frame(height: focusedField == .from ? Spacing.scene.button.accessoryHeight : Spacing.scene.button.height)
+                } else if focusedField == .from {
+                    PercentageAccessoryView(
+                        onSelectPercent: onSelectPercent,
+                        onDone: { focusedField = nil }
+                    )
+                }
+            }
+            .padding(.small)
+        }
+        .background(Colors.grayBackground)
     }
 }
 
