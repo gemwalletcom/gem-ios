@@ -52,10 +52,6 @@ public struct Scenes {
         public init() {}
     }
 
-    public struct FiatProviders: Hashable {
-        public init() {}
-    }
-
     public struct Stake: Hashable {
         public let chain: Chain
         public let wallet: Wallet

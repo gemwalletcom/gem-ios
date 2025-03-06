@@ -71,23 +71,11 @@ struct SwapNavigationView: View {
             )
         }
         .sheet(item: $isPresentingSwapProviderSelect) { asset in
-            NavigationStack {
-                SelectableListView(
-                    model: .constant(model.swapProvidersViewModel(asset: asset)),
-                    onFinishSelection: onSelectProvider,
-                    listContent: { SimpleListItemView(model: $0) }
-                )
-                .navigationTitle(Localized.Buy.Providers.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.medium, .large])
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSwapProviderSelect = nil
-                        }.bold()
-                    }
-                }
-            }
+            SelectableListNavigationStack(
+                model: model.swapProvidersViewModel(asset: asset),
+                onFinishSelection: onSelectProvider,
+                listContent: { SimpleListItemView(model: $0) }
+            )
         }
     }
 }

@@ -314,7 +314,7 @@ extension ConfirmTransferViewModel {
                 value: transactionInputModel.networkFeeText,
                 fiatValue: transactionInputModel.networkFeeFiatText
             )
-            state = .loaded(transactionInputModel)
+            state = .data(transactionInputModel)
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -354,7 +354,7 @@ extension ConfirmTransferViewModel {
                     confirmTransferDelegate?(.success(transactionData))
                 }
             }
-            confirmingState = .loaded(true)
+            confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)
             NSLog("confirm transaction error: \(error)")
