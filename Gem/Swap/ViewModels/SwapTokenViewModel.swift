@@ -9,7 +9,7 @@ import PrimitivesComponents
 struct SwapTokenViewModel {
     
     private let model: AssetDataViewModel
-    let type: SelectAssetSwapType
+    private let type: SelectAssetSwapType
     private let formatter = ValueFormatter(style: .medium)
     
     public init(
@@ -25,22 +25,23 @@ struct SwapTokenViewModel {
     }
 
     var availableBalanceText: String {
-        return Localized.Transfer.balance(model.availableBalanceText)
+        Localized.Transfer.balance(model.availableBalanceText)
     }
     
     var assetImage: AssetImage {
-        return model.assetImage
+        model.assetImage
     }
     
     var symbol: String {
-        return model.asset.symbol
+        model.asset.symbol
     }
     
     func fiatBalance(amount: String) -> String {
+        let value = (try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt)) ?? .zero
         guard
-            let value = try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt),
             let amount = try? formatter.double(from: value, decimals: model.asset.decimals.asInt),
-            let price = model.priceViewModel.price else {
+            let price = model.priceViewModel.price
+        else {
             return .empty
         }
         return model.priceViewModel.fiatAmountText(amount: price.price * amount)
