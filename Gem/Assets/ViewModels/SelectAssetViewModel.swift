@@ -176,7 +176,7 @@ extension SelectAssetViewModel {
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
 
             await MainActor.run { [self] in
-                self.state = .loaded(assets)
+                self.state = .data(assets)
             }
         } catch {
             await MainActor.run { [self] in

@@ -22,30 +22,43 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
     }
 
     public var body: some View {
-        ListView(
-            items: model.items,
-            content: { item in
-                if model.isMultiSelectionEnabled {
-                    SelectionView(
-                        value: item,
-                        selection: model.selectedItems.contains(item) ? item : nil,
-                        action: onSelect(item:),
-                        content: {
-                            listContent(item)
+        switch model.state {
+        case .noData:
+            if let title = model.emptyStateTitle {
+                StateEmptyView(title: title)
+            } else {
+                EmptyView()
+            }
+        case .loading:
+            LoadingView()
+        case .data(let items):
+            ListView(
+                items: items,
+                content: { item in
+                    if model.isMultiSelectionEnabled {
+                        SelectionView(
+                            value: item,
+                            selection: model.selectedItems.contains(item) ? item : nil,
+                            action: onSelect(item:),
+                            content: {
+                                listContent(item)
+                            }
+                        )
+                    } else {
+                        NavigationCustomLink(with: listContent(item)) {
+                            onFinishSelection?([item])
                         }
-                    )
-                } else {
-                    NavigationCustomLink(with: listContent(item)) {
-                        onFinishSelection?([item])
                     }
                 }
-            }
-        )
+            )
+        case .error(let error):
+            ListItemErrorView(errorTitle: model.errorTitle, error: error)
+        }
     }
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
-        guard !model.isMultiSelectionEnabled else { return }
-        onFinishSelection?(Array(model.items))
+        guard !model.isMultiSelectionEnabled, let items = model.state.value else { return }
+        onFinishSelection?(Array(items))
     }
 }

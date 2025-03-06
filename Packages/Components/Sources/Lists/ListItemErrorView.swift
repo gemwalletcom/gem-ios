@@ -25,7 +25,7 @@ public struct ListItemErrorView: View {
     }
 
     public init(
-        errorTitle: String,
+        errorTitle: String? = nil,
         error: Error,
         retryTitle: String? = nil,
         retryAction: (() -> Void)? = nil

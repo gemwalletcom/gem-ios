@@ -31,7 +31,7 @@ public struct StateButton: View {
                 return .disabled
             case .loading:
                 return .loading(showProgress: showProgressIndicator)
-            case .loaded:
+            case .data:
                 return .normal
             case .error:
                 if let disabledRule {
