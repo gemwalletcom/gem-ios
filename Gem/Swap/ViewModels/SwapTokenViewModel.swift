@@ -37,8 +37,8 @@ struct SwapTokenViewModel {
     }
     
     func fiatBalance(amount: String) -> String {
-        let value = (try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt)) ?? .zero
         guard
+            let value = try? formatter.inputNumber(from: amount, decimals: model.asset.decimals.asInt),
             let amount = try? formatter.double(from: value, decimals: model.asset.decimals.asInt),
             let price = model.priceViewModel.price
         else {
