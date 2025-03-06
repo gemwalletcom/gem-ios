@@ -98,7 +98,7 @@ public final class FiatSceneViewModel {
 
     var cryptoAmountValue: String {
         guard let quote = input.quote else { return "" }
-        let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote, formatter: currencyFormatter).amountText
+        let quoteAmount = FiatQuoteViewModel(asset: asset, quote: quote, selectedQuote: nil, formatter: currencyFormatter).amountText
         return "≈ \(quoteAmount)"
     }
     
@@ -107,7 +107,7 @@ public final class FiatSceneViewModel {
     }
 
     func rateValue(for quote: FiatQuote) -> String {
-        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote, formatter: currencyFormatter).rateText
+        let quoteRate = FiatQuoteViewModel(asset: asset, quote: quote, selectedQuote: nil, formatter: currencyFormatter).rateText
         return "1 \(asset.symbol) ≈ \(quoteRate)"
     }
 
@@ -196,7 +196,7 @@ extension FiatSceneViewModel {
     private func fiatProvidersViewModelState() -> StateViewType<[FiatQuoteViewModel]> {
         switch state {
         case .error(let error): .error(error)
-        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, formatter: currencyFormatter) })
+        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) })
         case .loading: .loading
         case .noData: .noData
         }

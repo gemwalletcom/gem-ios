@@ -35,7 +35,7 @@ struct SwapScene: View {
     
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
-    @Binding private var isPresentingSwapProviderSelect: Asset?
+    @Binding private var isPresentingSwapProviderSelect: AssetData?
     private let onTransferAction: TransferDataAction
 
     // Update quote every 30 seconds, needed if you come back from the background.
@@ -44,7 +44,7 @@ struct SwapScene: View {
     init(
         model: SwapViewModel,
         isPresentingAssetSwapType: Binding<SelectAssetSwapType?>,
-        isPresentingSwapProviderSelect: Binding<Asset?>,
+        isPresentingSwapProviderSelect: Binding<AssetData?>,
         onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
@@ -173,7 +173,7 @@ extension SwapScene {
                 )
                 if model.allowSelectProvider, let toAsset {
                     NavigationCustomLink(with: view) {
-                        isPresentingSwapProviderSelect = toAsset.asset
+                        isPresentingSwapProviderSelect = toAsset
                     }
                 } else {
                     view
