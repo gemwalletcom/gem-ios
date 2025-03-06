@@ -19,6 +19,9 @@ struct SwapTokenView: View {
         VStack(alignment: .leading) {
             HStack(alignment: .center) {
                 HStack {
+                    if showLoading {
+                        LoadingView()
+                    }
                     TextField(showLoading ? "" : String.zero, text: $text)
                         .keyboardType(.decimalPad)
                         .foregroundColor(Colors.black)
@@ -26,9 +29,6 @@ struct SwapTokenView: View {
                         .fontWeight(.semibold)
                         .disabled(disabledTextField)
                         .multilineTextAlignment(.leading)
-                    if showLoading {
-                        LoadingView()
-                    }
                 }
                 
                 VStack(alignment: .center) {
