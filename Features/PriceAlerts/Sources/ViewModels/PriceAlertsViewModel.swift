@@ -37,6 +37,16 @@ public final class PriceAlertsViewModel: Sendable {
             preferences.isPriceAlertsEnabled = newValue
         }
     }
+    
+    func alertsSections(for alerts: [PriceAlertData]) -> [[PriceAlertData]] {
+        alerts.reduce(into: []) { result, alert in
+            guard let index = result.firstIndex(where: { $0.first?.asset == alert.asset }) else {
+                result.append([alert])
+                return
+            }
+            result[index].append(alert)
+        }
+    }
 }
 
 // MARK: - Business Logic
@@ -55,9 +65,9 @@ extension PriceAlertsViewModel {
         }
     }
 
-    func deletePriceAlert(assetId: AssetId) async {
+    func deletePriceAlert(priceAlert: PriceAlert) async {
         do {
-            try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
+            try await priceAlertService.deletePriceAlerts(priceAlerts: [priceAlert])
         } catch {
             NSLog("deletePriceAlert error: \(error)")
         }
@@ -72,7 +82,7 @@ extension PriceAlertsViewModel {
 
     private func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.addPriceAlert(for: assetId)
+            try await priceAlertService.addPriceAlert(priceAlert: .default(for: assetId.identifier))
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }

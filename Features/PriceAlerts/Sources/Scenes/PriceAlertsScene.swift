@@ -22,33 +22,8 @@ public struct PriceAlertsScene: View {
 
     public var body: some View {
         List {
-            Section {
-                Toggle(
-                    model.enableTitle,
-                    isOn: $model.isPriceAlertsEnabled
-                )
-                .toggleStyle(AppToggleStyle())
-            } footer: {
-                Text(Localized.PriceAlerts.getNotifiedExplainMessage)
-            }
-
-            Section {
-                if priceAlerts.isEmpty {
-                    StateEmptyView(title: Localized.PriceAlerts.EmptyState.message)
-                } else {
-                    ForEach(priceAlerts) { alert in
-                        NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                            ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
-                                .swipeActions(edge: .trailing) {
-                                    Button(Localized.Common.delete, role: .destructive) {
-                                        onDelete(alert: alert)
-                                    }
-                                    .tint(Colors.red)
-                                }
-                        }
-                    }
-                }
-            }
+            toggleView
+            sectionsView
         }
         .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)
         .refreshable {
@@ -61,12 +36,50 @@ public struct PriceAlertsScene: View {
     }
 }
 
+// MARK: - UI
+
+extension PriceAlertsScene {
+    var toggleView: some View {
+        Section {
+            Toggle(
+                model.enableTitle,
+                isOn: $model.isPriceAlertsEnabled
+            )
+            .toggleStyle(AppToggleStyle())
+        } footer: {
+            Text(Localized.PriceAlerts.getNotifiedExplainMessage)
+        }
+    }
+    
+    var sectionsView: some View {
+        ForEach(model.alertsSections(for: priceAlerts), id: \.self) { alerts in
+            Section {
+                assetAlertsView(alerts: alerts)
+            }
+        }
+    }
+    
+    func assetAlertsView(alerts: [PriceAlertData]) -> some View {
+        ForEach(alerts) { alert in
+            NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+                    .swipeActions(edge: .trailing) {
+                        Button(Localized.Common.delete, role: .destructive) {
+                            onDelete(alert: alert.priceAlert)
+                        }
+                        .tint(Colors.red)
+                    }
+            }
+        }
+    }
+}
+
 // MARK: - Actions
 
 extension PriceAlertsScene {
-    func onDelete(alert: PriceAlertData) {
+    func onDelete(alert: PriceAlert) {
         Task {
-            await model.deletePriceAlert(assetId: alert.asset.id)
+            await model.deletePriceAlert(priceAlert: alert)
         }
     }
 

@@ -43,6 +43,7 @@ public struct CurrencyInputView: View {
 
     public init(text: Binding<String>, config: CurrencyInputConfigurable) {
         self.init(
+            placeholder: config.placeholder,
             text: text,
             currencySymbol: config.currencySymbol,
             currencyPosition: config.currencyPosition,

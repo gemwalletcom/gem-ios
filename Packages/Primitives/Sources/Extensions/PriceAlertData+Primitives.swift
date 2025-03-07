@@ -3,5 +3,5 @@
 import Foundation
 
 extension PriceAlertData: Identifiable {
-    public var id: String { asset.id.identifier }
+    public var id: String { asset.id.identifier + priceAlert.id }
 }

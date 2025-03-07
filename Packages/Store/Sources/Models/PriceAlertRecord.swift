@@ -48,8 +48,9 @@ extension PriceAlert {
         PriceAlertRecord(
             id: id,
             assetId: assetId,
+            priceDirection: priceDirection,
             price: price,
-            pricePercentChange: .none
+            pricePercentChange: pricePercentChange
         )
     }
 }
