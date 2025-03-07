@@ -3,6 +3,7 @@ import Foundation
 public protocol ProviderType: Sendable {
     associatedtype Target: TargetType
 }
+
 public protocol BatchTargetType: TargetType {}
 
 public struct Provider<T: TargetType>: ProviderType {
@@ -33,15 +34,17 @@ public struct Provider<T: TargetType>: ProviderType {
     }
 }
 
-extension Provider where T: BatchTargetType {
-    public func requestBatch(_ targets: [T]) async throws -> Response {
+public extension Provider where T: BatchTargetType {
+    func requestBatch(_ targets: [T]) async throws -> Response {
         let encoder = JSONEncoder()
-        let payload = try JSONSerialization.data(withJSONObject: targets.compactMap {
-            guard case .encodable(let req) = $0.data else { return nil }
-            return try? encoder.encode(req)
-        }.compactMap {
-            try? JSONSerialization.jsonObject(with: $0)
+        let payload = try JSONSerialization.data(withJSONObject: targets.enumerated().compactMap { index, element -> [String: Any]? in
+            guard case .encodable(let req) = element.data else { return nil }
+            // make sure id is unique in the batch
+            var jsonObject = try? JSONSerialization.jsonObject(with: encoder.encode(req)) as? [String: Any]
+            jsonObject?["id"] = index + 1
+            return jsonObject
         })
+
         guard let baseUrl = options.baseUrl else {
             throw ProviderError.missingBaseUrl
         }
