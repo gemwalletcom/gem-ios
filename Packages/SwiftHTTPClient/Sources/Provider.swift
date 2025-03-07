@@ -37,13 +37,14 @@ public struct Provider<T: TargetType>: ProviderType {
 public extension Provider where T: BatchTargetType {
     func requestBatch(_ targets: [T]) async throws -> Response {
         let encoder = JSONEncoder()
-        let payload = try JSONSerialization.data(withJSONObject: targets.enumerated().compactMap { index, element -> [String: Any]? in
+        let reqs = targets.enumerated().compactMap { index, element -> [String: Any]? in
             guard case .encodable(let req) = element.data else { return nil }
             // make sure id is unique in the batch
-            var jsonObject = try? JSONSerialization.jsonObject(with: encoder.encode(req)) as? [String: Any]
-            jsonObject?["id"] = index + 1
-            return jsonObject
-        })
+            var json = try? JSONSerialization.jsonObject(with: encoder.encode(req)) as? [String: Any]
+            json?["id"] = index + 1
+            return json
+        }
+        let payload = try JSONSerialization.data(withJSONObject: reqs)
 
         guard let baseUrl = options.baseUrl else {
             throw ProviderError.missingBaseUrl
