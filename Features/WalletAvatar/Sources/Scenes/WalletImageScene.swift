@@ -33,41 +33,23 @@ public struct WalletImageScene: View {
 
     public var body: some View {
         VStack {
-            avatar
-                .padding(.top, Spacing.medium)
-                .padding(.bottom, Spacing.extraLarge)
-            
+            if let dbWallet {
+                AvatarView(
+                    avatarImage: WalletViewModel(wallet: dbWallet).avatarImage,
+                    size: model.emojiViewSize,
+                    action: setDefaultAvatar
+                )
+                .padding(.top, .medium)
+                .padding(.bottom, .extraLarge)
+            }
             pickerView
-                .padding(.bottom, Spacing.medium)
-                .padding(.horizontal, Spacing.medium)
+                .padding(.bottom, .medium)
+                .padding(.horizontal, .medium)
             
             listView
         }
         .navigationTitle(model.title)
         .background(Colors.grayBackground)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(Localized.Filter.clear) {
-                    model.setDefaultAvatar()
-                }
-                .bold()
-                .disabled(dbWallet?.imageUrl == nil)
-            }
-        }
-    }
-    
-    private var avatar: some View {
-        VStack {
-            if let dbWallet {
-                AssetImageView(
-                    assetImage: WalletViewModel(wallet: dbWallet).avatarImage,
-                    size: model.emojiViewSize,
-                    overlayImageSize: Sizing.image.medium
-                )
-                .id(dbWallet.imageUrl)
-            }
-        }
-        .animation(.default, value: dbWallet?.imageUrl)
     }
     
     private var pickerView: some View {
@@ -84,7 +66,7 @@ public struct WalletImageScene: View {
             LazyVGrid(
                 columns: model.getColumns(for: selectedTab),
                 alignment: .center,
-                spacing: Spacing.medium
+                spacing: .medium
             ) {
                 switch selectedTab {
                 case .emoji:
@@ -93,14 +75,14 @@ public struct WalletImageScene: View {
                     nftAssetListView
                 }
             }
-            .padding(.horizontal, Spacing.medium)
+            .padding(.horizontal, .medium)
         }
-        .overlay(content: {
+        .overlay {
             if nftDataList.isEmpty, case .collections = selectedTab {
                 Text(Localized.Activity.EmptyState.message)
                     .textStyle(.body)
             }
-        })
+        }
     }
     
     private var emojiListView: some View {
@@ -127,7 +109,7 @@ public struct WalletImageScene: View {
 
 // MARK: - Actions
 
-extension WalletImageScene {
+private extension WalletImageScene {
     func onSelectNftAsset(_ item: WalletImageViewModel.NFTAssetImageItem) {
         guard let url = item.assetImage.imageURL else {
             return
@@ -135,5 +117,9 @@ extension WalletImageScene {
         Task {
             await model.setImage(from: url)
         }
+    }
+    
+    func setDefaultAvatar() {
+        model.setDefaultAvatar()
     }
 }

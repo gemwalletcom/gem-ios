@@ -9,4 +9,11 @@ public extension Optional {
         }
         return value
     }
+    
+    func or(_ defaultValue: Wrapped) -> Wrapped {
+        guard let value = self else {
+            return defaultValue
+        }
+        return value
+    }
 }

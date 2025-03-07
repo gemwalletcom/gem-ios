@@ -22,7 +22,7 @@ struct AddTokenScene: View {
 
     init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
         _model = State(initialValue: model)
-        _networksModel = State(initialValue: NetworkSelectorViewModel(items: model.chains))
+        _networksModel = State(initialValue: NetworkSelectorViewModel(state: .data(model.chains)))
         self.action = action
     }
 
@@ -35,13 +35,13 @@ struct AddTokenScene: View {
                 viewState: model.state,
                 action: onSelectImportToken
             )
-            .frame(maxWidth: Spacing.scene.button.maxWidth)
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .onAppear {
             focusedField = .address
         }
         .onChange(of: model.input.address, onAddressClean)
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
@@ -76,7 +76,7 @@ extension AddTokenScene {
             }
             Section {
                 FloatTextField(model.addressTitleField, text: model.addressBinding) {
-                    HStack(spacing: Spacing.medium) {
+                    HStack(spacing: .medium) {
                         ListButton(image: model.pasteImage, action: onSelectPaste)
                         ListButton(image: model.qrImage, action: onSelectScan)
                     }
@@ -93,7 +93,7 @@ extension AddTokenScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded(let asset):
+            case .data(let asset):
                 Section {
                     ListItemView(title: asset.nameTitle, subtitle: asset.name)
                     ListItemView(title: asset.symbolTitle, subtitle: asset.symbol)
@@ -125,7 +125,7 @@ extension AddTokenScene {
     }
 
     private func onSelectImportToken() {
-        guard case let .loaded(asset) = model.state else { return }
+        guard case let .data(asset) = model.state else { return }
         action?(asset.asset)
     }
 

@@ -273,7 +273,7 @@
 "price_alerts.empty_state.message" = "Пока не добавлено ни одного ценового оповещения.";
 "assets.select_asset" = "Выберите актив";
 "lock.privacy_lock" = "Блокировка конфиденциальности";
-"receive.your_address" = "Ваш адрес для получения";
+"receive.your_address" = "Адрес для получения";
 "verify_phrase.title" = "Подтвердите";
 "common.skip" = "Пропустить";
 "common.warning" = "Внимание";
@@ -333,4 +333,9 @@
 "social.instagram" = "Instagram";
 "social.tiktok" = "TikTok";
 "social.coinmarketcap" = "CoinMarketCap";
-"nft.set_as_avatar" = "Set as Avatar";
+"nft.set_as_avatar" = "Установить как аватар";
+"errors.connections.invalid_send_parameters" = "Для отправки транзакции указаны неверные параметры.";
+"errors.connections.invalid_sign_parameters" = "Для подписи предоставлены неверные параметры.";
+"errors.connections.no_supported_wallets" = "Поддерживаемые кошельки отсутствуют.";
+"errors.connections.unsupported_chain" = "The provided chain is not supported.";
+"errors.connections.unsupported_method" = "Запрошенный метод не поддерживается.";

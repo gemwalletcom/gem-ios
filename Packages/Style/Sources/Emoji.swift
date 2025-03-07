@@ -163,8 +163,8 @@ public struct Emoji {
         ForEach(symbols, id: \.1) { symbol in
             Section(header: Text(symbol.1)) {
                 Text(symbol.0)
-                    .frame(width: Sizing.list.image, height: Sizing.list.image)
-                    .padding(Spacing.extraSmall)
+                    .frame(width: .list.image, height: .list.image)
+                    .padding(.extraSmall)
             }
         }
     }

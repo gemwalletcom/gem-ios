@@ -44,19 +44,24 @@ public struct WalletViewModel {
     }
     
     public var avatarImage: AssetImage {
-        guard let imageUrl = wallet.imageUrl else {
-            return AssetImage(
-                imageURL: nil,
-                placeholder: image,
-                chainPlaceholder: subImage
-            )
-        }
-        return AssetImage(
-            type: .empty,
-            imageURL: imageUrl.asURL,
-            placeholder: nil,
-            chainPlaceholder: WalletViewModel(wallet: wallet).subImage
+        AssetImage(
+            type: wallet.name,
+            imageURL: imageUrl(),
+            placeholder: image,
+            chainPlaceholder: subImage
         )
+    }
+    
+    // MARK: - Private methods
+    
+    private func imageUrl() -> URL? {
+        guard let imageUrl = wallet.imageUrl else {
+            return nil
+        }
+        if let url = URL(string: imageUrl), url.scheme != nil {
+            return url
+        }
+        return URL.documentsDirectory.appendingPathComponent(imageUrl)
     }
 }
 

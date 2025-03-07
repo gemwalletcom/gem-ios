@@ -7,6 +7,7 @@ import Components
 
 public struct FiatQuoteViewModel {
     let quote: FiatQuote
+    let selectedQuote: FiatQuote?
 
     private let asset: Asset
     private let formatter: CurrencyFormatter
@@ -14,10 +15,12 @@ public struct FiatQuoteViewModel {
     public init(
         asset: Asset,
         quote: FiatQuote,
+        selectedQuote: FiatQuote?,
         formatter: CurrencyFormatter
     ) {
         self.asset = asset
         self.quote = quote
+        self.selectedQuote = selectedQuote
         self.formatter = formatter
     }
 
@@ -43,6 +46,10 @@ public struct FiatQuoteViewModel {
         case .sell: formatter.string(decimal: Decimal(quote.fiatAmount))
         }
     }
+    
+    private var isSelected: Bool {
+        selectedQuote?.provider == quote.provider
+    }
 }
 
 extension FiatQuoteViewModel: Identifiable {
@@ -54,9 +61,20 @@ extension FiatQuoteViewModel: Identifiable {
 // MARK: - SimpleListItemViewable
 
 extension FiatQuoteViewModel: SimpleListItemViewable {
-    public var image: Image {
-        Images.name(quote.provider.name.lowercased().replacing(" ", with: "_"))
+    public var assetImage: AssetImage {
+        AssetImage(
+            placeholder: Images.name(quote.provider.name.lowercased().replacing(" ", with: "_")),
+            chainPlaceholder: isSelected ? Images.Wallets.selected : nil
+        )
     }
 
     public var subtitle: String? { amountText }
+}
+
+// MARK: - Hashable
+
+extension FiatQuoteViewModel: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }

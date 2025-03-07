@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Gemstone
 
 public struct Scenes {
     public struct CreateWallet: Hashable {
@@ -48,10 +49,6 @@ public struct Scenes {
     }
 
     public struct Validators: Hashable {
-        public init() {}
-    }
-
-    public struct FiatProviders: Hashable {
         public init() {}
     }
 
@@ -125,7 +122,7 @@ public struct Scenes {
         }
     }
     
-    public struct NFTCollectionScene: Hashable {
+    public struct CollectionsScene: Hashable {
 
         public enum SceneStep: Hashable, Sendable {
             case collections
@@ -139,7 +136,7 @@ public struct Scenes {
         }
     }
     
-    public struct NFTDetails: Hashable, Sendable {
+    public struct Collectible: Hashable, Sendable {
         public let assetData: NFTAssetData
         
         public init(assetData: NFTAssetData) {

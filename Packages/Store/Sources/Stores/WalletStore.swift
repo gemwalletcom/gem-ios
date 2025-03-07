@@ -113,10 +113,10 @@ public struct WalletStore: Sendable {
         return SubscriptionsObserver(dbQueue: db)
     }
     
-    public func setWalletAvatar(_ walletId: String, url: URL?) throws {
+    public func setWalletAvatar(_ walletId: String, path: String?) throws {
         let _ = try db.write { db in
             let assignments = [
-                Columns.Wallet.imageUrl.set(to: url),
+                Columns.Wallet.imageUrl.set(to: path),
                 Columns.Wallet.updatedAt.set(to: Date.now)
             ]
             return try WalletRecord

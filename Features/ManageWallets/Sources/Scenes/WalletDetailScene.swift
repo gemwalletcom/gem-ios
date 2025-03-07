@@ -47,17 +47,14 @@ public struct WalletDetailScene: View {
                 } header: {
                     HStack {
                         Spacer()
-                        VStack(spacing: Spacing.medium) {
+                        VStack(spacing: .medium) {
                             if let dbWallet {
-                                AssetImageView(
-                                    assetImage: model.avatarAssetImage(for: dbWallet),
-                                    size: Sizing.image.extraLarge,
-                                    overlayImageSize: Sizing.image.medium
+                                AvatarView(
+                                    avatarImage: model.avatarAssetImage(for: dbWallet),
+                                    size: .image.extraLarge,
+                                    action: onSelectImage
                                 )
-                                .padding(.bottom, Spacing.extraLarge)
-                                .onTapGesture {
-                                    onSelectImage()
-                                }
+                                .padding(.bottom, .extraLarge)
                             }
                         }
                         Spacer()
@@ -110,7 +107,7 @@ public struct WalletDetailScene: View {
                 }
             }
         }
-        .padding(.bottom, Spacing.scene.bottom)
+        .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
         .onChange(of: name, onChangeWalletName)

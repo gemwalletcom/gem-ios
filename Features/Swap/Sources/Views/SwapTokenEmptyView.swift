@@ -22,8 +22,8 @@ public struct SwapTokenEmptyView: View {
         } label: {
             HStack {
                 Text(Localized.Assets.selectAsset)
-                    .padding(.horizontal, Spacing.extraSmall)
-                    .padding(.vertical, Spacing.medium)
+                    .padding(.horizontal, .extraSmall)
+                    .padding(.vertical, .medium)
                 SwapChevronView()
             }
         }

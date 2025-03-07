@@ -58,22 +58,15 @@ public class WalletDetailViewModel {
         WalletRequest(walletId: wallet.id)
     }
     
-    func avatarAssetImage(for dbWallet: Wallet) -> AssetImage {
-        guard let imageUrl = dbWallet.imageUrl else {
-            return AssetImage(
-                imageURL: nil,
-                placeholder: WalletViewModel(wallet: dbWallet).image,
-                chainPlaceholder: Images.Wallets.editFilled
-            )
-        }
+    func avatarAssetImage(for wallet: Wallet) -> AssetImage {
+        let avatar = WalletViewModel(wallet: wallet).avatarImage
         return AssetImage(
-            type: .empty,
-            imageURL: imageUrl.asURL,
-            placeholder: nil,
+            type: avatar.type,
+            imageURL: avatar.imageURL,
+            placeholder: avatar.placeholder,
             chainPlaceholder: Images.Wallets.editFilled
         )
     }
-        
 }
 
 // MARK: - Business Logic

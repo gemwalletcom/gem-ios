@@ -48,7 +48,7 @@ struct AssetScene: View {
                 currencyCode: Preferences.standard.currency
             ),
             walletModel: walletModel,
-            bannersViewModel: HeaderBannersViewModel(banners: model.banners + banners)
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: (model.banners + banners).map { $0.event })
         )
     }
     
@@ -90,8 +90,8 @@ struct AssetScene: View {
                     onHeaderAction: onSelectHeader(_:),
                     onInfoAction: onSelectWalletHeaderInfo
                 )
-                    .padding(.top, Spacing.small)
-                    .padding(.bottom, Spacing.medium)
+                    .padding(.top, .small)
+                    .padding(.bottom, .medium)
             }
             .frame(maxWidth: .infinity)
             .textCase(nil)
@@ -110,7 +110,7 @@ struct AssetScene: View {
 
                         if model.showPriceView {
                             Spacer()
-                            HStack(spacing: Spacing.tiny) {
+                            HStack(spacing: .tiny) {
                                 Text(model.priceView.text)
                                     .textStyle(model.priceView.style)
                                 Text(model.priceChangeView.text)
@@ -223,7 +223,7 @@ extension AssetScene {
     private var networkView: some View {
         HStack {
             ListItemView(title: model.networkField, subtitle: model.networkText)
-            AssetImageView(assetImage: model.networkAssetImage, size: Sizing.list.image)
+            AssetImageView(assetImage: model.networkAssetImage, size: .list.image)
         }
     }
 

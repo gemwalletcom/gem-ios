@@ -34,7 +34,7 @@ public struct ChartScene: View {
                             StateEmptyView(title: model.emptyTitle)
                         case .loading:
                             LoadingView()
-                        case .loaded(let model):
+                        case .data(let model):
                             ChartView(model: model)
                         case .error(let error):
                             StateEmptyView(
@@ -46,7 +46,7 @@ public struct ChartScene: View {
                     }
                     .frame(height: 320)
 
-                    HStack(alignment: .center, spacing: Spacing.medium) {
+                    HStack(alignment: .center, spacing: .medium) {
                         ForEach(model.periods) { period in
                             Button {
                                 model.currentPeriod = period.period
@@ -61,7 +61,7 @@ public struct ChartScene: View {
                             .buttonStyle(.borderless)
                         }
                     }
-                    .padding(.bottom, Spacing.medium)
+                    .padding(.bottom, .medium)
                 }
             }
             .frame(maxWidth: .infinity)

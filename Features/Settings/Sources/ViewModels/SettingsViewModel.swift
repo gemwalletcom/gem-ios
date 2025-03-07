@@ -101,6 +101,6 @@ public final class SettingsViewModel {
 
 extension SettingsViewModel {
     func fetch() async throws {
-        try await walletsService.changeCurrency(walletId: walletId)
+        try await walletsService.changeCurrency(for: walletId)
     }
 }

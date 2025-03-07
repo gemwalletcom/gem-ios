@@ -58,7 +58,7 @@ public struct ManageWalletService: Sendable {
     }
     
     public func renameWallet(wallet: Wallet, newName: String) throws {
-        try keystore.renameWallet(wallet: wallet, newName: newName)
+        try walletStore.renameWallet(wallet.id, name: newName)
     }
     
     public func getMnemonic(wallet: Wallet) throws -> [String] {

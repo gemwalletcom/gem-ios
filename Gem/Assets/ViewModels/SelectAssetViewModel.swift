@@ -141,8 +141,8 @@ extension SelectAssetViewModel {
         await searchAssets(query: query)
     }
 
-    func enableAsset(assetId: AssetId, enabled: Bool) {
-        walletsService.enableAssetId(walletId: wallet.walletId, assets: [assetId], enabled: enabled)
+    func enableAsset(assetId: AssetId, enabled: Bool) async {
+        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
     }
 }
 
@@ -171,10 +171,12 @@ extension SelectAssetViewModel {
         do {
             let assets = try await assetsService.searchAssets(query: query, chains: chains)
             try assetsService.addAssets(assets: assets)
+            try assetsService.assetStore.addAssetsSearch(query: query, assets: assets)
+            
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
 
             await MainActor.run { [self] in
-                self.state = .loaded(assets)
+                self.state = .data(assets)
             }
         } catch {
             await MainActor.run { [self] in

@@ -29,6 +29,7 @@ import DiscoverAssetsService
 import WalletsService
 import ManageWalletService
 import AvatarService
+import ScanService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -133,15 +134,12 @@ extension TransactionService {
     )
 }
 
-extension DiscoverAssetsService {
-    static let main = DiscoverAssetsService(
-        balanceService: .main,
-        chainServiceFactory: .main
-    )
-}
-
 extension NodeService {
     static let main = NodeService(nodeStore: .main)
+}
+
+extension ScanService {
+    static let main = ScanService(securePreferences: .standard)
 }
 
 extension WalletsService {
@@ -150,7 +148,7 @@ extension WalletsService {
         assetsService: .main,
         balanceService: .main,
         priceService: .main,
-        discoverAssetService: .main,
+        chainService: .main,
         transactionService: .main,
         bannerSetupService: .main,
         addressStatusService: .main

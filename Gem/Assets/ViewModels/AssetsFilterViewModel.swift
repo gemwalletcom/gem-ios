@@ -27,10 +27,10 @@ struct AssetsFilterViewModel {
         case .send: [.hasBalance]
         case .receive(let type):
             switch type {
-            case .asset: [.includeNewAssets]
+            case .asset: []
             case .collection: [.chainsOrAssets([], Chain.allCases.filter { $0.isNFTSupported }.map { $0.rawValue})]
             }
-        case .buy: [.buyable, .includeNewAssets]
+        case .buy: [.buyable]
 
         case .swap(let type):
             switch type {
@@ -42,10 +42,9 @@ struct AssetsFilterViewModel {
                         assetIds.map { $0.identifier }
                     ),
                     .swappable,
-                    .includeNewAssets,
                 ]
             }
-        case .manage: [.includeNewAssets]
+        case .manage: []
         case .priceAlert: [.priceAlerts]
         }
     }
@@ -56,7 +55,7 @@ struct AssetsFilterViewModel {
 
     var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
-            items: chainsFilter.allChains,
+            state: .data(chainsFilter.allChains),
             selectedItems: chainsFilter.selectedChains,
             isMultiSelectionEnabled: true
         )

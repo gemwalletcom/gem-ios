@@ -11,8 +11,8 @@ public struct SelectionImageView: View {
             .resizable()
             .scaledToFit()
             .frame(
-                width: Sizing.list.selected.image,
-                height: Sizing.list.selected.image
+                width: .list.selected.image,
+                height: .list.selected.image
             )
     }
 }
