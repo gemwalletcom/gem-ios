@@ -8,7 +8,11 @@ struct JSONRPCRequest<T: Encodable>: Encodable {
     let params: T
     let id: Int
     
-    init(method: String, params: T, id: Int) {
+    init(
+        method: String,
+        params: T,
+        id: Int = JSONRPCIDGenerator.shared.nextId()
+    ) {
         self.jsonrpc = "2.0"
         self.method = method
         self.params = params

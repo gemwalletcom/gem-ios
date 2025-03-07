@@ -68,7 +68,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
             .health,
             .genesisHash:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [] as [String])
             )
         case .balance(let address):
             let params: [JSON] = [
@@ -78,7 +78,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .getTokenAccountsByOwner(let owner, let token):
             let params: [JSON] = [
@@ -90,7 +90,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .getTokenAccountBalance(let token):
             let params: [JSON] = [
@@ -100,11 +100,11 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .rentExemption(let size):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [size], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [size])
             )
         case .broadcast(let data, let options):
             
@@ -125,7 +125,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
             }
             
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 2)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .transaction(let id):
             let params: [JSON] = [
@@ -137,7 +137,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .stakeDelegations(let address):
             let params: [JSON] = [
@@ -156,7 +156,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .stakeValidators:
             let params: [JSON<String>] = [
@@ -166,7 +166,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ])
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .getAccountInfo(let account):
             let params: [JSON] = [
@@ -177,7 +177,7 @@ public enum SolanaProvider: TargetType, BatchTargetType {
                 ]),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         }
     }
