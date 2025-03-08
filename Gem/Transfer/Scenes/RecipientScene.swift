@@ -9,14 +9,17 @@ import Primitives
 import Localization
 import Transfer
 import NameResolver
+import GRDBQuery
+import Store
+import Contacts
 
 struct RecipientScene: View {
     
-    @StateObject var model: RecipientViewModel
+    @State var model: RecipientViewModel
     
-    @State private var address: String = ""
-    @State private var memo: String = ""
-    @State private var amount: String = ""
+    @Query<ContactAddressInfoListRequest>
+    private var addresses: [ContactAddressInfo]
+    
     @State private var nameResolveState: NameRecordState = .none
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingScanner: RecipientScene.Field?
@@ -29,16 +32,28 @@ struct RecipientScene: View {
     
     @FocusState private var focusedField: Field?
     
+    init(model: RecipientViewModel) {
+        _model = State(initialValue: model)
+        
+        let request = Binding {
+            model.addressListRequest
+        } set: { new in
+            model.addressListRequest = new
+        }
+        
+        _addresses = Query(request)
+    }
+    
     var body: some View {
         VStack {
             List {
                 Section {
-                    FloatTextField(model.recipientField, text: $address, allowClean: false) {
+                    FloatTextField(model.recipientField, text: $model.address, allowClean: false) {
                         HStack(spacing: .large/2) {
                             NameRecordView(
                                 model: NameRecordViewModel(chain: model.chain),
                                 state: $nameResolveState,
-                                address: $address
+                                address: $model.address
                             )
                             ListButton(image: Images.System.paste) {
                                 paste(field: .address)
@@ -52,9 +67,10 @@ struct RecipientScene: View {
                     .keyboardType(.alphabet)
                     .textInputAutocapitalization(.never)
                     .autocorrectionDisabled()
+                    .truncationMode(.middle)
 
                     if model.showMemo {
-                        FloatTextField(model.memoField, text: $memo, allowClean: focusedField == .memo) {
+                        FloatTextField(model.memoField, text: $model.memo, allowClean: focusedField == .memo) {
                             ListButton(image: Images.System.qrCode) {
                                 isPresentingScanner = .memo
                             }
@@ -70,19 +86,20 @@ struct RecipientScene: View {
                     Section {
                         ForEach(model.getRecipient(by: .wallets)) { recipient in
                             NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                address = recipient.address
+                                model.address = recipient.address
                                 focusedField = .none
                             }
                         }
                     } header: {
                         Text("My Wallets")
                     }
+                    
                 }
                 if !model.getRecipient(by: .view).isEmpty {
                     Section {
                         ForEach(model.getRecipient(by: .view)) { recipient in
                             NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                address = recipient.address
+                                model.address = recipient.address
                                 focusedField = .none
                             }
                         }
@@ -90,12 +107,27 @@ struct RecipientScene: View {
                         Text("View Wallets")
                     }
                 }
+                if !model.buildListItemViews(addresses: addresses).isEmpty {
+                    Section {
+                        ForEach(model.buildListItemViews(addresses: addresses)) { item in
+                                ContactAddressListItemView(
+                                    name: item.name,
+                                    address: item.address,
+                                    memo: item.memo
+                                ).onTapGesture {
+                                    didSelect(item.object.address)
+                                }
+                        }
+                    } header: {
+                        Text("Contacts")
+                    }
+                }
             }
-            
             Spacer()
             Button(Localized.Common.continue, action: next)
             .frame(maxWidth: .scene.button.maxWidth)
             .buttonStyle(.blue())
+
         }
         .background(Colors.grayBackground)
         .navigationTitle(model.tittle)
@@ -107,10 +139,10 @@ struct RecipientScene: View {
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
         }
-        .onChange(of: address) { oldValue, newValue in
+        .onChange(of: model.address) { oldValue, newValue in
             // sometimes amount scanned from QR, pass it over, only address is not changed
-            if !amount.isEmpty {
-                amount = .empty
+            if !model.amount.isEmpty {
+                model.amount = .empty
             }
         }
     }
@@ -123,7 +155,7 @@ extension RecipientScene {
         guard let string = UIPasteboard.general.string else { return }
         switch field {
         case .address, .memo:
-            self.address = string.trim()
+            self.model.address = string.trim()
         }
     }
     
@@ -137,30 +169,34 @@ extension RecipientScene {
                 case .transferData(let data):
                     model.onTransferDataSelect(data: data)
                 case .recipient(let address, let memo, let amount):
-                    self.address = address
+                    self.model.address = address
                     
                     if let memo = memo {
-                        self.memo = memo
+                        self.model.memo = memo
                     }
                     if let amount = amount {
-                        self.amount = amount
+                        self.model.amount = amount
                     }
                 }
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }
         case .memo:
-            memo = result
+            model.memo = result
         }
+    }
+    
+    func didSelect(_ address: ContactAddress) {
+        model.onContactAddressSelected(address)
     }
     
     func next() {
         do {
             let data = try model.getRecipientData(
                 name: nameResolveState.result,
-                address: address,
-                memo: memo,
-                amount: amount.isEmpty ? .none : amount
+                address: model.address,
+                memo: model.memo,
+                amount: model.amount.isEmpty ? .none : model.amount
             )
             model.onRecipientDataSelect(data: data)
         } catch {

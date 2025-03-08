@@ -48,6 +48,7 @@ extension TextStyle {
     public static let largeTitle = TextStyle(font: .largeTitle, color: Colors.black)
     public static let boldTitle = TextStyle(font: .title.bold(), color: Colors.black)
     public static let highlighted = TextStyle(font: .headline, color: .white, background: Colors.blue)
+    public static let bodyBold = TextStyle(font: .body.bold(), color: Colors.black)
 }
 
 // MARK: - Modifier

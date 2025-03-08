@@ -23,6 +23,7 @@ import TransactionsService
 import WalletsService
 import ManageWalletService
 import AvatarService
+import ContactService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main
@@ -44,4 +45,5 @@ extension EnvironmentValues {
     @Entry var chainServiceFactory: ChainServiceFactory = .main
     @Entry var nftService: NFTService = .main
     @Entry var avatarService: AvatarService = .main
+    @Entry var contactService: ContactService = .main
 }
