@@ -46,6 +46,10 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
+            
+            //contacts
+            try ContactRecord.create(db: db)
+            try ContactAddressRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)

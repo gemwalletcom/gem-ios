@@ -30,6 +30,7 @@ import WalletsService
 import ManageWalletService
 import AvatarService
 import ScanService
+import ContactService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -229,6 +230,14 @@ extension NFTStore {
 
 extension AvatarService {
     static let main = AvatarService(store: .main)
+}
+
+extension ContactStore {
+    static let main = ContactStore(db: .main)
+}
+
+extension ContactService {
+    static let main = ContactService(contactStore: .main)
 }
 
 extension WalletConnectorSigner {

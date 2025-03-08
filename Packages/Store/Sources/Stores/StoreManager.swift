@@ -15,6 +15,7 @@ public struct StoreManager {
     public let bannerStore: BannerStore
     public let priceAlertStore: PriceAlertStore
     public let nftStore: NFTStore
+    public let contactStore: ContactStore
     
     public init(db: DB) {
         self.assetStore = AssetStore(db: db)
@@ -28,5 +29,6 @@ public struct StoreManager {
         self.bannerStore = BannerStore(db: db)
         self.priceAlertStore = PriceAlertStore(db: db)
         self.nftStore = NFTStore(db: db)
+        self.contactStore = ContactStore(db: db)
     }
 }

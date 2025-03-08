@@ -65,9 +65,18 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        wallet: model.wallet,
-                        asset: input.asset,
-                        type: .asset(input.asset),
+                        model: RecipientViewModel(
+                            wallet: model.wallet,
+                            asset: input.asset,
+                            keystore: keystore,
+                            type: .asset(input.asset),
+                            onRecipientDataAction: {
+                                navigationPath.append($0)
+                            },
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        ),
                         navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectAssetType = nil

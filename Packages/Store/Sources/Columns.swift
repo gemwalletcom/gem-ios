@@ -4,6 +4,22 @@ import Foundation
 import GRDB
 
 struct Columns {
+    struct ContactAddress {
+        static let id = Column("id")
+        static let contactId = Column("contactId")
+        static let value = Column("value")
+        static let chain = Column("chain")
+        static let memo = Column("memo")
+    }
+    
+    struct Contact {
+        static let id = Column("id")
+        static let name = Column("name")
+        static let addresses = Column("addresses")
+        static let description = Column("description")
+        static let chain = Column("chain")
+    }
+    
     struct Price {
         static let assetId = Column("assetId")
         static let price = Column("price")

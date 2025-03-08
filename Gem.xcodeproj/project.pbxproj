@@ -154,6 +154,8 @@
 		DF93C4EE2C969F4F00204ABD /* Gemstone in Frameworks */ = {isa = PBXBuildFile; productRef = DF93C4ED2C969F4F00204ABD /* Gemstone */; };
 		DFA0B5192D16C86E00355594 /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = DFA0B5182D16C86E00355594 /* Currency */; };
 		DFA0B51E2D16C94400355594 /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = DFA0B51D2D16C94400355594 /* Currency */; };
+		FA04F72D2D75F76E006B8C61 /* ContactService in Frameworks */ = {isa = PBXBuildFile; productRef = FA04F72C2D75F76E006B8C61 /* ContactService */; };
+		FA04F72F2D75F7F9006B8C61 /* Contacts in Frameworks */ = {isa = PBXBuildFile; productRef = FA04F72E2D75F7F9006B8C61 /* Contacts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -331,6 +333,9 @@
 		DF486B6D2BBE320800B95732 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DFBDD9AE2C77EC90002A1706 /* WalletCore */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletCore; sourceTree = "<group>"; };
 		DFCB242D2D1A5223000A12CC /* Currency */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Currency; sourceTree = "<group>"; };
+		FA1493772D758D7900E174A8 /* Contacts */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Contacts; sourceTree = "<group>"; };
+		FA1493782D75974700E174A8 /* ContactService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ContactService; sourceTree = "<group>"; };
+		FA8724FE2D775A0600225DA6 /* DataValidation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DataValidation; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -349,6 +354,7 @@
 				D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */,
 				8361BB6D2D400E4F008D89CF /* AssetsService in Frameworks */,
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
+				FA04F72F2D75F7F9006B8C61 /* Contacts in Frameworks */,
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
 				DFA0B51E2D16C94400355594 /* Currency in Frameworks */,
 				83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */,
@@ -387,6 +393,7 @@
 				D85AD29D2CD337BE0010DEF8 /* SwapService in Frameworks */,
 				07A9FE3D2D3565CD00ACDB94 /* NFTService in Frameworks */,
 				C3CF3B7B29A98C7B00E96586 /* Primitives in Frameworks */,
+				FA04F72D2D75F76E006B8C61 /* ContactService in Frameworks */,
 				C3CF3BDB29BBE45D00E96586 /* Style in Frameworks */,
 				C35DA07C2A9C3B4B008CCEFA /* Settings in Frameworks */,
 				83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */,
@@ -678,6 +685,7 @@
 		C3CF3B6E29A98BFD00E96586 /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				FA8724FE2D775A0600225DA6 /* DataValidation */,
 				832F57E92D36A6D50066024D /* Preferences */,
 				DFBDD9AE2C77EC90002A1706 /* WalletCore */,
 				487A27E82B632CCE00BEEADB /* Gemstone */,
@@ -784,6 +792,7 @@
 		D829BF2E2CBDC21600DEB2E8 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				FA1493772D758D7900E174A8 /* Contacts */,
 				B61C5C152D5FB899007699EC /* WalletAvatar */,
 				838383112D5E677A00D1CAF2 /* WalletTab */,
 				8349F1452D5E4D04003A0A93 /* ManageWallets */,
@@ -811,6 +820,7 @@
 		D829BF4B2CBF022700DEB2E8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				FA1493782D75974700E174A8 /* ContactService */,
 				D8CEF3272D6E60AF00E48A78 /* ScanService */,
 				83FEE7FC2D5E632300E7B2DA /* ManageWalletService */,
 				83F645072D52C5DF00C18881 /* WalletsService */,
@@ -1102,6 +1112,8 @@
 				8349F1462D5E4FF4003A0A93 /* ManageWallets */,
 				B617D60A2D5B75F0001697A6 /* AvatarService */,
 				D83D3C242D6E62F4002959EA /* ScanService */,
+				FA04F72C2D75F76E006B8C61 /* ContactService */,
+				FA04F72E2D75F7F9006B8C61 /* Contacts */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -2125,6 +2137,14 @@
 		DFA0B51D2D16C94400355594 /* Currency */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Currency;
+		};
+		FA04F72C2D75F76E006B8C61 /* ContactService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = ContactService;
+		};
+		FA04F72E2D75F7F9006B8C61 /* Contacts */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Contacts;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

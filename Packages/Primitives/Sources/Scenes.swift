@@ -11,6 +11,28 @@ public struct Scenes {
     public struct ImportWallet: Hashable {
         public init() {}
     }
+    
+    public struct Contacts: Hashable {
+        public init() {}
+    }
+    
+    public struct AddContactAddress: Hashable {
+        public let contact: Contact
+        public let address: ContactAddress?
+        
+        public init(contact: Contact, address: ContactAddress?) {
+            self.contact = contact
+            self.address = address
+        }
+    }
+    
+    public struct ContactAddresses: Hashable {
+        public let contact: Contact
+        
+        public init(contact: Contact) {
+            self.contact = contact
+        }
+    }
 
     public struct Notifications: Hashable {
         public init() {}

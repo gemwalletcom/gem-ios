@@ -9,6 +9,7 @@ import FiatConnect
 import PrimitivesComponents
 import PriceAlerts
 import Swap
+import Style
 
 struct SelectedAssetNavigationStack: View  {
     
@@ -37,9 +38,18 @@ struct SelectedAssetNavigationStack: View  {
             switch selectType.type {
             case .send(let type):
                 RecipientNavigationView(
-                    wallet: wallet,
-                    asset: selectType.asset,
-                    type: type,
+                    model: RecipientViewModel(
+                        wallet: wallet,
+                        asset: selectType.asset,
+                        keystore: keystore,
+                        type: type,
+                        onRecipientDataAction: {
+                            navigationPath.append($0)
+                        },
+                        onTransferAction: {
+                            navigationPath.append($0)
+                        }
+                    ),
                     navigationPath: $navigationPath,
                     onComplete: {
                         isPresentingSelectedAssetInput = nil

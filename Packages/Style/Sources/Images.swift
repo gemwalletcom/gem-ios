@@ -107,6 +107,7 @@ public enum Images {
         public static let networks = Image(.settingsNetworks)
         public static let walletConnect = Image(.settingsWalletConnect)
         public static let notifications = Image(.settingsNotifications)
+        public static let contacts = Image(.settingsContacts)
     }
 
     public enum Social {
@@ -236,7 +237,8 @@ public enum Images {
             (Images.Settings.wallets, "Wallets"),
             (Images.Settings.networks, "Networks"),
             (Images.Settings.walletConnect, "WalletConnect"),
-            (Images.Settings.notifications, "Notifications")
+            (Images.Settings.notifications, "Notifications"),
+            (Images.Settings.contacts, "Contacts")
         ]),
         ("Social", [
             (Images.Social.github, "GitHub"),

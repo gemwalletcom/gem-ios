@@ -24,6 +24,7 @@ import NFTService
 import WalletsService
 import ManageWalletService
 import AvatarService
+import ContactService
 
 struct ServicesFactory {
     @MainActor
@@ -135,6 +136,8 @@ struct ServicesFactory {
             bannerSetupService: bannerSetupService
         )
 
+        let contactService = Self.makeContactService(contactStore: storeManager.contactStore)
+        
         return AppResolver.Services(
             assetsService: assetsService,
             balanceService: balanceService,
@@ -154,7 +157,8 @@ struct ServicesFactory {
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
             onstartService: onstartService,
-            walletConnectorManager: walletConnectorManager
+            walletConnectorManager: walletConnectorManager,
+            contactService: contactService
         )
     }
 }
@@ -355,5 +359,9 @@ extension ServicesFactory {
             apiService: apiService,
             nftStore: nftStore
         )
+    }
+    
+    private static func makeContactService(contactStore: ContactStore) -> ContactService {
+        ContactService(contactStore: contactStore)
     }
 }
