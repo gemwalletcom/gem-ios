@@ -7,7 +7,7 @@ import GRDB
 
 public struct AssetBalanceNewRecord: Codable, PersistableRecord  {
     
-    public static let databaseTableName: String = AssetBalanceRecord.databaseTableName
+    public static let databaseTableName: String = BalanceRecord.databaseTableName
     
     public var assetId: String
     public var walletId: String

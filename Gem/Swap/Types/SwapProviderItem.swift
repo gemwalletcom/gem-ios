@@ -6,15 +6,46 @@ import Gemstone
 import Components
 import BigInt
 import SwiftUI
+import PrimitivesComponents
+import Style
 
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
-    public let formatter = ValueFormatter(style: .short)
+    public let selectedProvider: SwapProvider?
+    public let priceViewModel: PriceViewModel
+    public let valueFormatter: ValueFormatter
+    
+    init(
+        asset: Asset,
+        swapQuote: SwapQuote,
+        selectedProvider: SwapProvider?,
+        priceViewModel: PriceViewModel,
+        valueFormatter: ValueFormatter
+    ) {
+        self.asset = asset
+        self.swapQuote = swapQuote
+        self.selectedProvider = selectedProvider
+        self.priceViewModel = priceViewModel
+        self.valueFormatter = valueFormatter
+    }
     
     private var amount: String {
-        let value = (try? BigInt.from(string: swapQuote.toValue)) ?? .zero
-        return formatter.string(value, decimals: asset.decimals.asInt)
+        valueFormatter.string(swapQuote.toValueBigInt, decimals: asset.decimals.asInt)
+    }
+    
+    private var isSelected: Bool {
+        selectedProvider == swapQuote.data.provider.id
+    }
+
+    private func fiatBalance() -> String {
+        guard let value = try? valueFormatter.inputNumber(from: amount, decimals: asset.decimals.asInt),
+              let amount = try? valueFormatter.double(from: value, decimals: asset.decimals.asInt),
+              let price = priceViewModel.price
+        else {
+            return .empty
+        }
+        return priceViewModel.fiatAmountText(amount: price.price * amount)
     }
 }
 
@@ -25,12 +56,31 @@ extension SwapProviderItem: SimpleListItemViewable {
         swapQuote.data.provider.protocol
     }
     
+    public var titleStyle: TextStyle {
+        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
+    }
+    
     public var subtitle: String? {
         [amount, asset.symbol].joined(separator: " ")
     }
     
-    public var image: Image {
-        swapQuote.data.provider.image
+    public var assetImage: AssetImage {
+        AssetImage(
+            placeholder: swapQuote.data.provider.image,
+            chainPlaceholder: isSelected ? Images.Wallets.selected : nil
+        )
+    }
+    
+    public var subtitleExtra: String? {
+        fiatBalance()
+    }
+
+    public var subtitleStyle: TextStyle {
+        TextStyle(font: .callout, color: Colors.black, fontWeight: .semibold)
+    }
+    
+    public var subtitleStyleExtra: TextStyle {
+        TextStyle(font: .footnote, color: Colors.gray)
     }
 }
 

@@ -74,10 +74,6 @@ public struct Scenes {
         public init() {}
     }
 
-    public struct FiatProviders: Hashable {
-        public init() {}
-    }
-
     public struct Stake: Hashable {
         public let chain: Chain
         public let wallet: Wallet
@@ -167,14 +163,6 @@ public struct Scenes {
         
         public init(assetData: NFTAssetData) {
             self.assetData = assetData
-        }
-    }
-    
-    public struct SwapProviders: Hashable {
-        public let asset: Primitives.Asset
-
-        public init(asset: Primitives.Asset) {
-            self.asset = asset
         }
     }
 }

@@ -199,7 +199,7 @@ extension ConfirmTransferScene {
         Task {
             await model.process(input: input, amount: amount)
             await MainActor.run {
-                if case .loaded(_) = model.confirmingState {
+                if case .data(_) = model.confirmingState {
                     model.onCompleteAction()
                 }
             }

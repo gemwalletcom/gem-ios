@@ -17,9 +17,7 @@ import Gemstone
 
 struct SwapScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.presentationMode) var presentationMode
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.assetsService) private var assetsService
     @Environment(\.walletsService) private var walletsService
 
     enum Field: Int, Hashable {
@@ -37,6 +35,7 @@ struct SwapScene: View {
     
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @Binding private var isPresentingAssetSwapType: SelectAssetSwapType?
+    @Binding private var isPresentingSwapProviderSelect: AssetData?
     private let onTransferAction: TransferDataAction
 
     // Update quote every 30 seconds, needed if you come back from the background.
@@ -45,34 +44,24 @@ struct SwapScene: View {
     init(
         model: SwapViewModel,
         isPresentingAssetSwapType: Binding<SelectAssetSwapType?>,
+        isPresentingSwapProviderSelect: Binding<AssetData?>,
         onTransferAction: TransferDataAction
     ) {
         _model = State(initialValue: model)
         _fromAsset = Query(model.fromAssetRequest)
         _toAsset = Query(model.toAssetRequest)
         _isPresentingAssetSwapType = isPresentingAssetSwapType
+        _isPresentingSwapProviderSelect = isPresentingSwapProviderSelect
         self.onTransferAction = onTransferAction
     }
 
     var body: some View {
-        VStack {
+        ZStack(alignment: .bottom) {
             swapList
-            Spacer()
-            VStack {
-                if let fromAsset {
-                    StateButton(
-                        text: model.actionButtonTitle(fromAsset: fromAsset.asset),
-                        viewState: model.actionButtonState,
-                        disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset),
-                        action: onSelectActionButton
-                    )
-                }
-            }
-            .padding(.bottom, .scene.bottom)
-            .frame(maxWidth: .scene.button.maxWidth)
+                .padding(.bottom, .scene.button.height)
+            bottomActionView
         }
         .navigationTitle(model.title)
-        .background(Colors.grayBackground)
         .debounce(
             value: model.swapState.fetch,
             interval: model.swapState.fetch.delay,
@@ -102,6 +91,9 @@ struct SwapScene: View {
                 focusedField = .from
             }
         }
+        .sheet(item: $isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
     }
 }
 
@@ -110,92 +102,139 @@ struct SwapScene: View {
 extension SwapScene {
     private var swapList: some View {
         List {
-            Section {
-                if let fromAsset {
-                    SwapTokenView(
-                        model: model.swapTokenModel(from: fromAsset, type: .pay),
-                        text: $model.fromValue,
-                        onBalanceAction: onSelectFromBalance,
-                        onSelectAssetAction: onSelectAssetPayAction
-                    )
-                    .buttonStyle(.borderless)
-                    .focused($focusedField, equals: .from)
-                } else {
-                    SwapTokenEmptyView(
-                        onSelectAssetAction: onSelectAssetPayAction
-                    )
-                }
-                
-            } header: {
-                Text(model.swapFromTitle)
-            } footer: {
-                SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
-                    .offset(y: .small + .tiny)
-                    .frame(maxWidth: .infinity)
-                    .disabled(model.isSwitchAssetButtonDisabled)
-                    .textCase(nil)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(.zero)
-            }
-
-            Section(model.swapToTitle) {
-                if let toAsset {
-                    SwapTokenView(
-                        model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
-                        text: $model.toValue,
-                        showLoading: model.showToValueLoading(),
-                        disabledTextField: true,
-                        onBalanceAction: {},
-                        onSelectAssetAction: onSelectAssetReceiveAction
-                    )
-                    .buttonStyle(.borderless)
-                    .focused($focusedField, equals: .to)
-                } else {
-                    SwapTokenEmptyView(
-                        onSelectAssetAction: onSelectAssetReceiveAction
-                    )
-                }
-            }
-            
-            Section {
-                if let provider = model.providerText {
-                    let view = ListItemImageView(
-                        title: model.providerField,
-                        subtitle: provider,
-                        assetImage: model.providerImage
-                    )
-                    if model.allowSelectProvider, let toAsset {
-                        NavigationLink(value: Scenes.SwapProviders(asset: toAsset.asset)) {
-                            view
-                        }
-                    } else  {
-                        view
-                    }
-                }
-
-                if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
-                    PriceImpactView(model: viewModel) {
-                        isPresentingInfoSheet = .priceImpact
-                    }
-                }
-            }
+            swapFromSectionView
+            swapToSectionView
+            additionalInfoSectionView
 
             if case let .error(error) = model.swapState.availability {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
         }
-        .sheet(item: $isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+    }
+    
+    private var swapFromSectionView: some View {
+        Section {
+            if let fromAsset {
+                SwapTokenView(
+                    model: model.swapTokenModel(from: fromAsset, type: .pay),
+                    text: $model.fromValue,
+                    onBalanceAction: onSelectFromMaxBalance,
+                    onSelectAssetAction: onSelectAssetPayAction
+                )
+                .buttonStyle(.borderless)
+                .focused($focusedField, equals: .from)
+            } else {
+                SwapTokenEmptyView(
+                    onSelectAssetAction: onSelectAssetPayAction
+                )
+            }
+            
+        } header: {
+            Text(model.swapFromTitle)
+        } footer: {
+            SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
+                .offset(y: Spacing.small + Spacing.tiny)
+                .frame(maxWidth: .infinity)
+                .disabled(model.isSwitchAssetButtonDisabled)
+                .textCase(nil)
+                .listRowSeparator(.hidden)
+                .listRowInsets(.zero)
         }
+    }
+    
+    private var swapToSectionView: some View {
+        Section(model.swapToTitle) {
+            if let toAsset {
+                SwapTokenView(
+                    model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
+                    text: $model.toValue,
+                    showLoading: model.showToValueLoading(),
+                    disabledTextField: true,
+                    onBalanceAction: {},
+                    onSelectAssetAction: onSelectAssetReceiveAction
+                )
+                .buttonStyle(.borderless)
+                .focused($focusedField, equals: .to)
+            } else {
+                SwapTokenEmptyView(
+                    onSelectAssetAction: onSelectAssetReceiveAction
+                )
+            }
+        }
+    }
+    
+    private var additionalInfoSectionView: some View {
+        Section {
+            if let provider = model.providerText {
+                let view = ListItemImageView(
+                    title: model.providerField,
+                    subtitle: provider,
+                    assetImage: model.providerImage
+                )
+                if model.allowSelectProvider, let toAsset {
+                    NavigationCustomLink(with: view) {
+                        isPresentingSwapProviderSelect = toAsset
+                    }
+                } else {
+                    view
+                }
+            }
+
+            if let viewModel = model.priceImpactViewModel(fromAsset, toAsset) {
+                PriceImpactView(model: viewModel) {
+                    isPresentingInfoSheet = .priceImpact
+                }
+            }
+        }
+    }
+    
+    private var buttonView: some View {
+        VStack {
+            if let fromAsset {
+                StateButton(
+                    text: model.actionButtonTitle(),
+                    viewState: model.actionButtonState,
+                    disabledRule: model.shouldDisableActionButton(fromAsset: fromAsset.asset),
+                    action: onSelectActionButton
+                )
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var bottomActionView: some View {
+        VStack(spacing: 0) {
+            Divider()
+                .frame(height: 1 / UIScreen.main.scale)
+                .background(Colors.grayVeryLight)
+                .isVisible(focusedField == .from)
+
+            Group {
+                if model.isVisibleActionButton {
+                    buttonView
+                        .frame(height: focusedField == .from ? Spacing.scene.button.accessoryHeight : Spacing.scene.button.height)
+                } else if focusedField == .from {
+                    PercentageAccessoryView(
+                        onSelectPercent: onSelectPercent,
+                        onDone: { focusedField = nil }
+                    )
+                }
+            }
+            .padding(.small)
+        }
+        .background(Colors.grayBackground)
     }
 }
 
 // MARK: - Actions
 
 extension SwapScene {
-    private func onSelectFromBalance() {
-        guard let fromAsset, let _ = toAsset else { return }
-        model.setMaxFromValue(asset: fromAsset.asset, value: fromAsset.balance.available)
+    private func onSelectFromMaxBalance() {
+        onSelectPercent(100)
+    }
+    
+    private func onSelectPercent(_ percent: Int) {
+        model.setFromValue(asset: fromAsset, percent: percent)
         focusedField = .none
     }
 

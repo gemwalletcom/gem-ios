@@ -26,18 +26,18 @@ import struct Gemstone.Permit2Data
 import func Gemstone.permit2DataToEip712Json
 import struct Gemstone.Permit2Detail
 import struct Gemstone.PermitSingle
-import struct Gemstone.SwapProvider
+import struct Gemstone.SwapProviderType
 import struct Gemstone.SwapQuote
 import struct Gemstone.SwapQuoteData
 import struct Gemstone.SwapQuoteRequest
 import struct Swap.ErrorWrapper
-import struct Swap.SwapAvailabilityResult
 import class Swap.SwapPairSelectorViewModel
 
 typealias SelectAssetSwapTypeAction = ((SelectAssetSwapType) -> Void)?
 
+@MainActor
 @Observable
-class SwapViewModel {
+public final class SwapViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
     let wallet: Wallet
@@ -96,11 +96,18 @@ class SwapViewModel {
         return SwapProviderViewModel(provider: selectedSwapQuote.data.provider).providerImage
     }
 
-    var actionButtonState: StateViewType<SwapAvailabilityResult> {
+    var actionButtonState: StateViewType<[SwapQuote]> {
         switch swapState.getQuoteData {
         case .loading: .loading
         case .error(let error): .error(error)
-        case .noData, .loaded: swapState.availability
+        case .noData, .data: swapState.availability
+        }
+    }
+    
+    var isVisibleActionButton: Bool {
+        switch swapState.availability {
+        case .noData: false
+        case .data, .error, .loading: true
         }
     }
 
@@ -108,29 +115,20 @@ class SwapViewModel {
         swapState.availability.isLoading || swapState.getQuoteData.isLoading
     }
     
-    var swapQuotes: [SwapQuote] {
-        if case .loaded(let result) = swapState.availability {
-            return result.quotes
-        }
-        return []
-    }
-    
     var allowSelectProvider: Bool {
-        swapQuotes.count > 1
+        swapState.availability.value.or([]).count > 1
     }
 
     func showToValueLoading() -> Bool {
         swapState.availability.isLoading
     }
 
-    func actionButtonTitle(fromAsset: Asset) -> String {
+    func actionButtonTitle() -> String {
         switch swapState.availability {
-        case .noData, .loading:
-            return Localized.Wallet.swap
-        case .loaded:
-            return Localized.Wallet.swap
+        case .noData, .loading, .data:
+            Localized.Wallet.swap
         case .error:
-            return Localized.Common.tryAgain
+            Localized.Common.tryAgain
         }
     }
 
@@ -165,8 +163,8 @@ class SwapViewModel {
         )
     }
 
-    func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
-        SwapProvidersViewModel(items: swapQuotes.map { SwapProviderItem(asset: asset, swapQuote: $0) })
+    func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
+        SwapProvidersViewModel(state: swapProvidersViewModelState(for: asset))
     }
 }
 
@@ -182,8 +180,12 @@ extension SwapViewModel {
         toValue = ""
     }
 
-    func setMaxFromValue(asset: Asset, value: BigInt) {
-        fromValue = formatter.string(value, decimals: asset.decimals.asInt)
+    func setFromValue(asset: AssetData?, percent: Int) {
+        guard let asset else { return }
+        fromValue = formatter.string(
+            asset.balance.available.multiply(byPercent: percent),
+            decimals: asset.asset.decimals.asInt
+        )
     }
 
     func onFetchStateChange(state: SwapFetchState) async {
@@ -195,7 +197,7 @@ extension SwapViewModel {
                 toAsset: toAsset.asset,
                 amount: input.amount
             )
-        case .idle: break
+        case .idle, .data: break
         }
     }
 
@@ -253,37 +255,34 @@ extension SwapViewModel {
         toAsset: Asset,
         amount: String
     ) async {
-        let shouldFetch: Bool = await MainActor.run { [self] in
-            resetToValue()
-            if !self.isValidValue(fromAsset: fromAsset) {
-                self.swapState.availability = .noData
-                return false
-            }
-            self.swapState.availability = .loading
-            return true
+        resetToValue()
+        guard isValidValue(fromAsset: fromAsset) else {
+            swapState.availability = .noData
+            swapState.fetch = .idle
+            selectedSwapQuote = nil
+            return
         }
-
-        guard shouldFetch else { return }
+        swapState.availability = .loading
 
         do {
-            let swapQuotes = try await getQuotes(fromAsset: fromAsset, toAsset: toAsset, amount: amount)
+            let swapQuotes = try await getQuotes(
+                fromAsset: fromAsset,
+                toAsset: toAsset,
+                amount: amount
+            )
 
-            await MainActor.run {
-                swapState.availability = .loaded(SwapAvailabilityResult(quotes: swapQuotes))
-                if let selectedSwapQuote {
-                    onSelectQuote(selectedSwapQuote, asset: toAsset)
-                } else if let bestQuote = swapQuotes.first {
-                    onSelectQuote(bestQuote, asset: toAsset)
-                    selectedSwapQuote = bestQuote
-                }
+            swapState.fetch = .data(quotes: swapQuotes)
+            swapState.availability = .data(swapQuotes)
+            selectedSwapQuote = swapQuotes.first(where: { $0 == selectedSwapQuote }) ?? swapQuotes.first
+            if let quote = selectedSwapQuote {
+                onSelectQuote(quote, asset: toAsset)
             }
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.swapState.availability = .error(ErrorWrapper(error))
-                    NSLog("fetch asset data error: \(error)")
-                }
+            if !error.isCancelled {
+                swapState.availability = .error(ErrorWrapper(error))
+                NSLog("fetch asset data error: \(error)")
             }
+            swapState.fetch = .data(quotes: [])
         }
     }
 
@@ -334,6 +333,27 @@ extension SwapViewModel {
         }
     }
 
+    private func swapProvidersViewModelState(for asset: AssetData) -> StateViewType<[SwapProvidersViewModel.Item]> {
+        switch swapState.availability {
+        case .error(let error): return .error(error)
+        case .noData: return .noData
+        case .data(let items):
+            let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
+            let valueFormatter = ValueFormatter(style: .short)
+            return .data(
+                items.map {
+                    SwapProviderItem(
+                        asset: asset.asset,
+                        swapQuote: $0,
+                        selectedProvider: selectedSwapQuote?.data.provider.id,
+                        priceViewModel: priceViewModel,
+                        valueFormatter: valueFormatter
+                    )
+            })
+        case .loading: return .loading
+        }
+    }
+
     public func permitData(chain: Chain, data: Permit2ApprovalData) throws -> Permit2Data {
         let permit2Single = permit2Single(
             token: data.token,
@@ -377,7 +397,7 @@ extension SwapViewModel {
     }
 }
 
-extension Gemstone.SwapProvider {
+extension Gemstone.SwapProviderType {
     var image: Image {
         switch self.id {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap

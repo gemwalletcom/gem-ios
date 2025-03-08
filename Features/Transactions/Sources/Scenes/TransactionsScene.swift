@@ -35,7 +35,6 @@ public struct TransactionsScene: View {
         .onChange(of: model.filterModel, model.onChangeFilter)
         .listSectionSpacing(.compact)
         .refreshable(action: model.fetch)
-        .background(Colors.grayBackground)
         .overlay {
             // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if transactions.isEmpty {

@@ -314,7 +314,7 @@ extension ConfirmTransferViewModel {
                 value: transactionInputModel.networkFeeText,
                 fiatValue: transactionInputModel.networkFeeFiatText
             )
-            state = .loaded(transactionInputModel)
+            state = .data(transactionInputModel)
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -342,7 +342,9 @@ extension ConfirmTransferViewModel {
                     )
                     try addTransactions(transactions: [transaction])
                     
-                    await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    Task {
+                        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
+                    }
                     
                     // delay if multiple transaction should be exectured
                     if signedData.count > 1 && transactionData != signedData.last {
@@ -352,7 +354,7 @@ extension ConfirmTransferViewModel {
                     confirmTransferDelegate?(.success(transactionData))
                 }
             }
-            confirmingState = .loaded(true)
+            confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)
             NSLog("confirm transaction error: \(error)")

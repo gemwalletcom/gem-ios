@@ -69,58 +69,11 @@ public struct ValueFormatter: Sendable {
     }
     
     public func inputNumber(from string: String, decimals: Int) throws -> BigInt {
-        var string = string
-            .replacingOccurrences(of: " ", with: "")
-            .replacingOccurrences(of: "'", with: "")
-            .replacingOccurrences(of: "’", with: "")
-        
-        if let groupingSeparator = locale.groupingSeparator, groupingSeparator == "’" {
-            string = string.replacingOccurrences(of: groupingSeparator, with: "")
-        }
-        
-        if let groupingSeparator = locale.groupingSeparator, let decimalSeparator = locale.decimalSeparator, decimalSeparator == "." {
-            string = string.replacingOccurrences(of: groupingSeparator, with: "")
-        }
-        
-        if let groupingSeparator = locale.groupingSeparator, (groupingSeparator != "," && groupingSeparator != ".") {
-            string = string.replacingOccurrences(of: groupingSeparator, with: "")
-        }
-        
-        if let groupingSeparator = locale.groupingSeparator, groupingSeparator == "," && string.contains(".")  {
-            string = string.replacingOccurrences(of: groupingSeparator, with: "")
-        }
-        
-        if let groupingSeparator = locale.groupingSeparator, (groupingSeparator == ",") && !string.contains(".") {
-            let newString = string.replacingOccurrences(of: ",", with: ".")
-            if try number(amount: newString).doubleValue <= 1 {
-                string = newString
-            }
-        }
-        
-        if let groupingSeparator = locale.groupingSeparator, (groupingSeparator != "," && !groupingSeparator.contains("'") && !groupingSeparator.contains("’"))  && !string.contains(",") {
-            let newString = string.replacingOccurrences(of: ".", with: ",")
-            if try number(amount: newString).doubleValue <= 1 {
-                string = newString
-            }
-        }
-
-        let value = try number(amount: string, locale: locale)
-        
-//        if let groupingSeparator = locale.groupingSeparator, groupingSeparator == "," && !string.contains(".") {
-//            let newString = string.replacingOccurrences(of: ",", with: ".")
-//            if try number(amount: newString).doubleValue <= 1 {
-//                return try BigNumberFormatter.standard.number(from: newString, decimals: decimals)
-//            }
-//        }
-//        if let groupingSeparator = locale.groupingSeparator, groupingSeparator != "," && !string.contains(",") {
-//            let newString = string.replacingOccurrences(of: ".", with: ",")
-//            if try number(amount: newString).doubleValue <= 1 {
-//                return try BigNumberFormatter().number(from: newString, decimals: decimals)
-//            } else {
-//                return try BigNumberFormatter().number(from: string, decimals: decimals)
-//            }
-//        }
-        return try BigNumberFormatter.standard.number(from: value.description, decimals: decimals)
+        // use standart formatter, which are en_US for getting correct BigInt value
+        try BigNumberFormatter.standard.number(
+            from: NumberInputNormalizer.normalize(string, locale: locale),
+            decimals: decimals
+        )
     }
     
     public func string(_ value: BigInt, decimals: Int, currency: String = "") -> String {

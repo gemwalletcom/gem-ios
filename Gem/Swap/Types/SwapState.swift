@@ -2,16 +2,16 @@
 
 import Foundation
 import Components
-import Swap
+import Gemstone
 
 struct SwapState {
     var fetch: SwapFetchState
-    var availability: StateViewType<SwapAvailabilityResult>
+    var availability: StateViewType<[SwapQuote]>
     var getQuoteData: StateViewType<Bool>
 
     init(
         fetch: SwapFetchState = .idle,
-        availability: StateViewType<SwapAvailabilityResult> = .noData,
+        availability: StateViewType<[SwapQuote]> = .noData,
         getQuoteData: StateViewType<Bool> = .noData
     ) {
         self.fetch = fetch

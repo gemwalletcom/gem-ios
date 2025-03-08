@@ -66,7 +66,7 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
             .syncing,
             .latestBlock:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [] as [String])
             )
         case .estimateGasLimit(let from, let to, let value, let data):
             let params = [
@@ -77,27 +77,26 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
             ].compactMapValues { $0 }
             
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [params], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [params])
             )
         case .transactionsCount(let address):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address, "latest"], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [address, "latest"])
             )
         case .balance(let address):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address, "latest"], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [address, "latest"])
             )
         case .broadcast(let data):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [data.append0x], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [data.append0x])
             )
         case .call(let params):
             let json: [JSON] = [.dictionary(params.mapValues { .value($0) }), .value("latest")]
             return .encodable(
                 JSONRPCRequest(
                     method: rpc_method,
-                    params: json,
-                    id: 1
+                    params: json
                 )
             )
         case .feeHistory(let blocks, let rewardPercentiles):
@@ -109,13 +108,12 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
             return .encodable(
                 JSONRPCRequest(
                     method: rpc_method,
-                    params: params,
-                    id: 1
+                    params: params
                 )
             )
         case .transactionReceipt(let id):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [id] as [String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [id] as [String])
             )
         }
     }

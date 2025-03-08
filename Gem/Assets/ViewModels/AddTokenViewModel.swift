@@ -65,7 +65,7 @@ extension AddTokenViewModel {
         do {
             let asset = try await service.getTokenData(chain: chain, tokenId: address)
             await MainActor.run { [self] in
-                self.state = .loaded(AddAssetViewModel(asset: asset))
+                self.state = .data(AddAssetViewModel(asset: asset))
             }
         } catch {
             await MainActor.run { [self] in

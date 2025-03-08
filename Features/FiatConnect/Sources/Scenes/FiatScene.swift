@@ -16,9 +16,14 @@ public struct FiatScene: View {
     private var assetData: AssetData
 
     @State private var model: FiatSceneViewModel
+    @Binding private var isPresentingFiatProvider: Bool
 
-    public init(model: FiatSceneViewModel) {
+    public init(
+        model: FiatSceneViewModel,
+        isPresentingFiatProvider: Binding<Bool>
+    ) {
         _model = State(initialValue: model)
+        _isPresentingFiatProvider = isPresentingFiatProvider
         _assetData = Query(constant: model.assetRequest)
     }
 
@@ -128,22 +133,19 @@ extension FiatScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded(let quotes):
+            case .data:
                 if let quote = model.input.quote {
-                    if quotes.count > 1 {
-                        NavigationLink(value: Scenes.FiatProviders()) {
-                            ListItemImageView(
-                                title: model.providerTitle,
-                                subtitle: quote.provider.name,
-                                assetImage: model.providerAssetImage(quote.provider)
-                            )
+                    let view = ListItemImageView(
+                        title: model.providerTitle,
+                        subtitle: quote.provider.name,
+                        assetImage: model.providerAssetImage(quote.provider)
+                    )
+                    if model.allowSelectProvider {
+                        NavigationCustomLink(with: view) {
+                            isPresentingFiatProvider = true
                         }
                     } else {
-                        ListItemImageView(
-                            title: model.providerTitle,
-                            subtitle: quote.provider.name,
-                            assetImage: model.providerAssetImage(quote.provider)
-                        )
+                        view
                     }
                     ListItemView(title: model.rateTitle, subtitle: model.rateValue(for: quote))
                 } else {

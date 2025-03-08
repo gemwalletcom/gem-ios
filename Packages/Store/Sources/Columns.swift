@@ -49,6 +49,12 @@ struct Columns {
         static let stakingApr = Column("stakingApr")
     }
     
+    struct AssetSearch {
+        static let query = Column("query")
+        static let assetId = Column("assetId")
+        static let priority = Column("priority")
+    }
+    
     struct AssetLink {
         static let assetId = Column("assetId")
         static let name = Column("name")

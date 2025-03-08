@@ -99,7 +99,7 @@ extension AddNodeScene {
         switch model.state {
         case .noData, .loading, .error:
             EmptyView()
-        case let .loaded(result):
+        case let .data(result):
             Section {
                 ListItemView(title: result.chainIdTitle, subtitle: result.chainIdValue)
                 ListItemView(title: result.inSyncTitle, subtitle: result.inSyncValue)
