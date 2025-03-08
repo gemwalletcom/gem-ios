@@ -4,7 +4,6 @@ import Foundation
 import GemAPI
 import Primitives
 import Store
-@preconcurrency import Keystore
 import Combine
 import Preferences
 import AssetsService
@@ -13,22 +12,24 @@ public final class TransactionsService: Sendable {
     let provider: any GemAPITransactionService
     public let transactionStore: TransactionStore
     let assetsService: AssetsService
-    let keystore: any Keystore
+    let walletStore: WalletStore
 
     public init(
         provider: any GemAPITransactionService = GemAPIService(),
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        keystore: any Keystore
+        walletStore: WalletStore
     ) {
         self.provider = provider
         self.transactionStore = transactionStore
         self.assetsService = assetsService
-        self.keystore = keystore
+        self.walletStore = walletStore
     }
 
     public func updateAll(deviceId: String, walletId: WalletId) async throws {
-        let wallet = try keystore.getWallet(walletId)
+        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
+            throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
+        }
         let store = WalletPreferences(walletId: wallet.id)
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         

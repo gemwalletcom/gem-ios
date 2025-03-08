@@ -2,25 +2,28 @@
 
 import Foundation
 import WalletConnectorService
-@preconcurrency import Keystore
-import Store
 import Primitives
+import Store
+import Preferences
 import BigInt
 import class Gemstone.Config
 import WalletConnectSign
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
-    private let store: ConnectionsStore
-    private let keystore: any Keystore
+    private let connectionsStore: ConnectionsStore
+    private let walletStore: WalletStore
+    private let preferences: Preferences
     private let walletConnectorInteractor: any WalletConnectorInteractable
 
     public init(
-        store: ConnectionsStore,
-        keystore: any Keystore,
+        connectionsStore: ConnectionsStore,
+        walletStore: WalletStore,
+        preferences: Preferences,
         walletConnectorInteractor: any WalletConnectorInteractable
     ) {
-        self.store = store
-        self.keystore = keystore
+        self.preferences = preferences
+        self.connectionsStore = connectionsStore
+        self.walletStore = walletStore
         self.walletConnectorInteractor = walletConnectorInteractor
     }
 
@@ -29,11 +32,17 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     public func getCurrentWallet() throws -> Wallet {
-        try keystore.getCurrentWallet()
+        guard let id = preferences.currentWalletId else {
+            throw AnyError("Can't get a wallet, walletId: \(preferences.currentWalletId ?? "nil")")
+        }
+        return try getWallet(id: WalletId(id: id))
     }
 
     public func getWallet(id: WalletId) throws -> Wallet {
-        try keystore.getWallet(id)
+        guard let wallet = try walletStore.getWallet(id: id.id) else {
+            throw AnyError("Can't get a wallet, walletId: \(id.id)")
+        }
+        return wallet
     }
 
     public func getChains(wallet: Wallet) -> [Primitives.Chain] {
@@ -45,8 +54,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
-        let wallets = keystore.wallets
-            .filter { !$0.isViewOnly }
+        let wallets = try walletStore.getWallets().filter { !$0.isViewOnly }
         let blockchains = (proposal.requiredBlockchains + proposal.optionalBlockchains).asSet()
         
         return wallets.filter {
@@ -69,35 +77,37 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func signMessage(sessionId: String, chain: Chain, message: SignMessage) async throws -> String {
-        let session = try store.getConnection(id: sessionId)
+        let session = try connectionsStore.getConnection(id: sessionId)
         let payload = SignMessagePayload(chain: chain, session: session.session, wallet: session.wallet, message: message)
         return try await walletConnectorInteractor.signMessage(payload: payload)
     }
     
     public func updateSessions(sessions: [WalletConnectionSession]) throws {
         if sessions.isEmpty {
-            try? self.store.deleteAll()
+            try? connectionsStore.deleteAll()
         } else {
             let newSessionIds = sessions.map { $0.id }.asSet()
-            let sessionIds = try self.store.getSessions().filter { $0.state == .active }.map { $0.id }.asSet()
+            let sessionIds = try connectionsStore.getSessions().filter { $0.state == .active }.map { $0.id }.asSet()
             let deleteIds = sessionIds.subtracting(newSessionIds).asArray()
 
-            try? self.store.delete(ids: deleteIds)
+            try? connectionsStore.delete(ids: deleteIds)
 
             for session in sessions {
-                try? self.store.updateConnectionSession(session)
+                try? connectionsStore.updateConnectionSession(session)
             }
         }
     }
     
     public func sessionReject(id: String, error: any Error) async throws {
-        try self.store.delete(ids: [id])
+        try connectionsStore.delete(ids: [id])
         await walletConnectorInteractor.sessionReject(error: error)
     }
     
     public func signTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
-        let session = try store.getConnection(id: sessionId)
-        let wallet = try keystore.getWallet(session.wallet.walletId)
+        let session = try connectionsStore.getConnection(id: sessionId)
+
+        // TODO: - review why not get wallet from session (session.wallet)
+        let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
         case .ethereum: throw AnyError("Not supported yet")
@@ -116,8 +126,9 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func sendTransaction(sessionId: String, chain: Chain, transaction: WalletConnectorTransaction) async throws -> String {
-        let session = try store.getConnection(id: sessionId)
-        let wallet = try keystore.getWallet(session.wallet.walletId)
+        let session = try connectionsStore.getConnection(id: sessionId)
+        // TODO: - review why not get wallet from session (session.wallet)
+        let wallet = try getWallet(id: session.wallet.walletId)
 
         switch transaction {
         case .ethereum(let transaction):
@@ -183,7 +194,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func addConnection(connection: WalletConnection) throws {
-        try store.addConnection(connection)
+        try connectionsStore.addConnection(connection)
     }
 }
 

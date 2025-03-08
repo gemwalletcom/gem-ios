@@ -17,7 +17,6 @@ let package = Package(
         .package(name: "Store", path: "../Store"),
         .package(name: "GemAPI", path: "../GemAPI"),
         .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "Keystore", path: "../Keystore"),
         .package(name: "AssetsService", path: "../AssetsService"),
     ],
     targets: [
@@ -28,7 +27,6 @@ let package = Package(
                 "GemAPI",
                 "Store",
                 "Preferences",
-                "Keystore",
                 "AssetsService"
             ],
             path: "Sources"
