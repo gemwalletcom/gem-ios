@@ -16,13 +16,12 @@ public struct ContactAddressInfoListRequest: ValueObservationQueryable {
     
     public func fetch(_ db: Database) throws -> [ContactAddressInfo] {
         do {
-            let entities = try ContactAddressRecord
+            return try ContactAddressRecord
                 .filter(Columns.ContactAddress.chain == chain.rawValue)
                 .including(required: ContactAddressRecord.contact)
                 .asRequest(of: ContactAddressInfoRecord.self)
                 .fetchAll(db)
-            
-            return entities.map { $0.info }
+                .map { $0.mapToInfo() }
         } catch {
             throw error
         }

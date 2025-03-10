@@ -3,13 +3,13 @@
 import Foundation
 
 public enum ValidationError: Error {
-    case dataNotValid(description: String)
+    case invalid(description: String)
 }
 
 extension ValidationError: LocalizedError {
     public var errorDescription: String? {
         switch self {
-        case .dataNotValid(let description):
+        case .invalid(let description):
             return description
         }
     }

@@ -8,7 +8,7 @@ import DataValidation
 public struct AddContactAddressInput: Identifiable {
     public var id: String
     
-    var memo: ValidatedInput<String, ContactAddressMemoValidator>
+    var memo: ValidatedInput<String, StringLengthValidator>
     var address: ValidatedInput<String, BlockchainAddressValidator>
     private(set) var chain: ValidatedInput<Chain, ChainSelectionValidator>
     
@@ -22,37 +22,44 @@ public struct AddContactAddressInput: Identifiable {
     ) {
         self.id = id?.id ?? Self.createIdForNewEntity()
         self.chain = ValidatedInput(
-            validator: ChainSelectionValidator(),
+            validator: ChainSelectionValidator(errorMessage: "Please select a chain"),
             value: chain
         )
         self.address = ValidatedInput(
-            validator: BlockchainAddressValidator(chain: chain),
+            validator: BlockchainAddressValidator(
+                chain: chain,
+                errorMessage: "Address is invalid"
+            ),
             value: address
         )
         self.memo = ValidatedInput(
-            validator: ContactAddressMemoValidator(),
+            validator: StringLengthValidator(
+                max: 149,
+                errorMessage: "Please enter a correct memo (maximum 149 characters)"
+            ),
             value: memo
         )
     }
     
-    public func validate(shouldValidateAddress: Bool) throws -> Bool {
-        [
-            try chain.validate(),
-            shouldValidateAddress ? try address.validate() : nil,
-            try memo.validate()
-        ]
-            .compactMap { $0 }
-            .allSatisfy({$0})
+    public func validate(shouldValidateAddress: Bool) throws {
+        try chain.validate()
+        if shouldValidateAddress { try address.validate() }
+        try memo.validate()
     }
     
     public mutating func set(chain: Chain?) {
         self.chain.value = chain
         
         if let chain {
-            let validator = BlockchainAddressValidator(chain: chain)
-            let currentAddressIsValid = (try? validator.isValid(address.value)) == true
-            let addressValue = currentAddressIsValid ? address.value : ""
-            address = ValidatedInput(validator: validator, value: addressValue)
+            let validator = BlockchainAddressValidator(chain: chain, errorMessage: "Address is invalid")
+            
+            do {
+                try validator.validate(address.value)
+                address = ValidatedInput(validator: validator, value: address.value)
+            } catch {
+                address = ValidatedInput(validator: validator, value: "")
+
+            }
         }
     }
     

@@ -16,25 +16,20 @@ public class ContactAddressListViewModel: Sendable {
     let contactService: ContactService
     var addressListRequest: ContactAddressListRequest
     public let contact: Contact
-    public let chain: Chain?
-
-    var title: String { contact.name }
 
     public init(
-        chain: Chain?,
         contact: Contact,
         contactService: ContactService
     ) {
-        self.chain = chain
         self.contact = contact
         self.contactService = contactService
         
         self.addressListRequest = ContactAddressListRequest(
-            contactId: contact.id,
-            chain: chain,
-            searchQuery: nil
+            contactId: contact.id
         )
     }
+    
+    var title: String { contact.name }
     
     func input(from address: ContactAddress?) -> AddContactAddressInput {
         guard let address else {
@@ -43,7 +38,7 @@ public class ContactAddressListViewModel: Sendable {
         
         return AddContactAddressInput(
             id: address.id,
-            address: address.value,
+            address: address.address,
             chain: address.chain,
             memo: (address.memo).valueOrEmpty
         )
@@ -61,14 +56,14 @@ public class ContactAddressListViewModel: Sendable {
                         return nil
                     }
                     
-                    return .init(text: "Memo: \($0)", style: .bodySecondary)
+                    return TextValue(text: "Memo: \($0)", style: .bodySecondary)
                 }
                 
                 return ContactAddressListViewItem<ContactAddress>(
                     id: $0.id.id,
-                    address: .init(text: $0.value, style: .body),
+                    address: TextValue(text: $0.address, style: .body),
                     memo: memo,
-                    chain: .init(text: $0.chain.rawValue.capitalized, style: .caption),
+                    chain: TextValue(text: $0.chain.rawValue.capitalized, style: .caption),
                     image: ChainImage(chain: $0.chain),
                     object: $0
                 )

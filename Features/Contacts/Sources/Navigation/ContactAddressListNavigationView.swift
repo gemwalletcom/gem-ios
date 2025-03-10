@@ -19,10 +19,12 @@ public struct ContactAddressListNavigationView: View {
     }
     
     public var body: some View {
-        ContactAddressListScene(model: model, isPresentingContactAddressInput: $isPresentingContactAddressInput)
+        ContactAddressListScene(
+            model: model,
+            isPresentingContactAddressInput: $isPresentingContactAddressInput
+        )
             .navigationBarTitleDisplayMode(.inline)
-            .sheet(
-                item: $isPresentingContactAddressInput) {
+            .sheet(item: $isPresentingContactAddressInput) {
                     AddContactAddressNavigationView(
                         model: AddContactAddressViewModel(
                             input: $0,

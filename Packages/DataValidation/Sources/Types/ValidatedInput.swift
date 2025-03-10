@@ -12,7 +12,7 @@ public struct ValidatedInput<T,P: ValidatorConvertible> {
         self.value = value
     }
     
-    public func validate() throws -> Bool {
-        return try validator.isValid(value)
+    public func validate() throws {
+        try validator.validate(value)
     }
 }

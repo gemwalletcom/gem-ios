@@ -8,8 +8,8 @@ import DataValidation
 public struct AddContactInput: Identifiable {
     public var id: String
         
-    var name: ValidatedInput<String, ContactNameValidator>
-    var description: ValidatedInput<String, ContactDescriptionValidator>
+    var name: ValidatedInput<String, StringLengthValidator>
+    var description: ValidatedInput<String, StringLengthValidator>
     
     public var isEmpty: Bool { name.value.isEmpty && description.value.isEmpty }
     
@@ -20,21 +20,26 @@ public struct AddContactInput: Identifiable {
     ) {
         self.id = id?.id ?? Self.createIdForNewEntity()
         
-        self.name = .init(
-            validator: ContactNameValidator(),
+        self.name = ValidatedInput(
+            validator: StringLengthValidator(
+                min: 1,
+                max: 25,
+                errorMessage: "Please enter a valid name (minimum 1, maximum 25 characters)"
+            ),
             value: name
         )
-        self.description = .init(
-            validator: ContactDescriptionValidator(),
+        self.description = ValidatedInput(
+            validator: StringLengthValidator(
+                max: 50,
+                errorMessage: "Please enter a valid description (maximum 50 characters)"
+            ),
             value: description
         )
     }
     
-    public func validate() throws -> Bool {
-        [
-            try name.validate(),
-            try description.validate()
-        ].allSatisfy({$0})
+    public func validate() throws {
+        try name.validate()
+        try description.validate()
     }
     
     static private func createIdForNewEntity() -> String {

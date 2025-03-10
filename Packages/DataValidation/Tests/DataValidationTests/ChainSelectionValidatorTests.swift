@@ -5,30 +5,17 @@ import Primitives
 @testable import DataValidation
 
 struct ChainSelectionValidatorTests {
-    
     @Test
-    func testIsValidWithSelectedChain() {
-        let validator = ChainSelectionValidator()
-        let selectedChain: Chain? = .bitcoin
-        
-        do {
-            let isValid = try validator.isValid(selectedChain)
-            #expect(isValid)
-        } catch {
-            Issue.record("Validation failed for selected chain")
-        }
+    func testIsValidWithSelectedChain() throws {
+        let validator = ChainSelectionValidator(errorMessage: "")
+        try validator.validate(.bitcoin)
     }
     
     @Test
     func testIsValidWithNoSelectedChain() {
-        let validator = ChainSelectionValidator()
-        let selectedChain: Chain? = nil
-        
-        do {
-            let isValid = try validator.isValid(selectedChain)
-            #expect(!isValid)
-        } catch {
-            #expect(true)
-        }
+        let validator = ChainSelectionValidator(errorMessage: "")
+        #expect(throws: ValidationError.self, performing: {
+            try validator.validate(nil)
+        })
     }
 }

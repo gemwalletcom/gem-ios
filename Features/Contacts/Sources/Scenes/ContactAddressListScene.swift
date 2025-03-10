@@ -17,7 +17,7 @@ public struct ContactAddressListScene: View {
     private var addresses: [ContactAddress]
     
     @State var addressToDelete: ContactAddress? = .none
-    @State private var presentingErrorMessage: String?
+    @State private var isPresentingErrorMessage: String?
     @Binding var isPresentingContactAddressInput: AddContactAddressInput?
     
     public init(
@@ -37,49 +37,6 @@ public struct ContactAddressListScene: View {
     }
     
     public var body: some View {
-        VStack {
-            if addresses.isEmpty {
-                StateEmptyView(
-                    title: "Address list is empty",
-                    description: "Tap + to add the first one."
-                )
-            } else {
-                listView
-            }
-        }
-        .navigationTitle(model.title)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    isPresentingContactAddressInput = model.input(from: nil)
-                } label: {
-                    Images.System.plus
-                }
-            }
-        }
-        .alert(
-            "",
-            isPresented: $presentingErrorMessage.mappedToBool(),
-            actions: {},
-            message: {
-                Text(presentingErrorMessage ?? "")
-            }
-        )
-        .confirmationDialog(
-            Localized.Common.deleteConfirmation(addressToDelete?.value ?? ""),
-            presenting: $addressToDelete,
-            sensoryFeedback: .warning,
-            actions: { address in
-                Button(
-                    Localized.Common.delete,
-                    role: .destructive,
-                    action: { didTapConfirmDelete(address: address) }
-                )
-            }
-        )
-    }
-    
-    private var listView: some View {
         List {
             Section {
                 ForEach(model.buildListItemViews(addresses: addresses)) { item in
@@ -100,8 +57,43 @@ public struct ContactAddressListScene: View {
                 }
             }
         }
-        .background(Colors.grayBackground)
-        
+        .overlay {
+            if addresses.isEmpty {
+                Text("No addresses yet")
+                    .textStyle(.body)
+            }
+        }
+        .background(Colors.insetGroupedListStyle)
+        .navigationTitle(model.title)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button {
+                    isPresentingContactAddressInput = model.input(from: nil)
+                } label: {
+                    Images.System.plus
+                }
+            }
+        }
+        .alert(
+            "",
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(isPresentingErrorMessage ?? "")
+            }
+        )
+        .confirmationDialog(
+            Localized.Common.deleteConfirmation(addressToDelete?.address ?? ""),
+            presenting: $addressToDelete,
+            sensoryFeedback: .warning,
+            actions: { address in
+                Button(
+                    Localized.Common.delete,
+                    role: .destructive,
+                    action: { didTapConfirmDelete(address: address) }
+                )
+            }
+        )
     }
 }
 
@@ -112,7 +104,7 @@ extension ContactAddressListScene {
         do {
             try model.delete(address: address)
         } catch {
-            presentingErrorMessage = error.localizedDescription
+            isPresentingErrorMessage = error.localizedDescription
         }
     }
     

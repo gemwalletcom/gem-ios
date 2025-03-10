@@ -15,16 +15,9 @@ public class AddContactAddressViewModel: EntityEditorViewModel {
     let contact: Contact
     let onComplete: VoidAction
     var networksModel: NetworkSelectorViewModel
-    var input: AddContactAddressInput
-    var isPresentingScanner: Bool = false
     var nameResolveState: NameRecordState = .none
-    var state: StateViewType<Void> = .loaded(())
+    var input: AddContactAddressInput
 
-    var title: String { entityEditorViewType.title(objectName: "Address") }
-    var actionButtonTitle: String { "Save" }
-    var addressTextFieldTitle: String { "Address" }
-    var memoTextFieldTitle: String { "Memo" }
-    
     public init(
         input: AddContactAddressInput,
         contact: Contact,
@@ -37,22 +30,28 @@ public class AddContactAddressViewModel: EntityEditorViewModel {
         self.contact = contact
         self.onComplete = onComplete
         
-        networksModel = NetworkSelectorViewModel(items: AssetConfiguration.allChains.sortByRank())
+        networksModel = NetworkSelectorViewModel(state: .data(AssetConfiguration.allChains.sortByRank()))
         
         super.init(entityEditorViewType: entityEditorViewType)
     }
     
+    var title: String { entityEditorViewType.title(objectName: "Address") }
+    var actionButtonTitle: String { "Save" }
+    var addressTextFieldTitle: String { "Address" }
+    var memoTextFieldTitle: String { "Memo" }
+    var showMemo: Bool { input.chain.value?.isMemoSupported == true }
+    
     func confirmAddContact() throws {
-        _ = try input.validate(shouldValidateAddress: nameResolveState.result == nil)
+        try input.validate(shouldValidateAddress: nameResolveState.result == nil)
         
         guard let chain = input.chain.value else {
-            throw ValidationError.dataNotValid(description: "Please select a chain")
+            throw ValidationError.invalid(description: "Please select a chain")
         }
         
         let address = ContactAddress(
             id: ContactAddressId(id: input.id),
             contactId: contact.id,
-            value: input.address.value,
+            address: input.address.value,
             chain: chain,
             memo: input.memo.value
         )

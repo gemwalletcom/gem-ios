@@ -5,13 +5,18 @@ import Primitives
 public struct ContactAddressInfoRecord: FetchableRecord, Codable {
     let address: ContactAddressRecord
     let contact: ContactRecord
+    
+    public init(row: Row) throws {
+        address = try ContactAddressRecord(row: row)
+        contact = row["contact"]
+    }
 }
 
 public extension ContactAddressInfoRecord {
-    var info: ContactAddressInfo {
+    func mapToInfo() -> ContactAddressInfo {
         ContactAddressInfo(
-            address: address.address,
-            contact: contact .contact
+            address: address.mapToAddress(),
+            contact: contact.mapToContact()
         )
     }
 }

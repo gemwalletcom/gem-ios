@@ -23,15 +23,13 @@ public struct ContactListNavigationView: View {
             .navigationDestination(for: Scenes.ContactAddresses.self) {
                 ContactAddressListNavigationView(
                     model: ContactAddressListViewModel(
-                        chain: nil,
                         contact: $0.contact,
                         contactService: model.contactService
                     )
                 )
             }
             .sheet(
-                item: $isPresentingContactInput,
-                content: {
+                item: $isPresentingContactInput) {
                     AddContactNavigationView(
                         model: AddContactViewModel(
                             input: $0,
@@ -42,6 +40,6 @@ public struct ContactListNavigationView: View {
                             }
                         )
                     )
-                })
+                }
     }
 }

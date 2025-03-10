@@ -11,20 +11,20 @@ public struct ContactAddressId: Codable, Sendable, Hashable {
 public struct ContactAddress: Codable, Sendable, Hashable, Identifiable {
     public var id: ContactAddressId
     public let contactId: ContactId
-    public let value: String
+    public let address: String
     public let chain: Chain
     public let memo: String?
     
     public init(
         id: ContactAddressId,
         contactId: ContactId,
-        value: String,
+        address: String,
         chain: Chain,
         memo: String?
     ) {
         self.id = id
         self.contactId = contactId
-        self.value = value
+        self.address = address
         self.chain = chain
         self.memo = memo
     }

@@ -12,21 +12,17 @@ import PrimitivesComponents
 @Observable
 @MainActor
 public class ContactListViewModel: Sendable {
-        
     let contactService: ContactService
     var contactRequest: ContactListRequest
-
-    var title = "Contacts"
 
     public init(
         contactService: ContactService
     ) {
         self.contactService = contactService
-        
-        self.contactRequest = ContactListRequest(
-            searchQuery: nil
-        )
+        self.contactRequest = ContactListRequest()
     }
+    
+    var title = "Contacts"
     
     func input(from contact: Contact?) -> AddContactInput {
         guard let contact else {

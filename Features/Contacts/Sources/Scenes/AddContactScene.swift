@@ -45,7 +45,7 @@ public struct AddContactScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitlte,
-                viewState: model.state,
+                styleState: .normal,
                 action: onSelectConfirm
             )
             .frame(maxWidth: .scene.button.maxWidth)
@@ -81,7 +81,7 @@ public struct AddContactScene: View {
 extension AddContactScene {
     private func onSelectConfirm() {
         do {
-            try model.confirmAddContact()
+            try model.addContact()
         } catch {
             presentingErrorMessage = error.localizedDescription
         }

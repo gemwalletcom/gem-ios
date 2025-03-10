@@ -12,6 +12,7 @@ struct AddContactAddressNavigationView: View {
     
     @Environment(\.dismiss) private var dismiss
     
+    @State private var isPresentingScanner: Bool = false
     @State private var contactInput: AddContactAddressInput? = nil
     @State private var model: AddContactAddressViewModel
     @State private var navigationPath = NavigationPath()
@@ -23,9 +24,10 @@ struct AddContactAddressNavigationView: View {
     var body: some View {
         NavigationStack(path: $navigationPath) {
             AddContactAddressScene(
-                model: model
+                model: model,
+                isPresentingScanner: $isPresentingScanner
             )
-            .navigationDestination(for: Scenes.NetworksSelector.self, destination: { _ in
+            .navigationDestination(for: Scenes.NetworksSelector.self) { _ in
                 SearchableSelectableListView(
                     model: $model.networksModel,
                     onFinishSelection: { value in
@@ -35,8 +37,8 @@ struct AddContactAddressNavigationView: View {
                     listContent: { ChainView(model: ChainViewModel(chain: $0)) }
                 )
                 .navigationTitle(model.title)
-            })
-            .sheet(isPresented: $model.isPresentingScanner) {
+            }
+            .sheet(isPresented: $isPresentingScanner) {
                 ScanQRCodeNavigationStack() {
                     onHandleScan($0)
                 }

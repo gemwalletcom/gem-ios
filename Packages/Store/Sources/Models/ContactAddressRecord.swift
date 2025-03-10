@@ -10,7 +10,7 @@ public struct ContactAddressRecord: Identifiable, Codable, PersistableRecord, Fe
     
     public var id: String
     public let contactId: String
-    public let value: String
+    public let address: String
     public let chain: Chain
     public let memo: String?
     
@@ -19,13 +19,13 @@ public struct ContactAddressRecord: Identifiable, Codable, PersistableRecord, Fe
     public init(
         id: String,
         contactId: String,
-        value: String,
+        address: String,
         chain: Chain,
         memo: String?
     ) {
         self.id = id
         self.contactId = contactId
-        self.value = value
+        self.address = address
         self.chain = chain
         self.memo = memo
     }
@@ -41,24 +41,21 @@ extension ContactAddressRecord: CreateTable {
                 .notNull()
                 .indexed()
                 .references(ContactRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.ContactAddress.value.name, .text)
+            $0.column(Columns.ContactAddress.address.name, .text)
                 .notNull()
-                .indexed()
             $0.column(Columns.ContactAddress.memo.name, .text)
-                .indexed()
             $0.column(Columns.ContactAddress.chain.name, .text)
                 .notNull()
-                .indexed()
         }
     }
 }
 
 public extension ContactAddressRecord {
-    var address: ContactAddress {
+    func mapToAddress() -> ContactAddress {
         ContactAddress(
             id: ContactAddressId(id: id),
             contactId: ContactId(id: contactId),
-            value: value,
+            address: address,
             chain: chain,
             memo: memo
         )
@@ -66,11 +63,11 @@ public extension ContactAddressRecord {
 }
 
 public extension ContactAddress {
-    var record: ContactAddressRecord {
+    func mapToRecord() -> ContactAddressRecord {
         ContactAddressRecord(
             id: id.id,
             contactId: contactId.id,
-            value: value,
+            address: address,
             chain: chain,
             memo: memo
         )

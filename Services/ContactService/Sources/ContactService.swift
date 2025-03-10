@@ -17,25 +17,25 @@ public struct ContactService: Sendable {
 
 extension ContactService {
     public func add(contact: Contact) throws {
-        try contactStore.addContact(record: contact.record)
+        try contactStore.addContact(record: contact.mapToRecord())
     }
     
     public func add(address: ContactAddress) throws {
-        try contactStore.addAddress(record: address.record)
+        try contactStore.addAddress(record: address.mapToRecord())
     }
     
     public func edit(contact: Contact) throws {
-        try contactStore.editContact(record: contact.record)
+        try contactStore.editContact(record: contact.mapToRecord())
     }
     
     public func edit(address: ContactAddress) throws {
-        try contactStore.editAddress(record: address.record)
+        try contactStore.editAddress(record: address.mapToRecord())
     }
     
     public func delete(contact: Contact) throws -> Bool {
-        return try contactStore.deleteContact(record: contact.record)
+        return try contactStore.deleteContact(record: contact.mapToRecord())
     }
     public func delete(address: ContactAddress) throws -> Bool {
-        return try contactStore.deleteAddress(record: address.record)
+        return try contactStore.deleteAddress(record: address.mapToRecord())
     }
 }

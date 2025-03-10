@@ -12,13 +12,7 @@ import PrimitivesComponents
 public class AddContactViewModel: EntityEditorViewModel {
     let contactService: ContactService
     var input: AddContactInput
-    var state: StateViewType<Void> = .loaded(())
     let onComplete: VoidAction
-    
-    var title: String { entityEditorViewType.title(objectName: "Contact") }
-    var actionButtonTitlte: String { "Save" }
-    var nameTitleField: String { "Name" }
-    var descriptionTitleField: String { "Description" }
 
     public init(
         input: AddContactInput,
@@ -32,9 +26,14 @@ public class AddContactViewModel: EntityEditorViewModel {
         
         super.init(entityEditorViewType: entityEditorViewType)
     }
+    
+    var title: String { entityEditorViewType.title(objectName: "Contact") }
+    var actionButtonTitlte: String { "Save" }
+    var nameTitleField: String { "Name" }
+    var descriptionTitleField: String { "Description" }
         
-    func confirmAddContact() throws {
-        _ = try input.validate()
+    func addContact() throws {
+        try input.validate()
         
         let contact = Contact(
             id: ContactId(id: input.id),

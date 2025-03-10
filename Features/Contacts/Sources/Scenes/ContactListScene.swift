@@ -37,16 +37,36 @@ public struct ContactListScene: View {
     }
     
     public var body: some View {
-        VStack {
+        List {
+            Section {
+                ForEach(model.buildListItemViews(contacts: contacts)) { item in
+                    NavigationLink(value: Scenes.ContactAddresses(contact: item.object)) {
+                        ContactAddressListItemView(
+                            name: item.name,
+                            description: item.description
+                        ).swipeActions(edge: .trailing) {
+                            Button("Delete") {
+                                didTapDelete(on: item.object)
+                            }
+                            .tint(Colors.red)
+                            Button("Edit") {
+                                didSelect(contact: item.object)
+                            }
+                            .tint(Colors.blue)
+                        }
+                    }
+                        
+                }
+            }
+            
+        }
+        .overlay {
             if contacts.isEmpty {
-                StateEmptyView(
-                    title: "Contact list is empty",
-                    description: "Tap + to add the first one."
-                )
-            } else {
-                listView
+                Text("No contacts yet.")
+                    .textStyle(.body)
             }
         }
+        .background(Colors.insetGroupedListStyle)
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -77,32 +97,6 @@ public struct ContactListScene: View {
                 )
             }
         )
-    }
-    
-    private var listView: some View {
-        List {
-            Section {
-                ForEach(model.buildListItemViews(contacts: contacts)) { item in
-                    NavigationLink(value: Scenes.ContactAddresses(contact: item.object)) {
-                        ContactAddressListItemView(
-                            name: item.name,
-                            description: item.description
-                        ).swipeActions(edge: .trailing) {
-                            Button("Delete") {
-                                didTapDelete(on: item.object)
-                            }
-                            .tint(Colors.red)
-                            Button("Edit") {
-                                didSelect(contact: item.object)
-                            }
-                            .tint(Colors.blue)
-                        }
-                    }
-                        
-                }
-            }
-        }
-        .background(Colors.grayBackground)
     }
 }
 

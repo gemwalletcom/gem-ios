@@ -22,15 +22,13 @@ extension ContactRecord: CreateTable {
                 .notNull()
             $0.column(Columns.Contact.name.name, .text)
                 .notNull()
-                .indexed()
             $0.column(Columns.Contact.description.name, .text)
-                .indexed()
         }
     }
 }
 
 public extension ContactRecord {
-    var contact: Contact {
+    func mapToContact() -> Contact {
         Contact(
             id: ContactId(id: id),
             name: name,
@@ -40,7 +38,7 @@ public extension ContactRecord {
 }
 
 public extension Contact {
-    var record: ContactRecord {
+    func mapToRecord() -> ContactRecord {
         ContactRecord(
             id: id.id,
             name: name,

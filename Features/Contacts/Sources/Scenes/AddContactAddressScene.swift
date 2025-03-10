@@ -12,7 +12,8 @@ import NameResolver
 public struct AddContactAddressScene: View {
     
     @State private var model: AddContactAddressViewModel
-    @State private var presentingErrorMessage: String?
+    @State private var isPresentingErrorMessage: String?
+    @Binding private var isPresentingScanner: Bool
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -21,7 +22,11 @@ public struct AddContactAddressScene: View {
         case description
     }
     
-    public init(model: AddContactAddressViewModel) {
+    public init(
+        model: AddContactAddressViewModel,
+        isPresentingScanner: Binding<Bool>
+    ) {
+        _isPresentingScanner = isPresentingScanner
         _model = State(initialValue: model)
     }
     
@@ -61,7 +66,7 @@ public struct AddContactAddressScene: View {
                         .autocorrectionDisabled()
                         .truncationMode(.middle)
                     }
-                    if model.input.chain.value?.isMemoSupported == true {
+                    if model.showMemo {
                         FloatTextField(model.memoTextFieldTitle, text: $model.projectedValue.input.memo.value)
                             .focused($focusedField, equals: .name)
                             .textInputAutocapitalization(.never)
@@ -74,7 +79,7 @@ public struct AddContactAddressScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.state,
+                styleState: .normal,
                 action: onSelectConfirm
             )
             .frame(maxWidth: .scene.button.maxWidth)
@@ -96,13 +101,12 @@ public struct AddContactAddressScene: View {
         .listSectionSpacing(.compact)
         .alert(
             "",
-            isPresented: $presentingErrorMessage.mappedToBool(),
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
             actions: {},
             message: {
-                Text(presentingErrorMessage ?? "")
+                Text(isPresentingErrorMessage ?? "")
             }
         )
-        
     }
 }
 
@@ -110,7 +114,7 @@ public struct AddContactAddressScene: View {
 
 extension AddContactAddressScene {
     private func onSelectScan() {
-        model.isPresentingScanner = true
+        isPresentingScanner = true
     }
     
     private func onSelectPaste() {
@@ -122,7 +126,7 @@ extension AddContactAddressScene {
         do {
             try model.confirmAddContact()
         } catch {
-            presentingErrorMessage = error.localizedDescription
+            isPresentingErrorMessage = error.localizedDescription
         }
     }
 }

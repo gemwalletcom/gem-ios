@@ -30,7 +30,6 @@ class RecipientViewModel {
     var address: String = ""
     var memo: String = ""
     var amount: String = ""
-    var isPresentingContactList = false
     var addressListRequest: ContactAddressInfoListRequest
 
     private let keystore: any Keystore
@@ -122,13 +121,13 @@ class RecipientViewModel {
                         return nil
                     }
                     
-                    return .init(text: "Memo: \($0)", style: .bodySecondary)
+                    return TextValue(text: "Memo: \($0)", style: .bodySecondary)
                 }
                 
                 return ContactAddressListViewItem<ContactAddressInfo>(
                     id: $0.id,
                     name: TextValue(text: $0.contact.name, style: .bodyBold),
-                    address: TextValue(text: $0.address.value, style: .caption),
+                    address: TextValue(text: $0.address.address, style: .caption),
                     memo: memo,
                     object: $0
                 )
@@ -195,13 +194,8 @@ extension RecipientViewModel {
         onTransferAction?(data)
     }
     
-    func onContactsSelect() {
-        isPresentingContactList.toggle()
-    }
-    
     func onContactAddressSelected(_ address: ContactAddress) {
-        
-        self.address = address.value
+        self.address = address.address
         
         if let memo = address.memo {
             self.memo = memo

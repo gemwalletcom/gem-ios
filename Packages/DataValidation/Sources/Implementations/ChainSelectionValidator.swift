@@ -5,14 +5,16 @@ import Primitives
 public struct ChainSelectionValidator: ValidatorConvertible {
     public typealias T = Chain?
     
-    public var errorMessage: String {
-        "Please select a chain"
+    public let errorMessage: String
+    
+    public init(errorMessage: String) {
+        self.errorMessage = errorMessage
     }
     
-    public init() { }
-    
-    public func isValid(_ value: Chain?) throws -> Bool {
-        let result = value != nil
-        return try handle(result)
+    public func validate(_ value: Chain?) throws {
+        let isValid = value != nil
+        if !isValid {
+            throw ValidationError.invalid(description: errorMessage)
+        }
     }
 }

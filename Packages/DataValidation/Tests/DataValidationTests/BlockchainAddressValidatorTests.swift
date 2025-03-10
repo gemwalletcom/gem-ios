@@ -5,43 +5,27 @@ import Primitives
 @testable import DataValidation
 
 struct BlockchainAddressValidatorTests {
+    private var validAddress = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
     
     @Test
-    func testIsValidWithValidAddress() {
-        let validator = BlockchainAddressValidator(chain: .bitcoin)
-        let validAddress = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-        
-        do {
-            let isValid = try validator.isValid(validAddress)
-            #expect(isValid)
-        } catch {
-            Issue.record("Validation failed for valid address: \(validAddress)")
+    func testIsValidWithValidAddress() throws {
+        let validator = BlockchainAddressValidator(chain: .bitcoin, errorMessage: "")
+        try validator.validate(validAddress)
+    }
+    
+    @Test
+    func testIsValidWithInvalidAddress() throws {
+        let validator = BlockchainAddressValidator(chain: .bitcoin, errorMessage: "")
+        #expect(throws: ValidationError.self) {
+            try validator.validate("InvalidAddress123")
         }
     }
     
     @Test
-    func testIsValidWithInvalidAddress() {
-        let validator = BlockchainAddressValidator(chain: .bitcoin)
-        let invalidAddress = "InvalidAddress123"
-        
-        do {
-            let isValid = try validator.isValid(invalidAddress)
-            #expect(!isValid)
-        } catch {
-            #expect(true)
-        }
-    }
-    
-    @Test
-    func testIsValidWithNilChain() {
-        let validator = BlockchainAddressValidator(chain: nil)
-        let address = "1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa"
-        
-        do {
-            let isValid = try validator.isValid(address)
-            #expect(!isValid)
-        } catch {
-            #expect(true)
+    func testIsValidWithNilChain() throws {
+        let validator = BlockchainAddressValidator(chain: nil, errorMessage: "")
+        #expect(throws: ValidationError.self) {
+            try validator.validate(validAddress)
         }
     }
 }
