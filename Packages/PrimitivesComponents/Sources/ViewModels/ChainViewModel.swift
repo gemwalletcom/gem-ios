@@ -24,4 +24,8 @@ extension ChainViewModel: Identifiable {
 
 // MARK: - SimpleListItemViewable
 
-extension ChainViewModel: SimpleListItemViewable {}
+extension ChainViewModel: SimpleListItemViewable {
+    public var assetImage: AssetImage {
+        AssetImage.image(image)
+    }
+}

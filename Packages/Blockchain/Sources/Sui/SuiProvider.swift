@@ -58,15 +58,15 @@ public enum SuiProvider: TargetType {
         switch self {
         case .coins(let address, let coinType):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address, coinType], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [address, coinType])
             )
         case .balance(let address), .balances(let address):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [address])
             )
         case .gasPrice:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [:] as [String: String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [:] as [String: String])
             )
         case .moveCall(let request):
             let params: [JSON] = [
@@ -79,11 +79,11 @@ public enum SuiProvider: TargetType {
                 .value(request.gasBudget),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .dryRun(let data):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [data], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [data])
             )
         case .transaction(let id):
             let params: [JSON] = [
@@ -91,15 +91,15 @@ public enum SuiProvider: TargetType {
                 .dictionary(["showEffects": .bool(true)])
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .stakeDelegations(let address):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [address], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [address])
             )
         case .stakeValidators:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [:] as [String: String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [:] as [String: String])
             )
         case .batch(let request):
             let params: [JSON] = [
@@ -110,7 +110,7 @@ public enum SuiProvider: TargetType {
                 .null,
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .broadcast(let data, let signature):
             let params: [JSON] = [
@@ -120,24 +120,24 @@ public enum SuiProvider: TargetType {
                 .value("WaitForLocalExecution")
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .getObject(let id):
             let params: [JSON] = [
                 .value(id),
             ]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 2)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .coinMetadata(let id):
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [id], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [id])
             )
         case .systemState,
             .latestCheckpoint,
             .chainID:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [] as [String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [] as [String])
             )
         }
     }

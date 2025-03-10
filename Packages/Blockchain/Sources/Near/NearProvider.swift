@@ -40,7 +40,7 @@ public enum NearProvider: TargetType {
         case .gasPrice:
             let params: [JSON<String>] = [.null]
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: params, id: 1)
+                JSONRPCRequest(method: rpc_method, params: params)
             )
         case .account(let address):
             return .encodable(
@@ -48,7 +48,7 @@ public enum NearProvider: TargetType {
                     "request_type": "view_account",
                     "finality": "final",
                     "account_id": address
-                ], id: 1)
+                ])
             )
         case .accountAccessKey(let address, let publicKey):
             return .encodable(
@@ -57,13 +57,13 @@ public enum NearProvider: TargetType {
                     "finality": "final",
                     "account_id": address,
                     "public_key": publicKey,
-                ], id: 1)
+                ])
             )
         case .latestBlock:
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [
                     "finality": "final",
-                ], id: 1)
+                ])
             )
         case .transaction(let id, let senderAddress):
             return .encodable(
@@ -71,17 +71,17 @@ public enum NearProvider: TargetType {
                     "tx_hash": id,
                     "sender_account_id": senderAddress,
                     "wait_until": "EXECUTED"
-                ], id: 1)
+                ])
             )
         case .genesisConfig:
             return .encodable(
-                JSONRPCRequest(method: rpc_method, params: [:] as [String:String], id: 1)
+                JSONRPCRequest(method: rpc_method, params: [:] as [String:String])
             )
         case .broadcast(let data):
             return .encodable(
                 JSONRPCRequest(method: rpc_method, params: [
                     "signed_tx_base64": data,
-                ], id: 1)
+                ])
             )
         }
     }

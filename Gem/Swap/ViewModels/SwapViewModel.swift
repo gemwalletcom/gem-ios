@@ -163,7 +163,7 @@ public final class SwapViewModel {
         )
     }
 
-    func swapProvidersViewModel(asset: Asset) -> SwapProvidersViewModel {
+    func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
         SwapProvidersViewModel(state: swapProvidersViewModelState(for: asset))
     }
 }
@@ -333,12 +333,24 @@ extension SwapViewModel {
         }
     }
 
-    private func swapProvidersViewModelState(for asset: Asset) -> StateViewType<[SwapProvidersViewModel.Item]> {
+    private func swapProvidersViewModelState(for asset: AssetData) -> StateViewType<[SwapProvidersViewModel.Item]> {
         switch swapState.availability {
-        case .error(let error): .error(error)
-        case .noData: .noData
-        case .data(let items): .data(items.map { SwapProviderItem(asset: asset, swapQuote: $0) })
-        case .loading: .loading
+        case .error(let error): return .error(error)
+        case .noData: return .noData
+        case .data(let items):
+            let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
+            let valueFormatter = ValueFormatter(style: .short)
+            return .data(
+                items.map {
+                    SwapProviderItem(
+                        asset: asset.asset,
+                        swapQuote: $0,
+                        selectedProvider: selectedSwapQuote?.data.provider.id,
+                        priceViewModel: priceViewModel,
+                        valueFormatter: valueFormatter
+                    )
+            })
+        case .loading: return .loading
         }
     }
 
