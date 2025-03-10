@@ -3,99 +3,44 @@ import Primitives
 import Store
 import WalletCore
 import Preferences
+import WalletSessionService
 
-@Observable
-public final class LocalKeystore: Keystore {
+// TODO: - Add keystore Config with direcotry, folder, etc and inject into LocalKeystore
+// TODO: - move walletStore logic on top of ManageWalletService(should be extended ) and remove it dependecy
+
+public struct LocalKeystore: Keystore {
     public let directory: URL
 
     private let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
     private let walletStore: WalletStore
-    private let preferences: Preferences
     private let walletKeyStore: WalletKeyStore
-    
-    let keystorePassword: KeystorePassword
-    
-    public var currentWalletId: Primitives.WalletId? = .none
-    public var currentWallet: Primitives.Wallet? = .none
-    
+    private let keystorePassword: KeystorePassword
+    private let walletSessionService: any WalletSessionManageable
+
     public init(
         folder: String = "keystore",
         walletStore: WalletStore,
-        preferences: Preferences,
+        preferences: ObservablePreferences,
         keystorePassword: KeystorePassword = LocalKeystorePassword()
     ) {
         let directory = URL(fileURLWithPath: String(format: "%@/%@", documentsDirectory, folder))
         self.directory = directory
         self.walletKeyStore = WalletKeyStore(directory: directory)
-        self.preferences = preferences
         self.walletStore = walletStore
         self.keystorePassword = keystorePassword
-        self.currentWalletId = switch preferences.currentWalletId {
-        case .some(let value): WalletId(id: value)
-        case .none: .none
-        }
-        self.currentWallet = getWalletById(id: preferences.currentWalletId ?? "")
+        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
     }
-    
+
     public var wallets: [Primitives.Wallet] {
         do {
-            return try walletStore.getWallets()
+            return try walletSessionService.getWallets()
         } catch {
             return []
         }
     }
-    
+
     public func createWallet() -> [String] {
-        return walletKeyStore.createWallet()
-    }
-
-    public func getCurrentWallet() throws -> Primitives.Wallet {
-        if let currentWalletId {
-            return try getWallet(currentWalletId)
-        }
-        throw KeystoreError.noWalletId
-    }
-
-    public func getWallet(_ walletId: WalletId) throws -> Primitives.Wallet {
-        if let wallet = getWalletById(id: walletId.id) {
-            return wallet
-        }
-        throw KeystoreError.noWallet
-    }
-
-    public func setCurrentWalletId(_ walletId: Primitives.WalletId?) {
-        preferences.currentWalletId = walletId?.id
-        guard let walletId = walletId else {
-            currentWallet = nil
-            currentWalletId = nil
-            return
-        }
-        currentWalletId = walletId
-        currentWallet = getWalletById(id: walletId.id)
-    }
-
-    public func setCurrentWalletIndex(_ index: Int) {
-        setCurrentWalletId(getWalletByIndex(index: index)?.walletId)
-    }
-
-    private func getWalletById(id: String) -> Primitives.Wallet? {
-        return wallets.filter({ $0.id == id  }).first ?? wallets.first
-    }
-
-    private func getWalletByIndex(index: Int) -> Primitives.Wallet? {
-        return wallets.filter({ $0.index == index  }).first ?? wallets.first
-    }
-
-    private func getOrCreatePassword() throws -> String {
-        // setup once
-        var password = try keystorePassword.getPassword()
-        if password.isEmpty && wallets.isEmpty {
-            let newPassword = NSUUID().uuidString
-            // initial set / no biometrics
-            try keystorePassword.setPassword(newPassword, authentication: .none)
-            password = newPassword
-        }
-        return password
+        walletKeyStore.createWallet()
     }
 
     public func importWallet(name: String, type: KeystoreImportType) throws -> Primitives.Wallet {
@@ -111,12 +56,12 @@ public final class LocalKeystore: Keystore {
             result = Wallet.makeView(name: name, chain: chain, address: address)
         }
         try walletStore.addWallet(result)
-        setCurrentWalletId(result.walletId)
+        walletSessionService.setCurrent(walletId: result.walletId)
         return result
     }
     
     public func setupChains(chains: [Chain]) throws {
-        let setupWallets = wallets.filter { $0.type == .multicoin }.compactMap {
+        let setupWallets = walletSessionService.wallets.filter { $0.type == .multicoin }.compactMap {
             let enableChains = $0.accounts
                 .map { $0.chain }.asSet()
                 .intersection(chains)
@@ -159,13 +104,13 @@ public final class LocalKeystore: Keystore {
             } catch let error as KeystoreError {
                 //in some cases wallet already deleted, just ignore
                 switch error {
-                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey, .noWallet, .noWalletId:
+                case .unknownWalletInWalletCore, .unknownWalletIdInWalletCore, .unknownWalletInWalletCoreList, .invalidPrivateKey:
                     break
                 }
             }
         }
         try walletStore.deleteWallet(for: wallet.id)
-        setCurrentWalletId(wallets.first?.walletId)
+        walletSessionService.setCurrent(walletId: wallets.first?.walletId)
     }
     
     public func getNextWalletIndex() throws -> Int {
@@ -204,5 +149,17 @@ public final class LocalKeystore: Keystore {
     public func destroy() throws {
         try walletKeyStore.destroy()
         //try keystorePassword.remove()
+    }
+
+    private func getOrCreatePassword() throws -> String {
+        // setup once
+        var password = try keystorePassword.getPassword()
+        if password.isEmpty && walletSessionService.wallets.isEmpty {
+            let newPassword = NSUUID().uuidString
+            // initial set / no biometrics
+            try keystorePassword.setPassword(newPassword, authentication: .none)
+            password = newPassword
+        }
+        return password
     }
 }

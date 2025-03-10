@@ -2,10 +2,10 @@
 
 import Foundation
 import Primitives
-import Keystore
 import GemstonePrimitives
 import Localization
 import PrimitivesComponents
+import ManageWalletService
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
@@ -24,7 +24,7 @@ class RecipientViewModel: ObservableObject {
     let asset: Asset
     let type: RecipientAssetType
     
-    private let keystore: any Keystore
+    private let manageWalletService: ManageWalletService
     private let onRecipientDataAction: RecipientDataAction
     private let onTransferAction: TransferDataAction
     private let formatter = ValueFormatter(style: .full)
@@ -32,14 +32,14 @@ class RecipientViewModel: ObservableObject {
     init(
         wallet: Wallet,
         asset: Asset,
-        keystore: any Keystore,
+        manageWalletService: ManageWalletService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
         self.asset = asset
-        self.keystore = keystore
+        self.manageWalletService = manageWalletService
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
@@ -82,7 +82,7 @@ class RecipientViewModel: ObservableObject {
     func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
         switch type {
         case .wallets:
-            return keystore.wallets
+            return manageWalletService.wallets
                 .filter { ($0.type == .multicoin || $0.type == .single) && $0.id != wallet.id }
                 .filter { $0.accounts.first(where: { $0.chain == asset.chain }) != nil }
                 .map {
@@ -90,14 +90,17 @@ class RecipientViewModel: ObservableObject {
                         name: $0.name,
                         address: $0.accounts.first(where: { $0.chain == asset.chain })!.address
                     )
-            }.compactMap { $0 }
+                }
+                .compactMap { $0 }
         case .view:
-            return keystore.wallets.filter { $0.type == .view }.filter { $0.accounts[0].chain == asset.chain}.map {
-                return RecipientAddress(
-                    name: $0.name,
-                    address: $0.accounts[0].address
-                )
-            }
+            return manageWalletService.wallets
+                .filter { $0.type == .view }.filter { $0.accounts[0].chain == asset.chain}
+                .map {
+                    return RecipientAddress(
+                        name: $0.name,
+                        address: $0.accounts[0].address
+                    )
+                }
         }
     }
     

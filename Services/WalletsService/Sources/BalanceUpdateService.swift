@@ -3,32 +3,32 @@
 import Foundation
 import Primitives
 import BalanceService
-import Store
+import WalletSessionService
 
 struct BalanceUpdateService: BalanceUpdater {
     private let balanceService: BalanceService
-    private let walletStore: WalletStore
+    private let walletSessionService: any WalletSessionManageable
 
     init(
         balanceService: BalanceService,
-        walletStore: WalletStore
+        walletSessionService: any WalletSessionManageable
     ) {
         self.balanceService = balanceService
-        self.walletStore = walletStore
+        self.walletSessionService = walletSessionService
     }
 
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
-        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
-            throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
-        }
-        await balanceService.updateBalance(for: wallet, assetIds: assetIds)
+        await balanceService.updateBalance(
+            for: try walletSessionService.getWallet(walletId: walletId),
+            assetIds: assetIds
+        )
     }
 
     // add asset to asset store and create balance store record
     func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
-        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
-            throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
-        }
-        try balanceService.addAssetsBalancesIfMissing(assetIds: assetIds, wallet: wallet)
+        try balanceService.addAssetsBalancesIfMissing(
+            assetIds: assetIds,
+            wallet: walletSessionService.getWallet(walletId: walletId)
+        )
     }
 }

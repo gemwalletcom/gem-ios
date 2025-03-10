@@ -11,6 +11,7 @@ import TransactionService
 import DiscoverAssetsService
 import ChainService
 import Store
+import WalletSessionService
 
 public struct WalletsService: Sendable {
     // TODO: - remove public dependencies and remove them in future
@@ -18,8 +19,7 @@ public struct WalletsService: Sendable {
     public let priceService: PriceService
     public let balanceService: BalanceService
 
-    private let walletStore: WalletStore
-
+    private let walletSessionService: any WalletSessionManageable
     private let discoveryProcessor: any DiscoveryAssetsProcessing
     private let assetsEnabler: any AssetsEnabler
     private let priceUpdater: any PriceUpdater
@@ -40,10 +40,15 @@ public struct WalletsService: Sendable {
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
-        preferences: Preferences = .standard
+        preferences: ObservablePreferences = .default
     ) {
-        let balanceUpdater = BalanceUpdateService(balanceService: balanceService, walletStore: walletStore)
-        let priceUpdater = PriceUpdateService(priceService: priceService, preferences: preferences)
+
+        let walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+        let balanceUpdater = BalanceUpdateService(
+            balanceService: balanceService,
+            walletSessionService: walletSessionService
+        )
+        let priceUpdater = PriceUpdateService(priceService: priceService, preferences: preferences.preferences)
 
         let currencyUpdateService = CurrencyUpdateService(
             assetsService: assetsService,
@@ -63,7 +68,7 @@ public struct WalletsService: Sendable {
             ),
             assetsService: assetsService,
             assetsEnabler: assetsEnabler,
-            walletStore: walletStore
+            walletSessionService: walletSessionService
         )
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
@@ -71,17 +76,17 @@ public struct WalletsService: Sendable {
         self.currencyUpdater = currencyUpdateService
         self.discoveryProcessor = processor
 
-        self.walletStore = walletStore
         self.assetsService = assetsService
         self.balanceService = balanceService
         self.priceService = priceService
         self.transactionService = transactionService
         self.bannerSetupService = bannerSetupService
         self.addressStatusService = addressStatusService
+        self.walletSessionService = walletSessionService
     }
 
-    public var walletsCount: Int {
-        (try? walletStore.getWallets().count) ?? .zero
+    public func walletsCount() throws -> Int {
+        try walletSessionService.getWallets().count
     }
 
     public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {

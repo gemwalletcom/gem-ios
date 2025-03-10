@@ -4,7 +4,6 @@ import Components
 import Store
 import GRDBQuery
 import Style
-import Keystore
 import Localization
 import PrimitivesComponents
 

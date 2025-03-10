@@ -36,7 +36,10 @@ public final class SettingsViewModel {
     var title: String { Localized.Settings.title }
 
     var walletsTitle: String { Localized.Wallets.title }
-    var walletsValue: String { "\(walletsService.walletsCount)" }
+    var walletsValue: String {
+        let count = (try? walletsService.walletsCount()) ?? .zero
+        return "\(count)"
+    }
     var walletsImage: Image { Images.Settings.wallets }
 
     var securityTitle: String { Localized.Settings.security }

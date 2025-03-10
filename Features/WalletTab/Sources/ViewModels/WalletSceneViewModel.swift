@@ -11,14 +11,10 @@ import BannerService
 import Store
 import Preferences
 import Localization
-@preconcurrency import Keystore
-
-// TODO: - use one instance of wallet, now we use wallet + keysotre getting wallet
 
 public struct WalletSceneViewModel: Sendable {
     public let wallet: Wallet
 
-    private let keystore: any Keystore
     private let walletsService: WalletsService
     private let bannerService: BannerService
     private let balanceService: BalanceService
@@ -30,15 +26,13 @@ public struct WalletSceneViewModel: Sendable {
         balanceService: BalanceService,
         walletsService: WalletsService,
         bannerService: BannerService,
-        observablePreferences: ObservablePreferences,
-        keystore: any Keystore
+        observablePreferences: ObservablePreferences
     ) {
         self.wallet = wallet
         self.balanceService = balanceService
         self.walletsService = walletsService
         self.bannerService = bannerService
         self.observablePreferences = observablePreferences
-        self.keystore = keystore
     }
 
     var pinImage: Image {
@@ -83,14 +77,6 @@ public struct WalletSceneViewModel: Sendable {
                 .accountBlockedMultiSignature,
             ]
         )
-    }
-
-    var keystoreWalletId: WalletId? {
-        keystore.currentWalletId
-    }
-
-    var keystoreWallet: Wallet? {
-        keystore.currentWallet
     }
 
     func closeBanner(banner: Banner) {

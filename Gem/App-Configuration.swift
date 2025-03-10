@@ -82,7 +82,7 @@ extension AssetData  {
 }
 
 extension LocalKeystore {
-    @MainActor static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .standard)
+    static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .default)
 }
 
 extension WalletStore {
@@ -172,7 +172,12 @@ extension DeviceService {
 }
 
 extension ManageWalletService {
-    static let main = ManageWalletService(keystore: LocalKeystore.main, walletStore: .main, avatarService: .main)
+    static let main = ManageWalletService(
+        keystore: LocalKeystore.main,
+        walletStore: .main,
+        preferences: .default,
+        avatarService: .main
+    )
 }
 
 extension AssetStore {
@@ -239,7 +244,7 @@ extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         connectionsStore: .main,
         walletStore: .main,
-        preferences: .standard,
+        preferences: .default,
         walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
     )
 }

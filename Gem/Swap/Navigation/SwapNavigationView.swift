@@ -59,7 +59,6 @@ struct SwapNavigationView: View {
             SelectAssetSceneNavigationStack(
                 model: SelectAssetViewModel(
                     wallet: model.wallet,
-                    keystore: keystore,
                     selectType: .swap(selectType),
                     assetsService: assetsService,
                     walletsService: walletsService,

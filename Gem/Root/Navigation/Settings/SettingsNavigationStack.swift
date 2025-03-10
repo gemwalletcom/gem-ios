@@ -89,8 +89,7 @@ struct SettingsNavigationStack: View {
             .navigationDestination(for: Scenes.WalletConnect.self) { _ in
                 ConnectionsScene(
                     model: ConnectionsViewModel(
-                        service: connectionsService,
-                        keystore: keystore
+                        service: connectionsService
                     )
                 )
             }

@@ -26,7 +26,6 @@ import ManageWalletService
 import AvatarService
 
 struct ServicesFactory {
-    @MainActor
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
         let apiService: GemAPIService = GemAPIService()
@@ -49,6 +48,7 @@ struct ServicesFactory {
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
         let manageWalletService = Self.makeManageWalletService(
+            preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: AvatarService(store: storeManager.walletStore)
@@ -106,7 +106,7 @@ struct ServicesFactory {
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
             walletStore: storeManager.walletStore,
-            preferences: preferences,
+            preferences: storages.observablePreferences,
             interactor: walletConnectorManager
         )
 
@@ -194,6 +194,7 @@ extension ServicesFactory {
     }
 
     private static func makeManageWalletService(
+        preferences: ObservablePreferences,
         keystore: any Keystore,
         walletStore: WalletStore,
         avatarService: AvatarService
@@ -201,6 +202,7 @@ extension ServicesFactory {
         ManageWalletService(
             keystore: keystore,
             walletStore: walletStore,
+            preferences: preferences,
             avatarService: avatarService
         )
     }
@@ -292,7 +294,7 @@ extension ServicesFactory {
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
         walletStore: WalletStore,
-        preferences: Preferences,
+        preferences: ObservablePreferences,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(

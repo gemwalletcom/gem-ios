@@ -8,23 +8,22 @@ import Preferences
 import BigInt
 import class Gemstone.Config
 import WalletConnectSign
+import WalletSessionService
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let connectionsStore: ConnectionsStore
-    private let walletStore: WalletStore
-    private let preferences: Preferences
     private let walletConnectorInteractor: any WalletConnectorInteractable
+    private let walletSessionService: any WalletSessionManageable
 
     public init(
         connectionsStore: ConnectionsStore,
         walletStore: WalletStore,
-        preferences: Preferences,
+        preferences: ObservablePreferences,
         walletConnectorInteractor: any WalletConnectorInteractable
     ) {
-        self.preferences = preferences
         self.connectionsStore = connectionsStore
-        self.walletStore = walletStore
         self.walletConnectorInteractor = walletConnectorInteractor
+        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
     }
 
     public var allChains: [Primitives.Chain]  {
@@ -32,17 +31,11 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
 
     public func getCurrentWallet() throws -> Wallet {
-        guard let id = preferences.currentWalletId else {
-            throw AnyError("Can't get a wallet, walletId: \(preferences.currentWalletId ?? "nil")")
-        }
-        return try getWallet(id: WalletId(id: id))
+        try walletSessionService.getCurrentWallet()
     }
 
     public func getWallet(id: WalletId) throws -> Wallet {
-        guard let wallet = try walletStore.getWallet(id: id.id) else {
-            throw AnyError("Can't get a wallet, walletId: \(id.id)")
-        }
-        return wallet
+        try walletSessionService.getWallet(walletId: id)
     }
 
     public func getChains(wallet: Wallet) -> [Primitives.Chain] {
@@ -54,7 +47,7 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     }
     
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
-        let wallets = try walletStore.getWallets().filter { !$0.isViewOnly }
+        let wallets = try walletSessionService.getWallets().filter { !$0.isViewOnly }
         let blockchains = (proposal.requiredBlockchains + proposal.optionalBlockchains).asSet()
         
         return wallets.filter {

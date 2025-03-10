@@ -153,8 +153,14 @@ public struct WalletScene: View {
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
-        .onChange(of: model.wallet, fetch)
-        .taskOnce(fetch)
+        .task {
+            fetch()
+        }
+        .onChange(
+            of: model.wallet,
+            initial: true,
+            fetch
+        )
         .onReceive(pricesTimer) { time in
             runUpdatePrices()
         }
@@ -166,16 +172,13 @@ public struct WalletScene: View {
 extension WalletScene {
 
     func refreshable() async {
-        if let walletId = model.keystoreWalletId {
-            Task {
-                do {
-                    try await model.fetch(walletId: walletId, assets: assets)
-                } catch {
-                    NSLog("refreshable error: \(error)")
-                }
+        Task {
+            do {
+                try await model.fetch(walletId: model.wallet.walletId, assets: assets)
+            } catch {
+                NSLog("refreshable error: \(error)")
             }
         }
-
         runAddressStatusCheck()
     }
 
@@ -192,10 +195,8 @@ extension WalletScene {
     }
 
     func runAddressStatusCheck() {
-        if let wallet = model.keystoreWallet {
-            Task {
-                await model.runAddressStatusCheck(wallet: wallet)
-            }
+        Task {
+            await model.runAddressStatusCheck(wallet: model.wallet)
         }
     }
 

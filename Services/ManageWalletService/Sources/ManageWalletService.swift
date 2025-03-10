@@ -4,41 +4,42 @@ import Foundation
 import Store
 import Primitives
 import Preferences
-@preconcurrency import Keystore
+import Keystore
 import AvatarService
+import WalletSessionService
 
 public struct ManageWalletService: Sendable {
     private let keystore: any Keystore
     private let walletStore: WalletStore
-    private let preferences: Preferences
     private let avatarService: AvatarService
-
-    public var currentWallet: Wallet? {
-        keystore.currentWallet
-    }
+    private let walletSessionService: any WalletSessionManageable
 
     public init(
         keystore: any Keystore,
         walletStore: WalletStore,
-        preferences: Preferences = .standard,
+        preferences: ObservablePreferences,
         avatarService: AvatarService
     ) {
         self.keystore = keystore
         self.walletStore = walletStore
-        self.preferences = preferences
         self.avatarService = avatarService
+        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
     }
 
-    public func pin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: true)
+    public var currentWallet: Wallet? {
+        walletSessionService.currentWallet
     }
 
-    public func unpin(wallet: Wallet) throws {
-        try walletStore.pinWallet(wallet.id, value: false)
+    public var wallets: [Wallet] {
+        walletSessionService.wallets
+    }
+
+    public func setCurrent(_ index: Int) {
+        walletSessionService.setCurrent(index: index)
     }
 
     public func setCurrent(_ walletId: WalletId) {
-        keystore.setCurrentWalletId(walletId)
+        walletSessionService.setCurrent(walletId: walletId)
     }
 
     public func delete(_ wallet: Wallet) throws {
@@ -51,6 +52,14 @@ public struct ManageWalletService: Sendable {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
          */
+    }
+
+    public func pin(wallet: Wallet) throws {
+        try walletStore.pinWallet(wallet.id, value: true)
+    }
+
+    public func unpin(wallet: Wallet) throws {
+        try walletStore.pinWallet(wallet.id, value: false)
     }
 
     public func swapOrder(from: WalletId, to: WalletId) throws {

@@ -21,6 +21,7 @@ let package = Package(
         .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "WalletSessionService", path: "../WalletSessionService"),
     ],
     targets: [
         .target(
@@ -34,7 +35,8 @@ let package = Package(
                 "Store",
                 "Preferences",
                 "PrimitivesComponents",
-                "QRScanner"
+                "QRScanner",
+                "WalletSessionService"
             ],
             path: "Sources"
         ),

@@ -6,29 +6,28 @@ import DiscoverAssetsService
 import Primitives
 import Preferences
 import Store
+import WalletSessionService
 
 struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     private let discoverAssetService: DiscoverAssetsService
     private let assetsService: AssetsService
     private let assetsEnabler: any AssetsEnabler
-    private let walletStore: WalletStore
+    private let walletSessionService: any WalletSessionManageable
 
     init(
         discoverAssetService: DiscoverAssetsService,
         assetsService: AssetsService,
         assetsEnabler: any AssetsEnabler,
-        walletStore: WalletStore
+        walletSessionService: any WalletSessionManageable
     ) {
         self.discoverAssetService = discoverAssetService
         self.assetsService = assetsService
         self.assetsEnabler = assetsEnabler
-        self.walletStore = walletStore
+        self.walletSessionService = walletSessionService
     }
 
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
-        guard let wallet = try walletStore.getWallet(id: walletId.id) else {
-            throw AnyError("Can't get a wallet, walletId: \(walletId.id)")
-        }
+        let wallet = try walletSessionService.getWallet(walletId: walletId)
         async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
         async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
         _ = try await (coinProcess, tokenProcess)

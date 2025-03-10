@@ -63,7 +63,6 @@ struct WalletNavigationStack: View {
                 SelectAssetSceneNavigationStack(
                     model: SelectAssetViewModel(
                         wallet: model.wallet,
-                        keystore: keystore,
                         selectType: value,
                         assetsService: walletsService.assetsService,
                         walletsService: walletsService

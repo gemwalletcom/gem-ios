@@ -21,6 +21,7 @@
 		833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */; };
 		8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = 8349F1462D5E4FF4003A0A93 /* ManageWallets */; };
 		834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */ = {isa = PBXBuildFile; productRef = 834B38192D1D85E2009D58D4 /* LockManager */; };
+		834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */ = {isa = PBXBuildFile; productRef = 834EC8092D7F1FCD00D8FA39 /* WalletSessionService */; };
 		8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8350FB802CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift */; };
 		8352B1042D52C73B0059EB27 /* WalletsService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352B1032D52C73B0059EB27 /* WalletsService */; };
 		8352C8D52D393E05000DEDD9 /* ExplorerService in Frameworks */ = {isa = PBXBuildFile; productRef = 8352C8D42D393E05000DEDD9 /* ExplorerService */; };
@@ -209,6 +210,7 @@
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
 		838383112D5E677A00D1CAF2 /* WalletTab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletTab; sourceTree = "<group>"; };
 		83863EE52D19B8D8005048A7 /* NodeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NodeService; sourceTree = "<group>"; };
+		8391FE572D7F4D9F0057A548 /* WalletSessionService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletSessionService; sourceTree = "<group>"; };
 		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
 		83A4F8032D30433E000E09BB /* NameResolver */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NameResolver; sourceTree = "<group>"; };
 		83A4F8042D30434E000E09BB /* Onboarding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Onboarding; sourceTree = "<group>"; };
@@ -355,6 +357,7 @@
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
 				C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
+				834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
 				83CE0F602D11C50A00A55BBF /* Currency in Frameworks */,
 				D829BF2D2CBDBC5300DEB2E8 /* Localization in Frameworks */,
@@ -809,6 +812,7 @@
 		D829BF4B2CBF022700DEB2E8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8391FE572D7F4D9F0057A548 /* WalletSessionService */,
 				D8CEF3272D6E60AF00E48A78 /* ScanService */,
 				83FEE7FC2D5E632300E7B2DA /* ManageWalletService */,
 				83F645072D52C5DF00C18881 /* WalletsService */,
@@ -1099,6 +1103,7 @@
 				8349F1462D5E4FF4003A0A93 /* ManageWallets */,
 				B617D60A2D5B75F0001697A6 /* AvatarService */,
 				D83D3C242D6E62F4002959EA /* ScanService */,
+				834EC8092D7F1FCD00D8FA39 /* WalletSessionService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1889,6 +1894,10 @@
 		834B38192D1D85E2009D58D4 /* LockManager */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = LockManager;
+		};
+		834EC8092D7F1FCD00D8FA39 /* WalletSessionService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WalletSessionService;
 		};
 		8352B1032D52C73B0059EB27 /* WalletsService */ = {
 			isa = XCSwiftPackageProductDependency;
