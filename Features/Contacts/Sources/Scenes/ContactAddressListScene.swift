@@ -59,8 +59,11 @@ public struct ContactAddressListScene: View {
         }
         .overlay {
             if addresses.isEmpty {
-                Text("No addresses yet")
-                    .textStyle(.body)
+                ZStack {
+                    Colors.insetGroupedListStyle.ignoresSafeArea()
+                    Text("No addresses yet.")
+                        .textStyle(.body)
+                }
             }
         }
         .background(Colors.insetGroupedListStyle)

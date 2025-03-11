@@ -11,9 +11,7 @@ public struct ContactListNavigationView: View {
     @State private var model: ContactListViewModel
     @State private var isPresentingContactInput: AddContactInput?
     
-    public init(
-        model: ContactListViewModel
-    ) {
+    public init(model: ContactListViewModel) {
         _model = State(wrappedValue: model)
     }
     

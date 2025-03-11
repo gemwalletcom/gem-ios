@@ -37,36 +37,38 @@ public struct ContactListScene: View {
     }
     
     public var body: some View {
-        List {
-            Section {
-                ForEach(model.buildListItemViews(contacts: contacts)) { item in
-                    NavigationLink(value: Scenes.ContactAddresses(contact: item.object)) {
-                        ContactAddressListItemView(
-                            name: item.name,
-                            description: item.description
-                        ).swipeActions(edge: .trailing) {
-                            Button("Delete") {
-                                didTapDelete(on: item.object)
+        ZStack {
+            List {
+                Section {
+                    ForEach(model.buildListItemViews(contacts: contacts)) { item in
+                        NavigationLink(value: Scenes.ContactAddresses(contact: item.object)) {
+                            ContactAddressListItemView(
+                                name: item.name,
+                                description: item.description
+                            ).swipeActions(edge: .trailing) {
+                                Button("Delete") {
+                                    didTapDelete(on: item.object)
+                                }
+                                .tint(Colors.red)
+                                Button("Edit") {
+                                    didSelect(contact: item.object)
+                                }
+                                .tint(Colors.blue)
                             }
-                            .tint(Colors.red)
-                            Button("Edit") {
-                                didSelect(contact: item.object)
-                            }
-                            .tint(Colors.blue)
                         }
                     }
-                        
                 }
             }
-            
         }
         .overlay {
             if contacts.isEmpty {
-                Text("No contacts yet.")
-                    .textStyle(.body)
+                ZStack {
+                    Colors.insetGroupedListStyle.ignoresSafeArea()
+                    Text("No contacts yet.")
+                        .textStyle(.body)
+                }
             }
         }
-        .background(Colors.insetGroupedListStyle)
         .navigationTitle(model.title)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
