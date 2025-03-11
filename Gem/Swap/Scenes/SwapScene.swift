@@ -61,6 +61,7 @@ struct SwapScene: View {
                 .padding(.bottom, .scene.button.height)
             bottomActionView
         }
+        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .debounce(
             value: model.swapState.fetch,
