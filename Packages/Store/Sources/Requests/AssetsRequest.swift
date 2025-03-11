@@ -170,11 +170,16 @@ extension AssetsRequest {
     private func fetchAllAssetRecordsRequest(
         _ db: Database,
         filters: [AssetsRequestFilter]
-    ) throws -> [AssetRecord] {
+    ) throws -> [PriceAlertAssetRecordInfo] {
         var request = AssetRecord
+            .including(optional: AssetRecord.priceAlert)
             .order(Columns.Asset.rank.desc)
             .limit(Self.defaultQueryLimit)
+        
         request = Self.applyFilters(request: request, filters)
-        return try request.fetchAll(db)
+
+        return try request
+            .asRequest(of: PriceAlertAssetRecordInfo.self)
+            .fetchAll(db)
     }
 }

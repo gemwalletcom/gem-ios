@@ -118,14 +118,14 @@ struct SelectAssetScene: View {
                         action: onAsset
                     )
                 }
-            case .manage:
+            case .manage, .priceAlert:
                 ListAssetItemSelectionView(
                     assetData: assetData,
                     currencyCode: model.currencyCode,
                     type: model.selectType.listType,
                     action: onAsset
                 )
-            case .priceAlert, .swap:
+            case .swap:
                 NavigationCustomLink(
                     with: ListAssetItemSelectionView(
                         assetData: assetData,
@@ -151,9 +151,9 @@ extension SelectAssetScene {
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
-        case .enabled(let enabled):
+        case .switcher(let enabled):
             Task {
-                await model.enableAsset(assetId: asset.id, enabled: enabled)
+                await model.handleAction(assetId: asset.id, enabled: enabled)
             }
         case .copy:
             let address = assetData.account.address
@@ -161,7 +161,7 @@ extension SelectAssetScene {
             isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
             UIPasteboard.general.string = address
             Task {
-                await model.enableAsset(assetId: asset.id, enabled: true)
+                await model.handleAction(assetId: asset.id, enabled: true)
             }
         }
     }

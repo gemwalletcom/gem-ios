@@ -129,31 +129,6 @@ extension AssetRecord {
             type: type
         )
     }
-    
-    func mapToEmptyAssetData() -> AssetData {
-        AssetData(
-            asset: mapToAsset(),
-            balance: .zero,
-            account: .init(
-                chain: chain,
-                address: .empty,
-                derivationPath: .empty,
-                extendedPublicKey: nil
-            ),
-            price: nil,
-            price_alert: nil,
-            metadata: AssetMetaData(
-                isEnabled: true,
-                isBuyEnabled: isBuyable,
-                isSellEnabled: isSellable,
-                isSwapEnabled: isSwappable,
-                isStakeEnabled: isStakeable,
-                isPinned: false,
-                isActive: false,
-                stakingApr: stakingApr
-            )
-        )
-    }
 }
 
 extension PriceRecordInfo {
