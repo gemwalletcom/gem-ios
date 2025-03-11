@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "عبارات بازیابی خصوصی منحصربه‌فرد خود را بنویسید و آن را به صورت ایمن ذخیره کنید. برای دسترسی و بازیابی کیف پول ضروری است.";
 "common.continue" = "ادامه";
 "common.secret_phrase" = "عبارات بازیابی خصوصی";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "ارائه دهنده";
 "wallet.new.backup_confirm_warning" = "قبل از ادامه، مطمئن شوید که عبارات بازیابی خصوصی خود را به طور ایمن یادداشت کرده و ذخیره کرده اید، زیرا برای دسترسی و بازیابی کیف پول در آینده بسیار مهم است.";
 "common.loading" = "در حال بارگذاری";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "هیچ کیف پول پشتیبانی شده ای در دسترس نیست.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "روش درخواستی پشتیبانی نمی شود.";
+"errors.swap.amount_too_small" = "Amount too small";
