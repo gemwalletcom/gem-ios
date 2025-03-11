@@ -19,7 +19,7 @@ struct ConfirmTransferScene: View {
 
     var body: some View {
         VStack {
-            transactionsList(value: model.state.value)
+            transactionsList
             Spacer()
             StateButton(
                 text: model.buttonTitle,
@@ -64,8 +64,7 @@ extension ConfirmTransferScene {
         return nil
     }
 
-    @ViewBuilder
-    private func transactionsList(value: TransactionInputViewModel?) -> some View {
+    private var transactionsList: some View {
         List {
             Section {
                 if let appValue = model.appValue {
@@ -119,18 +118,20 @@ extension ConfirmTransferScene {
                 .headerProminence(.increased)
             }
 
-            Section {
-                if model.shouldShowFeeRatesSelector {
-                    NavigationCustomLink(
-                        with: networkFeeView,
-                        action: onSelectFeePicker
-                    )
-                } else {
-                    networkFeeView
-                }
-            } footer: {
-                if let footer = model.networkFeeFooterText {
-                    Text(footer)
+            if model.shouldShowFee {
+                Section {
+                    if model.shouldShowFeeRatesSelector {
+                        NavigationCustomLink(
+                            with: networkFeeView,
+                            action: onSelectFeePicker
+                        )
+                    } else {
+                        networkFeeView
+                    }
+                } footer: {
+                    if let footer = model.networkFeeFooterText {
+                        Text(footer)
+                    }
                 }
             }
 

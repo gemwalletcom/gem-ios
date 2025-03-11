@@ -8,9 +8,16 @@ import GemstonePrimitives
 public enum TransferAmountResult {
     case amount(TransferAmount)
     case error(TransferAmount, Error)
+    
+    public var isValid: Bool {
+        switch self {
+        case .amount: true
+        case .error: false
+        }
+    }
 }
 
-public struct TranferAmountInput {
+public struct TransferAmountInput {
     public let asset: Asset
     public let assetBalance: Balance
     public let value: BigInt
@@ -52,7 +59,7 @@ public struct TranferAmountInput {
 public struct TransferAmountCalculator {
     public init() {}
 
-    public func calculateResult(input: TranferAmountInput) -> TransferAmountResult {
+    public func calculateResult(input: TransferAmountInput) -> TransferAmountResult {
         do {
             let amount = try calculate(input: input)
             return .amount(amount)
@@ -65,7 +72,7 @@ public struct TransferAmountCalculator {
         }
     }
 
-    public func calculate(input: TranferAmountInput) throws -> TransferAmount {
+    public func calculate(input: TransferAmountInput) throws -> TransferAmount {
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
             guard input.fee.isZero else {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)

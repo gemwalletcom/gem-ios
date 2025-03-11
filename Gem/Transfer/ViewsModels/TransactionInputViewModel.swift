@@ -36,14 +36,6 @@ struct TransactionInputViewModel {
         case .none: data.value
         }
     }
-    
-    var feeValue: BigInt? {
-        switch transferAmountResult {
-        case .amount(let amount): amount.networkFee
-        case .error(let amount, _): amount.networkFee
-        case .none: .none
-        }
-    }
 
     var infoModel: TransactionInfoViewModel {
         TransactionInfoViewModel(
@@ -53,7 +45,7 @@ struct TransactionInputViewModel {
             feeAsset: data.type.asset.feeAsset,
             feeAssetPrice: metaData?.feePrice,
             value: value,
-            feeValue: feeValue
+            feeValue: input?.fee.fee
         )
     }
 
