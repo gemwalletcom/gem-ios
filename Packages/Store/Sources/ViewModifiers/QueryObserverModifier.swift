@@ -8,7 +8,7 @@ struct QueryObserverModifier<Q: ValueObservationQueryable>: ViewModifier where Q
     @Query<Q> private var queryValue: Q.Value
     @Binding private var value: Q.Value
 
-    init(value: Binding<Q.Value>, request: Binding<Q>) {
+    init(request: Binding<Q>, value: Binding<Q.Value>) {
         _value = value
         _queryValue = Query(request)
     }
@@ -26,13 +26,13 @@ struct QueryObserverModifier<Q: ValueObservationQueryable>: ViewModifier where Q
 
 public extension View {
     func observeQuery<Q: ValueObservationQueryable>(
-        value: Binding<Q.Value>,
-        request: Binding<Q>
+        request: Binding<Q>,
+        value: Binding<Q.Value>
     ) -> some View where Q.Value: Equatable, Q.Context == DatabaseContext {
         modifier(
             QueryObserverModifier(
-                value: value,
-                request: request
+                request: request,
+                value: value
             )
         )
     }
