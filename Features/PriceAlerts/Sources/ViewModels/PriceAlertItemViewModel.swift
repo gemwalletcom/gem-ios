@@ -24,14 +24,14 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
     public var name: String { data.asset.name }
     public var symbol: String? { data.asset.symbol }
-    public var rightView: Components.ListAssetItemRightView { .none }
-    public var action: ((Components.ListAssetItemAction) -> Void)?
+    public var rightView: ListAssetItemRightView { .none }
+    public var action: ((ListAssetItemAction) -> Void)?
 
-    public var assetImage: Components.AssetImage {
+    public var assetImage: AssetImage {
         AssetViewModel(asset: data.asset).assetImage
     }
 
-    public var subtitleView: Components.ListAssetItemSubtitleView {
+    public var subtitleView: ListAssetItemSubtitleView {
         .price(
             price: TextValue(
                 text: prefixText(),
@@ -64,8 +64,8 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
     
     private func priceDirectionPrefix() -> String {
         switch data.priceAlert.priceDirection {
-        case .up: "Exceeds"
-        case .down: "Falls below"
+        case .up: "Over"
+        case .down: "Under"
         case .none: .empty
         }
     }

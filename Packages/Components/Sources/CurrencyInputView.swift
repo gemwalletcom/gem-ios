@@ -10,6 +10,8 @@ public protocol CurrencyInputConfigurable {
     var secondaryText: String { get }
     var keyboardType: UIKeyboardType { get }
     var sanitizer: ((String) -> String)? { get }
+    var actionButtonImage: Image? { get }
+    var onTapActionButton: (() -> Void)? { get }
 }
 
 public struct CurrencyInputView: View {
@@ -20,7 +22,9 @@ public struct CurrencyInputView: View {
     private let currencyPosition: CurrencyTextField.CurrencyPosition
     private let secondaryText: String
     private let keyboardType: UIKeyboardType
+    private let actionButtonImage: Image?
 
+    private let onTapActionButton: (() -> Void)?
     private let sanitizer: ((String) -> String)?
 
     public init(
@@ -30,6 +34,8 @@ public struct CurrencyInputView: View {
         currencyPosition: CurrencyTextField.CurrencyPosition,
         secondaryText: String,
         keyboardType: UIKeyboardType,
+        actionButtonImage: Image? = nil,
+        onTapActionButton: (() -> Void)? = nil,
         sanitizer: ((String) -> String)? = nil
     ) {
         _text = text
@@ -38,6 +44,8 @@ public struct CurrencyInputView: View {
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
         self.currencyPosition = currencyPosition
+        self.actionButtonImage = actionButtonImage
+        self.onTapActionButton = onTapActionButton
         self.sanitizer = sanitizer
     }
 
@@ -49,22 +57,36 @@ public struct CurrencyInputView: View {
             currencyPosition: config.currencyPosition,
             secondaryText: config.secondaryText,
             keyboardType: config.keyboardType,
+            actionButtonImage: config.actionButtonImage,
+            onTapActionButton: config.onTapActionButton,
             sanitizer: config.sanitizer
         )
     }
 
     public var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            CurrencyTextField(
-                placeholder,
-                text: $text,
-                currencySymbol: currencySymbol,
-                currencyPosition: currencyPosition,
-                keyboardType: keyboardType
-            )
-            .ifLet(sanitizer) { view, sanitize in
-                view.onChange(of: text) { _, newValue in
-                    text = sanitize(newValue)
+            HStack(spacing: .medium) {
+                if let actionButtonImage {
+                    Button {
+                        onTapActionButton?()
+                    } label: {
+                        actionButtonImage
+                            .resizable()
+                            .frame(width: Sizing.image.semiMedium, height: Sizing.image.semiMedium)
+                    }
+                }
+
+                CurrencyTextField(
+                    placeholder,
+                    text: $text,
+                    currencySymbol: currencySymbol,
+                    currencyPosition: currencyPosition,
+                    keyboardType: keyboardType
+                )
+                .ifLet(sanitizer) { view, sanitize in
+                    view.onChange(of: text) { _, newValue in
+                        text = sanitize(newValue)
+                    }
                 }
             }
 

@@ -210,7 +210,11 @@ struct AssetScene: View {
                 model: SetPriceAlertViewModel(
                     wallet: model.walletModel.wallet,
                     assetId: model.assetModel.asset.id.identifier,
-                    priceAlertService: priceAlertService
+                    priceAlertService: priceAlertService,
+                    onComplete: {
+                        isPresentingSetPriceAlert = false
+                        showingPriceAlertMessage = true
+                    }
                 )
             )
         }

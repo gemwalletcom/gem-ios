@@ -15,19 +15,24 @@ public final class SetPriceAlertViewModel {
     private let wallet: Wallet
     private let assetId: String
     private let priceAlertService: PriceAlertService
+    private let onComplete: VoidAction
+    
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     private let valueFormatter = ValueFormatter(style: .short)
 
     var state: SetPriceAlertViewModelState
+    let preselectedPercentages: [String] = ["5", "10", "15"]
     
     public init(
         wallet: Wallet,
         assetId: String,
-        priceAlertService: PriceAlertService
+        priceAlertService: PriceAlertService,
+        onComplete: VoidAction
     ) {
         self.wallet = wallet
         self.assetId = assetId
         self.priceAlertService = priceAlertService
+        self.onComplete = onComplete
         self.state = .init()
     }
 
@@ -38,17 +43,17 @@ public final class SetPriceAlertViewModel {
         )
     }
     
-    var showPercentageAlertDirectionPicker: Bool {
+    var showPercentagePreselectedPicker: Bool {
         state.type == .percentage
     }
     
     var alertDirectionTitle: String {
         switch (state.type, state.alertDirection) {
-        case (.price, .up): "If the price exceeds"
-        case (.price, .down): "If the price drops below"
-        case (.price, .none): "Set a target price"
-        case (.percentage, .up): "If the price increases by"
-        case (.percentage, .down): "If the price decreases by"
+        case (.price, .up): "When price is over"
+        case (.price, .down): "When price is under"
+        case (.price, .none): "Set target price"
+        case (.percentage, .up): "When price increases by"
+        case (.percentage, .down): "When price decreases by"
         case (.percentage, .none): .empty
         }
     }
@@ -70,16 +75,17 @@ public final class SetPriceAlertViewModel {
     func currencyInputConfig(for assetData: AssetData) -> any CurrencyInputConfigurable {
         SetPriceAlertCurrencyInputConfig(
             type: state.type,
+            alertDirection: state.alertDirection,
             assetData: assetData,
-            formatter: currencyFormatter
+            formatter: currencyFormatter,
+            onTapActionButton: {
+                switch self.state.alertDirection {
+                case .up: self.state.alertDirection = .down
+                case .down: self.state.alertDirection = .up
+                default: break
+                }
+            }
         )
-    }
-    
-    func setPrice(_ : AssetData?, asset: AssetData) {
-        guard let price = asset.price?.price else {
-            return
-        }
-        state.amount = currencyFormatter.string(decimal: Decimal(price))
     }
     
     func onChangeAlertType(_: SetPriceAlertType, type: SetPriceAlertType) {
@@ -146,5 +152,6 @@ public final class SetPriceAlertViewModel {
 extension SetPriceAlertViewModel {
     func setPriceAlert() async throws {
         try await priceAlertService.addPriceAlert(priceAlert: priceAlert())
+        onComplete?()
     }
 }

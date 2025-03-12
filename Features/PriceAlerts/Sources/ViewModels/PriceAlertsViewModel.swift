@@ -37,14 +37,16 @@ public final class PriceAlertsViewModel: Sendable {
             preferences.isPriceAlertsEnabled = newValue
         }
     }
-    
-    func alertsSections(for alerts: [PriceAlertData]) -> [[PriceAlertData]] {
-        alerts.reduce(into: []) { result, alert in
-            guard let index = result.firstIndex(where: { $0.first?.asset == alert.asset }) else {
-                result.append([alert])
-                return
+
+    func alertsSections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
+        alerts.reduce(into: PriceAlertsSections(autoAlerts: [], manualAlerts: [])) { result, alert in
+            if alert.priceAlert.type == .auto {
+                result.autoAlerts.append(alert)
+            } else if let index = result.manualAlerts.firstIndex(where: { $0.first?.asset == alert.asset }) {
+                result.manualAlerts[index].append(alert)
+            } else {
+                result.manualAlerts.append([alert])
             }
-            result[index].append(alert)
         }
     }
 }

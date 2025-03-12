@@ -23,7 +23,12 @@ public struct PriceAlertsScene: View {
     public var body: some View {
         List {
             toggleView
-            sectionsView
+            
+            let sections = model.alertsSections(for: priceAlerts)
+            autoAssetAlertsView(alerts: sections.autoAlerts)
+            ForEach(sections.manualAlerts, id: \.self) {
+                manualAssetAlertsView(alerts: $0)
+            }
         }
         .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)
         .refreshable {
@@ -38,7 +43,7 @@ public struct PriceAlertsScene: View {
 
 // MARK: - UI
 
-extension PriceAlertsScene {
+private extension PriceAlertsScene {
     var toggleView: some View {
         Section {
             Toggle(
@@ -51,26 +56,32 @@ extension PriceAlertsScene {
         }
     }
     
-    var sectionsView: some View {
-        ForEach(model.alertsSections(for: priceAlerts), id: \.self) { alerts in
-            Section {
-                assetAlertsView(alerts: alerts)
+    func autoAssetAlertsView(alerts: [PriceAlertData]) -> some View {
+        Section {
+            ForEach(alerts) { alert in
+                NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                    assetAlertView(alert: alert)
+                }
             }
         }
     }
     
-    func assetAlertsView(alerts: [PriceAlertData]) -> some View {
-        ForEach(alerts) { alert in
-            NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
-                    .swipeActions(edge: .trailing) {
-                        Button(Localized.Common.delete, role: .destructive) {
-                            onDelete(alert: alert.priceAlert)
-                        }
-                        .tint(Colors.red)
-                    }
+    func manualAssetAlertsView(alerts: [PriceAlertData]) -> some View {
+        Section {
+            ForEach(alerts) { alert in
+                assetAlertView(alert: alert)
             }
         }
+    }
+    
+    func assetAlertView(alert: PriceAlertData) -> some View {
+        ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
+            .swipeActions(edge: .trailing) {
+                Button(Localized.Common.delete, role: .destructive) {
+                    onDelete(alert: alert.priceAlert)
+                }
+                .tint(Colors.red)
+            }
     }
 }
 

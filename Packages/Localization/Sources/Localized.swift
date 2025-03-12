@@ -452,6 +452,10 @@ public enum Localized {
     /// Unlock
     public static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
   }
+  public enum Markets {
+    /// Markets
+    public static let title = Localized.tr("Localizable", "markets.title", fallback: "Markets")
+  }
   public enum Nft {
     /// Collection
     public static let collection = Localized.tr("Localizable", "nft.collection", fallback: "Collection")

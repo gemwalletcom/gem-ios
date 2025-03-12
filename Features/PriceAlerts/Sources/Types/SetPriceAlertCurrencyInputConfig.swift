@@ -5,15 +5,18 @@ import Components
 import SwiftUI
 import Primitives
 import Preferences
+import Style
 
 struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     let type: SetPriceAlertType
+    let alertDirection: PriceAlertDirection?
     let assetData: AssetData
     let formatter: CurrencyFormatter
+    let onTapActionButton: VoidAction
     
     var placeholder: String {
         switch type {
-        case .price: .empty
+        case .price: "0"
         case .percentage: "5"
         }
     }
@@ -41,6 +44,14 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     
     var keyboardType: UIKeyboardType {
         .decimalPad
+    }
+    
+    var actionButtonImage: Image? {
+        switch (type, alertDirection) {
+        case (.percentage, .up): Images.PriceAlert.up
+        case (.percentage, .down): Images.PriceAlert.down
+        default: nil
+        }
     }
     
     var sanitizer: ((String) -> String)? = { input in

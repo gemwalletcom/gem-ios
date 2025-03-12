@@ -36,7 +36,7 @@ struct SetPriceAlertViewModelState {
         }
     }
     
-    private var priceAmount: String = .zero
+    private var priceAmount: String = .empty
     private var percentageAmount: String = .empty
     
     private var priceDirection: PriceAlertDirection?
