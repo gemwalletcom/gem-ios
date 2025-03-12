@@ -2,20 +2,26 @@
 
 import Foundation
 import Components
-import Gemstone
+import Primitives
+
+import struct Gemstone.SwapQuote
 
 struct SwapState {
     var fetch: SwapFetchState
-    var availability: StateViewType<[SwapQuote]>
-    var getQuoteData: StateViewType<Bool>
+    var quotes: StateViewType<[SwapQuote]>
+    var finalSwapData: StateViewType<TransferData>
 
     init(
         fetch: SwapFetchState = .idle,
         availability: StateViewType<[SwapQuote]> = .noData,
-        getQuoteData: StateViewType<Bool> = .noData
+        finalSwapData: StateViewType<TransferData> = .noData
     ) {
         self.fetch = fetch
-        self.availability = availability
-        self.getQuoteData = getQuoteData
+        self.quotes = availability
+        self.finalSwapData = finalSwapData
+    }
+
+    var isLoading: Bool {
+        quotes.isLoading || finalSwapData.isLoading
     }
 }

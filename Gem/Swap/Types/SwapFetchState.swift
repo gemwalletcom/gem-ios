@@ -23,7 +23,7 @@ extension SwapFetchState {
     var id: String {
         switch self {
         case .idle: "idle"
-        case let .fetch(input, _): input.id
+        case let .fetch(input, delay): input.id + (delay?.description ?? "")
         case let .data(quotes): quotes.map({ String($0.hashValue) }).joined(separator: "_")
         }
     }
