@@ -246,4 +246,47 @@ final class TransferAmountCalculatorTests {
 //            ))
 //        }
     }
+    
+    @Test
+    func testBalancePreCheck() {
+        #expect(throws: Error.self) {
+            try service.preCheckBalance(
+                asset: coinAsset,
+                assetBalance: .zero,
+                value: BigInt(10),
+                availableValue: BigInt(10),
+                ignoreValueCheck: false
+            )
+        }
+
+        #expect(throws: Error.self) {
+            try service.preCheckBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(10)),
+                value: BigInt(20),
+                availableValue: BigInt(10),
+                ignoreValueCheck: false
+            )
+        }
+
+        #expect(throws: Never.self) {
+            try service.preCheckBalance(
+                asset: coinAsset,
+                assetBalance: .zero,
+                value: BigInt(10),
+                availableValue: BigInt(10),
+                ignoreValueCheck: true
+            )
+        }
+
+        #expect(throws: Never.self) {
+            try service.preCheckBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(50)),
+                value: BigInt(20),
+                availableValue: BigInt(50),
+                ignoreValueCheck: false
+            )
+        }
+    }
 }
