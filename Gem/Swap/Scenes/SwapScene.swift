@@ -200,6 +200,7 @@ extension SwapScene {
                 )
             }
         }
+        .frame(maxWidth: Spacing.scene.button.maxWidth)
     }
     
     @ViewBuilder
@@ -213,7 +214,6 @@ extension SwapScene {
             Group {
                 if model.isVisibleActionButton {
                     buttonView
-                        .frame(height: focusedField == .from ? Spacing.scene.button.accessoryHeight : Spacing.scene.button.height)
                 } else if focusedField == .from {
                     PercentageAccessoryView(
                         onSelectPercent: onSelectPercent,

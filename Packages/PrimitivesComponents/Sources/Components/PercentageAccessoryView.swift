@@ -29,7 +29,7 @@ public struct PercentageAccessoryView: View {
                     }
                 }
             }
-            .buttonStyle(.listStyleColor(paddingVertical: .tiny, cornerRadius: .small))
+            .buttonStyle(.listStyleColor(paddingVertical: .small, cornerRadius: .small))
             .frame(maxWidth: .infinity)
 
             Button(action: onDone) {
