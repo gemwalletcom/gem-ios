@@ -50,10 +50,6 @@ public final class NetworkFeeSceneViewModel {
         rates.count > 1
     }
     
-    public var hasFeeRates: Bool {
-        !rates.isEmpty
-    }
-    
     public func getFeeRates(type: TransferDataType) async throws -> [FeeRate] {
         if rates.isEmpty {
             self.rates = try await service.feeRates(type: type)

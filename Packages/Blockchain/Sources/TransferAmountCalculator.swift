@@ -7,14 +7,7 @@ import GemstonePrimitives
 
 public enum TransferAmountResult {
     case amount(TransferAmount)
-    case error(TransferAmount, Error)
-    
-    public var isValid: Bool {
-        switch self {
-        case .amount: true
-        case .error: false
-        }
-    }
+    case error(TransferAmount?, Error)
 }
 
 public struct TransferAmountInput {
@@ -114,5 +107,17 @@ public struct TransferAmountCalculator {
         let useMaxAmount = input.availableValue == input.value
 
         return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
+    }
+
+    public func preCheckBalance(
+        asset: Asset,
+        assetBalance: Balance,
+        value: BigInt,
+        availableValue: BigInt,
+        ignoreValueCheck: Bool = false
+    ) throws {
+        if !ignoreValueCheck, assetBalance.available == 0 || availableValue < value {
+            throw TransferAmountCalculatorError.insufficientBalance(asset)
+        }
     }
 }

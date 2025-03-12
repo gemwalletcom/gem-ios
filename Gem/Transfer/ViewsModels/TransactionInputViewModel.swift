@@ -32,8 +32,7 @@ struct TransactionInputViewModel {
     var value: BigInt {
         switch transferAmountResult {
         case .amount(let amount): amount.value
-        case .error(let amount, _): amount.value
-        case .none: data.value
+        case .error, nil: data.value
         }
     }
 
@@ -58,7 +57,10 @@ struct TransactionInputViewModel {
     }
     
     var networkFeeText: String? {
-        infoModel.feeValueText
+        switch transferAmountResult {
+        case .amount: infoModel.feeValueText
+        case .error, nil: "-"
+        }
     }
     
     var networkFeeFiatText: String? {

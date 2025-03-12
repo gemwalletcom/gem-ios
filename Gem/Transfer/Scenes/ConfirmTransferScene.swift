@@ -118,20 +118,18 @@ extension ConfirmTransferScene {
                 .headerProminence(.increased)
             }
 
-            if model.shouldShowFee {
-                Section {
-                    if model.shouldShowFeeRatesSelector {
-                        NavigationCustomLink(
-                            with: networkFeeView,
-                            action: onSelectFeePicker
-                        )
-                    } else {
-                        networkFeeView
-                    }
-                } footer: {
-                    if let footer = model.networkFeeFooterText {
-                        Text(footer)
-                    }
+            Section {
+                if model.shouldShowFeeRatesSelector {
+                    NavigationCustomLink(
+                        with: networkFeeView,
+                        action: onSelectFeePicker
+                    )
+                } else {
+                    networkFeeView
+                }
+            } footer: {
+                if let footer = model.networkFeeFooterText {
+                    Text(footer)
                 }
             }
 

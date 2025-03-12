@@ -232,10 +232,6 @@ final class ConfirmTransferViewModel {
     var shouldShowFeeRatesSelector: Bool {
         feeModel.showFeeRatesSelector
     }
-    
-    var shouldShowFee: Bool {
-        feeModel.hasFeeRates
-    }
 
     var dataModel: TransferDataViewModel {
         TransferDataViewModel(data: data)
@@ -251,14 +247,16 @@ extension ConfirmTransferViewModel {
 
         do {
             let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            try updateState(metaData: metaData, preloadInput: nil)
-            
-            guard state.value?.transferAmountResult?.isValid == true else {
-                return
-            }
+            try preCheckBalance(metaData: metaData)
 
             let preloadInput = try await fetchTransactionLoad(metaData: metaData)
-            try updateState(metaData: metaData, preloadInput: preloadInput)
+            let transferAmountResult = calculateTransferAmount(
+                metaData: metaData,
+                preloadInput: preloadInput
+            )
+            updateState(with: transactionInputViewModel(transferAmount: transferAmountResult, input: preloadInput, metaData: metaData))
+        } catch let error as TransferAmountCalculatorError {
+            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -484,7 +482,7 @@ extension ConfirmTransferViewModel {
         )
     }
     
-    private func fetchTransactionLoad(metaData: TransferDataMetadata) async throws -> TransactionLoad? {
+    private func fetchTransactionLoad(metaData: TransferDataMetadata) async throws -> TransactionLoad {
         let senderAddress = try wallet.account(for: dataModel.chain).address
         let destinationAddress = dataModel.recipient.address
         let scanPayload = try scanService.getTransactionPayload(
@@ -527,10 +525,18 @@ extension ConfirmTransferViewModel {
         return try await service.load(input: transactionInput)
     }
     
-    private func updateState(
+    private func updateState(with viewModel: TransactionInputViewModel) {
+        feeModel.update(
+            value: viewModel.networkFeeText,
+            fiatValue: viewModel.networkFeeFiatText
+        )
+        state = .data(viewModel)
+    }
+    
+    private func calculateTransferAmount(
         metaData: TransferDataMetadata,
-        preloadInput: TransactionLoad?
-    ) throws {
+        preloadInput: TransactionLoad
+    ) -> TransferAmountResult {
         let calculatorInput = TransferAmountInput(
             asset: dataModel.asset,
             assetBalance: Balance(available: metaData.assetBalance),
@@ -538,24 +544,34 @@ extension ConfirmTransferViewModel {
             availableValue: availableValue,
             assetFee: dataModel.asset.feeAsset,
             assetFeeBalance: Balance(available: metaData.assetFeeBalance),
-            fee: preloadInput?.fee.fee ?? .zero,
+            fee: preloadInput.fee.fee,
             canChangeValue: dataModel.data.canChangeValue,
             ignoreValueCheck: dataModel.data.ignoreValueCheck
         )
-        let transferAmountResult = TransferAmountCalculator().calculateResult(input: calculatorInput)
-        
-        let transactionInputModel = TransactionInputViewModel(
+        return TransferAmountCalculator().calculateResult(input: calculatorInput)
+    }
+    
+    private func transactionInputViewModel(
+        transferAmount: TransferAmountResult,
+        input: TransactionLoad? = nil,
+        metaData: TransferDataMetadata? = nil
+    ) -> TransactionInputViewModel {
+        TransactionInputViewModel(
             data: data,
-            input: preloadInput,
+            input: input,
             metaData: metaData,
-            transferAmountResult: transferAmountResult
+            transferAmountResult: transferAmount
         )
-        
-        feeModel.update(
-            value: transactionInputModel.networkFeeText,
-            fiatValue: transactionInputModel.networkFeeFiatText
+    }
+    
+    private func preCheckBalance(metaData: TransferDataMetadata) throws {
+        try TransferAmountCalculator().preCheckBalance(
+            asset: dataModel.asset,
+            assetBalance: Balance(available: metaData.assetBalance),
+            value: dataModel.data.value,
+            availableValue: availableValue,
+            ignoreValueCheck: dataModel.data.ignoreValueCheck
         )
-        state = .data(transactionInputModel)
     }
 }
 
