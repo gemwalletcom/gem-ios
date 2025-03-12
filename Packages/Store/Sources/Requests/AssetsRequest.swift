@@ -76,10 +76,10 @@ extension AssetsRequest {
 
     static private func applyFilter(request: QueryInterfaceRequest<AssetRecord>, _ filter: AssetsRequestFilter) -> QueryInterfaceRequest<AssetRecord>  {
         switch filter {
-        case .search(let name, let hasPriorityAssets):
+        case .search(let query, let hasPriorityAssets):
             if hasPriorityAssets {
                 return request.joining(required: AssetRecord.priorityAssets
-                    .filter(Columns.AssetSearch.query == name)
+                    .filter(Columns.AssetSearch.query == query)
                 )
                 .order(
                     TableAlias(name: AssetSearchRecord.databaseTableName)[Columns.AssetSearch.priority].ascNullsLast,
@@ -88,9 +88,9 @@ extension AssetsRequest {
             }
             return request
                 .filter(
-                    Columns.Asset.symbol.like("%%\(name)%%") ||
-                    Columns.Asset.name.like("%%\(name)%%") ||
-                    Columns.Asset.tokenId.like("%%\(name)%%")
+                    Columns.Asset.symbol.like("%%\(query)%%") ||
+                    Columns.Asset.name.like("%%\(query)%%") ||
+                    Columns.Asset.tokenId.like("%%\(query)%%")
                 )
                 .order(
                     Columns.Asset.rank.desc
@@ -142,6 +142,7 @@ extension AssetsRequest {
         walletId: String,
         filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
+        let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0))
         let request = AssetRecord
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
@@ -153,8 +154,9 @@ extension AssetsRequest {
                 TableAlias(name: AccountRecord.databaseTableName)[Columns.Balance.walletId] == walletId
             )
             .order(
-                (TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] *
-                (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0)).desc
+                totalValue.desc,
+                (totalValue == 0).desc,
+                Columns.Asset.rank.desc
             )
             .limit(Self.defaultQueryLimit)
         
