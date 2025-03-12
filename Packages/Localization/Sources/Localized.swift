@@ -18,9 +18,9 @@ public enum Localized {
       public static let message = Localized.tr("Localizable", "activity.empty_state.message", fallback: "No activity yet.")
     }
   }
-  public enum App {
+  public enum Application {
     /// Gem
-    public static let name = Localized.tr("Localizable", "app.name", fallback: "Gem")
+    public static let name = Localized.tr("Localizable", "application.name", fallback: "Gem")
   }
   public enum Asset {
     /// Balances
@@ -324,6 +324,8 @@ public enum Localized {
       }
     }
     public enum Swap {
+      /// Amount too small
+      public static let amountTooSmall = Localized.tr("Localizable", "errors.swap.amount_too_small", fallback: "Amount too small")
       /// No quote available.
       public static let noQuoteAvailable = Localized.tr("Localizable", "errors.swap.no_quote_available", fallback: "No quote available.")
       /// No quote data

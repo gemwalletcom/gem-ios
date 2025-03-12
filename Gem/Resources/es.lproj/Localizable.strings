@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Write down your unique Secret Recovery Phrase and store it securely; it's essential for wallet access and recovery.";
 "common.continue" = "Continuar";
 "common.secret_phrase" = "Secret Recovery Phrase";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Proveedor";
 "wallet.new.backup_confirm_warning" = "Confirm that you've written down and stored your Secret Recovery Phrase securely before proceeding, as it is crucial for future wallet access and recovery.";
 "common.loading" = "Loading";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "No hay billeteras compatibles disponibles.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "El método solicitado no es compatible.";
+"errors.swap.amount_too_small" = "Amount too small";
