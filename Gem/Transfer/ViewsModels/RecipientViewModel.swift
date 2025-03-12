@@ -6,6 +6,9 @@ import Keystore
 import GemstonePrimitives
 import Localization
 import PrimitivesComponents
+import Store
+import Contacts
+import Components
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
@@ -19,11 +22,16 @@ enum RecipientScanResult {
     case transferData(TransferData)
 }
 
-class RecipientViewModel: ObservableObject {
+@Observable
+class RecipientViewModel {
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
-    
+    var address: String = ""
+    var memo: String = ""
+    var amount: String = ""
+    var addressListRequest: ContactAddressInfoListRequest
+
     private let keystore: any Keystore
     private let onRecipientDataAction: RecipientDataAction
     private let onTransferAction: TransferDataAction
@@ -43,6 +51,10 @@ class RecipientViewModel: ObservableObject {
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
+        
+        self.addressListRequest = ContactAddressInfoListRequest(
+            chain: asset.chain
+        )
     }
 
     var tittle: String {
@@ -98,6 +110,27 @@ class RecipientViewModel: ObservableObject {
                     address: $0.accounts[0].address
                 )
             }
+        }
+    }
+    
+    func buildListItemViews(addresses: [ContactAddressInfo]) -> [ContactAddressListViewItem<ContactAddressInfo>] {
+        addresses
+            .map {
+                let memo: TextValue? = $0.address.memo.flatMap {
+                    guard !$0.isEmpty else {
+                        return nil
+                    }
+                    
+                    return TextValue(text: "Memo: \($0)", style: .bodySecondary)
+                }
+                
+                return ContactAddressListViewItem<ContactAddressInfo>(
+                    id: $0.id,
+                    name: TextValue(text: $0.contact.name, style: .bodyBold),
+                    address: TextValue(text: $0.address.address, style: .caption),
+                    memo: memo,
+                    object: $0
+                )
         }
     }
     
@@ -159,6 +192,14 @@ extension RecipientViewModel {
     
     func onTransferDataSelect(data: TransferData) {
         onTransferAction?(data)
+    }
+    
+    func onContactAddressSelected(_ address: ContactAddress) {
+        self.address = address.address
+        
+        if let memo = address.memo {
+            self.memo = memo
+        }
     }
 }
 
