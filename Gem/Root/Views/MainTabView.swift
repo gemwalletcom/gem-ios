@@ -62,6 +62,14 @@ struct MainTabView: View {
             }
             .tag(TabItem.wallet)
             
+            if model.isMarketEnabled {
+                MarketsNavigationStack()
+                .tabItem {
+                    tabItem("Markets", Images.Tabs.markets)
+                }
+                .tag(TabItem.markets)
+            }
+            
             if model.isCollectionsEnabled {
                 CollectionsNavigationStack(
                     model: .init(

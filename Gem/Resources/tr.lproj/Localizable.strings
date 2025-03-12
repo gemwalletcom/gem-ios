@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Benzersiz Geçersiz Gizli İfade anahtarınızı bir yere yazın ve güvenli bir şekilde saklayın; cüzdan erişimi ve kurtarılması için önemlidir.";
 "common.continue" = "Devam etmek";
 "common.secret_phrase" = "Geçersiz Gizli İfade";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Sağlayıcı";
 "wallet.new.backup_confirm_warning" = "Devam etmeden önce cüzdan bilgilerinizi not ettiğinizi ve güvenli bir şekilde sakladığınızdan emin olun; çünkü bu, cüzdanınıza gelecekteki erişim ve kurtarma işlemleri için çok önemlidir.";
 "common.loading" = "Yükleniyor";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "Desteklenen cüzdan yok.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "İstenen yöntem desteklenmiyor.";
+"errors.swap.amount_too_small" = "Amount too small";

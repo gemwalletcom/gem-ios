@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Запишіть свою унікальну Секретна Фраза Гаманця і надійно зберігайте його; він необхідний для доступу до гаманця та його відновлення.";
 "common.continue" = "Продовжити";
 "common.secret_phrase" = "Секретна Фраза Гаманця";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Провайдер";
 "wallet.new.backup_confirm_warning" = "Переконайтеся, що ви записали і надійно зберегли свою Секретна Фраза Гаманця, перш ніж продовжити, оскільки це має вирішальне значення для майбутнього доступу до гаманця і його відновлення.";
 "common.loading" = "Завантаження";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "Немає підтримуваних гаманців.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "Потрібний метод не підтримується.";
+"errors.swap.amount_too_small" = "Amount too small";
