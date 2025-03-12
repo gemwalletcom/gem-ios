@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Запишите свой уникальный Секретная фраза восстановления и надежно сохраните его; это необходимо для доступа к кошельку и восстановления.";
 "common.continue" = "Продолжить";
 "common.secret_phrase" = "Секретная фраза восстановления";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Поставщик";
 "wallet.new.backup_confirm_warning" = "Прежде чем продолжить, подтвердите, что вы записали и сохранили свой Секретная фраза восстановления в безопасном месте, так как это имеет решающее значение для будущего доступа к кошельку и его восстановления.";
 "common.loading" = "Загрузка";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "Поддерживаемые кошельки отсутствуют.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "Запрошенный метод не поддерживается.";
+"errors.swap.amount_too_small" = "Amount too small";

@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "請寫下並安全保存您獨特的[%key_id：317595596%]；它對錢包訪問和恢復至關重要。";
 "common.continue" = "繼續";
 "common.secret_phrase" = "秘密助記詞";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "供應商";
 "wallet.new.backup_confirm_warning" = "繼續之前，請確認您已安全地記下並保存了[%key_id：317595596%]，因為它對將來訪問和恢復錢包至關重要。";
 "common.loading" = "装载中";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "沒有可用的受支援的錢包。";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "不支援請求的方法。";
+"errors.swap.amount_too_small" = "Amount too small";

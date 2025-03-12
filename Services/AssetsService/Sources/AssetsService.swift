@@ -77,6 +77,10 @@ public final class AssetsService: Sendable {
         let assets = try getAssets(for: assetIds).map { $0.id }.asSet()
         let missingAssetIds = assetIds.asSet().subtracting(assets)
 
+        if missingAssetIds.isEmpty {
+            return []
+        }
+        
         // add missing assets to local storage
         let newAssets = try await getAssets(assetIds: missingAssetIds.asArray())
         try addAssets(assets: newAssets)
