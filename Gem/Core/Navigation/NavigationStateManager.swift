@@ -25,6 +25,7 @@ final class NavigationStateManager: NavigationStateManagable {
     var collections = NavigationPath()
     var activity = NavigationPath()
     var settings = NavigationPath()
+    var markets = NavigationPath()
 
     var selectedTab: TabItem
     var previousSelectedTab: TabItem
@@ -50,19 +51,17 @@ extension NavigationStateManager {
 
     func backToRoot(tab: TabItem) {
         switch tab {
-        case .wallet:
-            guard !wallet.isEmpty else { return }
-            wallet.removeLast(wallet.count)
-        case .collections:
-            guard !collections.isEmpty else { return }
-            collections.removeLast(collections.count)
-        case .activity:
-            guard !activity.isEmpty else { return }
-            activity.removeLast(activity.count)
-        case .settings:
-            guard !settings.isEmpty else { return }
-            settings.removeLast(settings.count)
+        case .wallet: resetPath(&wallet)
+        case .collections: resetPath(&collections)
+        case .activity: resetPath(&activity)
+        case .settings: resetPath(&settings)
+        case .markets: resetPath(&markets)
         }
+    }
+
+    private func resetPath(_ path: inout NavigationPath) {
+        guard !path.isEmpty else { return }
+        path.removeLast(path.count)
     }
 
     func clearAll() {

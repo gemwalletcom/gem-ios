@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Speichern Sie Ihren persönlichen Geheimen Sicherheitsschlüssel und bewahren Sie diesen sicher auf; er wird zum zukünftigen Zugriff und zur Wiederherstellung Ihrer Wallet benötigt wird.";
 "common.continue" = "Weiter";
 "common.secret_phrase" = "Geheimen Sicherheitsschlüssel";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Anbieter";
 "wallet.new.backup_confirm_warning" = "Vergewissern Sie sich, dass Sie Ihren Geheimen Sicherheitsschlüssel aufgeschrieben und gespeichert haben, bevor Sie fortfahren, da er für den zukünftigen Zugriff und zur Wiederherstellung Ihrer Wallet benötigt wird.";
 "common.loading" = "Lädt";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "Es sind keine unterstützten Geldbörsen verfügbar.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "Die angeforderte Methode wird nicht unterstützt.";
+"errors.swap.amount_too_small" = "Amount too small";

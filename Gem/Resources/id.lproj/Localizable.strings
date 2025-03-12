@@ -22,7 +22,7 @@
 "wallet.new.backup_warning" = "Catat Frasa Pemulihan Rahasia unik Anda dan simpan dengan aman; ini sangat penting untuk akses dan pemulihan dompet.";
 "common.continue" = "Lanjutkan";
 "common.secret_phrase" = "Frasa Pemulihan Rahasia";
-"app.name" = "Gem";
+"application.name" = "Gem";
 "common.provider" = "Penyedia";
 "wallet.new.backup_confirm_warning" = "Pastikan Anda sudah mencatat dan menyimpan Frasa Pemulihan Rahasia Anda dengan aman sebelum melanjutkan, karena frasa ini penting untuk akses dan pemulihan dompet di masa depan.";
 "common.loading" = "Memuat";
@@ -339,3 +339,4 @@
 "errors.connections.no_supported_wallets" = "Tidak ada dompet yang didukung tersedia.";
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "Metode yang diminta tidak didukung.";
+"errors.swap.amount_too_small" = "Amount too small";

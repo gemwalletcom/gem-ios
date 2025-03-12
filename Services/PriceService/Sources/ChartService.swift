@@ -12,7 +12,7 @@ public struct ChartService: Sendable {
         self.chartProvider = chartProvider
     }
     
-    func getCharts(assetId: AssetId, period: ChartPeriod, currency: String) async throws -> Primitives.Charts {
+    public func getCharts(assetId: AssetId, period: ChartPeriod, currency: String) async throws -> Primitives.Charts {
         try await chartProvider
             .getCharts(assetId: assetId, currency: currency, period: period.rawValue)
     }

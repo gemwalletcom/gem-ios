@@ -70,6 +70,10 @@ public protocol GemAPIScanService: Sendable {
     func getScanTransaction(payload: ScanTransactionPayload) async throws -> ScanTransaction
 }
 
+public protocol GemAPIMarketService: Sendable {
+    func getMarkets() async throws -> Markets
+}
+
 public struct GemAPIService {
     
     let provider: Provider<GemAPI>
@@ -280,5 +284,13 @@ extension GemAPIService: GemAPIScanService {
         try await provider
             .request(.scanTransaction(payload: payload))
             .map(as: ResponseResult<ScanTransaction>.self).data
+    }
+}
+
+extension GemAPIService: GemAPIMarketService {
+    public func getMarkets() async throws -> Markets {
+        try await provider
+            .request(.markets)
+            .map(as: ResponseResult<Markets>.self).data
     }
 }

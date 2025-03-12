@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Store
 import GemstonePrimitives
+import Preferences
 
 struct MainTabViewModel {
     let wallet: Wallet
@@ -16,6 +17,10 @@ struct MainTabViewModel {
         TransactionsCountRequest(walletId: walletId.id, state: .pending)
     }
     
+    var isMarketEnabled: Bool {
+        Preferences.standard.isDeveloperEnabled && wallet.type == .multicoin
+    }
+        
     var isCollectionsEnabled: Bool {
         switch wallet.type {
         case .multicoin: true

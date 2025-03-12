@@ -22,6 +22,7 @@ let package = Package(
         .package(name: "Components", path: "../Components"),
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "PriceService", path: "../PriceService"),
+        .package(name: "AssetsService", path: "../AssetsService")
     ],
     targets: [
         .target(
@@ -36,6 +37,7 @@ let package = Package(
                 "Components",
                 "Preferences",
                 "PriceService",
+                "AssetsService"
             ],
             path: "Sources"
         ),
