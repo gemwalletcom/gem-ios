@@ -19,9 +19,6 @@ public struct WalletScene: View {
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
 
-    @Query<WalletRequest>
-    var dbWallet: Wallet?
-
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @Binding var isPresentingSelectType: SelectAssetType?
@@ -44,7 +41,6 @@ public struct WalletScene: View {
 
         _assets = Query(constant: model.assetsRequest)
         _totalFiatValue = Query(constant: model.totalFiatValueRequest)
-        _dbWallet = Query(constant: model.walletRequest)
         _banners = Query(constant: model.bannersRequest)
     }
 
@@ -135,10 +131,8 @@ public struct WalletScene: View {
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                if let wallet = dbWallet {
-                    WalletBarView(model: .from(wallet: wallet)) {
-                        isPresentingWallets.toggle()
-                    }
+                WalletBarView(model: .from(wallet: model.wallet)) {
+                    isPresentingWallets.toggle()
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -152,9 +146,6 @@ public struct WalletScene: View {
         .navigationBarTitleDisplayMode(.inline)
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-        .task {
-            fetch()
         }
         .onChange(
             of: model.wallet,
@@ -174,7 +165,7 @@ extension WalletScene {
     func refreshable() async {
         Task {
             do {
-                try await model.fetch(walletId: model.wallet.walletId, assets: assets)
+                try await model.fetch(assets: assets)
             } catch {
                 NSLog("refreshable error: \(error)")
             }
@@ -196,7 +187,7 @@ extension WalletScene {
 
     func runAddressStatusCheck() {
         Task {
-            await model.runAddressStatusCheck(wallet: model.wallet)
+            await model.runAddressStatusCheck()
         }
     }
 

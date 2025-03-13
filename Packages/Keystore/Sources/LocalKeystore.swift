@@ -32,11 +32,7 @@ public struct LocalKeystore: Keystore {
     }
 
     public var wallets: [Primitives.Wallet] {
-        do {
-            return try walletSessionService.getWallets()
-        } catch {
-            return []
-        }
+        (try? walletSessionService.getWallets()).or([])
     }
 
     public func createWallet() -> [String] {

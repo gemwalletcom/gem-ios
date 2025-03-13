@@ -87,19 +87,11 @@ public struct WalletSceneViewModel: Sendable {
         try walletsService.setupWallet(wallet)
     }
 
-    func fetch(walletId: WalletId, assets: [AssetData]) async throws {
+    func fetch(assets: [AssetData]) async throws {
         try await walletsService.fetch(
-            walletId: walletId,
+            walletId: wallet.walletId,
             assetIds: assets.map { $0.asset.id }
         )
-    }
-
-    func fetch(assets: [AssetData]) async throws {
-        do {
-            try await fetch(walletId: wallet.walletId, assets: assets)
-        } catch {
-            NSLog("fetch error: \(error)")
-        }
     }
 
     func handleBanner(action: BannerAction) async throws {
@@ -110,7 +102,7 @@ public struct WalletSceneViewModel: Sendable {
         try await walletsService.updatePrices()
     }
 
-    func runAddressStatusCheck(wallet: Wallet) async {
+    func runAddressStatusCheck() async {
         await walletsService.runAddressStatusCheck(wallet)
     }
 

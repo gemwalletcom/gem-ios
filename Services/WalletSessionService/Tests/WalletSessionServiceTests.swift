@@ -9,8 +9,10 @@ import WalletSessionServiceTeskKit
 
 @testable import WalletSessionService
 
-
 struct WalletSessionServiceTests {
+    private let wallet1: Wallet = .mock(id: "Wallet1", name: "Wallet 1")
+    private let wallet2: Wallet = .mock(id: "Wallet2", name: "Wallet 2")
+
     @Test
     func testCurrentWalletNilWhenPreferenceIsNil() {
         let service = WalletSessionService.mock()
@@ -26,14 +28,14 @@ struct WalletSessionServiceTests {
             store: walletStore
         )
 
-        try walletStore.addWallet(.mock(id: "Wallet1", name: "Wallet 1"))
-        try walletStore.addWallet(.mock(id: "Wallet2", name: "Wallet 2"))
+        try walletStore.addWallet(wallet1)
+        try walletStore.addWallet(wallet2)
 
-        service.setCurrent(walletId: WalletId.mock(id: "Wallet1"))
+        service.setCurrent(walletId: wallet1.walletId)
 
         #expect(service.currentWallet != nil)
-        #expect(service.currentWallet?.walletId.id == "Wallet1")
-        #expect(service.currentWalletId?.id == "Wallet1")
+        #expect(service.currentWallet?.id == wallet1.id)
+        #expect(service.currentWalletId == wallet1.walletId)
         #expect(service.wallets.count == 2)
     }
 
@@ -44,14 +46,14 @@ struct WalletSessionServiceTests {
             store: walletStore
         )
 
-        try walletStore.addWallet(.mock(id: "Wallet1", name: "Wallet 1"))
-        try walletStore.addWallet(.mock(id: "Wallet2", name: "Wallet 2"))
+        try walletStore.addWallet(wallet1)
+        try walletStore.addWallet(wallet2)
 
         service.setCurrent(index: 2)
 
         #expect(service.currentWallet != nil)
-        #expect(service.currentWallet?.walletId.id == "Wallet2")
-        #expect(service.currentWalletId?.id == "Wallet2")
+        #expect(service.currentWallet?.id == wallet2.id)
+        #expect(service.currentWalletId == wallet2.walletId)
         #expect(service.wallets.count == 2)
     }
 
@@ -63,17 +65,17 @@ struct WalletSessionServiceTests {
         )
         #expect(service.currentWallet == nil)
 
-        try walletStore.addWallet(.mock(id: "Wallet1", name: "Wallet 1"))
-        try walletStore.addWallet(.mock(id: "Wallet2", name: "Wallet 2"))
+        try walletStore.addWallet(wallet1)
+        try walletStore.addWallet(wallet2)
 
         #expect(service.currentWallet == nil)
 
-        service.setCurrent(walletId: WalletId.mock(id: "Wallet1"))
+        service.setCurrent(walletId: wallet1.walletId)
 
-        #expect(service.currentWalletId == WalletId.mock(id: "Wallet1"))
+        #expect(service.currentWalletId == wallet1.walletId)
 
-        service.setCurrent(walletId: WalletId.mock(id: "Wallet2"))
+        service.setCurrent(walletId: wallet2.walletId)
 
-        #expect(service.currentWalletId == WalletId.mock(id: "Wallet2"))
+        #expect(service.currentWalletId == wallet2.walletId)
     }
 }
