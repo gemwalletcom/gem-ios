@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "要使用%@資產，您必須先透過滿足網路的特定要求在%@網路上啟用它。";
 "nft.properties" = "特性";
 "nft.collections" = "收藏";
-"nft.description" = "描述";
+"common.description" = "描述";
 "nft.collection" = "收藏";
 "wallet.receive_collection" = "接收收藏";
 "wallet.more" = "更多的";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "節省";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "尚無聯絡人。";
+"contacts.no_addresses" = "尚無地址。";
+"contacts.contact" = "接觸";
+"contacts.title" = "聯絡方式";

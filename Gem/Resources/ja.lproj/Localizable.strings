@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@アセットを使用するには、まずネットワークの特定の要件を満たして%@ネットワーク上でアセットを有効にする必要があります。";
 "nft.properties" = "プロパティ";
 "nft.collections" = "コレクション";
-"nft.description" = "説明";
+"common.description" = "説明";
 "nft.collection" = "コレクション";
 "wallet.receive_collection" = "コレクションを受け取る";
 "wallet.more" = "もっと";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "保存";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "まだ連絡先はありません。";
+"contacts.no_addresses" = "まだ住所がありません。";
+"contacts.contact" = "接触";
+"contacts.title" = "連絡先";

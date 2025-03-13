@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "لاستخدام الأصل %@ ، يجب عليك أولاً تمكينه على شبكة %@ من خلال استيفاء المتطلبات المحددة للشبكة.";
 "nft.properties" = "ملكيات";
 "nft.collections" = "المجموعات";
-"nft.description" = "وصف";
+"common.description" = "وصف";
 "nft.collection" = "مجموعة";
 "wallet.receive_collection" = "استلام المجموعة";
 "wallet.more" = "أكثر";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "يحفظ";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "لا توجد اتصالات حتى الآن.";
+"contacts.no_addresses" = "لا يوجد عناوين حتى الآن.";
+"contacts.contact" = "اتصال";
+"contacts.title" = "جهات الاتصال";

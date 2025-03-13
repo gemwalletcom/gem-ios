@@ -49,12 +49,14 @@ public struct AssetFull: Codable, Sendable {
 	public let links: [AssetLink]
 	public let properties: AssetProperties
 	public let score: AssetScore
+	public let tags: [String]
 
-	public init(asset: Asset, links: [AssetLink], properties: AssetProperties, score: AssetScore) {
+	public init(asset: Asset, links: [AssetLink], properties: AssetProperties, score: AssetScore, tags: [String]) {
 		self.asset = asset
 		self.links = links
 		self.properties = properties
 		self.score = score
+		self.tags = tags
 	}
 }
 

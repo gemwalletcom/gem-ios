@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "Щоб використовувати ресурс %@, ви повинні спочатку ввімкнути його в мережі %@ виконавши спеціальні вимоги мережі.";
 "nft.properties" = "Властивості";
 "nft.collections" = "Колекції";
-"nft.description" = "опис";
+"common.description" = "опис";
 "nft.collection" = "Колекція";
 "wallet.receive_collection" = "Отримати колекцію";
 "wallet.more" = "більше";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "зберегти";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "Контактів ще немає.";
+"contacts.no_addresses" = "Адрес ще немає.";
+"contacts.contact" = "контакт";
+"contacts.title" = "Контакти";

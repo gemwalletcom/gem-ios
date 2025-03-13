@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@ varlığını kullanmak için, öncelikle ağın özel gereksinimlerini karşılayarak %@ ağında etkinleştirmeniz gerekir.";
 "nft.properties" = "Özellikler";
 "nft.collections" = "Koleksiyonlar";
-"nft.description" = "Tanım";
+"common.description" = "Tanım";
 "nft.collection" = "Koleksiyon";
 "wallet.receive_collection" = "Koleksiyon Al";
 "wallet.more" = "Daha";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "Kaydetmek";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "Henüz iletişim yok.";
+"contacts.no_addresses" = "Henüz adres yok.";
+"contacts.contact" = "Temas etmek";
+"contacts.title" = "İletişim";

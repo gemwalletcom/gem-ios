@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "כדי להשתמש בנכס %@, תחילה עליך להפעיל אותו ברשת %@ על ידי מילוי הדרישות הספציפיות של הרשת.";
 "nft.properties" = "נכסים";
 "nft.collections" = "אוספים";
-"nft.description" = "תֵאוּר";
+"common.description" = "תֵאוּר";
 "nft.collection" = "גְבִיָה";
 "wallet.receive_collection" = "קבלת אוסף";
 "wallet.more" = "יוֹתֵר";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "לְהַצִיל";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "עדיין אין אנשי קשר.";
+"contacts.no_addresses" = "עדיין אין כתובות.";
+"contacts.contact" = "מַגָע";
+"contacts.title" = "אנשי קשר";

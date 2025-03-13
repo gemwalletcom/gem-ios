@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "Để sử dụng tài sản %@, trước tiên bạn phải bật nó trên mạng %@ bằng cách đáp ứng các yêu cầu cụ thể của mạng.";
 "nft.properties" = "Của cải";
 "nft.collections" = "Bộ sưu tập";
-"nft.description" = "Sự miêu tả";
+"common.description" = "Sự miêu tả";
 "nft.collection" = "Bộ sưu tập";
 "wallet.receive_collection" = "Nhận bộ sưu tập";
 "wallet.more" = "Hơn";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "Cứu";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "Chưa có liên hệ nào.";
+"contacts.no_addresses" = "Chưa có địa chỉ nào.";
+"contacts.contact" = "Liên hệ";
+"contacts.title" = "Liên hệ";

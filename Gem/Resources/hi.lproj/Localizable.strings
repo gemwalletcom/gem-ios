@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@ एसेट का उपयोग करने के लिए, आपको पहले नेटवर्क की विशिष्ट आवश्यकताओं को पूरा करके इसे %@ नेटवर्क पर सक्षम करना होगा।";
 "nft.properties" = "गुण";
 "nft.collections" = "संग्रह";
-"nft.description" = "विवरण";
+"common.description" = "विवरण";
 "nft.collection" = "संग्रह";
 "wallet.receive_collection" = "संग्रह प्राप्त करें";
 "wallet.more" = "अधिक";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "बचाना";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "अभी तक कोई संपर्क नहीं.";
+"contacts.no_addresses" = "अभी तक कोई पता नहीं.";
+"contacts.contact" = "संपर्क";
+"contacts.title" = "संपर्क";

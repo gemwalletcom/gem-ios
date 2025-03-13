@@ -161,8 +161,12 @@ public enum Localized {
     public static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
+    /// Description
+    public static let description = Localized.tr("Localizable", "common.description", fallback: "Description")
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
+    /// Edit
+    public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Emoji
     public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
     /// Hide
@@ -211,6 +215,8 @@ public enum Localized {
     public static func requiredField(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.required_field", String(describing: p1), fallback: "%@ is required")
     }
+    /// Save
+    public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
     /// Secret Recovery Phrase
     public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Recovery Phrase")
     /// See All
@@ -241,6 +247,16 @@ public enum Localized {
     public static let warning = Localized.tr("Localizable", "common.warning", fallback: "Warning")
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
+  }
+  public enum Contacts {
+    /// Contact
+    public static let contact = Localized.tr("Localizable", "contacts.contact", fallback: "Contact")
+    /// No addresses yet.
+    public static let noAddresses = Localized.tr("Localizable", "contacts.no_addresses", fallback: "No addresses yet.")
+    /// No contacts yet.
+    public static let noContacts = Localized.tr("Localizable", "contacts.no_contacts", fallback: "No contacts yet.")
+    /// Contacts
+    public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
   }
   public enum Date {
     /// Today
@@ -461,8 +477,6 @@ public enum Localized {
     public static let collection = Localized.tr("Localizable", "nft.collection", fallback: "Collection")
     /// Collections
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
-    /// Description
-    public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos

@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "Aby użyć zasobu %@, należy najpierw włączyć go w sieci %@ spełniając określone wymagania sieciowe.";
 "nft.properties" = "Właściwości";
 "nft.collections" = "Kolekcje";
-"nft.description" = "Opis";
+"common.description" = "Opis";
 "nft.collection" = "Kolekcja";
 "wallet.receive_collection" = "Odbierz kolekcję";
 "wallet.more" = "Więcej";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "Ratować";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "Brak kontaktów.";
+"contacts.no_addresses" = "Brak adresów.";
+"contacts.contact" = "Kontakt";
+"contacts.title" = "Łączność";

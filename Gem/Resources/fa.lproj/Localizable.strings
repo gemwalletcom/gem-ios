@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "برای استفاده از دارایی %@ ، ابتدا باید آن را در شبکه %@ با انجام الزامات خاص شبکه فعال کنید.";
 "nft.properties" = "خواص";
 "nft.collections" = "مجموعه ها";
-"nft.description" = "توضیحات";
+"common.description" = "توضیحات";
 "nft.collection" = "مجموعه";
 "wallet.receive_collection" = "دریافت مجموعه";
 "wallet.more" = "بیشتر";
@@ -350,3 +350,9 @@
 "price_alerts.set_alert.price_increases_by" = "When price increases by";
 "price_alerts.set_alert.price_decreases_by" = "When price decreases by";
 "price_alerts.set_alert.set_target_price" = "Set target price";
+"common.save" = "ذخیره کنید";
+"common.edit" = "Edit";
+"contacts.no_contacts" = "هنوز مخاطبی وجود ندارد.";
+"contacts.no_addresses" = "هنوز آدرسی وجود ندارد.";
+"contacts.contact" = "تماس بگیرید";
+"contacts.title" = "مخاطبین";
