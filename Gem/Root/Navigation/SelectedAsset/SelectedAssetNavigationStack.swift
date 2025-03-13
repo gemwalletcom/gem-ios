@@ -11,7 +11,6 @@ import PriceAlerts
 import Swap
 
 struct SelectedAssetNavigationStack: View  {
-    
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
@@ -64,7 +63,7 @@ struct SelectedAssetNavigationStack: View  {
                     )
                 case .swap:
                     SwapNavigationView(
-                        model: SwapViewModel(
+                        model: SwapSceneViewModel(
                             wallet: wallet,
                             pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
                             walletsService: walletsService,
@@ -98,5 +97,3 @@ struct SelectedAssetNavigationStack: View  {
         }
     }
 }
-
-

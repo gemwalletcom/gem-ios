@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import SwiftUI
 
-public enum InfoSheetType: Identifiable, Sendable {
+public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case networkFee(Chain)
     case transactionState(imageURL: URL?, placeholder: Image?, state: TransactionState)
     case watchWallet

@@ -2,14 +2,14 @@
 
 import Foundation
 import Primitives
-import Gemstone
+import struct Gemstone.SwapQuote
 
-enum SwapFetchState: Identifiable, Hashable {
+public enum SwapFetchState: Identifiable, Hashable {
     case idle
     case fetch(input: SwapQuoteInput, delay: Duration?)
     case data(quotes: [SwapQuote])
 
-    var delay: Duration? {
+    public var delay: Duration? {
         switch self {
         case .idle, .data: nil
         case let .fetch(_, delay): delay
@@ -20,10 +20,10 @@ enum SwapFetchState: Identifiable, Hashable {
 // MARK: - Identifiable
 
 extension SwapFetchState {
-    var id: String {
+    public var id: String {
         switch self {
         case .idle: "idle"
-        case let .fetch(input, _): input.id
+        case let .fetch(input, delay): input.id + (delay?.description ?? "")
         case let .data(quotes): quotes.map({ String($0.hashValue) }).joined(separator: "_")
         }
     }
