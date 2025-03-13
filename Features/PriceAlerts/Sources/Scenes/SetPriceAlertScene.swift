@@ -96,11 +96,7 @@ extension SetPriceAlertScene {
     
     func confirm() {
         Task {
-            do {
-                try await model.setPriceAlert()
-            } catch {
-                print(error)
-            }
+            await model.setPriceAlert()
         }
     }
 }

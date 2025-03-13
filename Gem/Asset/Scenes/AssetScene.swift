@@ -21,7 +21,7 @@ struct AssetScene: View {
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var showingOptions = false
-    @State private var showingPriceAlertMessage = false
+    @State private var isPresentingPriceAlertMessage = false
     @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @State private var isPresentingSetPriceAlert: Bool = false
@@ -165,7 +165,7 @@ struct AssetScene: View {
         }
         .modifier(
             ToastModifier(
-                isPresenting: $showingPriceAlertMessage,
+                isPresenting: $isPresentingPriceAlertMessage,
                 value: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
                 systemImage: assetData.priceAlertSystemImage
             )
@@ -213,7 +213,7 @@ struct AssetScene: View {
                     priceAlertService: priceAlertService,
                     onComplete: {
                         isPresentingSetPriceAlert = false
-                        showingPriceAlertMessage = true
+                        isPresentingPriceAlertMessage = true
                     }
                 )
             )
@@ -296,7 +296,7 @@ extension AssetScene {
     }
 
     private func onPriceAlertToggle() {
-        showingPriceAlertMessage = true
+        isPresentingPriceAlertMessage = true
 
         Task {
             if assetData.isPriceAlertsEnabled {

@@ -49,11 +49,11 @@ public final class SetPriceAlertViewModel {
     
     var alertDirectionTitle: String {
         switch (state.type, state.alertDirection) {
-        case (.price, .up): "When price is over"
-        case (.price, .down): "When price is under"
-        case (.price, .none): "Set target price"
-        case (.percentage, .up): "When price increases by"
-        case (.percentage, .down): "When price decreases by"
+        case (.price, .up): Localized.PriceAlerts.SetAlert.priceOver
+        case (.price, .down): Localized.PriceAlerts.SetAlert.priceUnder
+        case (.price, .none): Localized.PriceAlerts.SetAlert.setTargetPrice
+        case (.percentage, .up): Localized.PriceAlerts.SetAlert.priceIncreasesBy
+        case (.percentage, .down): Localized.PriceAlerts.SetAlert.priceDecreasesBy
         case (.percentage, .none): .empty
         }
     }
@@ -78,13 +78,7 @@ public final class SetPriceAlertViewModel {
             alertDirection: state.alertDirection,
             assetData: assetData,
             formatter: currencyFormatter,
-            onTapActionButton: {
-                switch self.state.alertDirection {
-                case .up: self.state.alertDirection = .down
-                case .down: self.state.alertDirection = .up
-                default: break
-                }
-            }
+            onTapActionButton: toggleAlertDirection
         )
     }
     
@@ -145,13 +139,25 @@ public final class SetPriceAlertViewModel {
             priceDirection: state.alertDirection
         )
     }
+    
+    private func toggleAlertDirection() {
+        switch self.state.alertDirection {
+        case .up: self.state.alertDirection = .down
+        case .down: self.state.alertDirection = .up
+        default: break
+        }
+    }
 }
 
 // MARK: - Business logic
 
 extension SetPriceAlertViewModel {
-    func setPriceAlert() async throws {
-        try await priceAlertService.addPriceAlert(priceAlert: priceAlert())
-        onComplete?()
+    func setPriceAlert() async {
+        do {
+            try await priceAlertService.addPriceAlert(priceAlert: priceAlert())
+            onComplete?()
+        } catch {
+            NSLog("Set price alert error: \(error.localizedDescription)")
+        }
     }
 }

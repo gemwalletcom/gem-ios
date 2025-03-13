@@ -8,6 +8,7 @@ import SwiftUI
 import PrimitivesComponents
 import Store
 import Preferences
+import Localization
 
 public struct PriceAlertItemViewModel: ListAssetItemViewable {
     public let data: PriceAlertData
@@ -33,18 +34,26 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
 
     public var subtitleView: ListAssetItemSubtitleView {
         .price(
-            price: TextValue(
-                text: prefixText(),
-                style: TextStyle(font: .footnote, color: Colors.gray)
-            ),
-            priceChangePercentage24h: TextValue(
-                text: suffixText(),
-                style: TextStyle(font: .footnote, color: directionColor())
-            )
+            price: prefixTextValue(),
+            priceChangePercentage24h: suffixTextValue()
         )
     }
     
     // MARK: - Private methods
+    
+    private func prefixTextValue() -> TextValue {
+        TextValue(
+            text: prefixText(),
+            style: TextStyle(font: .footnote, color: Colors.gray)
+        )
+    }
+    
+    private func suffixTextValue() -> TextValue {
+        TextValue(
+            text: suffixText(),
+            style: TextStyle(font: .footnote, color: directionColor())
+        )
+    }
     
     private func prefixText() -> String {
         switch data.priceAlert.type {
@@ -64,16 +73,16 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
     
     private func priceDirectionPrefix() -> String {
         switch data.priceAlert.priceDirection {
-        case .up: "Over"
-        case .down: "Under"
+        case .up: Localized.PriceAlerts.Direction.over
+        case .down: Localized.PriceAlerts.Direction.under
         case .none: .empty
         }
     }
 
     private func percentDirectionPrefix() -> String {
         switch data.priceAlert.priceDirection {
-        case .up: "Increases by"
-        case .down: "Decreases by"
+        case .up: Localized.PriceAlerts.Direction.increasesBy
+        case .down: Localized.PriceAlerts.Direction.decreasesBy
         case .none: .empty
         }
     }

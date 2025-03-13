@@ -25,9 +25,9 @@ public struct PriceAlertsScene: View {
             toggleView
             
             let sections = model.alertsSections(for: priceAlerts)
-            autoAssetAlertsView(alerts: sections.autoAlerts)
+            autoAlertsView(alerts: sections.autoAlerts)
             ForEach(sections.manualAlerts, id: \.self) {
-                manualAssetAlertsView(alerts: $0)
+                manualAlertsView(alerts: $0)
             }
         }
         .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)
@@ -56,25 +56,25 @@ private extension PriceAlertsScene {
         }
     }
     
-    func autoAssetAlertsView(alerts: [PriceAlertData]) -> some View {
+    func autoAlertsView(alerts: [PriceAlertData]) -> some View {
         Section {
             ForEach(alerts) { alert in
                 NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                    assetAlertView(alert: alert)
+                    alertView(alert: alert)
                 }
             }
         }
     }
     
-    func manualAssetAlertsView(alerts: [PriceAlertData]) -> some View {
+    func manualAlertsView(alerts: [PriceAlertData]) -> some View {
         Section {
             ForEach(alerts) { alert in
-                assetAlertView(alert: alert)
+                alertView(alert: alert)
             }
         }
     }
     
-    func assetAlertView(alert: PriceAlertData) -> some View {
+    func alertView(alert: PriceAlertData) -> some View {
         ListAssetItemView(model: PriceAlertItemViewModel(data: alert))
             .swipeActions(edge: .trailing) {
                 Button(Localized.Common.delete, role: .destructive) {

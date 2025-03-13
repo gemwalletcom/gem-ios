@@ -13,6 +13,7 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     let assetData: AssetData
     let formatter: CurrencyFormatter
     let onTapActionButton: VoidAction
+    let sanitizer: ((String) -> String)? = nil
     
     var placeholder: String {
         switch type {
@@ -42,9 +43,7 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
         return ["Current price", formatter.string(price)].joined(separator: " ")
     }
     
-    var keyboardType: UIKeyboardType {
-        .decimalPad
-    }
+    var keyboardType: UIKeyboardType { .decimalPad }
     
     var actionButtonImage: Image? {
         switch (type, alertDirection) {
@@ -52,9 +51,5 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
         case (.percentage, .down): Images.PriceAlert.down
         default: nil
         }
-    }
-    
-    var sanitizer: ((String) -> String)? = { input in
-        input.components(separatedBy: .whitespacesAndNewlines).joined()
     }
 }
