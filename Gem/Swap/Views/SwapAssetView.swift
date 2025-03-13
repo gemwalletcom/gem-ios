@@ -61,7 +61,3 @@ struct SwapTokenView: View {
         }
     }
 }
-
-//#Preview {
-//    SwapTokenView()
-//}
