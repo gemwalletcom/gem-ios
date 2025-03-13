@@ -37,6 +37,14 @@ public struct PriceAlertStore: Sendable {
             }
         }
     }
+    
+    public func deleteAll(for assetId: String) throws {
+        let _ = try db.write { db in
+            try PriceAlertRecord
+                .filter(Columns.PriceAlert.assetId == assetId)
+                .deleteAll(db)
+        }
+    }
 
     public func clear() throws -> Int {
         try db.write {

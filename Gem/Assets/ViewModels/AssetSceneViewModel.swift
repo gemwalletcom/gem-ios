@@ -153,7 +153,7 @@ extension AssetSceneViewModel {
 
     func disablePriceAlert() async {
         do {
-            try await priceAlertService.deletePriceAlerts(priceAlerts: [.default(for: assetModel.asset.id.identifier)])
+            try await priceAlertService.disablePriceAlerts(for: assetModel.asset.id.identifier)
         } catch {
             NSLog("disablePriceAlert error \(error)")
         }
