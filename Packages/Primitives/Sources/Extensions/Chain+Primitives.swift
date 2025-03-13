@@ -13,7 +13,7 @@ extension Chain {
     }
     
     public var assetId: AssetId {
-        return AssetId(chain: self, tokenId: .none)
+        AssetId(chain: self, tokenId: .none)
     }
     
     // in most cases address is the case, except bitcoin cash

@@ -8,7 +8,7 @@ extension Asset {
     public init(_ chain: Chain) {
         let asset = chain.asset
         self.init(
-            id: AssetId(chain: chain, tokenId: .none),
+            id: chain.assetId,
             name: asset.name,
             symbol: asset.symbol,
             decimals: asset.decimals,
@@ -18,10 +18,8 @@ extension Asset {
     
     public var feeAsset: Asset {
         switch id.type {
-        case .native:
-            return self
-        case .token:
-            return id.chain.asset
+        case .native: self
+        case .token: id.chain.asset
         }
     }
 }
