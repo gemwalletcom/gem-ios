@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import BigInt
 
 public struct TransferAmountCalculator {
     public init() {}
