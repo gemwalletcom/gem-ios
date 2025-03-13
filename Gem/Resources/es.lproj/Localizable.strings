@@ -355,3 +355,4 @@
 "contacts.no_contacts" = "No hay contactos todavía.";
 "contacts.no_addresses" = "Aún no hay direcciones";
 "contacts.contact" = "Contacto";
+"contacts.title" = "Contactos";

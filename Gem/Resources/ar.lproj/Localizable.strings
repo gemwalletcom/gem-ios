@@ -355,3 +355,4 @@
 "contacts.no_contacts" = "لا توجد اتصالات حتى الآن.";
 "contacts.no_addresses" = "لا يوجد عناوين حتى الآن.";
 "contacts.contact" = "اتصال";
+"contacts.title" = "جهات الاتصال";

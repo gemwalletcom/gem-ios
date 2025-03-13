@@ -355,3 +355,4 @@
 "contacts.no_contacts" = "Belum ada kontak.";
 "contacts.no_addresses" = "Belum ada alamat.";
 "contacts.contact" = "Kontak";
+"contacts.title" = "Kontak";
