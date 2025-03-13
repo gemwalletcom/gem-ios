@@ -4,16 +4,16 @@ import Foundation
 import Primitives
 import BigInt
 
-struct SwapQuoteInput: Hashable, Sendable {
-    let fromAsset: Asset
-    let toAsset: Asset
-    let amount: BigInt
+public struct SwapQuoteInput: Hashable, Sendable {
+    public let fromAsset: Asset
+    public let toAsset: Asset
+    public let amount: BigInt
 }
 
 // MARK: - Identifiable
 
 extension SwapQuoteInput: Identifiable {
-    var id: String {
+    public var id: String {
         [fromAsset.id.identifier, toAsset.id.identifier, amount.description]
             .compactMap { $0 }
             .joined(separator: "_")
@@ -21,7 +21,7 @@ extension SwapQuoteInput: Identifiable {
 }
 
 extension SwapQuoteInput {
-    static func create(
+    public static func create(
         fromAsset: AssetData?,
         toAsset: AssetData?,
         fromValue: String,

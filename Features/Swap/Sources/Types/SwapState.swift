@@ -6,12 +6,12 @@ import Primitives
 
 import struct Gemstone.SwapQuote
 
-struct SwapState {
-    var fetch: SwapFetchState
-    var quotes: StateViewType<[SwapQuote]>
-    var swapTransferData: StateViewType<TransferData>
+public struct SwapState {
+    public var fetch: SwapFetchState
+    public var quotes: StateViewType<[SwapQuote]>
+    public var swapTransferData: StateViewType<TransferData>
 
-    init(
+    public init(
         fetch: SwapFetchState = .idle,
         availability: StateViewType<[SwapQuote]> = .noData,
         swapTransferData: StateViewType<TransferData> = .noData
@@ -21,7 +21,7 @@ struct SwapState {
         self.swapTransferData = swapTransferData
     }
 
-    var isLoading: Bool {
+    public var isLoading: Bool {
         quotes.isLoading || swapTransferData.isLoading
     }
 }

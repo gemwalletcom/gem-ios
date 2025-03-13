@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum SwapQuoteInputError: Error {
+public enum SwapQuoteInputError: Error {
     case invalidAmount
     case formatingError
     case missingFromAsset

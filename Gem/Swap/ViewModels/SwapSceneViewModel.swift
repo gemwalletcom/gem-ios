@@ -14,7 +14,6 @@ import Style
 import Swap
 import SwapService
 import WalletsService
-
 import struct Gemstone.SwapQuote
 
 @MainActor
@@ -47,7 +46,7 @@ public final class SwapSceneViewModel {
     private let provider: any SwapDataProviding
     private let preferences: Preferences
     private let swapService: SwapService
-    private let formatter = SwapValueFormatter(formatter: .full)
+    private let formatter = SwapValueFormatter(valueFormatter: .full)
 
     init(
         preferences: Preferences = Preferences.standard,

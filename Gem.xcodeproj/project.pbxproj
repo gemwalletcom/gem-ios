@@ -47,17 +47,12 @@
 		83B6C2102D5E3F2600F9DF8A /* WalletTab in Frameworks */ = {isa = PBXBuildFile; productRef = 83B6C20F2D5E3F2600F9DF8A /* WalletTab */; };
 		83CA4BA72D2F02440064A4AF /* NameResolver in Frameworks */ = {isa = PBXBuildFile; productRef = 83CA4BA62D2F02440064A4AF /* NameResolver */; };
 		83CE0F602D11C50A00A55BBF /* Currency in Frameworks */ = {isa = PBXBuildFile; productRef = 83CE0F5F2D11C50A00A55BBF /* Currency */; };
-		83CED9722D22F13500FF64A6 /* SwapQuoteInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */; };
-		83CED9762D22FBA600FF64A6 /* SwapFetchState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */; };
 		83D494142D80EF0A0069ED2C /* SwapDataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D494132D80EF0A0069ED2C /* SwapDataProvider.swift */; };
-		83D494162D8114610069ED2C /* SwapValueFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D494152D8114610069ED2C /* SwapValueFormatter.swift */; };
-		83D4941B2D81A22D0069ED2C /* SwapQuoteInputError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83D4941A2D81A22D0069ED2C /* SwapQuoteInputError.swift */; };
 		83D6808B2CCA90D900B45089 /* InfoSheet in Frameworks */ = {isa = PBXBuildFile; productRef = 83D6808A2CCA90D900B45089 /* InfoSheet */; };
 		83E041582D0AFCB10031D4BC /* RootScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E041572D0AFCB10031D4BC /* RootScene.swift */; };
 		83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */; };
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83F645062D52C31D00C18881 /* DiscoverAssetsService in Frameworks */ = {isa = PBXBuildFile; productRef = 83F645052D52C31D00C18881 /* DiscoverAssetsService */; };
-		83F8C3E62D241FEB0042CE22 /* SwapState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83F8C3E52D241FEB0042CE22 /* SwapState.swift */; };
 		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
 		B66DEDB02D49F0EA00309D53 /* ImageGalleryService in Frameworks */ = {isa = PBXBuildFile; productRef = B66DEDAF2D49F0EA00309D53 /* ImageGalleryService */; };
 		B6AE4A522D636869005BF29E /* SwapProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */; };
@@ -223,16 +218,11 @@
 		83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Storages.swift"; sourceTree = "<group>"; };
 		83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Services.swift"; sourceTree = "<group>"; };
 		83B57FAA2CFF92670009319F /* AppResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResolver.swift; sourceTree = "<group>"; };
-		83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapQuoteInput.swift; sourceTree = "<group>"; };
-		83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapFetchState.swift; sourceTree = "<group>"; };
 		83D494132D80EF0A0069ED2C /* SwapDataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapDataProvider.swift; sourceTree = "<group>"; };
-		83D494152D8114610069ED2C /* SwapValueFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapValueFormatter.swift; sourceTree = "<group>"; };
-		83D4941A2D81A22D0069ED2C /* SwapQuoteInputError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapQuoteInputError.swift; sourceTree = "<group>"; };
 		83E041572D0AFCB10031D4BC /* RootScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootScene.swift; sourceTree = "<group>"; };
 		83E041592D0AFCB80031D4BC /* RootSceneViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootSceneViewModel.swift; sourceTree = "<group>"; };
 		83F645042D52C2AB00C18881 /* DiscoverAssetsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = DiscoverAssetsService; sourceTree = "<group>"; };
 		83F645072D52C5DF00C18881 /* WalletsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletsService; sourceTree = "<group>"; };
-		83F8C3E52D241FEB0042CE22 /* SwapState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapState.swift; sourceTree = "<group>"; };
 		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
 		83FEE7FC2D5E632300E7B2DA /* ManageWalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWalletService; sourceTree = "<group>"; };
@@ -548,21 +538,9 @@
 			isa = PBXGroup;
 			children = (
 				B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */,
-				83CED9712D22F13500FF64A6 /* SwapQuoteInput.swift */,
-				83CED9752D22FBA600FF64A6 /* SwapFetchState.swift */,
-				83F8C3E52D241FEB0042CE22 /* SwapState.swift */,
 				836770DE2D80902700B5BD18 /* SwapSheetType.swift */,
-				83D494152D8114610069ED2C /* SwapValueFormatter.swift */,
 			);
 			path = Types;
-			sourceTree = "<group>";
-		};
-		83D494192D81A2250069ED2C /* Errors */ = {
-			isa = PBXGroup;
-			children = (
-				83D4941A2D81A22D0069ED2C /* SwapQuoteInputError.swift */,
-			);
-			path = Errors;
 			sourceTree = "<group>";
 		};
 		83E041562D0AFCA90031D4BC /* Root */ = {
@@ -774,7 +752,6 @@
 		D810F3752AF1AB680006D9C6 /* Swap */ = {
 			isa = PBXGroup;
 			children = (
-				83D494192D81A2250069ED2C /* Errors */,
 				83CED9702D22F10500FF64A6 /* Types */,
 				D8D83C8C2CECFD920083AA53 /* Views */,
 				D8D83C852CECFD3A0083AA53 /* ViewModels */,
@@ -1336,7 +1313,6 @@
 				C3CF3BCD29B80B1B00E96586 /* SelectAssetViewModel.swift in Sources */,
 				830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */,
 				8361BB672D400B7F008D89CF /* TransferDataViewModel.swift in Sources */,
-				83D494162D8114610069ED2C /* SwapValueFormatter.swift in Sources */,
 				83AE20732C7CB43500A38809 /* AssetsFilterScene.swift in Sources */,
 				D891DD412D3F359F00241222 /* CollectionsNavigationStack.swift in Sources */,
 				B6AE4A522D636869005BF29E /* SwapProvidersViewModel.swift in Sources */,
@@ -1362,7 +1338,6 @@
 				D890F7A52C7FC0AC00C26819 /* WalletsNavigationStack.swift in Sources */,
 				83B08BDD2D0B4B1E00CA1B33 /* AppResolver+Services.swift in Sources */,
 				83E0415A2D0AFCB80031D4BC /* RootSceneViewModel.swift in Sources */,
-				83CED9762D22FBA600FF64A6 /* SwapFetchState.swift in Sources */,
 				C3CF3BB529B6917600E96586 /* App-Configuration.swift in Sources */,
 				D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */,
 				8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */,
@@ -1373,8 +1348,6 @@
 				D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */,
 				C3D1C4EC2A2EA647006E8EEA /* AmountScene.swift in Sources */,
 				D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */,
-				83D4941B2D81A22D0069ED2C /* SwapQuoteInputError.swift in Sources */,
-				83F8C3E62D241FEB0042CE22 /* SwapState.swift in Sources */,
 				83B57FAB2CFF92670009319F /* AppResolver.swift in Sources */,
 				C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */,
 				C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */,
@@ -1385,7 +1358,6 @@
 				D8BAC95D2BD1A3E2001608BC /* AddAssetViewModel.swift in Sources */,
 				8350FB812CA3329200BBBEBD /* KeystoreAuthenticationViewModel.swift in Sources */,
 				C3CF3B8529AB18AD00E96586 /* SelectAssetScene.swift in Sources */,
-				83CED9722D22F13500FF64A6 /* SwapQuoteInput.swift in Sources */,
 				837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */,
 				D8BAC9502BCF6B50001608BC /* AddTokenViewModel.swift in Sources */,
 				C3549B3729C439DF00B4BE01 /* AssetSceneViewModel.swift in Sources */,

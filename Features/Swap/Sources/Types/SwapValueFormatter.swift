@@ -3,11 +3,11 @@
 import Primitives
 import BigInt
 
-struct SwapValueFormatter {
+public struct SwapValueFormatter {
     private let formatter: ValueFormatter
 
-    public init(formatter: ValueFormatter) {
-        self.formatter = formatter
+    public init(valueFormatter: ValueFormatter) {
+        self.formatter = valueFormatter
     }
 
     public func format(inputValue: String, decimals: Int) throws -> BigInt {
