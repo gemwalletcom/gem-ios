@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@ एसेट का उपयोग करने के लिए, आपको पहले नेटवर्क की विशिष्ट आवश्यकताओं को पूरा करके इसे %@ नेटवर्क पर सक्षम करना होगा।";
 "nft.properties" = "गुण";
 "nft.collections" = "संग्रह";
-"nft.description" = "विवरण";
+"common.description" = "विवरण";
 "nft.collection" = "संग्रह";
 "wallet.receive_collection" = "संग्रह प्राप्त करें";
 "wallet.more" = "अधिक";

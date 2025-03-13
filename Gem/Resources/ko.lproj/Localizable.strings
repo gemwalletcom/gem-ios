@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@ 자산을 사용하려면 먼저 네트워크의 특정 요구 사항을 충족하여 %@ 네트워크에서 해당 자산을 활성화해야 합니다.";
 "nft.properties" = "속성";
 "nft.collections" = "컬렉션";
-"nft.description" = "설명";
+"common.description" = "설명";
 "nft.collection" = "수집";
 "wallet.receive_collection" = "컬렉션 수신";
 "wallet.more" = "더";

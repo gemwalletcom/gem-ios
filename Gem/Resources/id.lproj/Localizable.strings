@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "Untuk menggunakan aset %@, Anda harus terlebih dahulu mengaktifkannya di jaringan %@ dengan memenuhi persyaratan khusus jaringan.";
 "nft.properties" = "Properti";
 "nft.collections" = "Koleksi";
-"nft.description" = "Keterangan";
+"common.description" = "Keterangan";
 "nft.collection" = "Koleksi";
 "wallet.receive_collection" = "Terima Koleksi";
 "wallet.more" = "Lagi";

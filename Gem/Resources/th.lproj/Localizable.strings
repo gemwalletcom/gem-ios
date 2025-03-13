@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "ในการใช้สินทรัพย์ %@ ก่อนอื่นคุณต้องเปิดใช้งานบนเครือข่าย %@ โดยปฏิบัติตามข้อกำหนดเฉพาะของเครือข่าย";
 "nft.properties" = "คุณสมบัติ";
 "nft.collections" = "คอลเลคชั่น";
-"nft.description" = "คำอธิบาย";
+"common.description" = "คำอธิบาย";
 "nft.collection" = "ของสะสม";
 "wallet.receive_collection" = "รับการรวบรวม";
 "wallet.more" = "มากกว่า";

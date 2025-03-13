@@ -161,6 +161,8 @@ public enum Localized {
     public static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
+    /// Description
+    public static let description = Localized.tr("Localizable", "common.description", fallback: "Description")
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
     /// Edit
@@ -475,8 +477,6 @@ public enum Localized {
     public static let collection = Localized.tr("Localizable", "nft.collection", fallback: "Collection")
     /// Collections
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
-    /// Description
-    public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos

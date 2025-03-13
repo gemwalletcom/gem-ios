@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "要使用%@資產，您必須先透過滿足網路的特定要求在%@網路上啟用它。";
 "nft.properties" = "特性";
 "nft.collections" = "收藏";
-"nft.description" = "描述";
+"common.description" = "描述";
 "nft.collection" = "收藏";
 "wallet.receive_collection" = "接收收藏";
 "wallet.more" = "更多的";

@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "%@ varlığını kullanmak için, öncelikle ağın özel gereksinimlerini karşılayarak %@ ağında etkinleştirmeniz gerekir.";
 "nft.properties" = "Özellikler";
 "nft.collections" = "Koleksiyonlar";
-"nft.description" = "Tanım";
+"common.description" = "Tanım";
 "nft.collection" = "Koleksiyon";
 "wallet.receive_collection" = "Koleksiyon Al";
 "wallet.more" = "Daha";

@@ -314,7 +314,7 @@
 "banner.activate_asset.description" = "Để sử dụng tài sản %@, trước tiên bạn phải bật nó trên mạng %@ bằng cách đáp ứng các yêu cầu cụ thể của mạng.";
 "nft.properties" = "Của cải";
 "nft.collections" = "Bộ sưu tập";
-"nft.description" = "Sự miêu tả";
+"common.description" = "Sự miêu tả";
 "nft.collection" = "Bộ sưu tập";
 "wallet.receive_collection" = "Nhận bộ sưu tập";
 "wallet.more" = "Hơn";
