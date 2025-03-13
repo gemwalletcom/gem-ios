@@ -340,3 +340,13 @@
 "errors.connections.unsupported_chain" = "The provided chain is not supported.";
 "errors.connections.unsupported_method" = "Phương pháp yêu cầu không được hỗ trợ.";
 "errors.swap.amount_too_small" = "Amount too small";
+"markets.title" = "Markets";
+"price_alerts.direction.over" = "Over";
+"price_alerts.direction.under" = "Under";
+"price_alerts.direction.increases_by" = "Increases by";
+"price_alerts.direction.decreases_by" = "Decreases by";
+"price_alerts.set_alert.price_over" = "When price is over";
+"price_alerts.set_alert.price_under" = "When price is under";
+"price_alerts.set_alert.price_increases_by" = "When price increases by";
+"price_alerts.set_alert.price_decreases_by" = "When price decreases by";
+"price_alerts.set_alert.set_target_price" = "Set target price";

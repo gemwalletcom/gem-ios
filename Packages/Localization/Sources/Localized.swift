@@ -509,9 +509,31 @@ public enum Localized {
     }
     /// Get notified when there’s a significant price change in your favorite crypto assets.
     public static let getNotifiedExplainMessage = Localized.tr("Localizable", "price_alerts.get_notified_explain_message", fallback: "Get notified when there’s a significant price change in your favorite crypto assets.")
+    public enum Direction {
+      /// Decreases by
+      public static let decreasesBy = Localized.tr("Localizable", "price_alerts.direction.decreases_by", fallback: "Decreases by")
+      /// Increases by
+      public static let increasesBy = Localized.tr("Localizable", "price_alerts.direction.increases_by", fallback: "Increases by")
+      /// Over
+      public static let over = Localized.tr("Localizable", "price_alerts.direction.over", fallback: "Over")
+      /// Under
+      public static let under = Localized.tr("Localizable", "price_alerts.direction.under", fallback: "Under")
+    }
     public enum EmptyState {
       /// No price alerts added yet.
       public static let message = Localized.tr("Localizable", "price_alerts.empty_state.message", fallback: "No price alerts added yet.")
+    }
+    public enum SetAlert {
+      /// When price decreases by
+      public static let priceDecreasesBy = Localized.tr("Localizable", "price_alerts.set_alert.price_decreases_by", fallback: "When price decreases by")
+      /// When price increases by
+      public static let priceIncreasesBy = Localized.tr("Localizable", "price_alerts.set_alert.price_increases_by", fallback: "When price increases by")
+      /// When price is over
+      public static let priceOver = Localized.tr("Localizable", "price_alerts.set_alert.price_over", fallback: "When price is over")
+      /// When price is under
+      public static let priceUnder = Localized.tr("Localizable", "price_alerts.set_alert.price_under", fallback: "When price is under")
+      /// Set target price
+      public static let setTargetPrice = Localized.tr("Localizable", "price_alerts.set_alert.set_target_price", fallback: "Set target price")
     }
   }
   public enum Receive {
