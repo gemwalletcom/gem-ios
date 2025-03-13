@@ -34,97 +34,67 @@ struct SelectedAssetNavigationStack: View  {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            switch selectType.type {
-            case .send(let type):
-                RecipientNavigationView(
-                    wallet: wallet,
-                    asset: selectType.asset,
-                    type: type,
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-            case .receive:
-                ReceiveScene(
-                    model: ReceiveViewModel(
-                        assetModel: AssetViewModel(asset: selectType.asset),
-                        walletId: wallet.walletId,
-                        address: selectType.address,
-                        walletsService: walletsService
-                    )
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .buy:
-                FiatConnectNavigationView(
-                    model: FiatSceneViewModel(
-                        assetAddress: selectType.assetAddress,
-                        walletId: wallet.id
-                    )
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .swap:
-                SwapNavigationView(
-                    model: SwapViewModel(
+            Group {
+                switch selectType.type {
+                case .send(let type):
+                    RecipientNavigationView(
                         wallet: wallet,
-                        pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
-                    ),
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
+                        asset: selectType.asset,
+                        type: type,
+                        navigationPath: $navigationPath,
+                        onComplete: {
                             isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .stake:
-                StakeNavigationView(
-                    wallet: wallet,
-                    assetId: selectType.asset.id,
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
+                        }
+                    )
+                case .receive:
+                    ReceiveScene(
+                        model: ReceiveViewModel(
+                            assetModel: AssetViewModel(asset: selectType.asset),
+                            walletId: wallet.walletId,
+                            address: selectType.address,
+                            walletsService: walletsService
+                        )
+                    )
+                case .buy:
+                    FiatConnectNavigationView(
+                        model: FiatSceneViewModel(
+                            assetAddress: selectType.assetAddress,
+                            walletId: wallet.id
+                        )
+                    )
+                case .swap:
+                    SwapNavigationView(
+                        model: SwapViewModel(
+                            wallet: wallet,
+                            pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
+                            walletsService: walletsService,
+                            swapService: SwapService(nodeProvider: nodeService),
+                            keystore: keystore
+                        ),
+                        navigationPath: $navigationPath,
+                        onComplete: {
                             isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
+                        }
+                    )
+                case .stake:
+                    StakeNavigationView(
+                        wallet: wallet,
+                        assetId: selectType.asset.id,
+                        navigationPath: $navigationPath,
+                        onComplete: {
+                            isPresentingSelectedAssetInput = nil
+                        }
+                    )
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(Localized.Common.done) {
+                        isPresentingSelectedAssetInput = nil
+                    }.bold()
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }

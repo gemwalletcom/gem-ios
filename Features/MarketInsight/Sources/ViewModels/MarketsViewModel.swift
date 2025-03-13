@@ -1,43 +1,36 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Components
 import Primitives
-import PriceService
-import AssetsService
+import Preferences
+import PrimitivesComponents
+import Components
+import Style
+import Localization
 
-@Observable
-public final class MarketsViewModel: Sendable  {
+public struct MarketsViewModel {
+    let markets: Markets
     
-    //public var state: StateViewType<Markets> = .noData
+    private let currencyFormatter: CurrencyFormatter
     
-    let service: MarketService
-    let assetsService: AssetsService
-    
-    public init(
-        service: MarketService,
-        assetsService: AssetsService
+    init(
+        markets: Markets,
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     ) {
-        self.service = service
-        self.assetsService = assetsService
+        self.markets = markets
+        self.currencyFormatter = currencyFormatter
     }
     
-    func fetch() async  {
-        do {
-            let markets = try await service.getMarkets()
-            let assets = [markets.assets.gainers, markets.assets.losers, markets.assets.trending]
-                .flatMap { $0 }
-                .compactMap {
-                    try? AssetId(id: $0)
-                }
-            try await assetsService.prefetchAssets(assetIds: assets)
-            
-        } catch {
-            NSLog("get markets error: \(error)")
-        }
-    }
-    
-    var title: String {
-        "Markets"
+    var marketCapViewModel: PriceListItemViewModel {
+        PriceListItemViewModel(
+            title: Localized.Asset.marketCap,
+            model: PriceViewModel(
+                price: Price(
+                    price: Double(markets.marketCap),
+                    priceChangePercentage24h: Double(markets.marketCapChangePercentage24h)
+                ),
+                currencyCode: currencyFormatter.currencyCode
+            )
+        )
     }
 }

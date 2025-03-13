@@ -15,6 +15,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
     
@@ -59,7 +60,8 @@ struct CollectionsNavigationStack: View {
                             keystore: keystore,
                             selectType: $0,
                             assetsService: walletsService.assetsService,
-                            walletsService: walletsService
+                            walletsService: walletsService,
+                            priceAlertService: priceAlertService
                         ),
                         isPresentingSelectType: $isPresentingReceiveSelectAssetType
                     )
