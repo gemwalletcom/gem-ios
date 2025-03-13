@@ -250,42 +250,57 @@ final class TransferAmountCalculatorTests {
     @Test
     func testBalancePreCheck() {
         #expect(throws: Error.self) {
-            try service.preCheckBalance(
+            try service.validateBalance(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: BigInt(10),
                 availableValue: BigInt(10),
-                ignoreValueCheck: false
+                ignoreValueCheck: false,
+                canChangeValue: false
             )
         }
 
         #expect(throws: Error.self) {
-            try service.preCheckBalance(
+            try service.validateBalance(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(10)),
                 value: BigInt(20),
                 availableValue: BigInt(10),
-                ignoreValueCheck: false
+                ignoreValueCheck: false,
+                canChangeValue: false
             )
         }
 
         #expect(throws: Never.self) {
-            try service.preCheckBalance(
+            try service.validateBalance(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: BigInt(10),
                 availableValue: BigInt(10),
-                ignoreValueCheck: true
+                ignoreValueCheck: true,
+                canChangeValue: false
             )
         }
 
         #expect(throws: Never.self) {
-            try service.preCheckBalance(
+            try service.validateBalance(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(50)),
                 value: BigInt(20),
                 availableValue: BigInt(50),
-                ignoreValueCheck: false
+                ignoreValueCheck: false,
+                canChangeValue: false
+            )
+        }
+        
+        #expect(throws: Never.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(0)),
+                value: BigInt(10000),
+                availableValue: BigInt(0),
+                ignoreValueCheck: false,
+                canChangeValue: true
             )
         }
     }

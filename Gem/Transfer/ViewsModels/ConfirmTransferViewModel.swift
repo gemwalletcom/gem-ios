@@ -246,15 +246,15 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            try preCheckBalance(metaData: metaData)
+            let metadata = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            try validateBalance(metadata: metadata)
 
-            let preloadInput = try await fetchTransactionLoad(metaData: metaData)
+            let preloadInput = try await fetchTransactionLoad(metaData: metadata)
             let transferAmountResult = calculateTransferAmount(
-                metaData: metaData,
+                metaData: metadata,
                 preloadInput: preloadInput
             )
-            updateState(with: transactionInputViewModel(transferAmount: transferAmountResult, input: preloadInput, metaData: metaData))
+            updateState(with: transactionInputViewModel(transferAmount: transferAmountResult, input: preloadInput, metaData: metadata))
         } catch let error as TransferAmountCalculatorError {
             updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
         } catch {
@@ -564,13 +564,14 @@ extension ConfirmTransferViewModel {
         )
     }
     
-    private func preCheckBalance(metaData: TransferDataMetadata) throws {
-        try TransferAmountCalculator().preCheckBalance(
+    private func validateBalance(metadata: TransferDataMetadata) throws {
+        try TransferAmountCalculator().validateBalance(
             asset: dataModel.asset,
-            assetBalance: Balance(available: metaData.assetBalance),
+            assetBalance: Balance(available: metadata.assetBalance),
             value: dataModel.data.value,
             availableValue: availableValue,
-            ignoreValueCheck: dataModel.data.ignoreValueCheck
+            ignoreValueCheck: dataModel.data.ignoreValueCheck,
+            canChangeValue: dataModel.data.canChangeValue
         )
     }
 }
