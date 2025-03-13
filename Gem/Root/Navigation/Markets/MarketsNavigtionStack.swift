@@ -11,7 +11,7 @@ struct MarketsNavigationStack: View {
     
     var body: some View {
         MarketsScene(
-            model: MarketsViewModel(
+            model: MarketsSceneViewModel(
                 service: MarketService(),
                 assetsService: assetsService
             )

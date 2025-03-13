@@ -20,7 +20,7 @@ final class TransferAmountCalculatorTests {
     @Test
     func testTransferCoin() {
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: BigInt(10),
@@ -33,7 +33,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: .zero,
@@ -46,7 +46,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(10)),
                 value: BigInt(20),
@@ -59,7 +59,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: BigInt(10),
@@ -72,7 +72,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: .zero,
                 value: .zero,
@@ -86,7 +86,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(100)),
                 value: BigInt(50),
@@ -100,7 +100,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(10),
@@ -114,7 +114,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(11),
@@ -128,7 +128,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
@@ -145,7 +145,7 @@ final class TransferAmountCalculatorTests {
     @Test
     func testClaimRewards() {
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(1000),
@@ -159,7 +159,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(1000),
@@ -174,7 +174,7 @@ final class TransferAmountCalculatorTests {
 
     func testCanChangeValue() {
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
@@ -188,7 +188,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(12),
@@ -204,7 +204,7 @@ final class TransferAmountCalculatorTests {
     @Test
     func testIgnoreValueCheck() {
         #expect(throws: Never.self) {
-            let result = try service.calculate(input: TranferAmountInput(
+            let result = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(2222),
@@ -219,7 +219,7 @@ final class TransferAmountCalculatorTests {
         }
 
         #expect(throws: Error.self) {
-            _ = try service.calculate(input: TranferAmountInput(
+            _ = try service.calculate(input: TransferAmountInput(
                 asset: coinAsset,
                 assetBalance: Balance(available: 12),
                 value: BigInt(2222),
@@ -245,5 +245,63 @@ final class TransferAmountCalculatorTests {
 //                ignoreValueCheck: false
 //            ))
 //        }
+    }
+    
+    @Test
+    func testBalancePreCheck() {
+        #expect(throws: Error.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: .zero,
+                value: BigInt(10),
+                availableValue: BigInt(10),
+                ignoreValueCheck: false,
+                canChangeValue: false
+            )
+        }
+
+        #expect(throws: Error.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(10)),
+                value: BigInt(20),
+                availableValue: BigInt(10),
+                ignoreValueCheck: false,
+                canChangeValue: false
+            )
+        }
+
+        #expect(throws: Never.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: .zero,
+                value: BigInt(10),
+                availableValue: BigInt(10),
+                ignoreValueCheck: true,
+                canChangeValue: false
+            )
+        }
+
+        #expect(throws: Never.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(50)),
+                value: BigInt(20),
+                availableValue: BigInt(50),
+                ignoreValueCheck: false,
+                canChangeValue: false
+            )
+        }
+        
+        #expect(throws: Never.self) {
+            try service.validateBalance(
+                asset: coinAsset,
+                assetBalance: Balance(available: BigInt(0)),
+                value: BigInt(10000),
+                availableValue: BigInt(0),
+                ignoreValueCheck: false,
+                canChangeValue: true
+            )
+        }
     }
 }

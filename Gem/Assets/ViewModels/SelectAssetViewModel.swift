@@ -10,6 +10,7 @@ import PrimitivesComponents
 import AssetsService
 import WalletsService
 import Preferences
+import PriceAlertService
 
 @Observable
 class SelectAssetViewModel {
@@ -19,6 +20,7 @@ class SelectAssetViewModel {
     let selectType: SelectAssetType
     let assetsService: AssetsService
     let walletsService: WalletsService
+    let priceAlertService: PriceAlertService
 
     var state: StateViewType<[AssetBasic]> = .noData
     var filterModel: AssetsFilterViewModel
@@ -33,6 +35,7 @@ class SelectAssetViewModel {
         selectType: SelectAssetType,
         assetsService: AssetsService,
         walletsService: WalletsService,
+        priceAlertService: PriceAlertService,
         selectAssetAction: AssetAction = .none
     ) {
         self.preferences = preferences
@@ -41,6 +44,7 @@ class SelectAssetViewModel {
         self.selectType = selectType
         self.assetsService = assetsService
         self.walletsService = walletsService
+        self.priceAlertService = priceAlertService
         self.selectAssetAction = selectAssetAction
 
         let filter = AssetsFilterViewModel(
@@ -140,9 +144,15 @@ extension SelectAssetViewModel {
         }
         await searchAssets(query: query)
     }
-
-    func enableAsset(assetId: AssetId, enabled: Bool) async {
-        await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+    
+    func handleAction(assetId: AssetId, enabled: Bool) async {
+        switch selectType {
+        case .manage:
+            await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
+        case .priceAlert:
+            await setPriceAlert(assetId: assetId, enabled: enabled)
+        case .send, .receive, .buy, .swap: break
+        }
     }
 }
 
@@ -179,11 +189,27 @@ extension SelectAssetViewModel {
                 self.state = .data(assets)
             }
         } catch {
-            await MainActor.run { [self] in
-                if !error.isCancelled {
-                    self.state = .error(error)
-                    NSLog("SelectAssetScene scene search assests error: \(error)")
-                }
+            await handle(error: error)
+        }
+    }
+    
+    private func setPriceAlert(assetId: AssetId, enabled: Bool) async {
+        do {
+            if enabled {
+                try await priceAlertService.addPriceAlert(for: assetId)
+            } else {
+                try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
+            }
+        } catch {
+            await handle(error: error)
+        }
+    }
+    
+    private func handle(error: any Error) async {
+        await MainActor.run { [self] in
+            if !error.isCancelled {
+                self.state = .error(error)
+                NSLog("SelectAssetScene scene error: \(error)")
             }
         }
     }

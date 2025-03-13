@@ -151,4 +151,8 @@ public struct AssetDataViewModel {
     public var stakeApr: Double? {
         assetData.metadata.stakingApr
     }
+    
+    public var hasPriceAlert: Bool {
+        assetData.price_alert != nil
+    }
 }

@@ -11,6 +11,7 @@ import InfoSheet
 struct SwapNavigationView: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var model: SwapSceneViewModel
     @Binding private var navigationPath: NavigationPath
@@ -60,6 +61,7 @@ struct SwapNavigationView: View {
                             selectType: .swap(type),
                             assetsService: assetsService,
                             walletsService: model.walletsService,
+                            priceAlertService: priceAlertService,
                             selectAssetAction: model.onFinishAssetSelection
                         ),
                         isPresentingSelectType: .constant(.swap(type))
