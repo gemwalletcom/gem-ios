@@ -19,6 +19,9 @@ public struct WalletScene: View {
     @Query<BannersRequest>
     private var banners: [Primitives.Banner]
 
+    @Query<WalletRequest>
+    var dbWallet: Wallet?
+
     let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
 
     @Binding var isPresentingSelectType: SelectAssetType?
@@ -42,6 +45,7 @@ public struct WalletScene: View {
         _assets = Query(constant: model.assetsRequest)
         _totalFiatValue = Query(constant: model.totalFiatValueRequest)
         _banners = Query(constant: model.bannersRequest)
+        _dbWallet = Query(constant: model.walletRequest)
     }
 
     private var sections: AssetsSections {
@@ -131,8 +135,10 @@ public struct WalletScene: View {
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                WalletBarView(model: .from(wallet: model.wallet)) {
-                    isPresentingWallets.toggle()
+                if let dbWallet {
+                    WalletBarView(model: .from(wallet: dbWallet)) {
+                        isPresentingWallets.toggle()
+                    }
                 }
             }
             ToolbarItem(placement: .navigationBarTrailing) {
