@@ -65,9 +65,9 @@ public struct SetPriceAlertScene: View {
 extension SetPriceAlertScene {
     var alertTypePickerView: some View {
         Picker("", selection: $model.state.type) {
-            Text("Price")
+            Text(Localized.Asset.price)
                 .tag(SetPriceAlertType.price)
-            Text("Percentage")
+            Text(Localized.Common.percentage)
                 .tag(SetPriceAlertType.percentage)
         }
         .pickerStyle(.segmented)

@@ -195,6 +195,8 @@ public enum Localized {
     public static let openSettings = Localized.tr("Localizable", "common.open_settings", fallback: "Open settings")
     /// Paste
     public static let paste = Localized.tr("Localizable", "common.paste", fallback: "Paste")
+    /// Percentage
+    public static let percentage = Localized.tr("Localizable", "common.percentage", fallback: "Percentage")
     /// Photo
     public static let photo = Localized.tr("Localizable", "common.photo", fallback: "Photo")
     /// Phrase
