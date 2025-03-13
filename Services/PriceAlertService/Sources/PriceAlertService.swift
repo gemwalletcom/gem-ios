@@ -84,8 +84,4 @@ public struct PriceAlertService: Sendable {
         try store.deletePriceAlerts(priceAlerts)
         try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
     }
-    
-    public func disablePriceAlerts(for assetId: String) async throws {
-        try store.deleteAll(for: assetId)
-    }
 }
