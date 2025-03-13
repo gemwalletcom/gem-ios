@@ -13,6 +13,7 @@ struct SwapNavigationView: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
+    @Environment(\.priceAlertService) private var priceAlertService
     
     @State private var model: SwapViewModel
     @State private var isPresentingAssetSwapType: SelectAssetSwapType?
@@ -63,6 +64,7 @@ struct SwapNavigationView: View {
                     selectType: .swap(selectType),
                     assetsService: assetsService,
                     walletsService: walletsService,
+                    priceAlertService: priceAlertService,
                     selectAssetAction: {
                         onSelectAssetComplete(type: selectType, asset: $0)
                     }

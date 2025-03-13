@@ -44,7 +44,8 @@ struct PriceAlertsNavigationView: View {
                     keystore: keystore,
                     selectType: .priceAlert,
                     assetsService: assetsService,
-                    walletsService: walletsService
+                    walletsService: walletsService,
+                    priceAlertService: priceAlertService
                 )
             )
         }
