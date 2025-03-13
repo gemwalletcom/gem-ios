@@ -43,7 +43,8 @@ struct PriceAlertsNavigationView: View {
                     wallet: manageWalletService.currentWallet!,
                     selectType: .priceAlert,
                     assetsService: assetsService,
-                    walletsService: walletsService
+                    walletsService: walletsService,
+                    priceAlertService: priceAlertService
                 )
             )
         }

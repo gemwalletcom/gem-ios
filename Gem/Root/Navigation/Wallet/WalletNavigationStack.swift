@@ -14,6 +14,7 @@ struct WalletNavigationStack: View {
     @Environment(\.stakeService) private var stakeService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.priceService) private var priceService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var isPresentingWallets = false
     @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
@@ -65,7 +66,8 @@ struct WalletNavigationStack: View {
                         wallet: model.wallet,
                         selectType: value,
                         assetsService: walletsService.assetsService,
-                        walletsService: walletsService
+                        walletsService: walletsService,
+                        priceAlertService: priceAlertService
                     ),
                     isPresentingSelectType: $isPresentingSelectAssetType
                 )
