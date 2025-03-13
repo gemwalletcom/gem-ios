@@ -146,8 +146,9 @@ public final class SwapSceneViewModel {
         )
     }
 
-    func swapTokenModel(from assetData: AssetData, type: SelectAssetSwapType) -> SwapTokenViewModel {
-        SwapTokenViewModel(
+    func swapTokenModel(type: SelectAssetSwapType) -> SwapTokenViewModel? {
+        guard let assetData: AssetData = type == .pay ? fromAsset : toAsset else { return nil }
+        return SwapTokenViewModel(
             model: AssetDataViewModel(
                 assetData: assetData,
                 formatter: .medium,

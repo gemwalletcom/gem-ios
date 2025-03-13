@@ -85,9 +85,9 @@ extension SwapScene {
     
     private var swapFromSectionView: some View {
         Section {
-            if let fromAsset = model.fromAsset {
+            if let swapModel = model.swapTokenModel(type: .pay) {
                 SwapTokenView(
-                    model: model.swapTokenModel(from: fromAsset, type: .pay),
+                    model: swapModel,
                     text: $model.fromValue,
                     onBalanceAction: model.onSelectFromMaxBalance,
                     onSelectAssetAction: model.onSelectAssetPay
@@ -114,9 +114,9 @@ extension SwapScene {
     
     private var swapToSectionView: some View {
         Section(model.swapToTitle) {
-            if let toAsset = model.toAsset {
+            if let swapModel = model.swapTokenModel(type: .receive(chains: [], assetIds: [])) {
                 SwapTokenView(
-                    model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
+                    model: swapModel,
                     text: $model.toValue,
                     showLoading: model.isLoading,
                     disabledTextField: true,
