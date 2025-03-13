@@ -97,7 +97,7 @@ public final class SwapSceneViewModel {
     }
 
     var actionButtonState: StateViewType<[SwapQuote]> {
-        switch swapState.finalSwapData {
+        switch swapState.swapTransferData {
         case .loading: .loading
         case .error(let error): .error(error)
         case .noData, .data: swapState.quotes
@@ -124,7 +124,7 @@ public final class SwapSceneViewModel {
         swapState.isLoading
     }
 
-    var showToValueLoading: Bool {
+    var isLoading: Bool {
         swapState.quotes.isLoading
     }
 
@@ -165,7 +165,7 @@ public final class SwapSceneViewModel {
 // MARK: - Business Logic
 
 extension SwapSceneViewModel {
-    func triggerFetch(delay: Duration? = nil) {
+    func fetch(delay: Duration? = nil) {
         do {
             resetToValue()
             let input = try SwapQuoteInput.create(
@@ -196,25 +196,25 @@ extension SwapSceneViewModel {
     }
 
     func onChangeSwapQuoute(_ _: SwapQuote?, _ newQuote: SwapQuote?) {
-        guard let newQuote, let toAsset = toAsset else { return }
+        guard let newQuote, let toAsset else { return }
         applyQuote(newQuote, asset: toAsset.asset)
     }
 
     func onChangeFromValue(_: String, _: String) {
-        triggerFetch(delay: SwapSceneViewModel.quoteTaskDebounceTimeout)
+        fetch(delay: SwapSceneViewModel.quoteTaskDebounceTimeout)
     }
 
     func onChangeFromAsset(_: AssetData?, _: AssetData?) {
         resetValues()
         selectedSwapQuote = nil
         focusField = .from
-        triggerFetch()
+        fetch()
     }
 
     func onChangeToAsset(_: AssetData?, _: AssetData?) {
         resetToValue()
         selectedSwapQuote = nil
-        triggerFetch()
+        fetch()
     }
 
     func onSelectFromMaxBalance() {
@@ -229,7 +229,7 @@ extension SwapSceneViewModel {
 
     func onSelectActionButton() {
         if swapState.quotes.isError {
-            triggerFetch()
+            fetch()
         } else {
             performSwap()
         }
@@ -367,16 +367,16 @@ extension SwapSceneViewModel {
 
     private func getFinalSwapData(quote: SwapQuote, fromAsset: Asset, toAsset: Asset) async  {
         do {
-            swapState.finalSwapData = .loading
+            swapState.swapTransferData = .loading
             let data = try await provider.fetchSwapData(
                 wallet: wallet,
                 fromAsset: fromAsset,
                 toAsset: toAsset,
                 quote: quote
             )
-            swapState.finalSwapData = .data(data)
+            swapState.swapTransferData = .data(data)
         } catch {
-            swapState.finalSwapData = .error(ErrorWrapper(error))
+            swapState.swapTransferData = .error(ErrorWrapper(error))
             swapState.quotes = .error(ErrorWrapper(error))
         }
     }

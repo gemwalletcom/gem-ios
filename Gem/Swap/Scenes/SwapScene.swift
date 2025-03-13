@@ -58,7 +58,7 @@ struct SwapScene: View {
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
         .onChange(of: model.focusField, onChangeFocus)
         .onReceive(updateQuoteTimer) { _ in // TODO: - create a view modifier with a timer
-            model.triggerFetch()
+            model.fetch()
         }
         .onAppear {
             if model.toValue.isEmpty {
@@ -118,7 +118,7 @@ extension SwapScene {
                 SwapTokenView(
                     model: model.swapTokenModel(from: toAsset, type: .receive(chains: [], assetIds: [])),
                     text: $model.toValue,
-                    showLoading: model.showToValueLoading,
+                    showLoading: model.isLoading,
                     disabledTextField: true,
                     onBalanceAction: {},
                     onSelectAssetAction: model.onSelectAssetReceive

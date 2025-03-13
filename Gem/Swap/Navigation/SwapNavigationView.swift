@@ -30,7 +30,7 @@ struct SwapNavigationView: View {
 
     var body: some View {
         SwapScene(model: model)
-            .onChange(of: model.swapState.finalSwapData.value) { oldValue, newValue in
+            .onChange(of: model.swapState.swapTransferData.value) { oldValue, newValue in
                 guard let newValue else { return }
                 navigationPath.append(newValue)
             }

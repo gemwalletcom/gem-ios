@@ -13,7 +13,11 @@ struct SwapQuoteInput: Hashable, Sendable {
 // MARK: - Identifiable
 
 extension SwapQuoteInput: Identifiable {
-    var id: String {"\(fromAsset.id)_\(toAsset.id)_\(amount)" }
+    var id: String {
+        [fromAsset.id.identifier, toAsset.id.identifier, amount.description]
+            .compactMap { $0 }
+            .joined(separator: "_")
+    }
 }
 
 extension SwapQuoteInput {

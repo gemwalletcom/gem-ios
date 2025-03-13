@@ -9,19 +9,19 @@ import struct Gemstone.SwapQuote
 struct SwapState {
     var fetch: SwapFetchState
     var quotes: StateViewType<[SwapQuote]>
-    var finalSwapData: StateViewType<TransferData>
+    var swapTransferData: StateViewType<TransferData>
 
     init(
         fetch: SwapFetchState = .idle,
         availability: StateViewType<[SwapQuote]> = .noData,
-        finalSwapData: StateViewType<TransferData> = .noData
+        swapTransferData: StateViewType<TransferData> = .noData
     ) {
         self.fetch = fetch
         self.quotes = availability
-        self.finalSwapData = finalSwapData
+        self.swapTransferData = swapTransferData
     }
 
     var isLoading: Bool {
-        quotes.isLoading || finalSwapData.isLoading
+        quotes.isLoading || swapTransferData.isLoading
     }
 }
