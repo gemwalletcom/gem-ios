@@ -21,7 +21,7 @@ extension PriceAlertAssetRecordInfo {
                 extendedPublicKey: nil
             ),
             price: nil,
-            price_alert: priceAlerts?.first?.map(),
+            price_alerts: priceAlerts.or([]).compactMap { $0.map() },
             metadata: AssetMetaData(
                 isEnabled: true,
                 isBuyEnabled: asset.isBuyable,

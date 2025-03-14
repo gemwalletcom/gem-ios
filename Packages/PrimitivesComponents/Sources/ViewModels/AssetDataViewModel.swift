@@ -153,6 +153,6 @@ public struct AssetDataViewModel {
     }
     
     public var hasPriceAlert: Bool {
-        assetData.price_alert != nil
+        assetData.isPriceAlertsEnabled
     }
 }

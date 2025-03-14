@@ -76,7 +76,7 @@ extension AssetData  {
         balance: .main,
         account: .main,
         price: .main,
-        price_alert: .none,
+        price_alerts: [],
         metadata: .main
     )
 }
