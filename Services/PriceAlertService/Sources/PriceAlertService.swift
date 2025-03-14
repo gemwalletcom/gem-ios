@@ -53,7 +53,7 @@ public struct PriceAlertService: Sendable {
         let changes = SyncValues.changes(primary: .local, local: local.asSet(), remote: remote.asSet())
         
         if !changes.delete.isEmpty {
-            try await deletePriceAlert(assetIds: changes.delete.asArray().map { $0.id })
+            try await deletePriceAlerts(priceAlerts: changes.delete.asArray())
         }
         if !changes.missing.isEmpty {
             try await addPriceAlerts(priceAlerts: changes.missing.asArray())
@@ -64,13 +64,7 @@ public struct PriceAlertService: Sendable {
         try await apiService.getPriceAlerts(deviceId: try await deviceService.getDeviceId())
     }
     
-    public func addPriceAlert(for assetId: AssetId) async throws {
-        let priceAlert = PriceAlert(
-            assetId: assetId.identifier,
-            price: .none,
-            pricePercentChange: .none,
-            priceDirection: .none
-        )
+    public func addPriceAlert(priceAlert: PriceAlert) async throws {
         try store.addPriceAlerts([priceAlert])
         try await addPriceAlerts(priceAlerts: [priceAlert])
     }
@@ -86,10 +80,7 @@ public struct PriceAlertService: Sendable {
         }
     }
 
-    public func deletePriceAlert(assetIds: [String]) async throws {
-        let priceAlerts = assetIds.map {
-            PriceAlert(assetId: $0, price: .none, pricePercentChange: .none, priceDirection: .none)
-        }
+    public func deletePriceAlerts(priceAlerts: [PriceAlert]) async throws {
         try store.deletePriceAlerts(priceAlerts)
         try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
     }

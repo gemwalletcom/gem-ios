@@ -356,3 +356,5 @@
 "contacts.no_addresses" = "Chưa có địa chỉ nào.";
 "contacts.contact" = "Liên hệ";
 "contacts.title" = "Liên hệ";
+"common.percentage" = "Percentage";
+"price_alerts.set_alert.current_price" = "Current price";

@@ -6,7 +6,7 @@ import Primitives
 
 struct PriceAlertAssetRecordInfo: FetchableRecord, Codable {
     let asset: AssetRecord
-    let priceAlert: PriceAlertRecord?
+    let priceAlerts: [PriceAlertRecord]?
 }
 
 extension PriceAlertAssetRecordInfo {
@@ -21,7 +21,7 @@ extension PriceAlertAssetRecordInfo {
                 extendedPublicKey: nil
             ),
             price: nil,
-            price_alert: priceAlert?.map(),
+            price_alerts: priceAlerts.or([]).compactMap { $0.map() },
             metadata: AssetMetaData(
                 isEnabled: true,
                 isBuyEnabled: asset.isBuyable,

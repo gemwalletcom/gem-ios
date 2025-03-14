@@ -356,3 +356,5 @@
 "contacts.no_addresses" = "Адрес ще немає.";
 "contacts.contact" = "контакт";
 "contacts.title" = "Контакти";
+"common.percentage" = "Percentage";
+"price_alerts.set_alert.current_price" = "Current price";

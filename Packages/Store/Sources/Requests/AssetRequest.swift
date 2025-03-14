@@ -25,7 +25,7 @@ public struct AssetRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.account)
-            .including(optional: AssetRecord.priceAlert)
+            .including(all: AssetRecord.priceAlerts)
             .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))
             .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletId))
             .filter(Columns.Asset.id == assetId)
@@ -51,7 +51,7 @@ extension AssetData {
                 extendedPublicKey: .none
             ),
             price: .none,
-            price_alert: .none,
+            price_alerts: [],
             metadata: AssetMetaData(
                 isEnabled: false,
                 isBuyEnabled: false,

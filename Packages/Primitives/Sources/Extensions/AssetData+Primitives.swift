@@ -23,7 +23,7 @@ public extension AssetData {
     }
 
     var isPriceAlertsEnabled: Bool {
-        price_alert != nil
+        price_alerts.first(where: { $0.type == .auto }) != nil
     }
 }
 

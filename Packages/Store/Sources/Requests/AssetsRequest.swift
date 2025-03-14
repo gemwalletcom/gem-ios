@@ -174,7 +174,7 @@ extension AssetsRequest {
         filters: [AssetsRequestFilter]
     ) throws -> [PriceAlertAssetRecordInfo] {
         var request = AssetRecord
-            .including(optional: AssetRecord.priceAlert)
+            .including(all: AssetRecord.priceAlerts)
             .order(Columns.Asset.rank.desc)
             .limit(Self.defaultQueryLimit)
         

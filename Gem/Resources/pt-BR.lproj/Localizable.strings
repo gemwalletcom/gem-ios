@@ -356,3 +356,5 @@
 "contacts.no_addresses" = "Nenhum endereço ainda.";
 "contacts.contact" = "Contato";
 "contacts.title" = "Contatos";
+"common.percentage" = "Percentage";
+"price_alerts.set_alert.current_price" = "Current price";

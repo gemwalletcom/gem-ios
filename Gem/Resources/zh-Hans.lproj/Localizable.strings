@@ -356,3 +356,5 @@
 "contacts.no_addresses" = "尚无地址。";
 "contacts.contact" = "接触";
 "contacts.title" = "联系方式";
+"common.percentage" = "Percentage";
+"price_alerts.set_alert.current_price" = "Current price";

@@ -46,15 +46,15 @@ public struct AssetLink: Codable, Equatable, Hashable, Sendable {
 
 public struct AssetFull: Codable, Sendable {
 	public let asset: Asset
-	public let links: [AssetLink]
 	public let properties: AssetProperties
 	public let score: AssetScore
+	public let links: [AssetLink]
 
-	public init(asset: Asset, links: [AssetLink], properties: AssetProperties, score: AssetScore) {
+	public init(asset: Asset, properties: AssetProperties, score: AssetScore, links: [AssetLink]) {
 		self.asset = asset
-		self.links = links
 		self.properties = properties
 		self.score = score
+		self.links = links
 	}
 }
 

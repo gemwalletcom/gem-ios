@@ -197,4 +197,13 @@ struct Columns {
         static let previewImageUrl = Column("previewImageUrl")
         static let originalSourceUrl = Column("originalSourceUrl")
     }
+    
+    struct PriceAlert {
+        static let id = Column("id")
+        static let assetId = Column("assetId")
+        static let priceDirection = Column("priceDirection")
+        static let price = Column("price")
+        static let pricePercentChange = Column("pricePercentChange")
+        static let lastNotifiedAt = Column("lastNotifiedAt")
+    }
 }

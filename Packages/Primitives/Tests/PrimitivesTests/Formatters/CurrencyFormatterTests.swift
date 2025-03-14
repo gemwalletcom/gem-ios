@@ -91,4 +91,21 @@ final class CurrencyFormatterTests {
         #expect(cryptoFormatter.string(decimal: Decimal(11)) == "11.00")
         #expect(cryptoFormatter.string(decimal: Decimal(12000123)) == "12,000,123.00")
     }
+    
+    @Test
+    func testNormalizedDouble() {
+        let formatter = currencyFormatterUS
+
+        #expect(formatter.normalizedDouble(from: 0) == 0.0)
+        #expect(formatter.normalizedDouble(from: 11.12) == 11.12)
+        #expect(formatter.normalizedDouble(from: 12000123) == 12000123.0)
+        #expect(formatter.normalizedDouble(from: -1.23) == -1.23)
+
+        #expect(formatter.normalizedDouble(from: 0.0000000002) == 0.0000000002)
+        #expect(formatter.normalizedDouble(from: 0.000123456) == 0.00012)
+        #expect(formatter.normalizedDouble(from: 0.002) == 0.002)
+
+        #expect(formatter.normalizedDouble(from: 1.89999) == 1.90)
+        #expect(formatter.normalizedDouble(from: 0.0123) == 0.012)
+    }
 }

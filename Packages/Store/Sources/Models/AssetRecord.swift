@@ -101,7 +101,7 @@ extension AssetRecord: CreateTable {
 
 extension Asset {
     var record: AssetRecord {
-        return AssetRecord(
+        AssetRecord(
             id: id.identifier,
             chain: chain,
             tokenId: tokenId ?? "",
@@ -133,10 +133,10 @@ extension AssetRecord {
 
 extension PriceRecordInfo {
     var priceData: PriceData {
-        return PriceData(
+        PriceData(
             asset: asset.mapToAsset(),
             price: price?.mapToPrice(),
-            priceAlert: priceAlert?.map(),
+            priceAlerts: priceAlerts.or([]).map { $0.map() },
             market: price?.mapToMarket(),
             links: links.map { $0.link }
         )
@@ -145,18 +145,18 @@ extension PriceRecordInfo {
 
 extension AssetRecordInfo {
     var assetData: AssetData {
-        return AssetData(
+        AssetData(
             asset: asset.mapToAsset(),
             balance: balance?.mapToBalance() ?? .zero,
             account: account.mapToAccount(),
             price: price?.mapToPrice(),
-            price_alert: priceAlert?.map(),
+            price_alerts: priceAlerts.or([]).compactMap { $0.map() },
             metadata: metadata
         )
     }
 
     var metadata: AssetMetaData {
-        return AssetMetaData(
+        AssetMetaData(
             isEnabled: balance?.isEnabled ?? false,
             isBuyEnabled: asset.isBuyable,
             isSellEnabled: asset.isSellable,
