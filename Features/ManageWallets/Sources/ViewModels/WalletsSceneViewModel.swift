@@ -8,21 +8,19 @@ import ManageWalletService
 public class WalletsSceneViewModel {
     @Binding var navigationPath: NavigationPath
     let service: ManageWalletService
-
+    let currentWalletId: WalletId?
+    
     public init(
         navigationPath: Binding<NavigationPath>,
         manageWalletService: ManageWalletService
     ) {
         _navigationPath = navigationPath
         self.service = manageWalletService
+        self.currentWalletId = service.currentWaletId
     }
     
     var title: String {
         Localized.Wallets.title
-    }
-    
-    var currentWalletId: WalletId? {
-        service.currentWaletId
     }
 }
 
