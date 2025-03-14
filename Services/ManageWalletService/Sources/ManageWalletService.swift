@@ -38,11 +38,11 @@ public struct ManageWalletService: Sendable {
         walletSessionService.wallets
     }
 
-    public func setCurrent(_ index: Int) {
+    public func setCurrent(for index: Int) {
         walletSessionService.setCurrent(index: index)
     }
 
-    public func setCurrent(_ walletId: WalletId) {
+    public func setCurrent(for walletId: WalletId) {
         walletSessionService.setCurrent(walletId: walletId)
     }
 

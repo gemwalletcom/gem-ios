@@ -110,7 +110,7 @@ final class LocalKeystoreTests {
             let id = NSUUID().uuidString
             let keystore = LocalKeystore(
                 folder: id,
-                walletStore: WalletStore(db: DB(path: "\(id).sqlite")),
+                walletStore: .mock(),
                 preferences: .mock(),
                 keystorePassword: MockKeystorePassword()
             )

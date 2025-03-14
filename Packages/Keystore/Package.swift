@@ -41,7 +41,8 @@ let package = Package(
             name: "KeystoreTestKit",
             dependencies: [
                 "Keystore",
-                .product(name: "PreferencesTestKit", package: "Preferences")
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "StoreTestKit", package: "Store"),
             ],
             path: "TestKit"
         ),
@@ -51,6 +52,7 @@ let package = Package(
                 "Keystore",
                 "KeystoreTestKit",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StoreTestKit", package: "Store"),
             ]),
     ]
 )

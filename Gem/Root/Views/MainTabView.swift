@@ -154,7 +154,7 @@ extension MainTabView {
             case .transaction(let walletIndex, let assetId):
                 //select wallet
                 if walletIndex != model.wallet.index.asInt {
-                    manageWalletService.setCurrent(walletIndex)
+                    manageWalletService.setCurrent(for: walletIndex)
                 }
 
                 let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)

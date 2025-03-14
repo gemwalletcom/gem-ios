@@ -2,10 +2,11 @@
 
 import Foundation
 import Store
+import StoreKit
 
 public extension WalletStore {
     static func mock(
-        db: DB = DB(path: "\(UUID().uuidString).sqlite")
+        db: DB = .mock()
     ) -> WalletStore {
         WalletStore(db: db)
     }

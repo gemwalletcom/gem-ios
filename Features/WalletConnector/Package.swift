@@ -45,6 +45,7 @@ let package = Package(
             dependencies: [
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StoreTestKit", package: "Store"),
                 "WalletConnector"
             ],
             resources: [.process("Resources")]

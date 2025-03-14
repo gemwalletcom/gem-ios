@@ -7,6 +7,7 @@ import WalletConnectSign
 import GRDB
 import Store
 import PrimitivesTestKit
+import StoreTestKit
 
 @testable import WalletConnector
 
@@ -57,7 +58,7 @@ extension WalletConnectorSigner {
     @MainActor
     static func mock(keystore: LocalKeystore) -> WalletConnectorSigner {
         WalletConnectorSigner(
-            store: ConnectionsStore(db: DB(path: "\(NSUUID().uuidString).sqlite")),
+            store: ConnectionsStore(db: .mock()),
             keystore: keystore,
             walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
         )

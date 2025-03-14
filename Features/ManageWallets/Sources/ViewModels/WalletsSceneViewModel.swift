@@ -30,7 +30,7 @@ public class WalletsSceneViewModel {
 
 extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
-        service.setCurrent(walletId)
+        service.setCurrent(for: walletId)
     }
 
     func onEdit(wallet: Wallet) {
