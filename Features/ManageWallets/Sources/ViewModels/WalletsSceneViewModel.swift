@@ -21,8 +21,8 @@ public class WalletsSceneViewModel {
         Localized.Wallets.title
     }
     
-    var currentWallet: Wallet? {
-        service.currentWallet
+    var currentWalletId: WalletId? {
+        service.currentWaletId
     }
 }
 

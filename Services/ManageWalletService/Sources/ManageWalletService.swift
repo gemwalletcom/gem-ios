@@ -26,6 +26,10 @@ public struct ManageWalletService: Sendable {
         self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
     }
 
+    public var currentWaletId: WalletId? {
+        walletSessionService.currentWalletId
+    }
+    
     public var currentWallet: Wallet? {
         walletSessionService.currentWallet
     }

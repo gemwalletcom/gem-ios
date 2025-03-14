@@ -12,7 +12,7 @@ import WalletAvatar
 struct WalletListItemView: View {
 
     let model: WalletViewModel
-    let currentWallet: Wallet?
+    let currentWalletId: WalletId?
 
     let onSelect: ((Wallet) -> Void)
     let onEdit: ((Wallet) -> Void)
@@ -21,13 +21,13 @@ struct WalletListItemView: View {
 
     init(
         wallet: Wallet,
-        currentWallet: Wallet?,
+        currentWalletId: WalletId?,
         onSelect: @escaping (Wallet) -> Void,
         onEdit: @escaping (Wallet) -> Void,
         onPin: @escaping (Wallet) -> Void,
         onDelete: @escaping (Wallet) -> Void
     ) {
-        self.currentWallet = currentWallet
+        self.currentWalletId = currentWalletId
         self.model = WalletViewModel(wallet: wallet)
         self.onSelect = onSelect
         self.onEdit = onEdit
@@ -54,7 +54,7 @@ struct WalletListItemView: View {
 
                 Spacer()
 
-                if currentWallet == model.wallet {
+                if currentWalletId == model.wallet.walletId {
                     SelectionImageView()
                 }
 
