@@ -540,6 +540,8 @@ public enum Localized {
       public static let message = Localized.tr("Localizable", "price_alerts.empty_state.message", fallback: "No price alerts added yet.")
     }
     public enum SetAlert {
+      /// Current price
+      public static let currentPrice = Localized.tr("Localizable", "price_alerts.set_alert.current_price", fallback: "Current price")
       /// When price decreases by
       public static let priceDecreasesBy = Localized.tr("Localizable", "price_alerts.set_alert.price_decreases_by", fallback: "When price decreases by")
       /// When price increases by

@@ -152,7 +152,7 @@ public struct AssetDataViewModel {
         assetData.metadata.stakingApr
     }
     
-    public var hasPriceAlert: Bool {
+    public var isPriceAlertsEnabled: Bool {
         assetData.isPriceAlertsEnabled
     }
 }

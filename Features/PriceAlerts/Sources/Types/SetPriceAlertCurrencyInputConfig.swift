@@ -6,6 +6,7 @@ import SwiftUI
 import Primitives
 import Preferences
 import Style
+import Localization
 
 struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     let type: SetPriceAlertType
@@ -17,7 +18,7 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     
     var placeholder: String {
         switch type {
-        case .price: "0"
+        case .price: .zero
         case .percentage: "5"
         }
     }
@@ -37,10 +38,8 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     }
     
     var secondaryText: String {
-        guard let price = assetData.price?.price else {
-            return .empty
-        }
-        return ["Current price", formatter.string(price)].joined(separator: " ")
+        guard let price = assetData.price?.price else { return .empty }
+        return [Localized.PriceAlerts.SetAlert.currentPrice, formatter.string(price)].joined(separator: " ")
     }
     
     var keyboardType: UIKeyboardType { .decimalPad }
