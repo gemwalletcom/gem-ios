@@ -10,6 +10,7 @@ import Store
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var model: TransactionsViewModel
 
@@ -65,27 +66,18 @@ struct TransactionsNavigationStack: View {
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
                 }
+                .sheet(item: $model.isPresentingSelectAssetType) {
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            selectType: $0,
+                            assetsService: walletsService.assetsService,
+                            walletsService: walletsService,
+                            priceAlertService: priceAlertService
+                        ),
+                        isPresentingSelectType: $model.isPresentingSelectAssetType
+                    )
+                }
         }
-        .onChange(of: keystore.currentWallet, onWalletChange)
-        .sheet(isPresented: $isPresentingFilteringView) {
-            NavigationStack {
-                TransactionsFilterScene(model: $model.filterModel)
-            }
-            .presentationDetents([.medium])
-            .presentationDragIndicator(.visible)
-        }
-    }
-}
-
-// MARK: - Actions
-
-extension TransactionsNavigationStack {
-    private func onWalletChange(_ _: Wallet?, wallet: Wallet?) {
-        guard let wallet = wallet else { return }
-        model.refresh(for: wallet)
-    }
-
-    private func onSelectFilter() {
-        isPresentingFilteringView.toggle()
     }
 }

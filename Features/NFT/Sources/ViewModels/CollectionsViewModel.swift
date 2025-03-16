@@ -40,7 +40,6 @@ public final class CollectionsViewModel: Sendable {
         self.wallet = wallet
         self.sceneStep = sceneStep
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
-        self.columns = Array(repeating: GridItem(spacing: .medium), count: 2)
     }
 
 

@@ -28,6 +28,7 @@ public final class TransactionsViewModel {
     public var request: TransactionsRequest
     public var filterModel: TransactionsFilterViewModel
     public var isPresentingFilteringView: Bool = false
+    public var isPresentingSelectAssetType: SelectAssetType?
 
     public init(
         transactionsService: TransactionsService,
@@ -62,9 +63,7 @@ public final class TransactionsViewModel {
 extension TransactionsViewModel {
     public func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
         guard let newWallet else { return }
-        wallet = newWallet
-        filterModel = TransactionsFilterViewModel(wallet: wallet)
-        request = TransactionsRequest(walletId: wallet.id, type: type)
+        refresh(for: newWallet)
     }
 
     public func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
@@ -90,6 +89,12 @@ extension TransactionsViewModel {
 // MARK: - Private
 
 extension TransactionsViewModel {
+    private func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        filterModel = TransactionsFilterViewModel(wallet: wallet)
+        request = TransactionsRequest(walletId: wallet.id, type: type)
+    }
+
     private func onSelectCleanFilters() {
         refresh(for: wallet)
     }

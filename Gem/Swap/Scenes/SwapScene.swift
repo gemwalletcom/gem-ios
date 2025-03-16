@@ -102,7 +102,7 @@ extension SwapScene {
         } header: {
             Text(model.swapFromTitle)
         } footer: {
-            SwapChangeView(fromId: $fromAsset.assetId, toId: $toAsset.assetId)
+            SwapChangeView(fromId: $model.fromAssetRequest.assetId, toId: $model.toAssetRequest.assetId)
                 .offset(y: .small + .tiny)
                 .frame(maxWidth: .infinity)
                 .disabled(model.isSwitchAssetButtonDisabled)
