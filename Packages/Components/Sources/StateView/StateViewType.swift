@@ -5,7 +5,7 @@ import Foundation
 public enum StateViewType<T> {
     case noData
     case loading
-    case loaded(T)
+    case data(T)
     case error(Error)
     
     public var isLoading: Bool {
@@ -30,7 +30,7 @@ public enum StateViewType<T> {
     }
 
     public var value: T? {
-        guard case .loaded(let t) = self else {
+        guard case .data(let t) = self else {
             return nil
         }
         return t

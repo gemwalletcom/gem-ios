@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum SelectAssetType: Identifiable, Hashable {
+public enum SelectAssetType: Identifiable, Hashable, Sendable {
     case send
     case receive(ReceiveAssetType)
     case buy
@@ -22,7 +22,7 @@ public enum SelectAssetType: Identifiable, Hashable {
     }
 }
 
-public enum SelectAssetSwapType: Identifiable, Hashable {
+public enum SelectAssetSwapType: Identifiable, Hashable, Sendable {
     case pay
     case receive(chains: [Chain], assetIds: [AssetId])
     
@@ -34,7 +34,7 @@ public enum SelectAssetSwapType: Identifiable, Hashable {
     }
 }
 
-public enum ReceiveAssetType: String, Hashable, Identifiable {
+public enum ReceiveAssetType: String, Hashable, Identifiable, Sendable {
     case asset
     case collection
 

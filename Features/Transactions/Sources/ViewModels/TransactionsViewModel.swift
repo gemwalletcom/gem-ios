@@ -9,37 +9,44 @@ import Preferences
 import TransactionsService
 import ExplorerService
 import PrimitivesComponents
+import ManageWalletService
 
 @Observable
 @MainActor
 public final class TransactionsViewModel {
+    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
+
+    private let manageWalletService: ManageWalletService
+    private let transactionsService: TransactionsService
+
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
-    private let service: TransactionsService
 
-    public var wallet: Wallet
-    public var filterModel: TransactionsFilterViewModel
+    public private(set) var wallet: Wallet
+
+    public var transactions: [TransactionExtended] = []
     public var request: TransactionsRequest
-
-    public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
-    public var isPresentingSelectAssetType: SelectAssetType?
+    public var filterModel: TransactionsFilterViewModel
+    public var isPresentingFilteringView: Bool = false
 
     public init(
+        transactionsService: TransactionsService,
+        manageWalletService: ManageWalletService,
         wallet: Wallet,
-        type: TransactionsRequestType,
-        service: TransactionsService
+        type: TransactionsRequestType
     ) {
-        self.wallet = wallet
+        self.manageWalletService = manageWalletService
+        self.transactionsService = transactionsService
+
         self.type = type
-        self.service = service
+        self.wallet = wallet
         self.filterModel = TransactionsFilterViewModel(wallet: wallet)
         self.request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
     public var title: String { Localized.Activity.title }
-    public var walletId: WalletId {
-        WalletId(id: wallet.id)
-    }
+    public var currentWallet: Wallet? { manageWalletService.currentWallet }
+    public var walletId: WalletId { wallet.walletId }
 
     public var emptyContentModel: EmptyContentTypeViewModel {
         if !filterModel.isAnyFilterSpecified {
@@ -53,14 +60,19 @@ public final class TransactionsViewModel {
 // MARK: - Business Logic
 
 extension TransactionsViewModel {
-    public func refresh(for wallet: Wallet) {
-        self.wallet = wallet
-        self.filterModel = TransactionsFilterViewModel(wallet: wallet)
-        self.request = TransactionsRequest(walletId: wallet.id, type: type)
+    public func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
+        guard let newWallet else { return }
+        wallet = newWallet
+        filterModel = TransactionsFilterViewModel(wallet: wallet)
+        request = TransactionsRequest(walletId: wallet.id, type: type)
     }
 
     public func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
         request.filters = filter.requestFilters
+    }
+
+    public func onSelectFilterButton() {
+        isPresentingFilteringView.toggle()
     }
 
     public func fetch() async {
@@ -68,7 +80,7 @@ extension TransactionsViewModel {
             guard let deviceId = try preferences.get(key: .deviceId) else {
                 throw AnyError("deviceId is null")
             }
-            try await service.updateAll(deviceId: deviceId, walletId: walletId)
+            try await transactionsService.updateAll(deviceId: deviceId, walletId: walletId)
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }

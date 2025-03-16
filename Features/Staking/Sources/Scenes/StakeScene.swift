@@ -77,7 +77,7 @@ extension StakeScene {
             case .loading:
                 ListItemLoadingView()
                     .id(UUID())
-            case .loaded(let delegations):
+            case .data(let delegations):
                 ForEach(delegations) { delegation in
                     NavigationLink(value: delegation.delegation) {
                         ValidatorDelegationView(delegation: delegation)

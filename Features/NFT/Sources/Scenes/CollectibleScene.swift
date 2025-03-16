@@ -42,7 +42,6 @@ public struct CollectibleScene: View {
         .environment(\.defaultMinListHeaderHeight, 0)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
-        .background(Colors.grayBackground)
         .alert(Localized.Permissions.accessDenied, isPresented: $isPresentingPhotoPermissionMessage) {
             Button(Localized.Common.openSettings) {
                 onSelectOpenSettings()

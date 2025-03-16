@@ -60,9 +60,12 @@ class AssetSceneViewModel: ObservableObject {
         }
         return .none
     }
-
-    var showPriceView: Bool {
-        !priceView.text.isEmpty && !priceChangeView.text.isEmpty
+    
+    var priceItemViewModel: PriceListItemViewModel {
+        PriceListItemViewModel(
+            title: Localized.Asset.price,
+            model: assetDataModel.priceViewModel
+        )
     }
     
     var showNetwork: Bool { true }
@@ -83,23 +86,6 @@ class AssetSceneViewModel: ObservableObject {
     
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
-    }
-    
-    var priceView: TextValue {
-        TextValue(
-            text: assetDataModel.priceAmountText,
-            style: .calloutSecondary)
-    }
-    
-    var priceChangeView: TextValue {
-        TextValue(
-            text: assetDataModel.priceChangeText,
-            style: TextStyle(
-                font: .callout,
-                color: assetDataModel.priceChangeTextColor,
-                background: assetDataModel.priceViewModel.priceChangeTextBackgroundColor
-            )
-        )
     }
 
     var emptyConentModel: EmptyContentTypeViewModel {

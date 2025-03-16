@@ -19,7 +19,7 @@ struct ConfirmTransferScene: View {
 
     var body: some View {
         VStack {
-            transactionsList(value: model.state.value)
+            transactionsList
             Spacer()
             StateButton(
                 text: model.buttonTitle,
@@ -64,8 +64,7 @@ extension ConfirmTransferScene {
         return nil
     }
 
-    @ViewBuilder
-    private func transactionsList(value: TransactionInputViewModel?) -> some View {
+    private var transactionsList: some View {
         List {
             Section {
                 if let appValue = model.appValue {
@@ -199,7 +198,7 @@ extension ConfirmTransferScene {
         Task {
             await model.process(input: input, amount: amount)
             await MainActor.run {
-                if case .loaded(_) = model.confirmingState {
+                if case .data(_) = model.confirmingState {
                     model.onCompleteAction()
                 }
             }

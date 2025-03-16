@@ -30,7 +30,7 @@ public struct AssetLinkViewModel {
         case .x: Localized.Social.x
         case .discord: Localized.Social.discord
         case .reddit: Localized.Social.reddit
-        case .telegram: Localized.Social.github
+        case .telegram: Localized.Social.telegram
         case .gitHub: Localized.Social.github
         case .youTube: Localized.Social.youtube
         case .facebook: Localized.Social.facebook

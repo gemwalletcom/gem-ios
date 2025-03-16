@@ -17,7 +17,7 @@ public struct ListAssetItemView: View {
             secondary: { secondaryContent }
         )
         .onChange(of: toggleValue) { _, newValue in
-            model.action?(.enabled(newValue))
+            model.action?(.switcher(enabled: newValue))
         }
     }
 }

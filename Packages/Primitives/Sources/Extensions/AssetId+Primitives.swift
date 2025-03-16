@@ -12,6 +12,10 @@ public extension AssetId {
         }
     }
     
+    init(chain: Chain) {
+        self = .init(chain: chain, tokenId: .none)
+    }
+    
     static func getData(id: String) -> (Chain, String?)? {
         let split = id.split(separator: "_")
         if split.count == 1  {

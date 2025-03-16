@@ -11,33 +11,38 @@ import Style
 import SwiftUI
 import PrimitivesComponents
 import AvatarService
+import ManageWalletService
 
 @Observable
 @MainActor
 public final class CollectionsViewModel: Sendable {
+    private let manageWalletService: ManageWalletService
     private let nftService: NFTService
     private let deviceService: any DeviceServiceable
 
+    let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
     let sceneStep: Scenes.CollectionsScene.SceneStep
     var request: NFTRequest
 
     public private(set) var wallet: Wallet
 
     public init(
-        wallet: Wallet,
-        sceneStep: Scenes.CollectionsScene.SceneStep,
         nftService: NFTService,
-        deviceService: any DeviceServiceable
+        deviceService: any DeviceServiceable,
+        manageWalletService: ManageWalletService,
+        wallet: Wallet,
+        sceneStep: Scenes.CollectionsScene.SceneStep
     ) {
-        self.wallet = wallet
-        self.sceneStep = sceneStep
         self.nftService = nftService
         self.deviceService = deviceService
+        self.manageWalletService = manageWalletService
+
+        self.wallet = wallet
+        self.sceneStep = sceneStep
         self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
         self.columns = Array(repeating: GridItem(spacing: .medium), count: 2)
     }
-    
-    let columns: [GridItem]
+
 
     var title: String {
         switch sceneStep {
@@ -49,12 +54,17 @@ public final class CollectionsViewModel: Sendable {
     var emptyContentModel: EmptyContentTypeViewModel {
         EmptyContentTypeViewModel(type: .nfts)
     }
+    
+    public var currentWallet: Wallet? {
+        manageWalletService.currentWallet
+    }
 
     // MARK: - Public methods
-
-    public func refresh(for wallet: Wallet) {
-        self.wallet = wallet
-        self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+    
+    public func onWalletChange(_ _: Wallet?, _ newWallet: Wallet?) {
+        guard let newWallet else { return }
+        wallet = newWallet
+        request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
     }
 
     // MARK: - Internal methods

@@ -10,14 +10,10 @@ import PrimitivesComponents
 public struct ConnectionsViewModel: Sendable {
     let service: ConnectionsService
 
-    private let keystore: any Keystore
-
     public init(
-        service: ConnectionsService,
-        keystore: any Keystore
+        service: ConnectionsService
     ) {
         self.service = service
-        self.keystore = keystore
     }
 
     var title: String { Localized.WalletConnect.title }

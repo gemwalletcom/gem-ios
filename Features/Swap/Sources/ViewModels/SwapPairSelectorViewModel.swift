@@ -4,8 +4,7 @@ import Foundation
 import Primitives
 import GemstonePrimitives
 
-@Observable
-public class SwapPairSelectorViewModel {
+public struct SwapPairSelectorViewModel: Equatable {
     public var fromAssetId: AssetId?
     public var toAssetId: AssetId?
     

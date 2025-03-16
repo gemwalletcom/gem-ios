@@ -246,75 +246,17 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let senderAddress = try wallet.account(for: dataModel.chain).address
-            let destinationAddress = dataModel.recipient.address
-            let metaData = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
-            let scanPayload = try scanService.getTransactionPayload(
-                wallet: wallet,
-                transferType: data.type,
-                recipient: dataModel.recipientData
-            )
-            
-            async let getRates = feeModel.getFeeRates(type: data.type)
-            async let getPreload = service.preload(
-                input: TransactionPreloadInput(
-                    senderAddress: senderAddress,
-                    destinationAddress: destinationAddress
-                )
-            )
-            async let getIsValidTransaction = scanService.isValidTransaction(scanPayload)
-            
-            let (rates, preload, isValid) = try await (getRates, getPreload, getIsValidTransaction)
-            
-            if !isValid {
-                throw AnyError("Transaction is invalid")
-            }
-            
-            guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
-                throw ChainCoreError.feeRateMissed
-            }
+            let metadata = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            try validateBalance(metadata: metadata)
 
-            let transactionInput = TransactionInput(
-                type: data.type,
-                asset: dataModel.asset,
-                senderAddress: senderAddress,
-                destinationAddress: dataModel.recipient.address,
-                value: dataModel.data.value,
-                balance: metaData.assetBalance,
-                gasPrice: rate.gasPriceType,
-                memo: dataModel.memo,
-                preload: preload
+            let preloadInput = try await fetchTransactionLoad(metaData: metadata)
+            let transferAmountResult = calculateTransferAmount(
+                metaData: metadata,
+                preloadInput: preloadInput
             )
-
-            let preloadInput = try await service.load(input: transactionInput)
-            let fee = preloadInput.fee
-
-            let transferAmountResult = TransferAmountCalculator().calculateResult(
-                input: TranferAmountInput(
-                    asset: dataModel.asset,
-                    assetBalance: Balance(available: metaData.assetBalance),
-                    value: dataModel.data.value,
-                    availableValue: availableValue,
-                    assetFee: dataModel.asset.feeAsset,
-                    assetFeeBalance: Balance(available: metaData.assetFeeBalance),
-                    fee: fee.totalFee,
-                    canChangeValue: dataModel.data.canChangeValue,
-                    ignoreValueCheck: dataModel.data.ignoreValueCheck
-                )
-            )
-            
-            let transactionInputModel = TransactionInputViewModel(
-                data: data,
-                input: preloadInput,
-                metaData: metaData,
-                transferAmountResult: transferAmountResult
-            )
-            
-            feeModel.update(
-                value: transactionInputModel.networkFeeText,
-                fiatValue: transactionInputModel.networkFeeFiatText
-            )
-            state = .loaded(transactionInputModel)
+            updateState(with: transactionInputViewModel(transferAmount: transferAmountResult, input: preloadInput, metaData: metadata))
+        } catch let error as TransferAmountCalculatorError {
+            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -346,7 +288,7 @@ extension ConfirmTransferViewModel {
                         await walletsService.enableAssets(walletId: wallet.walletId, assetIds: transaction.assetIds, enabled: true)
                     }
                     
-                    // delay if multiple transaction should be exectured
+                    // delay if multiple transaction should be executed
                     if signedData.count > 1 && transactionData != signedData.last {
                         try await Task.sleep(for: transactionDelay)
                     }
@@ -354,7 +296,7 @@ extension ConfirmTransferViewModel {
                     confirmTransferDelegate?(.success(transactionData))
                 }
             }
-            confirmingState = .loaded(true)
+            confirmingState = .data(true)
         } catch {
             confirmingState = .error(error)
             NSLog("confirm transaction error: \(error)")
@@ -537,6 +479,99 @@ extension ConfirmTransferViewModel {
             utxoOutputs: [],
             metadata: transferDataType.metadata,
             createdAt: Date()
+        )
+    }
+    
+    private func fetchTransactionLoad(metaData: TransferDataMetadata) async throws -> TransactionLoad {
+        let senderAddress = try wallet.account(for: dataModel.chain).address
+        let destinationAddress = dataModel.recipient.address
+        let scanPayload = try scanService.getTransactionPayload(
+            wallet: wallet,
+            transferType: data.type,
+            recipient: dataModel.recipientData
+        )
+        
+        async let getRates = feeModel.getFeeRates(type: data.type)
+        async let getPreload = service.preload(
+            input: TransactionPreloadInput(
+                senderAddress: senderAddress,
+                destinationAddress: destinationAddress
+            )
+        )
+        async let getIsValidTransaction = scanService.isValidTransaction(scanPayload)
+        
+        let (rates, preload, isValid) = try await (getRates, getPreload, getIsValidTransaction)
+        
+        if !isValid {
+            throw AnyError("Transaction is invalid")
+        }
+        
+        guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
+            throw ChainCoreError.feeRateMissed
+        }
+
+        let transactionInput = TransactionInput(
+            type: data.type,
+            asset: dataModel.asset,
+            senderAddress: senderAddress,
+            destinationAddress: dataModel.recipient.address,
+            value: dataModel.data.value,
+            balance: metaData.assetBalance,
+            gasPrice: rate.gasPriceType,
+            memo: dataModel.memo,
+            preload: preload
+        )
+
+        return try await service.load(input: transactionInput)
+    }
+    
+    private func updateState(with viewModel: TransactionInputViewModel) {
+        feeModel.update(
+            value: viewModel.networkFeeText,
+            fiatValue: viewModel.networkFeeFiatText
+        )
+        state = .data(viewModel)
+    }
+    
+    private func calculateTransferAmount(
+        metaData: TransferDataMetadata,
+        preloadInput: TransactionLoad
+    ) -> TransferAmountResult {
+        let calculatorInput = TransferAmountInput(
+            asset: dataModel.asset,
+            assetBalance: Balance(available: metaData.assetBalance),
+            value: dataModel.data.value,
+            availableValue: availableValue,
+            assetFee: dataModel.asset.feeAsset,
+            assetFeeBalance: Balance(available: metaData.assetFeeBalance),
+            fee: preloadInput.fee.fee,
+            canChangeValue: dataModel.data.canChangeValue,
+            ignoreValueCheck: dataModel.data.ignoreValueCheck
+        )
+        return TransferAmountCalculator().calculateResult(input: calculatorInput)
+    }
+    
+    private func transactionInputViewModel(
+        transferAmount: TransferAmountResult,
+        input: TransactionLoad? = nil,
+        metaData: TransferDataMetadata? = nil
+    ) -> TransactionInputViewModel {
+        TransactionInputViewModel(
+            data: data,
+            input: input,
+            metaData: metaData,
+            transferAmountResult: transferAmount
+        )
+    }
+    
+    private func validateBalance(metadata: TransferDataMetadata) throws {
+        try TransferAmountCalculator().validateBalance(
+            asset: dataModel.asset,
+            assetBalance: Balance(available: metadata.assetBalance),
+            value: dataModel.data.value,
+            availableValue: availableValue,
+            ignoreValueCheck: dataModel.data.ignoreValueCheck,
+            canChangeValue: dataModel.data.canChangeValue
         )
     }
 }

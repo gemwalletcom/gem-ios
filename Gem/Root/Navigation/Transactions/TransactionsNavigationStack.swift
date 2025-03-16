@@ -5,13 +5,12 @@ import Primitives
 import Style
 import Components
 import Transactions
+import Store
 
 struct TransactionsNavigationStack: View {
-    @Environment(\.keystore) private var keystore
     @Environment(\.navigationState) private var navigationState
     @Environment(\.walletsService) private var walletsService
 
-    @State private var isPresentingFilteringView: Bool = false
     @State private var model: TransactionsViewModel
 
     init(model: TransactionsViewModel) {
@@ -28,11 +27,17 @@ struct TransactionsNavigationStack: View {
     var body: some View {
         NavigationStack(path: navigationPath) {
             TransactionsScene(model: model)
+                .observeQuery(
+                    request: $model.request,
+                    value: $model.transactions
+                )
+                .onChange(of: model.filterModel, model.onChangeFilter)
+                .onChange(of: model.currentWallet, model.onChangeWallet)
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         FilterButton(
                             isActive: model.filterModel.isAnyFilterSpecified,
-                            action: onSelectFilter)
+                            action: model.onSelectFilterButton)
                     }
                 }
                 .navigationBarTitleDisplayMode(.inline)
@@ -53,17 +58,12 @@ struct TransactionsNavigationStack: View {
                         onAssetActivate: .none
                     )
                 }
-                .sheet(item: $model.isPresentingSelectAssetType) { value in
-                    SelectAssetSceneNavigationStack(
-                        model: SelectAssetViewModel(
-                            wallet: model.wallet,
-                            keystore: keystore,
-                            selectType: value,
-                            assetsService: walletsService.assetsService,
-                            walletsService: walletsService
-                        ),
-                        isPresentingSelectType: $model.isPresentingSelectAssetType
-                    )
+                .sheet(isPresented: $model.isPresentingFilteringView) {
+                    NavigationStack {
+                        TransactionsFilterScene(model: $model.filterModel)
+                    }
+                    .presentationDetents([.medium])
+                    .presentationDragIndicator(.visible)
                 }
         }
         .onChange(of: keystore.currentWallet, onWalletChange)

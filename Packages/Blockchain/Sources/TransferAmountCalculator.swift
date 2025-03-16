@@ -3,56 +3,11 @@
 import Foundation
 import Primitives
 import BigInt
-import GemstonePrimitives
-
-public enum TransferAmountResult {
-    case amount(TransferAmount)
-    case error(TransferAmount, Error)
-}
-
-public struct TranferAmountInput {
-    public let asset: Asset
-    public let assetBalance: Balance
-    public let value: BigInt
-    public let availableValue: BigInt // maximum available value (unstake)
-
-    public let assetFee: Asset
-    public let assetFeeBalance: Balance
-    public let fee: BigInt
-    public let canChangeValue: Bool
-    public let ignoreValueCheck: Bool // in some cases like claim rewards we should ignore checking total balance
-
-    public init(
-        asset: Asset,
-        assetBalance: Balance,
-        value: BigInt,
-        availableValue: BigInt,
-        assetFee: Asset,
-        assetFeeBalance: Balance,
-        fee: BigInt,
-        canChangeValue: Bool,
-        ignoreValueCheck: Bool = false
-    ) {
-        self.asset = asset
-        self.assetBalance = assetBalance
-        self.value = value
-        self.availableValue = availableValue
-        self.assetFee = assetFee
-        self.assetFeeBalance = assetFeeBalance
-        self.fee = fee
-        self.canChangeValue = canChangeValue
-        self.ignoreValueCheck = ignoreValueCheck
-    }
-    
-    public var isMaxValue: Bool {
-        value == availableValue
-    }
-}
 
 public struct TransferAmountCalculator {
     public init() {}
 
-    public func calculateResult(input: TranferAmountInput) -> TransferAmountResult {
+    public func calculateResult(input: TransferAmountInput) -> TransferAmountResult {
         do {
             let amount = try calculate(input: input)
             return .amount(amount)
@@ -65,7 +20,7 @@ public struct TransferAmountCalculator {
         }
     }
 
-    public func calculate(input: TranferAmountInput) throws -> TransferAmount {
+    public func calculate(input: TransferAmountInput) throws -> TransferAmount {
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
             guard input.fee.isZero else {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)
@@ -107,5 +62,21 @@ public struct TransferAmountCalculator {
         let useMaxAmount = input.availableValue == input.value
 
         return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
+    }
+
+    public func validateBalance(
+        asset: Asset,
+        assetBalance: Balance,
+        value: BigInt,
+        availableValue: BigInt,
+        ignoreValueCheck: Bool = false,
+        canChangeValue: Bool
+    ) throws {
+        if !canChangeValue {
+            return
+        }
+        if !ignoreValueCheck, assetBalance.available == 0 || availableValue < value {
+            throw TransferAmountCalculatorError.insufficientBalance(asset)
+        }
     }
 }

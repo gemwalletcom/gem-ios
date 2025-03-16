@@ -50,8 +50,10 @@ public extension Spacing {
         public struct button {
             /// 340
             public static let maxWidth: CGFloat = 340
-            /// 40
-            public static let accessoryHeight: CGFloat = 40
+            /// 44
+            public static let accessoryHeight: CGFloat = 44
+            /// 50
+            public static let height: CGFloat = 50
         }
 
         public struct content {
@@ -67,12 +69,14 @@ public extension Sizing {
         public static let tiny: CGFloat = 10
         /// 22
         public static let small: CGFloat = 22
+        /// 34
+        public static let semiMedium: CGFloat = 34
         /// 44
         public static let medium: CGFloat = 44
         /// 88
         public static let large: CGFloat = 88
         /// 112
-        public static let semiLarge: CGFloat = 112
+        public static let semiExtraLarge: CGFloat = 112
         /// 120
         public static let extraLarge: CGFloat = 120
     }

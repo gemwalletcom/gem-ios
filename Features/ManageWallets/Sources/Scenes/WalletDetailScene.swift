@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Keystore
 import SwiftUI
 import Components
 import Style
@@ -49,15 +48,12 @@ public struct WalletDetailScene: View {
                         Spacer()
                         VStack(spacing: .medium) {
                             if let dbWallet {
-                                AssetImageView(
-                                    assetImage: model.avatarAssetImage(for: dbWallet),
+                                AvatarView(
+                                    avatarImage: model.avatarAssetImage(for: dbWallet),
                                     size: .image.extraLarge,
-                                    overlayImageSize: .image.medium
+                                    action: onSelectImage
                                 )
                                 .padding(.bottom, .extraLarge)
-                                .onTapGesture {
-                                    onSelectImage()
-                                }
                             }
                         }
                         Spacer()

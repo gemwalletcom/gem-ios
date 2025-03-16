@@ -4,25 +4,22 @@ import SwiftUI
 import Primitives
 import SwapService
 import ChainService
-import class Swap.SwapPairSelectorViewModel
 import Components
 import Localization
+import InfoSheet
 
 struct SwapNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
-    
-    @State private var model: SwapViewModel
-    @State private var isPresentingAssetSwapType: SelectAssetSwapType?
-    @State private var isPresentingSwapProviderSelect: Asset?
+    @Environment(\.priceAlertService) private var priceAlertService
+
+    @State private var model: SwapSceneViewModel
+    @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
-    @Binding private var navigationPath: NavigationPath
-    
+
     init(
-        model: SwapViewModel,
+        model: SwapSceneViewModel,
         navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
@@ -30,65 +27,52 @@ struct SwapNavigationView: View {
         self.onComplete = onComplete
         _navigationPath = navigationPath
     }
-    
+
     var body: some View {
-        SwapScene(
-            model: model,
-            isPresentingAssetSwapType: $isPresentingAssetSwapType,
-            isPresentingSwapProviderSelect: $isPresentingSwapProviderSelect,
-            onTransferAction: {
-                navigationPath.append($0)
+        SwapScene(model: model)
+            .onChange(of: model.swapState.swapTransferData.value) { oldValue, newValue in
+                guard let newValue else { return }
+                navigationPath.append(newValue)
             }
-        )
-        .navigationDestination(for: TransferData.self) { data in
-            ConfirmTransferScene(
-                model: ConfirmTransferViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    data: data,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
-                        .service(for: data.chain),
-                    walletsService: walletsService,
-                    onComplete: {
-                        onSwapComplete(type: data.type)
-                    }
+            .navigationDestination(for: TransferData.self) { data in
+                ConfirmTransferScene(
+                    model: ConfirmTransferViewModel(
+                        wallet: model.wallet,
+                        keystore: model.keystore,
+                        data: data,
+                        service: ChainServiceFactory(nodeProvider: nodeService)
+                            .service(for: data.chain),
+                        walletsService: model.walletsService,
+                        onComplete: {
+                            onSwapComplete(type: data.type)
+                        }
+                    )
                 )
-            )
-        }
-        .sheet(item: $isPresentingAssetSwapType) { selectType in
-            SelectAssetSceneNavigationStack(
-                model: SelectAssetViewModel(
-                    wallet: model.wallet,
-                    keystore: keystore,
-                    selectType: .swap(selectType),
-                    assetsService: assetsService,
-                    walletsService: walletsService,
-                    selectAssetAction: {
-                        onSelectAssetComplete(type: selectType, asset: $0)
-                    }
-                ),
-                isPresentingSelectType: .constant(.swap(selectType))
-            )
-        }
-        .sheet(item: $isPresentingSwapProviderSelect) { asset in
-            NavigationStack {
-                SelectableListView(
-                    model: .constant(model.swapProvidersViewModel(asset: asset)),
-                    onFinishSelection: onSelectProvider,
-                    listContent: { SimpleListItemView(model: $0) }
-                )
-                .navigationTitle(Localized.Buy.Providers.title)
-                .navigationBarTitleDisplayMode(.inline)
-                .presentationDetents([.medium, .large])
-                .toolbar {
-                    ToolbarItem(placement: .topBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSwapProviderSelect = nil
-                        }.bold()
-                    }
+            }
+            .sheet(item: $model.isPresentedInfoSheet) {
+                switch $0 {
+                case let .info(type):
+                    InfoSheetScene(model: InfoSheetViewModel(type: type))
+                case let .selectAsset(type):
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            selectType: .swap(type),
+                            assetsService: assetsService,
+                            walletsService: model.walletsService,
+                            priceAlertService: priceAlertService,
+                            selectAssetAction: model.onFinishAssetSelection
+                        ),
+                        isPresentingSelectType: .constant(.swap(type))
+                    )
+                case let .swapProvider(asset):
+                    SelectableListNavigationStack(
+                        model: model.swapProvidersViewModel(asset: asset),
+                        onFinishSelection: model.onFinishSwapProvderSelection,
+                        listContent: { SimpleListItemView(model: $0) }
+                    )
                 }
             }
-        }
     }
 }
 
@@ -101,26 +85,5 @@ extension SwapNavigationView {
             onComplete?()
         default: break
         }
-    }
-    
-    private func onSelectAssetComplete(type: SelectAssetSwapType, asset: Asset) {
-        switch type {
-        case .pay:
-            if asset.id == model.pairSelectorModel.toAssetId {
-                model.pairSelectorModel.toAssetId = model.pairSelectorModel.fromAssetId
-            }
-            model.pairSelectorModel.fromAssetId = asset.id
-        case .receive:
-            if asset.id == model.pairSelectorModel.fromAssetId {
-                model.pairSelectorModel.fromAssetId = model.pairSelectorModel.toAssetId
-            }
-            model.pairSelectorModel.toAssetId = asset.id
-        }
-        isPresentingAssetSwapType = .none
-    }
-    
-    private func onSelectProvider(_ list: [SwapProviderItem]) {
-        model.setSelectedSwapQuote(list.first?.swapQuote)
-        isPresentingSwapProviderSelect = nil
     }
 }

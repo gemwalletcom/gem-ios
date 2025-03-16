@@ -9,4 +9,12 @@ public extension AssetId {
     ) -> AssetId {
         assetId
     }
+    
+    static func mockSolana() -> AssetId {
+        AssetId(chain: .solana, tokenId: .none)
+    }
+    
+    static func mockSolanaUSDC() -> AssetId {
+        AssetId(chain: .solana, tokenId: "EPjFWdd5AufqSSqeM2qN1xzybapC8G4wEGGkZwyTDt1v")
+    }
 }

@@ -77,15 +77,15 @@ public final class AssetsService: Sendable {
         let assets = try getAssets(for: assetIds).map { $0.id }.asSet()
         let missingAssetIds = assetIds.asSet().subtracting(assets)
 
+        if missingAssetIds.isEmpty {
+            return []
+        }
+        
         // add missing assets to local storage
         let newAssets = try await getAssets(assetIds: missingAssetIds.asArray())
         try addAssets(assets: newAssets)
 
         return newAssets.map { $0.asset.id }
-    }
-
-    public func getAssets(walletID: String, filters: [AssetsRequestFilter]) throws -> [AssetData] {
-        try assetStore.getAssetsData(for: walletID, filters: filters)
     }
 
     public func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
@@ -132,15 +132,13 @@ public final class AssetsService: Sendable {
             }
 
             for try await result in group {
-                if let result = result {
+                if let result = result, result.count > 0 {
                     assets.append(contentsOf: result)
                 }
             }
             return assets
         }
-        return assets.sorted { l, r in
-            l.score.rank > r.score.rank
-        }
+        return assets
     }
 
     func searchAPIAssets(query: String, chains: [Chain]) async throws -> [AssetBasic] {

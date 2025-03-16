@@ -14,7 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "Store", path: "../Store"),
         .package(name: "BannerService", path: "../BannerService"),
         .package(name: "PriceService", path: "../PriceService"),
         .package(name: "Preferences", path: "../Preferences"),
@@ -23,13 +23,14 @@ let package = Package(
         .package(name: "TransactionService", path: "../TransactionService"),
         .package(name: "DiscoverAssetsService", path: "../DiscoverAssetsService"),
         .package(name: "ChainService", path: "../ChainService"),
+        .package(name: "WalletSessionService", path: "../WalletSessionService"),
     ],
     targets: [
         .target(
             name: "WalletsService",
             dependencies: [
                 "Primitives",
-                "Keystore",
+                "Store",
                 "BannerService",
                 "PriceService",
                 "Preferences",
@@ -37,7 +38,8 @@ let package = Package(
                 "AssetsService",
                 "TransactionService",
                 "DiscoverAssetsService",
-                "ChainService"
+                "ChainService",
+                "WalletSessionService"
             ],
             path: "Sources"
         ),

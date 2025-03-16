@@ -34,7 +34,7 @@ public struct ChartScene: View {
                             StateEmptyView(title: model.emptyTitle)
                         case .loading:
                             LoadingView()
-                        case .loaded(let model):
+                        case .data(let model):
                             ChartView(model: model)
                         case .error(let error):
                             StateEmptyView(

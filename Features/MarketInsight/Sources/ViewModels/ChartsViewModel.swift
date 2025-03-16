@@ -84,7 +84,7 @@ extension ChartsViewModel {
 
             let chartValues = try ChartValues.from(charts: charts)
             let model = ChartValuesViewModel(period: currentPeriod, price: price?.mapToPrice(), values: chartValues)
-            state = .loaded(model)
+            state = .data(model)
         } catch {
             state = .error(error)
         }

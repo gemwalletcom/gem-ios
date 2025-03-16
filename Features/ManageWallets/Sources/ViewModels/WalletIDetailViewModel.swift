@@ -2,7 +2,6 @@ import SwiftUI
 import ManageWalletService
 import WalletAvatar
 import Primitives
-import Keystore
 import Components
 import Style
 import Localization

@@ -8,7 +8,7 @@ public final class ObservablePreferences: Sendable {
 
     public let preferences: Preferences
 
-    private init(preferences: Preferences = .standard) {
+    public init(preferences: Preferences = .standard) {
         self.preferences = preferences
     }
 
@@ -34,6 +34,19 @@ public final class ObservablePreferences: Sendable {
         set {
             withMutation(keyPath: \.isPriceAlertsEnabled) {
                 preferences.isPriceAlertsEnabled = newValue
+            }
+        }
+    }
+
+    @ObservationIgnored
+    public var currentWalletId: String? {
+        get {
+            access(keyPath: \.currentWalletId)
+            return preferences.currentWalletId
+        }
+        set {
+            withMutation(keyPath: \.currentWalletId) {
+                preferences.currentWalletId = newValue
             }
         }
     }

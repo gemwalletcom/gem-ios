@@ -77,7 +77,7 @@ public enum TonProvider: TargetType {
                     "address": .value(address),
                     "method": .value(method),
                     "stack": stack,
-                ]), id: 1)
+                ]))
             )
         case .masterChainInfo:
             return .plain
