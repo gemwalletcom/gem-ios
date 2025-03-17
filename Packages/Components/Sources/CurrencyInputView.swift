@@ -72,7 +72,7 @@ public struct CurrencyInputView: View {
                     } label: {
                         actionButtonImage
                             .resizable()
-                            .frame(width: Sizing.image.semiMedium, height: Sizing.image.semiMedium)
+                            .frame(width: Sizing.image.small, height: Sizing.image.small)
                     }
                     .buttonStyle(.plain)
                 }

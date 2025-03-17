@@ -17,7 +17,7 @@ import WalletsService
 
 @MainActor
 @Observable
-final class AmounViewModel {
+final class AmountViewModel {
     let input: AmountInput
     let wallet: Wallet
     let walletsService: WalletsService
@@ -356,8 +356,8 @@ final class AmounViewModel {
 
 // MARK: - Logic
 
-extension AmounViewModel {
-    func setRecipientAmount() {
+extension AmountViewModel {
+    func setRecipientAmountIfNeeded() {
         if let recipientAmount = recipientData.amount {
             amountText = recipientAmount
         }

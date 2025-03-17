@@ -30,7 +30,7 @@ struct AmountNavigationView: View {
 
     var body: some View {
         AmountScene(
-            model: AmounViewModel(
+            model: AmountViewModel(
                 input: input,
                 wallet: wallet,
                 walletsService: walletsService,

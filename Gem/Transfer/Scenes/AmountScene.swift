@@ -14,7 +14,7 @@ import struct Staking.StakeValidatorsScene
 
 struct AmountScene: View {
 
-    @State var model: AmounViewModel
+    @State var model: AmountViewModel
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
@@ -116,7 +116,7 @@ struct AmountScene: View {
             }
         }
         .taskOnce {
-            model.setRecipientAmount()
+            model.setRecipientAmountIfNeeded()
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
