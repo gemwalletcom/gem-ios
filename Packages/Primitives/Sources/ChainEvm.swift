@@ -28,4 +28,5 @@ public enum EVMChain: String, Codable, CaseIterable, Equatable, Sendable {
 	case ink
 	case unichain
 	case hyperliquid
+	case monad
 }
