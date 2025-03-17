@@ -58,7 +58,7 @@ public struct ContactListScene: View {
             if contacts.isEmpty {
                 ZStack {
                     Colors.insetGroupedListStyle.ignoresSafeArea()
-                    Text("No contacts yet.")
+                    Text(model.emptyStateTitle)
                         .textStyle(.body)
                 }
             }

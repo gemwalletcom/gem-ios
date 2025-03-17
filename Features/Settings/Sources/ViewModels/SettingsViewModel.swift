@@ -45,7 +45,7 @@ public final class SettingsViewModel {
     var securityTitle: String { Localized.Settings.security }
     var securityImage: Image { Images.Settings.security }
     
-    var contactsTitle: String { "Contacts" }
+    var contactsTitle: String { Localized.Contacts.title }
     var contactsImage: Image { Images.Settings.contacts }
 
     var notificationsTitle: String { Localized.Settings.Notifications.title }

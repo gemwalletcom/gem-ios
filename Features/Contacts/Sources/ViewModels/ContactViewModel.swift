@@ -31,7 +31,7 @@ public class ContactViewModel {
     }
     
     var title: String { viewType.title }
-    var actionButtonTitlte: String { "Save" }
+    var actionButtonTitlte: String { Localized.Common.save }
     var nameTitleField: String { "Name" }
     var descriptionTitleField: String { "Description" }
     var cancelButtonTitle: String {

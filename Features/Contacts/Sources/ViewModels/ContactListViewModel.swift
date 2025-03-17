@@ -8,6 +8,7 @@ import Store
 import Combine
 import Components
 import PrimitivesComponents
+import Localization
 
 @Observable
 @MainActor
@@ -20,7 +21,8 @@ public class ContactListViewModel: Sendable {
         self.contactRequest = ContactListRequest()
     }
     
-    var title = "Contacts"
+    var title = Localized.Contacts.title
+    var emptyStateTitle = Localized.Contacts.noContacts
     
     func delete(contact: Contact) throws {
         _ = try contactService.delete(contact: contact)

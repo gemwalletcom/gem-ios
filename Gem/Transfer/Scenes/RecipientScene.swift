@@ -120,7 +120,7 @@ struct RecipientScene: View {
                                 }
                         }
                     } header: {
-                        Text("Contacts")
+                        Text(Localized.Contacts.title)
                     }
                 }
             }

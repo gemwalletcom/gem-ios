@@ -34,7 +34,7 @@ public class ContactAddressViewModel {
     }
     
     var title: String { viewType.title }
-    var actionButtonTitle: String { "Save" }
+    var actionButtonTitle: String { Localized.Common.save }
     var addressTextFieldTitle: String { "Address" }
     var memoTextFieldTitle: String { "Memo" }
     var showMemo: Bool { input.chain.value?.isMemoSupported == true }
