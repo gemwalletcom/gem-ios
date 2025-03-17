@@ -347,6 +347,7 @@ extension SwapSceneViewModel {
             if !error.isCancelled {
                 swapState.quotes = .error(ErrorWrapper(error))
                 swapState.fetch = .data(quotes: [])
+                selectedSwapQuote = nil
 
                 NSLog("SwapScene get quotes error: \(error)")
             }
@@ -376,8 +377,13 @@ extension SwapSceneViewModel {
             )
             swapState.swapTransferData = .data(data)
         } catch {
-            swapState.swapTransferData = .error(ErrorWrapper(error))
-            swapState.quotes = .error(ErrorWrapper(error))
+            if !error.isCancelled {
+                swapState.swapTransferData = .error(ErrorWrapper(error))
+                swapState.quotes = .error(ErrorWrapper(error))
+                selectedSwapQuote = nil
+
+                NSLog("SwapScene get swap data error: \(error)")
+            }
         }
     }
 

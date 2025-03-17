@@ -4,12 +4,12 @@ import Foundation
 import SwiftUI
 import Style
 
-public struct ToastModifier: ViewModifier {
+struct ToastModifier: ViewModifier {
     @State var isPresenting: Binding<Bool>
     let value: String
     let systemImage: String
 
-    public init(
+    init(
         isPresenting: Binding<Bool>,
         value: String,
         systemImage: String
@@ -19,7 +19,7 @@ public struct ToastModifier: ViewModifier {
         self.systemImage = systemImage
     }
 
-    public func body(content: Content) -> some View {
+    func body(content: Content) -> some View {
         return content
             .toast(isPresenting: isPresenting){
                 AlertToast(

@@ -31,6 +31,13 @@ struct ReceiveViewModel {
         Localized.Common.copy
     }
 
+    var copyModel: CopyTypeViewModel {
+        CopyTypeViewModel(
+            type: .address(assetModel.asset, address: addressShort),
+            copyValue: address
+        )
+    }
+    
     func enableAsset() async {
         await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
     }

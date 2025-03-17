@@ -144,12 +144,10 @@ struct AssetScene: View {
         .refreshable {
             await fetch()
         }
-        .modifier(
-            ToastModifier(
-                isPresenting: $showingPriceAlertMessage,
-                value: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
-                systemImage: assetData.priceAlertSystemImage
-            )
+        .toast(
+            isPresenting: $showingPriceAlertMessage,
+            title: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
+            systemImage: assetData.priceAlertSystemImage
         )
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

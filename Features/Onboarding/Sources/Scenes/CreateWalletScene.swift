@@ -9,11 +9,10 @@ struct CreateWalletScene: View {
 
     @StateObject var model: CreateWalletViewModel
     
-    @State private var showCopyMessage = false
-    
+    @State private var isPresentingCopyToast = false
+
     var body: some View {
         VStack(spacing: .medium) {
-            
             OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
             SecretDataTypeView(type: model.type)
 
@@ -25,21 +24,19 @@ struct CreateWalletScene: View {
                 .buttonStyle(.blue())
                 .frame(maxWidth: .scene.button.maxWidth)
         }
+        .copyToast(
+            model: model.copyModel,
+            isPresenting: $isPresentingCopyToast
+        )
         .padding(.bottom, .scene.bottom)
         .navigationBarTitle(model.title)
         .taskOnce {
             model.words = model.generateWords()
         }
-        .modifier(ToastModifier(
-            isPresenting: $showCopyMessage,
-            value: CopyTypeViewModel(type: .secretPhrase).message,
-            systemImage: SystemImage.copy
-        ))
     }
     
     func copy() {
-        showCopyMessage = true
-        UIPasteboard.general.string = MnemonicFormatter.fromArray(words: model.words)
+        isPresentingCopyToast = true
     }
     
     func continueAction() {
