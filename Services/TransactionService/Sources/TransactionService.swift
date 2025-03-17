@@ -113,40 +113,38 @@ public struct TransactionService: Sendable {
             let assetIds = (transaction.assetIds + [transaction.feeAssetId]).unique()
             let walletIds = try transactionStore.getWalletIds(for: transactionId)
 
-            await withTaskGroup(of: Void.self) { group in
-                for assetId in assetIds {
-                    for walletId in walletIds {
-                        group.addTask {
-                            await balanceUpdater.updateBalance(
+            for assetId in assetIds {
+                for walletId in walletIds {
+                    Task {
+                        do {
+                            try await balanceUpdater.updateBalance(
                                 walletId: walletId,
                                 asset: assetId,
                                 address: transaction.from
                             )
+                        } catch {
+                            NSLog("Error updating balance for wallet \(walletId): \(error)")
                         }
+                    }
 
-                        if [TransactionType.stakeDelegate, .stakeUndelegate, .stakeRewards].contains(transaction.type) {
-                            group.addTask {
-                                do {
-                                    try await stakeService.update(
-                                        walletId: walletId,
-                                        chain: assetId.chain,
-                                        address: transaction.from
-                                    )
-                                } catch {
-                                    NSLog("Error updating stake for wallet \(walletId): \(error)")
-                                }
-                            }
-                        }
-
-                        if [TransactionType.transferNFT].contains(transaction.type) {
-                            group.addTask {
-                                // TODO: Add NFT update logic here.
+                    if [TransactionType.stakeDelegate, .stakeUndelegate, .stakeRewards].contains(transaction.type) {
+                        Task {
+                            do {
+                                try await stakeService.update(
+                                    walletId: walletId,
+                                    chain: assetId.chain,
+                                    address: transaction.from
+                                )
+                            } catch {
+                                NSLog("Error updating stake for wallet \(walletId): \(error)")
                             }
                         }
                     }
+
+                    if [TransactionType.transferNFT].contains(transaction.type) {
+                        // TODO: Add NFT update logic here.
+                    }
                 }
-                // Await all child tasks to finish.
-                for await _ in group { }
             }
         }
     }

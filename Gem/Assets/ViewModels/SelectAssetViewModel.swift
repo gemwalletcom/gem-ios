@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Keystore
 import Primitives
 import Store
 import Components
@@ -16,7 +15,6 @@ import PriceAlertService
 class SelectAssetViewModel {
     let preferences: Preferences
     let wallet: Wallet
-    let keystore: any Keystore
     let selectType: SelectAssetType
     let assetsService: AssetsService
     let walletsService: WalletsService
@@ -31,7 +29,6 @@ class SelectAssetViewModel {
     init(
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
-        keystore: any Keystore,
         selectType: SelectAssetType,
         assetsService: AssetsService,
         walletsService: WalletsService,
@@ -40,7 +37,6 @@ class SelectAssetViewModel {
     ) {
         self.preferences = preferences
         self.wallet = wallet
-        self.keystore = keystore
         self.selectType = selectType
         self.assetsService = assetsService
         self.walletsService = walletsService

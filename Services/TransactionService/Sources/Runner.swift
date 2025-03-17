@@ -15,24 +15,15 @@ public actor Runner: Sendable {
             if runImmediately {
                 await perform(action: action)
             }
-            await loop(every: duration, action: action)
-        }
-    }
 
-    private func loop(
-        every duration: Duration,
-        action: @Sendable @escaping () async throws -> Void
-    ) async {
-        do {
-            try await Task.sleep(for: duration)
-            try await action()
-        } catch {
-            NSLog("PeriodicRunner action error: \(error)")
-            return
-        }
-
-        if task?.isCancelled != true {
-            await loop(every: duration, action: action)
+            while !Task.isCancelled {
+                do {
+                    try await Task.sleep(for: duration)
+                    try await action()
+                } catch {
+                    NSLog("PeriodicRunner action error: \(error)")
+                }
+            }
         }
     }
 

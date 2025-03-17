@@ -31,6 +31,7 @@ public struct WalletsScene: View {
         isPresentingImportWalletSheet: Binding<Bool>
     ) {
         self.model = model
+        
         _pinnedWallets = Query(WalletsRequest(isPinned: true))
         _wallets = Query(WalletsRequest(isPinned: false))
         
@@ -65,7 +66,7 @@ public struct WalletsScene: View {
                     ForEach(pinnedWallets) {
                         WalletListItemView(
                             wallet: $0,
-                            currentWallet: model.currentWallet,
+                            currentWalletId: model.currentWalletId,
                             onSelect: onSelect,
                             onEdit: onEdit,
                             onPin: onPin,
@@ -85,7 +86,7 @@ public struct WalletsScene: View {
                 ForEach(wallets) {
                     WalletListItemView(
                         wallet: $0,
-                        currentWallet: model.currentWallet,
+                        currentWalletId: model.currentWalletId,
                         onSelect: onSelect,
                         onEdit: onEdit,
                         onPin: onPin,

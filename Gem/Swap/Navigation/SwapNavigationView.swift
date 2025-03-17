@@ -49,7 +49,7 @@ struct SwapNavigationView: View {
                     )
                 )
             }
-            .sheet(item: $model.presentedSheet) {
+            .sheet(item: $model.isPresentedInfoSheet) {
                 switch $0 {
                 case let .info(type):
                     InfoSheetScene(model: InfoSheetViewModel(type: type))
@@ -57,7 +57,6 @@ struct SwapNavigationView: View {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
-                            keystore: model.keystore,
                             selectType: .swap(type),
                             assetsService: assetsService,
                             walletsService: model.walletsService,

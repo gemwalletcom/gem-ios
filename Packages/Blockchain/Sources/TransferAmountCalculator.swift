@@ -72,7 +72,7 @@ public struct TransferAmountCalculator {
         ignoreValueCheck: Bool = false,
         canChangeValue: Bool
     ) throws {
-        if canChangeValue {
+        if !canChangeValue {
             return
         }
         if !ignoreValueCheck, assetBalance.available == 0 || availableValue < value {

@@ -256,7 +256,7 @@ final class TransferAmountCalculatorTests {
                 value: BigInt(10),
                 availableValue: BigInt(10),
                 ignoreValueCheck: false,
-                canChangeValue: false
+                canChangeValue: true
             )
         }
 
@@ -267,7 +267,7 @@ final class TransferAmountCalculatorTests {
                 value: BigInt(20),
                 availableValue: BigInt(10),
                 ignoreValueCheck: false,
-                canChangeValue: false
+                canChangeValue: true
             )
         }
 
@@ -293,7 +293,7 @@ final class TransferAmountCalculatorTests {
             )
         }
         
-        #expect(throws: Never.self) {
+        #expect(throws: Error.self) {
             try service.validateBalance(
                 asset: coinAsset,
                 assetBalance: Balance(available: BigInt(0)),

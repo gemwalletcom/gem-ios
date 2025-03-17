@@ -3,28 +3,32 @@
 import Foundation
 import Primitives
 import BalanceService
-@preconcurrency import Keystore
+import WalletSessionService
 
 struct BalanceUpdateService: BalanceUpdater {
     private let balanceService: BalanceService
-    private let keystore: any Keystore
+    private let walletSessionService: any WalletSessionManageable
 
     init(
         balanceService: BalanceService,
-        keystore: any Keystore
+        walletSessionService: any WalletSessionManageable
     ) {
         self.balanceService = balanceService
-        self.keystore = keystore
+        self.walletSessionService = walletSessionService
     }
 
     func updateBalance(for walletId: WalletId, assetIds: [AssetId]) async throws {
-        let wallet = try keystore.getWallet(walletId)
-        await balanceService.updateBalance(for: wallet, assetIds: assetIds)
+        await balanceService.updateBalance(
+            for: try walletSessionService.getWallet(walletId: walletId),
+            assetIds: assetIds
+        )
     }
 
     // add asset to asset store and create balance store record
     func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
-        let wallet = try keystore.getWallet(walletId)
-        try balanceService.addAssetsBalancesIfMissing(assetIds: assetIds, wallet: wallet)
+        try balanceService.addAssetsBalancesIfMissing(
+            assetIds: assetIds,
+            wallet: walletSessionService.getWallet(walletId: walletId)
+        )
     }
 }

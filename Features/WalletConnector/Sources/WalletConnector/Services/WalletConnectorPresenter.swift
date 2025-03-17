@@ -3,14 +3,18 @@
 import SwiftUI
 
 @Observable
-@MainActor
 public final class WalletConnectorPresenter: Sendable {
+
+    @MainActor
     public var isPresentingError: String?
+    @MainActor
     public var isPresentingConnectionBar: Bool = false
+    @MainActor
     public var isPresentingSheet: WalletConnectorSheetType?
 
     public init() { }
 
+    @MainActor
     public func complete(type: WalletConnectorSheetType) {
         switch type {
         case .transferData:
@@ -20,6 +24,7 @@ public final class WalletConnectorPresenter: Sendable {
         }
     }
 
+    @MainActor
     public func cancelSheet(type: WalletConnectorSheetType) {
         let error = ConnectionsError.userCancelled
         switch type {
