@@ -27,12 +27,11 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
         .words(words: WordIndex.rows(for: words))
     }
 
-    var copyValue: String {
-        MnemonicFormatter.fromArray(words: words)
-    }
-
-    var copyType: CopyType {
-        .secretPhrase
+    var copyModel: CopyTypeViewModel {
+        CopyTypeViewModel(
+            type: .secretPhrase,
+            copyValue: MnemonicFormatter.fromArray(words: words)
+        )
     }
 
     func generateWords() -> [String] {

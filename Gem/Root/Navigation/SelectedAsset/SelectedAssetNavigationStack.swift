@@ -12,10 +12,10 @@ import Swap
 import Style
 
 struct SelectedAssetNavigationStack: View  {
-    
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.manageWalletService) private var manageWalletService
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -35,108 +35,76 @@ struct SelectedAssetNavigationStack: View  {
 
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            switch selectType.type {
-            case .send(let type):
-                RecipientNavigationView(
-                    model: RecipientViewModel(
-                        wallet: wallet,
-                        asset: selectType.asset,
-                        keystore: keystore,
-                        type: type,
-                        onRecipientDataAction: {
-                            navigationPath.append($0)
-                        },
-                        onTransferAction: {
-                            navigationPath.append($0)
+            Group {
+                switch selectType.type {
+                case .send(let type):
+                    RecipientNavigationView(
+                        model: RecipientViewModel(
+                            wallet: wallet,
+                            asset: selectType.asset,
+                            manageWalletService: manageWalletService,
+                            type: type,
+                            onRecipientDataAction: {
+                                navigationPath.append($0)
+                            },
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        ),
+                        navigationPath: $navigationPath,
+                        onComplete: {
+                            isPresentingSelectedAssetInput = nil
                         }
-                    ),
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-                .navigationBarTitleDisplayMode(.inline)
-            case .receive:
-                ReceiveScene(
-                    model: ReceiveViewModel(
-                        assetModel: AssetViewModel(asset: selectType.asset),
-                        walletId: wallet.walletId,
-                        address: selectType.address,
-                        walletsService: walletsService
                     )
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .buy:
-                FiatConnectNavigationView(
-                    model: FiatSceneViewModel(
-                        assetAddress: selectType.assetAddress,
-                        walletId: wallet.id
+                case .receive:
+                    ReceiveScene(
+                        model: ReceiveViewModel(
+                            assetModel: AssetViewModel(asset: selectType.asset),
+                            walletId: wallet.walletId,
+                            address: selectType.address,
+                            walletsService: walletsService
+                        )
                     )
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
+                case .buy:
+                    FiatConnectNavigationView(
+                        model: FiatSceneViewModel(
+                            assetAddress: selectType.assetAddress,
+                            walletId: wallet.id
+                        )
+                    )
+                case .swap:
+                    SwapNavigationView(
+                        model: SwapSceneViewModel(
+                            wallet: wallet,
+                            pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
+                            walletsService: walletsService,
+                            swapService: SwapService(nodeProvider: nodeService),
+                            keystore: keystore
+                        ),
+                        navigationPath: $navigationPath,
+                        onComplete: {
                             isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .swap:
-                SwapNavigationView(
-                    model: SwapViewModel(
+                        }
+                    )
+                case .stake:
+                    StakeNavigationView(
                         wallet: wallet,
-                        pairSelectorModel: SwapPairSelectorViewModel.defaultSwapPair(for: selectType.asset),
-                        walletsService: walletsService,
-                        swapService: SwapService(nodeProvider: nodeService),
-                        keystore: keystore
-                    ),
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
+                        assetId: selectType.asset.id,
+                        navigationPath: $navigationPath,
+                        onComplete: {
                             isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
-                }
-            case .stake:
-                StakeNavigationView(
-                    wallet: wallet,
-                    assetId: selectType.asset.id,
-                    navigationPath: $navigationPath,
-                    onComplete: {
-                        isPresentingSelectedAssetInput = nil
-                    }
-                )
-                .navigationBarTitleDisplayMode(.inline)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.done) {
-                            isPresentingSelectedAssetInput = nil
-                        }.bold()
-                    }
+                        }
+                    )
                 }
             }
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(Localized.Common.done) {
+                        isPresentingSelectedAssetInput = nil
+                    }.bold()
+                }
+            }
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
-
-

@@ -10,7 +10,6 @@ import WalletsService
 import Contacts
 
 struct RecipientNavigationView: View {
-
     @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService

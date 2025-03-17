@@ -18,9 +18,9 @@ public enum Localized {
       public static let message = Localized.tr("Localizable", "activity.empty_state.message", fallback: "No activity yet.")
     }
   }
-  public enum App {
+  public enum Application {
     /// Gem
-    public static let name = Localized.tr("Localizable", "app.name", fallback: "Gem")
+    public static let name = Localized.tr("Localizable", "application.name", fallback: "Gem")
   }
   public enum Asset {
     /// Balances
@@ -161,8 +161,12 @@ public enum Localized {
     public static func deleteConfirmation(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "common.delete_confirmation", p1, fallback: "Are sure you want to delete %s?")
     }
+    /// Description
+    public static let description = Localized.tr("Localizable", "common.description", fallback: "Description")
     /// Done
     public static let done = Localized.tr("Localizable", "common.done", fallback: "Done")
+    /// Edit
+    public static let edit = Localized.tr("Localizable", "common.edit", fallback: "Edit")
     /// Emoji
     public static let emoji = Localized.tr("Localizable", "common.emoji", fallback: "Emoji")
     /// Hide
@@ -211,6 +215,8 @@ public enum Localized {
     public static func requiredField(_ p1: Any) -> String {
       return Localized.tr("Localizable", "common.required_field", String(describing: p1), fallback: "%@ is required")
     }
+    /// Save
+    public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
     /// Secret Recovery Phrase
     public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Recovery Phrase")
     /// See All
@@ -241,6 +247,16 @@ public enum Localized {
     public static let warning = Localized.tr("Localizable", "common.warning", fallback: "Warning")
     /// Yes
     public static let yes = Localized.tr("Localizable", "common.yes", fallback: "Yes")
+  }
+  public enum Contacts {
+    /// Contact
+    public static let contact = Localized.tr("Localizable", "contacts.contact", fallback: "Contact")
+    /// No addresses yet.
+    public static let noAddresses = Localized.tr("Localizable", "contacts.no_addresses", fallback: "No addresses yet.")
+    /// No contacts yet.
+    public static let noContacts = Localized.tr("Localizable", "contacts.no_contacts", fallback: "No contacts yet.")
+    /// Contacts
+    public static let title = Localized.tr("Localizable", "contacts.title", fallback: "Contacts")
   }
   public enum Date {
     /// Today
@@ -324,6 +340,8 @@ public enum Localized {
       }
     }
     public enum Swap {
+      /// Amount too small
+      public static let amountTooSmall = Localized.tr("Localizable", "errors.swap.amount_too_small", fallback: "Amount too small")
       /// No quote available.
       public static let noQuoteAvailable = Localized.tr("Localizable", "errors.swap.no_quote_available", fallback: "No quote available.")
       /// No quote data
@@ -450,13 +468,15 @@ public enum Localized {
     /// Unlock
     public static let unlock = Localized.tr("Localizable", "lock.unlock", fallback: "Unlock")
   }
+  public enum Markets {
+    /// Markets
+    public static let title = Localized.tr("Localizable", "markets.title", fallback: "Markets")
+  }
   public enum Nft {
     /// Collection
     public static let collection = Localized.tr("Localizable", "nft.collection", fallback: "Collection")
     /// Collections
     public static let collections = Localized.tr("Localizable", "nft.collections", fallback: "Collections")
-    /// Description
-    public static let description = Localized.tr("Localizable", "nft.description", fallback: "Description")
     /// Properties
     public static let properties = Localized.tr("Localizable", "nft.properties", fallback: "Properties")
     /// Save to Photos
@@ -503,9 +523,31 @@ public enum Localized {
     }
     /// Get notified when there’s a significant price change in your favorite crypto assets.
     public static let getNotifiedExplainMessage = Localized.tr("Localizable", "price_alerts.get_notified_explain_message", fallback: "Get notified when there’s a significant price change in your favorite crypto assets.")
+    public enum Direction {
+      /// Decreases by
+      public static let decreasesBy = Localized.tr("Localizable", "price_alerts.direction.decreases_by", fallback: "Decreases by")
+      /// Increases by
+      public static let increasesBy = Localized.tr("Localizable", "price_alerts.direction.increases_by", fallback: "Increases by")
+      /// Over
+      public static let over = Localized.tr("Localizable", "price_alerts.direction.over", fallback: "Over")
+      /// Under
+      public static let under = Localized.tr("Localizable", "price_alerts.direction.under", fallback: "Under")
+    }
     public enum EmptyState {
       /// No price alerts added yet.
       public static let message = Localized.tr("Localizable", "price_alerts.empty_state.message", fallback: "No price alerts added yet.")
+    }
+    public enum SetAlert {
+      /// When price decreases by
+      public static let priceDecreasesBy = Localized.tr("Localizable", "price_alerts.set_alert.price_decreases_by", fallback: "When price decreases by")
+      /// When price increases by
+      public static let priceIncreasesBy = Localized.tr("Localizable", "price_alerts.set_alert.price_increases_by", fallback: "When price increases by")
+      /// When price is over
+      public static let priceOver = Localized.tr("Localizable", "price_alerts.set_alert.price_over", fallback: "When price is over")
+      /// When price is under
+      public static let priceUnder = Localized.tr("Localizable", "price_alerts.set_alert.price_under", fallback: "When price is under")
+      /// Set target price
+      public static let setTargetPrice = Localized.tr("Localizable", "price_alerts.set_alert.set_target_price", fallback: "Set target price")
     }
   }
   public enum Receive {

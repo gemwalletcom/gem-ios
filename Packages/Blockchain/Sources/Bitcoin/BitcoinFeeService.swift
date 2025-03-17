@@ -31,8 +31,8 @@ extension BitcoinService {
 
 extension BitcoinService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async -> [FeeRate] {
-        await ConcurrentTask.results(for: FeePriority.allCases) { rate in
-            try await getFeeRate(priority: rate)
+        await ConcurrentTask.results(for: FeePriority.allCases) {
+            try await getFeeRate(priority: $0)
         }
     }
 }
@@ -96,9 +96,5 @@ extension BitcoinService {
     }
 }
 
-extension BitcoinChain {
-    public var minimumByteFee: Int {
-        GemstoneConfig.shared.getBitcoinChainConfig(chain: chain.rawValue).minimumByteFee.asInt
-    }
-}
+
 

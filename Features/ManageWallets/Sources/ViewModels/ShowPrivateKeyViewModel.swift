@@ -17,22 +17,20 @@ struct ShowPrivateKeyViewModel {
 
 extension ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     var title: String {
-        return Localized.Common.privateKey
+        Localized.Common.privateKey
     }
 
     var presentWarning: Bool {
-        return true
+        true
     }
 
+    var copyModel: CopyTypeViewModel {
+        CopyTypeViewModel(
+            type: .privateKey,
+            copyValue: text
+        )
+    }
     var type: SecretPhraseDataType {
         .privateKey(key: text)
-    }
-
-    var copyValue: String {
-        text
-    }
-
-    var copyType: CopyType {
-        .privateKey
     }
 }

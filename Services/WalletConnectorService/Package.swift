@@ -13,7 +13,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/reown-com/reown-swift", exact: Version(stringLiteral: "1.0.7")),
+        .package(url: "https://github.com/reown-com/reown-swift", exact: Version(stringLiteral: "1.5.2")),
         .package(url: "https://github.com/daltoniam/Starscream.git", exact: Version(stringLiteral: "3.1.2")),
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),

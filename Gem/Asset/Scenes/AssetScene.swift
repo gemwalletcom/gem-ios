@@ -102,20 +102,7 @@ struct AssetScene: View {
                         
             Section {
                 NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
-                    HStack {
-                        ListItemView(title: Localized.Asset.price)
-                            .accessibilityIdentifier("price")
-
-                        if model.showPriceView {
-                            Spacer()
-                            HStack(spacing: .tiny) {
-                                Text(model.priceView.text)
-                                    .textStyle(model.priceView.style)
-                                Text(model.priceChangeView.text)
-                                    .textStyle(model.priceChangeView.style)
-                            }
-                        }
-                    }
+                    PriceListItemView(model: model.priceItemViewModel)
                 }
                 if model.showNetwork {
                     if model.openNetwork {
@@ -161,12 +148,10 @@ struct AssetScene: View {
         .refreshable {
             await fetch()
         }
-        .modifier(
-            ToastModifier(
-                isPresenting: $showingPriceAlertMessage,
-                value: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
-                systemImage: assetData.priceAlertSystemImage
-            )
+        .toast(
+            isPresenting: $showingPriceAlertMessage,
+            title: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
+            systemImage: assetData.priceAlertSystemImage
         )
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {

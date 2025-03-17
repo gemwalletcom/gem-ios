@@ -205,16 +205,3 @@ extension RecipientScene {
         }
     }
 }
-
-//struct TransferScene_Previews: PreviewProvider {
-//    static var previews: some View {
-//        RecipientScene(
-//            model: RecipientViewModel(
-//                wallet: .main,
-//                keystore: .main,
-//                walletsService: .main,
-//                assetModel: AssetViewModel(asset: .main)
-//            )
-//        )
-//    }
-//}

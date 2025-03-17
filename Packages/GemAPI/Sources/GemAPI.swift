@@ -41,6 +41,8 @@ public enum GemAPI: TargetType {
     
     case scanTransaction(payload: ScanTransactionPayload)
     
+    case markets
+    
     public var baseUrl: URL {
         return URL(string: "https://api.gemwallet.com")!
     }
@@ -64,7 +66,8 @@ public enum GemAPI: TargetType {
             .getSearchAssets,
             .getAssetsList,
             .getPriceAlerts,
-            .getNFTAssets:
+            .getNFTAssets,
+            .markets:
             return .GET
         case .getPrices,
             .addSubscriptions,
@@ -134,6 +137,8 @@ public enum GemAPI: TargetType {
             return "/v1/nft/assets/device/\(deviceId)?wallet_index=\(walletIndex)"
         case .scanTransaction:
             return "/v1/scan/transaction"
+        case .markets:
+            return "/v1/markets"
         }
     }
     
@@ -151,7 +156,8 @@ public enum GemAPI: TargetType {
             .getAssetsList,
             .getAsset,
             .getPriceAlerts,
-            .getNFTAssets:
+            .getNFTAssets,
+            .markets:
             return .plain
         case .getPrice(_, let currency):
             return .params([

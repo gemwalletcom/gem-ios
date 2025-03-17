@@ -11,14 +11,10 @@ import BannerService
 import Store
 import Preferences
 import Localization
-@preconcurrency import Keystore
-
-// TODO: - use one instance of wallet, now we use wallet + keysotre getting wallet
 
 public struct WalletSceneViewModel: Sendable {
     public let wallet: Wallet
 
-    private let keystore: any Keystore
     private let walletsService: WalletsService
     private let bannerService: BannerService
     private let balanceService: BalanceService
@@ -30,15 +26,13 @@ public struct WalletSceneViewModel: Sendable {
         balanceService: BalanceService,
         walletsService: WalletsService,
         bannerService: BannerService,
-        observablePreferences: ObservablePreferences,
-        keystore: any Keystore
+        observablePreferences: ObservablePreferences
     ) {
         self.wallet = wallet
         self.balanceService = balanceService
         self.walletsService = walletsService
         self.bannerService = bannerService
         self.observablePreferences = observablePreferences
-        self.keystore = keystore
     }
 
     var pinImage: Image {
@@ -85,14 +79,6 @@ public struct WalletSceneViewModel: Sendable {
         )
     }
 
-    var keystoreWalletId: WalletId? {
-        keystore.currentWalletId
-    }
-
-    var keystoreWallet: Wallet? {
-        keystore.currentWallet
-    }
-
     func closeBanner(banner: Banner) {
         bannerService.onClose(banner)
     }
@@ -101,19 +87,11 @@ public struct WalletSceneViewModel: Sendable {
         try walletsService.setupWallet(wallet)
     }
 
-    func fetch(walletId: WalletId, assets: [AssetData]) async throws {
+    func fetch(assets: [AssetData]) async throws {
         try await walletsService.fetch(
-            walletId: walletId,
+            walletId: wallet.walletId,
             assetIds: assets.map { $0.asset.id }
         )
-    }
-
-    func fetch(assets: [AssetData]) async throws {
-        do {
-            try await fetch(walletId: wallet.walletId, assets: assets)
-        } catch {
-            NSLog("fetch error: \(error)")
-        }
     }
 
     func handleBanner(action: BannerAction) async throws {
@@ -124,7 +102,7 @@ public struct WalletSceneViewModel: Sendable {
         try await walletsService.updatePrices()
     }
 
-    func runAddressStatusCheck(wallet: Wallet) async {
+    func runAddressStatusCheck() async {
         await walletsService.runAddressStatusCheck(wallet)
     }
 

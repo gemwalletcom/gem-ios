@@ -16,7 +16,7 @@ public enum ListAssetItemSubtitleView {
 }
 
 public enum ListAssetItemAction {
-    case enabled(Bool)
+    case switcher(enabled: Bool)
     case copy
 }
 

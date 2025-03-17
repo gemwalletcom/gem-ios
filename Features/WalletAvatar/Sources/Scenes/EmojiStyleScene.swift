@@ -71,7 +71,7 @@ public struct EmojiStyleScene: View {
             Text(Localized.Common.emoji).tag(Tab.emoji)
             Text(Localized.Common.style).tag(Tab.style)
         }
-        .pickerStyle(SegmentedPickerStyle())
+        .pickerStyle(.segmented)
     }
     
     private var emojiListView: some View {

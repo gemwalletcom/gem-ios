@@ -61,7 +61,11 @@ struct RootScene: View {
         )
         .taskOnce(model.setup)
         .lockManaged(by: model.lockManager)
-        .onChange(of: model.currentWallet, model.onWalletChange)
+        .onChange(
+            of: model.currentWallet,
+            initial: true,
+            model.onWalletChange
+        )
         .toast(
             isPresenting: $model.isPresentingConnectorBar,
             title: "\(Localized.WalletConnect.brandName)...",

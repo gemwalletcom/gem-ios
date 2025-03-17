@@ -11,9 +11,10 @@ import Style
 import Currency
 import NFT
 import TransactionsService
+import WalletTab
+import Transactions
 
 struct MainTabView: View {
-    @Environment(\.keystore) private var keystore
     @Environment(\.balanceService) private var balanceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
@@ -23,6 +24,7 @@ struct MainTabView: View {
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
+    @Environment(\.manageWalletService) private var manageWalletService
 
     let model: MainTabViewModel
 
@@ -48,13 +50,12 @@ struct MainTabView: View {
     var body: some View {
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
-                model: .init(
+                model: WalletSceneViewModel(
                     wallet: model.wallet,
                     balanceService: balanceService,
                     walletsService: walletsService,
                     bannerService: bannerService,
-                    observablePreferences: observablePreferences,
-                    keystore: keystore
+                    observablePreferences: observablePreferences
                 )
             )
             .tabItem {
@@ -62,13 +63,22 @@ struct MainTabView: View {
             }
             .tag(TabItem.wallet)
             
+            if model.isMarketEnabled {
+                MarketsNavigationStack()
+                .tabItem {
+                    tabItem("Markets", Images.Tabs.markets)
+                }
+                .tag(TabItem.markets)
+            }
+            
             if model.isCollectionsEnabled {
                 CollectionsNavigationStack(
-                    model: .init(
-                        wallet: model.wallet,
-                        sceneStep: .collections,
+                    model: CollectionsViewModel(
                         nftService: nftService,
-                        deviceService: deviceService
+                        deviceService: deviceService,
+                        manageWalletService: manageWalletService,
+                        wallet: model.wallet,
+                        sceneStep: .collections
                     )
                 )
                 .tabItem {
@@ -78,10 +88,11 @@ struct MainTabView: View {
             }
             
             TransactionsNavigationStack(
-                model: .init(
+                model: TransactionsViewModel(
+                    transactionsService: transactionsService,
+                    manageWalletService: manageWalletService,
                     wallet: model.wallet,
-                    type: .all,
-                    service: transactionsService
+                    type: .all
                 )
             )
             .tabItem {
@@ -98,7 +109,7 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
-        .onChange(of: keystore.currentWalletId, onWalletIdChange)
+        .onChange(of: model.walletId, onWalletIdChange)
         .onChange(of: notificationService.notifications) { _, newValue in
             onReceiveNotifications(newValue)
         }
@@ -142,8 +153,8 @@ extension MainTabView {
             switch notification {
             case .transaction(let walletIndex, let assetId):
                 //select wallet
-                if walletIndex != keystore.currentWallet?.index.asInt  {
-                    keystore.setCurrentWalletIndex(walletIndex)
+                if walletIndex != model.wallet.index.asInt {
+                    manageWalletService.setCurrent(for: walletIndex)
                 }
 
                 let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)

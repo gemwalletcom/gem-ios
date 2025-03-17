@@ -132,6 +132,7 @@ public enum Images {
         public static let collections = Image(.tabCollections)
         public static let activity = Image(.tabActivity)
         public static let wallet = Image(.tabWallet)
+        public static let markets = Image(.tabDiscover)
     }
 
     public enum Transaction {

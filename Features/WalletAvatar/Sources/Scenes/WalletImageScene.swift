@@ -57,7 +57,7 @@ public struct WalletImageScene: View {
             Text(Localized.Common.emoji).tag(Tab.emoji)
             Text(Localized.Nft.collections).tag(Tab.collections)
         }
-        .pickerStyle(SegmentedPickerStyle())
+        .pickerStyle(.segmented)
     }
     
     @ViewBuilder

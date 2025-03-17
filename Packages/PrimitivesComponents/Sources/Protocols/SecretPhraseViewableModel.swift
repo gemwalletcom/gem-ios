@@ -5,8 +5,7 @@ import Foundation
 public protocol SecretPhraseViewableModel {
     var title: String { get }
     var type: SecretPhraseDataType { get }
-    var copyValue: String { get }
-    var copyType: CopyType { get }
+    var copyModel: CopyTypeViewModel { get }
     var presentWarning: Bool { get }
 }
 

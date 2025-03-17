@@ -4,14 +4,13 @@ import Components
 import Store
 import GRDBQuery
 import Style
-import Keystore
 import Localization
 import PrimitivesComponents
 
 struct SelectAssetScene: View {
 
-    @State private var isPresentingCopyMessage: Bool = false
-    @State private var isPresentingCopyMessageValue: String?  = .none
+    @State private var isPresentingCopyToast: Bool = false
+    @State private var copyTypeViewModel: CopyTypeViewModel?
 
     @Binding private var isPresentingAddToken: Bool
 
@@ -101,7 +100,12 @@ struct SelectAssetScene: View {
             )
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
-        .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
+        .ifLet(copyTypeViewModel) {
+            $0.copyToast(
+                model: $1,
+                isPresenting: $isPresentingCopyToast
+            )
+        }
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
     }
@@ -118,14 +122,14 @@ struct SelectAssetScene: View {
                         action: onAsset
                     )
                 }
-            case .manage:
+            case .manage, .priceAlert:
                 ListAssetItemSelectionView(
                     assetData: assetData,
                     currencyCode: model.currencyCode,
                     type: model.selectType.listType,
                     action: onAsset
                 )
-            case .priceAlert, .swap:
+            case .swap:
                 NavigationCustomLink(
                     with: ListAssetItemSelectionView(
                         assetData: assetData,
@@ -151,17 +155,19 @@ extension SelectAssetScene {
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
-        case .enabled(let enabled):
+        case .switcher(let enabled):
             Task {
-                await model.enableAsset(assetId: asset.id, enabled: enabled)
+                await model.handleAction(assetId: asset.id, enabled: enabled)
             }
         case .copy:
             let address = assetData.account.address
-            isPresentingCopyMessage = true
-            isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
-            UIPasteboard.general.string = address
+            copyTypeViewModel = CopyTypeViewModel(
+                type: .address(asset, address: address),
+                copyValue: address
+            )
+            isPresentingCopyToast = true
             Task {
-                await model.enableAsset(assetId: asset.id, enabled: true)
+                await model.handleAction(assetId: asset.id, enabled: true)
             }
         }
     }

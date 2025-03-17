@@ -8,21 +8,19 @@ import ManageWalletService
 public class WalletsSceneViewModel {
     @Binding var navigationPath: NavigationPath
     let service: ManageWalletService
-
+    let currentWalletId: WalletId?
+    
     public init(
         navigationPath: Binding<NavigationPath>,
         manageWalletService: ManageWalletService
     ) {
         _navigationPath = navigationPath
         self.service = manageWalletService
+        self.currentWalletId = service.currentWaletId
     }
     
     var title: String {
         Localized.Wallets.title
-    }
-    
-    var currentWallet: Wallet? {
-        service.currentWallet
     }
 }
 
@@ -30,7 +28,7 @@ public class WalletsSceneViewModel {
 
 extension WalletsSceneViewModel {
     func setCurrent(_ walletId: WalletId) {
-        service.setCurrent(walletId)
+        service.setCurrent(for: walletId)
     }
 
     func onEdit(wallet: Wallet) {

@@ -4,15 +4,9 @@ import Foundation
 import Primitives
 import SwiftUI
 
-public protocol Keystore: ObservableObject {
+public protocol Keystore: Sendable {
     var directory: URL { get }
-    var currentWalletId: Primitives.WalletId? { get }
-    var currentWallet: Primitives.Wallet? { get }
-    func setCurrentWalletId(_ walletId: Primitives.WalletId?)
-    func setCurrentWalletIndex(_ index: Int)
     var wallets: [Wallet] { get }
-    func getCurrentWallet() throws -> Wallet
-    func getWallet(_ walletId: WalletId) throws -> Wallet
     func createWallet() -> [String]
     @discardableResult
     func importWallet(name: String, type: KeystoreImportType) throws -> Wallet

@@ -1,3 +1,5 @@
+SIMULATOR_NAME := "iPhone 16"
+
 list:
     just --list
 
@@ -37,7 +39,7 @@ test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name=iPhone 16" \
+    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
     -parallel-testing-enabled YES \
     test | xcbeautify
 
@@ -45,7 +47,7 @@ test_ui:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme GemUITests \
     -sdk iphonesimulator \
-    -destination "platform=iOS Simulator,name=iPhone 16" \
+    -destination "platform=iOS Simulator,name={{SIMULATOR_NAME}}" \
     -allowProvisioningUpdates \
     -allowProvisioningDeviceRegistration \
     test | xcbeautify

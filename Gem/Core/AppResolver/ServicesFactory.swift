@@ -27,7 +27,6 @@ import AvatarService
 import ContactService
 
 struct ServicesFactory {
-    @MainActor
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
         let storeManager = StoreManager(db: storages.db)
         let apiService: GemAPIService = GemAPIService()
@@ -50,6 +49,7 @@ struct ServicesFactory {
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
         let manageWalletService = Self.makeManageWalletService(
+            preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
             avatarService: AvatarService(store: storeManager.walletStore)
@@ -75,7 +75,7 @@ struct ServicesFactory {
         let transactionsService = Self.makeTransactionsService(
             transactionStore: storeManager.transactionStore,
             assetsService: assetsService,
-            keystore: storages.keystore
+            walletStore: storeManager.walletStore
         )
         let transactionService = Self.makeTransactionService(
             transactionStore: storeManager.transactionStore,
@@ -106,7 +106,8 @@ struct ServicesFactory {
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
-            keystore: storages.keystore,
+            walletStore: storeManager.walletStore,
+            preferences: storages.observablePreferences,
             interactor: walletConnectorManager
         )
 
@@ -115,7 +116,7 @@ struct ServicesFactory {
             preferences: preferences
         )
         let walletsService = Self.makeWalletsService(
-            keystore: storages.keystore,
+            walletStore: storeManager.walletStore,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
@@ -197,6 +198,7 @@ extension ServicesFactory {
     }
 
     private static func makeManageWalletService(
+        preferences: ObservablePreferences,
         keystore: any Keystore,
         walletStore: WalletStore,
         avatarService: AvatarService
@@ -204,6 +206,7 @@ extension ServicesFactory {
         ManageWalletService(
             keystore: keystore,
             walletStore: walletStore,
+            preferences: preferences,
             avatarService: avatarService
         )
     }
@@ -245,12 +248,12 @@ extension ServicesFactory {
     private static func makeTransactionsService(
         transactionStore: TransactionStore,
         assetsService: AssetsService,
-        keystore: any Keystore
+        walletStore: WalletStore
     ) -> TransactionsService {
         TransactionsService(
             transactionStore: transactionStore,
             assetsService: assetsService,
-            keystore: keystore
+            walletStore: walletStore
         )
     }
 
@@ -294,12 +297,14 @@ extension ServicesFactory {
 
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
-        keystore: any Keystore,
+        walletStore: WalletStore,
+        preferences: ObservablePreferences,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
-            store: connectionsStore,
-            keystore: keystore,
+            connectionsStore: connectionsStore,
+            walletStore: walletStore,
+            preferences: preferences,
             walletConnectorInteractor: interactor
         )
         return ConnectionsService(
@@ -309,7 +314,7 @@ extension ServicesFactory {
     }
 
     private static func makeWalletsService(
-        keystore: any Keystore,
+        walletStore: WalletStore,
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
@@ -318,7 +323,7 @@ extension ServicesFactory {
         bannerSetupService: BannerSetupService
     ) -> WalletsService {
         WalletsService(
-            keystore: keystore,
+            walletStore: walletStore,
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
