@@ -10,7 +10,7 @@ import PrimitivesComponents
 struct SelectAssetScene: View {
 
     @State private var isPresentingCopyMessage: Bool = false
-    @State private var isPresentingCopyMessageValue: String?  = .none
+    @State private var copyTypeViewModel: CopyTypeViewModel?
 
     @Binding private var isPresentingAddToken: Bool
 
@@ -100,7 +100,12 @@ struct SelectAssetScene: View {
             )
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
-        .modifier(ToastModifier(isPresenting: $isPresentingCopyMessage, value: isPresentingCopyMessageValue ?? "", systemImage: SystemImage.copy))
+        .ifLet(copyTypeViewModel) {
+            $0.copyToast(
+                model: $1,
+                isPresenting: $isPresentingCopyMessage
+            )
+        }
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
     }
@@ -156,9 +161,11 @@ extension SelectAssetScene {
             }
         case .copy:
             let address = assetData.account.address
+            copyTypeViewModel = CopyTypeViewModel(
+                type: .address(asset, address: address),
+                copyValue: address
+            )
             isPresentingCopyMessage = true
-            isPresentingCopyMessageValue = CopyTypeViewModel(type: .address(asset, address: address)).message
-            UIPasteboard.general.string = address
             Task {
                 await model.handleAction(assetId: asset.id, enabled: true)
             }

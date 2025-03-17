@@ -16,22 +16,21 @@ class ShowSecretPhraseViewModel {
 
 extension ShowSecretPhraseViewModel: SecretPhraseViewableModel {
     var title: String {
-        return Localized.Common.secretPhrase
+        Localized.Common.secretPhrase
     }
 
     var type: SecretPhraseDataType {
-        return .words(words: WordIndex.rows(for: words))
+        .words(words: WordIndex.rows(for: words))
     }
 
-    var copyValue: String {
-        MnemonicFormatter.fromArray(words: words)
-    }
-
-    var copyType: CopyType {
-        .secretPhrase
+    var copyModel: CopyTypeViewModel {
+        CopyTypeViewModel(
+            type: .secretPhrase,
+            copyValue: MnemonicFormatter.fromArray(words: words)
+        )
     }
 
     var presentWarning: Bool {
-        return false
+        false
     }
 }

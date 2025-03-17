@@ -52,12 +52,9 @@ struct ReceiveScene: View {
         .sheet(isPresented: $showShareSheet) {
             ShareSheet(activityItems: [model.address])
         }
-        .modifier(
-            ToastModifier(
-                isPresenting: $showCopyMessage,
-                value: CopyTypeViewModel(type: .address(model.assetModel.asset, address: model.addressShort)).message,
-                systemImage: SystemImage.copy
-            )
+        .copyToast(
+            model: model.copyModel,
+            isPresenting: $showCopyMessage
         )
         .task {
             await generateQRCode()
@@ -75,7 +72,6 @@ struct ReceiveScene: View {
 extension ReceiveScene {
     private func onCopyAddress() {
         showCopyMessage = true
-        UIPasteboard.general.string = model.address
     }
 
     private func generateQRCode() async {
