@@ -9,21 +9,23 @@ import LockManager
 import WalletConnector
 import TransactionsService
 import TransactionService
+import ManageWalletService
 
 @Observable
 @MainActor
 final class RootSceneViewModel {
-    let keystore: any Keystore
     private let onstartService: OnstartAsyncService
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationService: NotificationService
+    private let manageWalletService: ManageWalletService
 
+    let keystore: any Keystore
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
 
-    var currentWallet: Wallet? { keystore.currentWallet }
+    var currentWallet: Wallet? { manageWalletService.currentWallet }
     var updateAvailableAlertSheetMessage: String?
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -47,7 +49,8 @@ final class RootSceneViewModel {
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
         notificationService: NotificationService,
-        lockWindowManager: any LockWindowManageable
+        lockWindowManager: any LockWindowManageable,
+        manageWalletService: ManageWalletService
     ) {
         self.keystore = keystore
         self.walletConnectorPresenter = walletConnectorPresenter
@@ -57,6 +60,7 @@ final class RootSceneViewModel {
         self.deviceObserverService = deviceObserverService
         self.notificationService = notificationService
         self.lockManager = lockWindowManager
+        self.manageWalletService = manageWalletService
     }
 }
 
@@ -71,10 +75,6 @@ extension RootSceneViewModel {
         transactionService.setup()
         connectionsService.setup()
         deviceObserverService.startSubscriptionsObserver()
-
-        if let wallet = keystore.currentWallet {
-            onstartService.setup(wallet: wallet)
-        }
     }
 }
 

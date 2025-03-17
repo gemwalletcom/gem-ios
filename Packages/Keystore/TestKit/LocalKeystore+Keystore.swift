@@ -5,18 +5,19 @@ import Keystore
 import Preferences
 import Store
 import PreferencesTestKit
+import StoreTestKit
 
 public extension LocalKeystore {
     static let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
 
     static func mock(
-        preferences: Preferences = Preferences.mock(),
+        preferences: ObservablePreferences = ObservablePreferences.mock(),
         keystorePassword: KeystorePassword = MockKeystorePassword()
     ) -> LocalKeystore {
         let id = NSUUID().uuidString
         return LocalKeystore(
             folder: id,
-            walletStore: WalletStore(db: DB(path: "\(id).sqlite")),
+            walletStore: .mock(),
             preferences: preferences,
             keystorePassword: keystorePassword
         )

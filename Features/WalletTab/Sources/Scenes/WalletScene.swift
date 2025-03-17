@@ -44,8 +44,8 @@ public struct WalletScene: View {
 
         _assets = Query(constant: model.assetsRequest)
         _totalFiatValue = Query(constant: model.totalFiatValueRequest)
-        _dbWallet = Query(constant: model.walletRequest)
         _banners = Query(constant: model.bannersRequest)
+        _dbWallet = Query(constant: model.walletRequest)
     }
 
     private var sections: AssetsSections {
@@ -135,8 +135,8 @@ public struct WalletScene: View {
         }
         .toolbar {
             ToolbarItem(placement: .principal) {
-                if let wallet = dbWallet {
-                    WalletBarView(model: .from(wallet: wallet)) {
+                if let dbWallet {
+                    WalletBarView(model: .from(wallet: dbWallet)) {
                         isPresentingWallets.toggle()
                     }
                 }
@@ -153,8 +153,11 @@ public struct WalletScene: View {
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
-        .onChange(of: model.wallet, fetch)
-        .taskOnce(fetch)
+        .onChange(
+            of: model.wallet,
+            initial: true,
+            fetch
+        )
         .onReceive(pricesTimer) { time in
             runUpdatePrices()
         }
@@ -166,16 +169,13 @@ public struct WalletScene: View {
 extension WalletScene {
 
     func refreshable() async {
-        if let walletId = model.keystoreWalletId {
-            Task {
-                do {
-                    try await model.fetch(walletId: walletId, assets: assets)
-                } catch {
-                    NSLog("refreshable error: \(error)")
-                }
+        Task {
+            do {
+                try await model.fetch(assets: assets)
+            } catch {
+                NSLog("refreshable error: \(error)")
             }
         }
-
         runAddressStatusCheck()
     }
 
@@ -192,10 +192,8 @@ extension WalletScene {
     }
 
     func runAddressStatusCheck() {
-        if let wallet = model.keystoreWallet {
-            Task {
-                await model.runAddressStatusCheck(wallet: wallet)
-            }
+        Task {
+            await model.runAddressStatusCheck()
         }
     }
 

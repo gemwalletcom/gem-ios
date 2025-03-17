@@ -59,7 +59,7 @@ extension BalanceService {
         }
     }
 
-    public func updateBalance(walletId: String, asset: AssetId, address: String) async {
+    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws {
         switch asset.type {
         case .native:
             await updateCoinBalance(walletId: walletId, asset: asset, address: address)

@@ -31,7 +31,8 @@ struct GemApp: App {
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
                     notificationService: resolver.services.notificationService,
-                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel())
+                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
+                    manageWalletService: resolver.services.manageWalletService
                 )
             )
             .inject(resolver: resolver)
@@ -65,7 +66,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         
         NSLog("Keystore directory: \(keystore.directory)")
         //NSLog("Keystore currentWallet: \(String(describing: keystore.currentWallet))")
-        NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
+        //NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
         
         //NSLog("User Defaults: \(UserDefaults.standard.dictionaryRepresentation())")
         
