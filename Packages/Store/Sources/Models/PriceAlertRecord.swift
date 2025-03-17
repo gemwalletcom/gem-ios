@@ -38,7 +38,8 @@ extension PriceAlertRecord {
             assetId: assetId,
             price: price,
             pricePercentChange: pricePercentChange,
-            priceDirection: priceDirection
+            priceDirection: priceDirection,
+            lastNotifiedAt: lastNotifiedAt
         )
     }
 }

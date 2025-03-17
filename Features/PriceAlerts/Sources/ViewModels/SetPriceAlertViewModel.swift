@@ -136,7 +136,8 @@ public final class SetPriceAlertViewModel {
             assetId: assetId,
             price: price,
             pricePercentChange: pricePercentChange,
-            priceDirection: state.alertDirection
+            priceDirection: state.alertDirection,
+            lastNotifiedAt: .none
         )
     }
     

@@ -12,9 +12,10 @@ public extension PriceAlert {
     static func `default`(for assetId: String) -> PriceAlert {
         PriceAlert(
             assetId: assetId,
-            price: nil,
-            pricePercentChange: nil,
-            priceDirection: nil
+            price: .none,
+            pricePercentChange: .none,
+            priceDirection: .none,
+            lastNotifiedAt: .none
         )
     }
     
