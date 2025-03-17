@@ -49,20 +49,8 @@ public struct ValueFormatter: Sendable {
         formatter.numberStyle = .decimal
         formatter.minimumFractionDigits = 2
         formatter.maximumFractionDigits = 32
-        formatter.usesSignificantDigits = true
         formatter.maximumSignificantDigits = 32
         formatter.usesSignificantDigits = true
-        formatter.roundingIncrement = 0
-        formatter.roundingMode = .down
-        return formatter
-    }
-    
-    private var formatterSmallValues: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.numberStyle = .decimal
-        formatter.maximumFractionDigits = 8
-        formatter.maximumSignificantDigits = 2
         formatter.roundingIncrement = 0
         formatter.roundingMode = .down
         return formatter

@@ -16,12 +16,20 @@ import StakeService
 import PrimitivesComponents
 import WalletsService
 
-class AmounViewModel: ObservableObject {
+@MainActor
+@Observable
+final class AmounViewModel {
     let input: AmountInput
     let wallet: Wallet
     let walletsService: WalletsService
     let stakeService: StakeService
     let onTransferAction: TransferDataAction
+    
+    var amountText: String = ""
+    var delegation: DelegationValidator?
+    var currentValidator: DelegationValidator? = .none
+    var currentDelegation: Delegation? = .none
+    var amountInputType: AmountInputType = .asset
 
     public init(
         input: AmountInput,
@@ -41,9 +49,37 @@ class AmounViewModel: ObservableObject {
     
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter.currency()
+    
+    var type: AmountType { input.type }
+    var asset: Asset { input.asset }
+    var assetImage: AssetImage { AssetViewModel(asset: asset).assetImage }
+    var assetName: String { asset.name }
+    var isInputDisabled: Bool { !isAmountChangable }
+    var isBalanceViewEnabled: Bool { !isInputDisabled }
+    
+    var amountTransferValue: String {
+        switch amountInputType {
+        case .asset: amountText
+        case .fiat: amountValue().valueOrEmpty
+        }
+    }
 
-    @Published var currentValidator: DelegationValidator? = .none
-    @Published var currentDelegation: Delegation? = .none
+    var inputConfig: any CurrencyInputConfigurable {
+        AmountInputConfig(
+            type: amountInputType,
+            asset: asset,
+            currencyFormatter: currencyFormatter,
+            secondaryText: secondaryText,
+            onTapActionButton: handleInputAction
+        )
+    }
+    
+    var secondaryText: String {
+        switch amountInputType {
+        case .asset: fiatValueText()
+        case .fiat: amountValueText()
+        }
+    }
 
     var defaultValidator: DelegationValidator? {
         let recommended: DelegationValidator? = switch type {
@@ -52,14 +88,6 @@ class AmounViewModel: ObservableObject {
         case .transfer, .unstake, .withdraw: .none
         }
         return recommended ?? validators.first
-    }
-
-    var type: AmountType {
-        input.type
-    }
-
-    var asset: Asset {
-        input.asset
     }
 
     var validators: [DelegationValidator] {
@@ -97,18 +125,6 @@ class AmounViewModel: ObservableObject {
         case .withdraw: Localized.Transfer.Withdraw.title
         }
     }
-
-    var assetSymbol: String {
-        asset.symbol
-    }
-    
-    var assetImage: AssetImage {
-        AssetViewModel(asset: asset).assetImage
-    }
-    
-    var assetName: String {
-        asset.name
-    }
     
     var availableValue: BigInt {
         switch input.type {
@@ -129,19 +145,11 @@ class AmounViewModel: ObservableObject {
     }
     
     var balanceText: String {
-        return ValueFormatter(style: .medium).string(
+        ValueFormatter(style: .medium).string(
             availableValue,
             decimals: asset.decimals.asInt,
             currency: asset.symbol
         )
-    }
-    
-    var isInputDisabled: Bool {
-        !isAmountChangable
-    }
-    
-    var isBalanceViewEnabled: Bool {
-        !isInputDisabled
     }
     
     var isAmountChangable: Bool {
@@ -194,28 +202,7 @@ class AmounViewModel: ObservableObject {
             currency: asset.symbol
         )
     }
-    
-    func isValidAmount(amount: String) throws -> BigInt {
-        if amount.isEmpty {
-            throw TransferError.invalidAmount
-        }
-        
-        let value = try value(for: amount)
-        
-        if value.isZero {
-            throw TransferError.invalidAmount
-        }
-        if minimumValue > value {
-            throw TransferError.minimumAmount(string: minimumValueText)
-        }
-        
-        return value
-    }
-    
-    private func value(for amount: String) throws -> BigInt {
-        return try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
-    }
-    
+
     var recipientData: RecipientData {
         switch type {
         case .transfer(recipient: let recipient):
@@ -242,10 +229,34 @@ class AmounViewModel: ObservableObject {
         }
     }
     
-    func getTransferData(recipientData: RecipientData, value: BigInt, canChangeValue: Bool) throws -> TransferData {
+    // MARK: - Private methods
+    
+    private func isValidAmount() throws -> BigInt {
+        if amountTransferValue.isEmpty {
+            throw TransferError.invalidAmount
+        }
+        
+        let value = try value(for: amountTransferValue)
+        
+        if value.isZero {
+            throw TransferError.invalidAmount
+        }
+        if minimumValue > value {
+            throw TransferError.minimumAmount(string: minimumValueText)
+        }
+        
+        return value
+    }
+    
+    private func getTransferData(value: BigInt, canChangeValue: Bool) throws -> TransferData {
         switch type {
         case .transfer:
-            return TransferData(type: .transfer(asset), recipientData: recipientData, value: value, canChangeValue: canChangeValue)
+            return TransferData(
+                type: .transfer(asset),
+                recipientData: recipientData,
+                value: value,
+                canChangeValue: canChangeValue
+            )
         case .stake:
             guard let validator = currentValidator else {
                 throw TransferError.invalidAmount
@@ -282,15 +293,96 @@ class AmounViewModel: ObservableObject {
             )
         }
     }
-
-    func fiatAmount(amount: String) -> String {
-        // simplify by adding priceService.getAmount(:amount, asset)
-        guard
-            let value = try? value(for: amount),
-            let fiatValue = try? formatter.double(from: value, decimals: asset.decimals.asInt),
-            let assetPrice = try? walletsService.priceService.getPrice(for: asset.id) else {
+    
+    private func value(for amount: String) throws -> BigInt {
+        try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
+    }
+    
+    private func fiatValueText() -> String {
+        guard let fiatValue = fiatValue() else {
             return .empty
         }
-        return currencyFormatter.string(fiatValue * assetPrice.price)
+        return currencyFormatter.string(fiatValue.doubleValue)
+    }
+    
+    private func amountValueText() -> String {
+        guard let amount = amountValue(),
+              amount.isNotEmpty
+        else {
+            return .empty
+        }
+        return [amount, asset.symbol].joined(separator: " ")
+    }
+    
+    private func amountValue() -> String? {
+        guard let amountValue = try? walletsService.priceService.convertToAmount(fiatValue: amountText, asset: asset) else {
+            return nil
+        }
+        return amountValue
+    }
+    
+    private func fiatValue() -> Decimal? {
+        guard amountText.isNotEmpty,
+              let fiatValue = try? walletsService.priceService.convertToFiat(amount: amountText, asset: asset),
+              !fiatValue.isZero
+        else {
+            return nil
+        }
+        return fiatValue
+    }
+    
+    private func handleInputAction() {
+        toggleAmountInputType()
+        replaceAmountText()
+    }
+    
+    private func toggleAmountInputType() {
+        switch amountInputType {
+        case .asset: amountInputType = .fiat
+        case .fiat: amountInputType = .asset
+        }
+    }
+    
+    private func replaceAmountText() {
+        switch amountInputType {
+        case .asset:
+            amountText = amountValue() ?? .empty
+        case .fiat:
+            if let fiatValue = fiatValue() {
+                amountText = currencyFormatter.string(decimal: fiatValue)
+            }
+        }
+    }
+}
+
+// MARK: - Logic
+
+extension AmounViewModel {
+    func setRecipientAmount() {
+        if let recipientAmount = recipientData.amount {
+            amountText = recipientAmount
+        }
+    }
+    
+    func setMax() {
+        amountInputType = .asset
+        amountText = maxBalance
+    }
+
+    func resetAmount() {
+        amountText = .empty
+    }
+    
+    func setCurrentValidator() {
+        delegation = currentValidator
+    }
+    
+    func setSelectedValidator(_ validator: DelegationValidator) {
+        currentValidator = validator
+    }
+    
+    func onNext() throws {
+        let transfer = try getTransferData(value: try isValidAmount(), canChangeValue: true)
+        onTransferAction?(transfer)
     }
 }

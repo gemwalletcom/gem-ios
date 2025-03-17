@@ -14,35 +14,26 @@ import struct Staking.StakeValidatorsScene
 
 struct AmountScene: View {
 
-    @StateObject var model: AmounViewModel
+    @State var model: AmounViewModel
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
-    enum Field: Int, Hashable, Identifiable {
-        case amount
-        var id: String { String(rawValue) }
-    }
-    @FocusState private var focusedField: Field?
+    @FocusState private var focusedField: Bool
 
-    @State private var amount: String = ""
-    @State private var delegation: DelegationValidator?
     @State private var isPresentingErrorMessage: String?
 
     var body: some View {
         VStack {
             List {
                 CurrencyInputView(
-                    text: $amount,
-                    currencySymbol: model.assetSymbol,
-                    currencyPosition: .trailing,
-                    secondaryText: model.fiatAmount(amount: amount),
-                    keyboardType: .decimalPad
+                    text: $model.amountText,
+                    config: model.inputConfig
                 )
                 .padding(.top, .medium)
                 .listGroupRowStyle()
                 .disabled(model.isInputDisabled)
-                .focused($focusedField, equals: .amount)
-
+                .focused($focusedField)
+                
                 if model.isBalanceViewEnabled {
                     Section {
                         AssetBalanceView(
@@ -50,14 +41,14 @@ struct AmountScene: View {
                             title: model.assetName,
                             balance: model.balanceText,
                             secondary: {
-                                Button(Localized.Transfer.max, action: useMax)
+                                Button(Localized.Transfer.max, action: setMax)
                                     .buttonStyle(.lightGray(paddingHorizontal: .medium, paddingVertical: .small))
                                     .fixedSize()
                             }
                         )
                     }
                 }
-
+                
                 switch model.type {
                 case .transfer:
                     EmptyView()
@@ -66,13 +57,13 @@ struct AmountScene: View {
                         Section(Localized.Stake.validator) {
                             //TODO: Use this, other option does not work for some reason
                             /*
-                            NavigationLink(value: Scenes.Validators()) {
-                                ListItemView(title: validator.name, subtitle: .none)
-                            }
+                             NavigationLink(value: Scenes.Validators()) {
+                             ListItemView(title: validator.name, subtitle: .none)
+                             }
                              */
                             if model.isSelectValidatorEnabled {
                                 NavigationCustomLink(with: ValidatorView(model: StakeValidatorViewModel(validator: validator))) {
-                                    self.delegation = model.currentValidator
+                                    model.setCurrentValidator()
                                 }
                             } else {
                                 ValidatorView(model: StakeValidatorViewModel(validator: validator))
@@ -80,8 +71,8 @@ struct AmountScene: View {
                         }
                     }
                 }
-
-
+                
+                
             }
             .contentMargins([.top], .zero, for: .scrollContent)
             //.listSectionSpacing(.compact)
@@ -103,34 +94,29 @@ struct AmountScene: View {
                 }.bold()
             }
         }
-        .navigationDestination(for: $delegation) { value in
+        .navigationDestination(for: $model.delegation) { value in
             StakeValidatorsScene(
                 model: StakeValidatorsViewModel(
                     type: model.stakeValidatorsType,
                     chain: model.asset.chain,
                     currentValidator: value,
                     validators: model.validators,
-                    selectValidator: { validator in
-                        amount = ""
-                        model.currentValidator = validator
-                    }
+                    selectValidator: onSelectValidator
                 )
             )
         }
         .onAppear {
             if model.isAmountChangable {
-                if focusedField == nil {
-                    focusedField = .amount
+                if focusedField == false {
+                    focusedField = true
                 }
                 UITextField.appearance().clearButtonMode = .never
             } else {
-                amount = model.maxBalance
+                setMax()
             }
         }
         .taskOnce {
-            if let amount = model.recipientData.amount {
-                self.amount = amount
-            }
+            model.setRecipientAmount()
         }
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(""), message: Text($0))
@@ -143,22 +129,19 @@ struct AmountScene: View {
 extension AmountScene {
     private func next() {
         do {
-            let value = try model.isValidAmount(amount: amount)
-            let transfer = try model.getTransferData(
-                recipientData: model.recipientData,
-                value: value,
-                canChangeValue: true
-            )
-
-            model.onTransferAction?(transfer)
+            try model.onNext()
         } catch {
             isPresentingErrorMessage = error.localizedDescription
         }
     }
 
-    private func useMax() {
-        amount = model.maxBalance
-
-        focusedField = .none
+    private func setMax() {
+        model.setMax()
+        focusedField = false
+    }
+    
+    private func onSelectValidator(_ validator: DelegationValidator) {
+        model.resetAmount()
+        model.setSelectedValidator(validator)
     }
 }

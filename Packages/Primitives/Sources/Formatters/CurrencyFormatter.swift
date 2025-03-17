@@ -65,6 +65,13 @@ public struct CurrencyFormatter: Sendable, Hashable {
         self.currencyCode = currencyCode
     }
     
+    public var symbol: String {
+        switch type {
+        case .currency: formatter.currencySymbol
+        case .percent, .percentSignLess: percentFormatter.percentSymbol
+        }
+    }
+    
     public func string(_ number: Double) -> String {
         switch type{
         case .currency:
