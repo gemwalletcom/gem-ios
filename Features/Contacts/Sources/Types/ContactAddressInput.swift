@@ -5,22 +5,36 @@ import Primitives
 import Foundation
 import DataValidation
 
-public struct AddContactAddressInput: Identifiable {
-    public var id: String
+public struct ContactAddressInput: Identifiable {
+    public var id: String?
     
     var memo: ValidatedInput<String, StringLengthValidator>
     var address: ValidatedInput<String, BlockchainAddressValidator>
     private(set) var chain: ValidatedInput<Chain, ChainSelectionValidator>
     
-    public var isEmpty: Bool { chain.value == nil && address.value.isEmpty }
-    
+    static func from(viewType: ContactAddressViewType) -> ContactAddressInput {
+        switch viewType {
+        case .add(_, let chain):
+            return ContactAddressInput(
+                chain: chain
+            )
+        case .edit(let address):
+            return ContactAddressInput(
+                id: address.id,
+                address: address.address,
+                chain: address.chain,
+                memo: address.memo ?? ""
+            )
+        }
+    }
+        
     public init(
-        id: ContactAddressId? = nil,
-        address: String = "",
-        chain: Chain? = nil,
+        id: String? = nil,
+        address: String? = nil,
+        chain: Chain,
         memo: String = ""
     ) {
-        self.id = id?.id ?? Self.createIdForNewEntity()
+        self.id = id
         self.chain = ValidatedInput(
             validator: ChainSelectionValidator(errorMessage: "Please select a chain"),
             value: chain
@@ -61,9 +75,5 @@ public struct AddContactAddressInput: Identifiable {
 
             }
         }
-    }
-    
-    static private func createIdForNewEntity() -> String {
-        UUID().uuidString
     }
 }

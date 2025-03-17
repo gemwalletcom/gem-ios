@@ -4,21 +4,32 @@ import Combine
 import Primitives
 import Foundation
 import DataValidation
+import PrimitivesComponents
 
-public struct AddContactInput: Identifiable {
-    public var id: String
-        
+public struct ContactInput: Identifiable {
+    public var id: String?
     var name: ValidatedInput<String, StringLengthValidator>
     var description: ValidatedInput<String, StringLengthValidator>
-    
-    public var isEmpty: Bool { name.value.isEmpty && description.value.isEmpty }
-    
+        
+    static func from(contactViewType: ContactViewType) -> ContactInput {
+        switch contactViewType {
+        case .add:
+            ContactInput()
+        case .view(let contact):
+            ContactInput(
+                id: contact.id.id,
+                name: contact.name,
+                description: contact.description
+            )
+        }
+    }
+        
     public init(
-        id: ContactId? = nil,
-        name: String = "",
-        description: String = ""
+        id: String? = nil,
+        name: String? = nil,
+        description: String? = nil
     ) {
-        self.id = id?.id ?? Self.createIdForNewEntity()
+        self.id = id
         
         self.name = ValidatedInput(
             validator: StringLengthValidator(
@@ -40,9 +51,5 @@ public struct AddContactInput: Identifiable {
     public func validate() throws {
         try name.validate()
         try description.validate()
-    }
-    
-    static private func createIdForNewEntity() -> String {
-        UUID().uuidString
     }
 }

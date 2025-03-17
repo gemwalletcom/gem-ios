@@ -6,5 +6,5 @@ public protocol ValidatorConvertible {
     associatedtype T
     
     var errorMessage: String { get }
-    func validate(_ value: T) throws
+    func validate(_ value: T?) throws
 }

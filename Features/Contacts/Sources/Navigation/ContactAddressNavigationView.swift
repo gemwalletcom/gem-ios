@@ -8,22 +8,21 @@ import Components
 import PrimitivesComponents
 import QRScanner
 
-struct AddContactAddressNavigationView: View {
+struct ContactAddressNavigationView: View {
     
     @Environment(\.dismiss) private var dismiss
     
     @State private var isPresentingScanner: Bool = false
-    @State private var contactInput: AddContactAddressInput? = nil
-    @State private var model: AddContactAddressViewModel
+    @State private var model: ContactAddressViewModel
     @State private var navigationPath = NavigationPath()
     
-    init(model: AddContactAddressViewModel) {
+    init(model: ContactAddressViewModel) {
         _model = State(wrappedValue: model)
     }
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            AddContactAddressScene(
+            ContactAddressScene(
                 model: model,
                 isPresentingScanner: $isPresentingScanner
             )

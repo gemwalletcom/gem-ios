@@ -113,22 +113,15 @@ class RecipientViewModel {
         }
     }
     
-    func buildListItemViews(addresses: [ContactAddressInfo]) -> [ContactAddressListViewItem<ContactAddressInfo>] {
+    func buildListItemViews(addresses: [ContactAddressData]) -> [ContactListViewItem<ContactAddressData>] {
         addresses
             .map {
-                let memo: TextValue? = $0.address.memo.flatMap {
-                    guard !$0.isEmpty else {
-                        return nil
-                    }
-                    
-                    return TextValue(text: "Memo: \($0)", style: .bodySecondary)
-                }
-                
-                return ContactAddressListViewItem<ContactAddressInfo>(
+                let memo = $0.address.memo
+                return ContactListViewItem<ContactAddressData>(
                     id: $0.id,
-                    name: TextValue(text: $0.contact.name, style: .bodyBold),
-                    address: TextValue(text: $0.address.address, style: .caption),
-                    memo: memo,
+                    name: $0.contact.name,
+                    address: $0.address.address,
+                    memo: $0.address.memo,
                     object: $0
                 )
         }
@@ -196,10 +189,7 @@ extension RecipientViewModel {
     
     func onContactAddressSelected(_ address: ContactAddress) {
         self.address = address.address
-        
-        if let memo = address.memo {
-            self.memo = memo
-        }
+        self.memo = address.memo.or("")
     }
 }
 

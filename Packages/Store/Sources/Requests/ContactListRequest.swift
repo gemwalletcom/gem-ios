@@ -8,17 +8,18 @@ import Combine
 
 public struct ContactListRequest: ValueObservationQueryable {
     public static var defaultValue: [Contact] { [] }
-        
-    public init() {}
+    
+    public init() { }
     
     public func fetch(_ db: Database) throws -> [Contact] {
-        let request = ContactRecord
-            .orderByPrimaryKey()
-            .asRequest(of: ContactRecord.self)
-        
-        return try request
-            .fetchAll(db)
-            .map { $0.mapToContact() }
+        do {
+            return try ContactRecord
+                .orderByPrimaryKey()
+                .asRequest(of: ContactRecord.self)
+                .fetchAll(db)
+                .map { $0.mapToContact() }
+        } catch {
+            throw error
+        }
     }
 }
-

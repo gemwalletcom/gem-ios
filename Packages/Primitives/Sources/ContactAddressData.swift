@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-public struct ContactAddressInfo: Codable, Sendable, Hashable, Identifiable {
+public struct ContactAddressData: Codable, Sendable, Hashable, Identifiable {
     public var id: String {
-        [contact.id.id, address.id.id].joined(separator: "_")
+        [contact.id.id, address.id].compactMap { $0 }.joined(separator: "_")
     }
     
     public let address: ContactAddress

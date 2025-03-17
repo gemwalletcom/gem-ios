@@ -17,15 +17,15 @@ public struct ContactListScene: View {
     private var contacts: [Contact]
     
     @State var contactToDelete: Contact? = .none
-    @State private var presentingErrorMessage: String?
-    @Binding var isPresentingContactInput: AddContactInput?
+    @State private var isPresentingErrorMessage: String?
+    @Binding var isPresentingContactViewType: ContactViewType?
 
     public init(
         model: ContactListViewModel,
-        isPresentingContactInput: Binding<AddContactInput?>
+        isPresentingContactViewType: Binding<ContactViewType?>
     ) {
         self.model = model
-        _isPresentingContactInput = isPresentingContactInput
+        _isPresentingContactViewType = isPresentingContactViewType
         
         let request = Binding {
             model.contactRequest
@@ -37,25 +37,19 @@ public struct ContactListScene: View {
     }
     
     public var body: some View {
-        ZStack {
-            List {
-                Section {
-                    ForEach(model.buildListItemViews(contacts: contacts)) { item in
-                        NavigationLink(value: Scenes.ContactAddresses(contact: item.object)) {
-                            ContactAddressListItemView(
-                                name: item.name,
-                                description: item.description
-                            ).swipeActions(edge: .trailing) {
-                                Button("Delete") {
-                                    didTapDelete(on: item.object)
-                                }
-                                .tint(Colors.red)
-                                Button("Edit") {
-                                    didSelect(contact: item.object)
-                                }
-                                .tint(Colors.blue)
-                            }
+        List {
+            Section {
+                ForEach(model.buildListItemViews(contacts: contacts)) { item in
+                    NavigationCustomLink(with: ListItemView(
+                        title: item.name,
+                        titleExtra: item.description
+                    )) {
+                        isPresentingContactViewType = .view(contact: item.object)
+                    }.swipeActions(edge: .trailing) {
+                        Button(Localized.Common.delete) {
+                            onSelectDelete(on: item.object)
                         }
+                        .tint(Colors.red)
                     }
                 }
             }
@@ -73,7 +67,7 @@ public struct ContactListScene: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    isPresentingContactInput = model.input(from: nil)
+                    isPresentingContactViewType = .add
                 } label: {
                     Images.System.plus
                 }
@@ -81,10 +75,10 @@ public struct ContactListScene: View {
         }
         .alert(
             "",
-            isPresented: $presentingErrorMessage.mappedToBool(),
+            isPresented: $isPresentingErrorMessage.mappedToBool(),
             actions: {},
             message: {
-                Text(presentingErrorMessage ?? "")
+                Text(isPresentingErrorMessage ?? "")
             }
         )
         .confirmationDialog(
@@ -95,7 +89,7 @@ public struct ContactListScene: View {
                 Button(
                     Localized.Common.delete,
                     role: .destructive,
-                    action: { didTapConfirmDelete(contact: contact) }
+                    action: { onSelectConfirmDelete(contact: contact) }
                 )
             }
         )
@@ -105,19 +99,15 @@ public struct ContactListScene: View {
 // MARK: - Actions
 
 extension ContactListScene {
-    private func didTapConfirmDelete(contact: Contact) {
+    private func onSelectConfirmDelete(contact: Contact) {
         do {
             try model.delete(contact: contact)
         } catch {
-            presentingErrorMessage = error.localizedDescription
+            isPresentingErrorMessage = error.localizedDescription
         }
     }
     
-    private func didTapDelete(on contact: Contact) {
+    private func onSelectDelete(on contact: Contact) {
         contactToDelete = contact
-    }
-    
-    private func didSelect(contact: Contact) {
-        isPresentingContactInput = model.input(from: contact)
     }
 }

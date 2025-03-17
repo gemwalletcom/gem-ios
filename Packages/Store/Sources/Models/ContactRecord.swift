@@ -12,6 +12,12 @@ public struct ContactRecord: Identifiable, Codable, PersistableRecord, Fetchable
     public let description: String?
 
     static let addresses = hasMany(ContactAddressRecord.self)
+    
+    init(id: String?, name: String, description: String?) {
+        self.id = id ?? UUID().uuidString
+        self.name = name
+        self.description = description
+    }
 }
 
 extension ContactRecord: CreateTable {
@@ -23,6 +29,7 @@ extension ContactRecord: CreateTable {
             $0.column(Columns.Contact.name.name, .text)
                 .notNull()
             $0.column(Columns.Contact.description.name, .text)
+            $0.uniqueKey([Columns.Contact.name.name])
         }
     }
 }

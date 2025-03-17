@@ -3,7 +3,7 @@
 import Primitives
 
 public struct ChainSelectionValidator: ValidatorConvertible {
-    public typealias T = Chain?
+    public typealias T = Chain
     
     public let errorMessage: String
     

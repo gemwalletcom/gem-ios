@@ -10,59 +10,53 @@ import PrimitivesComponents
 import NameResolver
 
 @Observable
-public class AddContactAddressViewModel: EntityEditorViewModel {
+public class ContactAddressViewModel {
     let contactService: ContactService
     let contact: Contact
     let onComplete: VoidAction
     var networksModel: NetworkSelectorViewModel
     var nameResolveState: NameRecordState = .none
-    var input: AddContactAddressInput
+    var input: ContactAddressInput
+    var viewType: ContactAddressViewType
 
     public init(
-        input: AddContactAddressInput,
-        contact: Contact,
         contactService: ContactService,
-        entityEditorViewType: EntityEditorViewType,
+        viewType: ContactAddressViewType,
         onComplete: VoidAction
     ) {
         self.contactService = contactService
-        self.input = input
-        self.contact = contact
+        self.viewType = viewType
         self.onComplete = onComplete
+        self.contact = viewType.contact
+        self.input = ContactAddressInput.from(viewType: viewType)
         
         networksModel = NetworkSelectorViewModel(state: .data(AssetConfiguration.allChains.sortByRank()))
-        
-        super.init(entityEditorViewType: entityEditorViewType)
     }
     
-    var title: String { entityEditorViewType.title(objectName: "Address") }
+    var title: String { viewType.title }
     var actionButtonTitle: String { "Save" }
     var addressTextFieldTitle: String { "Address" }
     var memoTextFieldTitle: String { "Memo" }
     var showMemo: Bool { input.chain.value?.isMemoSupported == true }
     
-    func confirmAddContact() throws {
+    func save() throws {
         try input.validate(shouldValidateAddress: nameResolveState.result == nil)
         
-        guard let chain = input.chain.value else {
-            throw ValidationError.invalid(description: "Please select a chain")
-        }
-        
         let address = ContactAddress(
-            id: ContactAddressId(id: input.id),
-            contactId: contact.id,
-            address: input.address.value,
-            chain: chain,
+            id: input.id,
+            contact: contact,
+            address: try input.address.unwrappedValue,
+            chain: try input.chain.unwrappedValue,
             memo: input.memo.value
         )
         
-        switch entityEditorViewType {
-        case .create:
-            try contactService.add(address: address)
-        case .update:
+        switch viewType {
+        case .edit:
             try contactService.edit(address: address)
+        case .add:
+            try contactService.add(address: address)
         }
-        
+                
         onComplete?()
     }
 }

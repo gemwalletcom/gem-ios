@@ -18,7 +18,7 @@ struct RecipientScene: View {
     @State var model: RecipientViewModel
     
     @Query<ContactAddressInfoListRequest>
-    private var addresses: [ContactAddressInfo]
+    private var addresses: [ContactAddressData]
     
     @State private var nameResolveState: NameRecordState = .none
     @State private var isPresentingErrorMessage: String?
@@ -110,12 +110,13 @@ struct RecipientScene: View {
                 if !model.buildListItemViews(addresses: addresses).isEmpty {
                     Section {
                         ForEach(model.buildListItemViews(addresses: addresses)) { item in
-                                ContactAddressListItemView(
-                                    name: item.name,
-                                    address: item.address,
-                                    memo: item.memo
+                                ListItemView(
+                                    title: item.name,
+                                    titleExtra: item.address,
+                                    subtitleExtra: item.memo
                                 ).onTapGesture {
                                     didSelect(item.object.address)
+                                    focusedField = .none
                                 }
                         }
                     } header: {

@@ -15,38 +15,24 @@ public class ContactListViewModel: Sendable {
     let contactService: ContactService
     var contactRequest: ContactListRequest
 
-    public init(
-        contactService: ContactService
-    ) {
+    public init(contactService: ContactService) {
         self.contactService = contactService
         self.contactRequest = ContactListRequest()
     }
     
     var title = "Contacts"
     
-    func input(from contact: Contact?) -> AddContactInput {
-        guard let contact else {
-            return AddContactInput()
-        }
-        
-        return AddContactInput(
-            id: contact.id,
-            name: contact.name,
-            description: contact.description.valueOrEmpty
-        )
-    }
-    
     func delete(contact: Contact) throws {
         _ = try contactService.delete(contact: contact)
     }
     
-    func buildListItemViews(contacts: [Contact]) -> [ContactAddressListViewItem<Contact>] {
+    func buildListItemViews(contacts: [Contact]) -> [ContactListViewItem<Contact>] {
         contacts
             .map {
-                return ContactAddressListViewItem<Contact>(
+                return ContactListViewItem<Contact>(
                     id: $0.id.id,
-                    name: TextValue(text: $0.name, style: .bodyBold),
-                    description: $0.description.flatMap { TextValue(text: $0, style: .caption) },
+                    name: $0.name,
+                    description: $0.description?.isEmpty == false ? $0.description : nil,
                     object: $0
                 )
         }

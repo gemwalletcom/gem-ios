@@ -3,9 +3,9 @@
 import Foundation
 
 public struct ContactId: Codable, Sendable, Hashable {
-    public let id: String
+    public let id: String?
     
-    public init(id: String) {
+    public init(id: String?) {
         self.id = id
     }
 }

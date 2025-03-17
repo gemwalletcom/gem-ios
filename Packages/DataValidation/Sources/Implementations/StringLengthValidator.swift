@@ -15,8 +15,9 @@ public struct StringLengthValidator: ValidatorConvertible {
         self.errorMessage = errorMessage
     }
     
-    public func validate(_ value: String) throws {
-        let isValid = value.count >= min && value.count <= max
+    public func validate(_ value: String?) throws {
+        let length = (value?.count).or(0)
+        let isValid = length >= min && length <= max
         if !isValid {
             throw ValidationError.invalid(description: errorMessage)
         }

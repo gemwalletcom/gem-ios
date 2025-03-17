@@ -13,39 +13,41 @@ public struct ContactStore: Sendable {
         self.db = db.dbQueue
     }
     
-    public func addContact(record: ContactRecord) throws {
+    public func addContact(_ contact: Contact) throws -> ContactId {
         try db.write { db in
-            try record.insert(db, onConflict: .replace)
+            let record = contact.mapToRecord()
+            try record.insert(db, onConflict: .abort)
+            return ContactId(id: record.id)
         }
     }
     
-    public func addAddress(record: ContactAddressRecord) throws {
+    public func addAddress(_ address: ContactAddress) throws {
         try db.write { db in
-            try record.insert(db, onConflict: .replace)
+            try address.mapToRecord().insert(db, onConflict: .abort)
         }
     }
     
-    public func editContact(record: ContactRecord) throws {
+    public func editContact(_ contact: Contact) throws {
         try db.write { db in
-            try record.update(db)
+            try contact.mapToRecord().update(db)
         }
     }
     
-    public func editAddress(record: ContactAddressRecord) throws {
+    public func editAddress(_ address: ContactAddress) throws {
         try db.write { db in
-            try record.update(db)
+            try address.mapToRecord().update(db)
         }
     }
     
-    public func deleteContact(record: ContactRecord) throws -> Bool {
+    public func deleteContact(_ contact: Contact) throws -> Bool {
         try db.write { db in
-            try record.delete(db)
+            try contact.mapToRecord().delete(db)
         }
     }
     
-    public func deleteAddress(record: ContactAddressRecord) throws -> Bool {
+    public func deleteAddress(_ address: ContactAddress) throws -> Bool {
         try db.write { db in
-            try record.delete(db)
+            try address.mapToRecord().delete(db)
         }
     }
 }

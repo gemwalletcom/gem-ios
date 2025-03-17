@@ -119,7 +119,7 @@ public struct ListItemView: View {
             if showPlaceholderProgress(for: .subtitle, value: subtitle) {
                 Spacer()
                 LoadingView(tint: subtitle?.style.color ?? Colors.gray)
-            } else if let subtitle = subtitle {
+            } else if showSubtitleView(for: subtitle, subtitleExtra: subtitleExtra) {
                 Spacer(minLength: .extraSmall)
                 SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
             }
@@ -132,6 +132,10 @@ public struct ListItemView: View {
 extension ListItemView {
     private func showPlaceholderProgress(for type: ListItemViewPlaceholderType, value: Any?) -> Bool {
         placeholders.contains(type) && value == nil
+    }
+    
+    private func showSubtitleView(for subtitle: TextValue?, subtitleExtra: TextValue?) -> Bool {
+        subtitle != nil || subtitleExtra != nil
     }
 }
 
@@ -239,17 +243,19 @@ extension ListItemView {
 
 extension ListItemView {
     struct SubtitleView: View {
-        public let subtitle: TextValue
+        public let subtitle: TextValue?
         public let subtitleExtra: TextValue?
 
         var body: some View {
             VStack(alignment: .trailing, spacing: .tiny) {
-                Text(subtitle.text)
-                    .textStyle(subtitle.style)
-                    .multilineTextAlignment(.trailing)
-                    .lineLimit(1)
-                    .truncationMode(.middle)
-
+                if let subtitle = subtitle {
+                    Text(subtitle.text)
+                        .textStyle(subtitle.style)
+                        .multilineTextAlignment(.trailing)
+                        .lineLimit(1)
+                        .truncationMode(.middle)
+                }
+                
                 if let extra = subtitleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)

@@ -8,22 +8,22 @@ import Primitives
 import Style
 import Localization
 import NameResolver
+import GRDB
 
-public struct AddContactAddressScene: View {
+public struct ContactAddressScene: View {
     
-    @State private var model: AddContactAddressViewModel
+    @State private var model: ContactAddressViewModel
     @State private var isPresentingErrorMessage: String?
     @Binding private var isPresentingScanner: Bool
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
         case address
-        case name
-        case description
+        case memo
     }
     
     public init(
-        model: AddContactAddressViewModel,
+        model: ContactAddressViewModel,
         isPresentingScanner: Binding<Bool>
     ) {
         _isPresentingScanner = isPresentingScanner
@@ -45,12 +45,12 @@ public struct AddContactAddressScene: View {
                         }
                     }
                     if let chain = model.input.chain.value {
-                        FloatTextField(model.addressTextFieldTitle, text: $model.projectedValue.input.address.value, allowClean: false) {
+                        FloatTextField(model.addressTextFieldTitle, text: $model.projectedValue.input.address.value ?? "", allowClean: false) {
                             HStack(spacing: .large/2) {
                                 NameRecordView(
                                     model: NameRecordViewModel(chain: chain),
                                     state: $model.nameResolveState,
-                                    address: $model.input.address.value
+                                    address: $model.input.address.value ?? ""
                                 )
                                 ListButton(image: Images.System.paste) {
                                     onSelectPaste()
@@ -65,13 +65,14 @@ public struct AddContactAddressScene: View {
                         .textInputAutocapitalization(.never)
                         .autocorrectionDisabled()
                         .truncationMode(.middle)
+                        .submitLabel(.done)
                     }
                     if model.showMemo {
-                        FloatTextField(model.memoTextFieldTitle, text: $model.projectedValue.input.memo.value)
-                            .focused($focusedField, equals: .name)
+                        FloatTextField(model.memoTextFieldTitle, text: $model.projectedValue.input.memo.value ?? "")
+                            .focused($focusedField, equals: .memo)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
-                            .submitLabel(.search)
+                            .submitLabel(.done)
                     }
                 }
                 
@@ -80,7 +81,7 @@ public struct AddContactAddressScene: View {
             StateButton(
                 text: model.actionButtonTitle,
                 styleState: .normal,
-                action: onSelectConfirm
+                action: onSelectSave
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -112,7 +113,7 @@ public struct AddContactAddressScene: View {
 
 // MARK: - Actions
 
-extension AddContactAddressScene {
+extension ContactAddressScene {
     private func onSelectScan() {
         isPresentingScanner = true
     }
@@ -122,10 +123,18 @@ extension AddContactAddressScene {
         model.input.address.value = address
     }
     
-    private func onSelectConfirm() {
+    private func onSelectSave() {
         do {
-            try model.confirmAddContact()
+            try model.save()
         } catch {
+            presentCreateError(error)
+        }
+    }
+    
+    private func presentCreateError(_ error: Error) {
+        if (error as? DatabaseError)?.extendedResultCode == .SQLITE_CONSTRAINT_UNIQUE {
+            isPresentingErrorMessage = "This address has already been added."
+        } else {
             isPresentingErrorMessage = error.localizedDescription
         }
     }

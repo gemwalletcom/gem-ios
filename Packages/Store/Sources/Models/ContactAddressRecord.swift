@@ -4,12 +4,12 @@ import Foundation
 import Primitives
 @preconcurrency import GRDB
 
-public struct ContactAddressRecord: Identifiable, Codable, PersistableRecord, FetchableRecord, TableRecord {
+public struct ContactAddressRecord: Codable, PersistableRecord, FetchableRecord {
     
     public static let databaseTableName: String = "contact_addresses"
     
-    public var id: String
-    public let contactId: String
+    public let id: String
+    public let contactId: String?
     public let address: String
     public let chain: Chain
     public let memo: String?
@@ -17,13 +17,13 @@ public struct ContactAddressRecord: Identifiable, Codable, PersistableRecord, Fe
     static let contact = belongsTo(ContactRecord.self).forKey("contact")
     
     public init(
-        id: String,
-        contactId: String,
+        id: String?,
+        contactId: String?,
         address: String,
         chain: Chain,
         memo: String?
     ) {
-        self.id = id
+        self.id = id ?? UUID().uuidString
         self.contactId = contactId
         self.address = address
         self.chain = chain
@@ -34,9 +34,9 @@ public struct ContactAddressRecord: Identifiable, Codable, PersistableRecord, Fe
 extension ContactAddressRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.ContactAddress.id.name, .text)
-                .primaryKey()
+            $0.primaryKey(Columns.ContactAddress.id.name, .text)
                 .notNull()
+                .indexed()
             $0.column(Columns.ContactAddress.contactId.name, .text)
                 .notNull()
                 .indexed()
@@ -44,17 +44,24 @@ extension ContactAddressRecord: CreateTable {
             $0.column(Columns.ContactAddress.address.name, .text)
                 .notNull()
             $0.column(Columns.ContactAddress.memo.name, .text)
+                .notNull()
             $0.column(Columns.ContactAddress.chain.name, .text)
                 .notNull()
+            $0.uniqueKey([
+                Columns.ContactAddress.contactId.name,
+                Columns.ContactAddress.chain.name,
+                Columns.ContactAddress.address.name,
+                Columns.ContactAddress.memo.name
+            ])
         }
     }
 }
 
 public extension ContactAddressRecord {
-    func mapToAddress() -> ContactAddress {
+    func mapToAddress(with contact: Contact) -> ContactAddress {
         ContactAddress(
-            id: ContactAddressId(id: id),
-            contactId: ContactId(id: contactId),
+            id: id,
+            contact: contact,
             address: address,
             chain: chain,
             memo: memo
@@ -65,8 +72,8 @@ public extension ContactAddressRecord {
 public extension ContactAddress {
     func mapToRecord() -> ContactAddressRecord {
         ContactAddressRecord(
-            id: id.id,
-            contactId: contactId.id,
+            id: id,
+            contactId: contact.id.id,
             address: address,
             chain: chain,
             memo: memo

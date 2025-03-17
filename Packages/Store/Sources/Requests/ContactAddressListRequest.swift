@@ -9,19 +9,23 @@ import Combine
 public struct ContactAddressListRequest: ValueObservationQueryable {
     public static var defaultValue: [ContactAddress] { [] }
     
-    private let contactId: ContactId
-    
-    public init(contactId: ContactId) {
-        self.contactId = contactId
+    private let contact: Contact?
+
+    public init(contact: Contact?) {
+        self.contact = contact
     }
     
     public func fetch(_ db: Database) throws -> [ContactAddress] {
+        guard let contact else {
+            return []
+        }
+        
         let request = ContactAddressRecord
-            .filter(Columns.ContactAddress.contactId == contactId.id)
+            .filter(Columns.ContactAddress.contactId == contact.id.id)
             .asRequest(of: ContactAddressRecord.self)
         
         return try request
             .fetchAll(db)
-            .compactMap { $0.mapToAddress() }
+            .compactMap { $0.mapToAddress(with: contact) }
     }
 }
