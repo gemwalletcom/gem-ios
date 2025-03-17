@@ -4,29 +4,17 @@
 
 import Foundation
 
-public struct FiatBuyRequest: Codable, Sendable {
+public struct FiatQuoteRequest: Codable, Sendable {
 	public let assetId: String
 	public let fiatCurrency: String
 	public let fiatAmount: Double
+	public let cryptoAmount: Double?
 	public let walletAddress: String
 
-	public init(assetId: String, fiatCurrency: String, fiatAmount: Double, walletAddress: String) {
+	public init(assetId: String, fiatCurrency: String, fiatAmount: Double, cryptoAmount: Double?, walletAddress: String) {
 		self.assetId = assetId
 		self.fiatCurrency = fiatCurrency
 		self.fiatAmount = fiatAmount
-		self.walletAddress = walletAddress
-	}
-}
-
-public struct FiatSellRequest: Codable, Sendable {
-	public let assetId: String
-	public let fiatCurrency: String
-	public let cryptoAmount: Double
-	public let walletAddress: String
-
-	public init(assetId: String, fiatCurrency: String, cryptoAmount: Double, walletAddress: String) {
-		self.assetId = assetId
-		self.fiatCurrency = fiatCurrency
 		self.cryptoAmount = cryptoAmount
 		self.walletAddress = walletAddress
 	}
