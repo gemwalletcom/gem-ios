@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import Style
 import Components
+import Localization
 
 // TODO: - add localizations, add actions ( now they are empty ), review texts, review images
 public struct EmptyContentTypeViewModel: EmptyContentViewable {
@@ -33,7 +34,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
 
     public var description: String? {
         switch type {
-        case .nfts: "Collect your first NFT"
+        case let .nfts(action): action != nil ? "Receive your first NFT" : nil
         case .priceAlerts: "Enable them by adding coins to track"
         case let .asset(ticker): "Receive, swap or buy \(ticker)"
         case .activity: "Make your first transacton"
@@ -61,23 +62,26 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
 
     public var buttons: [EmptyAction] {
         switch type {
-        case .nfts, .priceAlerts, .asset, .stake, .walletConnect:
+        case .priceAlerts, .asset, .stake, .walletConnect:
             return []
+        case let .nfts(action):
+            let receive = EmptyAction(title: Localized.Wallet.receive, action: action)
+            return [receive]
         case let .activity(receive, buy):
             let all = [
-                EmptyAction(title: "Receive", action: receive),
-                EmptyAction(title: "Buy", action: buy)
+                EmptyAction(title: Localized.Wallet.receive, action: receive),
+                EmptyAction(title: Localized.Wallet.buy, action: buy)
             ]
             return all.filter { $0.action != nil }
         case let .search(searchType, action):
             switch searchType {
             case .assets:
-                let custom = EmptyAction(title: "Add Custom Token", action: action)
+                let custom = EmptyAction(title: Localized.Assets.addCustomToken, action: action)
                 return [custom].filter { $0.action != nil }
             case .networks:
                 return []
             case .activity:
-                let clean = EmptyAction(title: "Clear", action: action)
+                let clean = EmptyAction(title: Localized.Filter.clear, action: action)
                 return [clean]
             }
         }

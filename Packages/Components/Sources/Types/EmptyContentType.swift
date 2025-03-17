@@ -9,7 +9,7 @@ public enum EmptyContentType {
         case activity
     }
 
-    case nfts
+    case nfts(action: (() -> Void)? = nil)
     case priceAlerts
     case asset(symbol: String)
     case activity(receive: (() -> Void)? = nil, buy: (() -> Void)? = nil)

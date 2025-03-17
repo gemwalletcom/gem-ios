@@ -79,8 +79,7 @@ public struct WalletImageScene: View {
         }
         .overlay {
             if nftDataList.isEmpty, case .collections = selectedTab {
-                Text(Localized.Activity.EmptyState.message)
-                    .textStyle(.body)
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
     }

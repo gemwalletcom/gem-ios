@@ -23,6 +23,7 @@ public final class CollectionsViewModel: Sendable {
     let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
     let sceneStep: Scenes.CollectionsScene.SceneStep
     var request: NFTRequest
+    public var isPresentingReceiveSelectAssetType: SelectAssetType?
 
     public private(set) var wallet: Wallet
 
@@ -51,7 +52,7 @@ public final class CollectionsViewModel: Sendable {
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .nfts)
+        EmptyContentTypeViewModel(type: .nfts(action: onSelectReceive))
     }
     
     public var currentWallet: Wallet? {
@@ -64,6 +65,10 @@ public final class CollectionsViewModel: Sendable {
         guard let newWallet else { return }
         wallet = newWallet
         request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+    }
+
+    public func onSelectReceive() {
+        isPresentingReceiveSelectAssetType = .receive(.collection)
     }
 
     // MARK: - Internal methods
