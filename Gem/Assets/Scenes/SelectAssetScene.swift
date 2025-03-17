@@ -9,7 +9,7 @@ import PrimitivesComponents
 
 struct SelectAssetScene: View {
 
-    @State private var isPresentingCopyMessage: Bool = false
+    @State private var isPresentingCopyToast: Bool = false
     @State private var copyTypeViewModel: CopyTypeViewModel?
 
     @Binding private var isPresentingAddToken: Bool
@@ -103,7 +103,7 @@ struct SelectAssetScene: View {
         .ifLet(copyTypeViewModel) {
             $0.copyToast(
                 model: $1,
-                isPresenting: $isPresentingCopyMessage
+                isPresenting: $isPresentingCopyToast
             )
         }
         .listSectionSpacing(.compact)
@@ -165,7 +165,7 @@ extension SelectAssetScene {
                 type: .address(asset, address: address),
                 copyValue: address
             )
-            isPresentingCopyMessage = true
+            isPresentingCopyToast = true
             Task {
                 await model.handleAction(assetId: asset.id, enabled: true)
             }

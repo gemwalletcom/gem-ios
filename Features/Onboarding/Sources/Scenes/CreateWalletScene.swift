@@ -9,8 +9,8 @@ struct CreateWalletScene: View {
 
     @StateObject var model: CreateWalletViewModel
     
-    @State private var showCopyMessage = false
-    
+    @State private var isPresentingCopyToast = false
+
     var body: some View {
         VStack(spacing: .medium) {
             OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
@@ -26,7 +26,7 @@ struct CreateWalletScene: View {
         }
         .copyToast(
             model: model.copyModel,
-            isPresenting: $showCopyMessage
+            isPresenting: $isPresentingCopyToast
         )
         .padding(.bottom, .scene.bottom)
         .navigationBarTitle(model.title)
@@ -36,7 +36,7 @@ struct CreateWalletScene: View {
     }
     
     func copy() {
-        showCopyMessage = true
+        isPresentingCopyToast = true
     }
     
     func continueAction() {
