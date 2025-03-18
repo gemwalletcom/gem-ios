@@ -2,12 +2,15 @@
 
 import Primitives
 import Localization
+import Style
 
-public struct CopyTypeViewModel {
+public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public let type: CopyType
+    public let copyValue: String
 
-    public init(type: CopyType) {
+    public init(type: CopyType, copyValue: String) {
         self.type = type
+        self.copyValue = copyValue
     }
 
     public var message: String {
@@ -24,4 +27,6 @@ public struct CopyTypeViewModel {
             )
         }
     }
+
+    public var systemImage: String { SystemImage.copy }
 }

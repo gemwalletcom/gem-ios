@@ -8,10 +8,10 @@ public enum GemAPI: TargetType {
     case getIpAddress
     case getPrice(AssetId, currency: String)
     case getPrices(AssetPricesRequest)
-    case getFiatOnRampQuotes(Asset, FiatBuyRequest)
+    case getFiatOnRampQuotes(Asset, FiatQuoteRequest)
     case getFiatOnRampAssets
     case getFiatOffRampAssets
-    case getFiatOffRampQuotes(Asset, FiatBuyRequest)
+    case getFiatOffRampQuotes(Asset, FiatQuoteRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)

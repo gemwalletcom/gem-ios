@@ -6,8 +6,8 @@ import Style
 import PrimitivesComponents
 
 struct ReceiveScene: View {
-    @State private var showShareSheet = false
-    @State private var showCopyMessage = false
+    @State private var isPresentingShareSheet = false
+    @State private var isPresentingCopyToast = false
     @State private var renderedImage: UIImage?
 
     private let qrWidth: CGFloat = 300
@@ -28,7 +28,7 @@ struct ReceiveScene: View {
                 }
                 Spacer()
                 Button(action: {
-                    showShareSheet.toggle()
+                    isPresentingShareSheet.toggle()
                 }) {
                     Text(model.shareTitle)
                 }
@@ -43,21 +43,18 @@ struct ReceiveScene: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button {
-                    showShareSheet.toggle()
+                    isPresentingShareSheet.toggle()
                 } label: {
                     Images.System.share
                 }
             }
         }
-        .sheet(isPresented: $showShareSheet) {
+        .sheet(isPresented: $isPresentingShareSheet) {
             ShareSheet(activityItems: [model.address])
         }
-        .modifier(
-            ToastModifier(
-                isPresenting: $showCopyMessage,
-                value: CopyTypeViewModel(type: .address(model.assetModel.asset, address: model.addressShort)).message,
-                systemImage: SystemImage.copy
-            )
+        .copyToast(
+            model: model.copyModel,
+            isPresenting: $isPresentingCopyToast
         )
         .task {
             await generateQRCode()
@@ -74,8 +71,7 @@ struct ReceiveScene: View {
 
 extension ReceiveScene {
     private func onCopyAddress() {
-        showCopyMessage = true
-        UIPasteboard.general.string = model.address
+        isPresentingCopyToast = true
     }
 
     private func generateQRCode() async {
