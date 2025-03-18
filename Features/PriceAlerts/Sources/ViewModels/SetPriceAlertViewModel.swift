@@ -105,17 +105,17 @@ public final class SetPriceAlertViewModel {
         price: Double?
     ) -> PriceAlertDirection? {
         guard let price,
-              let normalizedPrice = currencyFormatter.normalizedDouble(from: price),
+              let priceValue = currencyFormatter.normalizedDouble(from: price),
               let targetAmount = try? valueFormatter.number(amount: amount).doubleValue,
-              let normalizedAmount = currencyFormatter.normalizedDouble(from: targetAmount)
+              let amountValue = currencyFormatter.normalizedDouble(from: targetAmount)
         else {
             return nil
         }
         
-        switch normalizedAmount {
-        case _ where normalizedAmount > normalizedPrice:
+        switch amountValue {
+        case _ where amountValue > priceValue:
             return .up
-        case _ where normalizedAmount < normalizedPrice:
+        case _ where amountValue < priceValue:
             return .down
         default:
             return nil
@@ -155,8 +155,8 @@ public final class SetPriceAlertViewModel {
 extension SetPriceAlertViewModel {
     func setPriceAlert() async {
         do {
-            try await priceAlertService.addPriceAlert(priceAlert: priceAlert())
             onComplete?()
+            try await priceAlertService.add(priceAlert: priceAlert())
         } catch {
             NSLog("Set price alert error: \(error.localizedDescription)")
         }

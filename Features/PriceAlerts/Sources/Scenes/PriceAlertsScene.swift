@@ -24,7 +24,7 @@ public struct PriceAlertsScene: View {
         List {
             toggleView
             
-            let sections = model.alertsSections(for: priceAlerts)
+            let sections = model.sections(for: priceAlerts)
             autoAlertsView(alerts: sections.autoAlerts)
             ForEach(sections.manualAlerts, id: \.self) {
                 manualAlertsView(alerts: $0)

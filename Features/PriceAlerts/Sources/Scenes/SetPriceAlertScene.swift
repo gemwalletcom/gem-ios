@@ -24,7 +24,7 @@ public struct SetPriceAlertScene: View {
     }
     
     public var body: some View {
-        VStack(spacing: 0) {
+        VStack(spacing: .zero) {
             Text(model.alertDirectionTitle)
                 .textStyle(.subheadline)
                 .padding(.bottom, Spacing.tiny)
@@ -79,11 +79,10 @@ extension SetPriceAlertScene {
             ForEach(model.preselectedPercentages, id: \.self) {
                 Text($0 + "%")
                     .tag($0)
-                    .padding()
             }
         }
         .pickerStyle(.segmented)
-        .fixedSize()
+        .frame(width: 200)
     }
 }
 
