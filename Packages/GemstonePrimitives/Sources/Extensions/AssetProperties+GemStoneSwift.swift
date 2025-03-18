@@ -9,10 +9,7 @@ public extension AssetProperties {
         case .native: assetId.chain.isStakeSupported
         case .token: false
         }
-        let isSwapable = switch assetId.type {
-        case .native: assetId.chain.isSwapSupported
-        case .token: false
-        }
+        let isSwapable = assetId.chain.isSwapSupported
         return AssetProperties(
             isEnabled: true,
             isBuyable: false,
