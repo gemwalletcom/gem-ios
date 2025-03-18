@@ -151,7 +151,7 @@ struct AssetScene: View {
             await fetch()
         }
         .toast(
-            isPresenting: $showingPriceAlertMessage,
+            isPresenting: $isPresentingPriceAlertMessage,
             title: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
             systemImage: assetData.priceAlertSystemImage
         )
