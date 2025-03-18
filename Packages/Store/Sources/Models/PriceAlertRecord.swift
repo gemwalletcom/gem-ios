@@ -51,7 +51,8 @@ extension PriceAlert {
             assetId: assetId,
             priceDirection: priceDirection,
             price: price,
-            pricePercentChange: pricePercentChange
+            pricePercentChange: pricePercentChange,
+            lastNotifiedAt: lastNotifiedAt
         )
     }
 }
