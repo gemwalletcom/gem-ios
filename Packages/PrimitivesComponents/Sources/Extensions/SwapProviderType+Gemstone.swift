@@ -18,6 +18,7 @@ public extension Gemstone.SwapProviderType {
         case .across: Images.SwapProviders.across
         case .okuTrade: Images.SwapProviders.oku
         case .wagmi: Images.SwapProviders.wagmi
+        case .cetus: Images.SwapProviders.cetus
         }
     }
 }
