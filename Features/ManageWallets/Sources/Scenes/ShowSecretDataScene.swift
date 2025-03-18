@@ -10,7 +10,7 @@ import PrimitivesComponents
 struct ShowSecretDataScene: View {
     
     let model: any SecretPhraseViewableModel
-    @State private var showCopyMessage = false
+    @State private var isPresentingCopyToast = false
 
     var body: some View {
         VStack(spacing: .medium) {
@@ -23,19 +23,17 @@ struct ShowSecretDataScene: View {
             SecretDataTypeView(type: model.type)
 
             Button {
-                showCopyMessage = true
-                UIPasteboard.general.string = model.copyValue
+                isPresentingCopyToast = true
             } label: {
                 Text(Localized.Common.copy)
             }
             Spacer()
         }
-        .modifier(ToastModifier(
-            isPresenting: $showCopyMessage,
-            value: CopyTypeViewModel(type: model.copyType).message,
-            systemImage: SystemImage.copy
-        ))
         .frame(maxWidth: .scene.content.maxWidth)
         .navigationTitle(model.title)
+        .copyToast(
+            model: model.copyModel,
+            isPresenting: $isPresentingCopyToast
+        )
     }
 }

@@ -59,7 +59,7 @@ public struct TransactionService: Sendable {
                     } catch {
                         let timeout = ChainConfig.config(chain: transaction.assetId.chain).transactionTimeout
                         let interval = Date.now.timeIntervalSince(transaction.createdAt)
-                        if interval > timeout {
+                        if interval > Double(timeout) {
                             // If update fails due to timeout, mark transaction as failed.
                             try? transactionStore.updateState(id: transaction.id, state: .failed)
                         }

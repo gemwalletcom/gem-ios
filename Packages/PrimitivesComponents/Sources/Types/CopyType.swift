@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public enum CopyType {
+public enum CopyType: Hashable, Equatable, Sendable {
     case secretPhrase
     case privateKey
     case address(Asset, address: String)
