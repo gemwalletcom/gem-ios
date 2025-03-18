@@ -40,7 +40,10 @@ let package = Package(
         ),
         .testTarget(
             name: "PriceAlertsTests",
-            dependencies: ["PriceAlerts"]
+            dependencies: [
+                "PriceAlerts",
+                .product(name: "PriceAlertServiceTestKit", package: "PriceAlertService")
+            ]
         ),
     ]
 )

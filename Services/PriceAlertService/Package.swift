@@ -13,6 +13,10 @@ let package = Package(
             name: "PriceAlertService",
             targets: ["PriceAlertService"]
         ),
+        .library(
+            name: "PriceAlertServiceTestKit",
+            targets: ["PriceAlertServiceTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -36,6 +40,15 @@ let package = Package(
                 "Preferences"
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "PriceAlertServiceTestKit",
+            dependencies: [
+                "PriceAlertService",
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "DeviceServiceTestKit", package: "DeviceService")
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "PriceAlertServiceTests",

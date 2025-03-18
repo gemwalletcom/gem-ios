@@ -11,7 +11,12 @@ let package = Package(
     products: [
         .library(
             name: "DeviceService",
-            targets: ["DeviceService"]),
+            targets: ["DeviceService"]
+        ),
+        .library(
+            name: "DeviceServiceTestKit",
+            targets: ["DeviceServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -29,6 +34,15 @@ let package = Package(
                 "GemAPI",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "DeviceServiceTestKit",
+            dependencies: [
+                "DeviceService",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "StoreTestKit", package: "Store")
+            ],
+            path: "TestKit"
         ),
     ]
 )
