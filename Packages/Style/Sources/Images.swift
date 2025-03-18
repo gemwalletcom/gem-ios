@@ -163,6 +163,11 @@ public enum Images {
     public enum Info {
         public static let networkFee = Image(.networkFee)
     }
+    
+    public enum PriceAlert {
+        public static let up = Image(.up)
+        public static let down = Image(.down)
+    }
 }
 
 // MARK: - Preview
@@ -273,6 +278,10 @@ public enum Images {
         ("Name Resolve", [
             (Images.NameResolve.success, "Success"),
             (Images.NameResolve.error, "Error")
+        ]),
+        ("Price Alert", [
+            (Images.PriceAlert.down, "down"),
+            (Images.PriceAlert.up, "up")
         ])
     ]
 

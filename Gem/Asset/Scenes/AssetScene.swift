@@ -11,6 +11,7 @@ import Localization
 import InfoSheet
 import PrimitivesComponents
 import Preferences
+import PriceAlerts
 
 struct AssetScene: View {
     @Environment(\.walletsService) private var walletsService
@@ -20,9 +21,10 @@ struct AssetScene: View {
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var showingOptions = false
-    @State private var showingPriceAlertMessage = false
+    @State private var isPresentingPriceAlertMessage = false
     @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    @State private var isPresentingSetPriceAlert: Bool = false
 
     @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
@@ -156,6 +158,11 @@ struct AssetScene: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack {
+                    if Preferences.standard.isDeveloperEnabled {
+                        Button(action: onSelectSetPriceAlerts) {
+                            Image(systemName: SystemImage.plus)
+                        }
+                    }
                     Button(action: onPriceAlertToggle) {
                         Image(systemName: assetData.priceAlertSystemImage)
                     }
@@ -182,6 +189,19 @@ struct AssetScene: View {
         .navigationTitle(model.title)
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
+        .sheet(isPresented: $isPresentingSetPriceAlert) {
+            SetPriceAlertNavigationStack(
+                model: SetPriceAlertViewModel(
+                    wallet: model.walletModel.wallet,
+                    assetId: model.assetModel.asset.id.identifier,
+                    priceAlertService: priceAlertService,
+                    onComplete: {
+                        isPresentingSetPriceAlert = false
+                        isPresentingPriceAlertMessage = true
+                    }
+                )
+            )
         }
     }
 }
@@ -261,7 +281,7 @@ extension AssetScene {
     }
 
     private func onPriceAlertToggle() {
-        showingPriceAlertMessage = true
+        isPresentingPriceAlertMessage = true
 
         Task {
             if assetData.isPriceAlertsEnabled {
@@ -270,6 +290,10 @@ extension AssetScene {
                 await model.enablePriceAlert()
             }
         }
+    }
+    
+    private func onSelectSetPriceAlerts() {
+        isPresentingSetPriceAlert = true
     }
 }
 

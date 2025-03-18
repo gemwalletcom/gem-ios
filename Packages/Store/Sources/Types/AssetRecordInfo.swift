@@ -8,8 +8,7 @@ struct AssetRecordInfo: FetchableRecord, Codable {
     var price: PriceRecord?
     var account: AccountRecord
     var balance: BalanceRecord?
-    var priceAlert: PriceAlertRecord?
-    //var priceAlerts: [PriceAlertRecord]?
+    var priceAlerts: [PriceAlertRecord]?
 }
 
 struct AssetRecordInfoMinimal: FetchableRecord, Codable {
@@ -20,6 +19,6 @@ struct AssetRecordInfoMinimal: FetchableRecord, Codable {
 
 extension AssetRecordInfoMinimal {
     var totalFiatAmount: Double {
-        return balance.totalAmount * (price?.price ?? 0)
+        balance.totalAmount * (price?.price ?? 0)
     }
 }

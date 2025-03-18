@@ -192,9 +192,9 @@ extension SelectAssetViewModel {
     private func setPriceAlert(assetId: AssetId, enabled: Bool) async {
         do {
             if enabled {
-                try await priceAlertService.addPriceAlert(for: assetId)
+                try await priceAlertService.addPriceAlert(priceAlert: .default(for: assetId.identifier))
             } else {
-                try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
+                try await priceAlertService.deletePriceAlerts(priceAlerts: [.default(for: assetId.identifier)])
             }
         } catch {
             await handle(error: error)
