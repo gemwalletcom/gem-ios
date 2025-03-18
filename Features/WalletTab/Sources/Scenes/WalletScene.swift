@@ -169,31 +169,24 @@ public struct WalletScene: View {
 extension WalletScene {
 
     func refreshable() async {
-        Task {
-            do {
-                try await model.fetch(assets: assets)
-            } catch {
-                NSLog("refreshable error: \(error)")
-            }
-        }
-        runAddressStatusCheck()
+        fetch()
     }
 
     func fetch() {
+        guard let dbWallet else { return }
         Task {
             do {
-                try await model.fetch(assets: assets)
+                try await model.fetch(wallet: dbWallet, assets: assets)
             } catch {
                 NSLog("fetch error: \(error)")
             }
         }
-
-        runAddressStatusCheck()
+        runAddressStatusCheck(wallet: dbWallet)
     }
 
-    func runAddressStatusCheck() {
+    func runAddressStatusCheck(wallet: Wallet) {
         Task {
-            await model.runAddressStatusCheck()
+            await model.runAddressStatusCheck(wallet: wallet)
         }
     }
 
