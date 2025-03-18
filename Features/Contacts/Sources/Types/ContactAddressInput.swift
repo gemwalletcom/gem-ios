@@ -8,9 +8,9 @@ import DataValidation
 public struct ContactAddressInput: Identifiable {
     public var id: String?
     
-    var memo: ValidatedInput<String, StringLengthValidator>
-    var address: ValidatedInput<String, BlockchainAddressValidator>
-    private(set) var chain: ValidatedInput<Chain, ChainSelectionValidator>
+    var memo: ValidatedInput<String?, StringLengthValidator>
+    var address: ValidatedInput<String?, BlockchainAddressValidator>
+    private(set) var chain: Chain
     
     static func from(viewType: ContactAddressViewType) -> ContactAddressInput {
         switch viewType {
@@ -35,10 +35,7 @@ public struct ContactAddressInput: Identifiable {
         memo: String = ""
     ) {
         self.id = id
-        self.chain = ValidatedInput(
-            validator: ChainSelectionValidator(errorMessage: "Please select a chain"),
-            value: chain
-        )
+        self.chain = chain
         self.address = ValidatedInput(
             validator: BlockchainAddressValidator(
                 chain: chain,
@@ -56,24 +53,25 @@ public struct ContactAddressInput: Identifiable {
     }
     
     public func validate(shouldValidateAddress: Bool) throws {
-        try chain.validate()
         if shouldValidateAddress { try address.validate() }
         try memo.validate()
     }
     
     public mutating func set(chain: Chain?) {
-        self.chain.value = chain
+        guard let chain else {
+            return
+        }
         
-        if let chain {
-            let validator = BlockchainAddressValidator(chain: chain, errorMessage: "Address is invalid")
+        self.chain = chain
+        
+        let validator = BlockchainAddressValidator(chain: chain, errorMessage: "Address is invalid")
+        
+        do {
+            try validator.validate(address.value)
+            address = ValidatedInput(validator: validator, value: address.value)
+        } catch {
+            address = ValidatedInput(validator: validator, value: "")
             
-            do {
-                try validator.validate(address.value)
-                address = ValidatedInput(validator: validator, value: address.value)
-            } catch {
-                address = ValidatedInput(validator: validator, value: "")
-
-            }
         }
     }
 }

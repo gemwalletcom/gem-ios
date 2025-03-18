@@ -20,12 +20,4 @@ struct BlockchainAddressValidatorTests {
             try validator.validate("InvalidAddress123")
         }
     }
-    
-    @Test
-    func testIsValidWithNilChain() throws {
-        let validator = BlockchainAddressValidator(chain: nil, errorMessage: "")
-        #expect(throws: ValidationError.self) {
-            try validator.validate(validAddress)
-        }
-    }
 }

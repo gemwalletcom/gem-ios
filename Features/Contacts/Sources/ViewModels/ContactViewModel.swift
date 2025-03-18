@@ -32,8 +32,8 @@ public class ContactViewModel {
     
     var title: String { viewType.title }
     var actionButtonTitlte: String { Localized.Common.save }
-    var nameTitleField: String { "Name" }
-    var descriptionTitleField: String { "Description" }
+    var nameTitleField: String { Localized.Wallet.name }
+    var descriptionTitleField: String { Localized.Common.description }
     var cancelButtonTitle: String {
         switch viewType {
         case .add:

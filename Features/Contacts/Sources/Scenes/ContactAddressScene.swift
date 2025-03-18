@@ -35,38 +35,30 @@ public struct ContactAddressScene: View {
         VStack {
             List {
                 Section {
-                    if let chain = model.input.chain.value {
-                        NavigationLink(value: Scenes.NetworksSelector()) {
-                            ChainView(model: ChainViewModel(chain: chain))
-                        }
-                    } else {
-                        NavigationLink(value: Scenes.NetworksSelector()) {
-                            ListItemView(title: "Select chain")
-                        }
+                    NavigationLink(value: Scenes.NetworksSelector()) {
+                        ChainView(model: ChainViewModel(chain: model.input.chain))
                     }
-                    if let chain = model.input.chain.value {
-                        FloatTextField(model.addressTextFieldTitle, text: $model.projectedValue.input.address.value ?? "", allowClean: false) {
-                            HStack(spacing: .large/2) {
-                                NameRecordView(
-                                    model: NameRecordViewModel(chain: chain),
-                                    state: $model.nameResolveState,
-                                    address: $model.input.address.value ?? ""
-                                )
-                                ListButton(image: Images.System.paste) {
-                                    onSelectPaste()
-                                }
-                                ListButton(image: Images.System.qrCode) {
-                                    onSelectScan()
-                                }
+                    FloatTextField(model.addressTextFieldTitle, text: $model.projectedValue.input.address.value ?? "", allowClean: false) {
+                        HStack(spacing: .large/2) {
+                            NameRecordView(
+                                model: NameRecordViewModel(chain: model.input.chain),
+                                state: $model.nameResolveState,
+                                address: $model.input.address.value ?? ""
+                            )
+                            ListButton(image: Images.System.paste) {
+                                onSelectPaste()
+                            }
+                            ListButton(image: Images.System.qrCode) {
+                                onSelectScan()
                             }
                         }
-                        .focused($focusedField, equals: .address)
-                        .keyboardType(.alphabet)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .truncationMode(.middle)
-                        .submitLabel(.done)
                     }
+                    .focused($focusedField, equals: .address)
+                    .keyboardType(.alphabet)
+                    .textInputAutocapitalization(.never)
+                    .autocorrectionDisabled()
+                    .truncationMode(.middle)
+                    .submitLabel(.done)
                     if model.showMemo {
                         FloatTextField(model.memoTextFieldTitle, text: $model.projectedValue.input.memo.value ?? "")
                             .focused($focusedField, equals: .memo)

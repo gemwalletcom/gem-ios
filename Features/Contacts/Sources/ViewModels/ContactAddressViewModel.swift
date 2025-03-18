@@ -35,9 +35,9 @@ public class ContactAddressViewModel {
     
     var title: String { viewType.title }
     var actionButtonTitle: String { Localized.Common.save }
-    var addressTextFieldTitle: String { "Address" }
-    var memoTextFieldTitle: String { "Memo" }
-    var showMemo: Bool { input.chain.value?.isMemoSupported == true }
+    var addressTextFieldTitle: String { Localized.Common.address }
+    var memoTextFieldTitle: String { Localized.Transfer.memo }
+    var showMemo: Bool { input.chain.isMemoSupported }
     
     func save() throws {
         try input.validate(shouldValidateAddress: nameResolveState.result == nil)
@@ -46,7 +46,7 @@ public class ContactAddressViewModel {
             id: input.id,
             contact: contact,
             address: try input.address.unwrappedValue,
-            chain: try input.chain.unwrappedValue,
+            chain: input.chain,
             memo: input.memo.value
         )
         
