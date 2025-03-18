@@ -20,14 +20,14 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
 extension PriceAlertRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column("id", .text)
+            $0.column(Columns.PriceAlert.id.name, .text)
                 .primaryKey()
-            $0.column("assetId", .text)
+            $0.column(Columns.PriceAlert.assetId.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("priceDirection", .text)
-            $0.column("price", .double)
-            $0.column("pricePercentChange", .double)
-            $0.column("lastNotifiedAt", .date)
+            $0.column(Columns.PriceAlert.priceDirection.name, .text)
+            $0.column(Columns.PriceAlert.price.name, .double)
+            $0.column(Columns.PriceAlert.pricePercentChange.name, .double)
+            $0.column(Columns.PriceAlert.lastNotifiedAt.name, .date)
         }
     }
 }
@@ -38,7 +38,8 @@ extension PriceAlertRecord {
             assetId: assetId,
             price: price,
             pricePercentChange: pricePercentChange,
-            priceDirection: priceDirection
+            priceDirection: priceDirection,
+            lastNotifiedAt: lastNotifiedAt
         )
     }
 }
@@ -48,8 +49,10 @@ extension PriceAlert {
         PriceAlertRecord(
             id: id,
             assetId: assetId,
+            priceDirection: priceDirection,
             price: price,
-            pricePercentChange: .none
+            pricePercentChange: pricePercentChange,
+            lastNotifiedAt: lastNotifiedAt
         )
     }
 }

@@ -36,7 +36,8 @@ let package = Package(
                 "Preferences",
                 "PrimitivesComponents",
                 "QRScanner",
-                "WalletSessionService"
+                "WalletSessionService",
+                "Keystore",
             ],
             path: "Sources"
         ),

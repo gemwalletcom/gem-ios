@@ -7,77 +7,60 @@ import Testing
 
 final class Chain_WalletCorePrimitiveTests {
     @Test(arguments: Chain.allCases)
-       func testChainToCoinType(chain: Chain) {
-           let coinType = chain.coinType
-           switch chain {
-           case .bitcoin:
-               #expect(coinType == .bitcoin)
-           case .litecoin:
-               #expect(coinType == .litecoin)
-           case .ethereum,
-                .smartChain,
-                .polygon,
-                .arbitrum,
-                .optimism,
-                .base,
-                .avalancheC,
-                .opBNB,
-                .fantom,
-                .gnosis,
-                .manta,
-                .blast,
-                .zkSync,
-                .linea,
-                .mantle,
-                .celo,
-                .world,
-                .sonic,
-                .abstract,
-                .berachain,
-                .ink,
-                .unichain,
-                .hyperliquid:
-               #expect(coinType == .ethereum)
-           case .solana:
-               #expect(coinType == .solana)
-           case .thorchain:
-               #expect(coinType == .thorchain)
-           case .cosmos:
-               #expect(coinType == .cosmos)
-           case .osmosis:
-               #expect(coinType == .osmosis)
-           case .ton:
-               #expect(coinType == .ton)
-           case .tron:
-               #expect(coinType == .tron)
-           case .doge:
-               #expect(coinType == .dogecoin)
-           case .aptos:
-               #expect(coinType == .aptos)
-           case .sui:
-               #expect(coinType == .sui)
-           case .xrp:
-               #expect(coinType == .xrp)
-           case .celestia:
-               #expect(coinType == .tia)
-           case .injective:
-               #expect(coinType == .nativeInjective)
-           case .sei:
-               #expect(coinType == .sei)
-           case .noble:
-               #expect(coinType == .noble)
-           case .near:
-               #expect(coinType == .near)
-           case .stellar:
-               #expect(coinType == .stellar)
-           case .bitcoinCash:
-               #expect(coinType == .bitcoinCash)
-           case .algorand:
-               #expect(coinType == .algorand)
-           case .polkadot:
-               #expect(coinType == .polkadot)
-           case .cardano:
-               #expect(coinType == .cardano)
-           }
-       }
+    func testChainToCoinType(chain: Chain) {
+        let expected: CoinType
+        switch chain {
+        case .bitcoin:
+            expected = .bitcoin
+        case .litecoin:
+            expected = .litecoin
+        case .ethereum, .smartChain, .polygon, .arbitrum, .optimism, .base,
+             .avalancheC, .opBNB, .fantom, .gnosis, .manta, .blast, .zkSync,
+             .linea, .mantle, .celo, .world, .sonic, .abstract, .berachain,
+             .ink, .unichain, .hyperliquid, .monad:
+            expected = .ethereum
+        case .solana:
+            expected = .solana
+        case .thorchain:
+            expected = .thorchain
+        case .cosmos:
+            expected = .cosmos
+        case .osmosis:
+            expected = .osmosis
+        case .ton:
+            expected = .ton
+        case .tron:
+            expected = .tron
+        case .doge:
+            expected = .dogecoin
+        case .aptos:
+            expected = .aptos
+        case .sui:
+            expected = .sui
+        case .xrp:
+            expected = .xrp
+        case .celestia:
+            expected = .tia
+        case .injective:
+            expected = .nativeInjective
+        case .sei:
+            expected = .sei
+        case .noble:
+            expected = .noble
+        case .near:
+            expected = .near
+        case .stellar:
+            expected = .stellar
+        case .bitcoinCash:
+            expected = .bitcoinCash
+        case .algorand:
+            expected = .algorand
+        case .polkadot:
+            expected = .polkadot
+        case .cardano:
+            expected = .cardano
+        }
+
+        #expect(chain.coinType == expected)
+    }
 }
