@@ -53,7 +53,7 @@ struct AmountScene: View {
                 case .transfer:
                     EmptyView()
                 case .stake, .unstake, .redelegate, .withdraw:
-                    if let validator = model.currentValidator  {
+                    if let viewModel = model.stakeValidatorViewModel  {
                         Section(Localized.Stake.validator) {
                             //TODO: Use this, other option does not work for some reason
                             /*
@@ -62,11 +62,11 @@ struct AmountScene: View {
                              }
                              */
                             if model.isSelectValidatorEnabled {
-                                NavigationCustomLink(with: ValidatorView(model: StakeValidatorViewModel(validator: validator))) {
+                                NavigationCustomLink(with: ValidatorView(model: viewModel)) {
                                     model.setCurrentValidator()
                                 }
                             } else {
-                                ValidatorView(model: StakeValidatorViewModel(validator: validator))
+                                ValidatorView(model: viewModel)
                             }
                         }
                     }

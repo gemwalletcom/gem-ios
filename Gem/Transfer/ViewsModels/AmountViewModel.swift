@@ -14,6 +14,7 @@ import enum Staking.StakeValidatorsType
 import StakeService
 import PrimitivesComponents
 import WalletsService
+import Staking
 
 @MainActor
 @Observable
@@ -26,9 +27,9 @@ final class AmountViewModel {
     
     var amountText: String = ""
     var delegation: DelegationValidator?
-    var currentValidator: DelegationValidator? = .none
-    var currentDelegation: Delegation? = .none
-    var amountInputType: AmountInputType = .asset
+    private var currentValidator: DelegationValidator? = .none
+    private var currentDelegation: Delegation? = .none
+    private var amountInputType: AmountInputType = .asset
 
     public init(
         input: AmountInput,
@@ -42,13 +43,13 @@ final class AmountViewModel {
         self.walletsService = walletsService
         self.stakeService = stakeService
         self.onTransferAction = onTransferAction
-
         self.currentValidator = defaultValidator
     }
     
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter.currency()
     private let numberSanitizer = NumberSanitizer()
+    private let valueConverter = ValueConverter()
     
     var type: AmountType { input.type }
     var asset: Asset { input.asset }
@@ -106,6 +107,11 @@ final class AmountViewModel {
         case .transfer, .stake, .redelegate: .stake
         case .unstake, .withdraw: .unstake
         }
+    }
+    
+    var stakeValidatorViewModel: StakeValidatorViewModel? {
+        guard let currentValidator else { return nil }
+        return StakeValidatorViewModel(validator: currentValidator)
     }
     
     var delegations: [Delegation] {
@@ -316,20 +322,33 @@ final class AmountViewModel {
     }
     
     private func amountValue() -> String? {
-        guard let amountValue = try? walletsService.priceService.convertToAmount(fiatValue: amountText, asset: asset) else {
-            return nil
-        }
-        return amountValue
-    }
-    
-    private func fiatValue() -> Decimal? {
-        guard amountText.isNotEmpty,
-              let fiatValue = try? walletsService.priceService.convertToFiat(amount: amountText, asset: asset),
-              !fiatValue.isZero
+        guard let price = getAssetPrice(),
+              let amount = try? valueConverter.convertToAmount(
+                fiatValue: amountText,
+                price: price,
+                decimals: asset.decimals.asInt
+              )
         else {
             return nil
         }
-        return fiatValue
+        return amount
+    }
+    
+    private func fiatValue() -> Decimal? {
+        guard let price = getAssetPrice(),
+              let value = try? valueConverter.convertToFiat(
+                amount: amountText,
+                price: price
+              ),
+              !value.isZero
+        else {
+            return nil
+        }
+        return value
+    }
+    
+    private func getAssetPrice() -> AssetPrice? {
+        try? walletsService.priceService.getPrice(for: asset.id)
     }
     
     private func handleInputAction() {
