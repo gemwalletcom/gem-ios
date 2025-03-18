@@ -34,44 +34,44 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
 
     public var subtitleView: ListAssetItemSubtitleView {
         .price(
-            price: prefixTextValue(),
-            priceChangePercentage24h: suffixTextValue()
+            price: prefixTextValue,
+            priceChangePercentage24h: suffixTextValue
         )
     }
     
-    // MARK: - Private methods
+    // MARK: - Private
     
-    private func prefixTextValue() -> TextValue {
+    private var prefixTextValue: TextValue {
         TextValue(
-            text: prefixText(),
+            text: prefixText,
             style: TextStyle(font: .footnote, color: Colors.gray)
         )
     }
     
-    private func suffixTextValue() -> TextValue {
+    private var suffixTextValue: TextValue {
         TextValue(
-            text: suffixText(),
-            style: TextStyle(font: .footnote, color: directionColor())
+            text: suffixText,
+            style: TextStyle(font: .footnote, color: directionColor)
         )
     }
     
-    private func prefixText() -> String {
+    private var prefixText: String {
         switch data.priceAlert.type {
         case .auto: priceModel.priceAmountText
-        case .price: priceDirectionPrefix()
-        case .pricePercent: percentDirectionPrefix()
+        case .price: priceDirectionPrefix
+        case .pricePercentChange: percentDirectionPrefix
         }
     }
     
-    private func suffixText() -> String {
+    private var suffixText: String {
         switch data.priceAlert.type {
         case .auto: priceModel.priceChangeText
         case .price: priceModel.fiatAmountText(amount: data.priceAlert.price ?? .zero)
-        case .pricePercent: "\(data.priceAlert.pricePercentChange ?? .zero)%"
+        case .pricePercentChange: "\(data.priceAlert.pricePercentChange ?? .zero)%"
         }
     }
     
-    private func priceDirectionPrefix() -> String {
+    private var priceDirectionPrefix: String {
         switch data.priceAlert.priceDirection {
         case .up: Localized.PriceAlerts.Direction.over
         case .down: Localized.PriceAlerts.Direction.under
@@ -79,7 +79,7 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
         }
     }
 
-    private func percentDirectionPrefix() -> String {
+    private var percentDirectionPrefix: String {
         switch data.priceAlert.priceDirection {
         case .up: Localized.PriceAlerts.Direction.increasesBy
         case .down: Localized.PriceAlerts.Direction.decreasesBy
@@ -87,7 +87,7 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
         }
     }
     
-    private func directionColor() -> Color {
+    private var directionColor: Color {
         switch data.priceAlert.priceDirection {
         case .up: Colors.green
         case .down: Colors.red

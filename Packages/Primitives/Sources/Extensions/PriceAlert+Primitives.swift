@@ -19,17 +19,11 @@ public extension PriceAlert {
         )
     }
     
-    enum AlertType {
-        case auto
-        case price
-        case pricePercent
-    }
-    
-    var type: AlertType {
+    var type: PriceAlertNotificationType {
         switch (priceDirection, price, pricePercentChange) {
-        case (nil, _, _): .auto
-        case (_, .some, _): .price
-        case (_, _, .some): .pricePercent
+        case (nil, nil, nil): .auto
+        case (.some, .some, nil): .price
+        case (.some, nil, .some): .pricePercentChange
         default: .auto
         }
     }

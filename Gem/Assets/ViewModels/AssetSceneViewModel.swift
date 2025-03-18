@@ -143,7 +143,7 @@ extension AssetSceneViewModel {
 
     func enablePriceAlert() async {
         do {
-            try await priceAlertService.addPriceAlert(priceAlert: .default(for: assetModel.asset.id.identifier))
+            try await priceAlertService.add(priceAlert: .default(for: assetModel.asset.id.identifier))
             try await priceAlertService.requestPermissions()
             try await priceAlertService.enablePriceAlerts()
         } catch {
@@ -153,7 +153,7 @@ extension AssetSceneViewModel {
 
     func disablePriceAlert() async {
         do {
-            try await priceAlertService.deletePriceAlerts(priceAlerts: [.default(for: assetModel.asset.id.identifier)])
+            try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id.identifier)])
         } catch {
             NSLog("disablePriceAlert error \(error)")
         }
