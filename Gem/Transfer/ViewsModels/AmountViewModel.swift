@@ -48,6 +48,7 @@ final class AmountViewModel {
     
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter.currency()
+    private let numberSanitizer = NumberSanitizer()
     
     var type: AmountType { input.type }
     var asset: Asset { input.asset }
@@ -68,6 +69,7 @@ final class AmountViewModel {
             type: amountInputType,
             asset: asset,
             currencyFormatter: currencyFormatter,
+            numberSanitizer: numberSanitizer,
             secondaryText: secondaryText,
             onTapActionButton: handleInputAction
         )
@@ -332,24 +334,13 @@ final class AmountViewModel {
     
     private func handleInputAction() {
         toggleAmountInputType()
-        replaceAmountText()
+        amountText = .empty
     }
     
     private func toggleAmountInputType() {
         switch amountInputType {
         case .asset: amountInputType = .fiat
         case .fiat: amountInputType = .asset
-        }
-    }
-    
-    private func replaceAmountText() {
-        switch amountInputType {
-        case .asset:
-            amountText = amountValue() ?? .empty
-        case .fiat:
-            if let fiatValue = fiatValue() {
-                amountText = currencyFormatter.string(decimal: fiatValue)
-            }
         }
     }
 }
