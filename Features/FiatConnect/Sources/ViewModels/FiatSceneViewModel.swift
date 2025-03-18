@@ -251,10 +251,11 @@ extension FiatSceneViewModel {
 
         do {
             let quotes: [FiatQuote] = try await {
-                let request = FiatBuyRequest(
+                let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
                     fiatCurrency: currencyFormatter.currencyCode,
                     fiatAmount: input.amount,
+                    cryptoAmount: input.amount,
                     walletAddress: assetAddress.address
                 )
                 switch input.type {

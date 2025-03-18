@@ -73,7 +73,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     }
     
     public func string(_ number: Double) -> String {
-        switch type{
+        switch type {
         case .currency:
             let formatter = formatter(for: number)
             if includePlusSign && number == 0 {
@@ -93,6 +93,14 @@ public struct CurrencyFormatter: Sendable, Hashable {
         let formatter = formatter(for: decimal.doubleValue)
         formatter.currencySymbol = ""
         return formatter.string(from: NSDecimalNumber(decimal: decimal)) ?? ""
+    }
+    
+    public func normalizedDouble(from value: Double) -> Double? {
+        let formatter = formatter(for: value)
+        guard let formattedString = formatter.string(from: NSNumber(value: value)) else {
+            return nil
+        }
+        return formatter.number(from: formattedString)?.doubleValue
     }
     
     private func formatter(for value: Double) -> NumberFormatter {

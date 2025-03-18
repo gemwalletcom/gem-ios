@@ -22,6 +22,7 @@ let package = Package(
         .package(name: "Preferences", path: "../Preferences"),
         .package(name: "ExplorerService", path: "../ExplorerService"),
         .package(name: "TransactionsService", path: "../TransactionsService"),
+        .package(name: "ManageWalletService", path: "../ManageWalletService"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
     ],
     targets: [
@@ -36,6 +37,7 @@ let package = Package(
                 "PrimitivesComponents",
                 "ExplorerService",
                 "TransactionsService",
+                "ManageWalletService",
                 "Preferences",
                 "InfoSheet"
             ],
