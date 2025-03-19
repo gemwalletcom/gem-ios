@@ -52,10 +52,9 @@ public struct StateEmptyView<Content: View>: View {
                      image
                          .resizable()
                          .aspectRatio(contentMode: .fit)
-                         .padding(.large)
                  }
                  .frame(
-                    width: .image.extraLarge,
+                    width: .image.large,
                     height: .image.extraLarge
                  )
              }

@@ -171,10 +171,10 @@ public enum Images {
 
     public struct EmptyContent {
         public static let activity = Image(.emptyActivity)
-        public static let priceAlerts = Image(.emptyPriceAlerts)
-        public static let nft = Image(.emptyNft)
+        public static let priceAlerts = Image(.emptyNotification)
+        public static let nft = Image(.emptyIcons)
         public static let stake = Image(.emptyStake)
-        public static let walletConnect = Image(.emptyWalletConnect)
+        public static let walletConnect = Image(.emptyIcons)
         public static let search = Image(.emptySearch)
     }
 }
