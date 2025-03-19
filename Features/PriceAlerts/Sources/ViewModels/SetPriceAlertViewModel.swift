@@ -16,7 +16,7 @@ public final class SetPriceAlertViewModel {
     private let assetId: String
     private let priceAlertService: PriceAlertService
     private let onComplete: VoidAction
-    
+    private let preferences = Preferences.standard
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     private let valueFormatter = ValueFormatter(style: .short)
 
@@ -134,6 +134,7 @@ public final class SetPriceAlertViewModel {
         }()
         return PriceAlert(
             assetId: assetId,
+            currency: preferences.currency,
             price: price,
             pricePercentChange: pricePercentChange,
             priceDirection: state.alertDirection,

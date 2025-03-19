@@ -5,7 +5,6 @@ import Testing
 import BigInt
 @testable import Primitives
 
-
 final class FeeTests {
     @Test
     func testTotalFee() {

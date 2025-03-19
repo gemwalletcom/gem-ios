@@ -49,6 +49,7 @@ extension Price {
 extension PriceAlert {
     static let main = PriceAlert(
         assetId: AssetId.main.identifier,
+        currency: Currency.usd.rawValue,
         price: .none,
         pricePercentChange: .none,
         priceDirection: .none,

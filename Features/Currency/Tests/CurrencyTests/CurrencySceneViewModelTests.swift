@@ -38,6 +38,5 @@ struct CurrencySceneViewModelTests {
         
         #expect(usdCurrencyStorage.currency == Currency.ars.id)
         #expect(usdCurrencyStorage.currency == viewModel.currency.id)
-
     }
 }

@@ -91,7 +91,8 @@ extension PriceAlertsViewModel {
 
     private func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.add(priceAlert: .default(for: assetId.identifier))
+            try await priceAlertService
+                .add(priceAlert: .default(for: assetId.identifier, currency: preferences.preferences.currency))
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }
