@@ -235,6 +235,11 @@ public struct Migrations {
                 $0.add(column: Columns.PriceAlert.currency.name, .text).defaults(to: "USD")
             }
         }
+        
+        migrator.registerMigration("Add Contacts") { db in
+            try? ContactRecord.create(db: db)
+            try? ContactAddressRecord.create(db: db)
+        }
 
         try migrator.migrate(dbQueue)
     }
