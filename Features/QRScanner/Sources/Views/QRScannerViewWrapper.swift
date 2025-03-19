@@ -28,9 +28,7 @@ struct QRScannerViewWrapper {
         guard !dataScannerVC.isScanning else { return }
         do {
             try dataScannerVC.startScanning()
-            Task {
-                self.isScannerReady = true
-            }
+                isScannerReady = true
         } catch {
             scanResult(.failure(QRScannerError.unknown(error)))
             isScannerReady = false
