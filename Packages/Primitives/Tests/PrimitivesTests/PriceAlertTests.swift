@@ -10,8 +10,11 @@ final class PriceAlertTests {
     
     @Test func testId() {
         #expect(PriceAlert.mock().id == "ethereum")
-        #expect(PriceAlert.mock(price: 1, priceDirection: .up).id == "ethereum_USD_1.0_up")
-        #expect(PriceAlert.mock(pricePercentChange: 1).id == "ethereum_USD_1.0")
+        #expect(PriceAlert.mock(price: 1, priceDirection: .up).id == "ethereum_USD_1_up")
+        #expect(PriceAlert.mock(pricePercentChange: 1).id == "ethereum_USD_1")
+        #expect(PriceAlert.mock(pricePercentChange: 0.23).id == "ethereum_USD_0.23")
+        #expect(PriceAlert.mock(pricePercentChange: 1.12344).id == "ethereum_USD_1.12344")
+        #expect(PriceAlert.mock(pricePercentChange: 10_000.10).id == "ethereum_USD_10000.1")
     }
     
     @Test func testAutoAlertType() {

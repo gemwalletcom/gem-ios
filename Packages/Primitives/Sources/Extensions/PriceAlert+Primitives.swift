@@ -7,7 +7,9 @@ extension PriceAlert: Identifiable {
         if price == nil && pricePercentChange == nil && priceDirection == nil {
             return assetId
         }
-        return [assetId, currency, price?.description, pricePercentChange?.description, priceDirection?.rawValue].compactMap {
+        let price = price.map { String(format: "%g", $0) } ?? .none
+        let pricePercentChange = pricePercentChange.map { String(format: "%g", $0) } ?? .none
+        return [assetId, currency, price, pricePercentChange, priceDirection?.rawValue].compactMap {
             $0
         }
         .joined(separator: "_")
