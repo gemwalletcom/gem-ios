@@ -113,14 +113,14 @@ struct SelectAssetScene: View {
                         action: onAsset
                     )
                 }
-            case .manage, .priceAlert:
+            case .manage:
                 ListAssetItemSelectionView(
                     assetData: assetData,
                     currencyCode: model.currencyCode,
                     type: model.selectType.listType,
                     action: onAsset
                 )
-            case .swap:
+            case .swap, .priceAlert:
                 NavigationCustomLink(
                     with: ListAssetItemSelectionView(
                         assetData: assetData,

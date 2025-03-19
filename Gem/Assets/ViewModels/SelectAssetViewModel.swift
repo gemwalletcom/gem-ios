@@ -220,7 +220,7 @@ extension SelectAssetType {
             .buy,
             .swap: .view
         case .receive: .copy
-        case .manage:.manage
+        case .manage: .manage
         case .priceAlert: .price
         }
     }

@@ -66,7 +66,7 @@ extension PriceAlertsViewModel {
             try await priceAlertService.update()
 
             // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.assetId }.unique()
             try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
 
         } catch {
