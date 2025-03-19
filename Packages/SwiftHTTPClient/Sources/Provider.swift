@@ -26,7 +26,7 @@ public struct Provider<T: TargetType>: ProviderType {
     }
 
     public func request(_ api: Target) async throws -> Response {
-        let request = TargetRequestBuilder(
+        let request = try TargetRequestBuilder(
             baseUrl: options.baseUrl ?? api.baseUrl,
             method: api.method,
             path: api.path,
@@ -54,7 +54,7 @@ extension Provider where T: BatchTargetType {
             throw ProviderError.missingBaseUrl
         }
         // Predefined method, path, improve if needed
-        let request = TargetRequestBuilder(
+        let request = try TargetRequestBuilder(
             baseUrl: baseUrl,
             method: .POST,
             path: "",
