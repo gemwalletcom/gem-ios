@@ -11,7 +11,7 @@ public struct TargetRequestBuilder {
     let contentType: String
     let cachePolicy: URLRequest.CachePolicy
     
-    func build() -> URLRequest {
+    func build(encoder: JSONEncoder) -> URLRequest {
         let string: String
         var httpBody: Data? = .none
         switch data {
@@ -29,7 +29,7 @@ public struct TargetRequestBuilder {
         case .plain:
             string = path
         case .encodable(let value):
-            httpBody = try! JSONEncoder().encode(value)
+            httpBody = try! encoder.encode(value)
             string = path
         }
         let url = URL(string: baseUrl.absoluteString + string)!
