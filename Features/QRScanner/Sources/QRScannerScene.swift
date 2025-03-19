@@ -2,28 +2,31 @@
 
 import SwiftUI
 import PhotosUI
+import Components
 
-public struct QRScannerView: View {
+public struct QRScannerScene: View {
     @Environment(\.openURL) private var openURL
     @Environment(\.dismiss) private var dismiss
 
-    @State private var model: QRScannerViewModel
+    @State private var model: QRScannerSceneViewModel
 
     private let action: ((String) -> Void)
 
     public init(resources: QRScannerResources, action: @escaping ((String) -> Void)) {
         self.action = action
-        _model = State(initialValue: QRScannerViewModel(scannerState: .idle, imageState: .empty, resources: resources))
+        _model = State(initialValue: QRScannerSceneViewModel(scannerState: .idle, imageState: .empty, resources: resources))
     }
 
     public var body: some View {
-        VStack {
+        ZStack {
             switch model.scannerState {
-            case .idle:
-                ProgressView()
-                    .progressViewStyle(.circular)
-            case .scanning:
-                QRScannerViewWrapper(scanResult: onHandleScanResult)
+            case .idle, .scanning:
+                QRScannerDisplayView(
+                    configuration: model.overlayConfig,
+                    isScannerReady: $model.isScannerReady,
+                    scanResult: onHandleScanResult
+                )
+                .ignoresSafeArea()
             case .failure(let error):
                 ContentUnavailableView(
                     label: {
@@ -44,7 +47,7 @@ public struct QRScannerView: View {
                         case .permissionsNotGranted:
                             Button(model.resources.openSettings, action: onSelectOpenSettings)
                         case .decoding, .unknown:
-                            Button(model.resources.tryAgain, action: onRefreshScanner)
+                            Button(model.resources.tryAgain, action: model.refreshScannerState)
                         }
                     }
                 )
@@ -66,11 +69,13 @@ public struct QRScannerView: View {
                 }
             }
         }
+        .toolbarBackground(.visible, for: .navigationBar)
+        .onChange(
+            of: model.isScannerReady,
+            initial: true,
+            model.onChangeScannerReadyStatus)
         .onChange(of: model.selectedPhoto, onLoadPhoto)
         .onChange(of: model.imageState, onChangeImageState)
-        .task {
-            onRefreshScanner()
-        }
     }
 
     private func photosPicker<Content: View>(@ViewBuilder content: @Sendable () -> Content) -> some View {
@@ -86,11 +91,7 @@ public struct QRScannerView: View {
 
 // MARK: - Actions
 
-extension QRScannerView {
-    private func onRefreshScanner() {
-        model.refreshScannerState()
-    }
-
+extension QRScannerScene {
     private func onSelectOpenSettings() {
         guard let settingsURL = URL(string: UIApplication.openSettingsURLString) else { return }
         openURL(settingsURL)
