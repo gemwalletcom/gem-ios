@@ -168,6 +168,15 @@ public enum Images {
         public static let up = Image(.up)
         public static let down = Image(.down)
     }
+
+    public struct EmptyContent {
+        public static let activity = Image(.emptyActivity)
+        public static let priceAlerts = Image(.emptyPriceAlerts)
+        public static let nft = Image(.emptyNft)
+        public static let stake = Image(.emptyStake)
+        public static let walletConnect = Image(.emptyWalletConnect)
+        public static let search = Image(.emptySearch)
+    }
 }
 
 // MARK: - Preview

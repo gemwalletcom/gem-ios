@@ -64,27 +64,6 @@ struct SelectAssetScene: View {
             
             Section {
                 assetsList(assets: sections.assets)
-            } footer: {
-                if model.state.isLoading || assets.isEmpty {
-                    VStack {
-                        if model.state.isLoading {
-                            HStack {
-                                LoadingView()
-                            }
-                        } else if assets.isEmpty {
-                            Text(Localized.Assets.noAssetsFound)
-                        }
-                    }
-                    .frame(height: 22)
-                }
-            }
-            
-            if model.showAddToken {
-                Section {
-                    NavigationCustomLink(with: Text(Localized.Assets.addCustomToken)) {
-                        isPresentingAddToken = true
-                    }
-                }
             }
         }
         .listSectionSpacing(.compact)
@@ -98,6 +77,18 @@ struct SelectAssetScene: View {
                 interval: Duration.milliseconds(250),
                 action: model.search(query:)
             )
+        }
+        .overlay {
+            if sections.assets.isEmpty {
+                EmptyContentView (
+                    model: EmptyContentTypeViewModel(
+                        type: .search(
+                            type: .assets,
+                            action: model.showAddToken ? { onSelectAddCustomToken() } : nil
+                        )
+                    )
+                )
+            }
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
         .ifLet(copyTypeViewModel) {
@@ -148,6 +139,10 @@ struct SelectAssetScene: View {
 // MARK: - Actions
 
 extension SelectAssetScene {
+    private func onSelectAddCustomToken() {
+        isPresentingAddToken.toggle()
+    }
+
     private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
         model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
     }
