@@ -9,7 +9,7 @@ import Localization
 public final class CurrencySceneViewModel {
     private var currencyStorage: CurrencyStorable
 
-    var currency: Currency {
+    private(set) var currency: Currency {
         get {
             guard let currency = Currency(rawValue: currencyStorage.currency) else {
                 fatalError("unsupported currency")
@@ -52,6 +52,10 @@ public final class CurrencySceneViewModel {
             )
         ]
     }
+    
+    func setCurrency(_ currency: Currency) {
+        self.currency = currency
+    }
 }
 
 // MARK: - Private
@@ -59,7 +63,7 @@ public final class CurrencySceneViewModel {
 extension CurrencySceneViewModel {
     private var defaultCurrencies: [Currency] {
         let defaultCurrencies: [Currency] = [.usd, .eur, .gbp, .cny, .jpy, .inr, .rub]
-        return defaultCurrencies + [currency]
+        return defaultCurrencies.contains(currency) ? defaultCurrencies : defaultCurrencies + [currency]
     }
 
     private var recommendedCurrencies: [Currency] {

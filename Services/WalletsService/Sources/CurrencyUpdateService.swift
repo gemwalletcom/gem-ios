@@ -19,7 +19,7 @@ struct CurrencyUpdateService: CurrencyUpdater {
         // TODO: - here need a cancel logic if updatePrices & updateBalance in progress, but someone changes in one more time
         // updates prices
         try priceUpdater.clear()
-        let assetIds = try assetsService.getAssets().assetIds
+        let assetIds = try assetsService.getEnabledAssets()
         try await priceUpdater.updatePrices(assetIds: assetIds)
         // update balances
         let enabledAssetIds = try assetsService.getEnabledAssets()
