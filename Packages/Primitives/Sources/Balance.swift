@@ -3,7 +3,7 @@
 import Foundation
 import BigInt
 
-public struct Balance: Codable, Sendable {
+public struct Balance: Codable, Equatable, Hashable, Sendable {
 
     public var available: BigInt
     public var frozen: BigInt
