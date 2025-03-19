@@ -50,4 +50,5 @@ public enum Chain: String, Codable, CaseIterable, Equatable, Hashable, Sendable 
 	case ink
 	case unichain
 	case hyperliquid
+	case monad
 }

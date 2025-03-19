@@ -87,7 +87,7 @@ public struct WalletSceneViewModel: Sendable {
         try walletsService.setupWallet(wallet)
     }
 
-    func fetch(assets: [AssetData]) async throws {
+    func fetch(wallet: Wallet, assets: [AssetData]) async throws {
         try await walletsService.fetch(
             walletId: wallet.walletId,
             assetIds: assets.map { $0.asset.id }
@@ -102,7 +102,7 @@ public struct WalletSceneViewModel: Sendable {
         try await walletsService.updatePrices()
     }
 
-    func runAddressStatusCheck() async {
+    func runAddressStatusCheck(wallet: Wallet) async {
         await walletsService.runAddressStatusCheck(wallet)
     }
 

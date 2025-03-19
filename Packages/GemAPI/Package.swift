@@ -8,7 +8,12 @@ let package = Package(
     products: [
         .library(
             name: "GemAPI",
-            targets: ["GemAPI"]),
+            targets: ["GemAPI"]
+        ),
+        .library(
+            name: "GemAPITestKit",
+            targets: ["GemAPITestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -23,8 +28,17 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "GemAPITestKit",
+            dependencies: [
+                "SwiftHTTPClient",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "GemAPITests",
-            dependencies: ["GemAPI"]),
+            dependencies: ["GemAPI"]
+        ),
     ]
 )

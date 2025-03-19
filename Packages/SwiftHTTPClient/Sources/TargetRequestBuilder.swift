@@ -11,16 +11,16 @@ public struct TargetRequestBuilder {
     let contentType: String
     let cachePolicy: URLRequest.CachePolicy
     
-    func build() -> URLRequest {
+    func build(encoder: JSONEncoder) throws -> URLRequest {
         let string: String
         var httpBody: Data? = .none
         switch data {
         case .params(let params):
+            let query = params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&")
             if method == .GET {
-                let query = params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&")
                 string = "\(path)?\(query)"
             } else {
-                httpBody = Data(params.enumerated().map({ "\($1.key)=\($1.value)" }).joined(separator: "&").utf8)
+                httpBody = Data(query.utf8)
                 string = path
             }
         case .data(let data):
@@ -29,7 +29,7 @@ public struct TargetRequestBuilder {
         case .plain:
             string = path
         case .encodable(let value):
-            httpBody = try! JSONEncoder().encode(value)
+            httpBody = try encoder.encode(value)
             string = path
         }
         let url = URL(string: baseUrl.absoluteString + string)!

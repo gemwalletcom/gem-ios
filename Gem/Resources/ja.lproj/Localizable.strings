@@ -356,3 +356,5 @@
 "contacts.no_addresses" = "まだ住所がありません。";
 "contacts.contact" = "接触";
 "contacts.title" = "連絡先";
+"common.percentage" = "Percentage";
+"price_alerts.set_alert.current_price" = "Current price";

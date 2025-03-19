@@ -1,6 +1,64 @@
 import Testing
+import Primitives
+import PriceAlertServiceTestKit
+
 @testable import PriceAlerts
 
-@Test func example() async throws {
-    // Write your test here and use APIs like `#expect(...)` to check expected conditions.
+@MainActor
+struct SetPriceAlertViewModelTests {
+    
+    @Test
+    func testPriceAlertDirection_up() async throws {
+        let viewModel = SetPriceAlertViewModel.mock()
+        viewModel.state.amount = "200.00"
+        viewModel.setAlertDirection(for: Price(price: 150, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .up)
+        
+        viewModel.state.amount = "200,02"
+        viewModel.setAlertDirection(for: Price(price: 200.01, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .up)
+        
+        viewModel.state.amount = "200.00"
+        viewModel.setAlertDirection(for: Price(price: 199.9, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .up)
+    }
+
+    @Test
+    func testPriceAlertDirection_down() async throws {
+        let viewModel = SetPriceAlertViewModel.mock()
+        
+        viewModel.state.amount = "200.00"
+        viewModel.setAlertDirection(for: Price(price: 250, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .down)
+        
+        viewModel.state.amount = "200,00"
+        viewModel.setAlertDirection(for: Price(price: 200.1, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .down)
+
+        viewModel.state.amount = "199.9999"
+        viewModel.setAlertDirection(for: Price(price: 200, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == .down)
+    }
+
+    @Test
+    func testPriceAlertDirection_none() async throws {
+        let viewModel = SetPriceAlertViewModel.mock()
+        viewModel.setAlertDirection(for: nil)
+        #expect(viewModel.state.alertDirection == nil)
+        
+        viewModel.state.amount = "200,00"
+        viewModel.setAlertDirection(for: Price(price: 200.0, priceChangePercentage24h: 1))
+        #expect(viewModel.state.alertDirection == nil)
+    }
+}
+
+fileprivate extension SetPriceAlertViewModel {
+    static func mock() -> SetPriceAlertViewModel {
+        SetPriceAlertViewModel(
+            wallet: .makeView(name: "test", chain: .ethereum, address: .empty),
+            assetId: "test-asset",
+            priceAlertService: .mock(),
+            onComplete: {}
+        )
+    }
 }

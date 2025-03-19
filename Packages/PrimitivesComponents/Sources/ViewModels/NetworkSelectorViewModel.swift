@@ -25,14 +25,18 @@ public struct NetworkSelectorViewModel: SelectableSheetViewable {
     public var clearButtonTitle: String { Localized.Filter.clear }
     public var doneButtonTitle: String { Localized.Common.done }
     public var noResultsTitle: String? { Localized.Common.noResultsFound }
-    public var noResultsImage: Image? { Images.System.searchNoResults }
 }
 
 extension NetworkSelectorViewModel: ItemFilterable {
+
+    public var emptyCotentModel: (any EmptyContentViewable)? {
+        EmptyContentTypeViewModel(type: .search(type: EmptyContentType.SearchType.networks))
+    }
+    
     public var items: [Primitives.Chain] {
         state.value.or([])
     }
-    
+
     public func filter(_ chain: Chain, query: String) -> Bool {
         chain.asset.name.localizedCaseInsensitiveContains(query) ||
         chain.asset.symbol.localizedCaseInsensitiveContains(query) ||

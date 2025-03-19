@@ -7,6 +7,7 @@ import Localization
 import PriceAlertService
 import PriceService
 import Preferences
+import PrimitivesComponents
 
 @Observable
 public final class PriceAlertsViewModel: Sendable {
@@ -37,6 +38,24 @@ public final class PriceAlertsViewModel: Sendable {
             preferences.isPriceAlertsEnabled = newValue
         }
     }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .priceAlerts)
+    }
+
+    func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
+        alerts
+            .filter { $0.priceAlert.lastNotifiedAt == nil }
+            .reduce(into: PriceAlertsSections(autoAlerts: [], manualAlerts: [])) { result, alert in
+            if alert.priceAlert.type == .auto {
+                result.autoAlerts.append(alert)
+            } else if let index = result.manualAlerts.firstIndex(where: { $0.first?.asset == alert.asset }) {
+                result.manualAlerts[index].append(alert)
+            } else {
+                result.manualAlerts.append([alert])
+            }
+        }
+    }
 }
 
 // MARK: - Business Logic
@@ -47,7 +66,7 @@ extension PriceAlertsViewModel {
             try await priceAlertService.update()
 
             // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.assetId }.unique()
             try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
 
         } catch {
@@ -55,9 +74,9 @@ extension PriceAlertsViewModel {
         }
     }
 
-    func deletePriceAlert(assetId: AssetId) async {
+    func deletePriceAlert(priceAlert: PriceAlert) async {
         do {
-            try await priceAlertService.deletePriceAlert(assetIds: [assetId.identifier])
+            try await priceAlertService.delete(priceAlerts: [priceAlert])
         } catch {
             NSLog("deletePriceAlert error: \(error)")
         }
@@ -72,7 +91,8 @@ extension PriceAlertsViewModel {
 
     private func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.addPriceAlert(for: assetId)
+            try await priceAlertService
+                .add(priceAlert: .default(for: assetId.identifier, currency: preferences.preferences.currency))
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }

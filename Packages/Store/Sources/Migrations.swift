@@ -229,6 +229,12 @@ public struct Migrations {
         migrator.registerMigration("Add \(AssetSearchRecord.databaseTableName)") { db in
             try? AssetSearchRecord.create(db: db)
         }
+        
+        migrator.registerMigration("Add currency to \(PriceAlertRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceAlertRecord.databaseTableName) {
+                $0.add(column: Columns.PriceAlert.currency.name, .text).defaults(to: "USD")
+            }
+        }
 
         try migrator.migrate(dbQueue)
     }

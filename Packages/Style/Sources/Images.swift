@@ -54,6 +54,7 @@ public enum Images {
         public static let ink = Image(.ink)
         public static let unichain = Image(.unichain)
         public static let hyperliquid = Image(.hyperliquid)
+        public static let monad = Image(.monad)
     }
 
     public enum SwapProviders {
@@ -162,6 +163,20 @@ public enum Images {
 
     public enum Info {
         public static let networkFee = Image(.networkFee)
+    }
+    
+    public enum PriceAlert {
+        public static let up = Image(.up)
+        public static let down = Image(.down)
+    }
+
+    public struct EmptyContent {
+        public static let activity = Image(.emptyActivity)
+        public static let priceAlerts = Image(.emptyNotification)
+        public static let nft = Image(.emptyIcons)
+        public static let stake = Image(.emptyStake)
+        public static let walletConnect = Image(.emptyIcons)
+        public static let search = Image(.emptySearch)
     }
 }
 
@@ -274,6 +289,10 @@ public enum Images {
         ("Name Resolve", [
             (Images.NameResolve.success, "Success"),
             (Images.NameResolve.error, "Error")
+        ]),
+        ("Price Alert", [
+            (Images.PriceAlert.down, "down"),
+            (Images.PriceAlert.up, "up")
         ])
     ]
 

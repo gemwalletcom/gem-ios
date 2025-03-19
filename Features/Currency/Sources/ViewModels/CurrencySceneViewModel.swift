@@ -8,8 +8,9 @@ import Localization
 @Observable
 public final class CurrencySceneViewModel {
     private var currencyStorage: CurrencyStorable
-
-    var currency: Currency {
+    private let defaultCurrencies: [Currency] = [.usd, .eur, .gbp, .cny, .jpy, .inr, .rub]
+    
+    private(set) var currency: Currency {
         get {
             guard let currency = Currency(rawValue: currencyStorage.currency) else {
                 fatalError("unsupported currency")
@@ -52,15 +53,15 @@ public final class CurrencySceneViewModel {
             )
         ]
     }
+    
+    func setCurrency(_ currency: Currency) {
+        self.currency = currency
+    }
 }
 
 // MARK: - Private
 
 extension CurrencySceneViewModel {
-    private var defaultCurrencies: [Currency] {
-        let defaultCurrencies: [Currency] = [.usd, .eur, .gbp, .cny, .jpy, .inr, .rub]
-        return defaultCurrencies + [currency]
-    }
 
     private var recommendedCurrencies: [Currency] {
         guard let current = Locale.current.currency,
@@ -68,7 +69,7 @@ extension CurrencySceneViewModel {
         else {
             return defaultCurrencies
         }
-        return ([currency] + defaultCurrencies).unique()
+        return ([self.currency, currency] + defaultCurrencies).unique()
     }
 
     private var allCurrencies: [Currency] {

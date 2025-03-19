@@ -34,9 +34,9 @@ struct CurrencySceneViewModelTests {
     func testSetNewCurrency() {
         let usdCurrencyStorage = MockCurrencyStorage()
         let viewModel = CurrencySceneViewModel(currencyStorage: usdCurrencyStorage)
-        viewModel.currency = .ars
+        viewModel.setCurrency(.ars)
+        
         #expect(usdCurrencyStorage.currency == Currency.ars.id)
         #expect(usdCurrencyStorage.currency == viewModel.currency.id)
-
     }
 }

@@ -26,10 +26,8 @@ public struct TransactionsScene: View {
         .listSectionSpacing(.compact)
         .refreshable(action: model.fetch)
         .overlay {
-            // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if model.transactions.isEmpty {
-                Text(Localized.Activity.EmptyState.message)
-                    .textStyle(.body)
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .task {
