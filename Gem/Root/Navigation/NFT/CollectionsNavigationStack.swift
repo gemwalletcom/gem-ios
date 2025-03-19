@@ -17,8 +17,6 @@ struct CollectionsNavigationStack: View {
     @Environment(\.manageWalletService) private var manageWalletService
     @Environment(\.priceAlertService) private var priceAlertService
 
-    @State private var isPresentingReceiveSelectAssetType: SelectAssetType?
-
     @State private var model: CollectionsViewModel
 
     private var navigationPath: Binding<NavigationPath> {
@@ -55,7 +53,7 @@ struct CollectionsNavigationStack: View {
                         )
                     )
                 }
-                .sheet(item: $isPresentingReceiveSelectAssetType) {
+                .sheet(item: $model.isPresentingReceiveSelectAssetType) {
                     SelectAssetSceneNavigationStack(
                         model: SelectAssetViewModel(
                             wallet: model.wallet,
@@ -64,14 +62,12 @@ struct CollectionsNavigationStack: View {
                             walletsService: walletsService,
                             priceAlertService: priceAlertService
                         ),
-                        isPresentingSelectType: $isPresentingReceiveSelectAssetType
+                        isPresentingSelectType: $model.isPresentingReceiveSelectAssetType
                     )
                 }
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
-                        Button {
-                            isPresentingReceiveSelectAssetType = .receive(.collection)
-                        } label: {
+                        Button(action: model.onSelectReceive) {
                             Images.System.plus
                         }
                     }

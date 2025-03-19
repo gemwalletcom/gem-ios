@@ -8,6 +8,7 @@ import Primitives
 import Style
 import Components
 import Localization
+import PrimitivesComponents
 
 public struct PriceAlertsScene: View {
     @State private var model: PriceAlertsViewModel
@@ -28,6 +29,11 @@ public struct PriceAlertsScene: View {
             autoAlertsView(alerts: sections.autoAlerts)
             ForEach(sections.manualAlerts, id: \.self) {
                 manualAlertsView(alerts: $0)
+            }
+        }
+        .overlay {
+            if priceAlerts.isEmpty {
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .onChange(of: model.isPriceAlertsEnabled, onAlertsEnable)

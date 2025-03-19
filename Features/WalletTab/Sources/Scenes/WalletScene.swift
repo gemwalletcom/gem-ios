@@ -69,10 +69,7 @@ public struct WalletScene: View {
                 )
                 .padding(.top, .small)
             }
-            .frame(maxWidth: .infinity)
-            .textCase(nil)
-            .listRowSeparator(.hidden)
-            .listRowInsets(.zero)
+           .cleanListRow()
 
             Section {
                 BannerView(
@@ -155,9 +152,12 @@ public struct WalletScene: View {
         }
         .onChange(
             of: model.wallet,
-            initial: true,
+            initial: false,
             fetch
         )
+        .taskOnce {
+            fetch()
+        }
         .onReceive(pricesTimer) { time in
             runUpdatePrices()
         }

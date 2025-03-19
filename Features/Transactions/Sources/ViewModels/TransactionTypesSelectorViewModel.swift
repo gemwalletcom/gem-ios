@@ -27,7 +27,6 @@ public struct TransactionTypesSelectorViewModel: SelectableSheetViewable {
     public var cancelButtonTitle: String { Localized.Common.cancel }
     public var clearButtonTitle: String { Localized.Filter.clear }
     public var doneButtonTitle: String { Localized.Common.done }
-    public var noResultsTitle: String? { .none }
-    public var noResultsImage: Image? { .none }
+    public var emptyCotentModel: (any EmptyContentViewable)? { .none}
 }
 

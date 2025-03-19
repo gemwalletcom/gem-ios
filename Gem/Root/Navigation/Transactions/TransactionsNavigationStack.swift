@@ -9,7 +9,8 @@ import Store
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
-    @Environment(\.priceService) private var priceService
+    @Environment(\.walletsService) private var walletsService
+    @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var model: TransactionsViewModel
 
@@ -64,6 +65,18 @@ struct TransactionsNavigationStack: View {
                     }
                     .presentationDetents([.medium])
                     .presentationDragIndicator(.visible)
+                }
+                .sheet(item: $model.isPresentingSelectAssetType) {
+                    SelectAssetSceneNavigationStack(
+                        model: SelectAssetViewModel(
+                            wallet: model.wallet,
+                            selectType: $0,
+                            assetsService: walletsService.assetsService,
+                            walletsService: walletsService,
+                            priceAlertService: priceAlertService
+                        ),
+                        isPresentingSelectType: $model.isPresentingSelectAssetType
+                    )
                 }
         }
     }

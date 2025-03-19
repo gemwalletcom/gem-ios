@@ -7,6 +7,7 @@ import Localization
 import PriceAlertService
 import PriceService
 import Preferences
+import PrimitivesComponents
 
 @Observable
 public final class PriceAlertsViewModel: Sendable {
@@ -36,6 +37,10 @@ public final class PriceAlertsViewModel: Sendable {
         set {
             preferences.isPriceAlertsEnabled = newValue
         }
+    }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .priceAlerts)
     }
 
     func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
