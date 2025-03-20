@@ -80,95 +80,30 @@ public final class Preferences: @unchecked Sendable {
 
     public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        reInitialize(default: defaults)
+        configureAllProperties(with: defaults)
     }
 
-    private func reInitialize(default: UserDefaults) {
-        _currency = ConfigurableDefaults(
-            key: Keys.currency,
-            defaultValue: Currency.usd.rawValue,
-            defaults: defaults
-        )
-        _importFiatMappingsVersion = ConfigurableDefaults(
-            key: Keys.importFiatMappingsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _importFiatPurchaseAssetsVersion = ConfigurableDefaults(
-            key: Keys.importFiatPurchaseAssetsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _localAssetsVersion = ConfigurableDefaults(
-            key: Keys.localAssetsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _fiatOnRampAssetsVersion = ConfigurableDefaults(
-            key: Keys.fiatOnRampAssetsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _fiatOffRampAssetsVersion = ConfigurableDefaults(
-            key: Keys.fiatOffRampAssetsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _swapAssetsVersion = ConfigurableDefaults(
-            key: Keys.swapAssetsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _launchesCount = ConfigurableDefaults(
-            key: Keys.launchesCount,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _subscriptionsVersion = ConfigurableDefaults(
-            key: Keys.subscriptionsVersion,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _currentWalletId = ConfigurableDefaults(
-            key: Keys.currentWalletId,
-            defaultValue: .none,
-            defaults: defaults
-        )
-        _isPushNotificationsEnabled = ConfigurableDefaults(
-            key: Keys.isPushNotificationsEnabled,
-            defaultValue: false,
-            defaults: defaults
-        )
-        _isPriceAlertsEnabled = ConfigurableDefaults(
-            key: Keys.isPriceAlertsEnabled,
-            defaultValue: false,
-            defaults: defaults
-        )
-        _isSubscriptionsEnabled = ConfigurableDefaults(
-            key: Keys.isSubscriptionsEnabled,
-            defaultValue: true,
-            defaults: defaults
-        )
-        _rateApplicationShown = ConfigurableDefaults(
-            key: Keys.rateApplicationShown,
-            defaultValue: false,
-            defaults: defaults
-        )
-        _authenticationLockOption = ConfigurableDefaults(
-            key: Keys.authenticationLockOption,
-            defaultValue: 0,
-            defaults: defaults
-        )
-        _isDeveloperEnabled = ConfigurableDefaults(
-            key: Keys.isDeveloperEnabled,
-            defaultValue: false,
-            defaults: defaults
-        )
-        _isHideBalanceEnabled = ConfigurableDefaults(
-            key: Keys.isHideBalanceEnabled,
-            defaultValue: false,
-            defaults: defaults
-        )
+    private func configureAllProperties(with defaults: UserDefaults) {
+        func configure<T>(_ keyPath: ReferenceWritableKeyPath<Preferences, ConfigurableDefaults<T>>, key: String, defaultValue: T) {
+            self[keyPath: keyPath] = ConfigurableDefaults(key: key, defaultValue: defaultValue, defaults: defaults)
+        }
+        configure(\._currency, key: Keys.currency, defaultValue: Currency.usd.rawValue)
+        configure(\._importFiatMappingsVersion, key: Keys.importFiatMappingsVersion, defaultValue: 0)
+        configure(\._importFiatPurchaseAssetsVersion, key: Keys.importFiatPurchaseAssetsVersion, defaultValue: 0)
+        configure(\._localAssetsVersion, key: Keys.localAssetsVersion, defaultValue: 0)
+        configure(\._fiatOnRampAssetsVersion, key: Keys.fiatOnRampAssetsVersion, defaultValue: 0)
+        configure(\._fiatOffRampAssetsVersion, key: Keys.fiatOffRampAssetsVersion, defaultValue: 0)
+        configure(\._swapAssetsVersion, key: Keys.swapAssetsVersion, defaultValue: 0)
+        configure(\._launchesCount, key: Keys.launchesCount, defaultValue: 0)
+        configure(\._subscriptionsVersion, key: Keys.subscriptionsVersion, defaultValue: 0)
+        configure(\._currentWalletId, key: Keys.currentWalletId, defaultValue: nil)
+        configure(\._isPushNotificationsEnabled, key: Keys.isPushNotificationsEnabled, defaultValue: false)
+        configure(\._isPriceAlertsEnabled, key: Keys.isPriceAlertsEnabled, defaultValue: false)
+        configure(\._isSubscriptionsEnabled, key: Keys.isSubscriptionsEnabled, defaultValue: true)
+        configure(\._rateApplicationShown, key: Keys.rateApplicationShown, defaultValue: false)
+        configure(\._authenticationLockOption, key: Keys.authenticationLockOption, defaultValue: 0)
+        configure(\._isDeveloperEnabled, key: Keys.isDeveloperEnabled, defaultValue: false)
+        configure(\._isHideBalanceEnabled, key: Keys.isHideBalanceEnabled, defaultValue: false)
     }
 
     public func incrementLaunchesCount() {
