@@ -11,6 +11,7 @@ import Preferences
 import MarketInsight
 import Settings
 import ChainSettings
+import Contacts
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -25,6 +26,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.keystore) private var keystore
+    @Environment(\.contactService) private var contactService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -58,6 +60,13 @@ struct SettingsNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.Security.self) { _ in
                 SecurityScene(model: SecurityViewModel())
+            }
+            .navigationDestination(for: Scenes.Contacts.self) { _ in
+                ContactListNavigationView(
+                    model: ContactListViewModel(
+                        contactService: contactService
+                    )
+                )
             }
             .navigationDestination(for: Scenes.Notifications.self) { _ in
                 NotificationsScene(

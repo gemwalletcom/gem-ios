@@ -65,7 +65,12 @@ extension SettingsScene {
                     image: model.notificationsImage
                 )
             }
-
+            NavigationLink(value: Scenes.Contacts()) {
+                ListItemView(
+                    title: model.contactsTitle,
+                    image: model.contactsImage
+                )
+            }
             NavigationLink(value: Scenes.PriceAlerts()) {
                 ListItemView(
                     title: model.priceAlertsTitle,

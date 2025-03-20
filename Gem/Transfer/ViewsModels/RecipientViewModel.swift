@@ -5,6 +5,9 @@ import Primitives
 import GemstonePrimitives
 import Localization
 import PrimitivesComponents
+import Store
+import Contacts
+import Components
 import ManageWalletService
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
@@ -19,10 +22,15 @@ enum RecipientScanResult {
     case transferData(TransferData)
 }
 
-class RecipientViewModel: ObservableObject {
+@Observable
+class RecipientViewModel {
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
+    var address: String = ""
+    var memo: String = ""
+    var amount: String = ""
+    var addressListRequest: ContactAddressInfoListRequest
     
     private let manageWalletService: ManageWalletService
     private let onRecipientDataAction: RecipientDataAction
@@ -43,6 +51,10 @@ class RecipientViewModel: ObservableObject {
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
+        
+        self.addressListRequest = ContactAddressInfoListRequest(
+            chain: asset.chain
+        )
     }
 
     var tittle: String {
@@ -104,6 +116,20 @@ class RecipientViewModel: ObservableObject {
         }
     }
     
+    func buildListItemViews(addresses: [ContactAddressData]) -> [ContactListViewItem<ContactAddressData>] {
+        addresses
+            .map {
+                let memo = $0.address.memo
+                return ContactListViewItem<ContactAddressData>(
+                    id: $0.id,
+                    name: $0.contact.name,
+                    address: $0.address.address,
+                    memo: $0.address.memo,
+                    object: $0
+                )
+        }
+    }
+    
     //TODO: Add unit tests
     func getPaymentScanResult(string: String) throws -> PaymentScanResult {
         let payment = try PaymentURLDecoder.decode(string)
@@ -162,6 +188,11 @@ extension RecipientViewModel {
     
     func onTransferDataSelect(data: TransferData) {
         onTransferAction?(data)
+    }
+    
+    func onContactAddressSelected(_ address: ContactAddress) {
+        self.address = address.address
+        self.memo = address.memo.or("")
     }
 }
 

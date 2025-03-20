@@ -48,6 +48,9 @@ public struct Migrations {
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
             
+            //contacts
+            try ContactRecord.create(db: db)
+            try ContactAddressRecord.create(db: db)
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -231,6 +234,11 @@ public struct Migrations {
             try? db.alter(table: PriceAlertRecord.databaseTableName) {
                 $0.add(column: Columns.PriceAlert.currency.name, .text).defaults(to: "USD")
             }
+        }
+        
+        migrator.registerMigration("Add Contacts") { db in
+            try? ContactRecord.create(db: db)
+            try? ContactAddressRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)
