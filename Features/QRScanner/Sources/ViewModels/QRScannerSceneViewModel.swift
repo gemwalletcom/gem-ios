@@ -39,8 +39,8 @@ extension QRScannerSceneViewModel {
                     scannerState = .scanning
                 }
             case .failure:
-                // reset try again state
-                try QRScannerViewWrapper.checkDeviceQRScanningSupport()
+// Reset scanner state to allow retrying after a failure
+try QRScannerViewWrapper.checkDeviceQRScanningSupport()
             case .scanning:
                 break
             }
