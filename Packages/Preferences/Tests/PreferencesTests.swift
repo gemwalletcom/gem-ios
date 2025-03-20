@@ -5,6 +5,7 @@ import PreferencesTestKit
 import Primitives
 
 @testable import Preferences
+import Foundation
 
 struct PreferencesTests {
     private let preferences: Preferences = .mock()
@@ -156,5 +157,41 @@ struct PreferencesTests {
         #expect(!preferences.isDeveloperEnabled)
         #expect(!preferences.isHideBalanceEnabled)
         #expect(preferences.explorerName(chain: .bitcoin) == nil)
+    }
+
+    @Test
+    func testReinitializeReflectsExternalChanges() {
+        let testDefaults = UserDefaults(suiteName: "testReinitialize")!
+        testDefaults.removePersistentDomain(forName: "testReinitialize")
+
+        let preferences = Preferences(defaults: testDefaults)
+
+        #expect(preferences.currency == Currency.usd.rawValue)
+        #expect(preferences.launchesCount == 0)
+        #expect(preferences.currentWalletId == nil)
+
+        testDefaults.set(Currency.eur.rawValue, forKey: "currency")
+        testDefaults.set(5, forKey: "launches_count")
+        testDefaults.set("walletXYZ", forKey: "currentWallet")
+
+        #expect(preferences.currency == Currency.eur.rawValue)
+        #expect(preferences.launchesCount == 5)
+        #expect(preferences.currentWalletId == "walletXYZ")
+
+        let newPrefs = Preferences(defaults: testDefaults)
+        #expect(newPrefs.currency == Currency.eur.rawValue)
+        #expect(newPrefs.launchesCount == 5)
+        #expect(newPrefs.currentWalletId == "walletXYZ")
+
+        testDefaults.removePersistentDomain(forName: "testReinitialize")
+    }
+
+    @Test
+    func testOptionalNilAssignment() {
+        preferences.currentWalletId = "wallet123"
+        #expect(preferences.currentWalletId == "wallet123")
+
+        preferences.currentWalletId = nil
+        #expect(preferences.currentWalletId == nil)
     }
 }

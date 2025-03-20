@@ -78,35 +78,101 @@ public final class Preferences: @unchecked Sendable {
     public static let standard = Preferences()
     private let defaults: UserDefaults
 
-    public init(defaults: UserDefaults = UserDefaults.standard) {
+    public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-
-        // configure each @ConfigurableDefaults with injected defaults
-        Mirror(reflecting: self).children
-            .compactMap { $0.value as? ConfigurableUserDefaults }
-            .forEach { $0.configure(with: defaults) }
-    }
-}
-
-// MARK: - Explorer
-
-extension Preferences {
-    private struct ExplorerKeys {
-        static let explorerName = "explorer_name"
+        reInitialize(default: defaults)
     }
 
-    public func setExplorerName(chain: Chain, name: String) {
-        defaults.setValue(name, forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
+    private func reInitialize(default: UserDefaults) {
+        _currency = ConfigurableDefaults(
+            key: Keys.currency,
+            defaultValue: Currency.usd.rawValue,
+            defaults: defaults
+        )
+        _importFiatMappingsVersion = ConfigurableDefaults(
+            key: Keys.importFiatMappingsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _importFiatPurchaseAssetsVersion = ConfigurableDefaults(
+            key: Keys.importFiatPurchaseAssetsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _localAssetsVersion = ConfigurableDefaults(
+            key: Keys.localAssetsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _fiatOnRampAssetsVersion = ConfigurableDefaults(
+            key: Keys.fiatOnRampAssetsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _fiatOffRampAssetsVersion = ConfigurableDefaults(
+            key: Keys.fiatOffRampAssetsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _swapAssetsVersion = ConfigurableDefaults(
+            key: Keys.swapAssetsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _launchesCount = ConfigurableDefaults(
+            key: Keys.launchesCount,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _subscriptionsVersion = ConfigurableDefaults(
+            key: Keys.subscriptionsVersion,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _currentWalletId = ConfigurableDefaults(
+            key: Keys.currentWalletId,
+            defaultValue: .none,
+            defaults: defaults
+        )
+        _isPushNotificationsEnabled = ConfigurableDefaults(
+            key: Keys.isPushNotificationsEnabled,
+            defaultValue: false,
+            defaults: defaults
+        )
+        _isPriceAlertsEnabled = ConfigurableDefaults(
+            key: Keys.isPriceAlertsEnabled,
+            defaultValue: false,
+            defaults: defaults
+        )
+        _isSubscriptionsEnabled = ConfigurableDefaults(
+            key: Keys.isSubscriptionsEnabled,
+            defaultValue: true,
+            defaults: defaults
+        )
+        _rateApplicationShown = ConfigurableDefaults(
+            key: Keys.rateApplicationShown,
+            defaultValue: false,
+            defaults: defaults
+        )
+        _authenticationLockOption = ConfigurableDefaults(
+            key: Keys.authenticationLockOption,
+            defaultValue: 0,
+            defaults: defaults
+        )
+        _isDeveloperEnabled = ConfigurableDefaults(
+            key: Keys.isDeveloperEnabled,
+            defaultValue: false,
+            defaults: defaults
+        )
+        _isHideBalanceEnabled = ConfigurableDefaults(
+            key: Keys.isHideBalanceEnabled,
+            defaultValue: false,
+            defaults: defaults
+        )
     }
 
-    public func explorerName(chain: Chain) -> String? {
-        defaults.string(forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
-    }
-}
-
-extension Preferences {
     public func incrementLaunchesCount() {
-        launchesCount = launchesCount + 1
+        launchesCount += 1
     }
 
     public var hasCurrency: Bool {
@@ -117,5 +183,17 @@ extension Preferences {
         defaults.dictionaryRepresentation().keys.forEach {
             defaults.removeObject(forKey: $0)
         }
+    }
+
+    private struct ExplorerKeys {
+        static let explorerName = "explorer_name"
+    }
+
+    public func setExplorerName(chain: Chain, name: String) {
+        defaults.setValue(name, forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
+    }
+
+    public func explorerName(chain: Chain) -> String? {
+        defaults.string(forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
     }
 }
