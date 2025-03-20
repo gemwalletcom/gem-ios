@@ -65,15 +65,16 @@ public struct CurrencyInputView: View {
 
     public var body: some View {
         VStack(alignment: .center, spacing: 0) {
-            HStack(spacing: .medium) {
-                if let actionButtonImage {
+            HStack(spacing: .small) {
+                if let actionButtonImage = actionButtonImage {
                     Button {
                         onTapActionButton?()
                     } label: {
                         actionButtonImage
                             .resizable()
-                            .frame(width: Sizing.image.semiMedium, height: Sizing.image.semiMedium)
+                            .frame(width: Sizing.image.small, height: Sizing.image.small)
                     }
+                    .buttonStyle(.plain)
                 }
 
                 CurrencyTextField(

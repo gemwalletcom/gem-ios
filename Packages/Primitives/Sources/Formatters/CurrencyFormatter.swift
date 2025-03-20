@@ -66,11 +66,9 @@ public struct CurrencyFormatter: Sendable, Hashable {
     }
     
     public var symbol: String {
-        switch type{
-        case .currency:
-            formatter.currencySymbol
-        case .percent, .percentSignLess:
-            percentFormatter.percentSymbol
+        switch type {
+        case .currency: formatter.currencySymbol
+        case .percent, .percentSignLess: percentFormatter.percentSymbol
         }
     }
     
