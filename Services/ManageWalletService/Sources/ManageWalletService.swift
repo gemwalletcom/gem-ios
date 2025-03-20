@@ -24,6 +24,16 @@ public struct ManageWalletService: Sendable {
         self.walletStore = walletStore
         self.avatarService = avatarService
         self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+
+        // TODO: - https://github.com/gemwalletcom/gem-ios/issues/524
+        // some edge case occured probably with current wallet id & wallets
+        if preferences.currentWalletId == nil {
+            NSLog("ManageWalletService: current wallet id is nil")
+            if let firstWalletId = wallets.first?.walletId {
+                NSLog("ManageWalletService: set wallet \(firstWalletId)")
+                setCurrent(for: firstWalletId)
+            }
+        }
     }
 
     public var currentWaletId: WalletId? {
