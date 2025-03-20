@@ -15,7 +15,7 @@ public final class SetPriceAlertViewModel {
     private let wallet: Wallet
     private let assetId: String
     private let priceAlertService: PriceAlertService
-    private let onComplete: VoidAction
+    private let onComplete: StringAction
     private let preferences = Preferences.standard
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     private let valueFormatter = ValueFormatter(style: .short)
@@ -27,7 +27,7 @@ public final class SetPriceAlertViewModel {
         wallet: Wallet,
         assetId: String,
         priceAlertService: PriceAlertService,
-        onComplete: VoidAction
+        onComplete: StringAction
     ) {
         self.wallet = wallet
         self.assetId = assetId
@@ -98,7 +98,23 @@ public final class SetPriceAlertViewModel {
         }
     }
     
-    // MARK: - Private methods
+    // MARK: - Private
+    
+    private var amountValue: Double? {
+        try? valueFormatter.number(amount: state.amount).doubleValue
+    }
+    
+    private var completeMessage: String {
+        guard let amountValue else { return .empty }
+        let amount: String = {
+            switch state.type {
+            case .price: currencyFormatter.string(amountValue)
+            case .percentage: "\(amountValue)%"
+            }
+        }()
+        let message = [alertDirectionTitle.lowercased(), amount].joined(separator: " ")
+        return Localized.PriceAlerts.addedFor(message)
+    }
     
     private func priceAlertDirection(
         amount: String,
@@ -124,12 +140,9 @@ public final class SetPriceAlertViewModel {
     
     private func priceAlert() -> PriceAlert {
         let (price, pricePercentChange): (Double?, Double?) = {
-            let doubleValue: Double? = try? valueFormatter.number(amount: state.amount).doubleValue
             switch state.type {
-            case .price:
-                return (doubleValue, nil)
-            case .percentage:
-                return (nil, doubleValue)
+            case .price: (amountValue, nil)
+            case .percentage: (nil, amountValue)
             }
         }()
         return PriceAlert(
@@ -143,9 +156,9 @@ public final class SetPriceAlertViewModel {
     }
     
     private func toggleAlertDirection() {
-        switch self.state.alertDirection {
-        case .up: self.state.alertDirection = .down
-        case .down: self.state.alertDirection = .up
+        switch state.alertDirection {
+        case .up: state.alertDirection = .down
+        case .down: state.alertDirection = .up
         default: break
         }
     }
@@ -156,7 +169,7 @@ public final class SetPriceAlertViewModel {
 extension SetPriceAlertViewModel {
     func setPriceAlert() async {
         do {
-            onComplete?()
+            onComplete?(completeMessage)
             try await priceAlertService.add(priceAlert: priceAlert())
         } catch {
             NSLog("Set price alert error: \(error.localizedDescription)")

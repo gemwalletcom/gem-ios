@@ -20,12 +20,14 @@ public struct SyncValues: Sendable {
         remote: Set<T>
     ) -> SyncResult<T> {
         switch primary {
-        case .local: SyncResult(
-            missing: local.subtracting(remote),
-            delete: remote.subtracting(local)
-        )
-        case .remote: SyncResult(
-            missing: local.subtracting(remote),
+        case .local:
+            SyncResult(
+                missing: local.subtracting(remote),
+                delete: remote.subtracting(local)
+            )
+        case .remote:
+            SyncResult(
+                missing: remote.subtracting(local),
                 delete: local.subtracting(remote)
             )
         }

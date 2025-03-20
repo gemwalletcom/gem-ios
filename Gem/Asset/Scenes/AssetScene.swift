@@ -21,7 +21,8 @@ struct AssetScene: View {
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var showingOptions = false
-    @State private var isPresentingPriceAlertMessage = false
+    @State private var isPresentingToast = false
+    @State private var isPresentingToastMessage: String?
     @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @State private var isPresentingSetPriceAlert: Bool = false
@@ -147,10 +148,15 @@ struct AssetScene: View {
             await fetch()
         }
         .toast(
-            isPresenting: $isPresentingPriceAlertMessage,
-            title: assetData.isPriceAlertsEnabled ? Localized.PriceAlerts.enabledFor(assetData.asset.name) : Localized.PriceAlerts.disabledFor(assetData.asset.name),
+            isPresenting: $isPresentingToast,
+            title: isPresentingToastMessage.or(.empty),
             systemImage: assetData.priceAlertSystemImage
         )
+        .onChange(of: isPresentingToastMessage, { oldValue, newValue in
+            if newValue != nil {
+                isPresentingToast = true
+            }
+        })
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 HStack {
@@ -194,7 +200,7 @@ struct AssetScene: View {
                     priceAlertService: priceAlertService,
                     onComplete: {
                         isPresentingSetPriceAlert = false
-                        isPresentingPriceAlertMessage = true
+                        isPresentingToastMessage = $0
                     }
                 )
             )
@@ -277,12 +283,12 @@ extension AssetScene {
     }
 
     private func onPriceAlertToggle() {
-        isPresentingPriceAlertMessage = true
-
         Task {
             if assetData.isPriceAlertsEnabled {
+                isPresentingToastMessage = Localized.PriceAlerts.disabledFor(assetData.asset.name)
                 await model.disablePriceAlert()
             } else {
+                isPresentingToastMessage = Localized.PriceAlerts.enabledFor(assetData.asset.name)
                 await model.enablePriceAlert()
             }
         }
