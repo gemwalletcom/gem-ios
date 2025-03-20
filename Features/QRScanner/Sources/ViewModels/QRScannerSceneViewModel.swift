@@ -5,10 +5,11 @@ import PhotosUI
 
 @Observable
 @MainActor
-class QRScannerViewModel {
+final class QRScannerSceneViewModel {
     var scannerState: QRScannerState
     var imageState: ImageState
     var selectedPhoto: PhotosPickerItem?
+    var isScannerReady: Bool = false
 
     let resources: QRScannerResources
 
@@ -17,15 +18,30 @@ class QRScannerViewModel {
         self.imageState = imageState
         self.resources = resources
     }
+
+    var overlayConfig: QRScannerDisplayConfiguration { .default }
+    var isScanning: Bool { scannerState == .scanning }
 }
 
 // MARK: - Business Logic
 
-extension QRScannerViewModel {
+extension QRScannerSceneViewModel {
+    func onChangeScannerReadyStatus(_: Bool, _: Bool) {
+        refreshScannerState()
+    }
+    
     func refreshScannerState() {
         do {
-            try QRScannerViewWrapper.checkDeviceQRScanningSupport()
-            scannerState = .scanning
+            switch scannerState {
+            case .idle:
+                if isScannerReady {
+                    scannerState = .scanning
+                } else {
+                    try QRScannerViewWrapper.checkDeviceQRScanningSupport()
+                }
+            case .failure, .scanning:
+                break
+            }
         } catch {
             refreshScannerState(error: error)
         }

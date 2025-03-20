@@ -11,15 +11,19 @@ public enum PriceAlertDirection: String, Codable, Equatable, Hashable, Sendable 
 
 public struct PriceAlert: Codable, Equatable, Hashable, Sendable {
 	public let assetId: String
+	public let currency: String
 	public let price: Double?
 	public let pricePercentChange: Double?
 	public let priceDirection: PriceAlertDirection?
+	public let lastNotifiedAt: Date?
 
-	public init(assetId: String, price: Double?, pricePercentChange: Double?, priceDirection: PriceAlertDirection?) {
+	public init(assetId: String, currency: String, price: Double?, pricePercentChange: Double?, priceDirection: PriceAlertDirection?, lastNotifiedAt: Date?) {
 		self.assetId = assetId
+		self.currency = currency
 		self.price = price
 		self.pricePercentChange = pricePercentChange
 		self.priceDirection = priceDirection
+		self.lastNotifiedAt = lastNotifiedAt
 	}
 }
 
@@ -33,4 +37,10 @@ public struct PriceAlertData: Codable, Equatable, Hashable, Sendable {
 		self.price = price
 		self.priceAlert = priceAlert
 	}
+}
+
+public enum PriceAlertNotificationType: String, Codable, Equatable, Hashable, Sendable {
+	case auto = "Auto"
+	case price = "Price"
+	case pricePercentChange = "PricePercentChange"
 }

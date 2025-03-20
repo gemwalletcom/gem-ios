@@ -23,16 +23,6 @@ public extension AssetData {
     }
 
     var isPriceAlertsEnabled: Bool {
-        price_alert != nil
-    }
-}
-
-extension AssetData: Hashable {
-    public static func == (lhs: AssetData, rhs: AssetData) -> Bool {
-        return lhs.asset == rhs.asset
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(asset)
+        price_alerts.first(where: { $0.type == .auto }) != nil
     }
 }

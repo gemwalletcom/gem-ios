@@ -53,10 +53,10 @@ public struct PriceAlertService: Sendable {
         let changes = SyncValues.changes(primary: .local, local: local.asSet(), remote: remote.asSet())
         
         if !changes.delete.isEmpty {
-            try await deletePriceAlert(assetIds: changes.delete.asArray().map { $0.id })
+            try await delete(priceAlerts: changes.delete.asArray())
         }
         if !changes.missing.isEmpty {
-            try await addPriceAlerts(priceAlerts: changes.missing.asArray())
+            try await add(priceAlerts: changes.missing.asArray())
         }
     }
 
@@ -64,18 +64,12 @@ public struct PriceAlertService: Sendable {
         try await apiService.getPriceAlerts(deviceId: try await deviceService.getDeviceId())
     }
     
-    public func addPriceAlert(for assetId: AssetId) async throws {
-        let priceAlert = PriceAlert(
-            assetId: assetId.identifier,
-            price: .none,
-            pricePercentChange: .none,
-            priceDirection: .none
-        )
+    public func add(priceAlert: PriceAlert) async throws {
         try store.addPriceAlerts([priceAlert])
-        try await addPriceAlerts(priceAlerts: [priceAlert])
+        try await add(priceAlerts: [priceAlert])
     }
     
-    public func addPriceAlerts(priceAlerts: [PriceAlert]) async throws {
+    public func add(priceAlerts: [PriceAlert]) async throws {
         try await apiService.addPriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
     }
     
@@ -86,10 +80,7 @@ public struct PriceAlertService: Sendable {
         }
     }
 
-    public func deletePriceAlert(assetIds: [String]) async throws {
-        let priceAlerts = assetIds.map {
-            PriceAlert(assetId: $0, price: .none, pricePercentChange: .none, priceDirection: .none)
-        }
+    public func delete(priceAlerts: [PriceAlert]) async throws {
         try store.deletePriceAlerts(priceAlerts)
         try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
     }

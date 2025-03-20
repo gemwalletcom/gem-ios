@@ -4,6 +4,8 @@ import Foundation
 import Primitives
 import Store
 import Localization
+import PrimitivesComponents
+@preconcurrency import Keystore
 
 public struct ConnectionsViewModel: Sendable {
     let service: ConnectionsService
@@ -18,9 +20,12 @@ public struct ConnectionsViewModel: Sendable {
     var disconnectTitle: String { Localized.WalletConnect.disconnect }
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
-    var emptyStateTitle: String { Localized.WalletConnect.noActiveConnections }
 
     var request: ConnectionsRequest { ConnectionsRequest() }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .walletConnect)
+    }
 
     func connectionSceneModel(connection: WalletConnection) -> ConnectionSceneViewModel {
         ConnectionSceneViewModel(

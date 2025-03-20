@@ -47,7 +47,7 @@ public final class StakeViewModel {
 
     var stakeTitle: String { Localized.Transfer.Stake.title }
     var claimRewardsTitle: String { Localized.Transfer.ClaimRewards.title }
-    var assetTitle: String { AssetViewModel(asset: chain.asset).title }
+    var assetTitle: String { assetModel.title }
 
     var stakeAprTitle: String { Localized.Stake.apr("") }
     var stakeAprValue: String {
@@ -65,7 +65,7 @@ public final class StakeViewModel {
         return Self.lockTimeFormatter.string(from: now, to: date) ?? .empty
     }
     var lockTimeInfoSheet: InfoSheetType {
-        InfoSheetType.stakeLockTime(AssetViewModel(asset: chain.asset).assetImage.placeholder)
+        InfoSheetType.stakeLockTime(assetModel.assetImage.placeholder)
     }
 
     var minAmountTitle: String { Localized.Stake.minimumAmount }
@@ -81,6 +81,10 @@ public final class StakeViewModel {
     var recommendedCurrentValidator: DelegationValidator? {
         guard let validatorId = recommendedValidators.randomValidatorId(chain: chain) else { return .none }
         return try? stakeService.getValidator(assetId: asset.id, validatorId: validatorId)
+    }
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .stake(symbol: assetModel.symbol))
     }
 
     func stakeDelegateionState(delegationModels: [StakeDelegationViewModel]) -> StateViewType<[StakeDelegationViewModel]> {
@@ -171,6 +175,10 @@ extension StakeViewModel {
 
     private var minAmount: BigInt {
         BigInt(StakeConfig.config(chain: chain.stakeChain!).minAmount)
+    }
+
+    private var assetModel: AssetViewModel {
+        AssetViewModel(asset: chain.asset)
     }
 
     private var asset: Asset {

@@ -109,7 +109,7 @@ public struct ListAssetItemViewModel: ListAssetItemViewable {
         case .copy:
             return .copy
         case .price:
-            return .toggle(assetDataModel.hasPriceAlert)
+            return .none
         }
     }
 

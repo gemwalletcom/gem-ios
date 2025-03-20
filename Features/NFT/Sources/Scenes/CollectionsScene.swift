@@ -10,6 +10,7 @@ import Components
 import DeviceService
 import Style
 import Localization
+import PrimitivesComponents
 
 public struct CollectionsScene: View {
     private let model: CollectionsViewModel
@@ -34,10 +35,8 @@ public struct CollectionsScene: View {
             }
         }
         .overlay {
-            // TODO: - migrate to StateEmptyView + Overlay, when we will have image
             if nftDataList.isEmpty {
-                Text(Localized.Activity.EmptyState.message)
-                    .textStyle(.body)
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .padding(.horizontal, .medium)

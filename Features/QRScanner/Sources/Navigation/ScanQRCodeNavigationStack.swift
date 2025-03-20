@@ -16,7 +16,7 @@ public struct ScanQRCodeNavigationStack: View {
 
     public var body: some View {
         NavigationStack {
-            QRScannerView(resources: resources, action: action)
+            QRScannerScene(resources: resources, action: action)
                 .navigationTitle(Localized.Wallet.scanQrCode)
                 .navigationBarTitleDisplayMode(.inline)
         }

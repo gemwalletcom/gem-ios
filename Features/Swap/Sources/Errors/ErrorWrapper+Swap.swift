@@ -26,7 +26,8 @@ public struct ErrorWrapper: Error, LocalizedError {
                  .AbiError,
                  .NotImplemented,
                  .ComputeQuoteError,
-                 .InvalidRoute: error.localizedDescription
+                 .InvalidRoute,
+                 .TransactionError: error.localizedDescription
             }
         default: error.localizedDescription
         }
