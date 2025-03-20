@@ -34,12 +34,14 @@ extension QRScannerSceneViewModel {
         do {
             switch scannerState {
             case .idle:
+                try QRScannerViewWrapper.checkDeviceQRScanningSupport()
                 if isScannerReady {
                     scannerState = .scanning
-                } else {
-                    try QRScannerViewWrapper.checkDeviceQRScanningSupport()
                 }
-            case .failure, .scanning:
+            case .failure:
+                // reset try again state
+                try QRScannerViewWrapper.checkDeviceQRScanningSupport()
+            case .scanning:
                 break
             }
         } catch {
