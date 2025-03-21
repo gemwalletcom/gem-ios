@@ -40,6 +40,14 @@ struct SelectAssetScene: View {
 
     var body: some View {
         List {
+            Section {} header: {
+                AssetTagsView(model: model.searchModel.tagsViewModel) {
+                    model.setSelected(tag: $0)
+                }
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+
             if model.enablePopularSection && !sections.popular.isEmpty {
                 Section {
                     assetsList(assets: sections.popular)
@@ -68,18 +76,20 @@ struct SelectAssetScene: View {
         }
         .listSectionSpacing(.compact)
         .searchable(
-            text: $assets.searchBy,
+            text: $model.searchModel.searchableQuery,
             placement: .navigationBarDrawer(displayMode: .always)
         )
         .if(model.isNetworkSearchEnabled) {
             $0.debounce(
-                value: $assets.searchBy.wrappedValue,
+                value: $model.searchModel.searchableQuery.wrappedValue,
                 interval: Duration.milliseconds(250),
                 action: model.search(query:)
             )
         }
         .overlay {
-            if sections.assets.isEmpty {
+            if model.state.isLoading, sections.assets.isEmpty {
+                LoadingView()
+            } else if sections.assets.isEmpty {
                 EmptyContentView (
                     model: EmptyContentTypeViewModel(
                         type: .search(
@@ -91,6 +101,7 @@ struct SelectAssetScene: View {
             }
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
+        .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .ifLet(copyTypeViewModel) {
             $0.copyToast(
                 model: $1,

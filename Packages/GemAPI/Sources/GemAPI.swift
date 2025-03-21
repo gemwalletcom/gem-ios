@@ -34,7 +34,7 @@ public enum GemAPI: TargetType {
     
     case getAsset(AssetId)
     case getAssets([AssetId])
-    case getSearchAssets(query: String, chains: [Chain])
+    case getSearchAssets(query: String, chains: [Chain], tag: AssetTag?)
     case getAssetsList(deviceId: String, walletIndex: Int, fromTimestamp: Int)
     
     case getNFTAssets(deviceId: String, walletIndex: Int)
@@ -196,10 +196,11 @@ public enum GemAPI: TargetType {
             ].compactMapValues { $0 }
             
             return .params(params)
-        case .getSearchAssets(let query, let chains):
+        case .getSearchAssets(let query, let chains, let tag):
             return .params([
                 "query": query,
-                "chains": chains.map { $0.rawValue }.joined(separator: ",")
+                "chains": chains.map { $0.rawValue }.joined(separator: ","),
+                "tags": (tag?.rawValue).valueOrEmpty
             ])
         case .scanTransaction(let payload):
             return .encodable(payload)
