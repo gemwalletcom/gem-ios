@@ -22,6 +22,7 @@ class SelectAssetViewModel {
 
     var state: StateViewType<[AssetBasic]> = .noData
     var filterModel: AssetsFilterViewModel
+    var searchModel: SelectAssetSearchViewModel
     var request: AssetsRequest
 
     var selectAssetAction: AssetAction
@@ -50,6 +51,8 @@ class SelectAssetViewModel {
             )
         )
         self.filterModel = filter
+        self.searchModel = SelectAssetSearchViewModel()
+        
         self.request = AssetsRequest(
             walletID: wallet.id,
             filters: filter.defaultFilters
@@ -150,6 +153,19 @@ extension SelectAssetViewModel {
         case .send, .receive, .buy, .swap: break
         }
     }
+    
+    func setSelected(tag: AssetTag) {
+        searchModel.tagsViewModel.setSelectedTag(tag)
+        updateRequest()
+        Task {
+            await searchAssets(query: searchModel.searchableQuery)
+        }
+    }
+    
+    func updateRequest() {
+        request.searchBy = searchModel.priorityAssetsQuery
+        state = .loading
+    }
 }
 
 // MARK: - Private
@@ -175,10 +191,9 @@ extension SelectAssetViewModel {
         let chains: [Chain] = chains(for: wallet.type)
 
         do {
-            let assets = try await assetsService.searchAssets(query: query, chains: chains)
+            let assets = try await assetsService.searchAssets(query: query, chains: chains, tag: searchModel.tagsViewModel.selectedTag)
             try assetsService.addAssets(assets: assets)
-            try assetsService.assetStore.addAssetsSearch(query: query, assets: assets)
-            
+            try assetsService.assetStore.addAssetsSearch(query: searchModel.priorityAssetsQuery, assets: assets)
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
 
             await MainActor.run { [self] in
