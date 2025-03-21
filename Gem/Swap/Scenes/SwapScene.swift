@@ -101,19 +101,20 @@ extension SwapScene {
             }
         } header: {
             Text(model.swapFromTitle)
+                .listRowInsets(.horizontalMediumInsets)
         } footer: {
             SwapChangeView(fromId: $model.fromAssetRequest.assetId, toId: $model.toAssetRequest.assetId)
-                .offset(y: .small + .tiny)
+                .padding(.top, .small)
                 .frame(maxWidth: .infinity)
                 .disabled(model.isSwitchAssetButtonDisabled)
                 .textCase(nil)
                 .listRowSeparator(.hidden)
-                .listRowInsets(.zero)
+                .listRowInsets(.horizontalMediumInsets)
         }
     }
     
     private var swapToSectionView: some View {
-        Section(model.swapToTitle) {
+        Section {
             if let swapModel = model.swapTokenModel(type: .receive(chains: [], assetIds: [])) {
                 SwapTokenView(
                     model: swapModel,
@@ -130,6 +131,9 @@ extension SwapScene {
                     onSelectAssetAction: model.onSelectAssetReceive
                 )
             }
+        } header: {
+            Text(model.swapToTitle)
+                .listRowInsets(.horizontalMediumInsets)
         }
     }
     
