@@ -8,9 +8,31 @@ struct QRScannerViewWrapper {
     typealias ScanResult = (Result<String, Error>) -> Void
 
     private var scanResult: ScanResult
+    private var dataScannerVC = DataScannerViewController(
+        recognizedDataTypes: [.barcode(symbologies: [.qr])],
+        qualityLevel: .balanced,
+        recognizesMultipleItems: false,
+        isHighFrameRateTrackingEnabled: true,
+        isGuidanceEnabled: false,
+        isHighlightingEnabled: false
+    )
 
-    init(scanResult: @escaping ScanResult) {
+    @Binding var isScannerReady: Bool
+
+    init(isScannerReady: Binding<Bool>, scanResult: @escaping ScanResult) {
         self.scanResult = scanResult
+        _isScannerReady = isScannerReady
+    }
+
+    func startScanning() {
+        guard !dataScannerVC.isScanning else { return }
+        do {
+            try dataScannerVC.startScanning()
+                isScannerReady = true
+        } catch {
+            scanResult(.failure(QRScannerError.unknown(error)))
+            isScannerReady = false
+        }
     }
 
     static func checkDeviceQRScanningSupport() throws {
@@ -28,28 +50,11 @@ struct QRScannerViewWrapper {
 
 extension QRScannerViewWrapper: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> DataScannerViewController {
-        let dataScannerVC = DataScannerViewController(
-            recognizedDataTypes: [.barcode(symbologies: [.qr])],
-            qualityLevel: .accurate,
-            recognizesMultipleItems: false,
-            isHighFrameRateTrackingEnabled: true,
-            isGuidanceEnabled: false,
-            isHighlightingEnabled: true
-        )
         dataScannerVC.delegate = context.coordinator
-
         return dataScannerVC
     }
 
-    func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {
-        guard !uiViewController.isScanning else { return }
-
-        do {
-            try uiViewController.startScanning()
-        } catch {
-            context.coordinator.parent.scanResult(.failure(QRScannerError.unknown(error)))
-        }
-    }
+    func updateUIViewController(_ uiViewController: DataScannerViewController, context: Context) {}
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -65,6 +70,7 @@ extension QRScannerViewWrapper {
 
         init(_ parent: QRScannerViewWrapper) {
             self.parent = parent
+            parent.startScanning()
         }
 
         func didAddItem(item: RecognizedItem) {
@@ -86,5 +92,11 @@ extension QRScannerViewWrapper.Coordinator: DataScannerViewControllerDelegate {
         if let item = addedItems.first {
             didAddItem(item: item)
         }
+    }
+    func dataScanner(
+        _ dataScanner: DataScannerViewController,
+        becameUnavailableWithError error: DataScannerViewController.ScanningUnavailable
+    ) {
+        parent.scanResult(.failure(error))
     }
 }

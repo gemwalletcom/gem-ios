@@ -37,6 +37,7 @@ let package = Package(
             name: "PrimitivesTests",
             dependencies: [
                 "Primitives",
+                "PrimitivesTestKit"
             ]),
     ]
 )

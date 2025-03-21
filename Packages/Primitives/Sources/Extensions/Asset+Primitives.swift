@@ -1,15 +1,5 @@
 import Foundation
 
-extension Asset: Hashable {
-    public static func == (lhs: Asset, rhs: Asset) -> Bool {
-        return lhs.id == rhs.id
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-}
-
 extension Asset: Identifiable {}
 
 extension Asset {

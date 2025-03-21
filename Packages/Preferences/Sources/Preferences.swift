@@ -78,35 +78,36 @@ public final class Preferences: @unchecked Sendable {
     public static let standard = Preferences()
     private let defaults: UserDefaults
 
-    public init(defaults: UserDefaults = UserDefaults.standard) {
+    public init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-
-        // configure each @ConfigurableDefaults with injected defaults
-        Mirror(reflecting: self).children
-            .compactMap { $0.value as? ConfigurableUserDefaults }
-            .forEach { $0.configure(with: defaults) }
-    }
-}
-
-// MARK: - Explorer
-
-extension Preferences {
-    private struct ExplorerKeys {
-        static let explorerName = "explorer_name"
+        configureAllProperties(with: defaults)
     }
 
-    public func setExplorerName(chain: Chain, name: String) {
-        defaults.setValue(name, forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
+    private func configureAllProperties(with defaults: UserDefaults) {
+        func configure<T>(_ keyPath: ReferenceWritableKeyPath<Preferences, ConfigurableDefaults<T>>, key: String, defaultValue: T) {
+            self[keyPath: keyPath] = ConfigurableDefaults(key: key, defaultValue: defaultValue, defaults: defaults)
+        }
+        configure(\._currency, key: Keys.currency, defaultValue: Currency.usd.rawValue)
+        configure(\._importFiatMappingsVersion, key: Keys.importFiatMappingsVersion, defaultValue: 0)
+        configure(\._importFiatPurchaseAssetsVersion, key: Keys.importFiatPurchaseAssetsVersion, defaultValue: 0)
+        configure(\._localAssetsVersion, key: Keys.localAssetsVersion, defaultValue: 0)
+        configure(\._fiatOnRampAssetsVersion, key: Keys.fiatOnRampAssetsVersion, defaultValue: 0)
+        configure(\._fiatOffRampAssetsVersion, key: Keys.fiatOffRampAssetsVersion, defaultValue: 0)
+        configure(\._swapAssetsVersion, key: Keys.swapAssetsVersion, defaultValue: 0)
+        configure(\._launchesCount, key: Keys.launchesCount, defaultValue: 0)
+        configure(\._subscriptionsVersion, key: Keys.subscriptionsVersion, defaultValue: 0)
+        configure(\._currentWalletId, key: Keys.currentWalletId, defaultValue: nil)
+        configure(\._isPushNotificationsEnabled, key: Keys.isPushNotificationsEnabled, defaultValue: false)
+        configure(\._isPriceAlertsEnabled, key: Keys.isPriceAlertsEnabled, defaultValue: false)
+        configure(\._isSubscriptionsEnabled, key: Keys.isSubscriptionsEnabled, defaultValue: true)
+        configure(\._rateApplicationShown, key: Keys.rateApplicationShown, defaultValue: false)
+        configure(\._authenticationLockOption, key: Keys.authenticationLockOption, defaultValue: 0)
+        configure(\._isDeveloperEnabled, key: Keys.isDeveloperEnabled, defaultValue: false)
+        configure(\._isHideBalanceEnabled, key: Keys.isHideBalanceEnabled, defaultValue: false)
     }
 
-    public func explorerName(chain: Chain) -> String? {
-        defaults.string(forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
-    }
-}
-
-extension Preferences {
     public func incrementLaunchesCount() {
-        launchesCount = launchesCount + 1
+        launchesCount += 1
     }
 
     public var hasCurrency: Bool {
@@ -117,5 +118,17 @@ extension Preferences {
         defaults.dictionaryRepresentation().keys.forEach {
             defaults.removeObject(forKey: $0)
         }
+    }
+
+    private struct ExplorerKeys {
+        static let explorerName = "explorer_name"
+    }
+
+    public func setExplorerName(chain: Chain, name: String) {
+        defaults.setValue(name, forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
+    }
+
+    public func explorerName(chain: Chain) -> String? {
+        defaults.string(forKey: "\(ExplorerKeys.explorerName)_\(chain.rawValue)")
     }
 }

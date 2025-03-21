@@ -14,7 +14,7 @@ public struct AssetAddress: Codable, Equatable, Hashable, Sendable {
 	}
 }
 
-public struct AssetData: Codable, Sendable {
+public struct AssetData: Codable, Equatable, Hashable, Sendable {
 	public let asset: Asset
 	public let balance: Balance
 	public let account: Account

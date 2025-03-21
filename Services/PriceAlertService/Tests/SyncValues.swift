@@ -13,7 +13,7 @@ struct Test {
         
         let remoteChanges = SyncValues.changes(primary: .remote, local: ["1", "2", "3"], remote: ["2", "4"])
         
-        #expect(remoteChanges.missing == ["3", "1"])
+        #expect(remoteChanges.missing == ["4"])
         #expect(remoteChanges.delete == ["1", "3"])
     }
 }

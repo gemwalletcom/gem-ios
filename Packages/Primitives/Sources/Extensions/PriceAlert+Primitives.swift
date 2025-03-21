@@ -4,14 +4,25 @@ import Foundation
 
 extension PriceAlert: Identifiable {
     public var id: String {
-        [assetId, price?.description, pricePercentChange?.description, priceDirection?.rawValue].compactMap { $0 }.joined(separator: "_")
+        if price == nil && pricePercentChange == nil && priceDirection == nil {
+            return assetId
+        }
+        let price = price.map { String(format: "%g", $0) } ?? .none
+        let pricePercentChange = pricePercentChange.map { String(format: "%g", $0) } ?? .none
+        return [assetId, currency, price, pricePercentChange, priceDirection?.rawValue].compactMap {
+            $0
+        }
+        .joined(separator: "_")
+        
+        
     }
 }
 
 public extension PriceAlert {
-    static func `default`(for assetId: String) -> PriceAlert {
+    static func `default`(for assetId: String, currency: String) -> PriceAlert {
         PriceAlert(
             assetId: assetId,
+            currency: currency,
             price: .none,
             pricePercentChange: .none,
             priceDirection: .none,

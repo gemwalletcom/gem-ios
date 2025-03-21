@@ -14,12 +14,9 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
     public let data: PriceAlertData
     private let priceModel: PriceViewModel
 
-    public init(
-        data: PriceAlertData,
-        preferences: Preferences = .standard
-    ) {
+    public init(data: PriceAlertData) {
         self.data = data
-        self.priceModel = PriceViewModel(price: data.price, currencyCode: preferences.currency)
+        self.priceModel = PriceViewModel(price: data.price, currencyCode: data.priceAlert.currency)
     }
 
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }

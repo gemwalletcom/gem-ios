@@ -66,7 +66,7 @@ extension PriceAlertsViewModel {
             try await priceAlertService.update()
 
             // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.assetId }.unique()
             try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
 
         } catch {
@@ -91,7 +91,8 @@ extension PriceAlertsViewModel {
 
     private func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.add(priceAlert: .default(for: assetId.identifier))
+            try await priceAlertService
+                .add(priceAlert: .default(for: assetId.identifier, currency: preferences.preferences.currency))
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }

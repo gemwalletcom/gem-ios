@@ -201,6 +201,7 @@ struct Columns {
     struct PriceAlert {
         static let id = Column("id")
         static let assetId = Column("assetId")
+        static let currency = Column("currency")
         static let priceDirection = Column("priceDirection")
         static let price = Column("price")
         static let pricePercentChange = Column("pricePercentChange")
