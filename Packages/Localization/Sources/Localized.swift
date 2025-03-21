@@ -64,6 +64,18 @@ public enum Localized {
       public static let reserved = Localized.tr("Localizable", "asset.balances.reserved", fallback: "Reserved")
     }
   }
+  public enum AssetTag {
+    /// Gainers
+    public static let gainers = Localized.tr("Localizable", "asset_tag.gainers", fallback: "Gainers")
+    /// Losers
+    public static let losers = Localized.tr("Localizable", "asset_tag.losers", fallback: "Losers")
+    /// New
+    public static let new = Localized.tr("Localizable", "asset_tag.new", fallback: "New")
+    /// Stablecoins
+    public static let stablecoins = Localized.tr("Localizable", "asset_tag.stablecoins", fallback: "Stablecoins")
+    /// Trending
+    public static let trending = Localized.tr("Localizable", "asset_tag.trending", fallback: "Trending")
+  }
   public enum Assets {
     /// Add Custom Token
     public static let addCustomToken = Localized.tr("Localizable", "assets.add_custom_token", fallback: "Add Custom Token")
@@ -515,6 +527,10 @@ public enum Localized {
     }
   }
   public enum PriceAlerts {
+    /// Price alert added %@
+    public static func addedFor(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Price alert added %@")
+    }
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.disabled_for", String(describing: p1), fallback: "Price alert disabled for %@")
