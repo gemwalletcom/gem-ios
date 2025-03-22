@@ -62,9 +62,9 @@ public struct FiatScene: View {
                 ToolbarItem(placement: .principal) {
                     Picker("", selection: $model.input.type) {
                         Text(model.pickerTitle(type: .buy))
-                            .tag(FiatTransactionType.buy)
+                            .tag(FiatQuoteType.buy)
                         Text(model.pickerTitle(type: .sell))
-                            .tag(FiatTransactionType.sell)
+                            .tag(FiatQuoteType.sell)
                     }
                     .pickerStyle(.segmented)
                     .frame(width: 200)
@@ -180,7 +180,7 @@ extension FiatScene {
         await model.fetch(for: assetData)
     }
 
-    func onChangeType(_: FiatTransactionType, type: FiatTransactionType) {
+    func onChangeType(_: FiatQuoteType, type: FiatQuoteType) {
         // reset focus on type switch
         focusedField = .none
         focusedField = .amount

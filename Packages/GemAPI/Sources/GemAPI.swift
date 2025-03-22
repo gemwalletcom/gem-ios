@@ -8,10 +8,9 @@ public enum GemAPI: TargetType {
     case getIpAddress
     case getPrice(AssetId, currency: String)
     case getPrices(AssetPricesRequest)
-    case getFiatOnRampQuotes(Asset, FiatQuoteRequest)
     case getFiatOnRampAssets
     case getFiatOffRampAssets
-    case getFiatOffRampQuotes(Asset, FiatQuoteRequest)
+    case getFiatQuotes(Asset, FiatQuoteRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
@@ -51,10 +50,9 @@ public enum GemAPI: TargetType {
         switch self {
         case .getIpAddress,
             .getPrice,
-            .getFiatOnRampQuotes,
+            .getFiatQuotes,
             .getFiatOnRampAssets,
             .getFiatOffRampAssets,
-            .getFiatOffRampQuotes,
             .getSwapAssets,
             .getConfig,
             .getNameRecord,
@@ -93,14 +91,12 @@ public enum GemAPI: TargetType {
             return "/v1/prices/\(assetId.identifier)"
         case .getPrices:
             return "/v1/prices"
-        case .getFiatOnRampQuotes(let asset, _):
-            return "/v1/fiat/on_ramp/quotes/\(asset.id.identifier)"
         case .getFiatOnRampAssets:
             return "/v1/fiat/on_ramp/assets"
         case .getFiatOffRampAssets:
             return "/v1/fiat/off_ramp/assets"
-        case .getFiatOffRampQuotes(let asset, _):
-            return "/v1/fiat/off_ramp/quotes/\(asset.id.identifier)"
+        case .getFiatQuotes(let asset, _):
+            return "/v1/fiat/on_ramp/quotes/\(asset.id.identifier)"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -167,13 +163,16 @@ public enum GemAPI: TargetType {
             return .encodable(value)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
-        case let .getFiatOffRampQuotes(_, value),
-            let .getFiatOnRampQuotes(_, value):
-            return .params([
-                "amount": value.fiatAmount,
+        case let .getFiatQuotes(_, value):
+            let params: [String: Any] = [
+                "amount": value.fiatAmount as Any?,
+                "fiat_amount": value.fiatAmount,
+                "crypto_value": value.cryptoValue as Any?,
                 "currency": value.fiatCurrency,
                 "wallet_address": value.walletAddress
-            ])
+            ].compactMapValues { $0 }
+            
+            return .params(params)
         case .getCharts(_, let currency, let period):
             return .params([
                 "period": period,

@@ -15,7 +15,7 @@ struct SelectAssetInput: Hashable {
         assetAddress.address
     }
 
-    var fiatType: FiatTransactionType  {
+    var fiatType: FiatQuoteType  {
         switch type {
         case .send, .receive, .swap, .manage, .priceAlert: fatalError(
             "fiat operations not supported"
