@@ -16,6 +16,7 @@ extension FiatQuote {
             fiatAmount: fiatAmount,
             fiatCurrency: fiatCurrency,
             cryptoAmount: cryptoAmount,
+            cryptoValue: .zero,
             redirectUrl: ""
         )
     }
