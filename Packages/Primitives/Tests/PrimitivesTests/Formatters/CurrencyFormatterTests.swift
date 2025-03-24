@@ -15,6 +15,8 @@ final class CurrencyFormatterTests {
 
     let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: "")
 
+    let abbreviatedFormatter = CurrencyFormatter(type: .abbreviated, locale: .US, currencyCode: "USD")
+
     @Test
     func testCurrency() {
         #expect(currencyFormatterUS.string(0) == "$0.00")
@@ -91,21 +93,27 @@ final class CurrencyFormatterTests {
         #expect(cryptoFormatter.string(decimal: Decimal(11)) == "11.00")
         #expect(cryptoFormatter.string(decimal: Decimal(12000123)) == "12,000,123.00")
     }
-    
+
     @Test
-    func testNormalizedDouble() {
-        let formatter = currencyFormatterUS
+    func testStringDecimalWithSymbolVariants() {
+        #expect(abbreviatedFormatter.string(decimal: Decimal(1234.56), symbol: "BTC") == "1.23K BTC")
+        #expect(abbreviatedFormatter.string(decimal: Decimal(12), symbol: "BTC") == "12 BTC")
 
-        #expect(formatter.normalizedDouble(from: 0) == 0.0)
-        #expect(formatter.normalizedDouble(from: 11.12) == 11.12)
-        #expect(formatter.normalizedDouble(from: 12000123) == 12000123.0)
-        #expect(formatter.normalizedDouble(from: -1.23) == -1.23)
+        #expect(cryptoFormatter.string(decimal: Decimal(1234.56), symbol: "BTC") == "1,234.56 BTC")
+        #expect(cryptoFormatter.string(decimal: Decimal(0.0001234), symbol: "BTC") == "0.00012 BTC")
+    }
 
-        #expect(formatter.normalizedDouble(from: 0.0000000002) == 0.0000000002)
-        #expect(formatter.normalizedDouble(from: 0.000123456) == 0.00012)
-        #expect(formatter.normalizedDouble(from: 0.002) == 0.002)
+    @Test
+    func testAbbreviated() {
+        #expect(abbreviatedFormatter.string(0) == "$0")
+        #expect(abbreviatedFormatter.string(12) == "$12")
+        #expect(abbreviatedFormatter.string(1_234) == "$1.23K")
+        #expect(abbreviatedFormatter.string(5_000_000) == "$5M")
+        #expect(abbreviatedFormatter.string(7_890_000_000) == "$7.89B")
+        #expect(abbreviatedFormatter.string(1_200_000_000_000) == "$1.2T")
 
-        #expect(formatter.normalizedDouble(from: 1.89999) == 1.90)
-        #expect(formatter.normalizedDouble(from: 0.0123) == 0.012)
+        #expect(abbreviatedFormatter.string(-1234) == "-$1.23K")
+        #expect(abbreviatedFormatter.string(-5_600_000) == "-$5.6M")
+        #expect(abbreviatedFormatter.string(-9_999_999_999) == "-$10B")
     }
 }

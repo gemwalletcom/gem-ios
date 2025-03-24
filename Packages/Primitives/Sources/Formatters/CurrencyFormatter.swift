@@ -4,6 +4,7 @@ public enum CurrencyFormatterType: Sendable, Hashable {
     case currency
     case percent
     case percentSignLess
+    case abbreviated
 }
 
 public struct CurrencyFormatter: Sendable, Hashable {
@@ -50,10 +51,21 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return formatter
     }
     
+    private var abbreviatedFormatter: Foundation.NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.locale = locale
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 0
+        formatter.numberStyle = .currency
+        formatter.currencyCode = currencyCode
+        return formatter
+    }
+    
     public static let percent = CurrencyFormatter(type: .percent)
 
     public var includePlusSign: Bool = false
     public var currencyCode: String
+    public var divisors: [Divisor] = Divisor.defaultDivisors
     
     public init(
         type: CurrencyFormatterType = .currency,
@@ -67,7 +79,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     
     public var symbol: String {
         switch type {
-        case .currency: formatter.currencySymbol
+        case .currency, .abbreviated: formatter.currencySymbol
         case .percent, .percentSignLess: percentFormatter.percentSymbol
         }
     }
@@ -86,13 +98,24 @@ public struct CurrencyFormatter: Sendable, Hashable {
             return percentFormatter.string(from: NSNumber(value: number/100))!
         case .percentSignLess:
             return percentSignLessFormatter.string(from: NSNumber(value: number/100))!
+        case .abbreviated:
+            return abbreviatedString(for: number, formatter: abbreviatedFormatter)
         }
     }
     
-    public func string(decimal: Decimal) -> String {
+    public func string(decimal: Decimal, symbol: String = .empty) -> String {
         let formatter = formatter(for: decimal.doubleValue)
         formatter.currencySymbol = ""
-        return formatter.string(from: NSDecimalNumber(decimal: decimal)) ?? ""
+        
+        let value: String
+        switch type {
+        case .abbreviated:
+            value = abbreviatedString(for: decimal.doubleValue, formatter: formatter)
+        case .currency, .percent, .percentSignLess:
+            value = formatter.string(from: NSDecimalNumber(decimal: decimal)) ?? ""
+        }
+        
+        return [value, symbol].filter { $0.isNotEmpty }.joined(separator: " ")
     }
     
     public func normalizedDouble(from value: Double) -> Double? {
@@ -103,12 +126,28 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return formatter.number(from: formattedString)?.doubleValue
     }
     
+    // MARK: - Private methods
+    
     private func formatter(for value: Double) -> NumberFormatter {
-        if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
-            formatter
-        } else {
-            formatterSmallValues
+        switch type {
+        case .abbreviated: abbreviatedFormatter
+        case .currency, .percent, .percentSignLess:
+            if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
+                formatter
+            } else {
+                formatterSmallValues
+            }
         }
     }
-}
+    
+    private func abbreviatedString(for number: Double, formatter: NumberFormatter) -> String {
+        guard let divisor = divisors.reversed().first(where: { abs(number) >= $0.rawValue }) else {
+            return formatter.string(from: NSNumber(value: number)) ?? "\(number)"
+        }
+        
+        let value = number / divisor.rawValue
+        let formatted = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
 
+        return String(format: "%@%@", formatted, divisor.abbreviation)
+    }
+}
