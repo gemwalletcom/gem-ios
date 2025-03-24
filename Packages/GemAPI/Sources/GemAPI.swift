@@ -82,7 +82,9 @@ public enum GemAPI: TargetType {
             return .DELETE
         }
     }
-    
+//    https://api.gemwallet.com/v1/fiat/quotes/ethereum?fiat_amount=245&currency=USD&wallet_address=0x95222290dd7278aa3ddd389cc1e1d165cc4bafe5&type=buy
+
+
     public var path: String {
         switch self {
         case .getIpAddress:
@@ -96,7 +98,7 @@ public enum GemAPI: TargetType {
         case .getFiatOffRampAssets:
             return "/v1/fiat/off_ramp/assets"
         case .getFiatQuotes(let asset, _):
-            return "/v1/fiat/on_ramp/quotes/\(asset.id.identifier)"
+            return "/v1/fiat/quotes/\(asset.id.identifier)"
         case .getSwapAssets:
             return "/v1/swap/assets"
         case .getConfig:
@@ -165,6 +167,7 @@ public enum GemAPI: TargetType {
             return .encodable(value.map { $0.identifier })
         case let .getFiatQuotes(_, value):
             let params: [String: Any] = [
+                "type": value.type.rawValue,
                 "amount": value.fiatAmount as Any?,
                 "fiat_amount": value.fiatAmount,
                 "crypto_value": value.cryptoValue as Any?,
