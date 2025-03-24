@@ -10,6 +10,7 @@ import Localization
 import PrimitivesComponents
 import Store
 import Preferences
+import ExplorerService
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
@@ -108,6 +109,18 @@ struct TransactionDetailViewModel {
             .assetActivation:
             return .none
         }
+    }
+    
+    var recipienAddressViewModel: AddressListItemViewModel? {
+        guard let title = participantField, let account = participantAccount else {
+            return .none
+        }
+        return AddressListItemViewModel(
+            title: title,
+            account: account,
+            style: .full,
+            explorerService: ExplorerService.standard
+        )
     }
     
     var participantAccount: SimpleAccount? {
