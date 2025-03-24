@@ -5,7 +5,7 @@ import Testing
 
 @testable import Primitives
 
-struct VValueConverterTests {
+struct ValueConverterTests {
     let converter = ValueConverter()
 
     @Test
