@@ -4,10 +4,19 @@ import Foundation
 import PrimitivesComponents
 
 struct SelectAssetSearchViewModel {
+    enum Focus {
+        case search
+        case tags
+    }
+
     var tagsViewModel: AssetTagsViewModel = .default()
-    
     var searchableQuery: String = .empty
-    var priorityAssetsQuery: String {
-        get { [searchableQuery, tagsViewModel.query].joined() }
+    var focus: Focus = .search
+
+    var priorityAssetsQuery: String? {
+        switch focus {
+        case .search: searchableQuery
+        case .tags: tagsViewModel.query
+        }
     }
 }

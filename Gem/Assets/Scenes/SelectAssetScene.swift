@@ -14,7 +14,7 @@ struct SelectAssetScene: View {
 
     @Binding private var isPresentingAddToken: Bool
 
-    @Query<AssetsRequest> 
+    @Query<AssetsRequest>
     private var assets: [AssetData]
 
     @State private var model: SelectAssetViewModel
@@ -39,41 +39,11 @@ struct SelectAssetScene: View {
     }
 
     var body: some View {
-        List {
-            Section {} header: {
-                AssetTagsView(model: model.searchModel.tagsViewModel) {
-                    model.setSelected(tag: $0)
-                }
-            }
-            .textCase(nil)
-            .listRowInsets(EdgeInsets())
-
-            if model.enablePopularSection && !sections.popular.isEmpty {
-                Section {
-                    assetsList(assets: sections.popular)
-                } header: {
-                    HStack {
-                        Images.System.starFill
-                        Text(Localized.Common.popular)
-                    }
-                }
-            }
-            
-            if !sections.pinned.isEmpty {
-                Section {
-                    assetsList(assets: sections.pinned)
-                } header: {
-                    HStack {
-                        Images.System.pin
-                        Text(Localized.Common.pinned)
-                    }
-                }
-            }
-            
-            Section {
-                assetsList(assets: sections.assets)
-            }
-        }
+        SearchableWrapper(
+            content: { list },
+            onChangeIsSearching: model.onChangeFocus,
+            onDismissSearch: model.setDismissSearchAction
+        )
         .listSectionSpacing(.compact)
         .searchable(
             text: $model.searchModel.searchableQuery,
@@ -110,6 +80,44 @@ struct SelectAssetScene: View {
         }
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
+    }
+    
+    var list: some View {
+        List {
+            Section {} header: {
+                AssetTagsView(model: model.searchModel.tagsViewModel) {
+                    model.setSelected(tag: $0)
+                }
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+
+            if model.enablePopularSection && !sections.popular.isEmpty {
+                Section {
+                    assetsList(assets: sections.popular)
+                } header: {
+                    HStack {
+                        Images.System.starFill
+                        Text(Localized.Common.popular)
+                    }
+                }
+            }
+            
+            if !sections.pinned.isEmpty {
+                Section {
+                    assetsList(assets: sections.pinned)
+                } header: {
+                    HStack {
+                        Images.System.pin
+                        Text(Localized.Common.pinned)
+                    }
+                }
+            }
+            
+            Section {
+                assetsList(assets: sections.assets)
+            }
+        }
     }
     
     func assetsList(assets: [AssetData]) -> some View {

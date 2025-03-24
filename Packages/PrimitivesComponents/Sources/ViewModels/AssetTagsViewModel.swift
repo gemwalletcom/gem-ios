@@ -2,6 +2,8 @@
 
 import Foundation
 import Primitives
+import SwiftUICore
+import Style
 
 public struct AssetTagsViewModel {
     public let tags: [AssetTag]
@@ -15,12 +17,23 @@ public struct AssetTagsViewModel {
         tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
     }
     
-    public var query: String {
-        selectedTag?.rawValue ?? .empty
+    public var query: String? {
+        selectedTag?.rawValue
     }
     
     public var hasSelected: Bool {
         selectedTag != nil
+    }
+    
+    public func foregroundColor(for tag: AssetTag) -> Color {
+        if tag == selectedTag {
+            return .primary
+        }
+        return Colors.secondaryText
+    }
+    
+    public func opacity(for tag: AssetTag) -> Double {
+        !hasSelected || selectedTag == tag ? 1 : 0.35
     }
 
     public mutating func setSelectedTag(_ tag: AssetTag?) {

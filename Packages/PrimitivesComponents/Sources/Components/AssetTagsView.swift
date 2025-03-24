@@ -24,9 +24,10 @@ public struct AssetTagsView: View {
                         Text(tagModel.title)
                             .padding(.horizontal, .small)
                             .padding(.vertical, .tiny)
-                            .textStyle(.subheadline)
+                            .font(.subheadline)
                             .background(Colors.listStyleColor)
-                            .opacity(!model.hasSelected || tagModel.isSelected ? 1 : 0.35)
+                            .foregroundColor(model.foregroundColor(for: tagModel.tag))
+                            .opacity(model.opacity(for: tagModel.tag))
                             .cornerRadius(.small)
                     }
                     .buttonStyle(.borderless)
