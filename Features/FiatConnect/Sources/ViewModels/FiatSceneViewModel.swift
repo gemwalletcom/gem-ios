@@ -52,7 +52,7 @@ public final class FiatSceneViewModel {
             decimals: assetAddress.asset.decimals.asInt
         )
 
-        // TODO: - move asset request and query observing on top, just inject assetRequest
+        // TODO: - move asset request and query observing on top, just inject AssetData
         self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id.identifier)
     }
 

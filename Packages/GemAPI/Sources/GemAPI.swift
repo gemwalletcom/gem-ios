@@ -82,8 +82,6 @@ public enum GemAPI: TargetType {
             return .DELETE
         }
     }
-//    https://api.gemwallet.com/v1/fiat/quotes/ethereum?fiat_amount=245&currency=USD&wallet_address=0x95222290dd7278aa3ddd389cc1e1d165cc4bafe5&type=buy
-
 
     public var path: String {
         switch self {
