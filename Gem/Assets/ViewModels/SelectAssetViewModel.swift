@@ -142,7 +142,11 @@ extension SelectAssetViewModel {
         if query.isEmpty {
             return
         }
-        await searchAssets(query: query)
+        await searchAssets(
+            query: query,
+            priorityAssetsQuery: searchModel.priorityAssetsQuery,
+            tag: nil
+        )
     }
     
     func handleAction(assetId: AssetId, enabled: Bool) async {
@@ -161,7 +165,11 @@ extension SelectAssetViewModel {
         searchModel.focus = .tags
         updateRequest()
         Task {
-            await searchAssets(query: .empty)
+            await searchAssets(
+                query: .empty,
+                priorityAssetsQuery: searchModel.priorityAssetsQuery,
+                tag: searchModel.tagsViewModel.selectedTag
+            )
         }
     }
     
@@ -193,13 +201,17 @@ extension SelectAssetViewModel {
         }
     }
 
-    private func searchAssets(query: String) async {
+    private func searchAssets(
+        query: String,
+        priorityAssetsQuery: String?,
+        tag: AssetTag?
+    ) async {
         let chains: [Chain] = chains(for: wallet.type)
 
         do {
-            let assets = try await assetsService.searchAssets(query: query, chains: chains, tag: searchModel.tagsViewModel.selectedTag)
+            let assets = try await assetsService.searchAssets(query: query, chains: chains, tag: tag)
             try assetsService.addAssets(assets: assets)
-            if let priorityAssetsQuery = searchModel.priorityAssetsQuery {
+            if let priorityAssetsQuery {
                 try assetsService.assetStore.addAssetsSearch(query: priorityAssetsQuery, assets: assets)
             }
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
