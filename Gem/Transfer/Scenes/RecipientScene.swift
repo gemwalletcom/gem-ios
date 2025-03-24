@@ -70,8 +70,7 @@ struct RecipientScene: View {
                     Section {
                         ForEach(model.getRecipient(by: .wallets)) { recipient in
                             NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                address = recipient.address
-                                focusedField = .none
+                                onAddressSelect(recipient: recipient)
                             }
                         }
                     } header: {
@@ -82,8 +81,7 @@ struct RecipientScene: View {
                     Section {
                         ForEach(model.getRecipient(by: .view)) { recipient in
                             NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                address = recipient.address
-                                focusedField = .none
+                                onAddressSelect(recipient: recipient)
                             }
                         }
                     } header: {
@@ -154,6 +152,14 @@ extension RecipientScene {
         }
     }
     
+    func onAddressSelect(recipient: RecipientAddress) {
+        do {
+            model.onRecipientDataSelect(data: try model.getRecipientData(recipient: recipient))
+        } catch {
+            NSLog("onAddressSelect error \(error)")
+        }
+    }
+
     func next() {
         do {
             let data = try model.getRecipientData(
