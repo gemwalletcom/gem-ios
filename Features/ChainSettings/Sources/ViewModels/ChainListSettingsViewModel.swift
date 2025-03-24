@@ -12,6 +12,10 @@ public struct ChainListSettingsViewModel {
     var title: String {
         Localized.Settings.Networks.title
     }
+
+    var emptyContent: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .search(type: .networks))
+    }
 }
 
 // MARK: - ChainFilterable

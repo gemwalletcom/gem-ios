@@ -27,7 +27,7 @@ final class FiatSceneViewModelTests {
     @Test
     func testDefaultAmountText() {
         let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.amountText == String(format: "%.0f", FiatTransactionTypeViewModel(type: .buy).defaultAmount))
+        #expect(vm.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
 
         vm.selectType(.sell)
         #expect(vm.amountText == "")

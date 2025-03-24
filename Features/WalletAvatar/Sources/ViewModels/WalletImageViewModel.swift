@@ -20,7 +20,12 @@ public final class WalletImageViewModel: Sendable {
 
     public let wallet: Wallet
     private let avatarService: AvatarService
-    
+
+    let emojiViewSize: Sizing = .image.extraLarge
+    let emojiList: [EmojiValue] = {
+        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
+    }()
+
     public init(
         wallet: Wallet,
         avatarService: AvatarService
@@ -31,8 +36,6 @@ public final class WalletImageViewModel: Sendable {
     
     var title: String { Localized.Common.avatar }
     
-    let emojiViewSize: Sizing = .image.extraLarge
-    
     var walletRequest: WalletRequest {
         WalletRequest(walletId: wallet.id)
     }
@@ -40,11 +43,11 @@ public final class WalletImageViewModel: Sendable {
     var nftAssetsRequest: NFTRequest {
         NFTRequest(walletId: wallet.id, collectionId: nil)
     }
-    
-    let emojiList: [EmojiValue] = {
-        Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
-    }()
-    
+
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .nfts(action: nil))
+    }
+
     func buildNftAssetsItems(from list: [NFTData]) -> [NFTAssetImageItem] {
         list
             .map { $0.assets }

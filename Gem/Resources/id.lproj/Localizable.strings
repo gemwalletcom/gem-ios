@@ -358,3 +358,4 @@
 "contacts.title" = "Kontak";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
+"price_alerts. added_for" = "Price alert added %@";

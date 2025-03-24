@@ -8,6 +8,7 @@ import Localization
 import Preferences
 import TransactionsService
 import ExplorerService
+import PrimitivesComponents
 import ManageWalletService
 
 @Observable
@@ -27,6 +28,7 @@ public final class TransactionsViewModel {
     public var request: TransactionsRequest
     public var filterModel: TransactionsFilterViewModel
     public var isPresentingFilteringView: Bool = false
+    public var isPresentingSelectAssetType: SelectAssetType?
 
     public init(
         transactionsService: TransactionsService,
@@ -46,6 +48,14 @@ public final class TransactionsViewModel {
     public var title: String { Localized.Activity.title }
     public var currentWallet: Wallet? { manageWalletService.currentWallet }
     public var walletId: WalletId { wallet.walletId }
+
+    public var emptyContentModel: EmptyContentTypeViewModel {
+        if !filterModel.isAnyFilterSpecified {
+            EmptyContentTypeViewModel(type: .activity(receive: onSelectReceive, buy: onSelectBuy))
+        } else {
+            EmptyContentTypeViewModel(type: .search(type: .activity, action: onSelectCleanFilters))
+        }
+    }
 }
 
 // MARK: - Business Logic
@@ -53,9 +63,7 @@ public final class TransactionsViewModel {
 extension TransactionsViewModel {
     public func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
         guard let newWallet else { return }
-        wallet = newWallet
-        filterModel = TransactionsFilterViewModel(wallet: wallet)
-        request = TransactionsRequest(walletId: wallet.id, type: type)
+        refresh(for: newWallet)
     }
 
     public func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
@@ -75,5 +83,27 @@ extension TransactionsViewModel {
         } catch {
             NSLog("fetch getTransactions error \(error)")
         }
+    }
+}
+
+// MARK: - Private
+
+extension TransactionsViewModel {
+    private func refresh(for wallet: Wallet) {
+        self.wallet = wallet
+        filterModel = TransactionsFilterViewModel(wallet: wallet)
+        request = TransactionsRequest(walletId: wallet.id, type: type)
+    }
+
+    private func onSelectCleanFilters() {
+        refresh(for: wallet)
+    }
+
+    private func onSelectReceive() {
+        isPresentingSelectAssetType = .receive(.asset)
+    }
+
+    private func onSelectBuy() {
+        isPresentingSelectAssetType = .buy
     }
 }

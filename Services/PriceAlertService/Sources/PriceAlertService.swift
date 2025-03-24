@@ -50,13 +50,13 @@ public struct PriceAlertService: Sendable {
         let remote = try await getPriceAlerts()
         let local = try store.getPriceAlerts()
         
-        let changes = SyncValues.changes(primary: .local, local: local.asSet(), remote: remote.asSet())
+        let changes = SyncValues.changes(primary: .remote, local: local.asSet(), remote: remote.asSet())
         
         if !changes.delete.isEmpty {
-            try await delete(priceAlerts: changes.delete.asArray())
+            try store.deletePriceAlerts(changes.delete.asArray())
         }
         if !changes.missing.isEmpty {
-            try await add(priceAlerts: changes.missing.asArray())
+            try store.addPriceAlerts(changes.missing.asArray())
         }
     }
 

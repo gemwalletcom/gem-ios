@@ -5,12 +5,12 @@ import Components
 import Primitives
 
 struct FiatCurrencyInputConfig: CurrencyInputConfigurable {
-    let type: FiatTransactionType
+    let type: FiatQuoteType
     let assetAddress: AssetAddress
     var secondaryText: String
 
     init(
-        type: FiatTransactionType,
+        type: FiatQuoteType,
         assetAddress: AssetAddress,
         secondaryText: String
     ) {

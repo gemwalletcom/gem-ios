@@ -3,7 +3,7 @@
 import Primitives
 
 public struct FiatInput: Sendable {
-    public var type: FiatTransactionType
+    public var type: FiatQuoteType
 
     public var buyAmount: Double
     public var sellAmount: Double
@@ -11,7 +11,7 @@ public struct FiatInput: Sendable {
     public var quote: FiatQuote?
 
     public init(
-        type: FiatTransactionType,
+        type: FiatQuoteType,
         buyAmount: Double = .zero,
         sellAmount: Double = .zero
     ) {

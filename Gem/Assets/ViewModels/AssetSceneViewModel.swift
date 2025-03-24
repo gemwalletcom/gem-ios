@@ -87,7 +87,11 @@ class AssetSceneViewModel: ObservableObject {
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
-    
+
+    var emptyConentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol))
+    }
+
     var stakeAprText: String {
         guard let apr = assetDataModel.stakeApr else { return .empty }
         return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
@@ -143,7 +147,7 @@ extension AssetSceneViewModel {
 
     func enablePriceAlert() async {
         do {
-            try await priceAlertService.add(priceAlert: .default(for: assetModel.asset.id.identifier))
+            try await priceAlertService.add(priceAlert: .default(for: assetModel.asset.id.identifier, currency: Preferences.standard.currency))
             try await priceAlertService.requestPermissions()
             try await priceAlertService.enablePriceAlerts()
         } catch {
@@ -153,7 +157,7 @@ extension AssetSceneViewModel {
 
     func disablePriceAlert() async {
         do {
-            try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id.identifier)])
+            try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id.identifier, currency: Preferences.standard.currency)])
         } catch {
             NSLog("disablePriceAlert error \(error)")
         }

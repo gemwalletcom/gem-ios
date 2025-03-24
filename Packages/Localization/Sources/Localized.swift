@@ -515,6 +515,10 @@ public enum Localized {
     }
   }
   public enum PriceAlerts {
+    /// Price alert added %@
+    public static func addedFor(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "price_alerts. added_for", String(describing: p1), fallback: "Price alert added %@")
+    }
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
       return Localized.tr("Localizable", "price_alerts.disabled_for", String(describing: p1), fallback: "Price alert disabled for %@")

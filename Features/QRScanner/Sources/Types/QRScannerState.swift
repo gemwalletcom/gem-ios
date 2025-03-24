@@ -2,8 +2,8 @@
 
 import Foundation
 
-enum QRScannerState: Sendable {
+enum QRScannerState: Sendable, Equatable {
     case idle
-    case failure(error: QRScannerError)
     case scanning
+    case failure(error: QRScannerError)
 }

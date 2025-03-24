@@ -7,6 +7,7 @@ import Localization
 import PriceAlertService
 import PriceService
 import Preferences
+import PrimitivesComponents
 
 @Observable
 public final class PriceAlertsViewModel: Sendable {
@@ -38,6 +39,10 @@ public final class PriceAlertsViewModel: Sendable {
         }
     }
 
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .priceAlerts)
+    }
+
     func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
         alerts
             .filter { $0.priceAlert.lastNotifiedAt == nil }
@@ -61,7 +66,7 @@ extension PriceAlertsViewModel {
             try await priceAlertService.update()
 
             // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.id }
+            let assetIds = try priceAlertService.getPriceAlerts().map { $0.assetId }.unique()
             try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
 
         } catch {
@@ -86,7 +91,8 @@ extension PriceAlertsViewModel {
 
     private func addPriceAlert(assetId: AssetId) async {
         do {
-            try await priceAlertService.add(priceAlert: .default(for: assetId.identifier))
+            try await priceAlertService
+                .add(priceAlert: .default(for: assetId.identifier, currency: preferences.preferences.currency))
         } catch {
             NSLog("addPriceAlert error: \(error)")
         }

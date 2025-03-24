@@ -23,11 +23,8 @@ public struct ConnectionProposalScene: View {
                     }
                     .padding(.top, 8)
                 }
-                .frame(maxWidth: .infinity)
-                .textCase(nil)
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                
+                .cleanListRow()
+
                 Section {
                     NavigationLink(value: Scenes.SelectWallet()) {
                         ListItemView(
