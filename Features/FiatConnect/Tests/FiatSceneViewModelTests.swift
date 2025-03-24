@@ -25,109 +25,109 @@ final class FiatSceneViewModelTests {
 
     @Test
     func testDefaultAmountText() {
-        let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
+        let model = FiatSceneViewModelTests.mock()
+        #expect(model.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
 
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
 
-        #expect(vm.amountText == "")
+        #expect(model.amountText == "")
     }
 
     @Test
     func testStatesChanges() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.onChangeAmountText("", text: "100")
+        let model = FiatSceneViewModelTests.mock()
+        model.onChangeAmountText("", text: "100")
 
-        #expect(vm.input.type == .buy)
-        #expect(vm.input.amount == 100)
+        #expect(model.input.type == .buy)
+        #expect(model.input.amount == 100)
 
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
 
-        #expect(vm.input.type == .sell)
-        #expect(vm.input.amount != 100)
+        #expect(model.input.type == .sell)
+        #expect(model.input.amount != 100)
 
-        vm.onChangeAmountText("", text: "200")
+        model.onChangeAmountText("", text: "200")
 
-        vm.input.type = .buy
-        vm.onChangeType(.sell, type: .buy)
+        model.input.type = .buy
+        model.onChangeType(.sell, type: .buy)
 
-        #expect(vm.input.amount == 100)
+        #expect(model.input.amount == 100)
     }
 
     @Test
     func testSelectBuyAmount() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.onSelect(amount: 150)
+        let model = FiatSceneViewModelTests.mock()
+        model.onSelect(amount: 150)
 
-        #expect(vm.amountText == "150")
+        #expect(model.amountText == "150")
 
-        vm.onSelect(amount: 1.1)
+        model.onSelect(amount: 1.1)
 
-        #expect(vm.amountText != "1.1")
-        #expect(vm.amountText == "1")
+        #expect(model.amountText != "1.1")
+        #expect(model.amountText == "1")
     }
 
     @Test
     func testSelectSellAmount() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
-        vm.assetData = .mock(balance: Balance(available: 100_000.asBigInt))
+        let model = FiatSceneViewModelTests.mock()
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+        model.assetData = .mock(balance: Balance(available: 100_000.asBigInt))
 
-        vm.onSelect(amount: 50)
+        model.onSelect(amount: 50)
 
-        #expect(vm.amountText == "0.0005")
+        #expect(model.amountText == "0.0005")
 
-        vm.onSelect(amount: 100)
+        model.onSelect(amount: 100)
 
-        #expect(vm.amountText == "0.001")
+        #expect(model.amountText == "0.001")
     }
 
     @Test
     func testCurrencySymbol() {
-        let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.currencyInputConfig.currencySymbol == "$")
+        let model = FiatSceneViewModelTests.mock()
+        #expect(model.currencyInputConfig.currencySymbol == "$")
 
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
 
-        #expect(vm.currencyInputConfig.currencySymbol == vm.asset.symbol)
+        #expect(model.currencyInputConfig.currencySymbol == model.asset.symbol)
     }
 
     @Test
     func testButtonsTitle() {
-        let vm = FiatSceneViewModelTests.mock()
+        let model = FiatSceneViewModelTests.mock()
 
-        #expect(vm.buttonTitle(amount: 10.0) == "$10")
+        #expect(model.buttonTitle(amount: 10.0) == "$10")
 
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
 
-        #expect(vm.buttonTitle(amount: 1.3) == "1%")
+        #expect(model.buttonTitle(amount: 1.3) == "1%")
     }
 
     @Test
     func testRateValue() {
-        let vm = FiatSceneViewModelTests.mock()
-        let quote = FiatQuote.mock(fiatAmount: 1200, cryptoAmount: 2.0, type: vm.input.type)
+        let model = FiatSceneViewModelTests.mock()
+        let quote = FiatQuote.mock(fiatAmount: 1200, cryptoAmount: 2.0, type: model.input.type)
 
-        #expect(vm.rateValue(for: quote) == "1 \(vm.asset.symbol) ≈ $600.00")
+        #expect(model.rateValue(for: quote) == "1 \(model.asset.symbol) ≈ $600.00")
     }
 
     @Test
     func testCryptoAmountValue() {
-        let vm = FiatSceneViewModelTests.mock()
-        let buyQuote = FiatQuote.mock(fiatAmount: 0, cryptoAmount: 1, type: vm.input.type)
-        vm.input.quote = buyQuote
-        #expect(vm.cryptoAmountValue == "≈ 1.00 \(vm.asset.symbol)")
+        let model = FiatSceneViewModelTests.mock()
+        let buyQuote = FiatQuote.mock(fiatAmount: 0, cryptoAmount: 1, type: model.input.type)
+        model.input.quote = buyQuote
+        #expect(model.cryptoAmountValue == "≈ 1.00 \(model.asset.symbol)")
 
-        vm.input.type = .sell
-        vm.onChangeType(.buy, type: .sell)
-        let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: vm.input.type)
-        vm.input.quote = sellQuote
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+        let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: model.input.type)
+        model.input.quote = sellQuote
 
-        #expect(vm.cryptoAmountValue == "≈ 2,400.00 \(vm.currencyFormatter.symbol)")
+        #expect(model.cryptoAmountValue == "≈ 2,400.00 \(model.currencyFormatter.symbol)")
     }
 }
