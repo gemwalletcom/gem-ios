@@ -21,10 +21,7 @@ public struct AssetDetailsInfoViewModel {
     public init(
         priceData: PriceData,
         explorerService: ExplorerService = .standard,
-        currencyFormatter: CurrencyFormatter = CurrencyFormatter(
-            type: .abbreviated,
-            currencyCode: Preferences.standard.currency
-        )
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
     ) {
         self.priceData = priceData
         self.explorerService = explorerService
@@ -65,14 +62,14 @@ public struct AssetDetailsInfoViewModel {
 
     public var circulatingSupplyText: String?  {
         if let circulatingSupply = priceData.market?.circulatingSupply {
-            return currencyFormatter.string(decimal: Decimal(circulatingSupply), symbol: priceData.asset.symbol)
+            return IntegerFormatter.standard.string(circulatingSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
 
     public var totalSupplyText: String? {
         if let totalSupply = priceData.market?.totalSupply {
-            return currencyFormatter.string(decimal: Decimal(totalSupply), symbol: priceData.asset.symbol)
+            return IntegerFormatter.standard.string(totalSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
