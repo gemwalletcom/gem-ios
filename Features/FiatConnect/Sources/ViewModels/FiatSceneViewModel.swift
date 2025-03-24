@@ -37,7 +37,7 @@ public final class FiatSceneViewModel {
         self.walletId = walletId
 
         let input = FiatInput(type: .buy)
-        let defaultAmount = FiatTransactionTypeViewModel(type: input.type).defaultAmount
+        let defaultAmount = FiatQuoteTypeViewModel(type: input.type).defaultAmount
         self.input = input
         self.amountText = String(Int(defaultAmount))
     }
@@ -53,7 +53,7 @@ public final class FiatSceneViewModel {
         state.value.or([]).count > 1
     }
 
-    func pickerTitle(type: FiatTransactionType) -> String {
+    func pickerTitle(type: FiatQuoteType) -> String {
         typeModel(type: type).title
     }
 
@@ -146,8 +146,8 @@ extension FiatSceneViewModel {
         BalanceViewModel(asset: asset, balance: assetData.balance, formatter: valueFormatter)
     }
 
-    private func typeModel(type: FiatTransactionType) -> FiatTransactionTypeViewModel {
-        FiatTransactionTypeViewModel(type: type)
+    private func typeModel(type: FiatQuoteType) -> FiatQuoteTypeViewModel {
+        FiatQuoteTypeViewModel(type: type)
     }
 
     private func parseAmount(text: String) -> Double {
@@ -180,7 +180,7 @@ extension FiatSceneViewModel {
 
     private func maxAmount(assetData: AssetData) -> Double {
         switch input.type {
-        case .buy: FiatTransactionTypeViewModel.defaultBuyMaxAmount
+        case .buy: FiatQuoteTypeViewModel.defaultBuyMaxAmount
         case .sell: balanceModel(assetData: assetData).availableBalanceAmount
         }
     }
@@ -210,7 +210,7 @@ extension FiatSceneViewModel {
         input.quote = quote
     }
 
-    func selectType(_ type: FiatTransactionType) {
+    func selectType(_ type: FiatQuoteType) {
         input.type = type
         amountText = formatAmount(input.amount)
     }
@@ -253,17 +253,13 @@ extension FiatSceneViewModel {
             let quotes: [FiatQuote] = try await {
                 let request = FiatQuoteRequest(
                     assetId: asset.id.identifier,
+                    type: input.type,
                     fiatCurrency: currencyFormatter.currencyCode,
                     fiatAmount: input.amount,
-                    cryptoAmount: input.amount,
+                    cryptoValue: .none, //TODO
                     walletAddress: assetAddress.address
                 )
-                switch input.type {
-                case .buy:
-                    return try await fiatService.getBuyQuotes(asset: asset, request: request)
-                case .sell:
-                    return try await fiatService.getSellQuotes(asset: asset, request: request)
-                }
+                return try await fiatService.getQuotes(asset: asset, request: request)
             }()
 
             if !quotes.isEmpty {
