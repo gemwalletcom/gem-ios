@@ -142,11 +142,11 @@ public struct CurrencyFormatter: Sendable, Hashable {
     
     private func abbreviatedString(for number: Double, formatter: NumberFormatter) -> String {
         guard let divisor = divisors.reversed().first(where: { abs(number) >= $0.rawValue }) else {
-            return formatter.string(from: NSNumber(value: number)) ?? "\(number)"
+            return formatter.string(from: NSNumber(value: number)) ?? String(number)
         }
         
         let value = number / divisor.rawValue
-        let formatted = formatter.string(from: NSNumber(value: value)) ?? "\(value)"
+        let formatted = formatter.string(from: NSNumber(value: value)) ?? String(number)
 
         return String(format: "%@%@", formatted, divisor.abbreviation)
     }
