@@ -89,6 +89,13 @@ public struct TransactionScene: View {
                         Spacer(minLength: 0)
                     }
                 }
+                Section {
+                    NavigationOpenLink(
+                        url: model.transactionExplorerUrl,
+                        with: Text(model.transactionExplorerText)
+                            .tint(Colors.black)
+                    )
+                }
             }
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
