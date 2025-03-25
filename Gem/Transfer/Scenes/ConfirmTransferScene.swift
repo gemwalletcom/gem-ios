@@ -93,12 +93,7 @@ extension ConfirmTransferScene {
                 )
                 
                 if model.shouldShowRecipientField {
-                    AddressListItemView(
-                        title: model.recipientTitle,
-                        style: .full,
-                        account: model.recipientValue,
-                        explorerService: model.explorerService
-                    )
+                    AddressListItemView(model: model.recipientAddressViewModel)
                 }
 
                 if model.shouldShowMemo {

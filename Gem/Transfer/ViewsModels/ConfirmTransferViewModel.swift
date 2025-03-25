@@ -101,8 +101,15 @@ final class ConfirmTransferViewModel {
     var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }
 
     var shouldShowRecipientField: Bool { dataModel.shouldShowRecipient }
-    var recipientTitle: String { dataModel.recipientTitle }
-    var recipientValue: SimpleAccount { dataModel.recepientAccount }
+    
+    var recipientAddressViewModel: AddressListItemViewModel {
+        AddressListItemViewModel(
+            title: dataModel.recipientTitle,
+            account: dataModel.recepientAccount,
+            style: .short,
+            explorerService: explorerService
+        )
+    }
 
     var networkTitle: String { Localized.Transfer.network }
     var networkValue: String {

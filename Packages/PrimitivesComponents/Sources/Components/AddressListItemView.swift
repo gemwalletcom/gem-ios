@@ -8,46 +8,24 @@ import Localization
 
 // TODO: - remove explorerService dependency get address link in init
 public struct AddressListItemView: View {
-    let title: String
-    let style: AddressFormatter.Style
-    let account: SimpleAccount
-    let explorerService: any ExplorerLinkFetchable
+    
+    private let model: AddressListItemViewModel
 
     public init(
-        title: String,
-        style: AddressFormatter.Style,
-        account: SimpleAccount,
-        explorerService: any ExplorerLinkFetchable
+        model: AddressListItemViewModel
     ) {
-        self.title = title
-        self.style = style
-        self.account = account
-        self.explorerService = explorerService
+        self.model = model
     }
 
     public var body: some View {
         ListItemImageView(
-            title: title,
-            subtitle: subtitle,
-            assetImage: account.assetImage
+            title: model.title,
+            subtitle: model.subtitle,
+            assetImage: model.assetImage
         )
         .contextMenu {
-            ContextMenuCopy(title: Localized.Common.copy, value: account.address)
-            ContextMenuViewURL(title: addressExplorerText, url: addressExplorerUrl, image: SystemImage.globe)
+            ContextMenuCopy(title: Localized.Common.copy, value: model.account.address)
+            ContextMenuViewURL(title: model.addressExplorerText, url: model.addressExplorerUrl, image: SystemImage.globe)
         }
     }
-    
-    var subtitle: String {
-        if account.name == account.address || account.name == .none {
-            return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
-        }
-        return account.name ?? account.address
-    }
-    
-    private var addressLink: BlockExplorerLink {
-        explorerService.addressUrl(chain: account.chain, address: account.address)
-    }
-
-    var addressExplorerText: String { Localized.Transaction.viewOn(addressLink.name) }
-    var addressExplorerUrl: URL { addressLink.url }
 }
