@@ -14,18 +14,20 @@ public struct AssetDetailsInfoViewModel {
     
     private let priceData: PriceData
     private let explorerService: ExplorerService
-    private let currencyFormatter: CurrencyFormatter
+    private let abbreviatedFormatter: AbbreviatedFormatter
 
     public var showMarketValues: Bool { !marketValues.isEmpty }
 
     public init(
         priceData: PriceData,
         explorerService: ExplorerService = .standard,
-        currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
+        abbreviatedFormatter: AbbreviatedFormatter = AbbreviatedFormatter(
+            currencyCode: Preferences.standard.currency
+        )
     ) {
         self.priceData = priceData
         self.explorerService = explorerService
-        self.currencyFormatter = currencyFormatter
+        self.abbreviatedFormatter = abbreviatedFormatter
     }
     
     public var marketCapViewModel: MarketValueViewModel {
@@ -55,21 +57,21 @@ public struct AssetDetailsInfoViewModel {
     
     public var marketCapText: String? {
         if let marketCap = priceData.market?.marketCap {
-            return currencyFormatter.string(marketCap)
+            return abbreviatedFormatter.string(marketCap)
         }
         return .none
     }
 
     public var circulatingSupplyText: String?  {
         if let circulatingSupply = priceData.market?.circulatingSupply {
-            return IntegerFormatter.standard.string(circulatingSupply, symbol: priceData.asset.symbol)
+            return abbreviatedFormatter.string(circulatingSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
 
     public var totalSupplyText: String? {
         if let totalSupply = priceData.market?.totalSupply {
-            return IntegerFormatter.standard.string(totalSupply, symbol: priceData.asset.symbol)
+            return abbreviatedFormatter.string(totalSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
