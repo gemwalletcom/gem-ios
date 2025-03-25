@@ -19,7 +19,7 @@ public struct AssetTagsViewModel {
         case .manage, .priceAlert, .receive, .swap:
             tags = [.stablecoins, .trending]
         case .buy:
-            tags = [.stablecoins, .trendingFiat]
+            tags = [.stablecoins, .trendingFiatPurchase]
         case .send:
             tags = [.stablecoins]
         }
