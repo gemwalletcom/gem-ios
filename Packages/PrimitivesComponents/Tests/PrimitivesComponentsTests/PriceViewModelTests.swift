@@ -19,6 +19,9 @@ struct PriceViewModelTests {
     func testPriceAmountText() {
         #expect(PriceViewModel(price: Price(price: 10, priceChangePercentage24h: 5), currencyCode: currencyCode).priceAmountText == "$10.00")
         #expect(PriceViewModel(price: Price(price: -10, priceChangePercentage24h: -5), currencyCode: currencyCode).priceAmountText == "-$10.00")
+        
+        #expect(PriceViewModel(price: Price(price: 123_456, priceChangePercentage24h: 5), currencyCode: currencyCode).priceAmountText == "$123.46K")
+        #expect(PriceViewModel(price: Price(price: 10_123_456, priceChangePercentage24h: 5), currencyCode: currencyCode).priceAmountText == "$10.12M")
     }
 
     @Test

@@ -11,10 +11,10 @@ public struct AbbreviatedFormatter: Sendable {
     
     public init(
         locale: Locale = Locale.current,
-        currencyCode: String// = Locale.current.currency?.identifier ?? .empty
+        currencyFormatter: CurrencyFormatter
     ) {
         self.locale = locale
-        self.currencyFormatter = CurrencyFormatter(type: .currencyShort, locale: locale, currencyCode: currencyCode)
+        self.currencyFormatter = currencyFormatter
     }
     
     // MARK: - Public methods

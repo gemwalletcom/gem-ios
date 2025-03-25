@@ -22,7 +22,7 @@ public struct AssetDetailsInfoViewModel {
         priceData: PriceData,
         explorerService: ExplorerService = .standard,
         abbreviatedFormatter: AbbreviatedFormatter = AbbreviatedFormatter(
-            currencyCode: Preferences.standard.currency
+            currencyFormatter: CurrencyFormatter(type: .currencyShort, currencyCode: Preferences.standard.currency)
         )
     ) {
         self.priceData = priceData

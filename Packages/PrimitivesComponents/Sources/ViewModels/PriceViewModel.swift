@@ -8,13 +8,15 @@ import Style
 public struct PriceViewModel {
     public let price: Price?
 
-    let currencyFormatter: CurrencyFormatter
-    let percentFormatter = CurrencyFormatter.percent
+    private let currencyFormatter: AbbreviatedFormatter
+    static let percentFormatter = CurrencyFormatter.percent
     var customCurrency = CurrencyFormatter()
 
     public init(price: Price?, currencyCode: String) {
         self.price = price
-        self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        self.currencyFormatter = AbbreviatedFormatter(
+            currencyFormatter: CurrencyFormatter(type: .currency, currencyCode: currencyCode)
+        )
         customCurrency.includePlusSign = true
         customCurrency.currencyCode = currencyCode
     }
@@ -53,7 +55,7 @@ public struct PriceViewModel {
 
     public var priceChangeText: String {
         guard let priceChange = priceChange else { return "" }
-        return percentFormatter.string(priceChange)
+        return Self.percentFormatter.string(priceChange)
     }
 
     public var priceChangeTextColor: Color {

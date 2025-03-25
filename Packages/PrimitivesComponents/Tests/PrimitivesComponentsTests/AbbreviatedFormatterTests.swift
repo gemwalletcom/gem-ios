@@ -8,38 +8,43 @@ import Primitives
 struct AbbreviatedFormatterTests {
     
     @Test func abbreviatedString() {
-        let abbreviatedFormatter = AbbreviatedFormatter(locale: .US, currencyCode: "USD")
+        let formatter = AbbreviatedFormatter(
+            locale: .US,
+            currencyFormatter: CurrencyFormatter(type: .currencyShort, currencyCode: "USD")
+        )
         
-        #expect(abbreviatedFormatter.string(0) == "$0")
-        #expect(abbreviatedFormatter.string(12) == "$12")
-        #expect(abbreviatedFormatter.string(1_234) == "$1,234")
-        #expect(abbreviatedFormatter.string(5_000_000) == "$5M")
-        #expect(abbreviatedFormatter.string(7_890_000_000) == "$7.89B")
-        #expect(abbreviatedFormatter.string(1_200_000_000_000) == "$1.2T")
+        #expect(formatter.string(0) == "$0")
+        #expect(formatter.string(12) == "$12")
+        #expect(formatter.string(1_234) == "$1,234")
+        #expect(formatter.string(100_000) == "$100K")
+        #expect(formatter.string(123_456) == "$123.46K")
+        #expect(formatter.string(5_000_000) == "$5M")
+        #expect(formatter.string(7_890_000_000) == "$7.89B")
+        #expect(formatter.string(1_200_000_000_000) == "$1.2T")
 
-        #expect(abbreviatedFormatter.string(-1234) == "-$1,234")
-        #expect(abbreviatedFormatter.string(-5_600_000) == "-$5.6M")
-        #expect(abbreviatedFormatter.string(-9_999_999_999) == "-$10B")
+        #expect(formatter.string(-1234) == "-$1,234")
+        #expect(formatter.string(-5_600_000) == "-$5.6M")
+        #expect(formatter.string(-9_999_999_999) == "-$10B")
     }
     
     @Test func abbreviatedStringSymbol() {
-        let abbreviatedFormatter = AbbreviatedFormatter(locale: .US, currencyCode: "USD")
+        let formatter = AbbreviatedFormatter(locale: .US, currencyFormatter: CurrencyFormatter(type: .currencyShort, currencyCode: "USD"))
         
-        #expect(abbreviatedFormatter.string(0, symbol: "BTC") == "0 BTC")
-        #expect(abbreviatedFormatter.string(12, symbol: "BTC") == "12 BTC")
-        #expect(abbreviatedFormatter.string(1_234, symbol: "BTC") == "1,234 BTC")
-        #expect(abbreviatedFormatter.string(5_000_000, symbol: "BTC") == "5M BTC")
-        #expect(abbreviatedFormatter.string(7_890_000_000, symbol: "BTC") == "7.89B BTC")
+        #expect(formatter.string(0, symbol: "BTC") == "0 BTC")
+        #expect(formatter.string(12, symbol: "BTC") == "12 BTC")
+        #expect(formatter.string(1_234, symbol: "BTC") == "1,234 BTC")
+        #expect(formatter.string(5_000_000, symbol: "BTC") == "5M BTC")
+        #expect(formatter.string(7_890_000_000, symbol: "BTC") == "7.89B BTC")
     }
     
     @Test func abbreviatedStringItLocale() {
-        let abbreviatedFormatter = AbbreviatedFormatter(locale: .IT, currencyCode: "EUR")
+        let formatter = AbbreviatedFormatter(locale: .IT, currencyFormatter: CurrencyFormatter(type: .currencyShort, currencyCode: "EUR"))
         
-        #expect(abbreviatedFormatter.string(0) == "0 €")
-        #expect(abbreviatedFormatter.string(12) == "12 €")
-        #expect(abbreviatedFormatter.string(1_234) == "1.234 €")
-        #expect(abbreviatedFormatter.string(5_000_000) == "5 Mio €")
-        #expect(abbreviatedFormatter.string(7_890_000_000) == "7,89 Mrd €")
-        #expect(abbreviatedFormatter.string(1_200_000_000_000) == "1,2 Bln €")
+        #expect(formatter.string(0) == "€0")
+        #expect(formatter.string(12) == "€12")
+        #expect(formatter.string(1_234) == "€1,234")
+        #expect(formatter.string(5_000_000) == "5 Mio €")
+        #expect(formatter.string(7_890_000_000) == "7,89 Mrd €")
+        #expect(formatter.string(1_200_000_000_000) == "1,2 Bln €")
     }
 }
