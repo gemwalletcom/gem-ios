@@ -85,10 +85,12 @@ public struct WalletDetailScene: View {
                     switch model.address {
                     case .account(let account):
                         AddressListItemView(
-                            title: Localized.Common.address,
-                            style: .short,
-                            account: account,
-                            explorerService: model.explorerService
+                            model: AddressListItemViewModel(
+                                title: Localized.Common.address,
+                                account: account,
+                                style: .short,
+                                explorerService: model.explorerService
+                            )
                         )
                     case .none:
                         EmptyView()

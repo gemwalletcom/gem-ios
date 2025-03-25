@@ -56,13 +56,8 @@ public struct TransactionScene: View {
                         }
                     }
 
-                    if let participantField = model.participantField, let account = model.participantAccount {
-                        AddressListItemView(
-                            title: participantField,
-                            style: .short,
-                            account: account,
-                            explorerService: ExplorerService.standard
-                        )
+                    if let recipientAddressViewModel = model.recipienAddressViewModel {
+                        AddressListItemView(model: recipientAddressViewModel)
                     }
 
                     if model.showMemoField {
@@ -88,6 +83,13 @@ public struct TransactionScene: View {
                             .padding(.bottom, .medium)
                         Spacer(minLength: 0)
                     }
+                }
+                Section {
+                    NavigationOpenLink(
+                        url: model.transactionExplorerUrl,
+                        with: Text(model.transactionExplorerText)
+                            .tint(Colors.black)
+                    )
                 }
             }
             .background(Colors.grayBackground)
