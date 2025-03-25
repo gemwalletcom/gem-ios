@@ -358,9 +358,9 @@
 "contacts.title" = "संपर्क";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
-"price_alerts.added_for" = "Price alert added %@";
-"asset_tag.trending" = "Trending";
-"asset_tag.gainers" = "Gainers";
-"asset_tag.losers" = "Losers";
-"asset_tag.new" = "New";
-"asset_tag.stablecoins" = "Stablecoins";
+"price_alerts.added_for" = "Set price alert for %@";
+"assets.tag.trending" = "Trending";
+"assets.tag.gainers" = "Gainers";
+"assets.tag.losers" = "Losers";
+"assets.tag.new" = "New";
+"assets.tag.stablecoins" = "Stablecoins";
