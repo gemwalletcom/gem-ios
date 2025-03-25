@@ -50,14 +50,13 @@ public struct AssetImageView: View {
                     .cornerRadius(cornerRadius)
             } else if let type = assetImage.type {
                 ZStack {
+                    RoundedRectangle(cornerRadius: cornerRadius)
+                        .foregroundStyle(.tertiary)
                     Text(type)
                         .lineLimit(1)
                         .minimumScaleFactor(0.3)
                         .padding(4)
                 }
-                .frame(width: imageSize, height: imageSize)
-                .cornerRadius(cornerRadius)
-                .background(Colors.grayBackground)
             }
         }
         .cornerRadius(cornerRadius)
@@ -75,3 +74,31 @@ public struct AssetImageView: View {
         .frame(width: imageSize, height: imageSize)
     }
 }
+
+#Preview {
+    Group {
+        // Light mode preview
+        AssetImageView(
+            assetImage: AssetImage(
+                type: "SPL",
+                imageURL: URL(string: "https://example.com/token.png"),
+                placeholder: Image(systemName: "bitcoinsign.circle"),
+                chainPlaceholder: Image(systemName: "bolt.circle.fill")
+            ),
+            size: 50,
+            overlayImageSize: 20
+        )
+
+        // Dark mode preview
+        AssetImageView(
+            assetImage: AssetImage(
+                type: "SPL", imageURL: nil,
+                placeholder: nil,
+                chainPlaceholder: Image(systemName: "bolt.circle.fill")
+            ),
+            size: 50,
+            overlayImageSize: 20
+        )
+    }
+}
+
