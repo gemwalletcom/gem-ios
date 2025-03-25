@@ -22,9 +22,11 @@ class SelectAssetViewModel {
 
     var state: StateViewType<[AssetBasic]> = .noData
     var filterModel: AssetsFilterViewModel
+    var searchModel: SelectAssetSearchViewModel
     var request: AssetsRequest
 
-    var selectAssetAction: AssetAction
+    var onSelectAssetAction: AssetAction
+    var onDismissSearch: VoidAction = nil
 
     init(
         preferences: Preferences = Preferences.standard,
@@ -41,7 +43,7 @@ class SelectAssetViewModel {
         self.assetsService = assetsService
         self.walletsService = walletsService
         self.priceAlertService = priceAlertService
-        self.selectAssetAction = selectAssetAction
+        self.onSelectAssetAction = selectAssetAction
 
         let filter = AssetsFilterViewModel(
             type: selectType,
@@ -50,6 +52,8 @@ class SelectAssetViewModel {
             )
         )
         self.filterModel = filter
+        self.searchModel = SelectAssetSearchViewModel(selectType: selectType)
+        
         self.request = AssetsRequest(
             walletID: wallet.id,
             filters: filter.defaultFilters
@@ -108,6 +112,10 @@ class SelectAssetViewModel {
         case .send: return false
         }
     }
+    
+    var shouldShowTagFilter: Bool {
+        searchModel.searchableQuery.isEmpty
+    }
 
     var currencyCode: String {
         preferences.currency
@@ -118,7 +126,7 @@ class SelectAssetViewModel {
 
 extension SelectAssetViewModel {
     func selectAsset(asset: Asset) {
-        selectAssetAction?(asset)
+        onSelectAssetAction?(asset)
     }
 
     func update(filterRequest: AssetsRequestFilter) {
@@ -138,7 +146,11 @@ extension SelectAssetViewModel {
         if query.isEmpty {
             return
         }
-        await searchAssets(query: query)
+        await searchAssets(
+            query: query,
+            priorityAssetsQuery: searchModel.priorityAssetsQuery,
+            tag: nil
+        )
     }
     
     func handleAction(assetId: AssetId, enabled: Bool) async {
@@ -149,6 +161,37 @@ extension SelectAssetViewModel {
             await setPriceAlert(assetId: assetId, enabled: enabled)
         case .send, .receive, .buy, .swap: break
         }
+    }
+    
+    func setSelected(tag: AssetTag) {
+        onDismissSearch?()
+        searchModel.tagsViewModel.setSelectedTag(tag)
+        searchModel.focus = .tags
+        updateRequest()
+        Task {
+            await searchAssets(
+                query: .empty,
+                priorityAssetsQuery: searchModel.priorityAssetsQuery,
+                tag: searchModel.tagsViewModel.selectedTag
+            )
+        }
+    }
+    
+    func updateRequest() {
+        request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
+        state = .loading
+    }
+    
+    func onChangeFocus(isSearchable: Bool) {
+        if isSearchable {
+            searchModel.focus = .search
+            searchModel.tagsViewModel.setSelectedTag(nil)
+            updateRequest()
+        }
+    }
+
+    func setDismissSearchAction(_ onDismissSearch: @escaping () -> Void) {
+        self.onDismissSearch = onDismissSearch
     }
 }
 
@@ -162,23 +205,19 @@ extension SelectAssetViewModel {
         }
     }
 
-    private func searchAssets(query: String) async {
-        await MainActor.run { [self] in
-            self.state = .loading
-
-            if query.isEmpty {
-                self.state = .noData
-                return
-            }
-        }
-
+    private func searchAssets(
+        query: String,
+        priorityAssetsQuery: String?,
+        tag: AssetTag?
+    ) async {
         let chains: [Chain] = chains(for: wallet.type)
 
         do {
-            let assets = try await assetsService.searchAssets(query: query, chains: chains)
+            let assets = try await assetsService.searchAssets(query: query, chains: chains, tags: [tag].compactMap { $0 })
             try assetsService.addAssets(assets: assets)
-            try assetsService.assetStore.addAssetsSearch(query: query, assets: assets)
-            
+            if let priorityAssetsQuery {
+                try assetsService.assetStore.addAssetsSearch(query: priorityAssetsQuery, assets: assets)
+            }
             try assetsService.addBalancesIfMissing(walletId: wallet.walletId, assetIds: assets.map { $0.asset.id })
 
             await MainActor.run { [self] in
