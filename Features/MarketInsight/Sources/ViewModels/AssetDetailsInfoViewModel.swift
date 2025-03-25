@@ -64,14 +64,14 @@ public struct AssetDetailsInfoViewModel {
 
     public var circulatingSupplyText: String?  {
         if let circulatingSupply = priceData.market?.circulatingSupply {
-            return abbreviatedFormatter.stringSymbol(circulatingSupply, symbol: priceData.asset.symbol)
+            return abbreviatedFormatter.string(circulatingSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
 
     public var totalSupplyText: String? {
         if let totalSupply = priceData.market?.totalSupply {
-            return abbreviatedFormatter.stringSymbol(totalSupply, symbol: priceData.asset.symbol)
+            return abbreviatedFormatter.string(totalSupply, symbol: priceData.asset.symbol)
         }
         return .none
     }
