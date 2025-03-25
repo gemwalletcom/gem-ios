@@ -10,6 +10,18 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum Localized {
+  public enum Abbreviation {
+    public enum Divisor {
+      /// B
+      public static let billions = Localized.tr("Localizable", "abbreviation.divisor.billions", fallback: "B")
+      /// M
+      public static let millions = Localized.tr("Localizable", "abbreviation.divisor.millions", fallback: "M")
+      /// K
+      public static let thousands = Localized.tr("Localizable", "abbreviation.divisor.thousands", fallback: "K")
+      /// T
+      public static let trillions = Localized.tr("Localizable", "abbreviation.divisor.trillions", fallback: "T")
+    }
+  }
   public enum Activity {
     /// Activity
     public static let title = Localized.tr("Localizable", "activity.title", fallback: "Activity")
@@ -73,6 +85,18 @@ public enum Localized {
     public static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
     /// Select Asset
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
+    public enum Tag {
+      /// Gainers
+      public static let gainers = Localized.tr("Localizable", "assets.tag.gainers", fallback: "Gainers")
+      /// Losers
+      public static let losers = Localized.tr("Localizable", "assets.tag.losers", fallback: "Losers")
+      /// New
+      public static let new = Localized.tr("Localizable", "assets.tag.new", fallback: "New")
+      /// Stablecoins
+      public static let stablecoins = Localized.tr("Localizable", "assets.tag.stablecoins", fallback: "Stablecoins")
+      /// Trending
+      public static let trending = Localized.tr("Localizable", "assets.tag.trending", fallback: "Trending")
+    }
   }
   public enum Banner {
     public enum AccountActivation {
@@ -515,9 +539,9 @@ public enum Localized {
     }
   }
   public enum PriceAlerts {
-    /// Price alert added %@
+    /// Set price alert for %@
     public static func addedFor(_ p1: Any) -> String {
-      return Localized.tr("Localizable", "price_alerts. added_for", String(describing: p1), fallback: "Price alert added %@")
+      return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert for %@")
     }
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {

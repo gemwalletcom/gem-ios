@@ -358,4 +358,13 @@
 "contacts.title" = "連絡先";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
-"price_alerts. added_for" = "Price alert added %@";
+"price_alerts.added_for" = "Set price alert for %@";
+"assets.tag.trending" = "Trending";
+"assets.tag.gainers" = "Gainers";
+"assets.tag.losers" = "Losers";
+"assets.tag.new" = "New";
+"assets.tag.stablecoins" = "Stablecoins";
+"abbreviation.divisor.thousands" = "K";
+"abbreviation.divisor.millions" = "M";
+"abbreviation.divisor.billions" = "B";
+"abbreviation.divisor.trillions" = "T";
