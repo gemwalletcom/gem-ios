@@ -6,15 +6,22 @@ import SwiftUICore
 import Style
 
 public struct AssetTagsViewModel {
-    public let tags: [AssetTag]
+    public let selectType: SelectAssetType
     public var selectedTag: AssetTag?
     
-    public init(tags: [AssetTag]) {
-        self.tags = tags
+    public init(selectType: SelectAssetType) {
+        self.selectType = selectType
     }
     
     public var items: [AssetTagViewModel] {
-        tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
+        let tags: [AssetTag]
+        switch selectType {
+        case .buy, .manage, .priceAlert, .receive, .swap:
+            tags = [.stablecoins, .trending]
+        case .send:
+            tags = [.stablecoins]
+        }
+        return tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
     }
     
     public var query: String? {
@@ -38,11 +45,5 @@ public struct AssetTagsViewModel {
 
     public mutating func setSelectedTag(_ tag: AssetTag?) {
         selectedTag = selectedTag == tag ? nil : tag
-    }
-}
-
-public extension AssetTagsViewModel {
-    static func `default`() -> AssetTagsViewModel {
-        AssetTagsViewModel(tags: [.stablecoins, .trending])
     }
 }

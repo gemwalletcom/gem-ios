@@ -25,7 +25,7 @@ class SelectAssetViewModel {
     var searchModel: SelectAssetSearchViewModel
     var request: AssetsRequest
 
-    var selectAssetAction: AssetAction
+    var onSelectAssetAction: AssetAction
     var onDismissSearch: VoidAction = nil
 
     init(
@@ -43,7 +43,7 @@ class SelectAssetViewModel {
         self.assetsService = assetsService
         self.walletsService = walletsService
         self.priceAlertService = priceAlertService
-        self.selectAssetAction = selectAssetAction
+        self.onSelectAssetAction = selectAssetAction
 
         let filter = AssetsFilterViewModel(
             type: selectType,
@@ -52,7 +52,7 @@ class SelectAssetViewModel {
             )
         )
         self.filterModel = filter
-        self.searchModel = SelectAssetSearchViewModel()
+        self.searchModel = SelectAssetSearchViewModel(selectType: selectType)
         
         self.request = AssetsRequest(
             walletID: wallet.id,
@@ -112,6 +112,10 @@ class SelectAssetViewModel {
         case .send: return false
         }
     }
+    
+    var shouldShowTagFilter: Bool {
+        searchModel.searchableQuery.isEmpty
+    }
 
     var currencyCode: String {
         preferences.currency
@@ -122,7 +126,7 @@ class SelectAssetViewModel {
 
 extension SelectAssetViewModel {
     func selectAsset(asset: Asset) {
-        selectAssetAction?(asset)
+        onSelectAssetAction?(asset)
     }
 
     func update(filterRequest: AssetsRequestFilter) {
@@ -209,7 +213,7 @@ extension SelectAssetViewModel {
         let chains: [Chain] = chains(for: wallet.type)
 
         do {
-            let assets = try await assetsService.searchAssets(query: query, chains: chains, tag: tag)
+            let assets = try await assetsService.searchAssets(query: query, chains: chains, tags: [tag].compactMap { $0 })
             try assetsService.addAssets(assets: assets)
             if let priorityAssetsQuery {
                 try assetsService.assetStore.addAssetsSearch(query: priorityAssetsQuery, assets: assets)

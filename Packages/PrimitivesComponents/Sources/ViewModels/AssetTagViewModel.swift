@@ -17,11 +17,11 @@ public struct AssetTagViewModel: Identifiable {
     
     public var title: String {
         switch tag {
-        case .trending: Localized.AssetTag.trending
-        case .gainers: Localized.AssetTag.gainers
-        case .losers: Localized.AssetTag.losers
-        case .new: Localized.AssetTag.new
-        case .stablecoins: Localized.AssetTag.stablecoins
+        case .trending: Localized.Assets.Tag.trending
+        case .gainers: Localized.Assets.Tag.gainers
+        case .losers: Localized.Assets.Tag.losers
+        case .new: Localized.Assets.Tag.new
+        case .stablecoins: Localized.Assets.Tag.stablecoins
         }
     }
 }

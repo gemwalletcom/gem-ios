@@ -15,22 +15,26 @@ public struct AssetTagsView: View {
     }
     
     public var body: some View {
-        ScrollView(.horizontal, showsIndicators: false) {
-            HStack(alignment: .center, spacing: .medium) {
-                ForEach(model.items) { tagModel in
-                    Button {
-                        onSelect(tagModel.tag)
-                    } label: {
-                        Text(tagModel.title)
-                            .padding(.horizontal, .small)
-                            .padding(.vertical, .tiny)
-                            .font(.subheadline)
-                            .background(Colors.listStyleColor)
-                            .foregroundColor(model.foregroundColor(for: tagModel.tag))
-                            .opacity(model.opacity(for: tagModel.tag))
-                            .cornerRadius(.small)
+        if model.items.isEmpty {
+            EmptyView()
+        } else {
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(alignment: .center, spacing: .medium) {
+                    ForEach(model.items) { tagModel in
+                        Button {
+                            onSelect(tagModel.tag)
+                        } label: {
+                            Text(tagModel.title)
+                                .padding(.horizontal, .small)
+                                .padding(.vertical, .tiny)
+                                .font(.subheadline)
+                                .background(Colors.listStyleColor)
+                                .foregroundColor(model.foregroundColor(for: tagModel.tag))
+                                .opacity(model.opacity(for: tagModel.tag))
+                                .cornerRadius(.small)
+                        }
+                        .buttonStyle(.borderless)
                     }
-                    .buttonStyle(.borderless)
                 }
             }
         }

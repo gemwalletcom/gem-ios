@@ -88,6 +88,7 @@ struct SelectAssetScene: View {
                 AssetTagsView(model: model.searchModel.tagsViewModel) {
                     model.setSelected(tag: $0)
                 }
+                .isVisible(model.shouldShowTagFilter)
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())

@@ -22,7 +22,7 @@ public protocol GemAPIAssetsListService: Sendable {
 public protocol GemAPIAssetsService: Sendable {
     func getAsset(assetId: AssetId) async throws -> AssetFull
     func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic]
-    func getSearchAssets(query: String, chains: [Chain], tag: AssetTag?) async throws -> [AssetBasic]
+    func getSearchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic]
 }
 
 public protocol GemAPINameService: Sendable {
@@ -221,9 +221,9 @@ extension GemAPIService: GemAPIAssetsService {
             .map(as: [AssetBasic].self)
     }
     
-    public func getSearchAssets(query: String, chains: [Chain], tag: AssetTag?) async throws -> [AssetBasic] {
+    public func getSearchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {
         try await provider
-            .request(.getSearchAssets(query: query, chains: chains, tag: tag))
+            .request(.getSearchAssets(query: query, chains: chains, tags: tags))
             .map(as: [AssetBasic].self)
     }
 }

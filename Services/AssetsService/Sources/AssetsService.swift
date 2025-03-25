@@ -118,13 +118,13 @@ public final class AssetsService: Sendable {
 
     // search
 
-    public func searchAssets(query: String, chains: [Chain], tag: AssetTag?) async throws -> [AssetBasic] {
+    public func searchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {
         let assets = try await withThrowingTaskGroup(of: [AssetBasic]?.self) { group in
             var assets = [AssetBasic]()
 
             group.addTask { [weak self] in
                 guard let self = self else { return [] }
-                return try await self.searchAPIAssets(query: query, chains: chains, tag: tag)
+                return try await self.searchAPIAssets(query: query, chains: chains, tags: tags)
             }
             group.addTask { [weak self] in
                 guard let self = self else { return [] }
@@ -141,8 +141,8 @@ public final class AssetsService: Sendable {
         return assets
     }
 
-    func searchAPIAssets(query: String, chains: [Chain], tag: AssetTag?) async throws -> [AssetBasic] {
-        try await assetsProvider.getSearchAssets(query: query, chains: chains, tag: tag)
+    func searchAPIAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic] {
+        try await assetsProvider.getSearchAssets(query: query, chains: chains, tags: tags)
     }
 
     func searchNetworkAsset(tokenId: String, chains: [Chain]) async throws -> [AssetBasic] {
