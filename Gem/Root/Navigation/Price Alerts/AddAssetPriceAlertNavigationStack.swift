@@ -36,7 +36,7 @@ struct AddAssetPriceAlertsNavigationStack: View {
             }
             .navigationBarTitleDisplayMode(.inline)
             .task {
-                self.selectAssetModel.selectAssetAction = {
+                self.selectAssetModel.onSelectAssetAction = {
                     model.onSelectAsset($0)
                     dismiss()
                 }

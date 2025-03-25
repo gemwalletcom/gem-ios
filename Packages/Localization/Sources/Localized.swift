@@ -73,6 +73,18 @@ public enum Localized {
     public static let noAssetsFound = Localized.tr("Localizable", "assets.no_assets_found", fallback: "No assets found")
     /// Select Asset
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
+    public enum Tags {
+      /// Gainers
+      public static let gainers = Localized.tr("Localizable", "assets.tags.gainers", fallback: "Gainers")
+      /// Losers
+      public static let losers = Localized.tr("Localizable", "assets.tags.losers", fallback: "Losers")
+      /// New
+      public static let new = Localized.tr("Localizable", "assets.tags.new", fallback: "New")
+      /// Stablecoins
+      public static let stablecoins = Localized.tr("Localizable", "assets.tags.stablecoins", fallback: "Stablecoins")
+      /// Trending
+      public static let trending = Localized.tr("Localizable", "assets.tags.trending", fallback: "Trending")
+    }
   }
   public enum Banner {
     public enum AccountActivation {
@@ -515,9 +527,9 @@ public enum Localized {
     }
   }
   public enum PriceAlerts {
-    /// Price alert added %@
+    /// Set price alert for %@
     public static func addedFor(_ p1: Any) -> String {
-      return Localized.tr("Localizable", "price_alerts. added_for", String(describing: p1), fallback: "Price alert added %@")
+      return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert for %@")
     }
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
@@ -1029,7 +1041,7 @@ public enum Localized {
 // MARK: - Implementation Details
 
 extension Localized {
-  private static func tr(_ table: String, _ key: String, _ args: any CVarArg..., fallback value: String) -> String {
+  private static func tr(_ table: String, _ key: String, _ args: CVarArg..., fallback value: String) -> String {
     let format = BundleToken.bundle.localizedString(forKey: key, value: value, table: table)
     return String(format: format, locale: Locale.current, arguments: args)
   }

@@ -14,7 +14,7 @@ struct SelectAssetScene: View {
 
     @Binding private var isPresentingAddToken: Bool
 
-    @Query<AssetsRequest> 
+    @Query<AssetsRequest>
     private var assets: [AssetData]
 
     @State private var model: SelectAssetViewModel
@@ -39,7 +39,60 @@ struct SelectAssetScene: View {
     }
 
     var body: some View {
+        SearchableWrapper(
+            content: { list },
+            onChangeIsSearching: model.onChangeFocus,
+            onDismissSearch: model.setDismissSearchAction
+        )
+        .listSectionSpacing(.compact)
+        .searchable(
+            text: $model.searchModel.searchableQuery,
+            placement: .navigationBarDrawer(displayMode: .always)
+        )
+        .if(model.isNetworkSearchEnabled) {
+            $0.debounce(
+                value: $model.searchModel.searchableQuery.wrappedValue,
+                interval: Duration.milliseconds(250),
+                action: model.search(query:)
+            )
+        }
+        .overlay {
+            if model.state.isLoading, sections.assets.isEmpty {
+                LoadingView()
+            } else if sections.assets.isEmpty {
+                EmptyContentView (
+                    model: EmptyContentTypeViewModel(
+                        type: .search(
+                            type: .assets,
+                            action: model.showAddToken ? { onSelectAddCustomToken() } : nil
+                        )
+                    )
+                )
+            }
+        }
+        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
+        .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
+        .ifLet(copyTypeViewModel) {
+            $0.copyToast(
+                model: $1,
+                isPresenting: $isPresentingCopyToast
+            )
+        }
+        .listSectionSpacing(.compact)
+        .navigationBarTitle(model.title)
+    }
+    
+    var list: some View {
         List {
+            Section {} header: {
+                AssetTagsView(model: model.searchModel.tagsViewModel) {
+                    model.setSelected(tag: $0)
+                }
+                .isVisible(model.shouldShowTagFilter)
+            }
+            .textCase(nil)
+            .listRowInsets(EdgeInsets())
+
             if model.enablePopularSection && !sections.popular.isEmpty {
                 Section {
                     assetsList(assets: sections.popular)
@@ -66,39 +119,6 @@ struct SelectAssetScene: View {
                 assetsList(assets: sections.assets)
             }
         }
-        .listSectionSpacing(.compact)
-        .searchable(
-            text: $assets.searchBy,
-            placement: .navigationBarDrawer(displayMode: .always)
-        )
-        .if(model.isNetworkSearchEnabled) {
-            $0.debounce(
-                value: $assets.searchBy.wrappedValue,
-                interval: Duration.milliseconds(250),
-                action: model.search(query:)
-            )
-        }
-        .overlay {
-            if sections.assets.isEmpty {
-                EmptyContentView (
-                    model: EmptyContentTypeViewModel(
-                        type: .search(
-                            type: .assets,
-                            action: model.showAddToken ? { onSelectAddCustomToken() } : nil
-                        )
-                    )
-                )
-            }
-        }
-        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
-        .ifLet(copyTypeViewModel) {
-            $0.copyToast(
-                model: $1,
-                isPresenting: $isPresentingCopyToast
-            )
-        }
-        .listSectionSpacing(.compact)
-        .navigationBarTitle(model.title)
     }
     
     func assetsList(assets: [AssetData]) -> some View {

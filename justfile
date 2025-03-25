@@ -66,8 +66,6 @@ generate-model:
 generate-swiftgen:
     @echo "==> SwiftGen assets and Localizable.strings"
     @swiftgen config run --quiet
-    @echo "==> Applying SwiftGen patch, remove when SwiftGen is fixed"
-    @git apply .swiftgen.patch
 
 export BUILD_MODE := env_var_or_default("BUILD_MODE","")
 
