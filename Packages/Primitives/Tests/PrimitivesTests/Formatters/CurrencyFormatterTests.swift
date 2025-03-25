@@ -15,7 +15,7 @@ final class CurrencyFormatterTests {
 
     let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: "")
 
-    let abbreviatedFormatter = CurrencyFormatter(type: .abbreviated, locale: .US, currencyCode: "USD")
+    let shortFormatter = CurrencyFormatter(type: .currencyShort, locale: .US, currencyCode: "USD")
 
     @Test
     func testCurrency() {
@@ -96,24 +96,16 @@ final class CurrencyFormatterTests {
 
     @Test
     func testStringDecimalWithSymbolVariants() {
-        #expect(abbreviatedFormatter.string(decimal: Decimal(1234.56), symbol: "BTC") == "1.23K BTC")
-        #expect(abbreviatedFormatter.string(decimal: Decimal(12), symbol: "BTC") == "12 BTC")
-
+        #expect(shortFormatter.string(decimal: Decimal(12), symbol: "BTC") == "12 BTC")
         #expect(cryptoFormatter.string(decimal: Decimal(1234.56), symbol: "BTC") == "1,234.56 BTC")
         #expect(cryptoFormatter.string(decimal: Decimal(0.0001234), symbol: "BTC") == "0.00012 BTC")
     }
 
     @Test
     func testAbbreviated() {
-        #expect(abbreviatedFormatter.string(0) == "$0")
-        #expect(abbreviatedFormatter.string(12) == "$12")
-        #expect(abbreviatedFormatter.string(1_234) == "$1.23K")
-        #expect(abbreviatedFormatter.string(5_000_000) == "$5M")
-        #expect(abbreviatedFormatter.string(7_890_000_000) == "$7.89B")
-        #expect(abbreviatedFormatter.string(1_200_000_000_000) == "$1.2T")
-
-        #expect(abbreviatedFormatter.string(-1234) == "-$1.23K")
-        #expect(abbreviatedFormatter.string(-5_600_000) == "-$5.6M")
-        #expect(abbreviatedFormatter.string(-9_999_999_999) == "-$10B")
+        #expect(shortFormatter.string(0) == "$0")
+        #expect(shortFormatter.string(12) == "$12")
+        #expect(shortFormatter.string(1_234) == "$1,234")
+        #expect(shortFormatter.string(5_000_000) == "$5,000,000")
     }
 }
