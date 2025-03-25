@@ -25,8 +25,6 @@ public struct PriceListItemView: View {
                     Text(model.priceChangeView.text)
                         .textStyle(model.priceChangeView.style)
                 }
-            } else {
-                Text("--")
             }
         }
     }
