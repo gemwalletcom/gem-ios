@@ -166,7 +166,6 @@ public enum GemAPI: TargetType {
         case let .getFiatQuotes(_, value):
             let params: [String: Any] = [
                 "type": value.type.rawValue,
-                "amount": value.fiatAmount as Any?,
                 "fiat_amount": value.fiatAmount,
                 "crypto_value": value.cryptoValue as Any?,
                 "currency": value.fiatCurrency,
