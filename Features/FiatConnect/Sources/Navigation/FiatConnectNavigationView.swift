@@ -8,7 +8,6 @@ import Localization
 
 public struct FiatConnectNavigationView: View {
     @State private var model: FiatSceneViewModel
-    @State private var isPresentingFiatProvider: Bool = false
 
     public init(model: FiatSceneViewModel) {
         _model = State(initialValue: model)
@@ -16,25 +15,32 @@ public struct FiatConnectNavigationView: View {
 
     public var body: some View {
         FiatScene(
-            model: model,
-            isPresentingFiatProvider: $isPresentingFiatProvider
+            model: model
         )
-        .sheet(isPresented: $isPresentingFiatProvider) {
+        .observeQuery(
+            request: $model.assetRequest,
+            value: $model.assetData
+        )
+        .ifElse(
+            model.showFiatTypePicker,
+            ifContent: {
+                $0.toolbar {
+                    FiatTypeToolbar(
+                        selectedType: $model.input.type,
+                        pickerTitleProvider: model.pickerTitle
+                    )
+                }
+            },
+            elseContent: {
+                $0.navigationTitle(model.title)
+            }
+        )
+        .sheet(isPresented: $model.isPresentingFiatProvider) {
             SelectableListNavigationStack(
-                model: model.fiatProviderViewModel(),
-                onFinishSelection: onSelectQuote,
+                model: model.fiatProviderViewModel,
+                onFinishSelection: model.onSelectQuotes,
                 listContent: { SimpleListItemView(model: $0) }
             )
         }
-    }
-}
-
-// MARK: - Actions
-
-extension FiatConnectNavigationView {
-    func onSelectQuote(_ quotes: [FiatQuoteViewModel]) {
-        guard let quoteModel = quotes.first else { return }
-        model.selectQuote(quoteModel.quote)
-        isPresentingFiatProvider = false
     }
 }
