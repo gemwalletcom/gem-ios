@@ -14,8 +14,7 @@ final class FiatSceneViewModelTests {
         currencyFormatter: CurrencyFormatter = .init(locale: Locale.US, currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress = .mock(),
         walletId: String = UUID().uuidString
-    )
-    -> FiatSceneViewModel {
+    ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: service,
             currencyFormatter: currencyFormatter,
@@ -26,94 +25,109 @@ final class FiatSceneViewModelTests {
 
     @Test
     func testDefaultAmountText() {
-        let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
+        let model = FiatSceneViewModelTests.mock()
+        #expect(model.amountText == String(format: "%.0f", FiatQuoteTypeViewModel(type: .buy).defaultAmount))
 
-        vm.selectType(.sell)
-        #expect(vm.amountText == "")
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+
+        #expect(model.amountText == "")
     }
 
     @Test
     func testStatesChanges() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.changeAmountText("", text: "100")
-        #expect(vm.input.type == .buy)
-        #expect(vm.input.amount == 100)
+        let model = FiatSceneViewModelTests.mock()
+        model.onChangeAmountText("", text: "100")
 
-        vm.selectType(.sell)
-        #expect(vm.input.type == .sell)
-        #expect(vm.input.amount != 100)
-        vm.changeAmountText("", text: "200")
+        #expect(model.input.type == .buy)
+        #expect(model.input.amount == 100)
 
-        vm.selectType(.buy)
-        #expect(vm.input.amount == 100)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+
+        #expect(model.input.type == .sell)
+        #expect(model.input.amount != 100)
+
+        model.onChangeAmountText("", text: "200")
+
+        model.input.type = .buy
+        model.onChangeType(.sell, type: .buy)
+
+        #expect(model.input.amount == 100)
     }
 
     @Test
     func testSelectBuyAmount() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.select(amount: 150, assetData: .empty)
-        #expect(vm.amountText == "150")
+        let model = FiatSceneViewModelTests.mock()
+        model.onSelect(amount: 150)
 
-        vm.select(amount: 1.1, assetData: .empty)
-        #expect(vm.amountText != "1.1")
-        #expect(vm.amountText == "1")
+        #expect(model.amountText == "150")
+
+        model.onSelect(amount: 1.1)
+
+        #expect(model.amountText != "1.1")
+        #expect(model.amountText == "1")
     }
 
     @Test
     func testSelectSellAmount() {
-        let vm = FiatSceneViewModelTests.mock()
-        vm.selectType(.sell)
-        vm.select(
-            amount: 50,
-            assetData: .mock(balance: Balance(available: 100_000.asBigInt))
-        )
-        #expect(vm.amountText == "0.0005")
+        let model = FiatSceneViewModelTests.mock()
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+        model.assetData = .mock(balance: Balance(available: 100_000.asBigInt))
 
-        vm.select(
-            amount: 100,
-            assetData: .mock(balance: Balance(available: 100_000.asBigInt))
-        )
-        #expect(vm.amountText == "0.001")
+        model.onSelect(amount: 50)
+
+        #expect(model.amountText == "0.0005")
+
+        model.onSelect(amount: 100)
+
+        #expect(model.amountText == "0.001")
     }
 
     @Test
     func testCurrencySymbol() {
-        let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.currencyInputConfig.currencySymbol == "$")
+        let model = FiatSceneViewModelTests.mock()
+        #expect(model.currencyInputConfig.currencySymbol == "$")
 
-        vm.selectType(.sell)
-        #expect(vm.currencyInputConfig.currencySymbol == vm.asset.symbol)
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+
+        #expect(model.currencyInputConfig.currencySymbol == model.asset.symbol)
     }
 
     @Test
     func testButtonsTitle() {
-        let vm = FiatSceneViewModelTests.mock()
-        #expect(vm.buttonTitle(amount: 10.0) == "$10")
+        let model = FiatSceneViewModelTests.mock()
 
-        vm.selectType(.sell)
-        #expect(vm.buttonTitle(amount: 1.3) == "1%")
+        #expect(model.buttonTitle(amount: 10.0) == "$10")
+
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+
+        #expect(model.buttonTitle(amount: 1.3) == "1%")
     }
 
     @Test
     func testRateValue() {
-        let vm = FiatSceneViewModelTests.mock()
-        let quote = FiatQuote.mock(fiatAmount: 1200, cryptoAmount: 2.0, type: vm.input.type)
+        let model = FiatSceneViewModelTests.mock()
+        let quote = FiatQuote.mock(fiatAmount: 1200, cryptoAmount: 2.0, type: model.input.type)
 
-        #expect(vm.rateValue(for: quote) ==  "1 BTC ≈ $600.00")
+        #expect(model.rateValue(for: quote) == "1 \(model.asset.symbol) ≈ $600.00")
     }
 
     @Test
     func testCryptoAmountValue() {
-        let vm = FiatSceneViewModelTests.mock()
-        let buyQuote = FiatQuote.mock(fiatAmount: 0, cryptoAmount: 1, type: vm.input.type)
-        vm.input.quote = buyQuote
-        #expect(vm.cryptoAmountValue == "≈ 1.00 BTC")
+        let model = FiatSceneViewModelTests.mock()
+        let buyQuote = FiatQuote.mock(fiatAmount: 0, cryptoAmount: 1, type: model.input.type)
+        model.input.quote = buyQuote
+        #expect(model.cryptoAmountValue == "≈ 1.00 \(model.asset.symbol)")
 
-        vm.selectType(.sell)
-        let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: vm.input.type)
-        vm.input.quote = sellQuote
+        model.input.type = .sell
+        model.onChangeType(.buy, type: .sell)
+        let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: model.input.type)
+        model.input.quote = sellQuote
 
-        #expect(vm.cryptoAmountValue == "≈ 2,400.00 $")
+        #expect(model.cryptoAmountValue == "≈ 2,400.00 \(model.currencyFormatter.symbol)")
     }
 }
