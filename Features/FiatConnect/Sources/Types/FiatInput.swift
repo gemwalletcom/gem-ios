@@ -1,14 +1,17 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Primitives
+import SwiftUI
+import Components
 
-public struct FiatInput: Sendable {
+public struct FiatInput: Sendable, Equatable {
     public var type: FiatQuoteType
 
-    public var buyAmount: Double
-    public var sellAmount: Double
+    private var buyAmount: Double
+    private var sellAmount: Double
 
-    public var quote: FiatQuote?
+    private var sellQuote: FiatQuote?
+    private var buyQuote: FiatQuote?
 
     public init(
         type: FiatQuoteType,
@@ -18,6 +21,20 @@ public struct FiatInput: Sendable {
         self.type = type
         self.buyAmount = buyAmount
         self.sellAmount = sellAmount
+    }
+
+    public var quote: FiatQuote? {
+        get {
+            switch type {
+            case .buy: buyQuote
+            case .sell: sellQuote
+            }
+        } set {
+            switch type {
+            case .buy: buyQuote = newValue
+            case .sell: sellQuote = newValue
+            }
+        }
     }
 
     public var amount: Double {
