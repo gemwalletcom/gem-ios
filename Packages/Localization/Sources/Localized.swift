@@ -10,18 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum Localized {
-  public enum Abbreviation {
-    public enum Divisor {
-      /// B
-      public static let billions = Localized.tr("Localizable", "abbreviation.divisor.billions", fallback: "B")
-      /// M
-      public static let millions = Localized.tr("Localizable", "abbreviation.divisor.millions", fallback: "M")
-      /// K
-      public static let thousands = Localized.tr("Localizable", "abbreviation.divisor.thousands", fallback: "K")
-      /// T
-      public static let trillions = Localized.tr("Localizable", "abbreviation.divisor.trillions", fallback: "T")
-    }
-  }
   public enum Activity {
     /// Activity
     public static let title = Localized.tr("Localizable", "activity.title", fallback: "Activity")
