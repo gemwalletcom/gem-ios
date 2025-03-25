@@ -359,8 +359,8 @@
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
 "price_alerts.added_for" = "Set price alert for %@";
-"assets.tag.trending" = "Trending";
-"assets.tag.gainers" = "Gainers";
-"assets.tag.losers" = "Losers";
-"assets.tag.new" = "New";
-"assets.tag.stablecoins" = "Stablecoins";
+"assets.tags.trending" = "Trending";
+"assets.tags.gainers" = "Gainers";
+"assets.tags.losers" = "Losers";
+"assets.tags.new" = "नया";
+"assets.tags.stablecoins" = "स्थिर सिक्के";

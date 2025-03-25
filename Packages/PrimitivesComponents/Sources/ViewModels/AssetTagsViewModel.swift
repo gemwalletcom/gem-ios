@@ -16,8 +16,10 @@ public struct AssetTagsViewModel {
     public var items: [AssetTagViewModel] {
         let tags: [AssetTag]
         switch selectType {
-        case .buy, .manage, .priceAlert, .receive, .swap:
+        case .manage, .priceAlert, .receive, .swap:
             tags = [.stablecoins, .trending]
+        case .buy:
+            tags = [.stablecoins, .trendingFiat]
         case .send:
             tags = [.stablecoins]
         }

@@ -6,6 +6,7 @@ import Foundation
 
 public enum AssetTag: String, Codable, Equatable, Hashable, Sendable {
 	case trending
+	case trendingFiat = "trending_fiat"
 	case gainers
 	case losers
 	case new
