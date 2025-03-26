@@ -27,15 +27,22 @@ public final class SecurityViewModel {
         }
     }
 
-    var lockPeriodModel: LockPeriodSelectionViewModel
+    var lockPeriod: LockPeriod {
+        didSet { updateLockPeriod() }
+    }
 
-    public init(service: any BiometryAuthenticatable = BiometryAuthenticationService(),
-         preferences: ObservablePreferences = .default) {
+    var allLockPeriods: [LockPeriod] {
+        LockPeriod.allCases
+    }
 
+    public init(
+        service: any BiometryAuthenticatable = BiometryAuthenticationService(),
+        preferences: ObservablePreferences = .default
+    ) {
         self.service = service
         self.preferences = preferences
 
-        self.lockPeriodModel = LockPeriodSelectionViewModel(service: service)
+        self.lockPeriod = service.lockPeriod
         self.isEnabled = service.isAuthenticationEnabled
         self.isPrivacyLockEnabled = service.isPrivacyLockEnabled
     }
@@ -44,6 +51,7 @@ public final class SecurityViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
     var privacyLockTitle: String { Localized.Lock.privacyLock }
     var hideBalanceTitle: String { Localized.Settings.hideBalance }
+    var lockPeriodTitle: String { Localized.Lock.requireAuthentication }
 
     var authenticationTitle: String {
         switch service.availableAuthentication {
@@ -78,6 +86,15 @@ extension SecurityViewModel {
         } catch {
             isPresentingError = error.localizedDescription
             isPrivacyLockEnabled.toggle()
+        }
+    }
+    
+    func updateLockPeriod() {
+        do {
+            try service.update(period: lockPeriod)
+        } catch {
+            isPresentingError = error.localizedDescription
+            lockPeriod = service.lockPeriod
         }
     }
 }
