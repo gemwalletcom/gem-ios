@@ -6,16 +6,17 @@ import Foundation
 
 final class CurrencyFormatterTests {
 
-    let currencyFormatterUS = CurrencyFormatter(locale: .US, currencyCode: "USD")
-    let percentFormatterUS = CurrencyFormatter(type: .percent, locale: .US, currencyCode: "USD")
+    let currencyFormatterUS = CurrencyFormatter(locale: .US, currencyCode: Currency.usd.rawValue)
+    let percentFormatterUS = CurrencyFormatter(type: .percent, locale: .US, currencyCode: Currency.usd.rawValue)
 
-    let currencyFormatterUK = CurrencyFormatter(locale: .UK, currencyCode: "GBP")
-    let percentFormatterUK = CurrencyFormatter(type: .percent, locale: .UK, currencyCode: "GBP")
-    let percentSignLess = CurrencyFormatter(type: .percentSignLess, locale: .US, currencyCode: "USD")
+    let currencyFormatterUK = CurrencyFormatter(locale: .UK, currencyCode: Currency.gbp.rawValue)
+    let percentFormatterUK = CurrencyFormatter(type: .percent, locale: .UK, currencyCode: Currency.gbp.rawValue)
+    let percentSignLess = CurrencyFormatter(type: .percentSignLess, locale: .US, currencyCode: Currency.usd.rawValue)
 
     let cryptoFormatter = CurrencyFormatter(type: .currency, locale: .US, currencyCode: "")
 
-    let shortFormatter = CurrencyFormatter(type: .currencyShort, locale: .US, currencyCode: "USD")
+    let abbreviatedFormatterUS = CurrencyFormatter(type: .abbreviated, locale: .US, currencyCode: Currency.usd.rawValue)
+    let abbreviatedFormatterUK = CurrencyFormatter(type: .abbreviated, locale: .UK, currencyCode: Currency.gbp.rawValue)
 
     @Test
     func testCurrency() {
@@ -96,16 +97,35 @@ final class CurrencyFormatterTests {
 
     @Test
     func testStringDecimalWithSymbolVariants() {
-        #expect(shortFormatter.string(decimal: Decimal(12), symbol: "BTC") == "12 BTC")
         #expect(cryptoFormatter.string(decimal: Decimal(1234.56), symbol: "BTC") == "1,234.56 BTC")
         #expect(cryptoFormatter.string(decimal: Decimal(0.0001234), symbol: "BTC") == "0.00012 BTC")
     }
 
     @Test
     func testAbbreviated() {
-        #expect(shortFormatter.string(0) == "$0")
-        #expect(shortFormatter.string(12) == "$12")
-        #expect(shortFormatter.string(1_234) == "$1,234")
-        #expect(shortFormatter.string(5_000_000) == "$5,000,000")
+        #expect(abbreviatedFormatterUS.string(0) == "$0")
+        #expect(abbreviatedFormatterUS.string(12) == "$12")
+        #expect(abbreviatedFormatterUS.string(1_234) == "$1,234")
+        #expect(abbreviatedFormatterUS.string(100_000) == "$100K")
+        #expect(abbreviatedFormatterUS.string(-1234) == "-$1,234")
+        #expect(abbreviatedFormatterUS.string(-5_600_000) == "-$5.6M")
+
+        #expect(abbreviatedFormatterUK.string(123_456) == "£123.46K")
+        #expect(abbreviatedFormatterUK.string(5_000_000) == "£5M")
+        #expect(abbreviatedFormatterUK.string(7_890_000_000) == "£7.89B")
+        #expect(abbreviatedFormatterUK.string(1_200_000_000_000) == "£1.2T")
+        #expect(abbreviatedFormatterUK.string(-9_999_999_999) == "-£10B")
+    }
+    
+    @Test
+    func abbreviatedStringSymbol() {
+        #expect(abbreviatedFormatterUS.string(decimal: 0, symbol: "BTC") == "0 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 12, symbol: "BTC") == "12 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 1_234, symbol: "BTC") == "1,234 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 5_000_000, symbol: "BTC") == "5M BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 7_890_000_000, symbol: "BTC") == "7.89B BTC")
+        
+        #expect(abbreviatedFormatterUS.string(decimal: 1_234) == "1,234")
+        #expect(abbreviatedFormatterUS.string(decimal: 5_000_000) == "5M")
     }
 }
