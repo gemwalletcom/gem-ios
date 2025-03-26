@@ -174,7 +174,7 @@ public enum Images {
         public static let priceAlerts = Image(.emptyNotification)
         public static let nft = Image(.emptyIcons)
         public static let stake = Image(.emptyStake)
-        public static let walletConnect = Image(.emptyIcons)
+        public static let walletConnect = Image(.emptyDapps)
         public static let search = Image(.emptySearch)
     }
 }
