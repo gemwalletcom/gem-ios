@@ -177,6 +177,10 @@ public enum Images {
         public static let walletConnect = Image(.emptyDapps)
         public static let search = Image(.emptySearch)
     }
+
+    public struct ErrorConent {
+        public static let error = Image(.error)
+    }
 }
 
 // MARK: - Preview
