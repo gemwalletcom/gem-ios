@@ -32,18 +32,22 @@ public struct AbbreviatedFormatter: Sendable {
                 let string = amount
                     .formatted(
                         .number
-                        .notation(.compactName).locale(locale).precision(.fractionLength(0...2))
+                        .notation(.compactName)
+                        .locale(locale)
+                        .precision(.fractionLength(0...2))
                     )
                 return "\(string) \(symbol)"
             } else {
                 return amount
                     .formatted(
                         .currency(code: currencyFormatter.currencyCode)
-                        .notation(.compactName).locale(locale).precision(.fractionLength(0...2))
+                        .notation(.compactName)
+                        .locale(locale)
+                        .precision(.fractionLength(0...2))
                     )
             }
         } else {
-            return amount.description
+            return currencyFormatter.string(amount)
         }
     }
 }
