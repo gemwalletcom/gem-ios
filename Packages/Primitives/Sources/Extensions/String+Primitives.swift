@@ -21,8 +21,13 @@ public extension String {
         }
         return "0x" + self
     }
+
     var asURL: URL? {
         URL(string: self)
+    }
+    
+    var isNotEmpty: Bool {
+        !isEmpty
     }
     
     func index(from: Int) -> Index {

@@ -40,12 +40,12 @@ public struct CurrencyTextField: View {
             TextField(placeholder, text: $text)
                 .keyboardType(keyboardType)
                 .foregroundStyle(Colors.black)
-                .font(.system(size: 52).weight(.semibold))
+                .font(.system(size: 44).weight(.semibold))
                 .multilineTextAlignment(.center)
                 .textFieldStyle(.plain)
                 .lineLimit(1)
                 .padding(currencyPosition == .leading ? .leading : .trailing, .tiny)
-                .frame(minWidth: 40, maxWidth: 260)
+                .frame(minWidth: 40, maxWidth: 210)
                 .fixedSize(horizontal: true, vertical: false)
                 .disabled(!isEnabled)
 
@@ -57,7 +57,7 @@ public struct CurrencyTextField: View {
 
     private var currencySymbolView: some View {
         Text(currencySymbol)
-            .font(.system(size: 52).weight(.semibold))
+            .font(.system(size: 44).weight(.semibold))
             .foregroundStyle(Colors.black)
             .lineLimit(1)
             .fixedSize()
