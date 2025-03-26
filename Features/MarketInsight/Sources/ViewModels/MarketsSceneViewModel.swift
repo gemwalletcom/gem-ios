@@ -5,6 +5,7 @@ import Components
 import Primitives
 import PriceService
 import AssetsService
+import PrimitivesComponents
 
 @MainActor
 @Observable
@@ -42,5 +43,9 @@ public final class MarketsSceneViewModel: Sendable  {
     
     var title: String {
         "Markets"
+    }
+    
+    var emptyContentModel: EmptyContentTypeViewModel {
+        EmptyContentTypeViewModel(type: .markets)
     }
 }
