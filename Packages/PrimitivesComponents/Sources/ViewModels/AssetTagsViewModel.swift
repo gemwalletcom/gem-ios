@@ -14,14 +14,15 @@ public struct AssetTagsViewModel {
     }
     
     public var items: [AssetTagViewModel] {
-        let tags: [AssetTag]
-        switch selectType {
-        case .manage, .priceAlert, .receive, .swap:
-            tags = [.stablecoins, .trending]
-        case .buy:
-            tags = [.stablecoins, .trendingFiatPurchase]
-        case .send:
-            tags = [.stablecoins]
+        let tags: [AssetTag] = switch selectType {
+        case .receive(let type):
+            switch type {
+            case .asset: [.stablecoins, .trending]
+            case .collection: []
+            }
+        case .manage, .priceAlert, .swap: [.stablecoins, .trending]
+        case .buy: [.stablecoins, .trendingFiatPurchase]
+        case .send: [.stablecoins]
         }
         return tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
     }
