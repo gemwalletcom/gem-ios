@@ -42,11 +42,25 @@ public struct TonJettonToken: Codable, Sendable {
 	}
 }
 
+public struct TonTransactionOutMessage: Codable, Sendable {
+	public let hash: String
+	public let bounce: Bool
+	public let bounced: Bool
+
+	public init(hash: String, bounce: Bool, bounced: Bool) {
+		self.hash = hash
+		self.bounce = bounce
+		self.bounced = bounced
+	}
+}
+
 public struct TonTransactionMessage: Codable, Sendable {
 	public let hash: String
+	public let out_msgs: [TonTransactionOutMessage]
 
-	public init(hash: String) {
+	public init(hash: String, out_msgs: [TonTransactionOutMessage]) {
 		self.hash = hash
+		self.out_msgs = out_msgs
 	}
 }
 

@@ -215,10 +215,17 @@ extension TonService: ChainTransactionStateFetchable {
             let newTransactionId = Data(base64Encoded: transaction.hash)?.hexString else {
             throw AnyError("transaction not found")
         }
-        //TODO: Add status check
+        let state: TransactionState = {
+            if transaction.out_msgs.isEmpty {
+                return .failed
+            } else if let outMessage = transaction.out_msgs.first, outMessage.bounce && outMessage.bounced {
+                return .failed
+            }
+            return .confirmed
+        }()
         
         return TransactionChanges(
-            state: .confirmed,
+            state: state,
             changes: [
                 .hashChange(old: request.id, new: newTransactionId)
             ]
