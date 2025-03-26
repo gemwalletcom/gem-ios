@@ -42,6 +42,22 @@ public struct TonJettonToken: Codable, Sendable {
 	}
 }
 
+public struct TonTransactionMessage: Codable, Sendable {
+	public let hash: String
+
+	public init(hash: String) {
+		self.hash = hash
+	}
+}
+
+public struct TonMessageTransactions: Codable, Sendable {
+	public let transactions: [TonTransactionMessage]
+
+	public init(transactions: [TonTransactionMessage]) {
+		self.transactions = transactions
+	}
+}
+
 public struct TonTransactionId: Codable, Sendable {
 	public let hash: String
 
@@ -55,13 +71,5 @@ public struct TonTransaction: Codable, Sendable {
 
 	public init(transaction_id: TonTransactionId) {
 		self.transaction_id = transaction_id
-	}
-}
-
-public struct TonTransactionMessage: Codable, Sendable {
-	public let hash: String
-
-	public init(hash: String) {
-		self.hash = hash
 	}
 }
