@@ -55,12 +55,6 @@ struct AmountScene: View {
                 case .stake, .unstake, .redelegate, .withdraw:
                     if let viewModel = model.stakeValidatorViewModel  {
                         Section(Localized.Stake.validator) {
-                            //TODO: Use this, other option does not work for some reason
-                            /*
-                             NavigationLink(value: Scenes.Validators()) {
-                             ListItemView(title: validator.name, subtitle: .none)
-                             }
-                             */
                             if model.isSelectValidatorEnabled {
                                 NavigationCustomLink(with: ValidatorView(model: viewModel)) {
                                     model.setCurrentValidator()
@@ -75,7 +69,6 @@ struct AmountScene: View {
                 
             }
             .contentMargins([.top], .zero, for: .scrollContent)
-            //.listSectionSpacing(.compact)
 
             Spacer()
             Button(Localized.Common.continue, action: next)
