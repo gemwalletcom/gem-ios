@@ -18,15 +18,14 @@ public struct MarketsScene: View {
         List {
             switch model.state {
             case .noData:
-                EmptyView()
+                Text("")
             case .loading:
-                EmptyView()
+                LoadingView()
             case .data(let data):
                 PriceListItemView(model: data.marketCapViewModel)
-            case .error:
-                EmptyView()
+            case .error(let error):
+                ListItemErrorView(error: error)
             }
-            
         }
         .refreshable {
             await model.fetch()
@@ -34,6 +33,11 @@ public struct MarketsScene: View {
         .onAppear() {
             Task {
                 await model.fetch()
+            }
+        }
+        .overlay {
+            if model.state.isNoData {
+                EmptyContentView(model: model.emptyContentModel)
             }
         }
         .navigationTitle(model.title)

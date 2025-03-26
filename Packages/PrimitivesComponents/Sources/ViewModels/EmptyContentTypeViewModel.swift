@@ -29,6 +29,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .networks: "No networks found"
             case .activity: "No activities found"
             }
+        case .markets: "Your markets data will appear here"
         }
     }
 
@@ -46,6 +47,7 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
             case .networks: "Check the spelling or try a new search"
             case .activity: "Clear filters to refresh your activities"
             }
+        case .markets: .none
         }
     }
 
@@ -57,12 +59,13 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .stake: Images.EmptyContent.stake
         case .walletConnect: Images.EmptyContent.walletConnect
         case .search: Images.EmptyContent.search
+        case .markets: Images.EmptyContent.activity
         }
     }
 
     public var buttons: [EmptyAction] {
         switch type {
-        case .priceAlerts, .asset, .stake, .walletConnect:
+        case .priceAlerts, .asset, .stake, .walletConnect, .markets:
             return []
         case let .nfts(action):
             let receive = EmptyAction(title: Localized.Wallet.receive, action: action)
