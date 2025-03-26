@@ -17,10 +17,12 @@ public struct AssetTagsViewModel {
         let tags: [AssetTag] = switch selectType {
         case .receive(let type):
             switch type {
-            case .asset: [.stablecoins, .trending]
+            case .asset: [.stablecoins]
             case .collection: []
             }
-        case .manage, .priceAlert, .swap: [.stablecoins, .trending]
+        case .manage,
+            .priceAlert,
+            .swap: [.stablecoins, .trending]
         case .buy: [.stablecoins, .trendingFiatPurchase]
         case .send: [.stablecoins]
         }
