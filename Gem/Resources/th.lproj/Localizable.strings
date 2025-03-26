@@ -358,4 +358,9 @@
 "contacts.title" = "ติดต่อเรา";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
-"price_alerts. added_for" = "Price alert added %@";
+"price_alerts.added_for" = "Set price alert for %@";
+"assets.tags.trending" = "Trending";
+"assets.tags.gainers" = "Gainers";
+"assets.tags.losers" = "Losers";
+"assets.tags.new" = "ใหม่";
+"assets.tags.stablecoins" = "สเตเบิลคอยน์";

@@ -15,7 +15,7 @@ public struct FiatQuoteViewModel {
     public init(
         asset: Asset,
         quote: FiatQuote,
-        selectedQuote: FiatQuote?,
+        selectedQuote: FiatQuote? = nil,
         formatter: CurrencyFormatter
     ) {
         self.asset = asset

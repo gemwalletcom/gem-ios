@@ -73,6 +73,15 @@ class RecipientViewModel: ObservableObject {
         )
     }
     
+    func getRecipientData(recipient: RecipientAddress) throws -> RecipientData {
+        let recipient = Recipient(name: recipient.name, address: recipient.address, memo: .none) //TODO: Add Memo
+        try validateAddress(address: recipient.address)
+        return RecipientData(
+            recipient: recipient,
+            amount: .none
+        )
+    }
+    
     private func validateAddress(address: String) throws {
         guard asset.chain.isValidAddress(address) else {
             throw TransferError.invalidAddress(asset: asset)
