@@ -20,6 +20,8 @@ public struct Colors {
     public static let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
     public static let insetGroupedListStyle = UIColor.dynamicColor(UIColor.systemGroupedBackground.color, dark: UIColor.black.color
     )
+    public static let emptyBackgroundText = Color.dynamicColor("#777A80")
+    public static let emptyBackground = Color.dynamicColor("#CACACE", dark: "3D3D3D")
 }
 
 #Preview {

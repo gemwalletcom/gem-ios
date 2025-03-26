@@ -52,18 +52,20 @@ public struct AssetImageView: View {
             GeometryReader { geo in
                 let diameter = min(geo.size.width, geo.size.height)
                 ZStack {
-                    Circle().foregroundStyle(.tertiary)
+                    Circle().foregroundStyle(Colors.emptyBackground)
                     Text(tokenType.uppercased())
                         .font(.system(size: diameter * 0.3, weight: .semibold))
                         .minimumScaleFactor(0.4)
                         .lineLimit(1)
                         .multilineTextAlignment(.center)
                         .padding(.horizontal, .tiny + .extraSmall)
-                        .foregroundColor(.primary)
+                        .foregroundColor(Colors.emptyBackgroundText)
                 }
             }
         } else {
-            Circle().foregroundStyle(.tertiary)
+            ZStack {
+                Circle().foregroundStyle(Colors.emptyBackground)
+            }
         }
     }
 
