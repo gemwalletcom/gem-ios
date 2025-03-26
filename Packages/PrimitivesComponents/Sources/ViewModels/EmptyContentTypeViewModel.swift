@@ -7,7 +7,7 @@ import Style
 import Components
 import Localization
 
-// TODO: - add localizations, add actions ( now they are empty ), review texts, review images
+// TODO: - integrate localization texts
 public struct EmptyContentTypeViewModel: EmptyContentViewable {
     public let type: EmptyContentType
 
@@ -17,35 +17,37 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
 
     public var title: String {
         switch type {
-        case .nfts: "Your NFTs will appear here️"
-        case .priceAlerts: "Your alerts will appear here️"
-        case .asset: "Your transactions will appear here️"
-        case .activity: "Your activity will appear here"
-        case .stake: "Your stakes will appear here"
-        case .walletConnect: "Your connections will appear here️"
+        case .nfts: Localized.Nft.State.Empty.title
+        case .priceAlerts: Localized.PriceAlerts.State.Empty.title
+        case .asset: Localized.Asset.State.Empty.title
+        case .activity: Localized.Activity.State.Empty.title
+        case .stake: Localized.Stake.State.Empty.title
+        case .walletConnect: Localized.WalletConnect.State.Empty.title
+        case .markets: Localized.Markets.State.Empty.title
         case let .search(searchType, _):
             switch searchType {
-            case .assets: "No assets found"
-            case .networks: "No networks found"
-            case .activity: "No activities found"
+            case .assets: Localized.Assets.State.Empty.searchTitle
+            case .networks: Localized.Networks.State.Empty.searchTitle
+            case .activity: Localized.Activity.State.Empty.searchTitle
             }
         }
     }
 
     public var description: String? {
         switch type {
-        case let .nfts(action): action != nil ? "Receive your first NFT" : nil
-        case .priceAlerts: "Enable them by adding coins to track"
-        case let .asset(ticker): "Receive, swap or buy \(ticker)"
-        case .activity: "Make your first transacton"
-        case let .stake(ticker): "Stake your first \(ticker)"
-        case .walletConnect: "Scan or paste code to connect to the DApp"
+        case let .nfts(action): action != nil ? Localized.Nft.State.Empty.description : nil
+        case .priceAlerts: Localized.PriceAlerts.State.Empty.description
+        case let .asset(ticker): Localized.Asset.State.Empty.description(ticker)
+        case .activity: Localized.Activity.State.Empty.description
+        case let .stake(ticker): Localized.Stake.State.Empty.description(ticker)
+        case .walletConnect: Localized.WalletConnect.State.Empty.description
         case let .search(searchType, action):
             switch searchType {
-            case .assets: action != nil ? "You can try add it manually" : "Check the spelling or try a new search"
-            case .networks: "Check the spelling or try a new search"
-            case .activity: "Clear filters to refresh your activities"
+            case .assets: action != nil ? Localized.Assets.State.Empty.searchDescription : Localized.Search.State.Empty.description
+            case .networks: Localized.Search.State.Empty.description
+            case .activity: Localized.Activity.State.Empty.searchDescription
             }
+        case .markets: .none
         }
     }
 
@@ -57,12 +59,13 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         case .stake: Images.EmptyContent.stake
         case .walletConnect: Images.EmptyContent.walletConnect
         case .search: Images.EmptyContent.search
+        case .markets: Images.EmptyContent.activity
         }
     }
 
     public var buttons: [EmptyAction] {
         switch type {
-        case .priceAlerts, .asset, .stake, .walletConnect:
+        case .priceAlerts, .asset, .stake, .walletConnect, .markets:
             return []
         case let .nfts(action):
             let receive = EmptyAction(title: Localized.Wallet.receive, action: action)

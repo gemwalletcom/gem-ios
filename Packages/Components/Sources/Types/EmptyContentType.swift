@@ -16,4 +16,5 @@ public enum EmptyContentType {
     case stake(symbol: String)
     case walletConnect
     case search(type: SearchType, action: (() -> Void)? = nil)
+    case markets
 }

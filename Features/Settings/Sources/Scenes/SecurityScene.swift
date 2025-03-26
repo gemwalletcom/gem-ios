@@ -19,12 +19,12 @@ public struct SecurityScene: View {
                     .toggleStyle(AppToggleStyle())
 
                 if model.isEnabled {
-                    NavigationLink(value: model.lockPeriodModel.selectedPeriod) {
-                        ListItemView(
-                            title: model.lockPeriodModel.title,
-                            subtitle: model.lockPeriodModel.selectedPeriod.title
-                        )
+                    Picker(model.lockPeriodTitle, selection: $model.lockPeriod) {
+                        ForEach(model.allLockPeriods) {
+                            Text($0.title)
+                        }
                     }
+                    .pickerStyle(.menu)
 
                     Toggle(model.privacyLockTitle, isOn: $model.isPrivacyLockEnabled)
                         .toggleStyle(AppToggleStyle())
@@ -43,9 +43,6 @@ public struct SecurityScene: View {
                actions: {},
                message: { Text(model.errorTitle) }
         )
-        .navigationDestination(for: LockPeriod.self) { _ in
-            LockPeriodSelectionScene(model: $model.lockPeriodModel)
-        }
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
     }
