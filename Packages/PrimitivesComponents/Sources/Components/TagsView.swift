@@ -5,7 +5,7 @@ import SwiftUI
 import Style
 import Primitives
 
-public struct AssetTagsView: View {
+public struct TagsView: View {
     public let model: AssetTagsViewModel
     public let onSelect: (AssetTag) -> Void
     
