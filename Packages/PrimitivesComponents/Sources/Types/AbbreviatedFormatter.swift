@@ -20,12 +20,9 @@ public struct AbbreviatedFormatter: Sendable {
     // MARK: - Public methods
     
     public func string(_ amount: Double, symbol: String? = .none) -> String {
+        
         if abs(amount) < 100_000 {
-            if let symbol {
-                return currencyFormatter.string(decimal: Decimal(amount), symbol: symbol)
-            } else {
-                return currencyFormatter.string(amount)
-            }
+            return defaultString(amount, symbol: symbol)
         }
         if #available(iOS 18, *) {
             if let symbol {
@@ -46,8 +43,15 @@ public struct AbbreviatedFormatter: Sendable {
                         .precision(.fractionLength(0...2))
                     )
             }
+        }
+        return defaultString(amount, symbol: symbol)
+    }
+    
+    private func defaultString(_ amount: Double, symbol: String? = .none) -> String {
+        if let symbol {
+            currencyFormatter.string(decimal: Decimal(amount), symbol: symbol)
         } else {
-            return currencyFormatter.string(amount)
+            currencyFormatter.string(amount)
         }
     }
 }

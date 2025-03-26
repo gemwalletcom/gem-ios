@@ -208,13 +208,14 @@ extension TonService: ChainTransactionStateFetchable {
         }
         let transactions = try await provider
             .request(.transaction(hash: data.hexString))
-            .map(as: [TonTransactionMessage].self)
+            .map(as: TonMessageTransactions.self)
         
         guard
-            let transaction = transactions.first,
+            let transaction = transactions.transactions.first,
             let newTransactionId = Data(base64Encoded: transaction.hash)?.hexString else {
             throw AnyError("transaction not found")
         }
+        //TODO: Add status check
         
         return TransactionChanges(
             state: .confirmed,
