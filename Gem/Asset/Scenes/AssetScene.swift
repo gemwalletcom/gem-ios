@@ -139,6 +139,7 @@ struct AssetScene: View {
                     explorerService: model.explorerService,
                     transactions
                 )
+                .listRowInsets(.assetListRowInsets)
             } else {
                 EmptyContentView(model: model.emptyConentModel)
                     .cleanListRow(topOffset: .extraLarge)
