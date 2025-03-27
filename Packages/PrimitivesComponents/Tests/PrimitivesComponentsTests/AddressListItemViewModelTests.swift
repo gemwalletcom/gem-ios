@@ -5,6 +5,7 @@ import Testing
 import PrimitivesComponents
 import Primitives
 import PrimitivesTestKit
+import Components
 
 struct AddressListItemViewModelTests {
     
@@ -20,6 +21,18 @@ struct AddressListItemViewModelTests {
         #expect(model.subtitle == "Alice (0x12345...01112)")
     }
 
+    @Test("Subtitle includes name only if assetImage presented")
+    func subtitleWithoutAddress() {
+        let model = AddressListItemViewModel(
+            title: "Recipient",
+            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: AssetImage()),
+            style: .short,
+            explorerService: MockExplorerLink()
+        )
+        
+        #expect(model.subtitle == "Alice")
+    }
+    
     @Test("Subtitle falls back to formatted address if name is nil")
     func subtitleWithoutName() {
         let model = AddressListItemViewModel(
