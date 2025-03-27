@@ -29,7 +29,12 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     func discoverAssets(for walletId: WalletId, preferences: WalletPreferences) async throws {
         let wallet = try walletSessionService.getWallet(walletId: walletId)
         async let coinProcess: () = processCoinDiscovery(for: wallet, preferences: preferences)
-        async let tokenProcess: () = processTokenDiscovery(for: wallet, preferences: preferences)
+        async let tokenProcess: () = {
+            // FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
+            // otherwise it would return no assets
+            try await Task.sleep(nanoseconds: 1_000_000_000)
+            try await processTokenDiscovery(for: wallet, preferences: preferences)
+        }()
         _ = try await (coinProcess, tokenProcess)
     }
 
@@ -43,10 +48,6 @@ struct DiscoveryAssetsProcessor: DiscoveryAssetsProcessing {
     }
 
     private func processTokenDiscovery(for wallet: Wallet, preferences: WalletPreferences) async throws {
-        // FIXME: temp solution to wait for 1 second (need to wait until subscriptions updated)
-        // otherwise it would return no assets
-        try await Task.sleep(nanoseconds: 1_000_000_000)
-
         let deviceId = try SecurePreferences.standard.getDeviceId()
         let newTimestamp = Int(Date.now.timeIntervalSince1970)
         let tokenUpdates = try await discoverAssetService.updateTokens(

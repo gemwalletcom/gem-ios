@@ -22,7 +22,7 @@ public enum TonProvider: TargetType {
         switch self {
         case .balance: "/api/v2/getAddressBalance"
         case .walletInformation: "/api/v2/getWalletInformation"
-        case .transaction: "/api/index/v1/getTransactionsByInMessageHash"
+        case .transaction: "/api/v3/transactionsByMessage"
         case .estimateFee: "/api/v2/estimateFee"
         case .addressState: "/api/v2/getAddressState"
         case .tokenData: "/api/v2/getTokenData"
