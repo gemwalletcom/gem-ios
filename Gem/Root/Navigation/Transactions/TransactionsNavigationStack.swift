@@ -33,7 +33,11 @@ struct TransactionsNavigationStack: View {
                     value: $model.transactions
                 )
                 .onChange(of: model.filterModel, model.onChangeFilter)
-                .onChange(of: model.currentWallet, model.onChangeWallet)
+                .onChange(
+                    of: model.currentWallet,
+                    initial: true,
+                    model.onChangeWallet
+                )
                 .toolbar {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         FilterButton(
