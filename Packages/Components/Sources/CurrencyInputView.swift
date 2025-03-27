@@ -73,6 +73,7 @@ public struct CurrencyInputView: View {
                         actionButtonImage
                             .resizable()
                             .frame(width: Sizing.image.small, height: Sizing.image.small)
+                            .foregroundColor(Colors.gray)
                     }
                     .buttonStyle(.plain)
                 }
