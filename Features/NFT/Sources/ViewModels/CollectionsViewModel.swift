@@ -61,10 +61,12 @@ public final class CollectionsViewModel: Sendable {
 
     // MARK: - Public methods
     
-    public func onWalletChange(_ _: Wallet?, _ newWallet: Wallet?) {
-        guard let newWallet else { return }
-        wallet = newWallet
-        request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+    public func onWalletChange(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
+        guard oldWallet != newWallet else { return }
+        if let newWallet {
+            wallet = newWallet
+            request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+        }
     }
 
     public func onSelectReceive() {

@@ -61,9 +61,11 @@ public final class TransactionsViewModel {
 // MARK: - Business Logic
 
 extension TransactionsViewModel {
-    public func onChangeWallet(_ _: Wallet?, _ newWallet: Wallet?) {
-        guard let newWallet else { return }
-        refresh(for: newWallet)
+    public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
+        guard oldWallet != newWallet else { return }
+        if let newWallet {
+            refresh(for: newWallet)
+        }
     }
 
     public func onChangeFilter(_ _: TransactionsFilterViewModel, filter: TransactionsFilterViewModel) {
