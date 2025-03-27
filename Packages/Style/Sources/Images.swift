@@ -74,7 +74,6 @@ public enum Images {
     }
 
     public enum Fiat {
-        public static let kado = Image(.kado)
         public static let moonpay = Image(.moonpay)
         public static let transak = Image(.transak)
         public static let banxa = Image(.banxa)
@@ -227,7 +226,6 @@ public enum Images {
             (Images.Chains.zksync, "zkSync")
         ]),
         ("Fiat", [
-            (Images.Fiat.kado, "Kado"),
             (Images.Fiat.moonpay, "Moonpay"),
             (Images.Fiat.transak, "Transak"),
             (Images.Fiat.banxa, "Banxa"),
