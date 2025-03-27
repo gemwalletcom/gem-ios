@@ -22,6 +22,7 @@ public struct TransactionsScene: View {
                 explorerService: model.explorerService,
                 model.transactions
             )
+            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
         .refreshable(action: model.fetch)
