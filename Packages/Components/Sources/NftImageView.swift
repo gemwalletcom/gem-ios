@@ -5,7 +5,6 @@ import SwiftUI
 import Style
 
 public struct NftImageView: View {
-    
     let assetImage: AssetImage
     
     public init(assetImage: AssetImage) {
@@ -13,7 +12,7 @@ public struct NftImageView: View {
     }
     
     public var body: some View {
-        CachedAsyncImage(url: assetImage.imageURL) { phase in
+        CachedAsyncNFTImage(url: assetImage.imageURL) { phase in
             switch phase {
             case .empty:
                 ZStack {
