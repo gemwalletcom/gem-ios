@@ -64,7 +64,7 @@ struct RootScene: View {
         .onChange(
             of: model.currentWallet,
             initial: true,
-            model.onWalletChange
+            model.onChangeWallet
         )
         .toast(
             isPresenting: $model.isPresentingConnectorBar,

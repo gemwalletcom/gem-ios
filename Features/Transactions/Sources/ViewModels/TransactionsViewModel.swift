@@ -62,8 +62,7 @@ public final class TransactionsViewModel {
 
 extension TransactionsViewModel {
     public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        guard oldWallet != newWallet else { return }
-        if let newWallet {
+        if let newWallet, wallet != newWallet {
             refresh(for: newWallet)
         }
     }

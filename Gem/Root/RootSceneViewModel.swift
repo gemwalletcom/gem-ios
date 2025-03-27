@@ -81,8 +81,7 @@ extension RootSceneViewModel {
 // MARK: - Effects
 
 extension RootSceneViewModel {
-    func onWalletChange(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
-        guard oldWallet != newWallet else { return }
+    func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
             onstartService.setup(wallet: newWallet)
         }

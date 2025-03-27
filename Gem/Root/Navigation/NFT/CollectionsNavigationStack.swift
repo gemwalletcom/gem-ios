@@ -36,7 +36,7 @@ struct CollectionsNavigationStack: View {
                 .onChange(
                     of: model.currentWallet,
                     initial: true,
-                    model.onWalletChange
+                    model.onChangeWallet
                 )
                 .navigationDestination(for: Scenes.CollectionsScene.self) {
                     CollectionsScene(
