@@ -65,6 +65,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
 
     public var includePlusSign: Bool = false
     public var currencyCode: String
+    public var abbreviationThreshold: Decimal = 100_000
     
     public init(
         type: CurrencyFormatterType = .currency,
@@ -111,7 +112,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     // MARK: - Private methods
     
     private func abbreviatedString(_ number: Double) -> String {
-        guard abs(number) >= 100_000, #available(iOS 18, *) else {
+        guard abs(number) >= abbreviationThreshold.doubleValue, #available(iOS 18, *) else {
             return currencyString(number)
         }
         return number
@@ -124,7 +125,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     }
     
     private func abbreviatedStringSymbol(_ decimal: Decimal, symbol: String) -> String {
-        guard abs(decimal) >= 100_000 else {
+        guard abs(decimal) >= abbreviationThreshold else {
             return stringSymbol(decimal, symbol: symbol)
         }
         let string = decimal
