@@ -30,7 +30,6 @@ public struct TagsView: View {
                                 .font(.subheadline)
                                 .background(Colors.listStyleColor)
                                 .foregroundColor(model.foregroundColor(for: tagModel.tag))
-                                .opacity(model.opacity(for: tagModel.tag))
                                 .cornerRadius(.small)
                         }
                         .buttonStyle(.borderless)

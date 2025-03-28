@@ -84,6 +84,9 @@ public extension Sizing {
     struct list {
         /// 22
         public static let image: CGFloat = 22
+        
+        /// 54
+        public static let rowHeight: CGFloat = 54
 
         public struct selected {
             /// 20

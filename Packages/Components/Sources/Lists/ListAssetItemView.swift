@@ -16,6 +16,7 @@ public struct ListAssetItemView: View {
             primary: { primaryContent },
             secondary: { secondaryContent }
         )
+        .frame(height: Spacing.list.rowHeight)
         .onChange(of: toggleValue) { _, newValue in
             model.action?(.switcher(enabled: newValue))
         }
