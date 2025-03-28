@@ -14,20 +14,19 @@ public struct AssetDetailsInfoViewModel {
     
     private let priceData: PriceData
     private let explorerService: ExplorerService
-    private let abbreviatedFormatter: AbbreviatedFormatter
+    private let currencyFormatter: CurrencyFormatter
 
     public var showMarketValues: Bool { !marketValues.isEmpty }
 
     public init(
         priceData: PriceData,
         explorerService: ExplorerService = .standard,
-        abbreviatedFormatter: AbbreviatedFormatter = AbbreviatedFormatter(
-            currencyFormatter: CurrencyFormatter(type: .currencyShort, currencyCode: Preferences.standard.currency)
-        )
+        currencyFormatter: CurrencyFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: Preferences.standard.currency)
+        
     ) {
         self.priceData = priceData
         self.explorerService = explorerService
-        self.abbreviatedFormatter = abbreviatedFormatter
+        self.currencyFormatter = currencyFormatter
     }
     
     public var marketCapViewModel: MarketValueViewModel {
@@ -57,21 +56,21 @@ public struct AssetDetailsInfoViewModel {
     
     public var marketCapText: String? {
         if let marketCap = priceData.market?.marketCap {
-            return abbreviatedFormatter.string(marketCap)
+            return currencyFormatter.string(marketCap)
         }
         return .none
     }
 
     public var circulatingSupplyText: String?  {
         if let circulatingSupply = priceData.market?.circulatingSupply {
-            return abbreviatedFormatter.string(circulatingSupply, symbol: priceData.asset.symbol)
+            return currencyFormatter.string(decimal: Decimal(circulatingSupply), symbol: priceData.asset.symbol)
         }
         return .none
     }
 
     public var totalSupplyText: String? {
         if let totalSupply = priceData.market?.totalSupply {
-            return abbreviatedFormatter.string(totalSupply, symbol: priceData.asset.symbol)
+            return currencyFormatter.string(decimal: Decimal(totalSupply), symbol: priceData.asset.symbol)
         }
         return .none
     }
