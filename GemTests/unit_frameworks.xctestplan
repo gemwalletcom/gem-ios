@@ -15,6 +15,20 @@
   "testTargets" : [
     {
       "target" : {
+        "containerPath" : "container:Packages\/Style",
+        "identifier" : "StyleTests",
+        "name" : "StyleTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/SwiftHTTPClient",
+        "identifier" : "SwiftHTTPClientTests",
+        "name" : "SwiftHTTPClientTests"
+      }
+    },
+    {
+      "target" : {
         "containerPath" : "container:Packages\/Blockchain",
         "identifier" : "BlockchainTests",
         "name" : "BlockchainTests"
@@ -22,9 +36,30 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Components",
-        "identifier" : "ComponentsTests",
-        "name" : "ComponentsTests"
+        "containerPath" : "container:Packages\/Signer",
+        "identifier" : "SignerTests",
+        "name" : "SignerTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/WalletCorePrimitives",
+        "identifier" : "WalletCorePrimitivesTests",
+        "name" : "WalletCorePrimitivesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/GemstonePrimitives",
+        "identifier" : "GemstonePrimitivesTests",
+        "name" : "GemstonePrimitivesTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Packages\/Store",
+        "identifier" : "StoreTests",
+        "name" : "StoreTests"
       }
     },
     {
@@ -43,27 +78,6 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/Store",
-        "identifier" : "StoreTests",
-        "name" : "StoreTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Style",
-        "identifier" : "StyleTests",
-        "name" : "StyleTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/Signer",
-        "identifier" : "SignerTests",
-        "name" : "SignerTests"
-      }
-    },
-    {
-      "target" : {
         "containerPath" : "container:Packages\/GemAPI",
         "identifier" : "GemAPITests",
         "name" : "GemAPITests"
@@ -71,23 +85,16 @@
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/SwiftHTTPClient",
-        "identifier" : "SwiftHTTPClientTests",
-        "name" : "SwiftHTTPClientTests"
+        "containerPath" : "container:Packages\/Components",
+        "identifier" : "ComponentsTests",
+        "name" : "ComponentsTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:Packages\/WalletCorePrimitives",
-        "identifier" : "WalletCorePrimitivesTests",
-        "name" : "WalletCorePrimitivesTests"
-      }
-    },
-    {
-      "target" : {
-        "containerPath" : "container:Packages\/GemstonePrimitives",
-        "identifier" : "GemstonePrimitivesTests",
-        "name" : "GemstonePrimitivesTests"
+        "containerPath" : "container:Packages\/PrimitivesComponents",
+        "identifier" : "PrimitivesComponentsTests",
+        "name" : "PrimitivesComponentsTests"
       }
     }
   ],
