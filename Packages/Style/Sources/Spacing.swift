@@ -79,15 +79,26 @@ public extension Sizing {
         public static let semiExtraLarge: CGFloat = 112
         /// 120
         public static let extraLarge: CGFloat = 120
+        
+        /// 44
+        public static let asset: CGFloat = 44
     }
 
     struct list {
         /// 22
         public static let image: CGFloat = 22
-
+        
         public struct selected {
             /// 20
             public static let image: CGFloat = 20
+        }
+        
+        public struct assets {
+            public static let height: CGFloat = Sizing.image.asset
+        }
+    
+        public struct transactions {
+            public static let height: CGFloat = Sizing.image.asset
         }
     }
     
