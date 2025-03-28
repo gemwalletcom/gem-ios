@@ -159,8 +159,8 @@ struct Columns {
         static let contractAddress = Column("contractAddress")
         static let isVerified = Column("isVerified")
         static let links = Column("links")
-        static let imageUrl = Column("imageUrl")
         static let previewImageUrl = Column("previewImageUrl")
+        static let previewImageMimeType = Column("previewImageMimeType")
     }
     
     struct NFTAssetsAssociation {
@@ -180,8 +180,10 @@ struct Columns {
         static let description = Column("description")
         static let chain = Column("chain")
         static let attributes = Column("attributes")
-        static let imageUrl = Column("imageUrl")
+        static let resourceUrl = Column("resourceUrl")
+        static let resourceMimeType = Column("resourceMimeType")
         static let previewImageUrl = Column("previewImageUrl")
+        static let previewImageMimeType = Column("previewImageMimeType")
     }
     
     struct NFTAttribute {

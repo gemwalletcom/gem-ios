@@ -132,12 +132,12 @@ public struct CollectibleViewModel: Sendable {
     }
     
     public func setWalletAvatar() async throws {
-        guard let url = assetData.asset.image.previewImageUrl.asURL else { return }
+        guard let url = assetData.asset.images.preview.url.asURL else { return }
         try await avatarService.save(url: url, for: wallet.id)
     }
     
     public func saveImageToGallery() async throws(ImageGalleryServiceError) {
-        guard let url = assetData.asset.image.imageUrl.asURL else {
+        guard let url = assetData.asset.images.preview.url.asURL else {
             throw ImageGalleryServiceError.wrongURL
         }
         let saver = ImageGalleryService()

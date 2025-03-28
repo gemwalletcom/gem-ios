@@ -15,8 +15,11 @@ struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
     var chain: Chain
     var attributes: [NFTAttribute]?
 
-    var imageUrl: String
+    var resourceUrl: String
+    var resourceMimeType: String
+    
     var previewImageUrl: String
+    var previewImageMimeType: String
     
     static let collection = belongsTo(NFTCollectionRecord.self)
     static let assetAssociations = hasMany(NFTAssetAssociationRecord.self)
@@ -43,8 +46,14 @@ extension NFTAssetRecord: CreateTable {
                 .indexed()
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
             $0.column(Columns.NFTAsset.attributes.name, .jsonText)
-            $0.column(Columns.NFTCollection.imageUrl.name, .text)
-            $0.column(Columns.NFTCollection.previewImageUrl.name, .text)
+            $0.column(Columns.NFTAsset.resourceUrl.name, .text)
+                .notNull()
+            $0.column(Columns.NFTAsset.resourceMimeType.name, .text)
+                .notNull()
+            $0.column(Columns.NFTAsset.previewImageUrl.name, .text)
+                .notNull()
+            $0.column(Columns.NFTAsset.previewImageMimeType.name, .text)
+                .notNull()
         }
     }
 }
@@ -61,8 +70,10 @@ extension NFTAsset {
             description: description,
             chain: chain,
             attributes: attributes,
-            imageUrl: image.imageUrl,
-            previewImageUrl: image.previewImageUrl
+            resourceUrl: resource.url,
+            resourceMimeType: resource.mimeType,
+            previewImageUrl: images.preview.url,
+            previewImageMimeType: images.preview.mimeType
         )
     }
 }
@@ -78,10 +89,12 @@ extension NFTAssetRecord {
             name: name,
             description: description,
             chain: chain,
-            image: NFTImage(
-                imageUrl: imageUrl,
-                previewImageUrl: previewImageUrl,
-                originalSourceUrl: imageUrl
+            resource: NFTResource(url: resourceUrl, mimeType: resourceMimeType),
+            images: NFTImages(
+                preview: NFTResource(
+                    url: previewImageUrl,
+                    mimeType: previewImageMimeType
+                )
             ),
             attributes: attributes ?? []
         )

@@ -47,7 +47,6 @@ public struct Migrations {
             try NFTCollectionRecord.create(db: db)
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
-            
         }
 
         // delete later (after Oct 2024, as it's part of start tables)
@@ -231,6 +230,16 @@ public struct Migrations {
             try? db.alter(table: PriceAlertRecord.databaseTableName) {
                 $0.add(column: Columns.PriceAlert.currency.name, .text).defaults(to: "USD")
             }
+        }
+        
+        migrator.registerMigration("Re-create nft tables") { db in
+            try? db.drop(table: NFTAssetAssociationRecord.databaseTableName)
+            try? db.drop(table: NFTAssetRecord.databaseTableName)
+            try? db.drop(table: NFTCollectionRecord.databaseTableName)
+            
+            try NFTCollectionRecord.create(db: db)
+            try NFTAssetRecord.create(db: db)
+            try NFTAssetAssociationRecord.create(db: db)
         }
 
         try migrator.migrate(dbQueue)

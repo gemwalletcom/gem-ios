@@ -18,10 +18,11 @@ extension NFTCollectionRecordInfo {
                 description: collection.description,
                 chain: collection.chain,
                 contractAddress: collection.contractAddress,
-                image: NFTImage(
-                    imageUrl: collection.imageUrl,
-                    previewImageUrl: collection.previewImageUrl,
-                    originalSourceUrl: collection.imageUrl
+                images: NFTImages(
+                    preview: NFTResource(
+                        url: collection.previewImageUrl,
+                        mimeType: collection.previewImageMimeType
+                    )
                 ),
                 isVerified: collection.isVerified,
                 links: collection.links ?? []

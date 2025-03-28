@@ -108,7 +108,7 @@ public final class CollectionsViewModel: Sendable {
         GridPosterViewItem(
             id: data.id,
             destination: Scenes.CollectionsScene(sceneStep: .collection(data)),
-            assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.image.imageUrl.asURL),
+            assetImage: AssetImage(type: data.collection.name, imageURL: data.collection.images.preview.url.asURL),
             title: data.collection.name
         )
     }
@@ -117,7 +117,7 @@ public final class CollectionsViewModel: Sendable {
         GridPosterViewItem(
             id: asset.id,
             destination: Scenes.Collectible(assetData: NFTAssetData(collection: collection, asset: asset)),
-            assetImage: AssetImage(type: collection.name, imageURL: asset.image.imageUrl.asURL),
+            assetImage: AssetImage(type: collection.name, imageURL: asset.images.preview.url.asURL),
             title: asset.name
         )
     }
