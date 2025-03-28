@@ -85,4 +85,7 @@ uml PATH:
     PLANTUML_LIMIT_SIZE=16384 plantuml sources.txt && open sources.png
     rm sources.cmapx
 
+bump-version:
+    @sh ./scripts/bump-version-and-commit.sh patch
+
 mod core
