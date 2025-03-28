@@ -16,7 +16,6 @@ public struct ListAssetItemView: View {
             primary: { primaryContent },
             secondary: { secondaryContent }
         )
-        .frame(minHeight: Spacing.list.rowHeight)
         .onChange(of: toggleValue) { _, newValue in
             model.action?(.switcher(enabled: newValue))
         }
@@ -40,6 +39,7 @@ extension ListAssetItemView {
                 .textStyle(
                     TextStyle(font: .body, color: .primary, fontWeight: .semibold)
                 )
+                .lineLimit(1)
             if let symbol = model.symbol {
                 Text(symbol)
                     .textStyle(.calloutSecondary)
