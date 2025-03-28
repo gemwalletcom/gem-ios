@@ -17,10 +17,7 @@ public struct PriceViewModel {
     }
 
     public var isPriceAvailable: Bool {
-        guard let price = price else {
-            return false
-        }
-        return !(price.price == 0 && price.priceChangePercentage24h == 0)
+        price?.price != 0
     }
 
     public var priceAmountText: String {
