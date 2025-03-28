@@ -31,7 +31,7 @@ public enum Images {
         public static let near = Image(.near)
         public static let world = Image(.world)
         public static let noble = Image(.noble)
-        public static let opbnb = Image(.smartchain)
+        public static let opbnb = Image(.opbnb)
         public static let optimism = Image(.optimism)
         public static let osmosis = Image(.osmosis)
         public static let polygon = Image(.polygon)
@@ -74,7 +74,6 @@ public enum Images {
     }
 
     public enum Fiat {
-        public static let kado = Image(.kado)
         public static let moonpay = Image(.moonpay)
         public static let transak = Image(.transak)
         public static let banxa = Image(.banxa)
@@ -227,7 +226,6 @@ public enum Images {
             (Images.Chains.zksync, "zkSync")
         ]),
         ("Fiat", [
-            (Images.Fiat.kado, "Kado"),
             (Images.Fiat.moonpay, "Moonpay"),
             (Images.Fiat.transak, "Transak"),
             (Images.Fiat.banxa, "Banxa"),

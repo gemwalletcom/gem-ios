@@ -91,6 +91,7 @@ public struct WalletScene: View {
                         currencyCode: preferences.preferences.currency,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
                     )
+                    .listRowInsets(.assetListRowInsets)
                 } header: {
                     HStack {
                         model.pinImage
@@ -114,6 +115,7 @@ public struct WalletScene: View {
                     currencyCode: preferences.preferences.currency,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled
                 )
+                .listRowInsets(.assetListRowInsets)
             } footer: {
                 ListButton(
                     title: model.manageTokenTitle,

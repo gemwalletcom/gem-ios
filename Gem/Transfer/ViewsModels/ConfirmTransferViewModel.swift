@@ -103,12 +103,25 @@ final class ConfirmTransferViewModel {
     var shouldShowRecipientField: Bool { dataModel.shouldShowRecipient }
     
     var recipientAddressViewModel: AddressListItemViewModel {
-        AddressListItemViewModel(
-            title: dataModel.recipientTitle,
+        switch dataModel.type {
+        case .swap: AddressListItemViewModel(
+            title: Localized.Swap.provider,
             account: dataModel.recepientAccount,
             style: .short,
             explorerService: explorerService
         )
+        case .stake: AddressListItemViewModel(
+            title: Localized.Stake.validator,
+            account: dataModel.recepientAccount,
+            style: .short,
+            explorerService: explorerService
+        )
+        default: AddressListItemViewModel(
+            title: Localized.Transfer.to,
+            account: dataModel.recepientAccount,
+            style: .short,
+            explorerService: explorerService
+        )}
     }
 
     var networkTitle: String { Localized.Transfer.network }

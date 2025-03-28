@@ -18,8 +18,7 @@ public struct Colors {
     public static let grayDarkBackground = Color.dynamicColor("#E6E6F0", dark: "#1C1C1E")
     public static let secondaryText = Color.dynamicColor("#818181")
     public static let listStyleColor = UIColor.dynamicColor(UIColor.systemBackground.color, dark: UIColor.secondarySystemBackground.color)
-    public static let insetGroupedListStyle = UIColor.dynamicColor(UIColor.systemGroupedBackground.color, dark: UIColor.black.color
-    )
+    public static let insetGroupedListStyle = UIColor.dynamicColor(UIColor.systemGroupedBackground.color, dark: UIColor.black.color)
 }
 
 #Preview {

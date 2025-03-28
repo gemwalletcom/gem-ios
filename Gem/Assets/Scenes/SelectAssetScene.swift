@@ -102,6 +102,7 @@ struct SelectAssetScene: View {
                         Text(Localized.Common.popular)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
             
             if !sections.pinned.isEmpty {
@@ -113,11 +114,13 @@ struct SelectAssetScene: View {
                         Text(Localized.Common.pinned)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
             
             Section {
                 assetsList(assets: sections.assets)
             }
+            .listRowInsets(.assetListRowInsets)
         }
     }
     

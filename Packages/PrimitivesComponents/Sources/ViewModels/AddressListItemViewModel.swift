@@ -26,6 +26,8 @@ public struct AddressListItemViewModel {
     public var subtitle: String {
         if account.name == account.address || account.name == nil {
             return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
+        } else if let _ = account.assetImage, let name = account.name {
+            return name
         } else if let name = account.name {
             let address = AddressFormatter(style: .short, address: account.address, chain: account.chain).value()
             return "\(name) (\(address))"

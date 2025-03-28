@@ -33,7 +33,11 @@ struct CollectionsNavigationStack: View {
     public var body: some View   {
         NavigationStack(path: navigationPath) {
             CollectionsScene(model: model)
-                .onChange(of: model.currentWallet, model.onWalletChange)
+                .onChange(
+                    of: model.currentWallet,
+                    initial: true,
+                    model.onChangeWallet
+                )
                 .navigationDestination(for: Scenes.CollectionsScene.self) {
                     CollectionsScene(
                         model: CollectionsViewModel(
