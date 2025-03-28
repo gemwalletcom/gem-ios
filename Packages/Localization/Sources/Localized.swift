@@ -1066,10 +1066,14 @@ public enum Localized {
     public static let brandName = Localized.tr("Localizable", "wallet_connect.brand_name", fallback: "WalletConnect")
     /// Disconnect
     public static let disconnect = Localized.tr("Localizable", "wallet_connect.disconnect", fallback: "Disconnect")
+    /// Domain
+    public static let domain = Localized.tr("Localizable", "wallet_connect.domain", fallback: "Domain")
     /// No active connections
     public static let noActiveConnections = Localized.tr("Localizable", "wallet_connect.no_active_connections", fallback: "No active connections")
     /// WalletConnect
     public static let title = Localized.tr("Localizable", "wallet_connect.title", fallback: "WalletConnect")
+    /// Verifying contract
+    public static let verifyingContract = Localized.tr("Localizable", "wallet_connect.verifying_contract", fallback: "Verifying contract")
     /// Website
     public static let website = Localized.tr("Localizable", "wallet_connect.website", fallback: "Website")
     public enum Connect {
