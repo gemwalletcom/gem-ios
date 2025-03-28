@@ -28,6 +28,10 @@ public extension Primitives.Chain {
         return URL(string: url)
     }
     
+    var minimumAccountBalance: UInt64? {
+        ChainConfig.config(chain: self).minimumAccountBalance
+    }
+    
     var isMemoSupported: Bool {
         ChainConfig.config(chain: self).isMemoSupported
     }
