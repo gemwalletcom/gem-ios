@@ -12,8 +12,9 @@ public struct TonService: Sendable {
     let chain: Chain
     let provider: Provider<TonProvider>
     
-    private let baseFee = BigInt(10_000_000)
-    
+    private let baseFee = BigInt(10_000_000) // 0.01 TON
+    private let jettonTokenAccountCreation = BigInt(300_000_000) // 0.3 TON
+
     public init(
         chain: Chain,
         provider: Provider<TonProvider>
@@ -89,16 +90,24 @@ extension TonService {
                 // https://docs.ton.org/develop/smart-contracts/fees#fees-for-sending-jettons
                 let jettonAccountFee: BigInt = switch state {
                     case true: input.memo == nil ? BigInt(100_000_000) : BigInt(60_000_000) // 0.06
-                    case false: BigInt(300_000_000) // 0.3 TON
+                    case false: jettonTokenAccountCreation
                 }
                 return Fee(
-                    fee: baseFee,
+                    fee: baseFee + jettonAccountFee,
                     gasPriceType: .regular(gasPrice: baseFee),
                     gasLimit: 1,
                     options: [.tokenAccountCreation: BigInt(jettonAccountFee)]
                 )
             }
-        case .transferNft, .swap, .tokenApprove, .generic, .stake, .account:
+        case .swap:
+            let fee = baseFee + jettonTokenAccountCreation
+            return Fee(
+                fee: fee,
+                gasPriceType: .regular(gasPrice: baseFee),
+                gasLimit: 1,
+                options: [.tokenAccountCreation: jettonTokenAccountCreation]
+            )
+        case .transferNft, .tokenApprove, .generic, .stake, .account:
             fatalError()
         }
     }
