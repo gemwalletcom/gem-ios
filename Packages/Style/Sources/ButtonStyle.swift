@@ -133,9 +133,9 @@ extension ButtonStyle where Self == ColorButtonStyle {
     }
 
     public static func empty(
-        paddingHorizontal: CGFloat = .small + .space2,
-        paddingVertical: CGFloat = .small - .space2,
-        cornerRadius: CGFloat = 10
+        paddingHorizontal: CGFloat = .small + .space4,
+        paddingVertical: CGFloat = .small,
+        cornerRadius: CGFloat = .small
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             paddingHorizontal: paddingHorizontal,
@@ -151,7 +151,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func amount(
         paddingHorizontal: CGFloat = .small,
         paddingVertical: CGFloat = .small,
-        cornerRadius: CGFloat = 8
+        cornerRadius: CGFloat = .small
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             paddingHorizontal: paddingHorizontal,
