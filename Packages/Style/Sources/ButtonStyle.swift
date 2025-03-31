@@ -142,8 +142,8 @@ extension ButtonStyle where Self == ColorButtonStyle {
             paddingVertical: paddingVertical,
             foregroundStyle: Colors.black,
             foregroundStylePressed: Colors.black.opacity(0.5),
-            background: Colors.Empty.buttonsBacgkround,
-            backgroundPressed: Colors.Empty.buttonsBacgkround.opacity(0.5),
+            background: Colors.Empty.buttonsBackground,
+            backgroundPressed: Colors.Empty.buttonsBackground.opacity(0.5),
             cornerRadius: cornerRadius
         )
     }

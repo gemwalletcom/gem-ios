@@ -48,7 +48,7 @@ public struct StateEmptyView<Content: View>: View {
              if let image {
                  ZStack {
                      Circle()
-                         .foregroundStyle(Colors.Empty.Image.background)
+                         .foregroundStyle(Colors.Empty.imageBackground)
                      image
                          .resizable()
                          .aspectRatio(contentMode: .fit)
@@ -56,7 +56,7 @@ public struct StateEmptyView<Content: View>: View {
                             width: Sizing.image.medium,
                             height: Sizing.image.medium
                          )
-                         .foregroundStyle(Colors.Empty.Image.image)
+                         .foregroundStyle(Colors.Empty.image)
                  }
                  .frame(
                     width: .image.large,
