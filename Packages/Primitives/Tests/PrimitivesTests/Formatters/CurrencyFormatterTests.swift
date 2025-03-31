@@ -48,12 +48,8 @@ final class CurrencyFormatterTests {
 
     @Test
     func testCurrencyIncludeSign() {
-        var formatter = currencyFormatterUS
-        formatter.includePlusSign = true
-
-        #expect(formatter.string(0) == "$0.00")
-        #expect(formatter.string(11.12) == "+$11.12")
-        #expect(formatter.string(-1.2) == "-$1.20")
+        #expect(currencyFormatterUS.string(0) == "$0.00")
+        #expect(currencyFormatterUS.string(-1.2) == "-$1.20")
     }
 
     @Test
@@ -103,11 +99,11 @@ final class CurrencyFormatterTests {
 
     @Test
     func testAbbreviated() {
-        #expect(abbreviatedFormatterUS.string(0) == "$0")
-        #expect(abbreviatedFormatterUS.string(12) == "$12")
-        #expect(abbreviatedFormatterUS.string(1_234) == "$1,234")
+        #expect(abbreviatedFormatterUS.string(0) == "$0.00")
+        #expect(abbreviatedFormatterUS.string(12) == "$12.00")
+        #expect(abbreviatedFormatterUS.string(1_234) == "$1,234.00")
         #expect(abbreviatedFormatterUS.string(100_000) == "$100K")
-        #expect(abbreviatedFormatterUS.string(-1234) == "-$1,234")
+        #expect(abbreviatedFormatterUS.string(-1234) == "-$1,234.00")
         #expect(abbreviatedFormatterUS.string(-5_600_000) == "-$5.6M")
 
         #expect(abbreviatedFormatterUK.string(123_456) == "£123.46K")
@@ -119,13 +115,13 @@ final class CurrencyFormatterTests {
     
     @Test
     func abbreviatedStringSymbol() {
-        #expect(abbreviatedFormatterUS.string(decimal: 0, symbol: "BTC") == "0 BTC")
-        #expect(abbreviatedFormatterUS.string(decimal: 12, symbol: "BTC") == "12 BTC")
-        #expect(abbreviatedFormatterUS.string(decimal: 1_234, symbol: "BTC") == "1,234 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 0, symbol: "BTC") == "0.00 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 12, symbol: "BTC") == "12.00 BTC")
+        #expect(abbreviatedFormatterUS.string(decimal: 1_234, symbol: "BTC") == "1,234.00 BTC")
         #expect(abbreviatedFormatterUS.string(decimal: 5_000_000, symbol: "BTC") == "5M BTC")
         #expect(abbreviatedFormatterUS.string(decimal: 7_890_000_000, symbol: "BTC") == "7.89B BTC")
         
-        #expect(abbreviatedFormatterUS.string(decimal: 1_234) == "1,234")
+        #expect(abbreviatedFormatterUS.string(decimal: 1_234) == "1,234.00")
         #expect(abbreviatedFormatterUS.string(decimal: 5_000_000) == "5M")
     }
 }

@@ -51,19 +51,8 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return formatter
     }
     
-    private var abbreviatedFormatter: Foundation.NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.locale = locale
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 0
-        formatter.numberStyle = .currency
-        formatter.currencyCode = currencyCode
-        return formatter
-    }
-    
     public static let percent = CurrencyFormatter(type: .percent)
 
-    public var includePlusSign: Bool = false
     public var currencyCode: String
     public var abbreviationThreshold: Decimal = 100_000
     
@@ -79,9 +68,8 @@ public struct CurrencyFormatter: Sendable, Hashable {
     
     public var symbol: String {
         switch type {
-        case .currency: formatter.currencySymbol
+        case .currency, .abbreviated: formatter.currencySymbol
         case .percent, .percentSignLess: percentFormatter.percentSymbol
-        case .abbreviated: abbreviatedFormatter.currencyCode
         }
     }
     
@@ -94,7 +82,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
         }
     }
     
-    public func string(decimal: Decimal, symbol: String = .empty) -> String {
+    public func string(decimal: Decimal, symbol: String? = nil) -> String {
         switch type {
         case .abbreviated: abbreviatedStringSymbol(decimal, symbol: symbol)
         case .currency, .percent, .percentSignLess: stringSymbol(decimal, symbol: symbol)
@@ -124,7 +112,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
             )
     }
     
-    private func abbreviatedStringSymbol(_ decimal: Decimal, symbol: String) -> String {
+    private func abbreviatedStringSymbol(_ decimal: Decimal, symbol: String?) -> String {
         guard abs(decimal) >= abbreviationThreshold else {
             return stringSymbol(decimal, symbol: symbol)
         }
@@ -135,36 +123,30 @@ public struct CurrencyFormatter: Sendable, Hashable {
                 .locale(locale)
                 .precision(.fractionLength(0...2))
             )
-        return [string, symbol].filter { !$0.isEmpty }.joined(separator: " ")
+        return combined(value: string, symbol: symbol)
     }
     
-    private func stringSymbol(_ decimal: Decimal, symbol: String) -> String {
+    private func stringSymbol(_ decimal: Decimal, symbol: String?) -> String {
         let formatter = formatter(for: decimal.doubleValue)
         formatter.currencySymbol = ""
 
         let value = formatter.string(from: NSDecimalNumber(decimal: decimal)) ?? ""
-        return [value, symbol].filter { !$0.isEmpty }.joined(separator: " ")
+        return combined(value: value, symbol: symbol)
     }
     
     private func currencyString(_ number: Double) -> String {
-        let formatter = formatter(for: number)
-        if includePlusSign && number == 0 {
-            return "\(formatter.string(from: NSNumber(value: number))!)"
-        } else if includePlusSign && number > 0 {
-            return "+\(formatter.string(from: NSNumber(value: number))!)"
-        }
-        return formatter.string(from: NSNumber(value: number))!
+        formatter(for: number).string(from: NSNumber(value: number))!
     }
     
     private func formatter(for value: Double) -> NumberFormatter {
-        switch type {
-        case .abbreviated: abbreviatedFormatter
-        case .currency, .percent, .percentSignLess:
-            if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
-                formatter
-            } else {
-                formatterSmallValues
-            }
+        if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
+            formatter
+        } else {
+            formatterSmallValues
         }
+    }
+    
+    private func combined(value: String, symbol: String?) -> String {
+        [value, symbol].compactMap { $0 }.joined(separator: " ")
     }
 }
