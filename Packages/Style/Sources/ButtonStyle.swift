@@ -132,6 +132,22 @@ extension ButtonStyle where Self == ColorButtonStyle {
         )
     }
 
+    public static func empty(
+        paddingHorizontal: CGFloat = .small + .space2,
+        paddingVertical: CGFloat = .small - .space2,
+        cornerRadius: CGFloat = 10
+    ) -> ColorButtonStyle {
+        ColorButtonStyle(
+            paddingHorizontal: paddingHorizontal,
+            paddingVertical: paddingVertical,
+            foregroundStyle: Colors.black,
+            foregroundStylePressed: Colors.black.opacity(0.5),
+            background: Colors.Empty.buttonsBacgkround,
+            backgroundPressed: Colors.Empty.buttonsBacgkround.opacity(0.5),
+            cornerRadius: cornerRadius
+        )
+    }
+
     public static func amount(
         paddingHorizontal: CGFloat = .small,
         paddingVertical: CGFloat = .small,

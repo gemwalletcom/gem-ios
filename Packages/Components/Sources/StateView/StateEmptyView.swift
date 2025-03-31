@@ -48,14 +48,19 @@ public struct StateEmptyView<Content: View>: View {
              if let image {
                  ZStack {
                      Circle()
-                         .fill(.quaternary)
+                         .foregroundStyle(Colors.Empty.Image.background)
                      image
                          .resizable()
                          .aspectRatio(contentMode: .fit)
+                         .frame(
+                            width: Sizing.image.medium,
+                            height: Sizing.image.medium
+                         )
+                         .foregroundStyle(Colors.Empty.Image.image)
                  }
                  .frame(
                     width: .image.large,
-                    height: .image.extraLarge
+                    height: .image.large
                  )
              }
 

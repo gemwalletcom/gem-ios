@@ -21,6 +21,19 @@ public struct Colors {
     public static let insetGroupedListStyle = UIColor.dynamicColor(UIColor.systemGroupedBackground.color, dark: UIColor.black.color)
 }
 
+// MARK: - Empty
+
+extension Colors {
+    public struct Empty {
+        private static let defaultWhite = Color.dynamicColor("#000000", dark: "#FFFFFF")
+        public struct Image {
+            public static let background = defaultWhite.opacity(0.07)
+            public static let image = Color.dynamicColor("#767A81")
+        }
+        public static let buttonsBacgkround = defaultWhite.opacity(0.09)
+    }
+}
+
 #Preview {
     let colors: [(name: String, color: Color)] = [
         ("White", Colors.white),
