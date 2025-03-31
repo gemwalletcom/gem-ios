@@ -381,5 +381,3 @@
 "networks.state.empty.search_title" = "No networks found";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Your markets data will appear here";
-"wallet_connect.verifying_contract" = "Verifying contract";
-"wallet_connect.domain" = "Domain";
