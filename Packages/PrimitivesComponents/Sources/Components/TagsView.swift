@@ -5,7 +5,7 @@ import SwiftUI
 import Style
 import Primitives
 
-public struct AssetTagsView: View {
+public struct TagsView: View {
     public let model: AssetTagsViewModel
     public let onSelect: (AssetTag) -> Void
     
@@ -30,7 +30,6 @@ public struct AssetTagsView: View {
                                 .font(.subheadline)
                                 .background(Colors.listStyleColor)
                                 .foregroundColor(model.foregroundColor(for: tagModel.tag))
-                                .opacity(model.opacity(for: tagModel.tag))
                                 .cornerRadius(.small)
                         }
                         .buttonStyle(.borderless)

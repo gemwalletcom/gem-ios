@@ -14,7 +14,7 @@ public struct NFTAssetViewModel {
     public var assetImage: AssetImage {
         AssetImage(
             type: asset.name,
-            imageURL: asset.image.imageUrl.asURL,
+            imageURL: asset.images.preview.url.asURL,
             placeholder: .none,
             chainPlaceholder: .none
         )

@@ -11,11 +11,9 @@ public struct AssetImageView: View {
     private let assetImage: AssetImage
     private let overlayPadding: CGFloat = 2
 
-    public static let defaultImageSize: CGFloat = 40
-
     public init(
         assetImage: AssetImage,
-        size: CGFloat = Self.defaultImageSize,
+        size: CGFloat = .image.asset,
         overlayImageSize: CGFloat = 16
     ) {
         self.assetImage = assetImage

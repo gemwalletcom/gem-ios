@@ -39,6 +39,7 @@ extension ListAssetItemView {
                 .textStyle(
                     TextStyle(font: .body, color: .primary, fontWeight: .semibold)
                 )
+                .lineLimit(1)
             if let symbol = model.symbol {
                 Text(symbol)
                     .textStyle(.calloutSecondary)

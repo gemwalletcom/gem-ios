@@ -12,9 +12,9 @@ struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
     var contractAddress: String
     var isVerified: Bool
     var links: [AssetLink]?
-
-    var imageUrl: String
+    
     var previewImageUrl: String
+    var previewImageMimeType: String
 
     static let assets = hasMany(NFTAssetRecord.self).forKey("assets")
 }
@@ -36,8 +36,10 @@ extension NFTCollectionRecord: CreateTable {
             $0.column(Columns.NFTCollection.contractAddress.name, .text).notNull()
             $0.column(Columns.NFTCollection.isVerified.name, .boolean).notNull()
             $0.column(Columns.NFTCollection.links.name, .jsonText)
-            $0.column(Columns.NFTCollection.imageUrl.name, .text)
             $0.column(Columns.NFTCollection.previewImageUrl.name, .text)
+                .notNull()
+            $0.column(Columns.NFTCollection.previewImageMimeType.name, .text)
+                .notNull()
         }
     }
 }
@@ -52,8 +54,8 @@ extension NFTCollection {
             contractAddress: contractAddress,
             isVerified: isVerified,
             links: links,
-            imageUrl: image.imageUrl,
-            previewImageUrl: image.previewImageUrl
+            previewImageUrl: images.preview.url,
+            previewImageMimeType: images.preview.mimeType
         )
     }
 }

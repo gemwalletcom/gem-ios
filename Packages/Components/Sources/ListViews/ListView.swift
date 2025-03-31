@@ -14,6 +14,8 @@ public struct ListView<Item: Identifiable, Content: View>: View {
     public var body: some View {
         List(items) { item in
             content(item)
+            .listRowInsets(.assetListRowInsets)
+            .listSectionSpacing(.compact)
         }
     }
 }
