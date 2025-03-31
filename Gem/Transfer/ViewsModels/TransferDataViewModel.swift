@@ -107,7 +107,7 @@ struct TransferDataViewModel {
     
     var appAssetImage: AssetImage? {
         switch type {
-            case .transfer,
+        case .transfer,
                 .transferNft,
                 .swap,
                 .tokenApprove,
