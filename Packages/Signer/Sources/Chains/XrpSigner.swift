@@ -33,7 +33,7 @@ public struct XrpSigner: Signable {
             operation: .opPayment(RippleOperationPayment.with {
                 $0.destination = input.destinationAddress
                 $0.amount = input.value.asInt64
-                if let memo = input.memo, let destinationTag = UInt32(memo) {
+                if let memo = input.memo, let destinationTag = UInt64(memo) {
                     $0.destinationTag = destinationTag
                 }
             }),
@@ -51,7 +51,7 @@ public struct XrpSigner: Signable {
                     $0.currency = hexSymbol(symbol: input.asset.symbol)
                     $0.value = ValueFormatter.full.string(input.value, decimals: 15)
                 }
-                if let memo = input.memo, let destinationTag = UInt32(memo) {
+                if let memo = input.memo, let destinationTag = UInt64(memo) {
                     $0.destinationTag = destinationTag
                 }
             }),

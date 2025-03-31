@@ -11,15 +11,21 @@ public enum NFTType: String, Codable, Equatable, Hashable, Sendable {
 	case jetton
 }
 
-public struct NFTImage: Codable, Equatable, Hashable, Sendable {
-	public let imageUrl: String
-	public let previewImageUrl: String
-	public let originalSourceUrl: String
+public struct NFTResource: Codable, Equatable, Hashable, Sendable {
+	public let url: String
+	public let mimeType: String
 
-	public init(imageUrl: String, previewImageUrl: String, originalSourceUrl: String) {
-		self.imageUrl = imageUrl
-		self.previewImageUrl = previewImageUrl
-		self.originalSourceUrl = originalSourceUrl
+	public init(url: String, mimeType: String) {
+		self.url = url
+		self.mimeType = mimeType
+	}
+}
+
+public struct NFTImages: Codable, Equatable, Hashable, Sendable {
+	public let preview: NFTResource
+
+	public init(preview: NFTResource) {
+		self.preview = preview
 	}
 }
 
@@ -44,10 +50,11 @@ public struct NFTAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
 	public let name: String
 	public let description: String?
 	public let chain: Chain
-	public let image: NFTImage
+	public let resource: NFTResource
+	public let images: NFTImages
 	public let attributes: [NFTAttribute]
 
-	public init(id: String, collectionId: String, contractAddress: String?, tokenId: String, tokenType: NFTType, name: String, description: String?, chain: Chain, image: NFTImage, attributes: [NFTAttribute]) {
+	public init(id: String, collectionId: String, contractAddress: String?, tokenId: String, tokenType: NFTType, name: String, description: String?, chain: Chain, resource: NFTResource, images: NFTImages, attributes: [NFTAttribute]) {
 		self.id = id
 		self.collectionId = collectionId
 		self.contractAddress = contractAddress
@@ -56,7 +63,8 @@ public struct NFTAsset: Codable, Equatable, Hashable, Identifiable, Sendable {
 		self.name = name
 		self.description = description
 		self.chain = chain
-		self.image = image
+		self.resource = resource
+		self.images = images
 		self.attributes = attributes
 	}
 }
@@ -67,17 +75,17 @@ public struct NFTCollection: Codable, Equatable, Hashable, Identifiable, Sendabl
 	public let description: String?
 	public let chain: Chain
 	public let contractAddress: String
-	public let image: NFTImage
+	public let images: NFTImages
 	public let isVerified: Bool
 	public let links: [AssetLink]
 
-	public init(id: String, name: String, description: String?, chain: Chain, contractAddress: String, image: NFTImage, isVerified: Bool, links: [AssetLink]) {
+	public init(id: String, name: String, description: String?, chain: Chain, contractAddress: String, images: NFTImages, isVerified: Bool, links: [AssetLink]) {
 		self.id = id
 		self.name = name
 		self.description = description
 		self.chain = chain
 		self.contractAddress = contractAddress
-		self.image = image
+		self.images = images
 		self.isVerified = isVerified
 		self.links = links
 	}
@@ -112,5 +120,17 @@ public struct NFTData: Codable, Equatable, Hashable, Sendable {
 	public init(collection: NFTCollection, assets: [NFTAsset]) {
 		self.collection = collection
 		self.assets = assets
+	}
+}
+
+public struct NFTImageOld: Codable {
+	public let imageUrl: String
+	public let previewImageUrl: String
+	public let originalSourceUrl: String
+
+	public init(imageUrl: String, previewImageUrl: String, originalSourceUrl: String) {
+		self.imageUrl = imageUrl
+		self.previewImageUrl = previewImageUrl
+		self.originalSourceUrl = originalSourceUrl
 	}
 }

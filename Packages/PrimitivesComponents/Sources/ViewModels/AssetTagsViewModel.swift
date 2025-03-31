@@ -43,10 +43,6 @@ public struct AssetTagsViewModel {
         }
         return Colors.secondaryText
     }
-    
-    public func opacity(for tag: AssetTag) -> Double {
-        !hasSelected || selectedTag == tag ? 1 : 0.35
-    }
 
     public mutating func setSelectedTag(_ tag: AssetTag?) {
         selectedTag = selectedTag == tag ? nil : tag
