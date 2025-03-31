@@ -187,6 +187,13 @@ final class ConfirmTransferViewModel {
         let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
         return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
     }
+    
+    var showClearHeader: Bool {
+        switch headerType {
+        case .amount, .nft: true
+        case .swap: false
+        }
+    }
 
     var shouldDisableButton: Bool {
         if let result = state.value?.transferAmountResult, case .error = result {
