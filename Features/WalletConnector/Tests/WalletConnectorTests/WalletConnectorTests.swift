@@ -15,7 +15,7 @@ import PreferencesTestKit
 struct WalletConnectorSignerTests {
     @Test
     func testGetWalletsSuccess() throws {
-        let db = DB(path: "\(NSUUID().uuidString).sqlite")
+        let db = DB.mock()
         let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let _ = try keystore.importWallet(
             name: "test",
@@ -29,7 +29,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func testGetWalletsEmptyNoMatchingChain() throws {
-        let db = DB(path: "\(NSUUID().uuidString).sqlite")
+        let db = DB.mock()
         let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let _ = try keystore.importWallet(
             name: "test",
@@ -43,7 +43,7 @@ struct WalletConnectorSignerTests {
 
     @Test
     func testGetWalletsOptionalsBlockhain() throws {
-        let db = DB(path: "\(NSUUID().uuidString).sqlite")
+        let db = DB.mock()
         let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let proposal = try Session.Proposal.optionalNamespaces()
     
