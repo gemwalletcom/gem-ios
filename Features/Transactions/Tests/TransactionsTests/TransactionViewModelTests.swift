@@ -5,7 +5,7 @@ import PrimitivesTestKit
 import PrimitivesComponents
 import Primitives
 
-@testable import Gem
+@testable import Transactions
 
 final class TransactionViewModelTests {
 
