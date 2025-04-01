@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 # Base directories containing Swift packages
@@ -10,12 +11,11 @@ for base_dir in "${BASE_DIRS[@]}"; do
         continue
     fi
     
-    # Find all subdirectories containing a Package.swift file
-    find "$base_dir" -type f -name "Package.swift" 2>/dev/null | while read -r package_file; do
-        package_dir=$(dirname "$package_file")
-        echo "Found package in $package_dir"
-        
-        # Try to resolve dependencies, but don't exit on error
-        (cd "$package_dir" && swift package resolve) || echo "Failed to resolve dependencies in $package_dir"
+    # Look for Package.swift files directly in each subdirectory
+    for package_dir in "$base_dir"/*; do
+        if [ -f "$package_dir/Package.swift" ]; then
+            echo "Found package in $package_dir"
+            (cd "$package_dir" && swift package resolve) || echo "Failed to resolve dependencies in $package_dir"
+        fi
     done
 done

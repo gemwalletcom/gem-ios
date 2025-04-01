@@ -14,8 +14,8 @@ let package = Package(
             targets: ["ChainService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Blockchain", path: "../Blockchain"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Blockchain", path: "../../Packages/Blockchain"),
     ],
     targets: [
         .target(

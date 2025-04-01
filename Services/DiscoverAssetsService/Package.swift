@@ -13,10 +13,10 @@ let package = Package(
             targets: ["DiscoverAssetsService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "BalanceService", path: "../BalanceService"),
-        .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
     ],
     targets: [
         .target(

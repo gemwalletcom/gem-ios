@@ -13,11 +13,11 @@ let package = Package(
             targets: ["LockManager"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
     ],
     targets: [
         .target(
