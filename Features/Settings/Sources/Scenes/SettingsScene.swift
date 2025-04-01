@@ -45,8 +45,10 @@ extension SettingsScene {
                 with: ListItemView(
                     title: model.walletsTitle,
                     subtitle: model.walletsValue,
-                    image: model.walletsImage),
-                action: onOpenWallets)
+                    image: model.walletsImage
+                ),
+                action: onOpenWallets
+            )
 
             NavigationLink(value: Scenes.Security()) {
                 ListItemView(
@@ -74,7 +76,11 @@ extension SettingsScene {
             }
 
             NavigationLink(value: Scenes.Currency()) {
-                ListItemView(title: Localized.Settings.currency, subtitle: model.currencyValue, image: model.currencyImage)
+                ListItemView(
+                    title: Localized.Settings.currency,
+                    subtitle: model.currencyValue,
+                    image: model.currencyImage
+                )
             }
 
             NavigationCustomLink(

@@ -4,6 +4,7 @@ import SwiftUI
 import Foundation
 import Localization
 import Style
+import Components
 
 public struct ChainsFilterTypeViewModel: FilterTypeRepresentable {
     private let type: ChainsFilterType
@@ -27,5 +28,5 @@ public struct ChainsFilterTypeViewModel: FilterTypeRepresentable {
         Localized.Settings.Networks.title
     }
 
-    public var image: Image { Images.Settings.networks }
+    public var image: AssetImage { AssetImage.image(Images.Settings.networks) }
 }

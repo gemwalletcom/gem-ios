@@ -13,8 +13,10 @@ public struct ListItemSelectionView<T: Hashable>: View {
     let titleTagType: TitleTagType
     let titleTagStyle: TextStyle
     
-    let image: Image?
+    let image: AssetImage?
     let imageSize: CGFloat
+    let overlayImageSize: CGFloat
+    let cornerRadius: CGFloat
     
     let value: T?
     let selection: T?
@@ -30,8 +32,10 @@ public struct ListItemSelectionView<T: Hashable>: View {
         titleTagStyle: TextStyle = .body,
         subtitle: String?,
         subtitleExtra: String?,
-        image: Image? = nil,
+        image: AssetImage? = nil,
         imageSize: CGFloat = 28.0,
+        overlayImageSize: CGFloat = 16.0,
+        cornerRadius: CGFloat = 0,
         placeholders: [ListItemViewPlaceholderType] = [],
         value: T,
         selection: T?,
@@ -46,6 +50,8 @@ public struct ListItemSelectionView<T: Hashable>: View {
         self.subtitleExtra = subtitleExtra
         self.image = image
         self.imageSize = imageSize
+        self.overlayImageSize = overlayImageSize
+        self.cornerRadius = cornerRadius
         self.placeholders = placeholders
         self.value = value
         self.selection = selection
@@ -68,6 +74,8 @@ public struct ListItemSelectionView<T: Hashable>: View {
                  subtitleExtra: subtitleExtra,
                  image: image,
                  imageSize: imageSize,
+                 overlayImageSize: overlayImageSize,
+                 cornerRadius: cornerRadius,
                  placeholders: placeholders
              )
          }

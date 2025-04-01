@@ -5,6 +5,7 @@ import SwiftUI
 import Style
 import Localization
 import Preferences
+import Components
 
 @Observable
 @MainActor
@@ -28,7 +29,7 @@ public final class AboutUsViewModel {
         let number = Bundle.main.buildVersionNumber
         return "\(version) (\(number))"
     }
-    var versionTextImage: Image { Images.Settings.version }
+    var versionTextImage: AssetImage { AssetImage.image(Images.Settings.version) }
 
     var contextDevTitle: String { Localized.Settings.enableValue(Localized.Settings.developer) }
     var contextDeveloperImage: String { SystemImage.info }

@@ -14,7 +14,6 @@ public struct TransactionView: View {
 
     public var body: some View {
         HStack {
-            AssetImageView(assetImage: model.assetImage)
             ListItemView(
                 title: model.title,
                 titleStyle: model.titleTextStyle,
@@ -26,7 +25,10 @@ public struct TransactionView: View {
                 subtitle: model.subtitle,
                 subtitleStyle: model.subtitleTextStyle,
                 subtitleExtra: model.subtitleExtra,
-                subtitleStyleExtra: model.subtitleExtraStyle
+                subtitleStyleExtra: model.subtitleExtraStyle,
+                image: model.assetImage,
+                imageSize: .image.asset,
+                cornerRadius: .image.asset / 2
             )
         }
         .contextMenu {

@@ -26,9 +26,10 @@ public struct ListItemView: View {
     public let subtitle: TextValue?
     public let subtitleExtra: TextValue?
 
-    public let image: Image?
+    public let image: AssetImage?
     public let imageSize: CGFloat
     public let cornerRadius: CGFloat
+    public let overlayImageSize: CGFloat
 
     public var infoAction: (() -> Void)?
 
@@ -46,8 +47,9 @@ public struct ListItemView: View {
         subtitleStyle: TextStyle = TextStyle.calloutSecondary,
         subtitleExtra: String? = nil,
         subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
-        image: Image? = nil,
+        image: AssetImage? = nil,
         imageSize: CGFloat = 28.0,
+        overlayImageSize: CGFloat = 16,
         cornerRadius: CGFloat = 0,
         placeholders: [ListItemViewPlaceholderType] = [],
         infoAction: (() -> Void)? = nil
@@ -80,8 +82,9 @@ public struct ListItemView: View {
         titleTagType: TitleTagType,
         subtitle: TextValue?,
         subtitleExtra: TextValue?,
-        image: Image? = nil,
+        image: AssetImage? = nil,
         imageSize: CGFloat = 28.0,
+        overlayImageSize: CGFloat = 16,
         cornerRadius: CGFloat = 0,
         showInfo: Bool = false,
         placeholders: [ListItemViewPlaceholderType],
@@ -95,6 +98,7 @@ public struct ListItemView: View {
         self.subtitleExtra = subtitleExtra
         self.image = image
         self.imageSize = imageSize
+        self.overlayImageSize = overlayImageSize
         self.cornerRadius = cornerRadius
         self.placeholders = placeholders
         self.infoAction = infoAction
@@ -103,7 +107,7 @@ public struct ListItemView: View {
     public var body: some View {
         HStack {
             if let image = image {
-                ImageView(image: image, imageSize: imageSize, cornerRadius: cornerRadius)
+                AssetImageView(assetImage: image, size: imageSize, overlayImageSize: overlayImageSize, cornerRadius: cornerRadius)
             }
             if let title = title {
                 TitleView(
@@ -362,14 +366,14 @@ extension ListItemView {
                 titleExtra: titleExtra,
                 titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
                 subtitleStyle: defaultTextStyle, subtitleExtra: "Subtitle Extra",
-                subtitleStyleExtra: extraTextStyle, image: Images.System.faceid,
+                subtitleStyleExtra: extraTextStyle, image: AssetImage.image(Images.System.faceid),
                 imageSize: .list.image,
                 cornerRadius: 0
             )
             ListItemView(
                 title: defaultTitle,
                 titleStyle: defaultTextStyle, subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle, image: Images.System.eye,
+                subtitleStyle: defaultTextStyle, image: AssetImage.image(Images.System.eye),
                 imageSize: .list.image,
                 cornerRadius: 0
             )
@@ -412,7 +416,7 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, image: Images.System.eye,
+                titleStyle: defaultTextStyle, image: AssetImage.image(Images.System.eye),
                 imageSize: .list.image,
                 cornerRadius: 0
             )
