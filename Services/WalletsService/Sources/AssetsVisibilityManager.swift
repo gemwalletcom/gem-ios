@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import BalanceService
 
-struct AssetVisibilityManager: AssetVisibilityManageable {
+struct AssetVisibilityManager: AssetVisibilityServiceable {
     private let service: BalanceService
 
     init(service: BalanceService) {
@@ -15,8 +15,8 @@ struct AssetVisibilityManager: AssetVisibilityManageable {
         try service.hideAsset(walletId: walletId, assetId: assetId)
     }
 
-    public func togglePin(_ shouldPin: Bool, walletId: WalletId, assetId: AssetId) throws {
-        switch shouldPin {
+    public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+        switch isPinned {
         case true: try service.pinAsset(walletId: walletId, assetId: assetId)
         case false: try service.unpinAsset(walletId: walletId, assetId: assetId)
         }

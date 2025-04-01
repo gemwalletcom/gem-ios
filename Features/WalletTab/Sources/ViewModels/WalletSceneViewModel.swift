@@ -181,7 +181,7 @@ extension WalletSceneViewModel {
 
     func onPinAsset(_ assetId: AssetId, value: Bool) {
         do {
-            try walletsService.togglePin(value, walletId: wallet.walletId, assetId: assetId)
+            try walletsService.setPinned(value, walletId: wallet.walletId, assetId: assetId)
         } catch {
             NSLog("WalletSceneViewModel pin asset error: \(error)")
         }

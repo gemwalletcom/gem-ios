@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-protocol AssetVisibilityManageable: Sendable {
+protocol AssetVisibilityServiceable: Sendable {
     func hideAsset(walletId: WalletId, assetId: AssetId) throws
-    func togglePin(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws
+    func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws
 }

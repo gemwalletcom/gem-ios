@@ -25,7 +25,7 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let currencyUpdater: any CurrencyUpdater
-    private let assetsVisibilityManager: any AssetVisibilityManageable
+    private let assetsVisibilityManager: any AssetVisibilityServiceable
 
     // TODO: - move to different place
     private let addressStatusService: AddressStatusService
@@ -186,9 +186,9 @@ extension WalletsService: BalanceUpdater {
 
 // MARK: - AssetVisibilityManager
 
-extension WalletsService: AssetVisibilityManageable {
-    public func togglePin(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
-        try assetsVisibilityManager.togglePin(isPinned, walletId: walletId, assetId: assetId)
+extension WalletsService: AssetVisibilityServiceable {
+    public func setPinned(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+        try assetsVisibilityManager.setPinned(isPinned, walletId: walletId, assetId: assetId)
     }
 
     public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
