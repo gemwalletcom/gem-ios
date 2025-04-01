@@ -5,6 +5,7 @@ import WalletCore
 import WalletCorePrimitives
 import Keystore
 import Primitives
+import BigInt
 
 public struct TonSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -60,6 +61,25 @@ public struct TonSigner: Signable {
         }
 
         return output.encoded
+    }
+    
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard case .swap(_, _, _, let data) = input.type else {
+            throw AnyError("invalid type")
+        }
+        let transfer = try TheOpenNetworkTransfer.with {
+            $0.dest = data.to
+            $0.amount = try BigInt.from(string: data.value).asUInt
+            if let memo = input.memo {
+                $0.comment = memo
+            }
+            $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
+            $0.bounceable = true
+            $0.customPayload = data.data
+        }
+        return [
+            try sign(input: input, messages: [transfer], coinType: input.coinType, privateKey: privateKey),
+        ]
     }
 
     private func expireAt() -> UInt32 {
