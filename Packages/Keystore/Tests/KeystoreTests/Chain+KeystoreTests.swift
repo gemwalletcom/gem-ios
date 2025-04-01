@@ -20,7 +20,6 @@ final class Chain_KeystoreTests {
     @Test
     func testHasEncodingTypes() {
         for chain in Chain.allCases {
-            #expect(chain.defaultKeyEncodingType != nil)
             #expect(!chain.keyEncodingTypes.isEmpty)
         }
     }

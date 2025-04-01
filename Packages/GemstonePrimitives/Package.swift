@@ -14,7 +14,6 @@ let package = Package(
         .package(name: "Gemstone", path: "../Gemstone"),
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
-        .package(url: "https://github.com/attaswift/BigInt.git", exact: Version(5, 4, 1)),
     ],
     targets: [
         .target(
@@ -23,7 +22,6 @@ let package = Package(
                 "Gemstone",
                 "Primitives",
                 "WalletCorePrimitives",
-                .product(name: "BigInt", package: "BigInt"),
             ],
             path: "Sources"
         ),
