@@ -8,32 +8,34 @@ import GRDB
 import Store
 import PrimitivesTestKit
 import StoreTestKit
+import PreferencesTestKit
 
 @testable import WalletConnector
 
-@MainActor
 struct WalletConnectorSignerTests {
-    let keystore = LocalKeystore.mock()
-
     @Test
     func testGetWalletsSuccess() throws {
+        let db = DB.mock()
+        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let _ = try keystore.importWallet(
             name: "test",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .solana])
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore)
+        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
         let wallets = try signer.getWallets(for: try .mock())
 
-        #expect(keystore.currentWallet == wallets.first)
+        #expect(keystore.wallets.first == wallets.first)
     }
 
     @Test
     func testGetWalletsEmptyNoMatchingChain() throws {
+        let db = DB.mock()
+        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let _ = try keystore.importWallet(
             name: "test",
             type: .phrase(words:  LocalKeystore.words, chains: [])
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore)
+        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
         let wallets = try signer.getWallets(for: try .mock())
 
         #expect(wallets.isEmpty)
@@ -41,13 +43,15 @@ struct WalletConnectorSignerTests {
 
     @Test
     func testGetWalletsOptionalsBlockhain() throws {
+        let db = DB.mock()
+        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
         let proposal = try Session.Proposal.optionalNamespaces()
     
         let _ = try keystore.importWallet(
             name: "test",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore)
+        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
         let wallets = try signer.getWallets(for: proposal)
 
         #expect(wallets.count == 1)
@@ -55,11 +59,11 @@ struct WalletConnectorSignerTests {
 }
 
 extension WalletConnectorSigner {
-    @MainActor
-    static func mock(keystore: LocalKeystore) -> WalletConnectorSigner {
+    static func mock(keystore: LocalKeystore, walletStore: WalletStore) -> WalletConnectorSigner {
         WalletConnectorSigner(
-            store: ConnectionsStore(db: .mock()),
-            keystore: keystore,
+            connectionsStore: .mock(),
+            walletStore: walletStore,
+            preferences: .mock(),
             walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
         )
     }
