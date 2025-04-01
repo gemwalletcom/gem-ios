@@ -16,7 +16,7 @@ struct AbbreviatedFormatterTests {
         #expect(formatter.string(0) == "$0")
         #expect(formatter.string(12) == "$12")
         #expect(formatter.string(1_234) == "$1,234")
-        #expect(formatter.string(12_234) == "$12.23K")
+        #expect(formatter.string(12_234) == "$12,234")
         #expect(formatter.string(100_000) == "$100K")
         #expect(formatter.string(123_456) == "$123.46K")
         #expect(formatter.string(5_000_000) == "$5M")
@@ -44,8 +44,8 @@ struct AbbreviatedFormatterTests {
         #expect(formatter.string(0) == "€0")
         #expect(formatter.string(12) == "€12")
         #expect(formatter.string(1_234) == "€1,234")
-        #expect(formatter.string(5_000_000) == "5 Mio €")
-        #expect(formatter.string(7_890_000_000) == "7,89 Mrd €")
+        #expect(formatter.string(5_000_000) == "5 Mln €")
+        #expect(formatter.string(7_890_000_000) == "7,89 Mld €")
         #expect(formatter.string(1_200_000_000_000) == "1,2 Bln €")
     }
 }
