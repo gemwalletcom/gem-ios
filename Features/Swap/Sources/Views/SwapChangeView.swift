@@ -3,15 +3,16 @@
 import Foundation
 import SwiftUI
 import Style
+import Primitives
 
 public struct SwapChangeView: View {
     
-    @Binding var fromId: String?
-    @Binding var toId: String?
+    @Binding var fromId: AssetId?
+    @Binding var toId: AssetId?
     
     public init(
-        fromId: Binding<String?> = .constant(.none),
-        toId: Binding<String?> = .constant(.none)
+        fromId: Binding<AssetId?> = .constant(.none),
+        toId: Binding<AssetId?> = .constant(.none)
     ) {
         _fromId = fromId
         _toId = toId
