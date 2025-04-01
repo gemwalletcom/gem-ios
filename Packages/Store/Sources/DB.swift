@@ -21,6 +21,9 @@ public final class DB: ObservableObject, Sendable {
         do {
             var migrations = Migrations()
             try migrations.run(dbQueue: dbQueue)
+            if !isRunningTests {
+                try migrations.runChanges(dbQueue: dbQueue)
+            }
         } catch {
             fatalError("db migrations error: \(error)")
         }
@@ -48,4 +51,8 @@ public final class DB: ObservableObject, Sendable {
         #endif
         return config
     }()
+}
+
+var isRunningTests: Bool {
+    return ProcessInfo.processInfo.environment["XCTestConfigurationFilePath"] != nil
 }
