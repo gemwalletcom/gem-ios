@@ -70,8 +70,8 @@ public struct ManageWalletService: Sendable {
         try walletStore.swapOrder(from: from, to: to)
     }
     
-    public func renameWallet(wallet: Wallet, newName: String) throws {
-        try walletStore.renameWallet(wallet.id, name: newName)
+    public func rename(walletId: WalletId, newName: String) throws {
+        try walletStore.renameWallet(walletId.id, name: newName)
     }
     
     public func getMnemonic(wallet: Wallet) throws -> [String] {

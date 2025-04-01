@@ -49,7 +49,6 @@ public struct TransactionService: Sendable {
 
     private func updatePendingTransactions() async throws {
         let transactions = try transactionStore.getTransactions(state: .pending)
-
         await withTaskGroup(of: Void.self) { group in
             for transaction in transactions {
                 group.addTask {
