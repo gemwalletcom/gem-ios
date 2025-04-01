@@ -81,6 +81,7 @@ final class ConfirmTransferViewModel {
 
     var appTitle: String { Localized.WalletConnect.app }
     var appValue: String? { dataModel.appValue }
+    var appAssetImage: AssetImage? { dataModel.appAssetImage }
 
     var websiteURL: URL? { dataModel.websiteURL }
     var websiteTitle: String { Localized.WalletConnect.website }

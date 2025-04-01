@@ -18,9 +18,21 @@ public struct SignMessageScene: View {
         VStack {
             List {
                 Section {
+                    ListItemImageView(
+                        title: Localized.WalletConnect.app,
+                        subtitle: model.appName,
+                        assetImage: model.appAssetImage
+                    )
+                    if let appUrl = model.appUrl {
+                        ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
+                            .contextMenu {
+                                ContextMenuViewURL(title: Localized.WalletConnect.website, url: appUrl, image: SystemImage.network)
+                            }
+                    }
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
+
                 Section(Localized.SignMessage.message) {
                     Text(model.message)
                 }
