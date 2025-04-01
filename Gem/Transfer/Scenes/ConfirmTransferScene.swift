@@ -56,7 +56,6 @@ struct ConfirmTransferScene: View {
 // MARK: - UI Components
 
 extension ConfirmTransferScene {
-
     private var statefullButtonImage: Image? {
         if let image = model.buttonImage {
             return Image(systemName: image)
@@ -66,6 +65,10 @@ extension ConfirmTransferScene {
 
     private var transactionsList: some View {
         List {
+            TransactionHeaderListItemView(
+                headerType: model.headerType,
+                showClearHeader: model.showClearHeader
+            )
             Section {
                 if let appValue = model.appValue {
                     ListItemImageView(
@@ -107,14 +110,6 @@ extension ConfirmTransferScene {
                 if let slippage = model.slippageText {
                     ListItemView(title: model.slippageField, subtitle: slippage)
                 }
-            } header: {
-                HStack {
-                    Spacer(minLength: 0)
-                    TransactionHeaderView(type: model.headerType)
-                        .padding(.bottom, .medium)
-                    Spacer(minLength: 0)
-                }
-                .headerProminence(.increased)
             }
 
             Section {
