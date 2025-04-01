@@ -47,6 +47,7 @@ let package = Package(
                 .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "WalletConnector"
             ],
             resources: [.process("Resources")]
