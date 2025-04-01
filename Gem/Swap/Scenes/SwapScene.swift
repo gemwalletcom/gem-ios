@@ -103,7 +103,10 @@ extension SwapScene {
             Text(model.swapFromTitle)
                 .listRowInsets(.horizontalMediumInsets)
         } footer: {
-            SwapChangeView(fromId: $model.fromAssetRequest.assetId, toId: $model.toAssetRequest.assetId)
+            SwapChangeView(
+                fromId: $model.pairSelectorModel.fromAssetId,
+                toId: $model.pairSelectorModel.toAssetId
+            )
                 .padding(.top, .small)
                 .frame(maxWidth: .infinity)
                 .disabled(model.isSwitchAssetButtonDisabled)

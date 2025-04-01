@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import Transfer
 import PrimitivesComponents
+import Components
 
 struct TransferDataViewModel {
     let data: TransferData
@@ -101,6 +102,20 @@ struct TransferDataViewModel {
             }
         case .account: false
         default: true
+        }
+    }
+    
+    var appAssetImage: AssetImage? {
+        switch type {
+        case .transfer,
+                .transferNft,
+                .swap,
+                .tokenApprove,
+                .stake,
+                .account:
+                .none
+        case let .generic(_, session, _):
+            AssetImage(imageURL: session.icon.asURL)
         }
     }
 }
