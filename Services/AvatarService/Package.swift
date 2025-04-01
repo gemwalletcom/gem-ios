@@ -13,8 +13,8 @@ let package = Package(
             targets: ["AvatarService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store")
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store")
     ],
     targets: [
         .target(

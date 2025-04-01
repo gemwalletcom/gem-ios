@@ -14,10 +14,10 @@ let package = Package(
             targets: ["Transfer"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Blockchain", path: "../Blockchain"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Blockchain", path: "../../Packages/Blockchain"),
     ],
     targets: [
         .target(

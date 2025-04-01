@@ -13,9 +13,9 @@ let package = Package(
             targets: ["Currency"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Localization", path: "../Localization"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
     ],
     targets: [
         .target(

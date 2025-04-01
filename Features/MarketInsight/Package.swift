@@ -13,16 +13,16 @@ let package = Package(
             targets: ["MarketInsight"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "Gemstone", path: "../Gemstone"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "ExplorerService", path: "../ExplorerService"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "PriceService", path: "../PriceService"),
-        .package(name: "AssetsService", path: "../AssetsService")
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "ExplorerService", path: "../../Services/ExplorerService"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "PriceService", path: "../../Services/PriceService"),
+        .package(name: "AssetsService", path: "../../Services/AssetsService"),
     ],
     targets: [
         .target(
