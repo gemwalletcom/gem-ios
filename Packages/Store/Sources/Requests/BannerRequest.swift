@@ -9,7 +9,8 @@ import Primitives
 public struct BannersRequest: ValueObservationQueryable {
     public static var defaultValue: [Banner] { [] }
 
-    private let walletId: String?
+    public var walletId: String?
+    
     private let assetId: String?
     private let chain: String?
     private let events: [BannerEvent]

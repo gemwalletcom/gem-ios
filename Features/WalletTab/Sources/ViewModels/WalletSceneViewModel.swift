@@ -1,75 +1,64 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import UIKit
 import SwiftUI
 import Style
 import Primitives
-import BalanceService
 import WalletsService
 import BannerService
 import Store
 import Preferences
 import Localization
+import PrimitivesComponents
+import InfoSheet
+import Components
+import ManageWalletService
 
-public struct WalletSceneViewModel: Sendable {
-    public let wallet: Wallet
-
+@Observable
+@MainActor
+public final class WalletSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let bannerService: BannerService
-    private let balanceService: BalanceService
+    private let manageWalletService: ManageWalletService
 
     let observablePreferences: ObservablePreferences
 
+    public var wallet: Wallet
+
+    // db ovservation
+    public var totalFiatRequest: TotalValueRequest
+    public var assetsRequest: AssetsRequest
+    public var bannersRequest: BannersRequest
+
+    // db observered values
+    public var totalFiatValue: Double = .zero
+    public var assets: [AssetData] = []
+    public var banners: [Banner] = []
+
+    public var isPresentingWallets = false
+    public var isPresentingSelectAssetType: SelectAssetType?
+    public var isPresentingInfoSheet: InfoSheetType?
+
     public init(
-        wallet: Wallet,
-        balanceService: BalanceService,
         walletsService: WalletsService,
         bannerService: BannerService,
-        observablePreferences: ObservablePreferences
+        manageWalletService: ManageWalletService,
+        observablePreferences: ObservablePreferences,
+        wallet: Wallet
     ) {
         self.wallet = wallet
-        self.balanceService = balanceService
         self.walletsService = walletsService
         self.bannerService = bannerService
+        self.manageWalletService = manageWalletService
         self.observablePreferences = observablePreferences
-    }
 
-    var pinImage: Image {
-        Images.System.pin
-    }
-
-    var pinnedTitle: String {
-        Localized.Common.pinned
-    }
-
-    var manageTokenTitle: String {
-        Localized.Wallet.manageTokenList
-    }
-
-    var manageImage: Image {
-        Images.Actions.manage
-    }
-
-    var assetsRequest: AssetsRequest {
-        AssetsRequest(walletID: wallet.id, filters: [.enabled])
-    }
-
-    var totalFiatValueRequest: TotalValueRequest {
-        TotalValueRequest(walletID: wallet.id)
-    }
-
-    var recentTransactionsRequest: TransactionsRequest {
-        TransactionsRequest(walletId: wallet.id, type: .pending, limit: 3)
-    }
-
-    var walletRequest: WalletRequest {
-        WalletRequest(walletId: wallet.id)
-    }
-
-    var bannersRequest: BannersRequest {
-        BannersRequest(
-            walletId: wallet.walletId.id,
+        self.totalFiatRequest = TotalValueRequest(walletId: wallet.id)
+        self.assetsRequest = AssetsRequest(
+            walletId: wallet.id,
+            filters: [.enabled]
+        )
+        self.bannersRequest = BannersRequest(
+            walletId: wallet.id,
             assetId: .none,
             chain: .none,
             events: [
@@ -77,48 +66,162 @@ public struct WalletSceneViewModel: Sendable {
                 .accountBlockedMultiSignature,
             ]
         )
+
     }
 
-    func closeBanner(banner: Banner) {
-        bannerService.onClose(banner)
+    public var currentWallet: Wallet? { manageWalletService.currentWallet }
+
+    var pinnedTitle: String { Localized.Common.pinned }
+    var manageTokenTitle: String { Localized.Wallet.manageTokenList }
+
+    var pinImage: Image { Images.System.pin }
+    public var manageImage: Image { Images.Actions.manage }
+
+    var showPinnedSection: Bool {
+        !sections.pinned.isEmpty
     }
 
-    func setupWallet() throws {
-        try walletsService.setupWallet(wallet)
+    var currencyCode: String {
+        observablePreferences.preferences.currency
     }
 
-    func fetch(wallet: Wallet, assets: [AssetData]) async throws {
-        try await walletsService.fetch(
-            walletId: wallet.walletId,
-            assetIds: assets.map { $0.asset.id }
+    var sections: AssetsSections {
+        AssetsSections.from(assets)
+    }
+
+    public var walletBarModel: WalletBarViewViewModel {
+        let walletModel = WalletViewModel(wallet: wallet)
+        return WalletBarViewViewModel(
+            name: walletModel.name,
+            image: walletModel.avatarImage
         )
     }
 
-    func handleBanner(action: BannerAction) async throws {
-        try await bannerService.handleAction(action)
+    var walletHeaderModel: WalletHeaderViewModel {
+        WalletHeaderViewModel(
+            walletType: wallet.type,
+            value: totalFiatValue,
+            currencyCode: currencyCode
+        )
     }
+}
 
-    func updatePrices() async throws {
-        try await walletsService.updatePrices()
-    }
+// MARK: - Business Logic
 
-    func runAddressStatusCheck(wallet: Wallet) async {
-        await walletsService.runAddressStatusCheck(wallet)
-    }
-
-    func hideAsset(_ assetId: AssetId) throws {
-        try balanceService.hideAsset(walletId: wallet.walletId, assetId: assetId)
-    }
-
-    func pinAsset(_ assetId: AssetId, value: Bool) throws {
-        if value {
-            try balanceService.pinAsset(walletId: wallet.walletId, assetId: assetId)
-        } else {
-            try balanceService.unpinAsset(walletId: wallet.walletId, assetId: assetId)
+extension WalletSceneViewModel {
+    func fetch() {
+        Task {
+            await fetch(
+                walletId: wallet.walletId,
+                assetIds: assets.map { $0.asset.id }
+            )
         }
     }
 
-    func copyAssetAddress(for address: String) {
+    func updatePrices() async {
+        do {
+            try await walletsService.updatePrices()
+        } catch {
+            NSLog("WalletSceneViewModel updatePrices error: \(error)")
+        }
+    }
+    
+    public func onSelectWalletBar() {
+        isPresentingWallets.toggle()
+    }
+
+    public func onSelectManage() {
+        isPresentingSelectAssetType = .manage
+    }
+
+    func onHeaderAction(type: HeaderButtonType) {
+        let selectType: SelectAssetType = switch type {
+        case .buy: .buy
+        case .send: .send
+        case .receive: .receive(.asset)
+        case .swap, .more, .stake:
+            fatalError()
+        }
+        isPresentingSelectAssetType = selectType
+    }
+
+    func onCloseBanner(banner: Banner) {
+        bannerService.onClose(banner)
+    }
+
+    func onCopyAssetAddress(_ address: String) {
         UIPasteboard.general.string = address
+    }
+
+    func onSelectWatchWalletInfo() {
+        isPresentingInfoSheet = .watchWallet
+    }
+
+    func onBannerAction(banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
+        switch banner.event {
+        case .stake,
+                .enableNotifications,
+                .accountActivation,
+                .accountBlockedMultiSignature,
+                .activateAsset:
+            Task {
+                try await handleBanner(action: action)
+            }
+        }
+    }
+
+    func onHideAsset(_ assetId: AssetId) {
+        do {
+            try walletsService.hideAsset(walletId: wallet.walletId, assetId: assetId)
+        } catch {
+            NSLog("WalletSceneViewModel hide Asset error: \(error)")
+        }
+    }
+
+    func onPinAsset(_ assetId: AssetId, value: Bool) {
+        do {
+            try walletsService.togglePin(value, walletId: wallet.walletId, assetId: assetId)
+        } catch {
+            NSLog("WalletSceneViewModel pin asset error: \(error)")
+        }
+    }
+
+    public func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
+        if let newWallet, wallet != newWallet {
+            refresh(for: newWallet)
+        }
+    }
+}
+
+
+// MARK: - Private
+
+extension WalletSceneViewModel {
+    private func fetch(
+        walletId: WalletId,
+        assetIds: [AssetId]
+    ) async {
+        do {
+            try await walletsService.fetch(
+                walletId: walletId,
+                assetIds: assetIds
+            )
+        } catch {
+            NSLog("WalletSceneViewModel fetch error: \(error)")
+        }
+    }
+
+    private func refresh(for newWallet: Wallet) {
+        wallet = newWallet
+        totalFiatRequest.walletId = newWallet.id
+        assetsRequest.walletId = newWallet.id
+        bannersRequest.walletId = newWallet.id
+
+        fetch()
+    }
+
+    private func handleBanner(action: BannerAction) async throws {
+        try await bannerService.handleAction(action)
     }
 }

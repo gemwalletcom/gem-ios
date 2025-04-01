@@ -25,6 +25,7 @@ public struct WalletsService: Sendable {
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
     private let currencyUpdater: any CurrencyUpdater
+    private let assetsVisibilityManager: any AssetVisibilityManageable
 
     // TODO: - move to different place
     private let addressStatusService: AddressStatusService
@@ -70,11 +71,13 @@ public struct WalletsService: Sendable {
             assetsEnabler: assetsEnabler,
             walletSessionService: walletSessionService
         )
+        self.assetsVisibilityManager = AssetVisibilityManager(service: balanceService)
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
         self.currencyUpdater = currencyUpdateService
         self.discoveryProcessor = processor
+
 
         self.assetsService = assetsService
         self.balanceService = balanceService
@@ -109,7 +112,7 @@ public struct WalletsService: Sendable {
         )
     }
 
-    public func setupWallet(_ wallet: Wallet) throws {
+    public func setup(wallet: Wallet) throws {
         try enableBalances(for: wallet.walletId, chains: wallet.chains)
     }
 
@@ -178,6 +181,18 @@ extension WalletsService: BalanceUpdater {
 
     func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
         try balanceUpdater.enableBalances(for: walletId, assetIds: assetIds)
+    }
+}
+
+// MARK: - AssetVisibilityManager
+
+extension WalletsService: AssetVisibilityManageable {
+    public func togglePin(_ isPinned: Bool, walletId: WalletId, assetId: AssetId) throws {
+        try assetsVisibilityManager.togglePin(isPinned, walletId: walletId, assetId: assetId)
+    }
+
+    public func hideAsset(walletId: WalletId, assetId: AssetId) throws {
+        try assetsVisibilityManager.hideAsset(walletId: walletId, assetId: assetId)
     }
 }
 
