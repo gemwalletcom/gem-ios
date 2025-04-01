@@ -71,7 +71,11 @@ extension ConfirmTransferScene {
             )
             Section {
                 if let appValue = model.appValue {
-                    ListItemView(title: model.appTitle, subtitle: appValue)
+                    ListItemImageView(
+                        title: model.appTitle,
+                        subtitle: appValue,
+                        assetImage: model.appAssetImage
+                    )
                 }
 
                 if let websiteValue = model.websiteValue {
