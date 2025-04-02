@@ -45,7 +45,7 @@ extension SettingsScene {
                 with: ListItemView(
                     title: model.walletsTitle,
                     subtitle: model.walletsValue,
-                    image: model.walletsImage
+                    imageStyle: .settings(assetImage: model.walletsImage)
                 ),
                 action: onOpenWallets
             )
@@ -53,7 +53,7 @@ extension SettingsScene {
             NavigationLink(value: Scenes.Security()) {
                 ListItemView(
                     title: model.securityTitle,
-                    image: model.securityImage
+                    imageStyle: .settings(assetImage: model.securityImage)
                 )
             }
         }
@@ -64,14 +64,14 @@ extension SettingsScene {
             NavigationLink(value: Scenes.Notifications()) {
                 ListItemView(
                     title: model.notificationsTitle,
-                    image: model.notificationsImage
+                    imageStyle: .settings(assetImage: model.notificationsImage)
                 )
             }
 
             NavigationLink(value: Scenes.PriceAlerts()) {
                 ListItemView(
                     title: model.priceAlertsTitle,
-                    image: model.priceAlertsImage
+                    imageStyle: .settings(assetImage: model.priceAlertsImage)
                 )
             }
 
@@ -79,7 +79,7 @@ extension SettingsScene {
                 ListItemView(
                     title: Localized.Settings.currency,
                     subtitle: model.currencyValue,
-                    image: model.currencyImage
+                    imageStyle: .settings(assetImage: model.currencyImage)
                 )
             }
 
@@ -87,7 +87,7 @@ extension SettingsScene {
                 with: ListItemView(
                     title: model.lanugageTitle,
                     subtitle: model.lanugageValue,
-                    image: model.lanugageImage
+                    imageStyle: .settings(assetImage: model.lanugageImage)
                 ),
                 action: onSelectLanguages
             )
@@ -95,7 +95,7 @@ extension SettingsScene {
             NavigationLink(value: Scenes.Chains()) {
                 ListItemView(
                     title: model.chainsTitle,
-                    image: model.chainsImage
+                    imageStyle: .settings(assetImage: model.chainsImage)
                 )
             }
         }
@@ -106,7 +106,7 @@ extension SettingsScene {
             NavigationLink(value: Scenes.WalletConnect()) {
                 ListItemView(
                     title: model.walletConnectTitle,
-                    image: model.walletConnectImage
+                    imageStyle: .settings(assetImage: model.walletConnectImage)
                 )
             }
         }
@@ -122,18 +122,18 @@ extension SettingsScene {
         Section {
             NavigationOpenLink(url: model.helpCenterURL, with: ListItemView(
                 title: model.helpCenterTitle,
-                image: model.helpCenterImage
+                imageStyle: .settings(assetImage: model.helpCenterImage)
             ))
 
             NavigationOpenLink(url: model.supportURL, with: ListItemView(
                 title: model.supportTitle,
-                image: model.supportImage
+                imageStyle: .settings(assetImage: model.supportImage)
             ))
 
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(
                     title: model.aboutUsTitle,
-                    image: model.aboutUsImage
+                    imageStyle: .settings(assetImage: model.aboutUsImage)
                 )
             }
 
@@ -141,7 +141,7 @@ extension SettingsScene {
                 NavigationLink(value: Scenes.Developer()) {
                     ListItemView(
                         title: model.developerModeTitle,
-                        image: model.developerModeImage
+                        imageStyle: .settings(assetImage: model.developerModeImage)
                     )
                 }
             }

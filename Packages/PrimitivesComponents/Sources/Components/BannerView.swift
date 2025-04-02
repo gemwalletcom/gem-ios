@@ -24,17 +24,17 @@ public struct BannerView: View {
 
     public var body: some View {
         if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
-            Button(action: {
-                action(banner.banner)
-            }, label: {
-                HStack(spacing: 0) {
-                    ListItemView(
-                        title: banner.title,
-                        titleExtra: banner.description,
-                        image: banner.image,
-                        imageSize: banner.imageSize,
-                        cornerRadius: banner.cornerRadius
-                    )
+            Button(
+                action: {
+                    action(banner.banner)
+                },
+                label: {
+                    HStack(spacing: 0) {
+                        ListItemView(
+                            title: banner.title,
+                            titleExtra: banner.description,
+                            imageStyle: banner.imageStyle
+                        )
 
                     if banner.canClose {
                         Spacer()

@@ -117,6 +117,15 @@ public struct BannerViewModel {
             return Docs.url(.tronMultiSignature)
         }
     }
+    
+    public var imageStyle: AssetImageStyle? {
+        AssetImageStyle(
+            assetImage: image,
+            imageSize: imageSize,
+            overlayImageSize: .image.overlayImage.chain,
+            cornerRadiusType: .custom(cornerRadius)
+        )
+    }
 }
 
 extension BannerViewModel: Identifiable {

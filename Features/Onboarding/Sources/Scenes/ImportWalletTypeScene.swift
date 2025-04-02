@@ -21,9 +21,7 @@ struct ImportWalletTypeScene: View {
                 NavigationLink(value: ImportWalletType.multicoin) {
                     ListItemView(
                         title: Localized.Wallet.multicoin,
-                        image: AssetImage.image(Images.Logo.logo),
-                        imageSize: .image.medium,
-                        cornerRadius: .image.medium/2
+                        imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
                     )
                 }
                 .accessibilityIdentifier("multicoin")
@@ -36,9 +34,7 @@ struct ImportWalletTypeScene: View {
                         NavigationLink(value: ImportWalletType.chain(chain)) {
                             ListItemView(
                                 title: Asset(chain).name,
-                                image: AssetImage.resourceImage(image: chain.rawValue),
-                                imageSize: .image.medium,
-                                cornerRadius: .image.medium/2
+                                imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
                             )
                         }
                     }

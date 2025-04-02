@@ -14,7 +14,11 @@ public struct SocialLinksView: View {
         ForEach(model.links) {
             NavigationOpenLink(
                 url: $0.url,
-                with: ListItemView(title: $0.title, subtitle: $0.subtitle, image: $0.image)
+                with: ListItemView(
+                    title: $0.title,
+                    subtitle: $0.subtitle,
+                    imageStyle: .settings(assetImage: $0.image)
+                )
             )
         }
     }

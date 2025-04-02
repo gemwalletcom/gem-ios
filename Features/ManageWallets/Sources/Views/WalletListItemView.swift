@@ -49,9 +49,7 @@ struct WalletListItemView: View {
                 ListItemView(
                     title: model.name,
                     titleExtra: model.subType,
-                    image: model.avatarImage,
-                    imageSize: .image.medium,
-                    cornerRadius: .image.medium / 2
+                    imageStyle: .asset(assetImage: model.avatarImage)
                 )
 
                 Spacer()

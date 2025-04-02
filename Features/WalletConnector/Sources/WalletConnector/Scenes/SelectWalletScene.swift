@@ -25,9 +25,7 @@ struct SelectWalletScene: View {
                         titleTagType: .none,
                         subtitle: .none,
                         subtitleExtra: .none,
-                        image: wallet.avatarImage,
-                        imageSize: .image.medium,
-                        cornerRadius: .image.medium / 2,
+                        imageStyle: .asset(assetImage: wallet.avatarImage),
                         value: wallet,
                         selection: model.walletModel,
                         action: onSelect(wallet:)

@@ -26,10 +26,7 @@ public struct ListItemView: View {
     public let subtitle: TextValue?
     public let subtitleExtra: TextValue?
 
-    public let image: AssetImage?
-    public let imageSize: CGFloat
-    public let cornerRadius: CGFloat
-    public let overlayImageSize: CGFloat
+    public let imageStyle: AssetImageStyle?
 
     public var infoAction: (() -> Void)?
 
@@ -47,10 +44,7 @@ public struct ListItemView: View {
         subtitleStyle: TextStyle = TextStyle.calloutSecondary,
         subtitleExtra: String? = nil,
         subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
-        image: AssetImage? = nil,
-        imageSize: CGFloat = 28.0,
-        overlayImageSize: CGFloat = 16,
-        cornerRadius: CGFloat = 0,
+        imageStyle: AssetImageStyle? = nil,
         placeholders: [ListItemViewPlaceholderType] = [],
         infoAction: (() -> Void)? = nil
     ) {
@@ -67,9 +61,7 @@ public struct ListItemView: View {
             titleTagType: titleTagType,
             subtitle: subtitleValue,
             subtitleExtra: subtitleExtraValue,
-            image: image,
-            imageSize: imageSize,
-            cornerRadius: cornerRadius,
+            imageStyle: imageStyle,
             placeholders: placeholders,
             infoAction: infoAction
         )
@@ -82,10 +74,7 @@ public struct ListItemView: View {
         titleTagType: TitleTagType,
         subtitle: TextValue?,
         subtitleExtra: TextValue?,
-        image: AssetImage? = nil,
-        imageSize: CGFloat = 28.0,
-        overlayImageSize: CGFloat = 16,
-        cornerRadius: CGFloat = 0,
+        imageStyle: AssetImageStyle?,
         showInfo: Bool = false,
         placeholders: [ListItemViewPlaceholderType],
         infoAction: (() -> Void)? = nil
@@ -96,20 +85,22 @@ public struct ListItemView: View {
         self.titleTagType = titleTagType
         self.subtitle = subtitle
         self.subtitleExtra = subtitleExtra
-        self.image = image
-        self.imageSize = imageSize
-        self.overlayImageSize = overlayImageSize
-        self.cornerRadius = cornerRadius
+        self.imageStyle = imageStyle
         self.placeholders = placeholders
         self.infoAction = infoAction
     }
 
     public var body: some View {
         HStack {
-            if let image = image {
-                AssetImageView(assetImage: image, size: imageSize, overlayImageSize: overlayImageSize, cornerRadius: cornerRadius)
+            if let imageStyle {
+                AssetImageView(
+                    assetImage: imageStyle.assetImage,
+                    size: imageStyle.imageSize,
+                    overlayImageSize: imageStyle.overlayImageSize,
+                    cornerRadius: imageStyle.cornerRadius
+                )
             }
-            if let title = title {
+            if let title {
                 TitleView(
                     title: title,
                     titleExtra: titleExtra,
@@ -333,7 +324,8 @@ extension ListItemView {
         Section("Tag States") {
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Tag",
+                titleStyle: defaultTextStyle,
+                titleTag: "Tag",
                 titleTagStyle: tagTextStyleWhite,
                 titleTagType: .none,
                 subtitle: defaultSubtitle,
@@ -341,7 +333,8 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Loading",
+                titleStyle: defaultTextStyle,
+                titleTag: "Loading",
                 titleTagStyle: tagTextStyleWhite,
                 titleTagType: .progressView(),
                 subtitle: defaultSubtitle,
@@ -349,7 +342,8 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Image",
+                titleStyle: defaultTextStyle,
+                titleTag: "Image",
                 titleTagStyle: tagTextStyleWhite,
                 titleTagType: .image(Images.System.faceid),
                 subtitle: defaultSubtitle,
@@ -360,43 +354,50 @@ extension ListItemView {
         Section("Image States") {
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Tag",
+                titleStyle: defaultTextStyle,
+                titleTag: "Tag",
                 titleTagStyle: tagTextStyleBlue,
                 titleTagType: .none,
                 titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle, subtitleExtra: "Subtitle Extra",
-                subtitleStyleExtra: extraTextStyle, image: AssetImage.image(Images.System.faceid),
-                imageSize: .list.image,
-                cornerRadius: 0
+                titleStyleExtra: extraTextStyle,
+                subtitle: defaultSubtitle,
+                subtitleStyle: defaultTextStyle,
+                subtitleExtra: "Subtitle Extra",
+                subtitleStyleExtra: extraTextStyle,
+                imageStyle: .list(assetImage: AssetImage.image(Images.System.faceid))
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, subtitle: longSubtitle,
-                subtitleStyle: defaultTextStyle, image: AssetImage.image(Images.System.eye),
-                imageSize: .list.image,
-                cornerRadius: 0
+                titleStyle: defaultTextStyle,
+                subtitle: longSubtitle,
+                subtitleStyle: defaultTextStyle,
+                imageStyle: .list(assetImage: AssetImage.image(Images.System.eye))
             )
         }
 
         Section("Combined States") {
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Loading",
+                titleStyle: defaultTextStyle,
+                titleTag: "Loading",
                 titleTagStyle: tagTextStyleBlue,
                 titleTagType: .progressView(),
                 titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle, subtitle: longSubtitle,
+                titleStyleExtra: extraTextStyle,
+                subtitle: longSubtitle,
                 subtitleStyle: defaultTextStyle
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, titleTag: "Image",
+                titleStyle: defaultTextStyle,
+                titleTag: "Image",
                 titleTagStyle: tagTextStyleBlue,
                 titleTagType: .image(Images.System.faceid),
                 titleExtra: titleExtra,
-                titleStyleExtra: extraTextStyle, subtitle: defaultSubtitle,
-                subtitleStyle: defaultTextStyle, subtitleExtra: longSubtitleExtra,
+                titleStyleExtra: extraTextStyle,
+                subtitle: defaultSubtitle,
+                subtitleStyle: defaultTextStyle,
+                subtitleExtra: longSubtitleExtra,
                 subtitleStyleExtra: extraTextStyle
             )
         }
@@ -416,9 +417,8 @@ extension ListItemView {
             )
             ListItemView(
                 title: defaultTitle,
-                titleStyle: defaultTextStyle, image: AssetImage.image(Images.System.eye),
-                imageSize: .list.image,
-                cornerRadius: 0
+                titleStyle: defaultTextStyle,
+                imageStyle: .list(assetImage: AssetImage.image(Images.System.eye))
             )
         }
     }.listStyle(.insetGrouped)

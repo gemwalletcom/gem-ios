@@ -43,9 +43,7 @@ public struct SimpleListItemView: View {
             subtitleStyle: model.subtitleStyle,
             subtitleExtra: model.subtitleExtra,
             subtitleStyleExtra: model.subtitleStyleExtra,
-            image: model.assetImage,
-            imageSize: .image.asset,
-            cornerRadius: .image.asset / 2
+            imageStyle: .list(assetImage: model.assetImage)
         )
     }
 }

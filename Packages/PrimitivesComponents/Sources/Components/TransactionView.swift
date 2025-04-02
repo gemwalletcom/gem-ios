@@ -26,9 +26,7 @@ public struct TransactionView: View {
                 subtitleStyle: model.subtitleTextStyle,
                 subtitleExtra: model.subtitleExtra,
                 subtitleStyleExtra: model.subtitleExtraStyle,
-                image: model.assetImage,
-                imageSize: .image.asset,
-                cornerRadius: .image.asset / 2
+                imageStyle: .asset(assetImage: model.assetImage)
             )
         }
         .contextMenu {
