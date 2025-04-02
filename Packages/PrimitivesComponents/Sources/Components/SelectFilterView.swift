@@ -21,8 +21,7 @@ public struct SelectFilterView: View {
             with: ListItemView(
                 title: typeModel.title,
                 subtitle: typeModel.value,
-                image: typeModel.image,
-                imageSize: .list.image
+                imageStyle: .settings(assetImage: typeModel.image)
             ),
             action: action
         )

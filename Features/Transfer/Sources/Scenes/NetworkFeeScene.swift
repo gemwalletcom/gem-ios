@@ -26,8 +26,7 @@ public struct NetworkFeeScene: View {
                         titleTagType: .none,
                         subtitle: .none,
                         subtitleExtra: .none,
-                        image: feeRate.image,
-                        imageSize: 28,
+                        imageStyle: .asset(assetImage: feeRate.image),
                         value: feeRate.feeRate.priority,
                         selection: model.priority,
                         action: {
