@@ -10,6 +10,7 @@ import ManageWalletService
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 enum RecipientAddressType {
+    case pinned
     case wallets
     case view
 }
@@ -45,18 +46,20 @@ class RecipientViewModel: ObservableObject {
         self.onTransferAction = onTransferAction
     }
 
-    var tittle: String {
-        return Localized.Transfer.Recipient.title
-    }
-    
+    var tittle: String { Localized.Transfer.Recipient.title }
     var recipientField: String { Localized.Transfer.Recipient.addressField }
     var memoField: String { Localized.Transfer.memo }
 
-    var showMemo: Bool {
-        asset.chain.isMemoSupported
-    }
-    
+    var showMemo: Bool { asset.chain.isMemoSupported }
     var chain: Chain { asset.chain }
+    
+    var recipientSections: RecipientSections {
+        RecipientSections(
+            pinned: RecipientSection(title: Localized.Common.pinned, items: recipients(for: .pinned)),
+            wallets: RecipientSection(title: Localized.Transfer.Recipient.myWallets, items: recipients(for: .wallets)),
+            view: RecipientSection(title: Localized.Transfer.Recipient.viewWallets, items: recipients(for: .view))
+        )
+    }
 
     func getRecipientData(name: NameRecord?, address: String, memo: String?, amount: String?) throws -> RecipientData {
         let recipient: Recipient = {
@@ -80,37 +83,6 @@ class RecipientViewModel: ObservableObject {
             recipient: recipient,
             amount: .none
         )
-    }
-    
-    private func validateAddress(address: String) throws {
-        guard asset.chain.isValidAddress(address) else {
-            throw TransferError.invalidAddress(asset: asset)
-        }
-    }
-    
-    func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
-        switch type {
-        case .wallets:
-            return manageWalletService.wallets
-                .filter { ($0.type == .multicoin || $0.type == .single) && $0.id != wallet.id }
-                .filter { $0.accounts.first(where: { $0.chain == asset.chain }) != nil }
-                .map {
-                    return RecipientAddress(
-                        name: $0.name,
-                        address: $0.accounts.first(where: { $0.chain == asset.chain })!.address
-                    )
-                }
-                .compactMap { $0 }
-        case .view:
-            return manageWalletService.wallets
-                .filter { $0.type == .view }.filter { $0.accounts[0].chain == asset.chain}
-                .map {
-                    return RecipientAddress(
-                        name: $0.name,
-                        address: $0.accounts[0].address
-                    )
-                }
-        }
     }
     
     //TODO: Add unit tests
@@ -153,6 +125,33 @@ class RecipientViewModel: ObservableObject {
         }
         
         return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
+    }
+    
+    // MARK: - Private methods
+    
+    private func validateAddress(address: String) throws {
+        guard asset.chain.isValidAddress(address) else {
+            throw TransferError.invalidAddress(asset: asset)
+        }
+    }
+    
+    private func recipients(for section: RecipientAddressType) -> [RecipientAddress] {
+        manageWalletService.wallets
+            .filter { $0.id != wallet.id }
+            .filter {
+                switch section {
+                case .view:
+                    $0.type == .view && !$0.isPinned && $0.accounts.first?.chain == asset.chain
+                case .wallets:
+                    ($0.type == .multicoin || $0.type == .single) && !$0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                case .pinned:
+                    $0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                }
+            }
+            .compactMap {
+                guard let account = $0.accounts.first(where: { $0.chain == asset.chain }) else { return nil }
+                return RecipientAddress(name: $0.name, address: account.address)
+            }
     }
 }
 

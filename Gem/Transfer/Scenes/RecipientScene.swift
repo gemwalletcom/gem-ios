@@ -65,27 +65,26 @@ struct RecipientScene: View {
                         .autocorrectionDisabled()
                     }
                 }
-                
-                if !model.getRecipient(by: .wallets).isEmpty {
+
+                if model.recipientSections.pinned.items.isNotEmpty {
                     Section {
-                        ForEach(model.getRecipient(by: .wallets)) { recipient in
-                            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                onAddressSelect(recipient: recipient)
-                            }
-                        }
+                        recipientsView(from: model.recipientSections.pinned.items)
                     } header: {
-                        Text("My Wallets")
+                        Text(model.recipientSections.pinned.title)
                     }
                 }
-                if !model.getRecipient(by: .view).isEmpty {
+                if model.recipientSections.wallets.items.isNotEmpty {
                     Section {
-                        ForEach(model.getRecipient(by: .view)) { recipient in
-                            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                onAddressSelect(recipient: recipient)
-                            }
-                        }
+                        recipientsView(from: model.recipientSections.wallets.items)
                     } header: {
-                        Text("View Wallets")
+                        Text(model.recipientSections.wallets.title)
+                    }
+                }
+                if model.recipientSections.view.items.isNotEmpty {
+                    Section {
+                        recipientsView(from: model.recipientSections.view.items)
+                    } header: {
+                        Text(model.recipientSections.view.title)
                     }
                 }
             }
@@ -109,6 +108,14 @@ struct RecipientScene: View {
             // sometimes amount scanned from QR, pass it over, only address is not changed
             if !amount.isEmpty {
                 amount = .empty
+            }
+        }
+    }
+    
+    private func recipientsView(from items: [RecipientAddress]) -> some View {
+        ForEach(items) { recipient in
+            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
+                onAddressSelect(recipient: recipient)
             }
         }
     }
