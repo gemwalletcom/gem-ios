@@ -25,9 +25,7 @@ public struct BannerView: View {
     public var body: some View {
         if let banner = banners.map({ BannerViewModel(banner: $0) }).first {
             Button(
-                action: {
-                    action(banner.banner)
-                },
+                action: { action(banner.banner) },
                 label: {
                     HStack(spacing: 0) {
                         ListItemView(
@@ -36,20 +34,20 @@ public struct BannerView: View {
                             imageStyle: banner.imageStyle
                         )
 
-                    if banner.canClose {
-                        Spacer()
-                        
-                        ListButton(
-                            image: Images.System.xmarkCircle,
-                            action: {
-                                closeAction(banner.banner)
-                            }
-                        )
-                        .padding(.vertical, .small)
-                        .foregroundColor(Colors.gray)
+                        if banner.canClose {
+                            Spacer()
+
+                            ListButton(
+                                image: Images.System.xmarkCircle,
+                                action: {
+                                    closeAction(banner.banner)
+                                }
+                            )
+                            .padding(.vertical, .small)
+                            .foregroundColor(Colors.gray)
+                        }
                     }
-                }
-            })
+                })
         }
     }
 }

@@ -43,7 +43,12 @@ public struct SimpleListItemView: View {
             subtitleStyle: model.subtitleStyle,
             subtitleExtra: model.subtitleExtra,
             subtitleStyleExtra: model.subtitleStyleExtra,
-            imageStyle: .list(assetImage: model.assetImage)
+            imageStyle: AssetImageStyle(
+                assetImage: model.assetImage,
+                imageSize: model.imageSize,
+                overlayImageSize: .image.overlayImage.chain,
+                cornerRadiusType: .custom(model.cornerRadius)
+            )
         )
     }
 }

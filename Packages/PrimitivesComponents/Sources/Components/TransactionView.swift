@@ -13,22 +13,20 @@ public struct TransactionView: View {
     }
 
     public var body: some View {
-        HStack {
-            ListItemView(
-                title: model.title,
-                titleStyle: model.titleTextStyle,
-                titleTag: model.titleTag,
-                titleTagStyle: model.titleTagStyle,
-                titleTagType: model.titleTagType,
-                titleExtra: model.titleExtra,
-                titleStyleExtra: model.titleTextStyleExtra,
-                subtitle: model.subtitle,
-                subtitleStyle: model.subtitleTextStyle,
-                subtitleExtra: model.subtitleExtra,
-                subtitleStyleExtra: model.subtitleExtraStyle,
-                imageStyle: .asset(assetImage: model.assetImage)
-            )
-        }
+        ListItemView(
+            title: model.title,
+            titleStyle: model.titleTextStyle,
+            titleTag: model.titleTag,
+            titleTagStyle: model.titleTagStyle,
+            titleTagType: model.titleTagType,
+            titleExtra: model.titleExtra,
+            titleStyleExtra: model.titleTextStyleExtra,
+            subtitle: model.subtitle,
+            subtitleStyle: model.subtitleTextStyle,
+            subtitleExtra: model.subtitleExtra,
+            subtitleStyleExtra: model.subtitleExtraStyle,
+            imageStyle: .asset(assetImage: model.assetImage)
+        )
         .contextMenu {
             ContextMenuViewURL(title: model.viewOnTransactionExplorerText, url: model.transactionExplorerUrl, image: SystemImage.globe)
         }
