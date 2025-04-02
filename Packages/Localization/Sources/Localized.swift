@@ -933,8 +933,12 @@ public enum Localized {
     public enum Recipient {
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "transfer.recipient.address_field", fallback: "Address or Name")
+      /// My Wallets
+      public static let myWallets = Localized.tr("Localizable", "transfer.recipient.my_wallets", fallback: "My Wallets")
       /// Recipient
       public static let title = Localized.tr("Localizable", "transfer.recipient.title", fallback: "Recipient")
+      /// View Wallets
+      public static let viewWallets = Localized.tr("Localizable", "transfer.recipient.view_wallets", fallback: "View Wallets")
     }
     public enum Redelegate {
       /// Redelegate
