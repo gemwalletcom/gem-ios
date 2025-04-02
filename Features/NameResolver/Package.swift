@@ -13,11 +13,11 @@ let package = Package(
             targets: ["NameResolver"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
     ],
     targets: [
         .target(

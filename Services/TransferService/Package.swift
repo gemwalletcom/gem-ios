@@ -13,8 +13,8 @@ let package = Package(
             targets: ["TransferService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
     ],
     targets: [
         .target(

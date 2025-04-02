@@ -19,13 +19,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "NotificationService", path: "../NotificationService"),
         .package(name: "DeviceService", path: "../DeviceService"),
-        .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "PriceService", path: "../PriceService"),
-        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(

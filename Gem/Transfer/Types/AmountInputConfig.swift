@@ -18,7 +18,7 @@ struct AmountInputConfig: CurrencyInputConfigurable {
     
     var placeholder: String { .zero }
     var keyboardType: UIKeyboardType { .decimalPad }
-    var actionButtonImage: Image? { Images.Actions.swap.renderingMode(.template) }
+    var actionButtonImage: Image? { nil }
 
     var currencyPosition: CurrencyTextField.CurrencyPosition {
         switch type {

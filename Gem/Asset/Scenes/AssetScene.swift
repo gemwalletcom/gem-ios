@@ -141,8 +141,11 @@ struct AssetScene: View {
                 )
                 .listRowInsets(.assetListRowInsets)
             } else {
-                EmptyContentView(model: model.emptyConentModel)
-                    .cleanListRow(topOffset: .extraLarge)
+                Section {
+                    Spacer()
+                    EmptyContentView(model: model.emptyConentModel)
+                }
+                .cleanListRow()
             }
         }
         .refreshable {

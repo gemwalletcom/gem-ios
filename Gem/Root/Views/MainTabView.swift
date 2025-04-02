@@ -15,7 +15,6 @@ import WalletTab
 import Transactions
 
 struct MainTabView: View {
-    @Environment(\.balanceService) private var balanceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.notificationService) private var notificationService
@@ -51,11 +50,11 @@ struct MainTabView: View {
         TabView(selection: tabViewSelection) {
             WalletNavigationStack(
                 model: WalletSceneViewModel(
-                    wallet: model.wallet,
-                    balanceService: balanceService,
                     walletsService: walletsService,
                     bannerService: bannerService,
-                    observablePreferences: observablePreferences
+                    manageWalletService: manageWalletService,
+                    observablePreferences: observablePreferences,
+                    wallet: model.wallet
                 )
             )
             .tabItem {
@@ -110,13 +109,11 @@ struct MainTabView: View {
             .tag(TabItem.settings)
         }
         .onChange(of: model.walletId, onWalletIdChange)
-        .onChange(of: notificationService.notifications) { _, newValue in
-            onReceiveNotifications(newValue)
-        }
-        .onAppear {
-            //Needed here because .onChange(of: notificationService.notifications) not trigger on cold start
-            onReceiveNotifications(notificationService.notifications)
-        }
+        .onChange(
+            of: notificationService.notifications,
+            initial: true,
+            onReceiveNotifications
+        )
     }
 }
 
@@ -139,7 +136,7 @@ extension MainTabView {
         navigationState.select(tab: tab)
     }
 
-    private func onReceiveNotifications(_ notifications: [PushNotification]) {
+    private func onReceiveNotifications(_: [PushNotification], _ notifications: [PushNotification]) {
         if let notification = notifications.first {
             Task {
                 await onReceiveNotification(notification: notification)

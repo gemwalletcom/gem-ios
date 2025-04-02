@@ -55,7 +55,7 @@ class SelectAssetViewModel {
         self.searchModel = SelectAssetSearchViewModel(selectType: selectType)
         
         self.request = AssetsRequest(
-            walletID: wallet.id,
+            walletId: wallet.id,
             filters: filter.defaultFilters
         )
     }

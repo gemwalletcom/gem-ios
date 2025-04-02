@@ -25,6 +25,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.keystore) private var keystore
+    @Environment(\.observablePreferences) private var observablePreferences
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -51,7 +52,8 @@ struct SettingsNavigationStack: View {
                 model: SettingsViewModel(
                     walletId: walletId,
                     walletsService: walletsService,
-                    currencyModel: currencyModel
+                    currencyModel: currencyModel,
+                    observablePrefereces: observablePreferences
                 ),
                 isPresentingWallets: $isPresentingWallets
             )
@@ -84,7 +86,11 @@ struct SettingsNavigationStack: View {
                 ChainListSettingsScene()
             }
             .navigationDestination(for: Scenes.AboutUs.self) { _ in
-                AboutUsScene()
+                AboutUsScene(
+                    model: AboutUsViewModel(
+                        preferences: observablePreferences
+                    )
+                )
             }
             .navigationDestination(for: Scenes.WalletConnect.self) { _ in
                 ConnectionsScene(

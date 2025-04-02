@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct AssetsSections {
+public struct AssetsSections: Hashable, Sendable {
     public let pinned: [AssetData]
     public let assets: [AssetData]
     public let popular: [AssetData]

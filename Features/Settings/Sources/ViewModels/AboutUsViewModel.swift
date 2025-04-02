@@ -1,26 +1,28 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import SwiftUI
 import Style
 import Localization
 import Preferences
+import GemstonePrimitives
 
-@Observable
-@MainActor
-public final class AboutUsViewModel {
-    private let preferences: Preferences
+public struct AboutUsViewModel {
+    private let preferences: ObservablePreferences
 
-    public init(
-        preferences: Preferences = .standard
-    ) {
+    public init(preferences: ObservablePreferences) {
         self.preferences = preferences
-        self.isDeveloperEnabled = preferences.isDeveloperEnabled
     }
 
-    var isDeveloperEnabled: Bool {
-        didSet { preferences.isDeveloperEnabled = isDeveloperEnabled }
-    }
+    var title: String { Localized.Settings.aboutus }
+
+    var termsOfServiceTitle: String { Localized.Settings.termsOfServices }
+    var termsOfServiceURL: URL { PublicConstants.url(.termsOfService) }
+
+    var privacyPolicyTitle: String { Localized.Settings.privacyPolicy }
+    var privacyPolicyURL: URL { PublicConstants.url(.privacyPolicy) }
+
+    var websiteTitle: String { Localized.Settings.website }
+    var websiteURL: URL { PublicConstants.url(.website) }
 
     var versionTextTitle: String { Localized.Settings.version }
     var versionTextValue: String {
@@ -30,6 +32,18 @@ public final class AboutUsViewModel {
     }
     var versionTextImage: Image { Images.Settings.version }
 
-    var contextDevTitle: String { Localized.Settings.enableValue(Localized.Settings.developer) }
+    var contextDevTitle: String {
+        if preferences.isDeveloperEnabled {
+            Localized.Settings.disableValue(Localized.Settings.developer)
+        } else {
+            Localized.Settings.enableValue(Localized.Settings.developer)
+        }
+    }
     var contextDeveloperImage: String { SystemImage.info }
+}
+
+extension AboutUsViewModel {
+    func toggleDeveloperMode() {
+        preferences.isDeveloperEnabled.toggle()
+    }
 }

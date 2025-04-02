@@ -13,15 +13,15 @@ let package = Package(
             targets: ["PriceAlerts"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
 
-        .package(name: "Store", path: "../Store"),
-        .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "PriceAlertService", path: "../PriceAlertService"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "PriceAlertService", path: "../../Services/PriceAlertService"),
     ],
     targets: [
         .target(

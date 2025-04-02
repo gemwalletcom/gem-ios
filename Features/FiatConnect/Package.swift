@@ -14,13 +14,13 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "GemAPI", path: "../GemAPI"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
     ],
     targets: [
         .target(

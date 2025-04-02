@@ -13,9 +13,9 @@ let package = Package(
             targets: ["AssetsService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "GemAPI", path: "../GemAPI"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
         .package(name: "ChainService", path: "../ChainService")
     ],
     targets: [

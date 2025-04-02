@@ -14,10 +14,10 @@ let package = Package(
             targets: ["StakeService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "GemAPI", path: "../GemAPI"),
-        .package(name: "ChainService", path: "../../Services/ChainService"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "GemAPI", path: "../../Packages/GemAPI"),
+        .package(name: "ChainService", path: "../ChainService"),
     ],
     targets: [
         .target(
