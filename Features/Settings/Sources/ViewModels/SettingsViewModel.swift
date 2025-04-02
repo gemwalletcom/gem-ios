@@ -17,21 +17,25 @@ import Components
 @MainActor
 public final class SettingsViewModel {
     var currencyModel: CurrencySceneViewModel
-    var isDeveloperEnabled: Bool
 
     private let walletId: WalletId
     private let walletsService: WalletsService
-    private let preferences = Preferences.standard
+    private let observablePrefereces: ObservablePreferences
 
     public init(
         walletId: WalletId,
         walletsService: WalletsService,
-        currencyModel: CurrencySceneViewModel
+        currencyModel: CurrencySceneViewModel,
+        observablePrefereces: ObservablePreferences
     ) {
         self.walletId = walletId
         self.walletsService = walletsService
         self.currencyModel = currencyModel
-        self.isDeveloperEnabled = preferences.isDeveloperEnabled
+        self.observablePrefereces = observablePrefereces
+    }
+
+    var isDeveloperEnabled: Bool {
+        observablePrefereces.isDeveloperEnabled
     }
 
     var title: String { Localized.Settings.title }
