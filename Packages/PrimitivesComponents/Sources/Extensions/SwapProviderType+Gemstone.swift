@@ -20,6 +20,7 @@ public extension Gemstone.SwapProviderType {
         case .wagmi: Images.SwapProviders.wagmi
         case .cetus: Images.SwapProviders.cetus
         case .stonFiV2: Images.SwapProviders.stonfi
+        case .mayan: Images.SwapProviders.mayan
         }
     }
 }
