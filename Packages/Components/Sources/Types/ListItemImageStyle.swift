@@ -3,7 +3,7 @@
 import Foundation
 import Style
 
-public struct AssetImageStyle: Sendable {
+public struct ListItemImageStyle: Sendable {
     public let assetImage: AssetImage
     public let imageSize: CGFloat
     public let overlayImageSize: CGFloat
@@ -37,9 +37,9 @@ public struct AssetImageStyle: Sendable {
     }
 }
 
-public extension AssetImageStyle {
+public extension ListItemImageStyle {
     static func asset(assetImage: AssetImage?) -> Self? {
-        AssetImageStyle(
+        ListItemImageStyle(
             assetImage: assetImage,
             imageSize: .image.asset,
             overlayImageSize: .image.overlayImage.chain,
@@ -48,7 +48,7 @@ public extension AssetImageStyle {
     }
     
     static func list(assetImage: AssetImage?) -> Self? {
-        AssetImageStyle(
+        ListItemImageStyle(
             assetImage: assetImage,
             imageSize: .list.image,
             overlayImageSize: .image.tiny,
@@ -57,7 +57,7 @@ public extension AssetImageStyle {
     }
     
     static func settings(assetImage: AssetImage?) -> Self? {
-        AssetImageStyle(
+        ListItemImageStyle(
             assetImage: assetImage,
             imageSize: .list.settings,
             overlayImageSize: .image.tiny,

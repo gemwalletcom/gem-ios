@@ -43,7 +43,7 @@ public struct SimpleListItemView: View {
             subtitleStyle: model.subtitleStyle,
             subtitleExtra: model.subtitleExtra,
             subtitleStyleExtra: model.subtitleStyleExtra,
-            imageStyle: AssetImageStyle(
+            imageStyle: ListItemImageStyle(
                 assetImage: model.assetImage,
                 imageSize: model.imageSize,
                 overlayImageSize: .image.overlayImage.chain,

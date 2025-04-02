@@ -118,8 +118,8 @@ public struct BannerViewModel {
         }
     }
     
-    public var imageStyle: AssetImageStyle? {
-        AssetImageStyle(
+    public var imageStyle: ListItemImageStyle? {
+        ListItemImageStyle(
             assetImage: image,
             imageSize: imageSize,
             overlayImageSize: .image.overlayImage.chain,

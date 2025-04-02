@@ -13,7 +13,7 @@ public struct ListItemSelectionView<T: Hashable>: View {
     let titleTagType: TitleTagType
     let titleTagStyle: TextStyle
     
-    let imageStyle: AssetImageStyle?
+    let imageStyle: ListItemImageStyle?
     
     let value: T?
     let selection: T?
@@ -29,7 +29,7 @@ public struct ListItemSelectionView<T: Hashable>: View {
         titleTagStyle: TextStyle = .body,
         subtitle: String?,
         subtitleExtra: String?,
-        imageStyle: AssetImageStyle? = nil,
+        imageStyle: ListItemImageStyle? = nil,
         placeholders: [ListItemViewPlaceholderType] = [],
         value: T,
         selection: T?,

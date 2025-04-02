@@ -26,7 +26,7 @@ public struct ListItemView: View {
     public let subtitle: TextValue?
     public let subtitleExtra: TextValue?
 
-    public let imageStyle: AssetImageStyle?
+    public let imageStyle: ListItemImageStyle?
 
     public var infoAction: (() -> Void)?
 
@@ -44,7 +44,7 @@ public struct ListItemView: View {
         subtitleStyle: TextStyle = TextStyle.calloutSecondary,
         subtitleExtra: String? = nil,
         subtitleStyleExtra: TextStyle = TextStyle.calloutSecondary,
-        imageStyle: AssetImageStyle? = nil,
+        imageStyle: ListItemImageStyle? = nil,
         placeholders: [ListItemViewPlaceholderType] = [],
         infoAction: (() -> Void)? = nil
     ) {
@@ -74,7 +74,7 @@ public struct ListItemView: View {
         titleTagType: TitleTagType,
         subtitle: TextValue?,
         subtitleExtra: TextValue?,
-        imageStyle: AssetImageStyle?,
+        imageStyle: ListItemImageStyle?,
         showInfo: Bool = false,
         placeholders: [ListItemViewPlaceholderType],
         infoAction: (() -> Void)? = nil
