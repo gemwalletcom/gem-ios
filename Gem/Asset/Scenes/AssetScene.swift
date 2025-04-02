@@ -142,6 +142,7 @@ struct AssetScene: View {
                 .listRowInsets(.assetListRowInsets)
             } else {
                 Section {
+                    Spacer()
                     EmptyContentView(model: model.emptyConentModel)
                 }
                 .cleanListRow()
