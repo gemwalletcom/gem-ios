@@ -56,7 +56,7 @@ jobs:
             ${{ runner.os }}-spm-
 
       - name: Run sccache-cache
-        uses: mozilla-actions/sccache-action@v0.0.7
+        uses: mozilla-actions/sccache-action@v0.0.8
       
       - name: Verify sccache usage
         run: sccache --show-stats

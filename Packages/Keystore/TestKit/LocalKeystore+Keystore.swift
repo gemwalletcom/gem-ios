@@ -11,13 +11,13 @@ public extension LocalKeystore {
     static let words = ["shoot", "island", "position", "soft", "burden", "budget", "tooth", "cruel", "issue", "economy", "destroy", "above"]
 
     static func mock(
+        walletStore: WalletStore = .mock(), 
         preferences: ObservablePreferences = ObservablePreferences.mock(),
         keystorePassword: KeystorePassword = MockKeystorePassword()
     ) -> LocalKeystore {
-        let id = NSUUID().uuidString
-        return LocalKeystore(
-            folder: id,
-            walletStore: .mock(),
+        LocalKeystore(
+            folder: NSUUID().uuidString,
+            walletStore: walletStore,
             preferences: preferences,
             keystorePassword: keystorePassword
         )

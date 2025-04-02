@@ -13,19 +13,20 @@ let package = Package(
             targets: ["WalletTab"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
 
-        .package(name: "Store", path: "../Store"),
-        .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "BalanceService", path: "../BalanceService"),
-        .package(name: "WalletsService", path: "../WalletsService"),
-        .package(name: "BannerService", path: "../BannerService"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "BalanceService", path: "../../Services/BalanceService"),
+        .package(name: "WalletsService", path: "../../Services/WalletsService"),
+        .package(name: "BannerService", path: "../../Services/BannerService"),
         .package(name: "WalletAvatar", path: "../WalletAvatar"),
+        .package(name: "ManageWalletService", path: "../ManageWalletService"),
     ],
     targets: [
         .target(
@@ -42,7 +43,8 @@ let package = Package(
                 "BalanceService",
                 "WalletsService",
                 "BannerService",
-                "WalletAvatar"
+                "WalletAvatar",
+                "ManageWalletService"
             ],
             path: "Sources"
         ),

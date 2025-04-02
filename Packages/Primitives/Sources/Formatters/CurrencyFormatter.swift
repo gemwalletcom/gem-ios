@@ -110,6 +110,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     
     public func normalizedDouble(from value: Double) -> Double? {
         let formatter = formatter(for: value)
+        formatter.currencySymbol = ""
         guard let formattedString = formatter.string(from: NSNumber(value: value)) else {
             return nil
         }

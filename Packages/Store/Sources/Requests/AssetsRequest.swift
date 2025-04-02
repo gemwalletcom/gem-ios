@@ -9,17 +9,16 @@ public struct AssetsRequest: ValueObservationQueryable {
     
     static let defaultQueryLimit = 50
     
-    private let walletID: String
-
+    public var walletId: String
     public var searchBy: String
     public var filters: [AssetsRequestFilter]
 
     public init(
-        walletID: String,
+        walletId: String,
         searchBy: String = "",
         filters: [AssetsRequestFilter] = []
     ) {
-        self.walletID = walletID
+        self.walletId = walletId
         self.searchBy = searchBy
         self.filters = filters
     }
@@ -38,7 +37,7 @@ public struct AssetsRequest: ValueObservationQueryable {
                 .map { $0.mapToEmptyAssetData() }
         }
         
-        return try fetchAssetsSearch(walletId: walletID, filters: filters)
+        return try fetchAssetsSearch(walletId: walletId, filters: filters)
             .fetchAll(db)
             .map { $0.assetData }
     }

@@ -14,10 +14,10 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Gemstone", path: "../Gemstone"),
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(

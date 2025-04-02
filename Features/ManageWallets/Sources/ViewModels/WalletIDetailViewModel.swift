@@ -72,7 +72,7 @@ public class WalletDetailViewModel {
 
 extension WalletDetailViewModel {
     func rename(name: String) throws {
-        try walletService.renameWallet(wallet: wallet, newName: name)
+        try walletService.rename(walletId: wallet.walletId, newName: name)
     }
     
     func getMnemonicWords() throws -> [String] {
