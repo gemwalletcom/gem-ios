@@ -66,25 +66,26 @@ struct RecipientScene: View {
                     }
                 }
 
-                if model.recipientSections.pinned.items.isNotEmpty {
+                let sections = model.recipientSections
+                if sections.pinned.items.isNotEmpty {
                     Section {
-                        recipientsView(from: model.recipientSections.pinned.items)
+                        recipientsView(from: sections.pinned.items)
                     } header: {
-                        Text(model.recipientSections.pinned.title)
+                        Text(sections.pinned.title)
                     }
                 }
-                if model.recipientSections.wallets.items.isNotEmpty {
+                if sections.wallets.items.isNotEmpty {
                     Section {
-                        recipientsView(from: model.recipientSections.wallets.items)
+                        recipientsView(from: sections.wallets.items)
                     } header: {
-                        Text(model.recipientSections.wallets.title)
+                        Text(sections.wallets.title)
                     }
                 }
-                if model.recipientSections.view.items.isNotEmpty {
+                if sections.view.items.isNotEmpty {
                     Section {
-                        recipientsView(from: model.recipientSections.view.items)
+                        recipientsView(from: sections.view.items)
                     } header: {
-                        Text(model.recipientSections.view.title)
+                        Text(sections.view.title)
                     }
                 }
             }
