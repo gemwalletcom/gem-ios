@@ -13,6 +13,7 @@ extension Locale {
     public static let FR = Locale(identifier: "fr-CA")
     public static let EN_CH = Locale(identifier: "en_CH")
     public static let DE_CH = Locale(identifier: "de_CH")
+    public static let RU_UA = Locale(identifier: "ru_UA")
     public static let ZH_Simplifier = Locale(identifier: "zh-Hans")
     public static let ZH_Singapore = Locale(identifier: "zh_SG")
     public static let ZH_Traditional = Locale(identifier: "zh-Hant")

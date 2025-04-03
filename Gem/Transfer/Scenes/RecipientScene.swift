@@ -65,27 +65,17 @@ struct RecipientScene: View {
                         .autocorrectionDisabled()
                     }
                 }
-                
-                if !model.getRecipient(by: .wallets).isEmpty {
+
+                ForEach(model.recipientSections) { section in
                     Section {
-                        ForEach(model.getRecipient(by: .wallets)) { recipient in
-                            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                onAddressSelect(recipient: recipient)
-                            }
-                        }
+                        recipientsView(from: section.values)
                     } header: {
-                        Text("My Wallets")
-                    }
-                }
-                if !model.getRecipient(by: .view).isEmpty {
-                    Section {
-                        ForEach(model.getRecipient(by: .view)) { recipient in
-                            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                                onAddressSelect(recipient: recipient)
-                            }
+                        Label {
+                            Text(section.section)
+                        } icon: {
+                            section.image
                         }
-                    } header: {
-                        Text("View Wallets")
+
                     }
                 }
             }
@@ -109,6 +99,14 @@ struct RecipientScene: View {
             // sometimes amount scanned from QR, pass it over, only address is not changed
             if !amount.isEmpty {
                 amount = .empty
+            }
+        }
+    }
+    
+    private func recipientsView(from items: [ListItemValue<RecipientAddress>]) -> some View {
+        ForEach(items) { item in
+            NavigationCustomLink(with: ListItemView(title: item.value.name)) {
+                onAddressSelect(recipient: item.value)
             }
         }
     }

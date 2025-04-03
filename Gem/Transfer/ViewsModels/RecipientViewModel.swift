@@ -6,10 +6,14 @@ import GemstonePrimitives
 import Localization
 import PrimitivesComponents
 import ManageWalletService
+import Components
+import Style
+import SwiftUICore
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
-enum RecipientAddressType {
+enum RecipientAddressType: CaseIterable {
+    case pinned
     case wallets
     case view
 }
@@ -45,18 +49,22 @@ class RecipientViewModel: ObservableObject {
         self.onTransferAction = onTransferAction
     }
 
-    var tittle: String {
-        return Localized.Transfer.Recipient.title
-    }
-    
+    var tittle: String { Localized.Transfer.Recipient.title }
     var recipientField: String { Localized.Transfer.Recipient.addressField }
     var memoField: String { Localized.Transfer.memo }
 
-    var showMemo: Bool {
-        asset.chain.isMemoSupported
-    }
-    
+    var showMemo: Bool { asset.chain.isMemoSupported }
     var chain: Chain { asset.chain }
+    
+    var recipientSections: [ListItemValueSection<RecipientAddress>] {
+        RecipientAddressType.allCases.map {
+            ListItemValueSection(
+                section: sectionTitle(for: $0),
+                image: sectionImage(for: $0),
+                values: sectionRecipients(for: $0)
+            )
+        }
+    }
 
     func getRecipientData(name: NameRecord?, address: String, memo: String?, amount: String?) throws -> RecipientData {
         let recipient: Recipient = {
@@ -80,37 +88,6 @@ class RecipientViewModel: ObservableObject {
             recipient: recipient,
             amount: .none
         )
-    }
-    
-    private func validateAddress(address: String) throws {
-        guard asset.chain.isValidAddress(address) else {
-            throw TransferError.invalidAddress(asset: asset)
-        }
-    }
-    
-    func getRecipient(by type: RecipientAddressType) -> [RecipientAddress] {
-        switch type {
-        case .wallets:
-            return manageWalletService.wallets
-                .filter { ($0.type == .multicoin || $0.type == .single) && $0.id != wallet.id }
-                .filter { $0.accounts.first(where: { $0.chain == asset.chain }) != nil }
-                .map {
-                    return RecipientAddress(
-                        name: $0.name,
-                        address: $0.accounts.first(where: { $0.chain == asset.chain })!.address
-                    )
-                }
-                .compactMap { $0 }
-        case .view:
-            return manageWalletService.wallets
-                .filter { $0.type == .view }.filter { $0.accounts[0].chain == asset.chain}
-                .map {
-                    return RecipientAddress(
-                        name: $0.name,
-                        address: $0.accounts[0].address
-                    )
-                }
-        }
     }
     
     //TODO: Add unit tests
@@ -153,6 +130,48 @@ class RecipientViewModel: ObservableObject {
         }
         
         return .recipient(address: payment.address, memo: payment.memo, amount: payment.amount)
+    }
+    
+    // MARK: - Private methods
+    
+    private func validateAddress(address: String) throws {
+        guard asset.chain.isValidAddress(address) else {
+            throw TransferError.invalidAddress(asset: asset)
+        }
+    }
+    
+    private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
+        manageWalletService.wallets
+            .filter { $0.id != wallet.id }
+            .filter {
+                switch section {
+                case .view:
+                    $0.type == .view && !$0.isPinned && $0.accounts.first?.chain == asset.chain
+                case .wallets:
+                    ($0.type == .multicoin || $0.type == .single) && !$0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                case .pinned:
+                    $0.isPinned && $0.accounts.contains { $0.chain == asset.chain }
+                }
+            }
+            .compactMap {
+                guard let account = $0.accounts.first(where: { $0.chain == asset.chain }) else { return nil }
+                return ListItemValue(value: RecipientAddress(name: $0.name, address: account.address))
+            }
+    }
+    
+    private func sectionTitle(for type: RecipientAddressType) -> String {
+        switch type {
+        case .pinned: Localized.Common.pinned
+        case .wallets: Localized.Transfer.Recipient.myWallets
+        case .view: Localized.Transfer.Recipient.viewWallets
+        }
+    }
+    
+    private func sectionImage(for type: RecipientAddressType) -> Image? {
+        switch type {
+        case .pinned: Images.System.pin
+        case .wallets, .view: nil
+        }
     }
 }
 

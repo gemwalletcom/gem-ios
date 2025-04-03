@@ -89,6 +89,8 @@ public struct TransactionScene: View {
                     )
                 }
             }
+            .contentMargins([.top], .small, for: .scrollContent)
+            .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .toolbar {
