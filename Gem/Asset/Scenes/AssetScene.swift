@@ -141,8 +141,11 @@ struct AssetScene: View {
                 )
                 .listRowInsets(.assetListRowInsets)
             } else {
-                EmptyContentView(model: model.emptyConentModel)
-                    .cleanListRow(topOffset: .extraLarge)
+                Section {
+                    Spacer()
+                    EmptyContentView(model: model.emptyConentModel)
+                }
+                .cleanListRow()
             }
         }
         .refreshable {
@@ -213,10 +216,12 @@ struct AssetScene: View {
 
 extension AssetScene {
     private var networkView: some View {
-        HStack {
-            ListItemView(title: model.networkField, subtitle: model.networkText)
-            AssetImageView(assetImage: model.networkAssetImage, size: .list.image)
-        }
+        ListItemImageView(
+            title: model.networkField,
+            subtitle: model.networkText,
+            assetImage: model.networkAssetImage,
+            imageSize: .list.image
+        )
     }
 
     private var stakeView: some View {

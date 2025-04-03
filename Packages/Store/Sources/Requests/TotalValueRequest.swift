@@ -11,8 +11,8 @@ public struct TotalValueRequest: ValueObservationQueryable {
 
     public var walletId: String
     
-    public init(walletID: String) {
-        self.walletId = walletID
+    public init(walletId: String) {
+        self.walletId = walletId
     }
 
     public func fetch(_ db: Database) throws -> Double {

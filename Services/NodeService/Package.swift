@@ -12,9 +12,9 @@ let package = Package(
             targets: ["NodeService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "Gemstone", path: "../Gemstone"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "ChainService", path: "../ChainService"),
     ],
     targets: [

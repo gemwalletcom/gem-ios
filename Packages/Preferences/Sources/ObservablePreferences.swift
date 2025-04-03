@@ -39,6 +39,19 @@ public final class ObservablePreferences: Sendable {
     }
 
     @ObservationIgnored
+    public var isDeveloperEnabled: Bool {
+        get {
+            access(keyPath: \.isDeveloperEnabled)
+            return preferences.isDeveloperEnabled
+        }
+        set {
+            withMutation(keyPath: \.isDeveloperEnabled) {
+                preferences.isDeveloperEnabled = newValue
+            }
+        }
+    }
+
+    @ObservationIgnored
     public var currentWalletId: String? {
         get {
             access(keyPath: \.currentWalletId)

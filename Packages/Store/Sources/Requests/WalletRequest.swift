@@ -8,8 +8,7 @@ import Primitives
 
 public struct WalletRequest: ValueObservationQueryable {
     public static var defaultValue: Wallet? { .none }
-
-    private let walletId: String
+    public var walletId: String
 
     public init(walletId: String) {
         self.walletId = walletId

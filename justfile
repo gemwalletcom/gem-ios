@@ -35,6 +35,9 @@ setup-git:
 core-upgrade:
     git submodule update --recursive --remote
 
+spm-resolve-all:
+    sh scripts/spm-resolve-all.sh
+
 test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \

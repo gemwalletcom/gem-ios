@@ -13,13 +13,13 @@ let package = Package(
             targets: ["Swap"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
-        .package(name: "Localization", path: "../Localization"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "SwapService", path: "../../Services/SwapService"),
-        .package(name: "Signer", path: "../Signer"),
-        .package(name: "Keystore", path: "../Keystore"),
+        .package(name: "Signer", path: "../../Packages/Signer"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
     ],
     targets: [
         .target(

@@ -48,12 +48,10 @@ public struct Migrations {
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
         }
-
-        // delete later (after Oct 2024, as it's part of start tables)
-        migrator.registerMigration("Create \(BannerRecord.databaseTableName)") { db in
-            try? BannerRecord.create(db: db)
-        }
-
+        try migrator.migrate(dbQueue)
+    }
+    
+    mutating func runChanges(dbQueue: DatabaseQueue) throws {
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
                 $0.add(column: Columns.Wallet.isPinned.name, .boolean).defaults(to: false)
@@ -61,16 +59,16 @@ public struct Migrations {
         }
 
         migrator.registerMigration("Set order as index in \(WalletRecord.databaseTableName)") { db in
-            try db.execute(sql: "UPDATE wallets SET \"order\" = \"index\"")
+            try? db.execute(sql: "UPDATE wallets SET \"order\" = \"index\"")
         }
 
         migrator.registerMigration("Create \(PriceAlertRecord.databaseTableName)") { db in
-            try PriceAlertRecord.create(db: db)
+            try? PriceAlertRecord.create(db: db)
         }
         
         migrator.registerMigration("Recreate \(BannerRecord.databaseTableName)") { db in
-            try db.drop(table: BannerRecord.databaseTableName)
-            try BannerRecord.create(db: db)
+            try? db.drop(table: BannerRecord.databaseTableName)
+            try? BannerRecord.create(db: db)
         }
         
         migrator.registerMigration("Add balances value to \(BalanceRecord.databaseTableName)") { db in

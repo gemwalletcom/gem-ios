@@ -65,7 +65,7 @@ public extension Spacing {
 
 public extension Sizing {
     struct image {
-        /// 4
+        /// 10
         public static let tiny: CGFloat = 10
         /// 22
         public static let small: CGFloat = 22
@@ -82,11 +82,18 @@ public extension Sizing {
         
         /// 44
         public static let asset: CGFloat = 44
+        
+        public struct overlayImage {
+            /// 16
+            public static let chain: CGFloat = 16
+        }
     }
 
     struct list {
         /// 22
         public static let image: CGFloat = 22
+        /// 28
+        public static let settings: CGFloat = 28
         
         public struct selected {
             /// 20
