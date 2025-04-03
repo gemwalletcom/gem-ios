@@ -36,16 +36,19 @@ public struct SimpleListItemView: View {
     }
 
     public var body: some View {
-        HStack {
-            AssetImageView(assetImage: model.assetImage)
-            ListItemView(
-                title: model.title,
-                titleStyle: model.titleStyle,
-                subtitle: model.subtitle,
-                subtitleStyle: model.subtitleStyle,
-                subtitleExtra: model.subtitleExtra,
-                subtitleStyleExtra: model.subtitleStyleExtra
+        ListItemView(
+            title: model.title,
+            titleStyle: model.titleStyle,
+            subtitle: model.subtitle,
+            subtitleStyle: model.subtitleStyle,
+            subtitleExtra: model.subtitleExtra,
+            subtitleStyleExtra: model.subtitleStyleExtra,
+            imageStyle: ListItemImageStyle(
+                assetImage: model.assetImage,
+                imageSize: model.imageSize,
+                overlayImageSize: .image.overlayImage.chain,
+                cornerRadiusType: .custom(model.cornerRadius)
             )
-        }
+        )
     }
 }
