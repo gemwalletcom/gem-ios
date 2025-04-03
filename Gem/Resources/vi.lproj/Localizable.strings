@@ -384,4 +384,3 @@
 "transfer.recipient.my_wallets" = "My Wallets";
 "transfer.recipient.view_wallets" = "View Wallets";
 "settings.disable_value" = "Disable %@";
-"receive.my_address" = "My %s address to receive %s:";

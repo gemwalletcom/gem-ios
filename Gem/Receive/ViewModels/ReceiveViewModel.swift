@@ -43,11 +43,10 @@ struct ReceiveViewModel {
     }
     
     func activityItems(qrImage: UIImage?) -> [Any] {
-        let textItems = [Localized.Receive.myAddress(assetModel.networkFullName, assetModel.symbol), address]
         if let qrImage {
-            return [qrImage] + textItems
+            return [qrImage, address]
         }
-        return textItems
+        return [address]
     }
     
     func enableAsset() async {

@@ -623,10 +623,6 @@ public enum Localized {
     }
   }
   public enum Receive {
-    /// My %s address to receive %s:
-    public static func myAddress(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
-      return Localized.tr("Localizable", "receive.my_address", p1, p2, fallback: "My %s address to receive %s:")
-    }
     /// Receive %s
     public static func title(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "receive.title", p1, fallback: "Receive %s")
