@@ -623,6 +623,10 @@ public enum Localized {
     }
   }
   public enum Receive {
+    /// My %s address to receive %s:
+    public static func myAddress(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>) -> String {
+      return Localized.tr("Localizable", "receive.my_address", p1, p2, fallback: "My %s address to receive %s:")
+    }
     /// Receive %s
     public static func title(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "receive.title", p1, fallback: "Receive %s")
@@ -680,6 +684,10 @@ public enum Localized {
     public static let currency = Localized.tr("Localizable", "settings.currency", fallback: "Currency")
     /// Developer
     public static let developer = Localized.tr("Localizable", "settings.developer", fallback: "Developer")
+    /// Disable %@
+    public static func disableValue(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "settings.disable_value", String(describing: p1), fallback: "Disable %@")
+    }
     /// Enable Passcode
     public static let enablePasscode = Localized.tr("Localizable", "settings.enable_passcode", fallback: "Enable Passcode")
     /// Enable %@
@@ -933,8 +941,12 @@ public enum Localized {
     public enum Recipient {
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "transfer.recipient.address_field", fallback: "Address or Name")
+      /// My Wallets
+      public static let myWallets = Localized.tr("Localizable", "transfer.recipient.my_wallets", fallback: "My Wallets")
       /// Recipient
       public static let title = Localized.tr("Localizable", "transfer.recipient.title", fallback: "Recipient")
+      /// View Wallets
+      public static let viewWallets = Localized.tr("Localizable", "transfer.recipient.view_wallets", fallback: "View Wallets")
     }
     public enum Redelegate {
       /// Redelegate
