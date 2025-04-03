@@ -131,6 +131,7 @@ extension ConfirmTransferScene {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
+        .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
