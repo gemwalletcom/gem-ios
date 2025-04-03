@@ -680,6 +680,10 @@ public enum Localized {
     public static let currency = Localized.tr("Localizable", "settings.currency", fallback: "Currency")
     /// Developer
     public static let developer = Localized.tr("Localizable", "settings.developer", fallback: "Developer")
+    /// Disable %@
+    public static func disableValue(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "settings.disable_value", String(describing: p1), fallback: "Disable %@")
+    }
     /// Enable Passcode
     public static let enablePasscode = Localized.tr("Localizable", "settings.enable_passcode", fallback: "Enable Passcode")
     /// Enable %@
