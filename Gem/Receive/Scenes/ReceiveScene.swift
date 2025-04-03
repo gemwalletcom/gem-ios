@@ -10,9 +10,7 @@ struct ReceiveScene: View {
     @State private var isPresentingCopyToast = false
     @State private var renderedImage: UIImage?
 
-    private let qrWidth: CGFloat = 300
     private let model: ReceiveViewModel
-    private let generator = QRCodeGenerator()
 
     init(model: ReceiveViewModel) {
         self.model = model
@@ -24,7 +22,7 @@ struct ReceiveScene: View {
                 Spacer()
                 if let image = renderedImage {
                     qrCodeView(image: image)
-                        .frame(maxWidth: qrWidth)
+                        .frame(maxWidth: model.qrWidth)
                 }
                 Spacer()
                 Button(action: {
@@ -50,14 +48,17 @@ struct ReceiveScene: View {
             }
         }
         .sheet(isPresented: $isPresentingShareSheet) {
-            ShareSheet(activityItems: [model.address])
+            ShareSheet(activityItems: model.activityItems(qrImage: renderedImage))
         }
         .copyToast(
             model: model.copyModel,
             isPresenting: $isPresentingCopyToast
         )
         .task {
-            await generateQRCode()
+            let image = await model.generateQRCode()
+            await MainActor.run {
+                renderedImage = image
+            }
         }
         .taskOnce {
             Task {
@@ -72,21 +73,6 @@ struct ReceiveScene: View {
 extension ReceiveScene {
     private func onCopyAddress() {
         isPresentingCopyToast = true
-    }
-
-    private func generateQRCode() async {
-        let image = await generator.generate(
-            from: model.address,
-            size: CGSize(
-                width: qrWidth,
-                height: qrWidth
-            ),
-            logo: UIImage.name("logo-dark")
-        )
-
-        await MainActor.run {
-            renderedImage = image
-        }
     }
 }
 
