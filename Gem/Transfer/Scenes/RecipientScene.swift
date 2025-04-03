@@ -66,26 +66,16 @@ struct RecipientScene: View {
                     }
                 }
 
-                let sections = model.recipientSections
-                if sections.pinned.items.isNotEmpty {
+                ForEach(model.recipientSections) { section in
                     Section {
-                        recipientsView(from: sections.pinned.items)
+                        recipientsView(from: section.values)
                     } header: {
-                        Text(sections.pinned.title)
-                    }
-                }
-                if sections.wallets.items.isNotEmpty {
-                    Section {
-                        recipientsView(from: sections.wallets.items)
-                    } header: {
-                        Text(sections.wallets.title)
-                    }
-                }
-                if sections.view.items.isNotEmpty {
-                    Section {
-                        recipientsView(from: sections.view.items)
-                    } header: {
-                        Text(sections.view.title)
+                        Label {
+                            Text(section.section)
+                        } icon: {
+                            section.image
+                        }
+
                     }
                 }
             }
@@ -113,10 +103,10 @@ struct RecipientScene: View {
         }
     }
     
-    private func recipientsView(from items: [RecipientAddress]) -> some View {
-        ForEach(items) { recipient in
-            NavigationCustomLink(with: ListItemView(title: recipient.name)) {
-                onAddressSelect(recipient: recipient)
+    private func recipientsView(from items: [ListItemValue<RecipientAddress>]) -> some View {
+        ForEach(items) { item in
+            NavigationCustomLink(with: ListItemView(title: item.value.name)) {
+                onAddressSelect(recipient: item.value)
             }
         }
     }
