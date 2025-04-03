@@ -134,6 +134,18 @@ public final class SwapSceneViewModel {
     var assetIds: [AssetId] {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
+    
+    var rateTitle: String { Localized.Buy.rate }
+    var rateText: String? {
+        guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
+
+        return try? AssetRateFormatter().rate(
+            fromAsset: fromAsset.asset,
+            toAsset: toAsset.asset,
+            fromValue: selectedSwapQuote.fromValueBigInt,
+            toValue: selectedSwapQuote.toValueBigInt
+        )
+    }
 
     var priceImpactModel: PriceImpactViewModel? {
         guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }

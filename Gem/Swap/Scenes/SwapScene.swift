@@ -157,6 +157,14 @@ extension SwapScene {
                     view
                 }
             }
+            
+            if let rateText = model.rateText {
+                ListItemImageView(
+                    title: model.rateTitle,
+                    subtitle: rateText,
+                    assetImage: .none
+                )
+            }
 
             if let viewModel = model.priceImpactModel {
                 PriceImpactView(
