@@ -71,7 +71,7 @@ public struct TransactionViewModel: Sendable {
                 Localized.Transfer.title
             }
         case .swap: Localized.Wallet.swap
-        case .tokenApproval: Localized.Transfer.Approve.title
+        case .tokenApproval: tokenApprovalTitle
         case .stakeDelegate: Localized.Transfer.Stake.title
         case .stakeUndelegate: Localized.Transfer.Unstake.title
         case .stakeRedelegate: Localized.Transfer.Redelegate.title
@@ -81,6 +81,14 @@ public struct TransactionViewModel: Sendable {
         }
     }
     
+    private var tokenApprovalTitle: String {
+        if transaction.transaction.value == .zero {
+            "Revoke"
+        } else {
+            Localized.Transfer.Approve.title
+        }
+    }
+
     public var titleTextStyle: TextStyle {
         TextStyle(font: Font.system(.body, weight: .medium), color: .primary)
     }
