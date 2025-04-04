@@ -44,7 +44,15 @@ struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     
     var keyboardType: UIKeyboardType { .decimalPad }
     
-    var actionButtonImage: Image? {
+    var actionStyle: CurrencyInputActionStyle? {
+        guard let actionButtonImage else { return nil }
+        return CurrencyInputActionStyle(
+            position: .amount,
+            image: actionButtonImage
+        )
+    }
+    
+    private var actionButtonImage: Image? {
         switch (type, alertDirection) {
         case (.percentage, .up): Images.PriceAlert.up
         case (.percentage, .down): Images.PriceAlert.down

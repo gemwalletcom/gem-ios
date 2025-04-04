@@ -61,13 +61,14 @@ final class AmountViewModel {
     var amountTransferValue: String {
         switch amountInputType {
         case .asset: amountText
-        case .fiat: amountValue().valueOrEmpty
+        case .fiat: amountValue
         }
     }
 
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
-            type: amountInputType,
+            sceneType: type,
+            inputType: amountInputType,
             asset: asset,
             currencyFormatter: currencyFormatter,
             numberSanitizer: numberSanitizer,
@@ -78,8 +79,8 @@ final class AmountViewModel {
     
     var secondaryText: String {
         switch amountInputType {
-        case .asset: fiatValueText()
-        case .fiat: amountValueText()
+        case .asset: fiatValueText
+        case .fiat: amountValueText
         }
     }
 
@@ -236,6 +237,31 @@ final class AmountViewModel {
         }
     }
     
+    private var fiatValueText: String {
+        currencyFormatter.string(fiatValue.doubleValue)
+    }
+    
+    private var amountValueText: String {
+        [amountValue, asset.symbol].joined(separator: " ")
+    }
+    
+    private var amountValue: String {
+        guard let price = getAssetPrice() else { return .zero }
+        return (try? valueConverter.convertToAmount(
+            fiatValue: amountText,
+            price: price,
+            decimals: asset.decimals.asInt
+        )).or(.zero)
+    }
+    
+    private var fiatValue: Decimal {
+        guard let price = getAssetPrice() else { return .zero }
+        return (try? valueConverter.convertToFiat(
+            amount: amountText,
+            price: price
+        )).or(.zero)
+    }
+    
     // MARK: - Private methods
     
     private func isValidAmount() throws -> BigInt {
@@ -303,48 +329,6 @@ final class AmountViewModel {
     
     private func value(for amount: String) throws -> BigInt {
         try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
-    }
-    
-    private func fiatValueText() -> String {
-        guard let fiatValue = fiatValue() else {
-            return .empty
-        }
-        return currencyFormatter.string(fiatValue.doubleValue)
-    }
-    
-    private func amountValueText() -> String {
-        guard let amount = amountValue(),
-              amount.isNotEmpty
-        else {
-            return .empty
-        }
-        return [amount, asset.symbol].joined(separator: " ")
-    }
-    
-    private func amountValue() -> String? {
-        guard let price = getAssetPrice(),
-              let amount = try? valueConverter.convertToAmount(
-                fiatValue: amountText,
-                price: price,
-                decimals: asset.decimals.asInt
-              )
-        else {
-            return nil
-        }
-        return amount
-    }
-    
-    private func fiatValue() -> Decimal? {
-        guard let price = getAssetPrice(),
-              let value = try? valueConverter.convertToFiat(
-                amount: amountText,
-                price: price
-              ),
-              !value.isZero
-        else {
-            return nil
-        }
-        return value
     }
     
     private func getAssetPrice() -> AssetPrice? {
