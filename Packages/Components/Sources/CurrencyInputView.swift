@@ -10,7 +10,7 @@ public protocol CurrencyInputConfigurable {
     var secondaryText: String { get }
     var keyboardType: UIKeyboardType { get }
     var sanitizer: ((String) -> String)? { get }
-    var actionButtonImage: Image? { get }
+    var action: CurrencyInputActionStyle? { get }
     var onTapActionButton: (() -> Void)? { get }
 }
 
@@ -22,8 +22,7 @@ public struct CurrencyInputView: View {
     private let currencyPosition: CurrencyTextField.CurrencyPosition
     private let secondaryText: String
     private let keyboardType: UIKeyboardType
-    private let actionButtonImage: Image?
-
+    private let action: CurrencyInputActionStyle?
     private let onTapActionButton: (() -> Void)?
     private let sanitizer: ((String) -> String)?
 
@@ -34,7 +33,7 @@ public struct CurrencyInputView: View {
         currencyPosition: CurrencyTextField.CurrencyPosition,
         secondaryText: String,
         keyboardType: UIKeyboardType,
-        actionButtonImage: Image? = nil,
+        action: CurrencyInputActionStyle? = nil,
         onTapActionButton: (() -> Void)? = nil,
         sanitizer: ((String) -> String)? = nil
     ) {
@@ -44,7 +43,7 @@ public struct CurrencyInputView: View {
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
         self.currencyPosition = currencyPosition
-        self.actionButtonImage = actionButtonImage
+        self.action = action
         self.onTapActionButton = onTapActionButton
         self.sanitizer = sanitizer
     }
@@ -57,7 +56,7 @@ public struct CurrencyInputView: View {
             currencyPosition: config.currencyPosition,
             secondaryText: config.secondaryText,
             keyboardType: config.keyboardType,
-            actionButtonImage: config.actionButtonImage,
+            action: config.action,
             onTapActionButton: config.onTapActionButton,
             sanitizer: config.sanitizer
         )
@@ -66,16 +65,8 @@ public struct CurrencyInputView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(spacing: .small) {
-                if let actionButtonImage = actionButtonImage {
-                    Button {
-                        onTapActionButton?()
-                    } label: {
-                        actionButtonImage
-                            .resizable()
-                            .frame(width: Sizing.image.small, height: Sizing.image.small)
-                            .foregroundColor(Colors.gray)
-                    }
-                    .buttonStyle(.plain)
+                if let action, action.position == .amount {
+                    actionButton(action: action)
                 }
 
                 CurrencyTextField(
@@ -92,9 +83,46 @@ public struct CurrencyInputView: View {
                 }
             }
 
-            Text(secondaryText)
-                .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: .list.image)
+            if let action, action.position == .secondary {
+                actionButton(action: action)
+            } else {
+                secondaryTextView
+            }
         }
+    }
+    
+    @ViewBuilder
+    func actionButton(action: CurrencyInputActionStyle) -> some View {
+        Button {
+            onTapActionButton?()
+        } label: {
+            switch action.position {
+            case .amount:
+                actionImage
+            case .secondary:
+                HStack {
+                    secondaryTextView
+                    actionImage
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(self.action == nil)
+    }
+    
+    @ViewBuilder
+    var actionImage: some View {
+        if let image = action?.image {
+            image
+                .resizable()
+                .frame(width: Sizing.image.small, height: Sizing.image.small)
+                .foregroundColor(Colors.gray)
+        }
+    }
+
+    var secondaryTextView: some View {
+        Text(secondaryText)
+            .textStyle(.calloutSecondary.weight(.medium))
+            .frame(minHeight: .list.image)
     }
 }

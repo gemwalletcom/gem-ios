@@ -1,5 +1,3 @@
-// Copyright (c). Gem Wallet. All rights reserved.
-
 import Foundation
 import Components
 import Primitives
@@ -9,28 +7,38 @@ import WalletsService
 import BigInt
 
 struct AmountInputConfig: CurrencyInputConfigurable {
-    let type: AmountInputType
+    let sceneType: AmountType
+    let inputType: AmountInputType
     let asset: Asset
     let currencyFormatter: CurrencyFormatter
     let numberSanitizer: NumberSanitizer
     let secondaryText: String
-    let onTapActionButton: (() -> Void)?    
+    let onTapActionButton: (() -> Void)?
     
     var placeholder: String { .zero }
     var keyboardType: UIKeyboardType { .decimalPad }
-    var actionButtonImage: Image? { nil }
 
     var currencyPosition: CurrencyTextField.CurrencyPosition {
-        switch type {
+        switch inputType {
         case .asset: .trailing
         case .fiat: .leading
         }
     }
 
     var currencySymbol: String {
-        switch type {
+        switch inputType {
         case .asset: asset.symbol
         case .fiat: currencyFormatter.symbol
+        }
+    }
+    
+    var action: CurrencyInputActionStyle? {
+        switch sceneType {
+        case .transfer: CurrencyInputActionStyle(
+            position: .secondary,
+            image: Images.Actions.swap.renderingMode(.template)
+        )
+        case .stake, .unstake, .redelegate, .withdraw: nil
         }
     }
 

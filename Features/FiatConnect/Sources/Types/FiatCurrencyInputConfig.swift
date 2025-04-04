@@ -54,6 +54,6 @@ struct FiatCurrencyInputConfig: CurrencyInputConfigurable {
         }
     }
     
-    let actionButtonImage: Image? = nil
+    var action: CurrencyInputActionStyle? = nil
     let onTapActionButton: VoidAction = nil
 }
