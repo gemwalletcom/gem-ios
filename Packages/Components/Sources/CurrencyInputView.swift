@@ -10,7 +10,7 @@ public protocol CurrencyInputConfigurable {
     var secondaryText: String { get }
     var keyboardType: UIKeyboardType { get }
     var sanitizer: ((String) -> String)? { get }
-    var action: CurrencyInputActionStyle? { get }
+    var actionStyle: CurrencyInputActionStyle? { get }
     var onTapActionButton: (() -> Void)? { get }
 }
 
@@ -22,7 +22,7 @@ public struct CurrencyInputView: View {
     private let currencyPosition: CurrencyTextField.CurrencyPosition
     private let secondaryText: String
     private let keyboardType: UIKeyboardType
-    private let action: CurrencyInputActionStyle?
+    private let actionStyle: CurrencyInputActionStyle?
     private let onTapActionButton: (() -> Void)?
     private let sanitizer: ((String) -> String)?
 
@@ -33,7 +33,7 @@ public struct CurrencyInputView: View {
         currencyPosition: CurrencyTextField.CurrencyPosition,
         secondaryText: String,
         keyboardType: UIKeyboardType,
-        action: CurrencyInputActionStyle? = nil,
+        actionStyle: CurrencyInputActionStyle? = nil,
         onTapActionButton: (() -> Void)? = nil,
         sanitizer: ((String) -> String)? = nil
     ) {
@@ -43,7 +43,7 @@ public struct CurrencyInputView: View {
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
         self.currencyPosition = currencyPosition
-        self.action = action
+        self.actionStyle = actionStyle
         self.onTapActionButton = onTapActionButton
         self.sanitizer = sanitizer
     }
@@ -56,7 +56,7 @@ public struct CurrencyInputView: View {
             currencyPosition: config.currencyPosition,
             secondaryText: config.secondaryText,
             keyboardType: config.keyboardType,
-            action: config.action,
+            actionStyle: config.actionStyle,
             onTapActionButton: config.onTapActionButton,
             sanitizer: config.sanitizer
         )
@@ -65,8 +65,8 @@ public struct CurrencyInputView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(spacing: .small) {
-                if let action, action.position == .amount {
-                    actionButton(action: action)
+                if let actionStyle, actionStyle.position == .amount {
+                    actionButton(for: actionStyle.position)
                 }
 
                 CurrencyTextField(
@@ -83,20 +83,19 @@ public struct CurrencyInputView: View {
                 }
             }
 
-            if let action, action.position == .secondary {
-                actionButton(action: action)
+            if let actionStyle, actionStyle.position == .secondary {
+                actionButton(for: actionStyle.position)
             } else {
                 secondaryTextView
             }
         }
     }
-    
-    @ViewBuilder
-    func actionButton(action: CurrencyInputActionStyle) -> some View {
+
+    func actionButton(for position: CurrencyInputActionPosition) -> some View {
         Button {
             onTapActionButton?()
         } label: {
-            switch action.position {
+            switch position {
             case .amount:
                 actionImage
             case .secondary:
@@ -107,12 +106,12 @@ public struct CurrencyInputView: View {
             }
         }
         .buttonStyle(.plain)
-        .disabled(self.action == nil)
+        .disabled(self.actionStyle == nil)
     }
     
     @ViewBuilder
     var actionImage: some View {
-        if let image = action?.image {
+        if let image = actionStyle?.image {
             image
                 .resizable()
                 .frame(width: Sizing.image.small, height: Sizing.image.small)

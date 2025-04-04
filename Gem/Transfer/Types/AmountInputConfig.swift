@@ -32,7 +32,7 @@ struct AmountInputConfig: CurrencyInputConfigurable {
         }
     }
     
-    var action: CurrencyInputActionStyle? {
+    var actionStyle: CurrencyInputActionStyle? {
         switch sceneType {
         case .transfer: CurrencyInputActionStyle(
             position: .secondary,
