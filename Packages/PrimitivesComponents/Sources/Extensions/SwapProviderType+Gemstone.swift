@@ -21,6 +21,7 @@ public extension Gemstone.SwapProviderType {
         case .cetus: Images.SwapProviders.cetus
         case .stonFiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
+        case .reservoir: Images.SwapProviders.reservoir
         }
     }
 }

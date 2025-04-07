@@ -1,15 +1,19 @@
 import Foundation
+import SwiftUI
 import Primitives
 import Localization
 import PrimitivesComponents
 import WalletsService
+import Components
 
 struct ReceiveViewModel {
+    let qrWidth: CGFloat = 300
     
     let assetModel: AssetViewModel
     let walletId: WalletId
     let address: String
     let walletsService: WalletsService
+    let generator = QRCodeGenerator()
     
     var title: String {
         Localized.Receive.title(assetModel.symbol)
@@ -38,7 +42,25 @@ struct ReceiveViewModel {
         )
     }
     
+    func activityItems(qrImage: UIImage?) -> [Any] {
+        if let qrImage {
+            return [qrImage, address]
+        }
+        return [address]
+    }
+    
     func enableAsset() async {
         await walletsService.enableAssets(walletId: walletId, assetIds: [assetModel.asset.id], enabled: true)
+    }
+    
+    func generateQRCode() async -> UIImage? {
+        await generator.generate(
+            from: address,
+            size: CGSize(
+                width: qrWidth,
+                height: qrWidth
+            ),
+            logo: UIImage.name("logo-dark")
+        )
     }
 }
