@@ -41,7 +41,6 @@ extension WalletConnectorService {
     }
 
     public func setup() async {
-        updateSessions()
         await withTaskGroup(of: Void.self) { group in
             group.addTask { await self.handleSessions() }
             group.addTask { await self.handleSessionProposals() }
