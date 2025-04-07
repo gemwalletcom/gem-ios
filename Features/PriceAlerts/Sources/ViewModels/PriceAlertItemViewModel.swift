@@ -16,7 +16,12 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
 
     public init(data: PriceAlertData) {
         self.data = data
-        self.priceModel = PriceViewModel(price: data.price, currencyCode: data.priceAlert.currency)
+        switch data.priceAlert.type {
+        case .auto:
+            self.priceModel = PriceViewModel(price: data.price, currencyCode: Preferences.standard.currency)
+        case .price, .pricePercentChange:
+            self.priceModel = PriceViewModel(price: data.price, currencyCode: data.priceAlert.currency)
+        }
     }
 
     public var showBalancePrivacy: Binding<Bool> { .constant(false) }
