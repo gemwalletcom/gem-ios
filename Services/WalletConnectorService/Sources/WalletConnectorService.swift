@@ -41,6 +41,7 @@ extension WalletConnectorService {
     }
 
     public func setup() async {
+        updateSessions()
         await withTaskGroup(of: Void.self) { group in
             group.addTask { await self.handleSessions() }
             group.addTask { await self.handleSessionProposals() }
@@ -75,6 +76,10 @@ extension WalletConnectorService {
 
         try await WalletKit.instance.cleanup()
     }
+    
+    public func updateSessions() {
+        updateSessions(interactor.sessions)
+    }
 }
 
 // MARK: - Private
@@ -82,12 +87,7 @@ extension WalletConnectorService {
 extension WalletConnectorService {
     private func handleSessions() async {
         for await sessions in interactor.sessionsStream {
-            NSLog("Received sessions: \(sessions)")
-            do {
-                try signer.updateSessions(sessions: sessions.map { $0.asSession })
-            } catch {
-                NSLog("Error updating sessions: \(error)")
-            }
+            updateSessions(sessions)
         }
     }
 
@@ -117,6 +117,15 @@ extension WalletConnectorService {
         }
     }
 
+    private func updateSessions(_ sessions: [Session]) {
+        NSLog("Received sessions: \(sessions)")
+        do {
+            try signer.updateSessions(sessions: sessions.map { $0.asSession })
+        } catch {
+            NSLog("Error updating sessions: \(error)")
+        }
+    }
+
     private func handleRequest(request: WalletConnectSign.Request) async throws  {
         guard let method = WalletConnectionMethods(rawValue: request.method) else {
             throw WalletConnectorServiceError.unresolvedMethod(request.method)
@@ -140,30 +149,18 @@ extension WalletConnectorService {
 
     private func handleMethod(method: WalletConnectionMethods, chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         switch method {
-        case .ethSign:
-            return try await self.ethSign(chain: chain, request: request)
-        case .personalSign:
-            return try await self.personalSign(chain: chain, request: request)
-        case .ethSignTypedData, .ethSignTypedDataV4:
-            return try await self.ethSignTypedData(chain: chain, request: request)
-        case .ethSignTransaction:
-            return try await self.signTransaction(chain: chain, request: request)
-        case .ethSendTransaction:
-            return try await self.sendTransaction(chain: chain, request: request)
-        case .ethSendRawTransaction:
-            return try await self.sendRawTransaction(chain: chain, request: request)
-        case .ethChainId:
-            return .error(.methodNotFound)
-        case .walletAddEthereumChain:
-            return walletAddEthereumChain(chain: chain, request: request)
-        case  .walletSwitchEthereumChain:
-            return walletSwitchEthereumChain(chain: chain, request: request)
-        case .solanaSignMessage:
-            return try await solanaSignMessage(request: request)
-        case .solanaSignTransaction:
-            return try await solanaSignTransaction(request: request)
-        case .solanaSignAndSendTransaction:
-            return try await solanaSendTransaction(request: request)
+        case .ethSign: try await self.ethSign(chain: chain, request: request)
+        case .personalSign: try await self.personalSign(chain: chain, request: request)
+        case .ethSignTypedData, .ethSignTypedDataV4: try await self.ethSignTypedData(chain: chain, request: request)
+        case .ethSignTransaction: try await self.signTransaction(chain: chain, request: request)
+        case .ethSendTransaction: try await self.sendTransaction(chain: chain, request: request)
+        case .ethSendRawTransaction: try await self.sendRawTransaction(chain: chain, request: request)
+        case .ethChainId: .error(.methodNotFound)
+        case .walletAddEthereumChain: walletAddEthereumChain(chain: chain, request: request)
+        case .walletSwitchEthereumChain: walletSwitchEthereumChain(chain: chain, request: request)
+        case .solanaSignMessage: try await solanaSignMessage(request: request)
+        case .solanaSignTransaction: try await solanaSignTransaction(request: request)
+        case .solanaSignAndSendTransaction: try await solanaSendTransaction(request: request)
         }
     }
 
