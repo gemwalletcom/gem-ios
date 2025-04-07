@@ -270,7 +270,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/TransactionService",
         "identifier" : "TransactionServiceTests",

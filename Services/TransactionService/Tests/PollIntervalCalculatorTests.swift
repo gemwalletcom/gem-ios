@@ -8,7 +8,7 @@ import GemstonePrimitives
 
 @MainActor
 struct PollIntervalCalculatorTests {
-    let config = TransactionPollerConfiguration.default
+    let config = TimerPollerConfiguration.default
 
     var solanaBlockTime: Duration {
         .milliseconds(ChainConfig.config(chain: .solana).blockTime)
@@ -26,8 +26,8 @@ struct PollIntervalCalculatorTests {
     func testImmediateDrop() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(5),
-            blockTime: .seconds(3)
+            currentInterval: .seconds(5),
+            recommendedInterval: .seconds(3)
         )
         #expect(result == .seconds(3))
     }
@@ -36,8 +36,8 @@ struct PollIntervalCalculatorTests {
     func testStepUp() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(3),
-            blockTime: .seconds(8)
+            currentInterval: .seconds(3),
+            recommendedInterval: .seconds(8)
         )
         #expect(result == .seconds(4.5))
     }
@@ -46,8 +46,8 @@ struct PollIntervalCalculatorTests {
     func testSameDurationSetupUp() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(5),
-            blockTime: .seconds(5)
+            currentInterval: .seconds(5),
+            recommendedInterval: .seconds(5)
         )
         #expect(result == .seconds(7.5))
     }
@@ -56,8 +56,8 @@ struct PollIntervalCalculatorTests {
     func testBlockTimeAboveMax() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(10),
-            blockTime: .seconds(600)
+            currentInterval: .seconds(10),
+            recommendedInterval: .seconds(600)
         )
         #expect(result == config.maxInterval)
     }
@@ -66,8 +66,8 @@ struct PollIntervalCalculatorTests {
     func testMaxCapping() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(7),
-            blockTime: .seconds(9)
+            currentInterval: .seconds(7),
+            recommendedInterval: .seconds(9)
         )
         #expect(result == .seconds(10))
     }
@@ -76,8 +76,8 @@ struct PollIntervalCalculatorTests {
     func testImmediateDropMilliseconds() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .milliseconds(1000),  // 1 second
-            blockTime: .milliseconds(500)    // 0.5 seconds
+            currentInterval: .milliseconds(1000),  // 1 second
+            recommendedInterval: .milliseconds(500)    // 0.5 seconds
         )
         #expect(result == .milliseconds(500))
     }
@@ -87,8 +87,8 @@ struct PollIntervalCalculatorTests {
         // Calculation: 500ms * 1.5 = 750ms, then max(750, 800) = 800ms.
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .milliseconds(500),
-            blockTime: .milliseconds(800)
+            currentInterval: .milliseconds(500),
+            recommendedInterval: .milliseconds(800)
         )
         #expect(result == .milliseconds(800))
     }
@@ -97,8 +97,8 @@ struct PollIntervalCalculatorTests {
     func testSolanaImmediateDrop() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(5),
-            blockTime: solanaBlockTime
+            currentInterval: .seconds(5),
+            recommendedInterval: solanaBlockTime
         )
         #expect(result == solanaBlockTime)
     }
@@ -109,8 +109,8 @@ struct PollIntervalCalculatorTests {
         // With current interval 8s, since 600s > maxInterval, result should be capped to 10s.
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(8),
-            blockTime: btcBlockTime
+            currentInterval: .seconds(8),
+            recommendedInterval: btcBlockTime
         )
         #expect(result == .seconds(10))
     }
@@ -121,8 +121,8 @@ struct PollIntervalCalculatorTests {
         // With current interval 2s, since 12s > maxInterval (10s), result should be capped to 10s.
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(2),
-            blockTime: ethBlockTime
+            currentInterval: .seconds(2),
+            recommendedInterval: ethBlockTime
         )
         #expect(result == .seconds(10))
     }
@@ -134,8 +134,8 @@ struct PollIntervalCalculatorTests {
         // Calculation: 3s * 1.5 = 4.5s, then max(4.5, 4) = 4.5s.
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(3),
-            blockTime: .seconds(4)
+            currentInterval: .seconds(3),
+            recommendedInterval: .seconds(4)
         )
         #expect(result == .seconds(4))
     }
@@ -144,8 +144,8 @@ struct PollIntervalCalculatorTests {
     func testStepUpWithinAllowedRange() async {
         let result = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(2),
-            blockTime: .seconds(3)
+            currentInterval: .seconds(2),
+            recommendedInterval: .seconds(3)
         )
         #expect(result == .seconds(3))
     }
@@ -154,15 +154,15 @@ struct PollIntervalCalculatorTests {
     func testSequentialStepUp() async {
         let step1 = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: .seconds(5),
-            blockTime: .seconds(5)
+            currentInterval: .seconds(5),
+            recommendedInterval: .seconds(5)
         )
         #expect(step1 == .seconds(7.5))
 
         let step2 = PollIntervalCalculator.nextInterval(
             configuration: config,
-            interval: step1,
-            blockTime: .seconds(5)
+            currentInterval: step1,
+            recommendedInterval: .seconds(5)
         )
         #expect(step2 == .seconds(10))
     }

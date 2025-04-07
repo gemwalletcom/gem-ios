@@ -17,7 +17,7 @@ public struct TransactionService: Sendable {
     private let stakeService: StakeService
     private let nftService: NFTService
 
-    private let poller = TransactionPoller()
+    private let poller = TimerPoller()
 
     public init(
         transactionStore: TransactionStore,
@@ -44,10 +44,10 @@ public struct TransactionService: Sendable {
         setup()
     }
 
-    private func pollPendingTransactions() async throws -> (hasPendingTransactions: Bool, minBlockTime: Duration) {
+    private func pollPendingTransactions() async throws -> PollResult {
         let pendingTransactions = try transactionStore.getTransactions(state: .pending)
         guard !pendingTransactions.isEmpty else {
-            return (false, poller.configuration.idleInterval)
+            return .init(isActive: false, recommendedInterval: poller.configuration.idleInterval)
         }
 
         // Process each pending transaction
@@ -55,13 +55,12 @@ public struct TransactionService: Sendable {
 
         // Check if any remain pending
         let remainPendingTransactions = try transactionStore.getTransactions(state: .pending)
-        return (!remainPendingTransactions.isEmpty, minChainBlockTime(remainPendingTransactions))
-    }
-
-    private func minChainBlockTime(_ pendingTransactions: [Transaction]) -> Duration {
-        pendingTransactions
-            .map { Duration.milliseconds(ChainConfig.config(chain: $0.assetId.chain).blockTime)}
-            .min() ?? poller.configuration.idleInterval
+        return PollResult(
+            isActive: !remainPendingTransactions.isEmpty,
+            recommendedInterval: remainPendingTransactions
+                .map { Duration.milliseconds(ChainConfig.config(chain: $0.assetId.chain).blockTime)}
+                .min() ?? poller.configuration.idleInterval
+        )
     }
 
     private func updateState(pendingTransactions: [Transaction]) async throws {

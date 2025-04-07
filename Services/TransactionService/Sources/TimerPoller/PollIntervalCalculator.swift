@@ -4,20 +4,20 @@ import Foundation
 
 struct PollIntervalCalculator {
     static func nextInterval(
-        configuration: TransactionPollerConfiguration,
-        interval: Duration,
-        blockTime: Duration
+        configuration: TimerPollerConfiguration,
+        currentInterval: Duration,
+        recommendedInterval: Duration
     ) -> Duration {
         let stepFactor = configuration.stepFactor
         let maxInterval = configuration.maxInterval
         let idle = configuration.idleInterval
-
-        if blockTime < idle {
-            return blockTime
-        } else if blockTime >= maxInterval {
+        
+        if recommendedInterval < idle {
+            return recommendedInterval
+        } else if recommendedInterval >= maxInterval {
             return maxInterval
-        } else {
-            return Duration.min(interval * stepFactor, maxInterval)
         }
+        
+        return .min(currentInterval * stepFactor, maxInterval)
     }
 }
