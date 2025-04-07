@@ -17,7 +17,7 @@ public struct TransactionService: Sendable {
     private let stakeService: StakeService
     private let nftService: NFTService
 
-    private let runner = Runner()
+    private let poller = TransactionPoller()
 
     public init(
         transactionStore: TransactionStore,
@@ -35,22 +35,38 @@ public struct TransactionService: Sendable {
 
     public func setup() {
         Task {
-            await runner.start(
-                every: .seconds(5),
-                runImmediately: true,
-                action: updatePendingTransactions
-            )
+            await poller.start(pollAction: pollPendingTransactions)
         }
     }
 
     public func addTransactions(walletId: String, transactions: [Transaction]) throws {
         try transactionStore.addTransactions(walletId: walletId, transactions: transactions)
+        setup()
     }
 
-    private func updatePendingTransactions() async throws {
-        let transactions = try transactionStore.getTransactions(state: .pending)
+    private func pollPendingTransactions() async throws -> (hasPendingTransactions: Bool, minBlockTime: Duration) {
+        let pendingTransactions = try transactionStore.getTransactions(state: .pending)
+        guard !pendingTransactions.isEmpty else {
+            return (false, poller.configuration.idleInterval)
+        }
+
+        // Process each pending transaction
+        try await updateState(pendingTransactions: pendingTransactions)
+
+        // Check if any remain pending
+        let remainPendingTransactions = try transactionStore.getTransactions(state: .pending)
+        return (!remainPendingTransactions.isEmpty, minChainBlockTime(remainPendingTransactions))
+    }
+
+    private func minChainBlockTime(_ pendingTransactions: [Transaction]) -> Duration {
+        pendingTransactions
+            .map { Duration.milliseconds(ChainConfig.config(chain: $0.assetId.chain).blockTime)}
+            .min() ?? poller.configuration.idleInterval
+    }
+
+    private func updateState(pendingTransactions: [Transaction]) async throws {
         await withTaskGroup(of: Void.self) { group in
-            for transaction in transactions {
+            for transaction in pendingTransactions {
                 group.addTask {
                     do {
                         NSLog("pending transaction: chain \(transaction.assetId.chain.rawValue), hash: \(transaction.hash)")
