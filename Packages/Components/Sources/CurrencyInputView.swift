@@ -111,10 +111,10 @@ public struct CurrencyInputView: View {
     
     @ViewBuilder
     var actionImage: some View {
-        if let image = actionStyle?.image {
-            image
+        if let actionStyle = actionStyle {
+            actionStyle.image
                 .resizable()
-                .frame(width: Sizing.image.small, height: Sizing.image.small)
+                .frame(width: actionStyle.imageSize, height: actionStyle.imageSize)
                 .foregroundColor(Colors.gray)
         }
     }
