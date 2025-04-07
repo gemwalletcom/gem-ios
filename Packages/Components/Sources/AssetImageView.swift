@@ -78,7 +78,7 @@ public struct AssetImageView: View {
                 .aspectRatio(contentMode: .fit)
                 .frame(width: overlaySize, height: overlaySize)
                 .padding(overlayPadding)
-                .background(Colors.grayBackground)
+                .background(Colors.listStyleColor)
                 .clipShape(Circle())
                 .offset(x: overlayOffset + (size / overlaySize), y: overlayOffset + (size / overlaySize))
         }
