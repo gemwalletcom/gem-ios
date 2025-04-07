@@ -93,6 +93,7 @@ public struct ConnectionsScene: View {
         }
         )
         .navigationTitle(model.title)
+        .taskOnce { model.updateSessions() }
     }
 
     private func connectURI(uri: String) async {
