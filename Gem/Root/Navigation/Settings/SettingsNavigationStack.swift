@@ -71,7 +71,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
                 PriceAlertsNavigationView(
-                    model: PriceAlertsViewModel(priceAlertService: priceAlertService, priceService: priceService)
+                    model: PriceAlertsViewModel(priceAlertService: priceAlertService)
                 )
             }
             .navigationDestination(for: Scenes.Price.self) { scene in
