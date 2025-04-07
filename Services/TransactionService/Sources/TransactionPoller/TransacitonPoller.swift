@@ -29,11 +29,9 @@ actor TransactionPoller {
                     )
 
                     NSLog("[TransactionPoller] decision: \(decision)")
-                    switch decision {
-                    case let .sleepAndIdle(interval):
-                        currentInterval = interval
-                    case let .sleep(interval):
-                        currentInterval = interval
+                    currentInterval = switch decision {
+                    case let .sleepAndIdle(interval): interval
+                    case let .sleep(interval): interval
                     }
                 } catch {
                     currentInterval = configuration.idleInterval
