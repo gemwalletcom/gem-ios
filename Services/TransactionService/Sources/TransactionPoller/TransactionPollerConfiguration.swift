@@ -22,6 +22,6 @@ extension TransactionPollerConfiguration {
     static let `default` = TransactionPollerConfiguration(
         maxInterval: .seconds(10), // maximum allowed poll interval
         idleInterval: .seconds(5), // poll interval when there are no pending transactions
-        stepFactor: 1.5, // factor by which to multiply the interval when stepping up,
+        stepFactor: 1.5 // factor by which to multiply the interval when stepping up,
     )
 }
