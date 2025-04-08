@@ -46,7 +46,8 @@ let package = Package(
             dependencies: [
                 "PriceAlertService",
                 .product(name: "StoreTestKit", package: "Store"),
-                .product(name: "DeviceServiceTestKit", package: "DeviceService")
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
+                .product(name: "PriceServiceTestKit", package: "PriceService")
             ],
             path: "TestKit"
         ),
