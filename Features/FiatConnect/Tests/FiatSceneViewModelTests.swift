@@ -128,6 +128,6 @@ final class FiatSceneViewModelTests {
         let sellQuote = FiatQuote.mock(fiatAmount: 2400, cryptoAmount: 1, type: model.input.type)
         model.input.quote = sellQuote
 
-        #expect(model.cryptoAmountValue == "≈ 2,400.00 \(model.currencyFormatter.symbol)")
+        #expect(model.cryptoAmountValue == "≈ $2,400.00")
     }
 }

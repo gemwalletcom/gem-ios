@@ -101,7 +101,10 @@ public final class SetPriceAlertViewModel {
     // MARK: - Private
     
     private var amountValue: Double? {
-        try? valueFormatter.number(amount: state.amount).doubleValue
+        guard let double = try? valueFormatter.number(amount: state.amount).doubleValue else {
+            return nil
+        }
+        return currencyFormatter.normalizedDouble(from: double)
     }
     
     private var completeMessage: String {
