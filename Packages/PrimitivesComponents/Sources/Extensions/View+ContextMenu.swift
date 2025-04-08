@@ -8,7 +8,7 @@ public extension View {
     func contextMenu(_ items: [ContextMenuItemType]) -> some View {
         self.contextMenu {
             ForEach(Array(items.enumerated()), id: \.offset) { _, item in
-                buildContextMenuItem(item)
+                build(item)
             }
         }
     }
@@ -18,7 +18,7 @@ public extension View {
     }
 
     @ViewBuilder
-    private func buildContextMenuItem(_ item: ContextMenuItemType) -> some View {
+    private func build(_ item: ContextMenuItemType) -> some View {
         switch item {
         case let .copy(title, value, onCopied):
             ContextMenuItem(
@@ -67,7 +67,7 @@ public extension View {
                 systemImage: systemImage,
                 role: role
             ) {
-                action()
+                action?()
             }
         }
     }

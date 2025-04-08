@@ -4,7 +4,7 @@ import SwiftUI
 import Primitives
 
 public enum ContextMenuItemType {
-    case copy(title: String? = nil, value: String, onCopied: StringAction = nil)
+    case copy(title: String? = nil, value: String, onCopy: StringAction = nil)
     case pin(isPinned: Bool, onPin: VoidAction)
     case hide(VoidAction)
     case delete(VoidAction)
@@ -13,6 +13,6 @@ public enum ContextMenuItemType {
         title: String,
         systemImage: String? = nil,
         role: ButtonRole? = nil,
-        action: () -> Void
+        action: VoidAction
     )
 }
