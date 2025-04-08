@@ -17,7 +17,13 @@ public struct TransactionService: Sendable {
     private let stakeService: StakeService
     private let nftService: NFTService
 
-    private let poller = TimerPoller()
+    private let poller = TimerPoller(
+        configuration: TimerPollerConfiguration(
+            maxInterval: .seconds(10),
+            idleInterval: .seconds(5),
+            stepFactor: 1.5
+        )
+    )
 
     public init(
         transactionStore: TransactionStore,
@@ -56,7 +62,7 @@ public struct TransactionService: Sendable {
         // Check if any remain pending
         let remainPendingTransactions = try transactionStore.getTransactions(state: .pending)
         return PollResult(
-            isActive: !remainPendingTransactions.isEmpty,
+            isActive: remainPendingTransactions.isNotEmpty,
             recommendedInterval: remainPendingTransactions
                 .map { Duration.milliseconds(ChainConfig.config(chain: $0.assetId.chain).blockTime)}
                 .min() ?? poller.configuration.idleInterval

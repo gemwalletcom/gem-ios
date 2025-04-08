@@ -8,7 +8,11 @@ import GemstonePrimitives
 
 @MainActor
 struct PollIntervalCalculatorTests {
-    let config = TimerPollerConfiguration.default
+    let config = TimerPollerConfiguration(
+        maxInterval: .seconds(10),
+        idleInterval: .seconds(5),
+        stepFactor: 1.5
+    )
 
     var solanaBlockTime: Duration {
         .milliseconds(ChainConfig.config(chain: .solana).blockTime)

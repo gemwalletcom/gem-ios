@@ -6,7 +6,7 @@ actor TimerPoller {
     let configuration: TimerPollerConfiguration
     private var task: Task<Void, Never>?
 
-    init(configuration: TimerPollerConfiguration = .default) {
+    init(configuration: TimerPollerConfiguration) {
         self.configuration = configuration
     }
 
@@ -38,15 +38,5 @@ actor TimerPoller {
     public func stop() {
         task?.cancel()
         task = nil
-    }
-}
-
-extension Duration {
-    static func min(_ lhs: Duration, _ rhs: Duration) -> Duration {
-        lhs < rhs ? lhs : rhs
-    }
-
-    static func max(_ lhs: Duration, _ rhs: Duration) -> Duration {
-        lhs < rhs ? rhs : lhs
     }
 }

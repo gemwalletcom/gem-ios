@@ -17,11 +17,3 @@ struct TimerPollerConfiguration: Sendable {
         self.stepFactor = stepFactor
     }
 }
-
-extension TimerPollerConfiguration {
-    static let `default` = TimerPollerConfiguration(
-        maxInterval: .seconds(10), // maximum allowed poll interval
-        idleInterval: .seconds(5), // poll interval when there are no pending transactions
-        stepFactor: 1.5 // factor by which to multiply the interval when stepping up,
-    )
-}
