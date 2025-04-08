@@ -90,7 +90,7 @@ public struct PriceAlertService: Sendable {
     }
     
     public func updatePrices(for currency: String) async throws   {
-        let assetIds = try await getPriceAlerts().map { $0.assetId }.unique()
+        let assetIds = try store.getPriceAlerts().map { $0.assetId }.unique()
         try await priceService.updatePrices(assetIds: assetIds, currency: currency)
     }
 }
