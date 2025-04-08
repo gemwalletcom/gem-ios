@@ -6,15 +6,19 @@ import StoreTestKit
 import Store
 import DeviceService
 import DeviceServiceTestKit
+import PriceService
+import PriceServiceTestKit
 
 public extension PriceAlertService {
     static func mock(
         store: PriceAlertStore = .mock(),
-        deviceService: DeviceService = .mock()
+        deviceService: DeviceService = .mock(),
+        priceService: PriceService = .mock()
     ) -> PriceAlertService {
         PriceAlertService(
             store: store,
-            deviceService: deviceService
+            deviceService: deviceService,
+            priceService: priceService
         )
     }
 }

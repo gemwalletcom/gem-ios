@@ -91,13 +91,14 @@ struct ServicesFactory {
         )
         let notificationService = NotificationService.main
 
+        let priceService = PriceService(
+            priceStore: storeManager.priceStore
+        )
         let priceAlertService = Self.makePriceAlertService(
             priceAlertStore: storeManager.priceAlertStore,
             deviceService: deviceService,
+            priceService: priceService,
             preferences: preferences
-        )
-        let priceService = PriceService(
-            priceStore: storeManager.priceStore
         )
         let explorerService = ExplorerService.standard
 
@@ -282,11 +283,13 @@ extension ServicesFactory {
     private static func makePriceAlertService(
         priceAlertStore: PriceAlertStore,
         deviceService: DeviceService,
+        priceService: PriceService,
         preferences: Preferences
     ) -> PriceAlertService {
         PriceAlertService(
             store: priceAlertStore,
             deviceService: deviceService,
+            priceService: priceService,
             preferences: preferences
         )
     }

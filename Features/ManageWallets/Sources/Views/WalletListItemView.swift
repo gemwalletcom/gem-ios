@@ -46,11 +46,11 @@ struct WalletListItemView: View {
             .opacity(0)
 
             HStack {
-                AssetImageView(
-                    assetImage: model.avatarImage,
-                    size: .image.medium
+                ListItemView(
+                    title: model.name,
+                    titleExtra: model.subType,
+                    imageStyle: .asset(assetImage: model.avatarImage)
                 )
-                ListItemView(title: model.name, titleExtra: model.subType)
 
                 Spacer()
 

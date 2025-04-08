@@ -6,6 +6,7 @@ import SwiftUI
 import GemstonePrimitives
 import Style
 import Localization
+import Components
 
 public struct BannerViewModel {
     public  let banner: Banner
@@ -14,17 +15,17 @@ public struct BannerViewModel {
         self.banner = banner
     }
 
-    public var image: Image? {
+    public var image: AssetImage? {
         switch banner.event {
         case .stake, .accountActivation, .activateAsset:
             guard let asset = asset else {
                 return .none
             }
-            return Images.name(asset.chain.rawValue)
+            return AssetImage.resourceImage(image: asset.chain.rawValue)
         case .enableNotifications:
-            return Images.System.bell
+            return AssetImage.image(Images.System.bell)
         case .accountBlockedMultiSignature:
-            return Images.System.exclamationmarkTriangle
+            return AssetImage.image(Images.System.exclamationmarkTriangle)
         }
     }
     
@@ -115,6 +116,15 @@ public struct BannerViewModel {
         case .accountBlockedMultiSignature:
             return Docs.url(.tronMultiSignature)
         }
+    }
+    
+    public var imageStyle: ListItemImageStyle? {
+        ListItemImageStyle(
+            assetImage: image,
+            imageSize: imageSize,
+            overlayImageSize: .image.overlayImage.chain,
+            cornerRadiusType: .custom(cornerRadius)
+        )
     }
 }
 

@@ -5,6 +5,7 @@ import Style
 import Localization
 import Preferences
 import GemstonePrimitives
+import Components
 
 public struct AboutUsViewModel {
     private let preferences: ObservablePreferences
@@ -30,7 +31,7 @@ public struct AboutUsViewModel {
         let number = Bundle.main.buildVersionNumber
         return "\(version) (\(number))"
     }
-    var versionTextImage: Image { Images.Settings.version }
+    var versionTextImage: AssetImage { AssetImage.image(Images.Settings.version) }
 
     var contextDevTitle: String {
         if preferences.isDeveloperEnabled {

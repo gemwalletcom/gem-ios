@@ -10,7 +10,7 @@ public protocol CurrencyInputConfigurable {
     var secondaryText: String { get }
     var keyboardType: UIKeyboardType { get }
     var sanitizer: ((String) -> String)? { get }
-    var actionButtonImage: Image? { get }
+    var actionStyle: CurrencyInputActionStyle? { get }
     var onTapActionButton: (() -> Void)? { get }
 }
 
@@ -22,8 +22,7 @@ public struct CurrencyInputView: View {
     private let currencyPosition: CurrencyTextField.CurrencyPosition
     private let secondaryText: String
     private let keyboardType: UIKeyboardType
-    private let actionButtonImage: Image?
-
+    private let actionStyle: CurrencyInputActionStyle?
     private let onTapActionButton: (() -> Void)?
     private let sanitizer: ((String) -> String)?
 
@@ -34,7 +33,7 @@ public struct CurrencyInputView: View {
         currencyPosition: CurrencyTextField.CurrencyPosition,
         secondaryText: String,
         keyboardType: UIKeyboardType,
-        actionButtonImage: Image? = nil,
+        actionStyle: CurrencyInputActionStyle? = nil,
         onTapActionButton: (() -> Void)? = nil,
         sanitizer: ((String) -> String)? = nil
     ) {
@@ -44,7 +43,7 @@ public struct CurrencyInputView: View {
         self.keyboardType = keyboardType
         self.currencySymbol = currencySymbol
         self.currencyPosition = currencyPosition
-        self.actionButtonImage = actionButtonImage
+        self.actionStyle = actionStyle
         self.onTapActionButton = onTapActionButton
         self.sanitizer = sanitizer
     }
@@ -57,7 +56,7 @@ public struct CurrencyInputView: View {
             currencyPosition: config.currencyPosition,
             secondaryText: config.secondaryText,
             keyboardType: config.keyboardType,
-            actionButtonImage: config.actionButtonImage,
+            actionStyle: config.actionStyle,
             onTapActionButton: config.onTapActionButton,
             sanitizer: config.sanitizer
         )
@@ -66,16 +65,8 @@ public struct CurrencyInputView: View {
     public var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(spacing: .small) {
-                if let actionButtonImage = actionButtonImage {
-                    Button {
-                        onTapActionButton?()
-                    } label: {
-                        actionButtonImage
-                            .resizable()
-                            .frame(width: Sizing.image.small, height: Sizing.image.small)
-                            .foregroundColor(Colors.gray)
-                    }
-                    .buttonStyle(.plain)
+                if let actionStyle, actionStyle.position == .amount {
+                    actionButton(for: actionStyle.position)
                 }
 
                 CurrencyTextField(
@@ -92,9 +83,45 @@ public struct CurrencyInputView: View {
                 }
             }
 
-            Text(secondaryText)
-                .textStyle(.calloutSecondary.weight(.medium))
-                .frame(minHeight: .list.image)
+            if let actionStyle, actionStyle.position == .secondary {
+                actionButton(for: actionStyle.position)
+            } else {
+                secondaryTextView
+            }
         }
+    }
+
+    func actionButton(for position: CurrencyInputActionPosition) -> some View {
+        Button {
+            onTapActionButton?()
+        } label: {
+            switch position {
+            case .amount:
+                actionImage
+            case .secondary:
+                HStack {
+                    secondaryTextView
+                    actionImage
+                }
+            }
+        }
+        .buttonStyle(.plain)
+        .disabled(self.actionStyle == nil)
+    }
+    
+    @ViewBuilder
+    var actionImage: some View {
+        if let actionStyle = actionStyle {
+            actionStyle.image
+                .resizable()
+                .frame(width: actionStyle.imageSize, height: actionStyle.imageSize)
+                .foregroundColor(Colors.gray)
+        }
+    }
+
+    var secondaryTextView: some View {
+        Text(secondaryText)
+            .textStyle(.calloutSecondary.weight(.medium))
+            .frame(minHeight: .list.image)
     }
 }
