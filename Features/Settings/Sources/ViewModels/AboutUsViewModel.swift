@@ -6,6 +6,7 @@ import Localization
 import Preferences
 import GemstonePrimitives
 import Components
+import PrimitivesComponents
 
 public struct AboutUsViewModel {
     private let preferences: ObservablePreferences
@@ -41,6 +42,18 @@ public struct AboutUsViewModel {
         }
     }
     var contextDeveloperImage: String { SystemImage.info }
+
+
+    var contextMenuItems: [ContextMenuItemType] {
+        [
+            .copy(value: versionTextValue),
+            .custom(
+                title: contextDevTitle,
+                systemImage: contextDeveloperImage,
+                action: toggleDeveloperMode
+            )
+        ]
+    }
 }
 
 extension AboutUsViewModel {

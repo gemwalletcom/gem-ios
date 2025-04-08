@@ -149,10 +149,6 @@ extension WalletSceneViewModel {
         bannerService.onClose(banner)
     }
 
-    func onCopyAssetAddress(_ address: String) {
-        UIPasteboard.general.string = address
-    }
-
     func onSelectWatchWalletInfo() {
         isPresentingInfoSheet = .watchWallet
     }

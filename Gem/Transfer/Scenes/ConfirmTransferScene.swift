@@ -80,18 +80,18 @@ extension ConfirmTransferScene {
 
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                        .contextMenu {
-                            if let websiteURL = model.websiteURL {
-                                ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
-                            }
-                        }
+                        .contextMenu(
+                            model.websiteURL.map({ [.url(title: websiteValue, url: $0)] }) ?? []
+                        )
                 }
 
                 ListItemView(title: model.senderTitle, subtitle: model.senderValue)
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
-                        ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
-                    }
+                    .contextMenu(
+                        [
+                            .copy(value: model.senderAddress),
+                            .url(title: model.senderExplorerText, url: model.senderAddressExplorerUrl)
+                        ]
+                    )
 
                 ListItemImageView(
                     title: model.networkTitle,

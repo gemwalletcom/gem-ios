@@ -44,7 +44,6 @@ public struct WalletScene: View {
                     WalletAssetsList(
                         assets: model.sections.pinned,
                         currencyCode: model.currencyCode,
-                        onCopyAssetAddress: model.onCopyAssetAddress,
                         onHideAsset: model.onHideAsset,
                         onPinAsset: model.onPinAsset,
                         showBalancePrivacy: $preferences.isHideBalanceEnabled
@@ -62,7 +61,6 @@ public struct WalletScene: View {
                 WalletAssetsList(
                     assets: model.sections.assets,
                     currencyCode: model.currencyCode,
-                    onCopyAssetAddress: model.onCopyAssetAddress,
                     onHideAsset: model.onHideAsset,
                     onPinAsset: model.onPinAsset,
                     showBalancePrivacy: $preferences.isHideBalanceEnabled

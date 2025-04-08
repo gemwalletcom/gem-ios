@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import PrimitivesComponents
 
 public struct WalletConnectionViewModel: Sendable {
     let connection: WalletConnection
@@ -27,8 +28,21 @@ public struct WalletConnectionViewModel: Sendable {
     var host: String? {
         url?.host(percentEncoded: false)
     }
-    
-    var url: URL? {
+
+    var urlType: ContextMenuItemType? {
+        guard let host,
+              let url
+        else {
+            return nil
+        }
+        return .url(title: host, url: url)
+    }
+}
+
+// MARK: - Private
+
+extension WalletConnectionViewModel {
+    private var url: URL? {
         URL(string: connection.session.metadata.url)
     }
 }

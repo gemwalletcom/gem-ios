@@ -27,9 +27,12 @@ public struct TransactionView: View {
             subtitleStyleExtra: model.subtitleExtraStyle,
             imageStyle: .asset(assetImage: model.assetImage)
         )
-        .contextMenu {
-            ContextMenuViewURL(title: model.viewOnTransactionExplorerText, url: model.transactionExplorerUrl, image: SystemImage.globe)
-        }
+        .contextMenu(
+            .url(
+                title: model.viewOnTransactionExplorerText,
+                url: model.transactionExplorerUrl
+            )
+        )
     }
 }
 
