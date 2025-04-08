@@ -5,7 +5,7 @@ import SwiftUI
 import Primitives
 import Style
 
-public struct PriceViewModel {
+public struct PriceViewModel: Sendable {
     public let price: Price?
 
     private let currencyFormatter: AbbreviatedFormatter
