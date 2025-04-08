@@ -69,20 +69,20 @@ struct WalletListItemView: View {
                 .buttonStyle(.borderless)
             }
         }
-        .contextMenu {
-            ContextMenuItem(
-                title: Localized.Settings.title,
-                image: SystemImage.settings
-            ) {
-                onEdit(model.wallet)
-            }
-            ContextMenuPin(isPinned: model.wallet.isPinned) {
-                onPin(model.wallet)
-            }
-            ContextMenuDelete {
-                onDelete(model.wallet)
-            }
-        }
+        .contextMenu(
+            [
+                .custom(
+                    title: Localized.Settings.title,
+                    systemImage: SystemImage.settings,
+                    action: { onEdit(model.wallet) }
+                ),
+                .pin(
+                    isPinned: model.wallet.isPinned,
+                    onPin: { onPin(model.wallet) }
+                ),
+                .delete( { onDelete(model.wallet) })
+            ]
+        )
         .swipeActions {
             Button(
                 action: { onEdit(model.wallet) },

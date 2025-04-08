@@ -58,7 +58,8 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                     fromAsset: fromAsset.id,
                     fromValue: quote.fromValue,
                     toAsset: toAsset.id,
-                    toValue: quote.toValue
+                    toValue: quote.toValue,
+                    provider: quote.data.provider.protocol
                 )
             )
         case .generic,
