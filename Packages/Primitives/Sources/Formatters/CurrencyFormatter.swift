@@ -108,6 +108,13 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return [value, symbol].filter { !$0.isEmpty }.joined(separator: " ")
     }
     
+    public func double(from amount: String) -> Double? {
+        guard let decimal = Decimal(string: amount, locale: locale) else {
+            return nil
+        }
+        return normalizedDouble(from: decimal.doubleValue)
+    }
+    
     public func normalizedDouble(from value: Double) -> Double? {
         let formatter = formatter(for: value)
         formatter.currencySymbol = ""
