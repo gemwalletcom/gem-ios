@@ -34,15 +34,18 @@ let package = Package(
         .target(
             name: "PriceServiceTestKit",
             dependencies: [
+                "PriceService",
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
-                "Primitives"
+                "Primitives",
             ],
             path: "TestKit"
         ),
         .testTarget(
             name: "PriceServiceTests",
-            dependencies: ["PriceService"]
+            dependencies: [
+                "PriceService",
+            ]
         ),
     ]
 )
