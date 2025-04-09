@@ -11,7 +11,12 @@ let package = Package(
     products: [
         .library(
             name: "ChainService",
-            targets: ["ChainService"]),
+            targets: ["ChainService"]
+        ),
+        .library(
+            name: "ChainServiceTestKit",
+            targets: ["ChainServiceTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -25,6 +30,14 @@ let package = Package(
                 "Blockchain",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "ChainServiceTestKit",
+            dependencies: [
+                "Primitives",
+                "Blockchain",
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "ChainServiceTests",
