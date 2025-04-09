@@ -146,3 +146,11 @@ public extension View {
         }
     }
 }
+
+// MARK: - Syntactic sugar
+
+extension View {
+    func frame(size: CGFloat) -> some View {
+        frame(width: size, height: size)
+    }
+}
