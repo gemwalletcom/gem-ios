@@ -57,13 +57,15 @@ class RecipientViewModel: ObservableObject {
     var chain: Chain { asset.chain }
     
     var recipientSections: [ListItemValueSection<RecipientAddress>] {
-        RecipientAddressType.allCases.map {
-            ListItemValueSection(
-                section: sectionTitle(for: $0),
-                image: sectionImage(for: $0),
-                values: sectionRecipients(for: $0)
-            )
-        }
+        RecipientAddressType.allCases
+            .map {
+                ListItemValueSection(
+                    section: sectionTitle(for: $0),
+                    image: sectionImage(for: $0),
+                    values: sectionRecipients(for: $0)
+                )
+            }
+            .filter({ !$0.values.isEmpty })
     }
 
     func getRecipientData(name: NameRecord?, address: String, memo: String?, amount: String?) throws -> RecipientData {

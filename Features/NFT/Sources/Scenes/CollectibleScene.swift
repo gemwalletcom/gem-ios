@@ -91,13 +91,13 @@ extension CollectibleScene {
         .textCase(nil)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .contextMenu {
-            ContextMenuItem(
+        .contextMenu(
+            .custom(
                 title: Localized.Nft.saveToPhotos,
-                image: SystemImage.gallery,
+                systemImage: SystemImage.gallery,
                 action: onSelectSetAsAvatar
             )
-        }
+        )
     }
     
     private var assetInfoSectionView: some View {
@@ -115,9 +115,7 @@ extension CollectibleScene {
             
             if model.showContract {
                 ListItemView(title: model.contractTitle, subtitle: model.contractText)
-                    .contextMenu {
-                        ContextMenuCopy(value: model.contractValue)
-                    }
+                    .contextMenu(.copy(value: model.contractValue))
             }
             ListItemView(title: model.tokenIdTitle, subtitle: model.tokenIdText)
         }

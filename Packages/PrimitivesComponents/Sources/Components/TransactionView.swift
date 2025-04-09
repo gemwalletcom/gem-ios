@@ -27,19 +27,22 @@ public struct TransactionView: View {
             subtitleStyleExtra: model.subtitleExtraStyle,
             imageStyle: .asset(assetImage: model.assetImage)
         )
-        .contextMenu {
-            ContextMenuViewURL(title: model.viewOnTransactionExplorerText, url: model.transactionExplorerUrl, image: SystemImage.globe)
-        }
+        .contextMenu(
+            .url(
+                title: model.viewOnTransactionExplorerText,
+                url: model.transactionExplorerUrl
+            )
+        )
     }
 }
 
 // MARK: - Previews
 
 private struct ExplorerMock: ExplorerLinkFetchable {
-   func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
+    func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
-   func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
+   func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
 }
