@@ -108,4 +108,16 @@ final class CurrencyFormatterTests {
         #expect(shortFormatter.string(1_234) == "$1,234")
         #expect(shortFormatter.string(5_000_000) == "$5,000,000")
     }
+    
+    @Test
+    func testNormalizedDouble() {
+        // Basic formatting
+        #expect(currencyFormatterUS.normalizedDouble(from: 1234.56) == 1234.56)
+        #expect(currencyFormatterUS.normalizedDouble(from: 0.01) == 0.01)
+        #expect(currencyFormatterUS.normalizedDouble(from: 0) == 0)
+
+        #expect(currencyFormatterUS.normalizedDouble(from: 0.00000123456) == 0.0000012)
+        #expect(currencyFormatterUS.normalizedDouble(from: 1.999999) == 2.00)
+        #expect(currencyFormatterUS.normalizedDouble(from: 0.0000000000001) == 0)
+    }
 }
