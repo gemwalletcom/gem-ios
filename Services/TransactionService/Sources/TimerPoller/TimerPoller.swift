@@ -24,13 +24,14 @@ actor TimerPoller {
                             currentInterval: currentInterval,
                             recommendedInterval: pollResult.recommendedInterval
                         )
+                        try await Task.sleep(for: currentInterval)
                     } else {
-                        currentInterval = configuration.idleInterval
+                        break
                     }
                 } catch {
-                    currentInterval = configuration.idleInterval
+                    try? await Task.sleep(for: configuration.idleInterval)
+                    break
                 }
-                try? await Task.sleep(for: currentInterval)
             }
         }
     }

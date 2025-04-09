@@ -14,3 +14,7 @@ struct PollResult: Sendable {
         self.recommendedInterval = recommendedInterval
     }
 }
+
+extension PollResult {
+    static let empty: PollResult = .init(isActive: false, recommendedInterval: .zero)
+}

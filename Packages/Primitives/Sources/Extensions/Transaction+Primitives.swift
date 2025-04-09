@@ -38,6 +38,30 @@ extension Transaction {
             }
         }
     }
+
+    public func withState(_ newState: TransactionState) -> Transaction {
+          Transaction(
+              id: id,
+              hash: hash,
+              assetId: assetId,
+              from: from,
+              to: to,
+              contract: contract,
+              type: type,
+              state: newState,
+              blockNumber: blockNumber,
+              sequence: sequence,
+              fee: fee,
+              feeAssetId: feeAssetId,
+              value: value,
+              memo: memo,
+              direction: direction,
+              utxoInputs: utxoInputs,
+              utxoOutputs: utxoOutputs,
+              metadata: metadata,
+              createdAt: createdAt
+          )
+      }
 }
 
 extension Transaction: Identifiable { }
