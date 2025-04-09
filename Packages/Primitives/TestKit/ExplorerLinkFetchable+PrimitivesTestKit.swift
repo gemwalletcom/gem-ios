@@ -13,7 +13,7 @@ public struct MockExplorerLink: ExplorerLinkFetchable {
         )
     }
 
-    public func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
+    public func transactionUrl(chain: Chain, hash: String, swapProvider: String? = .none) -> BlockExplorerLink {
         BlockExplorerLink(
             name: "MockExplorer",
             link: "https://mock.explorer/\(chain.rawValue)/tx/\(hash)"

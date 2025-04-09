@@ -15,16 +15,14 @@ public struct MemoListItemView: View {
         ListItemView(
             title: Localized.Transfer.memo,
             subtitle: subtitle
-        ).contextMenu {
-            ContextMenuCopy(title: Localized.Common.copy, value: memo ?? "")
-        }
+        )
+        .contextMenu( memo.map ({ [.copy(value: $0)] }) ?? [] )
     }
     
     private var subtitle: String {
         MemoFormatter.format(memo: memo)
     }
 }
-
 
 struct MemoFormatter {
     static func format(memo: String?) -> String {

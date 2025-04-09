@@ -11,8 +11,6 @@ import PrimitivesComponents
 struct WalletAssetsList: View {
     let assets: [AssetData]
     let currencyCode: String
-
-    let onCopyAssetAddress: StringAction
     let onHideAsset: AssetIdAction
     let onPinAsset: AssetIdBoolAction
 
@@ -21,13 +19,11 @@ struct WalletAssetsList: View {
     init(
         assets: [AssetData],
         currencyCode: String,
-        onCopyAssetAddress: StringAction,
         onHideAsset: AssetIdAction,
         onPinAsset: AssetIdBoolAction,
         showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
-        self.onCopyAssetAddress = onCopyAssetAddress
         self.currencyCode = currencyCode
         self.onHideAsset = onHideAsset
         self.onPinAsset = onPinAsset
@@ -45,25 +41,21 @@ struct WalletAssetsList: View {
                         currencyCode: currencyCode
                     )
                 )
-                .contextMenu {
-                    ContextMenuItem(
-                        title: Localized.Wallet.copyAddress,
-                        image: SystemImage.copy
-                    ) {
-                        onCopyAssetAddress?(asset.account.address)
-                    }
-                    ContextMenuPin(
-                        isPinned: asset.metadata.isPinned
-                    ) {
-                        onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
-                    }
-                    ContextMenuItem(
-                        title: Localized.Common.hide,
-                        image: SystemImage.hide
-                    ) {
-                        onHideAsset?(asset.asset.id)
-                    }
-                }
+                .contextMenu(
+                    [
+                        .copy(
+                            title: Localized.Wallet.copyAddress,
+                            value: asset.account.address
+                        ),
+                        .pin(
+                            isPinned: asset.metadata.isPinned,
+                            onPin: {
+                                onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
+                            }
+                        ),
+                        .hide({ onHideAsset?(asset.asset.id) })
+                    ]
+                )
                 .swipeActions(edge: .trailing) {
                     Button(Localized.Common.hide, role: .destructive) {
                         onHideAsset?(asset.asset.id)

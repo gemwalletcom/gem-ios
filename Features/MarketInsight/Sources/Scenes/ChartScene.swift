@@ -78,11 +78,9 @@ public struct ChartScene: View {
                             ) {
                                 openURL(url)
                             }
-                            .contextMenu {
-                                if let value = link.value {
-                                    ContextMenuCopy(value: value)
-                                }
-                            }
+                            .contextMenu(
+                                link.value.map { [.copy(value: $0)] } ?? []
+                            )
                         } else {
                             ListItemView(
                                 title: link.title,

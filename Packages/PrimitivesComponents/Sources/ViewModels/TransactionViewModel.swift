@@ -283,7 +283,11 @@ public struct TransactionViewModel: Sendable {
     }
 
     private var transactionLink: BlockExplorerLink {
-        explorerService.transactionUrl(chain: assetId.chain, hash: transaction.transaction.hash)
+        explorerService.transactionUrl(
+            chain: assetId.chain,
+            hash: transaction.transaction.hash,
+            swapProvider: transaction.transaction.metadata?.swap?.provider
+        )
     }
 
     private var addressLink: BlockExplorerLink {
