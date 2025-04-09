@@ -47,7 +47,7 @@ public struct AssetImageView: View {
         if let placeholderImage = assetImage.placeholder {
             placeholderImage
                 .resizable()
-                .scaledToFill()
+                .scaledToFit()
                 .cornerRadius(cornerRadius)
         } else if let tokenType = assetImage.type {
             GeometryReader { geo in
