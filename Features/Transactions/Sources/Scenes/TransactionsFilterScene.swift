@@ -101,7 +101,7 @@ extension TransactionsFilterScene {
                     chainsFilterModel: ChainsFilterViewModel(
                         chains: [.aptos, .arbitrum]
                     ),
-                    transactionTypesFilter: TransacionTypesFilterViewModel(
+                    transactionTypesFilter: TransactionTypesFilterViewModel(
                         types: [.swap, .stakeDelegate]
                     )
                 )
