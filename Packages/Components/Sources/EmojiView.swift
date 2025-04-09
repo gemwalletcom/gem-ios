@@ -19,7 +19,7 @@ public struct EmojiView: View {
                     .fill(color)
                 
                 Text(emoji)
-                    .font(.system(size: geometry.size.width * 0.65))
+                    .font(.system(size: geometry.size.width * 0.6))
                     .minimumScaleFactor(0.01)
                     .multilineTextAlignment(.center)
                     .scaledToFit()
