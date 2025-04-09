@@ -144,7 +144,7 @@ public struct Emoji {
     }
     
     public enum FeeRate: String {
-        case fast = "🔥"
+        case fast = "🚀"
         case normal = "🔋"
         case slow = "🪫"
     }
