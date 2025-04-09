@@ -14,4 +14,8 @@ final class WCConnectionsInteractor: Sendable {
     var sessionRequestStream: AsyncStream<(request: Request, context: VerifyContext?)> {
         WalletKit.instance.sessionRequestPublisher.asAsyncStream()
     }
+    
+    var sessions: [Session] {
+        WalletKit.instance.getSessions()
+    }
 }

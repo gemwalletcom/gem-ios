@@ -29,11 +29,6 @@ struct PriceAlertsNavigationView: View {
                 }
             }
         }
-        .onChange(of: isPresentingAddAsset) { _, _ in
-            Task {
-                await model.fetch()
-            }
-        }
         .sheet(isPresented: $isPresentingAddAsset) {
             AddAssetPriceAlertsNavigationStack(
                 model: AddAssetPriceAlertsViewModel(

@@ -8,7 +8,6 @@ import Localization
 
 // TODO: - remove explorerService dependency get address link in init
 public struct AddressListItemView: View {
-    
     private let model: AddressListItemViewModel
 
     public init(
@@ -23,9 +22,11 @@ public struct AddressListItemView: View {
             subtitle: model.subtitle,
             assetImage: model.assetImage
         )
-        .contextMenu {
-            ContextMenuCopy(title: Localized.Common.copy, value: model.account.address)
-            ContextMenuViewURL(title: model.addressExplorerText, url: model.addressExplorerUrl, image: SystemImage.globe)
-        }
+        .contextMenu(
+            [
+                .copy(value: model.account.address),
+                .url(title: model.addressExplorerText, url: model.addressExplorerUrl)
+            ]
+        )
     }
 }
