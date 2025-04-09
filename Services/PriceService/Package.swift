@@ -11,6 +11,10 @@ let package = Package(
         .library(
             name: "PriceService",
             targets: ["PriceService"]),
+        .library(
+            name: "PriceServiceTestKit",
+            targets: ["PriceServiceTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -27,9 +31,21 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "PriceServiceTestKit",
+            dependencies: [
+                "PriceService",
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "StoreTestKit", package: "Store"),
+                "Primitives",
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "PriceServiceTests",
-            dependencies: ["PriceService"]
+            dependencies: [
+                "PriceService",
+            ]
         ),
     ]
 )

@@ -41,4 +41,8 @@ public struct ConnectionsViewModel: Sendable {
     func disconnect(connection: WalletConnection) async throws {
         try await service.disconnect(session: connection.session)
     }
+    
+    func updateSessions() {
+        service.updateSessions()
+    }
 }

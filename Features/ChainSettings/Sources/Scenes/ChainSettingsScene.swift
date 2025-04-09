@@ -32,9 +32,9 @@ public struct ChainSettingsScene: View {
                     ) { _ in
                         onSelectNode(nodeModel.chainNode)
                     }
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: nodeModel.chainNode.node.url)
-                    }
+                    .contextMenu(
+                        .copy(value: nodeModel.chainNode.node.url)
+                    )
                     .if(model.canDelete(node: nodeModel.chainNode)) {
                         $0.swipeActions(edge: .trailing) {
                             Button(Localized.Common.delete, role: .destructive) {

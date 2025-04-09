@@ -18,13 +18,9 @@ public struct DeveloperScene: View {
         List {
             Section("Device") {
                 ListItemView(title: "Device ID", subtitle: model.deviceId)
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: model.deviceId)
-                    }
+                    .contextMenu(.copy(value: model.deviceId))
                 ListItemView(title: "Device Token", subtitle: model.deviceToken)
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: model.deviceToken)
-                    }
+                    .contextMenu(.copy(value: model.deviceToken))
             }
             Section("Networking") {
                 NavigationCustomLink(

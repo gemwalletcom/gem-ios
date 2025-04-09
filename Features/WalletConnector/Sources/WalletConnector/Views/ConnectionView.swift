@@ -3,6 +3,7 @@
 import SwiftUI
 import Components
 import Style
+import PrimitivesComponents
 
 public struct ConnectionView: View {
     public let model: WalletConnectionViewModel
@@ -27,10 +28,6 @@ public struct ConnectionView: View {
                 }
             }
         }
-        .contextMenu {
-            if let url = model.url, let host = model.host {
-                ContextMenuViewURL(title: host, url: url, image: SystemImage.network)
-            }
-        }
+        .contextMenu(model.urlType.map({ [$0] }) ?? [])
     }
 }
