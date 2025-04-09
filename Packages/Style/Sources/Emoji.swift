@@ -142,6 +142,12 @@ public struct Emoji {
         case pumpkin = "🎃"
         case package = "📦"
     }
+    
+    public enum FeeRate: String {
+        case slow = "🪫"
+        case normal = "🔋"
+        case fast = "🚀"
+    }
 }
 
 // MARK: - Previews
