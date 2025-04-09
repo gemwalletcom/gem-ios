@@ -27,6 +27,15 @@ struct StakeViewModelTests {
         try assetStore.add(assets: [.mock(asset: .mockTron(), properties: .mock(stakingApr: 0))])
         #expect(model.stakeAprValue == .empty)
     }
+    
+    @Test
+    @MainActor
+    func testLockTimeValue() throws {
+        let mock = StakeViewModel.mock()
+        let model = mock.model
+
+        #expect(model.lockTimeValue == "14 days")
+    }
 }
 
 extension StakeViewModel {
