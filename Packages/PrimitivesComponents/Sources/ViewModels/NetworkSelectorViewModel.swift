@@ -25,6 +25,7 @@ public struct NetworkSelectorViewModel: SelectableSheetViewable {
     public var clearButtonTitle: String { Localized.Filter.clear }
     public var doneButtonTitle: String { Localized.Common.done }
     public var noResultsTitle: String? { Localized.Common.noResultsFound }
+    public var confirmButtonTitle: String? { Localized.Transfer.confirm }
 }
 
 extension NetworkSelectorViewModel: ItemFilterable {

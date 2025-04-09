@@ -49,6 +49,7 @@ public struct TransactionsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
+                onConfirm: onConfirmSelection(chains:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0)) }
             )
         }
@@ -56,7 +57,8 @@ public struct TransactionsFilterScene: View {
             SelectableSheet(
                 model: model.typesModel,
                 onFinishSelection: onFinishSelection(types:),
-                listContent: { 
+                onConfirm: onConfirmSelection(types:),
+                listContent: {
                     ListItemView(title: TransactionTypeViewModel(type: $0).title)
                 }
             )
@@ -75,9 +77,19 @@ extension TransactionsFilterScene {
     private func onSelectDone() {
         dismiss()
     }
+    
+    private func onConfirmSelection(chains: [Chain]) {
+        onFinishSelection(chains: chains)
+        dismiss()
+    }
 
     private func onFinishSelection(chains: [Chain]) {
         model.chainsFilter.selectedChains = chains
+    }
+    
+    private func onConfirmSelection(types: [TransactionType]) {
+        onFinishSelection(types: types)
+        dismiss()
     }
 
     private func onFinishSelection(types: [TransactionType]) {

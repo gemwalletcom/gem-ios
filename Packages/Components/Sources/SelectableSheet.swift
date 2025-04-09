@@ -7,6 +7,7 @@ public protocol SelectableSheetViewable: SelectableListAdoptable, ItemFilterable
     var cancelButtonTitle: String { get }
     var clearButtonTitle: String { get }
     var doneButtonTitle: String { get }
+    var confirmButtonTitle: String? { get }
 
     var isSearchable: Bool { get }
 }
@@ -19,20 +20,23 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
     @State private var model: ViewModel
     private let onFinishSelection: FinishSelection?
     private let listContent: ListContent
+    private let onConfirmAction: FinishSelection?
 
     public init(
         model: ViewModel,
         onFinishSelection: FinishSelection? = nil,
+        onConfirm: FinishSelection? = nil,
         listContent: @escaping ListContent
     ) {
         _model = State(initialValue: model)
         self.onFinishSelection = onFinishSelection
+        self.onConfirmAction = onConfirm
         self.listContent = listContent
     }
 
     public var body: some View {
         NavigationStack {
-            Group {
+            VStack {
                 if model.isSearchable {
                     SearchableSelectableListView(
                         model: $model,
@@ -45,6 +49,12 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                         onFinishSelection: onFinishSelection,
                         listContent: listContent
                     )
+                }
+                if let confirmButtonTitle = model.confirmButtonTitle, onConfirmAction != nil {
+                    Spacer()
+                    Button(confirmButtonTitle, action: onConfirm)
+                    .frame(maxWidth: .scene.button.maxWidth)
+                    .buttonStyle(.blue())
                 }
             }
             .navigationTitle(model.title)
@@ -84,6 +94,11 @@ extension SelectableSheet {
 
     private func onDone() {
         onFinishSelection?(Array(model.selectedItems))
+        dismiss()
+    }
+    
+    private func onConfirm() {
+        onConfirmAction?(Array(model.selectedItems))
         dismiss()
     }
 
