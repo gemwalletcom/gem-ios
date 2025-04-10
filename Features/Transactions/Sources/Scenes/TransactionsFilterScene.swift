@@ -48,16 +48,14 @@ public struct TransactionsFilterScene: View {
         .sheet(isPresented: $isPresentingChains) {
             SelectableSheet(
                 model: model.networksModel,
-                onFinishSelection: onFinishSelection(chains:),
-                onConfirm: onConfirmSelection(chains:),
+                onFinishSelection: onFinishSelection(value:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0)) }
             )
         }
         .sheet(isPresented: $isPresentingTypes) {
             SelectableSheet(
                 model: model.typesModel,
-                onFinishSelection: onFinishSelection(types:),
-                onConfirm: onConfirmSelection(types:),
+                onFinishSelection: onFinishSelection(value:),
                 listContent: {
                     ListItemView(title: TransactionTypeViewModel(type: $0).title)
                 }
@@ -77,23 +75,19 @@ extension TransactionsFilterScene {
     private func onSelectDone() {
         dismiss()
     }
-    
-    private func onConfirmSelection(chains: [Chain]) {
-        onFinishSelection(chains: chains)
-        dismiss()
+
+    private func onFinishSelection(value: SelectionResult<Chain>) {
+        model.chainsFilter.selectedChains = value.items
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
-    private func onFinishSelection(chains: [Chain]) {
-        model.chainsFilter.selectedChains = chains
-    }
-    
-    private func onConfirmSelection(types: [TransactionType]) {
-        onFinishSelection(types: types)
-        dismiss()
-    }
-
-    private func onFinishSelection(types: [TransactionType]) {
-        model.transactionTypesFilter.selectedTypes = types
+    private func onFinishSelection(value: SelectionResult<TransactionType>) {
+        model.transactionTypesFilter.selectedTypes = value.items
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
     private func onSelectChainsFilter() {

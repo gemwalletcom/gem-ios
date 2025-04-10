@@ -7,30 +7,28 @@ public protocol SelectableSheetViewable: SelectableListAdoptable, ItemFilterable
     var cancelButtonTitle: String { get }
     var clearButtonTitle: String { get }
     var doneButtonTitle: String { get }
-    var confirmButtonTitle: String? { get }
+    var confirmButtonTitle: String { get }
 
     var isSearchable: Bool { get }
 }
 
 public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>: View {
     public typealias ListContent = (ViewModel.Item) -> Content
-    public typealias FinishSelection = (([ViewModel.Item]) -> Void)
+    public typealias FinishSelection = ((SelectionResult<ViewModel.Item>) -> Void)
+    
     @Environment(\.dismiss) var dismiss
 
     @State private var model: ViewModel
-    private let onFinishSelection: FinishSelection?
+    private let onFinishSelection: FinishSelection
     private let listContent: ListContent
-    private let onConfirmAction: FinishSelection?
 
     public init(
         model: ViewModel,
-        onFinishSelection: FinishSelection? = nil,
-        onConfirm: FinishSelection? = nil,
+        onFinishSelection: @escaping FinishSelection,
         listContent: @escaping ListContent
     ) {
         _model = State(initialValue: model)
         self.onFinishSelection = onFinishSelection
-        self.onConfirmAction = onConfirm
         self.listContent = listContent
     }
 
@@ -40,22 +38,20 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                 if model.isSearchable {
                     SearchableSelectableListView(
                         model: $model,
-                        onFinishSelection: onFinishSelection,
+                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
                         listContent: listContent
                     )
                 } else {
                     SelectableListView(
                         model: $model,
-                        onFinishSelection: onFinishSelection,
+                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
                         listContent: listContent
                     )
                 }
-                if let confirmButtonTitle = model.confirmButtonTitle, onConfirmAction != nil {
-                    Spacer()
-                    Button(confirmButtonTitle, action: onConfirm)
+                Spacer()
+                Button(model.confirmButtonTitle, action: onConfirm)
                     .frame(maxWidth: .scene.button.maxWidth)
                     .buttonStyle(.blue())
-                }
             }
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
@@ -93,16 +89,21 @@ extension SelectableSheet {
     }
 
     private func onDone() {
-        onFinishSelection?(Array(model.selectedItems))
+        onFinish(items: Array(model.selectedItems), isConfirmed: false)
         dismiss()
     }
     
     private func onConfirm() {
-        onConfirmAction?(Array(model.selectedItems))
+        onFinish(items: Array(model.selectedItems), isConfirmed: true)
         dismiss()
     }
 
     private func onReset() {
         model.reset()
+    }
+    
+    private func onFinish(items: [ViewModel.Item], isConfirmed: Bool) {
+        let value = SelectionResult(items: items, isConfirmed: isConfirmed)
+        onFinishSelection(value)
     }
 }
