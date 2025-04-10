@@ -13,7 +13,7 @@ public final class ChainServiceFactory: Sendable {
     }
     
     public func service(for chain: Chain) -> any ChainServiceable {
-        return ChainService.service(
+        ChainService.service(
             chain: chain,
             with: nodeProvider.node(for: chain)
         )

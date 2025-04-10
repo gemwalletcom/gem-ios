@@ -46,8 +46,9 @@ let package = Package(
         .testTarget(
             name: "StakingTests",
             dependencies: [
-                "Staking",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StakeServiceTestKit", package: "StakeService"),
+                "Staking"
             ],
             path: "Tests"
         ),
