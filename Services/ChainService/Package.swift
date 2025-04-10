@@ -34,6 +34,7 @@ let package = Package(
         .target(
             name: "ChainServiceTestKit",
             dependencies: [
+                "ChainService",
                 "Primitives",
                 "Blockchain",
             ],
