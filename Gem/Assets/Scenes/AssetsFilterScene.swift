@@ -44,6 +44,7 @@ struct AssetsFilterScene: View {
             SelectableSheet(
                 model: model.networksModel,
                 onFinishSelection: onFinishSelection(chains:),
+                onConfirm: onConfirmSelection(chains:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0))}
             )
         }
@@ -59,6 +60,11 @@ extension AssetsFilterScene {
     }
 
     private func onSelectDone() {
+        dismiss()
+    }
+    
+    private func onConfirmSelection(chains: [Chain]) {
+        onFinishSelection(chains: chains)
         dismiss()
     }
 
