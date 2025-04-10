@@ -9,14 +9,14 @@ import PrimitivesTestKit
 
 @testable import Staking
 
+@MainActor
 struct StakeViewModelTests {
 
     @Test
-    @MainActor
     func testAprValue() throws {
-        let mock = StakeViewModel.mock()
-        let model = mock.model
-        let assetStore = mock.assetStore
+        let mocks = mocks()
+        let model = mocks.model
+        let assetStore = mocks.assetStore
 
         try assetStore.add(assets: [.mock(asset: .mockTron(), properties: .mock(stakingApr: 13.5))])
         #expect(model.stakeAprValue == "13.50%")
@@ -29,17 +29,18 @@ struct StakeViewModelTests {
     }
     
     @Test
-    @MainActor
     func testLockTimeValue() throws {
-        let mock = StakeViewModel.mock()
-        let model = mock.model
-
-        #expect(model.lockTimeValue == "14 days")
+        #expect(mocks().model.lockTimeValue == "14 days")
     }
-}
-
-extension StakeViewModel {
-    static func mock() -> (model: StakeViewModel, assetStore: AssetStore) {
+    
+    @Test
+    func minimumStakeAmount() throws {
+        #expect(mocks().model.minAmountValue == "1.00 TRX")
+    }
+    
+    // MARK: - Private methods
+    
+    private func mocks() -> (model: StakeViewModel, assetStore: AssetStore) {
         let db: DB = .mock()
         let assetStore: AssetStore = .mock(db: db)
         let stakeStore: StakeStore = .mock(db: db)
