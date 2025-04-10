@@ -5,6 +5,8 @@ import Style
 import Localization
 import Preferences
 import GemstonePrimitives
+import Components
+import PrimitivesComponents
 
 public struct AboutUsViewModel {
     private let preferences: ObservablePreferences
@@ -30,7 +32,7 @@ public struct AboutUsViewModel {
         let number = Bundle.main.buildVersionNumber
         return "\(version) (\(number))"
     }
-    var versionTextImage: Image { Images.Settings.version }
+    var versionTextImage: AssetImage { AssetImage.image(Images.Settings.version) }
 
     var contextDevTitle: String {
         if preferences.isDeveloperEnabled {
@@ -40,6 +42,18 @@ public struct AboutUsViewModel {
         }
     }
     var contextDeveloperImage: String { SystemImage.info }
+
+
+    var contextMenuItems: [ContextMenuItemType] {
+        [
+            .copy(value: versionTextValue),
+            .custom(
+                title: contextDevTitle,
+                systemImage: contextDeveloperImage,
+                action: toggleDeveloperMode
+            )
+        ]
+    }
 }
 
 extension AboutUsViewModel {

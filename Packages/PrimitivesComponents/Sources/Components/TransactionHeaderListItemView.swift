@@ -17,13 +17,17 @@ public struct TransactionHeaderListItemView: View {
     }
 
     public var body: some View {
-        HStack(spacing: .zero) {
-            Spacer(minLength: 0)
-            TransactionHeaderView(type: headerType)
-            Spacer(minLength: 0)
-        }
-        .if(showClearHeader) {
-            $0.cleanListRow()
+        if showClearHeader {
+            Section {} header: {
+                TransactionHeaderView(type: headerType)
+                    .padding(.top, .small + .space2)
+                    .padding(.bottom, .small + .space4)
+            }
+            .cleanListRow()
+        } else {
+            Section {
+                TransactionHeaderView(type: headerType)
+            }
         }
     }
 }

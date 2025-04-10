@@ -5,6 +5,7 @@ import Foundation
 import Style
 import Localization
 import SwiftUI
+import Components
 
 public struct FeeRateViewModel: Identifiable {
     static let formatter = CurrencyFormatter()
@@ -28,9 +29,12 @@ public struct FeeRateViewModel: Identifiable {
 
     public var id: String { feeRate.priority.rawValue }
 
-    public var image: Image? {
-        //TODO Specify image for each priority type
-        .none
+    public var emoji: String {
+        switch feeRate.priority {
+        case .fast: Emoji.FeeRate.fast.rawValue
+        case .normal: Emoji.FeeRate.normal.rawValue
+        case .slow: Emoji.FeeRate.slow.rawValue
+        }
     }
     
     public var title: String {

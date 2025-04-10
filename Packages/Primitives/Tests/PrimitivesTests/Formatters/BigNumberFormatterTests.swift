@@ -6,12 +6,11 @@ import BigInt
 final class BigNumberFormatterTests {
 
     let formatter = BigNumberFormatter.standard
-    let formatterRU_UA = BigNumberFormatter(locale: Locale(identifier: "ru_UA"))
 
     @Test
     func testFromString() {
         #expect(throws: Never.self) {
-            let result = try formatter.number(from: "0.00012317", decimals: 8)
+            let result = try self.formatter.number(from: "0.00012317", decimals: 8)
             #expect(result == 12317)
         }
     }
@@ -24,8 +23,9 @@ final class BigNumberFormatterTests {
 
     @Test
     func testFromNumberEULocalization() {
+        let formatter = BigNumberFormatter(locale: Locale.RU_UA)
         #expect(throws: Never.self) {
-            let result = try formatterRU_UA.number(from: "0,12317", decimals: 8)
+            let result = try formatter.number(from: "0,12317", decimals: 8)
             #expect(result == 12317000)
         }
     }

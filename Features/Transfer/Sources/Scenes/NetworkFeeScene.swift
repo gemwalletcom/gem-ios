@@ -19,22 +19,28 @@ public struct NetworkFeeScene: View {
         List {
             Section {
                 ForEach(model.feeRatesViewModels) { feeRate in
-                    ListItemSelectionView(
-                        title: feeRate.title,
-                        titleExtra: feeRate.valueText,
-                        titleTag: .none,
-                        titleTagType: .none,
-                        subtitle: .none,
-                        subtitleExtra: .none,
-                        image: feeRate.image,
-                        imageSize: 28,
-                        value: feeRate.feeRate.priority,
-                        selection: model.priority,
-                        action: {
-                            model.priority = $0
-                            dismiss()
-                        }
-                    )
+                    HStack {
+                        EmojiView(
+                            color: Colors.grayBackground,
+                            emoji: feeRate.emoji
+                        )
+                        .frame(width: Sizing.image.asset, height: Sizing.image.asset)
+
+                        ListItemSelectionView(
+                            title: feeRate.title,
+                            titleExtra: feeRate.valueText,
+                            titleTag: .none,
+                            titleTagType: .none,
+                            subtitle: .none,
+                            subtitleExtra: .none,
+                            value: feeRate.feeRate.priority,
+                            selection: model.priority,
+                            action: {
+                                model.priority = $0
+                                dismiss()
+                            }
+                        )
+                    }
                 }
             } footer: {
                 Text(model.infoIcon)

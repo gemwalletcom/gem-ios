@@ -60,7 +60,7 @@ public struct TransactionScene: View {
                         }
                     }
 
-                    if let recipientAddressViewModel = model.recipienAddressViewModel {
+                    if let recipientAddressViewModel = model.recipientAddressViewModel {
                         AddressListItemView(model: recipientAddressViewModel)
                     }
 
@@ -89,6 +89,8 @@ public struct TransactionScene: View {
                     )
                 }
             }
+            .contentMargins([.top], .small, for: .scrollContent)
+            .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .toolbar {

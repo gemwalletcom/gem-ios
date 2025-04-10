@@ -30,18 +30,9 @@ public struct AboutUsScene: View {
                 ListItemView(
                     title: model.versionTextTitle,
                     subtitle: model.versionTextValue,
-                    image: model.versionTextImage
+                    imageStyle: .settings(assetImage: model.versionTextImage)
                 )
-                .contextMenu {
-                    ContextMenuCopy(
-                        value: model.versionTextValue
-                    )
-                    ContextMenuItem(
-                        title: model.contextDevTitle,
-                        image: model.contextDeveloperImage,
-                        action: model.toggleDeveloperMode
-                    )
-                }
+                .contextMenu(model.contextMenuItems)
             }
         }
         .listStyle(.insetGrouped)

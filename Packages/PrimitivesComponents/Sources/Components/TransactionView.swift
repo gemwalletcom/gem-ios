@@ -13,35 +13,36 @@ public struct TransactionView: View {
     }
 
     public var body: some View {
-        HStack {
-            AssetImageView(assetImage: model.assetImage)
-            ListItemView(
-                title: model.title,
-                titleStyle: model.titleTextStyle,
-                titleTag: model.titleTag,
-                titleTagStyle: model.titleTagStyle,
-                titleTagType: model.titleTagType,
-                titleExtra: model.titleExtra,
-                titleStyleExtra: model.titleTextStyleExtra,
-                subtitle: model.subtitle,
-                subtitleStyle: model.subtitleTextStyle,
-                subtitleExtra: model.subtitleExtra,
-                subtitleStyleExtra: model.subtitleExtraStyle
+        ListItemView(
+            title: model.title,
+            titleStyle: model.titleTextStyle,
+            titleTag: model.titleTag,
+            titleTagStyle: model.titleTagStyle,
+            titleTagType: model.titleTagType,
+            titleExtra: model.titleExtra,
+            titleStyleExtra: model.titleTextStyleExtra,
+            subtitle: model.subtitle,
+            subtitleStyle: model.subtitleTextStyle,
+            subtitleExtra: model.subtitleExtra,
+            subtitleStyleExtra: model.subtitleExtraStyle,
+            imageStyle: .asset(assetImage: model.assetImage)
+        )
+        .contextMenu(
+            .url(
+                title: model.viewOnTransactionExplorerText,
+                url: model.transactionExplorerUrl
             )
-        }
-        .contextMenu {
-            ContextMenuViewURL(title: model.viewOnTransactionExplorerText, url: model.transactionExplorerUrl, image: SystemImage.globe)
-        }
+        )
     }
 }
 
 // MARK: - Previews
 
 private struct ExplorerMock: ExplorerLinkFetchable {
-   func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
+    func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
-   func transactionUrl(chain: Chain, hash: String) -> BlockExplorerLink {
+   func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
 }

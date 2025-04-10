@@ -5,6 +5,7 @@ import Foundation
 import Localization
 import Style
 import PrimitivesComponents
+import Components
 
 public struct TransactionsFilterTypeViewModel: FilterTypeRepresentable {
     private let type: TransactionsFilterType
@@ -25,5 +26,5 @@ public struct TransactionsFilterTypeViewModel: FilterTypeRepresentable {
     }
 
     public var title: String { Localized.Filter.types }
-    public var image: Image { Images.System.textPageFill }
+    public var image: AssetImage { AssetImage.image(Images.System.textPageFill) }
 }

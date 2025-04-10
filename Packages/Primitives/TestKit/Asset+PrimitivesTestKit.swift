@@ -30,6 +30,16 @@ public extension Asset {
         )
     }
     
+    static func mockBNB() -> Asset {
+        .mock(
+            id: AssetId(chain: .smartChain, tokenId: .none),
+            name: "BNB",
+            symbol: "BNB",
+            decimals: 18,
+            type: .native
+        )
+    }
+    
     static func mockEthereumUSDT() -> Asset {
         .mock(
             id: AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7"),

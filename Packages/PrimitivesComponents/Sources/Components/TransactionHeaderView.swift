@@ -20,21 +20,24 @@ public struct TransactionHeaderView: View {
     }
     
     public var body: some View {
-        switch type {
-        case .amount(let title, let subtitle):
-            AmountView(
-                title: title,
-                subtitle: subtitle
-            )
-        case .swap(let from, let to):
-            SwapAmountView(from: from, to: to)
-        case .nft(let name, let image):
-            VStack(spacing: .medium) {
-                NftImageView(assetImage: image)
-                    .frame(width: .image.large, height: .image.large)
-                    .cornerRadius(.image.large/4)
-                Text(name)
+        VStack(alignment: .center) {
+            switch type {
+            case .amount(let title, let subtitle):
+                AmountView(
+                    title: title,
+                    subtitle: subtitle
+                )
+            case .swap(let from, let to):
+                SwapAmountView(from: from, to: to)
+            case .nft(let name, let image):
+                VStack(spacing: .medium) {
+                    NftImageView(assetImage: image)
+                        .frame(width: .image.large, height: .image.large)
+                        .cornerRadius(.image.large/4)
+                    Text(name)
+                }
             }
         }
+        .frame(maxWidth: .infinity)
     }
 }
