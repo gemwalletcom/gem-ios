@@ -60,7 +60,7 @@ public struct TransactionScene: View {
                         }
                     }
 
-                    if let recipientAddressViewModel = model.recipienAddressViewModel {
+                    if let recipientAddressViewModel = model.recipientAddressViewModel {
                         AddressListItemView(model: recipientAddressViewModel)
                     }
 

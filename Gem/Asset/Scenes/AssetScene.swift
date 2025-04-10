@@ -131,7 +131,7 @@ struct AssetScene: View {
                     }
                 }
             } else if model.assetDataModel.isStakeEnabled {
-                stakeView
+                stakeViewEmpty
             }
 
             if !transactions.isEmpty {
@@ -229,6 +229,23 @@ extension AssetScene {
             .accessibilityIdentifier("stake")) {
                 onSelectHeader(.stake)
             }
+    }
+    
+    private var stakeViewEmpty: some View {
+        NavigationCustomLink(
+            with: HStack {
+                EmojiView(color: Colors.grayVeryLight, emoji: "💰")
+                    .frame(width: Sizing.image.asset, height: Sizing.image.asset)
+                ListItemView(
+                    title: Localized.Wallet.stake,
+                    subtitle: model.stakeAprText,
+                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                )
+            }
+            .accessibilityIdentifier("stake")
+        ) {
+            onSelectHeader(.stake)
+        }
     }
 }
 
