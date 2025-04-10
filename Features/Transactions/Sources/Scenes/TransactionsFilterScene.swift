@@ -48,15 +48,15 @@ public struct TransactionsFilterScene: View {
         .sheet(isPresented: $isPresentingChains) {
             SelectableSheet(
                 model: model.networksModel,
-                onFinishSelection: onFinishSelection(chains:),
+                onFinishSelection: onFinishSelection(value:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0)) }
             )
         }
         .sheet(isPresented: $isPresentingTypes) {
             SelectableSheet(
                 model: model.typesModel,
-                onFinishSelection: onFinishSelection(types:),
-                listContent: { 
+                onFinishSelection: onFinishSelection(value:),
+                listContent: {
                     ListItemView(title: TransactionTypeViewModel(type: $0).title)
                 }
             )
@@ -76,12 +76,18 @@ extension TransactionsFilterScene {
         dismiss()
     }
 
-    private func onFinishSelection(chains: [Chain]) {
-        model.chainsFilter.selectedChains = chains
+    private func onFinishSelection(value: SelectionResult<Chain>) {
+        model.chainsFilter.selectedChains = value.items
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
-    private func onFinishSelection(types: [TransactionType]) {
-        model.transactionTypesFilter.selectedTypes = types
+    private func onFinishSelection(value: SelectionResult<TransactionType>) {
+        model.transactionTypesFilter.selectedTypes = value.items
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
     private func onSelectChainsFilter() {
@@ -101,7 +107,7 @@ extension TransactionsFilterScene {
                     chainsFilterModel: ChainsFilterViewModel(
                         chains: [.aptos, .arbitrum]
                     ),
-                    transactionTypesFilter: TransacionTypesFilterViewModel(
+                    transactionTypesFilter: TransactionTypesFilterViewModel(
                         types: [.swap, .stakeDelegate]
                     )
                 )
