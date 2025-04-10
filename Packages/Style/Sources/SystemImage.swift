@@ -44,6 +44,7 @@ public struct SystemImage {
     public static let textPageFill = "text.page.fill"
     public static let emoji = "face.smiling"
     public static let pencil = "pencil"
+    public static let pencilLine = "pencil.line"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
