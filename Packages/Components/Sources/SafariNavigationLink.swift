@@ -4,7 +4,7 @@ import Foundation
 import SafariServices
 import SwiftUI
 
-public struct SafariLink<Content: View>: View {
+public struct SafariNavigationLink<Content: View>: View {
     let url: URL
     let content: () -> Content
 
@@ -19,7 +19,11 @@ public struct SafariLink<Content: View>: View {
         Button(action: {
             isPresented = true
         }) {
-            content()
+            HStack {
+                content()
+                    .layoutPriority(1)
+                NavigationLink.empty
+            }
         }
         .sheet(isPresented: $isPresented) {
             SFSafariView(url: url)

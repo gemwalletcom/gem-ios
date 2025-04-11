@@ -14,13 +14,13 @@ public struct AboutUsScene: View {
     public var body: some View {
         List {
             Section {
-                SafariLink(url: model.termsOfServiceURL) {
+                SafariNavigationLink(url: model.termsOfServiceURL) {
                     ListItemView(title: model.termsOfServiceTitle)
                 }
-                SafariLink(url: model.privacyPolicyURL) {
+                SafariNavigationLink(url: model.privacyPolicyURL) {
                     ListItemView(title: model.privacyPolicyTitle)
                 }
-                SafariLink(url: model.websiteURL) {
+                SafariNavigationLink(url: model.websiteURL) {
                     ListItemView(title: model.websiteTitle)
                 }
             }

@@ -71,7 +71,7 @@ public struct ChartScene: View {
                 Section {
                     ForEach(priceDataModel.marketValues, id: \.title) { link in
                         if let url = link.url {
-                            SafariLink(url: url) {
+                            SafariNavigationLink(url: url) {
                                 ListItemView(title: link.title, subtitle: link.subtitle)
                             }
                             .contextMenu(

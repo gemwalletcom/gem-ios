@@ -125,7 +125,7 @@ struct AssetScene: View {
                     }
 
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
-                        SafariLink(url: url) {
+                        SafariNavigationLink(url: url) {
                             ListItemView(
                                 title: Localized.Asset.Balances.reserved,
                                 subtitle: model.assetDataModel.reservedBalanceTextWithSymbol
