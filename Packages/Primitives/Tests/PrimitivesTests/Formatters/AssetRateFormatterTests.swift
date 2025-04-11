@@ -13,7 +13,7 @@ final class AssetRateFormatterTests {
         
         #expect(throws: Never.self) {
             let amount = try formatter.rate(fromAsset: fromAsset, toAsset: toAsset, fromValue: BigInt(100), toValue: BigInt(100))
-            #expect(amount == "1 BTC ≈ 100 USDT")
+            #expect(amount == "1 BTC ≈ 100.00 USDT")
         }
         
         #expect(throws: Never.self) {
@@ -28,7 +28,7 @@ final class AssetRateFormatterTests {
                 fromValue: BigInt(1000000000000000000),
                 toValue: BigInt(997365015742592220)
             )
-            #expect(amount == "1 ETH ≈ 1 BNB")
+            #expect(amount == "1 ETH ≈ 1.00 BNB")
         }
     }
 }
