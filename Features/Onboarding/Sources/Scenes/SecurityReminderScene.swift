@@ -32,11 +32,11 @@ struct SecurityReminderScene: View {
                 }
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
-            .listSectionSpacing(.compact)
+            .listSectionSpacing(.custom(.medium))
             
             Spacer()
             
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: .medium) {
                 Toggle(isOn: $model.isConfirmed) {
                     OnboardingHeaderTitle(title: model.checkMarkTitle, alignment: .leading)
                 }
