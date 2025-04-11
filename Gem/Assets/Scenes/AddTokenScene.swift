@@ -102,7 +102,9 @@ extension AddTokenScene {
                 }
                 if let url = asset.explorerUrl, let text = asset.explorerText {
                     Section {
-                        NavigationOpenLink(url: url, with: ListItemView(title: text))
+                        SafariNavigationLink(url: url) {
+                            ListItemView(title: text)
+                        }
                     }
                 }
             case .error(let error):
