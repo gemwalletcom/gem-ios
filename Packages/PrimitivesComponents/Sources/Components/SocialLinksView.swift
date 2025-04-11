@@ -11,15 +11,14 @@ public struct SocialLinksView: View {
     }
 
     public var body: some View {
-        ForEach(model.links) {
-            NavigationOpenLink(
-                url: $0.url,
-                with: ListItemView(
-                    title: $0.title,
-                    subtitle: $0.subtitle,
-                    imageStyle: .settings(assetImage: $0.image)
+        ForEach(model.links) { link in
+            SafariNavigationLink(url: link.url) {
+                ListItemView(
+                    title: link.title,
+                    subtitle: link.subtitle,
+                    imageStyle: .settings(assetImage: link.image)
                 )
-            )
+            }
         }
     }
 }
