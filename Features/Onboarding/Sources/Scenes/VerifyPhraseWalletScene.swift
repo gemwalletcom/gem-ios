@@ -24,7 +24,7 @@ struct VerifyPhraseWalletScene: View {
     var body: some View {
         VStack(spacing: 0) {
             VStack(spacing: .medium) {
-                OnboardingHeaderTitle(title: Localized.SecretPhrase.Confirm.QuickTest.title)
+                OnboardingHeaderTitle(title: Localized.SecretPhrase.Confirm.QuickTest.title, alignment: .center)
                 
                 SecretPhraseGridView(rows: model.rows, highlightIndex: model.wordsIndex)
                     .padding(.top, .small)
