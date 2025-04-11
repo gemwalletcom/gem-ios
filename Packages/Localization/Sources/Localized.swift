@@ -562,6 +562,36 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "nodes.import_node.title", fallback: "Add node")
     }
   }
+  public enum Onboarding {
+    public enum Security {
+      public enum CreateWallet {
+        /// In the next screen we will show you a Secret Phrase
+        public static let checkmartTitle = Localized.tr("Localizable", "onboarding.security.create_wallet.checkmart_title", fallback: "In the next screen we will show you a Secret Phrase")
+        /// Hate sharing slices? Follow this unless you want to share your crypto as well
+        public static let message = Localized.tr("Localizable", "onboarding.security.create_wallet.message", fallback: "Hate sharing slices? Follow this unless you want to share your crypto as well")
+        /// Security Reminder
+        public static let title = Localized.tr("Localizable", "onboarding.security.create_wallet.title", fallback: "Security Reminder")
+        public enum Item1 {
+          /// Anyone who has your secret phrase can access your wallet from anywhere in the world.
+          public static let subtitle = Localized.tr("Localizable", "onboarding.security.create_wallet.item_1.subtitle", fallback: "Anyone who has your secret phrase can access your wallet from anywhere in the world.")
+          /// Do Not Share It With Anyone
+          public static let title = Localized.tr("Localizable", "onboarding.security.create_wallet.item_1.title", fallback: "Do Not Share It With Anyone")
+        }
+        public enum Item2 {
+          /// Store it somewhere safe, the phrase is only way to access your wallet.
+          public static let subtitle = Localized.tr("Localizable", "onboarding.security.create_wallet.item_2.subtitle", fallback: "Store it somewhere safe, the phrase is only way to access your wallet.")
+          /// Keep Your Secret Phrase Safe
+          public static let title = Localized.tr("Localizable", "onboarding.security.create_wallet.item_2.title", fallback: "Keep Your Secret Phrase Safe")
+        }
+        public enum Item3 {
+          /// Its created only for you. Gem Wallet does not keep copy of your phrase.
+          public static let subtitle = Localized.tr("Localizable", "onboarding.security.create_wallet.item_3.subtitle", fallback: "Its created only for you. Gem Wallet does not keep copy of your phrase.")
+          /// If you lose it, we cannot recover it
+          public static let title = Localized.tr("Localizable", "onboarding.security.create_wallet.item_3.title", fallback: "If you lose it, we cannot recover it")
+        }
+      }
+    }
+  }
   public enum Permissions {
     /// Access Denied
     public static let accessDenied = Localized.tr("Localizable", "permissions.access_denied", fallback: "Access Denied")
