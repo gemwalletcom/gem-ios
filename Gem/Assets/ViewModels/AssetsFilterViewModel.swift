@@ -17,10 +17,8 @@ struct AssetsFilterViewModel {
 
     var isAnyFilterSpecified: Bool {
         switch type {
-        case .receive, .buy, .swap, .priceAlert:
-            false
-        case .manage, .send:
-            chainsFilter.isAnySelected
+        case .receive, .buy, .swap, .priceAlert: false
+        case .manage, .send: chainsFilter.isAnySelected
         }
     }
 
