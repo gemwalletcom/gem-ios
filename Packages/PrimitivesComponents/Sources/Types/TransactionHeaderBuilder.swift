@@ -30,8 +30,14 @@ public struct TransactionHeaderTypeBuilder {
                     fatalError("fromAsset & toAsset missed")
                 }
                 return .swap(input)
-            case .assetActivation,
-                .tokenApproval: return .symbol
+            case .assetActivation:
+                return .symbol
+            case .tokenApproval:
+                if infoModel.isZero {
+                    return .amount(showFiatSubtitle: false)
+                } else {
+                    return .symbol
+                }
             }
         }()
         return infoModel.headerType(input: inputType)

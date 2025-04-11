@@ -34,6 +34,10 @@ public struct TransactionInfoViewModel: Sendable {
         self.value = value
         self.feeValue = feeValue
     }
+    
+    public var isZero: Bool {
+        value.isZero
+    }
 
     public var amountValueText: String {
         fullFormatter.string(
