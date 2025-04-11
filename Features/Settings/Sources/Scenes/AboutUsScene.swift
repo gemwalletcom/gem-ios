@@ -5,8 +5,6 @@ import Components
 import PrimitivesComponents
 
 public struct AboutUsScene: View {
-    @Environment(\.openURL) private var openURL
-
     private let model: AboutUsViewModel
 
     public init(model: AboutUsViewModel) {
@@ -16,14 +14,14 @@ public struct AboutUsScene: View {
     public var body: some View {
         List {
             Section {
-                NavigationCustomLink(with: ListItemView(title: model.termsOfServiceTitle)) {
-                    openURL(model.termsOfServiceURL)
+                SafariLink(url: model.termsOfServiceURL) {
+                    ListItemView(title: model.termsOfServiceTitle)
                 }
-                NavigationCustomLink(with: ListItemView(title: model.privacyPolicyTitle)) {
-                    openURL(model.privacyPolicyURL)
+                SafariLink(url: model.privacyPolicyURL) {
+                    ListItemView(title: model.privacyPolicyTitle)
                 }
-                NavigationCustomLink(with: ListItemView(title: model.websiteTitle)) {
-                    openURL(model.websiteURL)
+                SafariLink(url: model.websiteURL) {
+                    ListItemView(title: model.websiteTitle)
                 }
             }
             Section {
