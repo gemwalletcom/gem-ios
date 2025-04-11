@@ -12,6 +12,7 @@ protocol SecurityReminderViewModel {
     var checkMarkTitle: String { get }
     var buttonTitle: String { get }
     
+    var onNext: () -> Void { get }
     var buttonState: StateViewType<Bool> { get }
     var isConfirmed: Bool { get set }
 }

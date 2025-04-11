@@ -6,6 +6,12 @@ import Components
 
 @Observable
 final class SecurityReminderCreateWalletViewModel: SecurityReminderViewModel {
+    let onNext: () -> Void
+    
+    init(onNext: @escaping () -> Void) {
+        self.onNext = onNext
+    }
+    
     var title: String = "Security Reminder"
     var message: String = "Hate sharing 🍕 slices? Follow this unless you want to share your crypto as well"
     var checkMarkTitle: String = "In the next screen we will show you a Secret Phrase"

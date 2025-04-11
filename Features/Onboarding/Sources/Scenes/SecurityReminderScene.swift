@@ -16,36 +16,36 @@ struct SecurityReminderScene: View {
     var body: some View {
         VStack {
             List {
-                Text(model.message)
-                    .textStyle(.calloutSecondary)
-                    .multilineTextAlignment(.center)
-                    .cleanListRow(listRowInsets: EdgeInsets(top: .zero, leading: .small, bottom: .zero, trailing: .small))
+                OnboardingHeaderTitle(title: model.message, alignment: .center)
+                    .cleanListRow()
                 
                 ForEach(model.items) { item in
                     Section {
                         ListItemView(
                             title: item.title,
+                            titleStyle: .headline,
                             titleExtra: item.subtitle,
+                            titleStyleExtra: .bodySecondary,
                             imageStyle: item.image
                         )
                     }
                 }
             }
+            .contentMargins([.top], .extraSmall, for: .scrollContent)
             .listSectionSpacing(.compact)
             
             Spacer()
             
             VStack(alignment: .leading) {
                 Toggle(isOn: $model.isConfirmed) {
-                    Text(model.checkMarkTitle)
-                        .textStyle(.calloutSecondary)
+                    OnboardingHeaderTitle(title: model.checkMarkTitle, alignment: .leading)
                 }
                 .toggleStyle(CheckboxStyle())
                 
                 StateButton(
                     text: model.buttonTitle,
                     viewState: model.buttonState,
-                    action: {}
+                    action: model.onNext
                 )
             }
             .frame(maxWidth: .scene.button.maxWidth)
@@ -57,5 +57,5 @@ struct SecurityReminderScene: View {
 }
 
 #Preview(body: {
-    SecurityReminderScene(model: SecurityReminderCreateWalletViewModel())
+    SecurityReminderScene(model: SecurityReminderCreateWalletViewModel(onNext: {}))
 })
