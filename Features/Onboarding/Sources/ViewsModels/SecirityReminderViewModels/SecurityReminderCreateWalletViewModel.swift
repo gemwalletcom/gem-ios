@@ -12,9 +12,9 @@ final class SecurityReminderCreateWalletViewModel: SecurityReminderViewModel {
         self.onNext = onNext
     }
     
-    var title: String = "Security Reminder"
-    var message: String = "Hate sharing 🍕 slices? Follow this unless you want to share your crypto as well"
-    var checkMarkTitle: String = "In the next screen we will show you a Secret Phrase"
+    var title: String = Localized.Onboarding.Security.CreateWallet.title
+    var message: String = Localized.Onboarding.Security.CreateWallet.message
+    var checkMarkTitle: String = Localized.Onboarding.Security.CreateWallet.checkmartTitle
     var buttonTitle: String = Localized.Common.continue
     let items: [SecurityReminderItem] = SecurityReminderItem.createWallet
     

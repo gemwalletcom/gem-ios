@@ -3,6 +3,7 @@
 import Foundation
 import Style
 import Components
+import Localization
 
 struct SecurityReminderItem: Identifiable {
     var id: String { [title,subtitle].joined() }
@@ -15,18 +16,18 @@ struct SecurityReminderItem: Identifiable {
 extension SecurityReminderItem {
     static let createWallet: [Self] = [
         SecurityReminderItem(
-            title: "Do Not Share It With Anyone",
-            subtitle: "Anyone who has your secret phrase can access your wallet from anywhere in the world.",
+            title: Localized.Onboarding.Security.CreateWallet.Item1.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.Item1.subtitle,
             image: .security(Images.System.exclamationmarkTriangle)
         ),
         SecurityReminderItem(
-            title: "Keep Your Secret Phrase Safe",
-            subtitle: "Store it somewhere safe, the phrase is only way to access your wallet.",
+            title: Localized.Onboarding.Security.CreateWallet.Item2.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.Item2.subtitle,
             image: .security(Images.System.pencilLine)
         ),
         SecurityReminderItem(
-            title: "If you lose it, we cannot recover it.",
-            subtitle: "Its created only for you. Gem Wallet does not keep copy of your phrase.",
+            title: Localized.Onboarding.Security.CreateWallet.Item3.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.Item3.subtitle,
             image: .security(Images.Logo.icon)
         )
     ]
