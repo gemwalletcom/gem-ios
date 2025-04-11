@@ -42,7 +42,7 @@ private struct ExplorerMock: ExplorerLinkFetchable {
     func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
-   func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
+    func transactionUrl(chain: Chain, hash: String, swapProvider: SwapProvider?) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
 }

@@ -79,7 +79,7 @@ public struct TransactionHeaderTypeBuilder {
                             fromValue: quote.fromValue,
                             toAsset: toAsset.id,
                             toValue: quote.toValue,
-                            provider: quote.data.provider.protocolId
+                            provider: SwapProvider(rawValue: quote.data.provider.protocolId)
                         )
                     )
                 )
