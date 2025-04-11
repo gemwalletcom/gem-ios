@@ -6,6 +6,7 @@ import Store
 import StakeService
 import StakeServiceTestKit
 import PrimitivesTestKit
+import Primitives
 
 @testable import Staking
 
@@ -14,46 +15,63 @@ struct StakeViewModelTests {
 
     @Test
     func testAprValue() throws {
-        let mocks = mocks()
-        let model = mocks.model
-        let assetStore = mocks.assetStore
-
-        try assetStore.add(assets: [.mock(asset: .mockTron(), properties: .mock(stakingApr: 13.5))])
-        #expect(model.stakeAprValue == "13.50%")
-
-        try assetStore.add(assets: [.mock(asset: .mockTron(), properties: .mock(stakingApr: nil))])
-        #expect(model.stakeAprValue == .empty)
-
-        try assetStore.add(assets: [.mock(asset: .mockTron(), properties: .mock(stakingApr: 0))])
-        #expect(model.stakeAprValue == .empty)
+        #expect(StakeViewModel.mock(stakeService: MockStakeService(stakeApr: 13.5)).stakeAprValue == "13.50%")
+        #expect(StakeViewModel.mock(stakeService: MockStakeService(stakeApr: 0)).stakeAprValue == .empty)
+        #expect(StakeViewModel.mock(stakeService: MockStakeService(stakeApr: .none)).stakeAprValue == .empty)
     }
     
     @Test
     func testLockTimeValue() throws {
-        #expect(mocks().model.lockTimeValue == "14 days")
+        #expect(StakeViewModel.mock(chain: .tron).lockTimeValue == "14 days")
     }
     
     @Test
     func minimumStakeAmount() throws {
-        #expect(mocks().model.minAmountValue == "1.00 TRX")
+        #expect(StakeViewModel.mock(chain: .tron).minAmountValue == "1.00 TRX")
+    }
+}
+
+//TODO: Move to staking test kit
+extension StakeViewModel {
+    static func mock(
+        chain: Chain = .tron,
+        stakeService: any StakeServiceable = MockStakeService(stakeApr: 13.5)
+    ) -> StakeViewModel {
+        StakeViewModel(
+            wallet: .mock(),
+            chain: chain,
+            stakeService: stakeService,
+            onTransferAction: .none,
+            onAmountInputAction: .none
+        )
+    }
+}
+
+//TODO: Move to staking stake test service kit
+
+public struct MockStakeService: StakeServiceable {
+    
+    public let stakeApr: Double?
+    
+    init(
+        stakeApr: Double? = .none
+    ) {
+        self.stakeApr = stakeApr
     }
     
-    // MARK: - Private methods
+    public func stakeApr(assetId: Primitives.AssetId) throws -> Double? {
+        self.stakeApr
+    }
     
-    private func mocks() -> (model: StakeViewModel, assetStore: AssetStore) {
-        let db: DB = .mock()
-        let assetStore: AssetStore = .mock(db: db)
-        let stakeStore: StakeStore = .mock(db: db)
-        let stakeService: StakeService = .mock(
-            store: stakeStore
-        )
-        let model = StakeViewModel(
-            wallet: .mock(),
-            chain: .tron,
-            stakeService: stakeService,
-            onTransferAction: nil,
-            onAmountInputAction: nil
-        )
-        return (model, assetStore)
+    public func update(walletId: String, chain: Primitives.Chain, address: String) async throws {
+        //
+    }
+
+    public func getActiveValidators(assetId: Primitives.AssetId) throws -> [Primitives.DelegationValidator] {
+        []
+    }
+
+    public func getValidator(assetId: Primitives.AssetId, validatorId: String) throws -> Primitives.DelegationValidator? {
+        .none
     }
 }
