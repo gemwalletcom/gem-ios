@@ -12,8 +12,6 @@ import PrimitivesComponents
 import Localization
 
 public struct ChartScene: View {
-    @Environment(\.openURL) private var openURL
-    
     private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: ChartsViewModel
 
@@ -73,10 +71,8 @@ public struct ChartScene: View {
                 Section {
                     ForEach(priceDataModel.marketValues, id: \.title) { link in
                         if let url = link.url {
-                            NavigationCustomLink(
-                                with: ListItemView(title: link.title, subtitle: link.subtitle)
-                            ) {
-                                openURL(url)
+                            SafariLink(url: url) {
+                                ListItemView(title: link.title, subtitle: link.subtitle)
                             }
                             .contextMenu(
                                 link.value.map { [.copy(value: $0)] } ?? []
