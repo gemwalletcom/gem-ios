@@ -6,6 +6,7 @@ import GRDBQuery
 import Store
 
 public struct FiatScene: View {
+    @State private var isPresentingUrl: URL? = nil
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable, Identifiable {
         case amountBuy
@@ -39,7 +40,7 @@ public struct FiatScene: View {
                 text: model.actionButtonTitle,
                 viewState: model.state,
                 showProgressIndicator: false,
-                action: model.onSelectContinue
+                action: { isPresentingUrl = model.redirectUrl() }
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -58,6 +59,7 @@ public struct FiatScene: View {
         .onAppear {
             focusedField = .amountBuy
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 

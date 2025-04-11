@@ -144,11 +144,13 @@ public final class FiatSceneViewModel {
 // MARK: - Business Logic
 
 extension FiatSceneViewModel {
-    func onSelectContinue() {
+    func redirectUrl() -> URL? {
         guard let quote = input.quote,
-              let url = URL(string: quote.redirectUrl) else { return }
-
-        UIApplication.shared.open(url, options: [:])
+              let url = URL(string: quote.redirectUrl)
+        else {
+            return nil
+        }
+        return url
     }
 
     func onSelect(amount: Double) {
