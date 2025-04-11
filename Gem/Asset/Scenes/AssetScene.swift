@@ -303,6 +303,7 @@ extension AssetScene {
                 try await bannerService.handleAction(action)
             }
         }
+        isPresentingUrl = action.url
     }
 
     private func onPriceAlertToggle() {
