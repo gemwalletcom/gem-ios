@@ -12,14 +12,14 @@ import Style
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
-    public let selectedProvider: Gemstone.SwapProvider?
+    public let selectedProvider: GemSwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
     
     init(
         asset: Asset,
         swapQuote: SwapQuote,
-        selectedProvider: Gemstone.SwapProvider?,
+        selectedProvider: GemSwapProvider?,
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {

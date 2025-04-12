@@ -20,9 +20,3 @@ public enum SwapProvider: String, Codable, Equatable, Sendable {
 	case mayan
 	case reservoir
 }
-
-public enum SwapProviderMode: String, Codable, Equatable, Sendable {
-	case onChain = "onchain"
-	case crossChain = "crosschain"
-	case bridge
-}

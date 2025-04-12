@@ -4,5 +4,5 @@ import Foundation
 
 public protocol ExplorerLinkFetchable: Sendable {
     func addressUrl(chain: Chain, address: String) -> BlockExplorerLink
-    func transactionUrl(chain: Chain, hash: String, swapProvider: SwapProvider?) -> BlockExplorerLink
+    func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink
 }

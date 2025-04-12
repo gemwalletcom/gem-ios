@@ -26,10 +26,10 @@ public struct ExplorerService {
         Gemstone.Config.shared.getBlockExplorers(chain: chain.id)
     }
     
-    public func transactionUrl(chain: Chain, hash: String, swapProvider: SwapProvider?) -> BlockExplorerLink {
+    public func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
         let name = explorerNameOrDefault(chain: chain)
         let explorer = Gemstone.Explorer(chain: chain.id)
-        if let swapProvider, let url = explorer.getTransactionSwapUrl(explorerName: name, transactionId: hash, provider: swapProvider.asGemstone) {
+        if let swapProvider, let url = explorer.getTransactionSwapUrl(explorerName: name, transactionId: hash, providerId: swapProvider) {
             return BlockExplorerLink(name: url.name, link: url.url)
         }
         let url = URL(string: explorer.getTransactionUrl(explorerName: name, transactionId: hash))!

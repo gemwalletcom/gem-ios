@@ -59,7 +59,7 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
                     fromValue: quote.fromValue,
                     toAsset: toAsset.id,
                     toValue: quote.toValue,
-                    provider: Primitives.SwapProvider(rawValue: quote.data.provider.protocolId)
+                    provider: quote.data.provider.protocolId
                 )
             )
         case .generic,
