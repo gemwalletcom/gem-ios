@@ -1,15 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import BigInt
+import Foundation
 import Gemstone
 
-extension SwapQuote {
-    public var toValueBigInt: BigInt {
+public extension SwapQuote {
+    var toValueBigInt: BigInt {
         (try? BigInt.from(string: toValue)) ?? .zero
     }
-    
-    public var fromValueBigInt: BigInt {
+
+    var fromValueBigInt: BigInt {
         (try? BigInt.from(string: fromValue)) ?? .zero
     }
 }
