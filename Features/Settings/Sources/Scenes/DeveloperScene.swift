@@ -54,6 +54,12 @@ public struct DeveloperScene: View {
                     with: ListItemView(title: "Clear Banners"),
                     action: model.clearBanners
                 )
+                #if DEBUG
+                NavigationCustomLink(
+                    with: ListItemView(title: "Add Transactions"),
+                    action: model.addTransactions
+                )
+                #endif
             }
             
             Section("Deeplinks") {

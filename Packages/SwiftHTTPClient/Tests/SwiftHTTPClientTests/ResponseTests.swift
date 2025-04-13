@@ -1,33 +1,39 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
+import Foundation
+import Testing
 import SwiftHTTPClient
 
 struct TestDate: Codable, Equatable {
     let date: Date
 }
 
-final class ResponseTests: XCTestCase {
-
+struct ResponseTests {
+    
     let encoder = JSONEncoder()
-    
-    func testMapInt() {
+
+    @Test
+    func testMapInt() throws {
         let response = Response(code: 0, body: Data("1".utf8), headers: [:])
-        XCTAssertEqual(try response.map(as: Int.self), 1)
+        #expect(try response.map(as: Int.self) == 1)
     }
-    
-    func testMapArray() {
+
+    @Test
+    func testMapArray() throws {
         let response = Response(code: 0, body: Data("[]".utf8), headers: [:])
-        XCTAssertEqual(try response.map(as: [String].self), [])
+        #expect(try response.map(as: [String].self) == [])
     }
-    
-    func testMapDate() {
+
+    @Test
+    func testMapDate() throws {
         let response = Response(code: 0, body: Data("{\"date\": \"2023-12-26T21:47:58.101180Z\"}".utf8), headers: [:])
-        XCTAssertNotNil(try response.map(as: TestDate.self))
+        _ = try response.map(as: TestDate.self)
     }
-    
-    func testMapDateZeroNanoseconds() {
+
+    @Test
+    func testMapDateZeroNanoseconds() throws {
         let response = Response(code: 0, body: Data("{\"date\": \"2023-12-26T21:47:40Z\"}".utf8), headers: [:])
-        XCTAssertEqual(try response.map(as: TestDate.self), TestDate(date: Date(timeIntervalSince1970: 1703627260)))
+        let expected = TestDate(date: Date(timeIntervalSince1970: 1703627260))
+        #expect(try response.map(as: TestDate.self) == expected)
     }
 }

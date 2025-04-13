@@ -10,7 +10,7 @@ import PrimitivesTestKit
 
 struct PriceAlertsViewModelTests {
     @Test
-    func sectionsTest() {
+    func testSections() {
         let model = PriceAlertsViewModel(priceAlertService: .mock())
         
         let autoAlert = PriceAlertData.mock()
@@ -20,9 +20,10 @@ struct PriceAlertsViewModelTests {
         
         let sections = model.sections(for: [autoAlert, manualAlert, manualSolAlert, notifiedAlert])
         
-        #expect(sections.autoAlerts.first == autoAlert)
-        #expect(sections.manualAlerts.first?.first == manualAlert)
-        #expect(sections.manualAlerts.last?.first == manualSolAlert)
-        #expect(!sections.manualAlerts.flatMap { $0 }.contains(where: { $0 == notifiedAlert }))
+        #expect(sections.autoAlerts == [autoAlert])
+        #expect(sections.manualAlerts[manualAlert.asset] == [manualAlert])
+        #expect(sections.manualAlerts[manualSolAlert.asset] == [manualSolAlert])
+        
+        #expect(sections.manualAlerts.values.flatMap { $0 }.contains(where: { $0 == notifiedAlert }) == false)
     }
 }
