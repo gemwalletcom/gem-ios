@@ -95,7 +95,6 @@ extension SelectableSheet {
     
     private func onConfirm() {
         onFinish(items: Array(model.selectedItems), isConfirmed: true)
-        dismiss()
     }
 
     private func onReset() {
