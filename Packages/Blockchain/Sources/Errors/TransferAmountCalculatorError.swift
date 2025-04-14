@@ -7,4 +7,5 @@ import Primitives
 public enum TransferAmountCalculatorError: LocalizedError {
     case insufficientBalance(Asset)
     case insufficientNetworkFee(Asset)
+    case minimumAccountBalanceTooLow(Asset)
 }
