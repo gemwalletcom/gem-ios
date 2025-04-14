@@ -26,7 +26,7 @@ class AddTokenViewModel {
     var title: String { Localized.Wallet.AddToken.title }
     var networkTitle: String { Localized.Transfer.network }
     var errorTitle: String { Localized.Errors.errorOccured }
-    var actionButtonTitlte: String { Localized.Wallet.Import.action }
+    var actionButtonTitle: String { Localized.Wallet.Import.action }
     var addressTitleField: String { Localized.Wallet.Import.contractAddressField }
 
     var pasteImage: Image { Images.System.paste }

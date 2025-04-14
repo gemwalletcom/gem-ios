@@ -4,6 +4,6 @@ import Foundation
 import Primitives
 
 struct PriceAlertsSections {
-    var autoAlerts: [PriceAlertData]
-    var manualAlerts: [[PriceAlertData]]
+    let autoAlerts: [PriceAlertData]
+    let manualAlerts: [Asset: [PriceAlertData]]
 }

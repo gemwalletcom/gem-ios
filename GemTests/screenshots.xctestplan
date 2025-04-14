@@ -111,6 +111,14 @@
         "language" : "it",
         "region" : "IT"
       }
+    },
+    {
+      "id" : "89B45A75-3A71-41FF-8BB4-B516DA97F6D9",
+      "name" : "Czech | cs",
+      "options" : {
+        "language" : "cs",
+        "region" : "CZ"
+      }
     }
   ],
   "defaultOptions" : {

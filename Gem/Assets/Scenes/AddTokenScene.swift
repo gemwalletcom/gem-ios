@@ -31,7 +31,7 @@ struct AddTokenScene: View {
             addTokenList
             Spacer()
             StateButton(
-                text: model.actionButtonTitlte,
+                text: model.actionButtonTitle,
                 viewState: model.state,
                 action: onSelectImportToken
             )
