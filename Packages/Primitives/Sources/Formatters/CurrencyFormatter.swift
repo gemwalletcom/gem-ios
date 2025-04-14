@@ -89,6 +89,10 @@ public struct CurrencyFormatter: Sendable, Hashable {
         }
     }
     
+    public func string(double: Double, symbol: String? = nil) -> String {
+        string(decimal: Decimal(double), symbol: symbol)
+    }
+    
     public func double(from amount: String) -> Double? {
         guard let decimal = Decimal(string: amount, locale: locale) else {
             return nil
