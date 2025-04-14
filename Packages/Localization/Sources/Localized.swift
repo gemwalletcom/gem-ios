@@ -569,8 +569,6 @@ public enum Localized {
         public static let checkmartTitle = Localized.tr("Localizable", "onboarding.security.create_wallet.checkmart_title", fallback: "In the next screen we will show you a Secret Phrase")
         /// Hate sharing 🍕 slices? Follow this unless you want to share your crypto as well.
         public static let message = Localized.tr("Localizable", "onboarding.security.create_wallet.message", fallback: "Hate sharing 🍕 slices? Follow this unless you want to share your crypto as well.")
-        /// Security Reminder
-        public static let title = Localized.tr("Localizable", "onboarding.security.create_wallet.title", fallback: "Security Reminder")
         public enum Item1 {
           /// Anyone who has your secret phrase can access your wallet from anywhere in the world.
           public static let subtitle = Localized.tr("Localizable", "onboarding.security.create_wallet.item_1.subtitle", fallback: "Anyone who has your secret phrase can access your wallet from anywhere in the world.")
