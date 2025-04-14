@@ -11,6 +11,7 @@ protocol SecurityReminderViewModel {
     var items: [SecurityReminderItem] { get }
     var checkMarkTitle: String { get }
     var buttonTitle: String { get }
+    var docsUrl: URL { get }
     
     var onNext: () -> Void { get }
     var buttonState: StateViewType<Bool> { get }

@@ -6,6 +6,8 @@ import Style
 import Components
 
 struct SecurityReminderScene: View {
+    // TODO: Fix after merging #590
+    @Environment(\.openURL) private var openURL
     
     @State private var model: SecurityReminderViewModel
     
@@ -47,12 +49,22 @@ struct SecurityReminderScene: View {
                     viewState: model.buttonState,
                     action: model.onNext
                 )
+                .frame(height: StateButtonStyle.maxButtonHeight)
             }
             .frame(maxWidth: .scene.button.maxWidth)
             
         }
+        .background(Colors.grayBackground)
+        .padding(.bottom, .scene.bottom)
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button("", systemImage: SystemImage.info) {
+                    openURL(model.docsUrl)
+                }
+            }
+        }
     }
 }
 
