@@ -46,8 +46,8 @@ public final class SwapService: Sendable {
 
     public func getQuotes(fromAsset: Asset, toAsset: Asset, value: String, walletAddress: String, destinationAddress: String) async throws -> [Gemstone.SwapQuote] {
         let swapRequest = Gemstone.SwapQuoteRequest(
-            fromAsset: QuoteAsset(id: fromAsset.id.identifier, decimals: UInt32(fromAsset.decimals)),
-            toAsset: QuoteAsset(id: toAsset.id.identifier, decimals: UInt32(toAsset.decimals)),
+            fromAsset: GemQuoteAsset(asset: fromAsset),
+            toAsset: GemQuoteAsset(asset: toAsset),
             walletAddress: walletAddress,
             destinationAddress: destinationAddress,
             value: value,
