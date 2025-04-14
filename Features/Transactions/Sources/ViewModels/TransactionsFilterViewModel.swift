@@ -8,10 +8,10 @@ import PrimitivesComponents
 
 public struct TransactionsFilterViewModel: Equatable {
     public var chainsFilter: ChainsFilterViewModel
-    public var transactionTypesFilter: TransacionTypesFilterViewModel
+    public var transactionTypesFilter: TransactionTypesFilterViewModel
 
     public init(chainsFilterModel: ChainsFilterViewModel,
-         transactionTypesFilter: TransacionTypesFilterViewModel) {
+         transactionTypesFilter: TransactionTypesFilterViewModel) {
         self.chainsFilter = chainsFilterModel
         self.transactionTypesFilter = transactionTypesFilter
     }
@@ -63,7 +63,7 @@ extension TransactionsFilterViewModel {
             chainsFilterModel: ChainsFilterViewModel(
                 chains: wallet.chains
             ),
-            transactionTypesFilter: TransacionTypesFilterViewModel(
+            transactionTypesFilter: TransactionTypesFilterViewModel(
                 types: TransactionType.allCases
             )
         )

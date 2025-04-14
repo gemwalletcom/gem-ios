@@ -9,7 +9,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
         continueAfterFailure = false
     }
 
-    @MainActor func testScreenshots() {
+    @MainActor func testScreenshots() throws {
         // Take a screenshot of an app's first window.
         let app = XCUIApplication()
         app.launch()
@@ -33,52 +33,67 @@ final class ScreenshotsLaunchTests: XCTestCase {
 
         sleep(4)
 
-        snapshoter.snap("0_secure")
+        try snapshoter.snap("secure")
 
         collectionViewsQuery.staticTexts["Solana"].tap()
 
-        snapshoter.snap("1_private")
+        try snapshoter.snap("private")
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "buy").tap()
 
         sleep(4)
 
-        snapshoter.snap("7_buy")
+        try snapshoter.snap("buy")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
-
+        
+        collectionViewsQuery.buttons.element(matching: .button, identifier: "swap").tap()
+        
+        app.staticTexts["SOL"].tap()
+        app.staticTexts["Ethereum"].tap()
+        
+        let fromTextField = app.textFields.element(boundBy: 0)
+        fromTextField.tap()
+        fromTextField.typeText("1\n")
+        
+        sleep(4)
+        
+        try snapshoter.snap("trade")
+        
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        
         collectionViewsQuery.buttons.element(matching: .button, identifier: "price").tap()
 
         sleep(1)
 
-        snapshoter.snap("3_market")
+        try snapshoter.snap("track")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "stake").tap()
         
-        sleep(12)
+        sleep(2)
 
-        snapshoter.snap("6_earn")
+        try snapshoter.snap("earn")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         collectionViewsQuery.buttons.element(matching: .button, identifier: "manage").tap()
 
-        snapshoter.snap("2_powerful")
+        try snapshoter.snap("manage")
 
         app.navigationBars.buttons.element(boundBy: 0).tap()
 
         sleep(1)
 
-        app.tabBars.buttons.element(boundBy: 1).tap()
+        app.tabBars.buttons.element(boundBy: 3).tap()
 
-        snapshoter.snap("4_transactions")
+        try snapshoter.snap("activity")
 
-        app.tabBars.buttons.element(boundBy: 2).tap()
+        app.tabBars.buttons.element(boundBy: 4).tap()
 
-        snapshoter.snap("5_settings")
+        try snapshoter.snap("control")
     }
 }
 
@@ -87,23 +102,25 @@ struct Snapshoter {
     let app: XCUIApplication
     let timeout: UInt32 = 1
 
-    func snap(_ name: String) {
+    func snap(_ name: String) throws {
+
         sleep(timeout)
 
         let screenshotData = app.windows.firstMatch.screenshot().pngRepresentation
 
         let path = ProcessInfo.processInfo.environment["SCREENSHOTS_PATH"]!
-        let directoryPath = "\(path)/\(Locale.current.appstoreLanguageIdentifier())"
+        let directoryPath = "\(path)/\(try Locale.current.appstoreLanguageIdentifier())"
         
         let fileURL = URL(fileURLWithPath: "\(directoryPath)/\(UIDevice.current.model.lowercased())_\(name).png")
 
+        
         // Create the directory if it doesn't exist
         let fileManager = FileManager.default
         if !fileManager.fileExists(atPath: directoryPath) {
-            try! fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
+            try fileManager.createDirectory(atPath: directoryPath, withIntermediateDirectories: true, attributes: nil)
         }
 
         // Save the screenshot
-        try! screenshotData.write(to: fileURL)
+        try screenshotData.write(to: fileURL)
     }
 }
