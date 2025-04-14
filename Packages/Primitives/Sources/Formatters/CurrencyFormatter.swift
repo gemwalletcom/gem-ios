@@ -54,7 +54,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     public static let percent = CurrencyFormatter(type: .percent)
 
     public var currencyCode: String
-    public var abbreviationThreshold: Decimal = 100_000
+    public var abbreviationThreshold: Double = 100_000
     
     public init(
         type: CurrencyFormatterType = .currency,
@@ -82,15 +82,11 @@ public struct CurrencyFormatter: Sendable, Hashable {
         }
     }
     
-    public func string(decimal: Decimal, symbol: String? = nil) -> String {
-        switch type {
-        case .abbreviated: abbreviatedStringSymbol(decimal, symbol: symbol)
-        case .currency, .percent, .percentSignLess: stringSymbol(decimal, symbol: symbol)
-        }
-    }
-    
     public func string(double: Double, symbol: String? = nil) -> String {
-        string(decimal: Decimal(double), symbol: symbol)
+        switch type {
+        case .abbreviated: abbreviatedStringSymbol(double, symbol: symbol)
+        case .currency, .percent, .percentSignLess: stringSymbol(double, symbol: symbol)
+        }
     }
     
     public func double(from amount: String) -> Double? {
@@ -111,11 +107,11 @@ public struct CurrencyFormatter: Sendable, Hashable {
     
     // MARK: - Private methods
     
-    private func abbreviatedString(_ number: Double) -> String {
-        guard abs(number) >= abbreviationThreshold.doubleValue, #available(iOS 18, *) else {
-            return currencyString(number)
+    private func abbreviatedString(_ double: Double) -> String {
+        guard abs(double) >= abbreviationThreshold, #available(iOS 18, *) else {
+            return currencyString(double)
         }
-        return number
+        return double
             .formatted(
                 .currency(code: currencyCode)
                 .notation(.compactName)
@@ -124,11 +120,11 @@ public struct CurrencyFormatter: Sendable, Hashable {
             )
     }
     
-    private func abbreviatedStringSymbol(_ decimal: Decimal, symbol: String?) -> String {
-        guard abs(decimal) >= abbreviationThreshold else {
-            return stringSymbol(decimal, symbol: symbol)
+    private func abbreviatedStringSymbol(_ double: Double, symbol: String?) -> String {
+        guard abs(double) >= abbreviationThreshold else {
+            return stringSymbol(double, symbol: symbol)
         }
-        let string = decimal
+        let string = double
             .formatted(
                 .number
                 .notation(.compactName)
@@ -138,16 +134,16 @@ public struct CurrencyFormatter: Sendable, Hashable {
         return combined(value: string, symbol: symbol)
     }
     
-    private func stringSymbol(_ decimal: Decimal, symbol: String?) -> String {
-        let formatter = formatter(for: decimal.doubleValue)
+    private func stringSymbol(_ double: Double, symbol: String?) -> String {
+        let formatter = formatter(for: double)
         formatter.currencySymbol = ""
 
-        let value = formatter.string(from: NSDecimalNumber(decimal: decimal)) ?? ""
+        let value = formatter.string(from: NSNumber(value: double)) ?? ""
         return combined(value: value, symbol: symbol)
     }
     
-    private func currencyString(_ number: Double) -> String {
-        formatter(for: number).string(from: NSNumber(value: number))!
+    private func currencyString(_ double: Double) -> String {
+        formatter(for: double).string(from: NSNumber(value: double))!
     }
     
     private func formatter(for value: Double) -> NumberFormatter {
