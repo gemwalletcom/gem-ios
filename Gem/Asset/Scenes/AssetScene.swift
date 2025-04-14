@@ -104,6 +104,8 @@ struct AssetScene: View {
                 NavigationLink(value: Scenes.Price(asset: model.assetModel.asset)) {
                     PriceListItemView(model: model.priceItemViewModel)
                 }
+                .accessibilityIdentifier("price")
+                
                 if model.showNetwork {
                     if model.openNetwork {
                         NavigationLink(value: Scenes.Asset(asset: model.assetModel.asset.chain.asset)) {
@@ -131,7 +133,7 @@ struct AssetScene: View {
                     }
                 }
             } else if model.assetDataModel.isStakeEnabled {
-                stakeView
+                stakeViewEmpty
             }
 
             if !transactions.isEmpty {
@@ -225,10 +227,26 @@ extension AssetScene {
     }
 
     private var stakeView: some View {
-        NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)
-            .accessibilityIdentifier("stake")) {
-                onSelectHeader(.stake)
+        NavigationCustomLink(with: ListItemView(title: Localized.Wallet.stake, subtitle: model.assetDataModel.stakeBalanceTextWithSymbol)) {
+            onSelectHeader(.stake)
+        }
+        .accessibilityIdentifier("stake")
+    }
+    
+    private var stakeViewEmpty: some View {
+        NavigationCustomLink(
+            with: HStack {
+                EmojiView(color: Colors.grayVeryLight, emoji: "💰")
+                    .frame(width: Sizing.image.asset, height: Sizing.image.asset)
+                ListItemView(
+                    title: Localized.Wallet.stake,
+                    subtitle: model.stakeAprText,
+                    subtitleStyle: TextStyle(font: .callout, color: Colors.green)
+                )
             }
+        ) {
+            onSelectHeader(.stake)
+        }
     }
 }
 

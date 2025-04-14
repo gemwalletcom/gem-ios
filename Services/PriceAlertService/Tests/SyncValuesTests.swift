@@ -3,7 +3,7 @@
 import Testing
 import PriceAlertService
 
-struct Test {
+struct SyncValuesTests {
 
     @Test func testChanges() async throws {
         let localChanges = SyncValues.changes(primary: .local, local: ["1", "2", "3"], remote: ["2", "4"])

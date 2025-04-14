@@ -80,7 +80,7 @@ public struct TransactionViewModel: Sendable {
         case .assetActivation: Localized.Transfer.ActivateAsset.title
         }
     }
-    
+
     public var titleTextStyle: TextStyle {
         TextStyle(font: Font.system(.body, weight: .medium), color: .primary)
     }
@@ -200,8 +200,14 @@ public struct TransactionViewModel: Sendable {
                 }
                 return "+" + swapFormatter(asset: asset, value: BigInt(stringLiteral: metadata.toValue))
             }
-        case .tokenApproval, .assetActivation:
+        case .assetActivation:
             return transaction.asset.symbol
+        case .tokenApproval:
+            if transaction.transaction.value == .zero {
+                return [transaction.transaction.value, transaction.asset.symbol].joined(separator: " ")
+            } else {
+                return transaction.asset.symbol
+            }
         }
     }
     

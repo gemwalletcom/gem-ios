@@ -101,6 +101,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Developer.self) { _ in
                 DeveloperScene(model: DeveloperViewModel(
+                    walletId: walletId,
                     transactionsService: transactionsService,
                     assetService: assetsService,
                     stakeService: stakeService,

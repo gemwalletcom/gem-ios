@@ -1,5 +1,9 @@
 import Foundation
 
+extension AssetId: Identifiable {
+    public var id: String { self.identifier }
+}
+
 public extension AssetId {
 
     static let subTokenSeparator = "::"
