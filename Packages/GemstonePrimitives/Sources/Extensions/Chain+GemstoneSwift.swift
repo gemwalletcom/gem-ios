@@ -29,7 +29,7 @@ public extension Primitives.Chain {
     }
     
     var minimumAccountBalance: BigInt {
-        BigInt(ChainConfig.config(chain: self).minimumAccountBalance ?? 0)
+        BigInt(ChainConfig.config(chain: self).minimumAccountBalance ?? .zero)
     }
     
     var isMemoSupported: Bool {
