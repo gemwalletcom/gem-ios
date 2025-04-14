@@ -39,7 +39,7 @@ public struct FeeUnitViewModel {
             guard let value = try? ValueFormatter.full.double(from: unit.value, decimals: 9) else {
                 return ""
             }
-            return currencyFormatter.string(decimal: Decimal(value))
+            return currencyFormatter.string(double: value)
         case .native:
             return String(
                 format: "%@ %@",
