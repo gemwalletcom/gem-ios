@@ -13,8 +13,6 @@ extension PriceAlert: Identifiable {
             $0
         }
         .joined(separator: "_")
-        
-        
     }
 }
 

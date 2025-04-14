@@ -25,15 +25,33 @@ public struct PriceAlertStore: Sendable {
             for alert in alerts {
                 try alert
                     .mapToRecord()
-                    .insert(db, onConflict: .ignore)
+                    .upsert(db)
             }
         }
     }
 
-    public func deletePriceAlerts(_ alerts: [PriceAlert]) throws {
+    @discardableResult
+    public func deletePriceAlerts(_ alertsIds: [String]) throws -> Int {
         try db.write { (db: Database) in
+            try PriceAlertRecord
+                .filter(alertsIds.contains(Columns.PriceAlert.id))
+                .deleteAll(db)
+        }
+    }
+    
+    public func diffPriceAlerts(deleteIds: [String], alerts: [PriceAlert]) throws {
+        if deleteIds.isEmpty && alerts.isEmpty {
+            return
+        }
+        try db.write { (db: Database) in
+            try PriceAlertRecord
+                .filter(deleteIds.contains(Columns.PriceAlert.id))
+                .deleteAll(db)
+            
             for alert in alerts {
-                try alert.mapToRecord().delete(db)
+                try alert
+                    .mapToRecord()
+                    .upsert(db)
             }
         }
     }

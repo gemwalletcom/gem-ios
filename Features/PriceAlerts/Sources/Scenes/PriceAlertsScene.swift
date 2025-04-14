@@ -26,10 +26,24 @@ public struct PriceAlertsScene: View {
             toggleView
             
             let sections = model.sections(for: priceAlerts)
-            autoAlertsView(alerts: sections.autoAlerts)
-            ForEach(sections.manualAlerts, id: \.self) {
-                manualAlertsView(alerts: $0)
+            
+            Section {
+                ForEach(sections.autoAlerts) { alert in
+                    NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                        alertView(alert: alert)
+                    }
+                }
             }
+            
+//            ForEach(sections.manualAlerts.values) { section in
+//                ForEach(section.) { alert in
+//                    Section {
+//                        ForEach(alerts) { alert in
+//                            alertView(alert: alert)
+//                        }
+//                    }
+//                }
+//            }
         }
         .overlay {
             if priceAlerts.isEmpty {
@@ -59,24 +73,6 @@ private extension PriceAlertsScene {
             .toggleStyle(AppToggleStyle())
         } footer: {
             Text(Localized.PriceAlerts.getNotifiedExplainMessage)
-        }
-    }
-    
-    func autoAlertsView(alerts: [PriceAlertData]) -> some View {
-        Section {
-            ForEach(alerts) { alert in
-                NavigationLink(value: Scenes.Price(asset: alert.asset)) {
-                    alertView(alert: alert)
-                }
-            }
-        }
-    }
-    
-    func manualAlertsView(alerts: [PriceAlertData]) -> some View {
-        Section {
-            ForEach(alerts) { alert in
-                alertView(alert: alert)
-            }
         }
     }
     

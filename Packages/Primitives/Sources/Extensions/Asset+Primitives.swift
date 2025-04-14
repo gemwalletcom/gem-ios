@@ -43,12 +43,6 @@ public extension Array where Element == Asset {
     }
 }
 
-public extension Array where Element == AssetId {
-    var ids: [String] {
-        return self.map { $0.identifier }
-    }
-}
-
 public extension Array where Element == Chain {
     var ids: [AssetId] {
         return self.compactMap { $0.assetId }
