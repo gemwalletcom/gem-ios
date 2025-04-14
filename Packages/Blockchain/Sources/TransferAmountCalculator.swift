@@ -62,7 +62,7 @@ public struct TransferAmountCalculator {
                 )
             }
             return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
-        } else if validateMinimumAccountBalance(for: input) {
+        } else if isMinimumAccountBalanceTooLow(for: input) {
             throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset)
         }
         let useMaxAmount = input.availableValue == input.value
@@ -88,7 +88,7 @@ public struct TransferAmountCalculator {
     
     // MARK: - Private methods
     
-    private func validateMinimumAccountBalance(for input: TransferAmountInput) -> Bool {
+    private func isMinimumAccountBalanceTooLow(for input: TransferAmountInput) -> Bool {
         [
             input.availableValue != input.value,
             input.canChangeValue,
