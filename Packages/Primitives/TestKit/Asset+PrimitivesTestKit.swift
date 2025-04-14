@@ -49,4 +49,14 @@ public extension Asset {
             type: .erc20
         )
     }
+    
+    static func mockTron() -> Asset {
+        .mock(
+            id: AssetId(chain: .tron, tokenId: .none),
+            name: "TRON",
+            symbol: "TRX",
+            decimals: 6,
+            type: .native
+        )
+    }
 }

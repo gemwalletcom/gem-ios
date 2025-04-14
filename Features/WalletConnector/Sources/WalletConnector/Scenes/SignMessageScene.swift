@@ -8,6 +8,7 @@ import PrimitivesComponents
 
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
+    @State private var isPresentingUrl: URL? = nil
     
     private let model: SignMessageSceneViewModel
 
@@ -27,10 +28,9 @@ public struct SignMessageScene: View {
                     if let appUrl = model.appUrl {
                         ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
                             .contextMenu(
-                                .url(
-                                    title: Localized.WalletConnect.website,
-                                    url: appUrl
-                                )
+                                .url(title: Localized.WalletConnect.website, onOpen: {
+                                    isPresentingUrl = appUrl
+                                })
                             )
                     }
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
@@ -55,6 +55,7 @@ public struct SignMessageScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
+        .safariSheet(url: $isPresentingUrl)
     }
     
     func sign() {
