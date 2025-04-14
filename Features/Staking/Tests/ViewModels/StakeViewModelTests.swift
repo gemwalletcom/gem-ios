@@ -46,32 +46,3 @@ extension StakeViewModel {
         )
     }
 }
-
-//TODO: Move to staking stake test service kit
-
-public struct MockStakeService: StakeServiceable {
-    
-    public let stakeApr: Double?
-    
-    init(
-        stakeApr: Double? = .none
-    ) {
-        self.stakeApr = stakeApr
-    }
-    
-    public func stakeApr(assetId: Primitives.AssetId) throws -> Double? {
-        self.stakeApr
-    }
-    
-    public func update(walletId: String, chain: Primitives.Chain, address: String) async throws {
-        //
-    }
-
-    public func getActiveValidators(assetId: Primitives.AssetId) throws -> [Primitives.DelegationValidator] {
-        []
-    }
-
-    public func getValidator(assetId: Primitives.AssetId, validatorId: String) throws -> Primitives.DelegationValidator? {
-        .none
-    }
-}
