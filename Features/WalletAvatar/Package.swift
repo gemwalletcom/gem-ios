@@ -14,14 +14,14 @@ let package = Package(
             targets: ["WalletAvatar"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Components", path: "../Components"),
-        .package(name: "Style", path: "../Style"),
-        .package(name: "Localization", path: "../Localization"),
-        .package(name: "PrimitivesComponents", path: "../PrimitivesComponents"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "ImageGalleryService", path: "../ImageGalleryService"),
-        .package(name: "AvatarService", path: "../AvatarService"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "Style", path: "../../Packages/Style"),
+        .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
+        .package(name: "AvatarService", path: "../../Services/AvatarService"),
     ],
     targets: [
         .target(

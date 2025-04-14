@@ -13,14 +13,14 @@ let package = Package(
             targets: ["TransactionService"]),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "Blockchain", path: "../Blockchain"),
+        .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "Blockchain", path: "../../Packages/Blockchain"),
         .package(name: "ChainService", path: "../ChainService"),
         .package(name: "StakeService", path: "../StakeService"),
         .package(name: "BalanceService", path: "../BalanceService"),
         .package(name: "NFTService", path: "../NFTService"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
     ],
     targets: [
         .target(

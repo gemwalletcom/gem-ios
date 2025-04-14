@@ -14,7 +14,7 @@ let package = Package(
             targets: ["NotificationService"]),
     ],
     dependencies: [
-        .package(name: "Preferences", path: "../Preferences"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
     ],
     targets: [
         .target(

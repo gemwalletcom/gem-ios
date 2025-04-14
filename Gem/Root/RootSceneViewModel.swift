@@ -10,6 +10,7 @@ import WalletConnector
 import TransactionsService
 import TransactionService
 import ManageWalletService
+import WalletsService
 
 @Observable
 @MainActor
@@ -20,6 +21,7 @@ final class RootSceneViewModel {
     private let deviceObserverService: DeviceObserverService
     private let notificationService: NotificationService
     private let manageWalletService: ManageWalletService
+    private let walletsService: WalletsService
 
     let keystore: any Keystore
     let walletConnectorPresenter: WalletConnectorPresenter
@@ -50,7 +52,8 @@ final class RootSceneViewModel {
         deviceObserverService: DeviceObserverService,
         notificationService: NotificationService,
         lockWindowManager: any LockWindowManageable,
-        manageWalletService: ManageWalletService
+        manageWalletService: ManageWalletService,
+        walletsService: WalletsService
     ) {
         self.keystore = keystore
         self.walletConnectorPresenter = walletConnectorPresenter
@@ -61,6 +64,7 @@ final class RootSceneViewModel {
         self.notificationService = notificationService
         self.lockManager = lockWindowManager
         self.manageWalletService = manageWalletService
+        self.walletsService = walletsService
     }
 }
 
@@ -83,7 +87,7 @@ extension RootSceneViewModel {
 extension RootSceneViewModel {
     func onChangeWallet(_ oldWallet: Wallet?, _ newWallet: Wallet?) {
         if let newWallet {
-            onstartService.setup(wallet: newWallet)
+            setup(wallet: newWallet)
         }
     }
 
@@ -100,8 +104,25 @@ extension RootSceneViewModel {
                 notificationService.notify(notification: PushNotification.asset(assetId))
             }
         } catch {
-            NSLog("handleUrl error: \(error)")
+            NSLog("RootSceneViewModel handleUrl error: \(error)")
             isPresentingConnectorError = error.localizedDescription
+        }
+    }
+}
+
+// MARK: - Private
+
+extension RootSceneViewModel {
+
+    private func setup(wallet: Wallet) {
+        onstartService.setup(wallet: wallet)
+        do {
+            try walletsService.setup(wallet: wallet)
+        } catch {
+            NSLog("RootSceneViewModel setupWallet error: \(error)")
+        }
+        Task {
+            await walletsService.runAddressStatusCheck(wallet)
         }
     }
 }

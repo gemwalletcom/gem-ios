@@ -37,6 +37,10 @@ public struct TransactionScene: View {
     public var body: some View {
         VStack {
             List {
+                TransactionHeaderListItemView(
+                    headerType: model.headerType,
+                    showClearHeader: model.showClearHeader
+                )
                 Section {
                     ListItemView(title: model.dateField, subtitle: model.date)
                     HStack(spacing: .small) {
@@ -56,7 +60,7 @@ public struct TransactionScene: View {
                         }
                     }
 
-                    if let recipientAddressViewModel = model.recipienAddressViewModel {
+                    if let recipientAddressViewModel = model.recipientAddressViewModel {
                         AddressListItemView(model: recipientAddressViewModel)
                     }
 
@@ -76,13 +80,6 @@ public struct TransactionScene: View {
                         subtitleExtra: model.networkFeeFiatText,
                         infoAction: onNetworkFeeInfo
                     )
-                } header: {
-                    HStack {
-                        Spacer(minLength: 0)
-                        TransactionHeaderView(type: model.headerType)
-                            .padding(.bottom, .medium)
-                        Spacer(minLength: 0)
-                    }
                 }
                 Section {
                     NavigationOpenLink(
@@ -92,6 +89,8 @@ public struct TransactionScene: View {
                     )
                 }
             }
+            .contentMargins([.top], .small, for: .scrollContent)
+            .listSectionSpacing(.compact)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .toolbar {

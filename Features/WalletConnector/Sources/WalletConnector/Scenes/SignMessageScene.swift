@@ -4,6 +4,7 @@ import SwiftUI
 import Components
 import Style
 import Localization
+import PrimitivesComponents
 
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
@@ -18,9 +19,24 @@ public struct SignMessageScene: View {
         VStack {
             List {
                 Section {
+                    ListItemImageView(
+                        title: Localized.WalletConnect.app,
+                        subtitle: model.appName,
+                        assetImage: model.appAssetImage
+                    )
+                    if let appUrl = model.appUrl {
+                        ListItemView(title: Localized.WalletConnect.website, subtitle: model.connectionViewModel.host)
+                            .contextMenu(
+                                .url(
+                                    title: Localized.WalletConnect.website,
+                                    url: appUrl
+                                )
+                            )
+                    }
                     ListItemView(title: Localized.Common.wallet, subtitle: model.walletText)
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
+
                 Section(Localized.SignMessage.message) {
                     Text(model.message)
                 }

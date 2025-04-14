@@ -381,3 +381,6 @@
 "networks.state.empty.search_title" = "No networks found";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Your markets data will appear here";
+"transfer.recipient.my_wallets" = "My Wallets";
+"transfer.recipient.view_wallets" = "View Wallets";
+"settings.disable_value" = "Disable %@";

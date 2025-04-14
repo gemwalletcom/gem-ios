@@ -52,6 +52,8 @@ struct SelectAssetSceneNavigationStack: View {
                             action: onSelectFilter
                         )
                     }
+                }
+                if model.showAddToken {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button {
                             isPresentingAddToken = true

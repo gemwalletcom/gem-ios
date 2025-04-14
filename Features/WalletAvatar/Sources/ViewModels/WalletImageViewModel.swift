@@ -57,7 +57,7 @@ public final class WalletImageViewModel: Sendable {
                     id: $0.id,
                     assetImage: AssetImage(
                         type: $0.name,
-                        imageURL: $0.image.imageUrl.asURL,
+                        imageURL: $0.images.preview.url.asURL,
                         placeholder: nil,
                         chainPlaceholder: nil
                     )

@@ -19,12 +19,12 @@ final class Locale_PrimitivesTests {
     }
 
     @Test
-    func testAppstoreLanguageIdentifier() {
-        #expect(Locale.US.appstoreLanguageIdentifier() == "en-US")
-        #expect(Locale.UK.appstoreLanguageIdentifier() == "en-US")
-        #expect(Locale.FR.appstoreLanguageIdentifier() == "fr-FR")
-        #expect(Locale.IT.appstoreLanguageIdentifier() == "it")
-        #expect(Locale.ZH_Simplifier.appstoreLanguageIdentifier() == "zh-Hans")
-        #expect(Locale.ZH_Traditional.appstoreLanguageIdentifier() == "zh-Hant")
+    func testAppstoreLanguageIdentifier() throws {
+        #expect(try Locale.US.appstoreLanguageIdentifier() == "en-US")
+        #expect(try Locale.UK.appstoreLanguageIdentifier() == "en-US")
+        #expect(try Locale.FR.appstoreLanguageIdentifier() == "fr-FR")
+        #expect(try Locale.IT.appstoreLanguageIdentifier() == "it")
+        #expect(try Locale.ZH_Simplifier.appstoreLanguageIdentifier() == "zh-Hans")
+        #expect(try Locale.ZH_Traditional.appstoreLanguageIdentifier() == "zh-Hant")
     }
 }

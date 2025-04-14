@@ -5,6 +5,7 @@ import Keystore
 import WalletConnectorService
 import Primitives
 import Localization
+import Components
 
 public struct SignMessageSceneViewModel {
     private let keystore: any Keystore
@@ -35,6 +36,22 @@ public struct SignMessageSceneViewModel {
 
     public var buttonTitle: String {
         Localized.Transfer.confirm
+    }
+    
+    public var connectionViewModel: WalletConnectionViewModel {
+        WalletConnectionViewModel(connection: WalletConnection(session: payload.session, wallet: payload.wallet))
+    }
+
+    public var appName: String {
+        payload.session.metadata.name
+    }
+    
+    public var appUrl: URL? {
+        payload.session.metadata.url.asURL
+    }
+    
+    public var appAssetImage: AssetImage {
+        AssetImage(imageURL: connectionViewModel.imageUrl)
     }
 
     public func signMessage() throws {

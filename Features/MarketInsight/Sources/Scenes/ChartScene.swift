@@ -14,6 +14,7 @@ import Localization
 public struct ChartScene: View {
     @Environment(\.openURL) private var openURL
     
+    private let fetchTimer = Timer.publish(every: 60, tolerance: 1, on: .main, in: .common).autoconnect()
     @State private var model: ChartsViewModel
 
     @Query<PriceRequest>
@@ -77,11 +78,9 @@ public struct ChartScene: View {
                             ) {
                                 openURL(url)
                             }
-                            .contextMenu {
-                                if let value = link.value {
-                                    ContextMenuCopy(value: value)
-                                }
-                            }
+                            .contextMenu(
+                                link.value.map { [.copy(value: $0)] } ?? []
+                            )
                         } else {
                             ListItemView(
                                 title: link.title,
@@ -105,6 +104,11 @@ public struct ChartScene: View {
         }
         .task {
             await model.fetch()
+        }
+        .onReceive(fetchTimer) { time in
+            Task {
+                await model.fetch()
+            }
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)

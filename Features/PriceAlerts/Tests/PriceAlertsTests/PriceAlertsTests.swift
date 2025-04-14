@@ -11,15 +11,15 @@ struct SetPriceAlertViewModelTests {
     func testPriceAlertDirection_up() async throws {
         let viewModel = SetPriceAlertViewModel.mock()
         viewModel.state.amount = "200.00"
-        viewModel.setAlertDirection(for: Price(price: 150, priceChangePercentage24h: 1))
+        viewModel.setAlertDirection(for: .mock(price: 150))
         #expect(viewModel.state.alertDirection == .up)
         
-        viewModel.state.amount = "200,02"
-        viewModel.setAlertDirection(for: Price(price: 200.01, priceChangePercentage24h: 1))
+        viewModel.state.amount = "200.02"
+        viewModel.setAlertDirection(for: .mock(price: 200.01))
         #expect(viewModel.state.alertDirection == .up)
         
         viewModel.state.amount = "200.00"
-        viewModel.setAlertDirection(for: Price(price: 199.9, priceChangePercentage24h: 1))
+        viewModel.setAlertDirection(for: .mock(price: 199.9))
         #expect(viewModel.state.alertDirection == .up)
     }
 
@@ -28,15 +28,15 @@ struct SetPriceAlertViewModelTests {
         let viewModel = SetPriceAlertViewModel.mock()
         
         viewModel.state.amount = "200.00"
-        viewModel.setAlertDirection(for: Price(price: 250, priceChangePercentage24h: 1))
+        viewModel.setAlertDirection(for: .mock(price: 250))
         #expect(viewModel.state.alertDirection == .down)
         
         viewModel.state.amount = "200,00"
-        viewModel.setAlertDirection(for: Price(price: 200.1, priceChangePercentage24h: 1))
+        viewModel.setAlertDirection(for: .mock(price: 200.1))
         #expect(viewModel.state.alertDirection == .down)
 
-        viewModel.state.amount = "199.9999"
-        viewModel.setAlertDirection(for: Price(price: 200, priceChangePercentage24h: 1))
+        viewModel.state.amount = "199.99"
+        viewModel.setAlertDirection(for: .mock(price: 200))
         #expect(viewModel.state.alertDirection == .down)
     }
 
@@ -47,7 +47,7 @@ struct SetPriceAlertViewModelTests {
         #expect(viewModel.state.alertDirection == nil)
         
         viewModel.state.amount = "200,00"
-        viewModel.setAlertDirection(for: Price(price: 200.0, priceChangePercentage24h: 1))
+        viewModel.setAlertDirection(for: .mock(price: 200.0))
         #expect(viewModel.state.alertDirection == nil)
     }
 }
@@ -58,7 +58,7 @@ fileprivate extension SetPriceAlertViewModel {
             wallet: .makeView(name: "test", chain: .ethereum, address: .empty),
             assetId: "test-asset",
             priceAlertService: .mock(),
-            onComplete: {}
+            onComplete: { _ in }
         )
     }
 }

@@ -17,7 +17,7 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Store", path: "../Store"),
         .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "WalletSessionService", path: "../WalletSessionService"),
+        .package(name: "WalletSessionService", path: "../../Services/WalletSessionService"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),

@@ -13,16 +13,13 @@ import PrimitivesComponents
 public final class PriceAlertsViewModel: Sendable {
     private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
-    private let priceService: PriceService
-
+    
     public init(
         preferences: ObservablePreferences = .default,
-        priceAlertService: PriceAlertService,
-        priceService: PriceService
+        priceAlertService: PriceAlertService
     ) {
         self.preferences = preferences
         self.priceAlertService = priceAlertService
-        self.priceService = priceService
     }
 
     var title: String { Localized.Settings.PriceAlerts.title }
@@ -44,17 +41,21 @@ public final class PriceAlertsViewModel: Sendable {
     }
 
     func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
-        alerts
-            .filter { $0.priceAlert.lastNotifiedAt == nil }
-            .reduce(into: PriceAlertsSections(autoAlerts: [], manualAlerts: [])) { result, alert in
-            if alert.priceAlert.type == .auto {
-                result.autoAlerts.append(alert)
-            } else if let index = result.manualAlerts.firstIndex(where: { $0.first?.asset == alert.asset }) {
-                result.manualAlerts[index].append(alert)
-            } else {
-                result.manualAlerts.append([alert])
+        NSLog("alerts \(alerts.count)")
+        let (autoAlerts, manualGroups) = alerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
+            switch alert.priceAlert.type {
+            case .auto:
+                result.0.append(alert)
+            case .price, .pricePercentChange:
+                guard alert.priceAlert.lastNotifiedAt == nil else { return }
+                result.1[alert.asset, default: []].append(alert)
             }
         }
+
+        return PriceAlertsSections(
+            autoAlerts: autoAlerts,
+            manualAlerts: manualGroups
+        )
     }
 }
 
@@ -64,11 +65,7 @@ extension PriceAlertsViewModel {
     public func fetch() async {
         do {
             try await priceAlertService.update()
-
-            // update prices
-            let assetIds = try priceAlertService.getPriceAlerts().map { $0.assetId }.unique()
-            try await priceService.updatePrices(assetIds: assetIds, currency: preferences.preferences.currency)
-
+            try await priceAlertService.updatePrices(for: preferences.preferences.currency)
         } catch {
             NSLog("getPriceAlerts error: \(error)")
         }

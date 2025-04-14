@@ -10,26 +10,23 @@ import PrimitivesComponents
 
 struct WalletAssetsList: View {
     let assets: [AssetData]
-    let copyAssetAddress: StringAction
-    let hideAsset: AssetIdAction
-    let pinAsset: AssetIdBoolAction
     let currencyCode: String
+    let onHideAsset: AssetIdAction
+    let onPinAsset: AssetIdBoolAction
 
     @Binding var showBalancePrivacy: Bool
 
     init(
         assets: [AssetData],
-        copyAssetAddress: StringAction,
-        hideAsset: @escaping AssetIdAction,
-        pinAsset: AssetIdBoolAction,
         currencyCode: String,
+        onHideAsset: AssetIdAction,
+        onPinAsset: AssetIdBoolAction,
         showBalancePrivacy: Binding<Bool>
     ) {
         self.assets = assets
-        self.copyAssetAddress = copyAssetAddress
-        self.hideAsset = hideAsset
-        self.pinAsset = pinAsset
         self.currencyCode = currencyCode
+        self.onHideAsset = onHideAsset
+        self.onPinAsset = onPinAsset
         _showBalancePrivacy = showBalancePrivacy
     }
 
@@ -44,28 +41,24 @@ struct WalletAssetsList: View {
                         currencyCode: currencyCode
                     )
                 )
-                .contextMenu {
-                    ContextMenuItem(
-                        title: Localized.Wallet.copyAddress,
-                        image: SystemImage.copy
-                    ) {
-                        copyAssetAddress?(asset.account.address)
-                    }
-                    ContextMenuPin(
-                        isPinned: asset.metadata.isPinned
-                    ) {
-                        pinAsset?(asset.asset.id, !asset.metadata.isPinned)
-                    }
-                    ContextMenuItem(
-                        title: Localized.Common.hide,
-                        image: SystemImage.hide
-                    ) {
-                        hideAsset(asset.asset.id)
-                    }
-                }
+                .contextMenu(
+                    [
+                        .copy(
+                            title: Localized.Wallet.copyAddress,
+                            value: asset.account.address
+                        ),
+                        .pin(
+                            isPinned: asset.metadata.isPinned,
+                            onPin: {
+                                onPinAsset?(asset.asset.id, !asset.metadata.isPinned)
+                            }
+                        ),
+                        .hide({ onHideAsset?(asset.asset.id) })
+                    ]
+                )
                 .swipeActions(edge: .trailing) {
                     Button(Localized.Common.hide, role: .destructive) {
-                        hideAsset(asset.asset.id)
+                        onHideAsset?(asset.asset.id)
                     }
                     .tint(Colors.gray)
                 }

@@ -13,47 +13,43 @@ struct PriceImpactViewModelTests {
     func testPriceImpactValue_Low() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "990000000")
         let value = viewModel.value()
-        let expectedValue = PriceImpactValue(type: .low, value: "-1.00%")
 
-        #expect(value == expectedValue)
+        #expect(value == nil)
     }
 
     @Test
     func testPriceImpactValue_Positive() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "1005000000")
         let value = viewModel.value()
-        let expectedValue = PriceImpactValue(type: .positive, value: "+0.50%")
 
-        #expect(value == expectedValue)
+        #expect(value == PriceImpactValue(type: .positive, value: "+0.50%"))
     }
 
     @Test
     func testPriceImpactValue_Medium() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "950000000")
         let value = viewModel.value()
-        let expectedValue = PriceImpactValue(type: .medium, value: "-5.00%")
 
-        #expect(value == expectedValue)
+        #expect(value == PriceImpactValue(type: .medium, value: "-5.00%"))
     }
 
     @Test
     func testPriceImpactValue_High() {
         let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "700000000")
         let value = viewModel.value()
-        let expectedValue = PriceImpactValue(type: .high, value: "-30.00%")
 
-        #expect(value == expectedValue)
+        #expect(value == PriceImpactValue(type: .high, value: "-30.00%"))
     }
 }
 
 extension PriceImpactViewModel {
     static func mock(fromValue: String, toValue: String) -> PriceImpactViewModel {
         let fromAssetData = AssetData.mock(
-            price: Price(price: 5, priceChangePercentage24h: 1)
+            price: .mock()
         )
         
         let toAssetData = AssetData.mock(
-            price: Price(price: 5, priceChangePercentage24h: 1)
+            price: .mock()
         )
         
         return PriceImpactViewModel(

@@ -35,6 +35,9 @@ setup-git:
 core-upgrade:
     git submodule update --recursive --remote
 
+spm-resolve-all:
+    sh scripts/spm-resolve-all.sh
+
 test:
     @set -o pipefail && xcodebuild -project Gem.xcodeproj \
     -scheme Gem \
@@ -84,5 +87,8 @@ uml PATH:
     swiftplantuml --output consoleOnly > sources.txt
     PLANTUML_LIMIT_SIZE=16384 plantuml sources.txt && open sources.png
     rm sources.cmapx
+
+bump-version:
+    @sh ./scripts/bump-version-and-commit.sh patch
 
 mod core

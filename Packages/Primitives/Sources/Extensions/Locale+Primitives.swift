@@ -13,6 +13,7 @@ extension Locale {
     public static let FR = Locale(identifier: "fr-CA")
     public static let EN_CH = Locale(identifier: "en_CH")
     public static let DE_CH = Locale(identifier: "de_CH")
+    public static let RU_UA = Locale(identifier: "ru_UA")
     public static let ZH_Simplifier = Locale(identifier: "zh-Hans")
     public static let ZH_Singapore = Locale(identifier: "zh_SG")
     public static let ZH_Traditional = Locale(identifier: "zh-Hant")
@@ -31,7 +32,7 @@ extension Locale {
     }
 
     // https://github.com/fastlane/fastlane/blob/e1ab951b63aeb7a669b415708ffbe0e1346c0f59/fastlane_core/lib/fastlane_core/languages.rb#L14
-    public func appstoreLanguageIdentifier() -> String {
+    public func appstoreLanguageIdentifier() throws -> String {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
@@ -48,8 +49,9 @@ extension Locale {
         case .vietnamese: "vi"
         case .italian: "it"
         case .portuguese: "pt-BR"
+        case .czech: "cs"
         case .chinese: usageLanguageIdentifier()
-        default: fatalError()
+        default: throw AnyError("missing mapping for \(languageCode)")
         }
     }
 }

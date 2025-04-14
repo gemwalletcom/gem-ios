@@ -81,6 +81,7 @@ final class ConfirmTransferViewModel {
 
     var appTitle: String { Localized.WalletConnect.app }
     var appValue: String? { dataModel.appValue }
+    var appAssetImage: AssetImage? { dataModel.appAssetImage }
 
     var websiteURL: URL? { dataModel.websiteURL }
     var websiteTitle: String { Localized.WalletConnect.website }
@@ -186,6 +187,13 @@ final class ConfirmTransferViewModel {
 
         let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
         return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
+    }
+    
+    var showClearHeader: Bool {
+        switch headerType {
+        case .amount, .nft: true
+        case .swap: false
+        }
     }
 
     var shouldDisableButton: Bool {

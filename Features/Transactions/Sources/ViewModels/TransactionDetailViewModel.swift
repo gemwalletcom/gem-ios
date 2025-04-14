@@ -31,42 +31,6 @@ struct TransactionDetailViewModel {
     var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
-
-    var amountTitle: String {
-        switch model.transaction.transaction.type {
-        case .transfer,
-            .transferNFT,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRedelegate,
-            .stakeRewards,
-            .stakeWithdraw,
-            .smartContractCall:
-            return model.amountSymbolText
-        case .swap:
-            //TODO: Show ETH <> USDT swap info
-            return model.amountSymbolText
-        case .tokenApproval, .assetActivation:
-            return model.transaction.asset.symbol
-        }
-    }
-    
-    var amountSubtitle: String? {
-        switch model.transaction.transaction.type {
-        case .transfer,
-            .transferNFT,
-            .swap,
-            .stakeDelegate,
-            .stakeUndelegate,
-            .stakeRedelegate,
-            .stakeRewards,
-            .stakeWithdraw,
-            .smartContractCall:
-            return infoModel.amountFiatValueText
-        case .tokenApproval, .assetActivation:
-            return .none
-        }
-    }
     
     var chain: Chain {
         model.transaction.transaction.assetId.chain
@@ -111,7 +75,7 @@ struct TransactionDetailViewModel {
         }
     }
     
-    var recipienAddressViewModel: AddressListItemViewModel? {
+    var recipientAddressViewModel: AddressListItemViewModel? {
         guard let title = participantField, let account = participantAccount else {
             return .none
         }
@@ -199,6 +163,13 @@ struct TransactionDetailViewModel {
     
     var transactionExplorerText: String {
         model.viewOnTransactionExplorerText
+    }
+
+    var showClearHeader: Bool {
+        switch headerType {
+        case .amount, .nft: true
+        case .swap: false
+        }
     }
 
     var headerType: TransactionHeaderType {

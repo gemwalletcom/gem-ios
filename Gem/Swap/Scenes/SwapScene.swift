@@ -103,7 +103,10 @@ extension SwapScene {
             Text(model.swapFromTitle)
                 .listRowInsets(.horizontalMediumInsets)
         } footer: {
-            SwapChangeView(fromId: $model.fromAssetRequest.assetId, toId: $model.toAssetRequest.assetId)
+            SwapChangeView(
+                fromId: $model.pairSelectorModel.fromAssetId,
+                toId: $model.pairSelectorModel.toAssetId
+            )
                 .padding(.top, .small)
                 .frame(maxWidth: .infinity)
                 .disabled(model.isSwitchAssetButtonDisabled)
@@ -153,6 +156,14 @@ extension SwapScene {
                 } else {
                     view
                 }
+            }
+            
+            if let rateText = model.rateText {
+                ListItemImageView(
+                    title: model.rateTitle,
+                    subtitle: rateText,
+                    assetImage: .none
+                )
             }
 
             if let viewModel = model.priceImpactModel {

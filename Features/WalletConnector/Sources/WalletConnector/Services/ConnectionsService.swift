@@ -37,6 +37,10 @@ public final class ConnectionsService: Sendable {
         try await disconnect(sessionId: session.sessionId)
     }
     
+    public func updateSessions() {
+        connector.updateSessions()
+    }
+    
     // MARK: - Private methods
     
     private func configure() async throws {

@@ -23,7 +23,7 @@ public struct EmptyContentView: View {
                                 action()
                             }
                             .buttonStyle(
-                                .amount()
+                                .empty()
                             )
                         }
                     }

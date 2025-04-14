@@ -1,27 +1,23 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
-@testable import Gem
+import Testing
 import PrimitivesTestKit
+import PrimitivesComponents
+import Primitives
 
-final class TransactionViewModelTests: XCTestCase {
+@testable import Transactions
 
+final class TransactionViewModelTests {
+
+    @Test
     func testTransactionTitle() {
-        XCTAssertEqual(
-            TransactionViewModel(transaction: .mock(transaction: .mock(state: .confirmed)), formatter: .full).title,
-            "Received"
-        )
-        XCTAssertEqual(
-            TransactionViewModel(transaction: .mock(transaction: .mock(state: .confirmed, direction: .outgoing)), formatter: .full).title,
-            "Sent"
-        )
-        XCTAssertEqual(
-            TransactionViewModel(transaction: .mock(transaction: .mock(state: .failed)), formatter: .full).title,
-            "Transfer"
-        )
-        XCTAssertEqual(
-            TransactionViewModel(transaction: .mock(transaction: .mock(type: .swap)), formatter: .full).title,
-            "Swap"
-        )
+        testTransactionTitle(expectedTitle: "Received", transaction: .mock(state: .confirmed))
+        testTransactionTitle(expectedTitle: "Sent", transaction: .mock(state: .confirmed, direction: .outgoing))
+        testTransactionTitle(expectedTitle: "Transfer", transaction: .mock(state: .failed))
+        testTransactionTitle(expectedTitle: "Swap", transaction: .mock(type: .swap))
+    }
+
+    func testTransactionTitle(expectedTitle: String, transaction: Transaction) {
+        #expect(TransactionViewModel(explorerService: MockExplorerLink(), transaction: .mock(transaction: transaction), formatter: .full).title == expectedTitle)
     }
 }

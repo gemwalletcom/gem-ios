@@ -56,7 +56,6 @@ struct ConfirmTransferScene: View {
 // MARK: - UI Components
 
 extension ConfirmTransferScene {
-
     private var statefullButtonImage: Image? {
         if let image = model.buttonImage {
             return Image(systemName: image)
@@ -66,25 +65,33 @@ extension ConfirmTransferScene {
 
     private var transactionsList: some View {
         List {
+            TransactionHeaderListItemView(
+                headerType: model.headerType,
+                showClearHeader: model.showClearHeader
+            )
             Section {
                 if let appValue = model.appValue {
-                    ListItemView(title: model.appTitle, subtitle: appValue)
+                    ListItemImageView(
+                        title: model.appTitle,
+                        subtitle: appValue,
+                        assetImage: model.appAssetImage
+                    )
                 }
 
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
-                        .contextMenu {
-                            if let websiteURL = model.websiteURL {
-                                ContextMenuViewURL(title: websiteValue, url: websiteURL, image: SystemImage.network)
-                            }
-                        }
+                        .contextMenu(
+                            model.websiteURL.map({ [.url(title: websiteValue, url: $0)] }) ?? []
+                        )
                 }
 
                 ListItemView(title: model.senderTitle, subtitle: model.senderValue)
-                    .contextMenu {
-                        ContextMenuCopy(title: Localized.Common.copy, value: model.senderAddress)
-                        ContextMenuViewURL(title: model.senderExplorerText, url: model.senderAddressExplorerUrl, image: SystemImage.globe)
-                    }
+                    .contextMenu(
+                        [
+                            .copy(value: model.senderAddress),
+                            .url(title: model.senderExplorerText, url: model.senderAddressExplorerUrl)
+                        ]
+                    )
 
                 ListItemImageView(
                     title: model.networkTitle,
@@ -103,14 +110,6 @@ extension ConfirmTransferScene {
                 if let slippage = model.slippageText {
                     ListItemView(title: model.slippageField, subtitle: slippage)
                 }
-            } header: {
-                HStack {
-                    Spacer(minLength: 0)
-                    TransactionHeaderView(type: model.headerType)
-                        .padding(.bottom, .medium)
-                    Spacer(minLength: 0)
-                }
-                .headerProminence(.increased)
             }
 
             Section {
@@ -132,6 +131,7 @@ extension ConfirmTransferScene {
                 ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
             }
         }
+        .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))

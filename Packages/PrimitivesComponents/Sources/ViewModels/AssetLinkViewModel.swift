@@ -5,6 +5,7 @@ import Primitives
 import Localization
 import SwiftUI
 import Style
+import Components
 
 public struct AssetLinkViewModel {
     public let assetLink: AssetLink
@@ -21,7 +22,7 @@ public struct AssetLinkViewModel {
             title: name,
             subtitle: host,
             url: url,
-            image: image
+            image: AssetImage.image(image)
         )
     }
     

@@ -18,7 +18,6 @@ public final class SetPriceAlertViewModel {
     private let onComplete: StringAction
     private let preferences = Preferences.standard
     private let currencyFormatter = CurrencyFormatter(currencyCode: Preferences.standard.currency)
-    private let valueFormatter = ValueFormatter(style: .short)
 
     var state: SetPriceAlertViewModelState
     let preselectedPercentages: [String] = ["5", "10", "15"]
@@ -60,7 +59,7 @@ public final class SetPriceAlertViewModel {
     
     var isEnabledConfirmButton: Bool {
         guard !state.amount.isEmpty,
-              let _ = try? valueFormatter.number(amount: state.amount).doubleValue,
+              currencyFormatter.double(from: state.amount) != .zero,
               state.alertDirection != nil
         else {
             return false
@@ -101,7 +100,7 @@ public final class SetPriceAlertViewModel {
     // MARK: - Private
     
     private var amountValue: Double? {
-        try? valueFormatter.number(amount: state.amount).doubleValue
+        currencyFormatter.double(from: state.amount)
     }
     
     private var completeMessage: String {
@@ -122,8 +121,7 @@ public final class SetPriceAlertViewModel {
     ) -> PriceAlertDirection? {
         guard let price,
               let priceValue = currencyFormatter.normalizedDouble(from: price),
-              let targetAmount = try? valueFormatter.number(amount: amount).doubleValue,
-              let amountValue = currencyFormatter.normalizedDouble(from: targetAmount)
+              let amountValue = currencyFormatter.double(from: amount)
         else {
             return nil
         }

@@ -25,6 +25,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.keystore) private var keystore
+    @Environment(\.observablePreferences) private var observablePreferences
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -51,7 +52,8 @@ struct SettingsNavigationStack: View {
                 model: SettingsViewModel(
                     walletId: walletId,
                     walletsService: walletsService,
-                    currencyModel: currencyModel
+                    currencyModel: currencyModel,
+                    observablePrefereces: observablePreferences
                 ),
                 isPresentingWallets: $isPresentingWallets
             )
@@ -69,7 +71,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
                 PriceAlertsNavigationView(
-                    model: PriceAlertsViewModel(priceAlertService: priceAlertService, priceService: priceService)
+                    model: PriceAlertsViewModel(priceAlertService: priceAlertService)
                 )
             }
             .navigationDestination(for: Scenes.Price.self) { scene in
@@ -84,7 +86,11 @@ struct SettingsNavigationStack: View {
                 ChainListSettingsScene()
             }
             .navigationDestination(for: Scenes.AboutUs.self) { _ in
-                AboutUsScene()
+                AboutUsScene(
+                    model: AboutUsViewModel(
+                        preferences: observablePreferences
+                    )
+                )
             }
             .navigationDestination(for: Scenes.WalletConnect.self) { _ in
                 ConnectionsScene(
@@ -95,6 +101,7 @@ struct SettingsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.Developer.self) { _ in
                 DeveloperScene(model: DeveloperViewModel(
+                    walletId: walletId,
                     transactionsService: transactionsService,
                     assetService: assetsService,
                     stakeService: stakeService,
