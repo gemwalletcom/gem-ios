@@ -26,8 +26,8 @@ struct ResponseTests {
 
     @Test
     func testMapDate() throws {
-        let response = Response(code: 0, body: Data("{\"date\": \"2023-12-26T21:47:58.101180Z\"}".utf8), headers: [:])
-        _ = try response.map(as: TestDate.self)
+        _ = try Response(code: 0, body: Data("{\"date\": \"2023-12-26T21:47:58.101180Z\"}".utf8), headers: [:]).map(as: TestDate.self)
+        _ = try Response(code: 0, body: Data("{\"date\": \"2025-04-09T01:27:01.827Z\"}".utf8), headers: [:]).map(as: TestDate.self)
     }
 
     @Test
