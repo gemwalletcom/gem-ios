@@ -308,18 +308,17 @@ final class TransferAmountCalculatorTests {
     @Test
     func testSolanaMinBalance() {
         let asset = Asset(.solana)
-        #expect(throws: Never.self) {
-            let result = try service.calculate(input: TransferAmountInput(
+        #expect(throws: Error.self) {
+            try service.calculate(input: TransferAmountInput(
                 asset: asset,
-                assetBalance: Balance(available: BigInt(890880)), // 890880 - Chain.minimumAccountBalance
-                value: .zero,
+                assetBalance: Balance(available: BigInt(1000890880)),
+                value: BigInt(1000590880),
                 availableValue: .zero,
                 assetFee: asset.feeAsset,
                 assetFeeBalance: Balance(available: .zero),
                 fee: .zero,
                 canChangeValue: true
             ))
-            #expect(result == TransferAmount(value: .zero, networkFee: .zero, useMaxAmount: true))
         }
     }
 }
