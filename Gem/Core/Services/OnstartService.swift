@@ -2,27 +2,27 @@
 
 import Foundation
 import Store
-import Keystore
 import Primitives
 import NodeService
 import AssetsService
 import Preferences
+import ManageWalletService
+
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
-
 struct OnstartService {
     
     let assetsService: AssetsService
     let assetStore: AssetStore
     let nodeStore: NodeStore
-    let keystore: any Keystore
     let preferences: Preferences
-    
+    let manageWalletService: ManageWalletService
+
     func migrations() {
         do {
-            try keystore.setupChains(chains: AssetConfiguration.allChains)
+            try manageWalletService.setup(chains: AssetConfiguration.allChains)
         } catch {
-            NSLog("keystore setup Chains error: \(error)")
+            NSLog("Setup chains: \(error)")
         }
         do {
             try ImportAssetsService(

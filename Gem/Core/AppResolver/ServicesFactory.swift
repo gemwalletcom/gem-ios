@@ -24,6 +24,7 @@ import NFTService
 import WalletsService
 import ManageWalletService
 import AvatarService
+import WalletSessionService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -106,8 +107,10 @@ struct ServicesFactory {
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
-            walletStore: storeManager.walletStore,
-            preferences: storages.observablePreferences,
+            walletSessionService: WalletSessionService(
+                walletStore: storeManager.walletStore,
+                preferences: storages.observablePreferences,
+            ),
             interactor: walletConnectorManager
         )
 
@@ -127,7 +130,6 @@ struct ServicesFactory {
 
         let onstartService = Self.makeOnstartService(
             assetStore: storeManager.assetStore,
-            keystore: storages.keystore,
             nodeStore: storeManager.nodeStore,
             preferences: preferences,
             assetsService: assetsService,
@@ -296,14 +298,12 @@ extension ServicesFactory {
 
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
-        walletStore: WalletStore,
-        preferences: ObservablePreferences,
+        walletSessionService: WalletSessionService,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             connectionsStore: connectionsStore,
-            walletStore: walletStore,
-            preferences: preferences,
+            walletSessionService: walletSessionService,
             walletConnectorInteractor: interactor
         )
         return ConnectionsService(
@@ -335,7 +335,6 @@ extension ServicesFactory {
 
     private static func makeOnstartService(
         assetStore: AssetStore,
-        keystore: any Keystore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
@@ -344,7 +343,6 @@ extension ServicesFactory {
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
-            keystore: keystore,
             nodeStore: nodeStore,
             preferences: preferences,
             assetsService: assetsService,

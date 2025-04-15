@@ -44,10 +44,10 @@ let package = Package(
         .testTarget(
             name: "WalletConnectorTests",
             dependencies: [
-                .product(name: "KeystoreTestKit", package: "Keystore"),
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "WalletSessionServiceTeskKit", package: "WalletSessionService"),
                 "WalletConnector"
             ],
             resources: [.process("Resources")]

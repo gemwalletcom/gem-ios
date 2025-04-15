@@ -5,8 +5,8 @@ import Primitives
 
 public extension Wallet {
     static func mock(
-        id: String = "",
-        name: String = "",
+        id: String = UUID().uuidString,
+        name: String = "Wallet \(UUID().uuidString)",
         accounts: [Account] = [],
         index: Int = 0
     ) -> Wallet {

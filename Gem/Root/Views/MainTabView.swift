@@ -2,7 +2,6 @@
 
 import SwiftUI
 import Primitives
-import Keystore
 import GRDB
 import GRDBQuery
 import Store

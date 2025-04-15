@@ -1,21 +1,21 @@
 import Foundation
-import Keystore
+import ManageWalletService
 import Primitives
 import SwiftUI
 import Localization
 import PrimitivesComponents
 
 class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
-    private let keystore: any Keystore
+    private let manageWalletService: ManageWalletService
     private let onCreateWallet: (([String]) -> Void)?
 
     @Published var words: [String] = []
 
     init(
-        keystore: any Keystore,
+        manageWalletService: ManageWalletService,
         onCreateWallet: (([String]) -> Void)? = nil
     ) {
-        self.keystore = keystore
+        self.manageWalletService = manageWalletService
         self.onCreateWallet = onCreateWallet
     }
 
@@ -35,7 +35,7 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     }
 
     func generateWords() -> [String] {
-        keystore.createWallet()
+        manageWalletService.createWallet()
     }
     
     var presentWarning: Bool {

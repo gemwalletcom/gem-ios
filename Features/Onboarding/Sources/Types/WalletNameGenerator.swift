@@ -1,21 +1,27 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Keystore
 import Primitives
 import Localization
+import ManageWalletService
 
 struct WalletNameGenerator {
-    
-    let type: ImportWalletType
-    let keystore: any Keystore
-    
-    var name: String {
-        let index = (try? keystore.getNextWalletIndex()) ?? 0
-        return name(type: type, index: index)
+    private let type: ImportWalletType
+    private let manageWalletService: ManageWalletService
+
+    init(type: ImportWalletType, manageWalletService: ManageWalletService) {
+        self.type = type
+        self.manageWalletService = manageWalletService
     }
-    
-    func name(type: ImportWalletType, index: Int) -> String {
+
+    var name: String {
+        name(
+            type: type,
+            index: (try? manageWalletService.nextWalletIndex()) ?? .zero
+        )
+    }
+
+    private func name(type: ImportWalletType, index: Int) -> String {
         switch type {
         case .multicoin: Localized.Wallet.defaultName(index)
         case .chain(let chain): Localized.Wallet.defaultNameChain(Asset(chain).name, index)
