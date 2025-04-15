@@ -18,6 +18,7 @@ struct ConfirmTransferScene: View {
 
     @State var model: ConfirmTransferViewModel
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
+    @State private var isPresentingUrl: URL? = nil
 
     var body: some View {
         VStack {
@@ -83,7 +84,7 @@ extension ConfirmTransferScene {
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
                         .contextMenu(
-                            model.websiteURL.map({ [.url(title: websiteValue, url: $0)] }) ?? []
+                            .url(title: websiteValue, onOpen: { isPresentingUrl = model.websiteURL })
                         )
                 }
 
@@ -91,7 +92,7 @@ extension ConfirmTransferScene {
                     .contextMenu(
                         [
                             .copy(value: model.senderAddress),
-                            .url(title: model.senderExplorerText, url: model.senderAddressExplorerUrl)
+                            .url(title: model.senderExplorerText, onOpen: { isPresentingUrl = model.senderAddressExplorerUrl })
                         ]
                     )
 
@@ -138,6 +139,7 @@ extension ConfirmTransferScene {
         .sheet(item: $isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 
     private var networkFeeView: some  View {
