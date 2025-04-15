@@ -13,8 +13,6 @@ import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
     @Environment(\.dismiss) private var dismiss
-    // TODO: Fix after merging #590
-    @Environment(\.openURL) private var openURL
 
     @State var model: ConfirmTransferViewModel
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
@@ -174,7 +172,7 @@ extension ConfirmTransferScene {
     private func onAction() {
         if let result = model.state.value?.transferAmountResult, case let .error(_, error) = result {
             if case .minimumAccountBalanceTooLow = error as? TransferAmountCalculatorError {
-                openURL(model.minimumBalanceInfoUrl)
+                isPresentingUrl = model.minimumBalanceInfoUrl
             }
         } else if model.state.isError {
             fetch()
