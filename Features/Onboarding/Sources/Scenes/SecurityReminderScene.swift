@@ -6,10 +6,8 @@ import Style
 import Components
 
 struct SecurityReminderScene: View {
-    // TODO: Fix after merging #590
-    @Environment(\.openURL) private var openURL
-    
     @State private var model: SecurityReminderViewModel
+    @State private var isPresentingUrl: URL? = nil
     
     init(model: SecurityReminderCreateWalletViewModel) {
         self.model = model
@@ -61,10 +59,11 @@ struct SecurityReminderScene: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", systemImage: SystemImage.info) {
-                    openURL(model.docsUrl)
+                    isPresentingUrl = model.docsUrl
                 }
             }
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 
