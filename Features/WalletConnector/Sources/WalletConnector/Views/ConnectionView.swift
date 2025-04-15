@@ -6,6 +6,7 @@ import Style
 import PrimitivesComponents
 
 public struct ConnectionView: View {
+    @State private var isPresentingUrl: URL? = nil
     public let model: WalletConnectionViewModel
 
     public init(model: WalletConnectionViewModel) {
@@ -28,6 +29,16 @@ public struct ConnectionView: View {
                 }
             }
         }
-        .contextMenu(model.urlType.map({ [$0] }) ?? [])
+        .contextMenu {
+            if let title = model.host, let url = model.url {
+                ContextMenuItem(
+                    title: title,
+                    systemImage: SystemImage.globe
+                ) {
+                    isPresentingUrl = url
+                }
+            }
+        }
+        .safariSheet(url: $isPresentingUrl)
     }
 }

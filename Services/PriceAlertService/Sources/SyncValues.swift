@@ -19,17 +19,18 @@ public struct SyncValues: Sendable {
         local: Set<T>,
         remote: Set<T>
     ) -> SyncResult<T> {
-        switch primary {
-        case .local:
-            SyncResult(
-                missing: local.subtracting(remote),
-                delete: remote.subtracting(local)
-            )
-        case .remote:
-            SyncResult(
-                missing: remote.subtracting(local),
-                delete: local.subtracting(remote)
-            )
-        }
+        let (primarySet, secondarySet): (Set<T>, Set<T>) = {
+            switch primary {
+            case .local:
+                return (local, remote)
+            case .remote:
+                return (remote, local)
+            }
+        }()
+
+        return SyncResult(
+            missing: primarySet.subtracting(secondarySet),
+            delete: secondarySet.subtracting(primarySet)
+        )
     }
 }

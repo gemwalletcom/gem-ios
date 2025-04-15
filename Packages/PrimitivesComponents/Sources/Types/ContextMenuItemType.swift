@@ -8,7 +8,7 @@ public enum ContextMenuItemType {
     case pin(isPinned: Bool, onPin: VoidAction)
     case hide(VoidAction)
     case delete(VoidAction)
-    case url(title: String, url: URL)
+    case url(title: String, onOpen: VoidAction)
     case custom(
         title: String,
         systemImage: String? = nil,

@@ -41,22 +41,21 @@ public final class PriceAlertsViewModel: Sendable {
     }
 
     func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
-        alerts
-            .reduce(into: PriceAlertsSections(autoAlerts: [], manualAlerts: [])) { result, alert in
-                switch alert.priceAlert.type {
-                case .auto:
-                    result.autoAlerts.append(alert)
-                case .price, .pricePercentChange:
-                    guard alert.priceAlert.lastNotifiedAt == nil else {
-                        return
-                    }
-                    if let index = result.manualAlerts.firstIndex(where: { $0.first?.asset == alert.asset }) {
-                        result.manualAlerts[index].append(alert)
-                    } else {
-                        result.manualAlerts.append([alert])
-                    }
-                }
+        NSLog("alerts \(alerts.count)")
+        let (autoAlerts, manualGroups) = alerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
+            switch alert.priceAlert.type {
+            case .auto:
+                result.0.append(alert)
+            case .price, .pricePercentChange:
+                guard alert.priceAlert.lastNotifiedAt == nil else { return }
+                result.1[alert.asset, default: []].append(alert)
+            }
         }
+
+        return PriceAlertsSections(
+            autoAlerts: autoAlerts,
+            manualAlerts: manualGroups
+        )
     }
 }
 
@@ -67,7 +66,6 @@ extension PriceAlertsViewModel {
         do {
             try await priceAlertService.update()
             try await priceAlertService.updatePrices(for: preferences.preferences.currency)
-
         } catch {
             NSLog("getPriceAlerts error: \(error)")
         }

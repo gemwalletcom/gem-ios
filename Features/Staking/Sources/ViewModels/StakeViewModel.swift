@@ -19,7 +19,7 @@ public final class StakeViewModel {
 
     private var delegatitonsState: StateViewType<Bool> = .loading
     private let chain: Chain
-    private let stakeService: StakeService
+    private let stakeService: any StakeServiceable
 
     private let formatter = ValueFormatter(style: .medium)
     private let recommendedValidators = StakeRecommendedValidators()
@@ -30,7 +30,7 @@ public final class StakeViewModel {
     public init(
         wallet: Wallet,
         chain: Chain,
-        stakeService: StakeService,
+        stakeService: any StakeServiceable,
         onTransferAction: TransferDataAction,
         onAmountInputAction: AmountInputAction
     ) {

@@ -82,11 +82,10 @@ public struct TransactionScene: View {
                     )
                 }
                 Section {
-                    NavigationOpenLink(
-                        url: model.transactionExplorerUrl,
-                        with: Text(model.transactionExplorerText)
+                    SafariNavigationLink(url: model.transactionExplorerUrl) {
+                        Text(model.transactionExplorerText)
                             .tint(Colors.black)
-                    )
+                    }
                 }
             }
             .contentMargins([.top], .small, for: .scrollContent)

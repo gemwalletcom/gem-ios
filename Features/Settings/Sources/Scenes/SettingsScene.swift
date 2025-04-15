@@ -120,15 +120,19 @@ extension SettingsScene {
 
     private var aboutSection: some View {
         Section {
-            NavigationOpenLink(url: model.helpCenterURL, with: ListItemView(
-                title: model.helpCenterTitle,
-                imageStyle: .settings(assetImage: model.helpCenterImage)
-            ))
+            SafariNavigationLink(url: model.helpCenterURL) {
+                ListItemView(
+                    title: model.helpCenterTitle,
+                    imageStyle: .settings(assetImage: model.helpCenterImage)
+                )
+            }
 
-            NavigationOpenLink(url: model.supportURL, with: ListItemView(
-                title: model.supportTitle,
-                imageStyle: .settings(assetImage: model.supportImage)
-            ))
+            SafariNavigationLink(url: model.supportURL) {
+                ListItemView(
+                    title: model.supportTitle,
+                    imageStyle: .settings(assetImage: model.supportImage)
+                )
+            }
 
             NavigationLink(value: Scenes.AboutUs()) {
                 ListItemView(

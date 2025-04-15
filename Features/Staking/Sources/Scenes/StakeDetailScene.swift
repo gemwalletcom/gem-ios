@@ -14,7 +14,9 @@ public struct StakeDetailScene: View {
         List {
             Section {
                 if let url = model.validatorUrl {
-                    NavigationOpenLink(url: url, with: ListItemView(title: model.validatorTitle, subtitle: model.validatorText))
+                    SafariNavigationLink(url: url) {
+                        ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
+                    }
                 } else {
                     ListItemView(title: model.validatorTitle, subtitle: model.validatorText)
                 }

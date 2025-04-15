@@ -32,7 +32,7 @@ extension Locale {
     }
 
     // https://github.com/fastlane/fastlane/blob/e1ab951b63aeb7a669b415708ffbe0e1346c0f59/fastlane_core/lib/fastlane_core/languages.rb#L14
-    public func appstoreLanguageIdentifier() -> String {
+    public func appstoreLanguageIdentifier() throws -> String {
         guard let languageCode = language.languageCode else {
             return Locale.US.language.minimalIdentifier
         }
@@ -49,8 +49,9 @@ extension Locale {
         case .vietnamese: "vi"
         case .italian: "it"
         case .portuguese: "pt-BR"
+        case .czech: "cs"
         case .chinese: usageLanguageIdentifier()
-        default: fatalError()
+        default: throw AnyError("missing mapping for \(languageCode)")
         }
     }
 }

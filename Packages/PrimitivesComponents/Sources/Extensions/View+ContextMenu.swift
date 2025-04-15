@@ -53,14 +53,13 @@ public extension View {
                     onDelete?()
                 }
             )
-        case let .url(title, url):
+        case let .url(title, onOpen):
             ContextMenuItem(
                 title: title,
                 systemImage: SystemImage.globe
             ) {
-                UIApplication.shared.open(url)
+                onOpen?()
             }
-
         case let .custom(title, systemImage, role, action):
             ContextMenuItem(
                 title: title,
