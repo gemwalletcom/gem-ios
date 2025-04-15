@@ -22,6 +22,7 @@ public extension Gemstone.SwapProviderType {
         case .stonFiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
         case .reservoir: Images.SwapProviders.reservoir
+        case .symbiosis: Images.SwapProviders.symbiosis
         }
     }
 }

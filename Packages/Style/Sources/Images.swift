@@ -72,6 +72,7 @@ public enum Images {
         public static let oku = Image(.oku)
         public static let wagmi = Image(.wagmi)
         public static let reservoir = Image(.reservoir)
+        public static let symbiosis = Image(.symbiosis)
     }
 
     public enum Fiat {
@@ -163,13 +164,13 @@ public enum Images {
     public enum Info {
         public static let networkFee = Image(.networkFee)
     }
-    
+
     public enum PriceAlert {
         public static let up = Image(.up)
         public static let down = Image(.down)
     }
 
-    public struct EmptyContent {
+    public enum EmptyContent {
         public static let activity = Image(.emptyActivity)
         public static let priceAlerts = Image(.emptyNotification)
         public static let nft = Image(.emptyIcons)
@@ -178,7 +179,7 @@ public enum Images {
         public static let search = Image(.emptySearch)
     }
 
-    public struct ErrorConent {
+    public enum ErrorConent {
         public static let error = Image(.error)
     }
 }
