@@ -109,7 +109,7 @@ struct ServicesFactory {
             connectionsStore: storeManager.connectionsStore,
             walletSessionService: WalletSessionService(
                 walletStore: storeManager.walletStore,
-                preferences: storages.observablePreferences,
+                preferences: storages.observablePreferences
             ),
             interactor: walletConnectorManager
         )
