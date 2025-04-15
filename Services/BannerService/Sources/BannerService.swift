@@ -26,9 +26,6 @@ public struct BannerService: Sendable {
                 return try await pushNotificationService.requestPermissionsOrOpenSettings()
             case .accountActivation,
                 .accountBlockedMultiSignature:
-                if let url = action.url {
-                    await UIApplication.shared.open(url, completionHandler: .none)
-                }
                 return true
             case .stake, .activateAsset:
                 return false

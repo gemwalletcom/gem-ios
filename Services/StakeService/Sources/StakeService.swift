@@ -7,7 +7,7 @@ import ChainService
 import GemAPI
 import Blockchain
 
-public struct StakeService: Sendable {
+public struct StakeService: StakeServiceable {
     private let store: StakeStore
     private let chainServiceFactory: ChainServiceFactory
     private let assetsService: GemAPIStaticService

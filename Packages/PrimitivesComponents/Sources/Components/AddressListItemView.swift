@@ -8,6 +8,7 @@ import Localization
 
 // TODO: - remove explorerService dependency get address link in init
 public struct AddressListItemView: View {
+    @State private var isPresentingUrl: URL? = nil
     private let model: AddressListItemViewModel
 
     public init(
@@ -25,8 +26,9 @@ public struct AddressListItemView: View {
         .contextMenu(
             [
                 .copy(value: model.account.address),
-                .url(title: model.addressExplorerText, url: model.addressExplorerUrl)
+                .url(title: model.addressExplorerText, onOpen: { isPresentingUrl = model.addressExplorerUrl })
             ]
         )
+        .safariSheet(url: $isPresentingUrl)
     }
 }

@@ -6,6 +6,7 @@ import Primitives
 import Style
 
 public struct TransactionView: View {
+    @State private var isPresentingUrl: URL? = nil
     private let model: TransactionViewModel
 
     public init(model: TransactionViewModel) {
@@ -28,11 +29,9 @@ public struct TransactionView: View {
             imageStyle: .asset(assetImage: model.assetImage)
         )
         .contextMenu(
-            .url(
-                title: model.viewOnTransactionExplorerText,
-                url: model.transactionExplorerUrl
-            )
+            .url(title: model.viewOnTransactionExplorerText, onOpen: { isPresentingUrl = model.transactionExplorerUrl })
         )
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 
@@ -42,7 +41,7 @@ private struct ExplorerMock: ExplorerLinkFetchable {
     func addressUrl(chain: Chain, address: String) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
-   func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
+    func transactionUrl(chain: Chain, hash: String, swapProvider: String?) -> BlockExplorerLink {
        .init(name: "", link: "")
    }
 }
