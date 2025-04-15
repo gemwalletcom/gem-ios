@@ -38,6 +38,7 @@ public final class WalletSceneViewModel: Sendable {
     public var isPresentingWallets = false
     public var isPresentingSelectAssetType: SelectAssetType?
     public var isPresentingInfoSheet: InfoSheetType?
+    public var isPresentingUrl: URL? = nil
 
     public init(
         walletsService: WalletsService,
@@ -165,6 +166,7 @@ extension WalletSceneViewModel {
                 try await handleBanner(action: action)
             }
         }
+        isPresentingUrl = action.url
     }
 
     func onHideAsset(_ assetId: AssetId) {

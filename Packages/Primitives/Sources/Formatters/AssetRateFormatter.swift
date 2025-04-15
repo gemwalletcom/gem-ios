@@ -18,7 +18,8 @@ public struct AssetRateFormatter {
         let fromAmount = try formatter.double(from: fromValue, decimals: fromAsset.decimals.asInt)
         let toAmount = try formatter.double(from: toValue, decimals: toAsset.decimals.asInt)
         let amount = toAmount / fromAmount
-        let amountString = CurrencyFormatter(type: .currencyShort).string(
+        
+        let amountString = CurrencyFormatter(type: .currency).string(
             decimal: Decimal(amount),
             symbol: toAsset.symbol
         )

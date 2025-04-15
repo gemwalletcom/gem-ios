@@ -43,7 +43,7 @@ struct AssetsFilterScene: View {
         .sheet(isPresented: $isPresentingChains) {
             SelectableSheet(
                 model: model.networksModel,
-                onFinishSelection: onFinishSelection(chains:),
+                onFinishSelection: onFinishSelection(value:),
                 listContent: { ChainView(model: ChainViewModel(chain: $0))}
             )
         }
@@ -62,8 +62,11 @@ extension AssetsFilterScene {
         dismiss()
     }
 
-    private func onFinishSelection(chains: [Chain]) {
-        model.chainsFilter.selectedChains = chains
+    private func onFinishSelection(value: SelectionResult<Chain>) {
+        model.chainsFilter.selectedChains = value.items
+        if value.isConfirmed {
+            dismiss()
+        }
     }
 
     private func onSelectChainsFilter() {

@@ -5,7 +5,7 @@ import Style
 
 public struct InfoSheetScene: View {
     @Environment(\.dismiss) private var dismiss
-    @Environment(\.openURL) private var openURL
+    @State private var isPresentedUrl: URL? = nil
 
     private let model: InfoSheetModelViewable
 
@@ -47,6 +47,7 @@ public struct InfoSheetScene: View {
                 }
             }
         }
+        .safariSheet(url: $isPresentedUrl)
         .presentationDetents([.medium])
         .presentationCornerRadius(.presentation.cornerRadius)
     }
@@ -61,7 +62,7 @@ extension InfoSheetScene {
 
     private func onLearnMore() {
         guard let url = model.url else { return }
-        openURL(url)
+        isPresentedUrl = url
     }
 }
 

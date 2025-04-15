@@ -29,20 +29,7 @@ public struct WalletConnectionViewModel: Sendable {
         url?.host(percentEncoded: false)
     }
 
-    var urlType: ContextMenuItemType? {
-        guard let host,
-              let url
-        else {
-            return nil
-        }
-        return .url(title: host, url: url)
-    }
-}
-
-// MARK: - Private
-
-extension WalletConnectionViewModel {
-    private var url: URL? {
+    var url: URL? {
         URL(string: connection.session.metadata.url)
     }
 }

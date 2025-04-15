@@ -107,6 +107,7 @@ struct WalletNavigationStack: View {
                 .sheet(item: $model.isPresentingInfoSheet) {
                     InfoSheetScene(model: InfoSheetViewModel(type: $0))
                 }
+                .safariSheet(url: $model.isPresentingUrl)
         }
     }
 }
