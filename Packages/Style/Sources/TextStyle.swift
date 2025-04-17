@@ -21,11 +21,23 @@ public struct TextStyle: Sendable {
         self.background = background
     }
 
+    public var stepDown: TextStyle { step(offset: 1) }
+    public var stepUp: TextStyle { step(offset: -1) }
+
     public func weight(_ weight: Font.Weight) -> TextStyle {
         TextStyle(
             font: font,
             color: color,
             fontWeight: weight,
+            background: background
+        )
+    }
+
+    public func step(offset: Int) -> TextStyle {
+        TextStyle(
+            font: font.step(offset: offset),
+            color: color,
+            fontWeight: fontWeight,
             background: background
         )
     }
@@ -46,7 +58,7 @@ extension TextStyle {
     public static let footnote = TextStyle(font: .footnote, color: Colors.secondaryText)
     public static let caption = TextStyle(font: .caption, color: Colors.secondaryText)
     public static let largeTitle = TextStyle(font: .largeTitle, color: Colors.black)
-    public static let boldTitle = TextStyle(font: .title.bold(), color: Colors.black)
+    public static let boldTitle = TextStyle(font: .title, color: Colors.black, fontWeight: .bold)
     public static let highlighted = TextStyle(font: .headline, color: .white, background: Colors.blue)
 }
 

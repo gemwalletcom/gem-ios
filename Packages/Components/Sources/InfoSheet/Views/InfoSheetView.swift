@@ -9,9 +9,7 @@ struct InfoSheetView: View {
     private let title: TextValue
     private let description: TextValue
 
-    init(
-        model: any InfoSheetModelViewable
-    ) {
+    init(model: any InfoSheetModelViewable) {
         self.init(
             title: model.title,
             description: model.description,
@@ -47,33 +45,71 @@ struct InfoSheetView: View {
     }
 
     var body: some View {
-        VStack(spacing: .medium) {
-            ZStack {
+        ViewThatFits(in: .vertical) {
+            regularLayout
+            compactLayout
+        }
+    }
+
+    @ViewBuilder
+    var regularLayout: some View {
+        content(
+            vSpacing: .medium,
+            titleStyle: title.style,
+            descriptionStyle: description.style,
+            imageSize: .image.semiExtraLarge,
+            overlayImageSize: .image.medium
+        )
+        .padding(.horizontal, .small)
+    }
+
+    @ViewBuilder
+    var compactLayout: some View {
+        content(
+            vSpacing: .small,
+            titleStyle: title.style.stepDown,
+            descriptionStyle: description.style.stepDown,
+            imageSize: .image.large,
+            overlayImageSize: .image.semiMedium
+        )
+        .padding(.horizontal, .extraSmall)
+    }
+
+    private func content(
+        vSpacing: CGFloat,
+        titleStyle: TextStyle,
+        descriptionStyle: TextStyle,
+        imageSize: CGFloat,
+        overlayImageSize: CGFloat
+    ) -> some View {
+        VStack(spacing: vSpacing) {
+            Group {
                 switch image {
                 case .image(let image):
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: .image.semiExtraLarge, height: .image.semiExtraLarge)
-                case .assetImage(let assetImage):
+                case .assetImage(let asset):
                     AssetImageView(
-                        assetImage: assetImage,
-                        size: .image.semiExtraLarge,
-                        overlayImageSize: .image.medium
+                        assetImage: asset,
+                        size: imageSize,
+                        overlayImageSize: overlayImageSize
                     )
                 case nil: EmptyView()
                 }
             }
-            
+            .frame(size: imageSize)
+
             VStack(spacing: .small) {
                 Text(title.text)
-                    .textStyle(title.style)
+                    .textStyle(titleStyle)
                 Text(description.text)
-                    .textStyle(description.style)
+                    .textStyle(descriptionStyle)
             }
-            .minimumScaleFactor(0.5)
             .multilineTextAlignment(.center)
+            .minimumScaleFactor(0.85)
         }
+        .frame(maxWidth: .infinity, alignment: .top)
     }
 }
 

@@ -15,11 +15,10 @@ public struct InfoSheetScene: View {
 
     public var body: some View {
         NavigationStack {
-            VStack(spacing: .small) {
+            VStack(spacing: .extraSmall) {
                 if model.url != nil {
-                    Spacer(minLength: 0)
+                    Spacer()
                     InfoSheetView(model: model)
-                        .padding(.horizontal, .small)
                     Spacer()
                     StateButton(
                         text: model.buttonTitle,
@@ -49,6 +48,8 @@ public struct InfoSheetScene: View {
         }
         .safariSheet(url: $isPresentedUrl)
         .presentationDetents([.medium])
+        .presentationContentInteraction(.scrolls)
+        .presentationDragIndicator(.hidden)
         .presentationCornerRadius(.presentation.cornerRadius)
     }
 }
