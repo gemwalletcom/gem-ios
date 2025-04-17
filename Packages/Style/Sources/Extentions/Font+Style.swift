@@ -14,8 +14,8 @@ extension Font {
         return Font.system(newStyle)
     }
 
-    var stepDown: Font { step(offset: +1) }
-    var stepUp:   Font { step(offset: -1) }
+    var smaller: Font { step(offset: +1) }
+    var larger: Font { step(offset: -1) }
 }
 
 extension Font.TextStyle {
@@ -37,7 +37,9 @@ extension Font.TextStyle {
     }
 
     static func from(rank: Int) -> Self {
-        switch rank.clamped(to: 0...10) {
+        let minRank = 0
+        let maxRank = 10
+        return switch rank.clamped(to: minRank...maxRank) {
         case 0: .largeTitle
         case 1: .title
         case 2: .title2

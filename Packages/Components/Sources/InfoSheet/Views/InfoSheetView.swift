@@ -67,8 +67,8 @@ struct InfoSheetView: View {
     var compactLayout: some View {
         content(
             vSpacing: .small,
-            titleStyle: title.style.stepDown,
-            descriptionStyle: description.style.stepDown,
+            titleStyle: title.style.smaller,
+            descriptionStyle: description.style.smaller,
             imageSize: .image.large,
             overlayImageSize: .image.semiMedium
         )

@@ -48,8 +48,6 @@ public struct InfoSheetScene: View {
         }
         .safariSheet(url: $isPresentedUrl)
         .presentationDetents([.medium])
-        .presentationContentInteraction(.scrolls)
-        .presentationDragIndicator(.hidden)
         .presentationCornerRadius(.presentation.cornerRadius)
     }
 }

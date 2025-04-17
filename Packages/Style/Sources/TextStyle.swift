@@ -21,8 +21,8 @@ public struct TextStyle: Sendable {
         self.background = background
     }
 
-    public var stepDown: TextStyle { step(offset: 1) }
-    public var stepUp: TextStyle { step(offset: -1) }
+    public var smaller: TextStyle { step(offset: 1) }
+    public var larger: TextStyle { step(offset: -1) }
 
     public func weight(_ weight: Font.Weight) -> TextStyle {
         TextStyle(
