@@ -67,7 +67,8 @@ extension XRPService: ChainBalanceable {
         let (available, reserved): (BigInt, BigInt) = {
             if let account = account {
                 let balance = BigInt(stringLiteral: account.Balance)
-                let reserved = reservedBalance()
+                let reserved = reservedBalance() + (account.OwnerCount.asBigInt * chain.tokenActivateFee)
+                
                 return (
                     max(balance - reserved, .zero),
                     reserved

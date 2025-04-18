@@ -6,7 +6,7 @@ import Primitives
 import BigInt
 import Testing
 
-final class TransferAmountCalculatorTests {
+struct TransferAmountCalculatorTests {
     let coinAsset = Asset(.ethereum)
     let tokenAsset = Asset(
         id: AssetId(chain: .ethereum, tokenId: "0x1"),
