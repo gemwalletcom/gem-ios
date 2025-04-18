@@ -26,6 +26,7 @@ struct AssetScene: View {
     @State private var isPresentingShareAssetSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
     @State private var isPresentingSetPriceAlert: Bool = false
+    @State private var isPresentingUrl: URL? = nil
 
     @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
@@ -126,10 +127,12 @@ struct AssetScene: View {
                     }
 
                     if model.showReservedBalance, let url = model.reservedBalanceUrl {
-                        NavigationCustomLink(
-                            with: ListItemView(title: Localized.Asset.Balances.reserved, subtitle: model.assetDataModel.reservedBalanceTextWithSymbol),
-                            action: { onOpenLink(url) }
-                        )
+                        SafariNavigationLink(url: url) {
+                            ListItemView(
+                                title: Localized.Asset.Balances.reserved,
+                                subtitle: model.assetDataModel.reservedBalanceTextWithSymbol
+                            )
+                        }
                     }
                 }
             } else if model.assetDataModel.isStakeEnabled {
@@ -178,9 +181,9 @@ struct AssetScene: View {
                         Images.System.ellipsis
                     }
                     .confirmationDialog("", isPresented: $showingOptions, titleVisibility: .hidden) {
-                        Button(model.viewAddressOnTitle) { onOpenLink(model.addressExplorerUrl )}
-                        if let title = model.viewTokenOnTitle, let url = model.tokenExplorerUrl {
-                            Button(title) { onOpenLink(url) }
+                        Button(model.viewAddressOnTitle) { isPresentingUrl = model.addressExplorerUrl }
+                        if let title = model.viewTokenOnTitle {
+                            Button(title) { isPresentingUrl = model.tokenExplorerUrl }
                         }
                         Button(Localized.Common.share) {
                             isPresentingShareAssetSheet = true
@@ -211,6 +214,7 @@ struct AssetScene: View {
                 )
             )
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 
@@ -273,10 +277,6 @@ extension AssetScene {
         isPresentingInfoSheet = .watchWallet
     }
 
-    private func onOpenLink(_ url: URL) {
-        UIApplication.shared.open(url)
-    }
-
     private func onSelectOptions() {
         showingOptions = true
     }
@@ -304,6 +304,7 @@ extension AssetScene {
                 try await bannerService.handleAction(action)
             }
         }
+        isPresentingUrl = action.url
     }
 
     private func onPriceAlertToggle() {

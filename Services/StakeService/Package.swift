@@ -12,6 +12,9 @@ let package = Package(
         .library(
             name: "StakeService",
             targets: ["StakeService"]),
+        .library(
+            name: "StakeServiceTestKit",
+            targets: ["StakeServiceTestKit"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -29,6 +32,16 @@ let package = Package(
                 "ChainService",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "StakeServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                "Primitives"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "StakeServiceTests",

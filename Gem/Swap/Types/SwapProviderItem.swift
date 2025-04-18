@@ -8,18 +8,19 @@ import BigInt
 import SwiftUI
 import PrimitivesComponents
 import Style
+import enum Gemstone.GemSwapProvider
 
 public struct SwapProviderItem {
     public let asset: Asset
     public let swapQuote: SwapQuote
-    public let selectedProvider: SwapProvider?
+    public let selectedProvider: GemSwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
     
     init(
         asset: Asset,
         swapQuote: SwapQuote,
-        selectedProvider: SwapProvider?,
+        selectedProvider: GemSwapProvider?,
         priceViewModel: PriceViewModel,
         valueFormatter: ValueFormatter
     ) {
