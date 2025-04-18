@@ -12,7 +12,15 @@ import JobRunner
 public struct TransactionService: Sendable {
     private let transactionStore: TransactionStore
     private let transactionUpdateService: TransactionUpdateService
-    private let runner: JobRunner
+    private let runner: JobRunner = JobRunner(
+        config: .adaptive(
+            AdaptiveConfiguration(
+                idleInterval: .seconds(5),
+                maxInterval: .seconds(10),
+                stepFactor: 1.5
+            )
+        )
+    )
 
     public init(
         transactionStore: TransactionStore,
@@ -28,15 +36,6 @@ public struct TransactionService: Sendable {
             balanceUpdater: balanceUpdater,
             stakeService: stakeService,
             nftService: nftService
-        )
-        self.runner = JobRunner(
-            config: .adaptive(
-                AdaptiveConfiguration(
-                    idleInterval: .seconds(5),
-                    maxInterval: .seconds(10),
-                    stepFactor: 1.5
-                )
-            )
         )
     }
 
@@ -58,7 +57,7 @@ public struct TransactionService: Sendable {
 extension TransactionService {
     private func runUpdate(for pendingTransactions: [Transaction]) {
         let jobs = pendingTransactions.map {
-            TransactionUpdateJob(
+            TransactionStateUpdateJob(
                 transaction: $0,
                 action: transactionUpdateService.execute(for:)
             )

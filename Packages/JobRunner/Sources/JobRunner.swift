@@ -27,8 +27,7 @@ public actor JobRunner {
     }
 
     public func stopAll() {
-        tasks.forEach { $0.value.cancel() }
-        tasks.removeAll()
+        tasks.forEach { cancelJob(id: $0.key) }
     }
 }
 

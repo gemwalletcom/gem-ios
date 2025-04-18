@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import JobRunner
 
-public struct TransactionUpdateJob: Job {
+public struct TransactionStateUpdateJob: Job {
     private let transaction: Transaction
     private let action: @Sendable (Transaction) async -> (TransactionState, Duration)
 
