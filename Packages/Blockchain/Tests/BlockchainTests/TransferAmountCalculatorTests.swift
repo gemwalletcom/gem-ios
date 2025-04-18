@@ -295,7 +295,7 @@ struct TransferAmountCalculatorTests {
     func testMinimumAccountBalance() {
         let asset1 = Asset(.solana)
         
-        #expect(throws: TransferAmountCalculatorError.minimumAccountBalanceTooLow(asset1)) {
+        #expect(throws: TransferAmountCalculatorError.minimumAccountBalanceTooLow(asset1, required: BigInt(890880))) {
             try service.calculate(input: TransferAmountInput(
                 asset: asset1,
                 assetBalance: Balance(available: BigInt(1000890880)),

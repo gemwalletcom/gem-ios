@@ -147,7 +147,7 @@ final class ConfirmTransferViewModel {
         Docs.url(.networkFees)
     }
     
-    var minimumBalanceInfoUrl: URL {
+    var minimumAccountBalanceInfoUrl: URL {
         Docs.url(.accountMinimalBalance)
     }
 
@@ -163,14 +163,14 @@ final class ConfirmTransferViewModel {
             let title: String = {
                 switch error {
                 case let tranferError as TransferAmountCalculatorError:
+                    
                     switch tranferError {
                     case .insufficientBalance(let asset):
                         return Localized.Transfer.insufficientBalance(AssetViewModel(asset: asset).title)
                     case .insufficientNetworkFee(let asset):
                         return Localized.Transfer.insufficientNetworkFeeBalance(AssetViewModel(asset: asset).title)
-                    case .minimumAccountBalanceTooLow:
-                        // TODO: Localization
-                        return "A minimum balance to low"
+                    case .minimumAccountBalanceTooLow(let asset, _):
+                        return Localized.Transfer.minimumAccountBalance(AssetViewModel(asset: asset).title)
                     }
                 default:
                     return Localized.Errors.unknown
@@ -190,8 +190,9 @@ final class ConfirmTransferViewModel {
 
         if let result = state.value?.transferAmountResult, case let .error(_, error) = result {
             switch error as? TransferAmountCalculatorError {
-            case .insufficientBalance, .insufficientNetworkFee, .none: return nil
-            case .minimumAccountBalanceTooLow: return SystemImage.info
+            case .insufficientBalance,
+                .insufficientNetworkFee,
+                .minimumAccountBalanceTooLow, .none: return nil
             }
         }
 

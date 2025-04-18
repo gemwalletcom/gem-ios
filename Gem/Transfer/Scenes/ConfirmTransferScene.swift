@@ -170,11 +170,7 @@ extension ConfirmTransferScene {
     }
 
     private func onAction() {
-        if let result = model.state.value?.transferAmountResult, case let .error(_, error) = result {
-            if case .minimumAccountBalanceTooLow = error as? TransferAmountCalculatorError {
-                isPresentingUrl = model.minimumBalanceInfoUrl
-            }
-        } else if model.state.isError {
+        if model.state.isError {
             fetch()
         } else {
             onSelectConfirmTransfer()

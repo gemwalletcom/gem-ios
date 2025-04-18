@@ -53,7 +53,7 @@ public struct TransferAmountCalculator {
         }
         
         if input.asset.chain.minimumAccountBalance > 0 && input.availableValue - input.value - input.fee < input.asset.chain.minimumAccountBalance {
-            throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset)
+            throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
         }
 
         // max value transfer
