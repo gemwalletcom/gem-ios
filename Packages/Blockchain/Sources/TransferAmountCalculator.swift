@@ -27,7 +27,7 @@ public struct TransferAmountCalculator {
             }
         }
 
-        //TODO: Check for input.value + input.fee
+        //TODO: Check for input.value + input.fee + minimumAccountBalance
 
         if input.ignoreValueCheck {
 
@@ -47,18 +47,27 @@ public struct TransferAmountCalculator {
         }
 
         if !input.canChangeValue && input.asset == input.assetFee {
-            if  input.availableValue < input.value + input.fee   {
+            if  input.availableValue < input.value + input.fee {
                 throw TransferAmountCalculatorError.insufficientBalance(input.asset)
             }
+        }
+        
+        if input.asset.chain.minimumAccountBalance > 0 && input.availableValue - input.value - input.fee < input.asset.chain.minimumAccountBalance {
+            throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
         }
 
         // max value transfer
         if input.assetBalance.available == input.value {
             if input.asset == input.asset.feeAsset && input.canChangeValue  {
-                return TransferAmount(value: input.assetBalance.available - input.fee, networkFee: input.fee, useMaxAmount: true)
+                return TransferAmount(
+                    value: input.assetBalance.available - input.fee,
+                    networkFee: input.fee,
+                    useMaxAmount: true
+                )
             }
             return TransferAmount(value: input.assetBalance.available, networkFee: input.fee, useMaxAmount: true)
         }
+        
         let useMaxAmount = input.availableValue == input.value
 
         return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
