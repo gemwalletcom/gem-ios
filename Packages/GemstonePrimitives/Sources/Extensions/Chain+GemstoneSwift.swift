@@ -28,6 +28,10 @@ public extension Primitives.Chain {
         return URL(string: url)
     }
     
+    var tokenActivateFee: BigInt {
+        BigInt(ChainConfig.config(chain: self).tokenActivationFee ?? 0)
+    }
+    
     var isMemoSupported: Bool {
         ChainConfig.config(chain: self).isMemoSupported
     }
