@@ -3,7 +3,6 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Keystore
 import ChainService
 import Localization
 

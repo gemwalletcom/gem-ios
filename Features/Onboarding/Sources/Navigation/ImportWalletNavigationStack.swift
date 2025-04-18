@@ -33,7 +33,7 @@ public struct ImportWalletNavigationStack: View {
                     ImportWalletScene(
                         model: ImportWalletViewModel(
                             type: type,
-                            keystore: model.keystore,
+                            manageWalletService: model.manageWalletService,
                             onFinishImport: {
                                 isPresentingWallets.toggle()
                             }

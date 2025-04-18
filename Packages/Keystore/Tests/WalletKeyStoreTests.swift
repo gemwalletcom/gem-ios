@@ -12,7 +12,7 @@ final class WalletKeyStoreTests {
 
     @Test
     func testImportPrivateKey() throws {
-        let store = WalletKeyStore.make()
+        let store = WalletKeyStore.mock()
         let wallet = try store.importPrivateKey(
             name: "test",
             key: testBase58Key,

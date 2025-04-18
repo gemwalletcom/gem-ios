@@ -30,6 +30,7 @@ import WalletsService
 import ManageWalletService
 import AvatarService
 import ScanService
+import WalletSessionService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -89,7 +90,7 @@ extension AssetData  {
 }
 
 extension LocalKeystore {
-    static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .default)
+    static let main = LocalKeystore()
 }
 
 extension WalletStore {
@@ -250,8 +251,7 @@ extension AvatarService {
 extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         connectionsStore: .main,
-        walletStore: .main,
-        preferences: .default,
+        walletSessionService: WalletSessionService(walletStore: .main, preferences: .default),
         walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
     )
 }

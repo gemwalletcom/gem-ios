@@ -1,11 +1,11 @@
 import SwiftUI
-import Keystore
 import Primitives
 import Style
 import Components
 import QRScanner
 import Localization
 import NameResolver
+import struct Keystore.Mnemonic
 
 struct ImportWalletScene: View {
     

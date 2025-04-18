@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import struct Gemstone.SwapQuote
 
-public enum SwapFetchState: Identifiable, Hashable {
+public enum SwapFetchState: Identifiable, Hashable, Sendable {
     case idle
     case fetch(input: SwapQuoteInput, delay: Duration?)
     case data(quotes: [SwapQuote])

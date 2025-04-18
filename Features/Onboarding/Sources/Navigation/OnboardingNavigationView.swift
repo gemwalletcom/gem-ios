@@ -21,13 +21,13 @@ public struct OnboardingNavigationView: View {
         )
         .sheet(isPresented: $isPresentingCreateWalletSheet) {
             CreateWalletNavigationStack(
-                keystore: model.keystore,
+                manageWalletService: model.manageWalletService,
                 isPresentingWallets: .constant(false)
             )
         }
         .sheet(isPresented: $isPresentingImportWalletSheet) {
             ImportWalletNavigationStack(
-                model: ImportWalletTypeViewModel(keystore: model.keystore),
+                model: ImportWalletTypeViewModel(manageWalletService: model.manageWalletService),
                 isPresentingWallets: .constant(false)
             )
         }

@@ -5,14 +5,13 @@ import Primitives
 import SwiftUI
 
 public protocol Keystore: Sendable {
-    var directory: URL { get }
-    var wallets: [Wallet] { get }
+    var configration: LocalKeystoreConfiguration { get }
+    
     func createWallet() -> [String]
     @discardableResult
-    func importWallet(name: String, type: KeystoreImportType) throws -> Wallet
-    func setupChains(chains: [Chain]) throws
-    func deleteWallet(for wallet: Wallet) throws
-    func getNextWalletIndex() throws -> Int
+    func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Primitives.Wallet
+    func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) throws -> [Primitives.Wallet]
+    func deleteKey(for wallet: Wallet) throws
     func getPrivateKey(wallet: Primitives.Wallet, chain: Chain) throws -> Data
     func getPrivateKey(wallet: Primitives.Wallet, chain: Chain, encoding: EncodingType) throws -> String
     func getMnemonic(wallet: Wallet) throws -> [String]

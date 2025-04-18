@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import Keystore
+import ManageWalletService
 import SwiftUI
 import Style
 import Localization
@@ -12,7 +12,7 @@ class VerifyPhraseViewModel: ObservableObject {
     
     private let words: [String]
     private let shuffledWords: [String]
-    private let keystore: any Keystore
+    private let manageWalletService: ManageWalletService
 
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
@@ -21,12 +21,12 @@ class VerifyPhraseViewModel: ObservableObject {
 
     init(
         words: [String],
-        keystore: any Keystore
+        manageWalletService: ManageWalletService
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
-        self.keystore = keystore
+        self.manageWalletService = manageWalletService
     }
     
     var title: String {
@@ -71,10 +71,7 @@ class VerifyPhraseViewModel: ObservableObject {
     }
     
     func importWallet() throws -> Primitives.Wallet  {
-        let name = WalletNameGenerator(type: .multicoin, keystore: keystore).name
-        return try keystore.importWallet(
-            name: name,
-            type: .phrase(words: words, chains: AssetConfiguration.allChains)
-        )
+        let name = WalletNameGenerator(type: .multicoin, manageWalletService: manageWalletService).name
+        return try manageWalletService.import(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
     }
 }

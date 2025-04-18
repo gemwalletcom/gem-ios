@@ -17,13 +17,12 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
 
     public init(
         connectionsStore: ConnectionsStore,
-        walletStore: WalletStore,
-        preferences: ObservablePreferences,
+        walletSessionService: any WalletSessionManageable,
         walletConnectorInteractor: any WalletConnectorInteractable
     ) {
         self.connectionsStore = connectionsStore
         self.walletConnectorInteractor = walletConnectorInteractor
-        self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+        self.walletSessionService = walletSessionService
     }
 
     public var allChains: [Primitives.Chain]  {

@@ -24,7 +24,6 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceAlertService) private var priceAlertService
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
-    @Environment(\.keystore) private var keystore
     @Environment(\.observablePreferences) private var observablePreferences
 
     @State private var isPresentingWallets = false

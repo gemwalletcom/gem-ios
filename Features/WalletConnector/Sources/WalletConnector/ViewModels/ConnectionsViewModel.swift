@@ -5,7 +5,6 @@ import Primitives
 import Store
 import Localization
 import PrimitivesComponents
-@preconcurrency import Keystore
 
 public struct ConnectionsViewModel: Sendable {
     let service: ConnectionsService

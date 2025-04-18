@@ -3,7 +3,6 @@ import Components
 import Style
 import Blockchain
 import Primitives
-import Keystore
 import Localization
 import ChainService
 import InfoSheet
@@ -201,18 +200,4 @@ extension ConfirmTransferScene {
             }
         }
     }
-}
-
-// MARK: - Previews
-
-#Preview {
-    ConfirmTransferScene(model: .init(
-        wallet: .main,
-        keystore: LocalKeystore.main,
-        data: .main,
-        service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
-        scanService: .main,
-        walletsService: .main,
-        onComplete: { }
-    ))
 }

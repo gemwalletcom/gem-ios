@@ -1,15 +1,11 @@
 import Testing
-import Store
 import WalletCore
 import Primitives
 import KeystoreTestKit
-import PreferencesTestKit
-import Preferences
 
 @testable import Keystore
 
-final class LocalKeystoreTests {
-
+struct LocalKeystoreTests {
     @Test
     func testCreateWallet() {
         let keystore = LocalKeystore.mock()
@@ -22,10 +18,14 @@ final class LocalKeystoreTests {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let words = keystore.createWallet()
-            #expect(keystore.wallets.count == 0)
+            let wallet = try keystore.importWallet(
+                name: "test",
+                type: .phrase(words: words, chains: [.ethereum]),
+                isWalletsEmpty: true
+            )
 
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: words, chains: [.ethereum]))
-            #expect(keystore.wallets.count == 1)
+            #expect(wallet.accounts.count == 1)
+            #expect(wallet.accounts.first?.chain == .ethereum)
         }
     }
 
@@ -33,11 +33,15 @@ final class LocalKeystoreTests {
     func testImportSolanaWallet() {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: [.solana]))
+            let wallet = try keystore.importWallet(
+                name: "Solana Wallet",
+                type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+                isWalletsEmpty: true
+            )
 
-            #expect(keystore.wallets.count == 1)
-            #expect(keystore.wallets.first?.accounts.count == 1)
-            #expect(keystore.wallets.first?.accounts.first?.address == "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71")
+            #expect(wallet.accounts.count == 1)
+            #expect(wallet.accounts.first?.chain == .solana)
+            #expect(wallet.accounts.first?.address == "57mwmnV2rFuVDmhiJEjonD7cfuFtcaP9QvYNGfDEWK71")
         }
     }
 
@@ -47,9 +51,13 @@ final class LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let chains: [Chain] = [.ethereum, .smartChain, .blast]
 
-            let _ = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: chains))
-            #expect(keystore.wallets.count == 1)
-            #expect(keystore.wallets.first?.accounts == chains.map {
+            let wallet = try keystore.importWallet(
+                name: "test",
+                type: .phrase(words: LocalKeystore.words, chains: chains),
+                isWalletsEmpty: true
+            )
+
+            #expect(wallet.accounts == chains.map {
                 Account(chain: $0,
                         address: "0x8f348F300873Fd5DA36950B2aC75a26584584feE",
                         derivationPath: "m/44'/60'/0'/0/0",
@@ -63,7 +71,11 @@ final class LocalKeystoreTests {
         #expect(throws: Never.self) {
             let keystore = LocalKeystore.mock()
             let hex = "0xb9095df5360714a69bc86ca92f6191e60355f206909982a8409f7b8358cf41b0"
-            let wallet = try keystore.importWallet(name: "Test Solana", type: .privateKey(text: hex, chain: .solana))
+            let wallet = try keystore.importWallet(
+                name: "Test Solana",
+                type: .privateKey(text: hex, chain: .solana),
+                isWalletsEmpty: true
+            )
 
             let exportedHex = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .hex)
             let exportedBase58 = try keystore.getPrivateKey(wallet: wallet, chain: .solana, encoding: .base58)
@@ -72,7 +84,11 @@ final class LocalKeystoreTests {
             #expect(exportedBase58 == "DTJi5pMtSKZHdkLX4wxwvjGjf2xwXx1LSuuUZhugYWDV")
 
             let keystore2 = LocalKeystore.mock()
-            let wallet2 = try keystore2.importWallet(name: "Test Solana 2", type: .privateKey(text: exportedBase58, chain: .solana))
+            let wallet2 = try keystore2.importWallet(
+                name: "Test Solana 2",
+                type: .privateKey(text: exportedBase58, chain: .solana),
+                isWalletsEmpty: true
+            )
             let exportedKey = try keystore2.getPrivateKey(wallet: wallet2, chain: .solana)
 
             #expect(Base58.encodeNoCheck(data: exportedKey) == exportedBase58)
@@ -82,7 +98,11 @@ final class LocalKeystoreTests {
     @Test
     func testSignSolanaMessage() throws {
         let keystore = LocalKeystore.mock()
-        let wallet = try keystore.importWallet(name: "Test Solana", type: .phrase(words: LocalKeystore.words, chains: [.solana]))
+        let wallet = try keystore.importWallet(
+            name: "Test Solana",
+            type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+            isWalletsEmpty: true
+        )
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
         let message = SignMessage(type: .base58, data: Data(text.utf8))
@@ -107,18 +127,14 @@ final class LocalKeystoreTests {
     @Test
     func testDeriveAddress() {
         #expect(throws: Never.self) {
-            let id = NSUUID().uuidString
-            let keystore = LocalKeystore(
-                folder: id,
-                walletStore: .mock(),
-                preferences: .mock(),
-                keystorePassword: MockKeystorePassword()
+            let keystore = LocalKeystore.mock()
+            let chains = Chain.allCases
+            let wallet = try keystore.importWallet(
+                name: "test",
+                type: .phrase(words: LocalKeystore.words, chains: chains),
+                isWalletsEmpty: true
             )
 
-            let chains = Chain.allCases
-            let wallet = try keystore.importWallet(name: "test", type: .phrase(words: LocalKeystore.words, chains: chains))
-
-            #expect(keystore.wallets.count == 1)
             #expect(wallet.accounts.count == chains.count)
 
             for account in wallet.accounts {
