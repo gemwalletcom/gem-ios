@@ -116,12 +116,6 @@ extension SolanaService {
             .map(as: JSONRPCResponse<[SolanaStakeAccount]>.self).result
     }
 
-    private func getRentExemption(size: Int) async throws -> BigInt {
-        try await provider
-            .request(.rentExemption(size: size))
-            .map(as: JSONRPCResponse<Int>.self).result.asBigInt
-    }
-
     // https://solana.com/docs/core/fees#compute-unit-limit
     private func getBaseFee(type: TransferDataType, gasPrice: GasPriceType) throws -> Fee {
         let gasLimit = switch type {
@@ -236,17 +230,14 @@ extension SolanaService: ChainTransactionLoadable {
                     fee: fee
                 )
             case .token:
-                async let getTokenAccountCreationFee = getRentExemption(size: tokenAccountSize)
-                async let getToken = try await getTokenTransferType(
+                let token = try await getTokenTransferType(
                     tokenId: try input.asset.getTokenId(),
                     senderAddress: input.senderAddress,
                     destinationAddress: input.destinationAddress
                 )
-                let (tokenAccountCreationFee, token) = try await (getTokenAccountCreationFee, getToken)
-                
                 let options: FeeOptionMap = switch token.recipientTokenAddress {
                 case .some: [:]
-                case .none: [.tokenAccountCreation: BigInt(tokenAccountCreationFee)]
+                case .none: [.tokenAccountCreation: chain.tokenActivateFee]
                 }
                 
                 return TransactionLoad(
