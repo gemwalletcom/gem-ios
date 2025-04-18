@@ -6,7 +6,7 @@ import SwiftUI
 import Style
 import Components
 
-public struct AssetDataViewModel {
+public struct AssetDataViewModel: Sendable {
     private let assetData: AssetData
     private let balanceViewModel: BalanceViewModel
 
