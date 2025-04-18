@@ -20,7 +20,7 @@ public struct AssetRateFormatter {
         let amount = toAmount / fromAmount
         
         let amountString = CurrencyFormatter(type: .currency).string(
-            decimal: Decimal(amount),
+            double: amount,
             symbol: toAsset.symbol
         )
         return String("1 \(fromAsset.symbol) ≈ \(amountString)")

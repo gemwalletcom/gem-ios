@@ -30,7 +30,7 @@ public struct FiatQuoteViewModel {
 
     public var amountText: String {
         switch quote.type {
-        case .buy: formatter.string(decimal: Decimal(quote.cryptoAmount), symbol: asset.symbol)
+        case .buy: formatter.string(double: quote.cryptoAmount, symbol: asset.symbol)
         case .sell: formatter.string(quote.fiatAmount)
         }
     }
