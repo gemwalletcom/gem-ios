@@ -16,7 +16,7 @@ public struct AddAssetPriceAlertsViewModel: Sendable {
     public func onSelectAsset(_ asset: Asset)  {
         Task {
             try await priceAlertService
-                .add(priceAlert: .default(for: asset.id.identifier, currency: preferences.currency))
+                .add(priceAlert: .default(for: asset.id, currency: preferences.currency))
             try await priceAlertService.enablePriceAlerts()
         }
     }

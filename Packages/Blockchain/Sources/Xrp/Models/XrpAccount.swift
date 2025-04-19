@@ -7,10 +7,12 @@ import Foundation
 public struct XRPAccount: Codable, Sendable {
 	public let Balance: String
 	public let Sequence: Int32
+	public let OwnerCount: Int32
 
-	public init(Balance: String, Sequence: Int32) {
+	public init(Balance: String, Sequence: Int32, OwnerCount: Int32) {
 		self.Balance = Balance
 		self.Sequence = Sequence
+		self.OwnerCount = OwnerCount
 	}
 }
 
