@@ -13,7 +13,7 @@ struct CreateWalletScene: View {
 
     var body: some View {
         VStack(spacing: .medium) {
-            OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
+            OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely, alignment: .center)
             SecretDataTypeView(type: model.type)
 
             Button(action: copy) {

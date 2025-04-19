@@ -23,12 +23,9 @@ public struct CreateWalletNavigationStack: View {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            CreateWalletScene(
-                model: CreateWalletViewModel(
-                    keystore: keystore,
-                    onCreateWallet: {
-                        navigationPath.append(Scenes.VerifyPhrase(words: $0))
-                    }
+            SecurityReminderScene(
+                model: SecurityReminderCreateWalletViewModel(
+                    onNext: { navigationPath.append(Scenes.CreateWallet()) }
                 )
             )
             .toolbar {
@@ -46,6 +43,16 @@ public struct CreateWalletNavigationStack: View {
                         keystore: keystore
                     ),
                     isPresentingWallets: $isPresentingWallets
+                )
+            }
+            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
+                CreateWalletScene(
+                    model: CreateWalletViewModel(
+                        keystore: keystore,
+                        onCreateWallet: {
+                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
+                        }
+                    )
                 )
             }
         }
