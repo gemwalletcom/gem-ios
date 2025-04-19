@@ -5,7 +5,7 @@ import Primitives
 
 public extension PriceAlert {
     static func mock(
-        assetId: String = "ethereum",
+        assetId: AssetId = .mock(),
         currency: String = "USD",
         price: Double? = .none,
         pricePercentChange: Double? = .none,

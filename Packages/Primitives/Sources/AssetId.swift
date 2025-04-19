@@ -13,11 +13,20 @@ public struct AssetId: Equatable, Hashable, Sendable {
 }
 
 extension AssetId: Codable {
+    enum CodingKeys: String, CodingKey {
+        case chain
+        case tokenId
+    }
+    
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let stringValue = try container.decode(String.self)
-        let assetId = try AssetId(id: stringValue)
-        self = assetId
+        if let container = try? decoder.singleValueContainer(), let stringValue = try? container.decode(String.self) {
+            let assetId = try AssetId(id: stringValue)
+            self = assetId
+            return
+        }
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.chain = try container.decode(Chain.self, forKey: .chain)
+        self.tokenId = try container.decodeIfPresent(String.self, forKey: .tokenId)
     }
 
     public func encode(to encoder: Encoder) throws {

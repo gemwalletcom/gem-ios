@@ -37,7 +37,7 @@ extension PriceAlertRecord: CreateTable {
 extension PriceAlertRecord {
     func map() -> PriceAlert {
         PriceAlert(
-            assetId: assetId,
+            assetId: try! AssetId(id: assetId),
             currency: currency,
             price: price,
             pricePercentChange: pricePercentChange,
@@ -51,7 +51,7 @@ extension PriceAlert {
     func mapToRecord() -> PriceAlertRecord {
         PriceAlertRecord(
             id: id,
-            assetId: assetId,
+            assetId: assetId.identifier,
             currency: currency,
             priceDirection: priceDirection,
             price: price,

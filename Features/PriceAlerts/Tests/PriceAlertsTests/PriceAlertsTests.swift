@@ -56,7 +56,7 @@ fileprivate extension SetPriceAlertViewModel {
     static func mock() -> SetPriceAlertViewModel {
         SetPriceAlertViewModel(
             wallet: .makeView(name: "test", chain: .ethereum, address: .empty),
-            assetId: "test-asset",
+            assetId: .mock(),
             priceAlertService: .mock(),
             onComplete: { _ in }
         )
