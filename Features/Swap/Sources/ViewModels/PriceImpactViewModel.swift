@@ -37,6 +37,10 @@ public struct PriceImpactViewModel {
     var priceImpactTitle: String { Localized.Swap.priceImpact }
     var value: PriceImpactValue? { rawImpactPercentage.flatMap(evaluatePriceImpactValue) }
 
+    public var priceImpactText: String? {
+        priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
+    }
+    
     func priceImpactColor(for type: PriceImpactType) -> Color {
         switch type {
         case .low: Colors.black
@@ -55,10 +59,6 @@ extension PriceImpactViewModel {
     private var isHighPriceImpact: Bool {
         guard let priceImpactPercentage else { return false }
         return priceImpactPercentage >= Double(swapConfig.highPriceImpactPercent)
-    }
-
-    private var priceImpactText: String? {
-        priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
 
     private var rawImpactPercentage: Double? {
