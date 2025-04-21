@@ -67,7 +67,7 @@ class ImportWalletViewModel: ObservableObject {
     }
 
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
-        try manageWalletService.import(name: name, type: keystoreType)
+        try manageWalletService.importWallet(name: name, type: keystoreType)
         onFinishImport?()
     }
     

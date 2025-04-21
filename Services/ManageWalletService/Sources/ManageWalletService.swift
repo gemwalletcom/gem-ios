@@ -55,7 +55,7 @@ public struct ManageWalletService: Sendable {
     }
 
     @discardableResult
-    public func `import`(name: String, type: KeystoreImportType) throws -> Wallet {
+    public func importWallet(name: String, type: KeystoreImportType) throws -> Wallet {
         let newWallet = try keystore.importWallet(
             name: name,
             type: type,

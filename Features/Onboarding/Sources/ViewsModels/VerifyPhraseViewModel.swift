@@ -72,6 +72,6 @@ class VerifyPhraseViewModel: ObservableObject {
     
     func importWallet() throws -> Primitives.Wallet  {
         let name = WalletNameGenerator(type: .multicoin, manageWalletService: manageWalletService).name
-        return try manageWalletService.import(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+        return try manageWalletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
     }
 }
