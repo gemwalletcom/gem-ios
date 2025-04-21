@@ -27,7 +27,7 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
-import ManageWalletService
+import WalletService
 import AvatarService
 import ScanService
 import WalletSessionService
@@ -179,8 +179,8 @@ extension DeviceService {
     static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
-extension ManageWalletService {
-    static let main = ManageWalletService(
+extension WalletService {
+    static let main = WalletService(
         keystore: LocalKeystore.main,
         walletStore: .main,
         preferences: .default,

@@ -22,7 +22,7 @@ struct MainTabView: View {
     @Environment(\.nftService) private var nftService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
-    @Environment(\.manageWalletService) private var manageWalletService
+    @Environment(\.walletService) private var walletService
 
     let model: MainTabViewModel
 
@@ -51,7 +51,7 @@ struct MainTabView: View {
                 model: WalletSceneViewModel(
                     walletsService: walletsService,
                     bannerService: bannerService,
-                    manageWalletService: manageWalletService,
+                    walletService: walletService,
                     observablePreferences: observablePreferences,
                     wallet: model.wallet
                 )
@@ -74,7 +74,7 @@ struct MainTabView: View {
                     model: CollectionsViewModel(
                         nftService: nftService,
                         deviceService: deviceService,
-                        manageWalletService: manageWalletService,
+                        walletService: walletService,
                         wallet: model.wallet,
                         sceneStep: .collections
                     )
@@ -88,7 +88,7 @@ struct MainTabView: View {
             TransactionsNavigationStack(
                 model: TransactionsViewModel(
                     transactionsService: transactionsService,
-                    manageWalletService: manageWalletService,
+                    walletService: walletService,
                     wallet: model.wallet,
                     type: .all
                 )
@@ -150,7 +150,7 @@ extension MainTabView {
             case .transaction(let walletIndex, let assetId):
                 //select wallet
                 if walletIndex != model.wallet.index.asInt {
-                    manageWalletService.setCurrent(for: walletIndex)
+                    walletService.setCurrent(for: walletIndex)
                 }
 
                 let asset = try await walletsService.assetsService.getOrFetchAsset(for: assetId)

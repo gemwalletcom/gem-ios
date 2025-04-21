@@ -2,13 +2,13 @@ import Foundation
 import Primitives
 import Style
 import Localization
-import ManageWalletService
+import WalletService
 import enum Keystore.KeystoreImportType
 
 class ImportWalletViewModel: ObservableObject {
 
     let type: ImportWalletType
-    let manageWalletService: ManageWalletService
+    let walletService: WalletService
     let wordSuggestor = WordSuggestor()
     let onFinishImport: (() -> Void)?
 
@@ -16,11 +16,11 @@ class ImportWalletViewModel: ObservableObject {
 
     init(
         type: ImportWalletType,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         onFinishImport: (() -> Void)?
     ) {
         self.type = type
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.onFinishImport = onFinishImport
     }
     
@@ -32,7 +32,7 @@ class ImportWalletViewModel: ObservableObject {
     }
     
     var name: String {
-        WalletNameGenerator(type: type, manageWalletService: manageWalletService).name
+        WalletNameGenerator(type: type, walletService: walletService).name
     }
     
     var chain: Chain? {
@@ -67,7 +67,7 @@ class ImportWalletViewModel: ObservableObject {
     }
 
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
-        try manageWalletService.importWallet(name: name, type: keystoreType)
+        try walletService.importWallet(name: name, type: keystoreType)
         onFinishImport?()
     }
     

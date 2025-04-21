@@ -3,7 +3,7 @@
 import SwiftUI
 import Localization
 import Primitives
-import ManageWalletService
+import WalletService
 
 public struct CreateWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
@@ -11,13 +11,13 @@ public struct CreateWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
 
     public init(
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         isPresentingWallets: Binding<Bool>
     ) {
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         _isPresentingWallets = isPresentingWallets
     }
 
@@ -25,7 +25,7 @@ public struct CreateWalletNavigationStack: View {
         NavigationStack(path: $navigationPath) {
             CreateWalletScene(
                 model: CreateWalletViewModel(
-                    manageWalletService: manageWalletService,
+                    walletService: walletService,
                     onCreateWallet: {
                         navigationPath.append(Scenes.VerifyPhrase(words: $0))
                     }
@@ -43,7 +43,7 @@ public struct CreateWalletNavigationStack: View {
                 VerifyPhraseWalletScene(
                     model: VerifyPhraseViewModel(
                         words: $0.words,
-                        manageWalletService: manageWalletService
+                        walletService: walletService
                     ),
                     isPresentingWallets: $isPresentingWallets
                 )

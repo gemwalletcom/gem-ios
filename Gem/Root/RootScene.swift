@@ -30,7 +30,7 @@ struct RootScene: View {
                 }
             } else {
                 OnboardingNavigationView(
-                    model: .init(manageWalletService: model.manageWalletService)
+                    model: .init(walletService: model.walletService)
                 )
             }
         }

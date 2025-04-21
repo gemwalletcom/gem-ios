@@ -9,7 +9,7 @@ import ManageWallets
 import WalletAvatar
 
 struct WalletsNavigationStack: View {
-    @Environment(\.manageWalletService) private var manageWalletService
+    @Environment(\.walletService) private var walletService
     @Environment(\.avatarService) private var avatarService
 
     @State private var navigationPath = NavigationPath()
@@ -27,7 +27,7 @@ struct WalletsNavigationStack: View {
             WalletsScene(
                 model: WalletsSceneViewModel(
                     navigationPath: $navigationPath,
-                    manageWalletService: manageWalletService
+                    walletService: walletService
                 ),
                 isPresentingCreateWalletSheet: $isPresentingCreateWalletSheet,
                 isPresentingImportWalletSheet: $isPresentingImportWalletSheet
@@ -37,7 +37,7 @@ struct WalletsNavigationStack: View {
                     model: WalletDetailViewModel(
                         navigationPath: $navigationPath,
                         wallet: $0.wallet,
-                        walletService: manageWalletService
+                        walletService: walletService
                     )
                 )
             }
@@ -49,13 +49,13 @@ struct WalletsNavigationStack: View {
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
-                    manageWalletService: manageWalletService,
+                    walletService: walletService,
                     isPresentingWallets: $isPresentingWallets
                 )
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
-                    model: ImportWalletTypeViewModel(manageWalletService: manageWalletService),
+                    model: ImportWalletTypeViewModel(walletService: walletService),
                     isPresentingWallets: $isPresentingWallets
                 )
             }

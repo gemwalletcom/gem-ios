@@ -3,14 +3,14 @@
 import PackageDescription
 
 let package = Package(
-    name: "ManageWalletService",
+    name: "WalletService",
     platforms: [
         .iOS(.v17)
     ],
     products: [
         .library(
-            name: "ManageWalletService",
-            targets: ["ManageWalletService"]),
+            name: "WalletService",
+            targets: ["WalletService"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -22,7 +22,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "ManageWalletService",
+            name: "WalletService",
             dependencies: [
                 "Primitives",
                 "Keystore",
@@ -34,8 +34,8 @@ let package = Package(
             path: "Sources"
         ),
         .testTarget(
-            name: "ManageWalletServiceTests",
-            dependencies: ["ManageWalletService"]
+            name: "WalletServiceTests",
+            dependencies: ["WalletService"]
         ),
     ]
 )

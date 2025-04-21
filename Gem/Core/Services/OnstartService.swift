@@ -6,7 +6,7 @@ import Primitives
 import NodeService
 import AssetsService
 import Preferences
-import ManageWalletService
+import WalletService
 
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
@@ -16,11 +16,11 @@ struct OnstartService {
     let assetStore: AssetStore
     let nodeStore: NodeStore
     let preferences: Preferences
-    let manageWalletService: ManageWalletService
+    let walletService: WalletService
 
     func migrations() {
         do {
-            try manageWalletService.setup(chains: AssetConfiguration.allChains)
+            try walletService.setup(chains: AssetConfiguration.allChains)
         } catch {
             NSLog("Setup chains: \(error)")
         }

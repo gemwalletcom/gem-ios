@@ -22,7 +22,7 @@ import TransactionsService
 import TransactionService
 import NFTService
 import WalletsService
-import ManageWalletService
+import WalletService
 import AvatarService
 import WalletSessionService
 
@@ -48,7 +48,7 @@ struct ServicesFactory {
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
-        let manageWalletService = Self.makeManageWalletService(
+        let walletService = Self.makewalletService(
             preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
@@ -151,7 +151,7 @@ struct ServicesFactory {
             stakeService: stakeService,
             transactionsService: transactionsService,
             transactionService: transactionService,
-            manageWalletService: manageWalletService,
+            walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
@@ -196,13 +196,13 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeManageWalletService(
+    private static func makewalletService(
         preferences: ObservablePreferences,
         keystore: any Keystore,
         walletStore: WalletStore,
         avatarService: AvatarService
-    ) -> ManageWalletService {
-        ManageWalletService(
+    ) -> WalletService {
+        WalletService(
             keystore: keystore,
             walletStore: walletStore,
             preferences: preferences,

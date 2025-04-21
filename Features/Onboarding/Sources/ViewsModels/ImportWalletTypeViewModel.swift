@@ -1,15 +1,15 @@
 import Foundation
 import Primitives
-import ManageWalletService
+import WalletService
 import SwiftUI
 import Localization
 import PrimitivesComponents
 
 public struct ImportWalletTypeViewModel {
-    let manageWalletService: ManageWalletService
+    let walletService: WalletService
 
-    public init(manageWalletService: ManageWalletService) {
-        self.manageWalletService = manageWalletService
+    public init(walletService: WalletService) {
+        self.walletService = walletService
     }
     
     var title: String {

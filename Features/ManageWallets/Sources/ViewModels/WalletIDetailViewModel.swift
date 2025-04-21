@@ -1,5 +1,5 @@
 import SwiftUI
-import ManageWalletService
+import WalletService
 import WalletAvatar
 import Primitives
 import Components
@@ -13,13 +13,13 @@ public class WalletDetailViewModel {
 
     @Binding var navigationPath: NavigationPath
     let wallet: Wallet
-    let walletService: ManageWalletService
+    let walletService: WalletService
     let explorerService: any ExplorerLinkFetchable
 
     public init(
         navigationPath: Binding<NavigationPath>,
         wallet: Wallet,
-        walletService: ManageWalletService,
+        walletService: WalletService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard
     ) {
         _navigationPath = navigationPath

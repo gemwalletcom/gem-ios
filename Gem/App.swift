@@ -9,7 +9,7 @@ import GemAPI
 import LockManager
 import Preferences
 import AssetsService
-import ManageWalletService
+import WalletService
 
 @main
 struct GemApp: App {
@@ -32,7 +32,7 @@ struct GemApp: App {
                     deviceObserverService: resolver.services.deviceObserverService,
                     notificationService: resolver.services.notificationService,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
-                    manageWalletService: resolver.services.manageWalletService,
+                    walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService
                 )
             )
@@ -82,7 +82,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             assetStore: AssetStore(db: .main),
             nodeStore: NodeStore(db: .main),
             preferences: Preferences.standard,
-            manageWalletService: ManageWalletService.main
+            walletService: WalletService.main
         )
         service.migrations()
         

@@ -8,7 +8,7 @@ import LockManager
 import WalletConnector
 import TransactionsService
 import TransactionService
-import ManageWalletService
+import WalletService
 import WalletsService
 import Onboarding
 
@@ -22,10 +22,10 @@ final class RootSceneViewModel {
     private let notificationService: NotificationService
     private let walletsService: WalletsService
 
-    let manageWalletService: ManageWalletService
+    let walletService: WalletService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
-    var currentWallet: Wallet? { manageWalletService.currentWallet }
+    var currentWallet: Wallet? { walletService.currentWallet }
     var updateAvailableAlertSheetMessage: String?
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -49,7 +49,7 @@ final class RootSceneViewModel {
         deviceObserverService: DeviceObserverService,
         notificationService: NotificationService,
         lockWindowManager: any LockWindowManageable,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         walletsService: WalletsService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
@@ -59,7 +59,7 @@ final class RootSceneViewModel {
         self.deviceObserverService = deviceObserverService
         self.notificationService = notificationService
         self.lockManager = lockWindowManager
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.walletsService = walletsService
     }
 }

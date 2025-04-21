@@ -3,21 +3,21 @@
 import Foundation
 import Primitives
 import Localization
-import ManageWalletService
+import WalletService
 
 struct WalletNameGenerator {
     private let type: ImportWalletType
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
 
-    init(type: ImportWalletType, manageWalletService: ManageWalletService) {
+    init(type: ImportWalletType, walletService: WalletService) {
         self.type = type
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
     }
 
     var name: String {
         name(
             type: type,
-            index: (try? manageWalletService.nextWalletIndex()) ?? .zero
+            index: (try? walletService.nextWalletIndex()) ?? .zero
         )
     }
 

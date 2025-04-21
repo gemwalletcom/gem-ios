@@ -3,19 +3,19 @@ import Primitives
 import SwiftUI
 import Localization
 import Preferences
-import ManageWalletService
+import WalletService
 
 public class WalletsSceneViewModel {
     @Binding var navigationPath: NavigationPath
-    let service: ManageWalletService
+    let service: WalletService
     let currentWalletId: WalletId?
     
     public init(
         navigationPath: Binding<NavigationPath>,
-        manageWalletService: ManageWalletService
+        walletService: WalletService
     ) {
         _navigationPath = navigationPath
-        self.service = manageWalletService
+        self.service = walletService
         self.currentWalletId = service.currentWaletId
     }
     

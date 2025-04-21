@@ -8,7 +8,7 @@ import Keystore
 import AvatarService
 import WalletSessionService
 
-public struct ManageWalletService: Sendable {
+public struct WalletService: Sendable {
     private let keystore: any Keystore
     private let walletStore: WalletStore
     private let avatarService: AvatarService
