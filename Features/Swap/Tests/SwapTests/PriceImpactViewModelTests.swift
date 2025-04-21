@@ -43,14 +43,14 @@ struct PriceImpactViewModelTests {
 
     @Test
     func testHighImpactConfirmationTextAboveThreshold() {
-        let vm = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "300000000")
-        #expect(vm.highImpactConfirmationText != nil)
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "300000000")
+        #expect(viewModel.highImpactConfirmationText != nil)
     }
 
     @Test
     func testHighImpactConfirmationTextBelowThreshold() {
-        let vm = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "850000000")
-        #expect(vm.highImpactConfirmationText == nil)
+        let viewModel = PriceImpactViewModel.mock(fromValue: "1000000000", toValue: "850000000")
+        #expect(viewModel.highImpactConfirmationText == nil)
     }
 }
 
