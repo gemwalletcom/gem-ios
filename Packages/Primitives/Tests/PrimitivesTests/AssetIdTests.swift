@@ -5,6 +5,7 @@ import Testing
 import Primitives
 
 final class AssetIdTests {
+    
     @Test
     func testId() throws {
         #expect((try? AssetId(id: "")) == nil)
@@ -58,5 +59,14 @@ final class AssetIdTests {
         let data = try JSONEncoder().encode(asset)
 
         #expect(String(data: data, encoding: .utf8) == #""solana""#)
+    }
+    
+    @Test
+    func testObjectDecoding() throws {
+        let asset = AssetId(chain: .ethereum, tokenId: "0xabc123")
+        let json = #"{"chain":"ethereum","tokenId":"0xabc123"}"#.data(using: .utf8)!
+        let decoded = try JSONDecoder().decode(AssetId.self, from: json)
+        
+        #expect(AssetId(chain: .ethereum, tokenId: "0xabc123") == asset)
     }
 }

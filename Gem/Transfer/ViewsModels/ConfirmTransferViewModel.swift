@@ -146,6 +146,10 @@ final class ConfirmTransferViewModel {
     var networkFeeInfoUrl: URL {
         Docs.url(.networkFees)
     }
+    
+    var minimumAccountBalanceInfoUrl: URL {
+        Docs.url(.accountMinimalBalance)
+    }
 
     var buttonTitle: String {
         // try again on failed data load
@@ -159,11 +163,14 @@ final class ConfirmTransferViewModel {
             let title: String = {
                 switch error {
                 case let tranferError as TransferAmountCalculatorError:
+                    
                     switch tranferError {
                     case .insufficientBalance(let asset):
                         return Localized.Transfer.insufficientBalance(AssetViewModel(asset: asset).title)
                     case .insufficientNetworkFee(let asset):
                         return Localized.Transfer.insufficientNetworkFeeBalance(AssetViewModel(asset: asset).title)
+                    case .minimumAccountBalanceTooLow(let asset, _):
+                        return Localized.Transfer.minimumAccountBalance(AssetViewModel(asset: asset).title)
                     }
                 default:
                     return Localized.Errors.unknown
@@ -181,8 +188,12 @@ final class ConfirmTransferViewModel {
             return nil
         }
 
-        if let result = state.value?.transferAmountResult, case .error = result {
-            return nil
+        if let result = state.value?.transferAmountResult, case let .error(_, error) = result {
+            switch error as? TransferAmountCalculatorError {
+            case .insufficientBalance,
+                .insufficientNetworkFee,
+                .minimumAccountBalanceTooLow, .none: return nil
+            }
         }
 
         let authentication = (try? keystore.getPasswordAuthentication()) ?? .none

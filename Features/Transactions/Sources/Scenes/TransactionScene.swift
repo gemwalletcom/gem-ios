@@ -73,7 +73,15 @@ public struct TransactionScene: View {
                         subtitle: model.network,
                         assetImage: model.networkAssetImage
                     )
-
+                    
+                    if let item = model.providerListItem {
+                        ListItemImageView(
+                            title: item.title,
+                            subtitle: item.subtitle,
+                            assetImage: item.assetImage
+                        )
+                    }
+                    
                     ListItemView(
                         title: model.networkFeeField,
                         subtitle: model.networkFeeText,
