@@ -8,6 +8,7 @@ import BigInt
 import SwiftUI
 import PrimitivesComponents
 import Style
+import enum Gemstone.GemSwapProvider
 
 public struct SwapProviderItem {
     public let asset: Asset

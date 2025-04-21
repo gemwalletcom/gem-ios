@@ -9,7 +9,7 @@ import PrimitivesTestKit
 
 @testable import Blockchain
 
-final class BitcoinFeeTests {
+struct BitcoinFeeTests {
     let utxos: [UTXO] = [
         UTXO(
             transaction_id: "21d603f2bcf5bf3c9b653ec70f53cf6caf9ad51d304e9fbbf609832d1f9a1fec",
@@ -28,7 +28,7 @@ final class BitcoinFeeTests {
 
     let chain = BitcoinChain.bitcoin
 
-    lazy var feeInput: FeeInput = {
+    var feeInput: FeeInput {
         FeeInput(
             type: .transfer(.init(.bitcoin)),
             senderAddress: "bc1qgxe8qnqpuz0zqtgztxl77t5egf2xzh2l4ylx90",
@@ -38,7 +38,7 @@ final class BitcoinFeeTests {
             gasPrice: feeRates[2].gasPriceType,
             memo: nil
         )
-    }()
+    }
 
     @Test
     func testCalculateFeeSuccess() throws {
