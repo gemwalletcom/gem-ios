@@ -205,7 +205,7 @@ struct AssetScene: View {
             SetPriceAlertNavigationStack(
                 model: SetPriceAlertViewModel(
                     wallet: model.walletModel.wallet,
-                    assetId: model.assetModel.asset.id.identifier,
+                    assetId: model.assetModel.asset.id,
                     priceAlertService: priceAlertService,
                     onComplete: {
                         isPresentingSetPriceAlert = false
