@@ -8,12 +8,12 @@ import SwiftUI
 import Style
 
 public struct PriceImpactViewModel {
+    private static let confirmationImpactThreshold: Double = 20 // % show confirmation above this value
+
     let fromAssetData: AssetData
     let fromValue: String
     let toAssetData: AssetData
     let toValue: String
-    
-    var priceImpactTitle: String { Localized.Swap.priceImpact }
     
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
@@ -25,21 +25,14 @@ public struct PriceImpactViewModel {
         self.toValue = toValue
     }
 
-    // MARK: - Public methods
-    
-    func value() -> PriceImpactValue? {
-        guard
-            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
-            let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
-            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
-            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
-        else {
-            return nil
-        }
-        let priceImpact = calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
-        return evaluatePriceImpactValue(priceImpact: priceImpact)
+    public var highImpactConfirmationText: String? {
+        guard isHighImpact, let percentage = formattedImpactPercentage else { return nil }
+        return Localized.Swap.priceImpactConfirmation(percentage, fromAssetData.asset.symbol)
     }
-    
+
+    var priceImpactTitle: String { Localized.Swap.priceImpact }
+    var value: PriceImpactValue? { rawImpactPercentage.flatMap(evaluatePriceImpactValue) }
+
     func priceImpactColor(for type: PriceImpactType) -> Color {
         switch type {
         case .low: Colors.black
@@ -48,9 +41,31 @@ public struct PriceImpactViewModel {
         case .positive: Colors.green
         }
     }
-    
-    // MARK: - Private methods
-    
+}
+
+// MARK: - Private
+
+extension PriceImpactViewModel {
+    private var impactPercentage: Double? { rawImpactPercentage.map(abs) }
+    private var isHighImpact: Bool { (impactPercentage ?? 0) >= Self.confirmationImpactThreshold }
+
+    private var formattedImpactPercentage: String? {
+        impactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
+    }
+
+    private var rawImpactPercentage: Double? {
+        guard
+            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
+            let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
+            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
+            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
+        else {
+            return nil
+        }
+
+        return calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
+    }
+
     private func getSwapAmount(value: String, decimals: Int) -> Double? {
         guard
             let value = try? BigInt.from(string: value),
@@ -60,14 +75,14 @@ public struct PriceImpactViewModel {
         }
         return amount
     }
-    
+
     private func assetFiatValue(value: Double, price: Double?) -> Double? {
         guard let price else {
             return nil
         }
         return value * price
     }
-    
+
     private func evaluatePriceImpactValue(priceImpact: Double) -> PriceImpactValue? {
         let priceImpactPercentage = percentFormatter.string(priceImpact)
         
@@ -82,7 +97,7 @@ public struct PriceImpactViewModel {
             return PriceImpactValue(type: .high, value: priceImpactPercentage)
         }
     }
-    
+
     private func calculatePriceImpact(fromValue: Double, expectedValue: Double) -> Double {
         guard fromValue > 0 else { return .zero }
         return ((expectedValue / fromValue) - 1 ) * 100
