@@ -393,4 +393,5 @@
 "onboarding.security.create_wallet.item_2.title" = "Keep Your Secret Phrase Safe";
 "onboarding.security.create_wallet.item_3.title" = "If you lose it, we cannot recover it";
 "transfer.minimum_account_balance" = "Dopo questo importo deve rimanere un saldo minimo %@, a meno che non si utilizzi l'intero saldo.";
-"swap.price_impact_confirmation" = "You will lose %@ of your %@ in this trade. Are you sure you want to proceed?";
+"swap.price_impact_warning.description" = "You will lose %@ of your %@ in this trade. Are you sure you want to proceed?";
+"swap.price_impact_warning.title" = "High Price Impact";

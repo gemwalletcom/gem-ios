@@ -393,4 +393,5 @@
 "onboarding.security.create_wallet.item_2.title" = "Keep Your Secret Phrase Safe";
 "onboarding.security.create_wallet.item_3.title" = "If you lose it, we cannot recover it";
 "transfer.minimum_account_balance" = "전체 잔액을 사용하지 않는 한, 이 후에는 최소 %@ 잔액이 남아 있어야 합니다.";
-"swap.price_impact_confirmation" = "You will lose %@ of your %@ in this trade. Are you sure you want to proceed?";
+"swap.price_impact_warning.description" = "You will lose %@ of your %@ in this trade. Are you sure you want to proceed?";
+"swap.price_impact_warning.title" = "High Price Impact";

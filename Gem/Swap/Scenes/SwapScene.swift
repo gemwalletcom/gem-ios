@@ -31,7 +31,7 @@ struct SwapScene: View {
             bottomActionView
         }
         .confirmationDialog(
-            model.isPresentingPriceImpactConfirmation ?? "",
+            model.priceImpactModel?.highImpactWarningTitle ?? "",
             presenting: $model.isPresentingPriceImpactConfirmation,
             sensoryFeedback: .warning,
             actions: { _ in
@@ -40,6 +40,9 @@ struct SwapScene: View {
                     role: .destructive,
                     action: model.onSelectSwapConfirmation
                 )
+            },
+            message: {
+                Text(model.isPresentingPriceImpactConfirmation ?? "")
             }
         )
         .background(Colors.grayBackground)

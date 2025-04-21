@@ -246,8 +246,8 @@ extension SwapSceneViewModel {
             return
         }
 
-        if let confirmationText = priceImpactModel?.highImpactConfirmationText {
-            isPresentingPriceImpactConfirmation = confirmationText
+        if let priceImpactModel, priceImpactModel.showPriceImpactWarning, let text = priceImpactModel.highImpactWarningDescription {
+            isPresentingPriceImpactConfirmation = text
             return
         }
 

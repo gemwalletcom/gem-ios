@@ -6,10 +6,10 @@ import Localization
 import BigInt
 import SwiftUI
 import Style
+import GemstonePrimitives
 
 public struct PriceImpactViewModel {
-    private static let confirmationImpactThreshold: Double = 20 // % show confirmation above this value
-
+    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     let fromAssetData: AssetData
     let fromValue: String
     let toAssetData: AssetData
@@ -24,10 +24,14 @@ public struct PriceImpactViewModel {
         self.toAssetData = toAssetData
         self.toValue = toValue
     }
-
-    public var highImpactConfirmationText: String? {
-        guard isHighImpact, let percentage = formattedImpactPercentage else { return nil }
-        return Localized.Swap.priceImpactConfirmation(percentage, fromAssetData.asset.symbol)
+    
+    public var showPriceImpactWarning: Bool { isHighPriceImpact }
+    public var highImpactWarningTitle: String {
+        Localized.Swap.PriceImpactWarning.title
+    }
+    public var highImpactWarningDescription: String? {
+        guard let priceImpactText else { return nil }
+        return Localized.Swap.PriceImpactWarning.description(priceImpactText, fromAssetData.asset.symbol)
     }
 
     var priceImpactTitle: String { Localized.Swap.priceImpact }
@@ -46,11 +50,15 @@ public struct PriceImpactViewModel {
 // MARK: - Private
 
 extension PriceImpactViewModel {
-    private var impactPercentage: Double? { rawImpactPercentage.map(abs) }
-    private var isHighImpact: Bool { (impactPercentage ?? 0) >= Self.confirmationImpactThreshold }
+    private var priceImpactPercentage: Double? { rawImpactPercentage.map(abs) }
 
-    private var formattedImpactPercentage: String? {
-        impactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
+    private var isHighPriceImpact: Bool {
+        guard let priceImpactPercentage else { return false }
+        return priceImpactPercentage >= Double(swapConfig.highPriceImpactPercent)
+    }
+
+    private var priceImpactText: String? {
+        priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
 
     private var rawImpactPercentage: Double? {
