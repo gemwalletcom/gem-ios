@@ -22,8 +22,9 @@ import TransactionsService
 import TransactionService
 import NFTService
 import WalletsService
-import ManageWalletService
+import WalletService
 import AvatarService
+import WalletSessionService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -47,7 +48,7 @@ struct ServicesFactory {
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
-        let manageWalletService = Self.makeManageWalletService(
+        let walletService = Self.makewalletService(
             preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
@@ -106,8 +107,10 @@ struct ServicesFactory {
         let walletConnectorManager = WalletConnectorManager(presenter: presenter)
         let connectionsService = Self.makeConnectionsService(
             connectionsStore: storeManager.connectionsStore,
-            walletStore: storeManager.walletStore,
-            preferences: storages.observablePreferences,
+            walletSessionService: WalletSessionService(
+                walletStore: storeManager.walletStore,
+                preferences: storages.observablePreferences
+            ),
             interactor: walletConnectorManager
         )
 
@@ -127,7 +130,6 @@ struct ServicesFactory {
 
         let onstartService = Self.makeOnstartService(
             assetStore: storeManager.assetStore,
-            keystore: storages.keystore,
             nodeStore: storeManager.nodeStore,
             preferences: preferences,
             assetsService: assetsService,
@@ -149,7 +151,7 @@ struct ServicesFactory {
             stakeService: stakeService,
             transactionsService: transactionsService,
             transactionService: transactionService,
-            manageWalletService: manageWalletService,
+            walletService: walletService,
             walletsService: walletsService,
             explorerService: explorerService,
             deviceObserverService: deviceObserverService,
@@ -194,13 +196,13 @@ extension ServicesFactory {
         )
     }
 
-    private static func makeManageWalletService(
+    private static func makewalletService(
         preferences: ObservablePreferences,
         keystore: any Keystore,
         walletStore: WalletStore,
         avatarService: AvatarService
-    ) -> ManageWalletService {
-        ManageWalletService(
+    ) -> WalletService {
+        WalletService(
             keystore: keystore,
             walletStore: walletStore,
             preferences: preferences,
@@ -296,14 +298,12 @@ extension ServicesFactory {
 
     private static func makeConnectionsService(
         connectionsStore: ConnectionsStore,
-        walletStore: WalletStore,
-        preferences: ObservablePreferences,
+        walletSessionService: WalletSessionService,
         interactor: any WalletConnectorInteractable
     ) -> ConnectionsService {
         let signer = WalletConnectorSigner(
             connectionsStore: connectionsStore,
-            walletStore: walletStore,
-            preferences: preferences,
+            walletSessionService: walletSessionService,
             walletConnectorInteractor: interactor
         )
         return ConnectionsService(
@@ -335,7 +335,6 @@ extension ServicesFactory {
 
     private static func makeOnstartService(
         assetStore: AssetStore,
-        keystore: any Keystore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
@@ -344,7 +343,6 @@ extension ServicesFactory {
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
-            keystore: keystore,
             nodeStore: nodeStore,
             preferences: preferences,
             assetsService: assetsService,

@@ -12,14 +12,14 @@ import Localization
 import PrimitivesComponents
 import InfoSheet
 import Components
-import ManageWalletService
+import WalletService
 
 @Observable
 @MainActor
 public final class WalletSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let bannerService: BannerService
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
 
     let observablePreferences: ObservablePreferences
 
@@ -43,14 +43,14 @@ public final class WalletSceneViewModel: Sendable {
     public init(
         walletsService: WalletsService,
         bannerService: BannerService,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         observablePreferences: ObservablePreferences,
         wallet: Wallet
     ) {
         self.wallet = wallet
         self.walletsService = walletsService
         self.bannerService = bannerService
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.observablePreferences = observablePreferences
 
         self.totalFiatRequest = TotalValueRequest(walletId: wallet.id)
@@ -70,7 +70,7 @@ public final class WalletSceneViewModel: Sendable {
 
     }
 
-    public var currentWallet: Wallet? { manageWalletService.currentWallet }
+    public var currentWallet: Wallet? { walletService.currentWallet }
 
     var pinnedTitle: String { Localized.Common.pinned }
     var manageTokenTitle: String { Localized.Wallet.manageTokenList }

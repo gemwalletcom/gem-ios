@@ -2,16 +2,16 @@
 
 import Foundation
 import Localization
-import Keystore
+import WalletService
 
 public struct OnboardingViewModel {
     var title: String { Localized.Welcome.title }
     var createWalletTitle: String { Localized.Wallet.createNewWallet }
     var importWalletTitle: String { Localized.Wallet.importExistingWallet }
 
-    let keystore: any Keystore
+    let walletService: WalletService
 
-    public init(keystore: any Keystore) {
-        self.keystore = keystore
+    public init(walletService: WalletService) {
+        self.walletService = walletService
     }
 }

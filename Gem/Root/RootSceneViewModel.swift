@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Keystore
 import DeviceService
 import Primitives
 import SwiftUI
@@ -9,8 +8,9 @@ import LockManager
 import WalletConnector
 import TransactionsService
 import TransactionService
-import ManageWalletService
+import WalletService
 import WalletsService
+import Onboarding
 
 @Observable
 @MainActor
@@ -20,14 +20,12 @@ final class RootSceneViewModel {
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
     private let notificationService: NotificationService
-    private let manageWalletService: ManageWalletService
     private let walletsService: WalletsService
 
-    let keystore: any Keystore
+    let walletService: WalletService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
-
-    var currentWallet: Wallet? { manageWalletService.currentWallet }
+    var currentWallet: Wallet? { walletService.currentWallet }
     var updateAvailableAlertSheetMessage: String?
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
@@ -44,7 +42,6 @@ final class RootSceneViewModel {
     }
 
     init(
-        keystore: any Keystore,
         walletConnectorPresenter: WalletConnectorPresenter,
         onstartService: OnstartAsyncService,
         transactionService: TransactionService,
@@ -52,10 +49,9 @@ final class RootSceneViewModel {
         deviceObserverService: DeviceObserverService,
         notificationService: NotificationService,
         lockWindowManager: any LockWindowManageable,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         walletsService: WalletsService
     ) {
-        self.keystore = keystore
         self.walletConnectorPresenter = walletConnectorPresenter
         self.onstartService = onstartService
         self.transactionService = transactionService
@@ -63,7 +59,7 @@ final class RootSceneViewModel {
         self.deviceObserverService = deviceObserverService
         self.notificationService = notificationService
         self.lockManager = lockWindowManager
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.walletsService = walletsService
     }
 }

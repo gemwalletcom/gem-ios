@@ -1,14 +1,13 @@
 import Testing
-import Keystore
-import KeystoreTestKit
 import Primitives
 import Foundation
 import WalletConnectSign
-import GRDB
 import Store
 import PrimitivesTestKit
 import StoreTestKit
 import PreferencesTestKit
+import WalletSessionServiceTeskKit
+import WalletSessionService
 
 @testable import WalletConnector
 
@@ -16,27 +15,31 @@ struct WalletConnectorSignerTests {
     @Test
     func testGetWalletsSuccess() throws {
         let db = DB.mock()
-        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
-        let _ = try keystore.importWallet(
-            name: "test",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .solana])
+        let walletStore = WalletStore(db: db)
+        let sessionService = WalletSessionService.mock(store: walletStore)
+        let signer = WalletConnectorSigner.mock(
+            connectionsStore: ConnectionsStore(db: db),
+            walletSessionService: sessionService
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
-        let wallets = try signer.getWallets(for: try .mock())
 
-        #expect(keystore.wallets.first == wallets.first)
+        try walletStore.addWallet(.mock(accounts: [.mock(chain: .ethereum), .mock(chain: .solana)]))
+        let wallets = try signer.getWallets(for: .mock())
+
+        #expect(try walletStore.getWallets() == wallets)
     }
 
     @Test
     func testGetWalletsEmptyNoMatchingChain() throws {
         let db = DB.mock()
-        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
-        let _ = try keystore.importWallet(
-            name: "test",
-            type: .phrase(words:  LocalKeystore.words, chains: [])
+        let walletStore = WalletStore(db: db)
+        let sessionService = WalletSessionService.mock(store: walletStore)
+        let signer = WalletConnectorSigner.mock(
+            connectionsStore: ConnectionsStore(db: db),
+            walletSessionService: sessionService
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
-        let wallets = try signer.getWallets(for: try .mock())
+
+        try walletStore.addWallet(.mock())
+        let wallets = try signer.getWallets(for: try .emptyRequiredNamespaces())
 
         #expect(wallets.isEmpty)
     }
@@ -44,26 +47,30 @@ struct WalletConnectorSignerTests {
     @Test
     func testGetWalletsOptionalsBlockhain() throws {
         let db = DB.mock()
-        let keystore = LocalKeystore.mock(walletStore: .mock(db: db))
-        let proposal = try Session.Proposal.optionalNamespaces()
-    
-        let _ = try keystore.importWallet(
-            name: "test",
-            type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
+        let walletStore = WalletStore(db: db)
+        let sessionService = WalletSessionService.mock(store: walletStore)
+        let signer = WalletConnectorSigner.mock(
+            connectionsStore: ConnectionsStore(db: db),
+            walletSessionService: sessionService
         )
-        let signer = WalletConnectorSigner.mock(keystore: keystore, walletStore: .mock(db: db))
-        let wallets = try signer.getWallets(for: proposal)
+        try walletStore.addWallet(.mock(accounts: [.mock(chain: .ethereum)]))
+        let wallets = try signer.getWallets(for: .optionalNamespaces())
 
         #expect(wallets.count == 1)
     }
 }
 
 extension WalletConnectorSigner {
-    static func mock(keystore: LocalKeystore, walletStore: WalletStore) -> WalletConnectorSigner {
+    static func mock(
+        connectionsStore: ConnectionsStore = .mock(),
+        walletSessionService: any WalletSessionManageable = WalletSessionService.mock(
+            store: .mock(),
+            preferences: .mock()
+        )
+    ) -> WalletConnectorSigner {
         WalletConnectorSigner(
-            connectionsStore: .mock(),
-            walletStore: walletStore,
-            preferences: .mock(),
+            connectionsStore: connectionsStore,
+            walletSessionService: walletSessionService,
             walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
         )
     }
