@@ -14,41 +14,44 @@ public struct InfoSheetScene: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            VStack(spacing: .extraSmall) {
-                if model.url != nil {
-                    Spacer()
-                    InfoSheetView(model: model)
-                    Spacer()
-                    StateButton(
-                        text: model.buttonTitle,
-                        styleState: .normal,
-                        action: onLearnMore
-                    )
-                    .frame(maxWidth: .scene.button.maxWidth)
-                } else {
-                    InfoSheetView(model: model)
-                }
-            }
+        InfoSheetView(model: model)
+            .frame(
+                maxWidth: .infinity,
+                maxHeight: .infinity
+            )
             .padding(.horizontal, .medium)
-            .if(model.url != nil) {
-                $0.padding(.bottom, .scene.bottom)
+            .safeAreaInset(edge: .top, alignment: .trailing) {
+                closeButton
+                    .padding([.trailing, .top], .medium)
             }
-            .toolbar {
-                ToolbarItem(placement: .primaryAction) {
-                    Button(action: onClose) {
-                        Images.System.xmarkCircle
-                            .symbolRenderingMode(.hierarchical)
-                            .foregroundStyle(.secondary)
-                            .font(.system(size: .large).bold())
-                    }
-                    .buttonStyle(.plain)
+            .if(model.url != nil) {
+                $0.safeAreaInset(edge: .bottom) {
+                    learnMoreButton
+                        .padding([.bottom], .medium)
                 }
             }
+            .presentationDetents([.medium])
+            .presentationCornerRadius(.presentation.cornerRadius)
+            .safariSheet(url: $isPresentedUrl)
+    }
+
+    private var closeButton: some View {
+        Button(action: onClose) {
+            Images.System.xmarkCircle
+                .symbolRenderingMode(.hierarchical)
+                .font(.system(size: .large, weight: .bold))
+                .foregroundStyle(.secondary)
         }
-        .safariSheet(url: $isPresentedUrl)
-        .presentationDetents([.medium])
-        .presentationCornerRadius(.presentation.cornerRadius)
+        .buttonStyle(.plain)
+    }
+
+    private var learnMoreButton: some View {
+        StateButton(
+            text: model.buttonTitle,
+            styleState: .normal,
+            action: onLearnMore
+        )
+        .frame(maxWidth: .scene.button.maxWidth)
     }
 }
 
