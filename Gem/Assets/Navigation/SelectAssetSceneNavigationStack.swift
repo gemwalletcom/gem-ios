@@ -5,7 +5,6 @@ import Primitives
 import Components
 import Style
 import Localization
-import SwapService
 import FiatConnect
 import PrimitivesComponents
 

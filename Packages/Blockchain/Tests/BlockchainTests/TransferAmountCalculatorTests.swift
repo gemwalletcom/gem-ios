@@ -323,4 +323,23 @@ struct TransferAmountCalculatorTests {
             ))
         }
     }
+    
+    @Test
+    func testMinimumAccountBalanceForToken() {
+        let assetCoin = Asset.mockEthereum()
+        let assetToken = Asset.mockEthereumUSDT()
+        
+        #expect(throws: Never.self) {
+            try service.calculate(input: TransferAmountInput(
+                asset: assetToken,
+                assetBalance: Balance(available: BigInt(1000890880)),
+                value: BigInt(1000590880),
+                availableValue: BigInt(1000890880),
+                assetFee: assetCoin,
+                assetFeeBalance: Balance(available: .zero),
+                fee: .zero,
+                canChangeValue: true
+            ))
+        }
+    }
 }
