@@ -46,7 +46,6 @@ public struct SimpleListItemView: View {
             imageStyle: ListItemImageStyle(
                 assetImage: model.assetImage,
                 imageSize: model.imageSize,
-                overlayImageSize: .image.overlayImage.chain,
                 cornerRadiusType: .custom(model.cornerRadius)
             )
         )

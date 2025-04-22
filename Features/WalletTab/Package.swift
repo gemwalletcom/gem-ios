@@ -26,7 +26,7 @@ let package = Package(
         .package(name: "WalletsService", path: "../../Services/WalletsService"),
         .package(name: "BannerService", path: "../../Services/BannerService"),
         .package(name: "WalletAvatar", path: "../WalletAvatar"),
-        .package(name: "ManageWalletService", path: "../ManageWalletService"),
+        .package(name: "WalletService", path: "../WalletService"),
     ],
     targets: [
         .target(
@@ -44,7 +44,7 @@ let package = Package(
                 "WalletsService",
                 "BannerService",
                 "WalletAvatar",
-                "ManageWalletService"
+                "WalletService"
             ],
             path: "Sources"
         ),

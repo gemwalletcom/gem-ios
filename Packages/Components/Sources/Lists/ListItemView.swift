@@ -96,7 +96,6 @@ public struct ListItemView: View {
                 AssetImageView(
                     assetImage: imageStyle.assetImage,
                     size: imageStyle.imageSize,
-                    overlayImageSize: imageStyle.overlayImageSize,
                     cornerRadius: imageStyle.cornerRadius
                 )
             }

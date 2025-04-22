@@ -122,7 +122,6 @@ public struct BannerViewModel {
         ListItemImageStyle(
             assetImage: image,
             imageSize: imageSize,
-            overlayImageSize: .image.overlayImage.chain,
             cornerRadiusType: .custom(cornerRadius)
         )
     }

@@ -1,15 +1,15 @@
 import Foundation
 import Primitives
-import Keystore
+import WalletService
 import SwiftUI
 import Localization
 import PrimitivesComponents
 
 public struct ImportWalletTypeViewModel {
-    let keystore: any Keystore
-    
-    public init(keystore: any Keystore) {
-        self.keystore = keystore
+    let walletService: WalletService
+
+    public init(walletService: WalletService) {
+        self.walletService = walletService
     }
     
     var title: String {

@@ -15,7 +15,6 @@ import struct Staking.StakeValidatorsScene
 struct AmountScene: View {
 
     @State var model: AmountViewModel
-    @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
 
     @FocusState private var focusedField: Bool

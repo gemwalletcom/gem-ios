@@ -7,7 +7,12 @@ public struct AssetImageView: View {
     @Environment(\.displayScale) private var scale
 
     private let size: CGFloat
-    private let overlaySize: CGFloat
+    private var overlaySize: CGFloat {
+        switch size {
+        case ...48: size / 2.6
+        default: size / 3
+        }
+    }
     private let assetImage: AssetImage
     private let overlayPadding: CGFloat = 2
     private let cornerRadius: CGFloat
@@ -15,12 +20,10 @@ public struct AssetImageView: View {
     public init(
         assetImage: AssetImage,
         size: CGFloat = .image.asset,
-        overlayImageSize: CGFloat = 16,
         cornerRadius: CGFloat? = nil
     ) {
         self.assetImage = assetImage
         self.size = max(1, size)
-        self.overlaySize = max(1, overlayImageSize)
         self.cornerRadius = cornerRadius ?? size / 2
     }
 
@@ -94,8 +97,7 @@ public struct AssetImageView: View {
                 placeholder: Image(systemName: "bitcoinsign.circle"),
                 chainPlaceholder: Image(systemName: "bolt.circle.fill")
             ),
-            size: .image.medium,
-            overlayImageSize: 20
+            size: .image.medium
         )
 
         AssetImageView(
@@ -105,8 +107,7 @@ public struct AssetImageView: View {
                 placeholder: nil,
                 chainPlaceholder: Image(systemName: "bolt.circle.fill")
             ),
-            size: .image.medium,
-            overlayImageSize: 20
+            size: .image.medium
         )
         .preferredColorScheme(.dark)
     }

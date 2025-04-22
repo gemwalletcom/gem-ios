@@ -9,9 +9,7 @@ struct InfoSheetView: View {
     private let title: TextValue
     private let description: TextValue
 
-    init(
-        model: any InfoSheetModelViewable
-    ) {
+    init(model: any InfoSheetModelViewable) {
         self.init(
             title: model.title,
             description: model.description,
@@ -48,32 +46,32 @@ struct InfoSheetView: View {
 
     var body: some View {
         VStack(spacing: .medium) {
-            ZStack {
+            Group {
                 switch image {
                 case .image(let image):
                     image
                         .resizable()
                         .aspectRatio(contentMode: .fit)
-                        .frame(width: .image.semiExtraLarge, height: .image.semiExtraLarge)
-                case .assetImage(let assetImage):
+                case .assetImage(let asset):
                     AssetImageView(
-                        assetImage: assetImage,
-                        size: .image.semiExtraLarge,
-                        overlayImageSize: .image.medium
+                        assetImage: asset,
+                        size: .image.semiExtraLarge
                     )
                 case nil: EmptyView()
                 }
             }
-            
+            .frame(size: .image.large)
+
             VStack(spacing: .small) {
                 Text(title.text)
                     .textStyle(title.style)
                 Text(description.text)
                     .textStyle(description.style)
             }
-            .minimumScaleFactor(0.5)
             .multilineTextAlignment(.center)
+            .minimumScaleFactor(0.85)
         }
+        .frame(maxWidth: .infinity, alignment: .top)
     }
 }
 

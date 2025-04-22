@@ -180,14 +180,6 @@
     {
       "enabled" : false,
       "target" : {
-        "containerPath" : "container:Services\/ManageWalletService",
-        "identifier" : "ManageWalletServiceTests",
-        "name" : "ManageWalletServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
         "containerPath" : "container:Features\/ManageWallets",
         "identifier" : "ManageWalletsTest",
         "name" : "ManageWalletsTest"

@@ -20,7 +20,7 @@ public struct WalletBarView: View {
             action?()
         } label: {
             HStack(spacing: .small) {
-                AssetImageView(assetImage: model.image, size: .large, overlayImageSize: .image.tiny)
+                AssetImageView(assetImage: model.image, size: .large)
                 
                 Text(model.name)
                     .foregroundColor(Colors.black)
