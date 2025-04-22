@@ -392,4 +392,6 @@
 "onboarding.security.create_wallet.item_3.subtitle" = "Its created only for you. Gem Wallet does not keep copy of your phrase.";
 "onboarding.security.create_wallet.item_2.title" = "Keep Your Secret Phrase Safe";
 "onboarding.security.create_wallet.item_3.title" = "If you lose it, we cannot recover it";
-"transfer.minimum_account_balance" = "A minimum %@ balance must remain after this, unless you’re using your full balance.";
+"transfer.minimum_account_balance" = "此後必須保留最低%@餘額，除非您使用全部餘額。";
+"swap.price_impact_warning.description" = "You will lose %@ of your %@ in this trade. Are you sure you want to proceed?";
+"swap.price_impact_warning.title" = "High Price Impact";

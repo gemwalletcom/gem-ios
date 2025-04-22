@@ -19,7 +19,7 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 .product(name: "WalletCore", package: "WalletCore"),
-                .product(name: "SwiftProtobuf", package: "WalletCore"),
+                .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
             ]
         ),
         .testTarget(

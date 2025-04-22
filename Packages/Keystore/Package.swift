@@ -32,7 +32,7 @@ let package = Package(
                 "WalletCorePrimitives",
                 "WalletSessionService",
                 .product(name: "WalletCore", package: "WalletCore"),
-                .product(name: "SwiftProtobuf", package: "WalletCore"),
+                .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
             ],
             path: "Sources"
