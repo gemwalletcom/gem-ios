@@ -34,6 +34,7 @@ public final class SwapSceneViewModel {
     var toAsset: AssetData?
 
     // UI states
+    var isPresentingPriceImpactConfirmation: String?
     var isPresentedInfoSheet: SwapSheetType?
     var pairSelectorModel: SwapPairSelectorViewModel
 
@@ -242,9 +243,19 @@ extension SwapSceneViewModel {
     func onSelectActionButton() {
         if swapState.quotes.isError {
             fetch()
-        } else {
-            performSwap()
+            return
         }
+
+        if let priceImpactModel, priceImpactModel.showPriceImpactWarning, let text = priceImpactModel.highImpactWarningDescription {
+            isPresentingPriceImpactConfirmation = text
+            return
+        }
+
+        performSwap()
+    }
+
+    func onSelectSwapConfirmation() {
+        performSwap()
     }
 
     func onAssetIdsChange(assetIds: [AssetId]) async {
@@ -323,7 +334,7 @@ extension SwapSceneViewModel {
         )
     }
 
-    private func performSwap() {
+    public func performSwap() {
         guard let fromAsset = fromAsset,
               let toAsset = toAsset,
               let quote = selectedSwapQuote
