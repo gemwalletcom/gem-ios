@@ -179,7 +179,7 @@ extension SelectAssetViewModel {
     
     func updateRequest() {
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
-        state = .loading
+        state = isNetworkSearchEnabled ? .loading : .noData
     }
     
     func onChangeFocus(isSearchable: Bool) {
