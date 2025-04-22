@@ -67,7 +67,7 @@ struct TransactionsNavigationStack: View {
                     NavigationStack {
                         TransactionsFilterScene(model: $model.filterModel)
                     }
-                    .presentationDetents([.medium])
+                    .presentationDetentsForCurrentDeviceSize(expandable: true)
                     .presentationDragIndicator(.visible)
                 }
                 .sheet(item: $model.isPresentingSelectAssetType) {

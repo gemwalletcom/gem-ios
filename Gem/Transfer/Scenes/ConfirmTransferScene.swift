@@ -44,7 +44,7 @@ struct ConfirmTransferScene: View {
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
                 NetworkFeeScene(model: model.feeModel)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetentsForCurrentDeviceSize(expandable: true)
             }
         }
         .alert(item: $model.confirmingErrorMessage) {

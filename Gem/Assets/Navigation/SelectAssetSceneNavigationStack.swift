@@ -105,7 +105,7 @@ struct SelectAssetSceneNavigationStack: View {
             NavigationStack {
                 AssetsFilterScene(model: $model.filterModel)
             }
-            .presentationDetents([.medium])
+            .presentationDetentsForCurrentDeviceSize(expandable: true)
             .presentationDragIndicator(.visible)
         }
     }

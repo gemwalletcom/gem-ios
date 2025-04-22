@@ -31,8 +31,7 @@ public struct WalletHeaderView: View {
             if let assetImage = model.assetImage {
                 AssetImageView(
                     assetImage: assetImage,
-                    size: 64,
-                    overlayImageSize: 26
+                    size: 64
                 )
             }
             ZStack {

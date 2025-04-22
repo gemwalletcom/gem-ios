@@ -30,7 +30,7 @@ public struct InfoSheetScene: View {
                         .padding([.bottom], .medium)
                 }
             }
-            .presentationDetents([.medium])
+            .presentationDetentsForCurrentDeviceSize()
             .presentationCornerRadius(.presentation.cornerRadius)
             .safariSheet(url: $isPresentedUrl)
     }

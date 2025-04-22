@@ -55,8 +55,7 @@ struct InfoSheetView: View {
                 case .assetImage(let asset):
                     AssetImageView(
                         assetImage: asset,
-                        size: .image.large,
-                        overlayImageSize: .image.semiMedium
+                        size: .image.semiExtraLarge
                     )
                 case nil: EmptyView()
                 }
