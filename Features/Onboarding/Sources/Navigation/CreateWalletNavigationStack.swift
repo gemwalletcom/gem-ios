@@ -48,7 +48,7 @@ public struct CreateWalletNavigationStack: View {
             .navigationDestination(for: Scenes.CreateWallet.self) { _ in
                 CreateWalletScene(
                     model: CreateWalletViewModel(
-                        keystore: keystore,
+                        walletService: walletService,
                         onCreateWallet: {
                             navigationPath.append(Scenes.VerifyPhrase(words: $0))
                         }

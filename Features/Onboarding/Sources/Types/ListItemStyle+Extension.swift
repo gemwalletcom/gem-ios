@@ -9,9 +9,8 @@ extension ListItemImageStyle {
         ListItemImageStyle(
             assetImage: .image(image),
             imageSize: .image.small,
-            overlayImageSize: .zero,
-            cornerRadiusType: .none,
-            alignment: .top
+            alignment: .top,
+            cornerRadiusType: .none
         )
     }
 }
