@@ -13,4 +13,16 @@ extension URL {
          }
          return host
      }
+    
+    public func appending(queryItems newItems: [URLQueryItem]) -> URL {
+        var components = URLComponents(url: self, resolvingAgainstBaseURL: false)!
+        var queryItems = components.queryItems ?? []
+        queryItems.append(contentsOf: newItems)
+        components.queryItems = queryItems
+        return components.url!
+    }
+    
+    public func withUTM(source: String) -> URL {
+        return appending(queryItems: [URLQueryItem(name: "utm_source", value: source)])
+    }
 }
