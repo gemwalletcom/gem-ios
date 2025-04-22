@@ -45,44 +45,7 @@ struct InfoSheetView: View {
     }
 
     var body: some View {
-        ViewThatFits(in: .vertical) {
-            regularLayout
-            compactLayout
-        }
-    }
-
-    @ViewBuilder
-    var regularLayout: some View {
-        content(
-            vSpacing: .medium,
-            titleStyle: title.style,
-            descriptionStyle: description.style,
-            imageSize: .image.semiExtraLarge,
-            overlayImageSize: .image.medium
-        )
-        .padding(.horizontal, .small)
-    }
-
-    @ViewBuilder
-    var compactLayout: some View {
-        content(
-            vSpacing: .small,
-            titleStyle: title.style.smaller,
-            descriptionStyle: description.style.smaller,
-            imageSize: .image.large,
-            overlayImageSize: .image.semiMedium
-        )
-        .padding(.horizontal, .extraSmall)
-    }
-
-    private func content(
-        vSpacing: CGFloat,
-        titleStyle: TextStyle,
-        descriptionStyle: TextStyle,
-        imageSize: CGFloat,
-        overlayImageSize: CGFloat
-    ) -> some View {
-        VStack(spacing: vSpacing) {
+        VStack(spacing: .medium) {
             Group {
                 switch image {
                 case .image(let image):
@@ -92,19 +55,19 @@ struct InfoSheetView: View {
                 case .assetImage(let asset):
                     AssetImageView(
                         assetImage: asset,
-                        size: imageSize,
-                        overlayImageSize: overlayImageSize
+                        size: .image.large,
+                        overlayImageSize: .image.semiMedium
                     )
                 case nil: EmptyView()
                 }
             }
-            .frame(size: imageSize)
+            .frame(size: .image.large)
 
             VStack(spacing: .small) {
                 Text(title.text)
-                    .textStyle(titleStyle)
+                    .textStyle(title.style)
                 Text(description.text)
-                    .textStyle(descriptionStyle)
+                    .textStyle(description.style)
             }
             .multilineTextAlignment(.center)
             .minimumScaleFactor(0.85)
