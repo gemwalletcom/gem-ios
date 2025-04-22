@@ -46,7 +46,7 @@ extension TextStyle {
     public static let footnote = TextStyle(font: .footnote, color: Colors.secondaryText)
     public static let caption = TextStyle(font: .caption, color: Colors.secondaryText)
     public static let largeTitle = TextStyle(font: .largeTitle, color: Colors.black)
-    public static let boldTitle = TextStyle(font: .title.bold(), color: Colors.black)
+    public static let boldTitle = TextStyle(font: .title, color: Colors.black, fontWeight: .bold)
     public static let highlighted = TextStyle(font: .headline, color: .white, background: Colors.blue)
 }
 

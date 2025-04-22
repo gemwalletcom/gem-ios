@@ -162,7 +162,7 @@ public struct SolanaSigner: Signable {
             throw AnyError("not swap SignerInput")
         }
         let decodeOutputData = TransactionDecoder.decode(coinType: .solana, encodedTx: transactionData)
-        let decodeOutput = try SolanaDecodingTransactionOutput(serializedData: decodeOutputData)
+        let decodeOutput = try SolanaDecodingTransactionOutput(serializedBytes: decodeOutputData)
         
         let signingInput = SolanaSigningInput.with {
             $0.privateKey = privateKey
