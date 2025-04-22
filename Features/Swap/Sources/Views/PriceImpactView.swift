@@ -16,7 +16,7 @@ public struct PriceImpactView: View {
     }
 
     public var body: some View {
-        if let priceImpactValue = model.value() {
+        if let priceImpactValue = model.value {
             ListItemView(
                 title: model.priceImpactTitle,
                 subtitle: priceImpactValue.value,

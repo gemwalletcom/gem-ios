@@ -25,7 +25,7 @@ let package = Package(
                 "Keystore",
                 "Blockchain",
                 .product(name: "WalletCore", package: "WalletCore"),
-                .product(name: "SwiftProtobuf", package: "WalletCore"),
+                .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 "WalletCorePrimitives",
             ],
             path: "Sources"
