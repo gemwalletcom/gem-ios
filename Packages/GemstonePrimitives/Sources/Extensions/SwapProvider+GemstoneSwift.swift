@@ -32,7 +32,6 @@ public extension GemQuoteAsset {
     init(asset: Asset) {
         self.init(
             id: asset.id.identifier,
-            assetId: asset.id.identifier,
             symbol: asset.symbol,
             decimals: UInt32(asset.decimals)
         )

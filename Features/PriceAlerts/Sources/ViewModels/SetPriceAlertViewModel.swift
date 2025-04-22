@@ -13,7 +13,7 @@ import Localization
 @Observable
 public final class SetPriceAlertViewModel {
     private let wallet: Wallet
-    private let assetId: String
+    private let assetId: AssetId
     private let priceAlertService: PriceAlertService
     private let onComplete: StringAction
     private let preferences = Preferences.standard
@@ -24,7 +24,7 @@ public final class SetPriceAlertViewModel {
     
     public init(
         wallet: Wallet,
-        assetId: String,
+        assetId: AssetId,
         priceAlertService: PriceAlertService,
         onComplete: StringAction
     ) {
@@ -38,7 +38,7 @@ public final class SetPriceAlertViewModel {
     var assetRequest: AssetRequest {
         AssetRequest(
             walletId: wallet.id,
-            assetId: assetId
+            assetId: assetId.identifier
         )
     }
     

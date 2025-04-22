@@ -6,14 +6,14 @@ import Localization
 import BigInt
 import SwiftUI
 import Style
+import GemstonePrimitives
 
 public struct PriceImpactViewModel {
+    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     let fromAssetData: AssetData
     let fromValue: String
     let toAssetData: AssetData
     let toValue: String
-    
-    var priceImpactTitle: String { Localized.Swap.priceImpact }
     
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
@@ -24,20 +24,21 @@ public struct PriceImpactViewModel {
         self.toAssetData = toAssetData
         self.toValue = toValue
     }
-
-    // MARK: - Public methods
     
-    func value() -> PriceImpactValue? {
-        guard
-            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
-            let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
-            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
-            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
-        else {
-            return nil
-        }
-        let priceImpact = calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
-        return evaluatePriceImpactValue(priceImpact: priceImpact)
+    public var showPriceImpactWarning: Bool { isHighPriceImpact }
+    public var highImpactWarningTitle: String {
+        Localized.Swap.PriceImpactWarning.title
+    }
+    public var highImpactWarningDescription: String? {
+        guard let priceImpactText else { return nil }
+        return Localized.Swap.PriceImpactWarning.description(priceImpactText, fromAssetData.asset.symbol)
+    }
+
+    var priceImpactTitle: String { Localized.Swap.priceImpact }
+    var value: PriceImpactValue? { rawImpactPercentage.flatMap(evaluatePriceImpactValue) }
+
+    public var priceImpactText: String? {
+        priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
     
     func priceImpactColor(for type: PriceImpactType) -> Color {
@@ -48,9 +49,31 @@ public struct PriceImpactViewModel {
         case .positive: Colors.green
         }
     }
-    
-    // MARK: - Private methods
-    
+}
+
+// MARK: - Private
+
+extension PriceImpactViewModel {
+    private var priceImpactPercentage: Double? { rawImpactPercentage.map(abs) }
+
+    private var isHighPriceImpact: Bool {
+        guard let priceImpactPercentage else { return false }
+        return priceImpactPercentage >= Double(swapConfig.highPriceImpactPercent)
+    }
+
+    private var rawImpactPercentage: Double? {
+        guard
+            let fromAmount = getSwapAmount(value: fromValue, decimals: fromAssetData.asset.decimals.asInt),
+            let toAmount = getSwapAmount(value: toValue, decimals: toAssetData.asset.decimals.asInt),
+            let fromValue = assetFiatValue(value: fromAmount, price: fromAssetData.price?.price),
+            let toValue = assetFiatValue(value: toAmount, price: toAssetData.price?.price)
+        else {
+            return nil
+        }
+
+        return calculatePriceImpact(fromValue: fromValue, expectedValue: toValue)
+    }
+
     private func getSwapAmount(value: String, decimals: Int) -> Double? {
         guard
             let value = try? BigInt.from(string: value),
@@ -60,14 +83,14 @@ public struct PriceImpactViewModel {
         }
         return amount
     }
-    
+
     private func assetFiatValue(value: Double, price: Double?) -> Double? {
         guard let price else {
             return nil
         }
         return value * price
     }
-    
+
     private func evaluatePriceImpactValue(priceImpact: Double) -> PriceImpactValue? {
         let priceImpactPercentage = percentFormatter.string(priceImpact)
         
@@ -82,7 +105,7 @@ public struct PriceImpactViewModel {
             return PriceImpactValue(type: .high, value: priceImpactPercentage)
         }
     }
-    
+
     private func calculatePriceImpact(fromValue: Double, expectedValue: Double) -> Double {
         guard fromValue > 0 else { return .zero }
         return ((expectedValue / fromValue) - 1 ) * 100

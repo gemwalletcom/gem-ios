@@ -13,13 +13,13 @@ public extension Gemstone.SwapProviderType {
         case .uniswapV3, .uniswapV4: Images.SwapProviders.uniswap
         case .jupiter: Images.SwapProviders.jupiter
         case .orca: Images.SwapProviders.orca
-        case .pancakeSwapV3, .pancakeSwapAptosV2: Images.SwapProviders.pancakeswap
+        case .pancakeswapV3, .pancakeswapAptosV2: Images.SwapProviders.pancakeswap
         case .thorchain: Images.SwapProviders.thorchain
         case .across: Images.SwapProviders.across
         case .oku: Images.SwapProviders.oku
         case .wagmi: Images.SwapProviders.wagmi
         case .cetus: Images.SwapProviders.cetus
-        case .stonFiV2: Images.SwapProviders.stonfi
+        case .stonfiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
         case .reservoir: Images.SwapProviders.reservoir
         case .symbiosis: Images.SwapProviders.symbiosis

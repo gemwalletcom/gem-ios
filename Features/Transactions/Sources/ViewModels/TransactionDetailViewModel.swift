@@ -11,6 +11,7 @@ import PrimitivesComponents
 import Store
 import Preferences
 import ExplorerService
+import class Gemstone.SwapProviderConfig
 
 struct TransactionDetailViewModel {
     let model: TransactionViewModel
@@ -31,6 +32,22 @@ struct TransactionDetailViewModel {
     var networkFeeField: String { Localized.Transfer.networkFee }
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
+    
+    var providerListItem: ListItemImageValue? {
+        guard
+            let metadata = model.transaction.transaction.metadata,
+            case let .swap( metadata) = metadata,
+            let providerId = metadata.provider else {
+            return .none
+        }
+        let config = SwapProviderConfig.fromString(id: providerId).inner()
+        
+        return ListItemImageValue(
+            title: Localized.Common.provider,
+            subtitle: config.name,
+            assetImage: AssetImage.resourceImage(image: providerId)
+        )
+    }
     
     var chain: Chain {
         model.transaction.transaction.assetId.chain

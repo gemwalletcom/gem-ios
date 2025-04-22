@@ -17,8 +17,8 @@ public struct PriceService: Sendable {
         self.priceStore = priceStore
     }
 
-    public func updatePrices(assetIds: [String], currency: String) async throws {
-        let prices = try await fetchPrices(for: assetIds, currency: currency)
+    public func updatePrices(assetIds: [AssetId], currency: String) async throws {
+        let prices = try await fetchPrices(for: assetIds.ids, currency: currency)
         try updatePrices(prices: prices)
     }
 
