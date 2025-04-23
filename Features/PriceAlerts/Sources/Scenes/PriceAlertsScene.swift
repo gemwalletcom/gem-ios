@@ -25,24 +25,14 @@ public struct PriceAlertsScene: View {
         List {
             toggleView
             
-            let list = model.sections(for: priceAlerts).list
-            
-            ForEach(list) { section in
-                Section {
-                    ForEach(section.values) { alert in
-                        NavigationLink(value: Scenes.Price(asset: alert.value.asset)) {
-                            alertView(alert: alert.value)
-                        }
-                    }
-                } header: {
-                    if section.section.isEmpty {
-                        EmptyView()
-                    } else {
-                        Text(section.section)
+            ListItemValueSectionList(
+                list: model.sections(for: priceAlerts).list,
+                content: { alert in
+                    NavigationLink(value: Scenes.Price(asset: alert.asset)) {
+                        alertView(alert: alert)
                     }
                 }
-                .listRowInsets(.assetListRowInsets)
-            }
+            )
         }
         .listSectionSpacing(.compact)
         .overlay {

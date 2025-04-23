@@ -40,7 +40,7 @@ public final class PriceAlertsViewModel: Sendable {
         EmptyContentTypeViewModel(type: .priceAlerts)
     }
 
-    func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
+    func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {        
         let (autoAlerts, manualGroups) = alerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
             switch alert.priceAlert.type {
             case .auto:
