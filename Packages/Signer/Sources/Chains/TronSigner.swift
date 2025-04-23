@@ -121,7 +121,8 @@ public struct TronSigner: Signable {
         guard
             case let .swap(_, _, quote, quoteData) = input.type,
             let data = Data(fromHex: quoteData.data),
-            let callValue = Int64(quoteData.value)
+            let callValue = Int64(quoteData.value),
+            let feeLimit = quoteData.gasLimit
         else {
             throw AnyError("Invalid input type for swapping")
         }
@@ -132,9 +133,8 @@ public struct TronSigner: Signable {
             $0.data = data
             $0.callValue = callValue
         }
-        let feeLimit = Int(quoteData.gasLimit ?? "150000000")
         return try [
-            sign(input: input, contract: .triggerSmartContract(contract), feeLimit: feeLimit, privateKey: privateKey)
+            sign(input: input, contract: .triggerSmartContract(contract), feeLimit: Int(feeLimit), privateKey: privateKey)
         ]
     }
 }
