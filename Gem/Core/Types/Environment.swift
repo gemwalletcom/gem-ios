@@ -21,7 +21,7 @@ import BalanceService
 import AssetsService
 import TransactionsService
 import WalletsService
-import ManageWalletService
+import WalletService
 import AvatarService
 
 extension EnvironmentValues {
@@ -31,7 +31,7 @@ extension EnvironmentValues {
     @Entry var priceService: PriceService = .main
     @Entry var explorerService: ExplorerService = .standard
     @Entry var walletsService: WalletsService = .main
-    @Entry var manageWalletService: ManageWalletService = .main
+    @Entry var walletService: WalletService = .main
     @Entry var priceAlertService: PriceAlertService = .main
     @Entry var deviceService: DeviceService = .main
     @Entry var balanceService: BalanceService = .main

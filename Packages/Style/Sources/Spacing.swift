@@ -75,8 +75,8 @@ public extension Sizing {
         public static let medium: CGFloat = 44
         /// 88
         public static let large: CGFloat = 88
-        /// 112
-        public static let semiExtraLarge: CGFloat = 112
+        /// 102
+        public static let semiExtraLarge: CGFloat = 102
         /// 120
         public static let extraLarge: CGFloat = 120
         

@@ -27,6 +27,14 @@ public struct GemstoneConfig {
 public struct Docs {
     public static func url(_ item: Gemstone.DocsUrl) -> URL {
         return URL(string: Config.shared.getDocsUrl(item: item))!
+            .withUTM(source: "gemwallet_ios")
+    }
+}
+
+public struct PublicConstants {
+    public static func url(_ item: Gemstone.PublicUrl) -> URL {
+        return URL(string: Config.shared.getPublicUrl(item: item))!
+            .withUTM(source: "gemwallet_ios")
     }
 }
 
@@ -36,12 +44,6 @@ public struct Social {
             return url
         }
         return .none
-    }
-}
-
-public struct PublicConstants {
-    public static func url(_ item: Gemstone.PublicUrl) -> URL {
-        return URL(string: Config.shared.getPublicUrl(item: item))!
     }
 }
 

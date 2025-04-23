@@ -11,7 +11,7 @@ struct PriceAlertsNavigationView: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
-    @Environment(\.manageWalletService) private var manageWalletService
+    @Environment(\.walletService) private var walletService
 
     @State private var isPresentingAddAsset: Bool = false
     @State private var assetPriceAlertsNavigationPath = NavigationPath()
@@ -35,7 +35,7 @@ struct PriceAlertsNavigationView: View {
                     priceAlertService: priceAlertService
                 ),
                 selectAssetModel: SelectAssetViewModel(
-                    wallet: manageWalletService.currentWallet!,
+                    wallet: walletService.currentWallet!,
                     selectType: .priceAlert,
                     assetsService: assetsService,
                     walletsService: walletsService,

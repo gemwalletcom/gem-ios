@@ -8,7 +8,7 @@ import Keystore
 import AvatarService
 import WalletSessionService
 
-public struct ManageWalletService: Sendable {
+public struct WalletService: Sendable {
     private let keystore: any Keystore
     private let walletStore: WalletStore
     private let avatarService: AvatarService
@@ -24,6 +24,10 @@ public struct ManageWalletService: Sendable {
         self.walletStore = walletStore
         self.avatarService = avatarService
         self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+    }
+
+    public func nextWalletIndex() throws -> Int {
+        try walletStore.nextWalletIndex()
     }
 
     public var currentWaletId: WalletId? {
@@ -46,9 +50,27 @@ public struct ManageWalletService: Sendable {
         walletSessionService.setCurrent(walletId: walletId)
     }
 
+    public func createWallet() -> [String] {
+        keystore.createWallet()
+    }
+
+    @discardableResult
+    public func importWallet(name: String, type: KeystoreImportType) throws -> Wallet {
+        let newWallet = try keystore.importWallet(
+            name: name,
+            type: type,
+            isWalletsEmpty: wallets.isEmpty
+        )
+        try walletStore.addWallet(newWallet)
+        walletSessionService.setCurrent(walletId: newWallet.walletId)
+        return newWallet
+    }
+
     public func delete(_ wallet: Wallet) throws {
-        try? avatarService.remove(for: wallet.id)
-        try keystore.deleteWallet(for: wallet)
+        try avatarService.remove(for: wallet.id)
+        try keystore.deleteKey(for: wallet)
+        try walletStore.deleteWallet(for: wallet.id)
+        walletSessionService.setCurrent(walletId: wallets.first?.walletId)
 
         // TODO: - enable once will be enabled in CleanUpService
         /*
@@ -56,6 +78,16 @@ public struct ManageWalletService: Sendable {
             try CleanUpService(keystore: keystore).onDeleteAllWallets()
         }
          */
+    }
+
+    public func setup(chains: [Chain]) throws {
+        let multicoinWallets = walletSessionService.wallets.filter { $0.type == .multicoin }
+        guard !multicoinWallets.isEmpty else { return }
+
+        let setupWallets = try keystore.setupChains(chains: chains, for: multicoinWallets)
+        for wallet in setupWallets {
+            try walletStore.addWallet(wallet)
+        }
     }
 
     public func pin(wallet: Wallet) throws {

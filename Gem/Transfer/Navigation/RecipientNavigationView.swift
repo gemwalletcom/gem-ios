@@ -10,7 +10,7 @@ import WalletsService
 
 struct RecipientNavigationView: View {
     @Environment(\.keystore) private var keystore
-    @Environment(\.manageWalletService) private var manageWalletService
+    @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
     
@@ -40,7 +40,7 @@ struct RecipientNavigationView: View {
             model: RecipientViewModel(
                 wallet: wallet,
                 asset: asset,
-                manageWalletService: manageWalletService,
+                walletService: walletService,
                 type: type,
                 onRecipientDataAction: {
                     navigationPath.append($0)

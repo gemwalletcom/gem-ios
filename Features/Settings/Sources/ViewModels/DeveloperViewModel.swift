@@ -10,7 +10,6 @@ import AssetsService
 import TransactionsService
 import Primitives
 import BigInt
-import Keystore
 
 @MainActor
 public struct DeveloperViewModel {

@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import BigInt
-import SwapService
-import Primitives
+import Foundation
 import Keystore
+import Primitives
 import Signer
+import SwapService
 
 import class Gemstone.Config
 import struct Gemstone.Permit2ApprovalData
@@ -35,8 +35,8 @@ public struct SwapDataProvider: SwapDataProviding {
         let walletAddress = try wallet.account(for: fromAsset.chain).address
         let destinationAddress = try wallet.account(for: toAsset.chain).address
         let quotes = try await swapService.getQuotes(
-            fromAsset: fromAsset.id,
-            toAsset: toAsset.id,
+            fromAsset: fromAsset,
+            toAsset: toAsset,
             value: amount.description,
             walletAddress: walletAddress,
             destinationAddress: destinationAddress
@@ -49,7 +49,7 @@ public struct SwapDataProvider: SwapDataProviding {
         case .none:
             return try await swapService.getQuoteData(quote, data: .none)
         case .some(let data):
-            let chain = try AssetId(id: quote.request.fromAsset).chain
+            let chain = try AssetId(id: quote.request.fromAsset.id).chain
             let permitData = try permitData(wallet: wallet, chain: chain, data: data)
             return try await swapService.getQuoteData(quote, data: .permit2(permitData))
         }

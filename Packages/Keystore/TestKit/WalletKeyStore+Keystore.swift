@@ -4,8 +4,8 @@ import Foundation
 import Keystore
 
 public extension WalletKeyStore {
-    static func make() -> WalletKeyStore {
-        let id = NSUUID().uuidString
+    static func mock() -> WalletKeyStore {
+        let id = UUID().uuidString
         let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
         let directory = URL(fileURLWithPath: String(format: "%@/test_keystore/%@", documentsDirectory, id))
 
