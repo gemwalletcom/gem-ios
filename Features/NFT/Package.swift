@@ -22,7 +22,7 @@ let package = Package(
         .package(name: "NFTService", path: "../../Services/NFTService"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
-        .package(name: "ManageWalletService", path: "../../Services/ManageWalletService"),
+        .package(name: "WalletService", path: "../../Services/WalletService"),
     ],
     targets: [
         .target(
@@ -37,7 +37,7 @@ let package = Package(
                 "NFTService",
                 "Store",
                 "ImageGalleryService",
-                "ManageWalletService"
+                "WalletService"
             ],
             path: "Sources"
         ),

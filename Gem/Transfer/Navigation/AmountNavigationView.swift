@@ -7,8 +7,6 @@ import Primitives
 import Transfer
 
 struct AmountNavigationView: View {
-    
-    @Environment(\.keystore) private var keystore
     @Environment(\.walletsService) private var walletsService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.nodeService) private var nodeService

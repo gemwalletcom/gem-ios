@@ -11,12 +11,12 @@ import Style
 import SwiftUI
 import PrimitivesComponents
 import AvatarService
-import ManageWalletService
+import WalletService
 
 @Observable
 @MainActor
 public final class CollectionsViewModel: Sendable {
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
     private let nftService: NFTService
     private let deviceService: any DeviceServiceable
 
@@ -30,13 +30,13 @@ public final class CollectionsViewModel: Sendable {
     public init(
         nftService: NFTService,
         deviceService: any DeviceServiceable,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         wallet: Wallet,
         sceneStep: Scenes.CollectionsScene.SceneStep
     ) {
         self.nftService = nftService
         self.deviceService = deviceService
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
 
         self.wallet = wallet
         self.sceneStep = sceneStep
@@ -56,7 +56,7 @@ public final class CollectionsViewModel: Sendable {
     }
     
     public var currentWallet: Wallet? {
-        manageWalletService.currentWallet
+        walletService.currentWallet
     }
 
     // MARK: - Public methods

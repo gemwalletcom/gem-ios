@@ -19,6 +19,7 @@
 		833931A52D2D5B1D0063BB6A /* PriceAlerts in Frameworks */ = {isa = PBXBuildFile; productRef = 833931A42D2D5B1D0063BB6A /* PriceAlerts */; };
 		833931A82D2D663C0063BB6A /* PriceService in Frameworks */ = {isa = PBXBuildFile; productRef = 833931A72D2D663C0063BB6A /* PriceService */; };
 		833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */; };
+		8342EA032DB67EE3001B3780 /* WalletService in Frameworks */ = {isa = PBXBuildFile; productRef = 8342EA022DB67EE3001B3780 /* WalletService */; };
 		8349F1472D5E4FF4003A0A93 /* ManageWallets in Frameworks */ = {isa = PBXBuildFile; productRef = 8349F1462D5E4FF4003A0A93 /* ManageWallets */; };
 		834B381A2D1D85E2009D58D4 /* LockManager in Frameworks */ = {isa = PBXBuildFile; productRef = 834B38192D1D85E2009D58D4 /* LockManager */; };
 		834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */ = {isa = PBXBuildFile; productRef = 834EC8092D7F1FCD00D8FA39 /* WalletSessionService */; };
@@ -216,6 +217,7 @@
 		83863EE52D19B8D8005048A7 /* NodeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NodeService; sourceTree = "<group>"; };
 		8391FE572D7F4D9F0057A548 /* WalletSessionService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletSessionService; sourceTree = "<group>"; };
 		8393897A2CCA8F0000735088 /* InfoSheet */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = InfoSheet; sourceTree = "<group>"; };
+		8399EC4F2DB67EC50020C0A6 /* WalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletService; sourceTree = "<group>"; };
 		83A4F8032D30433E000E09BB /* NameResolver */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NameResolver; sourceTree = "<group>"; };
 		83A4F8042D30434E000E09BB /* Onboarding */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Onboarding; sourceTree = "<group>"; };
 		83AE20722C7CB43500A38809 /* AssetsFilterScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterScene.swift; sourceTree = "<group>"; };
@@ -230,7 +232,6 @@
 		83F645072D52C5DF00C18881 /* WalletsService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletsService; sourceTree = "<group>"; };
 		83FE37B12D2715940048D54C /* WalletConnectorService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnectorService; sourceTree = "<group>"; };
 		83FE37B22D2715BF0048D54C /* WalletConnector */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletConnector; sourceTree = "<group>"; };
-		83FEE7FC2D5E632300E7B2DA /* ManageWalletService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = ManageWalletService; sourceTree = "<group>"; };
 		B617D6092D5B73B7001697A6 /* AvatarService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = AvatarService; sourceTree = "<group>"; };
 		B61C5C152D5FB899007699EC /* WalletAvatar */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletAvatar; sourceTree = "<group>"; };
 		B64A380C2D8D894E005F9419 /* SelectAssetSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectAssetSearchViewModel.swift; sourceTree = "<group>"; };
@@ -355,6 +356,7 @@
 				D85AD2A32CD442A40010DEF8 /* TransferService in Frameworks */,
 				8361BB6D2D400E4F008D89CF /* AssetsService in Frameworks */,
 				D8D83C842CECFA610083AA53 /* Swap in Frameworks */,
+				8342EA032DB67EE3001B3780 /* WalletService in Frameworks */,
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
 				DFA0B51E2D16C94400355594 /* Currency in Frameworks */,
 				83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */,
@@ -819,9 +821,9 @@
 		D829BF4B2CBF022700DEB2E8 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				8399EC4F2DB67EC50020C0A6 /* WalletService */,
 				8391FE572D7F4D9F0057A548 /* WalletSessionService */,
 				D8CEF3272D6E60AF00E48A78 /* ScanService */,
-				83FEE7FC2D5E632300E7B2DA /* ManageWalletService */,
 				83F645072D52C5DF00C18881 /* WalletsService */,
 				83F645042D52C2AB00C18881 /* DiscoverAssetsService */,
 				83245B5F2D529879003A6220 /* TransactionService */,
@@ -1113,6 +1115,7 @@
 				B617D60A2D5B75F0001697A6 /* AvatarService */,
 				D83D3C242D6E62F4002959EA /* ScanService */,
 				834EC8092D7F1FCD00D8FA39 /* WalletSessionService */,
+				8342EA022DB67EE3001B3780 /* WalletService */,
 			);
 			productName = wallet;
 			productReference = C30952B0299C39D70004C0F9 /* Gem.app */;
@@ -1898,6 +1901,10 @@
 		833931A72D2D663C0063BB6A /* PriceService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = PriceService;
+		};
+		8342EA022DB67EE3001B3780 /* WalletService */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = WalletService;
 		};
 		8349F1462D5E4FF4003A0A93 /* ManageWallets */ = {
 			isa = XCSwiftPackageProductDependency;
