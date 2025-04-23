@@ -5,10 +5,10 @@
 import Foundation
 
 public enum SwapProvider: String, Codable, Equatable, Sendable {
-	case uniswapV3 = "uniswapv3"
-	case uniswapV4 = "uniswapv4"
-	case pancakeSwapV3 = "pancakeswapv3"
-	case pancakeSwapAptosV2 = "pancakeswapaptosv2"
+	case uniswapV3 = "uniswap_v3"
+	case uniswapV4 = "uniswap_v4"
+	case pancakeswapV3 = "pancakeswap_v3"
+	case pancakeswapAptosV2 = "pancakeswap_aptos_v2"
 	case thorchain
 	case orca
 	case jupiter
@@ -16,7 +16,8 @@ public enum SwapProvider: String, Codable, Equatable, Sendable {
 	case oku
 	case wagmi
 	case cetus
-	case stonFiV2 = "stonfiv2"
+	case stonfiV2 = "stonfi_v2"
 	case mayan
 	case reservoir
+	case symbiosis
 }

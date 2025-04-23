@@ -17,10 +17,11 @@ let package = Package(
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Localization", path: "../../Packages/Localization"),
-        .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
         .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
+        .package(name: "WalletService", path: "../../Services/WalletService"),
     ],
     targets: [
         .target(
@@ -30,10 +31,11 @@ let package = Package(
                 "Components",
                 "Style",
                 "Localization",
-                "Keystore",
                 "PrimitivesComponents",
                 "NameResolver",
-                "QRScanner"
+                "QRScanner",
+                "Keystore",
+                "WalletService"
             ],
             path: "Sources"
         ),

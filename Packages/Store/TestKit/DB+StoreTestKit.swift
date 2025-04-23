@@ -5,6 +5,6 @@ import Store
 
 extension DB {
     public static func mock() -> DB {
-        DB(path: "\(NSUUID().uuidString).sqlite")
+        DB(fileName: "\(UUID().uuidString).sqlite")
     }
 }

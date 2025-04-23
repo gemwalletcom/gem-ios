@@ -3,7 +3,6 @@ import Components
 import Style
 import Blockchain
 import Primitives
-import Keystore
 import Localization
 import ChainService
 import InfoSheet
@@ -45,7 +44,7 @@ struct ConfirmTransferScene: View {
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
                 NetworkFeeScene(model: model.feeModel)
-                    .presentationDetents([.medium, .large])
+                    .presentationDetentsForCurrentDeviceSize(expandable: true)
             }
         }
         .alert(item: $model.confirmingErrorMessage) {
@@ -201,18 +200,4 @@ extension ConfirmTransferScene {
             }
         }
     }
-}
-
-// MARK: - Previews
-
-#Preview {
-    ConfirmTransferScene(model: .init(
-        wallet: .main,
-        keystore: LocalKeystore.main,
-        data: .main,
-        service: ChainServiceFactory(nodeProvider: NodeService.main).service(for: .bitcoin),
-        scanService: .main,
-        walletsService: .main,
-        onComplete: { }
-    ))
 }

@@ -3,7 +3,7 @@
 import SwiftUI
 import Localization
 import Primitives
-import Keystore
+import WalletService
 
 public struct CreateWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
@@ -11,24 +11,21 @@ public struct CreateWalletNavigationStack: View {
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     
-    private let keystore: any Keystore
+    private let walletService: WalletService
 
     public init(
-        keystore: any Keystore,
+        walletService: WalletService,
         isPresentingWallets: Binding<Bool>
     ) {
-        self.keystore = keystore
+        self.walletService = walletService
         _isPresentingWallets = isPresentingWallets
     }
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            CreateWalletScene(
-                model: CreateWalletViewModel(
-                    keystore: keystore,
-                    onCreateWallet: {
-                        navigationPath.append(Scenes.VerifyPhrase(words: $0))
-                    }
+            SecurityReminderScene(
+                model: SecurityReminderCreateWalletViewModel(
+                    onNext: { navigationPath.append(Scenes.CreateWallet()) }
                 )
             )
             .toolbar {
@@ -43,9 +40,19 @@ public struct CreateWalletNavigationStack: View {
                 VerifyPhraseWalletScene(
                     model: VerifyPhraseViewModel(
                         words: $0.words,
-                        keystore: keystore
+                        walletService: walletService
                     ),
                     isPresentingWallets: $isPresentingWallets
+                )
+            }
+            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
+                CreateWalletScene(
+                    model: CreateWalletViewModel(
+                        walletService: walletService,
+                        onCreateWallet: {
+                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
+                        }
+                    )
                 )
             }
         }

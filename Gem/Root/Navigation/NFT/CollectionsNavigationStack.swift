@@ -14,7 +14,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.avatarService) private var avatarService
-    @Environment(\.manageWalletService) private var manageWalletService
+    @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var model: CollectionsViewModel
@@ -43,7 +43,7 @@ struct CollectionsNavigationStack: View {
                         model: CollectionsViewModel(
                             nftService: nftService,
                             deviceService: deviceService,
-                            manageWalletService: manageWalletService,
+                            walletService: walletService,
                             wallet: model.wallet,
                             sceneStep: $0.sceneStep
                         )

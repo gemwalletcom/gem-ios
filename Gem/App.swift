@@ -9,6 +9,7 @@ import GemAPI
 import LockManager
 import Preferences
 import AssetsService
+import WalletService
 
 @main
 struct GemApp: App {
@@ -24,7 +25,6 @@ struct GemApp: App {
         WindowGroup {
             RootScene(
                 model: RootSceneViewModel(
-                    keystore: resolver.storages.keystore,
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
                     onstartService: resolver.services.onstartService,
                     transactionService: resolver.services.transactionService,
@@ -32,7 +32,7 @@ struct GemApp: App {
                     deviceObserverService: resolver.services.deviceObserverService,
                     notificationService: resolver.services.notificationService,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
-                    manageWalletService: resolver.services.manageWalletService,
+                    walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService
                 )
             )
@@ -51,10 +51,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
         
         do {
-            let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: directory))
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            let supportDirectory = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
+            
+            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: documentsDirectory))
+            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: supportDirectory))
+            
             #if DEBUG
-            NSLog("directory \(directory)")
+            NSLog("documentsDirectory \(documentsDirectory)")
+            NSLog("supportDirectory \(supportDirectory)")
             #endif
         } catch {
             NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
@@ -65,7 +70,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         // debug
         #if DEBUG
         
-        NSLog("Keystore directory: \(keystore.directory)")
+        NSLog("Keystore directory: \(keystore.configration.directory)")
         //NSLog("Keystore currentWallet: \(String(describing: keystore.currentWallet))")
         //NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
         
@@ -81,8 +86,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
             ),
             assetStore: AssetStore(db: .main),
             nodeStore: NodeStore(db: .main),
-            keystore: keystore,
-            preferences: Preferences.standard
+            preferences: Preferences.standard,
+            walletService: WalletService.main
         )
         service.migrations()
         

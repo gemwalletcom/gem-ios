@@ -91,32 +91,33 @@ public struct ListItemView: View {
     }
 
     public var body: some View {
-        HStack {
+        HStack(alignment: imageStyle?.alignment ?? .center) {
             if let imageStyle {
                 AssetImageView(
                     assetImage: imageStyle.assetImage,
                     size: imageStyle.imageSize,
-                    overlayImageSize: imageStyle.overlayImageSize,
                     cornerRadius: imageStyle.cornerRadius
                 )
             }
-            if let title {
-                TitleView(
-                    title: title,
-                    titleExtra: titleExtra,
-                    titleTag: titleTag,
-                    titleTagType: titleTagType,
-                    infoAction: infoAction
-                )
-                .listRowInsets(.zero)
-            }
+            HStack {
+                if let title {
+                    TitleView(
+                        title: title,
+                        titleExtra: titleExtra,
+                        titleTag: titleTag,
+                        titleTagType: titleTagType,
+                        infoAction: infoAction
+                    )
+                    .listRowInsets(.zero)
+                }
 
-            if showPlaceholderProgress(for: .subtitle, value: subtitle) {
-                Spacer()
-                LoadingView(tint: subtitle?.style.color ?? Colors.gray)
-            } else if let subtitle = subtitle {
-                Spacer(minLength: .extraSmall)
-                SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
+                if showPlaceholderProgress(for: .subtitle, value: subtitle) {
+                    Spacer()
+                    LoadingView(tint: subtitle?.style.color ?? Colors.gray)
+                } else if let subtitle = subtitle {
+                    Spacer(minLength: .extraSmall)
+                    SubtitleView(subtitle: subtitle, subtitleExtra: subtitleExtra)
+                }
             }
         }
     }

@@ -5,7 +5,7 @@ import Primitives
 import GemstonePrimitives
 import Localization
 import PrimitivesComponents
-import ManageWalletService
+import WalletService
 import Components
 import Style
 import SwiftUICore
@@ -28,7 +28,7 @@ class RecipientViewModel: ObservableObject {
     let asset: Asset
     let type: RecipientAssetType
     
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
     private let onRecipientDataAction: RecipientDataAction
     private let onTransferAction: TransferDataAction
     private let formatter = ValueFormatter(style: .full)
@@ -36,14 +36,14 @@ class RecipientViewModel: ObservableObject {
     init(
         wallet: Wallet,
         asset: Asset,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
     ) {
         self.wallet = wallet
         self.asset = asset
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
@@ -143,7 +143,7 @@ class RecipientViewModel: ObservableObject {
     }
     
     private func sectionRecipients(for section: RecipientAddressType) -> [ListItemValue<RecipientAddress>] {
-        manageWalletService.wallets
+        walletService.wallets
             .filter { $0.id != wallet.id }
             .filter {
                 switch section {

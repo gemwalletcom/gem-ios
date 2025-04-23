@@ -27,9 +27,10 @@ import TransactionsService
 import TransactionService
 import DiscoverAssetsService
 import WalletsService
-import ManageWalletService
+import WalletService
 import AvatarService
 import ScanService
+import WalletSessionService
 
 extension Asset {
     static let main = Asset.bitcoin
@@ -89,7 +90,7 @@ extension AssetData  {
 }
 
 extension LocalKeystore {
-    static let main = LocalKeystore(folder: "keystore", walletStore: .main, preferences: .default)
+    static let main = LocalKeystore()
 }
 
 extension WalletStore {
@@ -178,8 +179,8 @@ extension DeviceService {
     static let main = DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main)
 }
 
-extension ManageWalletService {
-    static let main = ManageWalletService(
+extension WalletService {
+    static let main = WalletService(
         keystore: LocalKeystore.main,
         walletStore: .main,
         preferences: .default,
@@ -250,14 +251,13 @@ extension AvatarService {
 extension WalletConnectorSigner {
     static let main = WalletConnectorSigner(
         connectionsStore: .main,
-        walletStore: .main,
-        preferences: .default,
+        walletSessionService: WalletSessionService(walletStore: .main, preferences: .default),
         walletConnectorInteractor: WalletConnectorManager(presenter: WalletConnectorPresenter())
     )
 }
  
 extension DB {
-    static let main = DB(path: "db.sqlite")
+    static let main = DB(fileName: "db.sqlite")
 }
 
 extension Wallet {

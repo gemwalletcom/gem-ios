@@ -2,7 +2,6 @@
 
 import Foundation
 import Store
-import Keystore
 import GemAPI
 import Primitives
 import BannerService
@@ -16,7 +15,6 @@ class OnstartAsyncService {
     
     let assetStore: AssetStore
     let nodeStore: NodeStore
-    let keystore: any Keystore
     let preferences: Preferences
     let configService: any GemAPIConfigService = GemAPIService()
     let service: ImportAssetsService
@@ -27,7 +25,6 @@ class OnstartAsyncService {
     
     init(
         assetStore: AssetStore,
-        keystore: any Keystore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
@@ -37,7 +34,6 @@ class OnstartAsyncService {
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
-        self.keystore = keystore
         self.preferences = preferences
         self.service = ImportAssetsService(
             nodeService: NodeService(nodeStore: nodeStore), 

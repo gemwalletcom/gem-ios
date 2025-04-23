@@ -9,14 +9,14 @@ import Preferences
 import TransactionsService
 import ExplorerService
 import PrimitivesComponents
-import ManageWalletService
+import WalletService
 
 @Observable
 @MainActor
 public final class TransactionsViewModel {
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
 
-    private let manageWalletService: ManageWalletService
+    private let walletService: WalletService
     private let transactionsService: TransactionsService
 
     private let type: TransactionsRequestType
@@ -32,11 +32,11 @@ public final class TransactionsViewModel {
 
     public init(
         transactionsService: TransactionsService,
-        manageWalletService: ManageWalletService,
+        walletService: WalletService,
         wallet: Wallet,
         type: TransactionsRequestType
     ) {
-        self.manageWalletService = manageWalletService
+        self.walletService = walletService
         self.transactionsService = transactionsService
 
         self.type = type
@@ -46,7 +46,7 @@ public final class TransactionsViewModel {
     }
 
     public var title: String { Localized.Activity.title }
-    public var currentWallet: Wallet? { manageWalletService.currentWallet }
+    public var currentWallet: Wallet? { walletService.currentWallet }
     public var walletId: WalletId { wallet.walletId }
 
     public var emptyContentModel: EmptyContentTypeViewModel {

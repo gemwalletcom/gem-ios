@@ -199,6 +199,9 @@
         "containerPath" : "container:Packages\/Primitives",
         "identifier" : "PrimitivesTests",
         "name" : "PrimitivesTests"
+        "containerPath" : "container:Features\/ManageWallets",
+        "identifier" : "ManageWalletsTest",
+        "name" : "ManageWalletsTest"
       }
     },
     {

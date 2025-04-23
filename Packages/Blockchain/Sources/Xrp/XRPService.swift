@@ -37,6 +37,12 @@ extension XRPService {
             .map(as: XRPResult<XRPAccountLinesResult>.self).result.lines ?? []
     }
     
+    private func fees() async throws -> XRPFee {
+        try await provider
+            .request(.fee)
+            .map(as: XRPResult<XRPFee>.self).result
+    }
+    
     private func latestBlock() async throws -> BigInt {
         return try await provider
             .request(.latestBlock)
@@ -112,9 +118,7 @@ extension XRPService: ChainBalanceable {
 
 extension XRPService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
-        let fees = try await provider
-            .request(.fee)
-            .map(as: XRPResult<XRPFee>.self).result
+        let fees = try await fees()
         
         let minimumFee = BigInt(stringLiteral: fees.drops.minimum_fee)
         let medianFee = BigInt(stringLiteral: fees.drops.median_fee)

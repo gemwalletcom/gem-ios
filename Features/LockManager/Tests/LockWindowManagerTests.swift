@@ -9,6 +9,9 @@ import Keystore
 
 @MainActor
 struct LockWindowManagerTests {
+    
+    let sleep: UInt64 = UInt64(1 * Double(NSEC_PER_SEC))
+    
     @Test
     func testInitialization() {
         let manager = LockWindowManagerMock.mock()
@@ -20,7 +23,7 @@ struct LockWindowManagerTests {
         let manager = LockWindowManagerMock.mock()
         manager.toggleLock(show: true)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.isHidden == false)
@@ -34,7 +37,7 @@ struct LockWindowManagerTests {
         manager.toggleLock(show: true)
         manager.toggleLock(show: false)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow == nil)
     }
@@ -83,7 +86,7 @@ struct LockWindowManagerTests {
         manager.lockModel.state = .locked
         manager.toggleLock(show: manager.showLockScreen)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.isHidden == false)
@@ -140,7 +143,7 @@ struct LockWindowManagerTests {
         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
         manager.toggleLock(show: true)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.alpha == 1.0)
@@ -152,19 +155,19 @@ struct LockWindowManagerTests {
         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
         manager.toggleLock(show: true)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.alpha == 1.0)
         #expect(!manager.isPrivacyLockVisible)
 
         manager.toggleLock(show: false)
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow == nil)
 
         manager.toggleLock(show: true)
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.alpha == 0.0)
@@ -175,7 +178,7 @@ struct LockWindowManagerTests {
     func testPrivacyLockNotShownIfAutoLockDisabled() async {
         let manager = LockWindowManagerMock.mock(isAuthEnabled: false, isPrivacyLockEnabled: true)
 
-        try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+        try? await Task.sleep(nanoseconds: sleep)
         #expect(manager.overlayWindow == nil)
         #expect(!manager.isPrivacyLockVisible)
     }
@@ -185,7 +188,7 @@ struct LockWindowManagerTests {
          let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: true)
          manager.toggleLock(show: true)
 
-         try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+         try? await Task.sleep(nanoseconds: sleep)
 
          #expect(manager.overlayWindow != nil)
          #expect(manager.overlayWindow?.alpha == 1.0)
@@ -197,7 +200,7 @@ struct LockWindowManagerTests {
          let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
          manager.toggleLock(show: true)
 
-         try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+         try? await Task.sleep(nanoseconds: sleep)
 
          #expect(manager.overlayWindow != nil)
          #expect(manager.overlayWindow?.alpha == 1)
@@ -205,11 +208,11 @@ struct LockWindowManagerTests {
 
          manager.toggleLock(show: false)
 
-         try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+         try? await Task.sleep(nanoseconds: sleep)
 
          manager.toggleLock(show: true)
 
-         try? await Task.sleep(nanoseconds: UInt64(0.3 * Double(NSEC_PER_SEC)))
+         try? await Task.sleep(nanoseconds: sleep)
 
          #expect(manager.overlayWindow != nil)
          #expect(manager.overlayWindow?.alpha == 0)

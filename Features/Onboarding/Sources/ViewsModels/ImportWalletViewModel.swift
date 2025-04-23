@@ -1,13 +1,14 @@
 import Foundation
-import Keystore
 import Primitives
 import Style
 import Localization
+import WalletService
+import enum Keystore.KeystoreImportType
 
 class ImportWalletViewModel: ObservableObject {
 
     let type: ImportWalletType
-    let keystore: any Keystore
+    let walletService: WalletService
     let wordSuggestor = WordSuggestor()
     let onFinishImport: (() -> Void)?
 
@@ -15,38 +16,34 @@ class ImportWalletViewModel: ObservableObject {
 
     init(
         type: ImportWalletType,
-        keystore: any Keystore,
+        walletService: WalletService,
         onFinishImport: (() -> Void)?
     ) {
         self.type = type
-        self.keystore = keystore
+        self.walletService = walletService
         self.onFinishImport = onFinishImport
     }
     
     var title: String {
         switch type {
-        case .multicoin:
-            return Localized.Wallet.multicoin
-        case .chain(let chain):
-            return Asset(chain).name
+        case .multicoin: Localized.Wallet.multicoin
+        case .chain(let chain): Asset(chain).name
         }
     }
     
     var name: String {
-        WalletNameGenerator(type: type, keystore: keystore).name
+        WalletNameGenerator(type: type, walletService: walletService).name
     }
     
     var chain: Chain? {
         switch type {
-        case .multicoin:
-            return .none
-        case .chain(let chain):
-            return chain
+        case .multicoin: .none
+        case .chain(let chain): chain
         }
     }
     
     var showImportTypes: Bool {
-        return importTypes.count > 1
+        importTypes.count > 1
     }
     
     var importTypes: [WalletImportType] {
@@ -70,7 +67,7 @@ class ImportWalletViewModel: ObservableObject {
     }
 
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
-        try keystore.importWallet(name: name, type: keystoreType)
+        try walletService.importWallet(name: name, type: keystoreType)
         onFinishImport?()
     }
     

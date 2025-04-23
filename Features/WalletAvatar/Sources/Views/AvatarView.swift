@@ -28,8 +28,7 @@ public struct AvatarView: View {
         } label: {
             AssetImageView(
                 assetImage: avatarImage,
-                size: size,
-                overlayImageSize: .image.semiMedium
+                size: size
             )
         }
     }

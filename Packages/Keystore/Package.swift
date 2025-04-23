@@ -15,9 +15,6 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "Store", path: "../Store"),
-        .package(name: "Preferences", path: "../Preferences"),
-        .package(name: "WalletSessionService", path: "../../Services/WalletSessionService"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
@@ -27,10 +24,7 @@ let package = Package(
             name: "Keystore",
             dependencies: [
                 "Primitives",
-                "Store",
-                "Preferences",
                 "WalletCorePrimitives",
-                "WalletSessionService",
                 .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
@@ -40,9 +34,7 @@ let package = Package(
         .target(
             name: "KeystoreTestKit",
             dependencies: [
-                "Keystore",
-                .product(name: "PreferencesTestKit", package: "Preferences"),
-                .product(name: "StoreTestKit", package: "Store"),
+                "Keystore"
             ],
             path: "TestKit"
         ),
@@ -51,8 +43,7 @@ let package = Package(
             dependencies: [
                 "Keystore",
                 "KeystoreTestKit",
-                .product(name: "PrimitivesTestKit", package: "Primitives"),
-                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PrimitivesTestKit", package: "Primitives")
             ]),
     ]
 )
