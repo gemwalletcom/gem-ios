@@ -38,9 +38,9 @@ public struct SecurityScene: View {
         .onChange(of: model.isEnabled, onToggleBiometrics)
         .onChange(of: model.isPrivacyLockEnabled, onToggleSecurityLock)
         .alert("",
-               isPresented: $model.isPresentingError.mappedToBool(),
-               actions: {},
-               message: { Text(model.errorTitle) }
+            isPresented: $model.isPresentingError.mappedToBool(),
+            actions: {},
+            message: { Text(model.errorTitle) }
         )
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)

@@ -17,3 +17,19 @@ public struct AppToggleStyle: ToggleStyle {
             .tint(Colors.blue)
     }
 }
+
+public struct CheckboxStyle: ToggleStyle {
+    public init() {}
+
+    public func makeBody(configuration: Self.Configuration) -> some View {
+        HStack {
+            Image(systemName: configuration.isOn ? "checkmark.circle" : "circle")
+                .resizable()
+                .frame(width: .image.small, height: .image.small)
+                .foregroundColor(configuration.isOn ? Colors.blue : Colors.gray)
+
+            configuration.label
+        }
+        .onTapGesture { configuration.isOn.toggle() }
+    }
+}

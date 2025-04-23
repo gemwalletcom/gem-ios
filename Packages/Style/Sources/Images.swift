@@ -6,6 +6,7 @@ public enum Images {
     public enum Logo {
         public static let logo = Image(.logo)
         public static let logoDark = Image(.logoDark)
+        public static let icon = Image(.gemIcon)
     }
 
     public enum Chains {
