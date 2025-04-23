@@ -61,6 +61,8 @@ public struct WalletsScene: View {
                     }
                 )
             }
+            .listRowInsets(.assetListRowInsets)
+
             if !pinnedWallets.isEmpty {
                 Section {
                     ForEach(pinnedWallets) {

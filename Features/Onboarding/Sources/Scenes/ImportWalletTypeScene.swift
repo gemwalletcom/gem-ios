@@ -26,6 +26,8 @@ struct ImportWalletTypeScene: View {
                 }
                 .accessibilityIdentifier("multicoin")
             }
+            .listRowInsets(.assetListRowInsets)
+            
             if model.items(for: searchQuery).isEmpty {
                 StateEmptyView(title: Localized.Common.noResultsFound)
             } else {
@@ -39,6 +41,7 @@ struct ImportWalletTypeScene: View {
                         }
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .navigationBarTitle(model.title)
