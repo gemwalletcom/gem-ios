@@ -17,3 +17,23 @@ public extension SwapQuoteData {
         BigInt(stringLiteral: value)
     }
 }
+
+public extension SwapQuote {
+    var toValueBigInt: BigInt {
+        (try? BigInt.from(string: toValue)) ?? .zero
+    }
+
+    var fromValueBigInt: BigInt {
+        (try? BigInt.from(string: fromValue)) ?? .zero
+    }
+}
+
+public extension GemQuoteAsset {
+    init(asset: Asset) {
+        self.init(
+            id: asset.id.identifier,
+            symbol: asset.symbol,
+            decimals: UInt32(asset.decimals)
+        )
+    }
+}

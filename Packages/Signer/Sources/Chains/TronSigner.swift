@@ -1,11 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
+import Blockchain
 import Foundation
+import Primitives
 import WalletCore
 import WalletCorePrimitives
-import Blockchain
-import Primitives
-import BigInt
 
 public struct TronSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
@@ -16,7 +16,7 @@ public struct TronSigner: Signable {
         }
         return try sign(input: input, contract: .transfer(contract), feeLimit: .none, privateKey: privateKey)
     }
-    
+
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let contract = try TronTransferTRC20Contract.with {
             $0.contractAddress = try input.asset.getTokenId()
@@ -29,74 +29,74 @@ public struct TronSigner: Signable {
 
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
         guard case let .stake(_, stakeType) = input.type else {
-            throw(AnyError("Invalid input type for staking"))
+            throw (AnyError("Invalid input type for staking"))
         }
 
         let contract: WalletCore.TronTransaction.OneOf_ContractOneof
         switch stakeType {
         case .stake:
             guard case let .vote(votes) = input.extra else {
-                throw(AnyError("vote for stacking should be always set"))
+                throw (AnyError("vote for stacking should be always set"))
             }
             let freezeContract = TronFreezeBalanceV2Contract.with {
                 $0.ownerAddress = input.senderAddress
                 $0.frozenBalance = input.value.asInt64
-                $0.resource = "BANDWIDTH"  // Or "ENERGY"
+                $0.resource = "BANDWIDTH" // Or "ENERGY"
             }
 
             let voteContract = TronVoteWitnessContract.with {
                 $0.ownerAddress = input.senderAddress
                 $0.support = true
-                $0.votes = votes.map { (adress, count) in
+                $0.votes = votes.map { adress, count in
                     TronVoteWitnessContract.Vote.with {
                         $0.voteAddress = adress
                         $0.voteCount = Int64(count)
                     }
                 }
             }
-            return [
-                try sign(input: input, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey),
-                try sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
+            return try [
+                sign(input: input, contract: .freezeBalanceV2(freezeContract), feeLimit: .none, privateKey: privateKey),
+                sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
             ]
         case .unstake:
             guard case let .vote(votes) = input.extra else {
-                throw(AnyError("vote for stacking should be always set"))
+                throw (AnyError("vote for stacking should be always set"))
             }
             if votes.isEmpty {
                 contract = .unfreezeBalanceV2(TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
                     $0.unfreezeBalance = input.value.asInt64
-                    $0.resource = "BANDWIDTH"  // Or "ENERGY"
+                    $0.resource = "BANDWIDTH" // Or "ENERGY"
                 })
             } else {
                 let unfreezeContract = TronUnfreezeBalanceV2Contract.with {
                     $0.ownerAddress = input.senderAddress
                     $0.unfreezeBalance = input.value.asInt64
-                    $0.resource = "BANDWIDTH"  // Or "ENERGY"
+                    $0.resource = "BANDWIDTH" // Or "ENERGY"
                 }
                 let voteContract = TronVoteWitnessContract.with {
                     $0.ownerAddress = input.senderAddress
                     $0.support = true
-                    $0.votes = votes.map { (adress, count) in
+                    $0.votes = votes.map { adress, count in
                         TronVoteWitnessContract.Vote.with {
                             $0.voteAddress = adress
                             $0.voteCount = Int64(count)
                         }
                     }
                 }
-                return [
-                    try sign(input: input, contract: .unfreezeBalanceV2(unfreezeContract), feeLimit: .none, privateKey: privateKey),
-                    try sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey),
+                return try [
+                    sign(input: input, contract: .unfreezeBalanceV2(unfreezeContract), feeLimit: .none, privateKey: privateKey),
+                    sign(input: input, contract: .voteWitness(voteContract), feeLimit: .none, privateKey: privateKey)
                 ]
             }
         case .redelegate:
             guard case let .vote(votes) = input.extra else {
-                throw(AnyError("vote for stacking should be always set"))
+                throw (AnyError("vote for stacking should be always set"))
             }
             contract = .voteWitness(TronVoteWitnessContract.with {
                 $0.ownerAddress = input.senderAddress
                 $0.support = true
-                $0.votes = votes.map { (adress, count) in
+                $0.votes = votes.map { adress, count in
                     TronVoteWitnessContract.Vote.with {
                         $0.voteAddress = adress
                         $0.voteCount = Int64(count)
@@ -112,8 +112,29 @@ public struct TronSigner: Signable {
                 $0.ownerAddress = input.senderAddress
             })
         }
-        return [
-            try sign(input: input, contract: contract, feeLimit: .none, privateKey: privateKey)
+        return try [
+            sign(input: input, contract: contract, feeLimit: .none, privateKey: privateKey)
+        ]
+    }
+
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard
+            case let .swap(_, _, quote, quoteData) = input.type,
+            let data = Data(fromHex: quoteData.data),
+            let callValue = Int64(quoteData.value),
+            let feeLimit = quoteData.gasLimit
+        else {
+            throw AnyError("Invalid input type for swapping")
+        }
+
+        let contract = TronTriggerSmartContract.with {
+            $0.ownerAddress = quote.request.walletAddress
+            $0.contractAddress = quoteData.to
+            $0.data = data
+            $0.callValue = callValue
+        }
+        return try [
+            sign(input: input, contract: .triggerSmartContract(contract), feeLimit: Int(feeLimit), privateKey: privateKey)
         ]
     }
 }
@@ -152,11 +173,11 @@ extension TronSigner {
             $0.privateKey = privateKey
         }
         let output: TronSigningOutput = AnySigner.sign(input: signingInput, coin: input.coinType)
-        
+
         if !output.errorMessage.isEmpty {
             throw AnyError(output.errorMessage)
         }
-        
+
         return output.json
     }
 }
