@@ -2,7 +2,6 @@
 
 import Foundation
 import SwiftUI
-import Primitives
 
 extension View {
     @MainActor
