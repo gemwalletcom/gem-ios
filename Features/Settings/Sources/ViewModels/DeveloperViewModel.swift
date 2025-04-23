@@ -48,10 +48,9 @@ public struct DeveloperViewModel {
     func reset() {
         do {
             try clearDocuments()
+            try clearApplicationSupport()
             Preferences.standard.clear()
             try SecurePreferences.standard.clear()
-            try clearDocuments()
-            try clearApplicationSupport()
             fatalError()
         } catch {
             NSLog("reset error \(error)")
