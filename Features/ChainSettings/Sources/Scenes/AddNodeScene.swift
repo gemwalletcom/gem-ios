@@ -157,14 +157,3 @@ extension AddNodeScene {
         }
     }
 }
-
-#Preview {
-    return NavigationStack {
-        AddNodeScene(
-            model: .init(
-                chain: .ethereum,
-                nodeService: .init(nodeStore: .init(db: .init(path: "")))
-            )
-        )
-    }
-}

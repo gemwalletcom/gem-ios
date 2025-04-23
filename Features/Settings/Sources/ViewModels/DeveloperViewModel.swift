@@ -51,6 +51,8 @@ public struct DeveloperViewModel {
             try clearDocuments()
             Preferences.standard.clear()
             try SecurePreferences.standard.clear()
+            try clearDocuments()
+            try clearApplicationSupport()
             fatalError()
         } catch {
             NSLog("reset error \(error)")
@@ -58,8 +60,33 @@ public struct DeveloperViewModel {
     }
     
     private func clearDocuments() throws {
-        let documentsUrl = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
-        let fileURLs = try FileManager.default.contentsOfDirectory(at: documentsUrl, includingPropertiesForKeys: nil, options: .skipsHiddenFiles)
+        let fileManager = FileManager.default
+        let documentsURL = try fileManager.url(
+            for: .documentDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false
+        )
+        try clearFiles(directoryURL: documentsURL)
+    }
+
+    private func clearApplicationSupport() throws {
+        let fileManager = FileManager.default
+        let appSupportURL = try fileManager.url(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask,
+            appropriateFor: nil,
+            create: false
+        )
+        try clearFiles(directoryURL: appSupportURL)
+    }
+
+    private func clearFiles(directoryURL: URL) throws {
+        let fileURLs = try FileManager.default.contentsOfDirectory(
+            at: directoryURL,
+            includingPropertiesForKeys: nil,
+            options: .skipsHiddenFiles
+        )
         for fileURL in fileURLs {
             try FileManager.default.removeItem(at: fileURL)
         }

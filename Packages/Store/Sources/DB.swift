@@ -1,26 +1,32 @@
 import Foundation
 @preconcurrency import GRDB
 
-public final class DB: ObservableObject, Sendable {
+public struct DB: Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
-    private let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    private let dbPath: URL
 
     public let dbQueue: DatabaseQueue
 
     public init(
-        path: String,
+        directory: String,
+        name: String,
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
         do {
-            dbPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
-            dbQueue = try DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
+            dbQueue = try DatabaseQueue(
+                path: DBURLResolver.resolve(
+                    directory: directory,
+                    fileName: name,
+                ).path(percentEncoded: false),
+                configuration: configuration
+            )
         } catch {
             fatalError("db initialization error: \(error)")
         }
+
         do {
             var migrations = Migrations()
             try migrations.run(dbQueue: dbQueue)
+
             if !isRunningTests {
                 try migrations.runChanges(dbQueue: dbQueue)
             }

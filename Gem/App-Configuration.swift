@@ -257,7 +257,10 @@ extension WalletConnectorSigner {
 }
  
 extension DB {
-    static let main = DB(path: "db.sqlite")
+    static let main = DB(
+        directory: "Database",
+        name: "db.sqlite"
+    )
 }
 
 extension Wallet {

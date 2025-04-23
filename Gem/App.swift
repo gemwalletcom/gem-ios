@@ -49,16 +49,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         // set cache
         URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
-        
-        do {
-            let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: directory))
-            #if DEBUG
-            NSLog("directory \(directory)")
-            #endif
-        } catch {
-            NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
-        }
 
         let keystore = LocalKeystore.main
         
