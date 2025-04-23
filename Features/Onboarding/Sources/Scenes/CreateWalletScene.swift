@@ -20,9 +20,13 @@ struct CreateWalletScene: View {
                 Text(Localized.Common.copy)
             }
             Spacer()
-            Button(Localized.Common.continue, action: continueAction)
-                .buttonStyle(.blue())
-                .frame(maxWidth: .scene.button.maxWidth)
+            
+            StateButton(
+                text: Localized.Common.continue,
+                styleState: .normal,
+                action: continueAction
+            )
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .copyToast(
             model: model.copyModel,

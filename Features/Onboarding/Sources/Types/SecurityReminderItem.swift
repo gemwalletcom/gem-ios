@@ -16,18 +16,18 @@ struct SecurityReminderItem: Identifiable {
 extension SecurityReminderItem {
     static let createWallet: [Self] = [
         SecurityReminderItem(
-            title: Localized.Onboarding.Security.CreateWallet.Item1.title,
-            subtitle: Localized.Onboarding.Security.CreateWallet.Item1.subtitle,
-            image: .security(Images.System.exclamationmarkTriangle)
-        ),
-        SecurityReminderItem(
-            title: Localized.Onboarding.Security.CreateWallet.Item2.title,
-            subtitle: Localized.Onboarding.Security.CreateWallet.Item2.subtitle,
+            title: Localized.Onboarding.Security.CreateWallet.KeepSafe.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.KeepSafe.subtitle,
             image: .security(Images.System.pencilLine)
         ),
         SecurityReminderItem(
-            title: Localized.Onboarding.Security.CreateWallet.Item3.title,
-            subtitle: Localized.Onboarding.Security.CreateWallet.Item3.subtitle,
+            title: Localized.Onboarding.Security.CreateWallet.DoNotShare.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.DoNotShare.subtitle,
+            image: .security(Images.System.exclamationmarkTriangle)
+        ),
+        SecurityReminderItem(
+            title: Localized.Onboarding.Security.CreateWallet.NoRecovery.title,
+            subtitle: Localized.Onboarding.Security.CreateWallet.NoRecovery.subtitle,
             image: .security(Images.Logo.icon)
         )
     ]

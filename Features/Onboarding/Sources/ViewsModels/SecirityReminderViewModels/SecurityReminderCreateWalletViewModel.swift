@@ -14,8 +14,8 @@ final class SecurityReminderCreateWalletViewModel: SecurityReminderViewModel {
     }
     
     var title: String = Localized.Wallet.New.title
-    var message: String = Localized.Onboarding.Security.CreateWallet.message
-    var checkMarkTitle: String = Localized.Onboarding.Security.CreateWallet.checkmartTitle
+    var message: String = Localized.Onboarding.Security.CreateWallet.Intro.title
+    var checkmarkTitle: String = Localized.Onboarding.Security.CreateWallet.Confirm.title
     var buttonTitle: String = Localized.Common.continue
     let items: [SecurityReminderItem] = SecurityReminderItem.createWallet
     var docsUrl: URL { Docs.url(.whatIsSecretPhrase) }

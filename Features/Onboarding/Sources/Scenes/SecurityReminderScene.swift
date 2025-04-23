@@ -14,7 +14,7 @@ struct SecurityReminderScene: View {
     }
     
     var body: some View {
-        VStack {
+        VStack(spacing: .medium) {
             List {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
@@ -36,9 +36,9 @@ struct SecurityReminderScene: View {
             
             Spacer()
             
-            VStack(alignment: .leading, spacing: .medium) {
+            VStack(alignment: .leading) {
                 Toggle(isOn: $model.isConfirmed) {
-                    OnboardingHeaderTitle(title: model.checkMarkTitle, alignment: .leading)
+                    OnboardingHeaderTitle(title: model.checkmarkTitle, alignment: .center)
                 }
                 .toggleStyle(CheckboxStyle())
                 
@@ -47,13 +47,11 @@ struct SecurityReminderScene: View {
                     viewState: model.buttonState,
                     action: model.onNext
                 )
-                .frame(height: StateButtonStyle.maxButtonHeight)
             }
             .frame(maxWidth: .scene.button.maxWidth)
-            
         }
-        .background(Colors.grayBackground)
         .padding(.bottom, .scene.bottom)
+        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
         .toolbar {

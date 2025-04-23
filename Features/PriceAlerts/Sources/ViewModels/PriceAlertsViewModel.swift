@@ -41,7 +41,6 @@ public final class PriceAlertsViewModel: Sendable {
     }
 
     func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {
-        NSLog("alerts \(alerts.count)")
         let (autoAlerts, manualGroups) = alerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
             switch alert.priceAlert.type {
             case .auto:

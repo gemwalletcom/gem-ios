@@ -13,8 +13,7 @@ struct OnboardingHeaderTitle: View {
             .font(.system(size: 16, weight: .medium))
             .multilineTextAlignment(alignment)
             .lineSpacing(.tiny)
-            .lineLimit(2)
-            .fixedSize(horizontal: false, vertical: true)
-            .padding(.top, .small)
+            .lineLimit(4)
+            .padding(.vertical, .small)
     }
 }
