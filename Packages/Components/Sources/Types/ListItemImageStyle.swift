@@ -2,10 +2,12 @@
 
 import Foundation
 import Style
+import SwiftUICore
 
 public struct ListItemImageStyle: Sendable {
     public let assetImage: AssetImage
     public let imageSize: CGFloat
+    public let alignment: VerticalAlignment
     private let cornerRadiusType: CornerRadiusType
     
     public var cornerRadius: CGFloat {
@@ -19,12 +21,14 @@ public struct ListItemImageStyle: Sendable {
     public init?(
         assetImage: AssetImage?,
         imageSize: CGFloat,
+        alignment: VerticalAlignment = .center,
         cornerRadiusType: CornerRadiusType
     ) {
         guard let assetImage else { return nil }
         self.assetImage = assetImage
         self.imageSize = imageSize
         self.cornerRadiusType = cornerRadiusType
+        self.alignment = alignment
     }
     
     public enum CornerRadiusType: Sendable {

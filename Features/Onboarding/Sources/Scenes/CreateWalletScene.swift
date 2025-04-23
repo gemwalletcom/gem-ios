@@ -13,16 +13,20 @@ struct CreateWalletScene: View {
 
     var body: some View {
         VStack(spacing: .medium) {
-            OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely)
+            OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely, alignment: .center)
             SecretDataTypeView(type: model.type)
 
             Button(action: copy) {
                 Text(Localized.Common.copy)
             }
             Spacer()
-            Button(Localized.Common.continue, action: continueAction)
-                .buttonStyle(.blue())
-                .frame(maxWidth: .scene.button.maxWidth)
+            
+            StateButton(
+                text: Localized.Common.continue,
+                styleState: .normal,
+                action: continueAction
+            )
+            .frame(maxWidth: .scene.button.maxWidth)
         }
         .copyToast(
             model: model.copyModel,
