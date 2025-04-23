@@ -80,6 +80,7 @@ public struct WalletsScene: View {
                         Text(Localized.Common.pinned)
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
 
             Section {
@@ -95,6 +96,7 @@ public struct WalletsScene: View {
                 }
                 .onMove(perform: onMove)
             }
+            .listRowInsets(.assetListRowInsets)
         }
         .alert("",
             isPresented: $isPresentingErrorMessage.mappedToBool(),

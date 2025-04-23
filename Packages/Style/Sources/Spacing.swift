@@ -11,6 +11,8 @@ public extension Spacing {
     static let space4: Spacing = 4
     /// 8
     static let space8: Spacing = 8
+    /// 12
+    static let space12: Spacing = 12
     /// 16
     static let space16: Spacing = 16
     /// 24
