@@ -301,8 +301,7 @@ public extension TronService {
                     return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
             case .swap:
-                // FIXME: estimate fee
-                return BigInt(4_000_000)
+                fatalError("Need to estimate feeLimit from quote data")
             case .generic, .tokenApprove, .account:
                 fatalError()
             }
