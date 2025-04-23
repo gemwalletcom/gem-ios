@@ -51,10 +51,15 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
         
         do {
-            let directory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: directory))
+            let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
+            let supportDirectory = NSSearchPathForDirectoriesInDomains(.applicationSupportDirectory, .userDomainMask, true)[0]
+            
+            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: documentsDirectory))
+            try FileManager().addSkipBackupAttributeToItemAtURL(URL(fileURLWithPath: supportDirectory))
+            
             #if DEBUG
-            NSLog("directory \(directory)")
+            NSLog("documentsDirectory \(documentsDirectory)")
+            NSLog("supportDirectory \(supportDirectory)")
             #endif
         } catch {
             NSLog("addSkipBackupAttributeToItemAtURL error \(error)")

@@ -1,20 +1,24 @@
 import Foundation
 @preconcurrency import GRDB
 
-public final class DB: ObservableObject, Sendable {
+public struct DB: Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
-    private let documentsDirectory = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true)[0]
-    private let dbPath: URL
-
     public let dbQueue: DatabaseQueue
 
     public init(
-        path: String,
+        fileName: String = "db.sqlite",
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
         do {
-            dbPath = try FileManager.default.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: path)
-            dbQueue = try DatabaseQueue(path: dbPath.absoluteString, configuration: configuration)
+            let fileManager = FileManager.default
+            let oldFileUrl = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
+            let newFileUrl = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
+            
+            // Migrate db from documents to support.
+            if fileManager.fileExists(atPath: oldFileUrl.path()) {
+                try fileManager.moveItem(at: oldFileUrl, to: newFileUrl)
+            }
+            dbQueue = try DatabaseQueue(path: newFileUrl.path(percentEncoded: false), configuration: configuration)
         } catch {
             fatalError("db initialization error: \(error)")
         }
