@@ -86,7 +86,7 @@ public struct TransactionInfoViewModel: Sendable {
                 )
         case let .nft(nftAsset):
                 .nft(
-                    name: asset.name,
+                    name: nftAsset.name,
                     image: NFTAssetViewModel(asset: nftAsset).assetImage
                 )
         case let .swap(swapInput):
