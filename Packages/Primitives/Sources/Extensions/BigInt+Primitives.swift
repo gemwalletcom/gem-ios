@@ -46,6 +46,10 @@ public extension BigInt {
         return Data(byteArray)
     }
     
+    func isBetween(_ lowerBound: BigInt, and upperBound: BigInt) -> Bool {
+        return self >= lowerBound && self <= upperBound
+    }
+    
     // 256 bit
     static let MAX_256 = BigInt(hex: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")!
 }

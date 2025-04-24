@@ -5,7 +5,7 @@ import Primitives
 import BigInt
 import Foundation
 
-final class Locale_PrimitivesTests {
+struct Locale_PrimitivesTests {
     @Test
     func testUsageLanguageIdentifier() {
         #expect(Locale.US.usageLanguageIdentifier() == "en")
