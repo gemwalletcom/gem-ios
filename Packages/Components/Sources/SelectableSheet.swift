@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Style
 
 public protocol SelectableSheetViewable: SelectableListAdoptable, ItemFilterable {
     var title: String { get }
@@ -49,10 +50,15 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                     )
                 }
                 Spacer()
-                Button(model.confirmButtonTitle, action: onConfirm)
-                    .frame(maxWidth: .scene.button.maxWidth)
-                    .buttonStyle(.blue())
+                
+                StateButton(
+                    text: model.confirmButtonTitle,
+                    styleState: .normal,
+                    action: onConfirm
+                )
+                .frame(maxWidth: .scene.button.maxWidth)
             }
+            .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {

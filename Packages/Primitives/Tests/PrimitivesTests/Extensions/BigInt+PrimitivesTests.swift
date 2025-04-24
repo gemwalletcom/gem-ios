@@ -4,7 +4,7 @@ import Testing
 import Primitives
 import BigInt
 
-final class BigInt_PrimitivesTests {
+struct BigInt_PrimitivesTests {
     @Test
     func testIncreaseByPercent() {
         #expect(BigInt(1).increase(byPercent: 1) == BigInt(1))
@@ -21,5 +21,13 @@ final class BigInt_PrimitivesTests {
         #expect(BigInt(100).multiply(byPercent: 10) == BigInt(10))
         #expect(BigInt(100).multiply(byPercent: 5) == BigInt(5))
         #expect(BigInt(1000).multiply(byPercent: 75) == BigInt(750))
+    }
+    
+    @Test
+    func testIsBetween() {
+        #expect(BigInt(100).isBetween(99, and: 110))
+        #expect(BigInt(100).isBetween(110, and: 99) == false)
+        #expect(BigInt(100).isBetween(0, and: 10) == false)
+        #expect(BigInt(0).isBetween(0, and: 1))
     }
 }

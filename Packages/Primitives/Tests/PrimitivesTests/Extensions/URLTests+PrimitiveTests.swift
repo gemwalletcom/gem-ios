@@ -1,14 +1,15 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import XCTest
+import Testing
 
 @testable import Primitives
 
-final class URLTests: XCTestCase {
+struct URLTests {
 
+    @Test
     func testCleanHost() {
-        XCTAssertEqual(URL(string: "https://www.example.com")?.cleanHost(), "example.com")
-        XCTAssertEqual(URL(string: "https://www.example.co.uk/about-us")?.cleanHost(), "example.co.uk")
+        #expect(URL(string: "https://www.example.com")?.cleanHost() == "example.com")
+        #expect(URL(string: "https://www.example.com/about-us")?.cleanHost() == "example.com")
     }
 }

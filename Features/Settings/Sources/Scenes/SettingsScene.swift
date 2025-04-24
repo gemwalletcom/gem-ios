@@ -23,11 +23,14 @@ public struct SettingsScene: View {
 
     public var body: some View {
         List {
-            walletsSection
-            deviceSection
-            walletConnectSection
-            communitySection
-            aboutSection
+            Group {
+                walletsSection
+                deviceSection
+                walletConnectSection
+                communitySection
+                aboutSection
+            }
+            .listRowInsets(.assetListRowInsets)
         }
         .onChange(of: model.currencyValue, onCurrencyChange)
         .listStyle(.insetGrouped)
@@ -67,7 +70,7 @@ extension SettingsScene {
                     imageStyle: .settings(assetImage: model.notificationsImage)
                 )
             }
-
+            
             NavigationLink(value: Scenes.PriceAlerts()) {
                 ListItemView(
                     title: model.priceAlertsTitle,
