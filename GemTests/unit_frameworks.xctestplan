@@ -158,14 +158,6 @@
     {
       "enabled" : false,
       "target" : {
-        "containerPath" : "container:Services\/ManageWalletService",
-        "identifier" : "ManageWalletServiceTests",
-        "name" : "ManageWalletServiceTests"
-      }
-    },
-    {
-      "enabled" : false,
-      "target" : {
         "containerPath" : "container:Services\/TransferService",
         "identifier" : "TransferServiceTests",
         "name" : "TransferServiceTests"
@@ -199,9 +191,6 @@
         "containerPath" : "container:Packages\/Primitives",
         "identifier" : "PrimitivesTests",
         "name" : "PrimitivesTests"
-        "containerPath" : "container:Features\/ManageWallets",
-        "identifier" : "ManageWalletsTest",
-        "name" : "ManageWalletsTest"
       }
     },
     {
