@@ -12,7 +12,7 @@ struct TransactionStateService: Sendable {
 
     public init(
         transactionStore: TransactionStore,
-        chainServiceFactory: ChainServiceFactory,
+        chainServiceFactory: ChainServiceFactory
     ) {
         self.transactionStore = transactionStore
         self.chainServiceFactory = chainServiceFactory
