@@ -48,7 +48,7 @@ public struct ListItemValueSectionList <Item: Identifiable, Content: View>: View
     
     public init(
         list: [ListItemValueSection<Item>],
-        @ViewBuilder content: @escaping (Item) -> Content,
+        @ViewBuilder content: @escaping (Item) -> Content
     ) {
         self.list = list
         self.content = content
