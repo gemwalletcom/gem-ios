@@ -90,20 +90,25 @@ public final class SwapSceneViewModel {
     var providerImage: AssetImage? { selectedProvderModel?.providerImage }
 
     var actionButtonTitle: String {
-        switch swapState.quotes {
-        case .noData, .loading, .data: Localized.Wallet.swap
-        case .error: Localized.Common.tryAgain
-        }
+        swapState.error != nil ? Localized.Common.tryAgain : Localized.Wallet.swap
     }
 
     var actionButtonState: StateViewType<[SwapQuote]> {
-        switch swapState.swapTransferData {
-        case .loading: .loading
-        case .error(let error): .error(error)
-        case .noData, .data: swapState.quotes
+        if swapState.isLoading {
+            return .loading
         }
+
+        if let error = swapState.error {
+            return .error(error)
+        }
+
+        if case .data(let data) = swapState.quotes {
+            return .data(data)
+        }
+
+        return swapState.quotes
     }
-    
+
     var isVisibleActionButton: Bool {
         switch swapState.quotes {
         case .noData: false
@@ -135,7 +140,7 @@ public final class SwapSceneViewModel {
     var assetIds: [AssetId] {
         [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
     }
-    
+
     var rateTitle: String { Localized.Buy.rate }
     var rateText: String? {
         guard let selectedSwapQuote, let fromAsset, let toAsset else { return nil }
@@ -193,6 +198,7 @@ extension SwapSceneViewModel {
             )
         } catch {
             swapState.quotes = .noData
+            swapState.swapTransferData = .noData
             swapState.fetch = .idle
             selectedSwapQuote = nil
         }
@@ -241,12 +247,20 @@ extension SwapSceneViewModel {
     }
 
     func onSelectActionButton() {
+        if swapState.swapTransferData.isError {
+            performSwap()
+            return
+        }
+
         if swapState.quotes.isError {
             fetch()
             return
         }
 
-        if let priceImpactModel, priceImpactModel.showPriceImpactWarning, let text = priceImpactModel.highImpactWarningDescription {
+        if let priceImpactModel,
+           let text = priceImpactModel.highImpactWarningDescription,
+           priceImpactModel.showPriceImpactWarning
+        {
             isPresentingPriceImpactConfirmation = text
             return
         }
@@ -352,6 +366,8 @@ extension SwapSceneViewModel {
 
     private func performFetch(input: SwapQuoteInput) async {
         do {
+            // reset transfer data on quotes fetch
+            swapState.swapTransferData = .noData
             swapState.quotes = .loading
             let swapQuotes = try await provider.fetchQuotes(
                 wallet: wallet,
@@ -402,8 +418,6 @@ extension SwapSceneViewModel {
         } catch {
             if !error.isCancelled {
                 swapState.swapTransferData = .error(ErrorWrapper(error))
-                swapState.quotes = .error(ErrorWrapper(error))
-                selectedSwapQuote = nil
 
                 NSLog("SwapScene get swap data error: \(error)")
             }
