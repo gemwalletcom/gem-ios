@@ -3,16 +3,16 @@
 import Foundation
 
 public struct AdaptiveConfiguration: Sendable {
-    public let idleInterval: Duration
+    public let initialInterval: Duration
     public let maxInterval: Duration
     public let stepFactor: Double
 
     public init(
-        idleInterval: Duration,
+        initialInterval: Duration,
         maxInterval: Duration,
         stepFactor: Double
     ) {
-        self.idleInterval = idleInterval
+        self.initialInterval = initialInterval
         self.maxInterval = maxInterval
         self.stepFactor = stepFactor
     }

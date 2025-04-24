@@ -3,22 +3,19 @@
 import Foundation
 
 public actor JobRunner {
-    private let config: JobRunnerConfiguration
     private var tasks: [String: Task<Void, Never>] = [:]
+    private let clock: ContinuousClock
 
-    public init(config: JobRunnerConfiguration) {
-        self.config = config
+    public init(clock: ContinuousClock = ContinuousClock()) {
+        self.clock = clock
     }
 
     public func addJob(job: Job) {
         tasks[job.id]?.cancel()
-
-        let task = Task {
-            await runJob(job)
-            removeJob(for: job.id)
+        tasks[job.id] = Task { [weak self] in
+            await self?.runJob(job)
+            await self?.removeJob(for: job.id)
         }
-
-        tasks[job.id] = task
     }
 
     public func cancelJob(id: String) {
@@ -27,7 +24,7 @@ public actor JobRunner {
     }
 
     public func stopAll() {
-        tasks.forEach { cancelJob(id: $0.key) }
+        tasks.keys.forEach(cancelJob)
     }
 }
 
@@ -39,20 +36,34 @@ extension JobRunner {
     }
 
     private func runJob(_ job: Job) async {
-        var currentInterval = RetryIntervalCalculator.initialInterval(for: config)
+        var interval = RetryIntervalCalculator.initialInterval(for: job.configuration)
+        let startTime = clock.now
 
         while !Task.isCancelled {
-            let status = await job.run()
-            switch status {
-            case .success, .failure: return
-            case .retry(let delay):
-                let newInterval = RetryIntervalCalculator.nextInterval(
-                    config: config,
-                    currentInterval: currentInterval,
-                    requestedDelay: delay
+            if let limit = job.configuration.timeLimit,
+               startTime.duration(to: clock.now) >= limit {
+                NSLog("job \(job.id) completed by time limit")
+                return
+            }
+
+            switch await job.run() {
+            case .complete:
+                do {
+                    try await job.onComplete()
+                }
+                catch {
+                    NSLog("job \(job.id) completed with error: \(error)")
+                }
+                return
+
+            case .retry:
+                interval = RetryIntervalCalculator.nextInterval(
+                    config: job.configuration,
+                    currentInterval: interval
                 )
-                currentInterval = newInterval
-                try? await Task.sleep(for: newInterval)
+                try? await clock.sleep(
+                    until: clock.now.advanced(by: interval)
+                )
             }
         }
     }
