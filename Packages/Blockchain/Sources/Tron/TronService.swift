@@ -108,20 +108,29 @@ extension TronService {
         )
     }
 
+    private func accountEnergy(address: String) async throws -> UInt64 {
+        let usage = try await accountUsage(address: address)
+        guard
+            let energyLimit = usage.energyLimit,
+            let energyUsed = usage.energyUsed
+        else {
+            return 0
+        }
+        return max(energyLimit - energyUsed, 0)
+    }
+
     private func votes(address: String) async throws -> [TronVote] {
         try await account(address: address).votes ?? []
     }
 
     // https://developers.tron.network/docs/set-feelimit#how-to-estimate-energy-consumption
-    private func estimateTRC20Transfer(ownerAddress: String, recipientAddress: String, contractAddress: String, value: BigInt) async throws -> BigInt {
-        let address = try addressHex(address: recipientAddress)
-        let parameter = [address, value.hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
+    private func estimateContractCall(ownerAddress: String, recipientAddress: String, contractAddress: String, value: UInt32, function: String, parameter: String) async throws -> BigInt {
         let call = TronSmartContractCall(
             contract_address: contractAddress,
-            function_selector: "transfer(address,uint256)",
+            function_selector: function,
             parameter: parameter,
             fee_limit: 0,
-            call_value: 0,
+            call_value: value,
             owner_address: ownerAddress,
             visible: true
         )
@@ -130,10 +139,31 @@ extension TronService {
             .map(as: TronSmartContractResult.self)
 
         if let message = result.result.message {
-            throw AnyError(message)
+            guard let data = Data(hexString: message) else {
+                throw AnyError(message)
+            }
+            throw AnyError(String(data: data, encoding: .utf8) ?? message)
         }
 
         return BigInt(result.energy_used)
+    }
+
+    private func estimateTRC20Transfer(
+        ownerAddress: String,
+        recipientAddress: String,
+        contractAddress: String,
+        value: BigInt
+    ) async throws -> BigInt {
+        let address = try addressHex(address: recipientAddress)
+        let parameter = [address, value.hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
+        return try await estimateContractCall(
+            ownerAddress: ownerAddress,
+            recipientAddress: recipientAddress,
+            contractAddress: contractAddress,
+            value: 0,
+            function: "transfer(address,uint256)",
+            parameter: parameter
+        )
     }
 
     private func parameters() async throws -> [TronChainParameter] {
@@ -300,8 +330,10 @@ public extension TronService {
                 case .rewards, .withdraw, .redelegate:
                     return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
-            case .swap:
-                fatalError("Need to estimate feeLimit from quote data")
+            case let .swap(_, _, _, quoteData):
+                let feeLimit = BigInt(stringLiteral: quoteData.gasLimit ?? "100000000")
+                let accountEnergy = try await accountEnergy(address: input.senderAddress)
+                return feeLimit - BigInt(accountEnergy) * baseFee / 1000
             case .generic, .tokenApprove, .account:
                 fatalError()
             }
