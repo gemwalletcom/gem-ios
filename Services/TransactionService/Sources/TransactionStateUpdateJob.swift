@@ -25,7 +25,7 @@ public struct TransactionStateUpdateJob: Job {
                 maxInterval: .seconds(10),
                 stepFactor: 1.1
             ),
-            timeLimit: .milliseconds(transaction.assetId.chain.transactionTimeout) * 10 // adjust later, once correct is set for transactionTimeout
+            timeLimit: .none
         )
     }
 
@@ -51,9 +51,8 @@ public struct TransactionStateUpdateJob: Job {
                 return .complete
             }
         } catch {
-            let isTimedOut = Date.now.timeIntervalSince(transaction.createdAt) > timeout
+            let isTimedOut = Date.now.timeIntervalSince(transaction.createdAt) > Double(transaction.assetId.chain.transactionTimeout) && isNetworkError(error) == false
             if isTimedOut {
-                // mark as failed on timeout and finish job
                 try? stateService.updateState(state: .failed, for: transaction)
                 return .complete
             }
@@ -63,13 +62,5 @@ public struct TransactionStateUpdateJob: Job {
 
     public func onComplete() async throws {
         try await postProcessingService.process(transaction: transaction)
-    }
-}
-
-// MARK: - Private
-
-extension TransactionStateUpdateJob {
-    private var timeout: Double {
-        Double(ChainConfig.config(chain: transaction.assetId.chain).transactionTimeout)
     }
 }
