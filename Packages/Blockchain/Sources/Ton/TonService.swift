@@ -202,9 +202,14 @@ extension TonService: ChainTransactionLoadable {
 
 extension TonService: ChainBroadcastable {
     public func broadcast(data: String, options: BroadcastOptions) async throws -> String {
-        return try await provider
+        let result = try await provider
             .request(.broadcast(data: data))
-            .map(as: TonResult<TonBroadcastTransaction>.self).result.hash
+            .map(as: TonResult<TonBroadcastTransaction>.self).result
+
+        guard let hash = Data(base64Encoded: result.hash) else {
+            throw AnyError("Invalid transaction hash")
+        }
+        return hash.hexString
     }
 }
 
@@ -212,16 +217,11 @@ extension TonService: ChainBroadcastable {
 
 extension TonService: ChainTransactionStateFetchable {
     public func transactionState(for request: TransactionStateRequest) async throws -> TransactionChanges {
-        guard let data = Data(base64Encoded: request.id) else {
-            throw AnyError("Invalid transaction id")
-        }
         let transactions = try await provider
-            .request(.transaction(hash: data.hexString))
+            .request(.transaction(hash: request.id))
             .map(as: TonMessageTransactions.self)
         
-        guard
-            let transaction = transactions.transactions.first,
-            let newTransactionId = Data(base64Encoded: transaction.hash)?.hexString else {
+        guard let transaction = transactions.transactions.first else {
             throw AnyError("transaction not found")
         }
         let state: TransactionState = {
@@ -234,10 +234,7 @@ extension TonService: ChainTransactionStateFetchable {
         }()
         
         return TransactionChanges(
-            state: state,
-            changes: [
-                .hashChange(old: request.id, new: newTransactionId)
-            ]
+            state: state
         )
     }
 }
