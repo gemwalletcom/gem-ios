@@ -18,11 +18,14 @@ public struct TransactionStateUpdateJob: Job {
     public var configuration: JobConfiguration {
         .adaptive(
             configuration: AdaptiveConfiguration(
-                initialInterval: .milliseconds(ChainConfig.config(chain: transaction.assetId.chain).blockTime),
+                initialInterval: min(
+                    .milliseconds(transaction.assetId.chain.blockTime),
+                    .seconds(5)
+                ),
                 maxInterval: .seconds(10),
-                stepFactor: 1.5
+                stepFactor: 1.1
             ),
-            timeLimit: .none
+            timeLimit: .milliseconds(transaction.assetId.chain.transactionTimeout) * 10 // adjust later, once correct is set for transactionTimeout
         )
     }
 

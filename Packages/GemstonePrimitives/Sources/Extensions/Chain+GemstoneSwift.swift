@@ -62,6 +62,14 @@ public extension Primitives.Chain {
         }
         return feeUnitType
     }
+    
+    var blockTime: UInt32 {
+        ChainConfig.config(chain: self).blockTime
+    }
+    
+    var transactionTimeout: UInt32 {
+        ChainConfig.config(chain: self).transactionTimeout
+    }
 }
 
 extension Array where Element == Primitives.Chain {

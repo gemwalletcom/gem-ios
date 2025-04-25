@@ -61,4 +61,20 @@ struct RetryIntervalCalculatorTests {
           #expect(first  == .seconds(7.5))
           #expect(second == .seconds(10))
       }
+    
+    @Test
+    func testInitialIntervalNotHigherThenMaxInternal() async {
+        let adaptiveConfig = JobConfiguration.adaptive(
+            configuration: AdaptiveConfiguration(
+                initialInterval: .seconds(50),
+                maxInterval: .seconds(10),
+                stepFactor: 1.5
+            )
+        )
+        let result1 = RetryIntervalCalculator.nextInterval(
+            config: adaptiveConfig,
+            currentInterval: .seconds(2)
+        )
+        #expect(result1 == .seconds(10))
+    }
 }
