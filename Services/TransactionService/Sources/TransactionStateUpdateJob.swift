@@ -11,7 +11,7 @@ import Blockchain
 public struct TransactionStateUpdateJob: Job {
     private let transaction: Transaction
     private let stateService: TransactionStateService
-    private let postProcessingService: TransactionPostProcessingService
+    private let postProcessingService: TransactionStateUpdatePostJob
 
     public var id: String { transaction.hash }
 
@@ -29,7 +29,7 @@ public struct TransactionStateUpdateJob: Job {
     init(
         transaction: Transaction,
         stateService: TransactionStateService,
-        postProcessingService: TransactionPostProcessingService
+        postProcessingService: TransactionStateUpdatePostJob
     ) {
         self.transaction = transaction
         self.stateService = stateService

@@ -12,7 +12,7 @@ import JobRunner
 public struct TransactionService: Sendable {
     private let transactionStore: TransactionStore
     private let stateService: TransactionStateService
-    private let postProcessingService: TransactionPostProcessingService
+    private let postProcessingService: TransactionStateUpdatePostJob
     private let runner: JobRunner = JobRunner()
 
     public init(
@@ -27,7 +27,7 @@ public struct TransactionService: Sendable {
             transactionStore: transactionStore,
             chainServiceFactory: chainServiceFactory
         )
-        self.postProcessingService = TransactionPostProcessingService(
+        self.postProcessingService = TransactionStateUpdatePostJob(
             transactionStore: transactionStore,
             balanceUpdater: balanceUpdater,
             stakeService: stakeService,

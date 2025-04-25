@@ -7,7 +7,7 @@ import StakeService
 import NFTService
 import Primitives
 
-struct TransactionPostProcessingService: Sendable {
+struct TransactionStateUpdatePostJob: Sendable {
     private let transactionStore: TransactionStore
     private let balanceUpdater: any BalancerUpdater
     private let stakeService: StakeService
@@ -25,6 +25,7 @@ struct TransactionPostProcessingService: Sendable {
         self.nftService = nftService
     }
 
+    // Once transaction is completed, update nessesary states internally, balances, stakes, nft ownership
     func process(transaction: Transaction) async throws {
         let assetIdentifiers = (transaction.assetIds + [transaction.feeAssetId]).unique()
         let walletIdentifiers = try transactionStore.getWalletIds(for: transaction.id)
