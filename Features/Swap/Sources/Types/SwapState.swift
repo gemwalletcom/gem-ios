@@ -24,4 +24,14 @@ public struct SwapState {
     public var isLoading: Bool {
         quotes.isLoading || swapTransferData.isLoading
     }
+
+    public var error: (any Error)? {
+        if case .error(let error) = quotes {
+            return error
+        }
+        if case .error(let error) = swapTransferData {
+            return error
+        }
+        return nil
+    }
 }
