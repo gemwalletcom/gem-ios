@@ -45,6 +45,8 @@ public struct ChainSettingsScene: View {
                     }
                 }
             }
+            .listRowInsets(.assetListRowInsets)
+            
             Section(model.explorerTitle) {
                 ForEach(model.explorers, id: \.self) { explorer in
                     ListItemSelectionView(
@@ -60,6 +62,7 @@ public struct ChainSettingsScene: View {
                     )
                 }
             }
+            .listRowInsets(.assetListRowInsets)
         }
         .refreshable {
             await fetch()
@@ -95,6 +98,7 @@ public struct ChainSettingsScene: View {
             }
         }
         .navigationTitle(model.title)
+        .listSectionSpacing(.compact)
         .taskOnce {
             Task { await fetch()}
         }
