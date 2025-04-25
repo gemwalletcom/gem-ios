@@ -124,7 +124,7 @@ extension TronService {
     }
 
     // https://developers.tron.network/docs/set-feelimit#how-to-estimate-energy-consumption
-    private func estimateContractCall(ownerAddress: String, recipientAddress: String, contractAddress: String, value: UInt32, function: String, parameter: String) async throws -> BigInt {
+    private func estimateContractCall(ownerAddress: String, contractAddress: String, value: UInt32, function: String, parameter: String) async throws -> BigInt {
         let call = TronSmartContractCall(
             contract_address: contractAddress,
             function_selector: function,
@@ -158,7 +158,6 @@ extension TronService {
         let parameter = [address, value.hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
         return try await estimateContractCall(
             ownerAddress: ownerAddress,
-            recipientAddress: recipientAddress,
             contractAddress: contractAddress,
             value: 0,
             function: "transfer(address,uint256)",
@@ -270,9 +269,19 @@ extension TronService: ChainBalanceable {
     }
 }
 
+private extension Fee {
+    static func makeFinal(fee: BigInt) -> Fee {
+        return Fee(
+            fee: fee,
+            gasPriceType: .regular(gasPrice: fee),
+            gasLimit: 1
+        )
+    }
+}
+
 public extension TronService {
     func fee(input: FeeInput) async throws -> Fee {
-        let fee = try await {
+        return try await {
             let baseFee = BigInt(280_000)
 
             switch input.type {
@@ -298,7 +307,8 @@ public extension TronService {
                 case .native:
                     let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
                     let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
-                    return isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
+                    let fee = isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
+                    return .makeFinal(fee: fee)
                 default:
                     let gasLimit = try await estimateTRC20Transfer(
                         ownerAddress: input.senderAddress,
@@ -308,10 +318,9 @@ public extension TronService {
                     )
                     let tokenTransferFee = BigInt(energyFee) * gasLimit.increase(byPercent: 20)
 
-                    return isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
+                    let fee = isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
+                    return .makeFinal(fee: fee)
                 }
-            case .transferNft:
-                fatalError()
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getBalance = accountBalance(address: input.senderAddress)
@@ -320,38 +329,53 @@ public extension TronService {
                 let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
                 switch type {
                 case .stake:
-                    return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
+                    return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2))
                 case .unstake:
                     if totalVotes > input.value {
-                        return availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2)
+                        return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2))
                     } else {
-                        return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
+                        return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee))
                     }
                 case .rewards, .withdraw, .redelegate:
-                    return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
+                    return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee))
                 }
-            case let .swap(_, _, _, quoteData):
+            case let .swap(_, _, quote, quoteData):
                 async let getParameters = parameters()
                 async let getAccountEnergy = accountEnergy(address: input.senderAddress)
                 let (parameters, accountEnergy) = try await (getParameters, getAccountEnergy)
                 guard
-                    let estimatedEnergy = quoteData.gasLimit,
+                    let swapEnergy = quoteData.gasLimit,
                     let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value
                 else {
                     throw AnyError("Unable to fetch gas limit or energy fee")
                 }
-                let remainEnergy = BigInt(stringLiteral: estimatedEnergy) - BigInt(accountEnergy)
-                return (remainEnergy * BigInt(energyFee)).increase(byPercent: 10)
-            case .generic, .tokenApprove, .account:
+
+                let estimatedEnergy: BigInt
+                if let approval = quoteData.approval {
+                    let address = try addressHex(address: approval.spender)
+                    let parameter = [address, BigInt.MAX_256.magnitude.serialize().hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
+                    estimatedEnergy = try await estimateContractCall(
+                        ownerAddress: quote.request.walletAddress,
+                        contractAddress: approval.token,
+                        value: 0,
+                        function: "approve(address,uint256)",
+                        parameter: parameter
+                    )
+                } else {
+                    estimatedEnergy = BigInt(stringLiteral: swapEnergy)
+                }
+
+                let gasLimit = (estimatedEnergy - BigInt(accountEnergy)).increase(byPercent: 10)
+                let gasPrice = BigInt(energyFee)
+                return Fee(
+                    fee: gasLimit * gasPrice,
+                    gasPriceType: .regular(gasPrice: gasPrice),
+                    gasLimit: gasLimit
+                )
+            case .generic, .tokenApprove, .account, .transferNft:
                 fatalError()
             }
         }()
-
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
-        )
     }
 }
 
