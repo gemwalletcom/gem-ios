@@ -29,6 +29,7 @@ public struct CurrencyScene: View {
                     }
                 }
             }
+            .listRowInsets(.assetListRowInsets)
         }
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)

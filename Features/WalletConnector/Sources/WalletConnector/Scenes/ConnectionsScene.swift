@@ -45,6 +45,8 @@ public struct ConnectionsScene: View {
                     action: onScan
                 )
             }
+            .listRowInsets(.assetListRowInsets)
+            
             ForEach(headers, id: \.self) { header in
                 Section(
                     header: Text(header.name)
@@ -63,6 +65,7 @@ public struct ConnectionsScene: View {
                         }
                     }
                 }
+                .listRowInsets(.assetListRowInsets)
             }
         }
         .overlay {
