@@ -92,7 +92,7 @@ extension SwapScene {
             swapToSectionView
             additionalInfoSectionView
 
-            if case let .error(error) = model.swapState.quotes {
+            if let error = model.swapState.error {
                 ListItemErrorView(errorTitle: model.errorTitle, error: error)
             }
         }

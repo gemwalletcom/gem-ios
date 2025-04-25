@@ -127,7 +127,7 @@ struct TransactionInfoModelTests {
             return
         }
 
-        #expect(name == asset.name)
+        #expect(name == nftAsset.name)
     }
 
     @Test

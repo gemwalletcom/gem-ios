@@ -3,7 +3,7 @@
 import Testing
 import Primitives
 
-final class ArrayPrimitivesTests {
+struct ArrayPrimitivesTests {
     @Test
     func testSplitInSubArrays() {
         #expect([1].splitInSubArrays(into: 2) == [[1], []])

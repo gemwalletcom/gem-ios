@@ -2,6 +2,7 @@
 
 import Foundation
 import SwiftUICore
+import SwiftUI
 
 public struct ListItemValue<T: Identifiable> {
     public let title: String?
@@ -39,4 +40,34 @@ public struct ListItemValueSection<T: Identifiable> {
 
 extension ListItemValueSection: Identifiable {
     public var id: String { section }
+}
+
+public struct ListItemValueSectionList <Item: Identifiable, Content: View>: View {
+    private let list: [ListItemValueSection<Item>]
+    private let content: (Item) -> Content
+    
+    public init(
+        list: [ListItemValueSection<Item>],
+        @ViewBuilder content: @escaping (Item) -> Content
+    ) {
+        self.list = list
+        self.content = content
+    }
+    
+    public var body: some View {
+        ForEach(list) { section in
+            Section {
+                ForEach(section.values) { alert in
+                    content(alert.value)
+                }
+            } header: {
+                if section.section.isEmpty {
+                    EmptyView()
+                } else {
+                    Text(section.section)
+                }
+            }
+            .listRowInsets(.assetListRowInsets)
+        }
+    }
 }

@@ -91,7 +91,7 @@ public struct ListItemView: View {
     }
 
     public var body: some View {
-        HStack(alignment: imageStyle?.alignment ?? .center) {
+        HStack(alignment: imageStyle?.alignment ?? .center, spacing: .space12) {
             if let imageStyle {
                 AssetImageView(
                     assetImage: imageStyle.assetImage,
