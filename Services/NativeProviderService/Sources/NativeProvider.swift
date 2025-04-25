@@ -49,8 +49,15 @@ extension NativeProvider: AlienProvider {
                     }
 
                     let (data, response) = try await self.session.data(for: target.asRequest())
-                    if (response as? HTTPURLResponse)?.statusCode != 200 {
-                        throw AlienError.ResponseError(msg: "invalid response: \(response)")
+                    let httpResponse = (response as? HTTPURLResponse)
+                    if httpResponse?.statusCode != 200 {
+                        guard
+                            let data = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                            let error = data["error"] as? String
+                        else {
+                            throw AlienError.ResponseError(msg: "Server error: \(String(describing: httpResponse?.statusCode))")
+                        }
+                        throw AlienError.ResponseError(msg: error)
                     }
                     print("<== response body size:\(data.count)")
 

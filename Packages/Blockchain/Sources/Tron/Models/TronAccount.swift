@@ -73,10 +73,14 @@ public struct TronAccountRequest: Codable, Sendable {
 public struct TronAccountUsage: Codable, Sendable {
 	public let freeNetUsed: Int32?
 	public let freeNetLimit: Int32?
+	public let EnergyUsed: UInt64?
+	public let EnergyLimit: UInt64?
 
-	public init(freeNetUsed: Int32?, freeNetLimit: Int32?) {
+	public init(freeNetUsed: Int32?, freeNetLimit: Int32?, EnergyUsed: UInt64?, EnergyLimit: UInt64?) {
 		self.freeNetUsed = freeNetUsed
 		self.freeNetLimit = freeNetLimit
+		self.EnergyUsed = EnergyUsed
+		self.EnergyLimit = EnergyLimit
 	}
 }
 
