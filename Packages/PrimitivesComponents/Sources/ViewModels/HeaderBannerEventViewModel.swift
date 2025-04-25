@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct HeaderBannerEventViewModel {
+public struct HeaderBannerEventViewModel: Sendable {
     
     private let events: [BannerEvent]
     

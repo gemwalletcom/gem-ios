@@ -5,7 +5,7 @@ import Components
 import Primitives
 import PrimitivesComponents
 
-struct AssetHeaderViewModel {
+struct AssetHeaderViewModel: Sendable {
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
     let bannerEventsViewModel: HeaderBannerEventViewModel

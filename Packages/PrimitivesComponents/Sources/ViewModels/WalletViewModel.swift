@@ -5,7 +5,7 @@ import SwiftUI
 import Style
 import Localization
 
-public struct WalletViewModel {
+public struct WalletViewModel: Sendable {
     public let wallet: Wallet
 
     public init(wallet: Wallet) {
