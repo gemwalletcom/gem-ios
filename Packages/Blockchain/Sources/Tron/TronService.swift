@@ -111,8 +111,8 @@ extension TronService {
     private func accountEnergy(address: String) async throws -> UInt64 {
         let usage = try await accountUsage(address: address)
         guard
-            let energyLimit = usage.energyLimit,
-            let energyUsed = usage.energyUsed
+            let energyLimit = usage.EnergyLimit,
+            let energyUsed = usage.EnergyUsed
         else {
             return 0
         }
@@ -331,9 +331,17 @@ public extension TronService {
                     return availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
                 }
             case let .swap(_, _, _, quoteData):
-                let feeLimit = BigInt(stringLiteral: quoteData.gasLimit ?? "100000000")
-                let accountEnergy = try await accountEnergy(address: input.senderAddress)
-                return feeLimit - BigInt(accountEnergy) * baseFee / 1000
+                async let getParameters = parameters()
+                async let getAccountEnergy = accountEnergy(address: input.senderAddress)
+                let (parameters, accountEnergy) = try await (getParameters, getAccountEnergy)
+                guard
+                    let estimatedEnergy = quoteData.gasLimit,
+                    let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value
+                else {
+                    throw AnyError("Unable to fetch gas limit or energy fee")
+                }
+                let remainEnergy = BigInt(stringLiteral: estimatedEnergy) - BigInt(accountEnergy)
+                return (remainEnergy * BigInt(energyFee)).increase(byPercent: 10)
             case .generic, .tokenApprove, .account:
                 fatalError()
             }
