@@ -55,21 +55,20 @@ public struct LocalKeystore: Keystore {
     
     public func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) throws -> [Primitives.Wallet] {
         let password = try keystorePassword.getPassword()
-        let updatedWallets: [Primitives.Wallet] = try {
-            var updatedWallets: [Primitives.Wallet] = []
-            for wallet in wallets {
-                let enableChains = Set(wallet.accounts.map { $0.chain })
-                let missingChains = Set(chains).subtracting(enableChains)
-                guard !missingChains.isEmpty else { continue }
-
-                updatedWallets.append(
-                    try walletKeyStore.addChains(chains: chains, wallet: wallet, password: password)
+        
+        return try wallets
+            .filter {
+                let enabled = Set($0.accounts.map(\.chain)).intersection(chains).map { $0 }
+                let missing = Set(chains).subtracting(enabled)
+                return missing.isNotEmpty
+            }
+            .map {
+                try walletKeyStore.addChains(
+                    chains:   chains,
+                    wallet:   $0,
+                    password: password
                 )
             }
-            return updatedWallets
-        }()
-
-        return updatedWallets
     }
     
     public func deleteKey(for wallet: Primitives.Wallet) throws {
