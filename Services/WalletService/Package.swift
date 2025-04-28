@@ -10,7 +10,12 @@ let package = Package(
     products: [
         .library(
             name: "WalletService",
-            targets: ["WalletService"]),
+            targets: ["WalletService"]
+        ),
+        .library(
+            name: "WalletServiceTestKit",
+            targets: ["WalletServiceTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -33,9 +38,24 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "WalletServiceTestKit",
+            dependencies: [
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "WalletServiceTests",
-            dependencies: ["WalletService"]
+            dependencies: [
+                "WalletService",
+                "WalletServiceTestKit",
+                .product(name: "KeystoreTestKit", package: "Keystore"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "StoreTestKit", package: "Store"),
+            ],
+            path: "Tests"
         ),
     ]
 )
