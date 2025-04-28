@@ -10,7 +10,7 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public var id: String
     public var walletId: String?
-    public var assetId: String?
+    public var assetId: AssetId?
     public var chain: String?
     public var event: BannerEvent
     public var state: BannerState
@@ -54,7 +54,7 @@ extension Banner {
         BannerRecord(
             id: id,
             walletId: wallet?.id,
-            assetId: asset?.id.identifier,
+            assetId: asset?.id,
             chain: chain?.id,
             event: event,
             state: state

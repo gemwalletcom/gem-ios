@@ -53,7 +53,7 @@ public final class FiatSceneViewModel {
         )
 
         // TODO: - move asset request and query observing on top, just inject AssetData
-        self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id.identifier)
+        self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
     }
 
     var title: String {

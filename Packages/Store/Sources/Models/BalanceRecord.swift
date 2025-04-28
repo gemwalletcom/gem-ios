@@ -9,7 +9,7 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "balances"
 
-    public var assetId: String
+    public var assetId: AssetId
     public var walletId: String
     
     public var available: String
@@ -97,7 +97,7 @@ extension BalanceRecord: CreateTable {
 }
 
 extension BalanceRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension BalanceRecord {
@@ -114,7 +114,7 @@ extension BalanceRecord {
     
     func mapToAssetBalance() -> AssetBalance {
         return AssetBalance(
-            assetId: try! AssetId(id: assetId),
+            assetId: assetId,
             balance: mapToBalance()
         )
     }

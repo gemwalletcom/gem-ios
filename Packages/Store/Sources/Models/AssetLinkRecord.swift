@@ -9,13 +9,13 @@ public struct AssetLinkRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "assets_links"
     
-    public var assetId: String
+    public var assetId: AssetId
     public var name: String
     public var url: String
 }
 
 extension AssetLinkRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension AssetLinkRecord: CreateTable {
@@ -33,7 +33,7 @@ extension AssetLinkRecord: CreateTable {
 }
 
 extension AssetLink {
-    func record(assetId: String) -> AssetLinkRecord {
+    func record(assetId: AssetId) -> AssetLinkRecord {
         AssetLinkRecord(
             assetId: assetId,
             name: name,

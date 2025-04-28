@@ -47,7 +47,7 @@ public struct TransactionStore: Sendable {
                 let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)
                 if let id = record.id {
                     try transaction.assetIds.forEach {
-                        try TransactionAssetAssociationRecord(transactionId: id, assetId: $0.identifier).upsert(db)
+                        try TransactionAssetAssociationRecord(transactionId: id, assetId: $0).upsert(db)
                     }
                 }
             }

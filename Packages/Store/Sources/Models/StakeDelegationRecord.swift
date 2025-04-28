@@ -9,7 +9,7 @@ public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord
     public static let databaseTableName: String = "stake_delegations"
 
     public var id: String
-    public var assetId: String
+    public var assetId: AssetId
     public var walletId: String
     public var state: DelegationState
     public var balance: String
@@ -63,7 +63,7 @@ extension DelegationBase {
     func record(walletId: String) -> StakeDelegationRecord {
         return StakeDelegationRecord(
             id: id,
-            assetId: assetId.identifier,
+            assetId: assetId,
             walletId: walletId,
             state: state,
             balance: balance,

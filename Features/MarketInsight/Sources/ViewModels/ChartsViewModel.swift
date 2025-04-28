@@ -36,7 +36,7 @@ public final class ChartsViewModel {
     }
 
     var priceRequest: PriceRequest {
-        PriceRequest(assetId: assetModel.asset.id.identifier)
+        PriceRequest(assetId: assetModel.asset.id)
     }
 
     var title: String { assetModel.name }

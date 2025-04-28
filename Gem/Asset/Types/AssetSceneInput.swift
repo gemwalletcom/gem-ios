@@ -12,7 +12,7 @@ struct AssetSceneInput {
     static let transactionsLimit = 25
 
     var assetRequest: AssetRequest {
-        return AssetRequest(walletId: walletId.id, assetId: assetId.identifier)
+        return AssetRequest(walletId: walletId.id, assetId: assetId)
     }
     
     var transactionsRequest: TransactionsRequest {

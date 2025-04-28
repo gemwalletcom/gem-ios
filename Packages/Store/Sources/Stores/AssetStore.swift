@@ -38,7 +38,7 @@ public struct AssetStore: Sendable {
     public func addAssetsSearch(query: String, assets: [AssetBasic]) throws {
         try db.write { db in
             try assets.enumerated().forEach {
-                try AssetSearchRecord(query: query, assetId: $1.asset.id.identifier, priority: $0)
+                try AssetSearchRecord(query: query, assetId: $1.asset.id, priority: $0)
                     .upsert(db)
             }
         }
@@ -98,7 +98,7 @@ public struct AssetStore: Sendable {
         }
     }
     
-    public func updateLinks(assetId: String, _ links: [AssetLink]) throws {
+    public func updateLinks(assetId: AssetId, _ links: [AssetLink]) throws {
         try db.write { db in
             for link in links {
                 try link.record(assetId: assetId).upsert(db)

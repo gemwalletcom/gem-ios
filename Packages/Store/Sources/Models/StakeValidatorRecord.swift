@@ -9,7 +9,7 @@ public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord 
     public static let databaseTableName: String = "stake_validators"
 
     public var id: String
-    public var assetId: String
+    public var assetId: AssetId
     public var validatorId: String
     public var name: String
     public var isActive: Bool
@@ -43,7 +43,7 @@ extension StakeValidatorRecord: CreateTable {
 extension StakeValidatorRecord {
     var validator: DelegationValidator {
         DelegationValidator(
-            chain: try! AssetId(id: assetId).chain,
+            chain: assetId.chain,
             id: validatorId,
             name: name,
             isActive: isActive,
@@ -63,7 +63,7 @@ extension DelegationValidator {
     var record: StakeValidatorRecord {
         StakeValidatorRecord(
             id: DelegationValidator.recordId(chain: chain, validatorId: id),
-            assetId: chain.assetId.identifier,
+            assetId: chain.assetId,
             validatorId: id,
             name: name,
             isActive: isActive,

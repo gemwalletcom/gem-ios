@@ -110,7 +110,7 @@ extension BalanceService {
             walletId: wallet.id,
             balances: missingBalancesAssetIds.map {
                 AddBalance(
-                    assetId: $0.identifier,
+                    assetId: $0,
                     isEnabled: AssetConfiguration.enabledByDefault.contains($0) || !wallet.isMultiCoins
                 )
             }

@@ -8,7 +8,7 @@ import BigInt
 public struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
     public var query: String
-    public var assetId: String
+    public var assetId: AssetId
     public var priority: Int
     
     public static let databaseTableName: String = "assets_search"

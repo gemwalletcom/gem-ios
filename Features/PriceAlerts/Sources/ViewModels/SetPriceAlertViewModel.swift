@@ -38,7 +38,7 @@ public final class SetPriceAlertViewModel {
     var assetRequest: AssetRequest {
         AssetRequest(
             walletId: wallet.id,
-            assetId: assetId.identifier
+            assetId: assetId
         )
     }
     

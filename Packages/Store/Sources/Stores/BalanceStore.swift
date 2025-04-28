@@ -98,7 +98,7 @@ public struct BalanceStore: Sendable {
             return try BalanceRecord
                 .filter(Columns.Balance.isEnabled == true)
                 .fetchAll(db)
-                .compactMap { try? AssetId(id: $0.assetId) }
+                .compactMap { $0.assetId }
         }
     }
     

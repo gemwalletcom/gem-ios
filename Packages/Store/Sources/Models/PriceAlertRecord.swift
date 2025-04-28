@@ -9,7 +9,7 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "price_alerts"
 
     public var id: String
-    public var assetId: String
+    public var assetId: AssetId
     public var currency: String
     public var priceDirection: PriceAlertDirection?
     public var price: Double?
@@ -37,7 +37,7 @@ extension PriceAlertRecord: CreateTable {
 extension PriceAlertRecord {
     func map() -> PriceAlert {
         PriceAlert(
-            assetId: try! AssetId(id: assetId),
+            assetId: assetId,
             currency: currency,
             price: price,
             pricePercentChange: pricePercentChange,
@@ -51,7 +51,7 @@ extension PriceAlert {
     func mapToRecord() -> PriceAlertRecord {
         PriceAlertRecord(
             id: id,
-            assetId: assetId.identifier,
+            assetId: assetId,
             currency: currency,
             priceDirection: priceDirection,
             price: price,

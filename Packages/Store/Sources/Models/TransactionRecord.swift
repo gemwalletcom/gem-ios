@@ -17,11 +17,11 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     public var to: String
     public var contract: String?
     public var chain: Chain
-    public var assetId: String
+    public var assetId: AssetId
     public var blockNumber: Int
     public var value: String
     public var fee: String
-    public var feeAssetId: String
+    public var feeAssetId: AssetId
     public var sequence: Int
     public var date: Date
     public var state: String
@@ -107,8 +107,6 @@ extension TransactionRecord: CreateTable {
 
 extension TransactionRecord {
     func mapToTransaction() -> Transaction {
-        let assetId = try! AssetId(id: assetId)
-        let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
             id: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
@@ -144,11 +142,11 @@ extension Transaction {
             to: to,
             contract: contract,
             chain: assetId.chain,
-            assetId: assetId.identifier,
+            assetId: assetId,
             blockNumber: Int(blockNumber) ?? 0,
             value: value,
             fee: fee,
-            feeAssetId: feeAssetId.identifier,
+            feeAssetId: feeAssetId,
             sequence: Int(sequence) ?? 0,
             date: createdAt,
             state: state.rawValue,

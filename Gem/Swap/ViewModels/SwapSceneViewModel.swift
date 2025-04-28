@@ -66,11 +66,11 @@ public final class SwapSceneViewModel {
 
         self.fromAssetRequest = AssetRequestOptional(
             walletId: wallet.walletId.id,
-            assetId: pairSelectorModel.fromAssetId?.identifier
+            assetId: pairSelectorModel.fromAssetId
         )
         self.toAssetRequest = AssetRequestOptional(
             walletId: wallet.walletId.id,
-            assetId: pairSelectorModel.toAssetId?.identifier
+            assetId: pairSelectorModel.toAssetId
         )
         self.provider = SwapDataProvider(
             keystore: keystore,
@@ -210,8 +210,8 @@ extension SwapSceneViewModel {
     }
 
     func onChangePair(_ _: SwapPairSelectorViewModel, _ newModel: SwapPairSelectorViewModel) {
-        fromAssetRequest.assetId = newModel.fromAssetId?.identifier
-        toAssetRequest.assetId = newModel.toAssetId?.identifier
+        fromAssetRequest.assetId = newModel.fromAssetId
+        toAssetRequest.assetId = newModel.toAssetId
     }
 
     func onChangeSwapQuoute(_ _: SwapQuote?, _ newQuote: SwapQuote?) {

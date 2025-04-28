@@ -8,7 +8,7 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "prices"
 
-    public var assetId: String
+    public var assetId: AssetId
     public var price: Double
     public var priceChangePercentage24h: Double
     
@@ -42,13 +42,13 @@ extension PriceRecord: CreateTable {
 }
 
 extension PriceRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension AssetPrice {
     var record: PriceRecord {
         return PriceRecord(
-            assetId: assetId,
+            assetId: try! AssetId(id: assetId),
             price: price,
             priceChangePercentage24h: priceChangePercentage24h
         )
@@ -65,7 +65,7 @@ extension PriceRecord {
     
     func mapToAssetPrice() -> AssetPrice {
         return AssetPrice(
-            assetId: assetId,
+            assetId: assetId.identifier,
             price: price,
             priceChangePercentage24h: priceChangePercentage24h
         )
