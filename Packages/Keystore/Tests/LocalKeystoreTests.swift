@@ -6,6 +6,8 @@ import KeystoreTestKit
 @testable import Keystore
 
 struct LocalKeystoreTests {
+    let chains: [Chain] = [.ethereum, .solana]
+
     @Test
     func testCreateWallet() {
         let keystore = LocalKeystore.mock()
@@ -215,6 +217,52 @@ struct LocalKeystoreTests {
 
                 #expect(derivedAddress == expected, "\(chain) failed to match address")
             }
+        }
+    }
+
+    @Test
+    func testSetupChainsAddsMissingChains() {
+        #expect(throws: Never.self) {
+            let keystore = LocalKeystore.mock()
+            let ethWallet = try keystore.importWallet(
+                name: "ETH only",
+                type: .phrase(words: LocalKeystore.words, chains: [.ethereum]),
+                isWalletsEmpty: true
+            )
+            let solWallet = try keystore.importWallet(
+                name: "SOL only",
+                type: .phrase(words: LocalKeystore.words, chains: [.solana]),
+                isWalletsEmpty: false
+            )
+            let updated = try keystore.setupChains(
+                chains: chains,
+                for: [ethWallet, solWallet]
+            )
+
+            #expect(updated.count == 2)
+
+            for wallet in updated {
+                #expect(wallet.accounts.map(\.chain) == chains)
+            }
+        }
+    }
+
+    @Test
+    func testSetupChainsAddNoMissingChains() {
+        #expect(throws: Never.self) {
+            let keystore = LocalKeystore.mock()
+            let wallet = try keystore.importWallet(
+                name: "Complete wallet",
+                type: .phrase(words: LocalKeystore.words, chains: chains),
+                isWalletsEmpty: true
+            )
+
+            let result = try keystore.setupChains(
+                chains: chains,
+                for: [wallet]
+            )
+
+            #expect(result.isEmpty)
         }
     }
 }
