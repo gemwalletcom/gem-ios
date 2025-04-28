@@ -6,6 +6,8 @@ import KeystoreTestKit
 @testable import Keystore
 
 struct LocalKeystoreTests {
+    let chains: [Chain] = [.ethereum, .solana]
+
     @Test
     func testCreateWallet() {
         let keystore = LocalKeystore.mock()
@@ -233,16 +235,14 @@ struct LocalKeystoreTests {
                 isWalletsEmpty: false
             )
             let updated = try keystore.setupChains(
-                chains: [.ethereum, .solana],
+                chains: chains,
                 for: [ethWallet, solWallet]
             )
 
             #expect(updated.count == 2)
 
             for wallet in updated {
-                let enabledChains = Set(wallet.accounts.map(\.chain))
-
-                #expect(enabledChains == [.ethereum, .solana])
+                #expect(wallet.accounts.map(\.chain) == chains)
             }
         }
     }
@@ -253,12 +253,12 @@ struct LocalKeystoreTests {
             let keystore = LocalKeystore.mock()
             let wallet = try keystore.importWallet(
                 name: "Complete wallet",
-                type: .phrase(words: LocalKeystore.words, chains: [.ethereum, .solana]),
+                type: .phrase(words: LocalKeystore.words, chains: chains),
                 isWalletsEmpty: true
             )
 
             let result = try keystore.setupChains(
-                chains: [.ethereum, .solana],
+                chains: chains,
                 for: [wallet]
             )
 
