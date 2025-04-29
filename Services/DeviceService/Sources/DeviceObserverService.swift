@@ -2,15 +2,11 @@
 
 import Foundation
 import Store
-import Combine
 
-public final class DeviceObserverService {
-
+public struct DeviceObserverService: Sendable {
     private let deviceService: DeviceService
     private let subscriptionsService: SubscriptionService
     private let subscriptionsObserver: SubscriptionsObserver
-
-    private var subscriptionsObserverAnyCancellable: AnyCancellable?
 
     public init(
         deviceService: DeviceService,
@@ -22,15 +18,11 @@ public final class DeviceObserverService {
         self.subscriptionsObserver = subscriptionsObserver
     }
 
-    public func startSubscriptionsObserver() {
-        self.subscriptionsObserverAnyCancellable = subscriptionsObserver.observe().sink { [weak self] update in
-            self?.onNewSubscriptionUpdate()
+    public func startSubscriptionsObserver() async throws {
+        for try await _ in subscriptionsObserver.observe().dropFirst() {
+            subscriptionsService.incrementSubscriptionsVersion()
+            onNewDeviceChange()
         }
-    }
-
-    private func onNewSubscriptionUpdate() {
-        subscriptionsService.incrementSubscriptionsVersion()
-        onNewDeviceChange()
     }
 
     private func onNewDeviceChange() {

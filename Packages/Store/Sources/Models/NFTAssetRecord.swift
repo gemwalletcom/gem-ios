@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
     static let databaseTableName = "nft_assets"
