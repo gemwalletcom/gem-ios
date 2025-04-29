@@ -69,8 +69,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         
         // debug
         #if DEBUG
-        
-        NSLog("Keystore directory: \(keystore.configration.directory)")
+    
         //NSLog("Keystore currentWallet: \(String(describing: keystore.currentWallet))")
         //NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
         

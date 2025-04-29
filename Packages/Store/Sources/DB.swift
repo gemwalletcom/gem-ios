@@ -1,4 +1,5 @@
 import Foundation
+import Primitives
 @preconcurrency import GRDB
 
 public struct DB: Sendable {
@@ -10,18 +11,18 @@ public struct DB: Sendable {
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
         do {
-            let fileManager = FileManager.default
-            let oldFileUrl = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
-            let newFileUrl = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
-            
-            // Migrate db from documents to support.
-            if fileManager.fileExists(atPath: oldFileUrl.path()) {
-                try fileManager.moveItem(at: oldFileUrl, to: newFileUrl)
-            }
-            dbQueue = try DatabaseQueue(path: newFileUrl.path(percentEncoded: false), configuration: configuration)
+            // migrate db from documents directory to applocation support directory
+            let databaseURL = try FileMigrator.migrate(
+                name: fileName,
+                fromDirectory: .documentDirectory,
+                toDirectory: .applicationSupportDirectory,
+                isDirectory: false
+            )
+            dbQueue = try DatabaseQueue(path: databaseURL.path(percentEncoded: false), configuration: configuration)
         } catch {
             fatalError("db initialization error: \(error)")
         }
+
         do {
             var migrations = Migrations()
             try migrations.run(dbQueue: dbQueue)

@@ -5,8 +5,6 @@ import Primitives
 import SwiftUI
 
 public protocol Keystore: Sendable {
-    var configration: LocalKeystoreConfiguration { get }
-    
     func createWallet() -> [String]
     @discardableResult
     func importWallet(name: String, type: KeystoreImportType, isWalletsEmpty: Bool) throws -> Primitives.Wallet
