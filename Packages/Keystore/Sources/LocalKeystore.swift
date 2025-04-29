@@ -13,7 +13,8 @@ public struct LocalKeystore: Keystore {
         do {
             // migrate keystore from documents directory to applocation support directory
             // TODO: delete in 2026
-            let keystoreURL = try FileMigrator.migrate(
+            let fileMigrator = FileMigrator()
+            let keystoreURL = try fileMigrator.migrate(
                 name: directory,
                 fromDirectory: .documentDirectory,
                 toDirectory: .applicationSupportDirectory,
