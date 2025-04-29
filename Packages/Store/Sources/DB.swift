@@ -11,8 +11,9 @@ public struct DB: Sendable {
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
         do {
-            // migrate db from documents directory to applocation support directory
-            let databaseURL = try FileMigrator.migrate(
+            // TODO: - remove the logic FileMigrator in 2026
+            let fileMigrator = FileMigrator()
+            let databaseURL = try fileMigrator.migrate(
                 name: fileName,
                 fromDirectory: .documentDirectory,
                 toDirectory: .applicationSupportDirectory,

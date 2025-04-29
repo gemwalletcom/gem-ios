@@ -1,5 +1,4 @@
 import SwiftUI
-import Keystore
 import Style
 import Store
 import Primitives
@@ -64,18 +63,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         } catch {
             NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
         }
-
-        let keystore = LocalKeystore.main
-        
-        // debug
-        #if DEBUG
-    
-        //NSLog("Keystore currentWallet: \(String(describing: keystore.currentWallet))")
-        //NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
-        
-        //NSLog("User Defaults: \(UserDefaults.standard.dictionaryRepresentation())")
-        
-        #endif
 
         let service = OnstartService(
             assetsService: AssetsService(
