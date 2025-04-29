@@ -7,7 +7,7 @@ import Primitives
 public struct GemAPIPriceServiceMock: GemAPIPriceService {
     public init() {}
     public func getPrice(
-        assetIds: [String],
+        assetIds: [AssetId],
         currency: String
     ) async throws -> [AssetPrice] {
         []

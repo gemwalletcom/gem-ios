@@ -18,7 +18,7 @@ public struct PriceService: Sendable {
     }
 
     public func updatePrices(assetIds: [AssetId], currency: String) async throws {
-        let prices = try await fetchPrices(for: assetIds.ids, currency: currency)
+        let prices = try await fetchPrices(for: assetIds, currency: currency)
         try updatePrices(prices: prices)
     }
 
@@ -42,7 +42,7 @@ public struct PriceService: Sendable {
         try priceStore.getPrices(for: assetIds.map { $0.identifier })
     }
     
-    public func fetchPrices(for assetIds: [String], currency: String) async throws -> [AssetPrice] {
+    public func fetchPrices(for assetIds: [AssetId], currency: String) async throws -> [AssetPrice] {
         guard !assetIds.isEmpty else { return [] }
         return try await apiService.getPrice(assetIds: assetIds, currency: currency)
     }
