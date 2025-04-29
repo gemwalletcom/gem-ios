@@ -31,28 +31,28 @@ public struct TransactionsRequest: ValueObservationQueryable {
         let states = states(type: type)
         let types = types(type: type)
         var request = TransactionRecord
-            .filter(Columns.Transaction.walletId == walletId)
-            .filter(states.contains(Columns.Transaction.state))
-            .filter(types.contains(Columns.Transaction.type))
+            .filter(TransactionRecord.Columns.walletId == walletId)
+            .filter(states.contains(TransactionRecord.Columns.state))
+            .filter(types.contains(TransactionRecord.Columns.type))
             .including(required: TransactionRecord.asset)
             .including(required: TransactionRecord.feeAsset)
             .including(optional: TransactionRecord.price)
             .including(optional: TransactionRecord.feePrice)
             .including(all: TransactionRecord.assets)
             .including(all: TransactionRecord.prices)
-            .order(Columns.Transaction.date.desc)
+            .order(TransactionRecord.Columns.date.desc)
             .distinct()
             .limit(limit)
 
         switch type {
         case .asset(let assetId):
-            request = request.joining(required: TransactionRecord.assetsAssociation.filter(Columns.TransactionAssetAssociation.assetId == assetId.identifier))
+            request = request.joining(required: TransactionRecord.assetsAssociation.filter(TransactionAssetAssociationRecord.Columns.assetId == assetId.identifier))
         case .assetsTransactionType(let assetIds, _, _):
             if !assetIds.isEmpty {
-                request = request.joining(required: TransactionRecord.assetsAssociation.filter(assetIds.map { $0.identifier }.contains(Columns.TransactionAssetAssociation.assetId)))
+                request = request.joining(required: TransactionRecord.assetsAssociation.filter(assetIds.map { $0.identifier }.contains(TransactionAssetAssociationRecord.Columns.assetId)))
             }
         case .transaction(let id):
-            request = request.filter(Columns.Transaction.transactionId == id)
+            request = request.filter(TransactionRecord.Columns.transactionId == id)
         case .all, .pending:
             break
         }
@@ -74,10 +74,10 @@ extension TransactionsRequest {
         switch filter {
         case .chains(let chains):
             guard !chains.isEmpty else { return request }
-            return request.filter(chains.contains(Columns.Transaction.chain))
+            return request.filter(chains.contains(TransactionRecord.Columns.chain))
         case .types(let types):
             guard !types.isEmpty else { return request }
-            return request.filter(types.contains(Columns.Transaction.type))
+            return request.filter(types.contains(TransactionRecord.Columns.type))
         }
     }
 

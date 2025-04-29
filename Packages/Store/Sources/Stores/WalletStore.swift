@@ -17,7 +17,7 @@ public struct WalletStore: Sendable {
     public func nextWalletIndex() throws -> Int {
         return try db.read { db in
             let request = WalletRecord
-                .select(max(Columns.Wallet.index))
+                .select(max(WalletRecord.Columns.index))
             
             if let index = try Int.fetchOne(db, request) {
                 return index + 1
@@ -42,7 +42,7 @@ public struct WalletStore: Sendable {
     public func getWallet(id walletId: String) throws -> Wallet? {
         try db.read { db in
             try WalletRecord
-                .filter(Columns.Wallet.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId)
                 .including(all: WalletRecord.accounts)
                 .asRequest(of: WalletRecordInfo.self)
                 .fetchOne(db)?
@@ -63,11 +63,11 @@ public struct WalletStore: Sendable {
     public func renameWallet(_ walletId: String, name: String) throws {
         let _ = try db.write { db in
             let assignments = [
-                Columns.Wallet.name.set(to: name),
-                Columns.Wallet.updatedAt.set(to: Date.now)
+                WalletRecord.Columns.name.set(to: name),
+                WalletRecord.Columns.updatedAt.set(to: Date.now)
             ]
             return try WalletRecord
-                .filter(Columns.Wallet.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId)
                 .updateAll(db, assignments)
         }
     }
@@ -78,7 +78,7 @@ public struct WalletStore: Sendable {
         try db.write { db in
             try WalletRecord.deleteOne(db, key: id)
             try AccountRecord
-                .filter(Columns.Account.walletId == id)
+                .filter(AccountRecord.Columns.walletId == id)
                 .deleteAll(db)
             return true
         }
@@ -87,8 +87,8 @@ public struct WalletStore: Sendable {
     public func pinWallet(_ walletId: String, value: Bool) throws {
         let _ = try db.write { db in
             return try WalletRecord
-                .filter(Columns.Wallet.id == walletId)
-                .updateAll(db, Columns.Wallet.isPinned.set(to: value))
+                .filter(WalletRecord.Columns.id == walletId)
+                .updateAll(db, WalletRecord.Columns.isPinned.set(to: value))
         }
     }
 
@@ -100,12 +100,12 @@ public struct WalletStore: Sendable {
         }
         return try db.write { db in
             try WalletRecord
-                .filter(Columns.Wallet.id == fromWallet.id)
-                .updateAll(db, Columns.Wallet.order.set(to: toWallet.order))
+                .filter(WalletRecord.Columns.id == fromWallet.id)
+                .updateAll(db, WalletRecord.Columns.order.set(to: toWallet.order))
 
             try WalletRecord
-                .filter(Columns.Wallet.id == toWallet.id)
-                .updateAll(db, Columns.Wallet.order.set(to: fromWallet.order))
+                .filter(WalletRecord.Columns.id == toWallet.id)
+                .updateAll(db, WalletRecord.Columns.order.set(to: fromWallet.order))
         }
     }
 
@@ -116,11 +116,11 @@ public struct WalletStore: Sendable {
     public func setWalletAvatar(_ walletId: String, path: String?) throws {
         let _ = try db.write { db in
             let assignments = [
-                Columns.Wallet.imageUrl.set(to: path),
-                Columns.Wallet.updatedAt.set(to: Date.now)
+                WalletRecord.Columns.imageUrl.set(to: path),
+                WalletRecord.Columns.updatedAt.set(to: Date.now)
             ]
             return try WalletRecord
-                .filter(Columns.Wallet.id == walletId)
+                .filter(WalletRecord.Columns.id == walletId)
                 .updateAll(db, assignments)
         }
     }

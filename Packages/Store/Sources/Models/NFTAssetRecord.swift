@@ -5,6 +5,24 @@ import Primitives
 import GRDB
 
 struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
+    static let databaseTableName = "nft_assets"
+
+    struct Columns {
+        static let id = Column("id")
+        static let collectionId = Column("collectionId")
+        static let contractAddress = Column("contractAddress")
+        static let tokenId = Column("tokenId")
+        static let tokenType = Column("tokenType")
+        static let name = Column("name")
+        static let description = Column("description")
+        static let chain = Column("chain")
+        static let attributes = Column("attributes")
+        static let resourceUrl = Column("resourceUrl")
+        static let resourceMimeType = Column("resourceMimeType")
+        static let previewImageUrl = Column("previewImageUrl")
+        static let previewImageMimeType = Column("previewImageMimeType")
+    }
+
     var id: String
     var collectionId: String
     var contractAddress: String?
@@ -27,32 +45,31 @@ struct NFTAssetRecord: Codable, FetchableRecord, PersistableRecord {
 
 extension NFTAssetRecord: CreateTable {
     
-    static let databaseTableName = "nft_assets"
 
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFTAsset.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
-            $0.column(Columns.NFTAsset.contractAddress.name, .text)
-            $0.column(Columns.NFTAsset.tokenId.name, .text).notNull()
-            $0.column(Columns.NFTAsset.tokenType.name, .text).notNull()
-            $0.column(Columns.NFTAsset.name.name, .text).notNull()
-            $0.column(Columns.NFTAsset.description.name, .text)
-            $0.column(Columns.NFTAsset.chain.name, .text)
+            $0.column(Columns.contractAddress.name, .text)
+            $0.column(Columns.tokenId.name, .text).notNull()
+            $0.column(Columns.tokenType.name, .text).notNull()
+            $0.column(Columns.name.name, .text).notNull()
+            $0.column(Columns.description.name, .text)
+            $0.column(Columns.chain.name, .text)
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.NFTAsset.collectionId.name, .text)
+            $0.column(Columns.collectionId.name, .text)
                 .notNull()
                 .indexed()
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.NFTAsset.attributes.name, .jsonText)
-            $0.column(Columns.NFTAsset.resourceUrl.name, .text)
+            $0.column(Columns.attributes.name, .jsonText)
+            $0.column(Columns.resourceUrl.name, .text)
                 .notNull()
-            $0.column(Columns.NFTAsset.resourceMimeType.name, .text)
+            $0.column(Columns.resourceMimeType.name, .text)
                 .notNull()
-            $0.column(Columns.NFTAsset.previewImageUrl.name, .text)
+            $0.column(Columns.previewImageUrl.name, .text)
                 .notNull()
-            $0.column(Columns.NFTAsset.previewImageMimeType.name, .text)
+            $0.column(Columns.previewImageMimeType.name, .text)
                 .notNull()
         }
     }

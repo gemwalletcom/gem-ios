@@ -5,6 +5,15 @@ import Primitives
 import GRDB
 
 struct NFTAssetAssociationRecord: Codable, FetchableRecord, PersistableRecord, Identifiable {
+    static let databaseTableName = NFTAssetRecord.databaseTableName + "_associations"
+    
+    struct Columns {
+        static let id = Column("id")
+        static let walletId = Column("walletId")
+        static let collectionId = Column("collectionId")
+        static let assetId = Column("assetId")
+    }
+
     var id: String
     var walletId: String
     var collectionId: String
@@ -35,22 +44,19 @@ extension NFTAssetAssociationRecord {
 }
 
 extension NFTAssetAssociationRecord: CreateTable {
-    
-    static let databaseTableName = NFTAssetRecord.databaseTableName + "_associations"
-    
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFTAssetsAssociation.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
-            $0.column(Columns.NFTAssetsAssociation.walletId.name, .text)
+            $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.NFTAssetsAssociation.collectionId.name, .text)
+            $0.column(Columns.collectionId.name, .text)
                 .notNull()
                 .indexed()
                 .references(NFTCollectionRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.NFTAssetsAssociation.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .notNull()
                 .indexed()
                 .references(NFTAssetRecord.databaseTableName, onDelete: .cascade)

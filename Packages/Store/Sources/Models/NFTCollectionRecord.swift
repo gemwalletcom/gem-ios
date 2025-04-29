@@ -5,6 +5,21 @@ import Primitives
 import GRDB
 
 struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
+    static let databaseTableName = "nft_collections"
+
+    struct Columns {
+        static let walletId = Column("walletId")
+        static let id = Column("id")
+        static let name = Column("name")
+        static let description = Column("description")
+        static let chain = Column("chain")
+        static let contractAddress = Column("contractAddress")
+        static let isVerified = Column("isVerified")
+        static let links = Column("links")
+        static let previewImageUrl = Column("previewImageUrl")
+        static let previewImageMimeType = Column("previewImageMimeType")
+    }
+
     var id: String
     var name: String
     var description: String?
@@ -21,24 +36,23 @@ struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
 
 extension NFTCollectionRecord: CreateTable {
 
-    static let databaseTableName = "nft_collections"
 
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.NFTCollection.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
-            $0.column(Columns.NFTCollection.name.name, .text).notNull()
-            $0.column(Columns.NFTCollection.description.name, .text)
-            $0.column(Columns.NFTCollection.chain.name, .text).notNull()
+            $0.column(Columns.name.name, .text).notNull()
+            $0.column(Columns.description.name, .text)
+            $0.column(Columns.chain.name, .text).notNull()
                 .notNull()
                 .indexed()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.NFTCollection.contractAddress.name, .text).notNull()
-            $0.column(Columns.NFTCollection.isVerified.name, .boolean).notNull()
-            $0.column(Columns.NFTCollection.links.name, .jsonText)
-            $0.column(Columns.NFTCollection.previewImageUrl.name, .text)
+            $0.column(Columns.contractAddress.name, .text).notNull()
+            $0.column(Columns.isVerified.name, .boolean).notNull()
+            $0.column(Columns.links.name, .jsonText)
+            $0.column(Columns.previewImageUrl.name, .text)
                 .notNull()
-            $0.column(Columns.NFTCollection.previewImageMimeType.name, .text)
+            $0.column(Columns.previewImageMimeType.name, .text)
                 .notNull()
         }
     }

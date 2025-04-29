@@ -10,8 +10,13 @@ struct NodeSelectedRecordInfo: FetchableRecord, Codable {
 }
 
 public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord  {
-    
     public static let databaseTableName: String = "nodes_selected_v1"
+    
+    enum Columns {
+        static let nodeId = Column("nodeId")
+        static let chain = Column("chain")
+        static let auto = Column("auto")
+    }
 
     public var nodeId: Int
     public var chain: Chain
@@ -23,13 +28,13 @@ public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, T
 extension NodeSelectedRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column("nodeId", .text)
+            $0.column(Columns.nodeId.name, .text)
                 .notNull()
                 .indexed()
                 .references(NodeRecord.databaseTableName, onDelete: .cascade)
-            $0.column("chain", .text)
+            $0.column(Columns.chain.name, .text)
                 .primaryKey()
-            $0.column("auto", .boolean)
+            $0.column(Columns.auto.name, .boolean)
         }
     }
 }
@@ -39,25 +44,3 @@ extension NodeSelectedRecordInfo {
         return node.mapToChainNode()
     }
 }
-
-
-//extension Node {
-//    func mapToSelectedRecord(chain: String) -> NodeSelectedRecord {
-//        return NodeSelectedRecord(
-//            chain: chain,
-//            url: url,
-//            auto: true
-//        )
-//    }
-//}
-
-//
-//extension NodeSelectedRecord {
-//    func mapToNode() -> Node {
-//        return Node(
-//            url: url,
-//            status: NodeStatus(rawValue: status) ?? .inactive,
-//            priority: Int32(priority)
-//        )
-//    }
-//}
