@@ -32,19 +32,19 @@ public struct BannersRequest: ValueObservationQueryable {
             .including(optional: BannerRecord.asset)
             .including(optional: BannerRecord.chain)
             .including(optional: BannerRecord.wallet)
-            .filter(events.map { $0.rawValue }.contains(Columns.Banner.event))
-            .filter(Columns.Banner.state != BannerState.cancelled.rawValue)
+            .filter(events.map { $0.rawValue }.contains(BannerRecord.Columns.event))
+            .filter(BannerRecord.Columns.state != BannerState.cancelled.rawValue)
             .asRequest(of: BannerInfo.self)
         
         if let walletId {
-            query = query.filter(Columns.Banner.walletId == walletId || Columns.Banner.walletId == nil)
+            query = query.filter(BannerRecord.Columns.walletId == walletId || BannerRecord.Columns.walletId == nil)
         }
         if let assetId, let chain {
-            query = query.filter(Columns.Banner.assetId == assetId || Columns.Banner.chain == chain)
+            query = query.filter(BannerRecord.Columns.assetId == assetId || BannerRecord.Columns.chain == chain)
         } else if let assetId {
-            query = query.filter(Columns.Banner.assetId == assetId)
+            query = query.filter(BannerRecord.Columns.assetId == assetId)
         } else if let chain {
-            query = query.filter(Columns.Banner.chain == chain)
+            query = query.filter(BannerRecord.Columns.chain == chain)
         }
         
         return try query

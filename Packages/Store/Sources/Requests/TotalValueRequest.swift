@@ -20,8 +20,8 @@ public struct TotalValueRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.price)
             .including(optional: AssetRecord.balance)
             .joining(required: AssetRecord.balance
-                .filter(Columns.Balance.walletId == walletId)
-                .filter(Columns.Balance.isEnabled == true)
+                .filter(BalanceRecord.Columns.walletId == walletId)
+                .filter(BalanceRecord.Columns.isEnabled == true)
             )
             .asRequest(of: AssetRecordInfoMinimal.self)
             .fetchAll(db)

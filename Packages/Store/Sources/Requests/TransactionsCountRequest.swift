@@ -22,8 +22,8 @@ public struct TransactionsCountRequest: ValueObservationQueryable {
 
     public func fetch(_ db: Database) throws -> Int {
         try TransactionRecord
-            .filter(Columns.Transaction.walletId == walletId)
-            .filter(Columns.Transaction.state == state.rawValue)
+            .filter(TransactionRecord.Columns.walletId == walletId)
+            .filter(TransactionRecord.Columns.state == state.rawValue)
             .fetchCount(db)
     }
 }

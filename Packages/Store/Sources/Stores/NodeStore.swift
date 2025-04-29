@@ -42,8 +42,8 @@ public struct NodeStore: Sendable {
     public func nodeRecord(chain: Chain, url: String) throws -> NodeRecord? {
         try db.read { db in
             try NodeRecord
-                .filter(Columns.Node.chain == chain.rawValue)
-                .filter(Columns.Node.url == url)
+                .filter(NodeRecord.Columns.chain == chain.rawValue)
+                .filter(NodeRecord.Columns.url == url)
                 .fetchOne(db)
         }
     }
@@ -51,7 +51,7 @@ public struct NodeStore: Sendable {
     public func nodeRecords(chain: Chain) throws -> [NodeRecord] {
         try db.read { db in
             try NodeRecord
-                .filter(Columns.Node.chain == chain.rawValue)
+                .filter(NodeRecord.Columns.chain == chain.rawValue)
                 .fetchAll(db)
         }
     }
@@ -69,7 +69,7 @@ public struct NodeStore: Sendable {
     public func deleteNodeSelected(chain: String) throws {
         return try db.write { (db: Database) in
             try NodeSelectedRecord
-                .filter(Columns.Node.chain == chain)
+                .filter(NodeRecord.Columns.chain == chain)
                 .deleteAll(db)
         }
     }
@@ -77,7 +77,7 @@ public struct NodeStore: Sendable {
     public func deleteNode(chain: String, url: String) throws {
         return try db.write { (db: Database) in
             try NodeRecord
-                .filter(Columns.Node.chain == chain && Columns.Node.url == url)
+                .filter(NodeRecord.Columns.chain == chain && NodeRecord.Columns.url == url)
                 .deleteAll(db)
         }
     }
@@ -96,7 +96,7 @@ public struct NodeStore: Sendable {
         try db.read { db in
             try NodeSelectedRecord
                 .including(required: NodeSelectedRecord.node)
-                .filter(Columns.Node.chain == chain)
+                .filter(NodeRecord.Columns.chain == chain)
                 .asRequest(of: NodeSelectedRecordInfo.self)
                 .fetchOne(db)
                 .map { $0.mapToChainNode() }

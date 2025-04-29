@@ -9,6 +9,22 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     
     public static let databaseTableName: String = "assets"
     
+    enum Columns {
+        static let id = Column("id")
+        static let rank = Column("rank")
+        static let type = Column("type")
+        static let chain = Column("chain")
+        static let name = Column("name")
+        static let symbol = Column("symbol")
+        static let decimals = Column("decimals")
+        static let tokenId = Column("tokenId")
+        static let isBuyable = Column("isBuyable")
+        static let isSellable = Column("isSellable")
+        static let isSwappable = Column("isSwappable")
+        static let isStakeable = Column("isStakeable")
+        static let stakingApr = Column("stakingApr")
+    }
+    
     public var id: String
     public var chain: Chain
     public var tokenId: String
@@ -40,35 +56,35 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
 extension AssetRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.Asset.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
                 .notNull()
-            $0.column(Columns.Asset.chain.name, .text)
+            $0.column(Columns.chain.name, .text)
                 .notNull()
                 .indexed()
-            $0.column(Columns.Asset.tokenId.name, .text)
+            $0.column(Columns.tokenId.name, .text)
                 .indexed()
-            $0.column(Columns.Asset.name.name, .text)
-                .notNull()
-                .indexed()
-            $0.column(Columns.Asset.symbol.name, .text)
+            $0.column(Columns.name.name, .text)
                 .notNull()
                 .indexed()
-            $0.column(Columns.Asset.decimals.name, .numeric)
+            $0.column(Columns.symbol.name, .text)
                 .notNull()
-            $0.column(Columns.Asset.type.name, .text)
+                .indexed()
+            $0.column(Columns.decimals.name, .numeric)
                 .notNull()
-            $0.column(Columns.Asset.isBuyable.name, .boolean)
+            $0.column(Columns.type.name, .text)
+                .notNull()
+            $0.column(Columns.isBuyable.name, .boolean)
                 .defaults(to: false)
-            $0.column(Columns.Asset.isSellable.name, .boolean)
+            $0.column(Columns.isSellable.name, .boolean)
                 .defaults(to: false)
-            $0.column(Columns.Asset.isSwappable.name, .boolean)
+            $0.column(Columns.isSwappable.name, .boolean)
                 .defaults(to: false)
-            $0.column(Columns.Asset.isStakeable.name, .boolean)
+            $0.column(Columns.isStakeable.name, .boolean)
                 .defaults(to: false)
-            $0.column(Columns.Asset.rank.name, .numeric)
+            $0.column(Columns.rank.name, .numeric)
                 .defaults(to: 0)
-            $0.column(Columns.Asset.stakingApr.name, .double)
+            $0.column(Columns.stakingApr.name, .double)
         }
     }
 }

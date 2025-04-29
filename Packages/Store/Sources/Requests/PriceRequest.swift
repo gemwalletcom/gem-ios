@@ -20,7 +20,7 @@ public struct PriceRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.price)
             .including(all: AssetRecord.priceAlerts)
             .including(all: AssetRecord.links)
-            .filter(Columns.Asset.id == assetId.identifier)
+            .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: PriceRecordInfo.self)
             .fetchOne(db)
             .map { $0.priceData }!
