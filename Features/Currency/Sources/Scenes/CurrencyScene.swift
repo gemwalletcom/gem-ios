@@ -35,15 +35,3 @@ public struct CurrencyScene: View {
         .navigationTitle(model.title)
     }
 }
-
-// MARK: - Previews
-
-#Preview {
-    struct CurrencyStorage: CurrencyStorable {
-        public var currency: String = "USD"
-    }
-    return NavigationStack {
-        CurrencyScene(model: .init(currencyStorage: CurrencyStorage()))
-            .navigationBarTitleDisplayMode(.inline)
-    }
-}

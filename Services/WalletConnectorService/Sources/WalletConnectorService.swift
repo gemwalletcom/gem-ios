@@ -160,6 +160,7 @@ extension WalletConnectorService {
         case .solanaSignMessage: try await solanaSignMessage(request: request)
         case .solanaSignTransaction: try await solanaSignTransaction(request: request)
         case .solanaSignAndSendTransaction: try await solanaSendTransaction(request: request)
+        case .solanaSignAllTransactions: throw AnyError.notImplemented
         }
     }
 

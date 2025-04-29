@@ -4,6 +4,7 @@ import Foundation
 
 public enum AnyError: Equatable {
     case message(String)
+    case notImplemented
     
     public init(_ message: String) {
         self = .message(message)
@@ -15,6 +16,8 @@ extension AnyError: LocalizedError {
         switch self {
         case .message(let message):
             return message
+        case .notImplemented:
+            return "Not implemented"
         }
     }
 }

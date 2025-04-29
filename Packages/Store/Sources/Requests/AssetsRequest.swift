@@ -7,7 +7,7 @@ import Primitives
 public struct AssetsRequest: ValueObservationQueryable {
     public static var defaultValue: [AssetData] { [] }
     
-    static let defaultQueryLimit = 50
+    static let defaultQueryLimit = 100
     
     public var walletId: String
     public var searchBy: String

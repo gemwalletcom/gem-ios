@@ -34,15 +34,17 @@ struct ImportAssetsService {
         
         if localAssetsVersion.count != assetIds.count {
             let assets = chains.map {
+                let chain = $0.asset.chain
                 let score = AssetScore.defaultScore(chain: $0.asset.chain)
-                let isStakable = GemstoneConfig.shared.getChainConfig(chain: $0.asset.chain.rawValue).isStakeSupported
-                let isSwapable = GemstoneConfig.shared.getChainConfig(chain: $0.asset.chain.rawValue).isSwapSupported
-                
+                let isStakable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isStakeSupported
+                let isSwapable = GemstoneConfig.shared.getChainConfig(chain: chain.rawValue).isSwapSupported
+                let isBuyable = score.rank >= 40
+            
                 return AssetBasic(
                     asset: $0.asset,
                     properties: AssetProperties(
                         isEnabled: true,
-                        isBuyable: score.rank >= 40,
+                        isBuyable: isBuyable,
                         isSellable: false,
                         isSwapable: isSwapable,
                         isStakeable: isStakable,

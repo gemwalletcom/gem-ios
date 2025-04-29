@@ -19,7 +19,7 @@ struct PriceUpdateService: PriceUpdater {
 
     public func updatePrices(assetIds: [AssetId]) async throws {
         let prices = try await priceService.fetchPrices(
-            for: assetIds.ids,
+            for: assetIds,
             currency: preferences.currency
         )
         try priceService.updatePrices(prices: prices)
