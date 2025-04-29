@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import GRDB
 
-public struct AccountRecord: Codable, FetchableRecord, PersistableRecord, Sendable  {
+public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "wallets_accounts"
 
