@@ -49,7 +49,7 @@ extension AssetsRequest {
     
     private func hasPriorityAssets(_ db: Database, query: String) throws -> Bool {
         try AssetSearchRecord
-            .filter(Columns.AssetSearch.query == query)
+            .filter(AssetSearchRecord.Columns.query == query)
             .fetchCount(db) > 0
     }
     
@@ -78,60 +78,60 @@ extension AssetsRequest {
         case .search(let query, let hasPriorityAssets):
             if hasPriorityAssets {
                 return request.joining(required: AssetRecord.priorityAssets
-                    .filter(Columns.AssetSearch.query == query)
+                    .filter(AssetSearchRecord.Columns.query == query)
                 )
                 .order(
-                    TableAlias(name: AssetSearchRecord.databaseTableName)[Columns.AssetSearch.priority].ascNullsLast,
-                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.rank].desc
+                    TableAlias(name: AssetSearchRecord.databaseTableName)[AssetSearchRecord.Columns.priority].ascNullsLast,
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.rank].desc
                 )
             }
             return request
                 .filter(
-                    Columns.Asset.symbol.like("%%\(query)%%") ||
-                    Columns.Asset.name.like("%%\(query)%%") ||
-                    Columns.Asset.tokenId.like("%%\(query)%%")
+                    AssetRecord.Columns.symbol.like("%%\(query)%%") ||
+                    AssetRecord.Columns.name.like("%%\(query)%%") ||
+                    AssetRecord.Columns.tokenId.like("%%\(query)%%")
                 )
                 .order(
-                    Columns.Asset.rank.desc
+                    AssetRecord.Columns.rank.desc
                 )
         case .hasBalance:
             return request
                 .filter(
-                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] > 0
+                    TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] > 0
                 )
         case .buyable:
             return request
                 .filter(
-                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isBuyable] == true
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isBuyable] == true
                 )
         case .swappable:
             return request
                 .filter(
-                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isSwappable] == true
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isSwappable] == true
                 )
         case .stakeable:
             return request
                 .filter(
-                    TableAlias(name: AssetRecord.databaseTableName)[Columns.Asset.isStakeable] == true
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.isStakeable] == true
                 )
         case .enabled:
             return request
                 .filter(
-                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.isEnabled] == true
+                    TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled] == true
                 )
         case .hidden:
             return request
                 .filter(
-                    TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.isHidden] == true
+                    TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isHidden] == true
                 )
         case .chains(let chains):
             if chains.isEmpty {
                 return request
             }
-            return request.filter(chains.contains(Columns.Asset.chain))
+            return request.filter(chains.contains(AssetRecord.Columns.chain))
         case .chainsOrAssets(let chains, let assetIds):
             return request
-                .filter(chains.contains(Columns.Asset.chain) || assetIds.contains(Columns.Asset.id))
+                .filter(chains.contains(AssetRecord.Columns.chain) || assetIds.contains(AssetRecord.Columns.id))
         case .priceAlerts:
             return request
         }
@@ -141,21 +141,21 @@ extension AssetsRequest {
         walletId: String,
         filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
-        let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[Columns.Balance.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[Columns.Price.price] ?? 0))
+        let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0))
         let request = AssetRecord
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.price)
             .joining(optional: AssetRecord.balance
-                .filter(Columns.Balance.walletId == walletId)
+                .filter(BalanceRecord.Columns.walletId == walletId)
             )
             .filter(
-                TableAlias(name: AccountRecord.databaseTableName)[Columns.Balance.walletId] == walletId
+                TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId
             )
             .order(
                 totalValue.desc,
                 (totalValue == 0).desc,
-                Columns.Asset.rank.desc
+                AssetRecord.Columns.rank.desc
             )
             .limit(Self.defaultQueryLimit)
         
@@ -174,7 +174,7 @@ extension AssetsRequest {
     ) throws -> [PriceAlertAssetRecordInfo] {
         var request = AssetRecord
             .including(all: AssetRecord.priceAlerts)
-            .order(Columns.Asset.rank.desc)
+            .order(AssetRecord.Columns.rank.desc)
             .limit(Self.defaultQueryLimit)
         
         request = Self.applyFilters(request: request, filters)

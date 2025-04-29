@@ -26,9 +26,9 @@ public struct AssetRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.account)
             .including(all: AssetRecord.priceAlerts)
-            .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))
-            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletId))
-            .filter(Columns.Asset.id == assetId.identifier)
+            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
+            .joining(optional: AssetRecord.account.filter(AccountRecord.Columns.walletId == walletId))
+            .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: AssetRecordInfo.self)
             .fetchOne(db)
             .map { $0.assetData } ?? .empty

@@ -5,8 +5,18 @@ import Primitives
 @preconcurrency import GRDB
 
 public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
-    
     public static let databaseTableName: String = "wallets"
+    
+    struct Columns {
+        static let id = Column("id")
+        static let name = Column("name")
+        static let index = Column("index")
+        static let type = Column("type")
+        static let order = Column("order")
+        static let isPinned = Column("isPinned")
+        static let imageUrl = Column("imageUrl")
+        static let updatedAt = Column("updatedAt")
+    }
 
     public var id: String
     public var name: String
@@ -24,23 +34,23 @@ public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRe
 extension WalletRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName) {
-            $0.column(Columns.Wallet.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
                 .notNull()
-            $0.column(Columns.Wallet.name.name, .text)
+            $0.column(Columns.name.name, .text)
                 .notNull()
-            $0.column(Columns.Wallet.type.name, .text)
+            $0.column(Columns.type.name, .text)
                 .notNull()
-            $0.column(Columns.Wallet.index.name, .numeric)
-                .notNull()
-                .defaults(to: 0)
-            $0.column(Columns.Wallet.order.name, .numeric)
+            $0.column(Columns.index.name, .numeric)
                 .notNull()
                 .defaults(to: 0)
-            $0.column(Columns.Wallet.isPinned.name, .boolean)
+            $0.column(Columns.order.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
+            $0.column(Columns.isPinned.name, .boolean)
                 .defaults(to: false)
-            $0.column(Columns.Wallet.imageUrl.name, .text)
-            $0.column(Columns.Wallet.updatedAt.name, .date)
+            $0.column(Columns.imageUrl.name, .text)
+            $0.column(Columns.updatedAt.name, .date)
         }
     }
 }
