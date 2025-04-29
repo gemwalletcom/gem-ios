@@ -11,9 +11,9 @@ public struct LocalKeystore: Keystore {
         keystorePassword: KeystorePassword = LocalKeystorePassword()
     ) {
         do {
-            // TODO: - remove the logic FileMigrator in 2026
-            let fileMigrator = FileMigrator()
-            let keystoreURL = try fileMigrator.migrate(
+            // migrate keystore from documents directory to applocation support directory
+            // TODO: delete in 2026
+            let keystoreURL = try FileMigrator.migrate(
                 name: directory,
                 fromDirectory: .documentDirectory,
                 toDirectory: .applicationSupportDirectory,
