@@ -9,9 +9,9 @@ struct WalletServiceTests {
     @Test
     func testCreateWallet() async throws {
         let walletService = WalletService.mock()
-        let worlds = walletService.createWallet()
+        let words = walletService.createWallet()
 
-        #expect(worlds.count == 12)
+        #expect(words.count == 12)
     }
 
     @Test
@@ -21,8 +21,7 @@ struct WalletServiceTests {
             name: "Main",
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
-
-        #expect(service.wallets.contains(where: { $0.walletId == wallet.walletId }))
+        #expect(service.wallets.map(\.walletId) == [wallet.walletId])
         #expect(service.currentWaletId == wallet.walletId)
     }
 
@@ -41,7 +40,7 @@ struct WalletServiceTests {
 
         try service.delete(first)
 
-        #expect(!service.wallets.contains(where: { $0.walletId == first.walletId }))
+        #expect(service.wallets.map(\.walletId) == [second.walletId])
         #expect(service.currentWaletId == second.walletId)
 
         try service.delete(second)
@@ -138,18 +137,20 @@ struct WalletServiceTests {
             type: .privateKey(text: hex, chain: .solana)
         )
 
-        let exported = try service.getPrivateKey(
+        let privateKey = try service.getPrivateKey(
             wallet: wallet,
             chain: .solana,
             encoding: .hex
         )
 
-        #expect(exported == hex)
+        #expect(privateKey == hex)
     }
 
     @Test
     func testNextWalletIndex() throws {
         let service = WalletService.mock()
+
+        #expect(try service.nextWalletIndex() == 1)
 
         _ = try service.importWallet(
             name: "First",
@@ -178,10 +179,10 @@ struct WalletServiceTests {
             type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
-        service.setCurrent(for: 0)
+        service.setCurrent(for: 1)
 
         #expect(service.currentWaletId != nil)
-        #expect(service.wallets.contains { $0.walletId == service.currentWaletId })
+        #expect(service.wallets[0].walletId == service.currentWaletId)
 
         service.setCurrent(for: second.walletId)
         #expect(service.currentWaletId == second.walletId)
