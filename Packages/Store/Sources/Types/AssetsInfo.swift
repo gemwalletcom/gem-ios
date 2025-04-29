@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct AssetsInfo {
+public struct AssetsInfo: Sendable {
     public let hidden: Int
     
     public init(hidden: Int) {

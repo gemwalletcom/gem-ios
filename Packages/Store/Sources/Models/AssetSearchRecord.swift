@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import GRDB
+import GRDB
 import Primitives
 import BigInt
 

@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     

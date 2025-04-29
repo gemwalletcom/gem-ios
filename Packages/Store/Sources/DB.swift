@@ -1,5 +1,5 @@
 import Foundation
-@preconcurrency import GRDB
+import GRDB
 
 public struct DB: Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()

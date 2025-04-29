@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 struct NFTAssetAssociationRecord: Codable, FetchableRecord, PersistableRecord, Identifiable {
     var id: String

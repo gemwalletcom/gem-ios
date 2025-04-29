@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 struct NFTCollectionRecord: Codable, FetchableRecord, PersistableRecord {
     var id: String
