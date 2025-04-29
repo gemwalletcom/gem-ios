@@ -4,6 +4,21 @@
 
 import Foundation
 
+public enum WebSocketPriceActionType: String, Codable, Sendable {
+	case subscribe
+	case add
+}
+
+public struct WebSocketPriceAction: Codable, Sendable {
+	public let action: WebSocketPriceActionType
+	public let assets: [AssetId]?
+
+	public init(action: WebSocketPriceActionType, assets: [AssetId]?) {
+		self.action = action
+		self.assets = assets
+	}
+}
+
 public struct WebSocketPricePayload: Codable, Sendable {
 	public let prices: [AssetPrice]
 	public let rates: [FiatRate]
