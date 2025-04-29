@@ -5,8 +5,23 @@ import Primitives
 import GRDB
 
 public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecord  {
-    
     public static let databaseTableName: String = "wallets_connections"
+    
+    enum Columns {
+        static let id = Column("id")
+        static let sessionId = Column("sessionId")
+        static let walletId = Column("walletId")
+        static let state = Column("state")
+        static let chains = Column("chains")
+        static let createdAt = Column("createdAt")
+        static let expireAt = Column("expireAt")
+        static let appName = Column("appName")
+        static let appDescription = Column("appDescription")
+        static let appLink = Column("appLink")
+        static let appIcon = Column("appIcon")
+        static let redirectNative = Column("redirectNative")
+        static let redirectUniversal = Column("redirectUniversal")
+    }
 
     public var id: String
     public var sessionId: String
@@ -28,33 +43,33 @@ public struct WalletConnectionRecord: Codable, FetchableRecord, PersistableRecor
 extension WalletConnectionRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column("id", .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
                 .notNull()
-            $0.column("sessionId", .text)
+            $0.column(Columns.sessionId.name, .text)
                 .notNull()
-            $0.column("walletId", .text)
+            $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column("state", .text)
+            $0.column(Columns.state.name, .text)
                 .notNull()
-            $0.column("chains", .jsonText)
-            $0.column("createdAt", .date)
+            $0.column(Columns.chains.name, .jsonText)
+            $0.column(Columns.createdAt.name, .date)
                 .notNull()
-            $0.column("expireAt", .date)
+            $0.column(Columns.expireAt.name, .date)
                 .notNull()
             
-            $0.column("appName", .text)
+            $0.column(Columns.appName.name, .text)
                 .notNull()
-            $0.column("appDescription", .text)
+            $0.column(Columns.appDescription.name, .text)
                 .notNull()
-            $0.column("appLink", .text)
+            $0.column(Columns.appLink.name, .text)
                 .notNull()
-            $0.column("appIcon", .text)
+            $0.column(Columns.appIcon.name, .text)
                 .notNull()
-            $0.column("redirectNative", .text)
-            $0.column("redirectUniversal", .text)
+            $0.column(Columns.redirectNative.name, .text)
+            $0.column(Columns.redirectUniversal.name, .text)
         }
     }
 }

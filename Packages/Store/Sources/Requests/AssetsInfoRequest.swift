@@ -15,8 +15,8 @@ public struct AssetsInfoRequest: ValueObservationQueryable {
 
     public func fetch(_ db: Database) throws -> AssetsInfo {
         let hidden = try BalanceRecord
-            .filter(Columns.Balance.walletId == walletId)
-            .filter(Columns.Balance.isHidden == true)
+            .filter(BalanceRecord.Columns.walletId == walletId)
+            .filter(BalanceRecord.Columns.isHidden == true)
             .fetchCount(db)
         return AssetsInfo(hidden: hidden)
     }

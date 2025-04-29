@@ -14,7 +14,7 @@ public struct NFTStore: Sendable {
     public func save(_ data: [NFTData], for walletId: String) throws {
         try db.write { db in
             let assetsAssociationsRequest = NFTAssetAssociationRecord
-                .filter(Columns.NFTAssetsAssociation.walletId == walletId)
+                .filter(NFTAssetAssociationRecord.Columns.walletId == walletId)
             let existingIds = try assetsAssociationsRequest.fetchAll(db).map { $0.id }
             
             var newIds: [String] = []
@@ -37,7 +37,7 @@ public struct NFTStore: Sendable {
             // delete outdated
             let deletIds = existingIds.asSet().subtracting(newIds.asSet()).asArray()
             try assetsAssociationsRequest
-                .filter(deletIds.contains(Columns.NFTAssetsAssociation.id))
+                .filter(deletIds.contains(NFTAssetAssociationRecord.Columns.id))
                 .deleteAll(db)
         }
     }

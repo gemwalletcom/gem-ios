@@ -34,7 +34,7 @@ public struct PriceAlertStore: Sendable {
     public func deletePriceAlerts(_ alertsIds: [String]) throws -> Int {
         try db.write { (db: Database) in
             try PriceAlertRecord
-                .filter(alertsIds.contains(Columns.PriceAlert.id))
+                .filter(alertsIds.contains(PriceAlertRecord.Columns.id))
                 .deleteAll(db)
         }
     }
@@ -45,7 +45,7 @@ public struct PriceAlertStore: Sendable {
         }
         try db.write { (db: Database) in
             try PriceAlertRecord
-                .filter(deleteIds.contains(Columns.PriceAlert.id))
+                .filter(deleteIds.contains(PriceAlertRecord.Columns.id))
                 .deleteAll(db)
             
             for alert in alerts {

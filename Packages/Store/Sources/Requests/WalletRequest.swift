@@ -18,7 +18,7 @@ public struct WalletRequest: ValueObservationQueryable {
         try WalletRecord
             .including(all: WalletRecord.accounts)
             .asRequest(of: WalletRecordInfo.self)
-            .filter(Columns.Wallet.id == walletId)
+            .filter(WalletRecord.Columns.id == walletId)
             .fetchOne(db)?
             .mapToWallet()
     }
