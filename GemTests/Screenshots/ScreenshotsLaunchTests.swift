@@ -3,6 +3,7 @@
 import XCTest
 import Primitives
 
+@MainActor
 final class ScreenshotsLaunchTests: XCTestCase {
 
     override func setUpWithError() throws {
