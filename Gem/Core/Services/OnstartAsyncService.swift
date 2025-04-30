@@ -94,7 +94,8 @@ final class OnstartAsyncService: Sendable {
             if let newVersion = config.releases.first(where: { $0.store == .appStore }),
                 VersionCheck.isVersionHigher(new: newVersion.version, current: Bundle.main.releaseVersionNumber) {
                     NSLog("Newer version available")
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
                     updateVersionAction?(newVersion.version)
                 }
             }

@@ -68,7 +68,8 @@ final class RootSceneViewModel {
 
 extension RootSceneViewModel {
     func setup() {
-        onstartService.updateVersionAction = { [self] in
+        onstartService.updateVersionAction = { [weak self] in
+            guard let self else { return }
             self.updateAvailableAlertSheetMessage = $0
         }
         onstartService.setup()
