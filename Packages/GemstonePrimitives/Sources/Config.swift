@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import Gemstone
+import Gemstone
 import Primitives
 
 extension Config {
