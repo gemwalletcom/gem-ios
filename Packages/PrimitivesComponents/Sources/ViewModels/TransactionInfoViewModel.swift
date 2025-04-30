@@ -44,9 +44,8 @@ public struct TransactionInfoViewModel: Sendable {
 
     public var amountValueText: String {
         switch direction {
-        case .incoming: String(format: "+%@", amountValue)
         case .outgoing, .selfTransfer: String(format: "-%@", amountValue)
-        case .none: amountValue
+        case .incoming, .none: amountValue
         }
     }
 
