@@ -19,15 +19,18 @@ struct SecurityReminderScene: View {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
                 
-                ForEach(model.items) { item in
+                ForEach($model.items) { $item in
                     Section {
-                        ListItemView(
-                            title: item.title,
-                            titleStyle: .headline,
-                            titleExtra: item.subtitle,
-                            titleStyleExtra: .bodySecondary,
-                            imageStyle: item.image
-                        )
+                        Toggle(isOn: $item.isConfirmed) {
+                            ListItemView(
+                                title: item.title,
+                                titleStyle: .headline,
+                                titleExtra: item.subtitle,
+                                titleStyleExtra: .bodySecondary,
+                                imageStyle: item.image
+                            )
+                        }
+                        .toggleStyle(CheckboxStyle(position: .right))
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
@@ -36,19 +39,12 @@ struct SecurityReminderScene: View {
             .listSectionSpacing(.custom(.medium))
             
             Spacer()
-            
-            VStack(alignment: .leading) {
-                Toggle(isOn: $model.isConfirmed) {
-                    OnboardingHeaderTitle(title: model.checkmarkTitle, alignment: .center)
-                }
-                .toggleStyle(CheckboxStyle())
-                
-                StateButton(
-                    text: model.buttonTitle,
-                    viewState: model.buttonState,
-                    action: model.onNext
-                )
-            }
+
+            StateButton(
+                text: model.buttonTitle,
+                viewState: model.buttonState,
+                action: model.onNext
+            )
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)

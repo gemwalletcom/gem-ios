@@ -17,10 +17,12 @@ final class SecurityReminderCreateWalletViewModel: SecurityReminderViewModel {
     var message: String = Localized.Onboarding.Security.CreateWallet.Intro.title
     var checkmarkTitle: String = Localized.Onboarding.Security.CreateWallet.Confirm.title
     var buttonTitle: String = Localized.Common.continue
-    let items: [SecurityReminderItem] = SecurityReminderItem.createWallet
+    var items: [SecurityReminderItem] = SecurityReminderItem.createWallet
     var docsUrl: URL { Docs.url(.whatIsSecretPhrase) }
     
-    var isConfirmed = false
+    var isConfirmed: Bool {
+        items.allSatisfy { $0.isConfirmed }
+    }
     
     var buttonState: StateViewType<Bool> {
         isConfirmed ? .data(true) : .noData

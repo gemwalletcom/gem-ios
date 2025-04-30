@@ -11,6 +11,8 @@ struct SecurityReminderItem: Identifiable {
     let title: String
     let subtitle: String
     let image: ListItemImageStyle?
+    
+    var isConfirmed: Bool = false
 }
 
 extension SecurityReminderItem {

@@ -19,17 +19,38 @@ public struct AppToggleStyle: ToggleStyle {
 }
 
 public struct CheckboxStyle: ToggleStyle {
-    public init() {}
+    public enum CheckboxPosition {
+        case left
+        case right
+    }
+    
+    let position: CheckboxPosition
+    
+    public init(position: CheckboxPosition) {
+        self.position = position
+    }
 
     public func makeBody(configuration: Self.Configuration) -> some View {
         HStack {
-            Image(systemName: configuration.isOn ? "checkmark.circle" : "circle")
-                .resizable()
-                .frame(width: .image.small, height: .image.small)
-                .foregroundColor(configuration.isOn ? Colors.blue : Colors.gray)
+            if position == .left {
+                checkboxView(configuration: configuration)
+                Spacer()
+            }
 
             configuration.label
+            
+            if position == .right {
+                Spacer()
+                checkboxView(configuration: configuration)
+            }
         }
         .onTapGesture { configuration.isOn.toggle() }
+    }
+    
+    private func checkboxView(configuration: Configuration) -> some View {
+        Image(systemName: configuration.isOn ? "checkmark.circle" : "circle")
+            .resizable()
+            .frame(width: .image.small, height: .image.small)
+            .foregroundColor(configuration.isOn ? Colors.blue : Colors.gray)
     }
 }
