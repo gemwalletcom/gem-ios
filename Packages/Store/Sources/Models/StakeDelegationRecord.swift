@@ -2,11 +2,23 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
-    
     public static let databaseTableName: String = "stake_delegations"
+    
+    enum Columns {
+        static let id = Column("id")
+        static let walletId = Column("walletId")
+        static let assetId = Column("assetId")
+        static let validatorId = Column("validatorId")
+        static let state = Column("state")
+        static let balance = Column("balance")
+        static let shares = Column("shares")
+        static let rewards = Column("rewards")
+        static let completionDate = Column("completionDate")
+        static let delegationId = Column("delegationId")
+    }
 
     public var id: String
     public var assetId: AssetId
@@ -26,35 +38,41 @@ public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord
 extension StakeDelegationRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName) {
-            $0.column("id", .text)
+            $0.column(Columns.id.name, .text)
                 .notNull()
-            $0.column("walletId", .text)
+            $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column("assetId", .text)
+            $0.column(Columns.assetId.name, .text)
                 .notNull()
                 .indexed()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("validatorId", .text)
+            $0.column(Columns.validatorId.name, .text)
                 .notNull()
                 .indexed()
                 .references(StakeValidatorRecord.databaseTableName, onDelete: .cascade)
-            $0.column("state", .text)
+            $0.column(Columns.state.name, .text)
                 .notNull()
-            $0.column("balance", .text)
-                .notNull()
-                .defaults(to: "0")
-            $0.column("shares", .text)
+            $0.column(Columns.balance.name, .text)
                 .notNull()
                 .defaults(to: "0")
-            $0.column("rewards", .text)
+            $0.column(Columns.shares.name, .text)
                 .notNull()
                 .defaults(to: "0")
-            $0.column("completionDate", .date)
-            $0.column("delegationId", .text)
+            $0.column(Columns.rewards.name, .text)
                 .notNull()
-            $0.uniqueKey(["walletId", "assetId", "validatorId", "state", "delegationId"])
+                .defaults(to: "0")
+            $0.column(Columns.completionDate.name, .date)
+            $0.column(Columns.delegationId.name, .text)
+                .notNull()
+            $0.uniqueKey([
+                Columns.walletId.name,
+                Columns.assetId.name,
+                Columns.validatorId.name,
+                Columns.state.name,
+                Columns.delegationId.name
+            ])
         }
     }
 }

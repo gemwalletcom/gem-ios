@@ -26,14 +26,14 @@ public struct NFTRequest: ValueObservationQueryable {
                 all: NFTCollectionRecord.assets
                     .joining(
                         required: NFTAssetRecord.assetAssociations
-                            .filter(Columns.NFTAssetsAssociation.walletId == walletId)
+                            .filter(NFTAssetAssociationRecord.Columns.walletId == walletId)
                     )
             )
             .distinct()
             .asRequest(of: NFTCollectionRecordInfo.self)
 
         if let collectionId {
-            request = request.filter(Columns.NFTCollection.id == collectionId)
+            request = request.filter(NFTCollectionRecord.Columns.id == collectionId)
         }
 
         return try request

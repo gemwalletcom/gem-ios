@@ -21,10 +21,11 @@ public struct PriceStore: Sendable {
             for assetPrice in prices {
                 try assetPrice.record.insert(db, onConflict: .ignore)
                 try PriceRecord
-                    .filter(Columns.Price.assetId == assetPrice.assetId)
-                    .updateAll(db,
-                        Columns.Price.price.set(to: assetPrice.price),
-                        Columns.Price.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h)
+                    .filter(PriceRecord.Columns.assetId == assetPrice.assetId)
+                    .updateAll(
+                        db,
+                        PriceRecord.Columns.price.set(to: assetPrice.price),
+                        PriceRecord.Columns.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h)
                     )
             }
         }
@@ -34,14 +35,15 @@ public struct PriceStore: Sendable {
     public func updateMarket(assetId: String, market: AssetMarket) throws -> Int {
         try db.write { db in
             try PriceRecord
-                .filter(Columns.Price.assetId == assetId)
-                .updateAll(db,
-                    Columns.Price.marketCap.set(to: market.marketCap),
-                    Columns.Price.marketCapRank.set(to: market.marketCapRank),
-                    Columns.Price.totalVolume.set(to: market.totalVolume),
-                    Columns.Price.circulatingSupply.set(to: market.circulatingSupply),
-                    Columns.Price.totalSupply.set(to: market.totalSupply),
-                    Columns.Price.maxSupply.set(to: market.maxSupply)
+                .filter(PriceRecord.Columns.assetId == assetId)
+                .updateAll(
+                    db,
+                    PriceRecord.Columns.marketCap.set(to: market.marketCap),
+                    PriceRecord.Columns.marketCapRank.set(to: market.marketCapRank),
+                    PriceRecord.Columns.totalVolume.set(to: market.totalVolume),
+                    PriceRecord.Columns.circulatingSupply.set(to: market.circulatingSupply),
+                    PriceRecord.Columns.totalSupply.set(to: market.totalSupply),
+                    PriceRecord.Columns.maxSupply.set(to: market.maxSupply)
                 )
         }
     }
@@ -49,7 +51,7 @@ public struct PriceStore: Sendable {
     public func getPrices(for assetIds: [String]) throws -> [AssetPrice] {
         try db.read { db in
             try PriceRecord
-                .filter(assetIds.contains(Columns.Price.assetId))
+                .filter(assetIds.contains(PriceRecord.Columns.assetId))
                 .fetchAll(db)
                 .map { $0.mapToAssetPrice() }
         }

@@ -3,17 +3,28 @@ import Primitives
 import WalletCore
 
 public struct LocalKeystore: Keystore {
-    public let configration: LocalKeystoreConfiguration
-
     private let walletKeyStore: WalletKeyStore
     private let keystorePassword: KeystorePassword
 
     public init(
-        configuration: LocalKeystoreConfiguration = LocalKeystoreConfiguration(),
+        directory: String = "keystore",
         keystorePassword: KeystorePassword = LocalKeystorePassword()
     ) {
-        self.configration = configuration
-        self.walletKeyStore = WalletKeyStore(directory: configuration.directory)
+        do {
+            // migrate keystore from documents directory to applocation support directory
+            // TODO: delete in 2026
+            let fileMigrator = FileMigrator()
+            let keystoreURL = try fileMigrator.migrate(
+                name: directory,
+                fromDirectory: .documentDirectory,
+                toDirectory: .applicationSupportDirectory,
+                isDirectory: true
+            )
+            self.walletKeyStore = WalletKeyStore(directory: keystoreURL)
+        } catch {
+            fatalError("keystore initialization error: \(error)")
+        }
+
         self.keystorePassword = keystorePassword
     }
 

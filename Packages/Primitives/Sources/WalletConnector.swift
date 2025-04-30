@@ -108,4 +108,5 @@ public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case solanaSignMessage = "solana_signMessage"
 	case solanaSignTransaction = "solana_signTransaction"
 	case solanaSignAndSendTransaction = "solana_signAndSendTransaction"
+	case solanaSignAllTransactions = "solana_signAllTransactions"
 }

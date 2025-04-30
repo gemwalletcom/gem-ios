@@ -36,8 +36,8 @@ public struct StakeStore: Sendable {
             }
 
             try StakeDelegationRecord
-                .filter(Columns.StakeDelegation.walletId == walletId)
-                .filter(deleteIds.contains(Columns.StakeDelegation.id))
+                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(deleteIds.contains(StakeDelegationRecord.Columns.id))
                 .deleteAll(db)
         }
     }
@@ -45,8 +45,8 @@ public struct StakeStore: Sendable {
     public func getValidator(assetId: AssetId, validatorId: String) throws -> DelegationValidator? {
         try db.read { db in
             try StakeValidatorRecord
-                .filter(Columns.StakeValidator.assetId == assetId.identifier)
-                .filter(Columns.StakeValidator.validatorId == validatorId)
+                .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
+                .filter(StakeValidatorRecord.Columns.validatorId == validatorId)
                 .fetchOne(db)
                 .map { $0.validator }
         }
@@ -55,8 +55,8 @@ public struct StakeStore: Sendable {
     public func getValidators(assetId: AssetId) throws -> [DelegationValidator] {
         try db.read { db in
             try StakeValidatorRecord
-                .filter(Columns.StakeValidator.assetId == assetId.identifier)
-                .order(Columns.StakeValidator.apr.desc)
+                .filter(StakeValidatorRecord.Columns.assetId == assetId.identifier)
+                .order(StakeValidatorRecord.Columns.apr.desc)
                 .fetchAll(db)
                 .map { $0.validator }
         }
@@ -75,8 +75,8 @@ public struct StakeStore: Sendable {
             try StakeDelegationRecord
                 .including(optional: StakeDelegationRecord.validator)
                 .including(optional: StakeDelegationRecord.price)
-                .filter(Columns.StakeDelegation.walletId == walletId)
-                .filter(Columns.StakeDelegation.assetId == assetId.identifier)
+                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(StakeDelegationRecord.Columns.assetId == assetId.identifier)
                 .asRequest(of: StakeDelegationInfo.self)
                 .fetchAll(db)
                 .map { $0.mapToDelegation() }
@@ -87,8 +87,8 @@ public struct StakeStore: Sendable {
     public func deleteDelegations(walletId: String, ids: [String]) throws -> Int {
         try db.write { db in
             try StakeDelegationRecord
-                .filter(Columns.StakeDelegation.walletId == walletId)
-                .filter(ids.contains(Columns.StakeDelegation.id))
+                .filter(StakeDelegationRecord.Columns.walletId == walletId)
+                .filter(ids.contains(StakeDelegationRecord.Columns.id))
                 .deleteAll(db)
         }
     }

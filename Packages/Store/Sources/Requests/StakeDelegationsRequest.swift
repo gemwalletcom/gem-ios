@@ -21,9 +21,9 @@ public struct StakeDelegationsRequest: ValueObservationQueryable {
         try StakeDelegationRecord
             .including(optional: StakeDelegationRecord.validator)
             .including(optional: StakeDelegationRecord.price)
-            .filter(Columns.StakeDelegation.walletId == walletId)
-            .filter(Columns.StakeDelegation.assetId == assetId)
-            .order(Columns.StakeDelegation.state.asc)
+            .filter(StakeDelegationRecord.Columns.walletId == walletId)
+            .filter(StakeDelegationRecord.Columns.assetId == assetId)
+            .order(StakeDelegationRecord.Columns.state.asc)
             .asRequest(of: StakeDelegationInfo.self)
             .fetchAll(db)
             .map { $0.mapToDelegation() }

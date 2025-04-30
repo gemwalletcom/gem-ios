@@ -47,10 +47,10 @@ public final class WalletConnectorSigner: WalletConnectorSignable {
     
     public func getWallets(for proposal: Session.Proposal) throws -> [Wallet] {
         let wallets = try walletSessionService.getWallets().filter { !$0.isViewOnly }
-        let blockchains = (proposal.requiredBlockchains + proposal.optionalBlockchains).asSet()
+        let blockchains = (proposal.requiredBlockchains + proposal.optionalBlockchains).asSet().map { $0.chain }
         
         return wallets.filter {
-            $0.accounts.compactMap { $0.chain.blockchain }.contains {
+            $0.accounts.compactMap { $0.chain }.contains {
                 blockchains.contains($0)
             }
         }

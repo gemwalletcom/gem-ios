@@ -1,32 +1,38 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import GRDB
+import GRDB
 import Primitives
 import BigInt
 
 public struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, TableRecord  {
     
+    public static let databaseTableName: String = "assets_search"
+    
+    enum Columns {
+        static let query = Column("query")
+        static let assetId = Column("assetId")
+        static let priority = Column("priority")
+    }
+
     public var query: String
     public var assetId: AssetId
     public var priority: Int
-    
-    public static let databaseTableName: String = "assets_search"
 }
 
 extension AssetSearchRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.AssetSearch.query.name, .text)
+            $0.column(Columns.query.name, .text)
                 .notNull()
                 .indexed()
-            $0.column(Columns.AssetSearch.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .indexed()
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.AssetSearch.priority.name, .integer)
+            $0.column(Columns.priority.name, .integer)
                 .notNull()
-            $0.uniqueKey([Columns.AssetSearch.query.name, Columns.AssetSearch.assetId.name])
+            $0.uniqueKey([Columns.query.name, Columns.assetId.name])
         }
     }
 }

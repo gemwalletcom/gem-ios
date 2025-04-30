@@ -58,7 +58,7 @@ public protocol GemAPIPriceAlertService: Sendable {
 }
 
 public protocol GemAPIPriceService: Sendable {
-    func getPrice(assetIds: [String], currency: String) async throws -> [AssetPrice]
+    func getPrice(assetIds: [AssetId], currency: String) async throws -> [AssetPrice]
 }
 
 public protocol GemAPINFTService: Sendable {
@@ -249,7 +249,7 @@ extension GemAPIService: GemAPIPriceAlertService {
 }
 
 extension GemAPIService: GemAPIPriceService {
-    public func getPrice(assetIds: [String], currency: String) async throws -> [Primitives.AssetPrice] {
+    public func getPrice(assetIds: [AssetId], currency: String) async throws -> [Primitives.AssetPrice] {
         let request = AssetPricesRequest(currency: currency, assetIds: assetIds)
         return try await provider
             .request(.getPrices(request))

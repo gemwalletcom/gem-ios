@@ -73,10 +73,6 @@
 		C366791A2A17507500F1D74D /* OnstartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679192A17507500F1D74D /* OnstartService.swift */; };
 		C366791D2A18623800F1D74D /* QRScanner in Frameworks */ = {isa = PBXBuildFile; productRef = C366791C2A18623800F1D74D /* QRScanner */; };
 		C3A7CB7C29CA5F7000431341 /* Store in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB7B29CA5F7000431341 /* Store */; };
-		C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB7E29CB9CCC00431341 /* GRDB */; };
-		C3A7CB8129CBA31E00431341 /* CSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB8029CBA31E00431341 /* CSQLite */; };
-		C3A7CB8429CBA9E700431341 /* GRDBQuery in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB8329CBA9E700431341 /* GRDBQuery */; };
-		C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB9429D140DB00431341 /* CSQLite */; };
 		C3B6F09229E7C31500C3B746 /* ConfirmTransferScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B6F09129E7C31500C3B746 /* ConfirmTransferScene.swift */; };
 		C3B6F09429E7C32900C3B746 /* ConfirmTransferViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B6F09329E7C32900C3B746 /* ConfirmTransferViewModel.swift */; };
 		C3B6F09629E7E94D00C3B746 /* SelectAssetInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B6F09529E7E94D00C3B746 /* SelectAssetInput.swift */; };
@@ -361,10 +357,8 @@
 				833931A82D2D663C0063BB6A /* PriceService in Frameworks */,
 				DFA0B51E2D16C94400355594 /* Currency in Frameworks */,
 				83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */,
-				C3A7CB8429CBA9E700431341 /* GRDBQuery in Frameworks */,
 				839C794B2D1C42A500E32072 /* PrimitivesComponents in Frameworks */,
 				C3E99BBF2A71E932005DF35F /* WalletCorePrimitives in Frameworks */,
-				C3A7CB7F29CB9CCC00431341 /* GRDB in Frameworks */,
 				D8D203D32AE0818C00261CA2 /* SwiftHTTPClient in Frameworks */,
 				834EC80A2D7F1FCD00D8FA39 /* WalletSessionService in Frameworks */,
 				C3CF3B8829AC2C0800E96586 /* Components in Frameworks */,
@@ -388,7 +382,6 @@
 				D829BF422CBDD65A00DEB2E8 /* MarketInsight in Frameworks */,
 				DFA0B5192D16C86E00355594 /* Currency in Frameworks */,
 				D83D3C252D6E62F4002959EA /* ScanService in Frameworks */,
-				C3A7CB8129CBA31E00431341 /* CSQLite in Frameworks */,
 				D8F5B86C2CCD52EB0007E615 /* Staking in Frameworks */,
 				C36679162A119C6200F1D74D /* GemAPI in Frameworks */,
 				C3CF3B7729A98C7B00E96586 /* Blockchain in Frameworks */,
@@ -421,7 +414,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C3A7CB9529D140DB00431341 /* CSQLite in Frameworks */,
 				D8D726BB2C6DC61F00A6B559 /* PrimitivesTestKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1060,9 +1052,6 @@
 				C3CF3BA629B5317300E96586 /* Keystore */,
 				C3CF3BDA29BBE45D00E96586 /* Style */,
 				C3A7CB7B29CA5F7000431341 /* Store */,
-				C3A7CB7E29CB9CCC00431341 /* GRDB */,
-				C3A7CB8029CBA31E00431341 /* CSQLite */,
-				C3A7CB8329CBA9E700431341 /* GRDBQuery */,
 				C36679152A119C6200F1D74D /* GemAPI */,
 				C366791C2A18623800F1D74D /* QRScanner */,
 				C3D1C4E12A2A9485006E8EEA /* Signer */,
@@ -1138,7 +1127,6 @@
 			);
 			name = GemTests;
 			packageProductDependencies = (
-				C3A7CB9429D140DB00431341 /* CSQLite */,
 				D8D726BA2C6DC61F00A6B559 /* PrimitivesTestKit */,
 			);
 			productName = walletTests;
@@ -1246,9 +1234,6 @@
 			);
 			mainGroup = C30952A7299C39D70004C0F9;
 			packageReferences = (
-				C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */,
-				C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */,
-				DFDF9CF22CAE618A003A731B /* XCRemoteSwiftPackageReference "BigInt" */,
 			);
 			productRefGroup = C30952B1299C39D70004C0F9 /* Products */;
 			projectDirPath = "";
@@ -1854,33 +1839,6 @@
 		};
 /* End XCConfigurationList section */
 
-/* Begin XCRemoteSwiftPackageReference section */
-		C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDB.swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = 6.29.3;
-			};
-		};
-		C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/groue/GRDBQuery.git";
-			requirement = {
-				kind = exactVersion;
-				version = 0.9.0;
-			};
-		};
-		DFDF9CF22CAE618A003A731B /* XCRemoteSwiftPackageReference "BigInt" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/attaswift/BigInt.git";
-			requirement = {
-				kind = exactVersion;
-				version = 5.5.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
-
 /* Begin XCSwiftPackageProductDependency section */
 		074168392D3AFDBB00AC26A4 /* NFT */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -2013,26 +1971,6 @@
 		C3A7CB7B29CA5F7000431341 /* Store */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Store;
-		};
-		C3A7CB7E29CB9CCC00431341 /* GRDB */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = GRDB;
-		};
-		C3A7CB8029CBA31E00431341 /* CSQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = CSQLite;
-		};
-		C3A7CB8329CBA9E700431341 /* GRDBQuery */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C3A7CB8229CBA9E700431341 /* XCRemoteSwiftPackageReference "GRDBQuery" */;
-			productName = GRDBQuery;
-		};
-		C3A7CB9429D140DB00431341 /* CSQLite */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = C3A7CB7D29CB9CCC00431341 /* XCRemoteSwiftPackageReference "GRDB.swift" */;
-			productName = CSQLite;
 		};
 		C3CF3B7629A98C7B00E96586 /* Blockchain */ = {
 			isa = XCSwiftPackageProductDependency;

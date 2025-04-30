@@ -48,9 +48,9 @@ public struct AssetPrices: Codable, Sendable {
 
 public struct AssetPricesRequest: Codable, Equatable, Sendable {
 	public let currency: String?
-	public let assetIds: [String]
+	public let assetIds: [AssetId]
 
-	public init(currency: String?, assetIds: [String]) {
+	public init(currency: String?, assetIds: [AssetId]) {
 		self.currency = currency
 		self.assetIds = assetIds
 	}

@@ -10,7 +10,7 @@ public extension LocalKeystore {
         keystorePassword: KeystorePassword = MockKeystorePassword()
     ) -> LocalKeystore {
         LocalKeystore(
-            configuration: LocalKeystoreConfiguration(folder: UUID().uuidString),
+            directory: UUID().uuidString,
             keystorePassword: keystorePassword
         )
     }
