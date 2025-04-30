@@ -98,6 +98,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
     }
 }
 
+@MainActor
 struct Snapshoter {
 
     let app: XCUIApplication
