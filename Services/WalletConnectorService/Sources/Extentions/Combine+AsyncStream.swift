@@ -1,6 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-@preconcurrency import Combine
+import Combine
 
 extension AnyPublisher where Failure == Never, Output: Sendable {
     func asAsyncStream() -> AsyncStream<Output> {
