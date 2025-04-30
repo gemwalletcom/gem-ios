@@ -10,7 +10,8 @@ import Localization
 import ChainService
 
 @Observable
-class AddTokenViewModel {
+@MainActor
+final class AddTokenViewModel {
     let service: AddTokenService
 
     var state: StateViewType<AddAssetViewModel> = .noData
