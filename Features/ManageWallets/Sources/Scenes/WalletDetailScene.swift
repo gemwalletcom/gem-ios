@@ -10,6 +10,7 @@ import PrimitivesComponents
 import WalletAvatar
 import GRDBQuery
 import Store
+import Onboarding
 
 public struct WalletDetailScene: View {
     let model: WalletDetailViewModel
@@ -21,11 +22,10 @@ public struct WalletDetailScene: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var name: String
-    @State private var words: [String]? = nil
-    @State private var privateKey: ExportPrivateKey? = nil
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
+    @State private var isPresentingExport: ExportWalletFlow?
     @FocusState private var focusedField: Field?
     
     @Query<WalletRequest>
@@ -133,11 +133,8 @@ public struct WalletDetailScene: View {
                 Text(isPresentingErrorMessage ?? "")
             }
         )
-        .navigationDestination(for: $words) { words in
-            ShowSecretDataScene(model: ShowSecretPhraseViewModel(words: words))
-        }
-        .navigationDestination(for: $privateKey) {
-            ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: $0.key, encoding: model.getEncodingType(for: $0.chain)))
+        .sheet(item: $isPresentingExport) {
+            ExportWalletNavigationStack(flow: $0)
         }
     }
 }
@@ -156,7 +153,8 @@ extension WalletDetailScene {
     private func onShowSecretPhrase() {
         Task {
             do {
-                words = try model.getMnemonicWords()
+                let words = try model.getMnemonicWords()
+                isPresentingExport = .words(words)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }
@@ -167,11 +165,8 @@ extension WalletDetailScene {
         Task {
             do {
                 //In the future it should allow to export PK for multichain wallet and specify the chain
-                let chain = model.wallet.accounts[0].chain
-                privateKey = ExportPrivateKey(
-                    chain: chain,
-                    key: try model.getPrivateKey(for: chain)
-                )
+                let key = try model.getPrivateKey()
+                isPresentingExport = .privateKey(key)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }

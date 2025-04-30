@@ -4,12 +4,13 @@ import Foundation
 import SwiftUI
 import Style
 import Components
+import Localization
 
 struct SecurityReminderScene: View {
     @State private var model: SecurityReminderViewModel
     @State private var isPresentingUrl: URL? = nil
     
-    init(model: SecurityReminderCreateWalletViewModel) {
+    init(model: SecurityReminderViewModel) {
         self.model = model
     }
     
@@ -62,6 +63,11 @@ struct SecurityReminderScene: View {
     }
 }
 
-#Preview(body: {
-    SecurityReminderScene(model: SecurityReminderCreateWalletViewModel(onNext: {}))
-})
+#Preview {
+    SecurityReminderScene(
+        model: SecurityReminderViewModelDefault(
+            title: Localized.Wallet.New.title,
+            onNext: {}
+        )
+    )
+}

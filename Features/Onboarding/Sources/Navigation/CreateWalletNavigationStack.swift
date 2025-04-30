@@ -24,7 +24,8 @@ public struct CreateWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             SecurityReminderScene(
-                model: SecurityReminderCreateWalletViewModel(
+                model: SecurityReminderViewModelDefault(
+                    title: Localized.Wallet.New.title,
                     onNext: { navigationPath.append(Scenes.CreateWallet()) }
                 )
             )
