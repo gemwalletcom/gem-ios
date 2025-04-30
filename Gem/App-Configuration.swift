@@ -363,5 +363,5 @@ extension BannerService {
 }
 
 extension NavigationStateManager {
-    static let main = NavigationStateManager(initialSelecedTab: .wallet)
+    static let main = NavigationStateManager()
 }

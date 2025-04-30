@@ -2,42 +2,30 @@
 
 import SwiftUI
 
-protocol NavigationStateManagable: Observation.Observable, AnyObject {
-    var wallet: NavigationPath { get set }
-    var activity: NavigationPath { get set }
-    var settings: NavigationPath { get set }
-
-    var selectedTab: TabItem { get set }
-    var previousSelectedTab: TabItem { get set }
-
-    init(initialSelecedTab: TabItem)
-
-    func select(tab: TabItem)
-    func backToRoot(tab: TabItem)
-    func clearAll()
-}
-
-// MARK: - NavigationStateManagable
-
 @Observable
-final class NavigationStateManager: NavigationStateManagable {
+final class NavigationStateManager: Sendable {
+    @MainActor
     var wallet = NavigationPath()
+    @MainActor
     var collections = NavigationPath()
+    @MainActor
     var activity = NavigationPath()
+    @MainActor
     var settings = NavigationPath()
+    @MainActor
     var markets = NavigationPath()
 
-    var selectedTab: TabItem
-    var previousSelectedTab: TabItem
+    @MainActor
+    var selectedTab: TabItem = .wallet
+    @MainActor
+    var previousSelectedTab: TabItem = .wallet
 
-    required init(initialSelecedTab: TabItem) {
-        self.selectedTab = initialSelecedTab
-        self.previousSelectedTab = initialSelecedTab
-    }
+    init() {}
 }
 
 // MARK: - Business Logic
 
+@MainActor
 extension NavigationStateManager {
     func select(tab: TabItem) {
         selectedTab = tab
