@@ -18,6 +18,7 @@ struct AssetScene: View {
     @Environment(\.assetsService) private var assetsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.bannerService) private var bannerService
+    @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.priceAlertService) private var priceAlertService
 
     @State private var showingOptions = false
@@ -59,6 +60,7 @@ struct AssetScene: View {
             walletsService: walletsService,
             assetsService: assetsService,
             transactionsService: transactionsService,
+            priceObserverService: priceObserverService,
             priceAlertService: priceAlertService,
             assetDataModel: AssetDataViewModel(
                 assetData: assetData,

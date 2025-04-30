@@ -32,7 +32,6 @@ public struct SettingsScene: View {
             }
             .listRowInsets(.assetListRowInsets)
         }
-        .onChange(of: model.currencyValue, onCurrencyChange)
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
@@ -166,11 +165,5 @@ extension SettingsScene {
 
     private func onOpenWallets() {
         isPresentingWallets.toggle()
-    }
-
-    private func onCurrencyChange() {
-        Task {
-            try await model.fetch()
-        }
     }
 }

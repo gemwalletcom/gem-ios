@@ -14,11 +14,15 @@ struct AssetRecordInfo: FetchableRecord, Codable {
 struct AssetRecordInfoMinimal: FetchableRecord, Codable {
     var asset: AssetRecord
     var price: PriceRecord?
+    var rate: FiatRateRecord?
     var balance: BalanceRecord
 }
 
 extension AssetRecordInfoMinimal {
     var totalFiatAmount: Double {
-        balance.totalAmount * (price?.price ?? 0)
+        guard let price else {
+            return 0
+        }
+        return balance.totalAmount * price.price
     }
 }

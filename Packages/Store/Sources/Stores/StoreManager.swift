@@ -5,6 +5,7 @@ import Foundation
 public struct StoreManager: Sendable {
     public let assetStore: AssetStore
     public let balanceStore: BalanceStore
+    public let fiatRateStore: FiatRateStore
     public let priceStore: PriceStore
     public let transactionStore: TransactionStore
     public let nodeStore: NodeStore
@@ -18,6 +19,7 @@ public struct StoreManager: Sendable {
     public init(db: DB) {
         self.assetStore = AssetStore(db: db)
         self.balanceStore = BalanceStore(db: db)
+        self.fiatRateStore = FiatRateStore(db: db)
         self.priceStore = PriceStore(db: db)
         self.transactionStore = TransactionStore(db: db)
         self.nodeStore = NodeStore(db: db)

@@ -15,13 +15,15 @@ import ExplorerService
 import AssetsService
 import TransactionsService
 import WalletsService
+import PriceService
 
 struct AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
+    private let priceObserverService: PriceObserverService
     private let priceAlertService: PriceAlertService
-
+    
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
@@ -34,6 +36,7 @@ struct AssetSceneViewModel: Sendable {
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
+        priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
         walletModel: WalletViewModel
@@ -41,6 +44,7 @@ struct AssetSceneViewModel: Sendable {
         self.walletsService = walletsService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
+        self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
@@ -128,6 +132,9 @@ extension AssetSceneViewModel {
         } catch {
             // TODO: - handle updateAsset error
             print("asset scene: updateAsset error \(error)")
+        }
+        Task {
+            try await priceObserverService.addAssets(assets: [assetModel.asset.id])
         }
     }
 

@@ -10,6 +10,7 @@ import AssetsService
 import TransactionsService
 import Primitives
 import BigInt
+import PriceService
 
 @MainActor
 public struct DeveloperViewModel {
@@ -18,19 +19,22 @@ public struct DeveloperViewModel {
     private let assetService: AssetsService
     private let stakeService: StakeService
     private let bannerService: BannerService
+    private let priceService: PriceService
 
     public init(
         walletId: WalletId,
         transactionsService: TransactionsService,
         assetService: AssetsService,
         stakeService: StakeService,
-        bannerService: BannerService
+        bannerService: BannerService,
+        priceService: PriceService
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService
         self.assetService = assetService
         self.stakeService = stakeService
         self.bannerService = bannerService
+        self.priceService = priceService
     }
 
     var title: String {
@@ -104,6 +108,12 @@ public struct DeveloperViewModel {
     func clearBanners() {
         do {
             try bannerService.clearBanners()
+        } catch { }
+    }
+    
+    func clearPrices() {
+        do {
+            try priceService.clear()
         } catch { }
     }
     
