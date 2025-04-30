@@ -16,7 +16,7 @@ import AssetsService
 import TransactionsService
 import WalletsService
 
-class AssetSceneViewModel: ObservableObject {
+struct AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
