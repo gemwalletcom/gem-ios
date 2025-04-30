@@ -21,7 +21,6 @@ final class OnstartAsyncService: Sendable {
     let deviceService: DeviceService
     let bannerSetupService: BannerSetupService
 
-
     @MainActor
     var updateVersionAction: StringAction = .none
 
