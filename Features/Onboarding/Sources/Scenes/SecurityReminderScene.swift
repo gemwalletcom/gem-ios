@@ -29,6 +29,7 @@ struct SecurityReminderScene: View {
                             imageStyle: item.image
                         )
                     }
+                    .listRowInsets(.assetListRowInsets)
                 }
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
