@@ -51,17 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/reown-com/reown-swift",
       "state" : {
-        "revision" : "193fe47626608b1f77de127adf9af5859f84bc1a",
-        "version" : "1.5.2"
-      }
-    },
-    {
-      "identity" : "starscream",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/daltoniam/Starscream.git",
-      "state" : {
-        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
-        "version" : "3.1.2"
+        "revision" : "da9931fc9aaf6295c68eb5cb178944c8491b6f59",
+        "version" : "1.6.0"
       }
     },
     {
@@ -96,8 +87,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/reown-com/yttrium",
       "state" : {
-        "revision" : "331244f5a569787452be5ec05b5699927c646878",
-        "version" : "0.8.35"
+        "revision" : "f6566a2b028ae60746254298ce1d5ba822ca5388",
+        "version" : "0.9.0"
       }
     }
   ],
