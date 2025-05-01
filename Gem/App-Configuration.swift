@@ -103,8 +103,8 @@ extension BannerStore {
 
 extension AssetsService {
     static let main = AssetsService(
-        assetStore: .main,
-        balanceStore: .main, 
+        assetStore: AssetStoreDefault.main,
+        balanceStore: .main,
         chainServiceFactory: .main
     )
 }
@@ -116,7 +116,7 @@ extension NotificationService {
 extension BalanceService {
     static let main = BalanceService(
         balanceStore: .main,
-        assertStore: .main,
+        assertStore: AssetStoreDefault.main,
         chainServiceFactory: .main
     )
 }
@@ -193,8 +193,8 @@ extension WalletService {
     )
 }
 
-extension AssetStore {
-    static let main = AssetStore(db: .main)
+extension AssetStoreDefault {
+    static let main = AssetStoreDefault(db: .main)
 }
 
 extension PriceStore {

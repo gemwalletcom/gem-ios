@@ -17,7 +17,7 @@ public struct StoreManager: Sendable {
     public let nftStore: NFTStore
     
     public init(db: DB) {
-        self.assetStore = AssetStore(db: db)
+        self.assetStore = AssetStoreDefault(db: db)
         self.balanceStore = BalanceStore(db: db)
         self.fiatRateStore = FiatRateStore(db: db)
         self.priceStore = PriceStore(db: db)
