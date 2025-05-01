@@ -5,22 +5,25 @@ import GemAPI
 import Primitives
 
 public actor GemAPIAssetsListServiceMock: GemAPIAssetsListService {
-    public var assetsByDeviceIdResult: [AssetId] = []
-    public var buyableFiatAssetsResult: FiatAssets?
-    public var sellableFiatAssetsResult: FiatAssets?
-    public var swapAssetsResult: FiatAssets?
+    private var assetsByDeviceIdResult: [AssetId]?
+    private var buyableFiatAssetsResult: FiatAssets?
+    private var sellableFiatAssetsResult: FiatAssets?
+    private var swapAssetsResult: FiatAssets?
 
-    public private(set) var receivedDeviceId: String?
-    public private(set) var receivedWalletIndex: Int?
-    public private(set) var receivedTimestamp: Int?
-
-    public init() {}
+    public init(
+        assetsByDeviceIdResult: [AssetId]? = nil,
+        buyableFiatAssetsResult: FiatAssets? = nil,
+        sellableFiatAssetsResult: FiatAssets? = nil,
+        swapAssetsResult: FiatAssets? = nil
+    ) {
+        self.assetsByDeviceIdResult = assetsByDeviceIdResult
+        self.buyableFiatAssetsResult = buyableFiatAssetsResult
+        self.sellableFiatAssetsResult = sellableFiatAssetsResult
+        self.swapAssetsResult = swapAssetsResult
+    }
 
     public func getAssetsByDeviceId(deviceId: String, walletIndex: Int, fromTimestamp: Int) async throws -> [AssetId] {
-        receivedDeviceId = deviceId
-        receivedWalletIndex = walletIndex
-        receivedTimestamp = fromTimestamp
-        return assetsByDeviceIdResult
+        assetsByDeviceIdResult!
     }
 
     public func getBuyableFiatAssets() async throws -> FiatAssets {
