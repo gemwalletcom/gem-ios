@@ -42,7 +42,7 @@ struct AssetSceneViewModel: Sendable {
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
         walletModel: WalletViewModel,
-        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>,
+        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
