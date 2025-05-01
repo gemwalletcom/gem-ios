@@ -53,7 +53,13 @@ let package = Package(
         ),
         .testTarget(
             name: "AssetsServiceTests",
-            dependencies: ["AssetsService"]
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                "AssetsService",
+                "AssetsServiceTestKit"
+            ]
         ),
     ]
 )

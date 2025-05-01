@@ -8,16 +8,18 @@ import Primitives
 import GemstonePrimitives
 
 public struct ImportAssetsService: Sendable {
-    let assetListService: any GemAPIAssetsListService = GemAPIService()
+    let assetListService: any GemAPIAssetsListService
     let assetsService: AssetsService
     let assetStore: AssetStore
     let preferences: Preferences
     
     public init(
+        assetListService: any GemAPIAssetsListService = GemAPIService(),
         assetsService: AssetsService,
         assetStore: AssetStore,
         preferences: Preferences
     ) {
+        self.assetListService = assetListService
         self.assetsService = assetsService
         self.assetStore = assetStore
         self.preferences = preferences

@@ -202,7 +202,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Services\/AssetsService",
         "identifier" : "AssetsServiceTests",
