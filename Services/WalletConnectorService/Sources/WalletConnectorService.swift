@@ -42,9 +42,20 @@ extension WalletConnectorService {
 
     public func setup() async {
         await withTaskGroup(of: Void.self) { group in
-            group.addTask { await self.handleSessions() }
-            group.addTask { await self.handleSessionProposals() }
-            group.addTask { await self.handleSessionRequests() }
+            group.addTask { [weak self] in
+                guard let self else { return }
+                await self.handleSessions()
+            }
+
+            group.addTask { [weak self] in
+                guard let self else { return }
+                await self.handleSessionProposals()
+            }
+
+            group.addTask { [weak self] in
+                guard let self else { return }
+                await self.handleSessionRequests()
+            }
         }
     }
 
@@ -93,25 +104,25 @@ extension WalletConnectorService {
     private func handleSessionProposals() async {
         for await proposal in interactor.sessionProposalStream {
             NSLog("Session proposal received: \(proposal)")
-            Task {
-                do {
-                    try await processSession(proposal: proposal.proposal)
-                } catch {
-                    NSLog("Error accepting proposal: \(error)")
-                    try await signer.sessionReject(id: proposal.proposal.pairingTopic, error: error)
-                }
+
+            do {
+                try await processSession(proposal: proposal.proposal)
+            } catch {
+                NSLog("Error accepting proposal: \(error)")
+                try? await signer.sessionReject(
+                    id: proposal.proposal.pairingTopic,
+                    error: error
+                )
             }
         }
     }
 
     private func handleSessionRequests() async {
         for await request in interactor.sessionRequestStream {
-            Task {
-                do {
-                    try await handleRequest(request: request.request)
-                } catch {
-                    NSLog("Error handling request: \(error)")
-                }
+            do {
+                try await handleRequest(request: request.request)
+            } catch {
+                NSLog("Error handling request: \(error)")
             }
         }
     }
