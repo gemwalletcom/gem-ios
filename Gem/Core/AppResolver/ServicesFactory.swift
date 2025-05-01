@@ -219,7 +219,7 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
-        assetsStore: AssetStore,
+        assetsStore: any AssetStore,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
@@ -240,7 +240,7 @@ extension ServicesFactory {
     }
 
     private static func makeAssetsService(
-        assetStore: AssetStore,
+        assetStore: any AssetStore,
         balanceStore: BalanceStore,
         chainFactory: ChainService.ChainServiceFactory
     ) -> AssetsService {
@@ -343,7 +343,7 @@ extension ServicesFactory {
     }
 
     private static func makeOnstartService(
-        assetStore: AssetStore,
+        assetStore: any AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,

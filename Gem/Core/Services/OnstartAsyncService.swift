@@ -13,7 +13,7 @@ import AssetsService
 
 final class OnstartAsyncService: Sendable {
 
-    let assetStore: AssetStore
+    let assetStore: any AssetStore
     let nodeStore: NodeStore
     let preferences: Preferences
     let configService: any GemAPIConfigService = GemAPIService()
@@ -25,7 +25,7 @@ final class OnstartAsyncService: Sendable {
     var updateVersionAction: StringAction = .none
 
     init(
-        assetStore: AssetStore,
+        assetStore: any AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
@@ -36,7 +36,6 @@ final class OnstartAsyncService: Sendable {
         self.nodeStore = nodeStore
         self.preferences = preferences
         self.service = ImportAssetsService(
-            nodeService: NodeService(nodeStore: nodeStore), 
             assetsService: assetsService,
             assetStore: assetStore,
             preferences: preferences

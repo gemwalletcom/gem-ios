@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import NodeService
 import GemAPI
 import Store
 import Preferences
@@ -9,19 +8,16 @@ import Primitives
 import GemstonePrimitives
 
 public struct ImportAssetsService: Sendable {
-    let nodeService: NodeService
     let assetListService: any GemAPIAssetsListService = GemAPIService()
     let assetsService: AssetsService
     let assetStore: AssetStore
     let preferences: Preferences
     
     public init(
-        nodeService: NodeService,
         assetsService: AssetsService,
         assetStore: AssetStore,
         preferences: Preferences
     ) {
-        self.nodeService = nodeService
         self.assetsService = assetsService
         self.assetStore = assetStore
         self.preferences = preferences

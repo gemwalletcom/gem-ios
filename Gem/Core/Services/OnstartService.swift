@@ -13,7 +13,7 @@ import WalletService
 struct OnstartService {
     
     let assetsService: AssetsService
-    let assetStore: AssetStore
+    let assetStore: any AssetStore
     let nodeStore: NodeStore
     let preferences: Preferences
     let walletService: WalletService
@@ -26,7 +26,6 @@ struct OnstartService {
         }
         do {
             try ImportAssetsService(
-                nodeService: NodeService(nodeStore: nodeStore),
                 assetsService: assetsService,
                 assetStore: assetStore,
                 preferences: preferences
