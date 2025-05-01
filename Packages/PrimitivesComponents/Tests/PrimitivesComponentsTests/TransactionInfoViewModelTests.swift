@@ -24,12 +24,31 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: .incoming
         )
 
         #expect(model.amountValueText.contains(asset.symbol))
         #expect(!model.amountValueText.isEmpty)
         #expect(model.amountValueText == "1 BTC")
+    }
+    
+    @Test
+    func testSentAmountValueText() {
+        let model = TransactionInfoViewModel(
+            currency: "USD",
+            asset: asset,
+            assetPrice: assetPrice,
+            feeAsset: feeAsset,
+            feeAssetPrice: feeAssetPrice,
+            value: value,
+            feeValue: feeValue,
+            direction: .outgoing
+        )
+
+        #expect(model.amountValueText.contains(asset.symbol))
+        #expect(!model.amountValueText.isEmpty)
+        #expect(model.amountValueText == "-1 BTC")
     }
 
     @Test
@@ -41,7 +60,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         #expect(model.amountFiatValueText != nil)
@@ -60,7 +80,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: .incoming
         )
 
         #expect(model.feeValueText != nil)
@@ -77,7 +98,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         #expect(model.feeFiatValueText != nil)
@@ -94,7 +116,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: .incoming
         )
         let header = model.headerType(input: .amount(showFiatSubtitle: true))
         guard case .amount(let title, let subtitle) = header else {
@@ -118,7 +141,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         let header = model.headerType(input: .nft(nftAsset))
@@ -152,7 +176,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         let header = model.headerType(input: .swap(swapMetadata))
@@ -176,7 +201,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         #expect(model.amountFiatValueText == nil)
@@ -191,7 +217,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: nil
+            feeValue: nil,
+            direction: nil
         )
 
         #expect(model.feeValueText == nil)
@@ -206,7 +233,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: nil,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: nil
         )
 
         #expect(model.feeFiatValueText == nil)
@@ -221,7 +249,8 @@ struct TransactionInfoModelTests {
             feeAsset: feeAsset,
             feeAssetPrice: feeAssetPrice,
             value: value,
-            feeValue: feeValue
+            feeValue: feeValue,
+            direction: .incoming
         )
         let header = model.headerType(input: .amount(showFiatSubtitle: false))
         guard case .amount(let title, let subtitle) = header else {

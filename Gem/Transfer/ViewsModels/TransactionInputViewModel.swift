@@ -44,16 +44,9 @@ struct TransactionInputViewModel {
             feeAsset: data.type.asset.feeAsset,
             feeAssetPrice: metaData?.feePrice,
             value: value,
-            feeValue: input?.fee.fee
+            feeValue: input?.fee.fee,
+            direction: nil
         )
-    }
-
-    var amountText: String {
-        infoModel.amountValueText
-    }
-    
-    var amountSecondText: String {
-        infoModel.amountFiatValueText ?? .empty
     }
     
     var networkFeeText: String? {
