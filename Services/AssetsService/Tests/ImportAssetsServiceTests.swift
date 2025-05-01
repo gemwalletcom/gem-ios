@@ -43,7 +43,7 @@ struct ImportAssetsServiceTests {
         let assetsService = AssetsServiceMock(assetStore: assetStore)
         let assetListService = GemAPIAssetsListServiceMock(
             buyableFiatAssetsResult: FiatAssets(version: 1, assetIds: []),
-            sellableFiatAssetsResult: FiatAssets(version: 2, assetIds: []),
+            sellableFiatAssetsResult: FiatAssets(version: 2, assetIds: [])
         )
 
         let service = ImportAssetsService(
