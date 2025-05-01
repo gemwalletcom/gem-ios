@@ -16,7 +16,10 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
-        .package(name: "ChainService", path: "../ChainService")
+        .package(name: "ChainService", path: "../ChainService"),
+        .package(name: "NodeService", path: "../NodeService"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "GemstonePrimitives", path: ".../GemstonePrimitives")
     ],
     targets: [
         .target(
@@ -25,7 +28,10 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "GemAPI",
-                "ChainService"
+                "ChainService",
+                "NodeService",
+                "Preferences",
+                "GemstonePrimitives"
             ],
             path: "Sources"
         ),
