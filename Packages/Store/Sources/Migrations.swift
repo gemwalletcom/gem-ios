@@ -24,6 +24,7 @@ public struct Migrations {
             try PriceRecord.create(db: db)
             try AssetLinkRecord.create(db: db)
             try AssetSearchRecord.create(db: db)
+            //TODO: Market. try MarketAssetRecord.create(db: db)
             
             // transactions
             try TransactionRecord.create(db: db)
@@ -252,6 +253,11 @@ public struct Migrations {
                     .defaults(to: 0)
             }
         }
+        
+//        TODO: Market.
+//        migrator.registerMigration("Add markets_assets table") { db in
+//            try? MarketAssetRecord.create(db: db)
+//        }
 
         try migrator.migrate(dbQueue)
     }
