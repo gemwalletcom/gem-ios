@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-struct SelectedAssetInput: Hashable {
+struct SelectedAssetInput: Sendable, Hashable {
     let type: SelectedAssetType
     let assetAddress: AssetAddress
     

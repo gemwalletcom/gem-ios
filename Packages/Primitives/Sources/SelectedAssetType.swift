@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum SelectedAssetType: Hashable {
+public enum SelectedAssetType: Sendable, Hashable {
     case send(RecipientAssetType)
     case receive(ReceiveAssetType)
     case stake(Asset)

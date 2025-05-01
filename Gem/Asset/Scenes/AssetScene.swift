@@ -67,7 +67,8 @@ struct AssetScene: View {
                 formatter: .medium,
                 currencyCode: Preferences.standard.currency
             ),
-            walletModel: walletModel
+            walletModel: walletModel,
+            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
         )
     }
 
