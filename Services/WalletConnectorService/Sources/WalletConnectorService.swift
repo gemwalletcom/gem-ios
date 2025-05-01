@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletConnectPairing
-import ReownWalletKit
+@preconcurrency import WalletConnectPairing
+@preconcurrency import ReownWalletKit
 import Primitives
 
 public final class WalletConnectorService: Sendable {

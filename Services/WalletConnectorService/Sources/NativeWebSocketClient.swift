@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletConnectRelay
+@preconcurrency import WalletConnectRelay
 
 public final class NativeWebSocketClient: WebSocketConnecting {
     public private(set) var isConnected = false
