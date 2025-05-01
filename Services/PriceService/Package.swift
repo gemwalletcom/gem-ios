@@ -39,6 +39,7 @@ let package = Package(
                 "PriceService",
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
                 "Primitives",
             ],
             path: "TestKit"

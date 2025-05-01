@@ -13,12 +13,13 @@ public extension PriceAlertService {
     static func mock(
         store: PriceAlertStore = .mock(),
         deviceService: DeviceService = .mock(),
-        priceService: PriceService = .mock()
+        priceService: PriceService = .mock(),
+        priceObserverService: PriceObserverService = .mock()
     ) -> PriceAlertService {
         PriceAlertService(
             store: store,
             deviceService: deviceService,
-            priceService: priceService
+            priceObserverService: priceObserverService
         )
     }
 }
