@@ -28,7 +28,7 @@ final class OnstartAsyncService: Sendable {
         assetStore: any AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
-        assetsService: AssetsService,
+        assetsService: any AssetsService,
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService
     ) {

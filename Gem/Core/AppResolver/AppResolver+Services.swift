@@ -20,7 +20,7 @@ import WalletService
 extension AppResolver {
     struct Services {
         // Environment-level services
-        let assetsService: AssetsService
+        let assetsService: any AssetsService
         let balanceService: BalanceService
         let bannerService: BannerService
         let chainServiceFactory: ChainServiceFactory
@@ -43,7 +43,7 @@ extension AppResolver {
         let walletConnectorManager: WalletConnectorManager
 
         init(
-            assetsService: AssetsService,
+            assetsService: any AssetsService,
             balanceService: BalanceService,
             bannerService: BannerService,
             chainServiceFactory: ChainServiceFactory,

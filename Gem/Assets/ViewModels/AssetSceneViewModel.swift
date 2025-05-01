@@ -19,7 +19,7 @@ import PriceService
 
 struct AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
-    private let assetsService: AssetsService
+    private let assetsService: any AssetsService
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
     private let priceAlertService: PriceAlertService
@@ -34,7 +34,7 @@ struct AssetSceneViewModel: Sendable {
 
     init(
         walletsService: WalletsService,
-        assetsService: AssetsService,
+        assetsService: any AssetsService,
         transactionsService: TransactionsService,
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
