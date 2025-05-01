@@ -45,6 +45,7 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
+                "AssetsService",
                 "Primitives",
                 "Preferences",
                 "GemstonePrimitives"
