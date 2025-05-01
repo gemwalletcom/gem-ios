@@ -12,8 +12,7 @@ import Primitives
 import BigInt
 import PriceService
 
-@MainActor
-public struct DeveloperViewModel {
+public struct DeveloperViewModel: Sendable {
     private let walletId: WalletId
     private let transactionsService: TransactionsService
     private let assetService: AssetsService
@@ -268,7 +267,7 @@ public struct DeveloperViewModel {
     }
     
     func deeplink(deeplink: DeepLink) {
-        Task {
+        Task { @MainActor in
             await UIApplication.shared.open(deeplink.localUrl, options: [:])
         }
     }
