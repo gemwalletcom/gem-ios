@@ -64,25 +64,30 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if model.isMultiSelectionEnabled && !model.selectedItems.isEmpty {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(model.clearButtonTitle, action: onReset)
-                            .bold()
-                    }
-                } else {
+                let cancelToolbarItem = {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(model.cancelButtonTitle, action: onCancel)
                             .bold()
                     }
                 }
-
-                if model.isMultiSelectionEnabled {
+                switch model.selectionType {
+                case .multiSelection:
+                    if model.selectedItems.isEmpty {
+                        cancelToolbarItem()
+                    } else {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(model.clearButtonTitle, action: onReset)
+                                .bold()
+                        }
+                    }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(model.doneButtonTitle) {
                             onDone()
                         }
                         .bold()
                     }
+                case .navigationLink, .checkmark:
+                    cancelToolbarItem()
                 }
             }
         }
