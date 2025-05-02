@@ -100,6 +100,7 @@ struct ImportWalletScene: View {
             .accessibilityIdentifier("import_wallet")
             .frame(maxWidth: .scene.button.maxWidth)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .alert(item: $isPresentingErrorMessage) {

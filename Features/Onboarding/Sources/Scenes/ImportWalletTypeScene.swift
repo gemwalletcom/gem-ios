@@ -44,6 +44,7 @@ struct ImportWalletTypeScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationBarTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .searchable(

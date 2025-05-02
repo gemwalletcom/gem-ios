@@ -28,6 +28,7 @@ public struct TransactionsFilterScene: View {
                 action: onSelectTypesFilter
             )
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)

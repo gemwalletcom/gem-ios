@@ -23,6 +23,7 @@ struct AssetsFilterScene: View {
                 typeModel: model.chainsFilter.typeModel,
                 action: onSelectChainsFilter)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)

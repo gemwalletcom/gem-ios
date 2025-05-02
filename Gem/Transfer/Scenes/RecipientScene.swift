@@ -85,6 +85,7 @@ struct RecipientScene: View {
             .frame(maxWidth: .scene.button.maxWidth)
             .buttonStyle(.blue())
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .background(Colors.grayBackground)
         .navigationTitle(model.tittle)
         .sheet(item: $isPresentingScanner) { value in

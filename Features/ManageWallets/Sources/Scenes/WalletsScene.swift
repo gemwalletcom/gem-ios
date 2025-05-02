@@ -100,6 +100,7 @@ public struct WalletsScene: View {
             }
             .listRowInsets(.assetListRowInsets)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .alert("",
             isPresented: $isPresentingErrorMessage.mappedToBool(),
             actions: {},
