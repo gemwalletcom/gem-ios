@@ -37,9 +37,9 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
         switch type {
         case let .nfts(action): action != nil ? Localized.Nft.State.Empty.description : nil
         case .priceAlerts: Localized.PriceAlerts.State.Empty.description
-        case let .asset(ticker): Localized.Asset.State.Empty.description(ticker)
+        case .asset(let symbol, _): Localized.Asset.State.Empty.description(symbol)
         case .activity: Localized.Activity.State.Empty.description
-        case let .stake(ticker): Localized.Stake.State.Empty.description(ticker)
+        case .stake(let symbol): Localized.Stake.State.Empty.description(symbol)
         case .walletConnect: Localized.WalletConnect.State.Empty.description
         case let .search(searchType, action):
             switch searchType {
@@ -65,27 +65,32 @@ public struct EmptyContentTypeViewModel: EmptyContentViewable {
 
     public var buttons: [EmptyAction] {
         switch type {
-        case .priceAlerts, .asset, .stake, .walletConnect, .markets:
+        case .priceAlerts, .stake, .walletConnect, .markets:
             return []
+        case let .asset(_ , buy):
+            return [
+                EmptyAction(title: Localized.Wallet.buy, action: buy),
+            ]
         case let .nfts(action):
             let receive = EmptyAction(title: Localized.Wallet.receive, action: action)
             return [receive]
         case let .activity(receive, buy):
-            let all = [
+            return [
+                EmptyAction(title: Localized.Wallet.buy, action: buy),
                 EmptyAction(title: Localized.Wallet.receive, action: receive),
-                EmptyAction(title: Localized.Wallet.buy, action: buy)
-            ]
-            return all.filter { $0.action != nil }
+            ].filter { $0.action != nil }
         case let .search(searchType, action):
             switch searchType {
             case .assets:
-                let custom = EmptyAction(title: Localized.Assets.addCustomToken, action: action)
-                return [custom].filter { $0.action != nil }
+                return [
+                    EmptyAction(title: Localized.Assets.addCustomToken, action: action)
+                ].filter { $0.action != nil }
             case .networks:
                 return []
             case .activity:
-                let clean = EmptyAction(title: Localized.Filter.clear, action: action)
-                return [clean]
+                return [
+                    EmptyAction(title: Localized.Filter.clear, action: action)
+                ]
             }
         }
     }

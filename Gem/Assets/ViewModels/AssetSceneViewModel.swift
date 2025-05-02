@@ -31,7 +31,9 @@ struct AssetSceneViewModel: Sendable {
 
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
-
+    
+    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
+    
     init(
         walletsService: WalletsService,
         assetsService: any AssetsService,
@@ -39,7 +41,8 @@ struct AssetSceneViewModel: Sendable {
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
-        walletModel: WalletViewModel
+        walletModel: WalletViewModel,
+        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
@@ -50,6 +53,7 @@ struct AssetSceneViewModel: Sendable {
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
         self.walletModel = walletModel
+        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 
     var title: String { assetModel.name }
@@ -93,7 +97,7 @@ struct AssetSceneViewModel: Sendable {
     }
 
     var emptyConentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol))
+        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol, buy: onSelectBuy))
     }
 
     var stakeAprText: String {
@@ -168,6 +172,13 @@ extension AssetSceneViewModel {
         } catch {
             NSLog("disablePriceAlert error \(error)")
         }
+    }
+    
+    func onSelectBuy() {
+        isPresentingAssetSelectedInput = SelectedAssetInput(
+            type: .buy(assetModel.asset),
+            assetAddress: assetDataModel.assetAddress
+        )
     }
 }
 
