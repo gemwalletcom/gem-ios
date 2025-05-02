@@ -35,6 +35,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
                 onFinishSelection: onFinishSelection,
                 listContent: listContent
             )
+            .padding(.bottom, .scene.bottom)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .presentationDetentsForCurrentDeviceSize(expandable: true)
