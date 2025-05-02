@@ -36,6 +36,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
                 listContent: listContent
             )
             .padding(.bottom, .scene.bottom)
+            .contentMargins([.top], .medium, for: .scrollContent)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .presentationDetentsForCurrentDeviceSize(expandable: true)
