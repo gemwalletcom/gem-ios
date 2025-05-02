@@ -424,14 +424,14 @@ extension SwapSceneViewModel {
         }
     }
 
-    private func swapProvidersViewModelState(for asset: AssetData) -> StateViewType<[SwapProvidersViewModel.Item]> {
+    private func swapProvidersViewModelState(for asset: AssetData) -> StateViewType<SelectableListType<SwapProvidersViewModel.Item>> {
         switch swapState.quotes {
         case .error(let error): return .error(error)
         case .noData: return .noData
         case .data(let items):
             let priceViewModel = PriceViewModel(price: asset.price, currencyCode: preferences.currency)
             let valueFormatter = ValueFormatter(style: .short)
-            return .data(
+            return .data(.plain(
                 items.map {
                     SwapProviderItem(
                         asset: asset.asset,
@@ -440,7 +440,8 @@ extension SwapSceneViewModel {
                         priceViewModel: priceViewModel,
                         valueFormatter: valueFormatter
                     )
-            })
+                }
+            ))
         case .loading: return .loading
         }
     }

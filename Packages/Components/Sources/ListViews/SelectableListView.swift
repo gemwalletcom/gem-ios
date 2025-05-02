@@ -31,34 +31,45 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
             }
         case .loading:
             LoadingView()
-        case .data(let items):
-            ListView(
-                items: items,
-                content: { item in
-                    if model.isMultiSelectionEnabled {
-                        SelectionView(
-                            value: item,
-                            selection: model.selectedItems.contains(item) ? item : nil,
-                            action: onSelect(item:),
-                            content: {
-                                listContent(item)
-                            }
-                        )
-                    } else {
-                        NavigationCustomLink(with: listContent(item)) {
-                            onFinishSelection?([item])
-                        }
-                    }
-                }
-            )
+        case .data(let type):
+            switch type {
+            case .plain(let items):
+                ListView(
+                    items: items,
+                    content: contentView
+                )
+            case .section(let sections):
+                ListSectionView(
+                    sections: sections,
+                    content: contentView
+                )
+            }
         case .error(let error):
             ListItemErrorView(errorTitle: model.errorTitle, error: error)
+        }
+    }
+    
+    @ViewBuilder
+    private func contentView(_ item: ViewModel.Item) -> some View {
+        if model.isMultiSelectionEnabled {
+            SelectionView(
+                value: item,
+                selection: model.selectedItems.contains(item) ? item : nil,
+                action: onSelect(item:),
+                content: {
+                    listContent(item)
+                }
+            )
+        } else {
+            NavigationCustomLink(with: listContent(item)) {
+                onFinishSelection?([item])
+            }
         }
     }
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
-        guard !model.isMultiSelectionEnabled, let items = model.state.value else { return }
+        guard !model.isMultiSelectionEnabled, let items = model.state.value?.items else { return }
         onFinishSelection?(Array(items))
     }
 }

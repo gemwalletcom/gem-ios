@@ -10,11 +10,15 @@ import Components
 public struct NetworkSelectorViewModel: SelectableSheetViewable {
     public var isSearchable: Bool { true }
     public let isMultiSelectionEnabled: Bool
-    public let state: StateViewType<[Chain]>
+    public let state: StateViewType<SelectableListType<Chain>>
 
     public var selectedItems: Set<Chain>
 
-    public init(state: StateViewType<[Chain]>, selectedItems: [Chain], isMultiSelectionEnabled: Bool) {
+    public init(
+        state: StateViewType<SelectableListType<Chain>>,
+        selectedItems: [Chain],
+        isMultiSelectionEnabled: Bool
+    ) {
         self.isMultiSelectionEnabled = isMultiSelectionEnabled
         self.state = state
         self.selectedItems = Set(selectedItems)
@@ -34,8 +38,8 @@ extension NetworkSelectorViewModel: ItemFilterable {
         EmptyContentTypeViewModel(type: .search(type: EmptyContentType.SearchType.networks))
     }
     
-    public var items: [Primitives.Chain] {
-        state.value.or([])
+    public var items: [Chain] {
+        state.value?.items ?? []
     }
 
     public func filter(_ chain: Chain, query: String) -> Bool {
