@@ -9,16 +9,16 @@ public struct FiatProvidersViewModel: SelectableListAdoptable {
     public typealias Item = FiatQuoteViewModel
     public let state: StateViewType<SelectableListType<FiatQuoteViewModel>>
     public var selectedItems: Set<FiatQuoteViewModel>
-    public let isMultiSelectionEnabled: Bool
+    public let selectionType: SelectionType
     
     public init(
         state: StateViewType<SelectableListType<FiatQuoteViewModel>>,
         selectedItems: [FiatQuoteViewModel],
-        isMultiSelectionEnabled: Bool
+        selectionType: SelectionType
     ) {
         self.state = state
         self.selectedItems = Set(selectedItems)
-        self.isMultiSelectionEnabled = isMultiSelectionEnabled
+        self.selectionType = selectionType
     }
 }
 

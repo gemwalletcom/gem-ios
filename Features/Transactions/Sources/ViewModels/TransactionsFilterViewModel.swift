@@ -28,7 +28,7 @@ public struct TransactionsFilterViewModel: Equatable {
         NetworkSelectorViewModel(
             state: .data(.plain(chainsFilter.allChains)),
             selectedItems: chainsFilter.selectedChains,
-            isMultiSelectionEnabled: true
+            selectionType: .multiSelection
         )
     }
 
@@ -36,7 +36,7 @@ public struct TransactionsFilterViewModel: Equatable {
         TransactionTypesSelectorViewModel(
             state: .data(.plain(transactionTypesFilter.allTransactionsTypes)),
             selectedItems: transactionTypesFilter.selectedTypes,
-            isMultiSelectionEnabled: true
+            selectionType: .multiSelection
         )
     }
     

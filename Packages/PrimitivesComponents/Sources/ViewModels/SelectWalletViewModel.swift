@@ -12,7 +12,7 @@ public struct SelectWalletViewModel: SelectableListAdoptable {
     public var title: String { Localized.Wallets.title }
     public var state: StateViewType<SelectableListType<Wallet>>
     public var selectedItems: Set<Wallet>
-    public var isMultiSelectionEnabled: Bool { false }
+    public var selectionType: SelectionType = .checkmark
 
     public init(
         wallets: [Wallet],
@@ -30,14 +30,14 @@ public struct SelectWalletViewModel: SelectableListAdoptable {
         self.init(
             state: .data(.section(sections)),
             selectedItems: [selectedWallet],
-            isMultiSelectionEnabled: false
+            selectionType: .checkmark
         )
     }
 
     public init(
         state: StateViewType<SelectableListType<Wallet>>,
         selectedItems: [Wallet],
-        isMultiSelectionEnabled: Bool
+        selectionType: SelectionType
     ) {
         self.state = state
         self.selectedItems = Set(selectedItems)

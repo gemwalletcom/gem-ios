@@ -51,7 +51,8 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
     
     @ViewBuilder
     private func contentView(_ item: ViewModel.Item) -> some View {
-        if model.isMultiSelectionEnabled {
+        switch model.selectionType {
+        case .multiSelection, .checkmark:
             SelectionView(
                 value: item,
                 selection: model.selectedItems.contains(item) ? item : nil,
@@ -60,7 +61,7 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
                     listContent(item)
                 }
             )
-        } else {
+        case .navigationLink:
             NavigationCustomLink(with: listContent(item)) {
                 onFinishSelection?([item])
             }
@@ -69,7 +70,12 @@ public struct SelectableListView<ViewModel: SelectableListAdoptable, Content: Vi
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
-        guard !model.isMultiSelectionEnabled, let items = model.state.value?.items else { return }
-        onFinishSelection?(Array(items))
+        
+        switch model.selectionType {
+        case .multiSelection:
+            break
+        case .navigationLink, .checkmark:
+            onFinishSelection?(Array(model.selectedItems))
+        }
     }
 }

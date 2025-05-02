@@ -8,8 +8,8 @@ import SwiftUI
 import Components
 
 public struct NetworkSelectorViewModel: SelectableSheetViewable {
+    public var selectionType: SelectionType
     public var isSearchable: Bool { true }
-    public let isMultiSelectionEnabled: Bool
     public let state: StateViewType<SelectableListType<Chain>>
 
     public var selectedItems: Set<Chain>
@@ -17,9 +17,9 @@ public struct NetworkSelectorViewModel: SelectableSheetViewable {
     public init(
         state: StateViewType<SelectableListType<Chain>>,
         selectedItems: [Chain],
-        isMultiSelectionEnabled: Bool
+        selectionType: SelectionType
     ) {
-        self.isMultiSelectionEnabled = isMultiSelectionEnabled
+        self.selectionType = selectionType
         self.state = state
         self.selectedItems = Set(selectedItems)
     }
