@@ -54,6 +54,9 @@ public actor PriceObserverService: Sendable {
     }
 
     public func addAssets(assets: [AssetId]) throws {
+        if subscribedAssetIds.contains(where: assets.contains) {
+            return
+        }
         let action = WebSocketPriceAction(
             action: .add,
             assets: assets
