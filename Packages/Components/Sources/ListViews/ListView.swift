@@ -17,5 +17,6 @@ public struct ListView<Item: Identifiable, Content: View>: View {
             .listRowInsets(.assetListRowInsets)
             .listSectionSpacing(.compact)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
     }
 }

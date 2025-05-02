@@ -58,6 +58,8 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                 )
                 .frame(maxWidth: .scene.button.maxWidth)
             }
+            .padding(.bottom, .scene.bottom)
+            .contentMargins(.top, .scene.top, for: .scrollContent)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)

@@ -68,6 +68,7 @@ public struct ConnectionsScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .overlay {
             if headers.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
