@@ -23,22 +23,18 @@ public struct ListSectionView<Item: Identifiable, Content: View>: View {
                     }
                 }
 
-                Group {
+                Section {
+                    sectionContent()
+                } header: {
                     if section.title == nil && section.image == nil {
-                        Section {
-                            sectionContent()
-                        }
+                        EmptyView()
                     } else {
-                        Section {
-                            sectionContent()
-                        } header: {
-                            HStack {
-                                if let image = section.image {
-                                    image
-                                }
-                                if let title = section.title {
-                                    Text(title)
-                                }
+                        HStack {
+                            if let image = section.image {
+                                image
+                            }
+                            if let title = section.title {
+                                Text(title)
                             }
                         }
                     }

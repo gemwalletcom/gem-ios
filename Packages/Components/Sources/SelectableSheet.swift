@@ -70,13 +70,13 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                 }
                 switch model.selectionType {
                 case .multiSelection:
-                    if !model.selectedItems.isEmpty {
+                    if model.selectedItems.isEmpty {
+                        cancelToolbarItem()
+                    } else {
                         ToolbarItem(placement: .navigationBarLeading) {
                             Button(model.clearButtonTitle, action: onReset)
                                 .bold()
                         }
-                    } else {
-                        cancelToolbarItem()
                     }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(model.doneButtonTitle) {

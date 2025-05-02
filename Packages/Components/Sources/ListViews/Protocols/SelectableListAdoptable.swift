@@ -2,26 +2,6 @@
 
 import SwiftUI
 
-public enum SelectableListType<T> {
-    case plain([T])
-    case section([ListSection<T>])
-    
-    public var items: [T] {
-        switch self {
-        case .plain(let items):
-            items
-        case .section(let sections):
-            sections.map { $0.values }.reduce([], +)
-        }
-    }
-}
-
-public enum SelectionType {
-    case multiSelection
-    case navigationLink
-    case checkmark
-}
-
 public protocol SelectableListAdoptable {
     associatedtype Item: Hashable & Identifiable
     var selectionType: SelectionType { get }
