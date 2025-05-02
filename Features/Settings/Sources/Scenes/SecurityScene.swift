@@ -35,6 +35,7 @@ public struct SecurityScene: View {
                     .toggleStyle(AppToggleStyle())
             }
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .onChange(of: model.isEnabled, onToggleBiometrics)
         .onChange(of: model.isPrivacyLockEnabled, onToggleSecurityLock)
         .alert("",
