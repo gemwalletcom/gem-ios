@@ -35,6 +35,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
                 onFinishSelection: onFinishSelection,
                 listContent: listContent
             )
+            .contentMargins([.top], .medium, for: .scrollContent)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .presentationDetentsForCurrentDeviceSize(expandable: true)
