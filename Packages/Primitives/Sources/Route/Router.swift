@@ -6,6 +6,7 @@ import SwiftUI
 @Observable
 open class Router<T: Hashable> {
     public var stack: [T] = []
+    public var isPresentingAlert: AlertValue?
     
     public init(stack: [T] = []) {
         self.stack = stack
@@ -29,5 +30,9 @@ open class Router<T: Hashable> {
             return
         }
         stack = Array(stack.prefix(through: index))
+    }
+    
+    public func presentAlert(title: String, message: String) {
+        isPresentingAlert = AlertValue(title: title, message: message)
     }
 }

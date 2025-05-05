@@ -6,7 +6,6 @@ import Testing
 @testable import Primitives
 
 @Suite("Router Tests")
-@MainActor
 struct RouterTests {
     @Test
     func testPushAddsViewToStack() {

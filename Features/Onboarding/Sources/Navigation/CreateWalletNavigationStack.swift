@@ -7,26 +7,27 @@ import WalletService
 
 public struct CreateWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
-
-    @State private var navigationPath: NavigationPath = NavigationPath()
-    @Binding private var isPresentingWallets: Bool
     
     private let walletService: WalletService
+    
+    @State private var router: CreateWalletRouter
 
     public init(
         walletService: WalletService,
-        isPresentingWallets: Binding<Bool>
+        onComplete: VoidAction
     ) {
         self.walletService = walletService
-        _isPresentingWallets = isPresentingWallets
+        self.router = CreateWalletRouter(onComplete: onComplete)
     }
 
     public var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationStack(path: $router.stack) {
             SecurityReminderScene(
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Wallet.New.title,
-                    onNext: { navigationPath.append(Scenes.CreateWallet()) }
+                    onNext: {
+                        router.push(to: .createWallet)
+                    }
                 )
             )
             .toolbar {
@@ -37,24 +38,27 @@ public struct CreateWalletNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: Scenes.VerifyPhrase.self) {
-                VerifyPhraseWalletScene(
-                    model: VerifyPhraseViewModel(
-                        words: $0.words,
-                        walletService: walletService
-                    ),
-                    isPresentingWallets: $isPresentingWallets
-                )
-            }
-            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
-                CreateWalletScene(
-                    model: CreateWalletViewModel(
-                        walletService: walletService,
-                        onCreateWallet: {
-                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
-                        }
+            .navigationDestination(for: CreateWalletRouter.Route.self) { route in
+                switch route {
+                case .createWallet:
+                    CreateWalletScene(
+                        model: CreateWalletViewModel(
+                            walletService: walletService,
+                            router: router
+                        )
                     )
-                )
+                case .verifyPhrase(let words):
+                    VerifyPhraseWalletScene(
+                        model: VerifyPhraseViewModel(
+                            words: words,
+                            walletService: walletService,
+                            router: router
+                        )
+                    )
+                }
+            }
+            .alert(item: $router.isPresentingAlert) {
+                Alert(title: Text($0.title), message: Text($0.message))
             }
         }
     }

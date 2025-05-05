@@ -8,25 +8,29 @@ import Style
 import Localization
 import PrimitivesComponents
 
-class VerifyPhraseViewModel: ObservableObject {
+@Observable
+final class VerifyPhraseViewModel {
     
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
+    private let router: CreateWalletRouter
 
-    @Published var wordsVerified: [String]
-    @Published var wordsIndex: Int = 0
-    @Published var buttonState = StateButtonStyle.State.disabled
+    var wordsVerified: [String]
+    var wordsIndex: Int = 0
+    var buttonState = StateButtonStyle.State.disabled
     private var selectedIndexes = Set<WordIndex>()
 
     init(
         words: [String],
-        walletService: WalletService
+        walletService: WalletService,
+        router: CreateWalletRouter
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
+        self.router = router
     }
     
     var title: String {
@@ -70,8 +74,17 @@ class VerifyPhraseViewModel: ObservableObject {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() throws -> Primitives.Wallet  {
-        let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        return try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+    func importWallet() {
+        do {
+            let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
+            let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+            router.didFinishFlow()
+        } catch {
+            router.presentAlert(
+                title: Localized.Errors.createWallet(""),
+                message: error.localizedDescription
+            )
+            buttonState = .normal
+        }
     }
 }

@@ -7,7 +7,7 @@ import PrimitivesComponents
 
 struct CreateWalletScene: View {
 
-    @StateObject var model: CreateWalletViewModel
+    @State var model: CreateWalletViewModel
     
     @State private var isPresentingCopyToast = false
 

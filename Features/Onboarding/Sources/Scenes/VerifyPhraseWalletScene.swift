@@ -8,17 +8,10 @@ import PrimitivesComponents
 
 struct VerifyPhraseWalletScene: View {
     
-    @StateObject var model: VerifyPhraseViewModel
+    @State var model: VerifyPhraseViewModel
 
-    @State private var isPresentingErrorMessage: String?
-    @Binding private var isPresentingWallets: Bool
-
-    init(
-        model: VerifyPhraseViewModel,
-        isPresentingWallets: Binding<Bool>
-    ) {
-        _model = StateObject(wrappedValue: model)
-        _isPresentingWallets = isPresentingWallets
+    init(model: VerifyPhraseViewModel) {
+        _model = .init(initialValue: model)
     }
 
     var body: some View {
@@ -64,9 +57,6 @@ struct VerifyPhraseWalletScene: View {
         }
         .padding(.bottom, .scene.bottom)
         .navigationTitle(model.title)
-        .alert(item: $isPresentingErrorMessage) {
-            Alert(title: Text(Localized.Errors.createWallet("")), message: Text($0))
-        }
     }
 
 }
@@ -79,16 +69,8 @@ extension VerifyPhraseWalletScene {
 
         Task {
             try await Task.sleep(for: .milliseconds(50))
-            do {
-                try await MainActor.run {
-                    let _ = try model.importWallet()
-                    isPresentingWallets = false
-                }
-            } catch {
-                await MainActor.run {
-                    isPresentingErrorMessage = error.localizedDescription
-                    model.buttonState = .normal
-                }
+            await MainActor.run {
+                model.importWallet()
             }
         }
     }

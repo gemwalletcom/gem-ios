@@ -5,18 +5,19 @@ import SwiftUI
 import Localization
 import PrimitivesComponents
 
-class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
+@Observable
+final class CreateWalletViewModel: SecretPhraseViewableModel {
     private let walletService: WalletService
-    private let onCreateWallet: (([String]) -> Void)?
+    private let router: CreateWalletRouter
 
-    @Published var words: [String] = []
+    var words: [String] = []
 
     init(
         walletService: WalletService,
-        onCreateWallet: (([String]) -> Void)? = nil
+        router: CreateWalletRouter
     ) {
         self.walletService = walletService
-        self.onCreateWallet = onCreateWallet
+        self.router = router
     }
 
     var title: String {
@@ -43,6 +44,6 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     }
 
     func continueAction() {
-        onCreateWallet?(words)
+        router.push(to: .verifyPhrase(words))
     }
 }

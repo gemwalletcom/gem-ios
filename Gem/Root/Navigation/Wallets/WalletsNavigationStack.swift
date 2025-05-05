@@ -49,9 +49,10 @@ struct WalletsNavigationStack: View {
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
-                    walletService: walletService,
-                    isPresentingWallets: $isPresentingWallets
-                )
+                    walletService: walletService
+                ) {
+                    isPresentingWallets = false
+                }
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
