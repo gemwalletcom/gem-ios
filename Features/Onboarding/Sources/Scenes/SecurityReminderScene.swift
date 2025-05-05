@@ -20,18 +20,15 @@ struct SecurityReminderScene: View {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
                 
-                ForEach($model.items) { $item in
+                ForEach(model.items) { item in
                     Section {
-                        Toggle(isOn: $item.isConfirmed) {
-                            ListItemView(
-                                title: item.title,
-                                titleStyle: .headline,
-                                titleExtra: item.subtitle,
-                                titleStyleExtra: .bodySecondary,
-                                imageStyle: item.image
-                            )
-                        }
-                        .toggleStyle(CheckboxStyle(position: .right))
+                        ListItemView(
+                            title: item.title,
+                            titleStyle: .headline,
+                            titleExtra: item.subtitle,
+                            titleStyleExtra: .bodySecondary,
+                            imageStyle: item.image
+                        )
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
@@ -41,12 +38,9 @@ struct SecurityReminderScene: View {
             
             Spacer()
 
-            StateButton(
-                text: model.buttonTitle,
-                viewState: model.buttonState,
-                action: model.onNext
-            )
+            Button(Localized.Common.continue, action: model.onNext)
             .frame(maxWidth: .scene.button.maxWidth)
+            .buttonStyle(.blue())
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)

@@ -23,12 +23,4 @@ final class SecurityReminderViewModelDefault: SecurityReminderViewModel {
     var buttonTitle: String = Localized.Common.continue
     var items: [SecurityReminderItem] = SecurityReminderItem.createWallet
     var docsUrl: URL { Docs.url(.whatIsSecretPhrase) }
-    
-    var isConfirmed: Bool {
-        items.allSatisfy { $0.isConfirmed }
-    }
-    
-    var buttonState: StateViewType<Bool> {
-        isConfirmed ? .data(true) : .noData
-    }
 }
