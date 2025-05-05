@@ -40,7 +40,7 @@ public struct CollectionsScene: View {
             }
         }
         .padding(.horizontal, .medium)
-        .if(!nftDataList.isEmpty) {
+        .if(nftDataList.isNotEmpty) {
             $0.background(Colors.insetGroupedListStyle)
         }
         .navigationBarTitleDisplayMode(.inline)
