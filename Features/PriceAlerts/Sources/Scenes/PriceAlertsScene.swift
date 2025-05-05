@@ -34,6 +34,7 @@ public struct PriceAlertsScene: View {
                 }
             )
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)
         .overlay {
             if priceAlerts.isEmpty {

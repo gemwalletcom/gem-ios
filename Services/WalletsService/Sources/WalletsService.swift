@@ -24,7 +24,6 @@ public struct WalletsService: Sendable {
     private let assetsEnabler: any AssetsEnabler
     private let priceUpdater: any PriceUpdater
     private let balanceUpdater: any BalanceUpdater
-    private let currencyUpdater: any CurrencyUpdater
     private let assetsVisibilityManager: any AssetVisibilityServiceable
 
     // TODO: - move to different place
@@ -37,6 +36,7 @@ public struct WalletsService: Sendable {
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
+        priceObserver: PriceObserverService,
         chainService: ChainServiceFactory,
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
@@ -49,13 +49,7 @@ public struct WalletsService: Sendable {
             balanceService: balanceService,
             walletSessionService: walletSessionService
         )
-        let priceUpdater = PriceUpdateService(priceService: priceService, preferences: preferences.preferences)
-
-        let currencyUpdateService = CurrencyUpdateService(
-            assetsService: assetsService,
-            balanceUpdater: balanceUpdater,
-            priceUpdater: priceUpdater
-        )
+        let priceUpdater = PriceUpdateService(priceObserver: priceObserver)
 
         let assetsEnabler = AssetsEnablerService(
             assetsService: assetsService,
@@ -75,7 +69,6 @@ public struct WalletsService: Sendable {
         self.assetsEnabler = assetsEnabler
         self.balanceUpdater = balanceUpdater
         self.priceUpdater = priceUpdater
-        self.currencyUpdater = currencyUpdateService
         self.discoveryProcessor = processor
 
 
@@ -93,10 +86,7 @@ public struct WalletsService: Sendable {
     }
 
     public func updateAssets(walletId: WalletId, assetIds: [AssetId]) async throws {
-        async let balances: () = try balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
-        async let prices: () = try priceUpdater.updatePrices(assetIds: assetIds)
-
-        let (_, _) =  try await (balances, prices)
+        try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }
 
     public func fetch(walletId: WalletId, assetIds: [AssetId]) async throws {
@@ -104,12 +94,6 @@ public struct WalletsService: Sendable {
         async let assets: () = try await discoveryProcessor.discoverAssets(for: walletId, preferences: WalletPreferences(walletId: walletId.id))
 
         let _ = try await [updateAssets, assets]
-    }
-
-    public func updatePrices() async throws {
-        try await priceUpdater.updatePrices(
-            assetIds: try assetsService.getEnabledAssets()
-        )
     }
 
     public func setup(wallet: Wallet) throws {
@@ -155,19 +139,11 @@ extension WalletsService: AssetsEnabler {
     }
 }
 
-// MARK: - CurrencyUpdater
-
-extension WalletsService: CurrencyUpdater {
-    public func changeCurrency(for walletId: WalletId) async throws {
-        try await currencyUpdater.changeCurrency(for: walletId)
-    }
-}
-
 // MARK: - PriceUpdater
 
 extension WalletsService: PriceUpdater {
-    public func updatePrices(assetIds: [AssetId]) async throws {
-        try await priceUpdater.updatePrices(assetIds: assetIds)
+    public func addPrices(assetIds: [AssetId]) async throws {
+        try await priceUpdater.addPrices(assetIds: assetIds)
     }
 }
 

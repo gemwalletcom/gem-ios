@@ -55,6 +55,7 @@ public struct NetworkFeeScene: View {
                 placeholders: [.subtitle]
             )
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

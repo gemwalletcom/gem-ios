@@ -3,6 +3,7 @@
 import XCTest
 import Primitives
 
+@MainActor
 final class ScreenshotsLaunchTests: XCTestCase {
 
     override func setUpWithError() throws {
@@ -97,6 +98,7 @@ final class ScreenshotsLaunchTests: XCTestCase {
     }
 }
 
+@MainActor
 struct Snapshoter {
 
     let app: XCUIApplication

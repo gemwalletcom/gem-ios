@@ -4,13 +4,14 @@ import Foundation
 import Primitives
 import WalletConnectorService
 import Localization
+import PrimitivesComponents
 
 public struct ConnectionProposalViewModel {
     private let connectionsService: ConnectionsService
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
     private let pairingProposal: WCPairingProposal
 
-    var walletSelectorModel: SellectWalletViewModel
+    var walletSelectorModel: SelectWalletViewModel
 
     public init(
         connectionsService: ConnectionsService,
@@ -20,7 +21,7 @@ public struct ConnectionProposalViewModel {
         self.connectionsService = connectionsService
         self.confirmTransferDelegate = confirmTransferDelegate
         self.pairingProposal = pairingProposal
-        self.walletSelectorModel = SellectWalletViewModel(
+        self.walletSelectorModel = SelectWalletViewModel(
             wallets: pairingProposal.proposal.wallets,
             selectedWallet: pairingProposal.proposal.defaultWallet
         )
@@ -33,7 +34,7 @@ public struct ConnectionProposalViewModel {
     var websiteTitle: String { Localized.WalletConnect.website }
 
     var walletName: String {
-        walletSelectorModel.walletModel.name
+        walletSelectorModel.selectedItems.first?.name ?? .empty
     }
 
     var appText: String {
@@ -60,7 +61,9 @@ public struct ConnectionProposalViewModel {
 
 extension ConnectionProposalViewModel {
     func accept() throws {
-        let selectedWalletId = walletSelectorModel.walletModel.wallet.walletId
-        confirmTransferDelegate(.success(selectedWalletId.id))
+        guard let selectedWallet = walletSelectorModel.selectedItems.first else {
+            return
+        }
+        confirmTransferDelegate(.success(selectedWallet.id))
     }
 }

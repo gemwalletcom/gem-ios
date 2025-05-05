@@ -2,6 +2,7 @@
 
 import XCTest
 
+@MainActor
 final class ImportWalletUITests: XCTestCase {
 
     func testImportWallet() throws {

@@ -9,12 +9,12 @@ import StoreTestKit
 
 public extension PriceService {
     static func mock(
-        apiService: any GemAPIPriceService = GemAPIPriceServiceMock(),
-        priceStore: PriceStore = .mock()
+        priceStore: PriceStore = .mock(),
+        fiatRateStore: FiatRateStore = .mock()
     ) -> Self {
         PriceService(
-            apiService: apiService,
-            priceStore: priceStore
+            priceStore: priceStore,
+            fiatRateStore: fiatRateStore
         )
     }
 }

@@ -93,12 +93,17 @@ struct ServicesFactory {
         let notificationService = NotificationService.main
 
         let priceService = PriceService(
-            priceStore: storeManager.priceStore
+            priceStore: storeManager.priceStore,
+            fiatRateStore: storeManager.fiatRateStore
+        )
+        let priceObserverService = PriceObserverService(
+            priceService: priceService,
+            preferences: preferences
         )
         let priceAlertService = Self.makePriceAlertService(
             priceAlertStore: storeManager.priceAlertStore,
             deviceService: deviceService,
-            priceService: priceService,
+            priceObserverService: priceObserverService,
             preferences: preferences
         )
         let explorerService = ExplorerService.standard
@@ -123,6 +128,7 @@ struct ServicesFactory {
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
+            priceObserver: priceObserverService,
             transactionService: transactionService,
             chainServiceFactory: chainServiceFactory,
             bannerSetupService: bannerSetupService
@@ -147,6 +153,7 @@ struct ServicesFactory {
             nodeService: nodeService,
             notificationService: notificationService,
             priceAlertService: priceAlertService,
+            priceObserverService: priceObserverService,
             priceService: priceService,
             stakeService: stakeService,
             transactionsService: transactionsService,
@@ -285,13 +292,13 @@ extension ServicesFactory {
     private static func makePriceAlertService(
         priceAlertStore: PriceAlertStore,
         deviceService: DeviceService,
-        priceService: PriceService,
+        priceObserverService: PriceObserverService,
         preferences: Preferences
     ) -> PriceAlertService {
         PriceAlertService(
             store: priceAlertStore,
             deviceService: deviceService,
-            priceService: priceService,
+            priceObserverService: priceObserverService,
             preferences: preferences
         )
     }
@@ -317,6 +324,7 @@ extension ServicesFactory {
         assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
+        priceObserver: PriceObserverService,
         transactionService: TransactionService,
         chainServiceFactory: ChainServiceFactory,
         bannerSetupService: BannerSetupService
@@ -326,6 +334,7 @@ extension ServicesFactory {
             assetsService: assetsService,
             balanceService: balanceService,
             priceService: priceService,
+            priceObserver: priceObserver,
             chainService: chainServiceFactory,
             transactionService: transactionService,
             bannerSetupService: bannerSetupService,

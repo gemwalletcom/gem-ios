@@ -6,7 +6,7 @@ import PrimitivesComponents
 import WalletsService
 import Components
 
-struct ReceiveViewModel {
+struct ReceiveViewModel: Sendable {
     let qrWidth: CGFloat = 300
     
     let assetModel: AssetViewModel

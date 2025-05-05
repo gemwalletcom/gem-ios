@@ -118,14 +118,6 @@ extension WalletSceneViewModel {
             )
         }
     }
-
-    func updatePrices() async {
-        do {
-            try await walletsService.updatePrices()
-        } catch {
-            NSLog("WalletSceneViewModel updatePrices error: \(error)")
-        }
-    }
     
     public func onSelectWalletBar() {
         isPresentingWallets.toggle()

@@ -15,13 +15,15 @@ import ExplorerService
 import AssetsService
 import TransactionsService
 import WalletsService
+import PriceService
 
-class AssetSceneViewModel: ObservableObject {
+struct AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
+    private let priceObserverService: PriceObserverService
     private let priceAlertService: PriceAlertService
-
+    
     let assetModel: AssetViewModel
     let assetDataModel: AssetDataViewModel
     let walletModel: WalletViewModel
@@ -29,23 +31,29 @@ class AssetSceneViewModel: ObservableObject {
 
     private let preferences: SecurePreferences = .standard
     private let transactionsLimit = 50
-
+    
+    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
+    
     init(
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
+        priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
         assetDataModel: AssetDataViewModel,
-        walletModel: WalletViewModel
+        walletModel: WalletViewModel,
+        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
         self.assetsService = assetsService
         self.transactionsService = transactionsService
+        self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
 
         self.assetModel = AssetViewModel(asset: assetDataModel.asset)
         self.assetDataModel = assetDataModel
         self.walletModel = walletModel
+        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 
     var title: String { assetModel.name }
@@ -89,7 +97,7 @@ class AssetSceneViewModel: ObservableObject {
     }
 
     var emptyConentModel: EmptyContentTypeViewModel {
-        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol))
+        EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol, buy: onSelectBuy))
     }
 
     var stakeAprText: String {
@@ -129,6 +137,9 @@ extension AssetSceneViewModel {
             // TODO: - handle updateAsset error
             print("asset scene: updateAsset error \(error)")
         }
+        Task {
+            try await priceObserverService.addAssets(assets: [assetModel.asset.id])
+        }
     }
 
     func updateWallet() async {
@@ -161,6 +172,13 @@ extension AssetSceneViewModel {
         } catch {
             NSLog("disablePriceAlert error \(error)")
         }
+    }
+    
+    func onSelectBuy() {
+        isPresentingAssetSelectedInput = SelectedAssetInput(
+            type: .buy(assetModel.asset),
+            assetAddress: assetDataModel.assetAddress
+        )
     }
 }
 

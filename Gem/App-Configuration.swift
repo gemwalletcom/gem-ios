@@ -129,7 +129,11 @@ extension StakeService {
 }
 
 extension PriceService {
-    static let main = PriceService(priceStore: .main)
+    static let main = PriceService(priceStore: .main, fiatRateStore: .main)
+}
+
+extension PriceObserverService {
+    static let main = PriceObserverService(priceService: .main, preferences: .standard)
 }
 
 extension TransactionService {
@@ -156,6 +160,7 @@ extension WalletsService {
         assetsService: .main,
         balanceService: .main,
         priceService: .main,
+        priceObserver: .main,
         chainService: .main,
         transactionService: .main,
         bannerSetupService: .main,
@@ -164,7 +169,7 @@ extension WalletsService {
 }
 
 extension PriceAlertService {
-    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main, priceService: .main)
+    static let main = PriceAlertService(store: .main, deviceService: DeviceService.main, priceObserverService: .main)
 }
 
 extension TransactionsService {
@@ -194,6 +199,10 @@ extension AssetStore {
 
 extension PriceStore {
     static let main = PriceStore(db: .main)
+}
+
+extension FiatRateStore {
+    static let main = FiatRateStore(db: .main)
 }
 
 extension PriceAlertStore {
@@ -363,5 +372,5 @@ extension BannerService {
 }
 
 extension NavigationStateManager {
-    static let main = NavigationStateManager(initialSelecedTab: .wallet)
+    static let main = NavigationStateManager()
 }

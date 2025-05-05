@@ -14,12 +14,15 @@ import WalletTab
 import Transactions
 
 struct MainTabView: View {
+    @Environment(\.scenePhase) private var scenePhase
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
     @Environment(\.notificationService) private var notificationService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
+    @Environment(\.priceService) private var priceService
+    @Environment(\.priceObserverService) private var priceObserverService
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
@@ -100,7 +103,8 @@ struct MainTabView: View {
             .tag(TabItem.activity)
 
             SettingsNavigationStack(
-                walletId: model.wallet.walletId
+                walletId: model.wallet.walletId,
+                priceService: priceService
             )
             .tabItem {
                 tabItem(Localized.Settings.title, Images.Tabs.settings)
@@ -113,6 +117,29 @@ struct MainTabView: View {
             initial: true,
             onReceiveNotifications
         )
+        .taskOnce {
+            Task {
+                await priceObserverService.connect()
+            }
+        }
+        .onChange(of: scenePhase) { (oldScene, newPhase) in
+            switch newPhase {
+            case .active:
+                Task {
+                    await priceObserverService.connect()
+                }
+                print("App moved to active — restart websocket, refresh UI…")
+            case .inactive:
+                Task {
+                    await priceObserverService.disconnect()
+                }
+                print("App is inactive — e.g. transitioning or showing interruption UI")
+            case .background:
+                print("App went to background — tear down connections, save state…")
+            @unknown default:
+                break
+            }
+        }
     }
 }
 

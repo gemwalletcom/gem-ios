@@ -12,7 +12,8 @@ import Preferences
 import PriceAlertService
 
 @Observable
-class SelectAssetViewModel {
+@MainActor
+final class SelectAssetViewModel {
     let preferences: Preferences
     let wallet: Wallet
     let selectType: SelectAssetType

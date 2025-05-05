@@ -28,7 +28,7 @@ struct AssetsEnablerService: AssetsEnabler {
             // If enabling, also update balances and prices
             if enabled {
                 async let balanceUpdate: () = balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
-                async let priceUpdate: () = priceUpdater.updatePrices(assetIds: assetIds)
+                async let priceUpdate: () = priceUpdater.addPrices(assetIds: assetIds)
                 _ = try await (balanceUpdate, priceUpdate)
             }
         } catch {

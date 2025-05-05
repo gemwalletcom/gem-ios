@@ -30,7 +30,7 @@ public protocol GemAPINameService: Sendable {
 }
 
 public protocol GemAPIChartService: Sendable {
-    func getCharts(assetId: AssetId, currency: String, period: String) async throws -> Charts
+    func getCharts(assetId: AssetId, period: String) async throws -> Charts
 }
 
 public protocol GemAPIDeviceService: Sendable {
@@ -55,10 +55,6 @@ public protocol GemAPIPriceAlertService: Sendable {
     func getPriceAlerts(deviceId: String) async throws -> [PriceAlert]
     func addPriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
     func deletePriceAlerts(deviceId: String, priceAlerts: [PriceAlert]) async throws
-}
-
-public protocol GemAPIPriceService: Sendable {
-    func getPrice(assetIds: [AssetId], currency: String) async throws -> [AssetPrice]
 }
 
 public protocol GemAPINFTService: Sendable {
@@ -113,9 +109,9 @@ extension GemAPIService: GemAPINameService {
 }
 
 extension GemAPIService: GemAPIChartService {
-    public func getCharts(assetId: AssetId, currency: String, period: String) async throws -> Charts {
+    public func getCharts(assetId: AssetId, period: String) async throws -> Charts {
         return try await provider
-            .request(.getCharts(assetId, currency: currency, period: period))
+            .request(.getCharts(assetId, period: period))
             .map(as: Charts.self)
     }
 }
@@ -245,15 +241,6 @@ extension GemAPIService: GemAPIPriceAlertService {
         let _ = try await provider
             .request(.deletePriceAlerts(deviceId: deviceId, priceAlerts: priceAlerts))
             .map(as: Int.self)
-    }
-}
-
-extension GemAPIService: GemAPIPriceService {
-    public func getPrice(assetIds: [AssetId], currency: String) async throws -> [Primitives.AssetPrice] {
-        let request = AssetPricesRequest(currency: currency, assetIds: assetIds)
-        return try await provider
-            .request(.getPrices(request))
-            .map(as: AssetPrices.self).prices
     }
 }
 

@@ -1,9 +1,20 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import WalletConnectRelay
+@preconcurrency import WalletConnectRelay
 
-public final class NativeWebSocketClient: WebSocketConnecting {
+private struct WSConnectingCompletionBox: @unchecked Sendable {
+    let callback: (() -> Void)?
+
+    func call() {
+        callback?()
+    }
+}
+
+// TODO: - remove preconcurrency, once walletconnect will be migrated to swift6
+// URLSessionWebSocketTask - use async await instead of closure, once WC will be migrated to swift6
+
+public final class NativeWebSocketClient: WebSocketConnecting, @unchecked Sendable {
     public private(set) var isConnected = false
     public var onConnect: (() -> Void)?
     public var onDisconnect: ((Error?) -> Void)?
@@ -33,19 +44,22 @@ public final class NativeWebSocketClient: WebSocketConnecting {
     }
 
     public func write(string: String, completion: (() -> Void)? = nil) {
+        // Wrap the non-Sendable closure
+        let box = WSConnectingCompletionBox(callback: completion)
+
         socket?.send(.string(string)) { [weak self] error in
-            if let error = error {
+            if let error {
                 self?.isConnected = false
                 self?.onDisconnect?(error)
             } else {
-                completion?()
+                box.call()
             }
         }
     }
 
     private func receiveNext() {
-        socket?.receive { [weak self] result in
-            guard let self = self else { return }
+        socket?.receive { @Sendable [weak self] result in
+            guard let self else { return }
             switch result {
             case .success(.string(let text)):
                 self.onText?(text)

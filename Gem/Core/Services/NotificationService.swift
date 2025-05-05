@@ -4,22 +4,23 @@ import Foundation
 import Primitives
 
 @Observable
-class NotificationService {
-
+final class NotificationService: Sendable {
+    @MainActor
     var notifications: [PushNotification] = []
 
-    init() {
+    init() {}
+}
 
-    }
-
+@MainActor
+extension NotificationService {
     func clear() {
         notifications = []
     }
-    
+
     func notify(notification: PushNotification) {
         notifications.append(notification)
     }
-    
+
     func handleUserInfo(_ userInfo: [AnyHashable : Any]) {
         do {
             notify(notification: try PushNotification(from: userInfo))

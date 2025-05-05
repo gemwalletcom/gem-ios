@@ -257,8 +257,8 @@ public enum Localized {
     }
     /// Save
     public static let save = Localized.tr("Localizable", "common.save", fallback: "Save")
-    /// Secret Recovery Phrase
-    public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Recovery Phrase")
+    /// Secret Phrase
+    public static let secretPhrase = Localized.tr("Localizable", "common.secret_phrase", fallback: "Secret Phrase")
     /// See All
     public static let seeAll = Localized.tr("Localizable", "common.see_all", fallback: "See All")
     /// Share
@@ -1085,16 +1085,16 @@ public enum Localized {
       public static func privateKey(_ p1: Any) -> String {
         return Localized.tr("Localizable", "wallet.import.private_key", String(describing: p1), fallback: "%@ encoded private key")
       }
-      /// Secret Recovery Phrase
-      public static let secretPhrase = Localized.tr("Localizable", "wallet.import.secret_phrase", fallback: "Secret Recovery Phrase")
+      /// Secret Phrase
+      public static let secretPhrase = Localized.tr("Localizable", "wallet.import.secret_phrase", fallback: "Secret Phrase")
       /// Import Wallet
       public static let title = Localized.tr("Localizable", "wallet.import.title", fallback: "Import Wallet")
     }
     public enum New {
-      /// Confirm that you've written down and stored your Secret Recovery Phrase securely before proceeding, as it is crucial for future wallet access and recovery.
-      public static let backupConfirmWarning = Localized.tr("Localizable", "wallet.new.backup_confirm_warning", fallback: "Confirm that you've written down and stored your Secret Recovery Phrase securely before proceeding, as it is crucial for future wallet access and recovery.")
-      /// Write down your unique Secret Recovery Phrase and store it securely; it's essential for wallet access and recovery.
-      public static let backupWarning = Localized.tr("Localizable", "wallet.new.backup_warning", fallback: "Write down your unique Secret Recovery Phrase and store it securely; it's essential for wallet access and recovery.")
+      /// Confirm that you've written down and stored your Secret Phrase securely before proceeding, as it is crucial for future wallet access and recovery.
+      public static let backupConfirmWarning = Localized.tr("Localizable", "wallet.new.backup_confirm_warning", fallback: "Confirm that you've written down and stored your Secret Phrase securely before proceeding, as it is crucial for future wallet access and recovery.")
+      /// Write down your unique Secret Phrase and store it securely; it's essential for wallet access and recovery.
+      public static let backupWarning = Localized.tr("Localizable", "wallet.new.backup_warning", fallback: "Write down your unique Secret Phrase and store it securely; it's essential for wallet access and recovery.")
       /// New Wallet
       public static let title = Localized.tr("Localizable", "wallet.new.title", fallback: "New Wallet")
     }
