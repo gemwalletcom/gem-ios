@@ -726,7 +726,6 @@
 			isa = PBXGroup;
 			children = (
 				C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */,
-				C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */,
 				D8BAC94F2BCF6B50001608BC /* AddTokenViewModel.swift */,
 				D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */,
 				83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */,
@@ -952,6 +951,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A39F2C9696FE006FABE8 /* AssetHeaderViewModel.swift */,
+				C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
