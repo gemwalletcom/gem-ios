@@ -8,44 +8,67 @@ import Testing
 @Suite("Router Tests")
 struct RouterTests {
     @Test
-    func testPushAddsViewToStack() {
-        let router = Router<String>()
+    func testPushAddsViewToPath() {
+        let router = Router(onComplete: {})
         router.push(to: "First")
-        #expect(router.stack == ["First"])
+        #expect(router.path.count == 1)
     }
 
     @Test
-    func testPopRemovesLastViewFromStack() {
-        let router = Router<String>()
+    func testPopRemovesLastViewFromPath() {
+        let router = Router(onComplete: {})
         router.push(to: "First")
         router.push(to: "Second")
         router.pop()
-        #expect(router.stack == ["First"])
+        #expect(router.path.count == 1)
     }
 
     @Test
-    func testPopDoesNothingIfStackIsEmpty() {
-        let router = Router<String>()
+    func testPopDoesNothingIfPathIsEmpty() {
+        let router = Router(onComplete: {})
         router.pop()
-        #expect(router.stack == [])
+        #expect(router.path.isEmpty)
     }
 
     @Test
-    func testNavigateBackToExistingView() {
-        let router = Router<String>()
+    func testPopToRootViewRemovesAllElements() {
+        let router = Router(onComplete: {})
+        router.push(to: "First")
+        router.push(to: "Second")
+        router.popToRootView()
+        #expect(router.path.isEmpty)
+    }
+    
+    @Test
+    func testMultiplePushesAddsViewsToPath() {
+        let router = Router(onComplete: {})
         router.push(to: "First")
         router.push(to: "Second")
         router.push(to: "Third")
-        router.navigateBack(to: "Second")
-        #expect(router.stack == ["First", "Second"])
+        #expect(router.path.count == 3)
     }
 
     @Test
-    func testNavigateBackToNonexistentView() {
-        let router = Router<String>()
-        router.push(to: "First")
-        router.push(to: "Second")
-        router.navigateBack(to: "Unknown")
-        #expect(router.stack == ["First", "Second"])
+    func testPopAfterSinglePushEmptiesPath() {
+        let router = Router(onComplete: {})
+        router.push(to: "Only")
+        router.pop()
+        #expect(router.path.isEmpty)
+    }
+
+    @Test
+    func testPresentAlertSetsAlertValue() {
+        let router = Router(onComplete: {})
+        router.presentAlert(title: "Title", message: "Message")
+        #expect(router.isPresentingAlert?.title == "Title")
+        #expect(router.isPresentingAlert?.message == "Message")
+    }
+
+    @Test
+    func testOnCompleteIsCalled() {
+        var didCall = false
+        let router = Router(onComplete: { didCall = true })
+        router.onComplete!()
+        #expect(didCall)
     }
 }

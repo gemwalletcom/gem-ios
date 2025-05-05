@@ -14,7 +14,7 @@ final class VerifyPhraseViewModel {
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
-    private let router: CreateWalletRouter
+    private let router: Routing
 
     var wordsVerified: [String]
     var wordsIndex: Int = 0
@@ -24,7 +24,7 @@ final class VerifyPhraseViewModel {
     init(
         words: [String],
         walletService: WalletService,
-        router: CreateWalletRouter
+        router: Routing
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
@@ -78,7 +78,7 @@ final class VerifyPhraseViewModel {
         do {
             let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
             let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
-            router.didFinishFlow()
+            router.onComplete?()
         } catch {
             router.presentAlert(
                 title: Localized.Errors.createWallet(""),

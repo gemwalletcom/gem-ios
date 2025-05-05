@@ -8,13 +8,13 @@ import PrimitivesComponents
 @Observable
 final class CreateWalletViewModel: SecretPhraseViewableModel {
     private let walletService: WalletService
-    private let router: CreateWalletRouter
+    private let router: Routing
 
     var words: [String] = []
 
     init(
         walletService: WalletService,
-        router: CreateWalletRouter
+        router: Routing
     ) {
         self.walletService = walletService
         self.router = router
@@ -44,6 +44,6 @@ final class CreateWalletViewModel: SecretPhraseViewableModel {
     }
 
     func continueAction() {
-        router.push(to: .verifyPhrase(words))
+        router.push(to: CreateWalletRoute.verifyPhrase(words))
     }
 }
