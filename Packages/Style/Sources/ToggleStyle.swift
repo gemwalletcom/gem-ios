@@ -31,16 +31,14 @@ public struct CheckboxStyle: ToggleStyle {
     }
 
     public func makeBody(configuration: Self.Configuration) -> some View {
-        HStack {
+        HStack(spacing: .medium) {
             if position == .left {
                 checkboxView(configuration: configuration)
-                Spacer()
             }
 
             configuration.label
             
             if position == .right {
-                Spacer()
                 checkboxView(configuration: configuration)
             }
         }

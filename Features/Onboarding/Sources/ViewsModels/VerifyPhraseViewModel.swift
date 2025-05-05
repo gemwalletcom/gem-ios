@@ -14,7 +14,6 @@ final class VerifyPhraseViewModel {
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
-    private let router: Routing
 
     var wordsVerified: [String]
     var wordsIndex: Int = 0
@@ -23,14 +22,12 @@ final class VerifyPhraseViewModel {
 
     init(
         words: [String],
-        walletService: WalletService,
-        router: Routing
+        walletService: WalletService
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
-        self.router = router
     }
     
     var title: String {
@@ -74,17 +71,8 @@ final class VerifyPhraseViewModel {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() {
-        do {
-            let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-            let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
-            router.onComplete?()
-        } catch {
-            router.presentAlert(
-                title: Localized.Errors.createWallet(""),
-                message: error.localizedDescription
-            )
-            buttonState = .normal
-        }
+    func importWallet() throws {
+        let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
+        let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
     }
 }

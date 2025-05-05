@@ -5,13 +5,19 @@ import Components
 import Style
 import Localization
 import PrimitivesComponents
+import Primitives
 
 struct VerifyPhraseWalletScene: View {
     
     @State var model: VerifyPhraseViewModel
+    private let router: Routing
 
-    init(model: VerifyPhraseViewModel) {
+    init(
+        model: VerifyPhraseViewModel,
+        router: Routing
+    ) {
         _model = .init(initialValue: model)
+        self.router = router
     }
 
     var body: some View {
@@ -70,7 +76,17 @@ extension VerifyPhraseWalletScene {
         Task {
             try await Task.sleep(for: .milliseconds(50))
             await MainActor.run {
-                model.importWallet()
+                do {
+                    try model.importWallet()
+                    router.onFinishFlow?()
+                } catch {
+                    router.presentAlert(
+                        title: Localized.Errors.createWallet(""),
+                        message: error.localizedDescription
+                    )
+                    model.buttonState = .normal
+                }
+
             }
         }
     }

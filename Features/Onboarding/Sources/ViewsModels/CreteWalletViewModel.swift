@@ -8,16 +8,11 @@ import PrimitivesComponents
 @Observable
 final class CreateWalletViewModel: SecretPhraseViewableModel {
     private let walletService: WalletService
-    private let router: Routing
 
     var words: [String] = []
 
-    init(
-        walletService: WalletService,
-        router: Routing
-    ) {
+    init(walletService: WalletService) {
         self.walletService = walletService
-        self.router = router
     }
 
     var title: String {
@@ -41,9 +36,5 @@ final class CreateWalletViewModel: SecretPhraseViewableModel {
     
     var presentWarning: Bool {
         true
-    }
-
-    func continueAction() {
-        router.push(to: CreateWalletRoute.verifyPhrase(words))
     }
 }

@@ -5,27 +5,36 @@ import SwiftUI
 
 public protocol Routing: AnyObject {
     var path: NavigationPath { get set }
+    
     var isPresentingAlert: AlertValue? { get set }
-    var onComplete: VoidAction { get set }
+    var isPresentingSheet: IdentifiableWrapper? { get set }
+    var isPresentingUrl: URL? { get set }
+    
+    var onFinishFlow: VoidAction { get set }
 
     func push(to view: any Hashable)
     func pop()
     func popToRootView()
     func presentAlert(title: String, message: String)
+    func presenting(_ view: any Identifiable)
 }
 
 @Observable
 open class Router: Routing {
     public var path: NavigationPath
+    
     public var isPresentingAlert: AlertValue?
-    public var onComplete: VoidAction
+    public var isPresentingSheet: IdentifiableWrapper?
+    public var isPresentingUrl: URL?
+    
+    public var onFinishFlow: VoidAction
     
     public init(
         path: NavigationPath = NavigationPath(),
-        onComplete: VoidAction
+        onFinishFlow: VoidAction = nil
     ) {
         self.path = path
-        self.onComplete = onComplete
+        self.onFinishFlow = onFinishFlow
     }
     
     public func push(to view: any Hashable) {
@@ -43,5 +52,9 @@ open class Router: Routing {
     
     public func presentAlert(title: String, message: String) {
         isPresentingAlert = AlertValue(title: title, message: message)
+    }
+    
+    public func presenting(_ view: any Identifiable) {
+        isPresentingSheet = IdentifiableWrapper(value: view)
     }
 }

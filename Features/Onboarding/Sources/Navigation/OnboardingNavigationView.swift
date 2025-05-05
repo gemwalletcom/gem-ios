@@ -22,7 +22,7 @@ public struct OnboardingNavigationView: View {
         .sheet(isPresented: $isPresentingCreateWalletSheet) {
             CreateWalletNavigationStack(
                 walletService: model.walletService,
-                onComplete: nil
+                onFinishFlow: nil
             )
         }
         .sheet(isPresented: $isPresentingImportWalletSheet) {

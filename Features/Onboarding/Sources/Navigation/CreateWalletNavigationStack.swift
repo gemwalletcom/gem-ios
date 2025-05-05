@@ -8,6 +8,7 @@ import WalletService
 enum CreateWalletRoute: Hashable {
     case verifyPhrase([String])
     case createWallet
+    case acceptTerms
 }
 
 public struct CreateWalletNavigationStack: View {
@@ -19,10 +20,10 @@ public struct CreateWalletNavigationStack: View {
 
     public init(
         walletService: WalletService,
-        onComplete: VoidAction
+        onFinishFlow: VoidAction
     ) {
         self.walletService = walletService
-        self.router = Router(onComplete: onComplete)
+        self.router = Router(onFinishFlow: onFinishFlow)
     }
 
     public var body: some View {
@@ -31,7 +32,7 @@ public struct CreateWalletNavigationStack: View {
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Wallet.New.title,
                     onNext: {
-                        router.push(to: CreateWalletRoute.createWallet)
+                        router.push(to: CreateWalletRoute.acceptTerms)
                     }
                 )
             )
@@ -48,23 +49,29 @@ public struct CreateWalletNavigationStack: View {
                 case .createWallet:
                     CreateWalletScene(
                         model: CreateWalletViewModel(
-                            walletService: walletService,
-                            router: router
-                        )
+                            walletService: walletService
+                        ),
+                        router: router
                     )
                 case .verifyPhrase(let words):
                     VerifyPhraseWalletScene(
                         model: VerifyPhraseViewModel(
                             words: words,
-                            walletService: walletService,
-                            router: router
-                        )
+                            walletService: walletService
+                        ),
+                        router: router
+                    )
+                case .acceptTerms:
+                    AcceptTermsScene(
+                        model: AcceptTermsViewModel(),
+                        router: router
                     )
                 }
             }
             .alert(item: $router.isPresentingAlert) {
                 Alert(title: Text($0.title), message: Text($0.message))
             }
+            .safariSheet(url: $router.isPresentingUrl)
         }
     }
 }

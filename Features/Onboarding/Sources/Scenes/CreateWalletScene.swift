@@ -8,8 +8,14 @@ import PrimitivesComponents
 struct CreateWalletScene: View {
 
     @State var model: CreateWalletViewModel
+    private let router: Routing
     
     @State private var isPresentingCopyToast = false
+    
+    init(model: CreateWalletViewModel, router: Routing) {
+        self.model = model
+        self.router = router
+    }
 
     var body: some View {
         VStack(spacing: .medium) {
@@ -44,6 +50,6 @@ struct CreateWalletScene: View {
     }
     
     func continueAction() {
-        model.continueAction()
+        router.push(to: CreateWalletRoute.verifyPhrase(model.words))
     }
 }
