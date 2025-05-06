@@ -40,7 +40,9 @@ public struct CollectionsScene: View {
             }
         }
         .padding(.horizontal, .medium)
-        .background(Colors.insetGroupedListStyle)
+        .if(nftDataList.isNotEmpty) {
+            $0.background(Colors.insetGroupedListStyle)
+        }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
         .refreshable(action: model.fetch)

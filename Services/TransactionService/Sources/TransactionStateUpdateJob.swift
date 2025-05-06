@@ -14,15 +14,17 @@ public struct TransactionStateUpdateJob: Job {
     private let postProcessingService: TransactionStateUpdatePostJob
 
     public var id: String { transaction.hash }
-
+    
+    private let minInitialInterval: Duration = .seconds(5)
+    
     public var configuration: JobConfiguration {
         .adaptive(
             configuration: AdaptiveConfiguration(
                 initialInterval: min(
                     .milliseconds(transaction.assetId.chain.blockTime),
-                    .seconds(5)
+                    minInitialInterval
                 ),
-                maxInterval: .seconds(10),
+                maxInterval: minInitialInterval * 3,
                 stepFactor: 1.1
             ),
             timeLimit: .none
