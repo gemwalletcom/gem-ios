@@ -38,14 +38,11 @@ public struct SignMessageSceneViewModel {
         payload.wallet.name
     }
     
-    public var messageSections: [ListSection<KeyValueItem>] {
+    public var messageSections: [ListSection<KeyValueItem>]? {
         switch try? decoder.preview {
-        case .text(let message):
-            textSection(message)
-        case .eip712(let message):
-            eip712Sections(message)
-        case .none:
-            textSection(decoder.plainPreview)
+        case .text(let message): textSection(message)
+        case .eip712(let message): eip712Sections(message)
+        case .none: nil
         }
     }
 

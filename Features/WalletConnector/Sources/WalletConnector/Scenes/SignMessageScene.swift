@@ -37,21 +37,27 @@ public struct SignMessageScene: View {
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
 
-                ForEach(model.messageSections) { section in
-                    Section {
-                        ForEach(section.values) { item in
-                            ListItemView(
-                                title: item.title,
-                                subtitle: item.value
-                            )
-                            
+                if let sections = model.messageSections {
+                    ForEach(sections) { section in
+                        Section {
+                            ForEach(section.values) { item in
+                                ListItemView(
+                                    title: item.title,
+                                    subtitle: item.value
+                                )
+                                
+                            }
+                        } header: {
+                            if let title = section.title {
+                                Text(title)
+                            }
                         }
-                    } header: {
-                        if let title = section.title {
-                            Text(title)
-                        }
+                        
                     }
-
+                } else {
+                    Section(Localized.SignMessage.message) {
+                        Text(model.decoder.plainPreview)
+                    }
                 }
             }
             
