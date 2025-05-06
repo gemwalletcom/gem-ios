@@ -45,6 +45,7 @@ let package = Package(
             dependencies: [
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
                 "AssetsService",
                 "Primitives",
                 "Preferences",
@@ -58,8 +59,10 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
                 "AssetsService",
-                "AssetsServiceTestKit"
+                "AssetsServiceTestKit",
+                "Primitives"
             ]
         ),
     ]

@@ -67,12 +67,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         }
 
         let service = OnstartService(
-            assetsService: AssetsServiceDefault(
-                assetStore: AssetStoreDefault.main,
+            assetsService: AssetsService(
+                assetStore: .main,
                 balanceStore: .main,
                 chainServiceFactory: .init(nodeProvider: NodeService.main)
             ),
-            assetStore: AssetStoreDefault.main,
+            assetStore: .main,
             nodeStore: NodeStore.main,
             preferences: Preferences.standard,
             walletService: WalletService.main

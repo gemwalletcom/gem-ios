@@ -4,30 +4,7 @@ import Foundation
 import GRDB
 import Primitives
 
-public protocol AssetStore: Sendable {
-    
-    func add(assets: [AssetBasic]) throws
-    func addAssetsSearch(query: String, assets: [AssetBasic]) throws
-    
-    func getAssets() throws -> [Asset]
-    func getAssets(for assetIds: [String]) throws -> [Asset]
-    
-    @discardableResult
-    func setAssetIsBuyable(for assetIds: [String], value: Bool) throws -> Int
-    @discardableResult
-    func setAssetIsSellable(for assetIds: [String], value: Bool) throws -> Int
-    @discardableResult
-    func setAssetIsSwappable(for assetIds: [String], value: Bool) throws -> Int
-    @discardableResult
-    func setAssetIsStakeable(for assetIds: [String], value: Bool) throws -> Int
-
-    @discardableResult
-    func clearTokens() throws -> Int
-    
-    func updateLinks(assetId: AssetId, _ links: [AssetLink]) throws
-}
-
-public struct AssetStoreDefault: AssetStore {
+public struct AssetStore: Sendable {
     
     let db: DatabaseQueue
 
@@ -72,6 +49,14 @@ public struct AssetStoreDefault: AssetStore {
             try AssetRecord
                 .fetchAll(db)
                 .map { $0.mapToAsset() }
+        }
+    }
+    
+    public func getBasicAssets() throws -> [AssetBasic] {
+        try db.read { db in
+            try AssetRecord
+                .fetchAll(db)
+                .map { $0.mapToBasic() }
         }
     }
     

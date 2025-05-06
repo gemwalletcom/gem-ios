@@ -4,34 +4,7 @@ import Primitives
 import GemAPI
 import ChainService
 
-public protocol AssetsService: Sendable {
-    var assetStore: AssetStore { get }
-
-    func addNewAsset(walletId: WalletId, asset: Asset) throws
-    func addAssets(assets: [AssetBasic]) throws
-    
-    func getAssets() throws -> [Asset]
-    func getEnabledAssets() throws -> [AssetId]
-    func getAsset(for assetId: AssetId) throws -> Asset
-    func getOrFetchAsset(for assetId: AssetId) async throws -> Asset
-    func getAssets(for assetIds: [AssetId]) throws -> [Asset]
-    
-    @discardableResult
-    func prefetchAssets(assetIds: [AssetId]) async throws -> [AssetId]
-    
-    func addBalancesIfMissing(walletId: WalletId, assetIds: [AssetId]) throws
-    func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws
-    
-    func updateEnabled(walletId: WalletId, assetId: AssetId, enabled: Bool) throws
-    
-    func updateAsset(assetId: AssetId) async throws
-    func getAsset(assetId: AssetId) async throws -> AssetFull
-    func getAssets(assetIds: [AssetId]) async throws -> [AssetBasic]
-    
-    func searchAssets(query: String, chains: [Chain], tags: [AssetTag]) async throws -> [AssetBasic]
-}
-
-public final class AssetsServiceDefault: AssetsService {
+public final class AssetsService: Sendable {
     public let assetStore: AssetStore
     let balanceStore: BalanceStore
     let assetsProvider: any GemAPIAssetsService

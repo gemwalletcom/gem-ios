@@ -8,17 +8,18 @@ import StoreTestKit
 import AssetsServiceTestKit
 import GemAPITestKit
 import Primitives
+import Store
 
 @testable import AssetsService
 
 struct ImportAssetsServiceTests {
     @Test
-    func migrateAddsAssetsOnFirstRun() throws {
+    func migrateAddsAssetsOnFirstRun() async throws {
         let preferences = Preferences.mock()
         preferences.localAssetsVersion = 0
 
-        let assetStore = AssetStoreMock()
-        let assetsService = AssetsServiceMock(assetStore: assetStore)
+        let assetStore: AssetStore = .mock()
+        let assetsService: AssetsService = .mock(assetStore: assetStore)
 
         let service = ImportAssetsService(
             assetsService: assetsService,
@@ -28,19 +29,24 @@ struct ImportAssetsServiceTests {
 
         try service.migrate()
 
-        let assets = assetStore.addedAssets
+        let assets = try assetStore.getBasicAssets()
         #expect(assets.isNotEmpty)
 
         for asset in assets {
             #expect(asset.properties.isBuyable == (asset.score.rank >= 40))
+            
+            let isStakeSupported = AssetConfiguration
+                .allChains
+                .first(where: { $0.asset.id == asset.asset.id })?
+                .isStakeSupported ?? false
+            
+            #expect(asset.properties.isStakeable == isStakeSupported)
         }
     }
 
     @Test
     func updateFiatAssetsMarksAssetsAndUpdatesPreferences() async throws {
         let preferences = Preferences.mock()
-        let assetStore = AssetStoreMock()
-        let assetsService = AssetsServiceMock(assetStore: assetStore)
         let assetListService = GemAPIAssetsListServiceMock(
             buyableFiatAssetsResult: FiatAssets(version: 1, assetIds: []),
             sellableFiatAssetsResult: FiatAssets(version: 2, assetIds: [])
@@ -48,8 +54,8 @@ struct ImportAssetsServiceTests {
 
         let service = ImportAssetsService(
             assetListService: assetListService,
-            assetsService: assetsService,
-            assetStore: assetStore,
+            assetsService: .mock(),
+            assetStore: .mock(),
             preferences: preferences
         )
 
@@ -62,14 +68,12 @@ struct ImportAssetsServiceTests {
     @Test
     func updateSwapAssetsMarksAssetsAndUpdatesPreferences() async throws {
         let preferences = Preferences.mock()
-        let assetStore = AssetStoreMock()
-        let assetsService = AssetsServiceMock(assetStore: assetStore)
         let assetListService = GemAPIAssetsListServiceMock(swapAssetsResult: FiatAssets(version: 3, assetIds: []))
 
         let service = ImportAssetsService(
             assetListService: assetListService,
-            assetsService: assetsService,
-            assetStore: assetStore,
+            assetsService: .mock(),
+            assetStore: .mock(),
             preferences: preferences
         )
 

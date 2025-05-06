@@ -12,8 +12,8 @@ import WalletService
 // See OnstartAsyncService for any background tasks to run after start
 struct OnstartService {
     
-    let assetsService: any AssetsService
-    let assetStore: any AssetStore
+    let assetsService: AssetsService
+    let assetStore: AssetStore
     let nodeStore: NodeStore
     let preferences: Preferences
     let walletService: WalletService

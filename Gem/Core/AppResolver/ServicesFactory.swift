@@ -219,7 +219,7 @@ extension ServicesFactory {
 
     private static func makeBalanceService(
         balanceStore: BalanceStore,
-        assetsStore: any AssetStore,
+        assetsStore: AssetStore,
         chainFactory: ChainServiceFactory
     ) -> BalanceService {
         BalanceService(
@@ -240,11 +240,11 @@ extension ServicesFactory {
     }
 
     private static func makeAssetsService(
-        assetStore: any AssetStore,
+        assetStore: AssetStore,
         balanceStore: BalanceStore,
         chainFactory: ChainService.ChainServiceFactory
-    ) -> any AssetsService {
-        AssetsServiceDefault(
+    ) -> AssetsService {
+        AssetsService(
             assetStore: assetStore,
             balanceStore: balanceStore,
             chainServiceFactory: chainFactory
@@ -253,7 +253,7 @@ extension ServicesFactory {
 
     private static func makeTransactionsService(
         transactionStore: TransactionStore,
-        assetsService: any AssetsService,
+        assetsService: AssetsService,
         walletStore: WalletStore
     ) -> TransactionsService {
         TransactionsService(
@@ -321,7 +321,7 @@ extension ServicesFactory {
 
     private static func makeWalletsService(
         walletStore: WalletStore,
-        assetsService: any AssetsService,
+        assetsService: AssetsService,
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
@@ -343,10 +343,10 @@ extension ServicesFactory {
     }
 
     private static func makeOnstartService(
-        assetStore: any AssetStore,
+        assetStore: AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
-        assetsService: any AssetsService,
+        assetsService: AssetsService,
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService
     ) -> OnstartAsyncService {

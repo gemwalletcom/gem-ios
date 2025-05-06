@@ -17,7 +17,7 @@ final class SelectAssetViewModel {
     let preferences: Preferences
     let wallet: Wallet
     let selectType: SelectAssetType
-    let assetsService: any AssetsService
+    let assetsService: AssetsService
     let walletsService: WalletsService
     let priceAlertService: PriceAlertService
 
@@ -33,7 +33,7 @@ final class SelectAssetViewModel {
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         selectType: SelectAssetType,
-        assetsService: any AssetsService,
+        assetsService: AssetsService,
         walletsService: WalletsService,
         priceAlertService: PriceAlertService,
         selectAssetAction: AssetAction = .none

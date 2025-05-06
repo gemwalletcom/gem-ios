@@ -38,7 +38,7 @@ extension EnvironmentValues {
     @Entry var balanceService: BalanceService = .main
     @Entry var bannerService: BannerService = .main
     @Entry var transactionsService: TransactionsService = .main
-    @Entry var assetsService: any AssetsService = AssetsServiceDefault.main
+    @Entry var assetsService: AssetsService = .main
     @Entry var notificationService: NotificationService = .main
     @Entry var stakeService: StakeService = .main
     @Entry var connectionsService: ConnectionsService = .main
