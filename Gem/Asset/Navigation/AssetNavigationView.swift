@@ -41,8 +41,7 @@ struct AssetNavigationView: View {
             }
         }
         .toast(
-            isPresenting: $model.isPresentingToast,
-            title: model.isPresentingToastMessage.or(.empty),
+            message: $model.isPresentingToastMessage,
             systemImage: model.priceAlertsSystemImage
         )
         .confirmationDialog(

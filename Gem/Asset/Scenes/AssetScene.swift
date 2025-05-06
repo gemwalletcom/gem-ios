@@ -91,11 +91,6 @@ struct AssetScene: View {
         .refreshable {
             await model.fetch()
         }
-        .onChange(of: model.isPresentingToastMessage, { oldValue, newValue in
-            if newValue != nil {
-                model.isPresentingToast = true
-            }
-        })
         .taskOnce(model.fetchOnce)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
