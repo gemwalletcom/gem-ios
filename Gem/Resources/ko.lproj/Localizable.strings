@@ -356,7 +356,7 @@
 "contacts.title" = "콘택트 렌즈";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
-"price_alerts.added_for" = "Set price alert for %@";
+"price_alerts.added_for" = "Set price alert %@";
 "assets.tags.trending" = "Trending";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
@@ -374,9 +374,9 @@
 "stake.state.empty.description" = "Stake your first %@";
 "wallet_connect.state.empty.title" = "Your connections will appear here️";
 "wallet_connect.state.empty.description" = "Scan or paste code to connect to the DApp";
-"assets.state.empty.search_description" = "You can try add it manually";
+"assets.state.empty.search_description" = "You can try to add it manually";
 "activity.state.empty.search_description" = "Clear filters to refresh your activities";
-"search.state.empty.description" = "Check the spelling or try a new search";
+"search.state.empty.description" = "Check the spelling or try a new search.";
 "assets.state.empty.search_title" = "No assets found";
 "networks.state.empty.search_title" = "No networks found";
 "activity.state.empty.search_title" = "No activities found";
@@ -395,3 +395,4 @@
 "transfer.minimum_account_balance" = "전체 잔액을 사용하지 않는 한, 이 후에는 최소 %@ 잔액이 남아 있어야 합니다.";
 "swap.price_impact_warning.description" = "이 거래에서 %@ 중 %@ 을(를) 잃게 됩니다. 계속하시겠습니까?";
 "swap.price_impact_warning.title" = "높은 가격의 영향";
+"wallet_connect.domain" = "Domain";

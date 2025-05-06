@@ -198,7 +198,7 @@
 "social.telegram" = "تلگرام";
 "social.github" = "گیت هاب";
 "social.youtube" = "یوتوب";
-"social.links" = "پیوند ها (Links)";
+"social.links" = "لینک‌ها";
 "social.facebook" = "Facebook";
 "nodes.import_node.title" = "افزودن گره (Node)";
 "nodes.import_node.chain_id" = "شناسه زنجیره";
@@ -356,7 +356,7 @@
 "contacts.title" = "مخاطبین";
 "common.percentage" = "Percentage";
 "price_alerts.set_alert.current_price" = "Current price";
-"price_alerts.added_for" = "Set price alert for %@";
+"price_alerts.added_for" = "Set price alert %@";
 "assets.tags.trending" = "Trending";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
@@ -374,9 +374,9 @@
 "stake.state.empty.description" = "Stake your first %@";
 "wallet_connect.state.empty.title" = "Your connections will appear here️";
 "wallet_connect.state.empty.description" = "Scan or paste code to connect to the DApp";
-"assets.state.empty.search_description" = "You can try add it manually";
+"assets.state.empty.search_description" = "You can try to add it manually";
 "activity.state.empty.search_description" = "Clear filters to refresh your activities";
-"search.state.empty.description" = "Check the spelling or try a new search";
+"search.state.empty.description" = "Check the spelling or try a new search.";
 "assets.state.empty.search_title" = "No assets found";
 "networks.state.empty.search_title" = "No networks found";
 "activity.state.empty.search_title" = "No activities found";
@@ -395,3 +395,4 @@
 "transfer.minimum_account_balance" = "حداقل موجودی %@ باید بعد از این باقی بماند، مگر اینکه از موجودی کامل خود استفاده کنید.";
 "swap.price_impact_warning.description" = "شما %@ از %@ خود را در این معامله از دست خواهید داد. آیا مطمئن هستید که می خواهید ادامه دهید؟";
 "swap.price_impact_warning.title" = "تاثیر قیمت بالا";
+"wallet_connect.domain" = "Domain";
