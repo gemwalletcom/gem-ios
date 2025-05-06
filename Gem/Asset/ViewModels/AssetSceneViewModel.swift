@@ -4,11 +4,9 @@ import Foundation
 import Primitives
 import SwiftUI
 import Components
-import Store
 import Style
 import Localization
 import PriceAlertService
-import StakeService
 import PrimitivesComponents
 import Preferences
 import ExplorerService
@@ -16,32 +14,44 @@ import AssetsService
 import TransactionsService
 import WalletsService
 import PriceService
+import InfoSheet
+import BannerService
 
-struct AssetSceneViewModel: Sendable {
+@Observable
+@MainActor
+final class AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
     private let priceObserverService: PriceObserverService
-    private let priceAlertService: PriceAlertService
-    
-    let assetModel: AssetViewModel
-    let assetDataModel: AssetDataViewModel
-    let walletModel: WalletViewModel
-    let explorerService: ExplorerService = .standard
+    private let bannerService: BannerService
 
-    private let preferences: SecurePreferences = .standard
-    private let transactionsLimit = 50
-    
-    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
-    
+    private let securePreferences: SecurePreferences = .standard
+    private let preferences: ObservablePreferences = .default
+
+    let explorerService: ExplorerService = .standard
+    let priceAlertService: PriceAlertService
+
+    private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
+
+    var isPresentingOptions = false
+    var isPresentingToast = false
+    var isPresentingToastMessage: String?
+    var isPresentingAssetSheet: AssetSheetType?
+
+    var input: AssetSceneInput
+    var assetData: AssetData = .empty
+    var transactions: [TransactionExtended] = []
+    var banners: [Banner] = []
+
     init(
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
         priceObserverService: PriceObserverService,
         priceAlertService: PriceAlertService,
-        assetDataModel: AssetDataViewModel,
-        walletModel: WalletViewModel,
+        bannerService: BannerService,
+        input: AssetSceneInput,
         isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
     ) {
         self.walletsService = walletsService
@@ -49,49 +59,54 @@ struct AssetSceneViewModel: Sendable {
         self.transactionsService = transactionsService
         self.priceObserverService = priceObserverService
         self.priceAlertService = priceAlertService
+        self.bannerService = bannerService
 
-        self.assetModel = AssetViewModel(asset: assetDataModel.asset)
-        self.assetDataModel = assetDataModel
-        self.walletModel = walletModel
+        self.input = input
         _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 
     var title: String { assetModel.name }
-    
     var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
-    var addressExplorerUrl: URL { addressLink.url }
-    var tokenExplorerUrl: URL? { tokenLink?.url }
-
     var viewTokenOnTitle: String? {
         if let link = tokenLink {
             return Localized.Asset.viewTokenOn(link.name)
         }
         return .none
     }
-    
+    var balancesTitle: String { Localized.Asset.Balances.available }
+    var networkTitle: String { Localized.Transfer.network }
+    var stakeTitle: String { Localized.Wallet.stake }
+
+    var addImage: Image { Images.System.plus }
+    var optionsImage: Image { Images.System.ellipsis }
+    var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
+    var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
+
+    var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
+    var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
+    var showBalances: Bool { assetDataModel.showBalances }
+    var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
+    var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
+    var showTransactions: Bool { transactions.isNotEmpty }
+
+    var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
+    var shareAssetUrl: URL { DeepLink.asset(assetDataModel.asset.id).url }
+    var addressExplorerUrl: URL { addressLink.url }
+    var tokenExplorerUrl: URL? { tokenLink?.url }
+
+    var networkText: String { assetModel.networkFullName }
+    var stakeAprText: String {
+        guard let apr = assetDataModel.stakeApr else { return .empty }
+        return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+    }
+
     var priceItemViewModel: PriceListItemViewModel {
         PriceListItemViewModel(
             title: Localized.Asset.price,
             model: assetDataModel.priceViewModel
         )
     }
-    
-    var showNetwork: Bool { true }
-    var openNetwork: Bool { assetDataModel.asset.type != .native }
-    var showBalances: Bool { assetDataModel.showBalances }
-    var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
-    var showReservedBalance: Bool { assetDataModel.hasReservedBalance }
 
-    var reservedBalanceUrl: URL? {
-        assetModel.asset.chain.accountActivationFeeUrl
-    }
-    
-    var networkField: String { Localized.Transfer.network }
-
-    var networkText: String {
-        assetModel.networkFullName
-    }
-    
     var networkAssetImage: AssetImage {
         AssetIdViewModel(assetId: assetModel.asset.chain.assetId).networkAssetImage
     }
@@ -100,85 +115,152 @@ struct AssetSceneViewModel: Sendable {
         EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol, buy: onSelectBuy))
     }
 
-    var stakeAprText: String {
-        guard let apr = assetDataModel.stakeApr else { return .empty }
-        return Localized.Stake.apr(CurrencyFormatter(type: .percentSignLess).string(apr))
+    var assetModel: AssetViewModel {
+        AssetViewModel(asset: assetData.asset)
     }
-    
-    var shareAssetUrl: URL {
-        DeepLink.asset(assetDataModel.asset.id).url
+
+    var assetDataModel: AssetDataViewModel {
+        AssetDataViewModel(
+            assetData: assetData,
+            formatter: .medium,
+            currencyCode: preferences.preferences.currency
+        )
     }
-    
-    // locally comouted banners
-    var banners: [Primitives.Banner] {
-        if !assetDataModel.isActive {
-            return [
-                Primitives
-                    .Banner(
-                        wallet: .none,
-                        asset: assetDataModel.asset,
-                        chain: .none,
-                        event: .activateAsset,
-                        state: .alwaysActive
-                    ),
-            ]
-        }
-        return []
+
+    var walletModel: WalletViewModel {
+        WalletViewModel(wallet: input.wallet)
+    }
+
+    var assetHeaderModel: AssetHeaderViewModel {
+        let allBanners = (assetDataModel.isActive ? [] : [Banner(wallet: .none,
+                                                                 asset: assetDataModel.asset,
+                                                                 chain: .none,
+                                                                 event: .activateAsset,
+                                                                 state: .alwaysActive)]) + banners
+        return AssetHeaderViewModel(
+            assetDataModel: assetDataModel,
+            walletModel: walletModel,
+            bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
+        )
     }
 }
+
 
 // MARK: - Business Logic
 
 extension AssetSceneViewModel {
-    func updateAsset() async {
-        do {
-            try await assetsService.updateAsset(assetId: assetModel.asset.id)
-        } catch {
-            // TODO: - handle updateAsset error
-            print("asset scene: updateAsset error \(error)")
+    func fetchOnce() {
+        Task {
+            await fetch()
         }
         Task {
-            try await priceObserverService.addAssets(assets: [assetModel.asset.id])
+            await updateAsset()
         }
     }
 
-    func updateWallet() async {
-        do {
-            async let updateAsset: () = try walletsService.updateAssets(
-                walletId: walletModel.wallet.walletId,
-                assetIds: [assetModel.asset.id]
+    func fetch() async {
+        await updateWallet()
+    }
+
+    func onSelectHeader(_ buttonType: HeaderButtonType) {
+        let selectType: SelectedAssetType = switch buttonType {
+        case .buy: .buy(assetData.asset)
+        case .send: .send(.asset(assetData.asset))
+        case .swap: .swap(assetData.asset)
+        case .receive: .receive(.asset)
+        case .stake: .stake(assetData.asset)
+        case .more:
+            fatalError()
+        }
+        isPresentingAssetSelectedInput.wrappedValue = SelectedAssetInput(
+            type: selectType,
+            assetAddress: assetData.assetAddress
+        )
+    }
+
+    func onSelectWalletHeaderInfo() {
+        isPresentingAssetSheet = .info(.watchWallet)
+    }
+
+    func onSelectBanner(_ banner: Banner) {
+        let action = BannerViewModel(banner: banner).action
+        switch banner.event {
+        case .stake:
+            onSelectHeader(.stake)
+        case .activateAsset:
+            isPresentingAssetSheet = .transfer(
+                TransferData(
+                    type: .account(assetData.asset, .activate),
+                    recipientData: RecipientData(
+                        recipient: Recipient(
+                            name: .none,
+                            address: "",
+                            memo: .none
+                        ),
+                        amount: .none
+                    ),
+                    value: 0,
+                    canChangeValue: false,
+                    ignoreValueCheck: true
+                )
             )
-            async let updateTransactions: () = try fetchTransactions()
-            let _ = try await [updateAsset, updateTransactions]
-        } catch {
-            // TODO: - handle fetch error
-            print("asset scene: updateWallet error \(error)")
+        case .enableNotifications,
+                .accountActivation,
+                .accountBlockedMultiSignature:
+            Task {
+                try await bannerService.handleAction(action)
+            }
         }
+        onSelect(url: action.url)
     }
 
-    func enablePriceAlert() async {
-        do {
-            try await priceAlertService.add(priceAlert: .default(for: assetModel.asset.id, currency: Preferences.standard.currency))
-            try await priceAlertService.requestPermissions()
-            try await priceAlertService.enablePriceAlerts()
-        } catch {
-            NSLog("enablePriceAlert error \(error)")
-        }
+    func onCloseBanner(_ banner: Banner) {
+        bannerService.onClose(banner)
     }
 
-    func disablePriceAlert() async {
-        do {
-            try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id, currency: Preferences.standard.currency)])
-        } catch {
-            NSLog("disablePriceAlert error \(error)")
-        }
-    }
-    
     func onSelectBuy() {
-        isPresentingAssetSelectedInput = SelectedAssetInput(
+        isPresentingAssetSelectedInput.wrappedValue = SelectedAssetInput(
             type: .buy(assetModel.asset),
             assetAddress: assetDataModel.assetAddress
         )
+    }
+
+    func onSelectSetPriceAlerts() {
+        isPresentingAssetSheet = .setPriceAlert
+    }
+
+    func onTogglePriceAlert() {
+        Task {
+            if assetData.isPriceAlertsEnabled {
+                isPresentingToastMessage = Localized.PriceAlerts.disabledFor(assetData.asset.name)
+                await disablePriceAlert()
+            } else {
+                isPresentingToastMessage = Localized.PriceAlerts.enabledFor(assetData.asset.name)
+                await enablePriceAlert()
+            }
+        }
+    }
+
+    func onSelectOptions() {
+        isPresentingOptions = true
+    }
+
+    func onSelectShareAsset() {
+        isPresentingAssetSheet = .share
+    }
+
+    func onSelect(url: URL?) {
+        guard let url else { return }
+        isPresentingAssetSheet = .url(url)
+    }
+
+    func onTransferComplete() {
+        isPresentingAssetSheet = .none
+    }
+
+    func onSetPriceAlertComplete(message: String) {
+        isPresentingAssetSheet = .none
+        isPresentingToastMessage = message
     }
 }
 
@@ -198,13 +280,63 @@ extension AssetSceneViewModel {
 
     private func fetchTransactions() async throws {
         do {
-            guard let deviceId = try preferences.get(key: .deviceId) else {
+            guard let deviceId = try securePreferences.get(key: .deviceId) else {
                 throw AnyError("deviceId is null")
             }
             try await transactionsService.updateForAsset(deviceId: deviceId, wallet: walletModel.wallet, assetId: assetModel.asset.id)
         } catch {
             // TODO: - handle fetchTransactions error
             print("asset scene: fetchTransactions error \(error)")
+        }
+    }
+
+    private func enablePriceAlert() async {
+        do {
+            try await priceAlertService.add(priceAlert: .default(for: assetModel.asset.id, currency: Preferences.standard.currency))
+            try await priceAlertService.requestPermissions()
+            try await priceAlertService.enablePriceAlerts()
+        } catch {
+            NSLog("enablePriceAlert error \(error)")
+        }
+    }
+
+    private func disablePriceAlert() async {
+        do {
+            try await priceAlertService.delete(priceAlerts: [.default(for: assetModel.asset.id, currency: Preferences.standard.currency)])
+        } catch {
+            NSLog("disablePriceAlert error \(error)")
+        }
+    }
+
+    private func updateAsset() async {
+        do {
+            try await assetsService.updateAsset(assetId: assetModel.asset.id)
+        } catch {
+            // TODO: - handle updateAsset error
+            print("asset scene: updateAsset error \(error)")
+        }
+
+        Task {
+            do {
+                try await priceObserverService.addAssets(assets: [assetModel.asset.id])
+            } catch {
+                // TODO: - handle priceObserverService.addAssets error
+                print("asset scene: priceObserverService.addAssets error \(error)")
+            }
+        }
+    }
+
+    private func updateWallet() async {
+        do {
+            async let updateAsset: () = try walletsService.updateAssets(
+                walletId: walletModel.wallet.walletId,
+                assetIds: [assetModel.asset.id]
+            )
+            async let updateTransactions: () = try fetchTransactions()
+            let _ = try await [updateAsset, updateTransactions]
+        } catch {
+            // TODO: - handle fetch error
+            print("asset scene: updateWallet error \(error)")
         }
     }
 }

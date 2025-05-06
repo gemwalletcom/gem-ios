@@ -4,51 +4,87 @@ import Foundation
 import SwiftUI
 import Primitives
 import Localization
+import Store
+import Components
+import InfoSheet
+import PriceAlerts
 
 struct AssetNavigationView: View {
+    @State private var model: AssetSceneViewModel
 
-    let wallet: Wallet
-    let assetId: AssetId
-
-    @Binding private var isPresentingAssetSelectedInput: SelectedAssetInput?
-    @State private var transferData: TransferData?
-    
-    init(
-        wallet: Wallet,
-        assetId: AssetId,
-        isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
-    ) {
-        self.wallet = wallet
-        self.assetId = assetId
-        _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
+    init(model: AssetSceneViewModel) {
+        _model = State(initialValue: model)
     }
 
     var body: some View {
         AssetScene(
-            wallet: wallet,
-            input: AssetSceneInput(walletId: wallet.walletId, assetId: assetId),
-            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput) { asset in
-                transferData = TransferData(
-                    type: .account(asset, .activate),
-                    recipientData: RecipientData(
-                        recipient: Recipient(
-                            name: .none,
-                            address: "",
-                            memo: .none
-                        ),
-                        amount: .none
-                    ),
-                    value: 0,
-                    canChangeValue: false,
-                    ignoreValueCheck: true
-                )
+            model: model
+        )
+        .observeQuery(request: $model.input.assetRequest, value: $model.assetData)
+        .observeQuery(request: $model.input.bannersRequest, value: $model.banners)
+        .observeQuery(request: $model.input.transactionsRequest, value: $model.transactions)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                HStack {
+                    if model.isDeveloperEnabled {
+                        Button(action: model.onSelectSetPriceAlerts) {
+                            model.addImage
+                        }
+                    }
+                    Button(action: model.onTogglePriceAlert) {
+                        model.priceAlertsImage
+                    }
+                    Button(action: model.onSelectOptions) {
+                        model.optionsImage
+                    }
+                }
             }
-        .sheet(item: $transferData) { data in
-            ConfirmTransferNavigationStack(
-                wallet: wallet,
-                transferData: data
-            ) {
-                transferData = .none
+        }
+        .toast(
+            isPresenting: $model.isPresentingToast,
+            title: model.isPresentingToastMessage.or(.empty),
+            systemImage: model.priceAlertsSystemImage
+        )
+        .confirmationDialog(
+            "",
+            isPresented: $model.isPresentingOptions,
+            titleVisibility: .hidden
+        ) {
+            Button(model.viewAddressOnTitle) {
+                model.onSelect(url: model.addressExplorerUrl)
+            }
+            if let title = model.viewTokenOnTitle {
+                Button(title) {
+                    model.onSelect(url: model.tokenExplorerUrl)
+                }
+            }
+            Button(Localized.Common.share) {
+                model.onSelectShareAsset()
+            }
+        }
+        .sheet(item: $model.isPresentingAssetSheet) {
+            switch $0 {
+            case let .info(type):
+                InfoSheetScene(model: InfoSheetViewModel(type: type))
+            case let .transfer(data):
+                ConfirmTransferNavigationStack(
+                    wallet: model.walletModel.wallet,
+                    transferData: data,
+                    onComplete: model.onTransferComplete
+                )
+            case .setPriceAlert:
+                SetPriceAlertNavigationStack(
+                    model: SetPriceAlertViewModel(
+                        wallet: model.walletModel.wallet,
+                        assetId: model.assetModel.asset.id,
+                        priceAlertService: model.priceAlertService,
+                        onComplete: model.onSetPriceAlertComplete(message:)
+                    )
+                )
+            case .share:
+                ShareSheet(activityItems: [model.shareAssetUrl.absoluteString])
+            case let .url(url):
+                SFSafariView(url: url)
             }
         }
     }
