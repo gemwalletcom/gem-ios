@@ -118,21 +118,21 @@ extension NativeWebSocketClient {
         }
     }
 
-    private func callOnMain(_ cb: (() -> Void)?) {
-        guard let cb else { return }
-        let boxed = UnsafeSendable(cb)
+    private func callOnMain(_ closure: (() -> Void)?) {
+        guard let closure else { return }
+        let boxed = UnsafeSendable(closure)
         DispatchQueue.main.async { boxed.value() }
     }
 
-    private func callOnMain(_ cb: ((Error?) -> Void)?, _ err: Error?) {
-        guard let cb else { return }
-        let boxed = UnsafeSendable(cb)
-        DispatchQueue.main.async { boxed.value(err) }
+    private func callOnMain(_ closure: ((Error?) -> Void)?, _ error: Error?) {
+        guard let closure else { return }
+        let boxed = UnsafeSendable(closure)
+        DispatchQueue.main.async { boxed.value(error) }
     }
 
-    private func callOnMain(_ cb: ((String) -> Void)?, _ txt: String) {
-        guard let cb else { return }
-        let boxed = UnsafeSendable(cb)
-        DispatchQueue.main.async { boxed.value(txt) }
+    private func callOnMain(_ closure: ((String) -> Void)?, _ text: String) {
+        guard let closure else { return }
+        let boxed = UnsafeSendable(closure)
+        DispatchQueue.main.async { boxed.value(text) }
     }
 }
