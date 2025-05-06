@@ -72,8 +72,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
                 balanceStore: .main,
                 chainServiceFactory: .init(nodeProvider: NodeService.main)
             ),
-            assetStore: AssetStore(db: .main),
-            nodeStore: NodeStore(db: .main),
+            assetStore: .main,
+            nodeStore: NodeStore.main,
             preferences: Preferences.standard,
             walletService: WalletService.main
         )
