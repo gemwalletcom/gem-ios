@@ -104,7 +104,7 @@ extension BannerStore {
 extension AssetsService {
     static let main = AssetsService(
         assetStore: .main,
-        balanceStore: .main, 
+        balanceStore: .main,
         chainServiceFactory: .main
     )
 }

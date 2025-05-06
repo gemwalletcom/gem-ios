@@ -119,6 +119,21 @@ extension AssetRecord {
             type: type
         )
     }
+    
+    func mapToBasic() -> AssetBasic {
+        AssetBasic(
+            asset: mapToAsset(),
+            properties: AssetProperties(
+                isEnabled: true,
+                isBuyable: isBuyable,
+                isSellable: isSellable,
+                isSwapable: isSwappable,
+                isStakeable: isStakeable,
+                stakingApr: stakingApr
+            ),
+            score: AssetScore(rank: rank.asInt32)
+        )
+    }
 }
 
 extension PriceRecordInfo {

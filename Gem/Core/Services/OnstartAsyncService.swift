@@ -36,7 +36,6 @@ final class OnstartAsyncService: Sendable {
         self.nodeStore = nodeStore
         self.preferences = preferences
         self.service = ImportAssetsService(
-            nodeService: NodeService(nodeStore: nodeStore), 
             assetsService: assetsService,
             assetStore: assetStore,
             preferences: preferences
