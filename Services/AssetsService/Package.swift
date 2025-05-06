@@ -60,9 +60,9 @@ let package = Package(
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "ChainServiceTestKit", package: "ChainService"),
+                "Primitives",
                 "AssetsService",
-                "AssetsServiceTestKit",
-                "Primitives"
+                "AssetsServiceTestKit"
             ]
         ),
     ]
