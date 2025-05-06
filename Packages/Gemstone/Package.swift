@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 5.9
 
 import PackageDescription
 
@@ -18,10 +18,7 @@ let package = Package(
     targets: [
         .target(
             name: "Gemstone",
-            dependencies: ["GemstoneFFI"],
-            swiftSettings: [
-                .swiftLanguageMode(.v5) // TODO: - remove when GemstoneFFI will support swift6 fully
-            ],
+            dependencies: ["GemstoneFFI"]
         ),
         .binaryTarget(name: "GemstoneFFI", path: "Sources/GemstoneFFI.xcframework"),
     ]
