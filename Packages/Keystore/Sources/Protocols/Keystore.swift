@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import SwiftUI
+import struct Gemstone.SignMessage
 
 public protocol Keystore: Sendable {
     func createWallet() -> [String]

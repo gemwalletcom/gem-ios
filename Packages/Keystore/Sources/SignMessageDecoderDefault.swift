@@ -3,8 +3,11 @@
 import Foundation
 import Primitives
 import WalletCore
+import struct Gemstone.SignMessage
+import class Gemstone.SignMessageDecoder
+import enum Gemstone.MessagePreview
 
-public struct SignMessageDecoder {
+public struct SignMessageDecoderDefault {
     
     private let message: SignMessage
     
@@ -12,8 +15,12 @@ public struct SignMessageDecoder {
         self.message = message
     }
     
-    public var preview: String {
-        switch message.type {
+    public var decoder: SignMessageDecoder {
+        SignMessageDecoder(message: message)
+    }
+    
+    public var plainPreview: String {
+        switch message.signType {
         case .sign,
             .eip191,
             .eip712:
@@ -28,14 +35,13 @@ public struct SignMessageDecoder {
         }
     }
     
-    public func getResult(from data: Data) -> String {
-        switch message.type {
-        case .sign,
-            .eip191,
-            .eip712:
-            return data.hexString.append0x
-        case .base58:
-            return Base58.encodeNoCheck(data: data)
+    public var preview: MessagePreview {
+        get throws {
+            try decoder.preview()
         }
+    }
+    
+    public func getResult(from data: Data) -> String {
+        decoder.getResult(data: data)
     }
 }

@@ -1,6 +1,7 @@
 import Foundation
 import Primitives
 import WalletCore
+import struct Gemstone.SignMessage
 
 public struct LocalKeystore: Keystore {
     private let walletKeyStore: WalletKeyStore
