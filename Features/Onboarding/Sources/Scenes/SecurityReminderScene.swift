@@ -37,10 +37,13 @@ struct SecurityReminderScene: View {
             .listSectionSpacing(.custom(.medium))
             
             Spacer()
-
-            Button(Localized.Common.continue, action: model.onNext)
+            
+            StateButton(
+                text: Localized.Common.continue,
+                styleState: .normal,
+                action: model.onNext
+            )
             .frame(maxWidth: .scene.button.maxWidth)
-            .buttonStyle(.blue())
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)

@@ -30,7 +30,7 @@ struct AcceptTermsScene: View {
                     Section {
                         Toggle(isOn: $item.isConfirmed) {
                             Text(item.message)
-                                .textStyle(.headline)
+                                .textStyle(.bodySecondary)
                         }
                         .toggleStyle(CheckboxStyle(position: .left))
                     }
@@ -45,6 +45,7 @@ struct AcceptTermsScene: View {
             StateButton(
                 text: "I Understand, Continue",
                 viewState: model.buttonState,
+                infoTitle: "By checking the boxes, you agree to these terms.",
                 action: onNext
             )
             .frame(maxWidth: .scene.button.maxWidth)
