@@ -58,29 +58,36 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                 )
                 .frame(maxWidth: .scene.button.maxWidth)
             }
+            .padding(.bottom, .scene.bottom)
+            .contentMargins(.top, .scene.top, for: .scrollContent)
             .background(Colors.grayBackground)
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
-                if model.isMultiSelectionEnabled && !model.selectedItems.isEmpty {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(model.clearButtonTitle, action: onReset)
-                            .bold()
-                    }
-                } else {
+                let cancelToolbarItem = {
                     ToolbarItem(placement: .navigationBarLeading) {
                         Button(model.cancelButtonTitle, action: onCancel)
                             .bold()
                     }
                 }
-
-                if model.isMultiSelectionEnabled {
+                switch model.selectionType {
+                case .multiSelection:
+                    if model.selectedItems.isEmpty {
+                        cancelToolbarItem()
+                    } else {
+                        ToolbarItem(placement: .navigationBarLeading) {
+                            Button(model.clearButtonTitle, action: onReset)
+                                .bold()
+                        }
+                    }
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(model.doneButtonTitle) {
                             onDone()
                         }
                         .bold()
                     }
+                case .navigationLink, .checkmark:
+                    cancelToolbarItem()
                 }
             }
         }

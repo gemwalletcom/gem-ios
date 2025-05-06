@@ -261,10 +261,10 @@ extension FiatSceneViewModel {
         }
     }
 
-    private var fiatProvidersViewModelState: StateViewType<[FiatQuoteViewModel]> {
+    private var fiatProvidersViewModelState: StateViewType<SelectableListType<FiatQuoteViewModel>> {
         switch state {
         case .error(let error): .error(error)
-        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) })
+        case .data(let items): .data(.plain(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) }))
         case .loading: .loading
         case .noData: .noData
         }

@@ -54,6 +54,9 @@ public actor PriceObserverService: Sendable {
     }
 
     public func addAssets(assets: [AssetId]) throws {
+        if subscribedAssetIds.contains(where: assets.contains) {
+            return
+        }
         let action = WebSocketPriceAction(
             action: .add,
             assets: assets
@@ -74,8 +77,7 @@ public actor PriceObserverService: Sendable {
     
     public func sendAction(_ action: WebSocketPriceAction) throws {
         let data = try JSONEncoder().encode(action)
-        let message = try data.asString()
-        task?.send(.string(message)) { error in
+        task?.send(.data(data)) { error in
             if let error {
                 print("Price Observer WebSocket send error:", error)
                 Task { await self.scheduleReconnect() }
@@ -138,24 +140,24 @@ public actor PriceObserverService: Sendable {
         }
     }
     
-    private func handlePayload(_ payload: WebSocketPricePayload) throws {
+    private func handle(_ message: URLSessionWebSocketTask.Message) throws {
+        switch message {
+        case .string(let text):
+            try handleMessageData(data: try text.encodedData())
+        case .data(let data):
+            try handleMessageData(data: data)
+        @unknown default:
+            break
+        }
+    }
+    
+    private func handleMessageData(data: Data) throws {
+        let payload = try JSONDecoder().decode(WebSocketPricePayload.self, from: data)
+        
         NSLog("handlePayload prices: \(payload.prices.count), rates: \(payload.rates.count)")
         
         try priceService.addRates(payload.rates)
         try priceService.updatePrices(payload.prices, currency: preferences.currency)
-    }
-
-    private func handle(_ message: URLSessionWebSocketTask.Message) throws {
-        switch message {
-        case .string(let text):
-            let payload = try JSONDecoder().decode(WebSocketPricePayload.self, from: text.data(using: .utf8)!)
-            try handlePayload(payload)
-        case .data(let data):
-            let payload = try JSONDecoder().decode(WebSocketPricePayload.self, from: data)
-            try handlePayload(payload)
-        @unknown default:
-            break
-        }
     }
 
     private func scheduleReconnect() async {

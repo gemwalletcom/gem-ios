@@ -8,20 +8,20 @@ import Localization
 
 public struct SwapProvidersViewModel: SelectableListAdoptable {
     public typealias Item = SwapProviderItem
-    public var state: StateViewType<[SwapProviderItem]>
+    public var state: StateViewType<SelectableListType<SwapProviderItem>>
     public var selectedItems: Set<SwapProviderItem>
-    public var isMultiSelectionEnabled: Bool
+    public var selectionType: SelectionType
     public var emptyStateTitle: String? { Localized.Common.notAvailable }
     public var errorTitle: String? { Localized.Errors.errorOccured }
     
     public init(
-        state: StateViewType<[Item]>,
+        state: StateViewType<SelectableListType<Item>>,
         selectedItems: [SwapProviderItem],
-        isMultiSelectionEnabled: Bool
+        selectionType: SelectionType
     ) {
         self.state = state
         self.selectedItems = Set(selectedItems)
-        self.isMultiSelectionEnabled = isMultiSelectionEnabled
+        self.selectionType = selectionType
     }
 }
 

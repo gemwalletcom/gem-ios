@@ -22,7 +22,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Packages\/Components",
         "identifier" : "ComponentsTests",

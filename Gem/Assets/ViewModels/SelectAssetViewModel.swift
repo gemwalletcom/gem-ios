@@ -102,7 +102,6 @@ final class SelectAssetViewModel {
     }
 
     var isNetworkSearchEnabled: Bool {
-        guard wallet.hasTokenSupport else { return false }
         switch selectType {
         case .manage, .receive, .buy, .priceAlert: return true
         case let .swap(type):

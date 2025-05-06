@@ -15,11 +15,11 @@ public struct MarketDominance: Codable, Equatable, Hashable, Sendable {
 }
 
 public struct MarketsAssets: Codable, Equatable, Hashable, Sendable {
-	public let trending: [String]
-	public let gainers: [String]
-	public let losers: [String]
+	public let trending: [AssetId]
+	public let gainers: [AssetId]
+	public let losers: [AssetId]
 
-	public init(trending: [String], gainers: [String], losers: [String]) {
+	public init(trending: [AssetId], gainers: [AssetId], losers: [AssetId]) {
 		self.trending = trending
 		self.gainers = gainers
 		self.losers = losers

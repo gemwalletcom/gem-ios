@@ -4,33 +4,25 @@ import SwiftUI
 import Components
 import Style
 import PrimitivesComponents
+import Primitives
 
 struct SelectWalletScene: View {
     @Environment(\.dismiss) private var dismiss
 
-    @Binding private var model: SellectWalletViewModel
+    @Binding private var model: SelectWalletViewModel
 
-    init(model: Binding<SellectWalletViewModel>) {
+    init(model: Binding<SelectWalletViewModel>) {
         _model = model
     }
 
     var body: some View {
-        List {
-            ForEach(model.walletModels) { wallet in
-                ListItemSelectionView(
-                    title: wallet.name,
-                    titleExtra: .none,
-                    titleTag: .none,
-                    titleTagType: .none,
-                    subtitle: .none,
-                    subtitleExtra: .none,
-                    imageStyle: .asset(assetImage: wallet.avatarImage),
-                    value: wallet,
-                    selection: model.walletModel,
-                    action: onSelect(wallet:)
-                )
+        SelectableListView(
+            model: $model,
+            onFinishSelection: onSelect,
+            listContent: { item in
+                SimpleListItemView(model: item)
             }
-        }
+        )
         .navigationTitle(model.title)
     }
 }
@@ -38,8 +30,8 @@ struct SelectWalletScene: View {
 // MARK: - Actions
 
 extension SelectWalletScene {
-    private func onSelect(wallet: WalletViewModel) {
-        model.walletModel = wallet
+    private func onSelect(wallets: [Wallet]) {
+        model.selectedItems = wallets.asSet()
         dismiss()
     }
 }
