@@ -5,18 +5,29 @@ import Foundation
 
 // TODO: - remove preconcurrency, once walletconnect will be migrated to swift6
 // URLSessionWebSocketTask - use async await instead of closure, once WC will be migrated to swift6
+// Wrapper that lets us move any value across @Sendable boundaries.
+private struct UnsafeSendable<T>: @unchecked Sendable {
+    let value: T
+
+    init(_ value: T) { self.value = value }
+}
 
 public final class NativeWebSocketClient: WebSocketConnecting, @unchecked Sendable {
-    public var isConnected: Bool { io.sync { _isConnected } }
     public var onConnect: (() -> Void)?
     public var onDisconnect: ((Error?) -> Void)?
     public var onText: ((String) -> Void)?
     public var request: URLRequest
 
-    private var _isConnected = false
     private let session: URLSession
-    private let io = DispatchQueue(label: "NativeWebSocketClient")
+    private let work = DispatchQueue(label: "NativeWebSocketClient")
     private var socket: URLSessionWebSocketTask?
+    private var _isConnected = false
+
+    public var isConnected: Bool {
+        var value = false
+        work.sync { value = _isConnected }
+        return value
+    }
 
     public init(request: URLRequest, session: URLSession = .shared) {
         self.request = request
@@ -24,71 +35,104 @@ public final class NativeWebSocketClient: WebSocketConnecting, @unchecked Sendab
     }
 
     public func connect() {
-        io.async { @Sendable [weak self] in
-            guard let self else { return }
-            let task = self.session.webSocketTask(with: self.request)
-            self.socket = task
-            task.resume()
-            self._isConnected = true
-            Task { @MainActor in self.onConnect?() }
-            self.receiveNext()
-        }
+        work.async { [weak self] in self?._connect() }
     }
 
     public func disconnect() {
-        io.async { @Sendable [weak self] in
-            guard let self, let socket = self.socket else { return }
-            socket.cancel(with: .goingAway, reason: nil)
-            self.socket = nil
-            self._isConnected = false
-            Task { @MainActor in self.onDisconnect?(nil) }
-        }
+        work.async { [weak self] in self?._disconnect() }
     }
 
     public func write(string: String, completion: (() -> Void)? = nil) {
-        io.async { [weak self] in
-            guard let self,
-                  let socket = self.socket else { return }
+        // Wrap optional callback to sendable box
+        let boxed = completion.map(UnsafeSendable.init)
 
-            socket.send(.string(string)) { [weak self] error in
-                self?.io.async { [weak self] in
-                    guard let self else { return }
+        // capture only the box sendable closure
+        work.async { [weak self] in
+            self?._write(string, boxedCompletion: boxed)
+        }
+    }
+}
 
-                    if let error {
-                        self._isConnected = false
-                        if let onDisconnect = self.onDisconnect {
-                            Task { @MainActor in onDisconnect(error) }
-                        }
-                    } else {
-                        // Fire completion on the main thread
-                        Task { @MainActor in completion?() }
-                    }
+// MARK: - Private
+
+extension NativeWebSocketClient {
+    private func _connect() {
+        guard socket == nil else { return }
+
+        let task = session.webSocketTask(with: request)
+        socket  = task
+        _isConnected = true
+
+        task.resume()
+        callOnMain(onConnect)
+        receiveNext()
+    }
+
+    private func _disconnect(error: Error? = nil) {
+        socket?.cancel(with: .goingAway, reason: nil)
+        socket = nil
+        _isConnected = false
+        callOnMain(onDisconnect, error)
+    }
+
+    private func _write(
+        _ text: String,
+        boxedCompletion: UnsafeSendable<() -> Void>?
+    ) {
+        guard let socket else { return }
+
+        socket.send(.string(text)) { [weak self] error in
+            guard let self else { return }
+            self.work.async {
+                if let error {
+                    self._isConnected = false
+                    self.callOnMain(self.onDisconnect, error)
+                } else if let boxedCompletion {
+                    self.callOnMain(boxedCompletion.value)
                 }
             }
         }
     }
 
     private func receiveNext() {
-        guard let socket = socket else { return }
-        socket.receive { @Sendable [weak self] result in
+        guard let socket else { return }
+
+        socket.receive { [weak self] result in
             guard let self else { return }
-            switch result {
-            case .success(.string(let text)):
-                Task { @MainActor in self.onText?(text) }
-                self.receiveNext()
-            case .success(.data(let data)):
-                if let text = String(data: data, encoding: .utf8) {
-                    Task { @MainActor in self.onText?(text) }
+            self.work.async {
+                switch result {
+                case .success(.string(let txt)):
+                    self.callOnMain(self.onText, txt)
+                    self.receiveNext()
+                case .success(.data(let data)):
+                    if let txt = String(data: data, encoding: .utf8) {
+                        self.callOnMain(self.onText, txt)
+                    }
+                    self.receiveNext()
+                case .failure(let err):
+                    self._disconnect(error: err)
+                @unknown default:
+                    break
                 }
-                self.receiveNext()
-            case .failure(let error):
-                self.io.async {
-                    self._isConnected = false
-                    Task { @MainActor in self.onDisconnect?(error) }
-                }
-            @unknown default:
-                break
             }
         }
+    }
+
+    private func callOnMain(_ cb: (() -> Void)?) {
+        guard let cb else { return }
+        let boxed = UnsafeSendable(cb)
+        DispatchQueue.main.async { boxed.value() }
+    }
+
+    private func callOnMain(_ cb: ((Error?) -> Void)?, _ err: Error?) {
+        guard let cb else { return }
+        let boxed = UnsafeSendable(cb)
+        DispatchQueue.main.async { boxed.value(err) }
+    }
+
+    private func callOnMain(_ cb: ((String) -> Void)?, _ txt: String) {
+        guard let cb else { return }
+        let boxed = UnsafeSendable(cb)
+        DispatchQueue.main.async { boxed.value(txt) }
     }
 }
