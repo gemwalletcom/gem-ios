@@ -13,22 +13,10 @@ public struct ConnectionsScene: View {
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorMessage: String?
 
-    @Query<ConnectionsRequest>
-    var connections: [WalletConnection]
-
-    var groupedByWallet: [Wallet: [Primitives.WalletConnection]] {
-        Dictionary(grouping: connections, by: { $0.wallet })
-    }
-
-    var headers: [Wallet] {
-        groupedByWallet.map({ $0.key }).sorted { $0.order < $1.order }
-    }
-
-    let model: ConnectionsViewModel
+    @State var model: ConnectionsViewModel
 
     public init(model: ConnectionsViewModel) {
         self.model = model
-        _connections = Query(constant: model.request)
     }
 
     public var body: some View {
@@ -47,11 +35,11 @@ public struct ConnectionsScene: View {
             }
             .listRowInsets(.assetListRowInsets)
             
-            ForEach(headers, id: \.self) { header in
+            ForEach(model.headers, id: \.self) { header in
                 Section(
                     header: Text(header.name)
                 ) {
-                    ForEach(groupedByWallet[header]!) { connection in
+                    ForEach(model.groupedByWallet[header]!) { connection in
                         NavigationLink(value: connection) {
                             ConnectionView(model: WalletConnectionViewModel(connection: connection))
                                 .swipeActions(edge: .trailing) {
@@ -68,9 +56,13 @@ public struct ConnectionsScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
+        .observeQuery(
+            request: $model.request,
+            value: $model.connections
+        )
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .overlay {
-            if headers.isEmpty {
+            if model.headers.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
