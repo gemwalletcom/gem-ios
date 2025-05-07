@@ -112,8 +112,9 @@ public final class FiatSceneViewModel {
         assetData.balance.available > 0 && assetData.metadata.isSellEnabled
     }
 
-    var assetBalance: String {
-        balanceModel.availableBalanceText
+    var assetBalance: String? {
+        let text = balanceModel.availableBalanceText
+        return text == .zero ? nil : text
     }
 
     var fiatProviderViewModel: FiatProvidersViewModel {
