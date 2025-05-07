@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "この取引で%@のうち%@を失います。続行してもよろしいですか?";
 "swap.price_impact_warning.title" = "高い価格影響";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

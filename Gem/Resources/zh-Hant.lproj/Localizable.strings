@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "您將在本次交易中損失%@ %@總金額。您確定要繼續嗎？";
 "swap.price_impact_warning.title" = "滑點巨大";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

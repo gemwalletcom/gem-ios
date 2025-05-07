@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "Bu işlemde %@ 'inizin %@ 'ini kaybedeceksiniz. Devam etmek istediğinizden emin misiniz?";
 "swap.price_impact_warning.title" = "Yüksek Fiyat Etkisi";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

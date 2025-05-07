@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "ستخسر %@ من رصيدك %@ في هذه الصفقة. هل أنت متأكد من رغبتك في المتابعة؟";
 "swap.price_impact_warning.title" = "تأثير السعر المرتفع";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

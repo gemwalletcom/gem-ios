@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "本次交易滑点较大，预计损失 %@ %@。是否确认继续？";
 "swap.price_impact_warning.title" = "滑点巨大";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

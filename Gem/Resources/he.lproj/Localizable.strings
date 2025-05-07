@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "אתה תפסיד %@ מה- %@ שלך במסחר הזה. האם אתה בטוח שאתה רוצה להמשיך?";
 "swap.price_impact_warning.title" = "השפעת מחיר גבוהה";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

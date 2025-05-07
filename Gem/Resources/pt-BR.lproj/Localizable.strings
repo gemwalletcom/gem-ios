@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "Você perderá %@ dos seus %@ nesta negociação. Tem certeza de que deseja prosseguir?";
 "swap.price_impact_warning.title" = "Alto Impacto de Preço";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

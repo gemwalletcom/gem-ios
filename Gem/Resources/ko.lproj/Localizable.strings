@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "이 거래에서 %@ 중 %@ 을(를) 잃게 됩니다. 계속하시겠습니까?";
 "swap.price_impact_warning.title" = "높은 가격의 영향";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

@@ -770,6 +770,8 @@ public enum Localized {
     public static let message = Localized.tr("Localizable", "sign_message.message", fallback: "Message")
     /// Sign Message
     public static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
+    /// View Full Message
+    public static let viewFullMessage = Localized.tr("Localizable", "sign_message.view_full_message", fallback: "View Full Message")
   }
   public enum Social {
     /// CoinGecko

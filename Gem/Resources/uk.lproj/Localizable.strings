@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "Ви втратите %@ із своїх %@ у цій торгівлі. Ви впевнені, що бажаєте продовжити?";
 "swap.price_impact_warning.title" = "Високий ціновий вплив";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

@@ -396,3 +396,4 @@
 "swap.price_impact_warning.description" = "Anda akan kehilangan %@ dari %@ Anda dalam perdagangan ini. Apakah Anda yakin ingin melanjutkan?";
 "swap.price_impact_warning.title" = "Dampak Harga Tinggi";
 "wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";
