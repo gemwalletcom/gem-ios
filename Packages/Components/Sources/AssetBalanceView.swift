@@ -6,13 +6,13 @@ import Style
 public struct AssetBalanceView<SecondaryView: View>: View {
     let image: AssetImage
     let title: String
-    let balance: String
+    let balance: String?
     let secondary: () -> SecondaryView
 
     public init(
         image: AssetImage,
         title: String,
-        balance: String,
+        balance: String?,
         @ViewBuilder secondary: @escaping () -> SecondaryView
     ) {
         self.image = image
@@ -29,8 +29,10 @@ public struct AssetBalanceView<SecondaryView: View>: View {
                 VStack(alignment: .leading, spacing: .tiny) {
                     Text(title)
                         .textStyle(.headline.weight(.semibold))
-                    Text(balance)
-                        .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                    if let balance {                    
+                        Text(balance)
+                            .textStyle(TextStyle(font: .callout, color: Colors.gray, fontWeight: .medium))
+                    }
                 }
                 .lineLimit(1)
                 .truncationMode(.tail)
