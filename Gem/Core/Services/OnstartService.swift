@@ -26,7 +26,6 @@ struct OnstartService {
         }
         do {
             try ImportAssetsService(
-                nodeService: NodeService(nodeStore: nodeStore),
                 assetsService: assetsService,
                 assetStore: assetStore,
                 preferences: preferences
