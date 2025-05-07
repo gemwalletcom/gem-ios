@@ -40,10 +40,13 @@ public struct SignMessageSceneViewModel {
     
     public var messageSections: [ListSection<KeyValueItem>]? {
         switch try? decoder.preview {
-        case .text(let message): textSection(message)
         case .eip712(let message): eip712Sections(message)
-        case .none: nil
+        case .none, .text: nil
         }
+    }
+    
+    public var shouldDisplayFullMessage: Bool {
+        messageSections != nil
     }
 
     public var buttonTitle: String {
@@ -65,6 +68,10 @@ public struct SignMessageSceneViewModel {
     public var appAssetImage: AssetImage {
         AssetImage(imageURL: connectionViewModel.imageUrl)
     }
+    
+    var fullMessageViewModel: FullMessageViewModel {
+        FullMessageViewModel(message: decoder.plainPreview)
+    }
 
     public func signMessage() throws {
         let data = try keystore.sign(wallet: payload.wallet, message: payload.message, chain: payload.chain)
@@ -73,15 +80,6 @@ public struct SignMessageSceneViewModel {
     }
     
     // MARK: - Private methods
-    
-    private func textSection(_ message: String) -> [ListSection<KeyValueItem>] {
-        [ListSection(
-            id: message,
-            title: Localized.SignMessage.message,
-            image: nil,
-            values: [KeyValueItem(title: message, value: .empty)]
-        )]
-    }
     
     private func eip712Sections(_ message: GemEip712Message) -> [ListSection<KeyValueItem>] {
         [
