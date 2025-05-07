@@ -29,6 +29,15 @@
       }
     },
     {
+      "identity" : "starscream",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/daltoniam/Starscream.git",
+      "state" : {
+        "revision" : "a063fda2b8145a231953c20e7a646be254365396",
+        "version" : "3.1.2"
+      }
+    },
+    {
       "identity" : "swift-qrcode-generator",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/dagronf/swift-qrcode-generator",
