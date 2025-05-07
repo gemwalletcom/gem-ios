@@ -26,10 +26,7 @@ public struct OnboardingNavigationView: View {
             )
         }
         .sheet(isPresented: $isPresentingImportWalletSheet) {
-            ImportWalletNavigationStack(
-                model: ImportWalletTypeViewModel(walletService: model.walletService),
-                isPresentingWallets: .constant(false)
-            )
+            ImportWalletNavigationStack(walletService: model.walletService)
         }
     }
 }

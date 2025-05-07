@@ -10,18 +10,15 @@ class ImportWalletViewModel: ObservableObject {
     let type: ImportWalletType
     let walletService: WalletService
     let wordSuggestor = WordSuggestor()
-    let onFinishImport: (() -> Void)?
 
     @Published var buttonState = StateButtonStyle.State.normal
 
     init(
         type: ImportWalletType,
-        walletService: WalletService,
-        onFinishImport: (() -> Void)?
+        walletService: WalletService
     ) {
         self.type = type
         self.walletService = walletService
-        self.onFinishImport = onFinishImport
     }
     
     var title: String {
@@ -68,7 +65,6 @@ class ImportWalletViewModel: ObservableObject {
 
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
         try walletService.importWallet(name: name, type: keystoreType)
-        onFinishImport?()
     }
     
     func wordSuggestionCalculate(value: String) -> String? {

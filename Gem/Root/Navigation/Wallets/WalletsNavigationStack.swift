@@ -56,8 +56,8 @@ struct WalletsNavigationStack: View {
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
-                    model: ImportWalletTypeViewModel(walletService: walletService),
-                    isPresentingWallets: $isPresentingWallets
+                    walletService: walletService,
+                    onFinishFlow: { isPresentingWallets.toggle() }
                 )
             }
             .toolbar {

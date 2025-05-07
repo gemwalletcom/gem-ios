@@ -50,6 +50,6 @@ struct CreateWalletScene: View {
     }
     
     func continueAction() {
-        router.push(to: CreateWalletRoute.verifyPhrase(model.words))
+        router.push(to: CreateWalletDestination.verifyPhrase(model.words))
     }
 }

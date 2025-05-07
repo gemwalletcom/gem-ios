@@ -5,7 +5,7 @@ import Localization
 import Primitives
 import WalletService
 
-enum CreateWalletRoute: Hashable {
+enum CreateWalletDestination: Hashable {
     case verifyPhrase([String])
     case createWallet
     case acceptTerms
@@ -32,7 +32,7 @@ public struct CreateWalletNavigationStack: View {
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Wallet.New.title,
                     onNext: {
-                        router.push(to: CreateWalletRoute.acceptTerms)
+                        router.push(to: CreateWalletDestination.acceptTerms)
                     }
                 )
             )
@@ -44,8 +44,8 @@ public struct CreateWalletNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: CreateWalletRoute.self) { route in
-                switch route {
+            .navigationDestination(for: CreateWalletDestination.self) {
+                switch $0 {
                 case .createWallet:
                     CreateWalletScene(
                         model: CreateWalletViewModel(
@@ -64,7 +64,8 @@ public struct CreateWalletNavigationStack: View {
                 case .acceptTerms:
                     AcceptTermsScene(
                         model: AcceptTermsViewModel(),
-                        router: router
+                        router: router,
+                        onNext: { router.push(to: CreateWalletDestination.createWallet) }
                     )
                 }
             }

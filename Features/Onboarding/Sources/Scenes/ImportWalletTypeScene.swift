@@ -7,24 +7,27 @@ import Localization
 struct ImportWalletTypeScene: View {
 
     let model: ImportWalletTypeViewModel
+    let router: Routing
     @State private var searchQuery = ""
 
     init(
-        model: ImportWalletTypeViewModel
+        model: ImportWalletTypeViewModel,
+        router: Routing
     ) {
         self.model = model
+        self.router = router
     }
 
     var body: some View {
         List {
             Section {
-                NavigationLink(value: ImportWalletType.multicoin) {
-                    ListItemView(
-                        title: Localized.Wallet.multicoin,
-                        imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
-                    )
+                let view = ListItemView(
+                    title: Localized.Wallet.multicoin,
+                    imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
+                )
+                NavigationCustomLink(with: view) {
+                    router.push(to: ImportWalletDestination.importWallet(.multicoin))
                 }
-                .accessibilityIdentifier("multicoin")
             }
             .listRowInsets(.assetListRowInsets)
             
@@ -33,11 +36,12 @@ struct ImportWalletTypeScene: View {
             } else {
                 Section {
                     ForEach(model.items(for: searchQuery)) { chain in
-                        NavigationLink(value: ImportWalletType.chain(chain)) {
-                            ListItemView(
-                                title: Asset(chain).name,
-                                imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
-                            )
+                        let view = ListItemView(
+                            title: Asset(chain).name,
+                            imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
+                        )
+                        NavigationCustomLink(with: view) {
+                            router.push(to: ImportWalletDestination.importWallet(.chain(chain)))
                         }
                     }
                 }

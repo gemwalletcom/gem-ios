@@ -3,43 +3,59 @@
 import SwiftUI
 import Primitives
 import Localization
+import WalletService
+
+enum ImportWalletDestination: Hashable {
+    case importWallet(ImportWalletType)
+    case importType
+}
 
 public struct ImportWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
-
-    @Binding private var isPresentingWallets: Bool
-    private let model: ImportWalletTypeViewModel
+    @State private var router: Routing
+    
+    let walletService: WalletService
 
     public init(
-        model: ImportWalletTypeViewModel,
-        isPresentingWallets: Binding<Bool>
+        walletService: WalletService,
+        onFinishFlow: VoidAction = nil
     ) {
-        self.model = model
-        _isPresentingWallets = isPresentingWallets
+        self.walletService = walletService
+        self.router = Router(onFinishFlow: onFinishFlow)
     }
 
     public var body: some View {
-        NavigationStack {
-            ImportWalletTypeScene(model: model)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            dismiss()
-                        }
+        NavigationStack(path: $router.path) {
+            AcceptTermsScene(
+                model: AcceptTermsViewModel(),
+                router: router,
+                onNext: { router.push(to: ImportWalletDestination.importType) }
+            )
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(Localized.Common.cancel) {
+                        dismiss()
                     }
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationDestination(for: ImportWalletType.self) { type in
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: ImportWalletDestination.self) {
+                switch $0 {
+                case .importType:
+                    ImportWalletTypeScene(
+                        model: ImportWalletTypeViewModel(walletService: walletService),
+                        router: router
+                    )
+                case .importWallet(let type):
                     ImportWalletScene(
                         model: ImportWalletViewModel(
                             type: type,
-                            walletService: model.walletService,
-                            onFinishImport: {
-                                isPresentingWallets.toggle()
-                            }
-                        )
+                            walletService: walletService
+                        ),
+                        router: router
                     )
                 }
+            }
         }
     }
 }

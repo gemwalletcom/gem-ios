@@ -24,9 +24,14 @@ struct ImportWalletScene: View {
     @State var nameResolveState: NameRecordState = .none
     
     @StateObject var model: ImportWalletViewModel
+    private let router: Routing
 
-    init(model: ImportWalletViewModel) {
+    init(
+        model: ImportWalletViewModel,
+        router: Routing
+    ) {
         _model = StateObject(wrappedValue: model)
+        self.router = router
     }
 
     var body: some View {
@@ -229,5 +234,6 @@ extension ImportWalletScene {
             }
             try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
         }
+        router.onFinishFlow?()
     }
 }
