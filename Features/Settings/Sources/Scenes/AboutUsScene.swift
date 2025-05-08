@@ -33,6 +33,7 @@ public struct AboutUsScene: View {
                 .contextMenu(model.contextMenuItems)
             }
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)

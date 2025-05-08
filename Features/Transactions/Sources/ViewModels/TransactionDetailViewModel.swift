@@ -215,7 +215,8 @@ struct TransactionDetailViewModel {
             feeAsset: model.transaction.feeAsset,
             feeAssetPrice: model.transaction.feePrice,
             value: model.transaction.transaction.valueBigInt,
-            feeValue: model.transaction.transaction.feeBigInt
+            feeValue: model.transaction.transaction.feeBigInt,
+            direction: model.transaction.transaction.type == .transfer ? model.transaction.transaction.direction : nil
         )
     }
 }

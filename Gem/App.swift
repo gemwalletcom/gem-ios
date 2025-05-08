@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Style
 import Store
@@ -13,10 +15,11 @@ import WalletService
 @main
 struct GemApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
-    private let resolver: AppResolver = AppResolver()
-
+    
+    private let resolver: AppResolver
+    
     init() {
+        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
@@ -43,9 +46,9 @@ struct GemApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
-        // set cache
         URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
         
@@ -70,8 +73,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
                 balanceStore: .main,
                 chainServiceFactory: .init(nodeProvider: NodeService.main)
             ),
-            assetStore: AssetStore(db: .main),
-            nodeStore: NodeStore(db: .main),
+            assetStore: .main,
+            nodeStore: NodeStore.main,
             preferences: Preferences.standard,
             walletService: WalletService.main
         )
@@ -109,10 +112,6 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         return true
     }
     
-    func scene(_ scene: UIScene, didUpdate userActivity: NSUserActivity) {
-        
-    }
-    
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         //NSLog("URLContexts.first?.url \(URLContexts.first?.url)")
     }
@@ -122,12 +121,16 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
     }
     
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
         NotificationService.main.handleUserInfo(response.notification.request.content.userInfo)
         completionHandler()
     }

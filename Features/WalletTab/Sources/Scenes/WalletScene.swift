@@ -9,7 +9,6 @@ import InfoSheet
 import PrimitivesComponents
 
 public struct WalletScene: View {
-    private let pricesTimer = Timer.publish(every: 600, tolerance: 1, on: .main, in: .common).autoconnect()
     private var model: WalletSceneViewModel
 
     public init(model: WalletSceneViewModel) {
@@ -82,11 +81,6 @@ public struct WalletScene: View {
         }
         .taskOnce {
             model.fetch()
-        }
-        .onReceive(pricesTimer) { time in
-            Task {
-                await model.updatePrices()
-            }
         }
     }
 }

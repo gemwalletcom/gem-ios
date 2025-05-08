@@ -8,15 +8,19 @@ import SwiftUI
 import Components
 
 public struct TransactionTypesSelectorViewModel: SelectableSheetViewable {
-    public var items: [Primitives.TransactionType] { state.value.or([]) }
+    public var items: [Primitives.TransactionType] { state.value?.items ?? [] }
     
-    public let isMultiSelectionEnabled: Bool
-    public let state: StateViewType<[TransactionType]>
+    public let selectionType: SelectionType
+    public let state: StateViewType<SelectableListType<TransactionType>>
 
     public var selectedItems: Set<TransactionType>
 
-    public init(state: StateViewType<[TransactionType]>, selectedItems: [TransactionType], isMultiSelectionEnabled: Bool) {
-        self.isMultiSelectionEnabled = isMultiSelectionEnabled
+    public init(
+        state: StateViewType<SelectableListType<TransactionType>>,
+        selectedItems: [TransactionType],
+        selectionType: SelectionType
+    ) {
+        self.selectionType = selectionType
         self.state = state
         self.selectedItems = Set(selectedItems)
     }

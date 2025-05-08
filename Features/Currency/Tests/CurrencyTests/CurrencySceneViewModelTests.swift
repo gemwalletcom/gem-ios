@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import Testing
+import PriceServiceTestKit
 
 @testable import Currency
 
@@ -19,22 +20,24 @@ struct CurrencySceneViewModelTests {
     @Test
     func testUSDCurrencyValue() {
         let usdCurrencyStorage = MockCurrencyStorage()
-        let viewModel = CurrencySceneViewModel(currencyStorage: usdCurrencyStorage)
+        let viewModel = CurrencySceneViewModel(currencyStorage: usdCurrencyStorage, priceService: .mock())
+        
         #expect(viewModel.selectedCurrencyValue == "🇺🇸 USD")
     }
 
     @Test
     func testGBPCurrencyValue() {
         let gbpCurrancyStorage = MockCurrencyStorage(currency: "GBP")
-        let viewModel = CurrencySceneViewModel(currencyStorage: gbpCurrancyStorage)
+        let viewModel = CurrencySceneViewModel(currencyStorage: gbpCurrancyStorage, priceService: .mock())
         #expect(viewModel.selectedCurrencyValue == "🇬🇧 GBP")
     }
 
     @Test
     func testSetNewCurrency() {
         let usdCurrencyStorage = MockCurrencyStorage()
-        let viewModel = CurrencySceneViewModel(currencyStorage: usdCurrencyStorage)
-        viewModel.setCurrency(.ars)
+        let viewModel = CurrencySceneViewModel(currencyStorage: usdCurrencyStorage, priceService: .mock())
+        
+        try? viewModel.setCurrency(.ars)
         
         #expect(usdCurrencyStorage.currency == Currency.ars.id)
         #expect(usdCurrencyStorage.currency == viewModel.currency.id)

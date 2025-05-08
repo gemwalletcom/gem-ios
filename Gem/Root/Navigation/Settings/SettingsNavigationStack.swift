@@ -11,6 +11,7 @@ import Preferences
 import MarketInsight
 import Settings
 import ChainSettings
+import PriceService
 
 struct SettingsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
@@ -31,11 +32,18 @@ struct SettingsNavigationStack: View {
 
     let walletId: WalletId
 
-    init(walletId: WalletId,
-         preferences: Preferences = .standard
+    init(
+        walletId: WalletId,
+        preferences: Preferences = .standard,
+        priceService: PriceService
     ) {
         self.walletId = walletId
-        _currencyModel = State(initialValue: CurrencySceneViewModel(currencyStorage: preferences))
+        _currencyModel = State(
+            initialValue: CurrencySceneViewModel(
+                currencyStorage: preferences,
+                priceService: priceService
+            )
+        )
     }
 
     private var navigationPath: Binding<NavigationPath> {
@@ -104,7 +112,8 @@ struct SettingsNavigationStack: View {
                     transactionsService: transactionsService,
                     assetService: assetsService,
                     stakeService: stakeService,
-                    bannerService: bannerService
+                    bannerService: bannerService,
+                    priceService: priceService
                 ))
             }
             .navigationDestination(for: Scenes.Currency.self) { _ in

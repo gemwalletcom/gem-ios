@@ -155,4 +155,8 @@ public struct AssetDataViewModel: Sendable {
     public var isPriceAlertsEnabled: Bool {
         assetData.isPriceAlertsEnabled
     }
+    
+    public var assetAddress: AssetAddress {
+        assetData.assetAddress
+    }
 }

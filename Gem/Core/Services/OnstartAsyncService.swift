@@ -11,8 +11,8 @@ import NodeService
 import Preferences
 import AssetsService
 
-class OnstartAsyncService {
-    
+final class OnstartAsyncService: Sendable {
+
     let assetStore: AssetStore
     let nodeStore: NodeStore
     let preferences: Preferences
@@ -21,29 +21,27 @@ class OnstartAsyncService {
     let deviceService: DeviceService
     let bannerSetupService: BannerSetupService
 
+    @MainActor
     var updateVersionAction: StringAction = .none
-    
+
     init(
         assetStore: AssetStore,
         nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        bannerSetupService: BannerSetupService,
-        updateVersionAction: StringAction = .none
+        bannerSetupService: BannerSetupService
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
         self.preferences = preferences
         self.service = ImportAssetsService(
-            nodeService: NodeService(nodeStore: nodeStore), 
             assetsService: assetsService,
             assetStore: assetStore,
             preferences: preferences
         )
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
-        self.updateVersionAction = updateVersionAction
     }
 
     func setup() {
@@ -94,7 +92,10 @@ class OnstartAsyncService {
             if let newVersion = config.releases.first(where: { $0.store == .appStore }),
                 VersionCheck.isVersionHigher(new: newVersion.version, current: Bundle.main.releaseVersionNumber) {
                     NSLog("Newer version available")
+                Task { @MainActor [weak self] in
+                    guard let self else { return }
                     updateVersionAction?(newVersion.version)
+                }
             }
         } catch {
             NSLog("Fetching config error: \(error)")

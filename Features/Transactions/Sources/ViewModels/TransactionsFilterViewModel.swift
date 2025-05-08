@@ -26,17 +26,17 @@ public struct TransactionsFilterViewModel: Equatable {
 
     public var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(
-            state: .data(chainsFilter.allChains),
+            state: .data(.plain(chainsFilter.allChains)),
             selectedItems: chainsFilter.selectedChains,
-            isMultiSelectionEnabled: true
+            selectionType: .multiSelection
         )
     }
 
     public var typesModel: TransactionTypesSelectorViewModel {
         TransactionTypesSelectorViewModel(
-            state: .data(transactionTypesFilter.allTransactionsTypes),
+            state: .data(.plain(transactionTypesFilter.allTransactionsTypes)),
             selectedItems: transactionTypesFilter.selectedTypes,
-            isMultiSelectionEnabled: true
+            selectionType: .multiSelection
         )
     }
     

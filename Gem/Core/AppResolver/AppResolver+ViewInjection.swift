@@ -25,6 +25,7 @@ extension View {
             .environment(\.notificationService, services.notificationService)
             .environment(\.chainServiceFactory, services.chainServiceFactory)
             .environment(\.priceService, services.priceService)
+            .environment(\.priceObserverService, services.priceObserverService)
             .environment(\.explorerService, services.explorerService)
             .environment(\.connectionsService, services.connectionsService)
     }

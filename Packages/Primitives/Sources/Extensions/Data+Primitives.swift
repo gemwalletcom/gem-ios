@@ -43,13 +43,6 @@ public extension Data {
         return data
     }
     
-    func asString() throws -> String {
-        guard let string = String(data: self, encoding: .utf8) else {
-            throw AnyError("Unable to decode data to string")
-        }
-        return string
-    }
-    
     /// Converts an ASCII byte to a hex value.
     private static func value(of nibble: UInt8) -> UInt8? {
         guard let letter = String(bytes: [nibble], encoding: .ascii) else { return nil }
@@ -61,5 +54,12 @@ public extension Data {
               let data = try? JSONSerialization.data(withJSONObject: object, options: [.prettyPrinted]),
               let prettyPrintedString = String(data: data, encoding:.utf8) else { return nil }
         return prettyPrintedString
+    }
+    
+    func encodeString() throws -> String {
+        guard let string = String(data: self, encoding: .utf8) else {
+            throw AnyError("unable to encode string")
+        }
+        return string
     }
 }

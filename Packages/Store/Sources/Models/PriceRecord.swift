@@ -10,6 +10,7 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     enum Columns {
         static let assetId = Column("assetId")
         static let price = Column("price")
+        static let priceUsd = Column("priceUsd")
         static let priceChangePercentage24h = Column("priceChangePercentage24h")
         static let marketCap = Column("marketCap")
         static let marketCapFdv = Column("marketCapFdv")
@@ -22,6 +23,7 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public var assetId: AssetId
     public var price: Double
+    public var priceUsd: Double
     public var priceChangePercentage24h: Double
     
     public var marketCap: Double?
@@ -40,7 +42,14 @@ extension PriceRecord: CreateTable {
                 .primaryKey()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
             $0.column(Columns.price.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
+            $0.column(Columns.priceUsd.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
             $0.column(Columns.priceChangePercentage24h.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
             
             $0.column(Columns.marketCap.name, .double)
             $0.column(Columns.marketCapFdv.name, .double)
@@ -62,6 +71,7 @@ extension AssetPrice {
         return PriceRecord(
             assetId: try! AssetId(id: assetId),
             price: price,
+            priceUsd: price,
             priceChangePercentage24h: priceChangePercentage24h
         )
     }

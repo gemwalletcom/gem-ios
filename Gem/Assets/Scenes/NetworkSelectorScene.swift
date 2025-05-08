@@ -34,6 +34,6 @@ struct NetworkSelectorScene: View {
 
 #Preview {
     NetworkSelectorScene(
-        model: .constant(NetworkSelectorViewModel(state: .data([.aptos, .arbitrum, .base])))
+        model: .constant(NetworkSelectorViewModel(state: .data(.plain([.aptos, .arbitrum, .base]))))
     )
 }

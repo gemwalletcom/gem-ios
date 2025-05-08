@@ -1,23 +1,32 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Store
-import Primitives
 import GemAPI
-import NodeService
+import Store
 import Preferences
+import Primitives
 import GemstonePrimitives
-import AssetsService
 
-struct ImportAssetsService {
-    let nodeService: NodeService
-    let assetListService: any GemAPIAssetsListService = GemAPIService()
+public struct ImportAssetsService: Sendable {
+    let assetListService: any GemAPIAssetsListService
     let assetsService: AssetsService
-    var assetStore: AssetStore
+    let assetStore: AssetStore
     let preferences: Preferences
     
+    public init(
+        assetListService: any GemAPIAssetsListService = GemAPIService(),
+        assetsService: AssetsService,
+        assetStore: AssetStore,
+        preferences: Preferences
+    ) {
+        self.assetListService = assetListService
+        self.assetsService = assetsService
+        self.assetStore = assetStore
+        self.preferences = preferences
+    }
+    
     // sync
-    func migrate() throws {
+    public func migrate() throws {
         let releaseVersionNumber = Bundle.main.buildVersionNumber
         
         #if targetEnvironment(simulator)
@@ -59,7 +68,7 @@ struct ImportAssetsService {
         try assetStore.setAssetIsStakeable(for: chains.filter { $0.isStakeSupported }.map { $0.id }, value: true)
     }
 
-    func updateFiatAssets() async throws {
+    public func updateFiatAssets() async throws {
         async let getBuyAssets = try assetListService.getBuyableFiatAssets()
         async let getSellAssets = try assetListService.getSellableFiatAssets()
 
@@ -77,7 +86,7 @@ struct ImportAssetsService {
         preferences.fiatOffRampAssetsVersion = Int(sellAssets.version)
     }
     
-    func updateSwapAssets() async throws {
+    public func updateSwapAssets() async throws {
         let assets = try await assetListService.getSwapAssets()
 
         try await assetsService.prefetchAssets(assetIds: assets.assetIds.compactMap { try? AssetId(id: $0) })

@@ -26,7 +26,8 @@ public struct SearchableSelectableListView<ViewModel: SelectableListAdoptable & 
             items: model.items,
             filter: model.filter(_:query:),
             content: { item in
-                if model.isMultiSelectionEnabled {
+                switch model.selectionType {
+                case .multiSelection, .checkmark:
                     SelectionView(
                         value: item,
                         selection: model.selectedItems.contains(item) ? item : nil,
@@ -35,7 +36,7 @@ public struct SearchableSelectableListView<ViewModel: SelectableListAdoptable & 
                             listContent(item)
                         }
                     )
-                } else {
+                case .navigationLink:
                     NavigationCustomLink(with: listContent(item)) {
                         onSelect(item: item)
                     }
@@ -51,7 +52,12 @@ public struct SearchableSelectableListView<ViewModel: SelectableListAdoptable & 
 
     private func onSelect(item: ViewModel.Item) {
         model.toggle(item: item)
-        guard !model.isMultiSelectionEnabled else { return }
-        onFinishSelection?(Array(model.selectedItems))
+        
+        switch model.selectionType {
+        case .multiSelection:
+            break
+        case .navigationLink, .checkmark:
+            onFinishSelection?(Array(model.selectedItems))
+        }
     }
 }

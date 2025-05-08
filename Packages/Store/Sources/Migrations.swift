@@ -20,9 +20,11 @@ public struct Migrations {
             try BalanceRecord.create(db: db)
 
             // asset
+            try FiatRateRecord.create(db: db)
             try PriceRecord.create(db: db)
             try AssetLinkRecord.create(db: db)
             try AssetSearchRecord.create(db: db)
+            //TODO: Market. try MarketAssetRecord.create(db: db)
             
             // transactions
             try TransactionRecord.create(db: db)
@@ -239,6 +241,23 @@ public struct Migrations {
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
         }
+        
+        migrator.registerMigration("Add fiat rates") { db in
+            try? FiatRateRecord.create(db: db)
+        }
+        
+        migrator.registerMigration("Add priceUsd to prices table \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.priceUsd.name, .double)
+                    .notNull()
+                    .defaults(to: 0)
+            }
+        }
+        
+//        TODO: Market.
+//        migrator.registerMigration("Add markets_assets table") { db in
+//            try? MarketAssetRecord.create(db: db)
+//        }
 
         try migrator.migrate(dbQueue)
     }

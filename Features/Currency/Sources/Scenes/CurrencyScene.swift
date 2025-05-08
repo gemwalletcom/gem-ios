@@ -25,7 +25,7 @@ public struct CurrencyScene: View {
                         value: $0.value.currency,
                         selection: model.currency
                     ) {
-                        model.setCurrency($0)
+                        try? model.setCurrency($0)
                     }
                 }
             }
