@@ -40,14 +40,16 @@ public class LockSceneViewModel {
     var shouldShowLockScreen: Bool { isLocked || showPlaceholderPreview }
 
     var lockPeriod: LockPeriod { service.lockPeriod }
-
     var isPrivacyLockEnabled: Bool { service.isPrivacyLockEnabled }
+
     var isPrivacyLockVisible: Bool {
         guard isAutoLockEnabled else { return false }
-        guard isPrivacyLockEnabled else {
+
+        if isPrivacyLockEnabled {
+            return state != .unlocked || showPlaceholderPreview
+        } else {
             return state == .lockedCanceled || shouldLock
         }
-        return true
     }
 }
 
@@ -83,7 +85,9 @@ extension LockSceneViewModel {
         do {
             try await service.authenticate(reason: Self.reason)
             state = .unlocked
-            lastUnlockTime = Date.distantFuture
+            lastUnlockTime = .distantFuture
+            // even if app still in inactive state, we immediately show content after success authentication
+            showPlaceholderPreview = false
         } catch let error as BiometryAuthenticationError {
             state = error.isAuthenticationCancelled ? .lockedCanceled : .locked
         } catch {

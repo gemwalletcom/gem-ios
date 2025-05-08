@@ -2,11 +2,10 @@
 
 import SwiftUI
 import Keystore
-
 @testable import LockManager
 
 @MainActor
-class LockWindowManagerMock: LockWindowManageable {
+final class LockWindowManagerMock: LockWindowManageable {
     init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
@@ -17,47 +16,46 @@ class LockWindowManagerMock: LockWindowManageable {
     var isPrivacyLockVisible: Bool { lockModel.isPrivacyLockVisible }
 
     func setPhase(phase: ScenePhase) {
-        guard lockModel.isAutoLockEnabled else {
-            lockModel.resetLockState()
-            return
-        }
-
+        guard lockModel.isAutoLockEnabled else { lockModel.resetLockState(); return }
         lockModel.handleSceneChange(to: phase)
     }
 
     func toggleLock(show: Bool) {
-        if show {
-            if overlayWindow == nil {
-                overlayWindow = Self.createOverlayWindow(
-                    model: lockModel,
-                    isPrivacyLockVisible: lockModel.isPrivacyLockVisible
-                )
-            }
-        } else {
-            overlayWindow = nil
-        }
+        show ? present() : dismiss()
     }
 
     func togglePrivacyLock(visible: Bool) {
-        overlayWindow?.alpha = visible ? 1 : 0
+        let alpha: CGFloat = visible ? 1 : 0
+        if overlayWindow?.alpha != alpha { overlayWindow?.alpha = alpha }
     }
 
-    static private func createOverlayWindow(
-        model: LockSceneViewModel,
-        isPrivacyLockVisible: Bool
-    ) -> UIWindow {
-        let lockScreen = LockScreenScene(model: model)
-        let hostingController = UIHostingController(rootView: lockScreen)
+    private func present() {
+        if overlayWindow == nil {
+            overlayWindow = Self.makeWindow(
+                model: lockModel,
+                visible: lockModel.isPrivacyLockVisible
+            )
+        }
+        togglePrivacyLock(visible: lockModel.isPrivacyLockVisible)
+        overlayWindow?.isHidden = false
+    }
 
-        let lockWindow = UIWindow(frame: .zero)
-        lockWindow.rootViewController = hostingController
-        lockWindow.windowLevel = UIWindow.Level.alert + 1
-        lockWindow.backgroundColor = .clear
-        lockWindow.isHidden = false
-        lockWindow.alpha = isPrivacyLockVisible ? 1.0 : 0.0
+    private func dismiss() {
+        guard !lockModel.isPrivacyLockVisible else { return }
+        overlayWindow?.alpha   = 0
+        overlayWindow?.isHidden = true
+        overlayWindow = nil
+    }
 
-        lockWindow.makeKeyAndVisible()
-        return lockWindow
+    private static func makeWindow(model: LockSceneViewModel, visible: Bool) -> UIWindow {
+        let host = UIHostingController(rootView: LockScreenScene(model: model))
+        let window = UIWindow(frame: .zero)
+        window.rootViewController = host
+        window.windowLevel = .alert + 1
+        window.backgroundColor = .clear
+        window.alpha = visible ? 1 : 0
+        window.makeKeyAndVisible()
+        return window
     }
 
     static func mock(
@@ -72,7 +70,6 @@ class LockWindowManagerMock: LockWindowManageable {
             lockPeriod: lockPeriod,
             isPrivacyLockEnabled: isPrivacyLockEnabled
         )
-        let lockModel = LockSceneViewModel(service: service)
-        return LockWindowManagerMock(lockModel: lockModel)
+        return .init(lockModel: LockSceneViewModel(service: service))
     }
 }
