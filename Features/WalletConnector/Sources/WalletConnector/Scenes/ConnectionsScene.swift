@@ -13,7 +13,7 @@ public struct ConnectionsScene: View {
     @State private var isPresentingScanner: Bool = false
     @State private var isPresentingErrorMessage: String?
 
-    @State var model: ConnectionsViewModel
+    @State private var model: ConnectionsViewModel
 
     public init(model: ConnectionsViewModel) {
         self.model = model
@@ -35,11 +35,9 @@ public struct ConnectionsScene: View {
             }
             .listRowInsets(.assetListRowInsets)
             
-            ForEach(model.headers, id: \.self) { header in
-                Section(
-                    header: Text(header.name)
-                ) {
-                    ForEach(model.groupedByWallet[header]!) { connection in
+            ForEach(model.sections) { section in
+                Section(section.title.or(.empty)) {
+                    ForEach(section.values) { connection in
                         NavigationLink(value: connection) {
                             ConnectionView(model: WalletConnectionViewModel(connection: connection))
                                 .swipeActions(edge: .trailing) {
@@ -62,7 +60,7 @@ public struct ConnectionsScene: View {
         )
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .overlay {
-            if model.headers.isEmpty {
+            if model.sections.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }

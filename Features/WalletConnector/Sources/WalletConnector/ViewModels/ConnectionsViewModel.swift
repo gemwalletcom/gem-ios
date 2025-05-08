@@ -5,6 +5,7 @@ import Primitives
 import Store
 import Localization
 import PrimitivesComponents
+import Components
 
 @Observable
 @MainActor
@@ -26,12 +27,15 @@ public final class ConnectionsViewModel {
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
     
-    var groupedByWallet: [Wallet: [Primitives.WalletConnection]] {
-        Dictionary(grouping: connections, by: { $0.wallet })
-    }
-    
-    var headers: [Wallet] {
-        groupedByWallet.map({ $0.key }).sorted { $0.order < $1.order }
+    var sections: [ListSection<WalletConnection>] {
+        Dictionary(grouping: connections, by: { $0.wallet }).map { wallet, connections in
+            ListSection(
+                id: wallet.id,
+                title: wallet.name,
+                image: nil,
+                values: connections
+            )
+        }
     }
 
     var emptyContentModel: EmptyContentTypeViewModel {
