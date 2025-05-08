@@ -6,17 +6,22 @@ import Keystore
 
 @MainActor
 final class LockWindowManagerMock: LockWindowManageable {
+
+    var lockModel: LockSceneViewModel
+    var overlayWindow: UIWindow?
+
     init(lockModel: LockSceneViewModel) {
         self.lockModel = lockModel
     }
 
-    var lockModel: LockSceneViewModel
-    var overlayWindow: UIWindow?
     var showLockScreen: Bool { lockModel.shouldShowLockScreen }
     var isPrivacyLockVisible: Bool { lockModel.isPrivacyLockVisible }
 
     func setPhase(phase: ScenePhase) {
-        guard lockModel.isAutoLockEnabled else { lockModel.resetLockState(); return }
+        guard lockModel.isAutoLockEnabled else {
+            lockModel.resetLockState()
+            return
+        }
         lockModel.handleSceneChange(to: phase)
     }
 
