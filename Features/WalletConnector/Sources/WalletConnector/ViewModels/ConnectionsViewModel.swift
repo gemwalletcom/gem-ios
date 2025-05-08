@@ -5,22 +5,38 @@ import Primitives
 import Store
 import Localization
 import PrimitivesComponents
+import Components
 
-public struct ConnectionsViewModel: Sendable {
+@Observable
+@MainActor
+public final class ConnectionsViewModel {
     let service: ConnectionsService
+    
+    var request: ConnectionsRequest
+    var connections: [WalletConnection] = []
 
     public init(
         service: ConnectionsService
     ) {
         self.service = service
+        self.request = ConnectionsRequest()
     }
 
     var title: String { Localized.WalletConnect.title }
     var disconnectTitle: String { Localized.WalletConnect.disconnect }
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
-
-    var request: ConnectionsRequest { ConnectionsRequest() }
+    
+    var sections: [ListSection<WalletConnection>] {
+        Dictionary(grouping: connections, by: { $0.wallet }).map { wallet, connections in
+            ListSection(
+                id: wallet.id,
+                title: wallet.name,
+                image: nil,
+                values: connections
+            )
+        }
+    }
 
     var emptyContentModel: EmptyContentTypeViewModel {
         EmptyContentTypeViewModel(type: .walletConnect)
