@@ -48,6 +48,8 @@ let package = Package(
             name: "PriceServiceTests",
             dependencies: [
                 "PriceService",
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PriceServiceTestKit", package: "PriceService"),
             ]
         ),
     ]

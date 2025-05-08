@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import GRDB
+import os
 
 public struct DB: Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
@@ -23,7 +24,13 @@ public struct DB: Sendable {
             )
             dbQueue = try DatabaseQueue(path: databaseURL.path(percentEncoded: false), configuration: configuration)
         } catch {
-            fatalError("db initialization error: \(error)")
+            os_log(
+                "DB Initialization error: %{public}@",
+                log: .default,
+                type: .fault,
+                error.localizedDescription
+            )
+            fatalError("DB Initialization error: \(error)")
         }
 
         do {
@@ -33,7 +40,13 @@ public struct DB: Sendable {
                 try migrations.runChanges(dbQueue: dbQueue)
             }
         } catch {
-            fatalError("db migrations error: \(error)")
+            os_log(
+                "DB Migration error: %{public}@",
+                log: .default,
+                type: .fault,
+                error.localizedDescription
+            )
+            fatalError("DB Migration error: \(error)")
         }
     }
 
