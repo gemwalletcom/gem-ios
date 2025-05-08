@@ -8,13 +8,11 @@ import PrimitivesComponents
 struct CreateWalletScene: View {
 
     @State var model: CreateWalletViewModel
-    private let router: Routing
     
     @State private var isPresentingCopyToast = false
     
-    init(model: CreateWalletViewModel, router: Routing) {
+    init(model: CreateWalletViewModel) {
         self.model = model
-        self.router = router
     }
 
     var body: some View {
@@ -50,6 +48,6 @@ struct CreateWalletScene: View {
     }
     
     func continueAction() {
-        router.push(to: CreateWalletDestination.verifyPhrase(model.words))
+        model.onNext()
     }
 }

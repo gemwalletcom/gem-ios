@@ -10,14 +10,9 @@ import Primitives
 struct VerifyPhraseWalletScene: View {
     
     @State var model: VerifyPhraseViewModel
-    private let router: Routing
 
-    init(
-        model: VerifyPhraseViewModel,
-        router: Routing
-    ) {
+    init(model: VerifyPhraseViewModel) {
         _model = .init(initialValue: model)
-        self.router = router
     }
 
     var body: some View {
@@ -76,17 +71,7 @@ extension VerifyPhraseWalletScene {
         Task {
             try await Task.sleep(for: .milliseconds(50))
             await MainActor.run {
-                do {
-                    try model.importWallet()
-                    router.onFinishFlow?()
-                } catch {
-                    router.presentAlert(
-                        title: Localized.Errors.createWallet(""),
-                        message: error.localizedDescription
-                    )
-                    model.buttonState = .normal
-                }
-
+                model.importWallet()
             }
         }
     }

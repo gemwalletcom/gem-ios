@@ -6,9 +6,9 @@ import Primitives
 import WalletService
 
 enum CreateWalletDestination: Hashable {
-    case verifyPhrase([String])
-    case createWallet
     case acceptTerms
+    case createWallet
+    case verifyPhrase([String])
 }
 
 public struct CreateWalletNavigationStack: View {
@@ -16,7 +16,7 @@ public struct CreateWalletNavigationStack: View {
     
     private let walletService: WalletService
     
-    @State private var router: Routing
+    @State private var router: Router<CreateWalletDestination>
 
     public init(
         walletService: WalletService,
@@ -31,9 +31,7 @@ public struct CreateWalletNavigationStack: View {
             SecurityReminderScene(
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Wallet.New.title,
-                    onNext: {
-                        router.push(to: CreateWalletDestination.acceptTerms)
-                    }
+                    onNext: securityReminderOnNext
                 )
             )
             .toolbar {
@@ -46,26 +44,26 @@ public struct CreateWalletNavigationStack: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: CreateWalletDestination.self) {
                 switch $0 {
+                case .acceptTerms:
+                    AcceptTermsScene(
+                        model: AcceptTermsViewModel(
+                            navigation: self
+                        )
+                    )
                 case .createWallet:
                     CreateWalletScene(
                         model: CreateWalletViewModel(
-                            walletService: walletService
-                        ),
-                        router: router
+                            walletService: walletService,
+                            navigation: self
+                        )
                     )
                 case .verifyPhrase(let words):
                     VerifyPhraseWalletScene(
                         model: VerifyPhraseViewModel(
                             words: words,
-                            walletService: walletService
-                        ),
-                        router: router
-                    )
-                case .acceptTerms:
-                    AcceptTermsScene(
-                        model: AcceptTermsViewModel(),
-                        router: router,
-                        onNext: { router.push(to: CreateWalletDestination.createWallet) }
+                            walletService: walletService,
+                            navigation: self
+                        )
                     )
                 }
             }
@@ -74,5 +72,42 @@ public struct CreateWalletNavigationStack: View {
             }
             .safariSheet(url: $router.isPresentingUrl)
         }
+    }
+}
+
+// MARK: - Navigation
+
+extension CreateWalletNavigationStack {
+    func securityReminderOnNext() {
+        router.push(to: .acceptTerms)
+    }
+}
+
+extension CreateWalletNavigationStack: CreateWalletViewModelNavigation {
+    func createWalletOnNext(words: [String]) {
+        router.push(to: .verifyPhrase(words))
+    }
+}
+
+extension CreateWalletNavigationStack: VerifyPhraseViewModelNavigation {
+    func verifyPhraseOnNext() {
+        router.onFinishFlow?()
+    }
+    
+    func show(error: any Error) {
+        router.presentAlert(
+            title: Localized.Errors.createWallet(""),
+            message: error.localizedDescription
+        )
+    }
+}
+
+extension CreateWalletNavigationStack: AcceptTermsViewModelNavigation {
+    func acceptTermsOnNext() {
+        router.push(to: .createWallet)
+    }
+    
+    func present(url: URL) {
+        router.isPresentingUrl = url
     }
 }

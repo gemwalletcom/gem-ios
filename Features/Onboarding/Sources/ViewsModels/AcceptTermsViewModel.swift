@@ -2,9 +2,22 @@
 
 import Foundation
 import Components
+import GemstonePrimitives
+
+@MainActor
+protocol AcceptTermsViewModelNavigation {
+    func acceptTermsOnNext()
+    func present(url: URL)
+}
 
 @Observable
 final class AcceptTermsViewModel {
+    private let navigation: AcceptTermsViewModelNavigation
+    
+    init(navigation: AcceptTermsViewModelNavigation) {
+        self.navigation = navigation
+    }
+    
     let title: String = "Accept Terms"
     let message: String = "Please read and agree to the following terms before you continue."
 
@@ -23,12 +36,15 @@ final class AcceptTermsViewModel {
     }
 }
 
-final class AcceptTermViewModel: Identifiable {
-    var id: String { message }
-    let message: String
-    var isConfirmed: Bool = false
+// MARK: - Navigation
+
+@MainActor
+extension AcceptTermsViewModel {
+    func onNext() {
+        navigation.acceptTermsOnNext()
+    }
     
-    init(message: String) {
-        self.message = message
+    func presentTermsOfService() {
+        navigation.present(url: PublicConstants.url(.termsOfService))
     }
 }

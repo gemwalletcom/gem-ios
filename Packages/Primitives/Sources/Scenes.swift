@@ -81,22 +81,6 @@ public struct Scenes {
             self.words = words
         }
     }
-    
-    public struct ShowWords: Hashable {
-        public let words: [String]
-        
-        public init(words: [String]) {
-            self.words = words
-        }
-    }
-    
-    public struct ShowPrivateKey: Hashable {
-        public let privateKey: String
-        
-        public init(privateKey: String) {
-            self.privateKey = privateKey
-        }
-    }
 
     public struct WalletDetail: Hashable {
         public let wallet: Wallet

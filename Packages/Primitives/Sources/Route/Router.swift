@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 
 public protocol Routing: AnyObject {
+    associatedtype Destination
     var path: NavigationPath { get set }
     
     var isPresentingAlert: AlertValue? { get set }
@@ -12,7 +13,7 @@ public protocol Routing: AnyObject {
     
     var onFinishFlow: VoidAction { get set }
 
-    func push(to view: any Hashable)
+    func push(to view: Destination)
     func pop()
     func popToRootView()
     func presentAlert(title: String, message: String)
@@ -20,7 +21,8 @@ public protocol Routing: AnyObject {
 }
 
 @Observable
-open class Router: Routing {
+public final class Router<T: Hashable>: Routing {
+    public typealias Destination = T
     public var path: NavigationPath
     
     public var isPresentingAlert: AlertValue?
@@ -37,7 +39,7 @@ open class Router: Routing {
         self.onFinishFlow = onFinishFlow
     }
     
-    public func push(to view: any Hashable) {
+    public func push(to view: Destination) {
         path.append(view)
     }
 

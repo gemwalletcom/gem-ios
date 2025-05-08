@@ -8,12 +8,20 @@ import Style
 import Localization
 import PrimitivesComponents
 
+@MainActor
+protocol VerifyPhraseViewModelNavigation {
+    func verifyPhraseOnNext()
+    func show(error: Error)
+}
+
 @Observable
+@MainActor
 final class VerifyPhraseViewModel {
     
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
+    private let navigation: VerifyPhraseViewModelNavigation
 
     var wordsVerified: [String]
     var wordsIndex: Int = 0
@@ -22,12 +30,14 @@ final class VerifyPhraseViewModel {
 
     init(
         words: [String],
-        walletService: WalletService
+        walletService: WalletService,
+        navigation: VerifyPhraseViewModelNavigation
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
+        self.navigation = navigation
     }
     
     var title: String {
@@ -71,8 +81,14 @@ final class VerifyPhraseViewModel {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() throws {
-        let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+    func importWallet() {
+        do {
+            let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
+            let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+            navigation.verifyPhraseOnNext()
+        } catch {
+            navigation.show(error: error)
+            buttonState = .normal
+        }
     }
 }

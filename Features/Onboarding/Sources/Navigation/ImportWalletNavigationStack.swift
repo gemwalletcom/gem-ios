@@ -12,7 +12,7 @@ enum ImportWalletDestination: Hashable {
 
 public struct ImportWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var router: Routing
+    @State private var router: Router<ImportWalletDestination>
     
     let walletService: WalletService
 
@@ -27,9 +27,7 @@ public struct ImportWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $router.path) {
             AcceptTermsScene(
-                model: AcceptTermsViewModel(),
-                router: router,
-                onNext: { router.push(to: ImportWalletDestination.importType) }
+                model: AcceptTermsViewModel(navigation: self)
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -43,19 +41,46 @@ public struct ImportWalletNavigationStack: View {
                 switch $0 {
                 case .importType:
                     ImportWalletTypeScene(
-                        model: ImportWalletTypeViewModel(walletService: walletService),
-                        router: router
+                        model: ImportWalletTypeViewModel(
+                            walletService: walletService,
+                            navigation: self
+                        )
                     )
                 case .importWallet(let type):
                     ImportWalletScene(
                         model: ImportWalletViewModel(
                             type: type,
-                            walletService: walletService
-                        ),
-                        router: router
+                            walletService: walletService,
+                            navigation: self
+                        )
                     )
                 }
             }
+            .safariSheet(url: $router.isPresentingUrl)
         }
+    }
+}
+
+// MARK: - Navigation
+
+extension ImportWalletNavigationStack: AcceptTermsViewModelNavigation {
+    func acceptTermsOnNext() {
+        router.push(to: .importType)
+    }
+    
+    func present(url: URL) {
+        router.isPresentingUrl = url
+    }
+}
+
+extension ImportWalletNavigationStack: ImportWalletTypeViewModelNavigation {
+    func importWalletOnNext(type: ImportWalletType) {
+        router.push(to: .importWallet(type))
+    }
+}
+
+extension ImportWalletNavigationStack: ImportWalletViewModelNavigation {
+    func importWalletOnNext() {
+        router.onFinishFlow?()
     }
 }

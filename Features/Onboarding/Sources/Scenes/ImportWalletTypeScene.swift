@@ -7,15 +7,10 @@ import Localization
 struct ImportWalletTypeScene: View {
 
     let model: ImportWalletTypeViewModel
-    let router: Routing
     @State private var searchQuery = ""
 
-    init(
-        model: ImportWalletTypeViewModel,
-        router: Routing
-    ) {
+    init(model: ImportWalletTypeViewModel) {
         self.model = model
-        self.router = router
     }
 
     var body: some View {
@@ -26,7 +21,7 @@ struct ImportWalletTypeScene: View {
                     imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
                 )
                 NavigationCustomLink(with: view) {
-                    router.push(to: ImportWalletDestination.importWallet(.multicoin))
+                    model.onNext(type: .multicoin)
                 }
             }
             .listRowInsets(.assetListRowInsets)
@@ -41,7 +36,7 @@ struct ImportWalletTypeScene: View {
                             imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
                         )
                         NavigationCustomLink(with: view) {
-                            router.push(to: ImportWalletDestination.importWallet(.chain(chain)))
+                            model.onNext(type: .chain(chain))
                         }
                     }
                 }

@@ -6,21 +6,12 @@ import Style
 import Localization
 import Components
 import Primitives
-import GemstonePrimitives
 
 struct AcceptTermsScene: View {
     @State private var model: AcceptTermsViewModel
-    private let router: Routing
-    private var onNext: VoidAction
     
-    init(
-        model: AcceptTermsViewModel,
-        router: Routing,
-        onNext: VoidAction
-    ) {
+    init(model: AcceptTermsViewModel) {
         self.model = model
-        self.router = router
-        self.onNext = onNext
     }
 
     var body: some View {
@@ -49,7 +40,7 @@ struct AcceptTermsScene: View {
                 text: "I Understand, Continue",
                 viewState: model.buttonState,
                 infoTitle: "By checking the boxes, you agree to these terms.",
-                action:  { onNext?() }
+                action: model.onNext
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -60,17 +51,9 @@ struct AcceptTermsScene: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", systemImage: SystemImage.info) {
-                    presentTermsOfService()
+                    model.presentTermsOfService()
                 }
             }
         }
-    }
-}
-
-// MARK: - Actions
-
-extension AcceptTermsScene {
-    private func presentTermsOfService() {
-        router.isPresentingUrl = PublicConstants.url(.termsOfService)
     }
 }
