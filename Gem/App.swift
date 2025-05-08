@@ -16,9 +16,10 @@ import WalletService
 struct GemApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    private let resolver: AppResolver = AppResolver()
+    private let resolver: AppResolver
     
     init() {
+        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
