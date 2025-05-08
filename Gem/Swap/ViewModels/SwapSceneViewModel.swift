@@ -202,6 +202,11 @@ extension SwapSceneViewModel {
             swapState.fetch = .idle
             selectedSwapQuote = nil
         }
+        
+        Task {
+            let assetIds =  [fromAsset?.asset.id, toAsset?.asset.id].compactMap { $0 }
+            try await walletsService.addPrices(assetIds: assetIds)
+        }
     }
 
     func onFetchStateChange(state: SwapFetchState) async {

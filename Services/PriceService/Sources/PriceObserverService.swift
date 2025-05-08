@@ -54,15 +54,16 @@ public actor PriceObserverService: Sendable {
     }
 
     public func addAssets(assets: [AssetId]) throws {
-        if subscribedAssetIds.contains(where: assets.contains) {
+        let newAssets = Set(assets).subtracting(subscribedAssetIds).asArray()
+        guard newAssets.isNotEmpty else {
             return
         }
         let action = WebSocketPriceAction(
             action: .add,
-            assets: assets
+            assets: newAssets
         )
         try sendAction(action)
-        subscribedAssetIds.formUnion(assets)
+        subscribedAssetIds.formUnion(newAssets)
     }
     
     public func setupAssets() throws {
