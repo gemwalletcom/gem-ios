@@ -5,8 +5,11 @@ import SwiftUI
 import Localization
 import Style
 import PrimitivesComponents
+import Components
 
 struct FullMessageScene: View {
+    @State private var showShareSheet = false
+
     let model: FullMessageViewModel
     
     var body: some View {
@@ -17,8 +20,18 @@ struct FullMessageScene: View {
                 .padding()
         }
         .dismissToolbarItem(title: .cancel, placement: .topBarLeading)
+        .customToolbarItem(placement: .topBarTrailing, content: {
+            Button {
+                showShareSheet.toggle()
+            } label: {
+                Images.System.share
+            }
+        })
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.message)
         .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $showShareSheet) {
+            ShareSheet(activityItems: [model.displayMessage])
+        }
     }
 }
