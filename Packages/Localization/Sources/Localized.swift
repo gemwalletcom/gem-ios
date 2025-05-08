@@ -93,8 +93,8 @@ public enum Localized {
     public static let selectAsset = Localized.tr("Localizable", "assets.select_asset", fallback: "Select Asset")
     public enum State {
       public enum Empty {
-        /// You can try add it manually
-        public static let searchDescription = Localized.tr("Localizable", "assets.state.empty.search_description", fallback: "You can try add it manually")
+        /// You can try to add it manually
+        public static let searchDescription = Localized.tr("Localizable", "assets.state.empty.search_description", fallback: "You can try to add it manually")
         /// No assets found
         public static let searchTitle = Localized.tr("Localizable", "assets.state.empty.search_title", fallback: "No assets found")
       }
@@ -607,9 +607,9 @@ public enum Localized {
     }
   }
   public enum PriceAlerts {
-    /// Set price alert for %@
+    /// Set price alert %@
     public static func addedFor(_ p1: Any) -> String {
-      return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert for %@")
+      return Localized.tr("Localizable", "price_alerts.added_for", String(describing: p1), fallback: "Set price alert %@")
     }
     /// Price alert disabled for %@
     public static func disabledFor(_ p1: Any) -> String {
@@ -675,8 +675,8 @@ public enum Localized {
   public enum Search {
     public enum State {
       public enum Empty {
-        /// Check the spelling or try a new search
-        public static let description = Localized.tr("Localizable", "search.state.empty.description", fallback: "Check the spelling or try a new search")
+        /// Check the spelling or try a new search.
+        public static let description = Localized.tr("Localizable", "search.state.empty.description", fallback: "Check the spelling or try a new search.")
       }
     }
   }

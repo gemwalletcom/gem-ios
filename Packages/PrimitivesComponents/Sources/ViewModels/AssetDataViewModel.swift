@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import Style
 import Components
+import Localization
 
 public struct AssetDataViewModel: Sendable {
     private let assetData: AssetData
@@ -30,6 +31,9 @@ public struct AssetDataViewModel: Sendable {
         )
         self.currencyCode = currencyCode
     }
+
+    public var availableBalanceTitle: String { Localized.Asset.Balances.available }
+    public var reservedBalanceTitle: String { Localized.Asset.Balances.reserved }
 
     // asset
 

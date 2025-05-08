@@ -4,6 +4,30 @@
 
 import Foundation
 
+public struct SolanaAccountMeta: Codable, Sendable {
+	public let pubkey: String
+	public let isSigner: Bool
+	public let isWritable: Bool
+
+	public init(pubkey: String, isSigner: Bool, isWritable: Bool) {
+		self.pubkey = pubkey
+		self.isSigner = isSigner
+		self.isWritable = isWritable
+	}
+}
+
+public struct SolanaInstruction: Codable, Sendable {
+	public let programId: String
+	public let accounts: [SolanaAccountMeta]
+	public let data: String
+
+	public init(programId: String, accounts: [SolanaAccountMeta], data: String) {
+		self.programId = programId
+		self.accounts = accounts
+		self.data = data
+	}
+}
+
 public struct SolanaTransactionError: Codable, Sendable {
 	public init() {}
 }

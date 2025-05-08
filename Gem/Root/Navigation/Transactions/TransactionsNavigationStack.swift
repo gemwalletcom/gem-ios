@@ -12,6 +12,10 @@ struct TransactionsNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.priceAlertService) private var priceAlertService
 
+    @Environment(\.assetsService) private var assetsService
+    @Environment(\.priceObserverService) private var priceObserverService
+    @Environment(\.bannerService) private var bannerService
+
     @State private var model: TransactionsViewModel
 
     init(model: TransactionsViewModel) {
@@ -56,11 +60,20 @@ struct TransactionsNavigationStack: View {
                     )
                 }
                 .navigationDestination(for: Scenes.Asset.self) {
-                    AssetScene(
-                        wallet: model.wallet,
-                        input: AssetSceneInput(walletId: model.walletId, assetId: $0.asset.id),
-                        isPresentingAssetSelectedInput: Binding.constant(.none),
-                        onAssetActivate: .none
+                    AssetNavigationView(
+                        model: AssetSceneViewModel(
+                            walletsService: walletsService,
+                            assetsService: assetsService,
+                            transactionsService: model.transactionsService,
+                            priceObserverService: priceObserverService,
+                            priceAlertService: priceAlertService,
+                            bannerService: bannerService,
+                            input: AssetSceneInput(
+                                wallet: model.wallet,
+                                assetId: $0.asset.id
+                            ),
+                            isPresentingAssetSelectedInput: .constant(.none)
+                        )
                     )
                 }
                 .sheet(isPresented: $model.isPresentingFilteringView) {

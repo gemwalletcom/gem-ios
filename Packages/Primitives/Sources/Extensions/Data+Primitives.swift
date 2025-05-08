@@ -55,4 +55,11 @@ public extension Data {
               let prettyPrintedString = String(data: data, encoding:.utf8) else { return nil }
         return prettyPrintedString
     }
+    
+    func encodeString() throws -> String {
+        guard let string = String(data: self, encoding: .utf8) else {
+            throw AnyError("unable to encode string")
+        }
+        return string
+    }
 }
