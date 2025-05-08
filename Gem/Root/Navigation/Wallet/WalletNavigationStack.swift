@@ -15,6 +15,11 @@ struct WalletNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.priceAlertService) private var priceAlertService
 
+    @Environment(\.assetsService) private var assetsService
+    @Environment(\.transactionsService) private var transactionsService
+    @Environment(\.bannerService) private var bannerService
+    @Environment(\.priceObserverService) private var priceObserverService
+
     @State private var model: WalletSceneViewModel
     @State private var isPresentingAssetSelectedInput: SelectedAssetInput?
 
@@ -61,9 +66,19 @@ struct WalletNavigationStack: View {
                 }
                 .navigationDestination(for: Scenes.Asset.self) {
                     AssetNavigationView(
-                        wallet: model.wallet,
-                        assetId: $0.asset.id,
-                        isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
+                        model: AssetSceneViewModel(
+                            walletsService: walletsService,
+                            assetsService: assetsService,
+                            transactionsService: transactionsService,
+                            priceObserverService: priceObserverService,
+                            priceAlertService: priceAlertService,
+                            bannerService: bannerService,
+                            input: AssetSceneInput(
+                                wallet: model.wallet,
+                                assetId: $0.asset.id
+                            ),
+                            isPresentingAssetSelectedInput: $isPresentingAssetSelectedInput
+                        )
                     )
                 }
                 .navigationDestination(for: TransactionExtended.self) {

@@ -74,7 +74,7 @@ public struct CosmosSigner: Signable {
             throw AnyError("invalid type")
         }
         let chain = try CosmosChain.from(string: input.asset.chain.rawValue)
-        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: "RUNE", memo: data.data)]
+        let messages = [getSwapMessage(input: input, chain: chain, chainName: "THOR", symbol: input.asset.symbol, memo: data.data)]
         
         return [
             try sign(input: input, messages: messages, chain: chain, memo: data.data, privateKey: privateKey),

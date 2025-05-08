@@ -16,9 +16,10 @@ import WalletService
 struct GemApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    private let resolver: AppResolver = AppResolver()
+    private let resolver: AppResolver
     
     init() {
+        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
@@ -72,8 +73,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
                 balanceStore: .main,
                 chainServiceFactory: .init(nodeProvider: NodeService.main)
             ),
-            assetStore: AssetStore(db: .main),
-            nodeStore: NodeStore(db: .main),
+            assetStore: .main,
+            nodeStore: NodeStore.main,
             preferences: Preferences.standard,
             walletService: WalletService.main
         )

@@ -6,6 +6,7 @@ import WalletCorePrimitives
 import Keystore
 import Primitives
 import BigInt
+import Blockchain
 
 public struct SolanaSigner: Signable {
     
@@ -144,20 +145,7 @@ public struct SolanaSigner: Signable {
         }
     }
     
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard 
-            case .swap(_, _, _, let swapData) = input.type else {
-            throw AnyError("not swap SignerInput")
-        }
-        let price = input.fee.priorityFee
-        let limit = input.fee.gasLimit
-        
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
-            throw AnyError("Unable to set compute unit price")
-        }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
-            throw AnyError("Unable to set compute unit limit")
-        }
+    func signRawTransaction(transaction: String, privateKey: Data) throws -> String {
         guard let transactionData = Base64.decode(string: transaction) else {
             throw AnyError("not swap SignerInput")
         }
@@ -174,8 +162,27 @@ public struct SolanaSigner: Signable {
         if !output.errorMessage.isEmpty {
             throw AnyError(output.errorMessage)
         }
+        return output.encoded
+    }
+    
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        guard 
+            case .swap(_, _, _, let swapData) = input.type else {
+            throw AnyError("not swap SignerInput")
+        }
+        let price = input.fee.priorityFee
+        let limit = input.fee.gasLimit
         
-        return [output.encoded]
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
+            throw AnyError("Unable to set compute unit price")
+        }
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
+            throw AnyError("Unable to set compute unit limit")
+        }
+    
+        return [
+            try signRawTransaction(transaction: transaction, privateKey: privateKey),
+        ]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -189,6 +196,23 @@ public struct SolanaSigner: Signable {
                 $0.validatorPubkey = validator.id
                 $0.value = input.value.asUInt
             })
+            let encoded = try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey)
+            let memo = input.memo ?? ""
+            let instruction = SolanaInstruction(
+                programId: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+                accounts: [
+                    SolanaAccountMeta(pubkey: input.senderAddress, isSigner: true, isWritable: true)
+                ],
+                data: Base58.encodeNoCheck(data: try memo.encodedData())
+            )
+            let data = try JSONEncoder().encode(instruction)
+            guard let transaction = SolanaTransaction.addInstruction(encodedTx: encoded, instruction: try data.encodeString()) else {
+                throw AnyError("Unable to add instruction")
+            }
+            
+            return [
+                try signRawTransaction(transaction: transaction, privateKey: privateKey),
+            ]
         case .unstake(let delegation):
             transactionType = .deactivateStakeTransaction(.with {
                 $0.stakeAccount = delegation.base.delegationId
