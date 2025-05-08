@@ -9,14 +9,14 @@ import Testing
 struct RouterTests {
     @Test
     func testPushAddsViewToPath() {
-        let router = Router()
+        let router = Router<String>()
         router.push(to: "First")
         #expect(router.path.count == 1)
     }
 
     @Test
     func testPopRemovesLastViewFromPath() {
-        let router = Router()
+        let router = Router<String>()
         router.push(to: "First")
         router.push(to: "Second")
         router.pop()
@@ -25,14 +25,14 @@ struct RouterTests {
 
     @Test
     func testPopDoesNothingIfPathIsEmpty() {
-        let router = Router()
+        let router = Router<String>()
         router.pop()
         #expect(router.path.isEmpty)
     }
 
     @Test
     func testPopToRootViewRemovesAllElements() {
-        let router = Router()
+        let router = Router<String>()
         router.push(to: "First")
         router.push(to: "Second")
         router.popToRootView()
@@ -41,7 +41,7 @@ struct RouterTests {
     
     @Test
     func testMultiplePushesAddsViewsToPath() {
-        let router = Router()
+        let router = Router<String>()
         router.push(to: "First")
         router.push(to: "Second")
         router.push(to: "Third")
@@ -50,7 +50,7 @@ struct RouterTests {
 
     @Test
     func testPopAfterSinglePushEmptiesPath() {
-        let router = Router()
+        let router = Router<String>()
         router.push(to: "Only")
         router.pop()
         #expect(router.path.isEmpty)
@@ -58,7 +58,7 @@ struct RouterTests {
 
     @Test
     func testPresentAlertSetsAlertValue() {
-        let router = Router()
+        let router = Router<String>()
         router.presentAlert(title: "Title", message: "Message")
         #expect(router.isPresentingAlert?.title == "Title")
         #expect(router.isPresentingAlert?.message == "Message")
@@ -67,7 +67,7 @@ struct RouterTests {
     @Test
     func testOnCompleteIsCalled() {
         var didCall = false
-        let router = Router(onFinishFlow: { didCall = true })
+        let router = Router<String>(onFinishFlow: { didCall = true })
         router.onFinishFlow!()
         #expect(didCall)
     }
@@ -78,7 +78,7 @@ struct RouterTests {
             let id = UUID()
         }
         
-        let router = Router()
+        let router = Router<String>()
         let view = DummyIdentifiable()
         router.presenting(view)
         
