@@ -4,14 +4,18 @@ import Foundation
 import SafariServices
 import SwiftUI
 
-struct SFSafariView: UIViewControllerRepresentable {
+public struct SFSafariView: UIViewControllerRepresentable {
     let url: URL
 
-    func makeUIViewController(context: Context) -> SFSafariViewController {
+    public init(url: URL) {
+        self.url = url
+    }
+
+    public func makeUIViewController(context: Context) -> SFSafariViewController {
         let configuration = SFSafariViewController.Configuration()
         configuration.barCollapsingEnabled = false
         return SFSafariViewController(url: url, configuration: configuration)
     }
 
-    func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
+    public func updateUIViewController(_ uiViewController: SFSafariViewController, context: Context) {}
 }

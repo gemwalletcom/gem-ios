@@ -15,9 +15,9 @@ import WalletService
 @MainActor
 public final class TransactionsViewModel {
     public let explorerService: any ExplorerLinkFetchable = ExplorerService.standard
+    public let transactionsService: TransactionsService
 
     private let walletService: WalletService
-    private let transactionsService: TransactionsService
 
     private let type: TransactionsRequestType
     private let preferences: SecurePreferences = .standard
