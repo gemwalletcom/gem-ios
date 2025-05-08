@@ -20,7 +20,7 @@ struct FullMessageScene: View {
                 .padding()
         }
         .dismissToolbarItem(title: .cancel, placement: .topBarLeading)
-        .customToolbarItem(placement: .topBarTrailing, content: {
+        .toolbarItemView(placement: .topBarTrailing, content: {
             Button {
                 showShareSheet.toggle()
             } label: {

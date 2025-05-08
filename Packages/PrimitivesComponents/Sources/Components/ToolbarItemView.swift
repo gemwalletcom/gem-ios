@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-public struct CustomToolbarItem<Content: View>: ToolbarContent {
+public struct ToolbarItemView<Content: View>: ToolbarContent {
     let placement: ToolbarItemPlacement
     let content: () -> Content
 

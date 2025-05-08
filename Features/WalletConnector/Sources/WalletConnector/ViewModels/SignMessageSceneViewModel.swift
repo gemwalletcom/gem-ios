@@ -108,6 +108,7 @@ public struct SignMessageSceneViewModel {
     private func eip712Items(_ message: [GemEip712Field]) -> [KeyValueItem] {
         message.flatMap { field in
             messageItems(value: field.value, name: field.name)
+                .filter { $0.title.isNotEmpty && $0.value.isNotEmpty }
         }
     }
     

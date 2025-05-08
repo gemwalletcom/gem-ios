@@ -2,7 +2,7 @@
 
 import SwiftUI
 
-struct CustomToolbarItemModifier<V: View>: ViewModifier {
+struct ToolbarItemViewModifier<V: View>: ViewModifier {
     let placement: ToolbarItemPlacement
     let toolbarContent: () -> V
 
@@ -17,16 +17,16 @@ struct CustomToolbarItemModifier<V: View>: ViewModifier {
     func body(content: Content) -> some View {
         content
             .toolbar {
-                CustomToolbarItem(placement: placement, content: toolbarContent)
+                ToolbarItemView(placement: placement, content: toolbarContent)
             }
     }
 }
 
 public extension View {
-    func customToolbarItem<Content: View>(
+    func toolbarItemView<Content: View>(
         placement: ToolbarItemPlacement,
         @ViewBuilder content: @escaping () -> Content
     ) -> some View {
-        modifier(CustomToolbarItemModifier(placement: placement, content: content))
+        modifier(ToolbarItemViewModifier(placement: placement, content: content))
     }
 }
