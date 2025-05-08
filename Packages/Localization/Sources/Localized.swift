@@ -450,8 +450,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
     }
     public enum PriceImpact {
-      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. 
-      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ")
+      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.
+      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.")
       /// Price Impact
       public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
