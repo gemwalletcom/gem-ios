@@ -302,7 +302,7 @@
 "errors.swap.not_supported_asset" = "Не підтримуваний актив.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Веб-сайт";
-"asset.contract" = "Договір";
+"asset.contract" = "Контракт";
 "filter.types" = "Типи";
 "fee_rate.gwei" = "%@ gwei";
 "swap.slippage" = "Slippage";
@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "Після цього має залишитися мінімальний баланс %@, якщо ви не використовуєте весь баланс.";
 "swap.price_impact_warning.description" = "Ви втратите %@ із своїх %@ у цій торгівлі. Ви впевнені, що бажаєте продовжити?";
 "swap.price_impact_warning.title" = "Високий ціновий вплив";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

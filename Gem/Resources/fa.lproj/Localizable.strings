@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "حداقل موجودی %@ باید بعد از این باقی بماند، مگر اینکه از موجودی کامل خود استفاده کنید.";
 "swap.price_impact_warning.description" = "شما %@ از %@ خود را در این معامله از دست خواهید داد. آیا مطمئن هستید که می خواهید ادامه دهید؟";
 "swap.price_impact_warning.title" = "تاثیر قیمت بالا";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

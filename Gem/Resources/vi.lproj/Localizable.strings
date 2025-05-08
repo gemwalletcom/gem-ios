@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "Sau đó, bạn phải giữ lại số dư tối thiểu %@, trừ khi bạn sử dụng hết số dư.";
 "swap.price_impact_warning.description" = "Bạn sẽ mất %@ trong số %@ của mình trong giao dịch này. Bạn có chắc chắn muốn tiếp tục không?";
 "swap.price_impact_warning.title" = "Tác động giá cao";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

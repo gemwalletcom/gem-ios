@@ -256,7 +256,7 @@
 "filter.clear" = "Очистить";
 "filter.title" = "Фильтры";
 "settings.help_center" = "Центр помощи";
-"settings.support" = "Поддерживать";
+"settings.support" = "Поддержка";
 "settings.price_alerts.title" = "Уведомления о ценах";
 "price_alerts.enabled_for" = "Оповещение о цене включено для %@";
 "price_alerts.disabled_for" = "Оповещение о цене отключено для %@";
@@ -302,7 +302,7 @@
 "errors.swap.not_supported_asset" = "Неподдерживаемый актив.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Веб-сайт";
-"asset.contract" = "Договор";
+"asset.contract" = "Контракт";
 "filter.types" = "Типы";
 "fee_rate.gwei" = "%@ gwei";
 "swap.slippage" = "Slippage";
@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "После этого должен оставаться минимальный баланс %@, если только вы не используете весь свой баланс.";
 "swap.price_impact_warning.description" = "Вы потеряете %@ из ваших %@ в этой сделке. Вы уверены, что хотите продолжить?";
 "swap.price_impact_warning.title" = "Высокое ценовое воздействие";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

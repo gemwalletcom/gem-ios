@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "इसके बाद न्यूनतम %@ शेष राशि बनी रहनी चाहिए, जब तक कि आप अपनी पूरी शेष राशि का उपयोग नहीं कर रहे हों।";
 "swap.price_impact_warning.description" = "इस व्यापार में आप अपना %@ %@ देंगे। क्या आप वाकई आगे बढ़ना चाहते हैं?";
 "swap.price_impact_warning.title" = "उच्च मूल्य प्रभाव";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

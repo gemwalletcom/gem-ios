@@ -770,6 +770,8 @@ public enum Localized {
     public static let message = Localized.tr("Localizable", "sign_message.message", fallback: "Message")
     /// Sign Message
     public static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
+    /// View Full Message
+    public static let viewFullMessage = Localized.tr("Localizable", "sign_message.view_full_message", fallback: "View Full Message")
   }
   public enum Social {
     /// CoinGecko
@@ -1118,6 +1120,8 @@ public enum Localized {
     public static let brandName = Localized.tr("Localizable", "wallet_connect.brand_name", fallback: "WalletConnect")
     /// Disconnect
     public static let disconnect = Localized.tr("Localizable", "wallet_connect.disconnect", fallback: "Disconnect")
+    /// Domain
+    public static let domain = Localized.tr("Localizable", "wallet_connect.domain", fallback: "Domain")
     /// No active connections
     public static let noActiveConnections = Localized.tr("Localizable", "wallet_connect.no_active_connections", fallback: "No active connections")
     /// WalletConnect

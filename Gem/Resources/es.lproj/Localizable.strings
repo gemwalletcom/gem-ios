@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "Después de esto, debe quedar un saldo mínimo %@, a menos que utilice su saldo completo.";
 "swap.price_impact_warning.description" = "Perderás %@ de tus %@ en esta operación. ¿Estás seguro de que deseas continuar?";
 "swap.price_impact_warning.title" = "Impacto de los altos precios";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";

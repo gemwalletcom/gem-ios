@@ -395,3 +395,5 @@
 "transfer.minimum_account_balance" = "残高をすべて使用しない限り、この後も最低%@残高が残っている必要があります。";
 "swap.price_impact_warning.description" = "この取引で%@のうち%@を失います。続行してもよろしいですか?";
 "swap.price_impact_warning.title" = "高い価格影響";
+"wallet_connect.domain" = "Domain";
+"sign_message.view_full_message" = "View Full Message";
