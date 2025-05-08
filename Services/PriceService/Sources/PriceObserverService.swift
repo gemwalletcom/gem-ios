@@ -66,6 +66,10 @@ public actor PriceObserverService: Sendable {
         subscribedAssetIds.formUnion(newAssets)
     }
     
+    public func subscribeAssets() -> Set<AssetId> {
+        return subscribedAssetIds
+    }
+    
     public func setupAssets() throws {
         let assets = try priceService.observableAssets()
         let action = WebSocketPriceAction(
