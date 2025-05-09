@@ -5,11 +5,21 @@ import SwiftUI
 import Localization
 import PrimitivesComponents
 
-public struct ImportWalletTypeViewModel {
-    let walletService: WalletService
+@MainActor
+protocol ImportWalletTypeViewModelNavigation {
+    func importWalletOnNext(type: ImportWalletType)
+}
 
-    public init(walletService: WalletService) {
+struct ImportWalletTypeViewModel {
+    private let walletService: WalletService
+    private let navigation: ImportWalletTypeViewModelNavigation
+
+    init(
+        walletService: WalletService,
+        navigation: ImportWalletTypeViewModelNavigation
+    ) {
         self.walletService = walletService
+        self.navigation = navigation
     }
     
     var title: String {
@@ -18,6 +28,15 @@ public struct ImportWalletTypeViewModel {
 
     func items(for searchText: String) -> [Chain] {
         filterChains(for: searchText)
+    }
+}
+
+// MARK: - Navigation
+
+@MainActor
+extension ImportWalletTypeViewModel {
+    func onNext(type: ImportWalletType) {
+        navigation.importWalletOnNext(type: type)
     }
 }
 

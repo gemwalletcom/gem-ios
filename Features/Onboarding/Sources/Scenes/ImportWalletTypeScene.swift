@@ -9,22 +9,20 @@ struct ImportWalletTypeScene: View {
     let model: ImportWalletTypeViewModel
     @State private var searchQuery = ""
 
-    init(
-        model: ImportWalletTypeViewModel
-    ) {
+    init(model: ImportWalletTypeViewModel) {
         self.model = model
     }
 
     var body: some View {
         List {
             Section {
-                NavigationLink(value: ImportWalletType.multicoin) {
-                    ListItemView(
-                        title: Localized.Wallet.multicoin,
-                        imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
-                    )
+                let view = ListItemView(
+                    title: Localized.Wallet.multicoin,
+                    imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
+                )
+                NavigationCustomLink(with: view) {
+                    model.onNext(type: .multicoin)
                 }
-                .accessibilityIdentifier("multicoin")
             }
             .listRowInsets(.assetListRowInsets)
             
@@ -33,11 +31,12 @@ struct ImportWalletTypeScene: View {
             } else {
                 Section {
                     ForEach(model.items(for: searchQuery)) { chain in
-                        NavigationLink(value: ImportWalletType.chain(chain)) {
-                            ListItemView(
-                                title: Asset(chain).name,
-                                imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
-                            )
+                        let view = ListItemView(
+                            title: Asset(chain).name,
+                            imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
+                        )
+                        NavigationCustomLink(with: view) {
+                            model.onNext(type: .chain(chain))
                         }
                     }
                 }

@@ -5,10 +5,10 @@ import Components
 import SwiftUICore
 
 extension ListItemImageStyle {
-    static func security(_ image: Image) -> ListItemImageStyle? {
+    static func security(_ emoji: String) -> ListItemImageStyle? {
         ListItemImageStyle(
-            assetImage: .image(image),
-            imageSize: .image.small,
+            assetImage: AssetImage(type: emoji),
+            imageSize: .image.semiMedium,
             alignment: .top,
             cornerRadiusType: .none
         )

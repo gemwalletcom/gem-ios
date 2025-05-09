@@ -5,18 +5,24 @@ import SwiftUI
 import Localization
 import PrimitivesComponents
 
-class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
-    private let walletService: WalletService
-    private let onCreateWallet: (([String]) -> Void)?
+@MainActor
+protocol CreateWalletViewModelNavigation {
+    func createWalletOnNext(words: [String])
+}
 
-    @Published var words: [String] = []
+@Observable
+final class CreateWalletViewModel: SecretPhraseViewableModel {
+    private let walletService: WalletService
+    private let navigation: CreateWalletViewModelNavigation
+
+    var words: [String] = []
 
     init(
         walletService: WalletService,
-        onCreateWallet: (([String]) -> Void)? = nil
+        navigation: CreateWalletViewModelNavigation
     ) {
         self.walletService = walletService
-        self.onCreateWallet = onCreateWallet
+        self.navigation = navigation
     }
 
     var title: String {
@@ -33,16 +39,22 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
     }
-
-    func generateWords() -> [String] {
-        walletService.createWallet()
-    }
     
     var presentWarning: Bool {
         true
     }
 
-    func continueAction() {
-        onCreateWallet?(words)
+    func generateWords() -> [String] {
+        walletService.createWallet()
+    }
+    
+}
+
+// MARK: - Navigation
+
+@MainActor
+extension CreateWalletViewModel {
+    func onNext() {
+        navigation.createWalletOnNext(words: words)
     }
 }

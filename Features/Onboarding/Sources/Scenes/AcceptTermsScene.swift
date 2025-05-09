@@ -3,32 +3,30 @@
 import Foundation
 import SwiftUI
 import Style
-import Components
 import Localization
+import Components
+import Primitives
 
-struct SecurityReminderScene: View {
-    @State private var model: SecurityReminderViewModel
-    @State private var isPresentingUrl: URL? = nil
+struct AcceptTermsScene: View {
+    @State private var model: AcceptTermsViewModel
     
-    init(model: SecurityReminderViewModel) {
+    init(model: AcceptTermsViewModel) {
         self.model = model
     }
-    
+
     var body: some View {
         VStack(spacing: .medium) {
             List {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
                 
-                ForEach(model.items) { item in
+                ForEach($model.items) { $item in
                     Section {
-                        ListItemView(
-                            title: item.title,
-                            titleStyle: .headline,
-                            titleExtra: item.subtitle,
-                            titleStyleExtra: .bodySecondary,
-                            imageStyle: item.image
-                        )
+                        Toggle(isOn: $item.isConfirmed) {
+                            Text(item.message)
+                                .textStyle(.bodySecondary)
+                        }
+                        .toggleStyle(CheckboxStyle(position: .left))
                     }
                     .listRowInsets(.assetListRowInsets)
                 }
@@ -39,8 +37,9 @@ struct SecurityReminderScene: View {
             Spacer()
             
             StateButton(
-                text: Localized.Common.continue,
-                styleState: .normal,
+                text: "I Understand, Continue",
+                viewState: model.buttonState,
+                infoTitle: "By checking the boxes, you agree to these terms.",
                 action: model.onNext
             )
             .frame(maxWidth: .scene.button.maxWidth)
@@ -52,19 +51,9 @@ struct SecurityReminderScene: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", systemImage: SystemImage.info) {
-                    isPresentingUrl = model.docsUrl
+                    model.presentTermsOfService()
                 }
             }
         }
-        .safariSheet(url: $isPresentingUrl)
     }
-}
-
-#Preview {
-    SecurityReminderScene(
-        model: SecurityReminderViewModelDefault(
-            title: Localized.Wallet.New.title,
-            onNext: {}
-        )
-    )
 }

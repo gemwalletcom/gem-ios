@@ -7,9 +7,13 @@ import PrimitivesComponents
 
 struct CreateWalletScene: View {
 
-    @StateObject var model: CreateWalletViewModel
+    @State var model: CreateWalletViewModel
     
     @State private var isPresentingCopyToast = false
+    
+    init(model: CreateWalletViewModel) {
+        self.model = model
+    }
 
     var body: some View {
         VStack(spacing: .medium) {
@@ -44,6 +48,6 @@ struct CreateWalletScene: View {
     }
     
     func continueAction() {
-        model.continueAction()
+        model.onNext()
     }
 }

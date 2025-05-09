@@ -229,5 +229,6 @@ extension ImportWalletScene {
             }
             try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
         }
+        model.onNext()
     }
 }
