@@ -153,6 +153,8 @@ extension AssetsRequest {
                 TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId
             )
             .order(
+                TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isPinned].desc,
+                TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled].desc,
                 totalValue.desc,
                 (totalValue == 0).desc,
                 AssetRecord.Columns.rank.desc
