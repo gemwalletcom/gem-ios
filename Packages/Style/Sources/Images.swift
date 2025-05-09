@@ -74,6 +74,7 @@ public enum Images {
         public static let wagmi = Image(.wagmi)
         public static let reservoir = Image(.reservoir)
         public static let symbiosis = Image(.symbiosis)
+        public static let chainflip = Image(.chainflip)
     }
 
     public enum Fiat {
