@@ -450,8 +450,8 @@ public enum Localized {
       public static let title = Localized.tr("Localizable", "info.network_fee.title", fallback: "Network Fee")
     }
     public enum PriceImpact {
-      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. 
-      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ")
+      /// Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.
+      public static let description = Localized.tr("Localizable", "info.price_impact.description", fallback: "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.")
       /// Price Impact
       public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
@@ -770,6 +770,8 @@ public enum Localized {
     public static let message = Localized.tr("Localizable", "sign_message.message", fallback: "Message")
     /// Sign Message
     public static let title = Localized.tr("Localizable", "sign_message.title", fallback: "Sign Message")
+    /// View Full Message
+    public static let viewFullMessage = Localized.tr("Localizable", "sign_message.view_full_message", fallback: "View Full Message")
   }
   public enum Social {
     /// CoinGecko
@@ -1118,6 +1120,8 @@ public enum Localized {
     public static let brandName = Localized.tr("Localizable", "wallet_connect.brand_name", fallback: "WalletConnect")
     /// Disconnect
     public static let disconnect = Localized.tr("Localizable", "wallet_connect.disconnect", fallback: "Disconnect")
+    /// Domain
+    public static let domain = Localized.tr("Localizable", "wallet_connect.domain", fallback: "Domain")
     /// No active connections
     public static let noActiveConnections = Localized.tr("Localizable", "wallet_connect.no_active_connections", fallback: "No active connections")
     /// WalletConnect
