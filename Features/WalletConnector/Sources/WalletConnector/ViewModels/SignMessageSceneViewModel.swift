@@ -45,7 +45,7 @@ public struct SignMessageSceneViewModel {
         }
     }
     
-    public var shouldDisplayFullMessage: Bool {
+    public var shouldDisplayTextMessage: Bool {
         messageSections != nil
     }
 
@@ -69,7 +69,7 @@ public struct SignMessageSceneViewModel {
         AssetImage(imageURL: connectionViewModel.imageUrl)
     }
     
-    var fullMessageViewModel: TextMessageViewModel {
+    var textMessageViewModel: TextMessageViewModel {
         TextMessageViewModel(message: decoder.plainPreview)
     }
 

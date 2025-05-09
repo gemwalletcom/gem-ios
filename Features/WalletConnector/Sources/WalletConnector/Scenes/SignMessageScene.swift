@@ -9,7 +9,7 @@ import PrimitivesComponents
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isPresentingUrl: URL? = nil
-    @State private var isPresentingFullMessage: Bool = false
+    @State private var isPresentingMessage: Bool = false
     
     private let model: SignMessageSceneViewModel
 
@@ -61,9 +61,9 @@ public struct SignMessageScene: View {
                     }
                 }
                 
-                if model.shouldDisplayFullMessage {
+                if model.shouldDisplayTextMessage {
                     NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
-                        isPresentingFullMessage = true
+                        isPresentingMessage = true
                     }
                 }
             }
@@ -82,9 +82,9 @@ public struct SignMessageScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
         .safariSheet(url: $isPresentingUrl)
-        .sheet(isPresented: $isPresentingFullMessage) {
+        .sheet(isPresented: $isPresentingMessage) {
             NavigationStack {
-                TextMessageScene(model: model.fullMessageViewModel)
+                TextMessageScene(model: model.textMessageViewModel)
             }
         }
     }
