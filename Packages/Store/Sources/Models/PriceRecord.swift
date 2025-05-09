@@ -19,6 +19,7 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
         static let circulatingSupply = Column("circulatingSupply")
         static let totalSupply = Column("totalSupply")
         static let maxSupply = Column("maxSupply")
+        static let updatedAt = Column("updatedAt")
     }
 
     public var assetId: AssetId
@@ -33,6 +34,8 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var circulatingSupply: Double?
     public var totalSupply: Double?
     public var maxSupply: Double?
+    
+    public var updatedAt: Date?
 }
 
 extension PriceRecord: CreateTable {
@@ -58,6 +61,7 @@ extension PriceRecord: CreateTable {
             $0.column(Columns.circulatingSupply.name, .double)
             $0.column(Columns.totalSupply.name, .double)
             $0.column(Columns.maxSupply.name, .double)
+            $0.column(Columns.updatedAt.name, .date)
         }
     }
 }
@@ -69,7 +73,7 @@ extension PriceRecord: Identifiable {
 extension AssetPrice {
     var record: PriceRecord {
         return PriceRecord(
-            assetId: try! AssetId(id: assetId),
+            assetId: assetId,
             price: price,
             priceUsd: price,
             priceChangePercentage24h: priceChangePercentage24h
@@ -81,15 +85,17 @@ extension PriceRecord {
     func mapToPrice() -> Price {
         return Price(
             price: price,
-            priceChangePercentage24h: priceChangePercentage24h
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt ?? .now
         )
     }
     
     func mapToAssetPrice() -> AssetPrice {
         return AssetPrice(
-            assetId: assetId.identifier,
+            assetId: assetId,
             price: price,
-            priceChangePercentage24h: priceChangePercentage24h
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt ?? .now
         )
     }
     
