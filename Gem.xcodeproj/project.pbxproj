@@ -38,6 +38,7 @@
 		83759DF72D384AF5002FECBA /* PreferencesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = 83759DF62D384AF5002FECBA /* PreferencesTestKit */; };
 		837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */; };
 		837A1E6D2D0B096600733AC1 /* WalletConnectorNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */; };
+		838081172DC96DC8004065D5 /* AssetSheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838081162DC96DC8004065D5 /* AssetSheetType.swift */; };
 		83863EE72D19B93E005048A7 /* NodeService in Frameworks */ = {isa = PBXBuildFile; productRef = 83863EE62D19B93E005048A7 /* NodeService */; };
 		839C794B2D1C42A500E32072 /* PrimitivesComponents in Frameworks */ = {isa = PBXBuildFile; productRef = 839C794A2D1C42A500E32072 /* PrimitivesComponents */; };
 		839C794D2D1C42AE00E32072 /* ChainSettings in Frameworks */ = {isa = PBXBuildFile; productRef = 839C794C2D1C42AE00E32072 /* ChainSettings */; };
@@ -209,6 +210,7 @@
 		8374DC592C6CDF6C00183109 /* AddTokenInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTokenInput.swift; sourceTree = "<group>"; };
 		837A1E6A2D0B029200733AC1 /* AppResolver+ViewInjection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+ViewInjection.swift"; sourceTree = "<group>"; };
 		837A1E6C2D0B096600733AC1 /* WalletConnectorNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletConnectorNavigationStack.swift; sourceTree = "<group>"; };
+		838081162DC96DC8004065D5 /* AssetSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetSheetType.swift; sourceTree = "<group>"; };
 		838383112D5E677A00D1CAF2 /* WalletTab */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletTab; sourceTree = "<group>"; };
 		83863EE52D19B8D8005048A7 /* NodeService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = NodeService; sourceTree = "<group>"; };
 		8391FE572D7F4D9F0057A548 /* WalletSessionService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = WalletSessionService; sourceTree = "<group>"; };
@@ -724,7 +726,6 @@
 			isa = PBXGroup;
 			children = (
 				C3CF3BCC29B80B1B00E96586 /* SelectAssetViewModel.swift */,
-				C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */,
 				D8BAC94F2BCF6B50001608BC /* AddTokenViewModel.swift */,
 				D8BAC95C2BD1A3E2001608BC /* AddAssetViewModel.swift */,
 				83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */,
@@ -942,6 +943,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A39C2C9696FE006FABE8 /* AssetSceneInput.swift */,
+				838081162DC96DC8004065D5 /* AssetSheetType.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -950,6 +952,7 @@
 			isa = PBXGroup;
 			children = (
 				D8C4A39F2C9696FE006FABE8 /* AssetHeaderViewModel.swift */,
+				C3549B3629C439DF00B4BE01 /* AssetSceneViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -1341,6 +1344,7 @@
 				D807004C2BBB26DD00ED770B /* TransactionsNavigationStack.swift in Sources */,
 				C3D1C4EC2A2EA647006E8EEA /* AmountScene.swift in Sources */,
 				D873DA512D7933AF0003F5CE /* MarketsNavigtionStack.swift in Sources */,
+				838081172DC96DC8004065D5 /* AssetSheetType.swift in Sources */,
 				83B57FAB2CFF92670009319F /* AppResolver.swift in Sources */,
 				C3CF3BC329B7CACA00E96586 /* ReceiveViewModel.swift in Sources */,
 				C3CF3BBE29B7C00E00E96586 /* ReceiveScene.swift in Sources */,

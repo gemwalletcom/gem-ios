@@ -5,9 +5,10 @@ import SwiftUI
 import Style
 
 struct ToastModifier: ViewModifier {
-    @State var isPresenting: Binding<Bool>
-    let value: String
-    let systemImage: String
+    private var isPresenting: Binding<Bool>
+
+    private let value: String
+    private let systemImage: String
 
     init(
         isPresenting: Binding<Bool>,
@@ -20,14 +21,34 @@ struct ToastModifier: ViewModifier {
     }
 
     func body(content: Content) -> some View {
-        return content
-            .toast(isPresenting: isPresenting){
+        content
+            .toast(isPresenting: isPresenting) {
                 AlertToast(
                     displayMode: .banner(.pop),
                     type: .systemImage(systemImage, Colors.black),
                     title: value
                 )
             }
+    }
+}
+
+private struct OptionalMessageToastModifier: ViewModifier {
+    @Binding var message: String?
+    let systemImage: String
+
+    func body(content: Content) -> some View {
+        content.modifier(
+            ToastModifier(
+                isPresenting: Binding(
+                    get: { message != nil },
+                    set: { showing in
+                        if showing == false { message = nil }
+                    }
+                ),
+                value: message ?? "",
+                systemImage: systemImage
+            )
+        )
     }
 }
 
@@ -40,6 +61,15 @@ public extension View {
                 isPresenting: isPresenting,
                 value: title,
                 systemImage: systemImage)
+        )
+    }
+
+    func toast(message: Binding<String?>, systemImage: String) -> some View {
+        self.modifier(
+            OptionalMessageToastModifier(
+                message: message,
+                systemImage: systemImage
+            )
         )
     }
 }

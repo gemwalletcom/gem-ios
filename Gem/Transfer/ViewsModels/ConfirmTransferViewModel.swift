@@ -92,7 +92,7 @@ final class ConfirmTransferViewModel {
         return host
     }
 
-    var senderTitle: String { Localized.Transfer.from }
+    var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }
     var senderAddress: String {
         (try? wallet.account(for: dataModel.chain).address) ?? ""
