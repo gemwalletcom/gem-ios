@@ -39,6 +39,7 @@ public struct BitcoinSigner: Signable {
         let utxos = input.utxos.map {
             $0.mapToUnspendTransaction(address: input.senderAddress, coinType: coinType)
         }
+
         let signingInput = try BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
@@ -51,7 +52,11 @@ public struct BitcoinSigner: Signable {
             $0.scripts = utxos.mapToScripts(address: input.senderAddress, coinType: coinType)
             $0.useMaxAmount = input.useMaxAmount
             if let outputOpReturn {
-                $0.outputOpReturn = try outputOpReturn.encodedData()
+                if outputOpReturn.starts(with: "0x"), let opReturnData = Data(hexString: outputOpReturn) {
+                    $0.outputOpReturn = opReturnData
+                } else {
+                    $0.outputOpReturn = try outputOpReturn.encodedData()
+                }
             }
             if let outputOpReturnIndex {
                 $0.outputOpReturnIndex.index = outputOpReturnIndex
