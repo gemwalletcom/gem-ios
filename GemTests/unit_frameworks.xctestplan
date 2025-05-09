@@ -140,7 +140,6 @@
       }
     },
     {
-      "enabled" : false,
       "target" : {
         "containerPath" : "container:Packages\/Store",
         "identifier" : "StoreTests",
