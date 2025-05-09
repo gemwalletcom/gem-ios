@@ -198,10 +198,14 @@ extension SelectAssetViewModel {
 // MARK: - Private
 
 extension SelectAssetViewModel {
-    private func chains(for type: WalletType) -> [Chain] {
-        switch wallet.type {
-        case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
-        case .multicoin: []
+    private func searchChains(for type: WalletType) -> [Chain] {
+        switch selectType {
+        case .send, .receive, .manage, .buy, .swap:
+            switch wallet.type {
+            case .single, .view, .privateKey: [wallet.accounts.first?.chain].compactMap { $0 }
+            case .multicoin: []
+            }
+        case .priceAlert: []
         }
     }
 
@@ -210,7 +214,7 @@ extension SelectAssetViewModel {
         priorityAssetsQuery: String?,
         tag: AssetTag?
     ) async {
-        let chains: [Chain] = chains(for: wallet.type)
+        let chains: [Chain] = searchChains(for: wallet.type)
 
         do {
             let assets = try await assetsService.searchAssets(query: query, chains: chains, tags: [tag].compactMap { $0 })

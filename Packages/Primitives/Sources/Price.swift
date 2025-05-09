@@ -7,10 +7,12 @@ import Foundation
 public struct Price: Codable, Equatable, Hashable, Sendable {
 	public let price: Double
 	public let priceChangePercentage24h: Double
+	public let updatedAt: Date
 
-	public init(price: Double, priceChangePercentage24h: Double) {
+	public init(price: Double, priceChangePercentage24h: Double, updatedAt: Date) {
 		self.price = price
 		self.priceChangePercentage24h = priceChangePercentage24h
+		self.updatedAt = updatedAt
 	}
 }
 

@@ -22,6 +22,6 @@ public struct SwapMetadata: Sendable {
     }
     
     public func price(for assetId: AssetId) -> Price? {
-        assetPrices.first(where: { $0.assetId == assetId.identifier })?.mapToPrice()
+        assetPrices.first(where: { $0.assetId == assetId })?.mapToPrice()
     }
 }

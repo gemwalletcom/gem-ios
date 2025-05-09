@@ -21,13 +21,10 @@ public actor PriceObserverService: Sendable {
     private var subscribedAssetIds: Set<AssetId> = []
     
     public init(
-        endpoint: String = "wss://api.gemwallet.com/v1/ws/prices",
+        url: URL = URL(string: "wss://api.gemwallet.com/v1/ws/prices")!,
         priceService: PriceService,
         preferences: Preferences
     ) {
-        guard let url = URL(string: endpoint) else {
-            fatalError("Invalid WebSocket URL")
-        }
         self.url = url
         self.session = .init(configuration: .default)
 
@@ -102,7 +99,7 @@ public actor PriceObserverService: Sendable {
         do {
             try setupAssets()
         } catch {
-            NSLog("startWebSocket \(error)")
+            NSLog("price observer: startWebSocket \(error)")
         }
 
         // Begin receiving
@@ -116,7 +113,7 @@ public actor PriceObserverService: Sendable {
                 do {
                     try await self.process(result)
                 } catch {
-                    NSLog("list error: \(error)")
+                    NSLog("price observer: listen error: \(error)")
                 }
             }
         }
@@ -133,7 +130,7 @@ public actor PriceObserverService: Sendable {
                 return
             }
 
-            print("WebSocket receive error:", error)
+            print("price observer:: process error:", error)
             await scheduleReconnect()
 
         case .success(let message):
@@ -157,9 +154,9 @@ public actor PriceObserverService: Sendable {
     }
     
     private func handleMessageData(data: Data) throws {
-        let payload = try JSONDecoder().decode(WebSocketPricePayload.self, from: data)
+        let payload = try JSONDateDecoder.standard.decode(WebSocketPricePayload.self, from: data)
         
-        NSLog("handlePayload prices: \(payload.prices.count), rates: \(payload.rates.count)")
+        NSLog("price observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
         
         try priceService.addRates(payload.rates)
         try priceService.updatePrices(payload.prices, currency: preferences.currency)
@@ -175,7 +172,7 @@ public actor PriceObserverService: Sendable {
 
         let delay = reconnectDelay
         reconnectDelay = min(maxReconnectDelay, reconnectDelay * 2)
-        print("⚡️ Reconnecting in \(delay)s…")
+        print("price observer: ⚡️ Reconnecting in \(delay)s…")
 
         // Wait, then restart
         try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))

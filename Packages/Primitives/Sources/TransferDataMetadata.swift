@@ -10,14 +10,14 @@ public struct TransferDataMetadata: Sendable {
     public let assetPrice: Price?
     public let feePrice: Price?
 
-    public let assetPrices: [String: Price]
+    public let assetPrices: [AssetId: Price]
 
     public init(
         assetBalance: BigInt,
         assetFeeBalance: BigInt,
         assetPrice: Price?,
         feePrice: Price?,
-        assetPrices: [String : Price]
+        assetPrices: [AssetId : Price]
     ) {
         self.assetBalance = assetBalance
         self.assetFeeBalance = assetFeeBalance
