@@ -256,7 +256,7 @@
 "filter.clear" = "Очистить";
 "filter.title" = "Фильтры";
 "settings.help_center" = "Центр помощи";
-"settings.support" = "Поддерживать";
+"settings.support" = "Поддержка";
 "settings.price_alerts.title" = "Уведомления о ценах";
 "price_alerts.enabled_for" = "Оповещение о цене включено для %@";
 "price_alerts.disabled_for" = "Оповещение о цене отключено для %@";
@@ -302,10 +302,10 @@
 "errors.swap.not_supported_asset" = "Неподдерживаемый актив.";
 "errors.swap.not_supported_pair" = "Not supported pair.";
 "social.website" = "Веб-сайт";
-"asset.contract" = "Договор";
+"asset.contract" = "Контракт";
 "filter.types" = "Типы";
 "fee_rate.gwei" = "%@ gwei";
-"swap.slippage" = "Slippage";
+"swap.slippage" = "Скольжение";
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
@@ -325,7 +325,7 @@
 "common.avatar" = "Аватар";
 "common.photo" = "Фото";
 "info.price_impact.title" = "Влияние цены";
-"info.price_impact.description" = "Влияние цены — это изменение цены токена, вызванное размером вашей сделки. Более высокое влияние цены означает, что вы получаете меньше токенов из-за низкой ликвидности или большого размера заказа. ";
+"info.price_impact.description" = "Влияние цены — это изменение цены токена, вызванное размером вашей сделки. Более высокое влияние цены означает, что вы получаете меньше токенов из-за низкой ликвидности или большого размера заказа.";
 "social.opensea" = "OpenSea";
 "social.magiceden" = "MagicEden";
 "social.instagram" = "Instagram";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "Высокое ценовое воздействие";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";

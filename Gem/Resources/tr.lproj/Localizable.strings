@@ -325,7 +325,7 @@
 "common.avatar" = "Avatar";
 "common.photo" = "Fotoğraf";
 "info.price_impact.title" = "Fiyat Etkisi";
-"info.price_impact.description" = "Fiyat etkisi, işlem boyutunuzdan kaynaklanan token fiyatındaki değişikliktir. Daha yüksek fiyat etkisi, düşük likidite veya büyük sipariş boyutu nedeniyle daha az token aldığınız anlamına gelir. ";
+"info.price_impact.description" = "Fiyat etkisi, işlem boyutunuzdan kaynaklanan token fiyatındaki değişikliktir. Daha yüksek fiyat etkisi, düşük likidite veya büyük sipariş boyutu nedeniyle daha az token aldığınız anlamına gelir.";
 "social.opensea" = "OpenSea";
 "social.magiceden" = "MagicEden";
 "social.instagram" = "Instagram";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "Yüksek Fiyat Etkisi";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";

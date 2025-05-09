@@ -245,7 +245,7 @@
 "transaction.title.sent" = "Sent";
 "stake.stake" = "Stake";
 "banner.account_activation.title" = "%@ Account Activation Fee";
-"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.account_activation.description" = "הרשת %@ דורשת תשלום חד פעמי של %@.";
 "banner.stake.title" = "Start staking %@";
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
 "banner.enable_notifications.title" = "Enable Notifications";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "השפעת מחיר גבוהה";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";

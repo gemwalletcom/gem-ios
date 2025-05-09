@@ -245,7 +245,7 @@
 "transaction.title.sent" = "Envoyé";
 "stake.stake" = "Stake";
 "banner.account_activation.title" = "%@ Account Activation Fee";
-"banner.account_activation.description" = "The %@ network requires a one time fee of %@.";
+"banner.account_activation.description" = "Le réseau %@ nécessite des frais uniques de %@.";
 "banner.stake.title" = "Start staking %@";
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
 "banner.enable_notifications.title" = "Activer les notifications";
@@ -325,7 +325,7 @@
 "common.avatar" = "Avatar";
 "common.photo" = "Photo";
 "info.price_impact.title" = "Impact sur les prix";
-"info.price_impact.description" = "L'impact sur le prix est la variation du prix du jeton causée par la taille de votre transaction. Un impact sur le prix plus élevé signifie que vous recevez moins de jetons en raison d'une faible liquidité ou d'une taille de commande importante. ";
+"info.price_impact.description" = "L'impact sur le prix est la variation du prix du jeton causée par la taille de votre transaction. Un impact sur le prix plus élevé signifie que vous recevez moins de jetons en raison d'une faible liquidité ou d'une taille de commande importante.";
 "social.opensea" = "OpenSea";
 "social.magiceden" = "MagicEden";
 "social.instagram" = "Instagram";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "Impact élevé sur les prix";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";

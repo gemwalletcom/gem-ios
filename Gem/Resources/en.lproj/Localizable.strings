@@ -325,7 +325,7 @@
 "common.avatar" = "Avatar";
 "common.photo" = "Photo";
 "info.price_impact.title" = "Price Impact";
-"info.price_impact.description" = "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size. ";
+"info.price_impact.description" = "Price impact is the change in token price caused by your trade size. Higher price impact means you receive fewer tokens due to low liquidity or a large order size.";
 "social.opensea" = "OpenSea";
 "social.magiceden" = "MagicEden";
 "social.instagram" = "Instagram";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "High Price Impact";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
