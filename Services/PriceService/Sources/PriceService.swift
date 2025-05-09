@@ -22,7 +22,11 @@ public struct PriceService: Sendable {
     }
 
     public func updateMarketPrice(assetId: AssetId, market: AssetMarket, currency: String) throws {
-        try priceStore.updateMarket(assetId: assetId.identifier, market: market, currency: currency)
+        try priceStore.updateMarket(
+            assetId: assetId.identifier,
+            market: market,
+            rate: try getRate(currency: currency)
+        )
     }
 
     public func getPrice(for assetId: AssetId) throws -> AssetPrice? {

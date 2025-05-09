@@ -25,14 +25,16 @@ public struct AssetMarket: Codable, Sendable {
 }
 
 public struct AssetPrice: Codable, Sendable {
-	public let assetId: String
+	public let assetId: AssetId
 	public let price: Double
 	public let priceChangePercentage24h: Double
+	public let updatedAt: Date
 
-	public init(assetId: String, price: Double, priceChangePercentage24h: Double) {
+	public init(assetId: AssetId, price: Double, priceChangePercentage24h: Double, updatedAt: Date) {
 		self.assetId = assetId
 		self.price = price
 		self.priceChangePercentage24h = priceChangePercentage24h
+		self.updatedAt = updatedAt
 	}
 }
 

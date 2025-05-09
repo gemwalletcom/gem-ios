@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "Високий ціновий вплив";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";

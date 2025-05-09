@@ -44,7 +44,7 @@ extension Balance {
 }
 
 extension Price {
-    static let main = Price(price: 10, priceChangePercentage24h: 21)
+    static let main = Price(price: 10, priceChangePercentage24h: 21, updatedAt: .now)
 }
 
 extension PriceAlert {
