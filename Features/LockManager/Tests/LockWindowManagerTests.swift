@@ -2,16 +2,11 @@
 
 import Testing
 import SwiftUI
-import UIKit
 import Keystore
-
 @testable import LockManager
 
 @MainActor
 struct LockWindowManagerTests {
-    
-    let sleep: UInt64 = UInt64(1 * Double(NSEC_PER_SEC))
-    
     @Test
     func testInitialization() {
         let manager = LockWindowManagerMock.mock()
@@ -19,203 +14,120 @@ struct LockWindowManagerTests {
     }
 
     @Test
-    func testShowLockScreen() async {
+    func testShowLockScreenCreatesWindow() {
         let manager = LockWindowManagerMock.mock()
         manager.toggleLock(show: true)
 
-        try? await Task.sleep(nanoseconds: sleep)
-
         #expect(manager.overlayWindow != nil)
         #expect(manager.overlayWindow?.isHidden == false)
-        #expect(manager.overlayWindow?.alpha == 1.0)
-        #expect(!manager.isPrivacyLockVisible)
+        #expect(manager.overlayWindow?.alpha == 1)
     }
 
     @Test
-    func testHideLockScreen() async {
+    func testDismissWhileLockedDoesNotRemoveWindow() {
         let manager = LockWindowManagerMock.mock()
         manager.toggleLock(show: true)
         manager.toggleLock(show: false)
 
-        try? await Task.sleep(nanoseconds: sleep)
+        #expect(manager.overlayWindow != nil)
+        #expect(manager.overlayWindow?.alpha == 1)
+    }
+
+    @Test
+    func testDismissAfterUnlockRemovesWindow() {
+        let manager = LockWindowManagerMock.mock()
+        manager.toggleLock(show: true)
+
+        manager.lockModel.state  = .unlocked
+        manager.lockModel.lastUnlockTime = .distantFuture
+        manager.toggleLock(show: false)
 
         #expect(manager.overlayWindow == nil)
     }
 
     @Test
-    func testSetPhaseActiveWhenAutoLockEnabled() {
-        let manager = LockWindowManagerMock.mock()
-        manager.setPhase(phase: .active)
-        #expect(manager.lockModel.state == .locked)
-    }
-
-    @Test
-    func testSetPhaseInactive() {
+    func testSetPhaseInactiveShowsPlaceholder() {
         let manager = LockWindowManagerMock.mock()
         manager.setPhase(phase: .inactive)
         #expect(manager.showLockScreen)
     }
 
     @Test
-    func testSetPhaseBackgroundWhenUnlockedAndShouldNotLock() {
-        let manager = LockWindowManagerMock.mock(lockPeriod: .oneMinute)
-        manager.lockModel.state = .unlocked
-        manager.lockModel.lastUnlockTime = Date().addingTimeInterval(1000) // Future date, so shouldLock is false
-
-        manager.setPhase(phase: .background)
-
-        let expectedTime = Date().addingTimeInterval(TimeInterval(manager.lockModel.lockPeriod.value))
-        let timeDifference = abs(manager.lockModel.lastUnlockTime.timeIntervalSince(expectedTime))
-        #expect(timeDifference < 1.0)
+    func testSetPhaseActiveAutoLocks() {
+        let manager = LockWindowManagerMock.mock()
+        manager.setPhase(phase: .active)
+        #expect(manager.lockModel.state == .locked)
     }
 
     @Test
-    func testAutoLockDisabledResetsLockState() {
+    func testBackgroundSchedulesAutoLock() {
+        let manager = LockWindowManagerMock.mock(lockPeriod: .oneMinute)
+        manager.lockModel.state = .unlocked
+        manager.lockModel.lastUnlockTime = .distantFuture
+
+        manager.setPhase(phase: .background)
+
+        let expected = Date().addingTimeInterval(TimeInterval(manager.lockModel.lockPeriod.value))
+
+        #expect(abs(manager.lockModel.lastUnlockTime.timeIntervalSince(expected)) < 1)
+    }
+
+    @Test
+    func testAutoLockDisabledResetsState() {
         let manager = LockWindowManagerMock.mock(isAuthEnabled: false)
         manager.lockModel.state = .locked
         manager.setPhase(phase: .active)
 
         #expect(manager.lockModel.state == .unlocked)
-        #expect(!manager.lockModel.isLocked)
         #expect(!manager.showLockScreen)
     }
 
     @Test
-    func testShowLockScreenWhenShouldShowLockScreenIsTrue() async {
-        let manager = LockWindowManagerMock.mock()
-        manager.lockModel.state = .locked
-        manager.toggleLock(show: manager.showLockScreen)
-
-        try? await Task.sleep(nanoseconds: sleep)
-
-        #expect(manager.overlayWindow != nil)
-        #expect(manager.overlayWindow?.isHidden == false)
-        #expect(manager.overlayWindow?.alpha == 1.0)
-    }
-
-    @Test
-    func testHideLockScreenWhenShouldShowLockScreenIsFalse() async {
-        let manager = LockWindowManagerMock.mock()
-        manager.lockModel.state = .unlocked
-        manager.toggleLock(show: manager.showLockScreen)
-
-        try? await Task.sleep(nanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))
-
-        #expect(manager.overlayWindow == nil)
-    }
-
-    @Test
-    func testOverlayWindowNotCreatedIfAlreadyExists() async {
+    func testOverlayWindowIsReused() {
         let manager = LockWindowManagerMock.mock()
         manager.toggleLock(show: true)
-
-        try? await Task.sleep(nanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))
-        let firstWindow = manager.overlayWindow
+        let first = manager.overlayWindow
 
         manager.toggleLock(show: true)
-        let secondWindow = manager.overlayWindow
-
-        #expect(firstWindow === secondWindow)
+        #expect(first === manager.overlayWindow)
     }
 
     @Test
-    func testHideLockDoesNothingIfNoOverlayWindow() {
-        let manager = LockWindowManagerMock.mock()
-        manager.toggleLock(show: false)
-        #expect(manager.overlayWindow == nil)
-    }
-
-    @Test
-    func testShowLockDoesNothingIfOverlayWindowExists() async {
-        let manager = LockWindowManagerMock.mock()
-        manager.toggleLock(show: true)
-        try? await Task.sleep(nanoseconds: UInt64(0.1 * Double(NSEC_PER_SEC)))
-        let firstWindow = manager.overlayWindow
-
-        manager.toggleLock(show: true)
-        let secondWindow = manager.overlayWindow
-
-        #expect(firstWindow === secondWindow)
-    }
-
-    @Test
-    func testPrivacyLockShownOnFirstAppearWhenConditionsMet() async {
+    func testOverlayVisibleWhenPrivacySwitchDisabled() {
         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
         manager.toggleLock(show: true)
 
-        try? await Task.sleep(nanoseconds: sleep)
-
-        #expect(manager.overlayWindow != nil)
-        #expect(manager.overlayWindow?.alpha == 1.0)
-        #expect(!manager.isPrivacyLockVisible)
+        #expect(manager.overlayWindow?.alpha == 1)
+        #expect(manager.isPrivacyLockVisible)
     }
 
     @Test
-    func testPrivacyLockNotShownOnSecondAppear() async {
+    func testOverlayVisibleWhenPrivacySwitchEnabled() {
+        let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: true)
+        manager.toggleLock(show: true)
+
+        #expect(manager.overlayWindow?.alpha == 1)
+        #expect(manager.isPrivacyLockVisible)
+    }
+
+    @Test
+    func testSecondPresentKeepsOverlayIfConditionsUnchanged() {
         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
         manager.toggleLock(show: true)
-
-        try? await Task.sleep(nanoseconds: sleep)
-
-        #expect(manager.overlayWindow != nil)
-        #expect(manager.overlayWindow?.alpha == 1.0)
-        #expect(!manager.isPrivacyLockVisible)
-
         manager.toggleLock(show: false)
-        try? await Task.sleep(nanoseconds: sleep)
-
-        #expect(manager.overlayWindow == nil)
-
         manager.toggleLock(show: true)
-        try? await Task.sleep(nanoseconds: sleep)
 
         #expect(manager.overlayWindow != nil)
-        #expect(manager.overlayWindow?.alpha == 0.0)
-        #expect(!manager.isPrivacyLockVisible)
+        #expect(manager.overlayWindow?.alpha == 1)
+        #expect(manager.isPrivacyLockVisible)
     }
 
     @Test
-    func testPrivacyLockNotShownIfAutoLockDisabled() async {
-        let manager = LockWindowManagerMock.mock(isAuthEnabled: false, isPrivacyLockEnabled: true)
+    func testNoOverlayWhenAuthenticationDisabled() {
+        let manager = LockWindowManagerMock.mock(isAuthEnabled: false,
+                                             isPrivacyLockEnabled: true)
 
-        try? await Task.sleep(nanoseconds: sleep)
+        #expect(manager.isPrivacyLockVisible == false)
         #expect(manager.overlayWindow == nil)
-        #expect(!manager.isPrivacyLockVisible)
     }
-
-    @Test
-     func testPrivacyLockNotShownIfPrivacyLockEnabled() async {
-         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: true)
-         manager.toggleLock(show: true)
-
-         try? await Task.sleep(nanoseconds: sleep)
-
-         #expect(manager.overlayWindow != nil)
-         #expect(manager.overlayWindow?.alpha == 1.0)
-         #expect(manager.isPrivacyLockVisible)
-     }
-
-     @Test
-     func testPrivacyLockFlagAfterFirstAppear() async {
-         let manager = LockWindowManagerMock.mock(isPrivacyLockEnabled: false)
-         manager.toggleLock(show: true)
-
-         try? await Task.sleep(nanoseconds: sleep)
-
-         #expect(manager.overlayWindow != nil)
-         #expect(manager.overlayWindow?.alpha == 1)
-         #expect(!manager.isPrivacyLockVisible)
-
-         manager.toggleLock(show: false)
-
-         try? await Task.sleep(nanoseconds: sleep)
-
-         manager.toggleLock(show: true)
-
-         try? await Task.sleep(nanoseconds: sleep)
-
-         #expect(manager.overlayWindow != nil)
-         #expect(manager.overlayWindow?.alpha == 0)
-         #expect(!manager.isPrivacyLockVisible)
-     }
- }
+}

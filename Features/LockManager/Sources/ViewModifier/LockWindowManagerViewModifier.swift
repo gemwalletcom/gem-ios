@@ -12,16 +12,13 @@ private struct LockWindowManagerViewModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .onAppear {
-                lockManager.toggleLock(show: lockManager.showLockScreen)
-            }
             .onChange(of: scenePhase) { _, newPhase in
                 lockManager.setPhase(phase: newPhase)
             }
             .onChange(of: lockManager.isPrivacyLockVisible) { _, visible in
                 lockManager.togglePrivacyLock(visible: visible)
             }
-            .onChange(of: lockManager.showLockScreen) { _, showLockScreen in
+            .onChange(of: lockManager.showLockScreen, initial: true) { _, showLockScreen in
                 lockManager.toggleLock(show: showLockScreen)
             }
     }
