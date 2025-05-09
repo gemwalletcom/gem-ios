@@ -7,14 +7,14 @@ import Style
 import PrimitivesComponents
 import Components
 
-struct FullMessageScene: View {
-    @State private var showShareSheet = false
+struct TextMessageScene: View {
+    @State private var isPresentingShareSheet = false
 
-    let model: FullMessageViewModel
+    let model: TextMessageViewModel
     
     var body: some View {
         ScrollView {
-            Text(model.displayMessage)
+            Text(model.text)
                 .font(.caption)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
@@ -22,7 +22,7 @@ struct FullMessageScene: View {
         .dismissToolbarItem(title: .cancel, placement: .topBarLeading)
         .toolbarItemView(placement: .topBarTrailing, content: {
             Button {
-                showShareSheet.toggle()
+                isPresentingShareSheet.toggle()
             } label: {
                 Images.System.share
             }
@@ -30,8 +30,8 @@ struct FullMessageScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.message)
         .navigationBarTitleDisplayMode(.inline)
-        .sheet(isPresented: $showShareSheet) {
-            ShareSheet(activityItems: [model.displayMessage])
+        .sheet(isPresented: $isPresentingShareSheet) {
+            ShareSheet(activityItems: [model.text])
         }
     }
 }

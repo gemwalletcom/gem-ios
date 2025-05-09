@@ -69,8 +69,8 @@ public struct SignMessageSceneViewModel {
         AssetImage(imageURL: connectionViewModel.imageUrl)
     }
     
-    var fullMessageViewModel: FullMessageViewModel {
-        FullMessageViewModel(message: decoder.plainPreview)
+    var fullMessageViewModel: TextMessageViewModel {
+        TextMessageViewModel(message: decoder.plainPreview)
     }
 
     public func signMessage() throws {

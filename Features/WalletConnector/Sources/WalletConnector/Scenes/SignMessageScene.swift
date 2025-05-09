@@ -84,7 +84,7 @@ public struct SignMessageScene: View {
         .safariSheet(url: $isPresentingUrl)
         .sheet(isPresented: $isPresentingFullMessage) {
             NavigationStack {
-                FullMessageScene(model: model.fullMessageViewModel)
+                TextMessageScene(model: model.fullMessageViewModel)
             }
         }
     }
