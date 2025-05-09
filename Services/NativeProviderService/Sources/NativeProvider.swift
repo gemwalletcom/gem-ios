@@ -49,9 +49,7 @@ extension NativeProvider: AlienProvider {
                     }
 
                     let (data, response) = try await self.session.data(for: target.asRequest())
-                    if (response as? HTTPURLResponse)?.statusCode != 200 {
-                        throw AlienError.ResponseError(msg: "invalid response: \(response)")
-                    }
+                    try inspectError(response: response, data: data)
                     print("<== response body size:\(data.count)")
 
                     // save cache
