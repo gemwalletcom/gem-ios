@@ -305,7 +305,7 @@
 "asset.contract" = "Контракт";
 "filter.types" = "Типы";
 "fee_rate.gwei" = "%@ gwei";
-"swap.slippage" = "Slippage";
+"swap.slippage" = "Скольжение";
 "swap.quote_fee" = "Quote includes a %@ Gem fee.";
 "common.short_name" = "Gem";
 "transfer.activate_asset.title" = "Activate Asset";
@@ -397,3 +397,4 @@
 "swap.price_impact_warning.title" = "Высокое ценовое воздействие";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
