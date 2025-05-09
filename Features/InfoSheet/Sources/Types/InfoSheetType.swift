@@ -20,7 +20,7 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"
         case .priceImpact: "priceImpact"
-        case .slippage: "slippadge"
+        case .slippage: "slippage"
         }
     }
 }
