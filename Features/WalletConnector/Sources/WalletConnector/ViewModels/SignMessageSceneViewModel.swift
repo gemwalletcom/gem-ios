@@ -6,6 +6,10 @@ import WalletConnectorService
 import Primitives
 import Localization
 import Components
+import struct Gemstone.GemEip712Message
+import struct Gemstone.GemEip712MessageDomain
+import struct Gemstone.GemEip712Field
+import enum Gemstone.GemEip712TypedValue
 
 public struct SignMessageSceneViewModel {
     private let keystore: any Keystore
@@ -21,6 +25,10 @@ public struct SignMessageSceneViewModel {
         self.payload = payload
         self.confirmTransferDelegate = confirmTransferDelegate
     }
+    
+    public var decoder: SignMessageDecoderDefault {
+        SignMessageDecoderDefault(message: payload.message)
+    }
 
     public var networkText: String {
         payload.chain.asset.name
@@ -29,9 +37,16 @@ public struct SignMessageSceneViewModel {
     public var walletText: String {
         payload.wallet.name
     }
-
-    public var message: String {
-        SignMessageDecoder(message: payload.message).preview
+    
+    public var messageSections: [ListSection<KeyValueItem>]? {
+        switch try? decoder.preview {
+        case .eip712(let message): eip712Sections(message)
+        case .none, .text: nil
+        }
+    }
+    
+    public var shouldDisplayTextMessage: Bool {
+        messageSections != nil
     }
 
     public var buttonTitle: String {
@@ -53,11 +68,64 @@ public struct SignMessageSceneViewModel {
     public var appAssetImage: AssetImage {
         AssetImage(imageURL: connectionViewModel.imageUrl)
     }
+    
+    var textMessageViewModel: TextMessageViewModel {
+        TextMessageViewModel(message: decoder.plainPreview)
+    }
 
     public func signMessage() throws {
-        let message = SignMessage(type: payload.message.type, data: payload.message.data)
-        let data = try keystore.sign(wallet: payload.wallet, message: message, chain: payload.chain)
-        let result = SignMessageDecoder(message: message).getResult(from: data)
+        let data = try keystore.sign(wallet: payload.wallet, message: payload.message, chain: payload.chain)
+        let result = decoder.getResult(from: data)
         confirmTransferDelegate(.success(result))
+    }
+    
+    // MARK: - Private methods
+    
+    private func eip712Sections(_ message: GemEip712Message) -> [ListSection<KeyValueItem>] {
+        [
+            ListSection(
+                id: message.domain.verifyingContract,
+                title: Localized.WalletConnect.domain,
+                image: nil,
+                values: domainItems(message.domain)
+            ),
+            ListSection(
+                id: Localized.SignMessage.message,
+                title: Localized.SignMessage.message,
+                image: nil,
+                values: eip712Items(message.message)
+            )
+        ]
+    }
+    
+    private func domainItems(_ domain: GemEip712MessageDomain) -> [KeyValueItem] {
+        [
+            KeyValueItem(title: Localized.Wallet.name, value: domain.name),
+            KeyValueItem(title: Localized.Asset.contract, value: domain.verifyingContract)
+        ]
+    }
+    
+    private func eip712Items(_ message: [GemEip712Field]) -> [KeyValueItem] {
+        message.flatMap { field in
+            messageItems(value: field.value, name: field.name)
+                .filter { $0.title.isNotEmpty && $0.value.isNotEmpty }
+        }
+    }
+    
+    private func messageItems(value: GemEip712TypedValue, name: String) -> [KeyValueItem] {
+        switch value {
+        case .address(let value),
+             .uint256(let value),
+             .string(let value):
+            [KeyValueItem(title: name, value: value)]
+        case .bool(let bool):
+            [KeyValueItem(title: name, value: bool.description)]
+        case .bytes(let data):
+            [KeyValueItem(title: name, value: data.base64EncodedString())]
+        case .struct(let fields):
+            fields.flatMap { messageItems(value: $0.value, name: [name, $0.name].joined(separator: " ")) }
+        case .array(let items):
+            items.flatMap { messageItems(value: $0, name: name) }
+        }
     }
 }

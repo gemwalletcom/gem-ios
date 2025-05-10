@@ -26,7 +26,7 @@ public struct TransactionScene: View {
     }
     private let input: TransactionSceneInput
 
-    @State private var showShareSheet = false
+    @State private var isPresentingShareSheet = false
     @State private var isPresentingInfoSheet: InfoSheetType? = .none
 
     public init(input: TransactionSceneInput) {
@@ -103,13 +103,13 @@ public struct TransactionScene: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button {
-                        showShareSheet.toggle()
+                        isPresentingShareSheet.toggle()
                     } label: {
                         Images.System.share
                     }
                 }
             }
-            .sheet(isPresented: $showShareSheet) {
+            .sheet(isPresented: $isPresentingShareSheet) {
                 ShareSheet(activityItems: [model.transactionExplorerUrl.absoluteString])
             }
             .sheet(item: $isPresentingInfoSheet) {

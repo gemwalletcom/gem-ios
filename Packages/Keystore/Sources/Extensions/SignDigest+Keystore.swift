@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Primitives
+import struct Gemstone.SignMessage
 import WalletCore
 
 extension SignMessage {
     public var hash: Data {
-        switch type {
+        switch signType {
         case .sign:
             return data
         case .eip191:

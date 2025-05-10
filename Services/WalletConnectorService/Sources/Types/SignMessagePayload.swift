@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import struct Gemstone.SignMessage
 
 public struct SignMessagePayload: Sendable {
     public let chain: Chain

@@ -3,6 +3,7 @@
 import Foundation
 @preconcurrency import WalletCore
 import Primitives
+import struct Gemstone.SignMessage
 
 public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore
@@ -171,7 +172,7 @@ public struct WalletKeyStore: Sendable {
         else {
             throw AnyError("no data signed")
         }
-        switch message.type {
+        switch message.signType {
         case .sign,
             .eip191,
             .eip712:

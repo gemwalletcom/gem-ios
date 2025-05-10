@@ -9,6 +9,7 @@ import BigInt
 import class Gemstone.Config
 import WalletConnectSign
 import WalletSessionService
+import struct Gemstone.SignMessage
 
 public final class WalletConnectorSigner: WalletConnectorSignable {
     private let connectionsStore: ConnectionsStore

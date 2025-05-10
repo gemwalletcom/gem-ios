@@ -4,6 +4,7 @@ import Foundation
 @preconcurrency import WalletConnectPairing
 @preconcurrency import ReownWalletKit
 import Primitives
+import struct Gemstone.SignMessage
 
 public final class WalletConnectorService: Sendable {
     private let interactor = WCConnectionsInteractor()
@@ -223,7 +224,7 @@ extension WalletConnectorService {
     private func ethSign(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([String].self)
         let data = Data(hex: params[1])
-        let message = SignMessage(type: .eip191, data: data)
+        let message = SignMessage(signType: .eip191, data: data)
         let digest = try await signer.signMessage(sessionId: request.topic, chain: chain,message: message)
         return .response(AnyCodable(digest))
     }
@@ -238,7 +239,7 @@ extension WalletConnectorService {
             }
             return hex
         }()
-        let message = SignMessage(type: .eip191, data: data)
+        let message = SignMessage(signType: .eip191, data: data)
         let digest = try await signer.signMessage(sessionId: request.topic, chain: chain, message: message)
         return .response(AnyCodable(digest))
     }
@@ -246,7 +247,7 @@ extension WalletConnectorService {
     private func ethSignTypedData(chain: Chain, request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get([String].self)
         let data = params[1].data(using: .utf8)!
-        let message = SignMessage(type: .eip712, data: data)
+        let message = SignMessage(signType: .eip712, data: data)
         let digest = try await signer.signMessage(sessionId: request.topic, chain: chain, message: message)
         return .response(AnyCodable(digest))
     }
@@ -298,7 +299,7 @@ extension WalletConnectorService {
     private func solanaSignMessage(request: WalletConnectSign.Request) async throws -> RPCResult {
         let params = try request.params.get(WCSolanaSignMessage.self)
         let data = Data(params.message.utf8)
-        let message = SignMessage(type: .base58, data: data)
+        let message = SignMessage(signType: .base58, data: data)
         let signature = try await signer.signMessage(sessionId: request.topic, chain: .solana, message: message)
         let result = WCSolanaSignMessageResult(signature: signature)
         return .response(AnyCodable(result))
