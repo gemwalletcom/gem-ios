@@ -92,7 +92,7 @@ final class ConfirmTransferViewModel {
         return host
     }
 
-    var senderTitle: String { Localized.Transfer.from }
+    var senderTitle: String { Localized.Wallet.title }
     var senderValue: String { wallet.name }
     var senderAddress: String {
         (try? wallet.account(for: dataModel.chain).address) ?? ""
@@ -429,19 +429,16 @@ extension ConfirmTransferViewModel {
         }
 
         let assetPricesIds: [AssetId] = [assetId, feeAssetId] + assetsIds
-        let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds).toMap {
-            try AssetId(id: $0.assetId)
-        }
-        let assetPricesMap = assetPrices.reduce(into: [:]) { partialResult, value in
-            partialResult[value.key.identifier] = Price(price: value.value.price, priceChangePercentage24h: value.value.priceChangePercentage24h)
-        }
-
+        let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds)
+            .toMap { $0.assetId }
+            .mapValues { $0.mapToPrice() }
+        
         return TransferDataMetadata(
             assetBalance: assetBalance.available,
             assetFeeBalance: assetFeeBalance.available,
-            assetPrice: assetPrices[assetId]?.mapToPrice(),
-            feePrice: assetPrices[feeAssetId]?.mapToPrice(),
-            assetPrices: assetPricesMap
+            assetPrice: assetPrices[assetId],
+            feePrice: assetPrices[feeAssetId],
+            assetPrices: assetPrices
         )
     }
 

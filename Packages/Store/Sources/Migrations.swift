@@ -259,6 +259,12 @@ public struct Migrations {
 //            try? MarketAssetRecord.create(db: db)
 //        }
 
+        migrator.registerMigration("Add updatedAt to \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.updatedAt.name, .date)
+            }
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }

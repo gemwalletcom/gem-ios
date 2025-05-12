@@ -56,7 +56,7 @@ test_ui:
     test | xcbeautify
 
 localize:
-    @sh core/scripts/localize.sh ios Gem/Resources
+    @sh core/scripts/localize.sh ios Packages/Localization/Sources/Resources
     just generate-model
     just generate-swiftgen
 

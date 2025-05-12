@@ -5,11 +5,11 @@
 import Foundation
 
 public struct AssetPriceInfo: Codable, Sendable {
-	public let assetId: String
+	public let assetId: AssetId
 	public let price: Price
 	public let market: AssetMarket
 
-	public init(assetId: String, price: Price, market: AssetMarket) {
+	public init(assetId: AssetId, price: Price, market: AssetMarket) {
 		self.assetId = assetId
 		self.price = price
 		self.market = market

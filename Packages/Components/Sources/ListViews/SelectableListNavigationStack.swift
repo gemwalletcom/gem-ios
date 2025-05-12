@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Style
 
 public protocol SelectableListNavigationAdoptable {
     var title: String { get }
@@ -40,6 +41,7 @@ public struct SelectableListNavigationStack<ViewModel: SelectableListAdoptable &
             .navigationTitle(model.title)
             .navigationBarTitleDisplayMode(.inline)
             .presentationDetentsForCurrentDeviceSize(expandable: true)
+            .background(Colors.grayBackground)
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
                     Button(model.doneTitle) {

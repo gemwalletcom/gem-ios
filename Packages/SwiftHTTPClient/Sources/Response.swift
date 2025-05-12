@@ -17,7 +17,6 @@ public struct Response {
         return decoder
     }()
 
-
     public static func make(data: Data, response urlResponse: URLResponse?) throws -> Response {
         guard
             let response = urlResponse as? HTTPURLResponse,
@@ -47,15 +46,16 @@ public struct Response {
         return try decoder.decode(type, from: body)
     }
 }
+// same code lives in primitives, allow to inject json / date formatter on init
 
-extension Formatter {
-    nonisolated(unsafe) public static let customISO8601DateFormatter: ISO8601DateFormatter = {
+private extension Formatter {
+    nonisolated(unsafe) static let customISO8601DateFormatter: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         return formatter
     }()
 
-    nonisolated(unsafe) public static let customISO8601DateFormatterNoSeconds: ISO8601DateFormatter = {
+    nonisolated(unsafe) static let customISO8601DateFormatterNoSeconds: ISO8601DateFormatter = {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime]
         return formatter

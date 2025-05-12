@@ -13,8 +13,8 @@ public struct AssetTagsViewModel {
         self.selectType = selectType
     }
     
-    public var items: [AssetTagViewModel] {
-        let tags: [AssetTag] = switch selectType {
+    public var tags: [AssetTag] {
+        switch selectType {
         case .receive(let type):
             switch type {
             case .asset: [.stablecoins]
@@ -26,7 +26,10 @@ public struct AssetTagsViewModel {
         case .buy: [.stablecoins, .trendingFiatPurchase]
         case .send: [.stablecoins]
         }
-        return tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
+    }
+    
+    public var items: [AssetTagViewModel] {
+        tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
     }
     
     public var query: String? {

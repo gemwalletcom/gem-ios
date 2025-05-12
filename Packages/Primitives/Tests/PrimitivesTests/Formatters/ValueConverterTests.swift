@@ -54,12 +54,4 @@ struct ValueConverterTests {
     }
 }
 
-fileprivate extension AssetPrice {
-    static func mock(price: Double) -> AssetPrice {
-        AssetPrice(
-            assetId: .empty,
-            price: price,
-            priceChangePercentage24h: .zero
-        )
-    }
-}
+
