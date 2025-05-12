@@ -23,11 +23,10 @@ public struct CreateWalletNavigationStack: View {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            SecurityReminderScene(
-                model: SecurityReminderViewModelDefault(
-                    title: Localized.Wallet.New.title,
-                    onNext: { navigationPath.append(Scenes.CreateWallet()) }
-                )
+            AcceptTermsScene(
+                model: AcceptTermsViewModel(onNext: {
+                    navigationPath.append(Scenes.SecurityReminder())
+                })
             )
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
@@ -52,6 +51,16 @@ public struct CreateWalletNavigationStack: View {
                         walletService: walletService,
                         onCreateWallet: {
                             navigationPath.append(Scenes.VerifyPhrase(words: $0))
+                        }
+                    )
+                )
+            }
+            .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
+                SecurityReminderScene(
+                    model: SecurityReminderViewModelDefault(
+                        title: Localized.Wallet.New.title,
+                        onNext: {
+                            navigationPath.append(Scenes.CreateWallet())
                         }
                     )
                 )

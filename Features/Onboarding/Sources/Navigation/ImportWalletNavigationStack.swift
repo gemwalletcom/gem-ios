@@ -7,6 +7,7 @@ import Localization
 public struct ImportWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
 
+    @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     private let model: ImportWalletTypeViewModel
 
@@ -19,27 +20,34 @@ public struct ImportWalletNavigationStack: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            ImportWalletTypeScene(model: model)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            dismiss()
-                        }
+        NavigationStack(path: $navigationPath) {
+            AcceptTermsScene(model: AcceptTermsViewModel(
+                onNext: {
+                    navigationPath.append(Scenes.ImportWalletType())
+                }
+            ))
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(Localized.Common.cancel) {
+                        dismiss()
                     }
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationDestination(for: ImportWalletType.self) { type in
-                    ImportWalletScene(
-                        model: ImportWalletViewModel(
-                            type: type,
-                            walletService: model.walletService,
-                            onFinishImport: {
-                                isPresentingWallets.toggle()
-                            }
-                        )
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: ImportWalletType.self) { type in
+                ImportWalletScene(
+                    model: ImportWalletViewModel(
+                        type: type,
+                        walletService: model.walletService,
+                        onFinishImport: {
+                            isPresentingWallets.toggle()
+                        }
                     )
-                }
+                )
+            }
+            .navigationDestination(for: Scenes.ImportWalletType.self) { _ in
+                ImportWalletTypeScene(model: model)
+            }
         }
     }
 }

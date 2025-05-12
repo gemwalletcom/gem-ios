@@ -21,12 +21,19 @@ public struct ExportWalletNavigationStack: View {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            SecurityReminderScene(
-                model: SecurityReminderViewModelDefault(
-                    title: Localized.Common.secretPhrase,
-                    onNext: onNext
-                )
-            )
+            Group {
+                switch flow {
+                case .words:
+                    SecurityReminderScene(
+                        model: SecurityReminderViewModelDefault(
+                            title: Localized.Common.secretPhrase,
+                            onNext: onNext
+                        )
+                    )
+                case .privateKey(let key):
+                    ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: key))
+                }
+            }
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(Localized.Common.cancel) {

@@ -3,19 +3,18 @@
 import Foundation
 import Components
 import GemstonePrimitives
-
-@MainActor
-protocol AcceptTermsViewModelNavigation {
-    func acceptTermsOnNext()
-    func present(url: URL)
-}
+import Primitives
 
 @Observable
 final class AcceptTermsViewModel {
-    private let navigation: AcceptTermsViewModelNavigation
+    let onNext: VoidAction
     
-    init(navigation: AcceptTermsViewModelNavigation) {
-        self.navigation = navigation
+    init(onNext: VoidAction) {
+        self.onNext = onNext
+    }
+    
+    var termsAndServicesURL: URL {
+        PublicConstants.url(.termsOfService)
     }
     
     let title: String = "Accept Terms"
@@ -33,18 +32,5 @@ final class AcceptTermsViewModel {
     
     var buttonState: StateViewType<Bool> {
         isConfirmed ? .data(true) : .noData
-    }
-}
-
-// MARK: - Navigation
-
-@MainActor
-extension AcceptTermsViewModel {
-    func onNext() {
-        navigation.acceptTermsOnNext()
-    }
-    
-    func presentTermsOfService() {
-        navigation.present(url: PublicConstants.url(.termsOfService))
     }
 }

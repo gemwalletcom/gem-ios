@@ -8,6 +8,7 @@ import Components
 import Primitives
 
 struct AcceptTermsScene: View {
+    @State private var isPresentingUrl: URL? = nil
     @State private var model: AcceptTermsViewModel
     
     init(model: AcceptTermsViewModel) {
@@ -39,8 +40,7 @@ struct AcceptTermsScene: View {
             StateButton(
                 text: "I Understand, Continue",
                 viewState: model.buttonState,
-                infoTitle: "By checking the boxes, you agree to these terms.",
-                action: model.onNext
+                action: { model.onNext?() }
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -51,9 +51,10 @@ struct AcceptTermsScene: View {
         .toolbar {
             ToolbarItem(placement: .topBarTrailing) {
                 Button("", systemImage: SystemImage.info) {
-                    model.presentTermsOfService()
+                    isPresentingUrl = model.termsAndServicesURL
                 }
             }
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
