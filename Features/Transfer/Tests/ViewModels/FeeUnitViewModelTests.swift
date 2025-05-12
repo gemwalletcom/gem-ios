@@ -52,7 +52,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: formatter
-            ).value == "0.12 gwei"
+            ).value == "0.1235 gwei"
         )
         #expect(
             FeeUnitViewModel(
@@ -104,7 +104,7 @@ struct FeeUnitViewModelTests {
                 decimals: Int(asset.decimals),
                 symbol: asset.symbol,
                 formatter: usFormatter
-            ).value == "0.12 gwei"
+            ).value == "0.1235 gwei"
         )
         #expect(
             FeeUnitViewModel(
