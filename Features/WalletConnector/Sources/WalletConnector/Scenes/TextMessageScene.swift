@@ -20,13 +20,13 @@ struct TextMessageScene: View {
                 .padding()
         }
         .dismissToolbarItem(title: .cancel, placement: .topBarLeading)
-        .toolbarItemView(placement: .topBarTrailing, content: {
+        .toolbarItemView(placement: .topBarTrailing) {
             Button {
                 isPresentingShareSheet.toggle()
             } label: {
                 Images.System.share
             }
-        })
+        }
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.message)
         .navigationBarTitleDisplayMode(.inline)

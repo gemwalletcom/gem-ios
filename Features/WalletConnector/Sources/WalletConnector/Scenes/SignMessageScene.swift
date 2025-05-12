@@ -53,7 +53,6 @@ public struct SignMessageScene: View {
                                 Text(title)
                             }
                         }
-                        
                     }
                 } else {
                     Section(Localized.SignMessage.message) {
