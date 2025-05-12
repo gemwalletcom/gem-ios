@@ -45,9 +45,8 @@ extension LockWindowManager {
             overlayWindow = makeOverlayWindow(in: scene)
         }
 
-        let alpha: CGFloat = lockModel.isPrivacyLockVisible ? 1 : 0
-        if overlayWindow?.alpha != alpha {
-            overlayWindow?.alpha = alpha
+        if overlayWindow?.alpha != lockModel.privacyLockAlpha {
+            overlayWindow?.alpha = lockModel.privacyLockAlpha
         }
         overlayWindow?.isHidden = false
     }
@@ -64,7 +63,7 @@ extension LockWindowManager {
         window.rootViewController = host
         window.windowLevel = .alert + 1
         window.backgroundColor = .clear
-        window.alpha = lockModel.isPrivacyLockVisible ? 1 : 0
+        window.alpha = lockModel.privacyLockAlpha
         window.makeKeyAndVisible()
         return window
     }

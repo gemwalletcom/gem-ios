@@ -42,6 +42,8 @@ public class LockSceneViewModel {
     var lockPeriod: LockPeriod { service.lockPeriod }
     var isPrivacyLockEnabled: Bool { service.isPrivacyLockEnabled }
 
+    var privacyLockAlpha: CGFloat { isPrivacyLockVisible ? 1 : 0 }
+
     var isPrivacyLockVisible: Bool {
         guard isAutoLockEnabled else { return false }
 
