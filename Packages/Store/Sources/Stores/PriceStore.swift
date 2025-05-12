@@ -36,6 +36,7 @@ public struct PriceStore: Sendable {
                         PriceRecord.Columns.price.set(to: assetPrice.price * rate.rate),
                         PriceRecord.Columns.priceUsd.set(to: assetPrice.price),
                         PriceRecord.Columns.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h),
+                        PriceRecord.Columns.updatedAt.set(to: Date()),
                         PriceRecord.Columns.marketCap.noOverwrite,
                         PriceRecord.Columns.marketCapFdv.noOverwrite,
                         PriceRecord.Columns.marketCapRank.noOverwrite,
@@ -49,15 +50,14 @@ public struct PriceStore: Sendable {
     }
     
     @discardableResult
-    public func updateMarket(assetId: String, market: AssetMarket, currency: String) throws -> Int {
-        let rate = try getRate(currency: currency)
+    public func updateMarket(assetId: String, market: AssetMarket, rate: Double) throws -> Int {
         return try db.write { db in
             try PriceRecord
                 .filter(PriceRecord.Columns.assetId == assetId)
                 .updateAll(
                     db,
-                    PriceRecord.Columns.marketCap.set(to: market.marketCap ?? 0 * rate.rate),
-                    PriceRecord.Columns.totalVolume.set(to: market.totalVolume ?? 0 * rate.rate),
+                    PriceRecord.Columns.marketCap.set(to: market.marketCap ?? 0 * rate),
+                    PriceRecord.Columns.totalVolume.set(to: market.totalVolume ?? 0 * rate),
                     PriceRecord.Columns.marketCapRank.set(to: market.marketCapRank),
                     PriceRecord.Columns.circulatingSupply.set(to: market.circulatingSupply),
                     PriceRecord.Columns.totalSupply.set(to: market.totalSupply),

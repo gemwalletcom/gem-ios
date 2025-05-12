@@ -118,10 +118,8 @@ public enum Localized {
       public static func description(_ p1: Any, _ p2: Any) -> String {
         return Localized.tr("Localizable", "banner.account_activation.description", String(describing: p1), String(describing: p2), fallback: "The %@ network requires a one time fee of %@.")
       }
-      /// %@ Account Activation Fee
-      public static func title(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "banner.account_activation.title", String(describing: p1), fallback: "%@ Account Activation Fee")
-      }
+      /// Account Activation Fee
+      public static let title = Localized.tr("Localizable", "banner.account_activation.title", fallback: "Account Activation Fee")
     }
     public enum ActivateAsset {
       /// To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.
@@ -455,6 +453,10 @@ public enum Localized {
       /// Price Impact
       public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
+    public enum Slippage {
+      /// Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.
+      public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
+    }
     public enum Transaction {
       public enum Error {
         /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
@@ -563,6 +565,26 @@ public enum Localized {
     }
   }
   public enum Onboarding {
+    public enum AcceptTerms {
+      /// I Understand, Continue
+      public static let `continue` = Localized.tr("Localizable", "onboarding.accept_terms.continue", fallback: "I Understand, Continue")
+      /// Please read and agree to the following terms before you continue.
+      public static let message = Localized.tr("Localizable", "onboarding.accept_terms.message", fallback: "Please read and agree to the following terms before you continue.")
+      /// Accept Terms
+      public static let title = Localized.tr("Localizable", "onboarding.accept_terms.title", fallback: "Accept Terms")
+      public enum Item1 {
+        /// I understand that I am solely responsible for the security and backup of my wallets, not Gem.
+        public static let message = Localized.tr("Localizable", "onboarding.accept_terms.item1.message", fallback: "I understand that I am solely responsible for the security and backup of my wallets, not Gem.")
+      }
+      public enum Item2 {
+        /// I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited.
+        public static let message = Localized.tr("Localizable", "onboarding.accept_terms.item2.message", fallback: "I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited.")
+      }
+      public enum Item3 {
+        /// I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.
+        public static let message = Localized.tr("Localizable", "onboarding.accept_terms.item3.message", fallback: "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.")
+      }
+    }
     public enum Security {
       public enum CreateWallet {
         public enum Confirm {

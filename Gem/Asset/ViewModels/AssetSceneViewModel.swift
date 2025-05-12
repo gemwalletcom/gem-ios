@@ -39,7 +39,7 @@ final class AssetSceneViewModel: Sendable {
     var isPresentingAssetSheet: AssetSheetType?
 
     var input: AssetSceneInput
-    var assetData: AssetData = .empty
+    var assetData: AssetData
     var transactions: [TransactionExtended] = []
     var banners: [Banner] = []
 
@@ -61,6 +61,7 @@ final class AssetSceneViewModel: Sendable {
         self.bannerService = bannerService
 
         self.input = input
+        self.assetData = AssetData.with(asset: input.asset)
         _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 

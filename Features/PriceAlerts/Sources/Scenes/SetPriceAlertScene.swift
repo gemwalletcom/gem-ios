@@ -25,19 +25,24 @@ public struct SetPriceAlertScene: View {
     
     public var body: some View {
         VStack(spacing: .zero) {
-            Text(model.alertDirectionTitle)
-                .textStyle(.subheadline)
-                .padding(.bottom, Spacing.tiny)
-            
-            CurrencyInputView(
-                text: $model.state.amount,
-                config: model.currencyInputConfig(for: assetData)
-            )
-            .focused($focusedField)
-            
-            if model.showPercentagePreselectedPicker {
-                preselectedPercentagePickerView
-                    .padding(.top, Spacing.medium)
+            List {
+                Section {
+                    Text(model.alertDirectionTitle)
+                        .textStyle(.subheadline)
+                        .padding(.bottom, Spacing.tiny)
+                    
+                    CurrencyInputView(
+                        text: $model.state.amount,
+                        config: model.currencyInputConfig(for: assetData)
+                    )
+                    .focused($focusedField)
+                    
+                    if model.showPercentagePreselectedPicker {
+                        preselectedPercentagePickerView
+                            .padding(.top, Spacing.medium)
+                    }
+                }
+                .cleanListRow()
             }
             
             Spacer()
@@ -50,6 +55,7 @@ public struct SetPriceAlertScene: View {
             .frame(maxWidth: Spacing.scene.button.maxWidth)
         }
         .padding(.bottom, Spacing.scene.bottom)
+        .background(Colors.grayBackground)
         .toolbar {
             ToolbarItem(placement: .principal) {
                 alertTypePickerView

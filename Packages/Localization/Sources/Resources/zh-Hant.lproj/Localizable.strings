@@ -244,7 +244,7 @@
 "transaction.title.received" = "已收到";
 "transaction.title.sent" = "已發送";
 "stake.stake" = "質押";
-"banner.account_activation.title" = "%@ 帳戶啟動費用";
+"banner.account_activation.title" = "帳戶啟動費用";
 "banner.account_activation.description" = "%@ 網路需要一次性費用 %@ 。";
 "banner.stake.title" = "開始質押 %@";
 "banner.stake.description" = "質押 %@ 賺取獎勵，躺著也賺";
@@ -397,3 +397,10 @@
 "swap.price_impact_warning.title" = "滑點巨大";
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
+"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
+"onboarding.accept_terms.title" = "Accept Terms";
+"onboarding.accept_terms.message" = "Please read and agree to the following terms before you continue.";
+"onboarding.accept_terms.item1.message" = "I understand that I am solely responsible for the security and backup of my wallets, not Gem.";
+"onboarding.accept_terms.item2.message" = "I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited.";
+"onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
+"onboarding.accept_terms.continue" = "I Understand, Continue";
