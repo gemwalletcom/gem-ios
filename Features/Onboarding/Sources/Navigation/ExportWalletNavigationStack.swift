@@ -13,14 +13,14 @@ public struct ExportWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
     
     private let flow: ExportWalletFlow
-    @State private var router = Router<ExportWalletDestination>()
+    @State private var navigationPath: NavigationPath = NavigationPath()
     
     public init(flow: ExportWalletFlow) {
         self.flow = flow
     }
 
     public var body: some View {
-        NavigationStack(path: $router.path) {
+        NavigationStack(path: $navigationPath) {
             SecurityReminderScene(
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Common.secretPhrase,
@@ -51,9 +51,9 @@ extension ExportWalletNavigationStack {
     private func onNext() {
         switch flow {
         case .words(let words):
-            router.push(to: .words(words))
+            navigationPath.append(ExportWalletDestination.words(words))
         case .privateKey(let key):
-            router.push(to: .privateKey(key))
+            navigationPath.append(ExportWalletDestination.privateKey(key))
         }
     }
 }

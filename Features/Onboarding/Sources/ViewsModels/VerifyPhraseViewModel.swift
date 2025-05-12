@@ -8,36 +8,25 @@ import Style
 import Localization
 import PrimitivesComponents
 
-@MainActor
-protocol VerifyPhraseViewModelNavigation {
-    func verifyPhraseOnNext()
-    func show(error: Error)
-}
-
-@Observable
-@MainActor
-final class VerifyPhraseViewModel {
+class VerifyPhraseViewModel: ObservableObject {
     
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
-    private let navigation: VerifyPhraseViewModelNavigation
 
-    var wordsVerified: [String]
-    var wordsIndex: Int = 0
-    var buttonState = StateButtonStyle.State.disabled
+    @Published var wordsVerified: [String]
+    @Published var wordsIndex: Int = 0
+    @Published var buttonState = StateButtonStyle.State.disabled
     private var selectedIndexes = Set<WordIndex>()
 
     init(
         words: [String],
-        walletService: WalletService,
-        navigation: VerifyPhraseViewModelNavigation
+        walletService: WalletService
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
-        self.navigation = navigation
     }
     
     var title: String {
@@ -81,14 +70,8 @@ final class VerifyPhraseViewModel {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() {
-        do {
-            let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-            let _ = try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
-            navigation.verifyPhraseOnNext()
-        } catch {
-            navigation.show(error: error)
-            buttonState = .normal
-        }
+    func importWallet() throws -> Primitives.Wallet  {
+        let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
+        return try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
     }
 }

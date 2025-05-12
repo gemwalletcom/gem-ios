@@ -49,15 +49,14 @@ struct WalletsNavigationStack: View {
             }
             .sheet(isPresented: $isPresentingCreateWalletSheet) {
                 CreateWalletNavigationStack(
-                    walletService: walletService
-                ) {
-                    isPresentingWallets = false
-                }
+                    walletService: walletService,
+                    isPresentingWallets: $isPresentingWallets
+                )
             }
             .sheet(isPresented: $isPresentingImportWalletSheet) {
                 ImportWalletNavigationStack(
-                    walletService: walletService,
-                    onFinishFlow: { isPresentingWallets.toggle() }
+                    model: ImportWalletTypeViewModel(walletService: walletService),
+                    isPresentingWallets: $isPresentingWallets
                 )
             }
             .toolbar {

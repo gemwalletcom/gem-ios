@@ -3,84 +3,43 @@
 import SwiftUI
 import Primitives
 import Localization
-import WalletService
-
-enum ImportWalletDestination: Hashable {
-    case importWallet(ImportWalletType)
-    case importType
-}
 
 public struct ImportWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var router: Router<ImportWalletDestination>
-    
-    let walletService: WalletService
+
+    @Binding private var isPresentingWallets: Bool
+    private let model: ImportWalletTypeViewModel
 
     public init(
-        walletService: WalletService,
-        onFinishFlow: VoidAction = nil
+        model: ImportWalletTypeViewModel,
+        isPresentingWallets: Binding<Bool>
     ) {
-        self.walletService = walletService
-        self.router = Router(onFinishFlow: onFinishFlow)
+        self.model = model
+        _isPresentingWallets = isPresentingWallets
     }
 
     public var body: some View {
-        NavigationStack(path: $router.path) {
-            AcceptTermsScene(
-                model: AcceptTermsViewModel(navigation: self)
-            )
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
+        NavigationStack {
+            ImportWalletTypeScene(model: model)
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarLeading) {
+                        Button(Localized.Common.cancel) {
+                            dismiss()
+                        }
                     }
                 }
-            }
-            .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: ImportWalletDestination.self) {
-                switch $0 {
-                case .importType:
-                    ImportWalletTypeScene(
-                        model: ImportWalletTypeViewModel(
-                            walletService: walletService,
-                            navigation: self
-                        )
-                    )
-                case .importWallet(let type):
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationDestination(for: ImportWalletType.self) { type in
                     ImportWalletScene(
                         model: ImportWalletViewModel(
                             type: type,
-                            walletService: walletService,
-                            navigation: self
+                            walletService: model.walletService,
+                            onFinishImport: {
+                                isPresentingWallets.toggle()
+                            }
                         )
                     )
                 }
-            }
-            .safariSheet(url: $router.isPresentingUrl)
         }
-    }
-}
-
-// MARK: - Navigation
-
-extension ImportWalletNavigationStack: AcceptTermsViewModelNavigation {
-    func acceptTermsOnNext() {
-        router.push(to: .importType)
-    }
-    
-    func present(url: URL) {
-        router.isPresentingUrl = url
-    }
-}
-
-extension ImportWalletNavigationStack: ImportWalletTypeViewModelNavigation {
-    func importWalletOnNext(type: ImportWalletType) {
-        router.push(to: .importWallet(type))
-    }
-}
-
-extension ImportWalletNavigationStack: ImportWalletViewModelNavigation {
-    func importWalletOnNext() {
-        router.onFinishFlow?()
     }
 }

@@ -5,33 +5,28 @@ import Localization
 import Primitives
 import WalletService
 
-enum CreateWalletDestination: Hashable {
-    case acceptTerms
-    case createWallet
-    case verifyPhrase([String])
-}
-
 public struct CreateWalletNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
+
+    @State private var navigationPath: NavigationPath = NavigationPath()
+    @Binding private var isPresentingWallets: Bool
     
     private let walletService: WalletService
-    
-    @State private var router: Router<CreateWalletDestination>
 
     public init(
         walletService: WalletService,
-        onFinishFlow: VoidAction
+        isPresentingWallets: Binding<Bool>
     ) {
         self.walletService = walletService
-        self.router = Router(onFinishFlow: onFinishFlow)
+        _isPresentingWallets = isPresentingWallets
     }
 
     public var body: some View {
-        NavigationStack(path: $router.path) {
+        NavigationStack(path: $navigationPath) {
             SecurityReminderScene(
                 model: SecurityReminderViewModelDefault(
                     title: Localized.Wallet.New.title,
-                    onNext: securityReminderOnNext
+                    onNext: { navigationPath.append(Scenes.CreateWallet()) }
                 )
             )
             .toolbar {
@@ -42,72 +37,25 @@ public struct CreateWalletNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationDestination(for: CreateWalletDestination.self) {
-                switch $0 {
-                case .acceptTerms:
-                    AcceptTermsScene(
-                        model: AcceptTermsViewModel(
-                            navigation: self
-                        )
-                    )
-                case .createWallet:
-                    CreateWalletScene(
-                        model: CreateWalletViewModel(
-                            walletService: walletService,
-                            navigation: self
-                        )
-                    )
-                case .verifyPhrase(let words):
-                    VerifyPhraseWalletScene(
-                        model: VerifyPhraseViewModel(
-                            words: words,
-                            walletService: walletService,
-                            navigation: self
-                        )
-                    )
-                }
+            .navigationDestination(for: Scenes.VerifyPhrase.self) {
+                VerifyPhraseWalletScene(
+                    model: VerifyPhraseViewModel(
+                        words: $0.words,
+                        walletService: walletService
+                    ),
+                    isPresentingWallets: $isPresentingWallets
+                )
             }
-            .alert(item: $router.isPresentingAlert) {
-                Alert(title: Text($0.title), message: Text($0.message))
+            .navigationDestination(for: Scenes.CreateWallet.self) { _ in
+                CreateWalletScene(
+                    model: CreateWalletViewModel(
+                        walletService: walletService,
+                        onCreateWallet: {
+                            navigationPath.append(Scenes.VerifyPhrase(words: $0))
+                        }
+                    )
+                )
             }
-            .safariSheet(url: $router.isPresentingUrl)
         }
-    }
-}
-
-// MARK: - Navigation
-
-extension CreateWalletNavigationStack {
-    func securityReminderOnNext() {
-        router.push(to: .acceptTerms)
-    }
-}
-
-extension CreateWalletNavigationStack: CreateWalletViewModelNavigation {
-    func createWalletOnNext(words: [String]) {
-        router.push(to: .verifyPhrase(words))
-    }
-}
-
-extension CreateWalletNavigationStack: VerifyPhraseViewModelNavigation {
-    func verifyPhraseOnNext() {
-        router.onFinishFlow?()
-    }
-    
-    func show(error: any Error) {
-        router.presentAlert(
-            title: Localized.Errors.createWallet(""),
-            message: error.localizedDescription
-        )
-    }
-}
-
-extension CreateWalletNavigationStack: AcceptTermsViewModelNavigation {
-    func acceptTermsOnNext() {
-        router.push(to: .createWallet)
-    }
-    
-    func present(url: URL) {
-        router.isPresentingUrl = url
     }
 }

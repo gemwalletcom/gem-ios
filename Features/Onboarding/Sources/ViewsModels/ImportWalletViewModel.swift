@@ -5,28 +5,23 @@ import Localization
 import WalletService
 import enum Keystore.KeystoreImportType
 
-@MainActor
-protocol ImportWalletViewModelNavigation {
-    func importWalletOnNext()
-}
-
 class ImportWalletViewModel: ObservableObject {
 
     let type: ImportWalletType
     let walletService: WalletService
     let wordSuggestor = WordSuggestor()
-    let navigation: ImportWalletViewModelNavigation
+    let onFinishImport: (() -> Void)?
 
     @Published var buttonState = StateButtonStyle.State.normal
 
     init(
         type: ImportWalletType,
         walletService: WalletService,
-        navigation: ImportWalletViewModelNavigation
+        onFinishImport: (() -> Void)?
     ) {
         self.type = type
         self.walletService = walletService
-        self.navigation = navigation
+        self.onFinishImport = onFinishImport
     }
     
     var title: String {
@@ -73,6 +68,7 @@ class ImportWalletViewModel: ObservableObject {
 
     func importWallet(name: String, keystoreType: KeystoreImportType) throws {
         try walletService.importWallet(name: name, type: keystoreType)
+        onFinishImport?()
     }
     
     func wordSuggestionCalculate(value: String) -> String? {
@@ -81,14 +77,5 @@ class ImportWalletViewModel: ObservableObject {
     
     func selectWordCalculate(input: String, word: String) -> String {
         wordSuggestor.selectWordCalculate(input: input, word: word)
-    }
-}
-
-// MARK: - Navigation
-
-@MainActor
-extension ImportWalletViewModel {
-    func onNext() {
-        navigation.importWalletOnNext()
     }
 }
