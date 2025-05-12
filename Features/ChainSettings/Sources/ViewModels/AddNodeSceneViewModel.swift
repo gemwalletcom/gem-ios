@@ -88,9 +88,14 @@ extension AddNodeSceneViewModel {
     private func fetchChainID(service: any ChainIDFetchable) async throws -> (latency: Latency, value: String) {
         let result = try await LatencyMeasureService.measure(for: service.getChainID)
         let networkId = result.value
-        guard NodeService.isValid(netoworkId: networkId, for: chain) else {
+        let isValid = NodeService.isValid(netoworkId: networkId, for: chain)
+        //valid on simulator and debug...
+        #if !(DEBUG && targetEnvironment(simulator))
+        guard isValid else {
             throw AddNodeError.invalidNetworkId
         }
+        #endif
+        
         return (latency: .from(duration: result.duration), value: networkId)
     }
 
