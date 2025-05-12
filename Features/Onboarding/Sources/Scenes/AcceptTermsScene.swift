@@ -25,7 +25,7 @@ struct AcceptTermsScene: View {
                     Section {
                         Toggle(isOn: $item.isConfirmed) {
                             Text(item.message)
-                                .textStyle(.bodySecondary)
+                                .textStyle(item.style)
                         }
                         .toggleStyle(CheckboxStyle(position: .left))
                     }
