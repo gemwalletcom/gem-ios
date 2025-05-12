@@ -108,7 +108,11 @@ extension ConfirmTransferScene {
                 }
                 
                 if let slippage = model.slippageText {
-                    ListItemView(title: model.slippageField, subtitle: slippage)
+                    ListItemView(
+                        title: model.slippageField,
+                        subtitle: slippage,
+                        infoAction: onSlippageInto
+                    )
                 }
             }
 
@@ -178,6 +182,10 @@ extension ConfirmTransferScene {
 
     private func onNetworkFeeInfo() {
         isPresentingInfoSheet = .networkFee(model.dataModel.chain)
+    }
+    
+    private func onSlippageInto() {
+        isPresentingInfoSheet = .slippage
     }
 }
 

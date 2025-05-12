@@ -455,6 +455,10 @@ public enum Localized {
       /// Price Impact
       public static let title = Localized.tr("Localizable", "info.price_impact.title", fallback: "Price Impact")
     }
+    public enum Slippage {
+      /// Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.
+      public static let description = Localized.tr("Localizable", "info.slippage.description", fallback: "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.")
+    }
     public enum Transaction {
       public enum Error {
         /// The transaction could not be completed due to an error, such as insufficient funds, invalid input, or rejection by the network. Please review the details and try again.
