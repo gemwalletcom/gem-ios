@@ -4,6 +4,7 @@ import Foundation
 import Components
 import GemstonePrimitives
 import Primitives
+import Localization
 
 @Observable
 final class AcceptTermsViewModel {
@@ -17,13 +18,13 @@ final class AcceptTermsViewModel {
         PublicConstants.url(.termsOfService)
     }
     
-    let title: String = "Accept Terms"
-    let message: String = "Please read and agree to the following terms before you continue."
+    let title: String = Localized.Onboarding.AcceptTerms.title
+    let message: String = Localized.Onboarding.AcceptTerms.message
 
     var items: [AcceptTermViewModel] = [
-        .init(message: "I understand that I am solely responsible for the security and backup of my wallets, not Gem."),
-        .init(message: "I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited."),
-        .init(message: "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.")
+        .init(message: Localized.Onboarding.AcceptTerms.Item1.message),
+        .init(message: Localized.Onboarding.AcceptTerms.Item2.message),
+        .init(message: Localized.Onboarding.AcceptTerms.Item3.message)
     ]
     
     var isConfirmed: Bool {

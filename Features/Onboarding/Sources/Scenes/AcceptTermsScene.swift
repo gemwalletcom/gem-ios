@@ -38,7 +38,7 @@ struct AcceptTermsScene: View {
             Spacer()
             
             StateButton(
-                text: "I Understand, Continue",
+                text: Localized.Onboarding.AcceptTerms.continue,
                 viewState: model.buttonState,
                 action: { model.onNext?() }
             )
