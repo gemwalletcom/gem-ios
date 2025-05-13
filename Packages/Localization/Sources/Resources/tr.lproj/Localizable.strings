@@ -244,7 +244,7 @@
 "transaction.title.received" = "Kabul edilmiş";
 "transaction.title.sent" = "Gönderilmiş";
 "stake.stake" = "Bahis";
-"banner.account_activation.title" = "%@ Hesap Aktivasyon Ücreti";
+"banner.account_activation.title" = "Hesap Aktivasyon Ücreti";
 "banner.account_activation.description" = "%@ ağı, tek seferlik bir ücret gerektirir %@.";
 "banner.stake.title" = "%@ bahisine başla";
 "banner.stake.description" = "Uyurken %@ ödül kazanın.";

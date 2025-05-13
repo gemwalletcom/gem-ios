@@ -70,7 +70,7 @@ struct TransactionsNavigationStack: View {
                             bannerService: bannerService,
                             input: AssetSceneInput(
                                 wallet: model.wallet,
-                                assetId: $0.asset.id
+                                asset: $0.asset
                             ),
                             isPresentingAssetSelectedInput: .constant(.none)
                         )

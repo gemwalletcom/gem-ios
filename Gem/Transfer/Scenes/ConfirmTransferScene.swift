@@ -85,13 +85,17 @@ extension ConfirmTransferScene {
                         )
                 }
 
-                ListItemView(title: model.senderTitle, subtitle: model.senderValue)
-                    .contextMenu(
-                        [
-                            .copy(value: model.senderAddress),
-                            .url(title: model.senderExplorerText, onOpen: { isPresentingUrl = model.senderAddressExplorerUrl })
-                        ]
-                    )
+                ListItemImageView(
+                    title: model.senderTitle,
+                    subtitle: model.senderValue,
+                    assetImage: model.senderAssetImage
+                )
+                .contextMenu(
+                    [
+                        .copy(value: model.senderAddress),
+                        .url(title: model.senderExplorerText, onOpen: { isPresentingUrl = model.senderAddressExplorerUrl })
+                    ]
+                )
 
                 ListItemImageView(
                     title: model.networkTitle,

@@ -28,7 +28,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
         formatter.locale = locale
         formatter.numberStyle = .currency
         formatter.maximumFractionDigits = 8
-        formatter.maximumSignificantDigits = 2
+        formatter.maximumSignificantDigits = 4
         formatter.currencyCode = currencyCode
         return formatter
     }
@@ -149,7 +149,7 @@ public struct CurrencyFormatter: Sendable, Hashable {
     }
     
     private func formatter(for value: Double) -> NumberFormatter {
-        if (abs(value) >= 0.1 || value == 0 || value < 0.000_000_000_1) {
+        if (abs(value) >= 0.99 || value == 0 || value < 0.000_000_000_1) {
             formatter
         } else {
             formatterSmallValues

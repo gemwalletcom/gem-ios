@@ -244,7 +244,7 @@
 "transaction.title.received" = "已收到";
 "transaction.title.sent" = "已发送";
 "stake.stake" = "质押";
-"banner.account_activation.title" = "%@ 账户激活费用";
+"banner.account_activation.title" = "账户激活费用";
 "banner.account_activation.description" = "%@ 网络需要一次性费用 %@。";
 "banner.stake.title" = "开始质押 %@";
 "banner.stake.description" = "质押 %@ 赚取奖励，躺着也赚";

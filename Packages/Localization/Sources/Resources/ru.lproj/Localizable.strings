@@ -244,7 +244,7 @@
 "transaction.title.received" = "Получено";
 "transaction.title.sent" = "Отправлено";
 "stake.stake" = "Стейкнути";
-"banner.account_activation.title" = "%@ Плата за активацию аккаунта";
+"banner.account_activation.title" = "Плата за активацию аккаунта";
 "banner.account_activation.description" = "Сеть %@ требует единовременную плату в размере %@.";
 "banner.stake.title" = "Начните стейкинг %@";
 "banner.stake.description" = "Зарабатывайте %@ наград за свою стейк, пока спите.";

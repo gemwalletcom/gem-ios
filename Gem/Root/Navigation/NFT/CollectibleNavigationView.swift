@@ -10,7 +10,7 @@ import Localization
 struct CollectibleNavigationView: View {
     
     @State private var isPresentingSelectedAssetInput: SelectedAssetInput?
-    @State private var isPresentingCollectibleOptions = false
+    @State private var isPresentingCollectibleOptions: Bool? = .none
 
     @Environment(\.avatarService) private var avatarService
 
