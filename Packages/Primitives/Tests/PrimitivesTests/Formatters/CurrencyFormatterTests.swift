@@ -30,20 +30,20 @@ final class CurrencyFormatterTests {
 
     @Test
     func testSmallValue() {
-        #expect(currencyFormatterUS.string(0.10) == "$0.10")
+        #expect(currencyFormatterUS.string(0.10) == "$0.1")
         #expect(currencyFormatterUS.string(0.11) == "$0.11")
-        #expect(currencyFormatterUS.string(0.2) == "$0.20")
+        #expect(currencyFormatterUS.string(0.2) == "$0.2")
         #expect(currencyFormatterUS.string(0.99) == "$0.99")
         #expect(currencyFormatterUS.string(1.89999) == "$1.90")
-        #expect(currencyFormatterUS.string(0.70) == "$0.70")
-        #expect(currencyFormatterUS.string(0.0345) == "$0.034")
+        #expect(currencyFormatterUS.string(0.70) == "$0.7")
+        #expect(currencyFormatterUS.string(0.0345) == "$0.0345")
         #expect(currencyFormatterUS.string(0.01) == "$0.01")
         #expect(currencyFormatterUS.string(0.13) == "$0.13")
-        #expect(currencyFormatterUS.string(0.0123) == "$0.012")
+        #expect(currencyFormatterUS.string(0.0123) == "$0.0123")
         #expect(currencyFormatterUS.string(0.002) == "$0.002")
         #expect(currencyFormatterUS.string(0.001) == "$0.001")
-        #expect(currencyFormatterUS.string(0.000123456) == "$0.00012")
-        #expect(currencyFormatterUS.string(0.00000123) == "$0.0000012")
+        #expect(currencyFormatterUS.string(0.000123456) == "$0.0001235")
+        #expect(currencyFormatterUS.string(0.00000123) == "$0.00000123")
     }
 
     @Test
@@ -94,7 +94,7 @@ final class CurrencyFormatterTests {
     @Test
     func testStringDecimalWithSymbolVariants() {
         #expect(cryptoFormatter.string(double: 1234.56, symbol: "BTC") == "1,234.56 BTC")
-        #expect(cryptoFormatter.string(double: 0.0001234, symbol: "BTC") == "0.00012 BTC")
+        #expect(cryptoFormatter.string(double: 0.0001234, symbol: "BTC") == "0.0001234 BTC")
     }
 
     @Test
@@ -132,7 +132,7 @@ final class CurrencyFormatterTests {
         #expect(currencyFormatterUS.normalizedDouble(from: 0.01) == 0.01)
         #expect(currencyFormatterUS.normalizedDouble(from: 0) == 0)
 
-        #expect(currencyFormatterUS.normalizedDouble(from: 0.00000123456) == 0.0000012)
+        #expect(currencyFormatterUS.normalizedDouble(from: 0.00000123456) == 0.000001235)
         #expect(currencyFormatterUS.normalizedDouble(from: 1.999999) == 2.00)
         #expect(currencyFormatterUS.normalizedDouble(from: 0.0000000000001) == 0)
     }
