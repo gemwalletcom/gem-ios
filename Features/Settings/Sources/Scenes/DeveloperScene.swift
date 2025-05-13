@@ -39,6 +39,10 @@ public struct DeveloperScene: View {
                     action: model.clearPendingTransactions
                 )
                 NavigationCustomLink(
+                    with: ListItemView(title: "Clear Transactions Timestamp"),
+                    action: model.clearTransactionsTimestamp
+                )
+                NavigationCustomLink(
                     with: ListItemView(title: "Clear Assets"),
                     action: model.clearAssets
                 )

@@ -86,6 +86,11 @@ public struct DeveloperViewModel: Sendable {
         } catch { }
     }
     
+    func clearTransactionsTimestamp() {
+        let store = WalletPreferences(walletId: walletId.id)
+        store.transactionsTimestamp = 0
+    }
+    
     func clearAssets() {
         do {
             try assetService.assetStore.clearTokens()
