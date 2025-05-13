@@ -95,8 +95,8 @@ public protocol ChainFeePriorityPreference: Sendable {}
 public extension ChainFeeRateFetchable {
     func defaultPriority(for type: TransferDataType) -> FeePriority {
         switch type {
-        case .swap, .tokenApprove, .stake: .fast
-        case .transfer, .transferNft, .generic, .account: .normal
+        case .swap: .fast
+        case .tokenApprove, .stake, .transfer, .transferNft, .generic, .account: .normal
         }
     }
 }
