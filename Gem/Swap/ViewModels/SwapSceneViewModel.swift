@@ -228,14 +228,18 @@ extension SwapSceneViewModel {
         fetch(delay: SwapSceneViewModel.quoteTaskDebounceTimeout)
     }
 
-    func onChangeFromAsset(_: AssetData?, _: AssetData?) {
+    func onChangeFromAsset(old: AssetData?, new: AssetData?) {
+        guard old?.asset.id != new?.asset.id else { return }
+
         resetValues()
         selectedSwapQuote = nil
         focusField = .from
         fetch()
     }
 
-    func onChangeToAsset(_: AssetData?, _: AssetData?) {
+    func onChangeToAsset(old: AssetData?, new: AssetData?) {
+        guard old?.asset.id != new?.asset.id else { return }
+
         resetToValue()
         selectedSwapQuote = nil
         fetch()
