@@ -1,10 +1,10 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Gemstone
 import Components
 import Primitives
 import Localization
+import enum Gemstone.MessagePreview
 
 public struct MessagePreviewViewModel {
     

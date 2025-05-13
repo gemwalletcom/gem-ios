@@ -3,7 +3,6 @@
 import Foundation
 @preconcurrency import WalletCore
 import Primitives
-import struct Gemstone.SignMessage
 
 public struct WalletKeyStore: Sendable {
     private let keyStore: WalletCore.KeyStore

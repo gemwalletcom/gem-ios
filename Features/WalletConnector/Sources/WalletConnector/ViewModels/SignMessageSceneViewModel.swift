@@ -6,10 +6,6 @@ import WalletConnectorService
 import Primitives
 import Localization
 import Components
-import struct Gemstone.GemEip712Message
-import struct Gemstone.GemEip712MessageDomain
-import struct Gemstone.GemEip712Section
-import struct Gemstone.GemEip712Value
 import class Gemstone.SignMessageDecoder
 
 public struct SignMessageSceneViewModel {
