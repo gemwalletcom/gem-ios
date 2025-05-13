@@ -21,6 +21,7 @@ struct PriceViewModelTests {
         #expect(PriceViewModel(price: .mock(price: 10), currencyCode: currencyCode).priceAmountText == "$10.00")
         #expect(PriceViewModel(price: .mock(price: 0.000000123), currencyCode: currencyCode).priceAmountText == "$0.000000123")
         #expect(PriceViewModel(price: .mock(price: 0.00000000123), currencyCode: currencyCode).priceAmountText == "$0.00000000123")
+        #expect(PriceViewModel(price: .mock(price: 0.000000123456), currencyCode: currencyCode).priceAmountText == "$0.0000001235")
         #expect(PriceViewModel(price: .mock(price: -10), currencyCode: currencyCode).priceAmountText == "-$10.00")
         
         #expect(PriceViewModel(price: .mock(price: 123_456), currencyCode: currencyCode).priceAmountText == "$123.46K")

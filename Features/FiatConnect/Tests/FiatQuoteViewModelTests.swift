@@ -39,5 +39,7 @@ struct FiatQuoteViewModelTests {
 
         #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 10.123, cryptoAmount: 15.12), formatter: frFormatter).rateText == "0,6695 $ US")
         #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 50, cryptoAmount: 0.0018), formatter: frFormatter).rateText == "27 777,78 $ US")
+        
+        #expect(FiatQuoteViewModel(asset: .mock(), quote: .mock(fiatAmount: 0.000000123456, cryptoAmount: 1), formatter: frFormatter).rateText == "0,0000001235 $ US")
     }
 }
