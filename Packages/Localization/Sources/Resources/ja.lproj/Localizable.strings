@@ -244,7 +244,7 @@
 "transaction.title.received" = "受け取った";
 "transaction.title.sent" = "送信済み";
 "stake.stake" = "ステーク";
-"banner.account_activation.title" = "%@ アカウントの有効化手数料";
+"banner.account_activation.title" = "アカウントの有効化手数料";
 "banner.account_activation.description" = "%@ネットワークは、一回限りの料金が%@必要です。";
 "banner.stake.title" = "%@ のステーキングを開始";
 "banner.stake.description" = "寝ている間にステークで%@の報酬を獲得できます。";

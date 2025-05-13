@@ -244,7 +244,7 @@
 "transaction.title.received" = "已收到";
 "transaction.title.sent" = "已發送";
 "stake.stake" = "質押";
-"banner.account_activation.title" = "%@ 帳戶啟動費用";
+"banner.account_activation.title" = "帳戶啟動費用";
 "banner.account_activation.description" = "%@ 網路需要一次性費用 %@ 。";
 "banner.stake.title" = "開始質押 %@";
 "banner.stake.description" = "質押 %@ 賺取獎勵，躺著也賺";

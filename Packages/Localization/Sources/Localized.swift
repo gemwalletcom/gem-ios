@@ -118,10 +118,8 @@ public enum Localized {
       public static func description(_ p1: Any, _ p2: Any) -> String {
         return Localized.tr("Localizable", "banner.account_activation.description", String(describing: p1), String(describing: p2), fallback: "The %@ network requires a one time fee of %@.")
       }
-      /// %@ Account Activation Fee
-      public static func title(_ p1: Any) -> String {
-        return Localized.tr("Localizable", "banner.account_activation.title", String(describing: p1), fallback: "%@ Account Activation Fee")
-      }
+      /// Account Activation Fee
+      public static let title = Localized.tr("Localizable", "banner.account_activation.title", fallback: "Account Activation Fee")
     }
     public enum ActivateAsset {
       /// To use the %@ asset, you must first enable it on the %@ network by fulfilling the network’s specific requirements.
