@@ -62,6 +62,20 @@ public struct WalletsScene: View {
                 )
             }
             .listRowInsets(.assetListRowInsets)
+            
+            if model.shouldShowFastCreateButton {
+                Section("Dev") {
+                    Button(
+                        action: onSelectFastCreateWallet,
+                        label: {
+                            HStack {
+                                Images.Wallets.create
+                                Text(Localized.Wallet.createNewWallet) + Text(Emoji.rocket)
+                            }
+                        }
+                    )
+                }
+            }
 
             if !pinnedWallets.isEmpty {
                 Section {
@@ -134,6 +148,11 @@ extension WalletsScene {
 
     private func onSelectImportWallet() {
         isPresentingImportWalletSheet.toggle()
+    }
+    
+    private func onSelectFastCreateWallet() {
+        model.createWallet()
+        dismiss()
     }
 
     private func onDelete(wallet: Wallet) {
