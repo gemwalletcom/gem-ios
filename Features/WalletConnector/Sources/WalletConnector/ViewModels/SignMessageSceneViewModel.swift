@@ -16,7 +16,8 @@ public struct SignMessageSceneViewModel {
     private let keystore: any Keystore
     private let payload: SignMessagePayload
     private let confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate
-
+    private let decoder: SignMessageDecoder
+    
     public init(
         keystore: any Keystore,
         payload: SignMessagePayload,
@@ -24,13 +25,10 @@ public struct SignMessageSceneViewModel {
     ) {
         self.keystore = keystore
         self.payload = payload
+        self.decoder = SignMessageDecoder(message: payload.message)
         self.confirmTransferDelegate = confirmTransferDelegate
     }
     
-    public var decoder: SignMessageDecoder {
-        SignMessageDecoder(message: payload.message)
-    }
-
     public var networkText: String {
         payload.chain.asset.name
     }
@@ -39,17 +37,13 @@ public struct SignMessageSceneViewModel {
         payload.wallet.name
     }
     
-    public var messageSections: [ListSection<KeyValueItem>]? {
-        switch try? decoder.preview() {
-        case .eip712(let message): eip712Sections(message)
-        case .none, .text: nil
+    public var messageDisplayType: SignMessageDisplayType {
+        guard let message = try? decoder.preview() else {
+            return .text(decoder.plainPreview())
         }
+        return MessagePreviewViewModel(message: message).messageDisplayType
     }
     
-    public var shouldDisplayTextMessage: Bool {
-        messageSections != nil
-    }
-
     public var buttonTitle: String {
         Localized.Transfer.confirm
     }
@@ -78,34 +72,5 @@ public struct SignMessageSceneViewModel {
         let signature = try keystore.sign(hash: decoder.hash(), wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))
-    }
-    
-    // MARK: - Private methods
-    
-    private func eip712Sections(_ message: GemEip712Message) -> [ListSection<KeyValueItem>] {
-        [ListSection(
-            id: message.domain.verifyingContract,
-            title: Localized.WalletConnect.domain,
-            image: nil,
-            values: domainItems(message.domain)
-        )] + messageSections(message.message)
-    }
-    
-    private func messageSections(_ message: [GemEip712Section]) -> [ListSection<KeyValueItem>] {
-        message.map {
-            ListSection(
-                id: $0.name,
-                title: $0.name,
-                image: nil,
-                values: $0.values.map { KeyValueItem(title: $0.name, value: $0.value) }.filter { $0.title.isNotEmpty && $0.value.isNotEmpty }
-            )
-        }
-    }
-    
-    private func domainItems(_ domain: GemEip712MessageDomain) -> [KeyValueItem] {
-        [
-            KeyValueItem(title: Localized.Wallet.name, value: domain.name),
-            KeyValueItem(title: Localized.Asset.contract, value: domain.verifyingContract)
-        ]
     }
 }

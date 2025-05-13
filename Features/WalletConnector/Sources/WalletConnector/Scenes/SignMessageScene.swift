@@ -38,7 +38,8 @@ public struct SignMessageScene: View {
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
 
-                if let sections = model.messageSections {
+                switch model.messageDisplayType {
+                case .sections(let sections):
                     ForEach(sections) { section in
                         Section {
                             ForEach(section.values) { item in
@@ -54,15 +55,12 @@ public struct SignMessageScene: View {
                             }
                         }
                     }
-                } else {
-                    Section(Localized.SignMessage.message) {
-                        Text(model.decoder.plainPreview())
-                    }
-                }
-                
-                if model.shouldDisplayTextMessage {
                     NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
                         isPresentingMessage = true
+                    }
+                case .text(let string):
+                    Section(Localized.SignMessage.message) {
+                        Text(string)
                     }
                 }
             }
