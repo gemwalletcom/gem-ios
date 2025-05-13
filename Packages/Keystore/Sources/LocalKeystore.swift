@@ -1,7 +1,6 @@
 import Foundation
 import Primitives
 import WalletCore
-import struct Gemstone.SignMessage
 
 public struct LocalKeystore: Keystore {
     private let walletKeyStore: WalletKeyStore
@@ -128,9 +127,9 @@ public struct LocalKeystore: Keystore {
         try keystorePassword.getAuthentication()
     }
     
-    public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
+    public func sign(hash: Data, wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         try walletKeyStore.sign(
-            message: message,
+            hash: hash,
             walletId: wallet.id,
             type: wallet.type,
             password: try keystorePassword.getPassword(),

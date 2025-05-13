@@ -56,7 +56,7 @@ public struct SignMessageScene: View {
                     }
                 } else {
                     Section(Localized.SignMessage.message) {
-                        Text(model.decoder.plainPreview)
+                        Text(model.decoder.plainPreview())
                     }
                 }
                 

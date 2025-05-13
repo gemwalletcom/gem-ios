@@ -17,8 +17,7 @@ let package = Package(
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
-        .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
-        .package(name: "Gemstone", path: "../../Packages/Gemstone")
+        .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2))
     ],
     targets: [
         .target(
@@ -28,8 +27,7 @@ let package = Package(
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
                 .product(name: "WalletCore", package: "WalletCore"),
                 "WalletCorePrimitives",
-                "Primitives",
-                "Gemstone"
+                "Primitives"
             ],
             path: "Sources"
         ),
@@ -45,8 +43,7 @@ let package = Package(
             dependencies: [
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "KeystoreTestKit",
-                "Keystore",
-                "Gemstone"
+                "Keystore"
             ]),
     ]
 )
