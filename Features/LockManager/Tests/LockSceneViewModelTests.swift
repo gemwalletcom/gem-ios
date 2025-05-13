@@ -401,7 +401,7 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sen
 
     init(isAuthEnabled: Bool,
          availableAuth: KeystoreAuthentication,
-         lockPeriod: LockPeriod = .oneMinute,
+         lockPeriod: LockPeriod = .default,
          isPrivacyLockEnabled: Bool = false
     ) {
         self.isAuthenticationEnabled = isAuthEnabled
@@ -413,6 +413,10 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sen
 
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws {
         isAuthenticationEnabled = enable
+        if !enable {
+            isPrivacyLockEnabled = false
+            lockPeriod = .default
+        }
     }
 
     func authenticate(context: LAContext, reason: String) async throws {
