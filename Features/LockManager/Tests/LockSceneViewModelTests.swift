@@ -413,6 +413,10 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sen
 
     func enableAuthentication(_ enable: Bool, context: LAContext, reason: String) async throws {
         isAuthenticationEnabled = enable
+        if !enable {
+            isPrivacyLockEnabled = false
+            lockPeriod = .oneMinute
+        }
     }
 
     func authenticate(context: LAContext, reason: String) async throws {
