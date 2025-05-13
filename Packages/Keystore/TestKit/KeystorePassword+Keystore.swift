@@ -14,7 +14,7 @@ public final class MockKeystorePassword: KeystorePassword, @unchecked Sendable {
     public init(
         memoryPassword: String = "",
         isAuthenticationEnabled: Bool = false,
-        lockPeriod: LockPeriod? = .oneMinute,
+        lockPeriod: LockPeriod? = .default,
         availableAuthentication: KeystoreAuthentication = .none,
         privacyLockStatus: PrivacyLockStatus? = .none
     ) {

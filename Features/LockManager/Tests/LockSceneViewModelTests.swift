@@ -401,7 +401,7 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sen
 
     init(isAuthEnabled: Bool,
          availableAuth: KeystoreAuthentication,
-         lockPeriod: LockPeriod = .oneMinute,
+         lockPeriod: LockPeriod = .default,
          isPrivacyLockEnabled: Bool = false
     ) {
         self.isAuthenticationEnabled = isAuthEnabled
@@ -415,7 +415,7 @@ class MockBiometryAuthenticationService: BiometryAuthenticatable, @unchecked Sen
         isAuthenticationEnabled = enable
         if !enable {
             isPrivacyLockEnabled = false
-            lockPeriod = .oneMinute
+            lockPeriod = .default
         }
     }
 
