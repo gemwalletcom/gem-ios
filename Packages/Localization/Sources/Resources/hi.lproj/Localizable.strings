@@ -244,7 +244,7 @@
 "transaction.title.received" = "Received";
 "transaction.title.sent" = "Sent";
 "stake.stake" = "Stake";
-"banner.account_activation.title" = "%@ Account Activation Fee";
+"banner.account_activation.title" = "Account Activation Fee";
 "banner.account_activation.description" = "%@ नेटवर्क को %@ का एक बार शुल्क देना पड़ता है।";
 "banner.stake.title" = "Start staking %@";
 "banner.stake.description" = "Earn %@ rewards on your stake while you sleep.";
@@ -398,3 +398,9 @@
 "wallet_connect.domain" = "Domain";
 "sign_message.view_full_message" = "View Full Message";
 "info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
+"onboarding.accept_terms.title" = "Accept Terms";
+"onboarding.accept_terms.message" = "Please read and agree to the following terms before you continue.";
+"onboarding.accept_terms.item1.message" = "I understand that I am solely responsible for the security and backup of my wallets, not Gem.";
+"onboarding.accept_terms.item2.message" = "I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited.";
+"onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
+"onboarding.accept_terms.continue" = "I Understand, Continue";
