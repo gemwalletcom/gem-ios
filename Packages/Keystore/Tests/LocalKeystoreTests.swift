@@ -2,7 +2,6 @@ import Testing
 import WalletCore
 import Primitives
 import KeystoreTestKit
-import struct Gemstone.SignMessage
 
 @testable import Keystore
 
@@ -108,8 +107,8 @@ struct LocalKeystoreTests {
         )
 
         let text = "5A2EYggC6hiAAuRArnkAANGySDyqQUGrbBHXfKQD9DQ5XcSkReDswnRqb7x3KRrnie9qSL"
-        let message = SignMessage(signType: .base58, data: Data(text.utf8))
-        let signature = try keystore.sign(wallet: wallet, message: message, chain: .solana)
+        let hash = Base58.decodeNoCheck(string: text)!
+        let signature = try keystore.sign(hash: hash, wallet: wallet, chain: .solana)
         let encoded = Base58.encodeNoCheck(data: signature)
 
         #expect(encoded == "5ZRaXVuDePowJjZmKaMjfcuqBVZet6e8QiCjTkGXBn7xhCvoEswUKXiGs2wmPxcqTfJUH28eCC91J1vLSjANNM9v")
