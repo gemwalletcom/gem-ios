@@ -283,9 +283,9 @@ extension ConfirmTransferViewModel {
     func fetch() async {
         state = .loading
         feeModel.reset()
-
+        var metadata: TransferDataMetadata!
         do {
-            let metadata = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            metadata = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
             try validateBalance(metadata: metadata)
 
             let preloadInput = try await fetchTransactionLoad(metaData: metadata)
@@ -295,7 +295,7 @@ extension ConfirmTransferViewModel {
             )
             updateState(with: transactionInputViewModel(transferAmount: transferAmountResult, input: preloadInput, metaData: metadata))
         } catch let error as TransferAmountCalculatorError {
-            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
+            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error), metaData: metadata))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
