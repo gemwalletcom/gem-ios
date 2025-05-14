@@ -9,6 +9,7 @@ import PrimitivesComponents
 public struct SignMessageScene: View {
     @Environment(\.dismiss) private var dismiss
     @State private var isPresentingUrl: URL? = nil
+    @State private var isPresentingMessage: Bool = false
     
     private let model: SignMessageSceneViewModel
 
@@ -37,8 +38,30 @@ public struct SignMessageScene: View {
                     ListItemView(title: Localized.Transfer.network, subtitle: model.networkText)
                 }
 
-                Section(Localized.SignMessage.message) {
-                    Text(model.message)
+                switch model.messageDisplayType {
+                case .sections(let sections):
+                    ForEach(sections) { section in
+                        Section {
+                            ForEach(section.values) { item in
+                                ListItemView(
+                                    title: item.title,
+                                    subtitle: item.value
+                                )
+                                
+                            }
+                        } header: {
+                            if let title = section.title {
+                                Text(title)
+                            }
+                        }
+                    }
+                    NavigationCustomLink(with: ListItemView(title: Localized.SignMessage.viewFullMessage)) {
+                        isPresentingMessage = true
+                    }
+                case .text(let string):
+                    Section(Localized.SignMessage.message) {
+                        Text(string)
+                    }
                 }
             }
             
@@ -56,6 +79,11 @@ public struct SignMessageScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(Localized.SignMessage.title)
         .safariSheet(url: $isPresentingUrl)
+        .sheet(isPresented: $isPresentingMessage) {
+            NavigationStack {
+                TextMessageScene(model: model.textMessageViewModel)
+            }
+        }
     }
     
     func sign() {
