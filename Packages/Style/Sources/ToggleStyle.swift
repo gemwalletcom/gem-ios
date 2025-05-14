@@ -31,7 +31,7 @@ public struct CheckboxStyle: ToggleStyle {
     }
 
     public func makeBody(configuration: Self.Configuration) -> some View {
-        HStack(spacing: .medium) {
+        HStack(spacing: .space12) {
             if position == .left {
                 checkboxView(configuration: configuration)
             }
