@@ -1239,6 +1239,7 @@
 				ro,
 				fil,
 				bn,
+				sw,
 			);
 			mainGroup = C30952A7299C39D70004C0F9;
 			packageReferences = (
