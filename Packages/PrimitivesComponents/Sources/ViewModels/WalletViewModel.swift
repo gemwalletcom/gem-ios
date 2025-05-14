@@ -43,6 +43,10 @@ public struct WalletViewModel: Sendable {
         }
     }
     
+    public var hasAvatar: Bool {
+        imageUrl() != nil
+    }
+    
     public var avatarImage: AssetImage {
         AssetImage(
             type: wallet.name,

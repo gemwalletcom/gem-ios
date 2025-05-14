@@ -62,6 +62,8 @@ public final class LocalKeystorePassword: KeystorePassword {
             }
         case false:
             try changeAuthentication(authentication: .none, context: context)
+            try setPrivacyLockStatus(.disabled)
+            try setAuthenticationLockPeriod(period: .default)
         }
     }
     

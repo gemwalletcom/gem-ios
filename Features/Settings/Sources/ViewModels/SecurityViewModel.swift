@@ -68,6 +68,8 @@ extension SecurityViewModel {
         guard isEnabled != service.isAuthenticationEnabled else { return }
         do {
             try await service.enableAuthentication(isEnabled, reason: SecurityViewModel.reason)
+            isPrivacyLockEnabled = service.isPrivacyLockEnabled
+            lockPeriod = service.lockPeriod 
         } catch let error as BiometryAuthenticationError {
             if !error.isAuthenticationCancelled {
                 isPresentingError = error.localizedDescription
