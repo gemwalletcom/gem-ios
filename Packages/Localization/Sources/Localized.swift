@@ -566,8 +566,8 @@ public enum Localized {
   }
   public enum Onboarding {
     public enum AcceptTerms {
-      /// I Understand, Continue
-      public static let `continue` = Localized.tr("Localizable", "onboarding.accept_terms.continue", fallback: "I Understand, Continue")
+      /// Agree and Continue
+      public static let `continue` = Localized.tr("Localizable", "onboarding.accept_terms.continue", fallback: "Agree and Continue")
       /// Please read and agree to the following terms before you continue.
       public static let message = Localized.tr("Localizable", "onboarding.accept_terms.message", fallback: "Please read and agree to the following terms before you continue.")
       /// Accept Terms
