@@ -11,6 +11,6 @@ struct TextMessageViewModel {
     }
     
     var text: String {
-        (try? message.encodedData().prettyJSON) ?? ""
+        message
     }
 }
