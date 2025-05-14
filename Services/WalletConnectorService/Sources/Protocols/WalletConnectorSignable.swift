@@ -3,6 +3,7 @@
 import Foundation
 import Primitives
 import WalletConnectSign
+import struct Gemstone.SignMessage
 
 public protocol WalletConnectorSignable: Sendable {
     var allChains: [Primitives.Chain] { get }

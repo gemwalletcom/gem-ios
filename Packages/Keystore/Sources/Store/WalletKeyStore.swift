@@ -163,23 +163,15 @@ public struct WalletKeyStore: Sendable {
         return MnemonicFormatter.toArray(string: hdwallet.mnemonic)
     }
     
-    public func sign(message: SignMessage, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
+    public func sign(hash: Data, walletId: String, type: Primitives.WalletType, password: String, chain: Chain) throws -> Data {
         let key = try getPrivateKey(id: walletId, type: type, chain: chain, password: password)
         guard
             let privateKey = PrivateKey(data: key),
-            var signature = privateKey.sign(digest: message.hash, curve: chain.coinType.curve)
+            let signature = privateKey.sign(digest: hash, curve: chain.coinType.curve)
         else {
             throw AnyError("no data signed")
         }
-        switch message.type {
-        case .sign,
-            .eip191,
-            .eip712:
-            signature[64] += 27
-            return signature
-        case .base58:
-            return signature
-        }
+        return signature
     }
     
     func destroy() throws {
