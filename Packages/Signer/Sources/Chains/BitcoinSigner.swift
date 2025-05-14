@@ -19,28 +19,62 @@ public struct BitcoinSigner: Signable {
         fatalError()
     }
 
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard case .swap(_, _, let quote, let data) = input.type else {
-            throw AnyError("invalid type")
+    public func signSwap(input: inout SignerInput, privateKey: Data) throws -> [String] {
+        let providers = Set([SwapProvider.thorchain, .chainflip].map { $0.rawValue })
+        guard
+            case .swap(_, _, let quote, let data) = input.type,
+            providers.contains(quote.data.provider.protocolId)
+        else {
+            throw AnyError("Invalid signing input type or not supported provider id")
         }
-        let outputOpReturnIndex: UInt32? = switch quote.data.provider.id {
+
+        let opReturnIndex: UInt32? = switch quote.data.provider.id {
         case .thorchain: .none
         case .chainflip: 1
         default: .none
         }
 
+        let opReturnData: Data = switch quote.data.provider.id {
+        case .thorchain:
+            try data.data.encodedData()
+        case .chainflip: try {
+                guard let data = Data(hexString: data.data) else {
+                    throw AnyError("Invalid Chainflip swap data")
+                }
+                return data
+            }()
+        default: fatalError()
+        }
+
+        let extraOutputs: [BitcoinOutputAddress] = if input.useMaxAmount && quote.data.provider.id == .chainflip {
+            [
+                BitcoinOutputAddress.with {
+                    $0.toAddress = input.senderAddress
+                    $0.amount = 1
+                }
+            ]
+        } else {
+            []
+        }
+
         return try [
-            sign(input: input, privateKey: privateKey, outputOpReturn: data.data, outputOpReturnIndex: outputOpReturnIndex)
+            sign(input: input, privateKey: privateKey) { signingInput in
+                if let opReturnIndex = opReturnIndex {
+                    signingInput.outputOpReturnIndex.index = opReturnIndex
+                }
+                signingInput.outputOpReturn = opReturnData
+                signingInput.extraOutputs = extraOutputs
+            }
         ]
     }
 
-    func sign(input: SignerInput, privateKey: Data, outputOpReturn: String? = .none, outputOpReturnIndex: UInt32? = .none) throws -> String {
+    func sign(input: SignerInput, privateKey: Data, signingOverride: ((inout BitcoinSigningInput) -> Void)? = nil) throws -> String {
         let coinType = input.coinType
         let utxos = input.utxos.map {
             $0.mapToUnspendTransaction(address: input.senderAddress, coinType: coinType)
         }
 
-        let signingInput = try BitcoinSigningInput.with {
+        var signingInput = BitcoinSigningInput.with {
             $0.coinType = coinType.rawValue
             $0.hashType = BitcoinScript.hashTypeForCoin(coinType: coinType)
             $0.amount = input.value.asInt64
@@ -51,17 +85,8 @@ public struct BitcoinSigner: Signable {
             $0.privateKey = [privateKey]
             $0.scripts = utxos.mapToScripts(address: input.senderAddress, coinType: coinType)
             $0.useMaxAmount = input.useMaxAmount
-            if let outputOpReturn {
-                if outputOpReturn.starts(with: "0x"), let opReturnData = Data(hexString: outputOpReturn) {
-                    $0.outputOpReturn = opReturnData
-                } else {
-                    $0.outputOpReturn = try outputOpReturn.encodedData()
-                }
-            }
-            if let outputOpReturnIndex {
-                $0.outputOpReturnIndex.index = outputOpReturnIndex
-            }
         }
+        signingOverride?(&signingInput)
         let output: BitcoinSigningOutput = AnySigner.sign(input: signingInput, coin: coinType)
 
         if output.error != .ok {
