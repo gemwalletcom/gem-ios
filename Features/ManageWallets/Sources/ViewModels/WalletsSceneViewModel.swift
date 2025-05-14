@@ -22,14 +22,6 @@ public class WalletsSceneViewModel {
     var title: String {
         Localized.Wallets.title
     }
-    
-    var shouldShowFastCreateButton: Bool {
-        #if targetEnvironment(simulator)
-            return true
-        #else
-            return false
-        #endif
-    }
 }
 
 // MARK: - Business Logic
@@ -57,15 +49,5 @@ extension WalletsSceneViewModel {
 
     func swapOrder(from: WalletId, to: WalletId) throws {
         try service.swapOrder(from: from, to: to)
-    }
-    
-    func createWallet() {
-        do {
-            let name = Localized.Wallet.defaultName((try? service.nextWalletIndex()) ?? .zero)
-            let words = service.createWallet()
-            try service.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
-        } catch {
-            print(error)
-        }
     }
 }
