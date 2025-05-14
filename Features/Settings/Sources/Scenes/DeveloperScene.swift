@@ -43,6 +43,10 @@ public struct DeveloperScene: View {
                     action: model.clearTransactionsTimestamp
                 )
                 NavigationCustomLink(
+                    with: ListItemView(title: "Clear Wallet Preferences"),
+                    action: model.clearWalletPreferences
+                )
+                NavigationCustomLink(
                     with: ListItemView(title: "Clear Assets"),
                     action: model.clearAssets
                 )
