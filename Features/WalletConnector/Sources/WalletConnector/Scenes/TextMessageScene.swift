@@ -19,12 +19,14 @@ struct TextMessageScene: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
         }
-        .dismissToolbarItem(title: .cancel, placement: .topBarLeading)
-        .toolbarItemView(placement: .topBarTrailing) {
-            Button {
-                isPresentingShareSheet.toggle()
-            } label: {
-                Images.System.share
+        .toolbarContent {
+            ToolbarDismissItem(title: .cancel, placement: .topBarLeading)
+            ToolbarItemView(placement: .topBarTrailing) {
+                Button {
+                    isPresentingShareSheet.toggle()
+                } label: {
+                    Images.System.share
+                }
             }
         }
         .background(Colors.grayBackground)

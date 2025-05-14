@@ -3,7 +3,7 @@
 import SwiftUI
 import Localization
 
-public struct DismissToolbarItem: ToolbarContent {
+public struct ToolbarDismissItem: ToolbarContent {
     @Environment(\.dismiss) private var dismiss
 
     public enum Title {

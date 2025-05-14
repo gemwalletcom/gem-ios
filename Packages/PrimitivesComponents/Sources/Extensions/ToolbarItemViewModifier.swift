@@ -30,3 +30,9 @@ public extension View {
         modifier(ToolbarItemViewModifier(placement: placement, content: content))
     }
 }
+
+public extension View {
+    func toolbarContent(@ToolbarContentBuilder _ content: @escaping () -> some ToolbarContent) -> some View {
+        toolbar(content: content)
+    }
+}

@@ -2,12 +2,12 @@
 
 import SwiftUI
 
-struct DismissToolbarItemModifier: ViewModifier {
-    let title: DismissToolbarItem.Title
+struct ToolbarDismissItemModifier: ViewModifier {
+    let title: ToolbarDismissItem.Title
     let placement: ToolbarItemPlacement
     
     public init(
-        title: DismissToolbarItem.Title,
+        title: ToolbarDismissItem.Title,
         placement: ToolbarItemPlacement
     ) {
         self.title = title
@@ -17,7 +17,7 @@ struct DismissToolbarItemModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .toolbar {
-                DismissToolbarItem(
+                ToolbarDismissItem(
                     title: title,
                     placement: placement
                 )
@@ -26,10 +26,10 @@ struct DismissToolbarItemModifier: ViewModifier {
 }
 
 public extension View {
-    func dismissToolbarItem(
-        title: DismissToolbarItem.Title,
+    func toolbarDismissItem(
+        title: ToolbarDismissItem.Title,
         placement: ToolbarItemPlacement
     ) -> some View {
-        modifier(DismissToolbarItemModifier(title: title, placement: placement))
+        modifier(ToolbarDismissItemModifier(title: title, placement: placement))
     }
 }
