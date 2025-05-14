@@ -6,8 +6,6 @@ import Primitives
 import WalletService
 
 public struct CreateWalletNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     
@@ -23,26 +21,37 @@ public struct CreateWalletNavigationStack: View {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            AcceptTermsScene(
-                model: AcceptTermsViewModel(onNext: {
-                    navigationPath.append(Scenes.SecurityReminder())
-                })
-            )
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
-                    }
+            Group {
+                switch walletService.isAcceptedTerms {
+                case true:
+                    SecurityReminderScene(
+                        model: SecurityReminderViewModelDefault(
+                            title: Localized.Wallet.New.title,
+                            onNext: {
+                                navigationPath.append(Scenes.CreateWallet())
+                            }
+                        )
+                    )
+                case false:
+                    AcceptTermsScene(
+                        model: AcceptTermsViewModel(onNext: {
+                            navigationPath.append(Scenes.SecurityReminder())
+                        })
+                    )
                 }
             }
+            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: Scenes.VerifyPhrase.self) {
                 VerifyPhraseWalletScene(
                     model: VerifyPhraseViewModel(
                         words: $0.words,
-                        walletService: walletService
-                    ),
-                    isPresentingWallets: $isPresentingWallets
+                        walletService: walletService,
+                        onFinish: {
+                            walletService.acceptTerms()
+                            isPresentingWallets.toggle()
+                        }
+                    )
                 )
             }
             .navigationDestination(for: Scenes.CreateWallet.self) { _ in

@@ -5,8 +5,6 @@ import Primitives
 import Localization
 
 public struct ImportWalletNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     private let model: ImportWalletTypeViewModel
@@ -21,18 +19,19 @@ public struct ImportWalletNavigationStack: View {
 
     public var body: some View {
         NavigationStack(path: $navigationPath) {
-            AcceptTermsScene(model: AcceptTermsViewModel(
-                onNext: {
-                    navigationPath.append(Scenes.ImportWalletType())
-                }
-            ))
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
-                    }
+            Group {
+                switch model.walletService.isAcceptedTerms {
+                case true:
+                    ImportWalletTypeScene(model: model)
+                case false:
+                    AcceptTermsScene(model: AcceptTermsViewModel(
+                        onNext: {
+                            navigationPath.append(Scenes.ImportWalletType())
+                        }
+                    ))
                 }
             }
+            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ImportWalletType.self) { type in
                 ImportWalletScene(
@@ -40,6 +39,7 @@ public struct ImportWalletNavigationStack: View {
                         type: type,
                         walletService: model.walletService,
                         onFinishImport: {
+                            model.walletService.acceptTerms()
                             isPresentingWallets.toggle()
                         }
                     )
