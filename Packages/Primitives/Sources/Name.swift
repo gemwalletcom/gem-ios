@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct NameRecord: Codable, Sendable {
+public struct NameRecord: Codable, Sendable, Hashable {
 	public let name: String
 	public let chain: Chain
 	public let address: String
