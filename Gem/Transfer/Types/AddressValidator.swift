@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Components
 import Primitives
 import Keystore
 import PrimitivesComponents
