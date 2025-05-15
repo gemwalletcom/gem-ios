@@ -244,7 +244,7 @@
 "transaction.title.received" = "受け取った";
 "transaction.title.sent" = "送信済み";
 "stake.stake" = "ステーク";
-"banner.account_activation.title" = "%@ アカウントの有効化手数料";
+"banner.account_activation.title" = "アカウントの有効化手数料";
 "banner.account_activation.description" = "%@ネットワークは、一回限りの料金が%@必要です。";
 "banner.stake.title" = "%@ のステーキングを開始";
 "banner.stake.description" = "寝ている間にステークで%@の報酬を獲得できます。";
@@ -395,6 +395,12 @@
 "transfer.minimum_account_balance" = "残高をすべて使用しない限り、この後も最低%@残高が残っている必要があります。";
 "swap.price_impact_warning.description" = "この取引で%@のうち%@を失います。続行してもよろしいですか?";
 "swap.price_impact_warning.title" = "高い価格影響";
-"wallet_connect.domain" = "Domain";
-"sign_message.view_full_message" = "View Full Message";
-"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
+"wallet_connect.domain" = "ドメイン";
+"sign_message.view_full_message" = "メッセージ全文を表示";
+"info.slippage.description" = "スリッページとは、取引の予想価格と実際に約定した価格の差を指します。";
+"onboarding.accept_terms.title" = "利用規約に同意する";
+"onboarding.accept_terms.message" = "続行する前に、以下の利用規約をお読みいただき同意してください。";
+"onboarding.accept_terms.item1.message" = "ウォレットのセキュリティとバックアップは自己責任であり、Gemは一切関与しないことを理解しています。";
+"onboarding.accept_terms.item2.message" = "Gemは銀行や取引所ではなく、違法目的での使用は禁止されていることを理解しています。";
+"onboarding.accept_terms.item3.message" = "ウォレットへのアクセスを失った場合、Gemは責任を負わず、支援もできないことを理解しています。";
+"onboarding.accept_terms.continue" = "理解しました。続行します。";

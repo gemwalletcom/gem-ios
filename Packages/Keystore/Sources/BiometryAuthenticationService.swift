@@ -32,9 +32,9 @@ public struct BiometryAuthenticationService: BiometryAuthenticatable {
 
     public var lockPeriod: LockPeriod {
         do {
-            return try keystorePassword.getAuthenticationLockPeriod() ?? .oneMinute
+            return try keystorePassword.getAuthenticationLockPeriod() ?? .default
         } catch {
-            return .oneMinute
+            return .default
         }
     }
 

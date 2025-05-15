@@ -244,7 +244,7 @@
 "transaction.title.received" = "已收到";
 "transaction.title.sent" = "已發送";
 "stake.stake" = "質押";
-"banner.account_activation.title" = "%@ 帳戶啟動費用";
+"banner.account_activation.title" = "帳戶啟動費用";
 "banner.account_activation.description" = "%@ 網路需要一次性費用 %@ 。";
 "banner.stake.title" = "開始質押 %@";
 "banner.stake.description" = "質押 %@ 賺取獎勵，躺著也賺";
@@ -376,7 +376,7 @@
 "wallet_connect.state.empty.description" = "掃描或複製連結以連接到DApp";
 "assets.state.empty.search_description" = "请嘗試手動新增";
 "activity.state.empty.search_description" = "清空篩選條件後將重新載入交易";
-"search.state.empty.description" = "Check the spelling or try a new search.";
+"search.state.empty.description" = "請檢查拼字或嘗試新的搜尋。";
 "assets.state.empty.search_title" = "未找到任何資產";
 "networks.state.empty.search_title" = "未找到任何網路";
 "activity.state.empty.search_title" = "未找到任何交易";
@@ -395,6 +395,12 @@
 "transfer.minimum_account_balance" = "此後必須保留最低%@餘額，除非您使用全部餘額。";
 "swap.price_impact_warning.description" = "您將在本次交易中損失%@ %@總金額。您確定要繼續嗎？";
 "swap.price_impact_warning.title" = "滑點巨大";
-"wallet_connect.domain" = "Domain";
-"sign_message.view_full_message" = "View Full Message";
-"info.slippage.description" = "Slippage refers to the difference between the expected price of a trade and the actual price at which it is executed.";
+"wallet_connect.domain" = "網域";
+"sign_message.view_full_message" = "查看完整訊息";
+"info.slippage.description" = "滑點是指交易預期價格與實際成交價格之間的差異。";
+"onboarding.accept_terms.title" = "接受條款";
+"onboarding.accept_terms.message" = "請閱讀並同意以下條款後繼續。";
+"onboarding.accept_terms.item1.message" = "我了解錢包的安全與備份完全由我自行負責，Gem 不承擔任何責任。";
+"onboarding.accept_terms.item2.message" = "我了解 Gem 不是銀行或交易所，嚴禁用於任何非法用途。";
+"onboarding.accept_terms.item3.message" = "我了解若遺失錢包存取權限，Gem 不負任何責任且無法提供協助。";
+"onboarding.accept_terms.continue" = "我了解，繼續";

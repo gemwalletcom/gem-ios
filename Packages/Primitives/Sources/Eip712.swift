@@ -6,11 +6,11 @@ import Foundation
 
 public struct EIP712Domain: Codable, Equatable, Sendable {
 	public let name: String
-	public let version: String
+	public let version: String?
 	public let chainId: UInt32
 	public let verifyingContract: String
 
-	public init(name: String, version: String, chainId: UInt32, verifyingContract: String) {
+	public init(name: String, version: String?, chainId: UInt32, verifyingContract: String) {
 		self.name = name
 		self.version = version
 		self.chainId = chainId
