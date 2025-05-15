@@ -3,7 +3,7 @@
 import Foundation
 import Style
 
-final class AcceptTermViewModel: Identifiable {
+final class TermItemViewModel: Identifiable {
     var id: String { message }
     let message: String
     var style: TextStyle {

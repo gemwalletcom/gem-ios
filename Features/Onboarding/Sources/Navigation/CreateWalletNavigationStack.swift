@@ -24,14 +24,7 @@ public struct CreateWalletNavigationStack: View {
             Group {
                 switch walletService.isAcceptedTerms {
                 case true:
-                    SecurityReminderScene(
-                        model: SecurityReminderViewModelDefault(
-                            title: Localized.Wallet.New.title,
-                            onNext: {
-                                navigationPath.append(Scenes.CreateWallet())
-                            }
-                        )
-                    )
+                    securityReminderScene
                 case false:
                     AcceptTermsScene(
                         model: AcceptTermsViewModel(onNext: {
@@ -65,15 +58,19 @@ public struct CreateWalletNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.SecurityReminder.self) { _ in
-                SecurityReminderScene(
-                    model: SecurityReminderViewModelDefault(
-                        title: Localized.Wallet.New.title,
-                        onNext: {
-                            navigationPath.append(Scenes.CreateWallet())
-                        }
-                    )
-                )
+                securityReminderScene
             }
         }
+    }
+    
+    private var securityReminderScene: some View {
+        SecurityReminderScene(
+            model: SecurityReminderViewModelDefault(
+                title: Localized.Wallet.New.title,
+                onNext: {
+                    navigationPath.append(Scenes.CreateWallet())
+                }
+            )
+        )
     }
 }

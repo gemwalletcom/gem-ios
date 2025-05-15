@@ -25,7 +25,7 @@ public struct WalletDetailScene: View {
 
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingDeleteConfirmation: Bool?
-    @State private var isPresentingExport: ExportWalletFlow?
+    @State private var isPresentingExportWallet: ExportWalletFlow?
     @FocusState private var focusedField: Field?
     
     @Query<WalletRequest>
@@ -133,7 +133,7 @@ public struct WalletDetailScene: View {
                 Text(isPresentingErrorMessage ?? "")
             }
         )
-        .sheet(item: $isPresentingExport) {
+        .sheet(item: $isPresentingExportWallet) {
             ExportWalletNavigationStack(flow: $0)
         }
     }
@@ -154,7 +154,7 @@ extension WalletDetailScene {
         Task {
             do {
                 let words = try model.getMnemonicWords()
-                isPresentingExport = .words(words)
+                isPresentingExportWallet = .words(words)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }
@@ -166,7 +166,7 @@ extension WalletDetailScene {
             do {
                 //In the future it should allow to export PK for multichain wallet and specify the chain
                 let key = try model.getPrivateKey()
-                isPresentingExport = .privateKey(key)
+                isPresentingExportWallet = .privateKey(key)
             } catch {
                 isPresentingErrorMessage = error.localizedDescription
             }

@@ -21,7 +21,7 @@ final class AcceptTermsViewModel {
     let title: String = Localized.Onboarding.AcceptTerms.title
     let message: String = Localized.Onboarding.AcceptTerms.message
 
-    var items: [AcceptTermViewModel] = [
+    var items: [TermItemViewModel] = [
         .init(message: Localized.Onboarding.AcceptTerms.Item1.message),
         .init(message: Localized.Onboarding.AcceptTerms.Item2.message),
         .init(message: Localized.Onboarding.AcceptTerms.Item3.message)

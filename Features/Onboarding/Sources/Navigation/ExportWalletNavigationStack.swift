@@ -10,7 +10,6 @@ enum ExportWalletDestination: Hashable {
 }
 
 public struct ExportWalletNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
     
     private let flow: ExportWalletFlow
     @State private var navigationPath: NavigationPath = NavigationPath()
@@ -34,13 +33,7 @@ public struct ExportWalletNavigationStack: View {
                     ShowSecretDataScene(model: ShowPrivateKeyViewModel(text: key))
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.cancel) {
-                        dismiss()
-                    }
-                }
-            }
+            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: ExportWalletDestination.self) {
                 switch $0 {

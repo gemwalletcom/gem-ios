@@ -39,7 +39,7 @@ public struct ImportWalletNavigationStack: View {
                         type: type,
                         walletService: model.walletService,
                         onFinishImport: {
-                            model.walletService.acceptTerms()
+                            model.acceptTerms()
                             isPresentingWallets.toggle()
                         }
                     )
