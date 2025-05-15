@@ -7,9 +7,9 @@ import Style
 public struct InputValidationField<TrailingView: View>: View {
     @Binding private var model: InputValidationViewModel
 
-    var style: FloatFieldStyle
-    var placeholder: String
-    var allowClean: Bool
+    let style: FloatFieldStyle
+    let placeholder: String
+    let allowClean: Bool
 
     private let trailingView: TrailingView
 

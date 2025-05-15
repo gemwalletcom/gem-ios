@@ -147,7 +147,7 @@ struct InputValidationViewModelTests {
         _ = viewModel.validate()
 
         // inject a failing rule
-        viewModel.updateValidators([StubValidator(shouldPass: false)])
+        viewModel.update(validators: [StubValidator(shouldPass: false)])
 
         #expect(viewModel.error is DummyError)
         #expect(!viewModel.isValid)
@@ -157,10 +157,10 @@ struct InputValidationViewModelTests {
     func updateCustomErrorOverridesAndClears() {
         let viewModel = InputValidationViewModel(validators: [])
 
-        viewModel.update(customError: DummyError.boom)
+        viewModel.update(error: DummyError.boom)
         #expect(viewModel.error is DummyError)
 
-        viewModel.update(customError: nil)
+        viewModel.update(error: nil)
         #expect(viewModel.error == nil)
     }
 }

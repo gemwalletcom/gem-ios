@@ -3,7 +3,6 @@
 import SwiftUI
 import Style
 import Components
-import Primitives
 import PrimitivesComponents
 import NameResolver
 

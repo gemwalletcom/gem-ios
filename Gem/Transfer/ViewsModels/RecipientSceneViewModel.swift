@@ -16,17 +16,6 @@ import SwiftUI
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
 
-private enum RecipientAddressType: CaseIterable {
-    case pinned
-    case wallets
-    case view
-}
-
-private enum RecipientScanResult {
-    case recipient(address: String, memo: String?, amount: String?)
-    case transferData(TransferData)
-}
-
 @Observable
 @MainActor
 final class RecipientSceneViewModel {
@@ -129,10 +118,7 @@ extension RecipientSceneViewModel {
 
     func onSelectPaste(field: RecipientScene.Field) {
         guard let string = UIPasteboard.general.string else { return }
-        switch field {
-        case .address, .memo:
-            addressInputModel.update(text: string.trim())
-        }
+        addressInputModel.update(text: string.trim())
     }
 
     func onSelectScan(field: RecipientScene.Field) {
@@ -151,7 +137,7 @@ extension RecipientSceneViewModel {
     func onChangeNameResolverState(_: NameRecordState, newState: NameRecordState) {
         // Remove address if any error, on success resolve
         if newState.result != nil {
-            addressInputModel.update(customError: nil)
+            addressInputModel.update(error: nil)
         }
     }
 
@@ -286,7 +272,7 @@ extension RecipientSceneViewModel {
                 if let amount = amount { self.amount = amount }
             }
         } catch {
-            addressInputModel.update(customError: error)
+            addressInputModel.update(error: error)
         }
     }
 

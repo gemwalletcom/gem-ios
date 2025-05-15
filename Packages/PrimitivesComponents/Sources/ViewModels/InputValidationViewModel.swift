@@ -21,7 +21,7 @@ public final class InputValidationViewModel {
 
     public private(set) var error: (any LocalizedError)?
 
-    private var mode: InputValidationMode
+    private let mode: InputValidationMode
     private var validators: [any TextValidator]
 
     public init(
@@ -32,7 +32,7 @@ public final class InputValidationViewModel {
         self.validators = validators
     }
 
-    public var isValid: Bool { error == nil && !text.isEmpty }
+    public var isValid: Bool { error == nil && text.isNotEmpty }
 }
 
 // MARK: - Public
@@ -45,7 +45,7 @@ extension InputValidationViewModel {
         return error == nil
     }
 
-    public func updateValidators(_ validators: [any TextValidator]) {
+    public func update(validators: [any TextValidator]) {
         self.validators = validators
         validate()
     }
@@ -56,9 +56,9 @@ extension InputValidationViewModel {
         return validate()
     }
 
-    public func update(customError: (any Error)?) {
-        if let customError {
-            if let error = customError as? LocalizedError {
+    public func update(error: (any Error)?) {
+        if let error {
+            if let error = error as? LocalizedError {
                 self.error = error
             } else {
                 self.error = UnknownValidationError()
@@ -76,7 +76,7 @@ extension InputValidationViewModel {
         _ text: String,
         with validators: [any TextValidator]
     ) -> (any LocalizedError)? {
-        guard !text.isEmpty else { return nil }
+        guard text.isNotEmpty else { return nil }
 
         do {
             try validators.forEach { try $0.validate(text) }
