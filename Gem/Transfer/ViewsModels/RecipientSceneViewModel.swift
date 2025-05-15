@@ -48,7 +48,7 @@ final class RecipientSceneViewModel {
     var nameResolveState: NameRecordState = .none
     var memo: String = ""
     var amount: String = ""
-    var addressInputModel: InputValidationFieldViewModel
+    var addressInputModel: InputValidationViewModel
 
     init(
         wallet: Wallet,
@@ -73,7 +73,7 @@ final class RecipientSceneViewModel {
         self.onRecipientDataAction = onRecipientDataAction
         self.onTransferAction = onTransferAction
 
-        self.addressInputModel = InputValidationFieldViewModel(
+        self.addressInputModel = InputValidationViewModel(
             mode: .manual,
             validators: [AddressValidator(asset: asset)]
         )

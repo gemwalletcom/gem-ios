@@ -8,7 +8,7 @@ public enum InputValidationMode {
 
 @MainActor
 @Observable
-public final class InputValidationFieldViewModel {
+public final class InputValidationViewModel {
     public var text: String = "" {
         didSet {
             if text.isEmpty {
@@ -37,7 +37,7 @@ public final class InputValidationFieldViewModel {
 
 // MARK: - Public
 
-extension InputValidationFieldViewModel {
+extension InputValidationViewModel {
 
     @discardableResult
     public func validate() -> Bool {
@@ -71,7 +71,7 @@ extension InputValidationFieldViewModel {
 
 // MARK: - Private
 
-extension InputValidationFieldViewModel {
+extension InputValidationViewModel {
     private static func validate(
         _ text: String,
         with validators: [any TextValidator]

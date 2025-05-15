@@ -45,10 +45,10 @@ private struct LengthLimitValidator: TextValidator {
 }
 
 @MainActor
-struct InputValidationFieldViewModelTests {
+struct InputValidationViewModelTests {
     @Test
     func combinedValidatorsAllPass() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             validators: [
                 NonEmptyValidator(),
                 LengthLimitValidator(max: 10),
@@ -62,7 +62,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func combinedValidatorsFailWhenOneRuleFails() {
-        let vm = InputValidationFieldViewModel(
+        let vm = InputValidationViewModel(
             validators: [
                 NonEmptyValidator(),
                 LengthLimitValidator(max: 3),   // will fail
@@ -77,7 +77,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func combinedValidatorsFailWhenStubFails() {
-        let vm = InputValidationFieldViewModel(
+        let vm = InputValidationViewModel(
             validators: [
                 NonEmptyValidator(),
                 LengthLimitValidator(max: 10),
@@ -91,7 +91,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func manualValidationPassesWhenAllRulesPass() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             mode: .manual,
             validators: [StubValidator(shouldPass: true)]
         )
@@ -105,7 +105,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func manualValidationFailsWhenAnyRuleFails() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             mode: .manual,
             validators: [StubValidator(shouldPass: false)]
         )
@@ -118,7 +118,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func liveValidationRunsAutomatically() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             mode: .live,
             validators: [StubValidator(shouldPass: false)]
         )
@@ -130,7 +130,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func updateTextValidatesAndReturnsBool() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             validators: [StubValidator(shouldPass: true)]
         )
 
@@ -140,7 +140,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func updateValidatorsRevalidatesImmediately() {
-        let viewModel = InputValidationFieldViewModel(
+        let viewModel = InputValidationViewModel(
             validators: [StubValidator(shouldPass: true)]
         )
         viewModel.text = "abc"
@@ -155,7 +155,7 @@ struct InputValidationFieldViewModelTests {
 
     @Test
     func updateCustomErrorOverridesAndClears() {
-        let viewModel = InputValidationFieldViewModel(validators: [])
+        let viewModel = InputValidationViewModel(validators: [])
 
         viewModel.update(customError: DummyError.boom)
         #expect(viewModel.error is DummyError)

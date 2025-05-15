@@ -5,7 +5,7 @@ import Components
 import Style
 
 public struct InputValidationField<TrailingView: View>: View {
-    @Binding private var model: InputValidationFieldViewModel
+    @Binding private var model: InputValidationViewModel
 
     var style: FloatFieldStyle
     var placeholder: String
@@ -14,7 +14,7 @@ public struct InputValidationField<TrailingView: View>: View {
     private let trailingView: TrailingView
 
     public init(
-        model: Binding<InputValidationFieldViewModel>,
+        model: Binding<InputValidationViewModel>,
         style: FloatFieldStyle = .standard,
         placeholder: String,
         allowClean: Bool = true,
