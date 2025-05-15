@@ -149,7 +149,7 @@ extension RecipientSceneViewModel {
     }
 
     func onChangeNameResolverState(_: NameRecordState, newState: NameRecordState) {
-        // Remove address error if any, once the resolver succeeded
+        // Remove address if any error, on success resolve
         if newState.result != nil {
             addressInputModel.update(customError: nil)
         }

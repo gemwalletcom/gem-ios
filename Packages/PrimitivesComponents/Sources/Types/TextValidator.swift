@@ -2,7 +2,7 @@
 
 import Foundation
 
-public protocol TextValidator {
+public protocol TextValidator: Sendable, Identifiable {
     func validate(_ text: String) throws
 }
 
