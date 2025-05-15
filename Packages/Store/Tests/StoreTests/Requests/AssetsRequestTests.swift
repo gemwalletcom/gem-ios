@@ -70,7 +70,7 @@ struct AssetsRequestTests {
         let assetStore = AssetStore(db: db)
         try prepareDatabase(db)
         
-        let assetId = AssetId(chain: .bitcoin, tokenId: "1")
+        let assetId = AssetId(chain: .bitcoin)
         try assetStore.setAssetIsBuyable(for: [assetId.identifier], value: false)
         try assetStore.setAssetIsStakeable(for: [assetId.identifier], value: false)
         try assetStore.setAssetIsSwappable(for: [assetId.identifier], value: false)
@@ -78,6 +78,7 @@ struct AssetsRequestTests {
         try db.dbQueue.read { db in
             let assets = try AssetsRequest.mock(filters: [.buyable, .stakeable, .swappable]).fetch(db)
             
+            #expect(assets.count == 4)
             #expect(assets.map { $0.asset.id }.contains(assetId) == false)
         }
     }
