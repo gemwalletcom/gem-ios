@@ -27,15 +27,16 @@ public struct SetPriceAlertScene: View {
         VStack(spacing: .zero) {
             List {
                 Section {
-                    Text(model.alertDirectionTitle)
-                        .textStyle(.subheadline)
-                        .padding(.bottom, Spacing.tiny)
-                    
-                    CurrencyInputView(
-                        text: $model.state.amount,
-                        config: model.currencyInputConfig(for: assetData)
-                    )
-                    .focused($focusedField)
+                    VStack(spacing: .small) {
+                        Text(model.alertDirectionTitle)
+                            .textStyle(.subheadline)
+                        
+                        CurrencyInputView(
+                            text: $model.state.amount,
+                            config: model.currencyInputConfig(for: assetData)
+                        )
+                        .focused($focusedField)
+                    }
                     
                     if model.showPercentagePreselectedPicker {
                         preselectedPercentagePickerView

@@ -97,6 +97,10 @@ final class ConfirmTransferViewModel {
     var senderAddress: String {
         (try? wallet.account(for: dataModel.chain).address) ?? ""
     }
+    var senderAssetImage: AssetImage? {
+        let viewModel = WalletViewModel(wallet: wallet)
+        return viewModel.hasAvatar ? viewModel.avatarImage : .none
+    }
 
     var senderAddressExplorerUrl: URL { senderLink.url }
     var senderExplorerText: String { Localized.Transaction.viewOn(senderLink.name) }

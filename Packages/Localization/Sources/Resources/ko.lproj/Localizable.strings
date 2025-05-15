@@ -403,4 +403,4 @@
 "onboarding.accept_terms.item1.message" = "I understand that I am solely responsible for the security and backup of my wallets, not Gem.";
 "onboarding.accept_terms.item2.message" = "I understand that Gem is not a bank or exchange, and using it for illegal purposes is strictly prohibited.";
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
-"onboarding.accept_terms.continue" = "I Understand, Continue";
+"onboarding.accept_terms.continue" = "Agree and Continue";
