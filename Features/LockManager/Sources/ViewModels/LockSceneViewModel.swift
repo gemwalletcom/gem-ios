@@ -86,10 +86,7 @@ extension LockSceneViewModel {
         state = .unlocking
         do {
             try await service.authenticate(reason: Self.reason)
-            state = .unlocked
-            lastUnlockTime = .distantFuture
-            // even if app still in inactive state, we immediately show content after success authentication
-            showPlaceholderPreview = false
+            resetLockState()
         } catch let error as BiometryAuthenticationError {
             state = error.isAuthenticationCancelled ? .lockedCanceled : .locked
         } catch {
@@ -100,6 +97,7 @@ extension LockSceneViewModel {
     func resetLockState() {
         inBackground = false
         showPlaceholderPreview = false
+        lastUnlockTime = .distantFuture
         state = .unlocked
     }
 }

@@ -23,11 +23,11 @@ let package = Package(
         .target(
             name: "Keystore",
             dependencies: [
-                "Primitives",
-                "WalletCorePrimitives",
-                .product(name: "WalletCore", package: "WalletCore"),
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 .product(name: "KeychainAccess", package: "KeychainAccess"),
+                .product(name: "WalletCore", package: "WalletCore"),
+                "WalletCorePrimitives",
+                "Primitives"
             ],
             path: "Sources"
         ),
@@ -41,9 +41,9 @@ let package = Package(
         .testTarget(
             name: "KeystoreTests",
             dependencies: [
-                "Keystore",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "KeystoreTestKit",
-                .product(name: "PrimitivesTestKit", package: "Primitives")
+                "Keystore"
             ]),
     ]
 )
