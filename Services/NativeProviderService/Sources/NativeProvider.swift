@@ -54,6 +54,12 @@ extension NativeProvider: AlienProvider {
                         throw AlienError.ResponseError(msg: "Invalid HTTP status code: \(String(describing: statusCode))")
                     }
                     print("<== response body size:\(data.count)")
+                    #if DEBUG
+                    if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                        let pretty = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
+                        print("<== response json: \(pretty)")
+                    }
+                    #endif
 
                     // save cache
                     if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
