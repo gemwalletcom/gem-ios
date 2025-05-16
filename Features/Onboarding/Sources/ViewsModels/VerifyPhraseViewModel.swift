@@ -13,6 +13,7 @@ class VerifyPhraseViewModel: ObservableObject {
     private let words: [String]
     private let shuffledWords: [String]
     private let walletService: WalletService
+    private let onFinish: VoidAction
 
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
@@ -21,12 +22,14 @@ class VerifyPhraseViewModel: ObservableObject {
 
     init(
         words: [String],
-        walletService: WalletService
+        walletService: WalletService,
+        onFinish: VoidAction
     ) {
         self.words = words
         self.shuffledWords = words.shuffleInGroups(groupSize: 4)
         self.wordsVerified = Array(repeating: "", count: words.count)
         self.walletService = walletService
+        self.onFinish = onFinish
     }
     
     var title: String {
@@ -70,8 +73,9 @@ class VerifyPhraseViewModel: ObservableObject {
         selectedIndexes.contains(index)
     }
     
-    func importWallet() throws -> Primitives.Wallet  {
+    func importWallet() throws  {
         let name = WalletNameGenerator(type: .multicoin, walletService: walletService).name
-        return try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+        try walletService.importWallet(name: name, type: .phrase(words: words, chains: AssetConfiguration.allChains))
+        onFinish?()
     }
 }

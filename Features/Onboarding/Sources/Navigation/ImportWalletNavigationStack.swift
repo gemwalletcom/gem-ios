@@ -5,8 +5,7 @@ import Primitives
 import Localization
 
 public struct ImportWalletNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
-
+    @State private var navigationPath: NavigationPath = NavigationPath()
     @Binding private var isPresentingWallets: Bool
     private let model: ImportWalletTypeViewModel
 
@@ -19,27 +18,36 @@ public struct ImportWalletNavigationStack: View {
     }
 
     public var body: some View {
-        NavigationStack {
-            ImportWalletTypeScene(model: model)
-                .toolbar {
-                    ToolbarItem(placement: .navigationBarLeading) {
-                        Button(Localized.Common.cancel) {
-                            dismiss()
+        NavigationStack(path: $navigationPath) {
+            Group {
+                switch model.walletService.isAcceptTermsCompleted {
+                case true:
+                    ImportWalletTypeScene(model: model)
+                case false:
+                    AcceptTermsScene(model: AcceptTermsViewModel(
+                        onNext: {
+                            navigationPath.append(Scenes.ImportWalletType())
                         }
-                    }
+                    ))
                 }
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationDestination(for: ImportWalletType.self) { type in
-                    ImportWalletScene(
-                        model: ImportWalletViewModel(
-                            type: type,
-                            walletService: model.walletService,
-                            onFinishImport: {
-                                isPresentingWallets.toggle()
-                            }
-                        )
+            }
+            .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationDestination(for: ImportWalletType.self) { type in
+                ImportWalletScene(
+                    model: ImportWalletViewModel(
+                        type: type,
+                        walletService: model.walletService,
+                        onFinish: {
+                            model.acceptTerms()
+                            isPresentingWallets = false
+                        }
                     )
-                }
+                )
+            }
+            .navigationDestination(for: Scenes.ImportWalletType.self) { _ in
+                ImportWalletTypeScene(model: model)
+            }
         }
     }
 }

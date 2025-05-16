@@ -18,17 +18,17 @@ extension SecurityReminderItem {
         SecurityReminderItem(
             title: Localized.Onboarding.Security.CreateWallet.KeepSafe.title,
             subtitle: Localized.Onboarding.Security.CreateWallet.KeepSafe.subtitle,
-            image: .security(Images.System.pencilLine)
+            image: .security(Emoji.WalletAvatar.lock.rawValue)
         ),
         SecurityReminderItem(
             title: Localized.Onboarding.Security.CreateWallet.DoNotShare.title,
             subtitle: Localized.Onboarding.Security.CreateWallet.DoNotShare.subtitle,
-            image: .security(Images.System.exclamationmarkTriangle)
+            image: .security(Emoji.WalletAvatar.warning.rawValue)
         ),
         SecurityReminderItem(
             title: Localized.Onboarding.Security.CreateWallet.NoRecovery.title,
             subtitle: Localized.Onboarding.Security.CreateWallet.NoRecovery.subtitle,
-            image: .security(Images.Logo.icon)
+            image: .security(Emoji.WalletAvatar.gem.rawValue)
         )
     ]
 }
