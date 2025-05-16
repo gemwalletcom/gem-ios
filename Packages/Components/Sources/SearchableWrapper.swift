@@ -6,31 +6,30 @@ public struct SearchableWrapper<Content: View>: View {
     @Environment(\.isSearching) private var isSearching
     @Environment(\.dismissSearch) private var dismissSearch
     
+    @Binding private var isSearchingBinding: Bool
+    @Binding private var dismissSearchBinding: Bool
+    
     private let content: () -> Content
-    private let onChangeIsSearching: (Bool) -> Void
-    private let onDismissSearch: (@escaping () -> Void) -> Void
     
     public init(
         @ViewBuilder content: @escaping () -> Content,
-        onChangeIsSearching: @escaping (Bool) -> Void,
-        onDismissSearch: @escaping (@escaping () -> Void) -> Void
+        isSearching: Binding<Bool>,
+        dismissSearch: Binding<Bool>
     ) {
         self.content = content
-        self.onChangeIsSearching = onChangeIsSearching
-        self.onDismissSearch = onDismissSearch
+        _isSearchingBinding = isSearching
+        _dismissSearchBinding = dismissSearch
     }
     
     public var body: some View {
         content()
-            .onAppear {
-                onDismissSearch {
-                    dismissSearch()
+            .onChange(of: isSearching) { oldValue, isSearching in
+                if oldValue != isSearching {
+                    isSearchingBinding = isSearching
                 }
             }
-            .onChange(of: isSearching) { oldValue, newValue in
-                if newValue != oldValue {
-                    onChangeIsSearching(newValue)
-                }
+            .onChange(of: dismissSearchBinding) { _, _ in
+                dismissSearch()
             }
     }
 }
