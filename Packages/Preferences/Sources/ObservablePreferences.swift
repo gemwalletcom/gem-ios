@@ -65,14 +65,14 @@ public final class ObservablePreferences: Sendable {
     }
     
     @ObservationIgnored
-    public var isAcceptedTerms: Bool {
+    public var isAcceptTermsCompleted: Bool {
         get {
-            access(keyPath: \.isAcceptedTerms)
-            return preferences.isAcceptedTerms
+            access(keyPath: \.isAcceptTermsCompleted)
+            return preferences.isAcceptTermsCompleted
         }
         set {
-            withMutation(keyPath: \.isAcceptedTerms) {
-                preferences.isAcceptedTerms = newValue
+            withMutation(keyPath: \.isAcceptTermsCompleted) {
+                preferences.isAcceptTermsCompleted = newValue
             }
         }
     }

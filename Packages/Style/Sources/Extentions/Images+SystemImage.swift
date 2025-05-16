@@ -44,5 +44,7 @@ public extension Images {
         public static let starFill = Image(systemName: SystemImage.starFill)
         public static let textPageFill = Image(systemName: SystemImage.textPageFill)
         public static let pencilLine = Image(systemName: SystemImage.pencilLine)
+        public static let checkmarkCircle = Image(systemName: SystemImage.checkmarkCircle)
+        public static let circle = Image(systemName: SystemImage.circle)
     }
 }

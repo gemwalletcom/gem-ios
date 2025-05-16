@@ -2,11 +2,11 @@
 
 import Foundation
 
-public enum ExportWalletFlow: Identifiable {
+public enum ExportWalletType: Identifiable {
     public var id: String {
         switch self {
-        case .words(let words): words.joined()
-        case .privateKey(let key): key
+        case .words(let words): "words"
+        case .privateKey(let key): "privateKey"
         }
     }
 

@@ -40,8 +40,8 @@ public struct WalletService: Sendable {
         walletSessionService.wallets
     }
     
-    public var isAcceptedTerms: Bool {
-        preferences.isAcceptedTerms
+    public var isAcceptTermsCompleted: Bool {
+        preferences.isAcceptTermsCompleted
     }
     
     public func nextWalletIndex() throws -> Int {
@@ -57,7 +57,7 @@ public struct WalletService: Sendable {
     }
     
     public func acceptTerms() {
-        preferences.isAcceptedTerms = true
+        preferences.isAcceptTermsCompleted = true
     }
 
     public func createWallet() -> [String] {

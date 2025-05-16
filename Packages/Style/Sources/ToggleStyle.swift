@@ -48,8 +48,8 @@ public struct CheckboxStyle: ToggleStyle {
     private func checkboxView(configuration: Configuration) -> some View {
         Group {
             switch configuration.isOn {
-            case true: Image(systemName: "checkmark.circle").resizable().bold()
-            case false: Image(systemName: "circle").resizable()
+            case true: Images.System.checkmarkCircle.resizable().bold()
+            case false: Images.System.circle.resizable()
             }
         }
             .frame(width: .image.small, height: .image.small)

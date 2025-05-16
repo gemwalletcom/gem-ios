@@ -7,7 +7,7 @@ final class TermItemViewModel: Identifiable {
     var id: String { message }
     let message: String
     var style: TextStyle {
-        isConfirmed ? .body : .bodySecondary
+        isConfirmed ? .body : TextStyle(font: .body, color: Colors.black.opacity(0.8))
     }
     var isConfirmed: Bool = false
     

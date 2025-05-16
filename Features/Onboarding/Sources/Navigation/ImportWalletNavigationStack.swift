@@ -20,7 +20,7 @@ public struct ImportWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
-                switch model.walletService.isAcceptedTerms {
+                switch model.walletService.isAcceptTermsCompleted {
                 case true:
                     ImportWalletTypeScene(model: model)
                 case false:
@@ -38,9 +38,9 @@ public struct ImportWalletNavigationStack: View {
                     model: ImportWalletViewModel(
                         type: type,
                         walletService: model.walletService,
-                        onFinishImport: {
+                        onFinish: {
                             model.acceptTerms()
-                            isPresentingWallets.toggle()
+                            isPresentingWallets = false
                         }
                     )
                 )

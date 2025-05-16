@@ -11,10 +11,10 @@ enum ExportWalletDestination: Hashable {
 
 public struct ExportWalletNavigationStack: View {
     
-    private let flow: ExportWalletFlow
+    private let flow: ExportWalletType
     @State private var navigationPath: NavigationPath = NavigationPath()
     
-    public init(flow: ExportWalletFlow) {
+    public init(flow: ExportWalletType) {
         self.flow = flow
     }
 

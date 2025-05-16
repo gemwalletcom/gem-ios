@@ -22,15 +22,13 @@ public struct CreateWalletNavigationStack: View {
     public var body: some View {
         NavigationStack(path: $navigationPath) {
             Group {
-                switch walletService.isAcceptedTerms {
-                case true:
-                    securityReminderScene
-                case false:
-                    AcceptTermsScene(
-                        model: AcceptTermsViewModel(onNext: {
-                            navigationPath.append(Scenes.SecurityReminder())
-                        })
-                    )
+                switch walletService.isAcceptTermsCompleted {
+                case true: securityReminderScene
+                case false: AcceptTermsScene(
+                    model: AcceptTermsViewModel(onNext: {
+                        navigationPath.append(Scenes.SecurityReminder())
+                    })
+                )
                 }
             }
             .toolbarDismissItem(title: .cancel, placement: .topBarLeading)
