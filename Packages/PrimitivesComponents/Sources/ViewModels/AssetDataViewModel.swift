@@ -110,7 +110,10 @@ public struct AssetDataViewModel: Sendable {
     }
 
     public var fiatBalanceText: String {
-        guard let price = priceViewModel.price else {
+        guard
+            let price = priceViewModel.price,
+            balanceViewModel.balanceAmount > 0
+        else {
             return .empty
         }
         let value = balanceViewModel.balanceAmount * price.price
