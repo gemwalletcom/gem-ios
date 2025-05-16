@@ -28,6 +28,10 @@ public struct BitcoinSigner: Signable {
             throw AnyError("Invalid signing input type or not supported provider id")
         }
 
+        if input.useMaxAmount && quote.data.provider.id == .chainflip {
+            throw AnyError("Doesn't support swapping all amounts on Chainflip yet")
+        }
+
         let opReturnIndex: UInt32? = switch quote.data.provider.id {
         case .thorchain: .none
         case .chainflip: 1
@@ -46,24 +50,12 @@ public struct BitcoinSigner: Signable {
         default: fatalError()
         }
 
-        let extraOutputs: [BitcoinOutputAddress] = if input.useMaxAmount && quote.data.provider.id == .chainflip {
-            [
-                BitcoinOutputAddress.with {
-                    $0.toAddress = input.senderAddress
-                    $0.amount = 1
-                }
-            ]
-        } else {
-            []
-        }
-
         return try [
             sign(input: input, privateKey: privateKey) { signingInput in
                 if let opReturnIndex = opReturnIndex {
                     signingInput.outputOpReturnIndex.index = opReturnIndex
                 }
                 signingInput.outputOpReturn = opReturnData
-                signingInput.extraOutputs = extraOutputs
             }
         ]
     }
