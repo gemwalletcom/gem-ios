@@ -14,6 +14,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.walletService) private var walletService
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -37,9 +38,21 @@ struct SelectedAssetNavigationStack: View  {
                 switch selectType.type {
                 case .send(let type):
                     RecipientNavigationView(
-                        wallet: wallet,
-                        asset: selectType.asset,
-                        type: type,
+                        model: RecipientSceneViewModel(
+                            wallet: wallet,
+                            asset: selectType.asset,
+                            keystore: keystore,
+                            walletService: walletService,
+                            walletsService: walletsService,
+                            nodeService: nodeService,
+                            type: type,
+                            onRecipientDataAction: {
+                                navigationPath.append($0)
+                            },
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        ),
                         navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectedAssetInput = nil

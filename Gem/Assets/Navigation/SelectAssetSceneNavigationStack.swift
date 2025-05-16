@@ -7,12 +7,15 @@ import Style
 import Localization
 import FiatConnect
 import PrimitivesComponents
+import Keystore
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.assetsService) private var assetsService
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.keystore) private var keystore
 
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
@@ -65,9 +68,21 @@ struct SelectAssetSceneNavigationStack: View {
                 switch input.type {
                 case .send:
                     RecipientNavigationView(
-                        wallet: model.wallet,
-                        asset: input.asset,
-                        type: .asset(input.asset),
+                        model: RecipientSceneViewModel(
+                            wallet: model.wallet,
+                            asset: input.asset,
+                            keystore: keystore,
+                            walletService: walletService,
+                            walletsService: walletsService,
+                            nodeService: nodeService,
+                            type: .asset(input.asset),
+                            onRecipientDataAction: {
+                                navigationPath.append($0)
+                            },
+                            onTransferAction: {
+                                navigationPath.append($0)
+                            }
+                        ),
                         navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectAssetType = nil
