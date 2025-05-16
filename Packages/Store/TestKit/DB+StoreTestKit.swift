@@ -19,6 +19,7 @@ public extension DB {
         try assetStore.add(assets: assets)
         try walletStore.addWallet(.mock(accounts: assets.map { Account.mock(chain: $0.asset.chain) }))
         try balanceStore.addBalance(assets.map { AddBalance(assetId: $0.asset.id, isEnabled: true) }, for: .empty)
+        try balanceStore.updateBalances(.mock(assets: assets), for: .empty)
         
         return db
     }
