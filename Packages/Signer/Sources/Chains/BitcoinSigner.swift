@@ -19,7 +19,7 @@ public struct BitcoinSigner: Signable {
         fatalError()
     }
 
-    public func signSwap(input: inout SignerInput, privateKey: Data) throws -> [String] {
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
         let providers = Set([SwapProvider.thorchain, .chainflip].map { $0.rawValue })
         guard
             case .swap(_, _, let quote, let data) = input.type,
