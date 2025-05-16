@@ -22,6 +22,7 @@ public final class Preferences: @unchecked Sendable {
         static let authenticationLockOption = "authentication_lock_option"
         static let isDeveloperEnabled = "is_developer_enabled"
         static let isHideBalanceEnabled = "is_balance_privacy_enabled"
+        static let isAcceptTermsCompleted = "is_accepted_terms"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -74,6 +75,9 @@ public final class Preferences: @unchecked Sendable {
 
     @ConfigurableDefaults(key: Keys.isHideBalanceEnabled, defaultValue: false)
     public var isHideBalanceEnabled: Bool
+    
+    @ConfigurableDefaults(key: Keys.isAcceptTermsCompleted, defaultValue: false)
+    public var isAcceptTermsCompleted: Bool
 
     public static let standard = Preferences()
     private let defaults: UserDefaults
@@ -104,6 +108,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._authenticationLockOption, key: Keys.authenticationLockOption, defaultValue: 0)
         configure(\._isDeveloperEnabled, key: Keys.isDeveloperEnabled, defaultValue: false)
         configure(\._isHideBalanceEnabled, key: Keys.isHideBalanceEnabled, defaultValue: false)
+        configure(\._isAcceptTermsCompleted, key: Keys.isAcceptTermsCompleted, defaultValue: false)
     }
 
     public func incrementLaunchesCount() {

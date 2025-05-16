@@ -56,13 +56,25 @@ public struct AssetImageView: View {
             GeometryReader { geo in
                 let diameter = min(geo.size.width, geo.size.height)
                 ZStack {
-                    Circle().foregroundStyle(.tertiary)
+                    Circle()
+                        .ifElse(tokenType.count == 1) { view in
+                            view.foregroundStyle(.clear)
+                        } elseContent: { view in
+                            view.foregroundStyle(.tertiary)
+                        }
+
                     Text(tokenType.uppercased())
-                        .font(.system(size: diameter * 0.3, weight: .semibold))
+                        .ifElse(tokenType.count == 1, ifContent: { view in
+                            view
+                                .font(.system(size: diameter, weight: .semibold))
+                        }, elseContent: { view in
+                            view
+                                .font(.system(size: diameter * 0.3, weight: .semibold))
+                                .padding(.horizontal, .tiny + .extraSmall)
+                        })
                         .minimumScaleFactor(0.4)
                         .lineLimit(1)
                         .multilineTextAlignment(.center)
-                        .padding(.horizontal, .tiny + .extraSmall)
                         .foregroundColor(.primary)
                 }
             }
@@ -103,6 +115,17 @@ public struct AssetImageView: View {
         AssetImageView(
             assetImage: AssetImage(
                 type: "MIGRAINE",
+                imageURL: nil,
+                placeholder: nil,
+                chainPlaceholder: Image(systemName: "bolt.circle.fill")
+            ),
+            size: .image.medium
+        )
+        .preferredColorScheme(.dark)
+        
+        AssetImageView(
+            assetImage: AssetImage(
+                type: Emoji.WalletAvatar.gem.rawValue,
                 imageURL: nil,
                 placeholder: nil,
                 chainPlaceholder: Image(systemName: "bolt.circle.fill")

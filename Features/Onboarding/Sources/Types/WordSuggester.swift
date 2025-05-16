@@ -2,7 +2,7 @@
 
 import Foundation
 
-struct WordSuggestor {
+struct WordSuggester {
     func wordSuggestionCalculate(value: String) -> String? {
         if value.last != Character.space, let word = value.split(separator: " ").last {
             return String(word)
