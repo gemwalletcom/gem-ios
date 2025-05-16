@@ -1,19 +1,20 @@
+import BigInt
 import Foundation
 import Primitives
-import BigInt
 
-public typealias ChainServiceable = ChainBalanceable &
+public typealias ChainServiceable =
+    ChainAddressStatusFetchable &
+    ChainBalanceable &
     ChainBroadcastable &
-    ChainTransactionPreloadable &
-    ChainTransactionLoadable &
     ChainFeeRateFetchable &
-    ChainTransactionStateFetchable &
-    ChainSyncable &
-    ChainStakable &
-    ChainTokenable &
     ChainIDFetchable &
     ChainLatestBlockFetchable &
-    ChainAddressStatusFetchable
+    ChainStakable &
+    ChainSyncable &
+    ChainTokenable &
+    ChainTransactionLoadable &
+    ChainTransactionPreloadable &
+    ChainTransactionStateFetchable
 
 // MARK: - Protocols
 
@@ -25,13 +26,14 @@ public protocol ChainBalanceable: Sendable {
 
 public protocol ChainFeeRateFetchable: Sendable {
     func feeRates(type: TransferDataType) async throws -> [FeeRate]
+    func defaultPriority(for type: TransferDataType) -> FeePriority
 }
 
-public protocol ChainTransactionPreloadable: Sendable  {
+public protocol ChainTransactionPreloadable: Sendable {
     func preload(input: TransactionPreloadInput) async throws -> TransactionPreload
 }
 
-public protocol ChainTransactionLoadable: Sendable  {
+public protocol ChainTransactionLoadable: Sendable {
     func load(input: TransactionInput) async throws -> TransactionLoad
 }
 
@@ -44,7 +46,7 @@ public struct TransactionStateRequest: Sendable {
     public let senderAddress: String
     public let recipientAddress: String
     public let block: String
-    
+
     public init(
         id: String,
         senderAddress: String,
@@ -86,4 +88,15 @@ public protocol ChainLatestBlockFetchable: Sendable {
 
 public protocol ChainAddressStatusFetchable: Sendable {
     func getAddressStatus(address: String) async throws -> [AddressStatus]
+}
+
+public protocol ChainFeePriorityPreference: Sendable {}
+
+public extension ChainFeeRateFetchable {
+    func defaultPriority(for type: TransferDataType) -> FeePriority {
+        switch type {
+        case .swap: .fast
+        case .tokenApprove, .stake, .transfer, .transferNft, .generic, .account: .normal
+        }
+    }
 }
