@@ -2,9 +2,24 @@
 
 import Foundation
 import Store
+import Primitives
+import PrimitivesTestKit
 
-extension DB {
-    public static func mock() -> DB {
+public extension DB {
+    static func mock() -> DB {
         DB(fileName: "\(UUID().uuidString).sqlite")
+    }
+    
+    static func mockAssets(assets: [AssetBasic] = .mock()) throws -> DB {
+        let db = Self.mock()
+        let assetStore = AssetStore(db: db)
+        let balanceStore = BalanceStore(db: db)
+        let walletStore = WalletStore(db: db)
+
+        try assetStore.add(assets: assets)
+        try walletStore.addWallet(.mock(accounts: assets.map { Account.mock(chain: $0.asset.chain) }))
+        try balanceStore.addBalance(assets.map { AddBalance(assetId: $0.asset.id, isEnabled: true) }, for: .empty)
+        
+        return db
     }
 }
