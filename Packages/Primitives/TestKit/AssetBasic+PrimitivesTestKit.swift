@@ -15,3 +15,15 @@ public extension AssetBasic {
         )
     }
 }
+
+public extension Array where Element == AssetBasic {
+    static func mock() -> Self {
+        [
+            .mock(asset: .mock()),
+            .mock(asset: .mockBNB()),
+            .mock(asset: .mockTron()),
+            .mock(asset: .mockEthereum()),
+            .mock(asset: .mockEthereumUSDT())
+        ]
+    }
+}
