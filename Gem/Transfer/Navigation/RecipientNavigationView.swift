@@ -3,18 +3,10 @@
 import Foundation
 import SwiftUI
 import Primitives
-import Transfer
 import ChainService
-import PrimitivesComponents
-import WalletsService
 import QRScanner
 
 struct RecipientNavigationView: View {
-    @Environment(\.keystore) private var keystore
-    @Environment(\.walletService) private var walletService
-    @Environment(\.walletsService) private var walletsService
-    @Environment(\.nodeService) private var nodeService
-
     @State private var model: RecipientSceneViewModel
     @Binding private var navigationPath: NavigationPath
 
@@ -50,11 +42,11 @@ struct RecipientNavigationView: View {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    keystore: keystore,
+                    keystore: model.keystore,
                     data: data,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
+                    service: ChainServiceFactory(nodeProvider: model.nodeService)
                         .service(for: data.chain),
-                    walletsService: walletsService,
+                    walletsService: model.walletsService,
                     onComplete: onComplete
                 )
             )
