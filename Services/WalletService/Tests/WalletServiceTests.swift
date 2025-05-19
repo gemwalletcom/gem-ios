@@ -38,12 +38,22 @@ struct WalletServiceTests {
             type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
-        try service.delete(first)
-
-        #expect(service.wallets.map(\.walletId) == [second.walletId])
-        #expect(service.currentWaletId == second.walletId)
+        let third = try service.importWallet(
+            name: "Third",
+            type: .phrase(words: LocalKeystore.words, chains: [.aptos])
+        )
 
         try service.delete(second)
+
+        #expect(service.wallets.map(\.walletId) == [first.walletId, third.walletId])
+        #expect(service.currentWaletId == third.walletId)
+
+        try service.delete(first)
+
+        #expect(service.wallets.map(\.walletId) == [third.walletId])
+        #expect(service.currentWaletId == third.walletId)
+
+        try service.delete(third)
 
         #expect(service.currentWaletId == nil)
         #expect(service.wallets.isEmpty)
