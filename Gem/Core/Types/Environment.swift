@@ -23,6 +23,7 @@ import TransactionsService
 import WalletsService
 import WalletService
 import AvatarService
+import AppService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main

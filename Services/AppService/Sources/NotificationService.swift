@@ -4,15 +4,15 @@ import Foundation
 import Primitives
 
 @Observable
-final class NotificationService: Sendable {
+public final class NotificationService: Sendable {
     @MainActor
-    var notifications: [PushNotification] = []
+    public var notifications: [PushNotification] = []
 
-    init() {}
+    public init() {}
 }
 
 @MainActor
-extension NotificationService {
+public extension NotificationService {
     func clear() {
         notifications = []
     }
