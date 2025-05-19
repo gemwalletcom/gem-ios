@@ -754,6 +754,7 @@
 				B65C9B122D88163600A222E8 /* AmountInputType.swift */,
 				B65C9AEC2D84161900A222E8 /* AmountInputConfig.swift */,
 				D80181452B3CF84A00F4D22B /* ScanRecipientResult.swift */,
+				83B8116B2DD6788200EDFC80 /* RecipientScanResult.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -918,7 +919,6 @@
 		D8C4A36D2C8CDB8B006FABE8 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
-				83B8116B2DD6788200EDFC80 /* RecipientScanResult.swift */,
 				D8C4A3732C8CE87C006FABE8 /* AmountNavigationView.swift */,
 				D8C4A3772C8D4D97006FABE8 /* RecipientNavigationView.swift */,
 				D89BB5ED2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift */,
