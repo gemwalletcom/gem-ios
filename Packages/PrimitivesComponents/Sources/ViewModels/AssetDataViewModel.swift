@@ -17,12 +17,14 @@ public struct AssetDataViewModel: Sendable {
     public init(
         assetData: AssetData,
         formatter: ValueFormatter,
-        currencyCode: String
+        currencyCode: String,
+        currencyFormatterType: CurrencyFormatterType = .abbreviated
     ) {
         self.assetData = assetData
         self.priceViewModel = PriceViewModel(
             price: assetData.price,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            currencyFormatterType: currencyFormatterType
         )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
