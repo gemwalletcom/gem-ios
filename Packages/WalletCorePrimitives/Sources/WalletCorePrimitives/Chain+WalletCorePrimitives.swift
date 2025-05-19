@@ -55,4 +55,8 @@ public extension Chain {
         case .cardano: .cardano
         }
     }
+    
+    func isValidAddress(_ address: String) -> Bool {
+        return AnyAddress.isValid(string: address, coin: coinType)
+    }
 }

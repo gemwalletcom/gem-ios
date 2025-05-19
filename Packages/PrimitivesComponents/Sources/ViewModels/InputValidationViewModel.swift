@@ -3,7 +3,7 @@
 import Foundation
 
 public enum InputValidationMode {
-    case live, manual
+    case onDemand, manual
 }
 
 @MainActor
@@ -11,15 +11,11 @@ public enum InputValidationMode {
 public final class InputValidationViewModel {
     public var text: String = "" {
         didSet {
-            if text.isEmpty {
-                error = nil
-            } else if mode == .live {
-                validate()
-            }
+            onChangeText(oldValue, text)
         }
     }
 
-    public private(set) var error: (any LocalizedError)?
+    public private(set) var error: (any Error)?
 
     private let mode: InputValidationMode
     private var validators: [any TextValidator]
@@ -31,60 +27,62 @@ public final class InputValidationViewModel {
         self.mode = mode
         self.validators = validators
     }
-
-    public var isValid: Bool { error == nil && text.isNotEmpty }
 }
 
 // MARK: - Public
 
 extension InputValidationViewModel {
+    public var isValid: Bool { error == nil }
+    public var isInvalid: Bool { error != nil }
 
-    @discardableResult
-    public func validate() -> Bool {
-        error = Self.validate(text, with: validators)
-        return error == nil
+    public func validate() -> (any Error)? {
+        do {
+            try validators.forEach { try $0.validate(text) }
+            return nil
+        } catch {
+            return error
+        }
     }
 
-    public func update(validators: [any TextValidator]) {
-        self.validators = validators
-        validate()
+    @discardableResult
+    public func update() -> Bool {
+        error = validate()
+        return isValid
     }
 
     @discardableResult
     public func update(text: String) -> Bool {
         self.text = text
-        return validate()
+        return update()
+    }
+
+    public func update(validators: [any TextValidator]) {
+        self.validators = validators
+        update()
     }
 
     public func update(error: (any Error)?) {
-        if let error {
-            if let error = error as? LocalizedError {
-                self.error = error
-            } else {
-                self.error = UnknownValidationError()
-            }
-        } else {
-            self.error = nil
-        }
+        self.error = error
     }
 }
 
 // MARK: - Private
 
 extension InputValidationViewModel {
-    private static func validate(
-        _ text: String,
-        with validators: [any TextValidator]
-    ) -> (any LocalizedError)? {
-        guard text.isNotEmpty else { return nil }
-
-        do {
-            try validators.forEach { try $0.validate(text) }
-        } catch let error as LocalizedError {
-            return error
-        } catch {
-            return UnknownValidationError()
+    private func onChangeText(_ oldText: String, _ text: String) {
+        guard text.isNotEmpty else {
+            update(error: nil)
+            return
         }
-        return nil
+
+        switch mode {
+        case .onDemand:
+            update()
+        case .manual:
+            // clear error for every field change
+            if isInvalid {
+                update(error: nil)
+            }
+        }
     }
 }

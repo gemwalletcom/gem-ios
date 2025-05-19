@@ -7,160 +7,86 @@ import PrimitivesTestKit
 
 @testable import PrimitivesComponents
 
-private enum DummyError: LocalizedError {
-    case boom
-}
-
-private struct StubValidator: TextValidator {
-    let shouldPass: Bool
+private enum DummyError: Error, Equatable { case invalid }
+private struct FailableValidator: TextValidator {
+    let allowed: String
+    var id: String { "failable-\(allowed)" }
 
     func validate(_ text: String) throws {
-        if !shouldPass {
-            throw DummyError.boom
-        }
+        guard text == allowed else { throw DummyError.invalid }
     }
-
-    var id: String { "StubValidator" }
-}
-
-private struct NonEmptyValidator: TextValidator {
-    func validate(_ text: String) throws {
-        if text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            throw AnyError("not-empty")
-        }
-    }
-
-    var id: String { "NonEmptyValidator" }
-}
-
-private struct LengthLimitValidator: TextValidator {
-    let max: Int
-    func validate(_ text: String) throws {
-        if text.count > max {
-            throw AnyError("too long")
-        }
-    }
-
-    var id: String { "LengthLimitValidator" }
 }
 
 @MainActor
 struct InputValidationViewModelTests {
     @Test
-    func combinedValidatorsAllPass() {
-        let viewModel = InputValidationViewModel(
-            validators: [
-                NonEmptyValidator(),
-                LengthLimitValidator(max: 10),
-                StubValidator(shouldPass: true)
-            ]
-        )
+      func manualModeDoesNotValidateOnTyping() {
+          let model = InputValidationViewModel(
+              mode: .manual,
+              validators: [FailableValidator(allowed: "ok")]
+          )
 
-        #expect(viewModel.update(text: "Gem"))
-        #expect(viewModel.error == nil)
-    }
+          model.text = "wrong"
+          #expect(model.error == nil)
+          #expect(model.isValid)
+      }
 
-    @Test
-    func combinedValidatorsFailWhenOneRuleFails() {
-        let vm = InputValidationViewModel(
-            validators: [
-                NonEmptyValidator(),
-                LengthLimitValidator(max: 3),   // will fail
-                StubValidator(shouldPass: true)
-            ]
-        )
+      @Test
+      func manualModeValidatesOnExplicitUpdate() {
+          let model = InputValidationViewModel(
+              mode: .manual,
+              validators: [FailableValidator(allowed: "ok")]
+          )
 
-        #expect(!vm.update(text: "GemWallet"))
-        #expect(vm.error != nil)
-        #expect(!vm.isValid)
-    }
+          model.text = "wrong"
+          let result = model.update()
 
-    @Test
-    func combinedValidatorsFailWhenStubFails() {
-        let vm = InputValidationViewModel(
-            validators: [
-                NonEmptyValidator(),
-                LengthLimitValidator(max: 10),
-                StubValidator(shouldPass: false)   // fail toggle
-            ]
-        )
+          #expect(!result)
+          #expect(model.error as? DummyError == .invalid)
+          #expect(model.isInvalid)
+      }
 
-        #expect(!vm.update(text: "Gem"))
-        #expect(vm.error is DummyError)
-    }
+      @Test
+      func onDemandModeValidatesOnEachChange() {
+          let model = InputValidationViewModel(
+              mode: .onDemand,
+              validators: [FailableValidator(allowed: "ok")]
+          )
 
-    @Test
-    func manualValidationPassesWhenAllRulesPass() {
-        let viewModel = InputValidationViewModel(
-            mode: .manual,
-            validators: [StubValidator(shouldPass: true)]
-        )
+          model.text = "wrong"
 
-        viewModel.text = "hello"
+          #expect(model.error as? DummyError == .invalid)
+          #expect(model.isInvalid)
+      }
 
-        #expect(viewModel.validate())
-        #expect(viewModel.error == nil)
-        #expect(viewModel.isValid)
-    }
+      @Test
+      func onDemandModeClearsErrorWhenFixed() {
+          let model = InputValidationViewModel(
+              mode: .onDemand,
+              validators: [FailableValidator(allowed: "ok")]
+          )
 
-    @Test
-    func manualValidationFailsWhenAnyRuleFails() {
-        let viewModel = InputValidationViewModel(
-            mode: .manual,
-            validators: [StubValidator(shouldPass: false)]
-        )
-        viewModel.text = "hello"
+          model.text = "wrong"
+          model.text = "ok"
 
-        #expect(!viewModel.validate())
-        #expect(viewModel.error is DummyError)
-        #expect(!viewModel.isValid)
-    }
+          #expect(model.error == nil)
+          #expect(model.isValid)
+      }
 
-    @Test
-    func liveValidationRunsAutomatically() {
-        let viewModel = InputValidationViewModel(
-            mode: .live,
-            validators: [StubValidator(shouldPass: false)]
-        )
-        viewModel.text = "change triggers didSet"
+      @Test
+      func updateValidatorsRevalidatesImmediately() {
+          let model = InputValidationViewModel(
+              mode: .onDemand,
+              validators: [FailableValidator(allowed: "ok")]
+          )
 
-        #expect(viewModel.error is DummyError)
-        #expect(!viewModel.isValid)
-    }
+          model.text = "wrong"
+          #expect(model.isInvalid)
 
-    @Test
-    func updateTextValidatesAndReturnsBool() {
-        let viewModel = InputValidationViewModel(
-            validators: [StubValidator(shouldPass: true)]
-        )
+          // updat evalidators
+          model.update(validators: [])
 
-        #expect(viewModel.update(text: "abc"))
-        #expect(viewModel.error == nil)
-    }
-
-    @Test
-    func updateValidatorsRevalidatesImmediately() {
-        let viewModel = InputValidationViewModel(
-            validators: [StubValidator(shouldPass: true)]
-        )
-        viewModel.text = "abc"
-        _ = viewModel.validate()
-
-        // inject a failing rule
-        viewModel.update(validators: [StubValidator(shouldPass: false)])
-
-        #expect(viewModel.error is DummyError)
-        #expect(!viewModel.isValid)
-    }
-
-    @Test
-    func updateCustomErrorOverridesAndClears() {
-        let viewModel = InputValidationViewModel(validators: [])
-
-        viewModel.update(error: DummyError.boom)
-        #expect(viewModel.error is DummyError)
-
-        viewModel.update(error: nil)
-        #expect(viewModel.error == nil)
-    }
+          #expect(model.isValid)
+          #expect(model.error == nil)
+      }
 }

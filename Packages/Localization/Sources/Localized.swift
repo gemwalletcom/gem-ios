@@ -339,6 +339,10 @@ public enum Localized {
     public static let notSupportedQr = Localized.tr("Localizable", "errors.not_supported_qr", fallback: "This device does not support QR code scanning. You can only select QR code image from library.")
     /// Permissions Not Granted
     public static let permissionsNotGranted = Localized.tr("Localizable", "errors.permissions_not_granted", fallback: "Permissions Not Granted")
+    /// %@ is required
+    public static func `required`(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "errors.required", String(describing: p1), fallback: "%@ is required")
+    }
     /// Transfer Error: %s
     public static func transfer(_ p1: UnsafePointer<CChar>) -> String {
       return Localized.tr("Localizable", "errors.transfer", p1, fallback: "Transfer Error: %s")

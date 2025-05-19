@@ -39,7 +39,7 @@ public struct InputValidationField<TrailingView: View>: View {
                 }
             )
 
-            if let message = model.error?.errorDescription {
+            if let message = model.error?.localizedDescription {
                 Text(message)
                     .textStyle(TextStyle(font: .footnote, color: Colors.red))
                     .transition(.opacity)

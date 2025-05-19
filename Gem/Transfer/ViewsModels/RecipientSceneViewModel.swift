@@ -64,7 +64,10 @@ final class RecipientSceneViewModel {
 
         self.addressInputModel = InputValidationViewModel(
             mode: .manual,
-            validators: [AddressValidator(asset: asset)]
+            validators: [
+                .required(requireName: Localized.Transfer.Recipient.addressField),
+                .address(asset)
+            ]
         )
     }
 
@@ -75,7 +78,7 @@ final class RecipientSceneViewModel {
     var actionButtonTitle: String { Localized.Common.continue }
     var actionButtonState: StateButtonStyle.State {
         switch nameResolveState {
-        case .none: addressInputModel.isValid  ? .normal : .disabled
+        case .none: addressInputModel.isValid || addressInputModel.text.isEmpty ? .normal : .disabled
         case .loading, .error: .disabled
         case .complete: .normal
         }
@@ -96,7 +99,7 @@ final class RecipientSceneViewModel {
                     values: sectionRecipients(for: $0)
                 )
             }
-            .filter({ !$0.values.isEmpty })
+            .filter({ $0.values.isNotEmpty })
     }
 }
 
@@ -104,10 +107,10 @@ final class RecipientSceneViewModel {
 
 extension RecipientSceneViewModel {
     func onContinue() {
-        // manual check if resolver success or address field validated
-        guard nameResolveState.result != nil || addressInputModel.validate() else { return }
+        guard nameResolveState.result != nil || addressInputModel.update() else { return }
+
         handle(
-            data: makeRecipientData(
+            recipientData: makeRecipientData(
                 name: nameResolveState.result,
                 address: addressInputModel.text,
                 memo: memo,
@@ -128,7 +131,12 @@ extension RecipientSceneViewModel {
     func onHandleScan(_ result: String, for field: RecipientScene.Field) {
         switch field {
         case .address:
-            handleAddressScan(result)
+            do {
+                try handleAddressScan(result)
+            } catch {
+                addressInputModel.update(error: error)
+            }
+
         case .memo:
             memo = result
         }
@@ -149,9 +157,8 @@ extension RecipientSceneViewModel {
     }
 
     func onSelectRecipient(_ recipient: RecipientAddress) {
-        guard addressInputModel.update(text: recipient.address) else { return }
         handle(
-            data: makeRecipientData(recipient: recipient)
+            recipientData: makeRecipientData(recipient: recipient)
         )
     }
 }
@@ -184,8 +191,8 @@ extension RecipientSceneViewModel {
         )
     }
 
-    //TODO: Add unit tests
-    private func decodeScanned(string: String) throws -> PaymentScanResult {
+    //TODO: Add unit tests, will be added once moved to package
+    private func paymentScan(string: String) throws -> PaymentScanResult {
         let payment = try PaymentURLDecoder.decode(string)
 
         return PaymentScanResult(
@@ -195,7 +202,7 @@ extension RecipientSceneViewModel {
         )
     }
 
-    private func toRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
+    private func getRecipientScanResult(payment: PaymentScanResult) throws -> RecipientScanResult {
         if let amount = payment.amount, (showMemo ? ((payment.memo?.isEmpty) == nil) : true),
            asset.chain.isValidAddress(payment.address)
         {
@@ -258,36 +265,32 @@ extension RecipientSceneViewModel {
         }
     }
 
-    private func handleAddressScan(_ string: String) {
-        do {
-            let payment = try decodeScanned(string: string)
-            let scanResult = try toRecipientScanResult(payment: payment)
-            switch scanResult {
-            case .transferData(let data):
-                handle(data: data)
-            case .recipient(let address, let memo, let amount):
-                addressInputModel.update(text: address)
+    private func handleAddressScan(_ string: String) throws {
+        let payment = try paymentScan(string: string)
+        let scanResult = try getRecipientScanResult(payment: payment)
+        switch scanResult {
+        case .transferData(let data):
+            handle(transferData: data)
+        case .recipient(let address, let memo, let amount):
+            // TODO: - open if all fields filled
+            addressInputModel.update(text: address)
 
-                if let memo = memo { self.memo = memo }
-                if let amount = amount { self.amount = amount }
-            }
-        } catch {
-            addressInputModel.update(error: error)
+            if let memo = memo { self.memo = memo }
+            if let amount = amount { self.amount = amount }
         }
     }
 
-
-    private func handle(data: RecipientData) {
+    private func handle(recipientData: RecipientData) {
         switch type {
         case .asset:
-            onRecipientDataAction?(data)
+            onRecipientDataAction?(recipientData)
         case .nft(let asset):
-            let data = TransferData(type: .transferNft(asset), recipientData: data, value: .zero, canChangeValue: false)
-            handle(data: data)
+            let data = TransferData(type: .transferNft(asset), recipientData: recipientData, value: .zero, canChangeValue: false)
+            handle(transferData: data)
         }
     }
 
-    private func handle(data: TransferData) {
-        onTransferAction?(data)
+    private func handle(transferData: TransferData) {
+        onTransferAction?(transferData)
     }
 }
