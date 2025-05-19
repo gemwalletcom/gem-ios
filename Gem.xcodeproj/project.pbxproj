@@ -71,7 +71,6 @@
 		C35DA07C2A9C3B4B008CCEFA /* Settings in Frameworks */ = {isa = PBXBuildFile; productRef = C35DA07B2A9C3B4B008CCEFA /* Settings */; };
 		C366790A2A0B7E5800F1D74D /* Environment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679092A0B7E5800F1D74D /* Environment.swift */; };
 		C36679162A119C6200F1D74D /* GemAPI in Frameworks */ = {isa = PBXBuildFile; productRef = C36679152A119C6200F1D74D /* GemAPI */; };
-		C366791A2A17507500F1D74D /* OnstartService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C36679192A17507500F1D74D /* OnstartService.swift */; };
 		C366791D2A18623800F1D74D /* QRScanner in Frameworks */ = {isa = PBXBuildFile; productRef = C366791C2A18623800F1D74D /* QRScanner */; };
 		C3A7CB7C29CA5F7000431341 /* Store in Frameworks */ = {isa = PBXBuildFile; productRef = C3A7CB7B29CA5F7000431341 /* Store */; };
 		C3B6F09229E7C31500C3B746 /* ConfirmTransferScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3B6F09129E7C31500C3B746 /* ConfirmTransferScene.swift */; };
@@ -249,7 +248,6 @@
 		C36679082A0B1E4200F1D74D /* unit_app.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = unit_app.xctestplan; sourceTree = "<group>"; };
 		C36679092A0B7E5800F1D74D /* Environment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Environment.swift; sourceTree = "<group>"; };
 		C36679142A0FF81000F1D74D /* GemAPI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = GemAPI; sourceTree = "<group>"; };
-		C36679192A17507500F1D74D /* OnstartService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnstartService.swift; sourceTree = "<group>"; };
 		C366791B2A1860E500F1D74D /* QRScanner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = QRScanner; sourceTree = "<group>"; };
 		C370289B2A9C3B0E009AE123 /* Settings */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Settings; sourceTree = "<group>"; };
 		C3B6F09129E7C31500C3B746 /* ConfirmTransferScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferScene.swift; sourceTree = "<group>"; };
@@ -993,7 +991,6 @@
 		D8DC1AF12C11384F00697D0A /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C36679192A17507500F1D74D /* OnstartService.swift */,
 				D852CB182CA49F35004121D3 /* NotificationService.swift */,
 			);
 			path = Services;
@@ -1341,7 +1338,6 @@
 				C3CF3BB529B6917600E96586 /* App-Configuration.swift in Sources */,
 				D8B738D42C59643D004EF083 /* MainTabViewModel.swift in Sources */,
 				8374DC5A2C6CDF6C00183109 /* AddTokenInput.swift in Sources */,
-				C366791A2A17507500F1D74D /* OnstartService.swift in Sources */,
 				836770DF2D80902700B5BD18 /* SwapSheetType.swift in Sources */,
 				D8CD0AB02D4965AA00333939 /* SelectedAssetInput.swift in Sources */,
 				C30952B4299C39D70004C0F9 /* App.swift in Sources */,

@@ -11,6 +11,7 @@ import LockManager
 import Preferences
 import AssetsService
 import WalletService
+import AppService
 
 @main
 struct GemApp: App {
