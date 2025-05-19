@@ -11,6 +11,7 @@ import TransactionService
 import WalletService
 import WalletsService
 import Onboarding
+import AppService
 
 @Observable
 @MainActor

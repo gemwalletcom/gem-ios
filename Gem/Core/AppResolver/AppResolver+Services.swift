@@ -16,6 +16,7 @@ import TransactionsService
 import TransactionService
 import WalletsService
 import WalletService
+import AppService
 
 extension AppResolver {
     struct Services {

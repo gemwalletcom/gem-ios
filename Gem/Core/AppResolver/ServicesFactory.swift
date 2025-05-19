@@ -25,6 +25,7 @@ import WalletsService
 import WalletService
 import AvatarService
 import WalletSessionService
+import AppService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
