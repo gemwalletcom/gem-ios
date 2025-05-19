@@ -151,6 +151,7 @@ struct AssetsRequestTests {
         let db = try DB.mockAssets()
         let priceStore = PriceStore(db: db)
         let fiatRateStore = FiatRateStore(db: db)
+        let balanceStore = BalanceStore(db: db)
         
         try fiatRateStore.add([FiatRate(symbol: Currency.usd.rawValue, rate: 1)])
         
@@ -169,6 +170,13 @@ struct AssetsRequestTests {
             
             #expect(assets.first?.asset.id == AssetId(chain: .tron))
             #expect(assets.last?.asset.id == AssetId(chain: .ethereum, tokenId: "0xdAC17F958D2ee523a2206206994597C13D831ec7"))
+        }
+        
+        try balanceStore.pinAsset(walletId: .empty, assetId: AssetId(chain: .bitcoin).identifier, value: true)
+        try db.dbQueue.read { db in
+            let assets = try AssetsRequest.mock().fetch(db)
+            
+            #expect(assets.first?.asset.id == AssetId(chain: .bitcoin))
         }
     }
 }
