@@ -134,8 +134,7 @@ struct AssetsRequestTests {
             let tron = try AssetsRequest.mock(filters: [.search("0xdAC17F958D2ee523a2206206994597C13D831ec7", hasPriorityAssets: false)]).fetch(db)
             let searchAssets = try AssetsRequest.mock(searchBy: query).fetch(db)
             let prioritySearchAssets = try AssetsRequest.mock(filters: [.search("T", hasPriorityAssets: true)]).fetch(db)
-            
-            print()
+
             #expect(btc.count == 1)
             #expect(btc.first?.asset.symbol == "BTC")
             #expect(bnb.count == 1)
