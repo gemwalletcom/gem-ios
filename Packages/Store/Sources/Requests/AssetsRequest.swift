@@ -47,20 +47,6 @@ public struct AssetsRequest: ValueObservationQueryable {
 
 extension AssetsRequest {
     
-    private static var defaultOrder: [SQLOrderingTerm] {
-        let assetAlias = TableAlias(name: AssetRecord.databaseTableName)
-        let balanceAlias = TableAlias(name: BalanceRecord.databaseTableName)
-        let totalValue = balanceAlias[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0)
-
-        return [
-            balanceAlias[BalanceRecord.Columns.isPinned].desc,
-            balanceAlias[BalanceRecord.Columns.isEnabled].desc,
-            totalValue.desc,
-            (totalValue == 0).desc,
-            assetAlias[AssetRecord.Columns.rank].desc
-        ]
-    }
-    
     private func hasPriorityAssets(_ db: Database, query: String) throws -> Bool {
         try AssetSearchRecord
             .filter(AssetSearchRecord.Columns.query == query)
@@ -91,13 +77,13 @@ extension AssetsRequest {
         switch filter {
         case .search(let query, let hasPriorityAssets):
             if hasPriorityAssets {
-                let order: [SQLOrderingTerm] = defaultOrder + [
-                    TableAlias(name: AssetSearchRecord.databaseTableName)[AssetSearchRecord.Columns.priority].ascNullsLast
-                ]
                 return request.joining(required: AssetRecord.priorityAssets
                     .filter(AssetSearchRecord.Columns.query == query)
                 )
-                .order(order)
+                .order(
+                    TableAlias(name: AssetSearchRecord.databaseTableName)[AssetSearchRecord.Columns.priority].ascNullsLast,
+                    TableAlias(name: AssetRecord.databaseTableName)[AssetRecord.Columns.rank].desc
+                )
             }
             return request
                 .filter(
@@ -105,7 +91,9 @@ extension AssetsRequest {
                     AssetRecord.Columns.name.like("%%\(query)%%") ||
                     AssetRecord.Columns.tokenId.like("%%\(query)%%")
                 )
-                .order(defaultOrder)
+                .order(
+                    AssetRecord.Columns.rank.desc
+                )
         case .hasBalance:
             return request
                 .filter(
@@ -153,6 +141,7 @@ extension AssetsRequest {
         walletId: String,
         filters: [AssetsRequestFilter]
     )-> QueryInterfaceRequest<AssetRecordInfo>  {
+        let totalValue = (TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.totalAmount] * (TableAlias(name: PriceRecord.databaseTableName)[PriceRecord.Columns.price] ?? 0))
         let request = AssetRecord
             .including(optional: AssetRecord.account)
             .including(optional: AssetRecord.balance)
@@ -163,7 +152,13 @@ extension AssetsRequest {
             .filter(
                 TableAlias(name: AccountRecord.databaseTableName)[BalanceRecord.Columns.walletId] == walletId
             )
-            .order(Self.defaultOrder)
+            .order(
+                TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isPinned].desc,
+                TableAlias(name: BalanceRecord.databaseTableName)[BalanceRecord.Columns.isEnabled].desc,
+                totalValue.desc,
+                (totalValue == 0).desc,
+                AssetRecord.Columns.rank.desc
+            )
             .limit(Self.defaultQueryLimit)
         
         return Self.applyFilters(request: request, filters)
