@@ -2,8 +2,8 @@
 
 import Foundation
 import Primitives
-import SwiftUI
 import Style
+import SwiftUI
 
 import struct Gemstone.SwapProviderType
 
@@ -23,6 +23,7 @@ public extension Gemstone.SwapProviderType {
         case .mayan: Images.SwapProviders.mayan
         case .reservoir: Images.SwapProviders.reservoir
         case .symbiosis: Images.SwapProviders.symbiosis
+        case .chainflip: Images.SwapProviders.chainflip
         }
     }
 }
