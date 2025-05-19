@@ -7,11 +7,9 @@ import PrimitivesComponents
 
 struct ShowPrivateKeyViewModel {
     let text: String
-    let encoding: EncodingType
 
-    init(text: String, encoding: EncodingType) {
+    init(text: String) {
         self.text = text
-        self.encoding = encoding
     }
 }
 

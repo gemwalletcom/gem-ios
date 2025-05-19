@@ -27,7 +27,8 @@ final class SelectAssetViewModel {
     var request: AssetsRequest
 
     var onSelectAssetAction: AssetAction
-    var onDismissSearch: VoidAction = nil
+    var isSearching: Bool = false
+    var isDismissSearch: Bool = false
 
     init(
         preferences: Preferences = Preferences.standard,
@@ -164,7 +165,7 @@ extension SelectAssetViewModel {
     }
     
     func setSelected(tag: AssetTag) {
-        onDismissSearch?()
+        isDismissSearch.toggle()
         searchModel.tagsViewModel.setSelectedTag(tag)
         searchModel.focus = .tags
         updateRequest()
@@ -182,16 +183,12 @@ extension SelectAssetViewModel {
         state = isNetworkSearchEnabled ? .loading : .noData
     }
     
-    func onChangeFocus(isSearchable: Bool) {
+    func onChangeFocus(_: Bool, isSearchable: Bool) {
         if isSearchable {
             searchModel.focus = .search
             searchModel.tagsViewModel.setSelectedTag(nil)
             updateRequest()
         }
-    }
-
-    func setDismissSearchAction(_ onDismissSearch: @escaping () -> Void) {
-        self.onDismissSearch = onDismissSearch
     }
 }
 

@@ -169,7 +169,8 @@ public final class SwapSceneViewModel {
             model: AssetDataViewModel(
                 assetData: assetData,
                 formatter: .medium,
-                currencyCode: preferences.currency
+                currencyCode: preferences.currency,
+                currencyFormatterType: .currency
             ),
             type: type
         )

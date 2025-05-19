@@ -79,13 +79,13 @@ extension WalletDetailViewModel {
         try walletService.getMnemonic(wallet: wallet)
     }
     
-    func getPrivateKey(for chain: Chain) throws -> String {
-        let encoding = getEncodingType(for: chain)
-        return try walletService.getPrivateKey(wallet: wallet, chain: chain, encoding: encoding)
-    }
-    
-    func getEncodingType(for chain: Chain) -> EncodingType {
-        return chain.defaultKeyEncodingType
+    func getPrivateKey() throws -> String {
+        let chain = wallet.accounts[0].chain
+        return try walletService.getPrivateKey(
+            wallet: wallet,
+            chain: chain,
+            encoding: chain.defaultKeyEncodingType
+        )
     }
 
     func delete() throws {

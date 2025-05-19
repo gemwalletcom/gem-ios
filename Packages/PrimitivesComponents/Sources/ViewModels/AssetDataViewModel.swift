@@ -17,12 +17,14 @@ public struct AssetDataViewModel: Sendable {
     public init(
         assetData: AssetData,
         formatter: ValueFormatter,
-        currencyCode: String
+        currencyCode: String,
+        currencyFormatterType: CurrencyFormatterType = .abbreviated
     ) {
         self.assetData = assetData
         self.priceViewModel = PriceViewModel(
             price: assetData.price,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            currencyFormatterType: currencyFormatterType
         )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
@@ -110,7 +112,10 @@ public struct AssetDataViewModel: Sendable {
     }
 
     public var fiatBalanceText: String {
-        guard let price = priceViewModel.price else {
+        guard
+            let price = priceViewModel.price,
+            balanceViewModel.balanceAmount > 0
+        else {
             return .empty
         }
         let value = balanceViewModel.balanceAmount * price.price

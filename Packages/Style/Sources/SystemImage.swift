@@ -45,6 +45,8 @@ public struct SystemImage {
     public static let emoji = "face.smiling"
     public static let pencil = "pencil"
     public static let pencilLine = "pencil.line"
+    public static let checkmarkCircle = "checkmark.circle"
+    public static let circle = "circle"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
