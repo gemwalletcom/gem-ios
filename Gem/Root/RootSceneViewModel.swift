@@ -11,6 +11,7 @@ import TransactionService
 import WalletService
 import WalletsService
 import Onboarding
+import AppService
 
 @Observable
 @MainActor
@@ -19,14 +20,17 @@ final class RootSceneViewModel {
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
-    private let notificationService: NotificationService
+    private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
 
     let walletService: WalletService
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
-    var updateAvailableAlertSheetMessage: String?
+
+    var availableRelease: Release?
+    var canSkipUpdate: Bool { availableRelease?.upgradeRequired == false }
+    
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
         set { walletConnectorPresenter.isPresentingError = newValue }
@@ -47,7 +51,7 @@ final class RootSceneViewModel {
         transactionService: TransactionService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
-        notificationService: NotificationService,
+        notificationHandler: NotificationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService
@@ -57,7 +61,7 @@ final class RootSceneViewModel {
         self.transactionService = transactionService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
-        self.notificationService = notificationService
+        self.notificationHandler = notificationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
         self.walletsService = walletsService
@@ -68,9 +72,9 @@ final class RootSceneViewModel {
 
 extension RootSceneViewModel {
     func setup() {
-        onstartService.updateVersionAction = { [weak self] in
+        onstartService.releaseAction = { [weak self] in
             guard let self else { return }
-            self.updateAvailableAlertSheetMessage = $0
+            self.availableRelease = $0
         }
         onstartService.setup()
         transactionService.setup()
@@ -100,12 +104,17 @@ extension RootSceneViewModel {
             case .walletConnectRequest:
                 isPresentingConnectorBar = true
             case .asset(let assetId):
-                notificationService.notify(notification: PushNotification.asset(assetId))
+                notificationHandler.notify(notification: PushNotification.asset(assetId))
             }
         } catch {
             NSLog("RootSceneViewModel handleUrl error: \(error)")
             isPresentingConnectorError = error.localizedDescription
         }
+    }
+    
+    func skipRelease() {
+        guard let version = availableRelease?.version else { return }
+        onstartService.skipRelease(version)
     }
 }
 

@@ -21,13 +21,19 @@ struct RootScene: View {
                 MainTabView(
                     model: .init(wallet: currentWallet)
                 )
-                .alert(Localized.UpdateApp.title, isPresented: $model.updateAvailableAlertSheetMessage.mappedToBool()) {
-                    Button(Localized.Common.cancel, role: .cancel) { }
+                .alert(Localized.UpdateApp.title, isPresented: $model.availableRelease.mappedToBool()) {
+                    if model.canSkipUpdate {
+                        Button(Localized.Common.skip, role: .none) {
+                            model.skipRelease()
+                        }
+                    } else {
+                        Button(Localized.Common.cancel, role: .cancel) { }
+                    }
                     Button(Localized.UpdateApp.action, role: .none) {
                         UIApplication.shared.open(PublicConstants.url(.appStore))
                     }
                 } message: {
-                    Text(Localized.UpdateApp.description(model.updateAvailableAlertSheetMessage ?? ""))
+                    Text(Localized.UpdateApp.description(model.availableRelease?.version ?? ""))
                 }
             } else {
                 OnboardingNavigationView(

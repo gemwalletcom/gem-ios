@@ -13,6 +13,10 @@ let package = Package(
             name: "BannerService",
             targets: ["BannerService"]
         ),
+        .library(
+            name: "BannerServiceTestKit",
+            targets: ["BannerServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -31,5 +35,14 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "BannerServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "NotificationServiceTestKit", package: "NotificationService"),
+                "BannerService"
+            ],
+            path: "TestKit"
+        )
     ]
 )
