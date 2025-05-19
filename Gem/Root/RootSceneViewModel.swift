@@ -26,7 +26,10 @@ final class RootSceneViewModel {
     let walletConnectorPresenter: WalletConnectorPresenter
     let lockManager: any LockWindowManageable
     var currentWallet: Wallet? { walletService.currentWallet }
-    var updateAvailableAlertSheetMessage: String?
+
+    var availableRelease: Release?
+    var canSkipUpdate: Bool { availableRelease?.upgradeRequired == false }
+    
     var isPresentingConnectorError: String? {
         get { walletConnectorPresenter.isPresentingError }
         set { walletConnectorPresenter.isPresentingError = newValue }
@@ -68,9 +71,9 @@ final class RootSceneViewModel {
 
 extension RootSceneViewModel {
     func setup() {
-        onstartService.updateVersionAction = { [weak self] in
+        onstartService.releaseAction = { [weak self] in
             guard let self else { return }
-            self.updateAvailableAlertSheetMessage = $0
+            self.availableRelease = $0
         }
         onstartService.setup()
         transactionService.setup()
@@ -106,6 +109,11 @@ extension RootSceneViewModel {
             NSLog("RootSceneViewModel handleUrl error: \(error)")
             isPresentingConnectorError = error.localizedDescription
         }
+    }
+    
+    func skipRelease() {
+        guard let version = availableRelease?.version else { return }
+        onstartService.skipRelease(version)
     }
 }
 

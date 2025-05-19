@@ -22,7 +22,7 @@ final class OnstartAsyncService: Sendable {
     let bannerSetupService: BannerSetupService
 
     @MainActor
-    var updateVersionAction: StringAction = .none
+    var releaseAction: ((Release) -> Void)?
 
     init(
         assetStore: AssetStore,
@@ -89,12 +89,20 @@ final class OnstartAsyncService: Sendable {
                     }
                 }
             }
-            if let newVersion = config.releases.first(where: { $0.store == .appStore }),
-                VersionCheck.isVersionHigher(new: newVersion.version, current: Bundle.main.releaseVersionNumber) {
-                    NSLog("Newer version available")
+
+            if let release = config.releases.first(where: { $0.store == .appStore }),
+                VersionCheck.isVersionHigher(new: release.version, current: Bundle.main.releaseVersionNumber) {
+
+                if let skippedReleaseVersion = preferences.skippedReleaseVersion,
+                   skippedReleaseVersion == release.version {
+                    NSLog("Skipping newer version: \(release.version)")
+                    return
+                }
+
+                NSLog("Newer version available")
                 Task { @MainActor [weak self] in
                     guard let self else { return }
-                    updateVersionAction?(newVersion.version)
+                    releaseAction?(release)
                 }
             }
         } catch {
@@ -113,5 +121,9 @@ final class OnstartAsyncService: Sendable {
         Task {
             try await deviceService.update()
         }
+    }
+    
+    func skipRelease(_ version: String) {
+        preferences.skippedReleaseVersion = version
     }
 }
