@@ -16,10 +16,11 @@ public final class OnstartAsyncService: Sendable {
     private let assetStore: AssetStore
     private let nodeStore: NodeStore
     private let preferences: Preferences
-    private let configService: any GemAPIConfigService = GemAPIService()
-    private let service: ImportAssetsService
+    private let configService: any GemAPIConfigService
+    private let importAssetsService: ImportAssetsService
     private let deviceService: DeviceService
     private let bannerSetupService: BannerSetupService
+    private let releaseVersionNumber: String
 
     @MainActor
     public var releaseAction: ((Release) -> Void)?
@@ -30,18 +31,22 @@ public final class OnstartAsyncService: Sendable {
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        bannerSetupService: BannerSetupService
+        bannerSetupService: BannerSetupService,
+        configService: any GemAPIConfigService = GemAPIService(),
+        releaseVersionNumber: String = Bundle.main.releaseVersionNumber
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
         self.preferences = preferences
-        self.service = ImportAssetsService(
+        self.importAssetsService = ImportAssetsService(
             assetsService: assetsService,
             assetStore: assetStore,
             preferences: preferences
         )
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
+        self.configService = configService
+        self.releaseVersionNumber = releaseVersionNumber
     }
 
     public func setup() {
@@ -90,7 +95,7 @@ public final class OnstartAsyncService: Sendable {
         if versions.fiatOnRampAssets > preferences.fiatOnRampAssetsVersion || versions.fiatOffRampAssets > preferences.fiatOffRampAssetsVersion {
             Task {
                 do {
-                    try await service.updateFiatAssets()
+                    try await importAssetsService.updateFiatAssets()
                     NSLog("Update fiat assets version: on ramp: \(versions.fiatOnRampAssets), off ramp: \(versions.fiatOffRampAssets)")
                 } catch {
                     NSLog("Update fiat assets error: \(error)")
@@ -101,7 +106,7 @@ public final class OnstartAsyncService: Sendable {
         if versions.swapAssets > preferences.swapAssetsVersion {
             Task {
                 do {
-                    try await service.updateSwapAssets()
+                    try await importAssetsService.updateSwapAssets()
                     NSLog("Update swap assets version: \(versions.swapAssets)")
                 } catch {
                     NSLog("Update swap assets error: \(error)")
@@ -112,7 +117,7 @@ public final class OnstartAsyncService: Sendable {
     
     private func checkNewRelease(_ config: ConfigResponse) {
         if let release = config.releases.first(where: { $0.store == .appStore }),
-            VersionCheck.isVersionHigher(new: release.version, current: Bundle.main.releaseVersionNumber) {
+            VersionCheck.isVersionHigher(new: release.version, current: releaseVersionNumber) {
 
             if let skippedReleaseVersion = preferences.skippedReleaseVersion,
                skippedReleaseVersion == release.version {

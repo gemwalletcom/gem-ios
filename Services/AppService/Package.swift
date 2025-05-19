@@ -48,8 +48,11 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "GemAPITestKit", package: "GemAPI"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
-                "AssetsService",
-                "Primitives"
+                .product(name: "AssetsServiceTestKit", package: "AssetsService"),
+                .product(name: "DeviceServiceTestKit", package: "DeviceService"),
+                .product(name: "BannerServiceTestKit", package: "BannerService"),
+                "Primitives",
+                "AppService"
             ]
         ),
     ]

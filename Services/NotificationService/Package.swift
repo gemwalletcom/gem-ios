@@ -11,7 +11,12 @@ let package = Package(
     products: [
         .library(
             name: "NotificationService",
-            targets: ["NotificationService"]),
+            targets: ["NotificationService"]
+        ),
+        .library(
+            name: "NotificationServiceTestKit",
+            targets: ["NotificationServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Preferences", path: "../../Packages/Preferences"),
@@ -24,5 +29,13 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .target(
+            name: "NotificationServiceTestKit",
+            dependencies: [
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                "NotificationService"
+            ],
+            path: "TestKit"
+        )
     ]
 )
