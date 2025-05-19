@@ -11,9 +11,13 @@ public struct PriceViewModel: Sendable {
     private let currencyFormatter: CurrencyFormatter
     static let percentFormatter = CurrencyFormatter.percent
 
-    public init(price: Price?, currencyCode: String) {
+    public init(
+        price: Price?,
+        currencyCode: String,
+        currencyFormatterType: CurrencyFormatterType = .abbreviated
+    ) {
         self.price = price
-        self.currencyFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: currencyCode)
+        self.currencyFormatter = CurrencyFormatter(type: currencyFormatterType, currencyCode: currencyCode)
     }
 
     public var isPriceAvailable: Bool {
