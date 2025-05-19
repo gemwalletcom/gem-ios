@@ -17,7 +17,7 @@ struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
-    @Environment(\.notificationHandler) private var notificationService
+    @Environment(\.notificationHandler) private var notificationHandler
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService
@@ -113,7 +113,7 @@ struct MainTabView: View {
         }
         .onChange(of: model.walletId, onWalletIdChange)
         .onChange(
-            of: notificationService.notifications,
+            of: notificationHandler.notifications,
             initial: true,
             onReceiveNotifications
         )
@@ -168,7 +168,7 @@ extension MainTabView {
                 await onReceiveNotification(notification: notification)
             }
         }
-        notificationService.clear()
+        notificationHandler.clear()
     }
 
     private func onReceiveNotification(notification: PushNotification) async {
