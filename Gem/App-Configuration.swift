@@ -109,8 +109,8 @@ extension AssetsService {
     )
 }
 
-extension NotificationService {
-    static let main = NotificationService()
+extension NotificationHandler {
+    static let main = NotificationHandler()
 }
 
 extension BalanceService {

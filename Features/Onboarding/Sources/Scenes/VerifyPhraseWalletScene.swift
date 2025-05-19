@@ -11,14 +11,9 @@ struct VerifyPhraseWalletScene: View {
     @StateObject var model: VerifyPhraseViewModel
 
     @State private var isPresentingErrorMessage: String?
-    @Binding private var isPresentingWallets: Bool
 
-    init(
-        model: VerifyPhraseViewModel,
-        isPresentingWallets: Binding<Bool>
-    ) {
+    init(model: VerifyPhraseViewModel) {
         _model = StateObject(wrappedValue: model)
-        _isPresentingWallets = isPresentingWallets
     }
 
     var body: some View {
@@ -81,8 +76,7 @@ extension VerifyPhraseWalletScene {
             try await Task.sleep(for: .milliseconds(50))
             do {
                 try await MainActor.run {
-                    let _ = try model.importWallet()
-                    isPresentingWallets = false
+                    try model.importWallet()
                 }
             } catch {
                 await MainActor.run {

@@ -63,6 +63,19 @@ public final class ObservablePreferences: Sendable {
             }
         }
     }
+    
+    @ObservationIgnored
+    public var isAcceptTermsCompleted: Bool {
+        get {
+            access(keyPath: \.isAcceptTermsCompleted)
+            return preferences.isAcceptTermsCompleted
+        }
+        set {
+            withMutation(keyPath: \.isAcceptTermsCompleted) {
+                preferences.isAcceptTermsCompleted = newValue
+            }
+        }
+    }
 }
 
 // MARK: - EnvironmentValues

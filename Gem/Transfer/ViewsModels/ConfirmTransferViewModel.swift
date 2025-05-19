@@ -493,14 +493,14 @@ extension ConfirmTransferViewModel {
             }
             return .outgoing
         }()
-
-        let transactionType: TransactionType = switch transferDataType {
+        // special case for transactionType and metadata, high level shit code to handle swap and approve at once
+        let data: (type: TransactionType, metadata: TransactionMetadata) = switch transferDataType {
         case .swap(_, _, _, let data):
             switch data.approval {
-            case .some: index == 0 ? .tokenApproval : .swap
-            case .none: .swap
+            case .some: index == 0 ? (.tokenApproval, .null) : (.swap, transferDataType.metadata)
+            case .none: (.swap, transferDataType.metadata)
             }
-        default: transferDataType.transactionType
+        default: (transferDataType.transactionType, transferDataType.metadata)
         }
 
         return Transaction(
@@ -510,7 +510,7 @@ extension ConfirmTransferViewModel {
             from: senderAddress,
             to: recipientData.recipient.address,
             contract: .none,
-            type: transactionType,
+            type: data.type,
             state: .pending,
             blockNumber: String(input.block.number),
             sequence: input.sequence.asString,
@@ -521,7 +521,7 @@ extension ConfirmTransferViewModel {
             direction: direction,
             utxoInputs: [],
             utxoOutputs: [],
-            metadata: transferDataType.metadata,
+            metadata: data.metadata,
             createdAt: Date()
         )
     }

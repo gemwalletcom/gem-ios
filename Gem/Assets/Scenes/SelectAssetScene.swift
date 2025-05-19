@@ -41,8 +41,8 @@ struct SelectAssetScene: View {
     var body: some View {
         SearchableWrapper(
             content: { list },
-            onChangeIsSearching: model.onChangeFocus,
-            onDismissSearch: model.setDismissSearchAction
+            isSearching: $model.isSearching,
+            dismissSearch: $model.isDismissSearch
         )
         .listSectionSpacing(.compact)
         .searchable(
@@ -72,6 +72,7 @@ struct SelectAssetScene: View {
         }
         .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
+        .onChange(of: model.isSearching, model.onChangeFocus)
         .ifLet(copyTypeViewModel) {
             $0.copyToast(
                 model: $1,

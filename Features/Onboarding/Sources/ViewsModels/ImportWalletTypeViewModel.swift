@@ -19,6 +19,10 @@ public struct ImportWalletTypeViewModel {
     func items(for searchText: String) -> [Chain] {
         filterChains(for: searchText)
     }
+    
+    func acceptTerms() {
+        walletService.acceptTerms()
+    }
 }
 
 // MARK: - Equatable

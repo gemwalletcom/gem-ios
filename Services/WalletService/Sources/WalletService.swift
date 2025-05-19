@@ -13,6 +13,7 @@ public struct WalletService: Sendable {
     private let walletStore: WalletStore
     private let avatarService: AvatarService
     private let walletSessionService: any WalletSessionManageable
+    private let preferences: ObservablePreferences
 
     public init(
         keystore: any Keystore,
@@ -24,10 +25,7 @@ public struct WalletService: Sendable {
         self.walletStore = walletStore
         self.avatarService = avatarService
         self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
-    }
-
-    public func nextWalletIndex() throws -> Int {
-        try walletStore.nextWalletIndex()
+        self.preferences = preferences
     }
 
     public var currentWaletId: WalletId? {
@@ -41,6 +39,14 @@ public struct WalletService: Sendable {
     public var wallets: [Wallet] {
         walletSessionService.wallets
     }
+    
+    public var isAcceptTermsCompleted: Bool {
+        preferences.isAcceptTermsCompleted
+    }
+    
+    public func nextWalletIndex() throws -> Int {
+        try walletStore.nextWalletIndex()
+    }
 
     public func setCurrent(for index: Int) {
         walletSessionService.setCurrent(index: index)
@@ -48,6 +54,10 @@ public struct WalletService: Sendable {
 
     public func setCurrent(for walletId: WalletId) {
         walletSessionService.setCurrent(walletId: walletId)
+    }
+    
+    public func acceptTerms() {
+        preferences.isAcceptTermsCompleted = true
     }
 
     public func createWallet() -> [String] {
