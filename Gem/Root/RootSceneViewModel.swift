@@ -20,7 +20,7 @@ final class RootSceneViewModel {
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
-    private let notificationService: NotificationService
+    private let notificationHandler: NotificationHandler
     private let walletsService: WalletsService
 
     let walletService: WalletService
@@ -51,7 +51,7 @@ final class RootSceneViewModel {
         transactionService: TransactionService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
-        notificationService: NotificationService,
+        notificationHandler: NotificationHandler,
         lockWindowManager: any LockWindowManageable,
         walletService: WalletService,
         walletsService: WalletsService
@@ -61,7 +61,7 @@ final class RootSceneViewModel {
         self.transactionService = transactionService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
-        self.notificationService = notificationService
+        self.notificationHandler = notificationHandler
         self.lockManager = lockWindowManager
         self.walletService = walletService
         self.walletsService = walletsService
@@ -104,7 +104,7 @@ extension RootSceneViewModel {
             case .walletConnectRequest:
                 isPresentingConnectorBar = true
             case .asset(let assetId):
-                notificationService.notify(notification: PushNotification.asset(assetId))
+                notificationHandler.notify(notification: PushNotification.asset(assetId))
             }
         } catch {
             NSLog("RootSceneViewModel handleUrl error: \(error)")

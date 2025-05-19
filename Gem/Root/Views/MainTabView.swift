@@ -17,7 +17,7 @@ struct MainTabView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(\.walletsService) private var walletsService
     @Environment(\.transactionsService) private var transactionsService
-    @Environment(\.notificationService) private var notificationService
+    @Environment(\.notificationHandler) private var notificationService
     @Environment(\.bannerService) private var bannerService
     @Environment(\.navigationState) private var navigationState
     @Environment(\.nftService) private var nftService

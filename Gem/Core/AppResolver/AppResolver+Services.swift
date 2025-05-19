@@ -28,7 +28,7 @@ extension AppResolver {
         let connectionsService: ConnectionsService
         let deviceService: DeviceService
         let nodeService: NodeService
-        let notificationService: NotificationService
+        let notificationHandler: NotificationHandler
         let priceAlertService: PriceAlertService
         let priceService: PriceService
         let priceObserverService: PriceObserverService
@@ -51,7 +51,7 @@ extension AppResolver {
             connectionsService: ConnectionsService,
             deviceService: DeviceService,
             nodeService: NodeService,
-            notificationService: NotificationService,
+            notificationHandler: NotificationHandler,
             priceAlertService: PriceAlertService,
             priceObserverService: PriceObserverService,
             priceService: PriceService,
@@ -72,7 +72,7 @@ extension AppResolver {
             self.connectionsService = connectionsService
             self.deviceService = deviceService
             self.nodeService = nodeService
-            self.notificationService = notificationService
+            self.notificationHandler = notificationHandler
             self.priceAlertService = priceAlertService
             self.priceService = priceService
             self.priceObserverService = priceObserverService
