@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 
 @Observable
-final class NotificationService: Sendable {
+final class NotificationHandler: Sendable {
     @MainActor
     var notifications: [PushNotification] = []
 
@@ -12,7 +12,7 @@ final class NotificationService: Sendable {
 }
 
 @MainActor
-extension NotificationService {
+extension NotificationHandler {
     func clear() {
         notifications = []
     }

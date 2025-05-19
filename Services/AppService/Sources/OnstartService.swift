@@ -10,15 +10,29 @@ import WalletService
 
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
-struct OnstartService {
+public struct OnstartService {
     
-    let assetsService: AssetsService
-    let assetStore: AssetStore
-    let nodeStore: NodeStore
-    let preferences: Preferences
-    let walletService: WalletService
+    private let assetsService: AssetsService
+    private let assetStore: AssetStore
+    private let nodeStore: NodeStore
+    private let preferences: Preferences
+    private let walletService: WalletService
+    
+    public init(
+        assetsService: AssetsService,
+        assetStore: AssetStore,
+        nodeStore: NodeStore,
+        preferences: Preferences,
+        walletService: WalletService
+    ) {
+        self.assetsService = assetsService
+        self.assetStore = assetStore
+        self.nodeStore = nodeStore
+        self.preferences = preferences
+        self.walletService = walletService
+    }
 
-    func migrations() {
+    public func migrations() {
         do {
             try walletService.setup(chains: AssetConfiguration.allChains)
         } catch {

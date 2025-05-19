@@ -25,6 +25,7 @@ import WalletsService
 import WalletService
 import AvatarService
 import WalletSessionService
+import AppService
 
 struct ServicesFactory {
     func makeServices(storages: AppResolver.Storages) -> AppResolver.Services {
@@ -90,7 +91,7 @@ struct ServicesFactory {
             bannerStore: storeManager.bannerStore,
             preferences: preferences
         )
-        let notificationService = NotificationService.main
+        let notificationHandler = NotificationHandler.main
 
         let priceService = PriceService(
             priceStore: storeManager.priceStore,
@@ -151,7 +152,7 @@ struct ServicesFactory {
             connectionsService: connectionsService,
             deviceService: deviceService,
             nodeService: nodeService,
-            notificationService: notificationService,
+            notificationHandler: notificationHandler,
             priceAlertService: priceAlertService,
             priceObserverService: priceObserverService,
             priceService: priceService,
