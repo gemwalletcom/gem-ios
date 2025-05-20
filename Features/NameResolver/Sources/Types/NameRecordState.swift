@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public enum NameRecordState {
+public enum NameRecordState: Equatable, Hashable, Sendable {
     case none
     case loading
     case error

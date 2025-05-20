@@ -2,11 +2,13 @@ import Foundation
 import Primitives
 import Localization
 
-public enum TransferError: LocalizedError {
+public enum TransferError: Equatable {
     case invalidAmount
     case minimumAmount(string: String)
     case invalidAddress(asset: Asset)
-    
+}
+
+extension TransferError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .invalidAmount:
