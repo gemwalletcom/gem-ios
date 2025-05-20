@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import SwiftUI
-import Primitives
-import Localization
 import Blockchain
+import Localization
+import Primitives
+import SwiftUI
 
 @Observable
 @MainActor
@@ -16,10 +16,10 @@ public final class NetworkFeeSceneViewModel {
     public var fiatValue: String?
 
     private let service: any ChainFeeRateFetchable
-    
+
     public init(
         chain: Chain,
-        priority: FeePriority = .normal,
+        priority: FeePriority,
         service: any ChainFeeRateFetchable
     ) {
         self.chain = chain
@@ -49,7 +49,7 @@ public final class NetworkFeeSceneViewModel {
     public var showFeeRatesSelector: Bool {
         rates.count > 1
     }
-    
+
     public func getFeeRates(type: TransferDataType) async throws -> [FeeRate] {
         if rates.isEmpty {
             self.rates = try await service.feeRates(type: type)
