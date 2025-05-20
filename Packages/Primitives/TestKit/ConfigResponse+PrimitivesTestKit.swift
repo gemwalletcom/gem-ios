@@ -30,9 +30,9 @@ public extension Release {
 
 public extension ConfigVersions {
     static func mock(
-        fiatOnRampAssets: Int32 = 1,
-        fiatOffRampAssets: Int32 = 1,
-        swapAssets: Int32 = 1
+        fiatOnRampAssets: Int32 = 0,
+        fiatOffRampAssets: Int32 = 0,
+        swapAssets: Int32 = 0
     ) -> Self {
         ConfigVersions(
             fiatOnRampAssets: fiatOnRampAssets,

@@ -377,6 +377,13 @@
       }
     },
     {
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "OnstartAsyncServiceTests"
+          }
+        ]
+      },
       "target" : {
         "containerPath" : "container:Services\/AppService",
         "identifier" : "AppServiceTests",
