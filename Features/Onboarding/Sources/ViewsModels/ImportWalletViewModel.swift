@@ -71,7 +71,7 @@ class ImportWalletViewModel: ObservableObject {
         onFinish?()
     }
     
-    func wordSuggestionCalculate(value: String) -> String? {
+    func wordSuggestionCalculate(value: String) -> [String] {
         wordSuggester.wordSuggestionCalculate(value: value)
     }
     

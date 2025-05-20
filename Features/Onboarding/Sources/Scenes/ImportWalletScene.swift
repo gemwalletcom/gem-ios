@@ -13,7 +13,7 @@ struct ImportWalletScene: View {
         case name, input
     }
     @State private var name: String = ""
-    @State private var wordSuggestion: String? = .none
+    @State private var wordsSuggestion: [String] = []
 
     @State private var importType: WalletImportType = .phrase
     @State private var input: String = ""
@@ -58,7 +58,7 @@ struct ImportWalletScene: View {
                                 .toolbar {
                                     if importType.showToolbar {
                                         ToolbarItem(placement: .keyboard) {
-                                            WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
+                                            WordSuggestionView(words: wordsSuggestion, selectWord: selectWord)
                                         }
                                     }
                                 }
@@ -110,7 +110,7 @@ struct ImportWalletScene: View {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .onChange(of: input) { oldValue, newValue in
-            wordSuggestion = model.wordSuggestionCalculate(value: newValue)
+            wordsSuggestion = model.wordSuggestionCalculate(value: newValue)
         }
         .onChange(of: importType) { (_, _) in
             input = ""
