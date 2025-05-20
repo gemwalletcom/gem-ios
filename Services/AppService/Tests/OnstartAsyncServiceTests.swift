@@ -16,7 +16,7 @@ struct OnstartAsyncServiceTests {
         
         await confirmation(expectedCount: 1) { confirmation in
             service.releaseAction = { release in
-                #expect(release.version == "1.1.1")
+                #expect(release.version == "16.1")
                 confirmation()
             }
             await service.migrations()
@@ -31,15 +31,9 @@ struct OnstartAsyncServiceTests {
             service.releaseAction = { _ in
                 confirmation()
             }
-            service.skipRelease("1.1.1")
+            service.skipRelease("16.1")
             await service.migrations()
         }
-    }
-    
-    @Test
-    func testGetRelease() async throws {
-        let service = OnstartAsyncService.mock()
-        #expect(try await service.getRelease()?.version == "1.1.1")
     }
 }
 
@@ -52,8 +46,7 @@ extension OnstartAsyncService {
             assetsService: .mock(),
             deviceService: .mock(),
             bannerSetupService: .mock(),
-            configService: GemAPIConfigServiceMock(config: .mock()),
-            releaseVersionNumber: "1.0.0"
+            configService: GemAPIConfigServiceMock(config: .mock())
         )
     }
 }

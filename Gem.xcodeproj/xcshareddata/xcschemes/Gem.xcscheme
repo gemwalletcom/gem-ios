@@ -441,6 +441,16 @@
                ReferencedContainer = "container:Services/StakeService">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppServiceTests"
+               BuildableName = "AppServiceTests"
+               BlueprintName = "AppServiceTests"
+               ReferencedContainer = "container:Services/AppService">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

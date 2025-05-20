@@ -375,6 +375,13 @@
         "identifier" : "PriceServiceTests",
         "name" : "PriceServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/AppService",
+        "identifier" : "AppServiceTests",
+        "name" : "AppServiceTests"
+      }
     }
   ],
   "version" : 1
