@@ -84,6 +84,11 @@ public final class OnstartAsyncService: Sendable {
         preferences.skippedReleaseVersion = version
     }
     
+    public func getRelease() async throws -> Release? {
+        let config = try await configService.getConfig()
+        return release(config)
+    }
+    
     // MARK: - Private methods
     
     private func importNodes() throws {
@@ -116,20 +121,20 @@ public final class OnstartAsyncService: Sendable {
     }
     
     private func checkNewRelease(_ config: ConfigResponse) {
-        if let release = config.releases.first(where: { $0.store == .appStore }),
-            VersionCheck.isVersionHigher(new: release.version, current: releaseVersionNumber) {
+        guard let release = release(config) else {
+            return
+        }
 
-            if let skippedReleaseVersion = preferences.skippedReleaseVersion,
-               skippedReleaseVersion == release.version {
-                NSLog("Skipping newer version: \(release.version)")
-                return
-            }
+        if let skippedReleaseVersion = preferences.skippedReleaseVersion,
+           skippedReleaseVersion == release.version {
+            NSLog("Skipping newer version: \(release.version)")
+            return
+        }
 
-            NSLog("Newer version available")
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                releaseAction?(release)
-            }
+        NSLog("Newer version available")
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            releaseAction?(release)
         }
     }
     
@@ -150,5 +155,15 @@ public final class OnstartAsyncService: Sendable {
         Task {
             try await deviceService.update()
         }
+    }
+    
+    private func release(_ config: ConfigResponse) -> Release? {
+        guard
+            let release = config.releases.first(where: { $0.store == .appStore }),
+            VersionCheck.isVersionHigher(new: release.version, current: releaseVersionNumber)
+        else {
+            return nil
+        }
+        return release
     }
 }
