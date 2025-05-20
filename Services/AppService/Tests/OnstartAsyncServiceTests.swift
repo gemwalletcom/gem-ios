@@ -14,8 +14,8 @@ struct OnstartAsyncServiceTests {
     func testNewRelease() async throws {
         let service = OnstartAsyncService.mock()
         
-        await confirmation(expectedCount: 1) { confirmation in
-            service.releaseAction = { release in
+        await confirmation(expectedCount: 1) { @Sendable confirmation in
+            service.releaseAction = { @Sendable release in
                 #expect(release.version == "16.1")
                 confirmation()
             }
@@ -27,8 +27,8 @@ struct OnstartAsyncServiceTests {
     func testSkipRelease() async throws {
         let service = OnstartAsyncService.mock()
         
-        await confirmation(expectedCount: 0) { confirmation in
-            service.releaseAction = { _ in
+        await confirmation(expectedCount: 0) { @Sendable confirmation in
+            service.releaseAction = { @Sendable _ in
                 confirmation()
             }
             service.skipRelease("16.1")
