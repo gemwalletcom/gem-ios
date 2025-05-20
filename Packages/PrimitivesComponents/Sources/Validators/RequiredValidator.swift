@@ -11,7 +11,7 @@ public struct RequiredValidator: TextValidator {
 
     public func validate(_ text: String) throws {
         guard !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            throw RequiredFieldError.field(name: requireName)
+            throw RequiredFieldError(field: requireName)
         }
     }
 

@@ -3,15 +3,16 @@
 import Foundation
 import Localization
 
-public enum RequiredFieldError: Equatable {
-    case field(name: String)
+public struct RequiredFieldError: Equatable {
+    private let field: String
+
+    public init(field: String) {
+        self.field = field
+    }
 }
 
 extension RequiredFieldError: LocalizedError {
     public var errorDescription: String? {
-        guard case .field(let name) = self else {
-            return .none
-        }
-        return Localized.Errors.required(name)
+        Localized.Errors.required(field)
     }
 }
