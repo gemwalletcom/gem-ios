@@ -10,7 +10,7 @@ public struct AboutUsScene: View {
     @State private var model: AboutUsViewModel
 
     public init(model: AboutUsViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
