@@ -17,7 +17,7 @@ struct RequiredValidatorTests {
     func throwsOnEmptyString() {
         let validator = RequiredValidator(requireName: "Wallet 1")
 
-        #expect(throws: RequiredFieldError.field(name: fieldName)) {
+        #expect(throws: RequiredFieldError(field: fieldName)) {
             try validator.validate("")
         }
     }
@@ -26,7 +26,7 @@ struct RequiredValidatorTests {
     func throwsOnWhitespaceOnly() {
         let validator = RequiredValidator(requireName: "Wallet 1")
 
-        #expect(throws: RequiredFieldError.field(name: fieldName)) {
+        #expect(throws: RequiredFieldError(field: fieldName)) {
             try validator.validate("   \n\t")
         }
     }
