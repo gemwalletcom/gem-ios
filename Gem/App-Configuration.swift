@@ -1,4 +1,5 @@
 import Foundation
+import AppService
 import Primitives
 import Keystore
 import Components
@@ -255,6 +256,10 @@ extension NFTStore {
 
 extension AvatarService {
     static let main = AvatarService(store: .main)
+}
+
+extension AppReleaseService {
+    static let main = AppReleaseService()
 }
 
 extension WalletConnectorSigner {
