@@ -8,8 +8,8 @@ import GemAPITestKit
 
 @testable import AppService
 
-@MainActor
 struct OnstartAsyncServiceTests {
+
     @Test
     func testNewRelease() async throws {
         let service = OnstartAsyncService.mock()
