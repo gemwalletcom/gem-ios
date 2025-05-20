@@ -8,8 +8,9 @@ import struct Staking.StakeValidatorViewModel
 import struct Staking.ValidatorView
 
 struct AmountScene: View {
-    private var model: AmountSceneViewModel
     @FocusState private var focusedField: Bool
+
+    private var model: AmountSceneViewModel
 
     public init(model: AmountSceneViewModel) {
         self.model = model
@@ -54,9 +55,10 @@ struct AmountScene: View {
                     if let viewModel = model.stakeValidatorViewModel  {
                         Section(model.validatorTitle) {
                             if model.isSelectValidatorEnabled {
-                                NavigationCustomLink(with: ValidatorView(model: viewModel)) {
-                                    model.setCurrentValidator()
-                                }
+                                NavigationCustomLink(
+                                    with: ValidatorView(model: viewModel),
+                                    action: model.onSelectCurrentValidator
+                                )
                             } else {
                                 ValidatorView(model: viewModel)
                             }
@@ -79,7 +81,6 @@ struct AmountScene: View {
         .frame(maxWidth: .infinity)
         .navigationTitle(model.title)
         .onAppear(perform: model.onAppear)
-        .taskOnce(model.setRecipientAmountIfNeeded)
         .onChange(of: model.focusField, onChangeFocus)
     }
 }

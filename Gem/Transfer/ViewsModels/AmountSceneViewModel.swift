@@ -26,8 +26,13 @@ final class AmountSceneViewModel {
     var isPresentingErrorMessage: String?
     var focusField: Bool = false
 
-    private var currentValidator: DelegationValidator? = .none
-    private var currentDelegation: Delegation? = .none
+    private let formatter = ValueFormatter(style: .full)
+    private let currencyFormatter = CurrencyFormatter.currency()
+    private let numberSanitizer = NumberSanitizer()
+    private let valueConverter = ValueConverter()
+
+    private var currentValidator: DelegationValidator?
+    private var currentDelegation: Delegation?
     private var amountInputType: AmountInputType = .asset
 
     public init(
@@ -43,12 +48,12 @@ final class AmountSceneViewModel {
         self.stakeService = stakeService
         self.onTransferAction = onTransferAction
         self.currentValidator = defaultValidator
+
+        // set amount if avaialbe in recipientData
+        if let recipientAmount = recipientData.amount {
+            amountText = recipientAmount
+        }
     }
-    
-    private let formatter = ValueFormatter(style: .full)
-    private let currencyFormatter = CurrencyFormatter.currency()
-    private let numberSanitizer = NumberSanitizer()
-    private let valueConverter = ValueConverter()
     
     var type: AmountType { input.type }
     var asset: Asset { input.asset }
@@ -62,13 +67,6 @@ final class AmountSceneViewModel {
     var nextTitle: String { Localized.Common.next }
     var continueTitle: String { Localized.Common.continue }
 
-    var amountTransferValue: String {
-        switch amountInputType {
-        case .asset: amountText
-        case .fiat: amountValue
-        }
-    }
-
     var inputConfig: any CurrencyInputConfigurable {
         AmountInputConfig(
             sceneType: type,
@@ -80,7 +78,17 @@ final class AmountSceneViewModel {
             onTapActionButton: handleInputAction
         )
     }
-    
+
+    var title: String {
+        switch type {
+        case .transfer: Localized.Transfer.Send.title
+        case .stake: Localized.Transfer.Stake.title
+        case .unstake: Localized.Transfer.Unstake.title
+        case .redelegate: Localized.Transfer.Redelegate.title
+        case .withdraw: Localized.Transfer.Withdraw.title
+        }
+    }
+
     var secondaryText: String {
         switch amountInputType {
         case .asset: fiatValueText
@@ -88,13 +96,12 @@ final class AmountSceneViewModel {
         }
     }
 
-    var defaultValidator: DelegationValidator? {
-        let recommended: DelegationValidator? = switch type {
-        case .stake(_, let recommendedValidator): recommendedValidator
-        case .redelegate(_, _, let recommendedValidator): recommendedValidator
-        case .transfer, .unstake, .withdraw: .none
-        }
-        return recommended ?? validators.first
+    var balanceText: String {
+        ValueFormatter(style: .medium).string(
+            availableValue,
+            decimals: asset.decimals.asInt,
+            currency: asset.symbol
+        )
     }
 
     var validators: [DelegationValidator] {
@@ -128,94 +135,84 @@ final class AmountSceneViewModel {
         }
     }
     
-    var title: String {
-        switch type {
-        case .transfer: Localized.Transfer.Send.title
-        case .stake: Localized.Transfer.Stake.title
-        case .unstake: Localized.Transfer.Unstake.title
-        case .redelegate: Localized.Transfer.Redelegate.title
-        case .withdraw: Localized.Transfer.Withdraw.title
-        }
-    }
-    
-    var availableValue: BigInt {
-        switch input.type {
-        case .transfer, .stake:
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-            return balance.available
-        case .unstake(let delegation):
-            return delegation.base.balanceValue
-        case .redelegate(let delegation, _, _):
-            return delegation.base.balanceValue
-        case .withdraw(let delegation):
-            return delegation.base.balanceValue
-        }
-    }
-    
-    var maxBalance: String {
-        formatter.string(availableValue, decimals: asset.decimals.asInt)
-    }
-    
-    var balanceText: String {
-        ValueFormatter(style: .medium).string(
-            availableValue,
-            decimals: asset.decimals.asInt,
-            currency: asset.symbol
-        )
-    }
-    
-    var isAmountChangable: Bool {
-        switch type {
-        case .transfer,
-            .stake,
-            .redelegate:
-            return true
-        case .unstake:
-            if let chain = StakeChain(rawValue: asset.chain.rawValue) {
-                return chain.canChangeAmountOnUnstake
-            }
-            return true
-        case .withdraw:
-            return false
-        }
-    }
-    
     var isSelectValidatorEnabled: Bool {
         switch type {
-        case .transfer, .stake, .redelegate:
-            return true
-        case .unstake, .withdraw:
-            return false
+        case .transfer, .stake, .redelegate: true
+        case .unstake, .withdraw: false
         }
     }
-    
-    var minimumValue: BigInt {
-        let stakeChain = asset.chain.stakeChain
-        switch type {
-        case .stake:
-            return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
-        case .redelegate:
-            switch stakeChain {
-            case .smartChain:
-                return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
-            default:
-                break
+}
+
+// MARK: - Business Logic
+
+extension AmountSceneViewModel {
+    func onAppear() {
+        if isAmountChangable {
+            if focusField == false {
+                focusField = true
             }
-        case .unstake, .withdraw, .transfer:
-            break
+        } else {
+            setMax()
         }
-        return BigInt(0)
-    }
-    
-    var minimumValueText: String {
-        ValueFormatter(style: .short).string(
-            minimumValue,
-            decimals: asset.decimals.asInt,
-            currency: asset.symbol
-        )
     }
 
-    var recipientData: RecipientData {
+    func onSelectNextButton() {
+        do {
+            try onNext()
+        } catch {
+            isPresentingErrorMessage = error.localizedDescription
+        }
+    }
+
+    func onSelectMaxButton() {
+        setMax()
+        focusField = false
+    }
+
+    func onSelectCurrentValidator() {
+        delegation = currentValidator
+    }
+
+    func onSelectValidator(_ validator: DelegationValidator) {
+        resetAmount()
+        setSelectedValidator(validator)
+    }
+}
+
+// MARK: - Private
+
+extension AmountSceneViewModel {
+    private func handleInputAction() {
+        toggleAmountInputType()
+        amountText = .empty
+    }
+
+    private func toggleAmountInputType() {
+        switch amountInputType {
+        case .asset: amountInputType = .fiat
+        case .fiat: amountInputType = .asset
+        }
+    }
+
+    private func setMax() {
+        amountInputType = .asset
+        amountText = maxBalance
+    }
+
+    private func resetAmount() {
+        amountText = .empty
+    }
+
+    private func setSelectedValidator(_ validator: DelegationValidator) {
+        currentValidator = validator
+    }
+
+    private func onNext() throws {
+        let transfer = try getTransferData(value: try isValidAmount(), canChangeValue: true)
+        onTransferAction?(transfer)
+    }
+
+    private var recipientData: RecipientData {
         switch type {
         case .transfer(recipient: let recipient):
             return recipient
@@ -223,13 +220,13 @@ final class AmountSceneViewModel {
             .unstake,
             .redelegate,
             .withdraw:
-            
+
             let recipientAddress = self.stakeService.getRecipientAddress(
                 chain: asset.chain.stakeChain,
                 type: type,
                 validatorId: currentValidator?.id
             )
-            
+
             return RecipientData(
                 recipient: Recipient(
                     name: currentValidator?.name,
@@ -240,15 +237,15 @@ final class AmountSceneViewModel {
             )
         }
     }
-    
+
     private var fiatValueText: String {
         currencyFormatter.string(fiatValue.doubleValue)
     }
-    
+
     private var amountValueText: String {
         [amountValue, asset.symbol].joined(separator: " ")
     }
-    
+
     private var amountValue: String {
         guard let price = getAssetPrice() else { return .zero }
         return (try? valueConverter.convertToAmount(
@@ -257,7 +254,7 @@ final class AmountSceneViewModel {
             decimals: asset.decimals.asInt
         )).or(.zero)
     }
-    
+
     private var fiatValue: Decimal {
         guard let price = getAssetPrice() else { return .zero }
         return (try? valueConverter.convertToFiat(
@@ -265,26 +262,24 @@ final class AmountSceneViewModel {
             price: price
         )).or(.zero)
     }
-    
-    // MARK: - Private methods
-    
+
     private func isValidAmount() throws -> BigInt {
         if amountTransferValue.isEmpty {
             throw TransferError.invalidAmount
         }
-        
+
         let value = try value(for: amountTransferValue)
-        
+
         if value.isZero {
             throw TransferError.invalidAmount
         }
         if minimumValue > value {
             throw TransferError.minimumAmount(string: minimumValueText)
         }
-        
+
         return value
     }
-    
+
     private func getTransferData(value: BigInt, canChangeValue: Bool) throws -> TransferData {
         switch type {
         case .transfer:
@@ -330,84 +325,88 @@ final class AmountSceneViewModel {
             )
         }
     }
-    
+
     private func value(for amount: String) throws -> BigInt {
         try formatter.inputNumber(from: amount, decimals: asset.decimals.asInt)
     }
-    
+
     private func getAssetPrice() -> AssetPrice? {
         try? walletsService.priceService.getPrice(for: asset.id)
     }
-    
-    private func handleInputAction() {
-        toggleAmountInputType()
-        amountText = .empty
-    }
-    
-    private func toggleAmountInputType() {
-        switch amountInputType {
-        case .asset: amountInputType = .fiat
-        case .fiat: amountInputType = .asset
-        }
-    }
-}
 
-// MARK: - Business Logic
-
-extension AmountSceneViewModel {
-    func onAppear() {
-        if isAmountChangable {
-            if focusField == false {
-                focusField = true
+    private var minimumValue: BigInt {
+        let stakeChain = asset.chain.stakeChain
+        switch type {
+        case .stake:
+            return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
+        case .redelegate:
+            switch stakeChain {
+            case .smartChain:
+                return BigInt(StakeConfig.config(chain: stakeChain!).minAmount)
+            default:
+                break
             }
-        } else {
-            setMax()
+        case .unstake, .withdraw, .transfer:
+            break
+        }
+        return BigInt(0)
+    }
+
+    private var defaultValidator: DelegationValidator? {
+        let recommended: DelegationValidator? = switch type {
+        case .stake(_, let recommendedValidator): recommendedValidator
+        case .redelegate(_, _, let recommendedValidator): recommendedValidator
+        case .transfer, .unstake, .withdraw: .none
+        }
+        return recommended ?? validators.first
+    }
+
+    private var availableValue: BigInt {
+        switch input.type {
+        case .transfer, .stake:
+            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+            return balance.available
+        case .unstake(let delegation):
+            return delegation.base.balanceValue
+        case .redelegate(let delegation, _, _):
+            return delegation.base.balanceValue
+        case .withdraw(let delegation):
+            return delegation.base.balanceValue
         }
     }
 
-    func onSelectNextButton() {
-        do {
-            try onNext()
-        } catch {
-            isPresentingErrorMessage = error.localizedDescription
+    private var maxBalance: String {
+        formatter.string(availableValue, decimals: asset.decimals.asInt)
+    }
+
+    private var minimumValueText: String {
+        ValueFormatter(style: .short).string(
+            minimumValue,
+            decimals: asset.decimals.asInt,
+            currency: asset.symbol
+        )
+    }
+
+    private var isAmountChangable: Bool {
+        switch type {
+        case .transfer,
+            .stake,
+            .redelegate:
+            return true
+        case .unstake:
+            if let chain = StakeChain(rawValue: asset.chain.rawValue) {
+                return chain.canChangeAmountOnUnstake
+            }
+            return true
+        case .withdraw:
+            return false
         }
     }
 
-    func onSelectMaxButton() {
-        setMax()
-        focusField = false
-    }
-
-    func onSelectValidator(_ validator: DelegationValidator) {
-        resetAmount()
-        setSelectedValidator(validator)
-    }
-
-    func setRecipientAmountIfNeeded() {
-        if let recipientAmount = recipientData.amount {
-            amountText = recipientAmount
+    private var amountTransferValue: String {
+        switch amountInputType {
+        case .asset: amountText
+        case .fiat: amountValue
         }
-    }
-
-    func setMax() {
-        amountInputType = .asset
-        amountText = maxBalance
-    }
-
-    func resetAmount() {
-        amountText = .empty
-    }
-
-    func setCurrentValidator() {
-        delegation = currentValidator
-    }
-
-    func setSelectedValidator(_ validator: DelegationValidator) {
-        currentValidator = validator
-    }
-
-    func onNext() throws {
-        let transfer = try getTransferData(value: try isValidAmount(), canChangeValue: true)
-        onTransferAction?(transfer)
     }
 }
