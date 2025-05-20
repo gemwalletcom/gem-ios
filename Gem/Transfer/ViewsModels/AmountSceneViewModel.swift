@@ -4,13 +4,8 @@ import Foundation
 import Primitives
 import BigInt
 import Components
-import Store
-import SwiftUI
-import Gemstone
 import GemstonePrimitives
 import Localization
-import Transfer
-import enum Staking.StakeValidatorsType
 import StakeService
 import PrimitivesComponents
 import WalletsService
@@ -18,7 +13,7 @@ import Staking
 
 @MainActor
 @Observable
-final class AmountViewModel {
+final class AmountSceneViewModel {
     let input: AmountInput
     let wallet: Wallet
     let walletsService: WalletsService
@@ -27,6 +22,10 @@ final class AmountViewModel {
     
     var amountText: String = ""
     var delegation: DelegationValidator?
+
+    var isPresentingErrorMessage: String?
+    var focusField: Bool = false
+
     private var currentValidator: DelegationValidator? = .none
     private var currentDelegation: Delegation? = .none
     private var amountInputType: AmountInputType = .asset
@@ -57,7 +56,12 @@ final class AmountViewModel {
     var assetName: String { asset.name }
     var isInputDisabled: Bool { !isAmountChangable }
     var isBalanceViewEnabled: Bool { !isInputDisabled }
-    
+
+    var validatorTitle: String { Localized.Stake.validator }
+    var maxTitle: String { Localized.Transfer.max }
+    var nextTitle: String { Localized.Common.next }
+    var continueTitle: String { Localized.Common.continue }
+
     var amountTransferValue: String {
         switch amountInputType {
         case .asset: amountText
@@ -348,15 +352,43 @@ final class AmountViewModel {
     }
 }
 
-// MARK: - Logic
+// MARK: - Business Logic
 
-extension AmountViewModel {
+extension AmountSceneViewModel {
+    func onAppear() {
+        if isAmountChangable {
+            if focusField == false {
+                focusField = true
+            }
+        } else {
+            setMax()
+        }
+    }
+
+    func onSelectNextButton() {
+        do {
+            try onNext()
+        } catch {
+            isPresentingErrorMessage = error.localizedDescription
+        }
+    }
+
+    func onSelectMaxButton() {
+        setMax()
+        focusField = false
+    }
+
+    func onSelectValidator(_ validator: DelegationValidator) {
+        resetAmount()
+        setSelectedValidator(validator)
+    }
+
     func setRecipientAmountIfNeeded() {
         if let recipientAmount = recipientData.amount {
             amountText = recipientAmount
         }
     }
-    
+
     func setMax() {
         amountInputType = .asset
         amountText = maxBalance
@@ -365,15 +397,15 @@ extension AmountViewModel {
     func resetAmount() {
         amountText = .empty
     }
-    
+
     func setCurrentValidator() {
         delegation = currentValidator
     }
-    
+
     func setSelectedValidator(_ validator: DelegationValidator) {
         currentValidator = validator
     }
-    
+
     func onNext() throws {
         let transfer = try getTransferData(value: try isValidAmount(), canChangeValue: true)
         onTransferAction?(transfer)

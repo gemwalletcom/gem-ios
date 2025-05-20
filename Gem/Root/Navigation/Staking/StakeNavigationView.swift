@@ -61,8 +61,8 @@ struct StakeNavigationView: View {
             )
         }
         .navigationDestination(for: AmountInput.self) {
-            AmountScene(
-                model: AmountViewModel(
+            AmountNavigationView(
+                model: AmountSceneViewModel(
                     input: $0,
                     wallet: wallet,
                     walletsService: walletsService,
