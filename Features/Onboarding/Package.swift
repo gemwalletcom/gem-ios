@@ -39,5 +39,10 @@ let package = Package(
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "OnboardingTest",
+            dependencies: ["Onboarding"],
+            path: "Tests"
+        )
     ]
 )

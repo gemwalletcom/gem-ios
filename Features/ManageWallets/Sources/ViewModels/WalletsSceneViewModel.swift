@@ -16,7 +16,7 @@ public class WalletsSceneViewModel {
     ) {
         _navigationPath = navigationPath
         self.service = walletService
-        self.currentWalletId = service.currentWaletId
+        self.currentWalletId = service.currentWalletId
     }
     
     var title: String {
