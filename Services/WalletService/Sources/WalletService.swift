@@ -28,7 +28,7 @@ public struct WalletService: Sendable {
         self.preferences = preferences
     }
 
-    public var currentWaletId: WalletId? {
+    public var currentWalletId: WalletId? {
         walletSessionService.currentWalletId
     }
     
@@ -80,7 +80,11 @@ public struct WalletService: Sendable {
         try avatarService.remove(for: wallet.id)
         try keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.id)
-        walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+
+
+        if currentWalletId == wallet.walletId {
+            walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+        }
 
         // TODO: - enable once will be enabled in CleanUpService
         /*
