@@ -7,7 +7,7 @@ import WalletCorePrimitives
 public struct AddressValidator: TextValidator {
     private let asset: Asset
 
-    init(asset: Asset) {
+    public init(asset: Asset) {
         self.asset = asset
     }
 
