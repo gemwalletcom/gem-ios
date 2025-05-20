@@ -451,6 +451,16 @@
                ReferencedContainer = "container:Services/AppService">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WalletServiceTests"
+               BuildableName = "WalletServiceTests"
+               BlueprintName = "WalletServiceTests"
+               ReferencedContainer = "container:Services/WalletService">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
