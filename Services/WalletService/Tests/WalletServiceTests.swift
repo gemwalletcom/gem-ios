@@ -22,7 +22,7 @@ struct WalletServiceTests {
             type: .phrase(words: LocalKeystore.words, chains: [.ethereum])
         )
         #expect(service.wallets.map(\.walletId) == [wallet.walletId])
-        #expect(service.currentWaletId == wallet.walletId)
+        #expect(service.currentWalletId == wallet.walletId)
     }
 
     @Test
@@ -38,14 +38,24 @@ struct WalletServiceTests {
             type: .phrase(words: LocalKeystore.words, chains: [.solana])
         )
 
-        try service.delete(first)
-
-        #expect(service.wallets.map(\.walletId) == [second.walletId])
-        #expect(service.currentWaletId == second.walletId)
+        let third = try service.importWallet(
+            name: "Third",
+            type: .phrase(words: LocalKeystore.words, chains: [.aptos])
+        )
 
         try service.delete(second)
 
-        #expect(service.currentWaletId == nil)
+        #expect(service.wallets.map(\.walletId) == [first.walletId, third.walletId])
+        #expect(service.currentWalletId == third.walletId)
+
+        try service.delete(first)
+
+        #expect(service.wallets.map(\.walletId) == [third.walletId])
+        #expect(service.currentWalletId == third.walletId)
+
+        try service.delete(third)
+
+        #expect(service.currentWalletId == nil)
         #expect(service.wallets.isEmpty)
     }
 
@@ -181,10 +191,10 @@ struct WalletServiceTests {
 
         service.setCurrent(for: 1)
 
-        #expect(service.currentWaletId != nil)
-        #expect(service.wallets[0].walletId == service.currentWaletId)
+        #expect(service.currentWalletId != nil)
+        #expect(service.wallets[0].walletId == service.currentWalletId)
 
         service.setCurrent(for: second.walletId)
-        #expect(service.currentWaletId == second.walletId)
+        #expect(service.currentWalletId == second.walletId)
     }
 }
