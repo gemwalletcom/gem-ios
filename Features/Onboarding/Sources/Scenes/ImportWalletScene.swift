@@ -58,7 +58,7 @@ struct ImportWalletScene: View {
                                 .toolbar {
                                     if importType.showToolbar {
                                         ToolbarItem(placement: .keyboard) {
-                                            WordSuggestionView(words: $wordsSuggestion, selectWord: selectWord)
+                                            WordSuggestionView(words: wordsSuggestion, selectWord: selectWord)
                                         }
                                     }
                                 }

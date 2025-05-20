@@ -8,7 +8,7 @@ import Primitives
 
 struct WordSuggestionView: View {
     
-    @Binding var words: [String]
+    let words: [String]
     var selectWord: StringAction = .none
 
     var body: some View {

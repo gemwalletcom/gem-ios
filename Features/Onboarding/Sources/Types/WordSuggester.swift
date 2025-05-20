@@ -26,9 +26,8 @@ struct WordSuggester {
     }
     
     private func suggest(word: String) -> [String] {
-        let words = WalletCore.Mnemonic.suggest(prefix: word)
+        WalletCore.Mnemonic.suggest(prefix: word)
             .split(separator: " ")
             .map { String($0) }
-        return Array(words)
     }
 }
