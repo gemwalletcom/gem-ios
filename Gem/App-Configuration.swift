@@ -258,15 +258,8 @@ extension AvatarService {
     static let main = AvatarService(store: .main)
 }
 
-extension OnstartAsyncService {
-    static let main = OnstartAsyncService(
-        assetStore: .main,
-        nodeStore: .main,
-        preferences: .standard,
-        assetsService: .main,
-        deviceService: .main,
-        bannerSetupService: .main
-    )
+extension AppReleaseService {
+    static let main = AppReleaseService()
 }
 
 extension WalletConnectorSigner {

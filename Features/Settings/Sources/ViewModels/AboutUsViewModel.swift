@@ -14,14 +14,14 @@ import Primitives
 @MainActor
 public final class AboutUsViewModel: Sendable {
     private let preferences: ObservablePreferences
-    private let onstartService: OnstartAsyncService
+    private let releaseService: AppReleaseService
 
     public init(
         preferences: ObservablePreferences,
-        onstartService: OnstartAsyncService
+        releaseService: AppReleaseService
     ) {
         self.preferences = preferences
-        self.onstartService = onstartService
+        self.releaseService = releaseService
     }
 
     var title: String { Localized.Settings.aboutus }
@@ -84,7 +84,7 @@ extension AboutUsViewModel {
     
     func fetch() async {
         do {
-            release = try await onstartService.getRelease()
+            release = try await releaseService.getNewestRelease()
         } catch {
             NSLog("Release fetch failed: \(error)")
         }

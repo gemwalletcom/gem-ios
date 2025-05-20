@@ -26,7 +26,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.priceService) private var priceService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.observablePreferences) private var observablePreferences
-    @Environment(\.onstartService) private var onstartService
+    @Environment(\.releaseService) private var releaseService
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -97,7 +97,7 @@ struct SettingsNavigationStack: View {
                 AboutUsScene(
                     model: AboutUsViewModel(
                         preferences: observablePreferences,
-                        onstartService: onstartService
+                        releaseService: releaseService
                     )
                 )
             }

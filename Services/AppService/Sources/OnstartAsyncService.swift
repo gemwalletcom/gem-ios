@@ -20,7 +20,7 @@ public final class OnstartAsyncService: Sendable {
     private let importAssetsService: ImportAssetsService
     private let deviceService: DeviceService
     private let bannerSetupService: BannerSetupService
-    private let releaseVersionNumber: String
+    private let releaseService: AppReleaseService
 
     @MainActor
     public var releaseAction: ((Release) -> Void)?
@@ -32,8 +32,7 @@ public final class OnstartAsyncService: Sendable {
         assetsService: AssetsService,
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
-        configService: any GemAPIConfigService = GemAPIService(),
-        releaseVersionNumber: String = Bundle.main.releaseVersionNumber
+        configService: any GemAPIConfigService = GemAPIService()
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
@@ -46,7 +45,9 @@ public final class OnstartAsyncService: Sendable {
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
         self.configService = configService
-        self.releaseVersionNumber = releaseVersionNumber
+        self.releaseService = AppReleaseService(
+            configService: configService
+        )
     }
 
     public func setup() {
@@ -84,11 +85,6 @@ public final class OnstartAsyncService: Sendable {
         preferences.skippedReleaseVersion = version
     }
     
-    public func getRelease() async throws -> Release? {
-        let config = try await configService.getConfig()
-        return release(config)
-    }
-    
     // MARK: - Private methods
     
     private func importNodes() throws {
@@ -121,16 +117,16 @@ public final class OnstartAsyncService: Sendable {
     }
     
     private func checkNewRelease(_ config: ConfigResponse) {
-        guard let release = release(config) else {
+        guard let release = releaseService.release(config) else {
             return
         }
-
+        
         if let skippedReleaseVersion = preferences.skippedReleaseVersion,
            skippedReleaseVersion == release.version {
             NSLog("Skipping newer version: \(release.version)")
             return
         }
-
+        
         NSLog("Newer version available")
         Task { @MainActor [weak self] in
             guard let self else { return }
@@ -155,15 +151,5 @@ public final class OnstartAsyncService: Sendable {
         Task {
             try await deviceService.update()
         }
-    }
-    
-    private func release(_ config: ConfigResponse) -> Release? {
-        guard
-            let release = config.releases.first(where: { $0.store == .appStore }),
-            VersionCheck.isVersionHigher(new: release.version, current: releaseVersionNumber)
-        else {
-            return nil
-        }
-        return release
     }
 }

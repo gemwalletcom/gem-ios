@@ -46,5 +46,5 @@ extension EnvironmentValues {
     @Entry var chainServiceFactory: ChainServiceFactory = .main
     @Entry var nftService: NFTService = .main
     @Entry var avatarService: AvatarService = .main
-    @Entry var onstartService: OnstartAsyncService = .main
+    @Entry var releaseService: AppReleaseService = .main
 }
