@@ -7,12 +7,21 @@ import Preferences
 import GemstonePrimitives
 import Components
 import PrimitivesComponents
+import AppService
+import Primitives
 
-public struct AboutUsViewModel {
+@Observable
+@MainActor
+public final class AboutUsViewModel: Sendable {
     private let preferences: ObservablePreferences
+    private let releaseService: AppReleaseService
 
-    public init(preferences: ObservablePreferences) {
+    public init(
+        preferences: ObservablePreferences,
+        releaseService: AppReleaseService
+    ) {
         self.preferences = preferences
+        self.releaseService = releaseService
     }
 
     var title: String { Localized.Settings.aboutus }
@@ -54,10 +63,30 @@ public struct AboutUsViewModel {
             )
         ]
     }
+    
+    var release: Release?
+    var releaseVersion: String? {
+        guard let release else { return nil }
+        return release.version
+    }
+    var appStoreLink: String {
+        PublicConstants.url(.appStore).absoluteString
+    }
+    var updateText: String {
+        "**[\(Localized.UpdateApp.action)](\(appStoreLink))**"
+    }
 }
 
 extension AboutUsViewModel {
     func toggleDeveloperMode() {
         preferences.isDeveloperEnabled.toggle()
+    }
+    
+    func fetch() async {
+        do {
+            release = try await releaseService.getNewestRelease()
+        } catch {
+            NSLog("Release fetch failed: \(error)")
+        }
     }
 }

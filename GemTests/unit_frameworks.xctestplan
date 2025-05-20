@@ -375,6 +375,20 @@
         "identifier" : "PriceServiceTests",
         "name" : "PriceServiceTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/AppService",
+        "identifier" : "AppServiceTests",
+        "name" : "AppServiceTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:Services\/WalletService",
+        "identifier" : "WalletServiceTests",
+        "name" : "WalletServiceTests"
+      }
     }
   ],
   "version" : 1

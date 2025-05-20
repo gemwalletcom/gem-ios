@@ -43,6 +43,7 @@ let package = Package(
             dependencies: [
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "StoreTestKit", package: "Store"),
+                "WalletService"
             ],
             path: "TestKit"
         ),
