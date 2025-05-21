@@ -12,6 +12,7 @@ import NameResolver
 import Keystore
 import WalletsService
 import NodeService
+import StakeService
 import SwiftUI
 
 typealias RecipientDataAction = ((RecipientData) -> Void)?
@@ -22,15 +23,16 @@ final class RecipientSceneViewModel {
     let keystore: any Keystore
     let walletsService: WalletsService
     let nodeService: NodeService
+    let stakeService: StakeService
 
     let wallet: Wallet
     let asset: Asset
     let type: RecipientAssetType
 
-    private let walletService: WalletService
+    let onTransferAction: TransferDataAction
 
+    private let walletService: WalletService
     private let onRecipientDataAction: RecipientDataAction
-    private let onTransferAction: TransferDataAction
     private let formatter = ValueFormatter(style: .full)
 
     var isPresentingScanner: RecipientScene.Field?
@@ -46,6 +48,7 @@ final class RecipientSceneViewModel {
         walletService: WalletService,
         walletsService: WalletsService,
         nodeService: NodeService,
+        stakeService: StakeService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
@@ -57,6 +60,7 @@ final class RecipientSceneViewModel {
         self.walletsService = walletsService
         self.keystore = keystore
         self.nodeService = nodeService
+        self.stakeService = stakeService
 
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction

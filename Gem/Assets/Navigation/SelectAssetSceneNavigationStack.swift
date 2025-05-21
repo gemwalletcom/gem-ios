@@ -16,6 +16,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.keystore) private var keystore
+    @Environment(\.stakeService) private var stakeService
 
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
@@ -75,6 +76,7 @@ struct SelectAssetSceneNavigationStack: View {
                             walletService: walletService,
                             walletsService: walletsService,
                             nodeService: nodeService,
+                            stakeService: stakeService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -83,7 +85,6 @@ struct SelectAssetSceneNavigationStack: View {
                                 navigationPath.append($0)
                             }
                         ),
-                        navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectAssetType = nil
                         }
