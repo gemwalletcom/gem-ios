@@ -48,6 +48,7 @@ public final class SwapSceneViewModel {
     private let preferences: Preferences
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
+    private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
 
     init(
         preferences: Preferences = Preferences.standard,
@@ -342,7 +343,7 @@ extension SwapSceneViewModel {
 
     private func applyQuote(_ quote: SwapQuote, asset: Asset) {
         do {
-            toValue = try formatter.format(
+            toValue = try toValueFormatter.format(
                 quoteValue: quote.toValue,
                 decimals: asset.decimals.asInt
             )
