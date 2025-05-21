@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Localization
 
+// TODO: - migrate to Observable macro, main actor
 public class StakeValidatorsViewModel: ObservableObject {
     
     private let type: StakeValidatorsType

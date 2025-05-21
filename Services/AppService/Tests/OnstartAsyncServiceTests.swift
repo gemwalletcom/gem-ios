@@ -8,13 +8,13 @@ import GemAPITestKit
 
 @testable import AppService
 
-@MainActor
 struct OnstartAsyncServiceTests {
+
     @Test
     func testNewRelease() async throws {
         let service = OnstartAsyncService.mock()
         
-        await confirmation(expectedCount: 1) { confirmation in
+        await confirmation(expectedCount: 1) { @MainActor confirmation in
             service.releaseAction = { release in
                 #expect(release.version == "16.1")
                 confirmation()
@@ -27,7 +27,7 @@ struct OnstartAsyncServiceTests {
     func testSkipRelease() async throws {
         let service = OnstartAsyncService.mock()
         
-        await confirmation(expectedCount: 0) { confirmation in
+        await confirmation(expectedCount: 0) { @MainActor confirmation in
             service.releaseAction = { _ in
                 confirmation()
             }

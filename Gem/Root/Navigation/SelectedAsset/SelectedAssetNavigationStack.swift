@@ -15,6 +15,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletsService) private var walletsService
     @Environment(\.walletService) private var walletService
+    @Environment(\.stakeService) private var stakeService
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -45,6 +46,7 @@ struct SelectedAssetNavigationStack: View  {
                             walletService: walletService,
                             walletsService: walletsService,
                             nodeService: nodeService,
+                            stakeService: stakeService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)
@@ -53,7 +55,6 @@ struct SelectedAssetNavigationStack: View  {
                                 navigationPath.append($0)
                             }
                         ),
-                        navigationPath: $navigationPath,
                         onComplete: {
                             isPresentingSelectedAssetInput = nil
                         }
