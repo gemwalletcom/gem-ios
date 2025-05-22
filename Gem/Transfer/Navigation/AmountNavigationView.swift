@@ -25,6 +25,7 @@ struct AmountNavigationView: View {
                     action: model.onSelectNextButton
                 )
                 .bold()
+                .disabled(!model.isNextEnabled)
             }
         }
         .navigationDestination(for: $model.delegation) { value in
@@ -37,9 +38,6 @@ struct AmountNavigationView: View {
                     selectValidator: model.onSelectValidator
                 )
             )
-        }
-        .alert(item: $model.isPresentingErrorMessage) {
-            Alert(title: Text(""), message: Text($0))
         }
     }
 }

@@ -10,6 +10,7 @@ import StakeService
 import PrimitivesComponents
 import WalletsService
 import Staking
+import Style
 
 @MainActor
 @Observable
@@ -19,12 +20,11 @@ final class AmountSceneViewModel {
     let walletsService: WalletsService
     let stakeService: StakeService
     let onTransferAction: TransferDataAction
-    
-    var amountText: String = ""
-    var delegation: DelegationValidator?
 
-    var isPresentingErrorMessage: String?
+    var delegation: DelegationValidator?
     var focusField: Bool = false
+
+    var amountInputModel: InputValidationViewModel = InputValidationViewModel()
 
     private let formatter = ValueFormatter(style: .full)
     private let currencyFormatter = CurrencyFormatter.currency()
@@ -49,9 +49,11 @@ final class AmountSceneViewModel {
         self.onTransferAction = onTransferAction
         self.currentValidator = defaultValidator
 
+        self.amountInputModel = InputValidationViewModel(mode: .onDemand, validators: inputValidators)
+
         // set amount if avaialbe in recipientData
         if let recipientAmount = recipientData.amount {
-            amountText = recipientAmount
+            amountInputModel.update(text: recipientAmount)
         }
     }
     
@@ -59,8 +61,14 @@ final class AmountSceneViewModel {
     var asset: Asset { input.asset }
     var assetImage: AssetImage { AssetViewModel(asset: asset).assetImage }
     var assetName: String { asset.name }
+
     var isInputDisabled: Bool { !isAmountChangable }
     var isBalanceViewEnabled: Bool { !isInputDisabled }
+    var isNextEnabled: Bool { actionButtonState == .normal }
+
+    var actionButtonState: StateButtonStyle.State {
+        amountInputModel.text.isNotEmpty && amountInputModel.isValid ? .normal : .disabled
+    }
 
     var validatorTitle: String { Localized.Stake.validator }
     var maxTitle: String { Localized.Transfer.max }
@@ -75,7 +83,7 @@ final class AmountSceneViewModel {
             currencyFormatter: currencyFormatter,
             numberSanitizer: numberSanitizer,
             secondaryText: secondaryText,
-            onTapActionButton: handleInputAction
+            onTapActionButton: onSelectInputButton
         )
     }
 
@@ -148,9 +156,7 @@ final class AmountSceneViewModel {
 extension AmountSceneViewModel {
     func onAppear() {
         if isAmountChangable {
-            if focusField == false {
-                focusField = true
-            }
+            focusField = true
         } else {
             setMax()
         }
@@ -160,7 +166,7 @@ extension AmountSceneViewModel {
         do {
             try onNext()
         } catch {
-            isPresentingErrorMessage = error.localizedDescription
+            amountInputModel.update(error: error)
         }
     }
 
@@ -174,7 +180,7 @@ extension AmountSceneViewModel {
     }
 
     func onSelectValidator(_ validator: DelegationValidator) {
-        resetAmount()
+        cleanInput()
         setSelectedValidator(validator)
     }
 }
@@ -182,25 +188,22 @@ extension AmountSceneViewModel {
 // MARK: - Private
 
 extension AmountSceneViewModel {
-    private func handleInputAction() {
-        toggleAmountInputType()
-        amountText = .empty
-    }
-
-    private func toggleAmountInputType() {
+    private func onSelectInputButton() {
         switch amountInputType {
         case .asset: amountInputType = .fiat
         case .fiat: amountInputType = .asset
         }
+        cleanInput()
     }
 
     private func setMax() {
         amountInputType = .asset
-        amountText = maxBalance
+        amountInputModel.update(text: maxBalance)
     }
 
-    private func resetAmount() {
-        amountText = .empty
+    private func cleanInput() {
+        amountInputModel.text = .empty
+        amountInputModel.update(validators: inputValidators)
     }
 
     private func setSelectedValidator(_ validator: DelegationValidator) {
@@ -208,7 +211,8 @@ extension AmountSceneViewModel {
     }
 
     private func onNext() throws {
-        let transfer = try getTransferData(value: try isValidAmount(), canChangeValue: true)
+        let value = try value(for: amountTransferValue)
+        let transfer = try getTransferData(value: value, canChangeValue: true)
         onTransferAction?(transfer)
     }
 
@@ -221,7 +225,7 @@ extension AmountSceneViewModel {
             .redelegate,
             .withdraw:
 
-            let recipientAddress = self.stakeService.getRecipientAddress(
+            let recipientAddress = stakeService.getRecipientAddress(
                 chain: asset.chain.stakeChain,
                 type: type,
                 validatorId: currentValidator?.id
@@ -238,6 +242,26 @@ extension AmountSceneViewModel {
         }
     }
 
+    private var inputValidators: [any TextValidator] {
+        let source: AmountValidator.Source = switch amountInputType {
+        case .asset: .asset
+        case .fiat: .fiat(price: getAssetPrice(), converter: valueConverter)
+        }
+
+        return [
+            .amount(
+                source: source,
+                decimals: asset.decimals.asInt,
+                validators: [
+                    PositiveValueValidator<BigInt>(),
+                    MinimumValueValidator<BigInt>(minimumValue: minimumValue, minimumValueText: minimumValueText),
+                    MinimumAccountReserveValidator<BigInt>(available: availableValue, reserve: minimumAccountReserve, asset: asset),
+                    BalanceValueValidator<BigInt>(available: availableValue, asset: asset)
+                ]
+            )
+        ]
+    }
+
     private var fiatValueText: String {
         currencyFormatter.string(fiatValue.doubleValue)
     }
@@ -249,7 +273,7 @@ extension AmountSceneViewModel {
     private var amountValue: String {
         guard let price = getAssetPrice() else { return .zero }
         return (try? valueConverter.convertToAmount(
-            fiatValue: amountText,
+            fiatValue: amountInputModel.text,
             price: price,
             decimals: asset.decimals.asInt
         )).or(.zero)
@@ -258,26 +282,9 @@ extension AmountSceneViewModel {
     private var fiatValue: Decimal {
         guard let price = getAssetPrice() else { return .zero }
         return (try? valueConverter.convertToFiat(
-            amount: amountText,
+            amount: amountInputModel.text,
             price: price
         )).or(.zero)
-    }
-
-    private func isValidAmount() throws -> BigInt {
-        if amountTransferValue.isEmpty {
-            throw TransferError.invalidAmount
-        }
-
-        let value = try value(for: amountTransferValue)
-
-        if value.isZero {
-            throw TransferError.invalidAmount
-        }
-        if minimumValue > value {
-            throw TransferError.minimumAmount(string: minimumValueText)
-        }
-
-        return value
     }
 
     private func getTransferData(value: BigInt, canChangeValue: Bool) throws -> TransferData {
@@ -405,8 +412,12 @@ extension AmountSceneViewModel {
 
     private var amountTransferValue: String {
         switch amountInputType {
-        case .asset: amountText
+        case .asset: amountInputModel.text
         case .fiat: amountValue
         }
+    }
+
+    private var minimumAccountReserve: BigInt {
+        asset.type == .native ? asset.chain.minimumAccountBalance : .zero
     }
 }

@@ -5,22 +5,22 @@ import Testing
 
 @testable import PrimitivesComponents
 
-struct AddressValidatorTests {
+struct AddressTextValidatorTests {
     let validETH = "0xb8c77482e45f1f44de1745f52c74426c631bdd52"
     let validBTC = "bc1qhgxl7yjhaazdhrfh0tzge572wkyp43h7t64fal"
 
     @Test
-    func validatesCorrectAddress() throws {
-        let validatorEth = AddressValidator(asset: .mockBNB())
-        try validatorEth.validate(validETH)
+    func testValidatesCorrectAddress() throws {
+        let eth = AddressTextValidator(asset: .mockBNB())
+        try eth.validate(validETH)
 
-        let validatorBTC = AddressValidator(asset: .mock())
-        try validatorBTC.validate(validBTC)
+        let btc = AddressTextValidator(asset: .mock())
+        try btc.validate(validBTC)
     }
 
     @Test
-    func throwsOnInvalidAddress() {
-        let validator = AddressValidator(asset: .mock())
+    func testThrowsOnInvalidAddress() {
+        let validator = AddressTextValidator(asset: .mock())
 
         #expect(throws: TransferError.invalidAddress(asset: .mock())) {
             try validator.validate("not-an-address")
