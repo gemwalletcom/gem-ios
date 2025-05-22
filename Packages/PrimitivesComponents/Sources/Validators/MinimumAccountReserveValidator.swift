@@ -5,7 +5,7 @@ import BigInt
 import Primitives
 
 public struct MinimumAccountReserveValidator<Value>: ValueValidator
-where Value: ValueValidetable & SignedNumeric {
+where Value: ValueValidatable & SignedNumeric {
 
     private let available: Value
     private let requiredReserve: Value

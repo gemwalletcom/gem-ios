@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 
 public struct BalanceValueValidator<Value>: ValueValidator
-where Value: ValueValidetable {
+where Value: ValueValidatable {
 
     private let available: Value
     private let asset: Asset

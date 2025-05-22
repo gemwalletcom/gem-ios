@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 
 public struct PositiveValueValidator<Value>: ValueValidator
-where Value: ValueValidetable
+where Value: ValueValidatable
 {
     public init() {}
 

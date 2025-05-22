@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 
 public struct MinimumValueValidator<Value>: ValueValidator
-where Value: ValueValidetable
+where Value: ValueValidatable
 {
     private let minimumValue: Value
     private let minimumValueText: String
