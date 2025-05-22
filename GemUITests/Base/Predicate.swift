@@ -9,6 +9,10 @@ enum Predicate {
     case doesNotExist
     case isHittable
     case isNotHittable
+    case isEnabled
+    case isNotEnabled
+    case isOn
+    case isOff
 
     var format: String {
         switch self {
@@ -18,6 +22,10 @@ enum Predicate {
         case .doesNotExist: "exists == false"
         case .isHittable: "isHittable == true"
         case .isNotHittable: "isHittable == false"
+        case .isEnabled: "isEnabled == true"
+        case .isNotEnabled: "isEnabled == false"
+        case .isOn: "value == '1'"
+        case .isOff: "value == '0'"
         }
     }
 }

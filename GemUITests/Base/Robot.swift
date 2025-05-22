@@ -7,24 +7,20 @@ import XCTest
 @MainActor
 class Robot {
 
-    private static let defaultTimeout: Double = 30
+    private static let defaultTimeout: Double = 5
 
     var app: XCUIApplication
 
-    lazy var navigationBar = app.navigationBars.firstMatch
-    lazy var navigationBarButton = navigationBar.buttons.firstMatch
-    lazy var navigationBarTitle = navigationBar.otherElements.firstMatch
-
-    init(_ app: XCUIApplication) {
+    init(_ app: XCUIApplication = XCUIApplication()) {
         self.app = app
     }
 
     @discardableResult
     func start(
-        launchEnvironment: UITestLaunchScenario,
+        scenario: UITestLaunchScenario,
         timeout: TimeInterval = Robot.defaultTimeout
     ) -> Self {
-        app.setLaunchEnvironment(launchEnvironment)
+        app.launchEnvironment[UITestLaunchScenario.testEnvironmentKey] = scenario.rawValue
         app.launch()
         assert(app, [.exists], timeout: timeout)
 
@@ -62,17 +58,7 @@ class Robot {
         contains title: String,
         timeout: TimeInterval = Robot.defaultTimeout
     ) -> Self {
-        assert(navigationBar, [.isHittable], timeout: timeout)
-        assert(navigationBarTitle, [.contains(title)], timeout: timeout)
-
-        return self
-    }
-
-    @discardableResult
-    func back(
-        timeout: TimeInterval = Robot.defaultTimeout
-    ) -> Self {
-        tap(navigationBarButton, timeout: timeout)
+        assert(app.navigationBars.staticTexts[title], [.exists], timeout: timeout)
 
         return self
     }

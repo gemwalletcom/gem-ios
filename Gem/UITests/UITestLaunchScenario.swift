@@ -3,10 +3,14 @@
 import Foundation
 
 public enum UITestLaunchScenario: String {
+    public static let testEnvironmentKey = "GemAppUITesting"
+
     case onboarding
+    case createFirstWallet
+    case createWallet
     
     public init?(info: ProcessInfo) {
-        guard let environmentString = info.environment["GemAppUITesting"] else {
+        guard let environmentString = info.environment[Self.testEnvironmentKey] else {
             return nil
         }
         
