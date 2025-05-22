@@ -22,7 +22,7 @@ public final class InputValidationViewModel {
 
     public init(
         mode: InputValidationMode = .manual,
-        validators: [any TextValidator]
+        validators: [any TextValidator] = []
     ) {
         self.mode = mode
         self.validators = validators
@@ -58,6 +58,10 @@ extension InputValidationViewModel {
 
     public func update(validators: [any TextValidator]) {
         self.validators = validators
+        guard text.isNotEmpty else {
+            update(error: nil)
+            return
+        }
         update()
     }
 

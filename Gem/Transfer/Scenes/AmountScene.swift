@@ -4,6 +4,7 @@ import SwiftUI
 import Style
 import Components
 import Primitives
+import PrimitivesComponents
 import struct Staking.StakeValidatorViewModel
 import struct Staking.ValidatorView
 
@@ -21,8 +22,8 @@ struct AmountScene: View {
         @Bindable var model = model
         VStack {
             List {
-                CurrencyInputView(
-                    text: $model.amountText,
+                CurrencyInputValidationView(
+                    model: $model.amountInputModel,
                     config: model.inputConfig
                 )
                 .padding(.top, .medium)
@@ -69,12 +70,12 @@ struct AmountScene: View {
             .contentMargins([.top], .zero, for: .scrollContent)
 
             Spacer()
-            Button(
-                model.continueTitle,
+            StateButton(
+                text: model.continueTitle,
+                styleState: model.actionButtonState,
                 action: model.onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
-            .buttonStyle(.blue())
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
