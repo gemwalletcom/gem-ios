@@ -15,7 +15,7 @@ struct OnstartAsyncServiceTests {
         let service = OnstartAsyncService.mock()
         
         await confirmation(expectedCount: 1) { @MainActor confirmation in
-            service.releaseAction = { release in
+            service.releaseAction = { @MainActor release in
                 #expect(release.version == "16.1")
                 confirmation()
             }
@@ -28,7 +28,7 @@ struct OnstartAsyncServiceTests {
         let service = OnstartAsyncService.mock()
         
         await confirmation(expectedCount: 0) { @MainActor confirmation in
-            service.releaseAction = { _ in
+            service.releaseAction = { @MainActor _ in
                 confirmation()
             }
             service.skipRelease("16.1")
