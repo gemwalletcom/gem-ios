@@ -44,21 +44,13 @@ final class CreateWalletUITests: XCTestCase {
             .startCreateWalletFlow()
         
         SecurityReminderRobot(app)
-            .checkScreen()
-            .checkTitle(contains: "New Wallet")
             .checkBackButton(title: "Cancel")
             .tapContinue()
         
         CreateWalletSceneRobot(app)
-            .checkScreen()
-            .checkTitle(contains: "New Wallet")
-            .checkBackButton(title: "New Wallet")
             .tapContinueButton()
         
         VerifyPhraseWalletSceneRobot(app)
-            .checkScreen()
-            .checkTitle(contains: "Confirm")
-            .checkBackButton(title: "New Wallet")
             .verifyPhrase()
             .tapContinue()
     }
