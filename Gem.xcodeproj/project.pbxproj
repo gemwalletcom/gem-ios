@@ -74,6 +74,7 @@
 		B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D72DE05F7500687F09 /* KeystoreTestKit */; };
 		B68BD2DA2DE05F9100687F09 /* PrimitivesTestKit in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2D92DE05F9100687F09 /* PrimitivesTestKit */; };
 		B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2DB2DE05FB600687F09 /* Keystore */; };
+		B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */ = {isa = PBXBuildFile; productRef = B68BD2E52DE0760E00687F09 /* Primitives */; };
 		B6AE4A522D636869005BF29E /* SwapProvidersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */; };
 		B6AE4A542D6368A0005BF29E /* SwapProviderItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */; };
 		B6B86A102D702E7C00D31D65 /* SwapNavigationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */; };
@@ -434,6 +435,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B68BD2CA2DE04B5B00687F09 /* Components in Frameworks */,
+				B68BD2E62DE0760E00687F09 /* Primitives in Frameworks */,
 				B68BD2DA2DE05F9100687F09 /* PrimitivesTestKit in Frameworks */,
 				B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */,
 				B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */,
@@ -1173,6 +1175,7 @@
 				B68BD2D72DE05F7500687F09 /* KeystoreTestKit */,
 				B68BD2D92DE05F9100687F09 /* PrimitivesTestKit */,
 				B68BD2DB2DE05FB600687F09 /* Keystore */,
+				B68BD2E52DE0760E00687F09 /* Primitives */,
 			);
 			productName = GemUITests;
 			productReference = D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */;
@@ -2016,6 +2019,10 @@
 		B68BD2DB2DE05FB600687F09 /* Keystore */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = Keystore;
+		};
+		B68BD2E52DE0760E00687F09 /* Primitives */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Primitives;
 		};
 		C35DA07B2A9C3B4B008CCEFA /* Settings */ = {
 			isa = XCSwiftPackageProductDependency;

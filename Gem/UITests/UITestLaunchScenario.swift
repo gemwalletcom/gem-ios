@@ -8,6 +8,7 @@ public enum UITestLaunchScenario: String {
     case onboarding
     case createFirstWallet
     case createWallet
+    case importWallet
     
     public init?(info: ProcessInfo) {
         guard let environmentString = info.environment[Self.testEnvironmentKey] else {

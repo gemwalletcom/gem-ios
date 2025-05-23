@@ -35,6 +35,11 @@ public struct LaunchEnvironmentView: View {
                 walletService: .mock(isAccepted: true),
                 isPresentingWallets: .constant(false)
             )
+        case .importWallet:
+            ImportWalletNavigationStack(
+                model: ImportWalletTypeViewModel(walletService: .mock(isAccepted: true)),
+                isPresentingWallets: .constant(false)
+            )
         }
     }
 }

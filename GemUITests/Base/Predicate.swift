@@ -13,6 +13,7 @@ enum Predicate {
     case isNotEnabled
     case isOn
     case isOff
+    case value(String)
 
     var format: String {
         switch self {
@@ -26,6 +27,7 @@ enum Predicate {
         case .isNotEnabled: "isEnabled == false"
         case .isOn: "value == '1'"
         case .isOff: "value == '0'"
+        case .value(let value): "value == '\(value)'"
         }
     }
 }

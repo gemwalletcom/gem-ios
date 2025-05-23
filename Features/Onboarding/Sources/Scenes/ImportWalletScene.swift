@@ -63,6 +63,8 @@ struct ImportWalletScene: View {
                                     }
                                 }
                                 .padding(.top, .small + .tiny)
+                                .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.phraseTextField.id)
+                            
                                 if let chain = model.chain, importType == .address {
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
@@ -97,7 +99,6 @@ struct ImportWalletScene: View {
                 styleState: model.buttonState,
                 action: onImportWallet
             )
-            .accessibilityIdentifier("import_wallet")
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
