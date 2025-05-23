@@ -62,4 +62,11 @@ class Robot {
 
         return self
     }
+    
+    @discardableResult
+    func checkBackButton(title: String) -> Self {
+        assert(backButton(title: title), [.exists, .isHittable])
+        
+        return self
+    }
 }

@@ -5,6 +5,7 @@ import SwiftUI
 import WalletServiceTestKit
 import PreferencesTestKit
 import WalletService
+import KeystoreTestKit
 
 // Features
 import Onboarding
@@ -41,6 +42,7 @@ public struct LaunchEnvironmentView: View {
 extension WalletService {
     static func mock(isAccepted: Bool) -> Self {
         .mock(
+            keystore: KeystoreMock(),
             preferences: .mock(
                 preferences: .mock(
                     defaults: .mockWithValues(values: ["is_accepted_terms": isAccepted])

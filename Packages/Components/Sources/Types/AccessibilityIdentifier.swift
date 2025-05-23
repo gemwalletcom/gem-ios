@@ -7,6 +7,7 @@ public struct AccessibilityIdentifier {
     public enum Common: String, Identifiable {
         case safariInfoButton
         case stateButton
+        case doneButton
         
         public var id: String { rawValue }
     }
