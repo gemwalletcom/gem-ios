@@ -89,4 +89,19 @@ struct InputValidationViewModelTests {
           #expect(model.isValid)
           #expect(model.error == nil)
       }
+
+    @Test
+    func testUpdateValidatorsWhenTextIsEmpty() {
+        let model = InputValidationViewModel(
+            mode: .onDemand,
+            validators: [FailableValidator(allowed: "ok")]
+        )
+
+        model.text = ""
+        model.update(error: AnyError("error"))
+
+        model.update(validators: [FailableValidator(allowed: "ok")])
+
+        #expect(model.isValid)
+    }
 }

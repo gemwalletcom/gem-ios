@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import WalletCorePrimitives
 
-public struct AddressValidator: TextValidator {
+public struct AddressTextValidator: TextValidator {
     private let asset: Asset
 
     public init(asset: Asset) {
@@ -20,8 +20,8 @@ public struct AddressValidator: TextValidator {
     public var id: String { asset.id.identifier }
 }
 
-public extension TextValidator where Self == AddressValidator {
-    static func address(_ asset: Asset) -> AddressValidator {
+public extension TextValidator where Self == AddressTextValidator {
+    static func address(_ asset: Asset) -> Self {
         .init(asset: asset)
     }
 }

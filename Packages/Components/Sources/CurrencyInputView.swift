@@ -89,6 +89,9 @@ public struct CurrencyInputView: View {
                 secondaryTextView
             }
         }
+        .onAppear {
+            UITextField.appearance().clearButtonMode = .never
+        }
     }
 
     func actionButton(for position: CurrencyInputActionPosition) -> some View {

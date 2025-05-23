@@ -8,16 +8,13 @@ import QRScanner
 
 struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
-    @Binding private var navigationPath: NavigationPath
 
     private let onComplete: VoidAction
 
     init(
         model: RecipientSceneViewModel,
-        navigationPath: Binding<NavigationPath>,
         onComplete: VoidAction
     ) {
-        _navigationPath = navigationPath
         _model = State(initialValue: model)
         self.onComplete = onComplete
     }
@@ -33,9 +30,13 @@ struct RecipientNavigationView: View {
         }
         .navigationDestination(for: RecipientData.self) { data in
             AmountNavigationView(
-                input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
-                wallet: model.wallet,
-                navigationPath: $navigationPath
+                model: AmountSceneViewModel(
+                    input: AmountInput(type: .transfer(recipient: data), asset: model.asset),
+                    wallet: model.wallet,
+                    walletsService: model.walletsService,
+                    stakeService: model.stakeService,
+                    onTransferAction: model.onTransferAction
+                )
             )
         }
         .navigationDestination(for: TransferData.self) { data in
