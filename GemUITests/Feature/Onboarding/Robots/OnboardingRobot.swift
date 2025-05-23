@@ -2,13 +2,12 @@
 
 import Foundation
 
-
 final class OnboardingRobot: Robot {
     private lazy var createButton = app.buttons["welcome_create"]
     private lazy var importButton = app.buttons["welcome_import"]
     
     func start() -> Self {
-        start(launchEnvironment: .onboarding, timeout: 5)
+        start(scenario: .onboarding)
     }
     
     @discardableResult
