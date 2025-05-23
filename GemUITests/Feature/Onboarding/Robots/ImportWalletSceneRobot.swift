@@ -2,7 +2,7 @@
 
 import Foundation
 import Components
-import XCUIAutomation
+import XCTest
 import Keystore
 import KeystoreTestKit
 

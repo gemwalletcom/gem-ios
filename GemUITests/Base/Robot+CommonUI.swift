@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import XCUIAutomation
+import XCTest
 import Components
 
 extension Robot {
