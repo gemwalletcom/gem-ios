@@ -34,9 +34,7 @@ struct CreateWalletScene: View {
         )
         .padding(.bottom, .scene.bottom)
         .navigationBarTitle(model.title)
-        .taskOnce {
-            model.words = model.generateWords()
-        }
+        .taskOnce { model.generateWords() }
     }
     
     func copy() {

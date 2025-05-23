@@ -34,8 +34,8 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
         )
     }
 
-    func generateWords() -> [String] {
-        walletService.createWallet()
+    func generateWords() {
+        words = walletService.createWallet()
     }
     
     var presentWarning: Bool {

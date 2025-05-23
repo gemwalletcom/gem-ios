@@ -21,12 +21,13 @@ struct AcceptTermsScene: View {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
                 
-                ForEach($model.items) { $item in
+                ForEach(Array($model.items.enumerated()), id: \.element.id) { index, $item in
                     Section {
                         Toggle(isOn: $item.isConfirmed) {
                             Text(item.message)
                                 .textStyle(item.style)
                         }
+                        .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.acceptTermsToggle(index).id)
                         .toggleStyle(CheckboxStyle(position: .left))
                     }
                     .listRowInsets(.assetListRowInsets)
@@ -53,6 +54,7 @@ struct AcceptTermsScene: View {
                 Button("", systemImage: SystemImage.info) {
                     isPresentingUrl = model.termsAndServicesURL
                 }
+                .accessibilityIdentifier(AccessibilityIdentifier.Common.safariInfoButton.id)
             }
         }
         .safariSheet(url: $isPresentingUrl)
