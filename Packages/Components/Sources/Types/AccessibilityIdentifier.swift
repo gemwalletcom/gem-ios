@@ -8,6 +8,7 @@ public struct AccessibilityIdentifier {
         case safariInfoButton
         case stateButton
         case doneButton
+        case cancelButton
         
         public var id: String { rawValue }
     }

@@ -3,13 +3,7 @@
 import Foundation
 import Components
 
-final class CreateFirstWalletRobot: Robot {
-    
-    func start() -> Self {
-        start(scenario: .createFirstWallet)
-        
-        return self
-    }
+final class AcceptTermsSceneRobot: Robot {
     
     @discardableResult
     func checkScreen() -> Self {

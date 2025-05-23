@@ -14,6 +14,9 @@ extension Robot {
     var doneButton: XCUIElement {
         app.buttons[AccessibilityIdentifier.Common.doneButton.id]
     }
+    var cancelButton: XCUIElement {
+        app.buttons[AccessibilityIdentifier.Common.cancelButton.id]
+    }
 
     func backButton(title: String) -> XCUIElement {
         app.navigationBars.buttons[title]
