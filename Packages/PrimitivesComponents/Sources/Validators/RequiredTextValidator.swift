@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct RequiredValidator: TextValidator {
+public struct RequiredTextValidator: TextValidator {
     private let requireName: String
 
     public init(requireName: String) {
@@ -18,8 +18,8 @@ public struct RequiredValidator: TextValidator {
     public var id: String { requireName }
 }
 
-public extension TextValidator where Self == RequiredValidator {
-    static func required(requireName: String) -> RequiredValidator {
+public extension TextValidator where Self == RequiredTextValidator {
+    static func required(requireName: String) -> Self {
         .init(requireName: requireName)
     }
 }

@@ -2,7 +2,7 @@
 
 import Foundation
 
-public struct ValueConverter {
+public struct ValueConverter: Sendable {
     private let formatter: ValueFormatter
     
     public init(formatter: ValueFormatter = ValueFormatter(style: .medium)) {
@@ -26,9 +26,11 @@ public struct ValueConverter {
         let amount = try calculateAssetAmount(fiat: fiatNumber, price: price)
         return try formatAssetAmount(amount: amount, decimals: decimals)
     }
+}
 
-    // MARK: - Private methods
+// MARK: - Private
 
+extension ValueConverter {
     private func calculateAssetAmount(
         fiat: Decimal,
         price: AssetPrice

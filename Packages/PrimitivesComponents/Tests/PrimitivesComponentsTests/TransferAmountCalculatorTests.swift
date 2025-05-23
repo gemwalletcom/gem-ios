@@ -1,10 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Blockchain
 import Primitives
 import BigInt
 import Testing
+
+@testable import PrimitivesComponents
 
 struct TransferAmountCalculatorTests {
     let coinAsset = Asset(.ethereum)
