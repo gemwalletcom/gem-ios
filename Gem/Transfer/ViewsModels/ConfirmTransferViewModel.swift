@@ -11,12 +11,13 @@ import Localization
 import Primitives
 import PrimitivesComponents
 import ScanService
-import Signer
 import Style
 import SwiftUI
 import Transfer
 import WalletConnector
 import WalletsService
+import InfoSheet
+import Signer
 
 @Observable
 @MainActor
@@ -36,11 +37,14 @@ final class ConfirmTransferViewModel {
 
     var isPresentedNetworkFeePicker: Bool = false
     var confirmingErrorMessage: String?
+    var isPresentingInfoSheet: InfoSheetType? = .none
+    var isPresentingUrl: URL? = nil
 
     let explorerService: any ExplorerLinkFetchable
 
     private var metadata: TransferDataMetadata?
 
+    private let transactionSigner: any TransactionSigning
     private let data: TransferData
     private let wallet: Wallet
     private let keystore: any Keystore
@@ -76,7 +80,7 @@ final class ConfirmTransferViewModel {
             priority: service.defaultPriority(for: data.type),
             service: service
         )
-
+        self.transactionSigner = TransactionSigner(keystore: keystore)
         // prefetch asset metadata from local storage
         let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.type.asset, assetsIds: data.type.assetIds)
         self.metadata = metadata
@@ -289,6 +293,44 @@ final class ConfirmTransferViewModel {
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
+
+    func onNetworkFeeInfo() {
+        isPresentingInfoSheet = .networkFee(dataModel.chain)
+    }
+
+    func onSlippageInto() {
+        isPresentingInfoSheet = .slippage
+    }
+
+    func onSelectFeePicker() {
+        isPresentedNetworkFeePicker.toggle()
+    }
+
+    func onChangeFeePriority(_ priority: FeePriority) async {
+        await fetch()
+    }
+
+    func onAction() {
+        if state.isError {
+            fetch()
+        } else {
+            onSelectConfirmTransfer()
+        }
+    }
+
+    func onSelectConfirmTransfer() {
+        guard let value = state.value,
+              let input = value.input,
+              case .amount(let amount) = value.transferAmountResult else { return }
+        process(input: input, amount: amount)
+    }
+
+    func fetch() {
+        Task {
+            await fetch()
+        }
+    }
+
     func fetch() async {
         state = .loading
         feeModel.reset()
@@ -316,7 +358,13 @@ extension ConfirmTransferViewModel {
     func process(input: TransactionLoad, amount: TransferAmount) async {
         confirmingState = .loading
         do {
-            let signedData = try await sign(transferData: data, input: input, amount: amount)
+            let signedData = try transactionSigner.sign(
+                transfer: data,
+                preload: input,
+                amount: amount,
+                wallet: wallet
+            )
+
             for (index, transactionData) in signedData.enumerated() {
                 switch data.type.outputType {
                 case .encodedTransaction:
@@ -356,13 +404,19 @@ extension ConfirmTransferViewModel {
     }
 }
 
-// MARK: - Actions
-
-extension ConfirmTransferViewModel {}
-
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private func process(input: TransactionLoad, amount: TransferAmount) {
+        Task {
+            await process(input: input, amount: amount)
+            await MainActor.run {
+                if case .data(_) = confirmingState {
+                    onCompleteAction()
+                }
+            }
+        }
+    }
     private var transactionDelay: Duration {
         switch data.chain.type {
         case .ethereum: .milliseconds(0)
@@ -447,18 +501,6 @@ extension ConfirmTransferViewModel {
             assetPrice: assetPrices[assetId],
             feePrice: assetPrices[feeAssetId],
             assetPrices: assetPrices
-        )
-    }
-
-    private func sign(transferData: TransferData, input: TransactionLoad, amount: TransferAmount) async throws -> [String] {
-        let signer = Signer(wallet: wallet, keystore: keystore)
-        return try await Self.sign(
-            signer: signer,
-            wallet: wallet,
-            type: transferData.type,
-            recipientData: transferData.recipientData,
-            input: input,
-            amount: amount
         )
     }
 
@@ -628,50 +670,5 @@ extension ConfirmTransferViewModel {
             ignoreValueCheck: dataModel.data.ignoreValueCheck,
             canChangeValue: dataModel.data.canChangeValue
         )
-    }
-}
-
-// MARK: - Static
-
-extension ConfirmTransferViewModel {
-    static func sign(
-        signer: Signer,
-        wallet: Wallet,
-        type: TransferDataType,
-        recipientData: RecipientData,
-        input: TransactionLoad,
-        amount: TransferAmount
-    ) async throws -> [String] {
-        let destinationAddress = recipientData.recipient.address
-        let isMaxAmount = amount.useMaxAmount
-
-        let senderAddress = try wallet.account(for: type.chain).address
-
-        let input = SignerInput(
-            type: type,
-            asset: type.asset,
-            value: amount.value,
-            fee: Fee(
-                fee: amount.networkFee,
-                gasPriceType: input.fee.gasPriceType,
-                gasLimit: input.fee.gasLimit,
-                options: input.fee.options
-            ),
-            isMaxAmount: isMaxAmount,
-            chainId: input.chainId,
-            memo: recipientData.recipient.memo,
-            accountNumber: input.accountNumber,
-            sequence: input.sequence,
-            senderAddress: senderAddress,
-            destinationAddress: destinationAddress,
-            data: input.data,
-            block: input.block,
-            token: input.token,
-            utxos: input.utxos,
-            messageBytes: input.messageBytes,
-            extra: input.extra
-        )
-
-        return try signer.sign(input: input)
     }
 }

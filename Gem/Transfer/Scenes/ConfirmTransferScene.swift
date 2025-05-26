@@ -11,11 +11,7 @@ import NodeService
 import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State var model: ConfirmTransferViewModel
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    @State private var isPresentingUrl: URL? = nil
 
     var body: some View {
         VStack {
@@ -26,7 +22,7 @@ struct ConfirmTransferScene: View {
                 viewState: model.state,
                 image: statefullButtonImage,
                 disabledRule: model.shouldDisableButton,
-                action: onAction
+                action: model.onAction
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -38,9 +34,9 @@ struct ConfirmTransferScene: View {
         .debounce(
             value: model.feeModel.priority,
             interval: nil,
-            action: onChangeFeePriority
+            action: model.onChangeFeePriority
         )
-        .taskOnce { fetch() }
+        .taskOnce { model.fetch() }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
                 NetworkFeeScene(model: model.feeModel)
@@ -81,7 +77,7 @@ extension ConfirmTransferScene {
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
                         .contextMenu(
-                            .url(title: websiteValue, onOpen: { isPresentingUrl = model.websiteURL })
+                            .url(title: websiteValue, onOpen: { model.isPresentingUrl = model.websiteURL })
                         )
                 }
 
@@ -93,7 +89,7 @@ extension ConfirmTransferScene {
                 .contextMenu(
                     [
                         .copy(value: model.senderAddress),
-                        .url(title: model.senderExplorerText, onOpen: { isPresentingUrl = model.senderAddressExplorerUrl })
+                        .url(title: model.senderExplorerText, onOpen: { model.isPresentingUrl = model.senderAddressExplorerUrl })
                     ]
                 )
 
@@ -115,7 +111,7 @@ extension ConfirmTransferScene {
                     ListItemView(
                         title: model.slippageField,
                         subtitle: slippage,
-                        infoAction: onSlippageInto
+                        infoAction: model.onSlippageInto
                     )
                 }
             }
@@ -124,7 +120,7 @@ extension ConfirmTransferScene {
                 if model.shouldShowFeeRatesSelector {
                     NavigationCustomLink(
                         with: networkFeeView,
-                        action: onSelectFeePicker
+                        action: model.onSelectFeePicker
                     )
                 } else {
                     networkFeeView
@@ -141,10 +137,10 @@ extension ConfirmTransferScene {
         }
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
-        .sheet(item: $isPresentingInfoSheet) {
+        .sheet(item: $model.isPresentingInfoSheet) {
             InfoSheetScene(model: InfoSheetViewModel(type: $0))
         }
-        .safariSheet(url: $isPresentingUrl)
+        .safariSheet(url: $model.isPresentingUrl)
     }
 
     private var networkFeeView: some  View {
@@ -153,63 +149,7 @@ extension ConfirmTransferScene {
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
             placeholders: [.subtitle],
-            infoAction: onNetworkFeeInfo
+            infoAction: model.onNetworkFeeInfo
         )
-    }
-}
-
-// MARK: - Actions
-
-extension ConfirmTransferScene {
-    private func onSelectConfirmTransfer() {
-        guard let value = model.state.value,
-              let input = value.input,
-              case .amount(let amount) = value.transferAmountResult else { return }
-        process(input: input, amount: amount)
-    }
-
-    private func onSelectFeePicker() {
-        model.isPresentedNetworkFeePicker.toggle()
-    }
-
-    private func onChangeFeePriority(_ priority: FeePriority) async {
-        await model.fetch()
-    }
-
-    private func onAction() {
-        if model.state.isError {
-            fetch()
-        } else {
-            onSelectConfirmTransfer()
-        }
-    }
-
-    private func onNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(model.dataModel.chain)
-    }
-    
-    private func onSlippageInto() {
-        isPresentingInfoSheet = .slippage
-    }
-}
-
-// MARK: - Effects
-
-extension ConfirmTransferScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
-    }
-
-    private func process(input: TransactionLoad, amount: TransferAmount) {
-        Task {
-            await model.process(input: input, amount: amount)
-            await MainActor.run {
-                if case .data(_) = model.confirmingState {
-                    model.onCompleteAction()
-                }
-            }
-        }
     }
 }
