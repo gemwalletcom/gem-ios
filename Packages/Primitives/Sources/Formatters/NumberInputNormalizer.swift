@@ -18,7 +18,8 @@ public struct NumberInputNormalizer: Sendable {
     /// Normalizes a raw `input` numeric string (with potential locale-specific separators or extra symbols)
     /// into a standard dot-based decimal format (e.g. `"1234.56"`) suitable for parsing.
     public static func normalize(_ input: String, locale: Locale) -> String {
-        var string = input.trimmingCharacters(in: .whitespacesAndNewlines)
+        var string = LatinNumericConverter.toLatinDigits(input).trimmingCharacters(in: .whitespacesAndNewlines)
+
         while let last = string.unicodeScalars.last, !allowedTrailingCharacters.contains(last) {
             string.removeLast()
         }
