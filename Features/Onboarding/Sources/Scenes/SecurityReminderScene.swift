@@ -5,6 +5,7 @@ import SwiftUI
 import Style
 import Components
 import Localization
+import Primitives
 
 struct SecurityReminderScene: View {
     @State private var model: SecurityReminderViewModel
@@ -54,6 +55,7 @@ struct SecurityReminderScene: View {
                 Button("", systemImage: SystemImage.info) {
                     isPresentingUrl = model.docsUrl
                 }
+                .accessibilityIdentifier(.safariInfoButton)
             }
         }
         .safariSheet(url: $isPresentingUrl)
