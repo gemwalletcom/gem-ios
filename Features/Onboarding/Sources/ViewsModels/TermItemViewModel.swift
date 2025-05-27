@@ -4,14 +4,18 @@ import Foundation
 import Style
 
 final class TermItemViewModel: Identifiable {
-    var id: String { message }
+    let id: String
     let message: String
     var style: TextStyle {
         isConfirmed ? .body : TextStyle(font: .body, color: Colors.black.opacity(0.8))
     }
     var isConfirmed: Bool = false
     
-    init(message: String) {
+    init(
+        id: String,
+        message: String
+    ) {
+        self.id = id
         self.message = message
     }
 }
