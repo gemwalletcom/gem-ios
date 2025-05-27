@@ -2,10 +2,8 @@
 
 import Foundation
 
-final class ImportWalletFlowLauncher: Robot {
-    
-    @discardableResult
-    func start() -> Self {
+final class ImportWalletNavigationStackRobot: Robot {
+    func startImportWalletFlow() {
         start(scenario: .importWallet)
     }
 }

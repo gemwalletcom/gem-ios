@@ -6,7 +6,7 @@ import Components
 final class AcceptTermsSceneRobot: Robot {
     
     @discardableResult
-    func checkScreen() -> Self {
+    func checkScene() -> Self {
         assert(safariInfoButton, [.exists, .isHittable])
         assert(stateButton, [.exists, .isNotEnabled])
         
@@ -23,11 +23,8 @@ final class AcceptTermsSceneRobot: Robot {
         return self
     }
     
-    @discardableResult
-    func tapContinueButton() -> SecurityReminderRobot {
+    func tapContinueButton() {
         assert(stateButton, [.isEnabled])
         tap(stateButton)
-
-        return SecurityReminderRobot(app)
     }
 }

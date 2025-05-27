@@ -92,12 +92,9 @@ final class ImportWalletSceneRobot: Robot {
         
         return self
     }
-    
-    @discardableResult
-    func tapContinue() -> Self {
+
+    func tapContinueButton() {
         tap(stateButton)
         assert(alert, [.doesNotExist])
-        
-        return self
     }
 }

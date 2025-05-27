@@ -7,51 +7,51 @@ final class CreateWalletUITests: XCTestCase {
 
     func testCreateFirstWalletFlow() {
         let app = XCUIApplication()
-        CreateWalletFlowLauncher(app)
+        CreateWalletNavigationStackRobot(app)
             .startCreateFirstWalletFlow()
         
         AcceptTermsSceneRobot(app)
-            .checkScreen()
+            .checkScene()
             .checkTitle(contains: "Accept Terms")
             .acceptTermsToggle(at: 0)
             .acceptTermsToggle(at: 1)
             .acceptTermsToggle(at: 2)
             .tapContinueButton()
 
-        SecurityReminderRobot(app)
-            .checkScreen()
+        SecurityReminderSceneRobot(app)
+            .checkScene()
             .checkTitle(contains: "New Wallet")
             .checkBackButton(title: "Accept Terms")
-            .tapContinue()
+            .tapContinueButton()
         
         CreateWalletSceneRobot(app)
-            .checkScreen()
+            .checkScene()
             .checkTitle(contains: "New Wallet")
             .checkBackButton(title: "New Wallet")
             .tapContinueButton()
         
         VerifyPhraseWalletSceneRobot(app)
-            .checkScreen()
+            .checkScene()
             .checkTitle(contains: "Confirm")
             .checkBackButton(title: "New Wallet")
             .verifyPhrase()
-            .tapContinue()
+            .tapContinueButton()
     }
     
     func testCreateWalletFlow() {
         let app = XCUIApplication()
-        CreateWalletFlowLauncher(app)
+        CreateWalletNavigationStackRobot(app)
             .startCreateWalletFlow()
         
-        SecurityReminderRobot(app)
+        SecurityReminderSceneRobot(app)
             .checkBackButton(title: "Cancel")
-            .tapContinue()
+            .tapContinueButton()
         
         CreateWalletSceneRobot(app)
             .tapContinueButton()
         
         VerifyPhraseWalletSceneRobot(app)
             .verifyPhrase()
-            .tapContinue()
+            .tapContinueButton()
     }
 }

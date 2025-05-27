@@ -7,11 +7,11 @@ final class ImportWalletUITests: XCTestCase {
 
     func testMulticoinImportWalletFlow() {
         let app = XCUIApplication()
-        ImportWalletFlowLauncher(app)
-            .start()
+        ImportWalletNavigationStackRobot(app)
+            .startImportWalletFlow()
         
         ImportWalletTypeSceneRobot(app)
-            .checkScreen()
+            .checkScene()
             .checkBackButton(title: "Cancel")
             .checkTitle(contains: "Import Wallet")
             .checkSearchEmpty()
@@ -26,13 +26,13 @@ final class ImportWalletUITests: XCTestCase {
             .renameWallet()
             .insertIncorrectPhrase()
             .insertCorrectPhrase()
-            .tapContinue()
+            .tapContinueButton()
     }
 
     func testEthereumImportPrivateKey() {
         let app = XCUIApplication()
-        ImportWalletFlowLauncher(app)
-            .start()
+        ImportWalletNavigationStackRobot(app)
+            .startImportWalletFlow()
         
         ImportWalletTypeSceneRobot(app)
             .tapEthereum()
@@ -42,13 +42,13 @@ final class ImportWalletUITests: XCTestCase {
             .checkSegmentedControl()
             .tapToPrivateKey()
             .insertPrivateKey()
-            .tapContinue()
+            .tapContinueButton()
     }
     
     func testEthereumImportAddress() {
         let app = XCUIApplication()
-        ImportWalletFlowLauncher(app)
-            .start()
+        ImportWalletNavigationStackRobot(app)
+            .startImportWalletFlow()
         
         ImportWalletTypeSceneRobot(app)
             .tapEthereum()
@@ -56,6 +56,6 @@ final class ImportWalletUITests: XCTestCase {
         ImportWalletSceneRobot(app)
             .tapToAddress()
             .insertAddress()
-            .tapContinue()
+            .tapContinueButton()
     }
 }

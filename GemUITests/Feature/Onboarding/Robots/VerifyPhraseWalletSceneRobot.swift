@@ -7,7 +7,7 @@ import KeystoreTestKit
 final class VerifyPhraseWalletSceneRobot: Robot {
     
     @discardableResult
-    func checkScreen() -> Self {
+    func checkScene() -> Self {
         assert(stateButton, [.exists, .isNotEnabled])
         
         return self
@@ -23,7 +23,7 @@ final class VerifyPhraseWalletSceneRobot: Robot {
         return self
     }
     
-    func tapContinue() {
+    func tapContinueButton() {
         tap(stateButton)
     }
 }

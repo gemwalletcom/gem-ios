@@ -6,6 +6,7 @@ import WalletServiceTestKit
 import PreferencesTestKit
 import WalletService
 import KeystoreTestKit
+import Keystore
 
 // Features
 import Onboarding
@@ -40,6 +41,11 @@ public struct LaunchEnvironmentView: View {
                 model: ImportWalletTypeViewModel(walletService: .mock(isAccepted: true)),
                 isPresentingWallets: .constant(false)
             )
+        
+        case .exportWords:
+            ExportWalletNavigationStack(flow: .words(LocalKeystore.words))
+        case .exportPrivateKey:
+            ExportWalletNavigationStack(flow: .privateKey(LocalKeystore.privateKey))
         }
     }
 }

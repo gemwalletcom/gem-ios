@@ -10,7 +10,7 @@ final class ImportWalletTypeSceneRobot: Robot {
     private lazy var ethereum: XCUIElement = app.buttons[AccessibilityIdentifier.Onboarding.chainNavigationLink(Chain.ethereum.rawValue).id]
     
     @discardableResult
-    func checkScreen() -> Self {
+    func checkScene() -> Self {
         assert(searchField, [.exists, .isHittable])
         assert(multicoin, [.exists, .isHittable])
         assert(ethereum, [.exists, .isHittable])
@@ -38,18 +38,12 @@ final class ImportWalletTypeSceneRobot: Robot {
         
         return self
     }
-    
-    @discardableResult
-    func tapMulticoin() -> ImportWalletSceneRobot {
+
+    func tapMulticoin() {
         tap(multicoin)
-        
-        return ImportWalletSceneRobot(app)
     }
-    
-    @discardableResult
-    func tapEthereum() -> ImportWalletSceneRobot {
+
+    func tapEthereum() {
         tap(ethereum)
-        
-        return ImportWalletSceneRobot(app)
     }
 }

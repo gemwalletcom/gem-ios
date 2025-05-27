@@ -2,20 +2,17 @@
 
 import Foundation
 
-final class SecurityReminderRobot: Robot {
+final class SecurityReminderSceneRobot: Robot {
     
     @discardableResult
-    func checkScreen() -> Self {
+    func checkScene() -> Self {
         assert(safariInfoButton, [.exists, .isHittable])
         assert(stateButton, [.exists, .isHittable, .isEnabled])
         
         return self
     }
-    
-    @discardableResult
-    func tapContinue() -> CreateWalletSceneRobot {
+
+    func tapContinueButton() {
         tap(stateButton)
-        
-        return CreateWalletSceneRobot(app)
     }
 }

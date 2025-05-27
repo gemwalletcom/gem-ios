@@ -8,8 +8,10 @@ final class OnboardingUITests: XCTestCase {
     private lazy var app = XCUIApplication()
     
     func testOnboarding() {
-        OnboardingRobot(app)
-            .start()
-            .checkOnboardingScreenVisible(timeout: 3)
+        OnboardingNavigationViewRobot()
+            .startOnboarding()
+
+        OnboardingSceneRobot(app)
+            .checkScene()
     }
 }

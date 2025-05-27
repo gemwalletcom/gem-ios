@@ -7,7 +7,7 @@ import KeystoreTestKit
 final class CreateWalletSceneRobot: Robot {
     
     @discardableResult
-    func checkScreen() -> Self {
+    func checkScene() -> Self {
         LocalKeystore.words.forEach {
             assert(app.staticTexts[$0], [.exists])
         }
@@ -16,11 +16,8 @@ final class CreateWalletSceneRobot: Robot {
         
         return self
     }
-    
-    @discardableResult
-    func tapContinueButton() -> VerifyPhraseWalletSceneRobot {
+
+    func tapContinueButton() {
         tap(stateButton)
-        
-        return VerifyPhraseWalletSceneRobot(app)
     }
 }
