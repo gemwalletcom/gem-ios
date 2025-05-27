@@ -20,6 +20,7 @@ final class ImportWalletUITests: XCTestCase {
         
         ImportWalletSceneRobot(app)
             .checkScene()
+            .checkWalletName("Wallet #1")
             .checkBackButton(title: "Import Wallet")
             .checkTitle(contains: "Multi-Coin")
             .renameWallet()
@@ -28,4 +29,33 @@ final class ImportWalletUITests: XCTestCase {
             .tapContinue()
     }
 
+    func testEthereumImportPrivateKey() {
+        let app = XCUIApplication()
+        ImportWalletFlowLauncher(app)
+            .start()
+        
+        ImportWalletTypeSceneRobot(app)
+            .tapEthereum()
+        
+        ImportWalletSceneRobot(app)
+            .checkTitle(contains: "Ethereum")
+            .checkSegmentedControl()
+            .tapToPrivateKey()
+            .insertPrivateKey()
+            .tapContinue()
+    }
+    
+    func testEthereumImportAddress() {
+        let app = XCUIApplication()
+        ImportWalletFlowLauncher(app)
+            .start()
+        
+        ImportWalletTypeSceneRobot(app)
+            .tapEthereum()
+        
+        ImportWalletSceneRobot(app)
+            .tapToAddress()
+            .insertAddress()
+            .tapContinue()
+    }
 }

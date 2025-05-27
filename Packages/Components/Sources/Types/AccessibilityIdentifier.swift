@@ -20,6 +20,7 @@ public struct AccessibilityIdentifier {
         case multicoinNavigationLink
         case chainNavigationLink(String)
         case phraseTextField
+        case walletImportType(String)
 
         public var id: String {
             switch self {
@@ -27,6 +28,7 @@ public struct AccessibilityIdentifier {
             case .multicoinNavigationLink: "onboarding_multicoinNavigationLink"
             case .chainNavigationLink(let string): "onboarding_chainNavigationLink_\(string)"
             case .phraseTextField: "onboarding_phraseTextField"
+            case .walletImportType(let string): "onboarding_walletImportType_\(string)"
             }
         }
     }

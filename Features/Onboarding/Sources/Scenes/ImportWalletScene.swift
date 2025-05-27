@@ -42,6 +42,7 @@ struct ImportWalletScene: View {
                             Picker("", selection: $importType) {
                                 ForEach(model.importTypes) { type in
                                     Text(type.title).tag(type)
+                                        .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.walletImportType(type.rawValue).id)
                                 }
                             }
                             .pickerStyle(.segmented)

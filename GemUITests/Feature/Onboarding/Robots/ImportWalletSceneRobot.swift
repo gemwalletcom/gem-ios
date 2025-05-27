@@ -13,9 +13,38 @@ final class ImportWalletSceneRobot: Robot {
     @discardableResult
     func checkScene() -> Self {
         assert(stateButton, [.exists])
-        assert(floatTextField, [.value("Wallet #1")])
         assert(floatTextField, [.exists, .isHittable])
         assert(phraseTextField, [.exists, .isHittable])
+        
+        return self
+    }
+    
+    @discardableResult
+    func checkWalletName(_ name: String) -> Self {
+        assert(floatTextField, [.value(name)])
+        
+        return self
+    }
+    
+    @discardableResult
+    func checkSegmentedControl() -> Self {
+        assert(app.segmentedControls.buttons["Phrase"], [.exists, .isHittable])
+        assert(app.segmentedControls.buttons["Private Key"], [.exists, .isHittable])
+        assert(app.segmentedControls.buttons["Address"], [.exists, .isHittable])
+        
+        return self
+    }
+    
+    @discardableResult
+    func tapToPrivateKey() -> Self {
+        tap(app.segmentedControls.buttons[AccessibilityIdentifier.Onboarding.walletImportType("Private Key").id])
+        
+        return self
+    }
+    
+    @discardableResult
+    func tapToAddress() -> Self {
+        tap(app.segmentedControls.buttons[AccessibilityIdentifier.Onboarding.walletImportType("Address").id])
         
         return self
     }
@@ -44,7 +73,22 @@ final class ImportWalletSceneRobot: Robot {
         tap(stateButton)
         assert(alert, [.exists])
         tap(app.alerts.buttons["OK"])
-        phraseTextField.typeText(.empty)
+        
+        return self
+    }
+    
+    @discardableResult
+    func insertPrivateKey() -> Self {
+        tap(phraseTextField)
+        phraseTextField.typeText(LocalKeystore.privateKey)
+        
+        return self
+    }
+    
+    @discardableResult
+    func insertAddress() -> Self {
+        tap(phraseTextField)
+        phraseTextField.typeText(LocalKeystore.address)
         
         return self
     }
