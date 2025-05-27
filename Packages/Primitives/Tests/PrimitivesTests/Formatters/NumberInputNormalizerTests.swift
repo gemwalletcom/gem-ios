@@ -50,9 +50,9 @@ struct NumberInputNormalizerTests {
             ("١٢٬٣٤٥٬٦٧٨٬٩٠١٫٢٣٤٥٦٧٨٩", "12345678901.23456789")
         ]
 
-        for (input, expected) in testCases {
-            let normalized = NumberInputNormalizer.normalize(input, locale: locale)
-            #expect(normalized == expected)
+        for testCase in testCases {
+            let normalized = NumberInputNormalizer.normalize(testCase.input, locale: locale)
+            #expect(normalized == testCase.expected)
         }
     }
 
