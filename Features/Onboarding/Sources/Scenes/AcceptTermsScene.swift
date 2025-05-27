@@ -21,13 +21,13 @@ struct AcceptTermsScene: View {
                 OnboardingHeaderTitle(title: model.message, alignment: .center)
                     .cleanListRow()
                 
-                ForEach(Array($model.items.enumerated()), id: \.element.id) { index, $item in
+                ForEach($model.items) { $item in
                     Section {
                         Toggle(isOn: $item.isConfirmed) {
                             Text(item.message)
                                 .textStyle(item.style)
                         }
-                        .accessibilityIdentifier(.acceptTermsToggle(index))
+                        .accessibilityIdentifier(item.id)
                         .toggleStyle(CheckboxStyle(position: .left))
                     }
                     .listRowInsets(.assetListRowInsets)

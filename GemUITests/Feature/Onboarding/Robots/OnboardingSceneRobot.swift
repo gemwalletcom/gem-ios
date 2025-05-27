@@ -2,9 +2,11 @@
 
 import Foundation
 
+@testable import Onboarding
+
 final class OnboardingSceneRobot: Robot {
-    private lazy var createButton = app.buttons["welcome_create"]
-    private lazy var importButton = app.buttons["welcome_import"]
+    private lazy var createButton = app.buttons[OnboardingAccessibilityIdentifier.onboardingCreateButton.id]
+    private lazy var importButton = app.buttons[OnboardingAccessibilityIdentifier.onboardingImportButton.id]
     
     @discardableResult
     func checkScene() -> Self {
