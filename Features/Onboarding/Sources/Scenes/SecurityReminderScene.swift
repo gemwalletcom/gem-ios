@@ -55,7 +55,7 @@ struct SecurityReminderScene: View {
                 Button("", systemImage: SystemImage.info) {
                     isPresentingUrl = model.docsUrl
                 }
-                .accessibilityIdentifier(AccessibilityIdentifier.Common.safariInfoButton.id)
+                .accessibilityIdentifier(.safariInfoButton)
             }
         }
         .safariSheet(url: $isPresentingUrl)

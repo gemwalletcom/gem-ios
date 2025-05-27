@@ -6,9 +6,11 @@ import XCTest
 import Keystore
 import KeystoreTestKit
 
+@testable import Onboarding
+
 final class ImportWalletSceneRobot: Robot {
-    private lazy var floatTextField: XCUIElement = app.textFields[AccessibilityIdentifier.Common.floatTextField.id]
-    private lazy var phraseTextField: XCUIElement = app.textFields[AccessibilityIdentifier.Onboarding.phraseTextField.id]
+    private lazy var floatTextField: XCUIElement = app.textFields[AccessibilityIdentifier.floatTextField.id]
+    private lazy var phraseTextField: XCUIElement = app.textFields[OnboardingAccessibilityIdentifier.phraseTextField.id]
     
     @discardableResult
     func checkScene() -> Self {
@@ -37,14 +39,14 @@ final class ImportWalletSceneRobot: Robot {
     
     @discardableResult
     func tapToPrivateKey() -> Self {
-        tap(app.segmentedControls.buttons[AccessibilityIdentifier.Onboarding.walletImportType("Private Key").id])
+        tap(app.segmentedControls.buttons[OnboardingAccessibilityIdentifier.walletImportType("Private Key").id])
         
         return self
     }
     
     @discardableResult
     func tapToAddress() -> Self {
-        tap(app.segmentedControls.buttons[AccessibilityIdentifier.Onboarding.walletImportType("Address").id])
+        tap(app.segmentedControls.buttons[OnboardingAccessibilityIdentifier.walletImportType("Address").id])
         
         return self
     }
@@ -52,7 +54,7 @@ final class ImportWalletSceneRobot: Robot {
     @discardableResult
     func renameWallet() -> Self {
         tap(floatTextField)
-        tap(app.buttons[AccessibilityIdentifier.Common.xCircleCleanButton.id])
+        tap(app.buttons[AccessibilityIdentifier.xCircleCleanButton.id])
         floatTextField.typeText("New Wallet")
 
         return self

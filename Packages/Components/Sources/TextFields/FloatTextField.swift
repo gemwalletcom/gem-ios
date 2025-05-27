@@ -100,7 +100,7 @@ extension FloatTextField {
         TextField("", text: $text)
             .offset(y: text.isEmpty ? .zero : .small + .extraSmall)
             .animation(.smooth(duration: 0.15), value: text.isEmpty)
-            .accessibilityIdentifier(AccessibilityIdentifier.Common.floatTextField.id)
+            .accessibilityIdentifier(.floatTextField)
     }
 
     private var trailingContent: some View {

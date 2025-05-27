@@ -5,9 +5,11 @@ import XCTest
 import Components
 import Primitives
 
+@testable import Onboarding
+
 final class ImportWalletTypeSceneRobot: Robot {
-    private lazy var multicoin: XCUIElement = app.buttons[AccessibilityIdentifier.Onboarding.multicoinNavigationLink.id]
-    private lazy var ethereum: XCUIElement = app.buttons[AccessibilityIdentifier.Onboarding.chainNavigationLink(Chain.ethereum.rawValue).id]
+    private lazy var multicoin: XCUIElement = app.buttons[OnboardingAccessibilityIdentifier.multicoinNavigationLink.id]
+    private lazy var ethereum: XCUIElement = app.buttons[OnboardingAccessibilityIdentifier.chainNavigationLink(Chain.ethereum.rawValue).id]
     
     @discardableResult
     func checkScene() -> Self {
@@ -33,7 +35,7 @@ final class ImportWalletTypeSceneRobot: Robot {
     func checkSearchNotEmpty() -> Self {
         tap(searchField)
         searchField.typeText(Chain.arbitrum.rawValue)
-        assert(app.buttons[AccessibilityIdentifier.Onboarding.chainNavigationLink(Chain.arbitrum.rawValue).id], [.exists])
+        assert(app.buttons[OnboardingAccessibilityIdentifier.chainNavigationLink(Chain.arbitrum.rawValue).id], [.exists])
         tap(cancelButton)
         
         return self

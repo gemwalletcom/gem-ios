@@ -59,6 +59,7 @@
 		83EB5E302D2ECF00006A7CFB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = 83EB5E2F2D2ECF00006A7CFB /* Onboarding */; };
 		83F645062D52C31D00C18881 /* DiscoverAssetsService in Frameworks */ = {isa = PBXBuildFile; productRef = 83F645052D52C31D00C18881 /* DiscoverAssetsService */; };
 		B617D60B2D5B75F0001697A6 /* AvatarService in Frameworks */ = {isa = PBXBuildFile; productRef = B617D60A2D5B75F0001697A6 /* AvatarService */; };
+		B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */ = {isa = PBXBuildFile; productRef = B62F6B9C2DE61ADF00AF56AB /* Onboarding */; };
 		B64A380D2D8D894E005F9419 /* SelectAssetSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64A380C2D8D894E005F9419 /* SelectAssetSearchViewModel.swift */; };
 		B65C9AED2D84161900A222E8 /* AmountInputConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C9AEC2D84161900A222E8 /* AmountInputConfig.swift */; };
 		B65C9B132D88163600A222E8 /* AmountInputType.swift in Sources */ = {isa = PBXBuildFile; fileRef = B65C9B122D88163600A222E8 /* AmountInputType.swift */; };
@@ -439,6 +440,7 @@
 				B68BD2DA2DE05F9100687F09 /* PrimitivesTestKit in Frameworks */,
 				B68BD2DC2DE05FB600687F09 /* Keystore in Frameworks */,
 				B68BD2D82DE05F7500687F09 /* KeystoreTestKit in Frameworks */,
+				B62F6B9D2DE61ADF00AF56AB /* Onboarding in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1176,6 +1178,7 @@
 				B68BD2D92DE05F9100687F09 /* PrimitivesTestKit */,
 				B68BD2DB2DE05FB600687F09 /* Keystore */,
 				B68BD2E52DE0760E00687F09 /* Primitives */,
+				B62F6B9C2DE61ADF00AF56AB /* Onboarding */,
 			);
 			productName = GemUITests;
 			productReference = D83096AC2D5D4F1E00FFEE3E /* GemUITests.xctest */;
@@ -1987,6 +1990,10 @@
 		B617D60A2D5B75F0001697A6 /* AvatarService */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = AvatarService;
+		};
+		B62F6B9C2DE61ADF00AF56AB /* Onboarding */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Onboarding;
 		};
 		B66AFC6B2DDB260A0082C026 /* AppService */ = {
 			isa = XCSwiftPackageProductDependency;

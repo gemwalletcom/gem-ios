@@ -3,6 +3,8 @@
 import Foundation
 import Components
 
+@testable import Onboarding
+
 final class AcceptTermsSceneRobot: Robot {
     
     @discardableResult
@@ -15,7 +17,7 @@ final class AcceptTermsSceneRobot: Robot {
     
     @discardableResult
     func acceptTermsToggle(at index: Int) -> Self {
-        let toggle = app.switches[AccessibilityIdentifier.Onboarding.acceptTermsToggle(index).id]
+        let toggle = app.switches[OnboardingAccessibilityIdentifier.acceptTermsToggle(index).id]
         assert(toggle, [.exists, .isOff])
         tap(toggle)
         assert(toggle, [.isOn])

@@ -27,7 +27,7 @@ struct AcceptTermsScene: View {
                             Text(item.message)
                                 .textStyle(item.style)
                         }
-                        .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.acceptTermsToggle(index).id)
+                        .accessibilityIdentifier(.acceptTermsToggle(index))
                         .toggleStyle(CheckboxStyle(position: .left))
                     }
                     .listRowInsets(.assetListRowInsets)
@@ -54,7 +54,7 @@ struct AcceptTermsScene: View {
                 Button("", systemImage: SystemImage.info) {
                     isPresentingUrl = model.termsAndServicesURL
                 }
-                .accessibilityIdentifier(AccessibilityIdentifier.Common.safariInfoButton.id)
+                .accessibilityIdentifier(.safariInfoButton)
             }
         }
         .safariSheet(url: $isPresentingUrl)

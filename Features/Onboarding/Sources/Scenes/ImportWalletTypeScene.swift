@@ -24,7 +24,7 @@ struct ImportWalletTypeScene: View {
                         imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
                     )
                 }
-                .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.multicoinNavigationLink.id)
+                .accessibilityIdentifier(.multicoinNavigationLink)
             }
             .listRowInsets(.assetListRowInsets)
             
@@ -39,7 +39,7 @@ struct ImportWalletTypeScene: View {
                                 imageStyle: .asset(assetImage: AssetImage.resourceImage(image: chain.rawValue))
                             )
                         }
-                        .accessibilityIdentifier(AccessibilityIdentifier.Onboarding.chainNavigationLink(chain.rawValue).id)
+                        .accessibilityIdentifier(.chainNavigationLink(chain.rawValue))
                     }
                 }
                 .listRowInsets(.assetListRowInsets)
