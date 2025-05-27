@@ -33,18 +33,19 @@ final class ConfirmTransferViewModel {
         }
     }
 
-    var feeModel: NetworkFeeSceneViewModel
-
     var isPresentedNetworkFeePicker: Bool = false
     var confirmingErrorMessage: String?
     var isPresentingInfoSheet: InfoSheetType? = .none
     var isPresentingUrl: URL? = nil
 
-    let explorerService: any ExplorerLinkFetchable
+    var feeModel: NetworkFeeSceneViewModel
 
-    private var metadata: TransferDataMetadata?
+    private var portfolio: AssetPortfolio?
 
+    private let explorerService: any ExplorerLinkFetchable
     private let transactionSigner: any TransactionSigning
+    private let portfolioProvider: any AssetPortfolioProviding
+
     private let data: TransferData
     private let wallet: Wallet
     private let keystore: any Keystore
@@ -81,9 +82,15 @@ final class ConfirmTransferViewModel {
             service: service
         )
         self.transactionSigner = TransactionSigner(keystore: keystore)
-        // prefetch asset metadata from local storage
-        let metadata = try? getAssetMetaData(walletId: wallet.id, asset: data.type.asset, assetsIds: data.type.assetIds)
-        self.metadata = metadata
+        self.portfolioProvider = AssetPortfolioProvider(
+            balanceService: walletsService.balanceService,
+            priceService: walletsService.priceService
+        )
+        self.portfolio = try? portfolioProvider.snapshot(
+            walletId: wallet.walletId,
+            asset: data.type.asset,
+            extraIds: data.type.assetIds
+        )
     }
 
     var title: String { dataModel.title }
@@ -277,7 +284,12 @@ final class ConfirmTransferViewModel {
         if let value = state.value {
             return value.headerType
         }
-        return TransactionInputViewModel(data: dataModel.data, input: nil, metaData: metadata, transferAmountResult: nil).headerType
+        return TransactionInputViewModel(
+            data: dataModel.data,
+            input: nil,
+            metaData: portfolio?.asMetadata(),
+            transferAmountResult: nil
+        ).headerType
     }
 
     var progressMessage: String { Localized.Common.loading }
@@ -336,7 +348,14 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let metadata = try getAssetMetaData(walletId: wallet.id, asset: dataModel.asset, assetsIds: data.type.assetIds)
+            let portfolio = try portfolioProvider.snapshot(
+                walletId: wallet.walletId,
+                asset: dataModel.asset,
+                extraIds: data.type.assetIds
+            )
+            self.portfolio = portfolio
+
+            let metadata = portfolio.asMetadata()
             try validateBalance(metadata: metadata)
 
             let preloadInput = try await fetchTransactionLoad(metaData: metadata)
@@ -425,11 +444,6 @@ extension ConfirmTransferViewModel {
         }
     }
 
-    private enum AssetMetadataError: Error {
-        case missingBalance
-        case invalidAssetId
-    }
-
     private var senderLink: BlockExplorerLink {
         explorerService.addressUrl(chain: dataModel.chain, address: senderAddress)
     }
@@ -446,36 +460,26 @@ extension ConfirmTransferViewModel {
     }
 
     private var availableValue: BigInt {
-        switch dataModel.type {
-        case .transfer(let asset),
-            .swap(let asset, _, _, _),
-            .tokenApprove(let asset, _),
-            .generic(let asset, _, _):
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-            return balance.available
-        case .transferNft(let asset):
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.chain.id) else {
-                return .zero
-            }
-            return balance.available
-        case .stake(let asset, let stakeType):
-            switch stakeType {
-            case .stake:
-                guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
-                return balance.available
-            case .unstake(let delegation):
-                return delegation.base.balanceValue
-            case .redelegate(let delegation, _):
-                return delegation.base.balanceValue
-            case .rewards:
-                return dataModel.data.value
-            case .withdraw(let delegation):
-                return delegation.base.balanceValue
-            }
-        case .account(let asset, let type):
-            guard let balance = try? walletsService.balanceService.getBalance(walletId: wallet.id, assetId: asset.id.identifier) else { return .zero }
+        switch data.type {
+        case .transfer,
+                .swap,
+                .tokenApprove,
+                .generic,
+                .transferNft:
+            portfolio?.available ?? .zero
+        case .account(_, let type):
             switch type {
-            case .activate: return balance.available
+            case .activate:
+                portfolio?.available ?? .zero
+            }
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .unstake(let delegation), .redelegate(let delegation, _), .withdraw(let delegation):
+                delegation.base.balanceValue
+            case .rewards:
+                dataModel.data.value
+            case .stake:
+                portfolio?.available ?? .zero
             }
         }
     }
