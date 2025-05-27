@@ -39,6 +39,24 @@ struct NumberInputNormalizerTests {
     }
 
     @Test
+    func testArabicNormalization() throws {
+        let locale = Locale.AR_SA
+        let testCases: [(input: String, expected: String)] = [
+            ("١٬٢٣٤٫٥٦", "1234.56"),
+            (" ١٬٢٣٤٫٥٦ ", "1234.56"),
+            ("١٬٢٣٤٫٥٦$", "1234.56"),
+            ("١٬٢٣٤٫٥٦ SAR","1234.56"),
+            ("١٢٣٬٤٥٦٫٧٨BTC", "123456.78"),
+            ("١٢٬٣٤٥٬٦٧٨٬٩٠١٫٢٣٤٥٦٧٨٩", "12345678901.23456789")
+        ]
+
+        for testCase in testCases {
+            let normalized = NumberInputNormalizer.normalize(testCase.input, locale: locale)
+            #expect(normalized == testCase.expected)
+        }
+    }
+
+    @Test
     func testExtraneousSymbols() throws {
         let locale = Locale.US
         let nonBreakingSpace = "\u{00A0}"
