@@ -35,28 +35,37 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
 
     public var body: some View {
         NavigationStack {
-            VStack {
-                if model.isSearchable {
-                    SearchableSelectableListView(
-                        model: $model,
-                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
-                        listContent: listContent
-                    )
-                } else {
-                    SelectableListView(
-                        model: $model,
-                        onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
-                        listContent: listContent
-                    )
+            ZStack(alignment: .bottom) {
+                Group {
+                    if model.isSearchable {
+                        SearchableSelectableListView(
+                            model: $model,
+                            onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
+                            listContent: listContent
+                        )
+                    } else {
+                        SelectableListView(
+                            model: $model,
+                            onFinishSelection: { onFinish(items: $0, isConfirmed: false) },
+                            listContent: listContent
+                        )
+                    }
                 }
-                Spacer()
+                .padding(.bottom, .scene.button.height)
                 
-                StateButton(
-                    text: model.confirmButtonTitle,
-                    styleState: .normal,
-                    action: onConfirm
-                )
-                .frame(maxWidth: .scene.button.maxWidth)
+                VStack(spacing: .small) {
+                    Divider()
+                        .frame(height: 1 / UIScreen.main.scale)
+                        .background(Colors.grayVeryLight)
+                    
+                    StateButton(
+                        text: model.confirmButtonTitle,
+                        styleState: .normal,
+                        action: onConfirm
+                    )
+                    .frame(maxWidth: .scene.button.maxWidth)
+                }
+                .background(Colors.grayBackground)
             }
             .padding(.bottom, .scene.bottom)
             .contentMargins(.top, .scene.top, for: .scrollContent)
