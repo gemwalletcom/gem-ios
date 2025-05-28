@@ -79,7 +79,7 @@ extension SelectAssetViewModel {
                 assetsService: .mock(
                     assetStore: .mock(db: db),
                     balanceStore: .mock(db: db)
-                ),
+                )
             ),
             priceAlertService: .mock()
         )
