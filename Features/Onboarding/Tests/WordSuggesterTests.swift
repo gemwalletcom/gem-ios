@@ -6,34 +6,25 @@ import Testing
 @testable import Onboarding
 
 struct WordSuggesterTests {
+    let suggester = WordSuggester()
+    
     @Test
     func testSuggestPartial() {
-        let suggester = WordSuggester()
-        let result = suggester.wordSuggestionCalculate(value: "ab")
-        #expect(result.isNotEmpty)
+        #expect(suggester.wordSuggestionCalculate(value: "ab").isNotEmpty)
     }
 
     @Test
     func testEmptyWhenEndsWithSpace() {
-        let suggester = WordSuggester()
-        let result = suggester.wordSuggestionCalculate(value: "ab ")
-        #expect(result.isEmpty)
+        #expect(suggester.wordSuggestionCalculate(value: "ab ").isEmpty)
     }
 
     @Test
     func testExactMatchReturnsEmpty() {
-        let suggester = WordSuggester()
-        let word = "abandon"
-        let result = suggester.wordSuggestionCalculate(value: word)
-        #expect(result.isEmpty)
+        #expect(suggester.wordSuggestionCalculate(value: "abandon").isEmpty)
     }
 
     @Test
     func testReplaceLastWord() {
-        let suggester = WordSuggester()
-        let input = "abando"
-        let word = "abandon"
-        let result = suggester.selectWordCalculate(input: input, word: word)
-        #expect(result == "abandon ")
+        #expect(suggester.selectWordCalculate(input: "abando", word: "abandon") == "abandon ")
     }
 }
