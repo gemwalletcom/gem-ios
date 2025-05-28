@@ -7,6 +7,11 @@ import PreferencesTestKit
 import WalletService
 import KeystoreTestKit
 import Keystore
+import AssetsServiceTestKit
+import WalletsServiceTestKit
+import PriceAlertServiceTestKit
+import Primitives
+import Store
 
 // Features
 import Onboarding
@@ -43,10 +48,41 @@ public struct LaunchEnvironmentView: View {
             )
         
         case .exportWords:
-            ExportWalletNavigationStack(flow: .words(LocalKeystore.words))
+            ExportWalletNavigationStack(
+                flow: .words(LocalKeystore.words)
+            )
         case .exportPrivateKey:
-            ExportWalletNavigationStack(flow: .privateKey(LocalKeystore.privateKey))
+            ExportWalletNavigationStack(
+                flow: .privateKey(LocalKeystore.privateKey)
+            )
+        case .selectAssetManage:
+            let db = DB.mockAssets()
+            SelectAssetSceneNavigationStack(
+                model: SelectAssetViewModel.mock(db: db, selectType: .manage),
+                isPresentingSelectType: .constant(nil)
+            )
+            .databaseContext(.readWrite { db.dbQueue })
         }
+    }
+}
+
+extension SelectAssetViewModel {
+    static func mock(
+        db: DB,
+        selectType: SelectAssetType
+    ) -> SelectAssetViewModel {
+        return SelectAssetViewModel(
+            wallet: .mock(accounts: [AssetBasic].mock().map { Account.mock(chain: $0.asset.chain) }),
+            selectType: selectType,
+            assetsService: .mock(),
+            walletsService: .mock(
+                assetsService: .mock(
+                    assetStore: .mock(db: db),
+                    balanceStore: .mock(db: db)
+                )
+            ),
+            priceAlertService: .mock()
+        )
     }
 }
 

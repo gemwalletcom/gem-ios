@@ -10,16 +10,16 @@ public extension DB {
         DB(fileName: "\(UUID().uuidString).sqlite")
     }
     
-    static func mockAssets(assets: [AssetBasic] = .mock()) throws -> DB {
+    static func mockAssets(assets: [AssetBasic] = .mock()) -> DB {
         let db = Self.mock()
         let assetStore = AssetStore(db: db)
         let balanceStore = BalanceStore(db: db)
         let walletStore = WalletStore(db: db)
 
-        try assetStore.add(assets: assets)
-        try walletStore.addWallet(.mock(accounts: assets.map { Account.mock(chain: $0.asset.chain) }))
-        try balanceStore.addBalance(assets.map { AddBalance(assetId: $0.asset.id, isEnabled: true) }, for: .empty)
-        try balanceStore.updateBalances(.mock(assets: assets), for: .empty)
+        try? assetStore.add(assets: assets)
+        try? walletStore.addWallet(.mock(accounts: assets.map { Account.mock(chain: $0.asset.chain) }))
+        try? balanceStore.addBalance(assets.map { AddBalance(assetId: $0.asset.id, isEnabled: true) }, for: .empty)
+        try? balanceStore.updateBalances(.mock(assets: assets), for: .empty)
         
         return db
     }

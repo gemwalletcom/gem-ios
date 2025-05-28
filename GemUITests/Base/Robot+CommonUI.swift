@@ -26,6 +26,12 @@ extension Robot {
     var alert: XCUIElement {
         app.alerts.firstMatch
     }
+    var filterButton: XCUIElement {
+        app.buttons[AccessibilityIdentifier.filterButton.id]
+    }
+    var plusButton: XCUIElement {
+        app.buttons[AccessibilityIdentifier.plusButton.id]
+    }
 
     func backButton(title: String) -> XCUIElement {
         app.navigationBars.buttons[title]
