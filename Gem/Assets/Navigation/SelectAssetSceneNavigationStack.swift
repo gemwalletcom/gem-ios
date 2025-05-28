@@ -10,7 +10,6 @@ import PrimitivesComponents
 import Keystore
 
 struct SelectAssetSceneNavigationStack: View {
-    @Environment(\.dismiss) private var dismiss
     @Environment(\.assetsService) private var assetsService
     @Environment(\.nodeService) private var nodeService
     @Environment(\.walletService) private var walletService
@@ -40,13 +39,10 @@ struct SelectAssetSceneNavigationStack: View {
                 isPresentingAddToken: $isPresentingAddToken
             )
             .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button(Localized.Common.done) {
-                        dismiss()
-                    }
-                    .bold()
-                    .accessibilityIdentifier("cancel")
-                }
+                ToolbarDismissItem(
+                    title: .done,
+                    placement: .topBarLeading
+                )
                 if model.showFilter {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         FilterButton(
@@ -62,6 +58,7 @@ struct SelectAssetSceneNavigationStack: View {
                         } label: {
                             Images.System.plus
                         }
+                        .accessibilityIdentifier(.plusButton)
                     }
                 }
             }

@@ -11,6 +11,7 @@ public enum UITestLaunchScenario: String {
     case importWallet
     case exportWords
     case exportPrivateKey
+    case selectAssetManage
     
     public init?(info: ProcessInfo) {
         guard let environmentString = info.environment[Self.testEnvironmentKey] else {
