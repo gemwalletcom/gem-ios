@@ -7,8 +7,8 @@ import Transfer
 import ScanService
 import BigInt
 
-public protocol TransansferTransactionProvidable: Sendable {
-    func loadContext(
+public protocol TransferTransactionProvidable: Sendable {
+    func loadTransferTransactionData(
         wallet: Wallet,
         data: TransferData,
         priority: FeePriority,
@@ -16,7 +16,7 @@ public protocol TransansferTransactionProvidable: Sendable {
     ) async throws -> TransferTransactionData
 }
 
-public struct TransferTransactionProvider: TransansferTransactionProvidable {
+public struct TransferTransactionProvider: TransferTransactionProvidable {
     private let feeRatesProvider: any FeeRateProviding
     private let chainService: any ChainServiceable
     private let scanService: ScanService
@@ -30,7 +30,7 @@ public struct TransferTransactionProvider: TransansferTransactionProvidable {
         self.scanService = scanService
     }
 
-    public func loadContext(
+    public func loadTransferTransactionData(
         wallet: Wallet,
         data: TransferData,
         priority: FeePriority,
