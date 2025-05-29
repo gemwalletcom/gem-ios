@@ -6,8 +6,8 @@ import Primitives
 import XCTest
 
 final class SelectAssetSceneRobot: Robot {
-    private lazy var btcToggle = app.switches[AccessibilityIdentifier.IdentifiableView.toggle("Bitcoin").id]
-    private lazy var ethToggle = app.switches[AccessibilityIdentifier.IdentifiableView.toggle("Ethereum").id]
+    private lazy var btcToggle = app.switches[AccessibilityIdentifier.IdentifiableView.key("Bitcoin").id]
+    private lazy var ethToggle = app.switches[AccessibilityIdentifier.IdentifiableView.key("Ethereum").id]
     
     @discardableResult
     func checkManageAssetScene() -> Self {
@@ -59,6 +59,6 @@ final class SelectAssetSceneRobot: Robot {
     // MARK: - Private methods
     
     private func tagView(_ tag: AssetTag) -> XCUIElement {
-        app.buttons[AccessibilityIdentifier.IdentifiableView.tagViewItem(tag.rawValue).id]
+        app.buttons[AccessibilityIdentifier.IdentifiableView.key(tag.rawValue).id]
     }
 }

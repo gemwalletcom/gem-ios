@@ -76,7 +76,7 @@ extension ListAssetItemView {
             Toggle("", isOn: $toggleValue)
                 .labelsHidden()
                 .toggleStyle(AppToggleStyle())
-                .accessibilityIdentifier(.toggle(model.name))
+                .accessibilityIdentifier(.key(model.name))
         case .copy:
             ListButton(
                 image: Images.System.copy,

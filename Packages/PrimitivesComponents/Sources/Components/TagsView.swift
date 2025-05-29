@@ -34,7 +34,7 @@ public struct TagsView: View {
                                 .cornerRadius(.small)
                         }
                         .buttonStyle(.borderless)
-                        .accessibilityIdentifier(.tagViewItem(tagModel.tag.rawValue))
+                        .accessibilityIdentifier(.key(tagModel.tag.rawValue))
                     }
                 }
             }
