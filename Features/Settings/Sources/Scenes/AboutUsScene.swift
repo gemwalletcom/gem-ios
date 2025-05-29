@@ -39,9 +39,8 @@ public struct AboutUsScene: View {
                 if let version = model.releaseVersion {
                     NavigationCustomLink(
                         with: ListItemView(
-                            title: Localized.UpdateApp.updateTo(version),
-                            titleTag: Localized.UpdateApp.new,
-                            titleTagStyle: model.releaseTagStyle,
+                            title: Localized.UpdateApp.title,
+                            subtitle: version,
                             imageStyle: .settings(assetImage: model.releaseImage)
                         ),
                         action: model.onUpdate

@@ -70,13 +70,6 @@ public final class AboutUsViewModel: Sendable {
     var releaseImage: AssetImage {
         AssetImage.image(Images.Settings.gem)
     }
-    var releaseTagStyle: TextStyle {
-        TextStyle(
-            font: .footnote,
-            color: Colors.green,
-            background: Colors.green.opacity(0.15)
-        )
-    }
 }
 
 extension AboutUsViewModel {
