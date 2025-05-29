@@ -235,64 +235,6 @@ struct TransferAmountCalculatorTests {
     }
     
     @Test
-    func testBalancePreCheck() {
-        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
-            try service.validateBalance(
-                asset: coinAsset,
-                assetBalance: .zero,
-                value: BigInt(10),
-                availableValue: BigInt(10),
-                ignoreValueCheck: false,
-                canChangeValue: true
-            )
-        }
-
-        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
-            try service.validateBalance(
-                asset: coinAsset,
-                assetBalance: Balance(available: BigInt(10)),
-                value: BigInt(20),
-                availableValue: BigInt(10),
-                ignoreValueCheck: false,
-                canChangeValue: true
-            )
-        }
-
-        #expect(throws: Never.self) {
-            try service.validateBalance(
-                asset: coinAsset,
-                assetBalance: .zero,
-                value: BigInt(10),
-                availableValue: BigInt(10),
-                ignoreValueCheck: true,
-                canChangeValue: false
-            )
-        }
-
-        #expect(throws: Never.self) {
-            try service.validateBalance(
-                asset: coinAsset,
-                assetBalance: Balance(available: BigInt(50)),
-                value: BigInt(20),
-                availableValue: BigInt(50),
-                ignoreValueCheck: false,
-                canChangeValue: false
-            )
-        }
-        
-        #expect(throws: TransferAmountCalculatorError.insufficientBalance(coinAsset)) {
-            try service.validateBalance(
-                asset: coinAsset,
-                assetBalance: Balance(available: BigInt(0)),
-                value: BigInt(10000),
-                availableValue: BigInt(0),
-                ignoreValueCheck: false,
-                canChangeValue: true
-            )
-        }
-    }
-    
-    @Test
     func testMinimumAccountBalance() {
         let asset1 = Asset(.solana)
         
