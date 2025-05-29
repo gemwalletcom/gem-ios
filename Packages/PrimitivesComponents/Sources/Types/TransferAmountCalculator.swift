@@ -71,20 +71,4 @@ public struct TransferAmountCalculator {
         
         return TransferAmount(value: input.value, networkFee: input.fee, useMaxAmount: useMaxAmount)
     }
-
-    public func validateBalance(
-        asset: Asset,
-        assetBalance: Balance,
-        value: BigInt,
-        availableValue: BigInt,
-        ignoreValueCheck: Bool = false,
-        canChangeValue: Bool
-    ) throws {
-        if !canChangeValue {
-            return
-        }
-        if !ignoreValueCheck, assetBalance.available == 0 || availableValue < value {
-            throw TransferAmountCalculatorError.insufficientBalance(asset)
-        }
-    }
 }
