@@ -7,17 +7,17 @@ import TransactionService
 import Signer
 import WalletsService
 
-public protocol TransferExecuting: Sendable {
+public protocol TransferExecutable: Sendable {
     func execute(input: TransferConfirmationInput) async throws
 }
 
-struct TransferExecutor: TransferExecuting {
-    private let signer: any TransactionSigning
+struct TransferExecutor: TransferExecutable {
+    private let signer: any TransactionSigneable
     private let chainService: any ChainServiceable
     private let walletsService: WalletsService
 
     init(
-        signer: any TransactionSigning,
+        signer: any TransactionSigneable,
         chainService: any ChainServiceable,
         walletsService: WalletsService
     ) {

@@ -21,8 +21,8 @@
 		833931A82D2D663C0063BB6A /* PriceService in Frameworks */ = {isa = PBXBuildFile; productRef = 833931A72D2D663C0063BB6A /* PriceService */; };
 		833CDFD02D10622D00DAABEE /* ServicesFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */; };
 		8342EA032DB67EE3001B3780 /* WalletService in Frameworks */ = {isa = PBXBuildFile; productRef = 8342EA022DB67EE3001B3780 /* WalletService */; };
-		8345F57D2DE7211B00E66F07 /* TransferContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F57C2DE7211B00E66F07 /* TransferContext.swift */; };
-		8345F57F2DE722CA00E66F07 /* TransferContextProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F57E2DE722CA00E66F07 /* TransferContextProvider.swift */; };
+		8345F57D2DE7211B00E66F07 /* TransferTransactionData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F57C2DE7211B00E66F07 /* TransferTransactionData.swift */; };
+		8345F57F2DE722CA00E66F07 /* TransferTransactionProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F57E2DE722CA00E66F07 /* TransferTransactionProvider.swift */; };
 		8345F5812DE77D5A00E66F07 /* TransferExecutor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F5802DE77D5A00E66F07 /* TransferExecutor.swift */; };
 		8345F5832DE782F900E66F07 /* TransferConfirmationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F5822DE782F900E66F07 /* TransferConfirmationInput.swift */; };
 		8345F5852DE784CD00E66F07 /* TransactionFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8345F5842DE784CD00E66F07 /* TransactionFactory.swift */; };
@@ -218,8 +218,8 @@
 		833931A62D2D64BA0063BB6A /* PriceService */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = PriceService; sourceTree = "<group>"; };
 		833CDFCF2D10622D00DAABEE /* ServicesFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServicesFactory.swift; sourceTree = "<group>"; };
 		833F6F292DA7E5590013F9E7 /* JobRunner */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = JobRunner; sourceTree = "<group>"; };
-		8345F57C2DE7211B00E66F07 /* TransferContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferContext.swift; sourceTree = "<group>"; };
-		8345F57E2DE722CA00E66F07 /* TransferContextProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferContextProvider.swift; sourceTree = "<group>"; };
+		8345F57C2DE7211B00E66F07 /* TransferTransactionData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTransactionData.swift; sourceTree = "<group>"; };
+		8345F57E2DE722CA00E66F07 /* TransferTransactionProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferTransactionProvider.swift; sourceTree = "<group>"; };
 		8345F5802DE77D5A00E66F07 /* TransferExecutor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferExecutor.swift; sourceTree = "<group>"; };
 		8345F5822DE782F900E66F07 /* TransferConfirmationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransferConfirmationInput.swift; sourceTree = "<group>"; };
 		8345F5842DE784CD00E66F07 /* TransactionFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionFactory.swift; sourceTree = "<group>"; };
@@ -503,7 +503,7 @@
 			isa = PBXGroup;
 			children = (
 				83332F032DE526F700956E6B /* TransferMetadataProvider.swift */,
-				8345F57E2DE722CA00E66F07 /* TransferContextProvider.swift */,
+				8345F57E2DE722CA00E66F07 /* TransferTransactionProvider.swift */,
 				8345F5802DE77D5A00E66F07 /* TransferExecutor.swift */,
 				8345F5842DE784CD00E66F07 /* TransactionFactory.swift */,
 			);
@@ -825,7 +825,7 @@
 		D80181442B3CF84300F4D22B /* Types */ = {
 			isa = PBXGroup;
 			children = (
-				8345F57C2DE7211B00E66F07 /* TransferContext.swift */,
+				8345F57C2DE7211B00E66F07 /* TransferTransactionData.swift */,
 				8345F5822DE782F900E66F07 /* TransferConfirmationInput.swift */,
 				83B811692DD6786400EDFC80 /* RecipientAddressType.swift */,
 				B65C9B122D88163600A222E8 /* AmountInputType.swift */,
@@ -1382,7 +1382,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D80181462B3CF84A00F4D22B /* ScanRecipientResult.swift in Sources */,
-				8345F57D2DE7211B00E66F07 /* TransferContext.swift in Sources */,
+				8345F57D2DE7211B00E66F07 /* TransferTransactionData.swift in Sources */,
 				83D494142D80EF0A0069ED2C /* SwapDataProvider.swift in Sources */,
 				83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */,
 				837A1E6B2D0B029200733AC1 /* AppResolver+ViewInjection.swift in Sources */,
@@ -1426,7 +1426,7 @@
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
-				8345F57F2DE722CA00E66F07 /* TransferContextProvider.swift in Sources */,
+				8345F57F2DE722CA00E66F07 /* TransferTransactionProvider.swift in Sources */,
 				8345F5852DE784CD00E66F07 /* TransactionFactory.swift in Sources */,
 				D8C4A3A92C9696FE006FABE8 /* AssetSceneInput.swift in Sources */,
 				C3B6F09629E7E94D00C3B746 /* SelectAssetInput.swift in Sources */,

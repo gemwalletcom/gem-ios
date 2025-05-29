@@ -4,7 +4,7 @@ import Foundation
 import Primitives
 import Keystore
 
-public struct TransactionSigner: TransactionSigning {
+public struct TransactionSigner: TransactionSigneable {
     private let keystore: any Keystore
 
     public init(keystore: any Keystore) {

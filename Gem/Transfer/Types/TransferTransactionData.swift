@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public struct TransferContext: Sendable {
+public struct TransferTransactionData: Sendable {
     public let rates: [FeeRate]
     public let transactionLoad: TransactionLoad
 

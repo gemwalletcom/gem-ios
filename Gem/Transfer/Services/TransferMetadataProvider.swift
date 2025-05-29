@@ -5,20 +5,20 @@ import Primitives
 import BalanceService
 import PriceService
 
-public protocol TransferMetadataProviding: Sendable {
-    func snapshot(
+public protocol TransferMetadataProvidable: Sendable {
+    func metadata(
         walletId: WalletId,
         asset: Asset,
         extraIds: [AssetId]
     ) throws -> TransferDataMetadata
 }
 
-public extension TransferMetadataProviding {
-    func snapshot(
+public extension TransferMetadataProvidable {
+    func metadata(
         wallet: Wallet,
         data: TransferData
     ) throws -> TransferDataMetadata {
-        try snapshot(
+        try metadata(
             walletId: wallet.walletId,
             asset: data.type.asset,
             extraIds: data.type.assetIds
@@ -30,7 +30,7 @@ public enum TransferMetadataProviderError: Error {
     case missingBalance
 }
 
-public final class TransferMetadataProvider: TransferMetadataProviding {
+public final class TransferMetadataProvider: TransferMetadataProvidable {
     private let balanceService: BalanceService
     private let priceService: PriceService
 
@@ -42,7 +42,7 @@ public final class TransferMetadataProvider: TransferMetadataProviding {
         self.priceService = priceService
     }
 
-    public func snapshot(
+    public func metadata(
         walletId: WalletId,
         asset: Asset,
         extraIds: [AssetId] = []

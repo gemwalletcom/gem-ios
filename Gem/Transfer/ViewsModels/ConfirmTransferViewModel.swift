@@ -24,20 +24,20 @@ final class ConfirmTransferViewModel {
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
             if case .error(let error) = confirmingState {
-                confirmingErrorMessage = error.localizedDescription
+                isPresentingErrorMessage = error.localizedDescription
             } else {
-                confirmingErrorMessage = nil
+                isPresentingErrorMessage = nil
             }
         }
     }
 
     var isPresentingSheet: ConfirmTransferSheetType?
-    var confirmingErrorMessage: String?
+    var isPresentingErrorMessage: String?
 
     private let explorerService: any ExplorerLinkFetchable
-    private let metadataProvider: any TransferMetadataProviding
-    private let transferContextProvider: any TransansferContextProviding
-    private let transerExecutor: any TransferExecuting
+    private let metadataProvider: any TransferMetadataProvidable
+    private let transferTransactionProvider: any TransansferTransactionProvidable
+    private let transerExecutor: any TransferExecutable
     private let keystore: any Keystore
 
     private let data: TransferData
@@ -76,7 +76,7 @@ final class ConfirmTransferViewModel {
             priceService: walletsService.priceService
         )
 
-        self.transferContextProvider = TransferContextProvider(
+        self.transferTransactionProvider = TransferTransactionProvider(
             chainService: chainService,
             scanService: scanService
         )
@@ -87,7 +87,7 @@ final class ConfirmTransferViewModel {
             walletsService: walletsService
         )
 
-        self.metadata = try? metadataProvider.snapshot(wallet: wallet, data: data)
+        self.metadata = try? metadataProvider.metadata(wallet: wallet, data: data)
     }
 
     var title: String { dataModel.title }
@@ -309,11 +309,8 @@ extension ConfirmTransferViewModel {
         feeModel.reset()
 
         do {
-            let metadata = try metadataProvider.snapshot(wallet: wallet, data: data)
-            // TODO: - remove this validation once the amount scene will be fully handle checking. Now no validation on qr scanning. Wallet-connect ?
-            try validateBalance(metadata: metadata, data: data)
-
-            let context = try await transferContextProvider.loadContext(
+            let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
+            let context = try await transferTransactionProvider.loadContext(
                 wallet: wallet, data: data,
                 priority: feeModel.priority,
                 available: metadata.available
@@ -398,17 +395,6 @@ extension ConfirmTransferViewModel {
             transactionLoad: input,
             metaData: metaData,
             transferAmountResult: transferAmount
-        )
-    }
-
-    private func validateBalance(metadata: TransferDataMetadata, data: TransferData) throws {
-        try TransferAmountCalculator().validateBalance(
-            asset: data.type.asset,
-            assetBalance: metadata.assetBalance,
-            value: data.value,
-            availableValue: metadata.available,
-            ignoreValueCheck: data.ignoreValueCheck,
-            canChangeValue: data.canChangeValue
         )
     }
 

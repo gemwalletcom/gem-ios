@@ -49,7 +49,7 @@ struct ConfirmTransferScene: View {
                 }
             }
         }
-        .alert(item: $model.confirmingErrorMessage) {
+        .alert(item: $model.isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.transferError), message: Text($0))
         }
     }
