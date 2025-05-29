@@ -23,4 +23,15 @@ public extension WalletService {
             avatarService: AvatarService(store: walletStore)
         )
     }
+    
+    static func mock(isAcceptedTerms: Bool) -> Self {
+        .mock(
+            keystore: KeystoreMock(),
+            preferences: .mock(
+                preferences: .mock(
+                    defaults: .mockWithValues(values: ["is_accepted_terms": isAcceptedTerms])
+                )
+            )
+        )
+    }
 }
