@@ -27,27 +27,31 @@ struct ConfirmTransferScene: View {
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
-        .navigationTitle(model.title)
         .debounce(
             value: model.feeModel.priority,
             interval: nil,
             action: model.onChangeFeePriority
         )
         .taskOnce { model.fetch() }
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-        .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
-            NavigationStack {
-                NetworkFeeScene(model: model.feeModel)
-                    .presentationDetentsForCurrentDeviceSize(expandable: true)
+        .navigationTitle(model.title)
+        // TODO: - move to navigation view
+        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
+        .sheet(item: $model.isPresentingSheet) {
+            switch $0 {
+            case let .info(type):
+                InfoSheetScene(model: InfoSheetViewModel(type: type))
+            case let .url(url):
+                SFSafariView(url: url)
+            case .networkFeeSelector:
+                NavigationStack {
+                    NetworkFeeScene(model: model.feeModel)
+                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                }
             }
         }
         .alert(item: $model.confirmingErrorMessage) {
             Alert(title: Text(Localized.Errors.transferError), message: Text($0))
         }
-        .safariSheet(url: $model.isPresentingUrl)
     }
 }
 
@@ -79,7 +83,7 @@ extension ConfirmTransferScene {
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
                         .contextMenu(
-                            .url(title: websiteValue, onOpen: { model.isPresentingUrl = model.websiteURL })
+                            .url(title: websiteValue, onOpen: model.onSelectOpenWebsiteURL)
                         )
                 }
 
@@ -91,7 +95,7 @@ extension ConfirmTransferScene {
                 .contextMenu(
                     [
                         .copy(value: model.senderAddress),
-                        .url(title: model.senderExplorerText, onOpen: { model.isPresentingUrl = model.senderAddressExplorerUrl })
+                        .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
                     ]
                 )
 
@@ -113,7 +117,7 @@ extension ConfirmTransferScene {
                     ListItemView(
                         title: model.slippageField,
                         subtitle: slippage,
-                        infoAction: model.onSlippageInto
+                        infoAction: model.onSelectSlippageInfo
                     )
                 }
             }
@@ -147,7 +151,7 @@ extension ConfirmTransferScene {
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
             placeholders: [.subtitle],
-            infoAction: model.onNetworkFeeInfo
+            infoAction: model.onSelectNetworkFeeInfo
         )
     }
 }

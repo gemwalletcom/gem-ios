@@ -19,6 +19,7 @@ import Signer
 @Observable
 @MainActor
 final class ConfirmTransferViewModel {
+    var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading
     var confirmingState: StateViewType<Bool> = .noData {
         didSet {
@@ -30,12 +31,8 @@ final class ConfirmTransferViewModel {
         }
     }
 
-    var isPresentedNetworkFeePicker: Bool = false
+    var isPresentingSheet: ConfirmTransferSheetType?
     var confirmingErrorMessage: String?
-    var isPresentingInfoSheet: InfoSheetType? = .none
-    var isPresentingUrl: URL? = nil
-
-    var feeModel: NetworkFeeSceneViewModel
 
     private let explorerService: any ExplorerLinkFetchable
     private let metadataProvider: any TransferMetadataProviding
@@ -241,17 +238,26 @@ final class ConfirmTransferViewModel {
 // MARK: - Business Logic
 
 extension ConfirmTransferViewModel {
-
-    func onNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(dataModel.chain)
+    func onSelectNetworkFeeInfo() {
+        isPresentingSheet = .info(.networkFee(dataModel.chain))
     }
 
-    func onSlippageInto() {
-        isPresentingInfoSheet = .slippage
+    func onSelectSlippageInfo() {
+        isPresentingSheet = .info(.slippage)
+    }
+
+    func onSelectOpenWebsiteURL() {
+        if let websiteURL {
+            isPresentingSheet = .url(websiteURL)
+        }
+    }
+
+    func onSelectOpenSenderAddressURL() {
+        isPresentingSheet = .url(senderAddressExplorerUrl)
     }
 
     func onSelectFeePicker() {
-        isPresentedNetworkFeePicker.toggle()
+        isPresentingSheet = .networkFeeSelector
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

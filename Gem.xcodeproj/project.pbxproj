@@ -52,6 +52,7 @@
 		83AE20772C7CD77600A38809 /* AssetsFilterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */; };
 		83B08BDB2D0B4AE200CA1B33 /* AppResolver+Storages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */; };
 		83B08BDD2D0B4B1E00CA1B33 /* AppResolver+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */; };
+		83B4F27C2DE88445008F34A1 /* ConfirmTransferSheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B4F27B2DE88445008F34A1 /* ConfirmTransferSheetType.swift */; };
 		83B57FAB2CFF92670009319F /* AppResolver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B57FAA2CFF92670009319F /* AppResolver.swift */; };
 		83B6C2102D5E3F2600F9DF8A /* WalletTab in Frameworks */ = {isa = PBXBuildFile; productRef = 83B6C20F2D5E3F2600F9DF8A /* WalletTab */; };
 		83B8116A2DD6786400EDFC80 /* RecipientAddressType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B811692DD6786400EDFC80 /* RecipientAddressType.swift */; };
@@ -250,6 +251,7 @@
 		83AE20762C7CD77600A38809 /* AssetsFilterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetsFilterViewModel.swift; sourceTree = "<group>"; };
 		83B08BDA2D0B4AE200CA1B33 /* AppResolver+Storages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Storages.swift"; sourceTree = "<group>"; };
 		83B08BDC2D0B4B1E00CA1B33 /* AppResolver+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "AppResolver+Services.swift"; sourceTree = "<group>"; };
+		83B4F27B2DE88445008F34A1 /* ConfirmTransferSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConfirmTransferSheetType.swift; sourceTree = "<group>"; };
 		83B57FAA2CFF92670009319F /* AppResolver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppResolver.swift; sourceTree = "<group>"; };
 		83B811692DD6786400EDFC80 /* RecipientAddressType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientAddressType.swift; sourceTree = "<group>"; };
 		83B8116B2DD6788200EDFC80 /* RecipientScanResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipientScanResult.swift; sourceTree = "<group>"; };
@@ -830,6 +832,7 @@
 				B65C9AEC2D84161900A222E8 /* AmountInputConfig.swift */,
 				D80181452B3CF84A00F4D22B /* ScanRecipientResult.swift */,
 				83B8116B2DD6788200EDFC80 /* RecipientScanResult.swift */,
+				83B4F27B2DE88445008F34A1 /* ConfirmTransferSheetType.swift */,
 			);
 			path = Types;
 			sourceTree = "<group>";
@@ -1419,6 +1422,7 @@
 				D8BAC9592BD0CDC8001608BC /* SelectAssetSceneNavigationStack.swift in Sources */,
 				8361BB652D400B63008D89CF /* TransactionInputViewModel.swift in Sources */,
 				D825E8132D693BEA00362A3A /* CollectibleNavigationView.swift in Sources */,
+				83B4F27C2DE88445008F34A1 /* ConfirmTransferSheetType.swift in Sources */,
 				D8BAC95B2BD0D1DB001608BC /* AddTokenNavigationStack.swift in Sources */,
 				D8C4A3742C8CE87C006FABE8 /* AmountNavigationView.swift in Sources */,
 				D807004A2BBB1FB600ED770B /* SettingsNavigationStack.swift in Sources */,
