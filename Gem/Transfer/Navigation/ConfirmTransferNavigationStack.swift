@@ -32,9 +32,9 @@ struct ConfirmTransferNavigationStack: View {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: wallet,
-                    keystore: keystore,
                     data: transferData,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
+                    keystore: keystore,
+                    chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: transferData.chain),
                     walletsService: walletsService,
                     onComplete: onComplete

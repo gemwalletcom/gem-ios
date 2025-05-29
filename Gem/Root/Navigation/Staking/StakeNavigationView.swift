@@ -51,9 +51,9 @@ struct StakeNavigationView: View {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: wallet,
-                    keystore: keystore,
                     data: $0,
-                    service: ChainServiceFactory(nodeProvider: nodeService)
+                    keystore: keystore,
+                    chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.chain),
                     walletsService: walletsService,
                     onComplete: onComplete

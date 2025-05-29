@@ -6,7 +6,7 @@ import Primitives
 public protocol TransactionSigning: Sendable {
     func sign(
         transfer: TransferData,
-        preload: TransactionLoad,
+        transactionLoad: TransactionLoad,
         amount: TransferAmount,
         wallet: Wallet
     ) throws -> [String]
