@@ -405,3 +405,4 @@
 "onboarding.accept_terms.item3.message" = "我明白如果丢失钱包访问权限，Gem 不承担任何责任，也无法提供帮助。";
 "onboarding.accept_terms.continue" = "我已了解，继续";
 "errors.required" = "%@ is required";
+"update_app.update_to" = "Update to %@";

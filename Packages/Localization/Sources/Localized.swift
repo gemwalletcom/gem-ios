@@ -1050,6 +1050,10 @@ public enum Localized {
     }
     /// New update available!
     public static let title = Localized.tr("Localizable", "update_app.title", fallback: "New update available!")
+    /// Update to %@
+    public static func updateTo(_ p1: Any) -> String {
+      return Localized.tr("Localizable", "update_app.update_to", String(describing: p1), fallback: "Update to %@")
+    }
   }
   public enum VerifyPhrase {
     /// Confirm

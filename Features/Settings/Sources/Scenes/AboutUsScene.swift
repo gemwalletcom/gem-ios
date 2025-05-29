@@ -35,10 +35,15 @@ public struct AboutUsScene: View {
                     imageStyle: .settings(assetImage: model.versionTextImage)
                 )
                 .contextMenu(model.contextMenuItems)
-            } footer: {
+
                 if let version = model.releaseVersion {
-                    Text("\(Localized.UpdateApp.description(version)) \(Text(.init(model.updateText)))")
-                        .tint(Colors.blue)
+                    NavigationCustomLink(
+                        with: ListItemView(
+                            title: Localized.UpdateApp.updateTo(version),
+                            imageStyle: .settings(assetImage: model.releaseImage)
+                        ),
+                        action: model.onUpdate
+                    )
                 }
             }
             .listRowInsets(.assetListRowInsets)
