@@ -1,21 +1,15 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Components
 import Style
-import Blockchain
-import Primitives
 import Localization
-import ChainService
 import InfoSheet
 import Transfer
-import NodeService
 import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
-    @Environment(\.dismiss) private var dismiss
-
     @State var model: ConfirmTransferViewModel
-    @State private var isPresentingInfoSheet: InfoSheetType? = .none
-    @State private var isPresentingUrl: URL? = nil
 
     var body: some View {
         VStack {
@@ -26,28 +20,36 @@ struct ConfirmTransferScene: View {
                 viewState: model.state,
                 image: statefullButtonImage,
                 disabledRule: model.shouldDisableButton,
-                action: onAction
+                action: model.onSelectConfirmButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .frame(maxWidth: .infinity)
-        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
-        .navigationTitle(model.title)
         .debounce(
             value: model.feeModel.priority,
             interval: nil,
-            action: onChangeFeePriority
+            action: model.onChangeFeePriority
         )
-        .taskOnce { fetch() }
-        .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
-            NavigationStack {
-                NetworkFeeScene(model: model.feeModel)
-                    .presentationDetentsForCurrentDeviceSize(expandable: true)
+        .taskOnce { model.fetch() }
+        .navigationTitle(model.title)
+        // TODO: - move to navigation view
+        .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
+        .sheet(item: $model.isPresentingSheet) {
+            switch $0 {
+            case let .info(type):
+                InfoSheetScene(model: InfoSheetViewModel(type: type))
+            case let .url(url):
+                SFSafariView(url: url)
+            case .networkFeeSelector:
+                NavigationStack {
+                    NetworkFeeScene(model: model.feeModel)
+                        .presentationDetentsForCurrentDeviceSize(expandable: true)
+                }
             }
         }
-        .alert(item: $model.confirmingErrorMessage) {
+        .alert(item: $model.isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.transferError), message: Text($0))
         }
     }
@@ -81,7 +83,7 @@ extension ConfirmTransferScene {
                 if let websiteValue = model.websiteValue {
                     ListItemView(title: model.websiteTitle, subtitle: websiteValue)
                         .contextMenu(
-                            .url(title: websiteValue, onOpen: { isPresentingUrl = model.websiteURL })
+                            .url(title: websiteValue, onOpen: model.onSelectOpenWebsiteURL)
                         )
                 }
 
@@ -93,7 +95,7 @@ extension ConfirmTransferScene {
                 .contextMenu(
                     [
                         .copy(value: model.senderAddress),
-                        .url(title: model.senderExplorerText, onOpen: { isPresentingUrl = model.senderAddressExplorerUrl })
+                        .url(title: model.senderExplorerText, onOpen: model.onSelectOpenSenderAddressURL)
                     ]
                 )
 
@@ -103,7 +105,7 @@ extension ConfirmTransferScene {
                     assetImage: model.networkAssetImage
                 )
                 
-                if model.shouldShowRecipientField {
+                if model.shouldShowRecipient {
                     AddressListItemView(model: model.recipientAddressViewModel)
                 }
 
@@ -115,7 +117,7 @@ extension ConfirmTransferScene {
                     ListItemView(
                         title: model.slippageField,
                         subtitle: slippage,
-                        infoAction: onSlippageInto
+                        infoAction: model.onSelectSlippageInfo
                     )
                 }
             }
@@ -124,7 +126,7 @@ extension ConfirmTransferScene {
                 if model.shouldShowFeeRatesSelector {
                     NavigationCustomLink(
                         with: networkFeeView,
-                        action: onSelectFeePicker
+                        action: model.onSelectFeePicker
                     )
                 } else {
                     networkFeeView
@@ -141,10 +143,6 @@ extension ConfirmTransferScene {
         }
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
-        .sheet(item: $isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-        .safariSheet(url: $isPresentingUrl)
     }
 
     private var networkFeeView: some  View {
@@ -153,63 +151,7 @@ extension ConfirmTransferScene {
             subtitle: model.networkFeeValue,
             subtitleExtra: model.networkFeeFiatValue,
             placeholders: [.subtitle],
-            infoAction: onNetworkFeeInfo
+            infoAction: model.onSelectNetworkFeeInfo
         )
-    }
-}
-
-// MARK: - Actions
-
-extension ConfirmTransferScene {
-    private func onSelectConfirmTransfer() {
-        guard let value = model.state.value,
-              let input = value.input,
-              case .amount(let amount) = value.transferAmountResult else { return }
-        process(input: input, amount: amount)
-    }
-
-    private func onSelectFeePicker() {
-        model.isPresentedNetworkFeePicker.toggle()
-    }
-
-    private func onChangeFeePriority(_ priority: FeePriority) async {
-        await model.fetch()
-    }
-
-    private func onAction() {
-        if model.state.isError {
-            fetch()
-        } else {
-            onSelectConfirmTransfer()
-        }
-    }
-
-    private func onNetworkFeeInfo() {
-        isPresentingInfoSheet = .networkFee(model.dataModel.chain)
-    }
-    
-    private func onSlippageInto() {
-        isPresentingInfoSheet = .slippage
-    }
-}
-
-// MARK: - Effects
-
-extension ConfirmTransferScene {
-    private func fetch() {
-        Task {
-            await model.fetch()
-        }
-    }
-
-    private func process(input: TransactionLoad, amount: TransferAmount) {
-        Task {
-            await model.process(input: input, amount: amount)
-            await MainActor.run {
-                if case .data(_) = model.confirmingState {
-                    model.onCompleteAction()
-                }
-            }
-        }
     }
 }

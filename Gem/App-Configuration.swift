@@ -328,10 +328,6 @@ extension TransferData {
     static let main = TransferData(type: .transfer(.main), recipientData: .main, value: .zero, canChangeValue: true)
 }
 
-extension TransferDataMetadata {
-    static let main = TransferDataMetadata(assetBalance: .zero, assetFeeBalance: .zero, assetPrice: .none, feePrice: .none, assetPrices: [:])
-}
-
 extension Wallet {
     func account(for chain: Chain) throws -> Account {
         guard let account = accounts.filter({ $0.chain == chain }).first else {

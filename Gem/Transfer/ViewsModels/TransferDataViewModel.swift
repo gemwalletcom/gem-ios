@@ -6,6 +6,7 @@ import Localization
 import Transfer
 import PrimitivesComponents
 import Components
+import BigInt
 
 struct TransferDataViewModel {
     let data: TransferData
@@ -41,6 +42,14 @@ struct TransferDataViewModel {
             switch type {
             case .activate: Localized.Transfer.ActivateAsset.title
             }
+        }
+    }
+
+    var recipientTitle: String {
+        switch type {
+        case .swap: Localized.Swap.provider
+        case .stake: Localized.Stake.validator
+        default: Localized.Transfer.to
         }
     }
 
@@ -118,8 +127,43 @@ struct TransferDataViewModel {
             AssetImage(imageURL: session.icon.asURL)
         }
     }
-}
 
+    var slippage: Double? {
+        if case .swap(_, _, let quote, _) = type {
+            Double(Double(quote.request.options.slippage.bps) / 100).rounded(toPlaces: 2)
+        } else {
+            .none
+        }
+    }
+
+    var quoteFee: Double? {
+        if case .swap(_, _, let quote, _) = type, let fee = quote.request.options.fee {
+            Double(Double(fee.evm.bps) / 100).rounded(toPlaces: 2)
+        } else {
+            .none
+        }
+    }
+
+    func availableValue(metadata: TransferDataMetadata?) -> BigInt {
+        switch type {
+        case .transfer,
+                .swap,
+                .tokenApprove,
+                .generic,
+                .transferNft: metadata?.available ?? .zero
+        case .account(_, let type):
+            switch type {
+            case .activate: metadata?.available ?? .zero
+            }
+        case .stake(_, let stakeType):
+            switch stakeType {
+            case .unstake(let delegation), .redelegate(let delegation, _), .withdraw(let delegation): delegation.base.balanceValue
+            case .rewards: data.value
+            case .stake: metadata?.available ?? .zero
+            }
+        }
+    }
+}
 
 // MARK: - Private
 
