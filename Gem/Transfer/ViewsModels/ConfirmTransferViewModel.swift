@@ -531,7 +531,7 @@ extension ConfirmTransferViewModel {
             throw ChainCoreError.feeRateMissed
         }
 
-        if let rate = rates.first(where: { $0.priority == feeModel.priority }) {
+        if let rate = rates.first(where: { $0.priority == priority }) {
             return rate
         }
 
