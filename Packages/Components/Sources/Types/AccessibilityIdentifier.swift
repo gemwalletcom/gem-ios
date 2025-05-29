@@ -34,7 +34,7 @@ public extension AccessibilityIdentifier {
         public var id: String {
             switch self {
             case .tagViewItem(let tag): tag
-            case .toggle(let toggle) : toggle
+            case .toggle(let toggle): toggle
             }
         }
     }

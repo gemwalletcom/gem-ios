@@ -62,6 +62,10 @@ public struct LaunchEnvironmentView: View {
                 isPresentingSelectType: .constant(nil)
             )
             .databaseContext(.readWrite { db.dbQueue })
+        case .walletsList:
+            WalletsNavigationStack(
+                isPresentingWallets: .constant(false)
+            )
         }
     }
 }
