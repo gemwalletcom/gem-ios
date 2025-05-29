@@ -318,7 +318,7 @@ extension ConfirmTransferViewModel {
             let transferAmount = calculateTransferAmount(
                 assetBalance: metadata.assetBalance,
                 assetFeeBalance: metadata.assetFeeBalance,
-                fee: context.transactionLoad.fee.fee,
+                fee: context.transactionLoad.fee.fee
             )
 
             self.metadata = metadata
