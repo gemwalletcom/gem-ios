@@ -10,7 +10,12 @@ let package = Package(
     products: [
         .library(
             name: "TransactionService",
-            targets: ["TransactionService"]),
+            targets: ["TransactionService"]
+        ),
+        .library(
+            name: "TransactionServiceTestKit",
+            targets: ["TransactionServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -38,6 +43,18 @@ let package = Package(
                 "JobRunner"
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "TransactionServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "StakeServiceTestKit", package: "StakeService"),
+                .product(name: "NFTServiceTestKit", package: "NFTService"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                .product(name: "BalanceServiceTestKit", package: "BalanceService"),
+                "TransactionService"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "TransactionServiceTests",

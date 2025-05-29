@@ -52,7 +52,6 @@ public final class AboutUsViewModel: Sendable {
     }
     var contextDeveloperImage: String { SystemImage.info }
 
-
     var contextMenuItems: [ContextMenuItemType] {
         [
             .copy(value: versionTextValue),
@@ -66,8 +65,7 @@ public final class AboutUsViewModel: Sendable {
     
     var release: Release?
     var releaseVersion: String? {
-        guard let release else { return nil }
-        return release.version
+        release?.version
     }
     var appStoreLink: String {
         PublicConstants.url(.appStore).absoluteString

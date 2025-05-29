@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Style
 import Primitives
+import Components
 
 public struct TagsView: View {
     public let model: AssetTagsViewModel
@@ -33,9 +34,11 @@ public struct TagsView: View {
                                 .cornerRadius(.small)
                         }
                         .buttonStyle(.borderless)
+                        .accessibilityIdentifier(.tagViewItem(tagModel.tag.rawValue))
                     }
                 }
             }
+            .accessibilityIdentifier(.tagsView)
         }
     }
 }

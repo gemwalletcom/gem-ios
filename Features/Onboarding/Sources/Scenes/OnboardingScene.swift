@@ -28,12 +28,12 @@ public struct OnboardingScene: View {
                     isPresentingCreateWalletSheet.toggle()
                 }
                 .buttonStyle(.blue())
-                .accessibilityIdentifier("welcome_create")
+                .accessibilityIdentifier(.onboardingCreateButton)
                 Button(model.importWalletTitle) {
                     isPresentingImportWalletSheet.toggle()
                 }
                 .buttonStyle(.blue())
-                .accessibilityIdentifier("welcome_import")
+                .accessibilityIdentifier(.onboardingImportButton)
             }
             .frame(maxWidth: .scene.button.maxWidth)
             .padding(.scene.bottom * 2)

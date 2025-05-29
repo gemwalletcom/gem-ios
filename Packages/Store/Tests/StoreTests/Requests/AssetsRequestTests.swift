@@ -28,7 +28,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testPinned() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         let balanceStore = BalanceStore(db: db)
         
         let assetId = AssetId(chain: .bitcoin, tokenId: nil)
@@ -44,7 +44,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testEnabled() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         let balanceStore = BalanceStore(db: db)
         
         let disabledId = AssetId(chain: .bitcoin)
@@ -64,7 +64,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testAssetProperties() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         let assetStore = AssetStore(db: db)
         
         let assetId = AssetId(chain: .bitcoin)
@@ -81,7 +81,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testHasBalance() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         
         try db.dbQueue.read { db in
             let assets = try AssetsRequest.mock(filters: [.hasBalance]).fetch(db)
@@ -92,7 +92,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testChains() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         
         try db.dbQueue.read { db in
             let ethereumAssets = try AssetsRequest.mock(filters: [.chains([Chain.ethereum.rawValue, Chain.solana.rawValue])]).fetch(db)
@@ -104,7 +104,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testChainsOrAssets() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         
         try db.dbQueue.read { db in
             let assets = try AssetsRequest.mock(
@@ -121,7 +121,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testSearch() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         let assetStore = AssetStore(db: db)
         
         let query = "usdt ethereum"
@@ -148,7 +148,7 @@ struct AssetsRequestTests {
     }
     
     @Test func testOrder() throws {
-        let db = try DB.mockAssets()
+        let db = DB.mockAssets()
         let priceStore = PriceStore(db: db)
         let fiatRateStore = FiatRateStore(db: db)
         let balanceStore = BalanceStore(db: db)

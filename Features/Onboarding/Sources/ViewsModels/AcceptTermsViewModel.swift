@@ -22,9 +22,9 @@ final class AcceptTermsViewModel {
     let message: String = Localized.Onboarding.AcceptTerms.message
 
     var items: [TermItemViewModel] = [
-        .init(message: Localized.Onboarding.AcceptTerms.Item1.message),
-        .init(message: Localized.Onboarding.AcceptTerms.Item2.message),
-        .init(message: Localized.Onboarding.AcceptTerms.Item3.message)
+        .init(id: OnboardingAccessibilityIdentifier.acceptTermsToggle(0).id, message: Localized.Onboarding.AcceptTerms.Item1.message),
+        .init(id: OnboardingAccessibilityIdentifier.acceptTermsToggle(1).id, message: Localized.Onboarding.AcceptTerms.Item2.message),
+        .init(id: OnboardingAccessibilityIdentifier.acceptTermsToggle(2).id, message: Localized.Onboarding.AcceptTerms.Item3.message)
     ]
     
     var isConfirmed: Bool {

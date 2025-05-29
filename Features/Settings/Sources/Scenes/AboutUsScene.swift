@@ -40,7 +40,6 @@ public struct AboutUsScene: View {
                     Text("\(Localized.UpdateApp.description(version)) \(Text(.init(model.updateText)))")
                         .tint(Colors.blue)
                 }
-                
             }
             .listRowInsets(.assetListRowInsets)
         }
