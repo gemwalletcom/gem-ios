@@ -36,7 +36,7 @@ final class ConfirmTransferViewModel {
 
     private let explorerService: any ExplorerLinkFetchable
     private let metadataProvider: any TransferMetadataProvidable
-    private let transferTransactionProvider: any TransansferTransactionProvidable
+    private let transferTransactionProvider: any TransferTransactionProvidable
     private let transerExecutor: any TransferExecutable
     private let keystore: any Keystore
 
@@ -310,7 +310,7 @@ extension ConfirmTransferViewModel {
 
         do {
             let metadata = try metadataProvider.metadata(wallet: wallet, data: data)
-            let context = try await transferTransactionProvider.loadContext(
+            let transferTransactionData = try await transferTransactionProvider.loadTransferTransactionData(
                 wallet: wallet, data: data,
                 priority: feeModel.priority,
                 available: metadata.available
@@ -318,15 +318,15 @@ extension ConfirmTransferViewModel {
             let transferAmount = calculateTransferAmount(
                 assetBalance: metadata.assetBalance,
                 assetFeeBalance: metadata.assetFeeBalance,
-                fee: context.transactionLoad.fee.fee
+                fee: transferTransactionData.transactionLoad.fee.fee
             )
 
             self.metadata = metadata
-            self.feeModel.update(rates: context.rates)
+            self.feeModel.update(rates: transferTransactionData.rates)
             self.updateState(
                 with: transactionInputViewModel(
                     transferAmount: transferAmount,
-                    input: context.transactionLoad,
+                    input: transferTransactionData.transactionLoad,
                     metaData: metadata
                 )
             )
