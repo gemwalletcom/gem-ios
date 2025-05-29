@@ -13,17 +13,17 @@ public struct TransactionSigner: TransactionSigning {
 
     public func sign(
         transfer: TransferData,
-        preload: TransactionLoad,
+        transactionLoad: TransactionLoad,
         amount: TransferAmount,
         wallet: Wallet
     ) throws -> [String] {
 
-        let rawSigner = Signer(wallet: wallet, keystore: keystore)
+        let signer = Signer(wallet: wallet, keystore: keystore)
         let fee = Fee(
             fee: amount.networkFee,
-            gasPriceType: preload.fee.gasPriceType,
-            gasLimit: preload.fee.gasLimit,
-            options: preload.fee.options
+            gasPriceType: transactionLoad.fee.gasPriceType,
+            gasLimit: transactionLoad.fee.gasLimit,
+            options: transactionLoad.fee.options
         )
 
         let input = SignerInput(
@@ -32,20 +32,20 @@ public struct TransactionSigner: TransactionSigning {
             value: amount.value,
             fee: fee,
             isMaxAmount: amount.useMaxAmount,
-            chainId: preload.chainId,
+            chainId: transactionLoad.chainId,
             memo: transfer.recipientData.recipient.memo,
-            accountNumber: preload.accountNumber,
-            sequence: preload.sequence,
+            accountNumber: transactionLoad.accountNumber,
+            sequence: transactionLoad.sequence,
             senderAddress: try wallet.account(for: transfer.type.chain).address,
             destinationAddress: transfer.recipientData.recipient.address,
-            data: preload.data,
-            block: preload.block,
-            token: preload.token,
-            utxos: preload.utxos,
-            messageBytes: preload.messageBytes,
-            extra: preload.extra
+            data: transactionLoad.data,
+            block: transactionLoad.block,
+            token: transactionLoad.token,
+            utxos: transactionLoad.utxos,
+            messageBytes: transactionLoad.messageBytes,
+            extra: transactionLoad.extra
         )
 
-        return try rawSigner.sign(input: input)
+        return try signer.sign(input: input)
     }
 }

@@ -1,13 +1,11 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Components
 import Style
-import Blockchain
-import Primitives
 import Localization
-import ChainService
 import InfoSheet
 import Transfer
-import NodeService
 import PrimitivesComponents
 
 struct ConfirmTransferScene: View {
@@ -22,7 +20,7 @@ struct ConfirmTransferScene: View {
                 viewState: model.state,
                 image: statefullButtonImage,
                 disabledRule: model.shouldDisableButton,
-                action: model.onAction
+                action: model.onSelectConfirmButton
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
@@ -37,6 +35,9 @@ struct ConfirmTransferScene: View {
             action: model.onChangeFeePriority
         )
         .taskOnce { model.fetch() }
+        .sheet(item: $model.isPresentingInfoSheet) {
+            InfoSheetScene(model: InfoSheetViewModel(type: $0))
+        }
         .sheet(isPresented: $model.isPresentedNetworkFeePicker) {
             NavigationStack {
                 NetworkFeeScene(model: model.feeModel)
@@ -46,6 +47,7 @@ struct ConfirmTransferScene: View {
         .alert(item: $model.confirmingErrorMessage) {
             Alert(title: Text(Localized.Errors.transferError), message: Text($0))
         }
+        .safariSheet(url: $model.isPresentingUrl)
     }
 }
 
@@ -99,7 +101,7 @@ extension ConfirmTransferScene {
                     assetImage: model.networkAssetImage
                 )
                 
-                if model.shouldShowRecipientField {
+                if model.shouldShowRecipient {
                     AddressListItemView(model: model.recipientAddressViewModel)
                 }
 
@@ -137,10 +139,6 @@ extension ConfirmTransferScene {
         }
         .contentMargins([.top], .small, for: .scrollContent)
         .listSectionSpacing(.compact)
-        .sheet(item: $model.isPresentingInfoSheet) {
-            InfoSheetScene(model: InfoSheetViewModel(type: $0))
-        }
-        .safariSheet(url: $model.isPresentingUrl)
     }
 
     private var networkFeeView: some  View {

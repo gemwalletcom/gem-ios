@@ -5,11 +5,32 @@ import Primitives
 import BalanceService
 import PriceService
 
-private enum AssetPortfolioProviderError: Error {
+public protocol TransferMetadataProviding: Sendable {
+    func snapshot(
+        walletId: WalletId,
+        asset: Asset,
+        extraIds: [AssetId]
+    ) throws -> TransferDataMetadata
+}
+
+public extension TransferMetadataProviding {
+    func snapshot(
+        wallet: Wallet,
+        data: TransferData
+    ) throws -> TransferDataMetadata {
+        try snapshot(
+            walletId: wallet.walletId,
+            asset: data.type.asset,
+            extraIds: data.type.assetIds
+        )
+    }
+}
+
+public enum TransferMetadataProviderError: Error {
     case missingBalance
 }
 
-public final class AssetPortfolioProvider: AssetPortfolioProviding {
+public final class TransferMetadataProvider: TransferMetadataProviding {
     private let balanceService: BalanceService
     private let priceService: PriceService
 
@@ -25,7 +46,7 @@ public final class AssetPortfolioProvider: AssetPortfolioProviding {
         walletId: WalletId,
         asset: Asset,
         extraIds: [AssetId] = []
-    ) throws -> AssetPortfolio {
+    ) throws -> TransferDataMetadata {
 
         let assetId = asset.id
         let feeAssetId = asset.feeAsset.id
@@ -39,18 +60,18 @@ public final class AssetPortfolioProvider: AssetPortfolioProviding {
                 walletId: walletId.id,
                 assetId: feeAssetId.identifier
             )
-        else { throw AssetPortfolioProviderError.missingBalance }
+        else { throw TransferMetadataProviderError.missingBalance }
 
-        let ids = [assetId, feeAssetId] + extraIds
+        let ids = Array(Set([assetId, feeAssetId] + extraIds))
         let pricesList = try priceService.getPrices(for: ids)
         let prices = Dictionary(uniqueKeysWithValues: pricesList.map { ($0.assetId, $0.mapToPrice()) })
 
-        return AssetPortfolio(
+        return TransferDataMetadata(
             assetId: assetId,
             feeAssetId: feeAssetId,
-            balance: balance,
-            feeBalance: fee,
-            prices: prices
+            assetBalance: balance,
+            assetFeeBalance: fee,
+            assetPrices: prices
         )
     }
 }
