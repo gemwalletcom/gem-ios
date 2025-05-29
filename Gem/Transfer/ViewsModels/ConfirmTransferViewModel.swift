@@ -102,6 +102,7 @@ final class ConfirmTransferViewModel {
     var senderAddress: String {
         (try? wallet.account(for: dataModel.chain).address) ?? ""
     }
+
     var senderAssetImage: AssetImage? {
         let viewModel = WalletViewModel(wallet: wallet)
         return viewModel.hasAvatar ? viewModel.avatarImage : .none
@@ -172,7 +173,6 @@ final class ConfirmTransferViewModel {
             let title: String = {
                 switch error {
                 case let tranferError as TransferAmountCalculatorError:
-
                     switch tranferError {
                     case .insufficientBalance(let asset):
                         return Localized.Transfer.insufficientBalance(AssetViewModel(asset: asset).title)
@@ -352,7 +352,7 @@ extension ConfirmTransferViewModel {
     }
 
     func onCompleteAction() {
-        self.onComplete?()
+        onComplete?()
     }
 }
 
@@ -440,7 +440,7 @@ extension ConfirmTransferViewModel {
         let assetPrices = try walletsService.priceService.getPrices(for: assetPricesIds)
             .toMap { $0.assetId }
             .mapValues { $0.mapToPrice() }
-        
+
         return TransferDataMetadata(
             assetBalance: assetBalance.available,
             assetFeeBalance: assetFeeBalance.available,
@@ -526,6 +526,19 @@ extension ConfirmTransferViewModel {
         )
     }
 
+    private func determineRate(rates: [FeeRate], priority: FeePriority) throws -> FeeRate {
+        guard rates.isNotEmpty else {
+            throw ChainCoreError.feeRateMissed
+        }
+
+        if let rate = rates.first(where: { $0.priority == feeModel.priority }) {
+            return rate
+        }
+
+        // if not preferable found, return the first one
+        return rates[0]
+    }
+
     private func fetchTransactionLoad(metaData: TransferDataMetadata) async throws -> TransactionLoad {
         let senderAddress = try wallet.account(for: dataModel.chain).address
         let destinationAddress = dataModel.recipient.address
@@ -550,9 +563,7 @@ extension ConfirmTransferViewModel {
             throw AnyError("Transaction is invalid")
         }
 
-        guard let rate = rates.first(where: { $0.priority == feeModel.priority }) else {
-            throw ChainCoreError.feeRateMissed
-        }
+        let rate = try determineRate(rates: rates, priority: feeModel.priority)
 
         let transactionInput = TransactionInput(
             type: data.type,
