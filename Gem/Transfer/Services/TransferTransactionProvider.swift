@@ -7,16 +7,16 @@ import Transfer
 import ScanService
 import BigInt
 
-public protocol TransansferContextProviding: Sendable {
+public protocol TransansferTransactionProvidable: Sendable {
     func loadContext(
         wallet: Wallet,
         data: TransferData,
         priority: FeePriority,
         available: BigInt
-    ) async throws -> TransferContext
+    ) async throws -> TransferTransactionData
 }
 
-public struct TransferContextProvider: TransansferContextProviding {
+public struct TransferTransactionProvider: TransansferTransactionProvidable {
     private let feeRatesProvider: any FeeRateProviding
     private let chainService: any ChainServiceable
     private let scanService: ScanService
@@ -25,7 +25,7 @@ public struct TransferContextProvider: TransansferContextProviding {
         chainService: any ChainServiceable,
         scanService: ScanService
     ) {
-        self.feeRatesProvider = FeeRateService(service: chainService, ttl: .zero)
+        self.feeRatesProvider = FeeRateService(service: chainService)
         self.chainService = chainService
         self.scanService = scanService
     }
@@ -35,14 +35,14 @@ public struct TransferContextProvider: TransansferContextProviding {
         data: TransferData,
         priority: FeePriority,
         available: BigInt
-    ) async throws -> TransferContext {
+    ) async throws -> TransferTransactionData {
         async let getTransactionValidation: () = validateTransaction(wallet: wallet, data: data)
         async let getFeeRates = getFeeRates(type: data.type, priority: priority)
         async let getTransactionPreload = getTransactionPreload(wallet: wallet, data: data)
 
         let (rates, preload, _) = try await (getFeeRates, getTransactionPreload, getTransactionValidation)
 
-        return try await TransferContext(
+        return try await TransferTransactionData(
             allRates: rates.rates,
             transactionLoad: getTransactionLoad(
                 wallet: wallet,
@@ -57,7 +57,7 @@ public struct TransferContextProvider: TransansferContextProviding {
 
 // MARK: - Private
 
-extension TransferContextProvider {
+extension TransferTransactionProvider {
     private func getTransactionLoad(
         wallet: Wallet,
         data: TransferData,

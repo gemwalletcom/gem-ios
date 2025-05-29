@@ -3,7 +3,7 @@
 import Foundation
 import Primitives
 
-public protocol TransactionSigning: Sendable {
+public protocol TransactionSigneable: Sendable {
     func sign(
         transfer: TransferData,
         transactionLoad: TransactionLoad,
