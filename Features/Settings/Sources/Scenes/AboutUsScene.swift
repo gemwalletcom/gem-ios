@@ -40,6 +40,8 @@ public struct AboutUsScene: View {
                     NavigationCustomLink(
                         with: ListItemView(
                             title: Localized.UpdateApp.updateTo(version),
+                            titleTag: Localized.UpdateApp.new,
+                            titleTagStyle: model.releaseTagStyle,
                             imageStyle: .settings(assetImage: model.releaseImage)
                         ),
                         action: model.onUpdate

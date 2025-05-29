@@ -406,3 +406,4 @@
 "onboarding.accept_terms.continue" = "理解しました。続行します。";
 "errors.required" = "%@ is required";
 "update_app.update_to" = "Update to %@";
+"update_app.new" = "New";
