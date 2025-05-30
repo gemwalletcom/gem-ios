@@ -8,24 +8,34 @@ import PriceAlertService
 import PriceService
 import Preferences
 import PrimitivesComponents
+import GRDB
+import GRDBQuery
 
 @Observable
+@MainActor
 public final class PriceAlertsViewModel: Sendable {
     private let preferences: ObservablePreferences
     private let priceAlertService: PriceAlertService
     
+    var priceAlerts: [PriceAlertData] = []
+    private var cancellable: DatabaseCancellable?
+    
     public init(
+        databaseContext: DatabaseContext,
         preferences: ObservablePreferences = .default,
         priceAlertService: PriceAlertService
     ) {
         self.preferences = preferences
         self.priceAlertService = priceAlertService
+        
+        cancellable = PriceAlertsRequest().observe(
+            in: databaseContext,
+            onChange: { self.priceAlerts = $0 }
+        )
     }
 
     var title: String { Localized.Settings.PriceAlerts.title }
     var enableTitle: String { Localized.Settings.enableValue("") }
-
-    var request: PriceAlertsRequest { PriceAlertsRequest() }
 
     var isPriceAlertsEnabled: Bool {
         get {
@@ -40,8 +50,8 @@ public final class PriceAlertsViewModel: Sendable {
         EmptyContentTypeViewModel(type: .priceAlerts)
     }
 
-    func sections(for alerts: [PriceAlertData]) -> PriceAlertsSections {        
-        let (autoAlerts, manualGroups) = alerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
+    func sections() -> PriceAlertsSections {
+        let (autoAlerts, manualGroups) = priceAlerts.reduce(into: ([PriceAlertData](), [Asset: [PriceAlertData]]())) { result, alert in
             switch alert.priceAlert.type {
             case .auto:
                 result.0.append(alert)
