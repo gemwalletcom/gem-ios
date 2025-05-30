@@ -8,7 +8,7 @@ public struct AccountRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "wallets_accounts"
 
-    enum Columns {
+    public enum Columns {
         static let walletId = Column("walletId")
         static let chain = Column("chain")
         static let address = Column("address")

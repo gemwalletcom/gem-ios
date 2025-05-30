@@ -9,7 +9,7 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "balances"
     
-    enum Columns {
+    public enum Columns {
         static let assetId = Column("assetId")
         static let walletId = Column("walletId")
         static let isEnabled = Column("isEnabled")
