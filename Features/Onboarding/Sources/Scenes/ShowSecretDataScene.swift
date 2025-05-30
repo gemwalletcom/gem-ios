@@ -13,23 +13,37 @@ struct ShowSecretDataScene: View {
     @State private var isPresentingCopyToast = false
 
     var body: some View {
-        VStack(spacing: .medium) {
-            CalloutView.error(
-                title: Localized.SecretPhrase.DoNotShare.title, 
-                subtitle: Localized.SecretPhrase.DoNotShare.description
-            )
-            .padding(.top, .scene.top)
+        VStack {
+            List {
+                Section {
+                    CalloutView.error(
+                        title: Localized.SecretPhrase.DoNotShare.title,
+                        subtitle: Localized.SecretPhrase.DoNotShare.description
+                    )
+                }
+                .cleanListRow()
 
-            SecretDataTypeView(type: model.type)
+                Section {
+                    SecretDataTypeView(
+                        type: model.type
+                    )
+                }
+                .cleanListRow()
 
-            Button {
-                isPresentingCopyToast = true
-            } label: {
-                Text(Localized.Common.copy)
+                Section {
+                    Button {
+                        isPresentingCopyToast = true
+                    } label: {
+                        Text(Localized.Common.copy)
+                    }
+                }
+                .cleanListRow()
             }
-            Spacer()
+            .contentMargins([.top], .extraSmall, for: .scrollContent)
+            .listSectionSpacing(.custom(.medium))
         }
-        .frame(maxWidth: .scene.content.maxWidth)
+        .padding(.bottom, .scene.bottom)
+        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .copyToast(
             model: model.copyModel,

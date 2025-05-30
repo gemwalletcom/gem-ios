@@ -13,14 +13,33 @@ struct CreateWalletScene: View {
 
     var body: some View {
         VStack(spacing: .medium) {
-            OnboardingHeaderTitle(title: Localized.SecretPhrase.savePhraseSafely, alignment: .center)
-            SecretDataTypeView(type: model.type)
+            List {
+                Section {
+                    OnboardingHeaderTitle(
+                        title: Localized.SecretPhrase.savePhraseSafely,
+                        alignment: .center
+                    )
+                }
+                .cleanListRow()
+                
+                Section {
+                    SecretDataTypeView(
+                        type: model.type
+                    )
+                }
+                .cleanListRow()
 
-            Button(action: copy) {
-                Text(Localized.Common.copy)
+                Section {
+                    Button(action: copy) {
+                        Text(Localized.Common.copy)
+                    }
+                    .buttonStyle(.clear)
+                }
+                .cleanListRow()
             }
-            Spacer()
-            
+            .contentMargins([.top], .extraSmall, for: .scrollContent)
+            .listSectionSpacing(.custom(.medium))
+
             StateButton(
                 text: Localized.Common.continue,
                 styleState: .normal,
@@ -33,6 +52,7 @@ struct CreateWalletScene: View {
             isPresenting: $isPresentingCopyToast
         )
         .padding(.bottom, .scene.bottom)
+        .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
         .taskOnce { model.generateWords() }
     }
