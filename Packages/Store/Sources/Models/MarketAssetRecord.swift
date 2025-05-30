@@ -6,7 +6,7 @@ import GRDB
 
 public struct MarketAssetRecord: Codable, FetchableRecord, PersistableRecord  {
     
-    enum Columns {
+    public enum Columns {
         public static let tag = Column("tag")
         public static let assetId = Column("assetId")
     }

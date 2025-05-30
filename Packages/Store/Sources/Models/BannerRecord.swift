@@ -8,7 +8,7 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public static let databaseTableName: String = "banners"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let state = Column("state")
         static let event = Column("event")

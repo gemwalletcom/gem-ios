@@ -7,7 +7,7 @@ import GRDB
 public struct StakeValidatorRecord: Codable, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "stake_validators"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let assetId = Column("assetId")
         static let validatorId = Column("validatorId")
