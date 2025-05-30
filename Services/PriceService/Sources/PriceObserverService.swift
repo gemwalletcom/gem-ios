@@ -5,21 +5,23 @@ import Primitives
 import Preferences
 
 public actor PriceObserverService: Sendable {
-    
+
     private let priceService: PriceService
     private let preferences: Preferences
-    
+
     // MARK: – Configuration
     private let url: URL
     private let session: URLSession
 
     // MARK: – State
     private var task: URLSessionWebSocketTask?
+    private var reconnectTask: Task<Void, Never>?
     private var isConnecting = false
+
     private var reconnectDelay: TimeInterval = 1
     private let maxReconnectDelay: TimeInterval = 30
     private var subscribedAssetIds: Set<AssetId> = []
-    
+
     public init(
         url: URL = URL(string: "wss://api.gemwallet.com/v1/ws/prices")!,
         priceService: PriceService,
@@ -30,6 +32,11 @@ public actor PriceObserverService: Sendable {
 
         self.priceService = priceService
         self.preferences = preferences
+    }
+
+    deinit {
+        task?.cancel(with: .goingAway, reason: nil)
+        reconnectTask?.cancel()
     }
 
     // MARK: – Public API
@@ -45,9 +52,11 @@ public actor PriceObserverService: Sendable {
     /// Cancels the connection and prevents further reconnects.
     public func disconnect() {
         guard isConnecting else { return }
-        isConnecting = false
+        reconnectTask?.cancel()
+        reconnectTask = nil
         task?.cancel(with: .goingAway, reason: nil)
         task = nil
+        isConnecting = false
     }
 
     public func addAssets(assets: [AssetId]) throws {
@@ -62,11 +71,11 @@ public actor PriceObserverService: Sendable {
         try sendAction(action)
         subscribedAssetIds.formUnion(newAssets)
     }
-    
+
     public func subscribeAssets() -> Set<AssetId> {
         return subscribedAssetIds
     }
-    
+
     public func setupAssets() throws {
         let assets = try priceService.observableAssets()
         let action = WebSocketPriceAction(
@@ -76,7 +85,7 @@ public actor PriceObserverService: Sendable {
         try sendAction(action)
         subscribedAssetIds.formUnion(assets)
     }
-    
+
     public func sendAction(_ action: WebSocketPriceAction) throws {
         let data = try JSONEncoder().encode(action)
         task?.send(.data(data)) { error in
@@ -88,7 +97,7 @@ public actor PriceObserverService: Sendable {
             }
         }
     }
-    
+
     // MARK: – Private
 
     private func startWebSocket() {
@@ -141,7 +150,7 @@ public actor PriceObserverService: Sendable {
             listen()
         }
     }
-    
+
     private func handle(_ message: URLSessionWebSocketTask.Message) throws {
         switch message {
         case .string(let text):
@@ -152,17 +161,20 @@ public actor PriceObserverService: Sendable {
             break
         }
     }
-    
+
     private func handleMessageData(data: Data) throws {
         let payload = try JSONDateDecoder.standard.decode(WebSocketPricePayload.self, from: data)
-        
+
         NSLog("price observer: prices: \(payload.prices.count), rates: \(payload.rates.count)")
-        
+
         try priceService.addRates(payload.rates)
         try priceService.updatePrices(payload.prices, currency: preferences.currency)
     }
 
     private func scheduleReconnect() async {
+        // already waiting
+        guard reconnectTask == nil else { return }
+
         // Tear down current connection
         task?.cancel(with: .goingAway, reason: nil)
         task = nil
@@ -175,8 +187,16 @@ public actor PriceObserverService: Sendable {
         print("price observer: ⚡️ Reconnecting in \(delay)s…")
 
         // Wait, then restart
-        try? await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
-        guard isConnecting else { return }
+        reconnectTask = Task { [weak self] in
+            guard let self else { return }
+            try? await Task.sleep(for: .seconds(delay))
+            await self.finishReconnect()
+        }
+    }
+
+    private func finishReconnect() {
+        reconnectTask = nil
+        guard isConnecting, task == nil else { return }
         startWebSocket()
     }
 }
