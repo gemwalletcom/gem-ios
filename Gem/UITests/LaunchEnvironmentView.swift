@@ -12,9 +12,11 @@ import WalletsServiceTestKit
 import PriceAlertServiceTestKit
 import Primitives
 import Store
+import WalletTabTestKit
 
 // Features
 import Onboarding
+import WalletTab
 
 public struct LaunchEnvironmentView: View {
     let launchEnvironment: UITestLaunchScenario
@@ -33,17 +35,17 @@ public struct LaunchEnvironmentView: View {
             )
         case .createFirstWallet:
             CreateWalletNavigationStack(
-                walletService: .mock(isAccepted: false),
+                walletService: .mock(isAcceptedTerms: false),
                 isPresentingWallets: .constant(false)
             )
         case .createWallet:
             CreateWalletNavigationStack(
-                walletService: .mock(isAccepted: true),
+                walletService: .mock(isAcceptedTerms: true),
                 isPresentingWallets: .constant(false)
             )
         case .importWallet:
             ImportWalletNavigationStack(
-                model: ImportWalletTypeViewModel(walletService: .mock(isAccepted: true)),
+                model: ImportWalletTypeViewModel(walletService: .mock(isAcceptedTerms: true)),
                 isPresentingWallets: .constant(false)
             )
         
@@ -66,39 +68,11 @@ public struct LaunchEnvironmentView: View {
             WalletsNavigationStack(
                 isPresentingWallets: .constant(false)
             )
-        }
-    }
-}
-
-extension SelectAssetViewModel {
-    static func mock(
-        db: DB,
-        selectType: SelectAssetType
-    ) -> SelectAssetViewModel {
-        return SelectAssetViewModel(
-            wallet: .mock(accounts: [AssetBasic].mock().map { Account.mock(chain: $0.asset.chain) }),
-            selectType: selectType,
-            assetsService: .mock(),
-            walletsService: .mock(
-                assetsService: .mock(
-                    assetStore: .mock(db: db),
-                    balanceStore: .mock(db: db)
-                )
-            ),
-            priceAlertService: .mock()
-        )
-    }
-}
-
-extension WalletService {
-    static func mock(isAccepted: Bool) -> Self {
-        .mock(
-            keystore: KeystoreMock(),
-            preferences: .mock(
-                preferences: .mock(
-                    defaults: .mockWithValues(values: ["is_accepted_terms": isAccepted])
-                )
+        case .assetScene:
+            WalletNavigationStack(
+                model: .mock()
             )
-        )
+            .databaseContext(.readWrite { DB.mockAssets().dbQueue })
+        }
     }
 }

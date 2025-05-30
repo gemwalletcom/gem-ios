@@ -15,6 +15,7 @@ public enum UITestLaunchScenario: String {
     
     // Gem
     case selectAssetManage
+    case assetScene
     
     // ManageWallets
     case walletsList
