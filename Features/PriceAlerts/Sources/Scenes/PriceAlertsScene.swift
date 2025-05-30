@@ -13,12 +13,8 @@ import PrimitivesComponents
 public struct PriceAlertsScene: View {
     @State private var model: PriceAlertsViewModel
 
-    @Query<PriceAlertsRequest>
-    private var priceAlerts: [PriceAlertData]
-
     public init(model: PriceAlertsViewModel) {
         _model = State(initialValue: model)
-        _priceAlerts = Query(constant: model.request)
     }
 
     public var body: some View {
@@ -26,7 +22,7 @@ public struct PriceAlertsScene: View {
             toggleView
             
             ListItemValueSectionList(
-                list: model.sections(for: priceAlerts).list,
+                list: model.sections().list,
                 content: { alert in
                     NavigationLink(value: Scenes.Price(asset: alert.asset)) {
                         alertView(alert: alert)
@@ -37,7 +33,7 @@ public struct PriceAlertsScene: View {
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listSectionSpacing(.compact)
         .overlay {
-            if priceAlerts.isEmpty {
+            if model.priceAlerts.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
