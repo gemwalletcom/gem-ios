@@ -67,11 +67,8 @@ public final class AboutUsViewModel: Sendable {
     var releaseVersion: String? {
         release?.version
     }
-    var appStoreLink: String {
-        PublicConstants.url(.appStore).absoluteString
-    }
-    var updateText: String {
-        "**[\(Localized.UpdateApp.action)](\(appStoreLink))**"
+    var releaseImage: AssetImage {
+        AssetImage.image(Images.Settings.gem)
     }
 }
 
@@ -86,5 +83,9 @@ extension AboutUsViewModel {
         } catch {
             NSLog("Release fetch failed: \(error)")
         }
+    }
+    
+    func onUpdate() {
+        UIApplication.shared.open(PublicConstants.url(.appStore))
     }
 }

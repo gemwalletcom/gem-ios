@@ -296,7 +296,7 @@ extension SuiService {
         let computationCost = BigInt(stringLiteral: gasUsed.computationCost)
         let storageCost = BigInt(stringLiteral: gasUsed.storageCost)
         let storageRebate = BigInt(stringLiteral: gasUsed.storageRebate)
-        let fee = computationCost + storageCost - storageRebate
+        let fee = max(computationCost, computationCost + storageCost - storageRebate)
 
         return Fee(
             fee: fee,
