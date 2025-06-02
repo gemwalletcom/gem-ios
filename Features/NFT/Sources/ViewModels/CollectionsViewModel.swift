@@ -12,6 +12,7 @@ import SwiftUI
 import PrimitivesComponents
 import AvatarService
 import WalletService
+import GRDB
 
 @Observable
 @MainActor
@@ -19,28 +20,39 @@ public final class CollectionsViewModel: Sendable {
     private let walletService: WalletService
     private let nftService: NFTService
     private let deviceService: any DeviceServiceable
+    private let dbQueue: DatabaseQueue
 
     let columns: [GridItem] = Array(repeating: GridItem(spacing: .medium), count: 2)
     let sceneStep: Scenes.CollectionsScene.SceneStep
-    var request: NFTRequest
     public var isPresentingReceiveSelectAssetType: SelectAssetType?
 
     public private(set) var wallet: Wallet
+    
+    var nftDataList: [NFTData] = []
+    var request: NFTRequest { didSet { observeRequest() }}
+    private var cancellable: DatabaseCancellable?
 
     public init(
+        dbQueue: DatabaseQueue,
         nftService: NFTService,
         deviceService: any DeviceServiceable,
         walletService: WalletService,
         wallet: Wallet,
         sceneStep: Scenes.CollectionsScene.SceneStep
     ) {
+        self.dbQueue = dbQueue
         self.nftService = nftService
         self.deviceService = deviceService
         self.walletService = walletService
 
         self.wallet = wallet
         self.sceneStep = sceneStep
-        self.request = Self.createNftRequest(for: wallet, sceneStep: sceneStep)
+        
+        self.request = Self.createNftRequest(
+            for: wallet,
+            sceneStep: sceneStep
+        )
+        observeRequest()
     }
 
 
@@ -83,10 +95,10 @@ public final class CollectionsViewModel: Sendable {
         }
     }
     
-    func createGridItems(from list: [NFTData]) -> [GridPosterViewItem] {
+    func createGridItems() -> [GridPosterViewItem] {
         switch sceneStep {
         case .collections:
-            list.map { buildCollectionsGridItem(from: $0) }
+            nftDataList.map { buildCollectionsGridItem(from: $0) }
         case .collection(let data):
             data.assets.map { asset in
                 buildAssetDetailsGridItem(collection: data.collection, asset: asset)
@@ -129,6 +141,13 @@ public final class CollectionsViewModel: Sendable {
         } catch {
             NSLog("updateCollection error \(error)")
         }
+    }
+    
+    private func observeRequest() {
+        cancellable = request.observe(
+            in: dbQueue,
+            onChange: { self.nftDataList = $0 }
+        )
     }
 
     private static func createNftRequest(

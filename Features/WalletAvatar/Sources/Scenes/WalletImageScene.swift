@@ -22,12 +22,8 @@ public struct WalletImageScene: View {
     @Query<WalletRequest>
     var dbWallet: Wallet?
     
-    @Query<NFTRequest>
-    private var nftDataList: [NFTData]
-    
     public init(model: WalletImageViewModel) {
         _model = State(initialValue: model)
-        _nftDataList = Query(constant: model.nftAssetsRequest)
         _dbWallet = Query(constant: model.walletRequest)
     }
 
@@ -78,7 +74,7 @@ public struct WalletImageScene: View {
             .padding(.horizontal, .medium)
         }
         .overlay {
-            if nftDataList.isEmpty, case .collections = selectedTab {
+            if model.nftDataList.isEmpty, case .collections = selectedTab {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
@@ -97,7 +93,7 @@ public struct WalletImageScene: View {
     }
     
     private var nftAssetListView: some View {
-        ForEach(model.buildNftAssetsItems(from: nftDataList)) { item in
+        ForEach(model.buildNftAssetsItems()) { item in
             let view = GridPosterView(assetImage: item.assetImage, title: nil)
             NavigationCustomLink(with: view) {
                 onSelectNftAsset(item)

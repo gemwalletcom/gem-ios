@@ -11,6 +11,7 @@ import WalletAvatar
 struct WalletsNavigationStack: View {
     @Environment(\.walletService) private var walletService
     @Environment(\.avatarService) private var avatarService
+    @Environment(\.dbQueue) private var dbQueue
 
     @State private var navigationPath = NavigationPath()
 
@@ -43,6 +44,7 @@ struct WalletsNavigationStack: View {
             }
             .navigationDestination(for: Scenes.WalletSelectImage.self) {
                 WalletImageScene(model: WalletImageViewModel(
+                    dbQueue: dbQueue,
                     wallet: $0.wallet,
                     avatarService: avatarService
                 ))

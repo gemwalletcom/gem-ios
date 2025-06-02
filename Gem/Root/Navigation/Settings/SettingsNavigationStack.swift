@@ -27,7 +27,7 @@ struct SettingsNavigationStack: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.releaseService) private var releaseService
-    @Environment(\.db) private var db
+    @Environment(\.dbQueue) private var dbQueue
 
     @State private var isPresentingWallets = false
     @State private var currencyModel: CurrencySceneViewModel
@@ -81,7 +81,7 @@ struct SettingsNavigationStack: View {
             .navigationDestination(for: Scenes.PriceAlerts.self) { _ in
                 PriceAlertsNavigationView(
                     model: PriceAlertsViewModel(
-                        dbQueue: db.dbQueue,
+                        dbQueue: dbQueue,
                         priceAlertService: priceAlertService
                     )
                 )

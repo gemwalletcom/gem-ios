@@ -9,6 +9,7 @@ import Components
 import AvatarService
 import Store
 import Localization
+import GRDB
 
 @MainActor
 @Observable
@@ -25,13 +26,25 @@ public final class WalletImageViewModel: Sendable {
     let emojiList: [EmojiValue] = {
         Array(Emoji.WalletAvatar.allCases.map { EmojiValue(emoji: $0.rawValue, color: Colors.grayVeryLight) })
     }()
+    
+    var nftDataList: [NFTData] = []
+    private var cancellable: DatabaseCancellable?
 
     public init(
+        dbQueue: DatabaseQueue,
         wallet: Wallet,
         avatarService: AvatarService
     ) {
         self.wallet = wallet
         self.avatarService = avatarService
+        self.cancellable = NFTRequest(
+            walletId: wallet.id,
+            collectionId: nil
+        )
+        .observe(
+            in: dbQueue,
+            onChange: { self.nftDataList = $0}
+        )
     }
     
     var title: String { Localized.Common.avatar }
@@ -39,17 +52,13 @@ public final class WalletImageViewModel: Sendable {
     var walletRequest: WalletRequest {
         WalletRequest(walletId: wallet.id)
     }
-    
-    var nftAssetsRequest: NFTRequest {
-        NFTRequest(walletId: wallet.id, collectionId: nil)
-    }
 
     var emptyContentModel: EmptyContentTypeViewModel {
         EmptyContentTypeViewModel(type: .nfts(action: nil))
     }
 
-    func buildNftAssetsItems(from list: [NFTData]) -> [NFTAssetImageItem] {
-        list
+    func buildNftAssetsItems() -> [NFTAssetImageItem] {
+        nftDataList
             .map { $0.assets }
             .reduce([], +)
             .map {
