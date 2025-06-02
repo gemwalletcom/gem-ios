@@ -13,7 +13,6 @@
 		830FDA452C224316003DA605 /* NavigationStateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA442C224316003DA605 /* NavigationStateManager.swift */; };
 		830FDA482C22EEC4003DA605 /* TabItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 830FDA472C22EEC4003DA605 /* TabItem.swift */; };
 		83245B612D529A26003A6220 /* TransactionService in Frameworks */ = {isa = PBXBuildFile; productRef = 83245B602D529A26003A6220 /* TransactionService */; };
-		832CD2892DEDDD7800110291 /* SelectAssetViewModel+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832CD2872DEDDD7800110291 /* SelectAssetViewModel+Mock.swift */; };
 		832CD28A2DEDDD7800110291 /* SelectAssetViewModel+Mock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 832CD2872DEDDD7800110291 /* SelectAssetViewModel+Mock.swift */; };
 		8331852F2CF78F4F007ED64F /* NetworkSelectorScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8331852E2CF78F4F007ED64F /* NetworkSelectorScene.swift */; };
 		83332F042DE526F700956E6B /* TransferMetadataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83332F032DE526F700956E6B /* TransferMetadataProvider.swift */; };
@@ -1408,7 +1407,6 @@
 				D89BB5EE2D1A085C00C7E510 /* ConfirmTransferNavigationStack.swift in Sources */,
 				8345F5832DE782F900E66F07 /* TransferConfirmationInput.swift in Sources */,
 				83E041582D0AFCB10031D4BC /* RootScene.swift in Sources */,
-				832CD2892DEDDD7800110291 /* SelectAssetViewModel+Mock.swift in Sources */,
 				D8D83C872CECFD440083AA53 /* SwapSceneViewModel.swift in Sources */,
 				C3B6F09229E7C31500C3B746 /* ConfirmTransferScene.swift in Sources */,
 				D852CAFD2C9C9837004121D3 /* AddAssetPriceAlertNavigationStack.swift in Sources */,
