@@ -21,7 +21,7 @@ public final class PriceAlertsViewModel: Sendable {
     private var cancellable: DatabaseCancellable?
     
     public init(
-        databaseContext: DatabaseContext,
+        dbQueue: some DatabaseReader,
         preferences: ObservablePreferences = .default,
         priceAlertService: PriceAlertService
     ) {
@@ -29,7 +29,7 @@ public final class PriceAlertsViewModel: Sendable {
         self.priceAlertService = priceAlertService
         
         cancellable = PriceAlertsRequest().observe(
-            in: databaseContext,
+            in: dbQueue,
             onChange: { self.priceAlerts = $0 }
         )
     }

@@ -47,4 +47,5 @@ extension EnvironmentValues {
     @Entry var nftService: NFTService = .main
     @Entry var avatarService: AvatarService = .main
     @Entry var releaseService: AppReleaseService = .main
+    @Entry var db: DB = .main
 }
