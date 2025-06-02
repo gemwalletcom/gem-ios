@@ -1,23 +1,22 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Primitives
-import Gemstone
 import Components
-import BigInt
 import SwiftUI
 import PrimitivesComponents
 import Style
-import enum Gemstone.GemSwapProvider
 
-public struct SwapProviderItem {
+import enum Gemstone.GemSwapProvider
+import struct Gemstone.SwapQuote
+
+public struct SwapProviderItem: Sendable {
     public let asset: Asset
     public let swapQuote: SwapQuote
     public let selectedProvider: GemSwapProvider?
     public let priceViewModel: PriceViewModel
     public let valueFormatter: ValueFormatter
     
-    init(
+    public init(
         asset: Asset,
         swapQuote: SwapQuote,
         selectedProvider: GemSwapProvider?,

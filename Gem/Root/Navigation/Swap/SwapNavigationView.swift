@@ -2,11 +2,10 @@
 
 import SwiftUI
 import Primitives
-import SwapService
 import ChainService
 import Components
-import Localization
 import InfoSheet
+import Swap
 
 struct SwapNavigationView: View {
     @Environment(\.nodeService) private var nodeService

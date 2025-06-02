@@ -11,7 +11,6 @@ import Primitives
 import PrimitivesComponents
 import Store
 import Style
-import Swap
 import SwapService
 import WalletsService
 import struct Gemstone.SwapQuote
@@ -21,9 +20,12 @@ import struct Gemstone.SwapQuote
 public final class SwapSceneViewModel {
     static let quoteTaskDebounceTimeout = Duration.milliseconds(150)
 
-    let keystore: any Keystore
-    let wallet: Wallet
-    let walletsService: WalletsService
+    public let keystore: any Keystore
+    public let wallet: Wallet
+    public let walletsService: WalletsService
+
+    public var swapState: SwapState = .init()
+    public var isPresentedInfoSheet: SwapSheetType?
 
     // db observation requests
     var fromAssetRequest: AssetRequestOptional
@@ -35,10 +37,8 @@ public final class SwapSceneViewModel {
 
     // UI states
     var isPresentingPriceImpactConfirmation: String?
-    var isPresentedInfoSheet: SwapSheetType?
     var pairSelectorModel: SwapPairSelectorViewModel
 
-    var swapState: SwapState = .init()
     var selectedSwapQuote: SwapQuote?
     var fromValue: String = ""
     var toValue: String = ""
@@ -50,17 +50,18 @@ public final class SwapSceneViewModel {
     private let formatter = SwapValueFormatter(valueFormatter: .full)
     private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
 
-    init(
+    public init(
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
-        pairSelectorModel: SwapPairSelectorViewModel,
+        asset: Asset,
         walletsService: WalletsService,
         swapService: SwapService,
         keystore: any Keystore
     ) {
+        let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
+        self.pairSelectorModel = pairSelectorModel
         self.preferences = preferences
         self.wallet = wallet
-        self.pairSelectorModel = pairSelectorModel
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
@@ -177,7 +178,7 @@ public final class SwapSceneViewModel {
         )
     }
 
-    func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
+    public func swapProvidersViewModel(asset: AssetData) -> SwapProvidersViewModel {
         SwapProvidersViewModel(state: swapProvidersViewModelState(for: asset))
     }
 }
@@ -306,12 +307,12 @@ extension SwapSceneViewModel {
         isPresentedInfoSheet = .swapProvider(toAsset)
     }
 
-    func onFinishSwapProvderSelection(list: [SwapProviderItem]) {
+    public func onFinishSwapProvderSelection(list: [SwapProviderItem]) {
         selectedSwapQuote = list.first?.swapQuote
         isPresentedInfoSheet = nil
     }
 
-    func onFinishAssetSelection(asset: Asset) {
+    public func onFinishAssetSelection(asset: Asset) {
         guard case let .selectAsset(type) = isPresentedInfoSheet else { return }
         switch type {
         case .pay:

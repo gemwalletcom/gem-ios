@@ -8,28 +8,28 @@ import SwiftUI
 import Style
 import GemstonePrimitives
 
-public struct PriceImpactViewModel {
-    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
+struct PriceImpactViewModel {
     let fromAssetData: AssetData
     let fromValue: String
     let toAssetData: AssetData
     let toValue: String
-    
+
+    private let swapConfig = GemstoneConfig.shared.getSwapConfig()
     private let valueFormatter = ValueFormatter(style: .full)
     private let percentFormatter = CurrencyFormatter(type: .percent)
 
-    public init(fromAssetData: AssetData, fromValue: String, toAssetData: AssetData, toValue: String) {
+    init(fromAssetData: AssetData, fromValue: String, toAssetData: AssetData, toValue: String) {
         self.fromAssetData = fromAssetData
         self.fromValue = fromValue
         self.toAssetData = toAssetData
         self.toValue = toValue
     }
-    
-    public var showPriceImpactWarning: Bool { isHighPriceImpact }
-    public var highImpactWarningTitle: String {
+
+    var showPriceImpactWarning: Bool { isHighPriceImpact }
+    var highImpactWarningTitle: String {
         Localized.Swap.PriceImpactWarning.title
     }
-    public var highImpactWarningDescription: String? {
+    var highImpactWarningDescription: String? {
         guard let priceImpactText else { return nil }
         return Localized.Swap.PriceImpactWarning.description(priceImpactText, fromAssetData.asset.symbol)
     }
@@ -37,10 +37,10 @@ public struct PriceImpactViewModel {
     var priceImpactTitle: String { Localized.Swap.priceImpact }
     var value: PriceImpactValue? { rawImpactPercentage.flatMap(evaluatePriceImpactValue) }
 
-    public var priceImpactText: String? {
+    var priceImpactText: String? {
         priceImpactPercentage.flatMap { CurrencyFormatter(type: .percentSignLess).string($0) }
     }
-    
+
     func priceImpactColor(for type: PriceImpactType) -> Color {
         switch type {
         case .low: Colors.black
@@ -93,7 +93,7 @@ extension PriceImpactViewModel {
 
     private func evaluatePriceImpactValue(priceImpact: Double) -> PriceImpactValue? {
         let priceImpactPercentage = percentFormatter.string(priceImpact)
-        
+
         switch priceImpact.rounded(toPlaces: 2) * -1 {
         case ..<0:
             return PriceImpactValue(type: .positive, value: priceImpactPercentage)
