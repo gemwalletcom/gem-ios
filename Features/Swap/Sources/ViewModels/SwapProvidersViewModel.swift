@@ -2,17 +2,15 @@
 
 import Foundation
 import Primitives
-import Gemstone
 import Components
 import Localization
 
 public struct SwapProvidersViewModel: SelectableListAdoptable {
     public typealias Item = SwapProviderItem
+
     public var state: StateViewType<SelectableListType<SwapProviderItem>>
     public var selectedItems: Set<SwapProviderItem>
     public var selectionType: SelectionType
-    public var emptyStateTitle: String? { Localized.Common.notAvailable }
-    public var errorTitle: String? { Localized.Errors.errorOccured }
     
     public init(
         state: StateViewType<SelectableListType<Item>>,
@@ -23,6 +21,9 @@ public struct SwapProvidersViewModel: SelectableListAdoptable {
         self.selectedItems = Set(selectedItems)
         self.selectionType = selectionType
     }
+
+    public var emptyStateTitle: String? { Localized.Common.notAvailable }
+    public var errorTitle: String? { Localized.Errors.errorOccured }
 }
 
 extension SwapProvidersViewModel: SelectableListNavigationAdoptable {

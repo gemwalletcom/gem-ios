@@ -1,15 +1,11 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
-import Primitives
-import Store
 import Components
 import Style
 import PrimitivesComponents
-import Swap
-import InfoSheet
 
-struct SwapScene: View {
+public struct SwapScene: View {
     enum Field: Int, Hashable {
         case from, to
     }
@@ -20,11 +16,11 @@ struct SwapScene: View {
     // Update quote every 30 seconds, needed if you come back from the background.
     private let updateQuoteTimer = Timer.publish(every: 30, tolerance: 1, on: .main, in: .common).autoconnect()
 
-    init(model: SwapSceneViewModel) {
+    public init(model: SwapSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    var body: some View {
+    public var body: some View {
         ZStack(alignment: .bottom) {
             swapList
                 .padding(.bottom, .scene.button.height)
