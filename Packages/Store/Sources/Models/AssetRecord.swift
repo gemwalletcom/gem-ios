@@ -9,7 +9,7 @@ public struct AssetRecord: Identifiable, Codable, PersistableRecord, FetchableRe
     
     public static let databaseTableName: String = "assets"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let rank = Column("rank")
         static let type = Column("type")

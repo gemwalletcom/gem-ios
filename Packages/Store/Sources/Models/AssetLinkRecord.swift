@@ -9,7 +9,7 @@ public struct AssetLinkRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "assets_links"
     
-    enum Columns {
+    public enum Columns {
         static let assetId = Column("assetId")
         static let name = Column("name")
         static let url = Column("url")

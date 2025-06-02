@@ -10,7 +10,12 @@ let package = Package(
     products: [
         .library(
             name: "TransactionsService",
-            targets: ["TransactionsService"]),
+            targets: ["TransactionsService"]
+        ),
+        .library(
+            name: "TransactionsServiceTestKit",
+            targets: ["TransactionsServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -30,6 +35,15 @@ let package = Package(
                 "AssetsService"
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "TransactionsServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "AssetsServiceTestKit", package: "AssetsService"),
+                "TransactionsService"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "TransactionsServiceTests",

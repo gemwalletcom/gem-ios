@@ -7,7 +7,7 @@ import GRDB
 public struct TransactionAssetAssociationRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = TransactionRecord.databaseTableName + "_assets"
     
-    enum Columns {
+    public enum Columns {
         static let transactionId = Column("transactionId")
         static let assetId = Column("assetId")
     }

@@ -28,13 +28,11 @@ public extension View {
 
 public extension AccessibilityIdentifier {
     enum IdentifiableView: Identifiable {
-        case tagViewItem(String)
-        case toggle(String)
+        case key(String)
         
         public var id: String {
             switch self {
-            case .tagViewItem(let tag): tag
-            case .toggle(let toggle): toggle
+            case .key(let id): id
             }
         }
     }

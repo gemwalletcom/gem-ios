@@ -7,7 +7,7 @@ import GRDB
 public struct WalletRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "wallets"
     
-    struct Columns {
+    public struct Columns {
         static let id = Column("id")
         static let name = Column("name")
         static let index = Column("index")
