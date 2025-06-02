@@ -29,12 +29,12 @@ struct CreateWalletScene: View {
                 }
                 .cleanListRow()
 
-                Section {
-                    Button(action: copy) {
-                        Text(Localized.Common.copy)
-                    }
-                    .buttonStyle(.clear)
-                }
+                ListButton(
+                    title: Localized.Common.copy,
+                    image: Images.System.copy,
+                    action: copy
+                )
+                .frame(maxWidth: .infinity, alignment: .center)
                 .cleanListRow()
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
