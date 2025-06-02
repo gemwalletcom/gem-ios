@@ -12,7 +12,7 @@ struct NodeSelectedRecordInfo: FetchableRecord, Codable {
 public struct NodeSelectedRecord: Codable, FetchableRecord, PersistableRecord, TableRecord  {
     public static let databaseTableName: String = "nodes_selected_v1"
     
-    enum Columns {
+    public enum Columns {
         static let nodeId = Column("nodeId")
         static let chain = Column("chain")
         static let auto = Column("auto")

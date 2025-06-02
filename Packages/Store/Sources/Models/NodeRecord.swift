@@ -7,7 +7,7 @@ import GRDB
 public struct NodeRecord: Codable, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "nodes"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let url = Column("url")
         static let chain = Column("chain")

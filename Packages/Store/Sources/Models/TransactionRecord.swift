@@ -7,7 +7,7 @@ import GRDB
 public struct TransactionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "transactions_v23"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let transactionId = Column("transactionId")
