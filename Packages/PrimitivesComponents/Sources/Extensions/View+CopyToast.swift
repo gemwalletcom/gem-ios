@@ -15,7 +15,7 @@ public extension View {
             title: model.message,
             systemImage: model.systemImage
         )
-        .onChange(of: isPresenting.wrappedValue) { oldValue, newValue in
+        .onChange(of: isPresenting.wrappedValue, initial: true) { oldValue, newValue in
             if newValue {
                 UIPasteboard.general.string = model.copyValue
                 feedbackGenerator.notificationOccurred(.success)
