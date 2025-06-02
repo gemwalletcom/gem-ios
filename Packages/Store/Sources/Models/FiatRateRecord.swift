@@ -5,7 +5,7 @@ import Primitives
 import GRDB
 
 public struct FiatRateRecord: Codable, FetchableRecord, PersistableRecord  {
-    enum Columns {
+    public enum Columns {
         public static let symbol = Column("symbol")
         public static let rate = Column("rate")
         public static let updatedAt = Column("updatedAt")

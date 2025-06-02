@@ -7,7 +7,7 @@ import GRDB
 public struct StakeDelegationRecord: Codable, FetchableRecord, PersistableRecord  {
     public static let databaseTableName: String = "stake_delegations"
     
-    enum Columns {
+    public enum Columns {
         static let id = Column("id")
         static let walletId = Column("walletId")
         static let assetId = Column("assetId")
