@@ -14,18 +14,9 @@ import PrimitivesComponents
 
 public struct CollectionsScene: View {
     private let model: CollectionsViewModel
-
-    @Query<NFTRequest>
-    private var nftDataList: [NFTData]
     
     public init(model: CollectionsViewModel) {
         self.model = model
-        let request = Binding {
-            model.request
-        } set: { new in
-            model.request = new
-        }
-        _nftDataList = Query(request)
     }
     
     public var body: some View {
@@ -35,12 +26,12 @@ public struct CollectionsScene: View {
             }
         }
         .overlay {
-            if nftDataList.isEmpty {
+            if model.nftDataList.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
         .padding(.horizontal, .medium)
-        .if(nftDataList.isNotEmpty) {
+        .if(model.nftDataList.isNotEmpty) {
             $0.background(Colors.insetGroupedListStyle)
         }
         .navigationBarTitleDisplayMode(.inline)
@@ -56,7 +47,7 @@ public struct CollectionsScene: View {
 
 extension CollectionsScene {
     private var collectionsView: some View {
-        ForEach(model.createGridItems(from: nftDataList)) { gridItem in
+        ForEach(model.createGridItems()) { gridItem in
             NavigationLink(value: gridItem.destination) {
                 GridPosterView(
                     assetImage: gridItem.assetImage,

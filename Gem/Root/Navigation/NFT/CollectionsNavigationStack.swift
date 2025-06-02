@@ -16,6 +16,7 @@ struct CollectionsNavigationStack: View {
     @Environment(\.avatarService) private var avatarService
     @Environment(\.walletService) private var walletService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.dbQueue) private var dbQueue
 
     @State private var model: CollectionsViewModel
 
@@ -41,6 +42,7 @@ struct CollectionsNavigationStack: View {
                 .navigationDestination(for: Scenes.CollectionsScene.self) {
                     CollectionsScene(
                         model: CollectionsViewModel(
+                            dbQueue: dbQueue,
                             nftService: nftService,
                             deviceService: deviceService,
                             walletService: walletService,

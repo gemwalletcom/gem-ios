@@ -26,6 +26,7 @@ struct MainTabView: View {
     @Environment(\.deviceService) private var deviceService
     @Environment(\.observablePreferences) private var observablePreferences
     @Environment(\.walletService) private var walletService
+    @Environment(\.dbQueue) private var dbQueue
 
     let model: MainTabViewModel
 
@@ -75,6 +76,7 @@ struct MainTabView: View {
             if model.isCollectionsEnabled {
                 CollectionsNavigationStack(
                     model: CollectionsViewModel(
+                        dbQueue: dbQueue,
                         nftService: nftService,
                         deviceService: deviceService,
                         walletService: walletService,

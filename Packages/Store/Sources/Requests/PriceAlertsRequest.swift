@@ -2,13 +2,9 @@
 
 import Foundation
 import GRDB
-import GRDBQuery
-import Combine
 import Primitives
 
-public struct PriceAlertsRequest: ValueObservationQueryable {
-    public static var defaultValue: [PriceAlertData] { [] }
-
+public struct PriceAlertsRequest: ValueObservable {
     public init() {}
 
     public func fetch(_ db: Database) throws -> [PriceAlertData] {

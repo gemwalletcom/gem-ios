@@ -6,9 +6,7 @@ import GRDBQuery
 import Primitives
 import Combine
 
-public struct NFTRequest: ValueObservationQueryable {
-    public static var defaultValue: [NFTData] { [] }
-    
+public struct NFTRequest: ValueObservable {
     private let walletId: String
     private let collectionId: String?
     
