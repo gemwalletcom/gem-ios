@@ -59,14 +59,13 @@ public final class SwapSceneViewModel {
         keystore: any Keystore
     ) {
         let pairSelectorModel = SwapPairSelectorViewModel.defaultSwapPair(for: asset)
+        self.pairSelectorModel = pairSelectorModel
         self.preferences = preferences
         self.wallet = wallet
-        self.pairSelectorModel = pairSelectorModel
         self.keystore = keystore
         self.walletsService = walletsService
         self.swapService = swapService
 
-        self.pairSelectorModel = pairSelectorModel
         self.fromAssetRequest = AssetRequestOptional(
             walletId: wallet.walletId.id,
             assetId: pairSelectorModel.fromAssetId
