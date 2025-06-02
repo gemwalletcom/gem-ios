@@ -34,7 +34,7 @@ struct AdaptiveContentMargins: ViewModifier {
 }
 
 public extension View {
-    func adaptiveContentMargins(maxContentWidth: CGFloat = 700) -> some View {
+    func adaptiveContentMargins(maxContentWidth: CGFloat = 720) -> some View {
         self.modifier(AdaptiveContentMargins(maxContentWidth: maxContentWidth))
     }
 }
