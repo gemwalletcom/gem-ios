@@ -3,6 +3,7 @@
 import Primitives
 import Localization
 import Style
+import UIKit
 
 public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public let type: CopyType
@@ -11,6 +12,7 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public init(type: CopyType, copyValue: String) {
         self.type = type
         self.copyValue = copyValue
+        copy()
     }
 
     public var message: String {
@@ -29,4 +31,11 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     }
 
     public var systemImage: String { SystemImage.copy }
+
+    public func copy() {
+        UIPasteboard.general.string = copyValue
+        Task { @MainActor in
+            UINotificationFeedbackGenerator().notificationOccurred(.success)
+        }
+    }
 }
