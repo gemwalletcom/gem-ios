@@ -34,7 +34,7 @@ final class AssetSceneViewModel: Sendable {
 
     private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
 
-    var isPresentingOptions = false
+    var isPresentingOptions: Bool?
     var isPresentingToastMessage: String?
     var isPresentingAssetSheet: AssetSheetType?
 

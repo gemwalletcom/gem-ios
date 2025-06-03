@@ -91,13 +91,18 @@ extension CollectibleScene {
         .textCase(nil)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .contextMenu(
+        .contextMenu([
             .custom(
                 title: Localized.Nft.saveToPhotos,
                 systemImage: SystemImage.gallery,
+                action: onSelectSaveToGallery
+            ),
+            .custom(
+                title: Localized.Nft.setAsAvatar,
+                systemImage: SystemImage.emoji,
                 action: onSelectSetAsAvatar
             )
-        )
+        ])
     }
     
     private var assetInfoSectionView: some View {

@@ -35,7 +35,7 @@ public struct SecretPhraseGridView: View {
                         }
                         .padding(.small)
                         .frame(maxWidth: (.scene.content.maxWidth / 2) - (.small * 2))
-                        .background(Colors.grayVeryLight)
+                        .background(Colors.listStyleColor)
                         .cornerRadius(10)
                         .overlay {
                             if highlightIndex == word.index {

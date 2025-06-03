@@ -3,13 +3,12 @@
 import Foundation
 import Localization
 
-public enum SwapError: LocalizedError {
+public enum SwapError: LocalizedError, Sendable {
     case noQuoteData
 
     public var errorDescription: String? {
         switch self {
-        case .noQuoteData:
-            return Localized.Errors.Swap.noQuoteData
+        case .noQuoteData: Localized.Errors.Swap.noQuoteData
         }
     }
 }

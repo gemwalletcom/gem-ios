@@ -45,22 +45,22 @@ struct AssetNavigationView: View {
             systemImage: model.priceAlertsSystemImage
         )
         .confirmationDialog(
-            "",
-            isPresented: $model.isPresentingOptions,
-            titleVisibility: .hidden
-        ) {
-            Button(model.viewAddressOnTitle) {
-                model.onSelect(url: model.addressExplorerUrl)
-            }
-            if let title = model.viewTokenOnTitle {
-                Button(title) {
-                    model.onSelect(url: model.tokenExplorerUrl)
+            model.title,
+            presenting: $model.isPresentingOptions,
+            actions: { _ in
+                Button(model.viewAddressOnTitle) {
+                    model.onSelect(url: model.addressExplorerUrl)
+                }
+                if let title = model.viewTokenOnTitle {
+                    Button(title) {
+                        model.onSelect(url: model.tokenExplorerUrl)
+                    }
+                }
+                Button(Localized.Common.share) {
+                    model.onSelectShareAsset()
                 }
             }
-            Button(Localized.Common.share) {
-                model.onSelectShareAsset()
-            }
-        }
+        )
         .sheet(item: $model.isPresentingAssetSheet) {
             switch $0 {
             case let .info(type):

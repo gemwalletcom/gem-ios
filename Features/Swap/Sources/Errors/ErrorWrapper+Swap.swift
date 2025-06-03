@@ -1,8 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import enum Gemstone.SwapperError
 import Localization
+import enum Gemstone.SwapperError
 
 public struct ErrorWrapper: Error, LocalizedError {
     private let error: Error
