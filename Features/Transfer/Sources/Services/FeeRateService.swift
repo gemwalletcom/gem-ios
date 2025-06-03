@@ -5,7 +5,7 @@ import Primitives
 import Blockchain
 
 public protocol FeeRateProviding: Sendable {
-    func rates(for type: TransferDataType) async throws -> [FeeRate] // cached
+    func rates(for type: TransferDataType) async throws -> [FeeRate]
 }
 
 public struct FeeRateService: FeeRateProviding {

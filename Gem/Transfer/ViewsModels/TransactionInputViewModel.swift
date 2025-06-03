@@ -9,7 +9,7 @@ import Preferences
 
 struct TransactionInputViewModel {
     let data: TransferData
-    let transactionLoad: TransactionLoad?
+    let transactionData: TransactionData?
     let metaData: TransferDataMetadata?
     let transferAmountResult: TransferAmountResult?
 
@@ -17,12 +17,12 @@ struct TransactionInputViewModel {
 
     init(
         data: TransferData,
-        transactionLoad: TransactionLoad?,
+        transactionData: TransactionData?,
         metaData: TransferDataMetadata?,
         transferAmountResult: TransferAmountResult?,
         preferences: Preferences = Preferences.standard
     ) {
-        self.transactionLoad = transactionLoad
+        self.transactionData = transactionData
         self.data = data
         self.metaData = metaData
         self.transferAmountResult = transferAmountResult
@@ -44,7 +44,7 @@ struct TransactionInputViewModel {
             feeAsset: data.type.asset.feeAsset,
             feeAssetPrice: metaData?.feePrice,
             value: value,
-            feeValue: transactionLoad?.fee.fee,
+            feeValue: transactionData?.fee.fee,
             direction: nil
         )
     }

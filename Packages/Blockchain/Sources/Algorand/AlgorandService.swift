@@ -113,9 +113,9 @@ extension AlgorandService: ChainTransactionPreloadable {
     }
 }
 
-extension AlgorandService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
-        TransactionLoad(
+extension AlgorandService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
+        TransactionData(
             sequence: input.preload.sequence,
             block: SignerInputBlock(hash: input.preload.blockHash),
             chainId: input.preload.chainId,

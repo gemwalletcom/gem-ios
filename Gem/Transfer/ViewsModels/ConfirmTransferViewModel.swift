@@ -228,7 +228,7 @@ final class ConfirmTransferViewModel {
         }
         return TransactionInputViewModel(
             data: dataModel.data,
-            transactionLoad: nil,
+            transactionData: nil,
             metaData: metadata,
             transferAmountResult: nil
         ).headerType
@@ -274,9 +274,9 @@ extension ConfirmTransferViewModel {
 
     func onSelectConfirmTransfer() {
         guard let value = state.value,
-              let transactionLoad = value.transactionLoad,
+              let TransactionData = value.transactionData,
               case .amount(let amount) = value.transferAmountResult else { return }
-        confirmTransfer(transactionLoad: transactionLoad, amount: amount)
+        confirmTransfer(transactionData: TransactionData, amount: amount)
     }
 
     func fetch() {
@@ -290,12 +290,12 @@ extension ConfirmTransferViewModel {
 
 extension ConfirmTransferViewModel {
     private func confirmTransfer(
-        transactionLoad: TransactionLoad,
+        transactionData: TransactionData,
         amount: TransferAmount
     ) {
         Task {
             await processConfirmation(
-                transactionLoad: transactionLoad,
+                transactionData: transactionData,
                 amount: amount
             )
             if case .data(_) = confirmingState {
@@ -318,7 +318,7 @@ extension ConfirmTransferViewModel {
             let transferAmount = calculateTransferAmount(
                 assetBalance: metadata.assetBalance,
                 assetFeeBalance: metadata.assetFeeBalance,
-                fee: transferTransactionData.transactionLoad.fee.fee
+                fee: transferTransactionData.transactionData.fee.fee
             )
 
             self.metadata = metadata
@@ -326,7 +326,7 @@ extension ConfirmTransferViewModel {
             self.updateState(
                 with: transactionInputViewModel(
                     transferAmount: transferAmount,
-                    input: transferTransactionData.transactionLoad,
+                    input: transferTransactionData.transactionData,
                     metaData: metadata
                 )
             )
@@ -340,13 +340,13 @@ extension ConfirmTransferViewModel {
         }
     }
 
-    private func processConfirmation(transactionLoad: TransactionLoad, amount: TransferAmount) async {
+    private func processConfirmation(transactionData: TransactionData, amount: TransferAmount) async {
         confirmingState = .loading
         do {
             let input = TransferConfirmationInput(
                 data: data,
                 wallet: wallet,
-                load: transactionLoad,
+                transactionData: transactionData,
                 amount: amount,
                 delegate: confirmTransferDelegate
             )
@@ -387,12 +387,12 @@ extension ConfirmTransferViewModel {
 
     private func transactionInputViewModel(
         transferAmount: TransferAmountResult,
-        input: TransactionLoad? = nil,
+        input: TransactionData? = nil,
         metaData: TransferDataMetadata? = nil
     ) -> TransactionInputViewModel {
         TransactionInputViewModel(
             data: data,
-            transactionLoad: input,
+            transactionData: input,
             metaData: metaData,
             transferAmountResult: transferAmount
         )

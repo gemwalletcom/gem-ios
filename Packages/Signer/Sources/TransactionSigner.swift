@@ -13,7 +13,7 @@ public struct TransactionSigner: TransactionSigneable {
 
     public func sign(
         transfer: TransferData,
-        transactionLoad: TransactionLoad,
+        transactionData: TransactionData,
         amount: TransferAmount,
         wallet: Wallet
     ) throws -> [String] {
@@ -21,9 +21,9 @@ public struct TransactionSigner: TransactionSigneable {
         let signer = Signer(wallet: wallet, keystore: keystore)
         let fee = Fee(
             fee: amount.networkFee,
-            gasPriceType: transactionLoad.fee.gasPriceType,
-            gasLimit: transactionLoad.fee.gasLimit,
-            options: transactionLoad.fee.options
+            gasPriceType: transactionData.fee.gasPriceType,
+            gasLimit: transactionData.fee.gasLimit,
+            options: transactionData.fee.options
         )
 
         let input = SignerInput(
@@ -32,18 +32,18 @@ public struct TransactionSigner: TransactionSigneable {
             value: amount.value,
             fee: fee,
             isMaxAmount: amount.useMaxAmount,
-            chainId: transactionLoad.chainId,
+            chainId: transactionData.chainId,
             memo: transfer.recipientData.recipient.memo,
-            accountNumber: transactionLoad.accountNumber,
-            sequence: transactionLoad.sequence,
+            accountNumber: transactionData.accountNumber,
+            sequence: transactionData.sequence,
             senderAddress: try wallet.account(for: transfer.type.chain).address,
             destinationAddress: transfer.recipientData.recipient.address,
-            data: transactionLoad.data,
-            block: transactionLoad.block,
-            token: transactionLoad.token,
-            utxos: transactionLoad.utxos,
-            messageBytes: transactionLoad.messageBytes,
-            extra: transactionLoad.extra
+            data: transactionData.data,
+            block: transactionData.block,
+            token: transactionData.token,
+            utxos: transactionData.utxos,
+            messageBytes: transactionData.messageBytes,
+            extra: transactionData.extra
         )
 
         return try signer.sign(input: input)

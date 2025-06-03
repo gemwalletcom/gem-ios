@@ -40,14 +40,14 @@ struct TransferExecutor: TransferExecutable {
                     data: transactionData,
                     options: options
                 )
-                NSLog("TransferExecutor broacast resonse hash \(hash)")
+                NSLog("TransferExecutor broadcast response hash \(hash)")
 
                 input.delegate?(.success(hash))
 
                 let transaction = try TransactionFactory.makePendingTransaction(
                     wallet: input.wallet,
                     transferData: input.data,
-                    transactionLoad: input.load,
+                    transactionData: input.transactionData,
                     amount: input.amount,
                     hash: hash,
                     transactionIndex: index
@@ -75,7 +75,7 @@ extension TransferExecutor {
     private func sign(input: TransferConfirmationInput) throws -> [String] {
         try signer.sign(
             transfer: input.data,
-            transactionLoad: input.load,
+            transactionData: input.transactionData,
             amount: input.amount,
             wallet: input.wallet
         )

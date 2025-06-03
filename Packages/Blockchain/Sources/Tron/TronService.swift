@@ -329,8 +329,8 @@ extension TronService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension TronService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension TronService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         async let getBlock = latestBlock().block_header.raw_data
         async let getFee = fee(input: input.feeInput)
         async let getVotes: [TronVote]? = {
@@ -366,7 +366,7 @@ extension TronService: ChainTransactionLoadable {
             return .vote(result.filter { $1 > 0 })
         }()
 
-        return TransactionLoad(
+        return TransactionData(
             block: SignerInputBlock(
                 number: Int(block.number),
                 version: Int(block.version),

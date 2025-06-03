@@ -44,7 +44,7 @@ public struct TransferTransactionProvider: TransferTransactionProvidable {
 
         return try await TransferTransactionData(
             allRates: rates.rates,
-            transactionLoad: getTransactionLoad(
+            transactionData: getTransactionLoad(
                 wallet: wallet,
                 data: data,
                 available: available,
@@ -64,7 +64,7 @@ extension TransferTransactionProvider {
         available: BigInt,
         rate: FeeRate,
         preload: TransactionPreload
-    ) async throws -> TransactionLoad {
+    ) async throws -> TransactionData {
         let input = TransactionInput(
             type: data.type,
             asset: data.type.asset,

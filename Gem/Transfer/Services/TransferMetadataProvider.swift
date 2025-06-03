@@ -26,10 +26,6 @@ public extension TransferMetadataProvidable {
     }
 }
 
-public enum TransferMetadataProviderError: Error {
-    case missingBalance
-}
-
 public final class TransferMetadataProvider: TransferMetadataProvidable {
     private let balanceService: BalanceService
     private let priceService: PriceService
@@ -60,7 +56,7 @@ public final class TransferMetadataProvider: TransferMetadataProvidable {
                 walletId: walletId.id,
                 assetId: feeAssetId.identifier
             )
-        else { throw TransferMetadataProviderError.missingBalance }
+        else { throw AnyError("Missing balance") }
 
         let ids = Array(Set([assetId, feeAssetId] + extraIds))
         let pricesList = try priceService.getPrices(for: ids)

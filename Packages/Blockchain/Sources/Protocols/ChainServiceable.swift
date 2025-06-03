@@ -12,7 +12,7 @@ public typealias ChainServiceable =
     ChainStakable &
     ChainSyncable &
     ChainTokenable &
-    ChainTransactionLoadable &
+    ChainTransactionDataLoadable &
     ChainTransactionPreloadable &
     ChainTransactionStateFetchable
 
@@ -33,8 +33,8 @@ public protocol ChainTransactionPreloadable: Sendable {
     func preload(input: TransactionPreloadInput) async throws -> TransactionPreload
 }
 
-public protocol ChainTransactionLoadable: Sendable {
-    func load(input: TransactionInput) async throws -> TransactionLoad
+public protocol ChainTransactionDataLoadable: Sendable {
+    func load(input: TransactionInput) async throws -> TransactionData
 }
 
 public protocol ChainBroadcastable: Sendable {

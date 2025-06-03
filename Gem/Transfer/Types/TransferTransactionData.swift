@@ -5,13 +5,13 @@ import Primitives
 
 public struct TransferTransactionData: Sendable {
     public let rates: [FeeRate]
-    public let transactionLoad: TransactionLoad
+    public let transactionData: TransactionData
 
     public init(
         allRates: [FeeRate],
-        transactionLoad: TransactionLoad
+        transactionData: TransactionData
     ) {
         self.rates = allRates
-        self.transactionLoad = transactionLoad
+        self.transactionData = transactionData
     }
 }

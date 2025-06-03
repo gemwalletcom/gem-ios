@@ -6,7 +6,7 @@ public enum SigningdExtra: Sendable {
     case vote([String: UInt64])
 }
 
-public struct TransactionLoad: Sendable {
+public struct TransactionData: Sendable {
     public let accountNumber: Int
     public let sequence: Int
     public let data: SigningData

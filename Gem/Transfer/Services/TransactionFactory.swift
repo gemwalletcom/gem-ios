@@ -8,7 +8,7 @@ struct TransactionFactory {
     public static func makePendingTransaction(
         wallet: Wallet,
         transferData: TransferData,
-        transactionLoad: TransactionLoad,
+        transactionData: TransactionData,
         amount: TransferAmount,
         hash: String,
         transactionIndex: Int
@@ -37,8 +37,8 @@ struct TransactionFactory {
             contract: nil,
             type: data.type,
             state: .pending,
-            blockNumber: String(transactionLoad.block.number),
-            sequence: transactionLoad.sequence.asString,
+            blockNumber: String(transactionData.block.number),
+            sequence: transactionData.sequence.asString,
             fee: amount.networkFee.description,
             feeAssetId: transferData.type.asset.feeAsset.id,
             value: amount.value.description,
