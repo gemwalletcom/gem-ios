@@ -17,6 +17,7 @@ public extension View {
         )
         .onChange(of: isPresenting.wrappedValue, initial: true) { oldValue, newValue in
             if newValue {
+                model.copy()
                 feedbackGenerator.notificationOccurred(.success)
             }
         }

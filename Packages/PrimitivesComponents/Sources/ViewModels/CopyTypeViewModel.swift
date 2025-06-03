@@ -12,7 +12,6 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public init(type: CopyType, copyValue: String) {
         self.type = type
         self.copyValue = copyValue
-        copy()
     }
 
     public var message: String {
