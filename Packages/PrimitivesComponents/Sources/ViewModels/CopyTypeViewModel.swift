@@ -34,8 +34,5 @@ public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
 
     public func copy() {
         UIPasteboard.general.string = copyValue
-        Task { @MainActor in
-            UINotificationFeedbackGenerator().notificationOccurred(.success)
-        }
     }
 }
