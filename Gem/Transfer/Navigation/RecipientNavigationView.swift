@@ -43,9 +43,9 @@ struct RecipientNavigationView: View {
             ConfirmTransferScene(
                 model: ConfirmTransferViewModel(
                     wallet: model.wallet,
-                    keystore: model.keystore,
                     data: data,
-                    service: ChainServiceFactory(nodeProvider: model.nodeService)
+                    keystore: model.keystore,
+                    chainService: ChainServiceFactory(nodeProvider: model.nodeService)
                         .service(for: data.chain),
                     walletsService: model.walletsService,
                     onComplete: onComplete

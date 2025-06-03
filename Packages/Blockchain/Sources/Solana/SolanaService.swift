@@ -218,14 +218,14 @@ extension SolanaService: ChainTransactionPreloadable {
     }
 }
 
-extension SolanaService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension SolanaService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let fee = try getBaseFee(type: input.type, gasPrice: input.gasPrice)
         switch input.type {
         case .generic, .transfer:
             switch input.asset.id.type {
             case .native:
-                return TransactionLoad(
+                return TransactionData(
                     block: SignerInputBlock(hash: input.preload.blockHash),
                     fee: fee
                 )
@@ -240,7 +240,7 @@ extension SolanaService: ChainTransactionLoadable {
                 case .none: [.tokenAccountCreation: chain.tokenActivateFee]
                 }
                 
-                return TransactionLoad(
+                return TransactionData(
                     block: SignerInputBlock(hash: input.preload.blockHash),
                     token: token,
                     fee: fee.withOptions(options)
@@ -249,7 +249,7 @@ extension SolanaService: ChainTransactionLoadable {
         case .transferNft:
             fatalError()
         case .swap, .stake:
-            return TransactionLoad(
+            return TransactionData(
                 block: SignerInputBlock(hash: input.preload.blockHash),
                 fee: fee
             )

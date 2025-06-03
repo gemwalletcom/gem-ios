@@ -151,12 +151,12 @@ extension CardanoService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension CardanoService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension CardanoService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let utxos = try await utxos(address: input.senderAddress)
         let fee = try calculateFee(input: input, utxos: utxos)
         
-        return TransactionLoad(
+        return TransactionData(
             fee: Fee(fee: fee, gasPriceType: .regular(gasPrice: 1), gasLimit: 1),
             utxos: utxos
         )

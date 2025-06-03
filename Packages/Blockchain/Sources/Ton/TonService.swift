@@ -171,15 +171,15 @@ extension TonService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension TonService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension TonService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         switch input.asset.id.type {
         case .native:
             async let getWallet = walletInformation(address: input.senderAddress)
             async let getFee = fee(input: input.feeInput);
             let (wallet, fee) = try await (getWallet, getFee)
             
-            return TransactionLoad(
+            return TransactionData(
                 sequence: wallet.sequence,
                 fee: fee
             )
@@ -189,7 +189,7 @@ extension TonService: ChainTransactionLoadable {
             async let getFee = fee(input: input.feeInput)
             let (wallet, jettonAddress, fee) = try await (getWallet, getJettonAddress, getFee)
             
-            return TransactionLoad(
+            return TransactionData(
                 sequence: wallet.sequence,
                 token: SignerInputToken(senderTokenAddress: jettonAddress),
                 fee: fee

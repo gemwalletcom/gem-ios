@@ -37,9 +37,9 @@ struct SwapNavigationView: View {
                 ConfirmTransferScene(
                     model: ConfirmTransferViewModel(
                         wallet: model.wallet,
-                        keystore: model.keystore,
                         data: data,
-                        service: ChainServiceFactory(nodeProvider: nodeService)
+                        keystore: model.keystore,
+                        chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
                         walletsService: model.walletsService,
                         onComplete: {

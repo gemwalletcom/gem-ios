@@ -111,11 +111,11 @@ extension EthereumService: ChainTransactionPreloadable {
     }
 }
 
-extension EthereumService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension EthereumService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         async let fee = fee(input: input.feeInput)
         
-        return try await TransactionLoad(
+        return try await TransactionData(
             sequence: input.preload.sequence,
             chainId: getChainId().asString,
             fee: fee,

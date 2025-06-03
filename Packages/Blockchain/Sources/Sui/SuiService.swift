@@ -322,12 +322,12 @@ extension SuiService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension SuiService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension SuiService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let data: String = try await getData(input: input.feeInput)
         let fee = try await fee(data: String(data.split(separator: "_")[0]))
 
-        return TransactionLoad(
+        return TransactionData(
             fee: fee,
             messageBytes: data
         )

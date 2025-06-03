@@ -149,8 +149,8 @@ extension AptosService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension AptosService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension AptosService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let fee = try await fee(
             input: input,
             gasPrice: input.gasPrice,
@@ -158,7 +158,7 @@ extension AptosService: ChainTransactionLoadable {
             sequence: input.preload.sequence
         )
         
-        return TransactionLoad(
+        return TransactionData(
             sequence: input.preload.sequence,
             fee: fee
         )
