@@ -17,22 +17,24 @@ public struct TransactionsScene: View {
     }
 
     public var body: some View {
-        List {
-            TransactionsList(
-                explorerService: model.explorerService,
-                model.transactions
-            )
-            .listRowInsets(.assetListRowInsets)
+        VStack {
+            List {
+                TransactionsList(
+                    explorerService: model.explorerService,
+                    model.transactions
+                )
+                .listRowInsets(.assetListRowInsets)
+            }
+            .listSectionSpacing(.compact)
+            .scrollContentBackground(.hidden)
+            .refreshable(action: model.fetch)
         }
-        .listSectionSpacing(.compact)
-        .refreshable(action: model.fetch)
+        .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .overlay {
             if model.transactions.isEmpty {
                 EmptyContentView(model: model.emptyContentModel)
             }
         }
-        .task {
-            await model.fetch()
-        }
+        .task { await model.fetch() }
     }
 }
