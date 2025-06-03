@@ -6,6 +6,7 @@ import Style
 import Components
 import Transactions
 import Store
+import Assets
 
 struct TransactionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState

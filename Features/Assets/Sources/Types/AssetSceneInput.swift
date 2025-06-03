@@ -4,17 +4,17 @@ import Foundation
 import Primitives
 import Store
 
-struct AssetSceneInput: Sendable {
-    static let transactionsLimit = 25
+public struct AssetSceneInput: Sendable {
+    private static let transactionsLimit = 25
 
-    let wallet: Wallet
-    let asset: Asset
+    public let wallet: Wallet
+    public let asset: Asset
 
-    var assetRequest: AssetRequest
-    var transactionsRequest: TransactionsRequest
-    var bannersRequest: BannersRequest
+    public var assetRequest: AssetRequest
+    public var transactionsRequest: TransactionsRequest
+    public var bannersRequest: BannersRequest
 
-    init(wallet: Wallet, asset: Asset) {
+    public init(wallet: Wallet, asset: Asset) {
         self.wallet = wallet
         self.asset = asset
 
