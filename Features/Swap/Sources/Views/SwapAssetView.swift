@@ -4,7 +4,6 @@ import SwiftUI
 import Style
 import Components
 import Primitives
-import Swap
 
 struct SwapTokenView: View {
     

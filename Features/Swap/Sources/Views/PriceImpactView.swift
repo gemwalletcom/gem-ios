@@ -6,16 +6,16 @@ import Primitives
 import Components
 import Style
 
-public struct PriceImpactView: View {
+struct PriceImpactView: View {
     private let model: PriceImpactViewModel
     private let infoAction: VoidAction
 
-    public init(model: PriceImpactViewModel, infoAction: VoidAction) {
+    init(model: PriceImpactViewModel, infoAction: VoidAction) {
         self.model = model
         self.infoAction = infoAction
     }
 
-    public var body: some View {
+    var body: some View {
         if let priceImpactValue = model.value {
             ListItemView(
                 title: model.priceImpactTitle,

@@ -7,7 +7,6 @@ import Localization
 import PrimitivesComponents
 
 struct SwapTokenViewModel {
-    
     private let model: AssetDataViewModel
     private let type: SelectAssetSwapType
     private let formatter = ValueFormatter(style: .medium)
