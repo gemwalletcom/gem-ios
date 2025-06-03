@@ -35,6 +35,7 @@ struct ConfirmTransferScene: View {
         .taskOnce { model.fetch() }
         .navigationTitle(model.title)
         // TODO: - move to navigation view
+        .navigationBarTitleDisplayMode(.inline)
         .activityIndicator(isLoading: model.confirmingState.isLoading, message: model.progressMessage)
         .sheet(item: $model.isPresentingSheet) {
             switch $0 {
