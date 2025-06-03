@@ -259,6 +259,7 @@
 		B68BD2A42DDF5FB100687F09 /* LaunchEnvironmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchEnvironmentView.swift; sourceTree = "<group>"; };
 		B68BD2A72DDF5FD700687F09 /* UITestLaunchScenario.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITestLaunchScenario.swift; sourceTree = "<group>"; };
 		B69C53AE2DE8466800BBD95D /* SelectAssetViewModel+Mock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SelectAssetViewModel+Mock.swift"; sourceTree = "<group>"; };
+		B69C56DA2DEF2E1700BBD95D /* Keychain */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = Keychain; sourceTree = "<group>"; };
 		B6AE4A512D636869005BF29E /* SwapProvidersViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProvidersViewModel.swift; sourceTree = "<group>"; };
 		B6AE4A532D6368A0005BF29E /* SwapProviderItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapProviderItem.swift; sourceTree = "<group>"; };
 		B6B86A0F2D702E7C00D31D65 /* SwapNavigationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwapNavigationView.swift; sourceTree = "<group>"; };
@@ -746,6 +747,7 @@
 				C3D1C4E32A2AB5B6006E8EEA /* Signer */,
 				D829BF2B2CBDB82600DEB2E8 /* Localization */,
 				83518CCC2D1C998300B339E5 /* PrimitivesComponents */,
+				B69C56DA2DEF2E1700BBD95D /* Keychain */,
 			);
 			path = Packages;
 			sourceTree = "<group>";

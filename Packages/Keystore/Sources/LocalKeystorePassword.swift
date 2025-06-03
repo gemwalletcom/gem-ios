@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import KeychainAccess
+import Keychain
 import LocalAuthentication
 import Primitives
 

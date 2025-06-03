@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import KeychainAccess
+import Keychain
 
 public final class SecurePreferences: Sendable {
     public enum Keys: String, CaseIterable {
