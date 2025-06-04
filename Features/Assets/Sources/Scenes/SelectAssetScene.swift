@@ -7,7 +7,7 @@ import Style
 import Localization
 import PrimitivesComponents
 
-struct SelectAssetScene: View {
+public struct SelectAssetScene: View {
 
     @State private var isPresentingCopyToast: Bool = false
     @State private var copyTypeViewModel: CopyTypeViewModel?
@@ -18,12 +18,12 @@ struct SelectAssetScene: View {
     private var assets: [AssetData]
 
     @State private var model: SelectAssetViewModel
-    
+
     private var sections: AssetsSections {
         AssetsSections.from(assets)
     }
 
-    init(
+    public init(
         model: SelectAssetViewModel,
         isPresentingAddToken: Binding<Bool>
     ) {
@@ -38,7 +38,7 @@ struct SelectAssetScene: View {
         _assets = Query(request)
     }
 
-    var body: some View {
+    public var body: some View {
         SearchableWrapper(
             content: { list },
             isSearching: $model.isSearching,
@@ -82,7 +82,7 @@ struct SelectAssetScene: View {
         .listSectionSpacing(.compact)
         .navigationBarTitle(model.title)
     }
-    
+
     var list: some View {
         List {
             Section {} header: {
@@ -105,7 +105,7 @@ struct SelectAssetScene: View {
                 }
                 .listRowInsets(.assetListRowInsets)
             }
-            
+
             if !sections.pinned.isEmpty {
                 Section {
                     assetsList(assets: sections.pinned)
@@ -117,14 +117,14 @@ struct SelectAssetScene: View {
                 }
                 .listRowInsets(.assetListRowInsets)
             }
-            
+
             Section {
                 assetsList(assets: sections.assets)
             }
             .listRowInsets(.assetListRowInsets)
         }
     }
-    
+
     func assetsList(assets: [AssetData]) -> some View {
         ForEach(assets) { assetData in
             switch model.selectType {
@@ -170,7 +170,7 @@ extension SelectAssetScene {
     private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
         model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
     }
-    
+
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {

@@ -7,17 +7,17 @@ import Primitives
 import Components
 import PrimitivesComponents
 
-struct AssetsFilterScene: View {
+public struct AssetsFilterScene: View {
     @Environment(\.dismiss) var dismiss
     @Binding var model: AssetsFilterViewModel
 
     @State private var isPresentingChains: Bool = false
 
-    init(model: Binding<AssetsFilterViewModel>) {
+    public init(model: Binding<AssetsFilterViewModel>) {
         _model = model
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,

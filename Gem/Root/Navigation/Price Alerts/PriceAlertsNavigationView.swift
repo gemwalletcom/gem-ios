@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Style
 import PriceAlerts
+import Assets
 
 struct PriceAlertsNavigationView: View {
     @Environment(\.dismiss) private var dismiss
