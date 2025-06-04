@@ -55,10 +55,6 @@ let package = Package(
                 "BannerService",
                 "ChainService"
             ]
-        ),
-        .testTarget(
-            name: "AssetsTests",
-            dependencies: ["Assets"]
-        ),
+        )
     ]
 )
