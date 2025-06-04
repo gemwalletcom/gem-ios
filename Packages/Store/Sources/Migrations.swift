@@ -54,17 +54,16 @@ public struct Migrations {
     }
     
     mutating func runChanges(dbQueue: DatabaseQueue) throws {
-        migrator.registerMigration("Delete missing assetId in \(PriceRecord.databaseTableName), \(BalanceRecord.databaseTableName)") { db in
-            try? db.execute(sql: "DELETE FROM prices WHERE assetId NOT IN (SELECT id FROM assets)")
-            try? db.execute(sql: "DELETE FROM balances WHERE assetId NOT IN (SELECT id FROM assets)")
+        migrator.registerMigration("Delete missing assetId in \(PriceRecord.databaseTableName), \(BalanceRecord.databaseTableName)") {
+            try? $0.execute(sql: "DELETE FROM prices WHERE assetId NOT IN (SELECT id FROM assets)")
+            try? $0.execute(sql: "DELETE FROM balances WHERE assetId NOT IN (SELECT id FROM assets)")
         }
         
-        migrator
-            .registerMigration(
+        migrator.registerMigration(
                 "Delete missing assetId in \(TransactionRecord.databaseTableName), \(TransactionAssetAssociationRecord.databaseTableName)"
             ) {
-            try? $0.execute(sql: "DELETE FROM transactions WHERE assetId NOT IN (SELECT id FROM assets) OR feeAssetId NOT IN (SELECT id FROM assets)")
-            try? $0.execute(sql: "DELETE FROM transactions_assets WHERE assetId NOT IN (SELECT id FROM assets)")
+            try? $0.execute(sql: "DELETE FROM transactions_v23 WHERE assetId NOT IN (SELECT id FROM assets) OR feeAssetId NOT IN (SELECT id FROM assets)")
+            try? $0.execute(sql: "DELETE FROM transactions_v23_assets WHERE assetId NOT IN (SELECT id FROM assets)")
         }
         
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in

@@ -17,7 +17,7 @@ public extension View {
         )
         .onChange(of: isPresenting.wrappedValue, initial: true) { oldValue, newValue in
             if newValue {
-                UIPasteboard.general.string = model.copyValue
+                model.copy()
                 feedbackGenerator.notificationOccurred(.success)
             }
         }

@@ -20,11 +20,10 @@ public struct BitcoinSigner: Signable {
     }
 
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        let (_, _, quote, data) = try input.type.swap()
         let providers = Set([SwapProvider.thorchain, .chainflip].map { $0.rawValue })
-        guard
-            case .swap(_, _, let quote, let data) = input.type,
-            providers.contains(quote.data.provider.protocolId)
-        else {
+        
+        if providers.contains(quote.data.provider.protocolId) == false {
             throw AnyError("Invalid signing input type or not supported provider id")
         }
 
