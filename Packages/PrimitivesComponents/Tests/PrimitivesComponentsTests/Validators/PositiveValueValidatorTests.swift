@@ -34,11 +34,11 @@ struct PositiveValueValidatorTests {
     func testSilentValidatorThrowsNonPositiveError() {
         let validator = PositiveValueValidator<BigInt>(isSilent: true)
 
-        #expect(throws: SilentValidationError.self) {
+        #expect(throws: NonPositiveSilentError.self) {
             try validator.validate(0)
         }
 
-        #expect(throws: SilentValidationError.self) {
+        #expect(throws: NonPositiveSilentError.self) {
             try validator.validate(-7)
         }
     }
