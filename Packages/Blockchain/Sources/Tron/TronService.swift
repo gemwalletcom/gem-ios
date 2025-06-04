@@ -276,7 +276,9 @@ public extension TronService {
                         contractAddress: asset.getTokenId(),
                         value: input.value
                     )
-                    let tokenTransferFee = BigInt(energyFee) * gasLimit.increase(byPercent: 20)
+                    let availableEnergy = BigInt(accountUsage.EnergyLimit ?? 0) - BigInt(accountUsage.EnergyUsed ?? 0)
+                    let energyShortfall = max(BigInt.zero, gasLimit.increase(byPercent: 20) - availableEnergy)
+                    let tokenTransferFee = BigInt(energyFee) * energyShortfall
 
                     return isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
                 }
