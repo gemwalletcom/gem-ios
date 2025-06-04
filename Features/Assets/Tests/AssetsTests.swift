@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import XCTest
+import Testing
 @testable import Settings
 
-final class SettingsTests: XCTestCase {
+struct AssetsTests {
 
 }
 
