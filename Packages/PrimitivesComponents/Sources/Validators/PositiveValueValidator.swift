@@ -3,13 +3,24 @@
 import Foundation
 import Primitives
 
-public struct PositiveValueValidator<V>: ValueValidator where V: ValueValidatable
-{
-    public init() {}
+private struct NonPositiveError: LocalizedError, SilentValidationError {
+    var errorDescription: String? { nil }
+}
+
+public struct PositiveValueValidator<V>: ValueValidator where V: ValueValidatable {
+    private let isSilent: Bool
+
+    public init(isSilent: Bool = false) {
+        self.isSilent = isSilent
+    }
 
     public func validate(_ value: V) throws {
         guard value > 0 else {
-            throw TransferError.invalidAmount
+            if isSilent {
+                throw NonPositiveError()
+            } else {
+                throw TransferError.invalidAmount
+            }
         }
     }
 
