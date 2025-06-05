@@ -8,6 +8,7 @@ import Transactions
 import WalletTab
 import InfoSheet
 import Components
+import Assets
 
 struct WalletNavigationStack: View {
     @Environment(\.walletsService) private var walletsService

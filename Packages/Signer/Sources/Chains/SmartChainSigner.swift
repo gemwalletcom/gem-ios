@@ -15,10 +15,8 @@ public class SmartChainSigner: EthereumSigner {
         }
 
         let valueData: Data = switch stakeType {
-        case .stake:
-            input.value.magnitude.serialize()
-        case .redelegate, .unstake, .rewards, .withdraw:
-            Data()
+        case .stake: input.value.magnitude.serialize()
+        case .redelegate, .unstake, .rewards, .withdraw: Data()
         }
 
         let callData = try StakeHub().encodeStake(type: stakeType, amount: input.value)

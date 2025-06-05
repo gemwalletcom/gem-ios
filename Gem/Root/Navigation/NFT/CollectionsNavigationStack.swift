@@ -7,6 +7,7 @@ import NFT
 import Components
 import Localization
 import Style
+import Assets
 
 struct CollectionsNavigationStack: View {
     @Environment(\.navigationState) private var navigationState
