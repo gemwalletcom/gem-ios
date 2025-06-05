@@ -10,6 +10,7 @@ import PrimitivesComponents
 import PriceAlerts
 import Swap
 import Assets
+import Transfer
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore
@@ -48,6 +49,7 @@ struct SelectedAssetNavigationStack: View  {
                             walletsService: walletsService,
                             nodeService: nodeService,
                             stakeService: stakeService,
+                            scanService: .main,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

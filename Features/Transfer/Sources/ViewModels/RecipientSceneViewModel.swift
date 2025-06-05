@@ -14,16 +14,18 @@ import WalletsService
 import NodeService
 import StakeService
 import SwiftUI
+import ScanService
 
-typealias RecipientDataAction = ((RecipientData) -> Void)?
+public typealias RecipientDataAction = ((RecipientData) -> Void)?
 
 @Observable
 @MainActor
-final class RecipientSceneViewModel {
+public final class RecipientSceneViewModel {
     let keystore: any Keystore
     let walletsService: WalletsService
     let nodeService: NodeService
     let stakeService: StakeService
+    let scanService: ScanService
 
     let wallet: Wallet
     let asset: Asset
@@ -41,7 +43,7 @@ final class RecipientSceneViewModel {
     var amount: String = ""
     var addressInputModel: InputValidationViewModel
 
-    init(
+    public init(
         wallet: Wallet,
         asset: Asset,
         keystore: any Keystore,
@@ -49,6 +51,7 @@ final class RecipientSceneViewModel {
         walletsService: WalletsService,
         nodeService: NodeService,
         stakeService: StakeService,
+        scanService: ScanService,
         type: RecipientAssetType,
         onRecipientDataAction: RecipientDataAction,
         onTransferAction: TransferDataAction
@@ -61,6 +64,7 @@ final class RecipientSceneViewModel {
         self.keystore = keystore
         self.nodeService = nodeService
         self.stakeService = stakeService
+        self.scanService = scanService
 
         self.type = type
         self.onRecipientDataAction = onRecipientDataAction

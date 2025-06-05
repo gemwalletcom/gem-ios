@@ -16,8 +16,33 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Components", path: "../../Packages/Components"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
+        .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Keystore", path: "../../Packages/Keystore"),
         .package(name: "Blockchain", path: "../../Packages/Blockchain"),
+        .package(name: "Signer", path: "../../Packages/Signer"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+
+
+        .package(name: "Staking", path: "../Staking"),
+        .package(name: "QRScanner", path: "../QRScanner"),
+        .package(name: "NameResolver", path: "../NameResolver"),
+        .package(name: "WalletConnector", path: "../WalletConnector"),
+        .package(name: "InfoSheet", path: "../InfoSheet"),
+
+
+        .package(name: "ChainService", path: "../../Services/ChainService"),
+        .package(name: "WalletService", path: "../../Services/WalletService"),
+        .package(name: "WalletsService", path: "../../Services/WalletsService"),
+        .package(name: "StakeService", path: "../../Services/StakeService"),
+        .package(name: "NodeService", path: "../../Services/NodeService"),
+        .package(name: "TransactionService", path: "../../Services/TransactionService"),
+        .package(name: "ScanService", path: "../../Services/ScanService"),
+        .package(name: "BalanceService", path: "../../Services/BalanceService"),
+        .package(name: "PriceService", path: "../../Services/PriceService"),
+        .package(name: "ExplorerService", path: "../../Services/ExplorerService")
     ],
     targets: [
         .target(
@@ -25,8 +50,31 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Localization",
+                "Style",
                 "Components",
+                "PrimitivesComponents",
+                "GemstonePrimitives",
+                "Keystore",
                 "Blockchain",
+                "Signer",
+                "Preferences",
+
+                "Staking",
+                "QRScanner",
+                "NameResolver",
+                "WalletConnector",
+                "InfoSheet",
+
+                "ChainService",
+                "WalletService",
+                "WalletsService",
+                "StakeService",
+                "NodeService",
+                "TransactionService",
+                "ScanService",
+                "BalanceService",
+                "PriceService",
+                "ExplorerService"
             ],
             path: "Sources"
         ),
