@@ -184,6 +184,11 @@ public enum Images {
     public enum ErrorConent {
         public static let error = Image(.error)
     }
+    
+    public enum AssetVerification {
+        public static let orange = Image(.verificationOrange)
+        public static let red = Image(.verificationRed)
+    }
 }
 
 // MARK: - Preview

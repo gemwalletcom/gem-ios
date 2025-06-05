@@ -44,6 +44,11 @@ extension ListAssetItemView {
                 Text(symbol)
                     .textStyle(.calloutSecondary)
             }
+            if model.hasWarning {
+                Image(systemName: SystemImage.errorOccurred)
+                    .foregroundColor(Colors.red)
+                    .frame(width: .list.image, height: .list.image)
+            }
         }
     }
 
@@ -113,6 +118,7 @@ extension ListAssetItemView {
         let showBalancePrivacy: Binding<Bool>
         let name: String
         let symbol: String?
+        let hasWarning: Bool
         let assetImage: AssetImage
         let subtitleView: ListAssetItemSubtitleView
         let rightView: ListAssetItemRightView
@@ -125,6 +131,7 @@ extension ListAssetItemView {
                 showBalancePrivacy: .constant(false),
                 name: "Bitcoin",
                 symbol: "BTC",
+                hasWarning: true,
                 assetImage: AssetImage(
                     type: "ERC20",
                     imageURL: URL(string: "https://assets.gemwallet.com/blockchains/bitcoin/info/logo.png")!,

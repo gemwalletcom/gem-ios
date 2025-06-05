@@ -5,9 +5,12 @@ import Primitives
 import Components
 import Style
 import PrimitivesComponents
+import Localization
 
 struct AssetScene: View {
     private let model: AssetSceneViewModel
+    
+    @State private var isPresentingUrl: URL?
 
     init(model: AssetSceneViewModel) {
         self.model = model
@@ -47,6 +50,16 @@ struct AssetScene: View {
                     )
                 } else {
                     networkView
+                }
+                if model.scoreViewModel.hasWarning {
+                    let view = ListItemImageView(
+                        title: Localized.Transaction.status,
+                        subtitle: model.scoreViewModel.status,
+                        assetImage: model.scoreViewModel.assetImage
+                    )
+                    NavigationCustomLink(with: view) {
+                        isPresentingUrl = model.scoreViewModel.url
+                    }
                 }
             }
 
@@ -88,6 +101,7 @@ struct AssetScene: View {
                 .cleanListRow()
             }
         }
+        .safariSheet(url: $isPresentingUrl)
         .refreshable {
             await model.fetch()
         }

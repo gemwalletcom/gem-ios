@@ -8,6 +8,7 @@ import Components
 import Style
 import Localization
 import ChainService
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -45,6 +46,22 @@ final class AddTokenViewModel {
                 self.input.address = $0.isEmpty ? nil : $0
             }
         )
+    }
+    
+    var warningImageStyle: ListItemImageStyle? {
+        ListItemImageStyle(
+            assetImage: AssetImage(type: Emoji.WalletAvatar.warning.rawValue),
+            imageSize: .image.semiMedium,
+            alignment: .top,
+            cornerRadiusType: .none
+        )
+    }
+    
+    var tokenVerificationUrl: URL {
+        Docs.url(.tokenVerification)
+    }
+    var customTokenUrl: URL {
+        Docs.url(.addCustomToken)
     }
 }
 

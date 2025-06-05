@@ -169,7 +169,8 @@ extension AssetRecordInfo {
             isStakeEnabled: asset.isStakeable,
             isPinned: balance?.isPinned ?? false,
             isActive: balance?.isActive ?? true,
-            stakingApr: asset.stakingApr
+            stakingApr: asset.stakingApr,
+            rankScore: asset.rank.asInt32
         )
     }
 }

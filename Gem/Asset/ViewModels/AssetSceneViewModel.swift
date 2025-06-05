@@ -143,6 +143,10 @@ final class AssetSceneViewModel: Sendable {
             bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
         )
     }
+    
+    var scoreViewModel: AssetScoreViewModel {
+        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    }
 }
 
 

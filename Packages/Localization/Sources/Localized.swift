@@ -81,6 +81,16 @@ public enum Localized {
         public static let title = Localized.tr("Localizable", "asset.state.empty.title", fallback: "Your transactions will appear here️")
       }
     }
+    public enum Verification {
+      /// Malicious
+      public static let malicious = Localized.tr("Localizable", "asset.verification.malicious", fallback: "Malicious")
+      /// Unverified
+      public static let unverified = Localized.tr("Localizable", "asset.verification.unverified", fallback: "Unverified")
+      /// Anyone can create one - including fake or malicious tokens.
+      public static let warningMessage = Localized.tr("Localizable", "asset.verification.warning_message", fallback: "Anyone can create one - including fake or malicious tokens.")
+      /// Know What You’re Adding
+      public static let warningTitle = Localized.tr("Localizable", "asset.verification.warning_title", fallback: "Know What You’re Adding")
+    }
   }
   public enum Assets {
     /// Add Custom Token

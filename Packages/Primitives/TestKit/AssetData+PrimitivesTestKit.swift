@@ -18,7 +18,8 @@ public extension AssetData {
             isStakeEnabled: true,
             isPinned: true,
             isActive: true,
-            stakingApr: .none
+            stakingApr: .none,
+            rankScore: 50
         )
     ) -> AssetData {
         AssetData(

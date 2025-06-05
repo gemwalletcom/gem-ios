@@ -8,10 +8,12 @@ import Style
 import ChainService
 import NodeService
 import PrimitivesComponents
+import Localization
 
 struct AddTokenScene: View {
     @State private var model: AddTokenViewModel
     @State private var networksModel: NetworkSelectorViewModel
+    @State private var isPresentingUrl: URL?
 
     @FocusState private var focusedField: Field?
     enum Field: Int, Hashable {
@@ -37,6 +39,7 @@ struct AddTokenScene: View {
             )
             .frame(maxWidth: .scene.button.maxWidth)
         }
+        .toolbarInfoButton(url: model.customTokenUrl)
         .onAppear {
             focusedField = .address
         }
@@ -54,6 +57,7 @@ struct AddTokenScene: View {
         .sheet(isPresented: $model.isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
+        .safariSheet(url: $isPresentingUrl)
     }
 }
 
@@ -87,6 +91,19 @@ extension AddTokenScene {
                 .submitLabel(.search)
                 .onSubmit(fetch)
             }
+
+            Section {
+                ListItemView(
+                    title: Localized.Asset.Verification.warningTitle,
+                    titleStyle: .headline,
+                    titleExtra: Localized.Asset.Verification.warningMessage,
+                    titleStyleExtra: .bodySecondary,
+                    imageStyle: model.warningImageStyle
+                ) {
+                    isPresentingUrl = model.tokenVerificationUrl
+                }
+            }
+
             switch model.state {
             case .noData:
                 EmptyView()
@@ -138,11 +155,13 @@ extension AddTokenScene {
     private func onSelectPaste() {
         guard let address = UIPasteboard.general.string else { return }
         model.input.address = address
+        focusedField = nil
         fetch()
     }
 
     private func onHandleScan(_ result: String) {
         model.input.address = result
+        focusedField = nil
         fetch()
     }
 
@@ -161,11 +180,4 @@ extension AddTokenScene {
             await model.fetch()
         }
     }
-}
-
-// MARK: - Previews
-
-#Preview {
-    let service = AddTokenService.init(chainServiceFactory: ChainServiceFactory(nodeProvider: NodeService(nodeStore: .main)))
-    return AddTokenScene(model: AddTokenViewModel(wallet: .main, service: service))
 }

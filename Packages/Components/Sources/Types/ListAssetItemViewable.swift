@@ -23,6 +23,7 @@ public enum ListAssetItemAction {
 public protocol ListAssetItemViewable {
     var name: String { get }
     var symbol: String? { get }
+    var hasWarning: Bool { get }
 
     var assetImage: AssetImage { get }
 

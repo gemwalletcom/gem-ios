@@ -41,6 +41,8 @@ public struct PriceAlertItemViewModel: ListAssetItemViewable {
         )
     }
     
+    public var hasWarning: Bool { false }
+    
     // MARK: - Private
     
     private var prefixTextValue: TextValue {
