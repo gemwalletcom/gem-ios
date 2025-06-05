@@ -7,16 +7,16 @@ import Style
 import PrimitivesComponents
 import Localization
 
-struct AssetScene: View {
+public struct AssetScene: View {
     private let model: AssetSceneViewModel
     
     @State private var isPresentingUrl: URL?
 
-    init(model: AssetSceneViewModel) {
+    public init(model: AssetSceneViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section { } header: {
                 WalletHeaderView(

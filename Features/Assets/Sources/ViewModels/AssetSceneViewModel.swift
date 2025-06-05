@@ -1,6 +1,5 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Primitives
 import SwiftUI
 import Components
@@ -14,12 +13,11 @@ import AssetsService
 import TransactionsService
 import WalletsService
 import PriceService
-import InfoSheet
 import BannerService
 
 @Observable
 @MainActor
-final class AssetSceneViewModel: Sendable {
+public final class AssetSceneViewModel: Sendable {
     private let walletsService: WalletsService
     private let assetsService: AssetsService
     private let transactionsService: TransactionsService
@@ -30,20 +28,20 @@ final class AssetSceneViewModel: Sendable {
     private let preferences: ObservablePreferences = .default
 
     let explorerService: ExplorerService = .standard
-    let priceAlertService: PriceAlertService
+    public let priceAlertService: PriceAlertService
 
     private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
 
-    var isPresentingOptions: Bool?
-    var isPresentingToastMessage: String?
-    var isPresentingAssetSheet: AssetSheetType?
+    public var isPresentingOptions: Bool?
+    public var isPresentingToastMessage: String?
+    public var isPresentingAssetSheet: AssetSheetType?
 
-    var input: AssetSceneInput
-    var assetData: AssetData
-    var transactions: [TransactionExtended] = []
-    var banners: [Banner] = []
+    public var input: AssetSceneInput
+    public var assetData: AssetData
+    public var transactions: [TransactionExtended] = []
+    public var banners: [Banner] = []
 
-    init(
+    public init(
         walletsService: WalletsService,
         assetsService: AssetsService,
         transactionsService: TransactionsService,
@@ -65,9 +63,9 @@ final class AssetSceneViewModel: Sendable {
         _isPresentingAssetSelectedInput = isPresentingAssetSelectedInput
     }
 
-    var title: String { assetModel.name }
-    var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
-    var viewTokenOnTitle: String? {
+    public var title: String { assetModel.name }
+    public var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
+    public var viewTokenOnTitle: String? {
         if let link = tokenLink {
             return Localized.Asset.viewTokenOn(link.name)
         }
@@ -77,12 +75,6 @@ final class AssetSceneViewModel: Sendable {
     var networkTitle: String { Localized.Transfer.network }
     var stakeTitle: String { Localized.Wallet.stake }
 
-    var addImage: Image { Images.System.plus }
-    var optionsImage: Image { Images.System.ellipsis }
-    var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
-    var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
-
-    var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
     var canOpenNetwork: Bool { assetDataModel.asset.type != .native }
     var showBalances: Bool { assetDataModel.showBalances }
     var showStakedBalance: Bool { assetDataModel.isStakeEnabled }
@@ -90,9 +82,8 @@ final class AssetSceneViewModel: Sendable {
     var showTransactions: Bool { transactions.isNotEmpty }
 
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
-    var shareAssetUrl: URL { DeepLink.asset(assetDataModel.asset.id).url }
-    var addressExplorerUrl: URL { addressLink.url }
-    var tokenExplorerUrl: URL? { tokenLink?.url }
+
+    public var tokenExplorerUrl: URL? { tokenLink?.url }
 
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
@@ -115,20 +106,12 @@ final class AssetSceneViewModel: Sendable {
         EmptyContentTypeViewModel(type: .asset(symbol: assetModel.symbol, buy: onSelectBuy))
     }
 
-    var assetModel: AssetViewModel {
-        AssetViewModel(asset: assetData.asset)
-    }
-
     var assetDataModel: AssetDataViewModel {
         AssetDataViewModel(
             assetData: assetData,
             formatter: .medium,
             currencyCode: preferences.preferences.currency
         )
-    }
-
-    var walletModel: WalletViewModel {
-        WalletViewModel(wallet: input.wallet)
     }
 
     var assetHeaderModel: AssetHeaderViewModel {
@@ -143,6 +126,19 @@ final class AssetSceneViewModel: Sendable {
             bannerEventsViewModel: HeaderBannerEventViewModel(events: allBanners.map(\.event))
         )
     }
+
+    public var shareAssetUrl: URL { DeepLink.asset(assetDataModel.asset.id).url }
+    public var addressExplorerUrl: URL { addressLink.url }
+
+    public var assetModel: AssetViewModel { AssetViewModel(asset: assetData.asset) }
+    public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
+
+    public var addImage: Image { Images.System.plus }
+    public var optionsImage: Image { Images.System.ellipsis }
+    public var priceAlertsSystemImage: String { assetData.isPriceAlertsEnabled ? SystemImage.bellFill : SystemImage.bell }
+    public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
+
+    public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
     
     var scoreViewModel: AssetScoreViewModel {
         AssetScoreViewModel(score: assetData.metadata.rankScore)
@@ -229,11 +225,29 @@ extension AssetSceneViewModel {
         )
     }
 
-    func onSelectSetPriceAlerts() {
+    public func onSelectShareAsset() {
+        isPresentingAssetSheet = .share
+    }
+
+    public func onSelect(url: URL?) {
+        guard let url else { return }
+        isPresentingAssetSheet = .url(url)
+    }
+
+    public func onTransferComplete() {
+        isPresentingAssetSheet = .none
+    }
+
+    public func onSetPriceAlertComplete(message: String) {
+        isPresentingAssetSheet = .none
+        isPresentingToastMessage = message
+    }
+
+    public func onSelectSetPriceAlerts() {
         isPresentingAssetSheet = .setPriceAlert
     }
 
-    func onTogglePriceAlert() {
+    public func onTogglePriceAlert() {
         Task {
             if assetData.isPriceAlertsEnabled {
                 isPresentingToastMessage = Localized.PriceAlerts.disabledFor(assetData.asset.name)
@@ -245,26 +259,8 @@ extension AssetSceneViewModel {
         }
     }
 
-    func onSelectOptions() {
+    public func onSelectOptions() {
         isPresentingOptions = true
-    }
-
-    func onSelectShareAsset() {
-        isPresentingAssetSheet = .share
-    }
-
-    func onSelect(url: URL?) {
-        guard let url else { return }
-        isPresentingAssetSheet = .url(url)
-    }
-
-    func onTransferComplete() {
-        isPresentingAssetSheet = .none
-    }
-
-    func onSetPriceAlertComplete(message: String) {
-        isPresentingAssetSheet = .none
-        isPresentingToastMessage = message
     }
 }
 

@@ -8,6 +8,7 @@ import Store
 import Components
 import InfoSheet
 import PriceAlerts
+import Assets
 
 struct AssetNavigationView: View {
     @State private var model: AssetSceneViewModel
