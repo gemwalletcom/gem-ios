@@ -6,18 +6,16 @@ import Primitives
 import Localization
 import PrimitivesComponents
 
-struct AssetsFilterViewModel {
+public struct AssetsFilterViewModel {
     private let type: SelectAssetType
     var chainsFilter: ChainsFilterViewModel
 
-    init(type: SelectAssetType, model: ChainsFilterViewModel) {
+    public init(type: SelectAssetType, model: ChainsFilterViewModel) {
         self.type = type
         self.chainsFilter = model
     }
 
-    var isAnyFilterSpecified: Bool {
-        chainsFilter.isAnySelected
-    }
+    public var isAnyFilterSpecified: Bool { chainsFilter.isAnySelected }
 
     var defaultFilters: [AssetsRequestFilter] {
         switch type {

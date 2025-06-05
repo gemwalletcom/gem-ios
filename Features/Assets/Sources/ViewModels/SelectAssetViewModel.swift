@@ -13,24 +13,26 @@ import PriceAlertService
 
 @Observable
 @MainActor
-final class SelectAssetViewModel {
+public final class SelectAssetViewModel {
     let preferences: Preferences
-    let wallet: Wallet
     let selectType: SelectAssetType
     let assetsService: AssetsService
     let walletsService: WalletsService
     let priceAlertService: PriceAlertService
 
+    public let wallet: Wallet
+
     var state: StateViewType<[AssetBasic]> = .noData
-    var filterModel: AssetsFilterViewModel
     var searchModel: SelectAssetSearchViewModel
     var request: AssetsRequest
 
-    var onSelectAssetAction: AssetAction
     var isSearching: Bool = false
     var isDismissSearch: Bool = false
 
-    init(
+    public var filterModel: AssetsFilterViewModel
+    public var onSelectAssetAction: AssetAction
+
+    public init(
         preferences: Preferences = Preferences.standard,
         wallet: Wallet,
         selectType: SelectAssetType,
@@ -55,7 +57,7 @@ final class SelectAssetViewModel {
         )
         self.filterModel = filter
         self.searchModel = SelectAssetSearchViewModel(selectType: selectType)
-        
+
         self.request = AssetsRequest(
             walletId: wallet.id,
             filters: filter.defaultFilters
@@ -80,16 +82,16 @@ final class SelectAssetViewModel {
         case .priceAlert: Localized.Assets.selectAsset
         }
     }
-    
+
     var enablePopularSection: Bool {
         [.buy, .priceAlert].contains(selectType)
     }
 
-    var showAddToken: Bool {
+    public var showAddToken: Bool {
         selectType == .manage && wallet.hasTokenSupport && !filterModel.chainsFilter.isEmpty
     }
 
-    var showFilter: Bool {
+    public var showFilter: Bool {
         switch selectType {
         case .receive(let type):
             switch type {
@@ -113,7 +115,7 @@ final class SelectAssetViewModel {
         case .send: return false
         }
     }
-    
+
     var shouldShowTagFilter: Bool {
         searchModel.searchableQuery.isEmpty
     }
@@ -153,7 +155,7 @@ extension SelectAssetViewModel {
             tag: nil
         )
     }
-    
+
     func handleAction(assetId: AssetId, enabled: Bool) async {
         switch selectType {
         case .manage:
@@ -163,7 +165,7 @@ extension SelectAssetViewModel {
         case .send, .receive, .buy, .swap: break
         }
     }
-    
+
     func setSelected(tag: AssetTag) {
         isDismissSearch.toggle()
         searchModel.tagsViewModel.setSelectedTag(tag)
@@ -177,12 +179,12 @@ extension SelectAssetViewModel {
             )
         }
     }
-    
+
     func updateRequest() {
         request.searchBy = searchModel.priorityAssetsQuery.or(.empty)
         state = isNetworkSearchEnabled ? .loading : .noData
     }
-    
+
     func onChangeFocus(_: Bool, isSearchable: Bool) {
         if isSearchable {
             searchModel.focus = .search
@@ -228,7 +230,7 @@ extension SelectAssetViewModel {
             await handle(error: error)
         }
     }
-    
+
     private func setPriceAlert(assetId: AssetId, enabled: Bool) async {
         do {
             let currency = Preferences.standard.currency
@@ -241,7 +243,7 @@ extension SelectAssetViewModel {
             await handle(error: error)
         }
     }
-    
+
     private func handle(error: any Error) async {
         await MainActor.run { [self] in
             if !error.isCancelled {
@@ -258,8 +260,8 @@ extension SelectAssetType {
     var listType: AssetListType {
         switch self {
         case .send,
-            .buy,
-            .swap: .view
+                .buy,
+                .swap: .view
         case .receive: .copy
         case .manage: .manage
         case .priceAlert: .price

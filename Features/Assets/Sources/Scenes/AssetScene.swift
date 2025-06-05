@@ -6,14 +6,14 @@ import Components
 import Style
 import PrimitivesComponents
 
-struct AssetScene: View {
+public struct AssetScene: View {
     private let model: AssetSceneViewModel
 
-    init(model: AssetSceneViewModel) {
+    public init(model: AssetSceneViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         List {
             Section { } header: {
                 WalletHeaderView(

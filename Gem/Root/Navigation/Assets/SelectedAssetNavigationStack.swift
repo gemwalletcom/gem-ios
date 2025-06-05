@@ -9,6 +9,7 @@ import FiatConnect
 import PrimitivesComponents
 import PriceAlerts
 import Swap
+import Assets
 
 struct SelectedAssetNavigationStack: View  {
     @Environment(\.keystore) private var keystore

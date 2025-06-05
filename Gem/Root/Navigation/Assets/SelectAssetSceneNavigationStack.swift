@@ -8,6 +8,7 @@ import Localization
 import FiatConnect
 import PrimitivesComponents
 import Keystore
+import Assets
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService

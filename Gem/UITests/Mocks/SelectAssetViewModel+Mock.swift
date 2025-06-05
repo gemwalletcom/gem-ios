@@ -4,6 +4,7 @@ import Foundation
 import Store
 import Primitives
 import WalletsServiceTestKit
+import Assets
 
 extension SelectAssetViewModel {
     static func mock(
