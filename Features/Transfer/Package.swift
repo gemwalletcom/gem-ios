@@ -25,13 +25,11 @@ let package = Package(
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
 
-
         .package(name: "Staking", path: "../Staking"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "WalletConnector", path: "../WalletConnector"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
-
 
         .package(name: "ChainService", path: "../../Services/ChainService"),
         .package(name: "WalletService", path: "../../Services/WalletService"),
