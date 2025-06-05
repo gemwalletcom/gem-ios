@@ -46,7 +46,7 @@ public enum AssetScoreViewModel {
         }
     }
 
-    public var url: URL {
+    public var docsUrl: URL {
         Docs.url(.tokenVerification)
     }
 }

@@ -58,7 +58,7 @@ struct AssetScene: View {
                         assetImage: model.scoreViewModel.assetImage
                     )
                     NavigationCustomLink(with: view) {
-                        isPresentingUrl = model.scoreViewModel.url
+                        isPresentingUrl = model.scoreViewModel.docsUrl
                     }
                 }
             }
