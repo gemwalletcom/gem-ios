@@ -9,6 +9,7 @@ import FiatConnect
 import PrimitivesComponents
 import Keystore
 import Assets
+import Transfer
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -75,6 +76,7 @@ struct SelectAssetSceneNavigationStack: View {
                             walletsService: walletsService,
                             nodeService: nodeService,
                             stakeService: stakeService,
+                            scanService: .main,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)

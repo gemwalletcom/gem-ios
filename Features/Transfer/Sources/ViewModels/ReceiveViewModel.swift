@@ -6,7 +6,7 @@ import PrimitivesComponents
 import WalletsService
 import Components
 
-struct ReceiveViewModel: Sendable {
+public struct ReceiveViewModel: Sendable {
     let qrWidth: CGFloat = 300
     
     let assetModel: AssetViewModel
@@ -14,7 +14,20 @@ struct ReceiveViewModel: Sendable {
     let address: String
     let walletsService: WalletsService
     let generator = QRCodeGenerator()
-    
+
+    public init(
+        assetModel: AssetViewModel,
+        walletId: WalletId,
+        address: String,
+        generator: QRCodeGenerator = QRCodeGenerator(),
+        walletsService: WalletsService
+    ) {
+        self.assetModel = assetModel
+        self.walletId = walletId
+        self.address = address
+        self.walletsService = walletsService
+    }
+
     var title: String {
         Localized.Receive.title(assetModel.symbol)
     }

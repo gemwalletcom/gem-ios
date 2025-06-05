@@ -3,17 +3,16 @@
 import Foundation
 import SwiftUI
 import Primitives
-import struct Staking.StakeValidatorsScene
-import class Staking.StakeValidatorsViewModel
+import Staking
 
-struct AmountNavigationView: View {
+public struct AmountNavigationView: View {
     @State private var model: AmountSceneViewModel
 
-    init(model: AmountSceneViewModel) {
+    public init(model: AmountSceneViewModel) {
         _model = State(initialValue: model)
     }
 
-    var body: some View {
+    public var body: some View {
         AmountScene(
             model: model
         )

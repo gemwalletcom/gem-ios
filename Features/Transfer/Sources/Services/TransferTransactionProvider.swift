@@ -3,8 +3,6 @@
 import Blockchain
 import Primitives
 import ScanService
-import Transfer
-import ScanService
 import BigInt
 
 public protocol TransferTransactionProvidable: Sendable {

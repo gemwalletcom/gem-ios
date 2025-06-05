@@ -55,6 +55,7 @@ struct StakeNavigationView: View {
                     keystore: keystore,
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.chain),
+                    scanService: .main,
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

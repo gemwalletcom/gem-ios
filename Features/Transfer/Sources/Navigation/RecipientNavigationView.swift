@@ -6,12 +6,12 @@ import Primitives
 import ChainService
 import QRScanner
 
-struct RecipientNavigationView: View {
+public struct RecipientNavigationView: View {
     @State private var model: RecipientSceneViewModel
 
     private let onComplete: VoidAction
 
-    init(
+    public init(
         model: RecipientSceneViewModel,
         onComplete: VoidAction
     ) {
@@ -19,7 +19,7 @@ struct RecipientNavigationView: View {
         self.onComplete = onComplete
     }
 
-    var body: some View {
+    public var body: some View {
         RecipientScene(
             model: model
         )
@@ -47,6 +47,7 @@ struct RecipientNavigationView: View {
                     keystore: model.keystore,
                     chainService: ChainServiceFactory(nodeProvider: model.nodeService)
                         .service(for: data.chain),
+                    scanService: model.scanService,
                     walletsService: model.walletsService,
                     onComplete: onComplete
                 )

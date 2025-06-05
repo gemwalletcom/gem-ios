@@ -4,12 +4,13 @@ import SwiftUI
 import Primitives
 import Localization
 import WalletConnector
+import Transfer
 
 struct WalletConnectorNavigationStack: View {
-    @Environment(\.keystore) var keystore
-    @Environment(\.chainServiceFactory) var chainServiceFactory
-    @Environment(\.walletsService) var walletsService
-    @Environment(\.connectionsService) var connectionsService
+    @Environment(\.keystore) private var keystore
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
+    @Environment(\.walletsService) private var walletsService
+    @Environment(\.connectionsService) private var connectionsService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -34,6 +35,7 @@ struct WalletConnectorNavigationStack: View {
                             keystore: keystore,
                             chainService: chainServiceFactory
                                 .service(for: data.payload.tranferData.chain),
+                            scanService: .main,
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }

@@ -7,6 +7,7 @@ import Components
 import InfoSheet
 import Swap
 import Assets
+import Transfer
 
 struct SwapNavigationView: View {
     @Environment(\.nodeService) private var nodeService
@@ -42,6 +43,7 @@ struct SwapNavigationView: View {
                         keystore: model.keystore,
                         chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
+                        scanService: .main,
                         walletsService: model.walletsService,
                         onComplete: {
                             onSwapComplete(type: data.type)
