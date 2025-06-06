@@ -90,18 +90,6 @@ extension AddTokenScene {
                 .onSubmit(fetch)
             }
 
-            Section {
-                ListItemView(
-                    title: Localized.Asset.Verification.warningTitle,
-                    titleStyle: .headline,
-                    titleExtra: Localized.Asset.Verification.warningMessage,
-                    titleStyleExtra: .bodySecondary,
-                    imageStyle: model.warningImageStyle
-                ) {
-                    isPresentingUrl = model.tokenVerificationUrl
-                }
-            }
-
             switch model.state {
             case .noData:
                 EmptyView()
@@ -128,6 +116,18 @@ extension AddTokenScene {
                     errorSystemNameImage: model.errorSystemImage,
                     error: error
                 )
+            }
+            
+            Section {
+                ListItemView(
+                    title: Localized.Asset.Verification.warningTitle,
+                    titleStyle: .headline,
+                    titleExtra: Localized.Asset.Verification.warningMessage,
+                    titleStyleExtra: .bodySecondary,
+                    imageStyle: model.warningImageStyle
+                ) {
+                    isPresentingUrl = model.tokenVerificationUrl
+                }
             }
         }
     }

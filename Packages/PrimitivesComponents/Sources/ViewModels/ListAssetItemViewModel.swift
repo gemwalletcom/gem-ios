@@ -62,13 +62,6 @@ public struct ListAssetItemViewModel: ListAssetItemViewable {
             return assetDataModel.symbol
         }
     }
-    
-    public var hasWarning: Bool {
-        switch type {
-        case .wallet: assetDataModel.hasWarning
-        case .copy, .manage, .price, .view: false
-        }
-    }
 
     public var subtitleView: ListAssetItemSubtitleView {
         switch type {

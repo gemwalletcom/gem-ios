@@ -54,10 +54,6 @@ public struct AssetDataViewModel: Sendable {
     public var symbol: String {
         assetData.asset.symbol
     }
-    
-    public var hasWarning: Bool {
-        AssetScoreViewModel(score: assetData.metadata.rankScore).hasWarning
-    }
 
     // price
 
