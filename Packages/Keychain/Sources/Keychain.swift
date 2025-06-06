@@ -1,155 +1,44 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import Security
 import LocalAuthentication
 
-// Adapted from: https://github.com/kishikawakatsumi/KeychainAccess/blob/master/Lib/KeychainAccess/Keychain.swift
+public protocol Keychain: Sendable {
+    func accessibility(_ accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain
+    func authenticationContext(_ authenticationContext: LAContext) -> Keychain
 
-public final class Keychain: Sendable {
-    fileprivate let options: Options
+    func get(_ key: String, ignoringAttributeSynchronizable: Bool) throws -> String?
+    func getString(_ key: String, ignoringAttributeSynchronizable: Bool) throws -> String?
+    func getData(_ key: String, ignoringAttributeSynchronizable: Bool) throws -> Data?
 
-    // MARK: - Constructors
+    func set(_ value: String, key: String, ignoringAttributeSynchronizable: Bool) throws
+    func set(_ value: Data, key: String, ignoringAttributeSynchronizable: Bool) throws
 
-    public convenience init() {
-        var options = Options()
-        if let bundleIdentifier = Bundle.main.bundleIdentifier {
-            options.service = bundleIdentifier
-        }
-        self.init(options)
+    func remove(_ key: String, ignoringAttributeSynchronizable: Bool) throws
+}
+
+public extension Keychain {
+    func get(_ key: String) throws -> String? {
+        try get(key, ignoringAttributeSynchronizable: true)
     }
 
-    fileprivate init(_ opts: Options) {
-        options = opts
+    func getString(_ key: String) throws -> String? {
+        try getString(key, ignoringAttributeSynchronizable: true)
     }
 
-    // MARK: - Public (Set Options) methods
-
-    public func accessibility(_ accessibility: Accessibility, authenticationPolicy: AuthenticationPolicy) -> Keychain {
-        var options = self.options
-        options.accessibility = accessibility
-        options.authenticationPolicy = authenticationPolicy
-        return Keychain(options)
+    func getData(_ key: String) throws -> Data? {
+        try getData(key, ignoringAttributeSynchronizable: true)
     }
 
-    public func authenticationContext(_ authenticationContext: LAContext) -> Keychain {
-        var options = self.options
-        options.authenticationContext = authenticationContext
-        return Keychain(options)
+    func set(_ value: String, key: String) throws {
+        try set(value, key: key, ignoringAttributeSynchronizable: true)
     }
 
-    // MARK: - Public (get) methods
-
-    public func get(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
-        try getString(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
+    func set(_ value: Data, key: String) throws {
+        try set(value, key: key, ignoringAttributeSynchronizable: true)
     }
 
-    public func getString(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> String? {
-        guard let data = try getData(key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable) else  {
-            return nil
-        }
-        guard let string = String(data: data, encoding: .utf8) else {
-            print("failed to convert data to string")
-            throw Status.conversionError
-        }
-        return string
-    }
-
-    public func getData(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws -> Data? {
-        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
-
-        query[MatchLimit] = MatchLimitOne
-        query[ReturnData] = kCFBooleanTrue
-
-        query[AttributeAccount] = key
-
-        var result: AnyObject?
-        let status = SecItemCopyMatching(query as CFDictionary, &result)
-
-        switch status {
-        case errSecSuccess:
-            guard let data = result as? Data else {
-                throw Status.unexpectedError
-            }
-            return data
-        case errSecItemNotFound:
-            return nil
-        default:
-            throw securityError(status: status)
-        }
-    }
-
-    // MARK: - Public (set) methods
-
-    public func set(_ value: String, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
-        guard let data = value.data(using: .utf8, allowLossyConversion: false) else {
-            print("failed to convert string to data")
-            throw Status.conversionError
-        }
-        try set(data, key: key, ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
-    }
-
-    public func set(_ value: Data, key: String, ignoringAttributeSynchronizable: Bool = true) throws {
-        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
-        query[AttributeAccount] = key
-        
-        var status = SecItemCopyMatching(query as CFDictionary, nil)
-        switch status {
-        case errSecSuccess, errSecInteractionNotAllowed:
-            var query = options.query()
-            query[AttributeAccount] = key
-            
-            var (attributes, error) = options.attributes(key: nil, value: value)
-            if let error = error {
-                print(error.localizedDescription)
-                throw error
-            }
-            
-            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
-            
-            status = SecItemUpdate(query as CFDictionary, attributes as CFDictionary)
-            if status != errSecSuccess {
-                throw securityError(status: status)
-            }
-        case errSecItemNotFound:
-            var (attributes, error) = options.attributes(key: key, value: value)
-            if let error = error {
-                print(error.localizedDescription)
-                throw error
-            }
-            
-            options.attributes.forEach { attributes.updateValue($1, forKey: $0) }
-            
-            status = SecItemAdd(attributes as CFDictionary, nil)
-            if status != errSecSuccess {
-                throw securityError(status: status)
-            }
-        default:
-            throw securityError(status: status)
-        }
-    }
-
-    // MARK: - Public (remove) methods
-
-    public func remove(_ key: String, ignoringAttributeSynchronizable: Bool = true) throws {
-        var query = options.query(ignoringAttributeSynchronizable: ignoringAttributeSynchronizable)
-        query[AttributeAccount] = key
-
-        let status = SecItemDelete(query as CFDictionary)
-        if status != errSecSuccess && status != errSecItemNotFound {
-            throw securityError(status: status)
-        }
-    }
-
-    // MARK: - Error methods
-
-    @discardableResult
-    fileprivate class func securityError(status: OSStatus) -> Error {
-        Status(status: status)
-    }
-
-    @discardableResult
-    fileprivate func securityError(status: OSStatus) -> Error {
-        type(of: self).securityError(status: status)
+    func remove(_ key: String) throws {
+        try remove(key, ignoringAttributeSynchronizable: true)
     }
 }

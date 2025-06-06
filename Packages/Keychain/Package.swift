@@ -11,14 +11,26 @@ let package = Package(
             name: "Keychain",
             targets: ["Keychain"]
         ),
+        .library(
+            name: "KeychainTestKit",
+            targets: ["KeychainTestKit"]
+        )
     ],
     targets: [
         .target(
             name: "Keychain",
             path: "Sources"
         ),
+        .target(
+            name: "KeychainTestKit",
+            dependencies: ["Keychain"],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "KeychainTests",
+            dependencies: [
+                "Keychain"
+            ],
             path: "Tests"
         ),
     ]
