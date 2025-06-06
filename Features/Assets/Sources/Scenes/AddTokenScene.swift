@@ -5,11 +5,9 @@ import Components
 import QRScanner
 import Primitives
 import Style
-import ChainService
-import NodeService
 import PrimitivesComponents
 
-struct AddTokenScene: View {
+public struct AddTokenScene: View {
     @State private var model: AddTokenViewModel
     @State private var networksModel: NetworkSelectorViewModel
 
@@ -20,13 +18,13 @@ struct AddTokenScene: View {
 
     var action: ((Asset) -> Void)?
 
-    init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
+    public init(model: AddTokenViewModel, action: ((Asset) -> Void)? = nil) {
         _model = State(initialValue: model)
         _networksModel = State(initialValue: NetworkSelectorViewModel(state: .data(.plain(model.chains))))
         self.action = action
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             addTokenList
             Spacer()
@@ -161,11 +159,4 @@ extension AddTokenScene {
             await model.fetch()
         }
     }
-}
-
-// MARK: - Previews
-
-#Preview {
-    let service = AddTokenService.init(chainServiceFactory: ChainServiceFactory(nodeProvider: NodeService(nodeStore: .main)))
-    return AddTokenScene(model: AddTokenViewModel(wallet: .main, service: service))
 }

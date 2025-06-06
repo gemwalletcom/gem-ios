@@ -104,13 +104,13 @@ public struct XrpSigner: Signable {
                         "Memos": [
                             {
                                 "Memo": {
-                                    "MemoData": "\(swapData.data.remove0x)"
+                                    "MemoData": "\(Data(swapData.data.remove0x.utf8).hexString.remove0x)"
                                 }
                             }
                         ]
                     }
                 """
-        
+
             return [
                 try sign(
                     input: input,

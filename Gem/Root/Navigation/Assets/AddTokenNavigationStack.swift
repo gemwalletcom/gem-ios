@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Localization
 import ChainService
+import Assets
 
 struct AddTokenNavigationStack: View {
     
