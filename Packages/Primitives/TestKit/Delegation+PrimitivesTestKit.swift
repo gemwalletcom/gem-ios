@@ -5,11 +5,12 @@ import Primitives
 
 public extension Delegation {
     static func mock(
-        state: DelegationState
+        state: DelegationState,
+        validator: DelegationValidator = .mock()
     ) -> Delegation {
         Delegation(
             base: .mock(state: state),
-            validator: .mock(),
+            validator: validator,
             price: nil
         )
     }

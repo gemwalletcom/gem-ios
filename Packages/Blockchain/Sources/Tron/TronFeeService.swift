@@ -12,8 +12,8 @@ struct TronFeeService: Sendable {
         parameters: [TronChainParameter],
         isNewAccount: Bool
     ) throws -> BigInt {
-        let newAccountFee = try getValue(from: parameters, for: .getCreateAccountFee)
-        let newAccountFeeInSmartContract = try getValue(from: parameters, for: .getCreateNewAccountFeeInSystemContract)
+        let newAccountFee = try parameters.value(for: .getCreateAccountFee)
+        let newAccountFeeInSmartContract = try parameters.value(for: .getCreateNewAccountFeeInSystemContract)
 
         let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
         let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
@@ -27,8 +27,8 @@ struct TronFeeService: Sendable {
         gasLimit: BigInt,
         isNewAccount: Bool
     ) throws -> BigInt {
-        let energyFee = try getValue(from: parameters, for: .getEnergyFee)
-        let newAccountFeeInSmartContract = try getValue(from: parameters, for: .getCreateNewAccountFeeInSystemContract)
+        let energyFee = try parameters.value(for: .getEnergyFee)
+        let newAccountFeeInSmartContract = try parameters.value(for: .getCreateNewAccountFeeInSystemContract)
         
         let availableEnergy = BigInt(accountUsage.EnergyLimit ?? 0) - BigInt(accountUsage.EnergyUsed ?? 0)
         let energyShortfall = max(BigInt.zero, gasLimit.increase(byPercent: 20) - availableEnergy)
@@ -57,12 +57,12 @@ struct TronFeeService: Sendable {
             return availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
         }
     }
-    
-    // MARK: - Private methods
-    
-    private func getValue(from parameters: [TronChainParameter], for key: TronChainParameterKey) throws -> Int64 {
-        guard let value = parameters.first(where: { $0.key == key.rawValue })?.value else {
-            throw AnyError("Unknown tron chain parameter key: \(key)")
+}
+
+extension Collection where Element == TronChainParameter {
+    func value(for key: TronChainParameterKey) throws -> Int64 {
+        guard let value = first(where: { $0.key == key.rawValue })?.value else {
+            throw AnyError("Unknown Tron chain parameter key: \(key)")
         }
         return value
     }
