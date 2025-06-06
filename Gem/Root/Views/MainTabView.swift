@@ -111,7 +111,6 @@ struct MainTabView: View {
             }
             .tag(TabItem.settings)
         }
-        .adaptiveContentMargins()
         .onChange(of: model.walletId, onWalletIdChange)
         .onChange(
             of: notificationHandler.notifications,
