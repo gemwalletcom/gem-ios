@@ -6,6 +6,7 @@ import NFT
 import Primitives
 import Components
 import Localization
+import struct Assets.SelectedAssetInput
 
 struct CollectibleNavigationView: View {
     

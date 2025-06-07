@@ -17,6 +17,7 @@ import WalletTabTestKit
 // Features
 import Onboarding
 import WalletTab
+import Assets
 
 public struct LaunchEnvironmentView: View {
     let launchEnvironment: UITestLaunchScenario

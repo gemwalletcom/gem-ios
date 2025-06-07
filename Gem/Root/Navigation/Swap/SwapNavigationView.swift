@@ -6,6 +6,7 @@ import ChainService
 import Components
 import InfoSheet
 import Swap
+import Assets
 
 struct SwapNavigationView: View {
     @Environment(\.nodeService) private var nodeService
