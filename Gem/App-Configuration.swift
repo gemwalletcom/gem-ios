@@ -48,48 +48,6 @@ extension Price {
     static let main = Price(price: 10, priceChangePercentage24h: 21, updatedAt: .now)
 }
 
-extension PriceAlert {
-    static let main = PriceAlert(
-        assetId: AssetId.main,
-        currency: Currency.usd.rawValue,
-        price: .none,
-        pricePercentChange: .none,
-        priceDirection: .none,
-        lastNotifiedAt: .none
-    )
-}
-
-extension AssetMetaData {
-    static let main = AssetMetaData(
-        isEnabled: true,
-        isBuyEnabled: true,
-        isSellEnabled: true,
-        isSwapEnabled: true,
-        isStakeEnabled: false,
-        isPinned: false,
-        isActive: true,
-        stakingApr: .none
-    )
-}
-
-extension AssetId {
-    static let main = Self.ethereum
-    static let ethereum = Chain.ethereum.assetId
-    static let bitcoin = Chain.bitcoin.assetId
-    static let smartChain = Chain.smartChain.assetId
-}
-
-extension AssetData  {
-    static let main = AssetData(
-        asset: .main,
-        balance: .main,
-        account: .main,
-        price: .main,
-        price_alerts: [],
-        metadata: .main
-    )
-}
-
 extension LocalKeystore {
     static let main = LocalKeystore()
 }
@@ -289,30 +247,6 @@ extension Account {
         address: "btc123123",
         derivationPath: "",
         extendedPublicKey: .none
-    )
-}
-
-extension Transaction {
-    static let main = Transaction(
-        id: "chain_1",
-        hash: "1",
-        assetId: .main,
-        from: "address-1",
-        to: "address-2",
-        contract: .none,
-        type: .transfer,
-        state: .confirmed,
-        blockNumber: 1.asString,
-        sequence: 1.asString,
-        fee: BigInt(1).description,
-        feeAssetId: .main,
-        value: BigInt(1).description,
-        memo: "",
-        direction: .outgoing,
-        utxoInputs: [],
-        utxoOutputs: [],
-        metadata: .null,
-        createdAt: .now
     )
 }
 

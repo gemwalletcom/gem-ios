@@ -122,15 +122,3 @@ public struct NFTData: Codable, Equatable, Hashable, Sendable {
 		self.assets = assets
 	}
 }
-
-public struct NFTImageOld: Codable {
-	public let imageUrl: String
-	public let previewImageUrl: String
-	public let originalSourceUrl: String
-
-	public init(imageUrl: String, previewImageUrl: String, originalSourceUrl: String) {
-		self.imageUrl = imageUrl
-		self.previewImageUrl = previewImageUrl
-		self.originalSourceUrl = originalSourceUrl
-	}
-}

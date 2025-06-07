@@ -54,6 +54,7 @@ public struct ListItemErrorView: View {
                     .textStyle(.subheadline)
             }
             if let retry = retryAction, let retryTitle = retryTitle {
+                Divider()
                 Button(retryTitle, action: retry)
                     .buttonStyle(.clearBlue)
             }

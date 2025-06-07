@@ -139,6 +139,10 @@ public final class AssetSceneViewModel: Sendable {
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
 
     public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
+    
+    var scoreViewModel: AssetScoreViewModel {
+        AssetScoreViewModel(score: assetData.metadata.rankScore)
+    }
 }
 
 
