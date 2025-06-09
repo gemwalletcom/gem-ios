@@ -169,6 +169,10 @@ extension SwapScene {
                 }
             }
             
+            if let swapTime = model.swapEstimation {
+                ListItemView(title: "Duration", subtitle: swapTime)
+            }
+            
             if let rateText = model.rateText {
                 ListItemImageView(
                     title: model.rateTitle,

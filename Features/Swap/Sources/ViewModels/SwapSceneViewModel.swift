@@ -49,6 +49,12 @@ public final class SwapSceneViewModel {
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
     private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
+    private var timeFormatter: DateComponentsFormatter {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .short
+        return formatter
+    }
 
     public init(
         preferences: Preferences = Preferences.standard,
@@ -87,6 +93,13 @@ public final class SwapSceneViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
 
     var providerField: String { Localized.Common.provider }
+
+    var swapEstimation: String? {
+        guard let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60 else {
+            return nil
+        }
+        return timeFormatter.string(from: TimeInterval(estimation))?.addPrefix("≈ ")
+    }
 
     var providerText: String? { selectedProvderModel?.providerText }
     var providerImage: AssetImage? { selectedProvderModel?.providerImage }
