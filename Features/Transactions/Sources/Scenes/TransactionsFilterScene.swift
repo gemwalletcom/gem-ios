@@ -84,7 +84,7 @@ extension TransactionsFilterScene {
         }
     }
 
-    private func onFinishSelection(value: SelectionResult<TransactionType>) {
+    private func onFinishSelection(value: SelectionResult<FilterType>) {
         model.transactionTypesFilter.selectedTypes = value.items
         if value.isConfirmed {
             dismiss()

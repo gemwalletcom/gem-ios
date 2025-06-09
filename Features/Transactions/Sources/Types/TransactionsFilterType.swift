@@ -5,10 +5,10 @@ import Primitives
 
 public enum TransactionsFilterType {
     case allTypes
-    case type(name: TransactionType)
-    case types(selected: [TransactionType])
+    case type(name: FilterType)
+    case types(selected: [FilterType])
 
-    public init(selectedTypes: [TransactionType]) {
+    public init(selectedTypes: [FilterType]) {
         switch selectedTypes.count {
         case 0: self = .allTypes
         case 1: self = .type(name: selectedTypes[0])

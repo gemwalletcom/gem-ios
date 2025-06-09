@@ -5,24 +5,19 @@ import Primitives
 import Localization
 
 struct TransactionTypeViewModel {
-    private let type: TransactionType
+    private let type: FilterType
 
-    init(type: TransactionType) {
+    init(type: FilterType) {
         self.type = type
     }
 
     var title: String {
         switch type {
-        case .transfer, .transferNFT: Localized.Transfer.title
-        case .swap: Localized.Wallet.swap
-        case .tokenApproval: Localized.Transfer.Approve.title
-        case .stakeDelegate: Localized.Transfer.Stake.title
-        case .stakeUndelegate: Localized.Transfer.Unstake.title
-        case .stakeRedelegate: Localized.Transfer.Redelegate.title
-        case .stakeRewards: Localized.Transfer.Rewards.title
-        case .stakeWithdraw: Localized.Transfer.Withdraw.title
-        case .assetActivation: Localized.Transfer.ActivateAsset.title
-        case .smartContractCall: Localized.Transfer.title //TODO: SmartContract
+        case .transfers: Localized.Transfer.title
+        case .smartContract: Localized.Transfer.SmartContract.title
+        case .swaps: Localized.Wallet.swap
+        case .stake: Localized.Transfer.Stake.title
+        case .others: Localized.Transfer.Other.title
         }
     }
 }
