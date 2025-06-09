@@ -6,6 +6,7 @@ import WalletConnectorService
 import Primitives
 import Localization
 import Components
+import WalletCore
 import class Gemstone.SignMessageDecoder
 
 public struct SignMessageSceneViewModel {
@@ -65,7 +66,14 @@ public struct SignMessageSceneViewModel {
     }
 
     public func signMessage() throws {
-        let signature = try keystore.sign(hash: decoder.hash(), wallet: payload.wallet, chain: payload.chain)
+        let hash = switch payload.message.signType {
+        case .eip712:
+            // temporary fix for Hyperliquid 712 encoding issue, it contains not valid Solidity type names like HyperliquidTransaction:ApproveAgent
+            EthereumAbi.encodeTyped(messageJson: String(data: payload.message.data, encoding: .utf8) ?? "")
+        default:
+            decoder.hash()
+        }
+        let signature = try keystore.sign(hash: hash, wallet: payload.wallet, chain: payload.chain)
         let result = decoder.getResult(data: signature)
         confirmTransferDelegate(.success(result))
     }
