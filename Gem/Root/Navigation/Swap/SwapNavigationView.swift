@@ -13,6 +13,8 @@ struct SwapNavigationView: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.assetsService) private var assetsService
     @Environment(\.priceAlertService) private var priceAlertService
+    @Environment(\.scanService) private var scanService
+
 
     @State private var model: SwapSceneViewModel
     @Binding private var navigationPath: NavigationPath
@@ -43,7 +45,7 @@ struct SwapNavigationView: View {
                         keystore: model.keystore,
                         chainService: ChainServiceFactory(nodeProvider: nodeService)
                             .service(for: data.chain),
-                        scanService: .main,
+                        scanService: scanService,
                         walletsService: model.walletsService,
                         onComplete: {
                             onSwapComplete(type: data.type)

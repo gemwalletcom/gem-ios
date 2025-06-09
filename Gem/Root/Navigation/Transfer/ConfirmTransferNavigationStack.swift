@@ -12,6 +12,7 @@ struct ConfirmTransferNavigationStack: View {
     @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.walletsService) private var walletsService
     @Environment(\.nodeService) private var nodeService
+    @Environment(\.scanService) private var scanService
 
     private let wallet: Wallet
     private let transferData: TransferData
@@ -36,7 +37,7 @@ struct ConfirmTransferNavigationStack: View {
                     keystore: keystore,
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: transferData.chain),
-                    scanService: .main,
+                    scanService: scanService,
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

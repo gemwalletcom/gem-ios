@@ -13,6 +13,7 @@ struct StakeNavigationView: View {
     @Environment(\.nodeService) private var nodeService
     @Environment(\.stakeService) private var stakeService
     @Environment(\.walletsService) private var walletsService
+    @Environment(\.scanService) private var scanService
 
     private let wallet: Wallet
     private let assetId: AssetId
@@ -55,7 +56,7 @@ struct StakeNavigationView: View {
                     keystore: keystore,
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: $0.chain),
-                    scanService: .main,
+                    scanService: scanService,
                     walletsService: walletsService,
                     onComplete: onComplete
                 )

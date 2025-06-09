@@ -24,6 +24,7 @@ import WalletsService
 import WalletService
 import AvatarService
 import AppService
+import ScanService
 
 extension EnvironmentValues {
     @Entry var navigationState: NavigationStateManager = .main
@@ -47,4 +48,5 @@ extension EnvironmentValues {
     @Entry var nftService: NFTService = .main
     @Entry var avatarService: AvatarService = .main
     @Entry var releaseService: AppReleaseService = .main
+    @Entry var scanService: ScanService = .main
 }

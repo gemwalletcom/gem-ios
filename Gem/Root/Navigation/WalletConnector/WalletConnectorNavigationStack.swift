@@ -11,6 +11,7 @@ struct WalletConnectorNavigationStack: View {
     @Environment(\.chainServiceFactory) private var chainServiceFactory
     @Environment(\.walletsService) private var walletsService
     @Environment(\.connectionsService) private var connectionsService
+    @Environment(\.scanService) private var scanService
 
     private let type: WalletConnectorSheetType
     private let presenter: WalletConnectorPresenter
@@ -35,7 +36,7 @@ struct WalletConnectorNavigationStack: View {
                             keystore: keystore,
                             chainService: chainServiceFactory
                                 .service(for: data.payload.tranferData.chain),
-                            scanService: .main,
+                            scanService: scanService,
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
                             onComplete: { presenter.complete(type: type) }

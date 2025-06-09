@@ -18,6 +18,7 @@ struct SelectedAssetNavigationStack: View  {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.walletService) private var walletService
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.scanService) private var scanService
 
     @State private var navigationPath = NavigationPath()
     @Binding private var isPresentingSelectedAssetInput: SelectedAssetInput?
@@ -49,7 +50,7 @@ struct SelectedAssetNavigationStack: View  {
                             walletsService: walletsService,
                             nodeService: nodeService,
                             stakeService: stakeService,
-                            scanService: .main,
+                            scanService: scanService,
                             type: type,
                             onRecipientDataAction: {
                                 navigationPath.append($0)

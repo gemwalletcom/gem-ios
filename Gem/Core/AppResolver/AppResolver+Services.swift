@@ -17,6 +17,7 @@ import TransactionService
 import WalletsService
 import WalletService
 import AppService
+import ScanService
 
 extension AppResolver {
     struct Services {
@@ -38,7 +39,8 @@ extension AppResolver {
         let walletService: WalletService
         let walletsService: WalletsService
         let explorerService: ExplorerService
-        
+        let scanService: ScanService
+
         let deviceObserverService: DeviceObserverService
         let onstartService: OnstartAsyncService
         let walletConnectorManager: WalletConnectorManager
@@ -61,6 +63,7 @@ extension AppResolver {
             walletService: WalletService,
             walletsService: WalletsService,
             explorerService: ExplorerService,
+            scanService: ScanService,
             deviceObserverService: DeviceObserverService,
             onstartService: OnstartAsyncService,
             walletConnectorManager: WalletConnectorManager
@@ -82,6 +85,7 @@ extension AppResolver {
             self.walletService = walletService
             self.walletsService = walletsService
             self.explorerService = explorerService
+            self.scanService = scanService
             self.deviceObserverService = deviceObserverService
             self.onstartService = onstartService
             self.walletConnectorManager = walletConnectorManager
