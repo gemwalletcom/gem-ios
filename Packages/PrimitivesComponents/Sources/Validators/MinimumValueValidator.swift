@@ -3,22 +3,21 @@
 import Foundation
 import Primitives
 
-public struct MinimumValueValidator<Value>: ValueValidator
-where Value: ValueValidatable
+public struct MinimumValueValidator<V>: ValueValidator where V: ValueValidatable
 {
-    private let minimumValue: Value
+    private let minimumValue: V
     private let minimumValueText: String
 
-    public init(minimumValue: Value, minimumValueText: String) {
+    public init(minimumValue: V, minimumValueText: String) {
         self.minimumValue = minimumValue
         self.minimumValueText = minimumValueText
     }
 
-    public func validate(_ value: Value) throws {
+    public func validate(_ value: V) throws {
         guard value >= minimumValue else {
             throw TransferError.minimumAmount(string: minimumValueText)
         }
     }
 
-    public var id: String { "MinimumValueValidator<\(Value.self)>" }
+    public var id: String { "MinimumValueValidator<\(V.self)>" }
 }

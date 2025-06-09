@@ -16,10 +16,16 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "SwapService", path: "../../Services/SwapService"),
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
+        .package(name: "Store", path: "../../Packages/Store"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "WalletsService", path: "../../Services/WalletsService"),
+        .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
+        .package(name: "InfoSheet", path: "../InfoSheet")
     ],
     targets: [
         .target(
@@ -28,10 +34,16 @@ let package = Package(
                 "Primitives",
                 "Components",
                 "GemstonePrimitives",
+                "Gemstone",
                 "Localization",
                 "SwapService",
                 "Signer",
-                "Keystore"
+                "Keystore",
+                "Store",
+                "Preferences",
+                "WalletsService",
+                "PrimitivesComponents",
+                "InfoSheet"
             ],
             path: "Sources"
         ),

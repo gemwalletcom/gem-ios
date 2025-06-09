@@ -143,8 +143,8 @@ extension StellarService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension StellarService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension StellarService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let fee: Fee = {
             if input.preload.isDestinationAddressExist { input.defaultFee } else {
                 Fee(
@@ -156,7 +156,7 @@ extension StellarService: ChainTransactionLoadable {
             }
         }()
         
-        return TransactionLoad(
+        return TransactionData(
             sequence: input.preload.sequence,
             fee: fee
         )

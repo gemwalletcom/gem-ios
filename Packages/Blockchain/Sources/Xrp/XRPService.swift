@@ -145,9 +145,9 @@ extension XRPService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension XRPService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
-        return TransactionLoad(
+extension XRPService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
+        return TransactionData(
             sequence: input.preload.sequence,
             block: SignerInputBlock(number: input.preload.blockNumber),
             fee: input.defaultFee

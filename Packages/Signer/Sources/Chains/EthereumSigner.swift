@@ -12,7 +12,7 @@ import GemstonePrimitives
 public class EthereumSigner: Signable {
 
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let base = buildBaseInput(
+        let base = try buildBaseInput(
             input: input,
             transaction: .with {
                 $0.transfer = EthereumTransaction.Transfer.with {
@@ -26,7 +26,7 @@ public class EthereumSigner: Signable {
     }
     
     public func signTokenTransfer(input: SignerInput, privateKey: Data) throws -> String {
-        let base = buildBaseInput(
+        let base = try buildBaseInput(
             input: input,
             transaction: .with {
                 $0.erc20Transfer = EthereumTransaction.ERC20Transfer.with {
@@ -63,7 +63,7 @@ public class EthereumSigner: Signable {
         case .jetton, .spl: fatalError()
         }
         
-        let base = buildBaseInput(
+        let base = try buildBaseInput(
             input: input,
             transaction: transaction,
             toAddress: try asset.getContractAddress(),
@@ -79,18 +79,14 @@ public class EthereumSigner: Signable {
         nonce: BigInt,
         gasLimit: BigInt,
         privateKey: Data
-    ) -> EthereumSigningInput {
+    ) throws -> EthereumSigningInput {
+        guard case let .eip1559(gasPrice,priorityFee) = input.fee.gasPriceType else {
+            throw AnyError("no longer supported")
+        }
         return EthereumSigningInput.with {
-            switch input.fee.gasPriceType {
-            case .regular(let gasPrice):
-                $0.txMode = .legacy
-                $0.gasPrice = gasPrice.magnitude.serialize()
-                fatalError("no longer supported")
-            case .eip1559(let gasPrice, let priorityFee):
-                $0.txMode = .enveloped
-                $0.maxFeePerGas = gasPrice.magnitude.serialize()
-                $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
-            }
+            $0.txMode = .enveloped
+            $0.maxFeePerGas = gasPrice.magnitude.serialize()
+            $0.maxInclusionFeePerGas = priorityFee.magnitude.serialize()
             $0.gasLimit = gasLimit.magnitude.serialize()
             $0.chainID = BigInt(stringLiteral: input.chainId).magnitude.serialize()
             $0.nonce = nonce.magnitude.serialize()
@@ -105,8 +101,8 @@ public class EthereumSigner: Signable {
         transaction: EthereumTransaction,
         toAddress: String,
         privateKey: Data
-    ) -> EthereumSigningInput {
-        buildBaseInputCustom(
+    ) throws -> EthereumSigningInput {
+        try buildBaseInputCustom(
             input: input,
             transaction: transaction,
             toAddress: toAddress,
@@ -129,7 +125,7 @@ public class EthereumSigner: Signable {
         guard case .generic(_, _, let extra) = input.type else {
             fatalError()
         }
-        let base = buildBaseInput(
+        let base = try buildBaseInput(
             input: input,
             transaction: .with {
                 $0.contractGeneric = EthereumTransaction.ContractGeneric.with {

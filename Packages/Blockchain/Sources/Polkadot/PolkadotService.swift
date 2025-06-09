@@ -134,8 +134,8 @@ extension PolkadotService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension PolkadotService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension PolkadotService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         async let getTransactionMaterial = try await transactionMaterial()
         async let getDestinationAccount = try await balance(address: input.destinationAddress)
         async let getNonce = BigInt(stringLiteral: balance(address: input.senderAddress).nonce)
@@ -161,7 +161,7 @@ extension PolkadotService: ChainTransactionLoadable {
         )
         let fee = try await BigInt(stringLiteral: estimateFee(tx: transactionData).partialFee)
         
-        return TransactionLoad(
+        return TransactionData(
             sequence: nonce.asInt,
             data: .polkadot(transactionPayload), block: SignerInputBlock(number: Int(transactionMaterial.at.height)!),
             fee: Fee(fee: fee, gasPriceType: input.feeInput.gasPrice, gasLimit: 1)

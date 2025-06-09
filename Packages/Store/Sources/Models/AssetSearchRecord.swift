@@ -9,7 +9,7 @@ public struct AssetSearchRecord: Codable, PersistableRecord, FetchableRecord, Ta
     
     public static let databaseTableName: String = "assets_search"
     
-    enum Columns {
+    public enum Columns {
         static let query = Column("query")
         static let assetId = Column("assetId")
         static let priority = Column("priority")

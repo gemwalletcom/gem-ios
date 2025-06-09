@@ -245,12 +245,12 @@ extension CosmosService: ChainFeeRateFetchable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension CosmosService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension CosmosService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         async let account = getAccount(address: input.senderAddress)
         async let block = getLatestCosmosBlock()
 
-        return try await TransactionLoad(
+        return try await TransactionData(
             accountNumber: Int(account.account_number) ?? 0,
             sequence: Int(account.sequence) ?? 0,
             chainId: block.header.chain_id,

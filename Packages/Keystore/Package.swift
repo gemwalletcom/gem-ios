@@ -34,7 +34,8 @@ let package = Package(
         .target(
             name: "KeystoreTestKit",
             dependencies: [
-                "Keystore"
+                "Keystore",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
             path: "TestKit"
         ),

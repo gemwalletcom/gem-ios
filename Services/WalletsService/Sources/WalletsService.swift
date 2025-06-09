@@ -155,7 +155,7 @@ extension WalletsService: BalanceUpdater {
         try await balanceUpdater.updateBalance(for: walletId, assetIds: assetIds)
     }
 
-    func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
+    public func enableBalances(for walletId: WalletId, assetIds: [AssetId]) throws {
         try balanceUpdater.enableBalances(for: walletId, assetIds: assetIds)
     }
 }

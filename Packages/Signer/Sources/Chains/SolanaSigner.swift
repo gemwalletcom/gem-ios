@@ -147,7 +147,7 @@ public struct SolanaSigner: Signable {
     
     func signRawTransaction(transaction: String, privateKey: Data) throws -> String {
         guard let transactionData = Base64.decode(string: transaction) else {
-            throw AnyError("not swap SignerInput")
+            throw AnyError("unable to decode base64 string")
         }
         let decodeOutputData = TransactionDecoder.decode(coinType: .solana, encodedTx: transactionData)
         let decodeOutput = try SolanaDecodingTransactionOutput(serializedBytes: decodeOutputData)
@@ -166,10 +166,7 @@ public struct SolanaSigner: Signable {
     }
     
     public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard 
-            case .swap(_, _, _, let swapData) = input.type else {
-            throw AnyError("not swap SignerInput")
-        }
+        let (_, _, _, swapData) = try input.type.swap()
         let price = input.fee.priorityFee
         let limit = input.fee.gasLimit
         

@@ -6,7 +6,7 @@ public struct ActivityIndicator: UIViewRepresentable {
     let style: UIActivityIndicatorView.Style
 
     public func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
-        return UIActivityIndicatorView(style: style)
+        UIActivityIndicatorView(style: style)
     }
 
     public func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
@@ -14,44 +14,36 @@ public struct ActivityIndicator: UIViewRepresentable {
     }
 }
 
-public struct ActivityIndicatorModifier: AnimatableModifier {
-    
+private struct ActivityIndicatorOverlay: ViewModifier {
+    let isLoading: Bool
     let message: String
-    var isLoading: Bool
 
-    public init(
-        message: String,
-        isLoading: Bool
-    ) {
-        self.message = message
-        self.isLoading = isLoading
-    }
-
-    public func body(content: Content) -> some View {
-        ZStack {
-            if isLoading {
-                GeometryReader { geometry in
-                    ZStack(alignment: .center) {
-                        content
-                            .disabled(self.isLoading)
-                        //    .blur(radius: self.isLoading ? 3 : 0)
-                        VStack {
+    func body(content: Content) -> some View {
+        content
+            .disabled(isLoading)
+            .overlay {
+                if isLoading {
+                    GeometryReader { geo in
+                        VStack(spacing: .small) {
                             Text(message)
                             ActivityIndicator(isAnimating: .constant(true), style: .large)
                         }
-                        .frame(width: geometry.size.width / 2,
-                               height: geometry.size.height / 5)
+                        .frame(
+                            width: geo.size.width / 2,
+                            height: geo.size.height / 5
+                        )
                         .background(Color.secondary.colorInvert())
-                        .foregroundColor(Color.primary)
+                        .foregroundColor(.primary)
                         .cornerRadius(20)
-                        .opacity(self.isLoading ? 1 : 0)
-                        .position(x: geometry.frame(in: .local).midX, y: geometry.frame(in: .local).midY)
+                        .position(
+                            x: geo.size.width / 2,
+                            y: geo.size.height / 2
+                        )
+                        .transition(.opacity.combined(with: .scale))
                     }
                 }
-            } else {
-                content
             }
-        }
+            .animation(.easeInOut(duration: 0.2), value: isLoading)
     }
 }
 
@@ -59,6 +51,6 @@ public struct ActivityIndicatorModifier: AnimatableModifier {
 
 public extension View {
     func activityIndicator(isLoading: Bool, message: String) -> some View {
-        self.modifier(ActivityIndicatorModifier(message: message, isLoading: isLoading))
+        modifier(ActivityIndicatorOverlay(isLoading: isLoading, message: message))
     }
 }

@@ -30,9 +30,9 @@ struct WalletConnectorNavigationStack: View {
                     ConfirmTransferScene(
                         model: ConfirmTransferViewModel(
                             wallet: data.payload.wallet,
-                            keystore: keystore,
                             data: data.payload.tranferData,
-                            service: chainServiceFactory
+                            keystore: keystore,
+                            chainService: chainServiceFactory
                                 .service(for: data.payload.tranferData.chain),
                             walletsService: walletsService,
                             confirmTransferDelegate: data.delegate,
