@@ -405,3 +405,11 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ is required";
+"asset.verification.unverified" = "Unverified";
+"asset.verification.malicious" = "Malicious";
+"asset.verification.warning_title" = "Know What You’re Adding";
+"asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
+"transfer.smart_contract.title" = "Smart Contract";
+"transfer.other.title" = "Other";
+"filter.has_balance" = "Tiene equilibrio";
+"swap.estimated_time.title" = "Estimated Time";

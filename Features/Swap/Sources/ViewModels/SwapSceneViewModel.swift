@@ -94,6 +94,7 @@ public final class SwapSceneViewModel {
 
     var providerField: String { Localized.Common.provider }
 
+    var swapEstimationTitle: String { Localized.Swap.EstimatedTime.title }
     var swapEstimation: String? {
         guard let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60 else {
             return nil
