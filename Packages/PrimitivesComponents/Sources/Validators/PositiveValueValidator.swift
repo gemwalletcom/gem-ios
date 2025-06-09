@@ -3,8 +3,7 @@
 import Foundation
 import Primitives
 
-public struct PositiveValueValidator<V>: ValueValidator where V: ValueValidatable
-{
+public struct PositiveValueValidator<V>: ValueValidator where V: ValueValidatable {
     public init() {}
 
     public func validate(_ value: V) throws {
