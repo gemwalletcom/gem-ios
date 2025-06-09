@@ -2,7 +2,7 @@
 
 import Foundation
 
-enum AmountInputType {
+enum AmountInputType: Sendable {
     case asset
     case fiat
 }

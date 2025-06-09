@@ -3,7 +3,6 @@
 import Foundation
 import Primitives
 import Localization
-import Transfer
 import PrimitivesComponents
 import Components
 import BigInt

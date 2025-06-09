@@ -5,14 +5,15 @@ import SwiftUI
 import Primitives
 import ChainService
 import Localization
+import Transfer
 
 struct ConfirmTransferNavigationStack: View {
-    
-    @Environment(\.keystore) var keystore
-    @Environment(\.chainServiceFactory) var chainServiceFactory
-    @Environment(\.walletsService) var walletsService
-    @Environment(\.nodeService) var nodeService
-    
+    @Environment(\.keystore) private var keystore
+    @Environment(\.chainServiceFactory) private var chainServiceFactory
+    @Environment(\.walletsService) private var walletsService
+    @Environment(\.nodeService) private var nodeService
+    @Environment(\.scanService) private var scanService
+
     private let wallet: Wallet
     private let transferData: TransferData
     private let onComplete: VoidAction
@@ -36,6 +37,7 @@ struct ConfirmTransferNavigationStack: View {
                     keystore: keystore,
                     chainService: ChainServiceFactory(nodeProvider: nodeService)
                         .service(for: transferData.chain),
+                    scanService: scanService,
                     walletsService: walletsService,
                     onComplete: onComplete
                 )
