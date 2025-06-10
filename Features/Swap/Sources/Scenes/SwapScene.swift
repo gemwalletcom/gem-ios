@@ -169,7 +169,7 @@ extension SwapScene {
                 }
             }
             
-            if let swapEstimation = model.swapEstimation {
+            if let swapEstimation = model.swapEstimationText {
                 ListItemView(title: model.swapEstimationTitle, subtitle: swapEstimation)
             }
             

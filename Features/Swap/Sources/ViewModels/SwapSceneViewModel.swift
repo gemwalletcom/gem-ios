@@ -95,11 +95,14 @@ public final class SwapSceneViewModel {
     var providerField: String { Localized.Common.provider }
 
     var swapEstimationTitle: String { Localized.Swap.EstimatedTime.title }
-    var swapEstimation: String? {
-        guard let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60 else {
+    var swapEstimationText: String? {
+        guard
+            let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60,
+            let estimationTime = Self.timeFormatter.string(from: TimeInterval(estimation))
+        else {
             return nil
         }
-        return Self.timeFormatter.string(from: TimeInterval(estimation))?.addPrefix("≈ ")
+        return String(format: "%@ %@", "≈", estimationTime)
     }
 
     var providerText: String? { selectedProvderModel?.providerText }
