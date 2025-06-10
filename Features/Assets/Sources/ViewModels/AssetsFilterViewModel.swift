@@ -22,17 +22,17 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
     var filters: [AssetsRequestFilter] {
         guard isAnyFilterSpecified else { return defaultFilters }
 
-        var result = Set(defaultFilters)
+        var result = defaultFilters
 
         if chainsFilter.isAnySelected {
-            result.insert(.chains(chainsFilter.selectedChains.map(\.rawValue)))
+            result.append(.chains(chainsFilter.selectedChains.map(\.rawValue)))
         }
 
         if hasBalance && showHasBalanceToggle {
-            result.insert(.hasBalance)
+            result.append(.hasBalance)
         }
 
-        return Array(result)
+        return result.unique()
     }
 
     private var defaultFilters: [AssetsRequestFilter] {

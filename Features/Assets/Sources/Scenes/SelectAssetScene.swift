@@ -79,7 +79,7 @@ public struct SelectAssetScene: View {
             .textCase(nil)
             .listRowInsets(EdgeInsets())
 
-            if model.enablePopularSection && !model.sections.popular.isEmpty {
+            if model.enablePopularSection && model.sections.popular.isNotEmpty {
                 Section {
                     assetsList(assets: model.sections.popular)
                 } header: {
@@ -91,7 +91,7 @@ public struct SelectAssetScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
 
-            if !model.sections.pinned.isEmpty {
+            if model.sections.pinned.isNotEmpty {
                 Section {
                     assetsList(assets: model.sections.pinned)
                 } header: {
