@@ -2,7 +2,7 @@
 
 import Primitives
 
-public struct ChainsFilterViewModel: Equatable {
+public struct ChainsFilterViewModel: Sendable, Equatable {
     public let allChains: [Primitives.Chain]
     public var selectedChains: [Primitives.Chain]
 

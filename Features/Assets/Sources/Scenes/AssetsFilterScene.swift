@@ -22,6 +22,14 @@ public struct AssetsFilterScene: View {
             SelectFilterView(
                 typeModel: model.chainsFilter.typeModel,
                 action: onSelectChainsFilter)
+
+            if model.showHasBalanceToggle {
+                ListItemToggleView(
+                    isOn: $model.hasBalance,
+                    title: model.hasBalanceTitle,
+                    imageStyle: model.hasBalanceImageStyle
+                )
+            }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
@@ -55,8 +63,8 @@ public struct AssetsFilterScene: View {
 
 extension AssetsFilterScene {
     private func onSelectClear() {
-        // clean to default, extend with different filters
         model.chainsFilter.selectedChains = []
+        model.hasBalance = false
     }
 
     private func onSelectDone() {

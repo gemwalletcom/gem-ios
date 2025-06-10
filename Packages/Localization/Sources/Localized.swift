@@ -81,6 +81,16 @@ public enum Localized {
         public static let title = Localized.tr("Localizable", "asset.state.empty.title", fallback: "Your transactions will appear here️")
       }
     }
+    public enum Verification {
+      /// Malicious
+      public static let malicious = Localized.tr("Localizable", "asset.verification.malicious", fallback: "Malicious")
+      /// Unverified
+      public static let unverified = Localized.tr("Localizable", "asset.verification.unverified", fallback: "Unverified")
+      /// Anyone can create one - including fake or malicious tokens.
+      public static let warningMessage = Localized.tr("Localizable", "asset.verification.warning_message", fallback: "Anyone can create one - including fake or malicious tokens.")
+      /// Know What You’re Adding
+      public static let warningTitle = Localized.tr("Localizable", "asset.verification.warning_title", fallback: "Know What You’re Adding")
+    }
   }
   public enum Assets {
     /// Add Custom Token
@@ -433,6 +443,8 @@ public enum Localized {
   public enum Filter {
     /// Clear
     public static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
+    /// Has balance
+    public static let hasBalance = Localized.tr("Localizable", "filter.has_balance", fallback: "Has balance")
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
     /// Types
@@ -1006,6 +1018,10 @@ public enum Localized {
       /// Max total
       public static let maxtotal = Localized.tr("Localizable", "transfer.confirm.maxtotal", fallback: "Max total")
     }
+    public enum Other {
+      /// Other
+      public static let title = Localized.tr("Localizable", "transfer.other.title", fallback: "Other")
+    }
     public enum Recipient {
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "transfer.recipient.address_field", fallback: "Address or Name")
@@ -1027,6 +1043,10 @@ public enum Localized {
     public enum Send {
       /// Send
       public static let title = Localized.tr("Localizable", "transfer.send.title", fallback: "Send")
+    }
+    public enum SmartContract {
+      /// Smart Contract
+      public static let title = Localized.tr("Localizable", "transfer.smart_contract.title", fallback: "Smart Contract")
     }
     public enum Stake {
       /// Stake
