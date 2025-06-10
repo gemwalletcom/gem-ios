@@ -1,7 +1,6 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwiftUICore
 import SwiftUI
 
 public struct ListItemValue<T: Identifiable> {

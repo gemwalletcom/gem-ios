@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import SwiftUICore
+import SwiftUI
 import Style
 
 public struct AssetTagsViewModel {
