@@ -29,7 +29,7 @@ public struct AssetTagsViewModel {
     }
     
     public var items: [AssetTagViewModel] {
-        tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
+        [AssetTagViewModel(tag: nil, isSelected: selectedTag == nil)] + tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
     }
     
     public var query: String? {

@@ -166,7 +166,7 @@ extension SelectAssetViewModel {
         }
     }
 
-    func setSelected(tag: AssetTag) {
+    func setSelected(tag: AssetTag?) {
         isDismissSearch.toggle()
         searchModel.tagsViewModel.setSelectedTag(tag)
         searchModel.focus = .tags

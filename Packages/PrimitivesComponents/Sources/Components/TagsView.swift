@@ -8,9 +8,9 @@ import Components
 
 public struct TagsView: View {
     private let model: AssetTagsViewModel
-    private let onSelect: (AssetTag) -> Void
+    private let onSelect: (AssetTag?) -> Void
 
-    public init(model: AssetTagsViewModel, onSelect: @escaping (AssetTag) -> Void) {
+    public init(model: AssetTagsViewModel, onSelect: @escaping (AssetTag?) -> Void) {
         self.model = model
         self.onSelect = onSelect
     }
@@ -36,9 +36,9 @@ public struct TagsView: View {
 
 public struct TagChip: View {
     private let model: AssetTagViewModel
-    private let onSelect: (AssetTag) -> Void
+    private let onSelect: (AssetTag?) -> Void
 
-    public init(model: AssetTagViewModel, onSelect: @escaping (AssetTag) -> Void) {
+    public init(model: AssetTagViewModel, onSelect: @escaping (AssetTag?) -> Void) {
         self.model = model
         self.onSelect = onSelect
     }
@@ -74,6 +74,6 @@ public struct TagChip: View {
 
         }
         .buttonStyle(.plain)
-        .accessibilityIdentifier(.key(model.tag.rawValue))
+        .accessibilityIdentifier(.key(model.id))
     }
 }

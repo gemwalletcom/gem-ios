@@ -49,7 +49,10 @@ public extension Images {
 
         public static let trending = Image(systemName: SystemImage.trending)
         public static let trendingFill = Image(systemName: SystemImage.trendingFill)
-        public static let t = Image(systemName: SystemImage.t)
-        public static let tFill = Image(systemName: SystemImage.tFill)
+        public static let dollarsign = Image(systemName: SystemImage.dollarsign)
+        public static let dollarsignFill = Image(systemName: SystemImage.dollarsignFill)
+
+        public static let circleGrid3x3 = Image(systemName: SystemImage.circleGrid3x3)
+        public static let circleGrid3x3Fill = Image(systemName: SystemImage.circleGrid3x3Fill)
     }
 }

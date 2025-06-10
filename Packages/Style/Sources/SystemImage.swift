@@ -51,9 +51,11 @@ public struct SystemImage {
     public static let trending = "arrow.up.forward.circle"
     public static let trendingFill = "arrow.up.forward.circle.fill"
 
-    public static let t = "t.circle"
-    public static let tFill = "t.circle.fill"
+    public static let dollarsign = "dollarsign.circle"
+    public static let dollarsignFill = "dollarsign.circle.fill"
 
+    public static let circleGrid3x3 = "circle.grid.3x3.circle"
+    public static let circleGrid3x3Fill = "circle.grid.3x3.circle.fill"
 
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
