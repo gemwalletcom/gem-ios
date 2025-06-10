@@ -24,17 +24,11 @@ public struct AssetsFilterScene: View {
                 action: onSelectChainsFilter)
 
             if model.showHasBalanceToggle {
-                Toggle(isOn: $model.hasBalance) {
-                    HStack(spacing: .space12) {
-                        model.hasBalanceImage
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(width: .list.settings, height: .list.settings)
-                        Text(model.hasBalanceTitle)
-                            .font(.body)
-                    }
-                }
-                .toggleStyle(AppToggleStyle())
+                ListItemToggleView(
+                    isOn: $model.hasBalance,
+                    title: model.hasBalanceTitle,
+                    imageStyle: model.hasBalanceImageStyle
+                )
             }
         }
         .contentMargins(.top, .scene.top, for: .scrollContent)

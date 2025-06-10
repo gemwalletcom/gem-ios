@@ -6,6 +6,7 @@ import Localization
 import PrimitivesComponents
 import SwiftUI
 import Style
+import Components
 
 public struct AssetsFilterViewModel: Sendable, Equatable {
     private let type: SelectAssetType
@@ -73,7 +74,7 @@ public struct AssetsFilterViewModel: Sendable, Equatable {
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
 
-    var hasBalanceImage: Image { Images.Filters.balance}
+    var hasBalanceImageStyle: ListItemImageStyle? { .settings(assetImage: .image(Images.Filters.balance)) }
     var hasBalanceTitle: String { Localized.Filter.hasBalance }
 
     var networksModel: NetworkSelectorViewModel {
