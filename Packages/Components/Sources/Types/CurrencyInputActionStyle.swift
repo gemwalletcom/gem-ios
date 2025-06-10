@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 public struct CurrencyInputActionStyle {
     let position: CurrencyInputActionPosition
