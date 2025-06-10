@@ -159,16 +159,16 @@ extension SelectAssetViewModel {
         }
     }
 
-    func setSelected(tag: AssetTag?) {
+    func setSelected(tag: AssetTagSelection) {
         isDismissSearch.toggle()
-        searchModel.tagsViewModel.setSelectedTag(tag)
+        searchModel.tagsViewModel.selectedTag = tag
         searchModel.focus = .tags
         updateRequest()
         Task {
             await searchAssets(
                 query: .empty,
                 priorityAssetsQuery: searchModel.priorityAssetsQuery,
-                tag: searchModel.tagsViewModel.selectedTag
+                tag: searchModel.tagsViewModel.selectedTag.tag
             )
         }
     }
@@ -181,7 +181,7 @@ extension SelectAssetViewModel {
     func onChangeFocus(_: Bool, isSearchable: Bool) {
         if isSearchable {
             searchModel.focus = .search
-            searchModel.tagsViewModel.setSelectedTag(nil)
+            searchModel.tagsViewModel.selectedTag = .all
             updateRequest()
         }
     }

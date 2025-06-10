@@ -7,10 +7,11 @@ import Style
 
 public struct AssetTagsViewModel {
     public let selectType: SelectAssetType
-    public var selectedTag: AssetTag?
-    
-    public init(selectType: SelectAssetType) {
+    public var selectedTag: AssetTagSelection
+
+    public init(selectType: SelectAssetType, selectedTag: AssetTagSelection = .all) {
         self.selectType = selectType
+        self.selectedTag = selectedTag
     }
     
     public var tags: [AssetTag] {
@@ -29,18 +30,14 @@ public struct AssetTagsViewModel {
     }
     
     public var items: [AssetTagViewModel] {
-        [AssetTagViewModel(tag: nil, isSelected: selectedTag == nil)] + tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
+        [AssetTagViewModel(tag: .all, isSelected: selectedTag == .all)] + tags.map { AssetTagViewModel(tag: .tag($0), isSelected: selectedTag == .tag($0)) }
     }
     
     public var query: String? {
-        selectedTag?.rawValue
-    }
-    
-    public var hasSelected: Bool {
-        selectedTag != nil
-    }
-
-    public mutating func setSelectedTag(_ tag: AssetTag?) {
-        selectedTag = selectedTag == tag ? nil : tag
+        switch selectedTag {
+        case .all: nil
+        case let .tag(assetTag):
+            assetTag.rawValue
+        }
     }
 }
