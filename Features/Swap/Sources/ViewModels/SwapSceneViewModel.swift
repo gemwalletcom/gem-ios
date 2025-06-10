@@ -49,12 +49,12 @@ public final class SwapSceneViewModel {
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
     private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
-    private var timeFormatter: DateComponentsFormatter {
+    private static let timeFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.minute]
         formatter.unitsStyle = .short
         return formatter
-    }
+    }()
 
     public init(
         preferences: Preferences = Preferences.standard,
@@ -99,7 +99,7 @@ public final class SwapSceneViewModel {
         guard let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60 else {
             return nil
         }
-        return timeFormatter.string(from: TimeInterval(estimation))?.addPrefix("≈ ")
+        return Self.timeFormatter.string(from: TimeInterval(estimation))?.addPrefix("≈ ")
     }
 
     var providerText: String? { selectedProvderModel?.providerText }
