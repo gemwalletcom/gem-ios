@@ -3,11 +3,11 @@
 import Foundation
 import Primitives
 
-public enum FilterType: String, CaseIterable {
+public enum TransactionFilterType: Int, CaseIterable {
     case transfers
-    case smartContract
     case swaps
     case stake
+    case smartContract
     case others
     
     public init(transactionType: TransactionType) {
@@ -24,18 +24,14 @@ public enum FilterType: String, CaseIterable {
             self = .others
         }
     }
-
-    public var filters: [TransactionType] {
-        switch self {
-        case .transfers: [.transfer, .transferNFT]
-        case .smartContract: [.smartContractCall]
-        case .swaps: [.swap, .tokenApproval]
-        case .stake: [.stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw]
-        case .others: [.assetActivation]
-        }
-    }
 }
 
-extension FilterType: Identifiable {
-    public var id: String { rawValue }
+extension TransactionFilterType: Identifiable {
+    public var id: String { rawValue.description }
+}
+
+extension TransactionFilterType: Comparable {
+    public static func < (lhs: TransactionFilterType, rhs: TransactionFilterType) -> Bool {
+        lhs.rawValue < rhs.rawValue
+    }
 }

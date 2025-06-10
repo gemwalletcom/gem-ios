@@ -58,7 +58,7 @@ public struct TransactionsFilterScene: View {
                 model: model.typesModel,
                 onFinishSelection: onFinishSelection(value:),
                 listContent: {
-                    ListItemView(title: TransactionTypeViewModel(type: $0).title)
+                    ListItemView(title: TransactionFilterTypeViewModel(type: $0).title)
                 }
             )
         }
@@ -84,7 +84,7 @@ extension TransactionsFilterScene {
         }
     }
 
-    private func onFinishSelection(value: SelectionResult<FilterType>) {
+    private func onFinishSelection(value: SelectionResult<TransactionFilterType>) {
         model.transactionTypesFilter.selectedTypes = value.items
         if value.isConfirmed {
             dismiss()

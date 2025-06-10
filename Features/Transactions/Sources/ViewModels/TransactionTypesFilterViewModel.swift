@@ -3,16 +3,16 @@
 import Primitives
 
 public struct TransactionTypesFilterViewModel: Equatable {
-    public let allTransactionsTypes: [FilterType]
-    public var selectedTypes: [FilterType]
+    public let allTransactionsTypes: [TransactionFilterType]
+    public var selectedTypes: [TransactionFilterType]
 
     public init(types: [TransactionType]) {
-        self.allTransactionsTypes = types.map { FilterType(transactionType: $0) }.unique()
+        self.allTransactionsTypes = types.map { TransactionFilterType(transactionType: $0) }.unique().sorted()
         self.selectedTypes = []
     }
     
     public var requestFilters: [TransactionType] {
-        selectedTypes.map { $0.filters }.reduce([], +).unique()
+        selectedTypes.map { TransactionFilterTypeViewModel(type: $0).filters }.reduce([], +)
     }
 
     public var typeModel: TransactionsFilterTypeViewModel {

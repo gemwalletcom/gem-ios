@@ -8,16 +8,16 @@ import SwiftUI
 import Components
 
 public struct TransactionTypesSelectorViewModel: SelectableSheetViewable {
-    public var items: [FilterType] { state.value?.items ?? [] }
+    public var items: [TransactionFilterType] { state.value?.items ?? [] }
     
     public let selectionType: SelectionType
-    public let state: StateViewType<SelectableListType<FilterType>>
+    public let state: StateViewType<SelectableListType<TransactionFilterType>>
 
-    public var selectedItems: Set<FilterType>
+    public var selectedItems: Set<TransactionFilterType>
 
     public init(
-        state: StateViewType<SelectableListType<FilterType>>,
-        selectedItems: [FilterType],
+        state: StateViewType<SelectableListType<TransactionFilterType>>,
+        selectedItems: [TransactionFilterType],
         selectionType: SelectionType
     ) {
         self.selectionType = selectionType
