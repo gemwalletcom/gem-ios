@@ -71,8 +71,8 @@ public struct SelectAssetScene: View {
     var list: some View {
         List {
             Section {} header: {
-                AssetsTagsView(
-                    model: model.searchModel.tagsViewModel,
+                TagsView(
+                    tags: model.searchModel.tagsViewModel.items,
                     onSelect: { model.setSelected(tag: $0.tag) }
                 )
                 .isVisible(model.shouldShowTagFilter)
