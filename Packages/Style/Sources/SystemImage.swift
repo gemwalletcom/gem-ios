@@ -48,6 +48,13 @@ public struct SystemImage {
     public static let checkmarkCircle = "checkmark.circle"
     public static let circle = "circle"
 
+    public static let trending = "arrow.up.forward.circle"
+    public static let trendingFill = "arrow.up.forward.circle.fill"
+
+    public static let t = "t.circle"
+    public static let tFill = "t.circle.fill"
+
+
     // specific to Gem style
     public static let errorOccurred = exclamationmarkTriangleFill
 }

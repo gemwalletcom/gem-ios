@@ -22,8 +22,8 @@ public struct AssetTagsViewModel {
             }
         case .manage,
             .priceAlert,
-            .swap: [.stablecoins, .trending]
-        case .buy: [.stablecoins, .trendingFiatPurchase]
+            .swap: [.trending, .stablecoins]
+        case .buy: [.trendingFiatPurchase, .stablecoins]
         case .send: [.stablecoins]
         }
     }
@@ -38,13 +38,6 @@ public struct AssetTagsViewModel {
     
     public var hasSelected: Bool {
         selectedTag != nil
-    }
-    
-    public func foregroundColor(for tag: AssetTag) -> Color {
-        if tag == selectedTag {
-            return .primary
-        }
-        return Colors.secondaryText
     }
 
     public mutating func setSelectedTag(_ tag: AssetTag?) {

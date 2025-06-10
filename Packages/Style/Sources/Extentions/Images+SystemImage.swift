@@ -46,5 +46,10 @@ public extension Images {
         public static let pencilLine = Image(systemName: SystemImage.pencilLine)
         public static let checkmarkCircle = Image(systemName: SystemImage.checkmarkCircle)
         public static let circle = Image(systemName: SystemImage.circle)
+
+        public static let trending = Image(systemName: SystemImage.trending)
+        public static let trendingFill = Image(systemName: SystemImage.trendingFill)
+        public static let t = Image(systemName: SystemImage.t)
+        public static let tFill = Image(systemName: SystemImage.tFill)
     }
 }
