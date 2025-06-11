@@ -7,7 +7,7 @@ public struct TransactionTypesFilterViewModel: Equatable {
     public var selectedTypes: [TransactionFilterType]
 
     public init(types: [TransactionType]) {
-        self.allTransactionsTypes = types.map { TransactionFilterType(transactionType: $0) }.unique().sorted()
+        self.allTransactionsTypes = types.map { $0.filterType }.unique().sorted()
         self.selectedTypes = []
     }
     

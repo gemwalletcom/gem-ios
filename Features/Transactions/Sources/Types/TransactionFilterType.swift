@@ -10,20 +10,6 @@ public enum TransactionFilterType: Int, CaseIterable {
     case smartContract
     case others
     
-    public init(transactionType: TransactionType) {
-        switch transactionType {
-        case .transfer, .transferNFT:
-            self = .transfers
-        case .smartContractCall:
-            self = .smartContract
-        case .swap, .tokenApproval:
-            self = .swaps
-        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw:
-            self = .stake
-        case .assetActivation:
-            self = .others
-        }
-    }
 }
 
 extension TransactionFilterType: Identifiable {
@@ -33,5 +19,17 @@ extension TransactionFilterType: Identifiable {
 extension TransactionFilterType: Comparable {
     public static func < (lhs: TransactionFilterType, rhs: TransactionFilterType) -> Bool {
         lhs.rawValue < rhs.rawValue
+    }
+}
+
+extension TransactionType {
+    public var filterType: TransactionFilterType {
+        switch self {
+        case .transfer, .transferNFT: .transfers
+        case .smartContractCall: .smartContract
+        case .swap, .tokenApproval: .swaps
+        case .stakeDelegate, .stakeUndelegate, .stakeRewards, .stakeRedelegate, .stakeWithdraw: .stake
+        case .assetActivation: .others
+        }
     }
 }
