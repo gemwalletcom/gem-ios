@@ -45,7 +45,7 @@ struct TransactionDetailViewModel {
         return ListItemImageValue(
             title: Localized.Common.provider,
             subtitle: config.name,
-            assetImage: AssetImage.image(config.image)
+            assetImage: nil
         )
     }
     
