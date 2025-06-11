@@ -68,7 +68,8 @@ extension AssetMetaData {
         isStakeEnabled: false,
         isPinned: false,
         isActive: true,
-        stakingApr: .none
+        stakingApr: .none,
+        rankScore: 42
     )
 }
 
