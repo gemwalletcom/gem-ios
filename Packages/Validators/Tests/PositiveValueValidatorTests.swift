@@ -4,7 +4,7 @@ import Foundation
 import Testing
 import BigInt
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct PositiveValueValidatorTests {
     @Test

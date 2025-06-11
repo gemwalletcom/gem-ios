@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Blockchain", path: "../../Packages/Blockchain"),
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "Validators", path: "../../Packages/Validators"),
 
         .package(name: "Staking", path: "../Staking"),
         .package(name: "QRScanner", path: "../QRScanner"),
@@ -56,6 +57,7 @@ let package = Package(
                 "Blockchain",
                 "Signer",
                 "Preferences",
+                "Validators",
 
                 "Staking",
                 "QRScanner",

@@ -12,6 +12,7 @@ import WalletsService
 import Staking
 import Style
 import Preferences
+import Validators
 
 @MainActor
 @Observable

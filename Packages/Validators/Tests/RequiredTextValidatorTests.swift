@@ -3,7 +3,7 @@
 import Foundation
 import Testing
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct RequiredTextValidatorTests {
     private let fieldName = "Wallet 1"
