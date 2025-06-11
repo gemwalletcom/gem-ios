@@ -110,24 +110,23 @@ extension AddTokenScene {
                         }
                     }
                 }
+                Section {
+                    ListItemView(
+                        title: Localized.Asset.Verification.warningTitle,
+                        titleStyle: .headline,
+                        titleExtra: Localized.Asset.Verification.warningMessage,
+                        titleStyleExtra: .bodySecondary,
+                        imageStyle: model.warningImageStyle
+                    ) {
+                        isPresentingUrl = model.tokenVerificationUrl
+                    }
+                }
             case .error(let error):
                 ListItemErrorView(
                     errorTitle: model.errorTitle,
                     errorSystemNameImage: model.errorSystemImage,
                     error: error
                 )
-            }
-            
-            Section {
-                ListItemView(
-                    title: Localized.Asset.Verification.warningTitle,
-                    titleStyle: .headline,
-                    titleExtra: Localized.Asset.Verification.warningMessage,
-                    titleStyleExtra: .bodySecondary,
-                    imageStyle: model.warningImageStyle
-                ) {
-                    isPresentingUrl = model.tokenVerificationUrl
-                }
             }
         }
     }
