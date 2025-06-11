@@ -443,6 +443,8 @@ public enum Localized {
   public enum Filter {
     /// Clear
     public static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
+    /// Has balance
+    public static let hasBalance = Localized.tr("Localizable", "filter.has_balance", fallback: "Has balance")
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
     /// Types
@@ -912,6 +914,10 @@ public enum Localized {
     public static let youPay = Localized.tr("Localizable", "swap.you_pay", fallback: "You Pay")
     /// You Receive
     public static let youReceive = Localized.tr("Localizable", "swap.you_receive", fallback: "You Receive")
+    public enum EstimatedTime {
+      /// Estimated Time
+      public static let title = Localized.tr("Localizable", "swap.estimated_time.title", fallback: "Estimated Time")
+    }
     public enum PriceImpactWarning {
       /// You will lose %@ of your %@ in this trade. Are you sure you want to proceed?
       public static func description(_ p1: Any, _ p2: Any) -> String {
@@ -1016,6 +1022,10 @@ public enum Localized {
       /// Max total
       public static let maxtotal = Localized.tr("Localizable", "transfer.confirm.maxtotal", fallback: "Max total")
     }
+    public enum Other {
+      /// Other
+      public static let title = Localized.tr("Localizable", "transfer.other.title", fallback: "Other")
+    }
     public enum Recipient {
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "transfer.recipient.address_field", fallback: "Address or Name")
@@ -1037,6 +1047,10 @@ public enum Localized {
     public enum Send {
       /// Send
       public static let title = Localized.tr("Localizable", "transfer.send.title", fallback: "Send")
+    }
+    public enum SmartContract {
+      /// Smart Contract
+      public static let title = Localized.tr("Localizable", "transfer.smart_contract.title", fallback: "Smart Contract")
     }
     public enum Stake {
       /// Stake

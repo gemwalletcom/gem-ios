@@ -2,7 +2,4 @@
 
 import Foundation
 
-enum AmountInputType {
-    case asset
-    case fiat
-}
+public protocol SilentValidatable: Sendable { }

@@ -22,4 +22,5 @@ public enum SwapProvider: String, Codable, Equatable, Sendable {
 	case symbiosis
 	case chainflip
 	case cetusAggregator = "cetus_aggregator"
+	case relay
 }

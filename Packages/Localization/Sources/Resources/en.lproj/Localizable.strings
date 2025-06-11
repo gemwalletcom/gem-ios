@@ -409,3 +409,7 @@
 "asset.verification.malicious" = "Malicious";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
+"transfer.smart_contract.title" = "Smart Contract";
+"transfer.other.title" = "Other";
+"filter.has_balance" = "Has balance";
+"swap.estimated_time.title" = "Estimated Time";

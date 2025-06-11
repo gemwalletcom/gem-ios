@@ -9,6 +9,7 @@ import FiatConnect
 import PrimitivesComponents
 import Keystore
 import Assets
+import Transfer
 
 struct SelectAssetSceneNavigationStack: View {
     @Environment(\.assetsService) private var assetsService
@@ -17,6 +18,7 @@ struct SelectAssetSceneNavigationStack: View {
     @Environment(\.walletsService) private var walletsService
     @Environment(\.keystore) private var keystore
     @Environment(\.stakeService) private var stakeService
+    @Environment(\.scanService) private var scanService
 
     @State private var isPresentingAddToken: Bool = false
     @State private var isPresentingFilteringView: Bool = false
@@ -75,6 +77,7 @@ struct SelectAssetSceneNavigationStack: View {
                             walletsService: walletsService,
                             nodeService: nodeService,
                             stakeService: stakeService,
+                            scanService: scanService,
                             type: .asset(input.asset),
                             onRecipientDataAction: {
                                 navigationPath.append($0)

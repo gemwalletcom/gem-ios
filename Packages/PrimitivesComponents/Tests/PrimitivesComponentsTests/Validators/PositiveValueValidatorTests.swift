@@ -29,4 +29,17 @@ struct PositiveValueValidatorTests {
             try validator.validate(-42)
         }
     }
+
+    @Test
+    func testSilentValidation() {
+        let validator = PositiveValueValidator<BigInt>().silent
+
+        #expect(throws: SilentValidationError.self) {
+            try validator.validate(0)
+        }
+
+        #expect(throws: SilentValidationError.self) {
+            try validator.validate(-7)
+        }
+    }
 }

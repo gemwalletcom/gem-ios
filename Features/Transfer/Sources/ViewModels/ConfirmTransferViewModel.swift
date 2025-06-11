@@ -10,7 +10,6 @@ import Localization
 import Primitives
 import PrimitivesComponents
 import ScanService
-import Transfer
 import WalletConnector
 import WalletsService
 import InfoSheet
@@ -18,7 +17,7 @@ import Signer
 
 @Observable
 @MainActor
-final class ConfirmTransferViewModel {
+public final class ConfirmTransferViewModel {
     var feeModel: NetworkFeeSceneViewModel
     var state: StateViewType<TransactionInputViewModel> = .loading
     var confirmingState: StateViewType<Bool> = .noData {
@@ -47,12 +46,12 @@ final class ConfirmTransferViewModel {
 
     private var metadata: TransferDataMetadata?
 
-    init(
+    public init(
         wallet: Wallet,
         data: TransferData,
         keystore: any Keystore,
         chainService: any ChainServiceable,
-        scanService: ScanService = .main,
+        scanService: ScanService,
         walletsService: WalletsService,
         explorerService: any ExplorerLinkFetchable = ExplorerService.standard,
         confirmTransferDelegate: TransferDataCallback.ConfirmTransferDelegate? = .none,
@@ -152,12 +151,12 @@ final class ConfirmTransferViewModel {
 
     var networkFeeFooterText: String? {
         return .none
-//        TODO: Enable later
-//        if let quoteFee = dataModel.quoteFee {
-//            Localized.Swap.quoteFee("\(quoteFee)%")
-//        } else {
-//            .none
-//        }
+        //        TODO: Enable later
+        //        if let quoteFee = dataModel.quoteFee {
+        //            Localized.Swap.quoteFee("\(quoteFee)%")
+        //        } else {
+        //            .none
+        //        }
     }
 
     var buttonTitle: String {
@@ -199,8 +198,8 @@ final class ConfirmTransferViewModel {
         if let result = state.value?.transferAmountResult, case .error(_, let error) = result {
             switch error as? TransferAmountCalculatorError {
             case .insufficientBalance,
-                .insufficientNetworkFee,
-                .minimumAccountBalanceTooLow, .none: return nil
+                    .insufficientNetworkFee,
+                    .minimumAccountBalanceTooLow, .none: return nil
             }
         }
 

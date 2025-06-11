@@ -185,6 +185,10 @@ public enum Images {
     public enum ErrorConent {
         public static let error = Image(.error)
     }
+
+    public enum Filters {
+        public static let balance = Image(.filtersBalance)
+	}
     
     public enum AssetVerification {
         public static let orange = Image(.verificationOrange)

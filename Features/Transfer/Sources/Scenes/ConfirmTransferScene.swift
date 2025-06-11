@@ -5,13 +5,16 @@ import Components
 import Style
 import Localization
 import InfoSheet
-import Transfer
 import PrimitivesComponents
 
-struct ConfirmTransferScene: View {
-    @State var model: ConfirmTransferViewModel
+public struct ConfirmTransferScene: View {
+    @State private var model: ConfirmTransferViewModel
 
-    var body: some View {
+    public init(model: ConfirmTransferViewModel) {
+        _model = State(initialValue: model)
+    }
+
+    public var body: some View {
         VStack {
             transactionsList
             Spacer()
@@ -50,9 +53,14 @@ struct ConfirmTransferScene: View {
                 }
             }
         }
-        .alert(item: $model.isPresentingErrorMessage) {
-            Alert(title: Text(Localized.Errors.transferError), message: Text($0))
-        }
+        .alert(
+            Localized.Errors.transferError,
+            isPresented: $model.isPresentingErrorMessage.mappedToBool(),
+            actions: {},
+            message: {
+                Text(model.isPresentingErrorMessage ?? "")
+            }
+        )
     }
 }
 

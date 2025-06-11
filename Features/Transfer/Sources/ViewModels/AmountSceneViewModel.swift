@@ -11,10 +11,11 @@ import PrimitivesComponents
 import WalletsService
 import Staking
 import Style
+import Preferences
 
 @MainActor
 @Observable
-final class AmountSceneViewModel {
+public final class AmountSceneViewModel {
     let input: AmountInput
     let wallet: Wallet
     let walletsService: WalletsService
@@ -27,7 +28,7 @@ final class AmountSceneViewModel {
     var amountInputModel: InputValidationViewModel = InputValidationViewModel()
 
     private let formatter = ValueFormatter(style: .full)
-    private let currencyFormatter = CurrencyFormatter.currency()
+    private let currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: Preferences.standard.currency)
     private let numberSanitizer = NumberSanitizer()
     private let valueConverter = ValueConverter()
 
@@ -253,7 +254,7 @@ extension AmountSceneViewModel {
                 source: source,
                 decimals: asset.decimals.asInt,
                 validators: [
-                    PositiveValueValidator<BigInt>(),
+                    PositiveValueValidator<BigInt>().silent,
                     MinimumValueValidator<BigInt>(minimumValue: minimumValue, minimumValueText: minimumValueText),
                     MinimumAccountReserveValidator<BigInt>(available: availableValue, reserve: minimumAccountReserve, asset: asset),
                     BalanceValueValidator<BigInt>(available: availableValue, asset: asset)

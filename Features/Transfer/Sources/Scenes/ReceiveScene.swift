@@ -5,18 +5,18 @@ import Components
 import Style
 import PrimitivesComponents
 
-struct ReceiveScene: View {
+public struct ReceiveScene: View {
     @State private var isPresentingShareSheet = false
     @State private var isPresentingCopyToast = false
     @State private var renderedImage: UIImage?
 
     private let model: ReceiveViewModel
 
-    init(model: ReceiveViewModel) {
+    public init(model: ReceiveViewModel) {
         self.model = model
     }
 
-    var body: some View {
+    public var body: some View {
         VStack {
             VStack {
                 Spacer()

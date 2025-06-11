@@ -27,6 +27,7 @@ extension View {
             .environment(\.priceService, services.priceService)
             .environment(\.priceObserverService, services.priceObserverService)
             .environment(\.explorerService, services.explorerService)
+            .environment(\.scanService, services.scanService)
             .environment(\.connectionsService, services.connectionsService)
     }
 
