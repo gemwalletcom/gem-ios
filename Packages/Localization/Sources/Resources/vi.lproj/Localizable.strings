@@ -412,3 +412,4 @@
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Có sự cân bằng";
+"swap.estimated_time.title" = "Estimated Time";
