@@ -1,23 +1,42 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import Store
 import Primitives
 import Localization
 import PrimitivesComponents
+import SwiftUI
+import Style
+import Components
 
-public struct AssetsFilterViewModel {
+public struct AssetsFilterViewModel: Sendable, Equatable {
     private let type: SelectAssetType
     var chainsFilter: ChainsFilterViewModel
+    var hasBalance: Bool = false
 
     public init(type: SelectAssetType, model: ChainsFilterViewModel) {
         self.type = type
         self.chainsFilter = model
     }
 
-    public var isAnyFilterSpecified: Bool { chainsFilter.isAnySelected }
+    public var isAnyFilterSpecified: Bool { chainsFilter.isAnySelected || hasBalance }
 
-    var defaultFilters: [AssetsRequestFilter] {
+    var filters: [AssetsRequestFilter] {
+        guard isAnyFilterSpecified else { return defaultFilters }
+
+        var result = defaultFilters
+
+        if chainsFilter.isAnySelected {
+            result.append(.chains(chainsFilter.selectedChains.map(\.rawValue)))
+        }
+
+        if hasBalance && showHasBalanceToggle {
+            result.append(.hasBalance)
+        }
+
+        return result.unique()
+    }
+
+    private var defaultFilters: [AssetsRequestFilter] {
         switch type {
         case .send: [.hasBalance]
         case .receive(let type):
@@ -44,9 +63,19 @@ public struct AssetsFilterViewModel {
         }
     }
 
+    var showHasBalanceToggle: Bool {
+        switch type {
+        case .send, .receive, .buy, .swap, .priceAlert: false
+        case .manage: true
+        }
+    }
+
     var title: String { Localized.Filter.title }
     var clear: String { Localized.Filter.clear }
     var done: String { Localized.Common.done }
+
+    var hasBalanceImageStyle: ListItemImageStyle? { .settings(assetImage: .image(Images.Filters.balance)) }
+    var hasBalanceTitle: String { Localized.Filter.hasBalance }
 
     var networksModel: NetworkSelectorViewModel {
         NetworkSelectorViewModel(

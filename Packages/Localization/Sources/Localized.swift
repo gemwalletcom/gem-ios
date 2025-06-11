@@ -443,6 +443,8 @@ public enum Localized {
   public enum Filter {
     /// Clear
     public static let clear = Localized.tr("Localizable", "filter.clear", fallback: "Clear")
+    /// Has balance
+    public static let hasBalance = Localized.tr("Localizable", "filter.has_balance", fallback: "Has balance")
     /// Filters
     public static let title = Localized.tr("Localizable", "filter.title", fallback: "Filters")
     /// Types
@@ -912,6 +914,10 @@ public enum Localized {
     public static let youPay = Localized.tr("Localizable", "swap.you_pay", fallback: "You Pay")
     /// You Receive
     public static let youReceive = Localized.tr("Localizable", "swap.you_receive", fallback: "You Receive")
+    public enum EstimatedTime {
+      /// Estimated Time
+      public static let title = Localized.tr("Localizable", "swap.estimated_time.title", fallback: "Estimated Time")
+    }
     public enum PriceImpactWarning {
       /// You will lose %@ of your %@ in this trade. Are you sure you want to proceed?
       public static func description(_ p1: Any, _ p2: Any) -> String {

@@ -411,3 +411,5 @@
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
+"filter.has_balance" = "A un équilibre";
+"swap.estimated_time.title" = "Estimated Time";

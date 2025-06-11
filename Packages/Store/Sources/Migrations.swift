@@ -54,6 +54,11 @@ public struct Migrations {
     }
     
     mutating func runChanges(dbQueue: DatabaseQueue) throws {
+        migrator.registerMigration("Delete missing assetId in \(PriceRecord.databaseTableName), \(BalanceRecord.databaseTableName)") {
+            try? $0.execute(sql: "DELETE FROM prices WHERE assetId NOT IN (SELECT id FROM assets)")
+            try? $0.execute(sql: "DELETE FROM balances WHERE assetId NOT IN (SELECT id FROM assets)")
+        }
+        
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
                 $0.add(column: WalletRecord.Columns.isPinned.name, .boolean).defaults(to: false)
