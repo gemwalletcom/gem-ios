@@ -10,9 +10,9 @@ import Localization
 
 public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
+    public let explorerService: any ExplorerLinkFetchable
 
     private let formatter: ValueFormatter
-    private let explorerService: any ExplorerLinkFetchable
 
     public init(
         explorerService: any ExplorerLinkFetchable,

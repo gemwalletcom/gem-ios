@@ -74,12 +74,8 @@ public struct TransactionScene: View {
                         assetImage: model.networkAssetImage
                     )
                     
-                    if let item = model.providerListItem {
-                        ListItemImageView(
-                            title: item.title,
-                            subtitle: item.subtitle,
-                            assetImage: item.assetImage
-                        )
+                    if let model = model.providerListModel {
+                        AddressListItemView(model: model)
                     }
                     
                     ListItemView(
