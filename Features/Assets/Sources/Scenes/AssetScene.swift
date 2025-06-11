@@ -28,7 +28,7 @@ public struct AssetScene: View {
             .cleanListRow()
             Section {
                 BannerView(
-                    banners: model.banners,
+                    banners: model.allBanners,
                     action: model.onSelectBanner,
                     closeAction: model.onCloseBanner
                 )
