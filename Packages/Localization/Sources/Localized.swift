@@ -914,6 +914,10 @@ public enum Localized {
     public static let youPay = Localized.tr("Localizable", "swap.you_pay", fallback: "You Pay")
     /// You Receive
     public static let youReceive = Localized.tr("Localizable", "swap.you_receive", fallback: "You Receive")
+    public enum EstimatedTime {
+      /// Estimated Time
+      public static let title = Localized.tr("Localizable", "swap.estimated_time.title", fallback: "Estimated Time")
+    }
     public enum PriceImpactWarning {
       /// You will lose %@ of your %@ in this trade. Are you sure you want to proceed?
       public static func description(_ p1: Any, _ p2: Any) -> String {

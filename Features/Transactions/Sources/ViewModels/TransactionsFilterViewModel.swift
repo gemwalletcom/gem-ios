@@ -49,7 +49,7 @@ public struct TransactionsFilterViewModel: Equatable {
         }
         
         if !transactionTypesFilter.selectedTypes.isEmpty {
-            let typeIds = transactionTypesFilter.selectedTypes.map { $0.rawValue }
+            let typeIds = transactionTypesFilter.requestFilters.map { $0.rawValue }
             filters.append(.types(typeIds))
         }
         

@@ -412,3 +412,4 @@
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
 "filter.has_balance" = "균형이 있다";
+"swap.estimated_time.title" = "Estimated Time";
