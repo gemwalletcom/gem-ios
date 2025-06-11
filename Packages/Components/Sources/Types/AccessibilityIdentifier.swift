@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import SwiftUICore
+import SwiftUI
 
 public enum AccessibilityIdentifier: String, Identifiable {
     

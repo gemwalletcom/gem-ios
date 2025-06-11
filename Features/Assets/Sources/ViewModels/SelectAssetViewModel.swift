@@ -22,6 +22,7 @@ public final class SelectAssetViewModel {
 
     public let wallet: Wallet
 
+    var assets: [AssetData] = []
     var state: StateViewType<[AssetBasic]> = .noData
     var searchModel: SelectAssetSearchViewModel
     var request: AssetsRequest
@@ -60,7 +61,7 @@ public final class SelectAssetViewModel {
 
         self.request = AssetsRequest(
             walletId: wallet.id,
-            filters: filter.defaultFilters
+            filters: filter.filters
         )
     }
 
@@ -81,6 +82,10 @@ public final class SelectAssetViewModel {
         case .manage: Localized.Wallet.manageTokenList
         case .priceAlert: Localized.Assets.selectAsset
         }
+    }
+
+    var sections: AssetsSections {
+        AssetsSections.from(assets)
     }
 
     var enablePopularSection: Bool {
@@ -132,18 +137,6 @@ extension SelectAssetViewModel {
         onSelectAssetAction?(asset)
     }
 
-    func update(filterRequest: AssetsRequestFilter) {
-        request.filters.removeAll { existingFilter in
-            switch (filterRequest, existingFilter) {
-            case (.chains, .chains):
-                return true
-            default:
-                return false
-            }
-        }
-        request.filters.append(filterRequest)
-    }
-
     func search(query: String) async {
         let query = query.trim()
         if query.isEmpty {
@@ -191,6 +184,10 @@ extension SelectAssetViewModel {
             searchModel.tagsViewModel.setSelectedTag(nil)
             updateRequest()
         }
+    }
+
+    func onChangeFilterModel(_: AssetsFilterViewModel, model: AssetsFilterViewModel) {
+        request.filters = model.filters
     }
 }
 
