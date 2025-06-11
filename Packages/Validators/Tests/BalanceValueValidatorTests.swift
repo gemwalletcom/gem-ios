@@ -5,7 +5,7 @@ import Testing
 import BigInt
 import Primitives
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct BalanceValueValidatorTests {
     private let asset = Asset.mock()

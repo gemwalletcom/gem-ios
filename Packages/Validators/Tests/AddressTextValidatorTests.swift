@@ -2,8 +2,9 @@
 
 import Foundation
 import Testing
+import PrimitivesTestKit
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct AddressTextValidatorTests {
     let validETH = "0xb8c77482e45f1f44de1745f52c74426c631bdd52"

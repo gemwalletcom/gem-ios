@@ -5,7 +5,7 @@ import Testing
 import BigInt
 import Primitives
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct MaximumValueValidatorTests {
     private let max = BigInt(100)

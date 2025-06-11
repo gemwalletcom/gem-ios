@@ -4,7 +4,9 @@ import Foundation
 import Testing
 import BigInt
 import Primitives
-@testable import PrimitivesComponents
+import PrimitivesTestKit
+
+@testable import Validators
 
 struct MinimumAccountReserveValidatorTests {
     private let nativeAsset = Asset.mockBNB()

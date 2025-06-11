@@ -4,8 +4,9 @@ import Foundation
 import Testing
 import BigInt
 import Primitives
+import PrimitivesTestKit
 
-@testable import PrimitivesComponents
+@testable import Validators
 
 struct AmountValidatorTests {
     private let asset = Asset.mockEthereumUSDT()
