@@ -14,7 +14,7 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(name: "Primitives", path: "../Packages/Primitives"),
+        .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives")
     ],
