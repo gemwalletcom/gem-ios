@@ -389,6 +389,20 @@
         "identifier" : "WalletServiceTests",
         "name" : "WalletServiceTests"
       }
+    },
+    {
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "KeychainTests"
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:Packages\/Keychain",
+        "identifier" : "KeychainTests",
+        "name" : "KeychainTests"
+      }
     }
   ],
   "version" : 1

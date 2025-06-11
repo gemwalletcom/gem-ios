@@ -17,14 +17,14 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/gemwalletcom/KeychainAccess", exact: Version(4, 2, 2)),
+        .package(name: "Keychain", path: "../Keychain")
     ],
     targets: [
         .target(
             name: "Preferences",
             dependencies: [
                 "Primitives",
-                .product(name: "KeychainAccess", package: "KeychainAccess"),
+                "Keychain"
             ],
             path: "Sources"
         ),

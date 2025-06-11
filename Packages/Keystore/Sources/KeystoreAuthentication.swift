@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-import KeychainAccess
+import Keychain
 import LocalAuthentication
 
 public enum KeystoreAuthentication: String, Sendable {

@@ -461,6 +461,26 @@
                ReferencedContainer = "container:Services/WalletService">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OnboardingTest"
+               BuildableName = "OnboardingTest"
+               BlueprintName = "OnboardingTest"
+               ReferencedContainer = "container:Features/Onboarding">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "KeychainTests"
+               BuildableName = "KeychainTests"
+               BlueprintName = "KeychainTests"
+               ReferencedContainer = "container:Packages/Keychain">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
