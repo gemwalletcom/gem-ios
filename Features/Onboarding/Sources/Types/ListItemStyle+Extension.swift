@@ -2,7 +2,7 @@
 
 import Foundation
 import Components
-import SwiftUICore
+import SwiftUI
 
 extension ListItemImageStyle {
     static func security(_ emoji: String) -> ListItemImageStyle? {

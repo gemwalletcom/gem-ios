@@ -18,5 +18,5 @@ public enum AssetsRequestFilter {
     case priceAlerts
 }
 
-extension AssetsRequestFilter: Equatable {}
+extension AssetsRequestFilter: Equatable, Hashable {}
 extension AssetsRequestFilter: Sendable {}
