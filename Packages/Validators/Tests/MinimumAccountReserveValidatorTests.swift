@@ -4,6 +4,7 @@ import Foundation
 import Testing
 import BigInt
 import Primitives
+import PrimitivesTestKit
 
 @testable import Validators
 
