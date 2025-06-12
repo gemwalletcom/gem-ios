@@ -9,36 +9,69 @@ import Components
 
 struct AddressListItemViewModelTests {
     
-    @Test("Subtitle includes name and address when name is different from address")
+    @Test
     func subtitleWithName() {
         let model = AddressListItemViewModel(
             title: "Recipient",
             account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
-            style: .short,
+            mode: .auto(addressStyle: .short),
             explorerService: MockExplorerLink()
         )
         
         #expect(model.subtitle == "Alice (0x12345...01112)")
     }
 
-    @Test("Subtitle includes name only if assetImage presented")
+    @Test
     func subtitleWithoutAddress() {
         let model = AddressListItemViewModel(
             title: "Recipient",
             account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: AssetImage()),
-            style: .short,
+            mode: .auto(addressStyle: .short),
             explorerService: MockExplorerLink()
         )
         
         #expect(model.subtitle == "Alice")
     }
     
-    @Test("Subtitle falls back to formatted address if name is nil")
+    @Test
     func subtitleWithoutName() {
         let model = AddressListItemViewModel(
             title: "Recipient",
             account: SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil),
-            style: .full,
+            mode: .auto(addressStyle: .full),
+            explorerService: MockExplorerLink()
+        )
+        #expect(model.subtitle == "0x123456789101112")
+    }
+
+    @Test
+    func subtitleAddressMode() {
+        let model = AddressListItemViewModel(
+            title: "Recipient",
+            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            mode: .address(addressStyle: .short),
+            explorerService: MockExplorerLink()
+        )
+        #expect(model.subtitle == "0x12345...01112")
+    }
+
+    @Test
+    func subtitleNameOrAddressWithName() {
+        let model = AddressListItemViewModel(
+            title: "Recipient",
+            account: SimpleAccount(name: "Alice", chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            mode: .nameOrAddress,
+            explorerService: MockExplorerLink()
+        )
+        #expect(model.subtitle == "Alice")
+    }
+
+    @Test
+    func subtitleNameOrAddressWithoutName() {
+        let model = AddressListItemViewModel(
+            title: "Recipient",
+            account: SimpleAccount(name: nil, chain: .ethereum, address: "0x123456789101112", assetImage: nil),
+            mode: .nameOrAddress,
             explorerService: MockExplorerLink()
         )
         #expect(model.subtitle == "0x123456789101112")

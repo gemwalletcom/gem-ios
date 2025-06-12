@@ -53,19 +53,24 @@ struct TransferDataViewModel {
     }
 
     var recepientAccount: SimpleAccount {
-        switch type {
-        case .swap(_, _, let quote, _): SimpleAccount(
-            name: recipientName,
-            chain: chain,
-            address: recipient.address,
-            assetImage: SwapProviderViewModel(provider: quote.data.provider).providerImage
-        )
-        default: SimpleAccount(
+        SimpleAccount(
             name: recipientName,
             chain: chain,
             address: recipient.address,
             assetImage: .none
-        )}
+        )
+    }
+
+    var recipientMode: AddressListItemViewModel.Mode {
+        switch type {
+        case .transfer,
+                .transferNft,
+                .tokenApprove,
+                .stake,
+                .account,
+                .generic: .auto(addressStyle: .short)
+        case .swap: .nameOrAddress
+        }
     }
 
     var appValue: String? {
