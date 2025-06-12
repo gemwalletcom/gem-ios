@@ -7,42 +7,37 @@ import GemstonePrimitives
 import Components
 import Style
 
-public enum AssetScoreViewModel {
-    case verified
-    case unverified
-    case malicious
+public struct AssetScoreViewModel {
+    private let scoreType: AssetScoreType
 
     public init(score: Int32) {
         switch score {
-        case ...5:
-            self = .malicious
-        case 6...15:
-            self = .unverified
-        default:
-            self = .verified
+        case ...5: scoreType = .suspicious
+        case 6...15: scoreType = .unverified
+        default: scoreType = .verified
         }
     }
     
     public var hasWarning: Bool {
-        switch self {
-        case .malicious, .unverified: true
+        switch scoreType {
+        case .suspicious, .unverified: true
         case .verified: false
         }
     }
     
     public var status: String {
-        switch self {
+        switch scoreType {
         case .verified: .empty
         case .unverified: Localized.Asset.Verification.unverified
-        case .malicious: Localized.Asset.Verification.malicious
+        case .suspicious: Localized.Asset.Verification.suspicious
         }
     }
     
     public var assetImage: AssetImage? {
-        switch self {
+        switch scoreType {
         case .verified: AssetImage()
         case .unverified: AssetImage(placeholder: Images.AssetVerification.orange)
-        case .malicious: AssetImage(placeholder: Images.AssetVerification.red)
+        case .suspicious: AssetImage(placeholder: Images.AssetVerification.red)
         }
     }
 
