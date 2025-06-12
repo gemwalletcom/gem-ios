@@ -70,15 +70,7 @@ public struct ConnectionsScene: View {
         .sheet(isPresented: $isPresentingScanner) {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button() {
-                    isPresentingScanner = true
-                } label: {
-                    Images.System.qrCode
-                }
-            }
-        }
+        .toolbarInfoButton(url: model.docsUrl)
         .alert("",
                isPresented: $isPresentingErrorMessage.mappedToBool(),
                actions: {},

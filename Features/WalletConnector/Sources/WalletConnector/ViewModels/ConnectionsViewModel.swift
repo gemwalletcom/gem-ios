@@ -6,6 +6,7 @@ import Store
 import Localization
 import PrimitivesComponents
 import Components
+import GemstonePrimitives
 
 @Observable
 @MainActor
@@ -26,6 +27,7 @@ public final class ConnectionsViewModel {
     var disconnectTitle: String { Localized.WalletConnect.disconnect }
     var pasteButtonTitle: String { Localized.Common.paste }
     var scanQRCodeButtonTitle: String { Localized.Wallet.scanQrCode }
+    var docsUrl: URL { Docs.url(.walletConnect) }
     
     var sections: [ListSection<WalletConnection>] {
         Dictionary(grouping: connections, by: { $0.wallet }).map { wallet, connections in

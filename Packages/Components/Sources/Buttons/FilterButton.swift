@@ -23,7 +23,6 @@ public struct FilterButton: View {
                     .foregroundStyle(.primary)
             }
         }
-        .accessibilityIdentifier(.filterButton)
         .contentTransition(.symbolEffect(.replace))
     }
 }

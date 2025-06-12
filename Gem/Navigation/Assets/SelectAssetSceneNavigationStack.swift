@@ -61,7 +61,6 @@ struct SelectAssetSceneNavigationStack: View {
                         } label: {
                             Images.System.plus
                         }
-                        .accessibilityIdentifier(.plusButton)
                     }
                 }
             }
