@@ -33,25 +33,19 @@ struct TransactionDetailViewModel {
     var dateField: String { Localized.Transaction.date }
     var memoField: String { Localized.Transfer.memo }
     
-    var providerListModel: AddressListItemViewModel? {
+    var providerListItem: ListItemImageValue? {
         guard
             let metadata = model.transaction.transaction.metadata,
             case let .swap( metadata) = metadata,
-            let providerId = metadata.provider
-        else {
+            let providerId = metadata.provider else {
             return .none
         }
         let config = SwapProviderConfig.fromString(id: providerId).inner()
-        return AddressListItemViewModel(
+        
+        return ListItemImageValue(
             title: Localized.Common.provider,
-            account: SimpleAccount(
-                name: config.name,
-                chain: chain,
-                address: model.transaction.transaction.to,
-                assetImage: nil
-            ),
-            style: .short,
-            explorerService: model.explorerService
+            subtitle: config.name,
+            assetImage: nil
         )
     }
     
