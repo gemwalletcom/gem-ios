@@ -35,7 +35,7 @@ public struct AssetRequest: ValueObservationQueryable {
     }
 }
 
-// MARK: - Models Exttensions
+// MARK: - Models Extensions
 
 //TODO: Find a way to remove .empty
 
