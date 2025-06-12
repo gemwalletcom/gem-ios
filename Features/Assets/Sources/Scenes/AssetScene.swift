@@ -51,7 +51,7 @@ public struct AssetScene: View {
                 } else {
                     networkView
                 }
-                if model.scoreViewModel.hasWarning {
+                if model.showStatus {
                     let view = ListItemImageView(
                         title: Localized.Transaction.status,
                         subtitle: model.scoreViewModel.status,

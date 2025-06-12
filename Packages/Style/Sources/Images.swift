@@ -190,9 +190,9 @@ public enum Images {
         public static let balance = Image(.filtersBalance)
 	}
     
-    public enum AssetVerification {
-        public static let orange = Image(.verificationOrange)
-        public static let red = Image(.verificationRed)
+    public enum TokenStatus {
+        public static let warning = Image(.verificationOrange)
+        public static let risk = Image(.verificationRed)
     }
 }
 

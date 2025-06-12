@@ -152,6 +152,9 @@ public final class AssetSceneViewModel: Sendable {
     var scoreViewModel: AssetScoreViewModel {
         AssetScoreViewModel(score: assetData.metadata.rankScore)
     }
+    var showStatus: Bool {
+        scoreViewModel.hasWarning
+    }
 }
 
 
