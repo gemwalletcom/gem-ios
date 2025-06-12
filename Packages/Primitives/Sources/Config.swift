@@ -28,12 +28,22 @@ public struct ConfigVersions: Codable, Sendable {
 	}
 }
 
+public struct SwapConfig: Codable, Sendable {
+	public let enabledProviders: [SwapProvider]
+
+	public init(enabledProviders: [SwapProvider]) {
+		self.enabledProviders = enabledProviders
+	}
+}
+
 public struct ConfigResponse: Codable, Sendable {
 	public let releases: [Release]
 	public let versions: ConfigVersions
+	public let swap: SwapConfig
 
-	public init(releases: [Release], versions: ConfigVersions) {
+	public init(releases: [Release], versions: ConfigVersions, swap: SwapConfig) {
 		self.releases = releases
 		self.versions = versions
+		self.swap = swap
 	}
 }

@@ -15,7 +15,7 @@ extension Config {
         getBitcoinChainConfig(chain: bitcoinChain.rawValue)
     }
     
-    public func swapConfig() -> SwapConfig {
+    public func swapConfig() -> Gemstone.SwapConfig {
         getSwapConfig()
     }
 }

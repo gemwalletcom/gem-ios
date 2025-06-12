@@ -20,7 +20,8 @@ let package = Package(
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
-        .package(name: "Style", path: "../Style")
+        .package(name: "Style", path: "../Style"),
+        .package(name: "Validators", path: "../Validators")
     ],
     targets: [
         .target(
@@ -31,7 +32,8 @@ let package = Package(
                 "WalletCorePrimitives",
                 "Localization",
                 "Components",
-                "Style"
+                "Style",
+                "Validators"
             ],
             path: "Sources"
         ),

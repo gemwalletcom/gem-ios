@@ -9,7 +9,6 @@ import Primitives
 
 struct SecurityReminderScene: View {
     @State private var model: SecurityReminderViewModel
-    @State private var isPresentingUrl: URL? = nil
     
     init(model: SecurityReminderViewModel) {
         self.model = model
@@ -50,15 +49,7 @@ struct SecurityReminderScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("", systemImage: SystemImage.info) {
-                    isPresentingUrl = model.docsUrl
-                }
-                .accessibilityIdentifier(.safariInfoButton)
-            }
-        }
-        .safariSheet(url: $isPresentingUrl)
+        .toolbarInfoButton(url: model.docsUrl)
     }
 }
 

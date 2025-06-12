@@ -9,6 +9,8 @@ public extension Spacing {
     static let space2: Spacing = 2
     /// 4
     static let space4: Spacing = 4
+    /// 6
+    static let space6: Spacing = 6
     /// 8
     static let space8: Spacing = 8
     /// 12
