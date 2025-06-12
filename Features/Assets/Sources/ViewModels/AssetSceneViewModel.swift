@@ -113,13 +113,22 @@ public final class AssetSceneViewModel: Sendable {
             currencyCode: preferences.preferences.currency
         )
     }
-
+    
+    var allBanners: [Banner] {
+        let allBanners = (assetDataModel.isActive ? [] : [
+            Banner(
+                wallet: .none,
+                asset: assetDataModel.asset,
+                chain: .none,
+                event: .activateAsset,
+                state: .alwaysActive
+            )
+        ])
+        
+        return allBanners + banners
+    }
+    
     var assetHeaderModel: AssetHeaderViewModel {
-        let allBanners = (assetDataModel.isActive ? [] : [Banner(wallet: .none,
-                                                                 asset: assetDataModel.asset,
-                                                                 chain: .none,
-                                                                 event: .activateAsset,
-                                                                 state: .alwaysActive)]) + banners
         return AssetHeaderViewModel(
             assetDataModel: assetDataModel,
             walletModel: walletModel,

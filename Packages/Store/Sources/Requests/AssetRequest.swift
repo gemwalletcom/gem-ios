@@ -61,7 +61,7 @@ extension AssetData {
                 isPinned: false,
                 isActive: true,
                 stakingApr: .none,
-                rankScore: 50
+                rankScore: 0
             )
         )
     }()
@@ -87,7 +87,7 @@ extension AssetData {
                 isPinned: false,
                 isActive: true,
                 stakingApr: .none,
-                rankScore: 50
+                rankScore: 0
             )
         )
     }
