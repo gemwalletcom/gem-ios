@@ -25,7 +25,6 @@ public struct TagsView<T: TagItemViewable>: View {
                     }
                 }
             }
-            .accessibilityIdentifier(.tagsView)
         }
     }
 }
@@ -67,6 +66,5 @@ public struct TagView<T: TagItemViewable>: View {
 
         }
         .buttonStyle(.plain)
-        .accessibilityIdentifier(.key(tag.id))
     }
 }

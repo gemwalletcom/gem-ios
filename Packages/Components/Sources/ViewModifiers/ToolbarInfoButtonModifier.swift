@@ -25,7 +25,6 @@ struct ToolbarInfoButtonModifier: ViewModifier {
                     Button("", systemImage: SystemImage.info) {
                         isPresentingUrl = url
                     }
-                    .accessibilityIdentifier(.safariInfoButton)
                 }
             }
             .safariSheet(url: $isPresentingUrl)

@@ -42,7 +42,6 @@ struct ImportWalletScene: View {
                             Picker("", selection: $importType) {
                                 ForEach(model.importTypes) { type in
                                     Text(type.title).tag(type)
-                                        .accessibilityIdentifier(.walletImportType(type.rawValue))
                                 }
                             }
                             .pickerStyle(.segmented)
@@ -55,7 +54,6 @@ struct ImportWalletScene: View {
                                 .keyboardType(.asciiCapable)
                                 .frame(minHeight: 80, alignment: .top)
                                 .focused($focusedField, equals: .input)
-                                .accessibilityIdentifier(importType.id.lowercased())
                                 .toolbar {
                                     if importType.showToolbar {
                                         ToolbarItem(placement: .keyboard) {
@@ -64,7 +62,6 @@ struct ImportWalletScene: View {
                                     }
                                 }
                                 .padding(.top, .small + .tiny)
-                                .accessibilityIdentifier(.phraseTextField)
                             
                                 if let chain = model.chain, importType == .address {
                                     NameRecordView(
