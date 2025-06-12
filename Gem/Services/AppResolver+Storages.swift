@@ -7,8 +7,8 @@ import Preferences
 
 extension AppResolver {
     struct Storages {
-        let db: DB = .main
+        let db: DB = DB(fileName: "db.sqlite")
         let observablePreferences: ObservablePreferences = .default
-        let keystore: any Keystore = LocalKeystore.main
+        let keystore: any Keystore = LocalKeystore()
     }
 }
