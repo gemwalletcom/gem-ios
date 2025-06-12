@@ -121,7 +121,7 @@ public final class ConfirmTransferViewModel {
         AddressListItemViewModel(
             title: dataModel.recipientTitle,
             account: dataModel.recepientAccount,
-            style: .short,
+            mode: dataModel.recipientMode,
             explorerService: explorerService
         )
     }

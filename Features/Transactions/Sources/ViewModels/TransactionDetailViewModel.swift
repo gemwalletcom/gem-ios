@@ -99,7 +99,7 @@ struct TransactionDetailViewModel {
         return AddressListItemViewModel(
             title: title,
             account: account,
-            style: .full,
+            mode: .auto(addressStyle: .full),
             explorerService: ExplorerService.standard
         )
     }
