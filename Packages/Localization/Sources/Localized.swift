@@ -82,8 +82,8 @@ public enum Localized {
       }
     }
     public enum Verification {
-      /// Malicious
-      public static let malicious = Localized.tr("Localizable", "asset.verification.malicious", fallback: "Malicious")
+      /// Suspicious
+      public static let suspicious = Localized.tr("Localizable", "asset.verification.suspicious", fallback: "Suspicious")
       /// Unverified
       public static let unverified = Localized.tr("Localizable", "asset.verification.unverified", fallback: "Unverified")
       /// Anyone can create one - including fake or malicious tokens.

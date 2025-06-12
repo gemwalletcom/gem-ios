@@ -4,6 +4,7 @@ import Foundation
 import Testing
 import Primitives
 import PrimitivesTestKit
+import Validators
 
 @testable import PrimitivesComponents
 
@@ -83,7 +84,7 @@ struct InputValidationViewModelTests {
           model.text = "wrong"
           #expect(model.isInvalid)
 
-          // updat evalidators
+          // update validators
           model.update(validators: [])
 
           #expect(model.isValid)

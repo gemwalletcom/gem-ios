@@ -8,7 +8,6 @@ import Components
 import Primitives
 
 struct AcceptTermsScene: View {
-    @State private var isPresentingUrl: URL? = nil
     @State private var model: AcceptTermsViewModel
     
     init(model: AcceptTermsViewModel) {
@@ -49,14 +48,6 @@ struct AcceptTermsScene: View {
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("", systemImage: SystemImage.info) {
-                    isPresentingUrl = model.termsAndServicesURL
-                }
-                .accessibilityIdentifier(.safariInfoButton)
-            }
-        }
-        .safariSheet(url: $isPresentingUrl)
+        .toolbarInfoButton(url: model.termsAndServicesURL)
     }
 }

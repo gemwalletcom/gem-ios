@@ -198,7 +198,7 @@ public struct SolanaSigner: Signable {
             let instruction = SolanaInstruction(
                 programId: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
                 accounts: [
-                    SolanaAccountMeta(pubkey: input.senderAddress, isSigner: true, isWritable: true)
+                    SolanaAccountMeta(pubkey: input.senderAddress)
                 ],
                 data: Base58.encodeNoCheck(data: try memo.encodedData())
             )

@@ -26,3 +26,9 @@ public enum AssetRank: String, Codable, CaseIterable, Equatable, Sendable {
 	case fradulent
 	case unknown
 }
+
+public enum AssetScoreType: String, Codable, Equatable, Sendable {
+	case verified
+	case unverified
+	case suspicious
+}

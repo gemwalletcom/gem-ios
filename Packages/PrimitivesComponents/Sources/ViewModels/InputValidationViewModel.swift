@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Validators
 
 public enum InputValidationMode {
     case onDemand, manual
@@ -16,6 +17,7 @@ public final class InputValidationViewModel {
     }
 
     public private(set) var error: (any Error)?
+    
 
     private let mode: InputValidationMode
     private var validators: [any TextValidator]
