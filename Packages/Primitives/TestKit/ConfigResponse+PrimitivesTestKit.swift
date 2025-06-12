@@ -10,7 +10,8 @@ public extension ConfigResponse {
     ) -> Self {
         ConfigResponse(
             releases: releases,
-            versions: versions
+            versions: versions,
+            swap: SwapConfig(enabledProviders: [])
         )
     }
 }

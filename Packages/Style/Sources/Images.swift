@@ -188,6 +188,11 @@ public enum Images {
 
     public enum Filters {
         public static let balance = Image(.filtersBalance)
+	}
+    
+    public enum TokenStatus {
+        public static let warning = Image(.verificationOrange)
+        public static let risk = Image(.verificationRed)
     }
 }
 

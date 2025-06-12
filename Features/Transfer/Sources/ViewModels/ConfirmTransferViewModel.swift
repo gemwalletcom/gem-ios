@@ -14,6 +14,7 @@ import WalletConnector
 import WalletsService
 import InfoSheet
 import Signer
+import Validators
 
 @Observable
 @MainActor

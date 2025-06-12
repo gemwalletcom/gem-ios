@@ -17,6 +17,7 @@ struct SwapTokenEmptyView: View {
             onSelectAssetAction()
         } label: {
             HStack {
+                Spacer()
                 Text(Localized.Assets.selectAsset)
                     .padding(.horizontal, .extraSmall)
                     .padding(.vertical, .medium)

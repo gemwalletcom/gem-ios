@@ -51,7 +51,6 @@ public struct WalletsScene: View {
                         }
                     }
                 )
-                .accessibilityIdentifier(.manageWalletsCreateButton)
                 Button(
                     action: onSelectImportWallet,
                     label: {
@@ -61,7 +60,6 @@ public struct WalletsScene: View {
                         }
                     }
                 )
-                .accessibilityIdentifier(.manageWalletsImportButton)
             }
             .listRowInsets(.assetListRowInsets)
 

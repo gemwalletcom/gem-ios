@@ -26,26 +26,22 @@ struct GemApp: App {
     
     var body: some Scene {
         WindowGroup {
-            if let launchEnvironment = UITestLaunchScenario(info: ProcessInfo.processInfo) {
-                LaunchEnvironmentView(launchEnvironment: launchEnvironment)
-            } else {
-                RootScene(
-                    model: RootSceneViewModel(
-                        walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
-                        onstartService: resolver.services.onstartService,
-                        transactionService: resolver.services.transactionService,
-                        connectionsService: resolver.services.connectionsService,
-                        deviceObserverService: resolver.services.deviceObserverService,
-                        notificationHandler: resolver.services.notificationHandler,
-                        lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
-                        walletService: resolver.services.walletService,
-                        walletsService: resolver.services.walletsService
-                    )
+            RootScene(
+                model: RootSceneViewModel(
+                    walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
+                    onstartService: resolver.services.onstartService,
+                    transactionService: resolver.services.transactionService,
+                    connectionsService: resolver.services.connectionsService,
+                    deviceObserverService: resolver.services.deviceObserverService,
+                    notificationHandler: resolver.services.notificationHandler,
+                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
+                    walletService: resolver.services.walletService,
+                    walletsService: resolver.services.walletsService
                 )
-                .inject(resolver: resolver)
-                .navigationBarTitleDisplayMode(.inline)
-                .tint(Colors.black)
-            }
+            )
+            .inject(resolver: resolver)
+            .navigationBarTitleDisplayMode(.inline)
+            .tint(Colors.black)
         }
     }
 }

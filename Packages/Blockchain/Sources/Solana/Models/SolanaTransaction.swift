@@ -6,13 +6,9 @@ import Foundation
 
 public struct SolanaAccountMeta: Codable, Sendable {
 	public let pubkey: String
-	public let isSigner: Bool
-	public let isWritable: Bool
 
-	public init(pubkey: String, isSigner: Bool, isWritable: Bool) {
+	public init(pubkey: String) {
 		self.pubkey = pubkey
-		self.isSigner = isSigner
-		self.isWritable = isWritable
 	}
 }
 
