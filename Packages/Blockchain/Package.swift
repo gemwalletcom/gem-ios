@@ -16,7 +16,7 @@ let package = Package(
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Gemstone", path: "../Gemstone"),
-        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
+        .package(name: "GemstonePrimitives", path: "../GemstonePrimitives")
     ],
     targets: [
         .target(
@@ -28,7 +28,7 @@ let package = Package(
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 "WalletCorePrimitives",
                 "Gemstone",
-                "GemstonePrimitives",
+                "GemstonePrimitives"
             ],
             path: "Sources"
         ),

@@ -2,15 +2,17 @@
 
 import Foundation
 
-struct AppResolver {
+struct AppResolver: Sendable {
     let storages: Storages
     let navigation: NavigationStateManager
     let services: Services
 
-    init(
+    public static let main: AppResolver = AppResolver()
+
+    private init(
         storages: Storages = Storages(),
         factory: ServicesFactory = ServicesFactory(),
-        navigation: NavigationStateManager = .main
+        navigation: NavigationStateManager = NavigationStateManager()
     ) {
         self.storages = storages
         self.navigation = navigation

@@ -10,7 +10,7 @@ import WalletService
 
 // OnstartService runs services before the app starts.
 // See OnstartAsyncService for any background tasks to run after start
-public struct OnstartService {
+public struct OnstartService: Sendable {
     
     private let assetsService: AssetsService
     private let assetStore: AssetStore

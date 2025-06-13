@@ -18,9 +18,11 @@ import WalletsService
 import WalletService
 import AppService
 import ScanService
+import NFTService
+import AvatarService
 
 extension AppResolver {
-    struct Services {
+    struct Services: Sendable {
         // Environment-level services
         let assetsService: AssetsService
         let balanceService: BalanceService
@@ -40,9 +42,13 @@ extension AppResolver {
         let walletsService: WalletsService
         let explorerService: ExplorerService
         let scanService: ScanService
-
+        let nftService: NFTService
+        let avatarService: AvatarService
+        let subscriptionsService: SubscriptionService
+        let appReleaseService: AppReleaseService
         let deviceObserverService: DeviceObserverService
-        let onstartService: OnstartAsyncService
+        let onstartService: OnstartService
+        let onstartAsyncService: OnstartAsyncService
         let walletConnectorManager: WalletConnectorManager
 
         init(
@@ -64,8 +70,13 @@ extension AppResolver {
             walletsService: WalletsService,
             explorerService: ExplorerService,
             scanService: ScanService,
+            nftService: NFTService,
+            avatarService: AvatarService,
+            appReleaseService: AppReleaseService,
+            subscriptionsService: SubscriptionService,
             deviceObserverService: DeviceObserverService,
-            onstartService: OnstartAsyncService,
+            onstartService: OnstartService,
+            onstartAsyncService: OnstartAsyncService,
             walletConnectorManager: WalletConnectorManager
         ) {
             self.assetsService = assetsService
@@ -86,8 +97,13 @@ extension AppResolver {
             self.walletsService = walletsService
             self.explorerService = explorerService
             self.scanService = scanService
+            self.nftService = nftService
+            self.avatarService = avatarService
+            self.appReleaseService = appReleaseService
             self.deviceObserverService = deviceObserverService
+            self.subscriptionsService = subscriptionsService
             self.onstartService = onstartService
+            self.onstartAsyncService = onstartAsyncService
             self.walletConnectorManager = walletConnectorManager
         }
     }

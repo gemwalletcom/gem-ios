@@ -32,7 +32,8 @@ public final class OnstartAsyncService: Sendable {
         assetsService: AssetsService,
         deviceService: DeviceService,
         bannerSetupService: BannerSetupService,
-        configService: any GemAPIConfigService = GemAPIService()
+        configService: any GemAPIConfigService,
+        releaseService: AppReleaseService
     ) {
         self.assetStore = assetStore
         self.nodeStore = nodeStore
@@ -45,9 +46,7 @@ public final class OnstartAsyncService: Sendable {
         self.deviceService = deviceService
         self.bannerSetupService = bannerSetupService
         self.configService = configService
-        self.releaseService = AppReleaseService(
-            configService: configService
-        )
+        self.releaseService = releaseService
     }
 
     public func setup() {

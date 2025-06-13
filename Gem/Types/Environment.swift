@@ -27,26 +27,26 @@ import AppService
 import ScanService
 
 extension EnvironmentValues {
-    @Entry var navigationState: NavigationStateManager = .main
-    @Entry var keystore: any Keystore = LocalKeystore.main
-    @Entry var nodeService: NodeService = .main
-    @Entry var priceService: PriceService = .main
-    @Entry var priceObserverService: PriceObserverService = .main
-    @Entry var explorerService: ExplorerService = .standard
-    @Entry var walletsService: WalletsService = .main
-    @Entry var walletService: WalletService = .main
-    @Entry var priceAlertService: PriceAlertService = .main
-    @Entry var deviceService: DeviceService = .main
-    @Entry var balanceService: BalanceService = .main
-    @Entry var bannerService: BannerService = .main
-    @Entry var transactionsService: TransactionsService = .main
-    @Entry var assetsService: AssetsService = .main
-    @Entry var notificationHandler: NotificationHandler = .main
-    @Entry var stakeService: StakeService = .main
-    @Entry var connectionsService: ConnectionsService = .main
-    @Entry var chainServiceFactory: ChainServiceFactory = .main
-    @Entry var nftService: NFTService = .main
-    @Entry var avatarService: AvatarService = .main
-    @Entry var releaseService: AppReleaseService = .main
-    @Entry var scanService: ScanService = .main
+    @Entry var navigationState: NavigationStateManager = AppResolver.main.navigation
+    @Entry var keystore: any Keystore = AppResolver.main.storages.keystore
+    @Entry var nodeService: NodeService = AppResolver.main.services.nodeService
+    @Entry var priceService: PriceService = AppResolver.main.services.priceService
+    @Entry var priceObserverService: PriceObserverService = AppResolver.main.services.priceObserverService
+    @Entry var explorerService: ExplorerService = AppResolver.main.services.explorerService
+    @Entry var walletsService: WalletsService = AppResolver.main.services.walletsService
+    @Entry var walletService: WalletService = AppResolver.main.services.walletService
+    @Entry var priceAlertService: PriceAlertService = AppResolver.main.services.priceAlertService
+    @Entry var deviceService: DeviceService = AppResolver.main.services.deviceService
+    @Entry var balanceService: BalanceService = AppResolver.main.services.balanceService
+    @Entry var bannerService: BannerService = AppResolver.main.services.bannerService
+    @Entry var transactionsService: TransactionsService =  AppResolver.main.services.transactionsService
+    @Entry var assetsService: AssetsService = AppResolver.main.services.assetsService
+    @Entry var notificationHandler: NotificationHandler =  AppResolver.main.services.notificationHandler
+    @Entry var stakeService: StakeService = AppResolver.main.services.stakeService
+    @Entry var connectionsService: ConnectionsService = AppResolver.main.services.connectionsService
+    @Entry var chainServiceFactory: ChainServiceFactory = AppResolver.main.services.chainServiceFactory
+    @Entry var nftService: NFTService = AppResolver.main.services.nftService
+    @Entry var avatarService: AvatarService = AppResolver.main.services.avatarService
+    @Entry var releaseService: AppReleaseService = AppResolver.main.services.appReleaseService
+    @Entry var scanService: ScanService = AppResolver.main.services.scanService
 }
