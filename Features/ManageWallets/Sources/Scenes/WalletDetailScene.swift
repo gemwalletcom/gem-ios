@@ -88,7 +88,7 @@ public struct WalletDetailScene: View {
                             model: AddressListItemViewModel(
                                 title: Localized.Common.address,
                                 account: account,
-                                style: .short,
+                                mode: .auto(addressStyle: .short),
                                 explorerService: model.explorerService
                             )
                         )
