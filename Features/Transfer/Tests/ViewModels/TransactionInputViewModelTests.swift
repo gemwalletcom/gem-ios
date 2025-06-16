@@ -76,6 +76,19 @@ struct TransactionInputViewModelTests {
         
         #expect(viewModel.networkFeeFiatText == "$0.000000015")
     }
+    
+    @Test
+    func testNilFee() {
+        let viewModel = TransactionInputViewModel(
+            data: .mock(),
+            transactionData: nil,
+            metaData: nil,
+            transferAmountResult: nil
+        )
+        
+        #expect(viewModel.networkFeeText == "-")
+        #expect(viewModel.networkFeeFiatText == nil)
+    }
 }
 
 extension TransferData {

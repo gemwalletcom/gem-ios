@@ -50,7 +50,10 @@ struct TransactionInputViewModel {
     }
     
     var networkFeeText: String? {
-        infoModel.feeValueText
+        guard let text = infoModel.feeValueText else {
+            return "-"
+        }
+        return text
     }
     
     var networkFeeFiatText: String? {
