@@ -365,9 +365,6 @@ extension ServicesFactory {
         )
     }
 
-    /*
-
-     */
     private static func makeOnstartService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
