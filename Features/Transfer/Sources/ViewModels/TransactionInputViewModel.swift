@@ -50,10 +50,10 @@ struct TransactionInputViewModel {
     }
     
     var networkFeeText: String? {
-        switch transferAmountResult {
-        case .amount: infoModel.feeValueText
-        case .error, nil: "-"
+        guard let text = infoModel.feeValueText else {
+            return "-"
         }
+        return text
     }
     
     var networkFeeFiatText: String? {
