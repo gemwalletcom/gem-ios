@@ -3,7 +3,7 @@
 import Testing
 import Foundation
 import BigInt
-@testable import Primitives
+import Formatters
 
 struct NumberInputNormalizerTests {
     @Test
