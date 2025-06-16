@@ -21,7 +21,8 @@ let package = Package(
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
         .package(name: "Style", path: "../Style"),
-        .package(name: "Validators", path: "../Validators")
+        .package(name: "Validators", path: "../Validators"),
+        .package(name: "Formatters", path: "../Formatters")
     ],
     targets: [
         .target(
@@ -33,7 +34,8 @@ let package = Package(
                 "Localization",
                 "Components",
                 "Style",
-                "Validators"
+                "Validators",
+                "Formatters"
             ],
             path: "Sources"
         ),

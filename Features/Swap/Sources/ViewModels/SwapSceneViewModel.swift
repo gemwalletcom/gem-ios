@@ -14,6 +14,7 @@ import Style
 import SwapService
 import WalletsService
 import struct Gemstone.SwapQuote
+import Formatters
 
 @MainActor
 @Observable

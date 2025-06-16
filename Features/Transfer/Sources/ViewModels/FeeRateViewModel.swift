@@ -6,6 +6,7 @@ import Style
 import Localization
 import SwiftUI
 import Components
+import Formatters
 
 public struct FeeRateViewModel: Identifiable {
     static let formatter = CurrencyFormatter()

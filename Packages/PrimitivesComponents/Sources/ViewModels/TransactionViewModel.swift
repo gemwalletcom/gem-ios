@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import BigInt
 import Localization
+import Formatters
 
 public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended

@@ -6,6 +6,7 @@ import Localization
 import ChainService
 import NodeService
 import ExplorerService
+import Formatters
 
 @Observable
 @MainActor

@@ -1,7 +1,8 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Primitives
+import PrimitivesTestKit
+@testable import Formatters
 
 final class AddressFormatterTests {
     @Test
