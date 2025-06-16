@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Store
 import ChainService
+import Formatters
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore

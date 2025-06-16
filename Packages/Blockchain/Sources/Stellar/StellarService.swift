@@ -5,6 +5,7 @@ import Primitives
 import SwiftHTTPClient
 import BigInt
 import GemstonePrimitives
+import Formatters
 
 public struct StellarService: Sendable {
     

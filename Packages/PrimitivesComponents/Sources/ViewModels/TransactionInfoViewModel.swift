@@ -3,6 +3,7 @@
 import Foundation
 import BigInt
 import Primitives
+import Formatters
 
 public struct TransactionInfoViewModel: Sendable {
     private let asset: Asset

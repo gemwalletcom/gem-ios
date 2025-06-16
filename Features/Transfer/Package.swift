@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Components", path: "../../Packages/Components"),
@@ -48,6 +49,7 @@ let package = Package(
             name: "Transfer",
             dependencies: [
                 "Primitives",
+                "Formatters",
                 "Localization",
                 "Style",
                 "Components",

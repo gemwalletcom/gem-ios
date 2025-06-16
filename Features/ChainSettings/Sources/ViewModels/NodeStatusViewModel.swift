@@ -4,6 +4,7 @@ import Primitives
 import Style
 import Localization
 import SwiftUI
+import Formatters
 
 struct NodeStatusViewModel: Sendable {
     let nodeStatus: NodeStatus

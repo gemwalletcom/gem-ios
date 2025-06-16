@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public struct AddressFormatter {
-    
     public enum Style {
         case short
         case full
@@ -40,12 +40,9 @@ public struct AddressFormatter {
     
     public func value() -> String {
         switch style {
-        case .short:
-            return address.truncate(first: first, last: shownNumberOfCharacters)
-        case .full:
-            return address
-        case .extra(let extra):
-            return address.truncate(first: first + extra, last: shownNumberOfCharacters + extra)
+        case .short: address.truncate(first: first, last: shownNumberOfCharacters)
+        case .full: address
+        case .extra(let extra): address.truncate(first: first + extra, last: shownNumberOfCharacters + extra)
         }
     }
 }
