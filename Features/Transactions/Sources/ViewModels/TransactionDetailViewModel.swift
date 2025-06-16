@@ -45,7 +45,7 @@ struct TransactionDetailViewModel {
         return ListItemImageValue(
             title: Localized.Common.provider,
             subtitle: config.name,
-            assetImage: AssetImage.image(config.image)
+            assetImage: nil
         )
     }
     
@@ -99,7 +99,7 @@ struct TransactionDetailViewModel {
         return AddressListItemViewModel(
             title: title,
             account: account,
-            style: .full,
+            mode: .auto(addressStyle: .full),
             explorerService: ExplorerService.standard
         )
     }

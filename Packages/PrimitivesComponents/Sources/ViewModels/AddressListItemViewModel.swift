@@ -6,33 +6,36 @@ import Localization
 import Components
 
 public struct AddressListItemViewModel {
+    
+    public enum Mode {
+        case auto(addressStyle: AddressFormatter.Style)
+        case address(addressStyle: AddressFormatter.Style)
+        case nameOrAddress
+    }
+
     public let title: String
     public let account: SimpleAccount
-    public let style: AddressFormatter.Style
+    public let mode: Mode
     private let explorerService: ExplorerLinkFetchable
 
     public init(
         title: String,
         account: SimpleAccount,
-        style: AddressFormatter.Style,
+        mode: Mode,
         explorerService: some ExplorerLinkFetchable
     ) {
         self.title = title
         self.account = account
-        self.style = style
+        self.mode = mode
         self.explorerService = explorerService
     }
 
     public var subtitle: String {
-        if account.name == account.address || account.name == nil {
-            return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
-        } else if let _ = account.assetImage, let name = account.name {
-            return name
-        } else if let name = account.name {
-            let address = AddressFormatter(style: .short, address: account.address, chain: account.chain).value()
-            return "\(name) (\(address))"
+        switch mode {
+        case .auto(let style): auto(for: style)
+        case .address(let style): address(for: style)
+        case .nameOrAddress: account.name ?? account.address
         }
-        return account.address
     }
     
     public var assetImage: AssetImage? {
@@ -49,5 +52,23 @@ public struct AddressListItemViewModel {
 
     public var addressExplorerUrl: URL {
         addressLink.url
+    }
+    
+    // MARK: - Private methods
+    
+    private func auto(for style: AddressFormatter.Style) -> String {
+        if account.name == account.address || account.name == nil {
+            return address(for: style)
+        } else if let _ = account.assetImage, let name = account.name {
+            return name
+        } else if let name = account.name {
+            let address = address(for: .short)
+            return "\(name) (\(address))"
+        }
+        return account.address
+    }
+
+    private func address(for style: AddressFormatter.Style) -> String {
+        return AddressFormatter(style: style, address: account.address, chain: account.chain).value()
     }
 }
