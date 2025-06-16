@@ -1,4 +1,4 @@
-"NSCameraUsageDescription" = "Gem Wallet needs access to your Camera to scan QR Codes.";
+"NSCameraUsageDescription" = "Gem Wallet are nevoie de acces la camera foto pentru a scana coduri QR.";
 "NSPhotoLibraryAddUsageDescription" = "Această aplicație necesită acces la biblioteca ta foto pentru a salva NFT-uri.";
 "NSFaceIDUsageDescription" = "Activarea Face ID ajută Gem Wallet să vă păstreze bunurile în siguranță.";
-"NSPhotoLibraryUsageDescription" = "We need access to your photo library to let you select photos.";
+"NSPhotoLibraryUsageDescription" = "Avem nevoie de acces la biblioteca ta foto pentru a te ajuta să selectezi fotografii.";
