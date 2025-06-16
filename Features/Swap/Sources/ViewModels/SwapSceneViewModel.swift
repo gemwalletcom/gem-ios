@@ -48,7 +48,7 @@ public final class SwapSceneViewModel {
     private let preferences: Preferences
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
-    private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
+    private let toValueFormatter = SwapValueFormatter(valueFormatter: .auto)
     private static let timeFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.minute]

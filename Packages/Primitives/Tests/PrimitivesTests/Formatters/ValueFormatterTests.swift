@@ -191,4 +191,15 @@ final class ValueFormatterTests {
 
         #expect(try formatter.double(from: 122131233, decimals: 0) == Double(122131233.0))
     }
+
+    @Test
+    func testAuto() {
+        let formatter = ValueFormatter(locale: .US, style: .auto)
+
+        #expect(formatter.string(123, decimals: 0) == "123.00")
+        #expect(formatter.string(12344, decimals: 6) == "0.0123")
+        #expect(formatter.string(1, decimals: 4) == "0.0001")
+        #expect(formatter.string(1, decimals: 5) == "0.00001")
+        #expect(formatter.string(4162, decimals: 18) == "0.000000000000004162")
+    }
 }

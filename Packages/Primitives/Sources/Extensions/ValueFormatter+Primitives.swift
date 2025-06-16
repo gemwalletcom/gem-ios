@@ -6,6 +6,7 @@ extension ValueFormatter {
     public static let short = ValueFormatter(style: .short)
     public static let medium = ValueFormatter(style: .medium)
     public static let full = ValueFormatter(style: .full)
+    public static let auto = ValueFormatter(style: .auto)
     
     public static let full_US = ValueFormatter(locale: Locale.US, style: .full)
 }

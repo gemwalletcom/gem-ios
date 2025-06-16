@@ -8,6 +8,7 @@ public struct ValueFormatter: Sendable {
         case short
         case medium
         case full
+        case auto
     }
     
     private let locale: Locale
@@ -71,7 +72,7 @@ public struct ValueFormatter: Sendable {
         let number = NSDecimalNumber(decimal: decimal)
         
         let formatter = {
-            let formatter = self.formatter(style: style)
+            let formatter = self.formatter(style: style, number: number)
             if value == 0 {
                 formatter.maximumFractionDigits = 0
                 return formatter
@@ -113,11 +114,22 @@ public struct ValueFormatter: Sendable {
         return number
     }
     
-    private func formatter(style: ValueFormatter.Style) -> Foundation.NumberFormatter {
+    private func formatter(style: ValueFormatter.Style, number: NSDecimalNumber) -> Foundation.NumberFormatter {
         switch style {
         case .short: formatterShort
         case .medium: formatterMedium
         case .full: formatterFull
+        case .auto: autoFormatter(for: number)
+        }
+    }
+    
+    private func autoFormatter(for number: NSDecimalNumber) -> NumberFormatter {
+        switch number.doubleValue.magnitude {
+        case 0: formatterShort
+        case 1...: formatterShort
+        case 0.01..<1: formatterShort
+        case 0.0001..<0.01: formatterMedium
+        default: formatterFull
         }
     }
 }
