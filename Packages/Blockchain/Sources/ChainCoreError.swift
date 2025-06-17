@@ -10,7 +10,7 @@ public enum ChainCoreError: Error, Equatable {
     case incorrectAmount    
     case dustThreshold(chain: Chain)
     
-    static func fromWalletCore(for chain: Chain, _ error: CommonSigningError) throws {
+    public static func fromWalletCore(for chain: Chain, _ error: CommonSigningError) throws {
         let chainError: ChainCoreError? = switch error {
         case .errorDustAmountRequested,
             .errorNotEnoughUtxos: ChainCoreError.dustThreshold(chain: chain)
