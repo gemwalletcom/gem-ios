@@ -8,8 +8,7 @@ let package = Package(
     products: [
         .library(
             name: "Blockchain",
-            targets: ["Blockchain"]
-            ),
+            targets: ["Blockchain"]),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
@@ -30,7 +29,7 @@ let package = Package(
                 .product(name: "WalletCoreSwiftProtobuf", package: "WalletCore"),
                 "WalletCorePrimitives",
                 "Gemstone",
-                "GemstonePrimitives"
+                "GemstonePrimitives",
                 "Formatters"
             ],
             path: "Sources"
