@@ -189,11 +189,7 @@ extension EthereumService {
 extension EthereumService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         let config = GemstoneConfig.shared.config(for: chain)
-        let (baseFee, priorityFees) = try await getBasePriorityFees(
-            blocks: config.feeHistoryBlocks,
-            rewardsPercentiles: config.rewardsPercentiles,
-            defaultMinPriorityFee: config.minPriorityFee
-        )
+        let (baseFee, priorityFees) = try await getBasePriorityFees(config: config)
         let feeRates = FeePriority.allCases.compactMap { priority in
             priorityFees[priority].map {
                 FeeRate(
@@ -205,21 +201,17 @@ extension EthereumService: ChainFeeRateFetchable {
         return feeRates
     }
 
-    private func getBasePriorityFees(
-        blocks: UInt64,
-        rewardsPercentiles: EvmHistoryRewardPercentiles,
-        defaultMinPriorityFee: UInt64
-    ) async throws -> (
-        base: BigInt,
-        priority: [FeePriority: BigInt]
-    ) {
+    private func getBasePriorityFees(config: EvmChainConfig) async throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
         let feeHistory = try await provider
-            .request(.feeHistory(blocks: Int(blocks), rewardPercentiles: rewardsPercentiles.all))
+            .request(.feeHistory(
+                blocks: Int(config.feeHistoryBlocks),
+                rewardPercentiles: config.rewardsPercentiles.all)
+            )
             .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
 
         return try calculator.basePriorityFees(
             feeHistory: feeHistory,
-            defaultMinPriorityFee: defaultMinPriorityFee
+            defaultMinPriorityFee: config.minPriorityFee
         )
     }
 }
