@@ -2,7 +2,7 @@
 
 import Testing
 import Foundation
-@testable import Primitives
+import Formatters
 
 struct NumberSanitizerTests {
     

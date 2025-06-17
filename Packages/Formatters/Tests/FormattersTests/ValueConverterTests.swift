@@ -2,8 +2,10 @@
 
 import Foundation
 import Testing
+import Primitives
+import PrimitivesTestKit
 
-@testable import Primitives
+@testable import Formatters
 
 struct ValueConverterTests {
     let converter = ValueConverter()

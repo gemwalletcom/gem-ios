@@ -23,6 +23,7 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "ImageGalleryService", path: "../../Services/ImageGalleryService"),
         .package(name: "WalletService", path: "../../Services/WalletService"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
     ],
     targets: [
         .target(
@@ -37,7 +38,8 @@ let package = Package(
                 "NFTService",
                 "Store",
                 "ImageGalleryService",
-                "WalletService"
+                "WalletService",
+                "Formatters"
             ],
             path: "Sources"
         ),

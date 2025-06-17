@@ -5,6 +5,7 @@ import Primitives
 import SwiftUI
 import PrimitivesComponents
 import Preferences
+import Formatters
 
 struct ChartPriceModel {
     

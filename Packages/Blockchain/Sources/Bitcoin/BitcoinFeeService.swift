@@ -8,6 +8,7 @@ import WalletCore
 import WalletCorePrimitives
 import Gemstone
 import GemstonePrimitives
+import Formatters
 
 // MARK: - ChainFeeCalculateable
 

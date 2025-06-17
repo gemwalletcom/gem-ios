@@ -54,12 +54,7 @@ public extension BigInt {
     static let MAX_256 = BigInt(hex: "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff")!
 }
 
-// BigNumberFormatter
 public extension BigInt {
-    static func from(_ string: String, decimals: Int) throws -> BigInt {
-        try BigNumberFormatter.standard.number(from: string, decimals: decimals)
-    }
-    
     static func from(string: String) throws -> BigInt {
         if string.isEmpty {
            return .zero

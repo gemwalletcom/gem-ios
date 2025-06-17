@@ -7,6 +7,7 @@ import Style
 import Components
 import Localization
 import StakeService
+import Formatters
 
 public struct StakeDetailViewModel {
     public let model: StakeDelegationViewModel

@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import WalletsService
 import BigInt
+import Formatters
 
 struct AmountInputConfig: CurrencyInputConfigurable {
     let sceneType: AmountType

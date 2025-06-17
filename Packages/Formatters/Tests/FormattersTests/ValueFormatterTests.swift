@@ -1,9 +1,9 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Testing
-import Primitives
 import BigInt
 import Foundation
+import Formatters
 
 final class ValueFormatterTests {
     @Test

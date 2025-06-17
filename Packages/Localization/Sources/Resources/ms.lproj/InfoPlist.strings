@@ -1,4 +1,4 @@
-"NSCameraUsageDescription" = "Gem Wallet needs access to your Camera to scan QR Codes.";
+"NSCameraUsageDescription" = "Dompet Permata memerlukan akses kepada Kamera anda untuk mengimbas Kod QR.";
 "NSPhotoLibraryAddUsageDescription" = "Apl ini memerlukan akses kepada pustaka foto anda untuk menyimpan NFT.";
 "NSFaceIDUsageDescription" = "Mendayakan Face ID membantu Gem Wallet memastikan aset anda selamat.";
-"NSPhotoLibraryUsageDescription" = "We need access to your photo library to let you select photos.";
+"NSPhotoLibraryUsageDescription" = "Kami memerlukan akses kepada pustaka foto anda untuk membolehkan anda memilih foto.";

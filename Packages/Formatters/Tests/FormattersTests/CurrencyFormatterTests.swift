@@ -3,6 +3,7 @@
 import Testing
 import Foundation
 @testable import Primitives
+import Formatters
 
 final class CurrencyFormatterTests {
 

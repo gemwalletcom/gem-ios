@@ -9,6 +9,7 @@ import ExplorerService
 import Style
 import Preferences
 import PrimitivesComponents
+import Formatters
 
 public struct AssetDetailsInfoViewModel {
     

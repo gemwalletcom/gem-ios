@@ -687,8 +687,8 @@ public enum Localized {
       public enum Empty {
         /// Enable them by adding coins to track
         public static let description = Localized.tr("Localizable", "price_alerts.state.empty.description", fallback: "Enable them by adding coins to track")
-        /// Your alerts will appear here️
-        public static let title = Localized.tr("Localizable", "price_alerts.state.empty.title", fallback: "Your alerts will appear here️")
+        /// Your price alerts will appear here️
+        public static let title = Localized.tr("Localizable", "price_alerts.state.empty.title", fallback: "Your price alerts will appear here️")
       }
     }
   }

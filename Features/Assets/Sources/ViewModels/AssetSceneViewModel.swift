@@ -14,6 +14,7 @@ import TransactionsService
 import WalletsService
 import PriceService
 import BannerService
+import Formatters
 
 @Observable
 @MainActor

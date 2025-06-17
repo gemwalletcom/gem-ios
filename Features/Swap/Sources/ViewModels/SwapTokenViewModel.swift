@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Localization
 import PrimitivesComponents
+import Formatters
 
 struct SwapTokenViewModel {
     private let model: AssetDataViewModel

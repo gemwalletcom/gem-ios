@@ -16,7 +16,8 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "Localization", path: "../Localization"),
-        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives")
+        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
+        .package(name: "Formatters", path: "../Formatters")
     ],
     targets: [
         .target(
@@ -24,7 +25,8 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Localization",
-                "WalletCorePrimitives"
+                "WalletCorePrimitives",
+                "Formatters"
             ],
             path: "Sources"
         ),
