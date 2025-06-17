@@ -12,12 +12,12 @@ public struct EthereumService: Sendable {
 
     let chain: EVMChain
     let provider: Provider<EthereumTarget>
-    let calculator: EthereumFeeCalculator
+    let calculator: any EthereumFeeCalculetable
 
     public init(
         chain: EVMChain,
         provider: Provider<EthereumTarget>,
-        calculator: EthereumFeeCalculator = EthereumFeeCalculator()
+        calculator: any EthereumFeeCalculetable = EthereumFeeCalculator()
     ) {
         self.chain = chain
         self.provider = provider

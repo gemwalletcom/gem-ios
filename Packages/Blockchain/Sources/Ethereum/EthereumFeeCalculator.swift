@@ -6,6 +6,13 @@ import Gemstone
 import GemstonePrimitives
 import BigInt
 
+public protocol EthereumFeeCalculetable: Sendable {
+    func basePriorityFees(
+        feeHistory: EthereumFeeHistory,
+        defaultMinPriorityFee: UInt64
+    ) throws -> (base: BigInt, priority: [FeePriority: BigInt])
+}
+
 public struct EthereumFeeCalculator: Sendable {
     private let calculator: GemFeeCalculatorProtocol
 
@@ -14,9 +21,9 @@ public struct EthereumFeeCalculator: Sendable {
     }
 }
 
-// MARK: - Public
+// MARK: - EthereumFeeCalculetable
 
-extension EthereumFeeCalculator {
+extension EthereumFeeCalculator: EthereumFeeCalculetable {
     public func basePriorityFees(
         feeHistory: EthereumFeeHistory,
         defaultMinPriorityFee: UInt64
