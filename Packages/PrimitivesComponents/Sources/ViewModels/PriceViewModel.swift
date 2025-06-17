@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Style
+import Formatters
 
 public struct PriceViewModel: Sendable {
     public let price: Price?

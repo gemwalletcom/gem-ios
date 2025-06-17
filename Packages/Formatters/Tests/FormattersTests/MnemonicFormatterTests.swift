@@ -1,5 +1,7 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Testing
-import Primitives
+import Formatters
 
 final class MnemonicFormatterTests {
 

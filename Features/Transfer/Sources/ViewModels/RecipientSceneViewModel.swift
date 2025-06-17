@@ -15,6 +15,7 @@ import NodeService
 import StakeService
 import SwiftUI
 import ScanService
+import Formatters
 
 public typealias RecipientDataAction = ((RecipientData) -> Void)?
 

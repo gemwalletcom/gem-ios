@@ -7,6 +7,7 @@ import PrimitivesComponents
 import Components
 import Style
 import Localization
+import Formatters
 
 public struct MarketsViewModel {
     let markets: Markets

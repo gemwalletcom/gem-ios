@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Localization
 import Components
+import Formatters
 
 public struct AddressListItemViewModel {
     

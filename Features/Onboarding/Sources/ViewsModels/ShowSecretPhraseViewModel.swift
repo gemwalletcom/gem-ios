@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Localization
 import PrimitivesComponents
+import Formatters
 
 class ShowSecretPhraseViewModel {
     

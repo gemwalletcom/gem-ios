@@ -13,6 +13,7 @@ import Staking
 import Style
 import Preferences
 import Validators
+import Formatters
 
 @MainActor
 @Observable

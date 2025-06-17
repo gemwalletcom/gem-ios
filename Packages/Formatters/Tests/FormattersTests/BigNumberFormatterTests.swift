@@ -1,6 +1,8 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Testing
+import Formatters
 import Foundation
-import Primitives
 import BigInt
 
 final class BigNumberFormatterTests {

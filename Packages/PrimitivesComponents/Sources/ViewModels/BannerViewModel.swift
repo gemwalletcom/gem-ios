@@ -7,6 +7,7 @@ import GemstonePrimitives
 import Style
 import Localization
 import Components
+import Formatters
 
 public struct BannerViewModel {
     public  let banner: Banner

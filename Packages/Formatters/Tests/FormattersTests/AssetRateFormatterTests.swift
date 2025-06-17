@@ -2,6 +2,7 @@
 
 import Testing
 @testable import Primitives
+import Formatters
 import BigInt
 
 final class AssetRateFormatterTests {

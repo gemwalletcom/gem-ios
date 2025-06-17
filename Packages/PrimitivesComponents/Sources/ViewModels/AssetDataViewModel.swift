@@ -6,6 +6,7 @@ import SwiftUI
 import Style
 import Components
 import Localization
+import Formatters
 
 public struct AssetDataViewModel: Sendable {
     private let assetData: AssetData

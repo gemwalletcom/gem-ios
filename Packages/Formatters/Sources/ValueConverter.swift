@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public struct ValueConverter: Sendable {
     private let formatter: ValueFormatter

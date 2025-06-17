@@ -32,6 +32,7 @@ import WalletService
 import AvatarService
 import ScanService
 import WalletSessionService
+import Formatters
 
 extension Asset {
     static let main = Asset.bitcoin
