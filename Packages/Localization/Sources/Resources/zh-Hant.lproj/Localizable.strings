@@ -168,7 +168,6 @@
 "asset.view_address_on" = "在 %@ 上查看地址";
 "transfer.rewards.title" = "獎勵";
 "wallet.title" = "錢包";
-"wallet.import.contract_address_field" = "合約地址或代幣ID";
 "wallet.add_token.title" = "添加代幣";
 "errors.token.invalid_id" = "無效的代幣 ID";
 "errors.token.unable_fetch_token_information" = "無法取得代幣資訊： %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "有餘額";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "合約或代幣ID";

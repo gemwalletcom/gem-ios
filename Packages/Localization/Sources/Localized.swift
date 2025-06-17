@@ -1129,8 +1129,8 @@ public enum Localized {
       public static let action = Localized.tr("Localizable", "wallet.import.action", fallback: "Import")
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "wallet.import.address_field", fallback: "Address or Name")
-      /// Contract Address or Token ID
-      public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract Address or Token ID")
+      /// Contract or Token ID
+      public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract or Token ID")
       /// %@ encoded private key
       public static func privateKey(_ p1: Any) -> String {
         return Localized.tr("Localizable", "wallet.import.private_key", String(describing: p1), fallback: "%@ encoded private key")

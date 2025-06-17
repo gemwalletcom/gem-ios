@@ -168,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "보상";
 "wallet.title" = "지갑";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "토큰 추가하기";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "토큰 정보를 가져올 수 없습니다: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "균형이 있다";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "계약 또는 토큰 ID";

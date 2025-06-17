@@ -168,7 +168,6 @@
 "asset.view_address_on" = "آدرس را در %@ مشاهده کنید.";
 "transfer.rewards.title" = "پاداش ها";
 "wallet.title" = "کیف پول";
-"wallet.import.contract_address_field" = "ادرس قرارداد هوشمند و یا شناسه توکن";
 "wallet.add_token.title" = "افزودن توکن.";
 "errors.token.invalid_id" = "شناسه توکن نامعتبر است.";
 "errors.token.unable_fetch_token_information" = "خطا در واکشی اطلاعات توکن: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "تعادل دارد";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "قرارداد یا شناسه توکن";

@@ -168,7 +168,6 @@
 "asset.view_address_on" = "Переглянути адресу на %@";
 "transfer.rewards.title" = "Нагороди";
 "wallet.title" = "Гаманець";
-"wallet.import.contract_address_field" = "Адреса контракту або ідентифікатор токену";
 "wallet.add_token.title" = "Додати токен";
 "errors.token.invalid_id" = "Невірний ідентифікатор токену";
 "errors.token.unable_fetch_token_information" = "Не вдається отримати інформацію про токен: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Має баланс";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Контракт або ID токена";

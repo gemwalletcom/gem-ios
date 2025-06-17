@@ -168,7 +168,6 @@
 "asset.view_address_on" = "Tampilkan alamat di %@";
 "transfer.rewards.title" = "Hadiah";
 "wallet.title" = "Dompet";
-"wallet.import.contract_address_field" = "Alamat Kontrak atau ID Token";
 "wallet.add_token.title" = "Tambahkan Token";
 "errors.token.invalid_id" = "ID Token Tidak Valid";
 "errors.token.unable_fetch_token_information" = "Gagal mengambil informasi token: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Memiliki keseimbangan";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Kontrak atau Token ID";

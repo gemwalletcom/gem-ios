@@ -168,7 +168,6 @@
 "asset.view_address_on" = "%@ でアドレスを見る";
 "transfer.rewards.title" = "リワード";
 "wallet.title" = "ウォレット";
-"wallet.import.contract_address_field" = "コントラクトアドレスまたはトークンID";
 "wallet.add_token.title" = "トークンを追加";
 "errors.token.invalid_id" = "無効なトークンID";
 "errors.token.unable_fetch_token_information" = "トークン情報を取得できません: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "バランスがある";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "契約またはトークンID";

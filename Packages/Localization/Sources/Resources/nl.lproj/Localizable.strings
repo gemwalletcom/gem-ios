@@ -168,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Rewards";
 "wallet.title" = "Wallet";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Add Token";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Unable to fetch token information: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Heeft evenwicht";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Contract of token-ID";

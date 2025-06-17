@@ -168,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Phần thưởng";
 "wallet.title" = "Cái ví";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Thêm mã thông báo";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Không thể tìm nạp thông tin mã thông báo: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Có sự cân bằng";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Hợp đồng hoặc ID token";

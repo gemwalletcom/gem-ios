@@ -168,7 +168,6 @@
 "asset.view_address_on" = "%@ üzerinde adresi görüntüle";
 "transfer.rewards.title" = "Ödüller";
 "wallet.title" = "Cüzdan";
-"wallet.import.contract_address_field" = "Sözleşme Adresi veya Token Kimliği";
 "wallet.add_token.title" = "Jeton Ekle";
 "errors.token.invalid_id" = "Geçersiz adres veya ad";
 "errors.token.unable_fetch_token_information" = "Belirteç bilgileri getirilemiyor: %@";
@@ -412,3 +411,4 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Dengesi var";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Sözleşme veya Token ID";
