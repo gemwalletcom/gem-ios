@@ -109,6 +109,7 @@ public struct SelectAssetScene: View {
             }
             .listRowInsets(.assetListRowInsets)
         }
+        .contentMargins([.top], .extraSmall, for: .scrollContent)
     }
 
     func assetsList(assets: [AssetData]) -> some View {

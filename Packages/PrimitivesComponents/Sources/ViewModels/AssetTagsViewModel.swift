@@ -30,7 +30,8 @@ public struct AssetTagsViewModel {
     }
     
     public var items: [AssetTagViewModel] {
-        [AssetTagViewModel(tag: .all, isSelected: selectedTag == .all)] + tags.map { AssetTagViewModel(tag: .tag($0), isSelected: selectedTag == .tag($0)) }
+        let tagViewModels = tags.map { AssetTagViewModel(tag: .tag($0), isSelected: selectedTag == .tag($0)) }
+        return tags.isEmpty ? [] : [AssetTagViewModel(tag: .all, isSelected: selectedTag == .all)] + tagViewModels
     }
     
     public var query: String? {
