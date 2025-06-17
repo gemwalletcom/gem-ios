@@ -34,6 +34,11 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
     }
+    
+    // TODO: - Replace from Gemstone Docs
+    var docsUrl: URL {
+        URL(string: "https://docs.gemwallet.com/faq/secure-recovery-phrase/#how-to-secure-my-secret-phrase")!
+    }
 
     func generateWords() {
         words = walletService.createWallet()

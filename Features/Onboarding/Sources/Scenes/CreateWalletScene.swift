@@ -51,6 +51,7 @@ struct CreateWalletScene: View {
             model: model.copyModel,
             isPresenting: $isPresentingCopyToast
         )
+        .toolbarInfoButton(url: model.docsUrl)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationBarTitle(model.title)
