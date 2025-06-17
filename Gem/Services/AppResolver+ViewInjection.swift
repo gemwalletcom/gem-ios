@@ -29,8 +29,11 @@ extension View {
             .environment(\.explorerService, services.explorerService)
             .environment(\.scanService, services.scanService)
             .environment(\.connectionsService, services.connectionsService)
+            .environment(\.nftService, services.nftService)
+            .environment(\.avatarService, services.avatarService)
+            .environment(\.releaseService, services.appReleaseService)
     }
-
+    
     private func inject(storages: AppResolver.Storages) -> some View {
         self
             .databaseContext(.readWrite { storages.db.dbQueue })
