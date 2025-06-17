@@ -9,17 +9,19 @@ import GemstonePrimitives
 
 public struct EthereumService: Sendable {
     static let gasLimitPercent = 50
-    static let historyBlocks = 10
 
     let chain: EVMChain
     let provider: Provider<EthereumTarget>
+    let calculator: EthereumFeeCalculator
 
     public init(
         chain: EVMChain,
-        provider: Provider<EthereumTarget>
+        provider: Provider<EthereumTarget>,
+        calculator: EthereumFeeCalculator = EthereumFeeCalculator()
     ) {
         self.chain = chain
         self.provider = provider
+        self.calculator = calculator
     }
 }
 

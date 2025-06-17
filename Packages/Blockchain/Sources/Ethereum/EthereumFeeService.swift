@@ -152,53 +152,6 @@ extension EthereumService {
         case .account: fatalError()
         }
     }
-
-    internal func getBasePriorityFees(
-        blocks: Int,
-        rewardsPercentiles: EvmHistoryRewardPercentiles,
-        minPriorityFee: BigInt
-    ) async throws -> (
-        base: BigInt,
-        priority: [FeePriority: BigInt]
-    ) {
-        let feeHistory = try await provider
-            .request(.feeHistory(blocks: blocks, rewardPercentiles: rewardsPercentiles.all))
-            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
-
-        guard
-            let baseFeeHex = feeHistory.baseFeePerGas.last,
-            let baseFeePerGas = try? BigInt.fromHex(baseFeeHex)
-        else {
-            throw AnyError("Unable to retrieve base fee from history")
-        }
-        let priorityFees = calculatePriorityFees(
-            rewards: feeHistory.reward.toBigInts(),
-            rewardsPercentiles: rewardsPercentiles,
-            minPriorityFee: minPriorityFee
-        )
-        return (baseFeePerGas, priorityFees)
-    }
-
-    internal func calculatePriorityFees(
-        rewards: [[BigInt]],
-        rewardsPercentiles: EvmHistoryRewardPercentiles,
-        minPriorityFee: BigInt
-    ) -> [FeePriority: BigInt] {
-        let percentileToPriority: [Int: FeePriority] = [
-            Int(rewardsPercentiles.slow): .slow,
-            Int(rewardsPercentiles.normal): .normal,
-            Int(rewardsPercentiles.fast): .fast
-        ]
-        return FeePriority.allCases.reduce(into: [FeePriority: BigInt]()) { result, priority in
-            guard let index = rewardsPercentiles.all.firstIndex(where: { percentileToPriority[$0] == priority }) else {
-                result[priority] = minPriorityFee
-                return
-            }
-            let fees = rewards.compactMap { $0[safe: index] }
-            let average = fees.isEmpty ? minPriorityFee : max(minPriorityFee, fees.reduce(0, +) / BigInt(fees.count))
-            result[priority] = average
-        }
-    }
     
     public func gasLimit(input: FeeInput) async throws -> BigInt {
         if let gasLimit = input.gasLimit {
@@ -237,9 +190,9 @@ extension EthereumService: ChainFeeRateFetchable {
     public func feeRates(type: TransferDataType) async throws -> [FeeRate] {
         let config = GemstoneConfig.shared.config(for: chain)
         let (baseFee, priorityFees) = try await getBasePriorityFees(
-            blocks: Self.historyBlocks,
+            blocks: config.feeHistoryBlocks,
             rewardsPercentiles: config.rewardsPercentiles,
-            minPriorityFee: config.minPriorityFee.asBigInt
+            defaultMinPriorityFee: config.minPriorityFee
         )
         let feeRates = FeePriority.allCases.compactMap { priority in
             priorityFees[priority].map {
@@ -250,6 +203,24 @@ extension EthereumService: ChainFeeRateFetchable {
             }
         }
         return feeRates
+    }
+
+    private func getBasePriorityFees(
+        blocks: UInt64,
+        rewardsPercentiles: EvmHistoryRewardPercentiles,
+        defaultMinPriorityFee: UInt64
+    ) async throws -> (
+        base: BigInt,
+        priority: [FeePriority: BigInt]
+    ) {
+        let feeHistory = try await provider
+            .request(.feeHistory(blocks: Int(blocks), rewardPercentiles: rewardsPercentiles.all))
+            .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
+
+        return try calculator.basePriorityFees(
+            feeHistory: feeHistory,
+            defaultMinPriorityFee: defaultMinPriorityFee
+        )
     }
 }
 
