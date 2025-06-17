@@ -186,22 +186,24 @@ extension AmountSceneViewModel {
         cleanInput()
         setSelectedValidator(validator)
     }
-}
-
-// MARK: - Private
-
-extension AmountSceneViewModel {
-    private func onSelectInputButton() {
+    
+    func onSelectInputButton() {
         switch amountInputType {
         case .asset: amountInputType = .fiat
         case .fiat: amountInputType = .asset
         }
         cleanInput()
     }
+}
+
+// MARK: - Private
+
+extension AmountSceneViewModel {
 
     private func setMax() {
         amountInputType = .asset
         amountInputModel.update(text: maxBalance)
+        amountInputModel.update(validators: inputValidators)
     }
 
     private func cleanInput() {
