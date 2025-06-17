@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -357,7 +356,7 @@
 "common.percentage" = "فیصد";
 "price_alerts.set_alert.current_price" = "موجودہ قیمت";
 "price_alerts.added_for" = "قیمت کا الرٹ مقرر کریں %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "ٹرینڈنگ";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "New";
@@ -372,12 +371,12 @@
 "activity.state.empty.description" = "اپنا پہلا لین دین کریں۔";
 "stake.state.empty.title" = "آپ کے داؤ یہاں ظاہر ہوں گے۔";
 "stake.state.empty.description" = "اپنا پہلا حصہ %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "آپ کے کنکشن یہاں ظاہر ہوں گے۔";
 "wallet_connect.state.empty.description" = "DApp سے جڑنے کے لیے کوڈ کو اسکین یا پیسٹ کریں۔";
 "assets.state.empty.search_description" = "آپ اسے دستی طور پر شامل کرنے کی کوشش کر سکتے ہیں۔";
 "activity.state.empty.search_description" = "اپنی سرگرمیوں کو تازہ کرنے کے لیے فلٹرز صاف کریں۔";
 "search.state.empty.description" = "ہجے چیک کریں یا نئی تلاش کی کوشش کریں۔";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "کوئی اثاثہ نہیں ملا";
 "networks.state.empty.search_title" = "کوئی نیٹ ورک نہیں ملا";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "آپ کے بازاروں کا ڈیٹا یہاں ظاہر ہوگا۔";

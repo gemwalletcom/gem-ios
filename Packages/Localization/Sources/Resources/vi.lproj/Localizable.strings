@@ -134,7 +134,6 @@
 "swap.you_receive" = "Bạn nhận được";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Các nhà cung cấp";
 "common.phrase" = "Cụm từ";
 "stake.active" = "Tích cực";
 "stake.pending" = "Pending";
@@ -357,7 +356,7 @@
 "common.percentage" = "Phần trăm";
 "price_alerts.set_alert.current_price" = "Giá hiện tại";
 "price_alerts.added_for" = "Đặt cảnh báo giá %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "Xu hướng";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "Mới";
@@ -372,12 +371,12 @@
 "activity.state.empty.description" = "Thực hiện giao dịch đầu tiên của bạn";
 "stake.state.empty.title" = "Cổ phần của bạn sẽ xuất hiện ở đây";
 "stake.state.empty.description" = "Đặt cược %@ đầu tiên của bạn";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Kết nối của bạn sẽ xuất hiện ở đây️";
 "wallet_connect.state.empty.description" = "Quét hoặc dán mã để kết nối với DApp";
 "assets.state.empty.search_description" = "Bạn có thể thử thêm nó theo cách thủ công";
 "activity.state.empty.search_description" = "Xóa bộ lọc để làm mới hoạt động của bạn";
 "search.state.empty.description" = "Kiểm tra lỗi chính tả hoặc thử tìm kiếm mới.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Không tìm thấy tài sản";
 "networks.state.empty.search_title" = "Không tìm thấy mạng lưới nào";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Dữ liệu thị trường của bạn sẽ xuất hiện ở đây";

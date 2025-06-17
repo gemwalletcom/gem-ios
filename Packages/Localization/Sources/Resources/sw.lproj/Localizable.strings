@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -357,7 +356,7 @@
 "common.percentage" = "Asilimia";
 "price_alerts.set_alert.current_price" = "Bei ya sasa";
 "price_alerts.added_for" = "Weka arifa ya bei %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "Zinazovuma";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "New";
@@ -372,12 +371,12 @@
 "activity.state.empty.description" = "Fanya muamala wako wa kwanza";
 "stake.state.empty.title" = "Hisa zako zitaonekana hapa";
 "stake.state.empty.description" = "Shiriki %@ yako ya kwanza";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Miunganisho yako itaonekana hapa️";
 "wallet_connect.state.empty.description" = "Changanua au ubandike msimbo ili kuunganisha kwenye DApp";
 "assets.state.empty.search_description" = "Unaweza kujaribu kuiongeza wewe mwenyewe";
 "activity.state.empty.search_description" = "Futa vichujio ili kuonyesha upya shughuli zako";
 "search.state.empty.description" = "Angalia tahajia au jaribu utafutaji mpya.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Hakuna mali iliyopatikana";
 "networks.state.empty.search_title" = "Hakuna mitandao iliyopatikana";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Data yako ya masoko itaonekana hapa";

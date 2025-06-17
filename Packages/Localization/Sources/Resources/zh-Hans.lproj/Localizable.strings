@@ -134,7 +134,6 @@
 "swap.you_receive" = "将收到";
 "swap.approve_token" = "授权 %@ 进行兑换";
 "swap.approve_token_permission" = "授权 %@ 代币进行兑换";
-"swap.provider" = "服务商";
 "common.phrase" = "助记词";
 "stake.active" = "已激活";
 "stake.pending" = "待确认";

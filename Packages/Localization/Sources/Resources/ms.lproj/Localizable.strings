@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -372,12 +371,12 @@
 "activity.state.empty.description" = "Buat transaksi pertama anda";
 "stake.state.empty.title" = "Taruhan anda akan muncul di sini";
 "stake.state.empty.description" = "Pertaruhkan %@ pertama anda";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Sambungan anda akan muncul di sini️";
 "wallet_connect.state.empty.description" = "Imbas atau tampal kod untuk menyambung ke DApp";
 "assets.state.empty.search_description" = "Anda boleh cuba menambahnya secara manual";
 "activity.state.empty.search_description" = "Kosongkan penapis untuk menyegarkan aktiviti anda";
 "search.state.empty.description" = "Semak ejaan atau cuba carian baharu.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Tiada aset ditemui";
 "networks.state.empty.search_title" = "Tiada rangkaian ditemui";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Data pasaran anda akan dipaparkan di sini";

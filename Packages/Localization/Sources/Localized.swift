@@ -902,8 +902,6 @@ public enum Localized {
     }
     /// Price Impact
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
-    /// Provider
-    public static let provider = Localized.tr("Localizable", "swap.provider", fallback: "Provider")
     /// Quote includes a %@ Gem fee.
     public static func quoteFee(_ p1: Any) -> String {
       return Localized.tr("Localizable", "swap.quote_fee", String(describing: p1), fallback: "Quote includes a %@ Gem fee.")

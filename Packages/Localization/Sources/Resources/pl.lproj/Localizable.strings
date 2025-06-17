@@ -134,7 +134,6 @@
 "swap.you_receive" = "Otrzymujesz";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Dostawca";
 "common.phrase" = "Phrase";
 "stake.active" = "Aktywny";
 "stake.pending" = "Pending";
@@ -357,7 +356,7 @@
 "common.percentage" = "Procent";
 "price_alerts.set_alert.current_price" = "Aktualna cena";
 "price_alerts.added_for" = "Ustaw alert cenowy %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "Trendy";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "Nowy";
@@ -372,12 +371,12 @@
 "activity.state.empty.description" = "Dokonaj pierwszej transakcji";
 "stake.state.empty.title" = "Twoje stawki pojawią się tutaj";
 "stake.state.empty.description" = "Postaw swoją pierwszą %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Twoje połączenia pojawią się tutaj️";
 "wallet_connect.state.empty.description" = "Zeskanuj lub wklej kod, aby połączyć się z aplikacją DApp";
 "assets.state.empty.search_description" = "Możesz spróbować dodać go ręcznie";
 "activity.state.empty.search_description" = "Wyczyść filtry, aby odświeżyć swoje działania";
 "search.state.empty.description" = "Sprawdź pisownię lub spróbuj wyszukać ponownie.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Nie znaleziono zasobów";
 "networks.state.empty.search_title" = "Nie znaleziono sieci";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Twoje dane rynkowe pojawią się tutaj";

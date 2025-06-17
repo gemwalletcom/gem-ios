@@ -134,7 +134,6 @@
 "swap.you_receive" = "受け取るもの";
 "swap.approve_token" = "%@ をスワップするために承認してください";
 "swap.approve_token_permission" = "スワップのために%@トークンの承認を行ってください。";
-"swap.provider" = "プロバイダー";
 "common.phrase" = "フレーズ";
 "stake.active" = "アクティブ";
 "stake.pending" = "確認待ち";
