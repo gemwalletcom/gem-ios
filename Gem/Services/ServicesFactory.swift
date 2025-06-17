@@ -50,11 +50,13 @@ struct ServicesFactory {
         let nodeService = NodeService(nodeStore: storeManager.nodeStore)
         let chainServiceFactory = ChainServiceFactory(nodeProvider: nodeService)
 
+        let avatarService = AvatarService(store: storeManager.walletStore)
+
         let walletService = Self.makewalletService(
             preferences: storages.observablePreferences,
             keystore: storages.keystore,
             walletStore: storeManager.walletStore,
-            avatarService: AvatarService(store: storeManager.walletStore)
+            avatarService: avatarService
         )
         let balanceService = Self.makeBalanceService(
             balanceStore: storeManager.balanceStore,
@@ -92,7 +94,7 @@ struct ServicesFactory {
             bannerStore: storeManager.bannerStore,
             preferences: preferences
         )
-        let notificationHandler = NotificationHandler.main
+        let notificationHandler = NotificationHandler()
 
         let priceService = PriceService(
             priceStore: storeManager.priceStore,
@@ -136,13 +138,26 @@ struct ServicesFactory {
             bannerSetupService: bannerSetupService
         )
 
-        let onstartService = Self.makeOnstartService(
+        let configService = GemAPIService()
+        let releaseService = AppReleaseService(configService: configService)
+
+        let onStartService = Self.makeOnstartService(
+            assetStore: storeManager.assetStore,
+            nodeStore: storeManager.nodeStore,
+            balanceStore: storeManager.balanceStore,
+            preferences: preferences,
+            chainServiceFactory: chainServiceFactory,
+            walletService: walletService
+        )
+        let onstartAsyncService = Self.makeOnstartAsyncService(
             assetStore: storeManager.assetStore,
             nodeStore: storeManager.nodeStore,
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            bannerSetupService: bannerSetupService
+            bannerSetupService: bannerSetupService,
+            configService: configService,
+            releaseService: AppReleaseService(configService: configService)
         )
 
         return AppResolver.Services(
@@ -164,8 +179,13 @@ struct ServicesFactory {
             walletsService: walletsService,
             explorerService: explorerService,
             scanService: ScanService(securePreferences: .standard),
+            nftService: nftService,
+            avatarService: avatarService,
+            appReleaseService: releaseService,
+            subscriptionsService: subscriptionService,
             deviceObserverService: deviceObserverService,
-            onstartService: onstartService,
+            onstartService: onStartService,
+            onstartAsyncService: onstartAsyncService,
             walletConnectorManager: walletConnectorManager
         )
     }
@@ -348,10 +368,33 @@ extension ServicesFactory {
     private static func makeOnstartService(
         assetStore: AssetStore,
         nodeStore: NodeStore,
+        balanceStore: BalanceStore,
+        preferences: Preferences,
+        chainServiceFactory: ChainServiceFactory,
+        walletService: WalletService
+    ) -> OnstartService {
+        OnstartService(
+            assetsService: AssetsService(
+                assetStore: assetStore,
+                balanceStore: balanceStore,
+                chainServiceFactory: chainServiceFactory
+            ),
+            assetStore: assetStore,
+            nodeStore: nodeStore,
+            preferences: preferences,
+            walletService: walletService
+        )
+    }
+
+    private static func makeOnstartAsyncService(
+        assetStore: AssetStore,
+        nodeStore: NodeStore,
         preferences: Preferences,
         assetsService: AssetsService,
         deviceService: DeviceService,
-        bannerSetupService: BannerSetupService
+        bannerSetupService: BannerSetupService,
+        configService: any GemAPIConfigService,
+        releaseService: AppReleaseService
     ) -> OnstartAsyncService {
         OnstartAsyncService(
             assetStore: assetStore,
@@ -359,7 +402,9 @@ extension ServicesFactory {
             preferences: preferences,
             assetsService: assetsService,
             deviceService: deviceService,
-            bannerSetupService: bannerSetupService
+            bannerSetupService: bannerSetupService,
+            configService: configService,
+            releaseService: releaseService
         )
     }
     
