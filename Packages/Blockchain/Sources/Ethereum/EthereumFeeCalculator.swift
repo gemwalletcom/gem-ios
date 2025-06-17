@@ -23,8 +23,9 @@ extension EthereumFeeCalculator {
     ) throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
 
         guard let baseFeeHex = feeHistory.baseFeePerGas.last,
-              let baseWei = try? BigInt.fromHex(baseFeeHex) else {
-            throw AnyError("eth feeHistory: baseFeePerGas array is empty or invalid")
+              let baseWei = try? BigInt.fromHex(baseFeeHex)
+        else {
+            throw AnyError("eth feeHistory: baseFeePerGas array might be empty or its last element is not a valid hex string")
         }
 
         let minPriorityFee = try minPriorityFee(
