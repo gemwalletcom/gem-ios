@@ -13,17 +13,15 @@ import enum Primitives.EVMChain
 import Signer
 
 public final class SwapService: Sendable {
-    private let nodeProvider: any NodeURLFetchable
-    private let swapper: GemSwapper
+    private let swapper: GemSwapperProtocol
     private let swapConfig = GemstoneConfig.shared.getSwapConfig()
+    
+    public init(swapper: GemSwapperProtocol) {
+        self.swapper = swapper
+    }
 
-    public init(
-        nodeProvider: any NodeURLFetchable
-    ) {
-        self.nodeProvider = nodeProvider
-        swapper = GemSwapper(
-            rpcProvider: NativeProvider(nodeProvider: nodeProvider)
-        )
+    public convenience init(nodeProvider: any NodeURLFetchable) {
+        self.init(swapper: GemSwapper(rpcProvider: NativeProvider(nodeProvider: nodeProvider)))
     }
 
     private func getReferralFees() -> SwapReferralFees {
