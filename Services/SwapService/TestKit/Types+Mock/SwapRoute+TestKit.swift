@@ -1,0 +1,16 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
+import Foundation
+import struct Gemstone.SwapRoute
+import typealias Gemstone.AssetId
+
+extension SwapRoute {
+    static func mock() -> SwapRoute {
+        SwapRoute(
+            input: "ethereum_0x0000000000000000000000000000000000000000",
+            output: "ethereum_0xdac17f958d2ee523a2206206994597c13d831ec7",
+            routeData: "0x",
+            gasLimit: "150000"
+        )
+    }
+} 
