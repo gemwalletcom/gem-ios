@@ -36,7 +36,9 @@ public final class AmountSceneViewModel {
 
     private var currentValidator: DelegationValidator?
     private var currentDelegation: Delegation?
-    private var amountInputType: AmountInputType = .asset
+    private var amountInputType: AmountInputType = .asset {
+        didSet { amountInputModel.update(validators: inputValidators) }
+    }
 
     public init(
         input: AmountInput,
@@ -203,7 +205,6 @@ extension AmountSceneViewModel {
     private func setMax() {
         amountInputType = .asset
         amountInputModel.update(text: maxBalance)
-        amountInputModel.update(validators: inputValidators)
     }
 
     private func cleanInput() {
