@@ -364,7 +364,7 @@
 "assets.tags.stablecoins" = "Stablecoins";
 "nft.state.empty.title" = "Your NFTs will appear here️";
 "nft.state.empty.description" = "Receive your first NFT";
-"price_alerts.state.empty.title" = "Your alerts will appear here️";
+"price_alerts.state.empty.title" = "Your price alerts will appear here️";
 "price_alerts.state.empty.description" = "Enable them by adding coins to track";
 "asset.state.empty.title" = "Your transactions will appear here️";
 "asset.state.empty.description" = "Receive, swap or buy %@";
@@ -405,3 +405,11 @@
 "onboarding.accept_terms.item3.message" = "I understand that if I ever lose access to my wallets, Gem is not liable and cannot help in any way.";
 "onboarding.accept_terms.continue" = "Agree and Continue";
 "errors.required" = "%@ is required";
+"asset.verification.unverified" = "Unverified";
+"asset.verification.suspicious" = "Suspicious";
+"asset.verification.warning_title" = "Know What You’re Adding";
+"asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
+"transfer.smart_contract.title" = "Smart Contract";
+"transfer.other.title" = "Other";
+"filter.has_balance" = "Has balance";
+"swap.estimated_time.title" = "Estimated Time";

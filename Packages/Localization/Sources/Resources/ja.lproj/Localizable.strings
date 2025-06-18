@@ -404,4 +404,12 @@
 "onboarding.accept_terms.item2.message" = "Gemは銀行や取引所ではなく、違法目的での使用は禁止されていることを理解しています。";
 "onboarding.accept_terms.item3.message" = "ウォレットへのアクセスを失った場合、Gemは責任を負わず、支援もできないことを理解しています。";
 "onboarding.accept_terms.continue" = "理解しました。続行します。";
-"errors.required" = "%@ is required";
+"errors.required" = "%@は必須です";
+"asset.verification.unverified" = "Unverified";
+"asset.verification.suspicious" = "疑わしい";
+"asset.verification.warning_title" = "Know What You’re Adding";
+"asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
+"transfer.smart_contract.title" = "Smart Contract";
+"transfer.other.title" = "Other";
+"filter.has_balance" = "バランスがある";
+"swap.estimated_time.title" = "Estimated Time";

@@ -8,6 +8,7 @@ import Components
 import PriceAlertService
 import Style
 import Localization
+import Formatters
 
 @MainActor
 @Observable

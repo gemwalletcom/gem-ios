@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Charts
 import Preferences
+import Formatters
 
 public struct ChartValuesViewModel {
     let period: ChartPeriod

@@ -17,35 +17,30 @@ import AppService
 struct GemApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     
-    private let resolver: AppResolver
+    private let resolver: AppResolver = .main
     
     init() {
-        self.resolver = AppResolver()
         UNUserNotificationCenter.current().delegate = appDelegate
     }
     
     var body: some Scene {
         WindowGroup {
-            if let launchEnvironment = UITestLaunchScenario(info: ProcessInfo.processInfo) {
-                LaunchEnvironmentView(launchEnvironment: launchEnvironment)
-            } else {
-                RootScene(
-                    model: RootSceneViewModel(
-                        walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
-                        onstartService: resolver.services.onstartService,
-                        transactionService: resolver.services.transactionService,
-                        connectionsService: resolver.services.connectionsService,
-                        deviceObserverService: resolver.services.deviceObserverService,
-                        notificationHandler: resolver.services.notificationHandler,
-                        lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
-                        walletService: resolver.services.walletService,
-                        walletsService: resolver.services.walletsService
-                    )
+            RootScene(
+                model: RootSceneViewModel(
+                    walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
+                    onstartAsyncService: resolver.services.onstartAsyncService,
+                    transactionService: resolver.services.transactionService,
+                    connectionsService: resolver.services.connectionsService,
+                    deviceObserverService: resolver.services.deviceObserverService,
+                    notificationHandler: resolver.services.notificationHandler,
+                    lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
+                    walletService: resolver.services.walletService,
+                    walletsService: resolver.services.walletsService
                 )
-                .inject(resolver: resolver)
-                .navigationBarTitleDisplayMode(.inline)
-                .tint(Colors.black)
-            }
+            )
+            .inject(resolver: resolver)
+            .navigationBarTitleDisplayMode(.inline)
+            .tint(Colors.black)
         }
     }
 }
@@ -71,21 +66,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         } catch {
             NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
         }
-
-        let service = OnstartService(
-            assetsService: AssetsService(
-                assetStore: .main,
-                balanceStore: .main,
-                chainServiceFactory: .init(nodeProvider: NodeService.main)
-            ),
-            assetStore: .main,
-            nodeStore: NodeStore.main,
-            preferences: Preferences.standard,
-            walletService: WalletService.main
-        )
-        service.migrations()
-        
-        Preferences.standard.incrementLaunchesCount()
+        AppResolver.main.services.onstartService.migrations()
+        AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
 
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
@@ -99,8 +81,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         Task {
-            let _ = try SecurePreferences().set(value: token, key: .deviceToken)
-            try await DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main).update()
+            let _ = try SecurePreferences.standard.set(value: token, key: .deviceToken)
+            try await AppResolver.main.services.deviceService.update()
         }
     }
 
@@ -109,7 +91,7 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        NotificationHandler.main.handleUserInfo(userInfo)
+        AppResolver.main.services.notificationHandler.handleUserInfo(userInfo)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
@@ -136,7 +118,7 @@ extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        NotificationHandler.main.handleUserInfo(response.notification.request.content.userInfo)
+        AppResolver.main.services.notificationHandler.handleUserInfo(response.notification.request.content.userInfo)
         completionHandler()
     }
 }

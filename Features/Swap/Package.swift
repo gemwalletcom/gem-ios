@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
@@ -32,6 +33,7 @@ let package = Package(
             name: "Swap",
             dependencies: [
                 "Primitives",
+                "Formatters",
                 "Components",
                 "GemstonePrimitives",
                 "Gemstone",

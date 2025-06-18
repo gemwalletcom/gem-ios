@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Style
 import Localization
+import Formatters
 
 public struct ChainNodeViewModel: Sendable {
     public let chainNode: ChainNode

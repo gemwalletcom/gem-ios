@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
+        .package(name: "Formatters", path: "../Formatters"),
         .package(name: "WalletCore", path: "../WalletCore"),
         .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Keychain", path: "../Keychain")
@@ -27,6 +28,7 @@ let package = Package(
                 .product(name: "WalletCore", package: "WalletCore"),
                 "WalletCorePrimitives",
                 "Primitives",
+                "Formatters",
                 "Keychain"
             ],
             path: "Sources"

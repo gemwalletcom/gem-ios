@@ -21,9 +21,7 @@ extension SwapPairSelectorViewModel {
         if asset.type == .native {
             return SwapPairSelectorViewModel(
                 fromAssetId: asset.chain.assetId,
-                toAssetId: Chain.allCases
-                    .sortByRank()
-                    .first(where: { $0.asset != asset })?.assetId
+                toAssetId: nil
             )
         }
         return SwapPairSelectorViewModel(

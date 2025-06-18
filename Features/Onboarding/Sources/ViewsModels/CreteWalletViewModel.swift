@@ -4,6 +4,7 @@ import Primitives
 import SwiftUI
 import Localization
 import PrimitivesComponents
+import Formatters
 
 class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     private let walletService: WalletService

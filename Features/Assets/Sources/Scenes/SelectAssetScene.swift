@@ -1,8 +1,6 @@
 import SwiftUI
 import Primitives
 import Components
-import Store
-import GRDBQuery
 import Style
 import Localization
 import PrimitivesComponents
@@ -14,14 +12,7 @@ public struct SelectAssetScene: View {
 
     @Binding private var isPresentingAddToken: Bool
 
-    @Query<AssetsRequest>
-    private var assets: [AssetData]
-
     @State private var model: SelectAssetViewModel
-
-    private var sections: AssetsSections {
-        AssetsSections.from(assets)
-    }
 
     public init(
         model: SelectAssetViewModel,
@@ -29,13 +20,6 @@ public struct SelectAssetScene: View {
     ) {
         _model = State(wrappedValue: model)
         _isPresentingAddToken = isPresentingAddToken
-
-        let request = Binding {
-            model.request
-        } set: { new in
-            model.request = new
-        }
-        _assets = Query(request)
     }
 
     public var body: some View {
@@ -57,9 +41,9 @@ public struct SelectAssetScene: View {
             )
         }
         .overlay {
-            if model.state.isLoading, sections.assets.isEmpty {
+            if model.state.isLoading, model.sections.assets.isEmpty {
                 LoadingView()
-            } else if sections.assets.isEmpty {
+            } else if model.sections.assets.isEmpty {
                 EmptyContentView (
                     model: EmptyContentTypeViewModel(
                         type: .search(
@@ -70,7 +54,8 @@ public struct SelectAssetScene: View {
                 )
             }
         }
-        .onChange(of: model.filterModel.chainsFilter.selectedChains, onChangeChains)
+        .observeQuery(request: $model.request, value: $model.assets)
+        .onChange(of: model.filterModel, model.onChangeFilterModel)
         .onChange(of: model.searchModel.searchableQuery, model.updateRequest)
         .onChange(of: model.isSearching, model.onChangeFocus)
         .ifLet(copyTypeViewModel) {
@@ -86,17 +71,18 @@ public struct SelectAssetScene: View {
     var list: some View {
         List {
             Section {} header: {
-                TagsView(model: model.searchModel.tagsViewModel) {
-                    model.setSelected(tag: $0)
-                }
+                TagsView(
+                    tags: model.searchModel.tagsViewModel.items,
+                    onSelect: { model.setSelected(tag: $0.tag) }
+                )
                 .isVisible(model.shouldShowTagFilter)
             }
             .textCase(nil)
             .listRowInsets(EdgeInsets())
 
-            if model.enablePopularSection && !sections.popular.isEmpty {
+            if model.enablePopularSection && model.sections.popular.isNotEmpty {
                 Section {
-                    assetsList(assets: sections.popular)
+                    assetsList(assets: model.sections.popular)
                 } header: {
                     HStack {
                         Images.System.starFill
@@ -106,9 +92,9 @@ public struct SelectAssetScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
 
-            if !sections.pinned.isEmpty {
+            if model.sections.pinned.isNotEmpty {
                 Section {
-                    assetsList(assets: sections.pinned)
+                    assetsList(assets: model.sections.pinned)
                 } header: {
                     HStack {
                         Images.System.pin
@@ -119,7 +105,7 @@ public struct SelectAssetScene: View {
             }
 
             Section {
-                assetsList(assets: sections.assets)
+                assetsList(assets: model.sections.assets)
             }
             .listRowInsets(.assetListRowInsets)
         }
@@ -167,10 +153,6 @@ extension SelectAssetScene {
         isPresentingAddToken.toggle()
     }
 
-    private func onChangeChains(_ _: [Chain], _ chains: [Chain]) {
-        model.update(filterRequest: .chains(chains.map({ $0.rawValue })))
-    }
-
     private func onAsset(action: ListAssetItemAction, assetData: AssetData) {
         let asset = assetData.asset
         switch action {
@@ -189,29 +171,5 @@ extension SelectAssetScene {
                 await model.handleAction(assetId: asset.id, enabled: true)
             }
         }
-    }
-}
-
-private struct ListAssetItemSelectionView: View {
-    let assetData: AssetData
-    let currencyCode: String
-    let type: AssetListType
-    let action: (ListAssetItemAction, AssetData) -> Void
-
-    var body: some View {
-        ListAssetItemView(
-            model: ListAssetItemViewModel(
-                showBalancePrivacy: .constant(false),
-                assetDataModel: AssetDataViewModel(
-                    assetData: assetData,
-                    formatter: .short,
-                    currencyCode: currencyCode
-                ),
-                type: type,
-                action: {
-                    action($0, assetData)
-                }
-            )
-        )
     }
 }

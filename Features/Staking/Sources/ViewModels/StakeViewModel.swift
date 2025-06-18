@@ -11,6 +11,7 @@ import Localization
 import StakeService
 import InfoSheet
 import PrimitivesComponents
+import Formatters
 
 @MainActor
 @Observable

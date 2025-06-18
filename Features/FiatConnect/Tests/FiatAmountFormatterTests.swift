@@ -4,6 +4,7 @@ import Testing
 import FiatConnect
 import PrimitivesTestKit
 import Primitives
+import Formatters
 
 @testable import FiatConnect
 

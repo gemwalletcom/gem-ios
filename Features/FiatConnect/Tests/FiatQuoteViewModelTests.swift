@@ -4,6 +4,7 @@ import Testing
 import FiatConnect
 import PrimitivesTestKit
 import Primitives
+import Formatters
 
 struct FiatQuoteViewModelTests {
     let usFormatter = CurrencyFormatter(locale: .US, currencyCode: Currency.usd.rawValue)

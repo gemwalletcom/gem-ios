@@ -35,7 +35,7 @@ public struct AssetRequest: ValueObservationQueryable {
     }
 }
 
-// MARK: - Models Exttensions
+// MARK: - Models Extensions
 
 //TODO: Find a way to remove .empty
 
@@ -60,7 +60,8 @@ extension AssetData {
                 isStakeEnabled: false,
                 isPinned: false,
                 isActive: true,
-                stakingApr: .none
+                stakingApr: .none,
+                rankScore: 0
             )
         )
     }()
@@ -85,7 +86,8 @@ extension AssetData {
                 isStakeEnabled: false,
                 isPinned: false,
                 isActive: true,
-                stakingApr: .none
+                stakingApr: .none,
+                rankScore: 0
             )
         )
     }

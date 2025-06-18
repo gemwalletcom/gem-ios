@@ -2,7 +2,7 @@
 
 import Foundation
 import Style
-import SwiftUICore
+import SwiftUI
 
 public struct ListItemImageStyle: Sendable {
     public let assetImage: AssetImage

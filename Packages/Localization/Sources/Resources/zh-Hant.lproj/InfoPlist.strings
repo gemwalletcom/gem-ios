@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "Gem Wallet 需要存取您的相機來掃描二維碼。";
+"NSPhotoLibraryAddUsageDescription" = "此應用程式需要存取您的照片庫來保存 NFT。";
+"NSFaceIDUsageDescription" = "啟用 Face ID 有助於 Gem Wallet 保證您的資產安全。";
+"NSPhotoLibraryUsageDescription" = "我們需要存取您的照片庫以便您選擇照片。";

@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "Gem Wallet은 QR 코드를 스캔하기 위해 카메라에 접근해야 합니다.";
+"NSPhotoLibraryAddUsageDescription" = "이 앱은 NFT를 저장하기 위해 사진 라이브러리에 대한 접근 권한이 필요합니다.";
+"NSFaceIDUsageDescription" = "Face ID를 활성화하면 Gem Wallet에서 자산을 안전하게 보호하는 데 도움이 됩니다.";
+"NSPhotoLibraryUsageDescription" = "사진을 선택하려면 사진 라이브러리에 액세스해야 합니다.";

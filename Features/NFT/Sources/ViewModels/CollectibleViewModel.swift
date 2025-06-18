@@ -9,6 +9,7 @@ import Style
 import ImageGalleryService
 import Photos
 import AvatarService
+import Formatters
 
 public struct CollectibleViewModel: Sendable {
     private let wallet: Wallet

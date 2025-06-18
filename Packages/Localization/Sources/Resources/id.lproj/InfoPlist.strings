@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "Gem Wallet memerlukan akses ke Kamera Anda untuk memindai Kode QR.";
+"NSPhotoLibraryAddUsageDescription" = "Aplikasi ini memerlukan akses ke perpustakaan foto Anda untuk menyimpan NFT.";
+"NSFaceIDUsageDescription" = "Mengaktifkan Face ID membantu Gem Wallet menjaga aset Anda tetap aman.";
+"NSPhotoLibraryUsageDescription" = "Kami memerlukan akses ke perpustakaan foto Anda agar Anda dapat memilih foto.";

@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "QR Kodlarını tarayabilmek için Gem Wallet'ın Kameranıza erişmesi gerekiyor.";
+"NSPhotoLibraryAddUsageDescription" = "Bu uygulamanın NFT'leri kaydedebilmesi için fotoğraf kütüphanenize erişmesi gerekiyor.";
+"NSFaceIDUsageDescription" = "Face ID'yi etkinleştirmek Gem Wallet'ın varlıklarınızı güvende tutmasına yardımcı olur.";
+"NSPhotoLibraryUsageDescription" = "Fotoğraf seçebilmeniz için fotoğraf arşivinize erişmemiz gerekiyor.";

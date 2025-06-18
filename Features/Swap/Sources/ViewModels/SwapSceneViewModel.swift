@@ -14,6 +14,7 @@ import Style
 import SwapService
 import WalletsService
 import struct Gemstone.SwapQuote
+import Formatters
 
 @MainActor
 @Observable
@@ -49,6 +50,12 @@ public final class SwapSceneViewModel {
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
     private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
+    private static let timeFormatter: DateComponentsFormatter = {
+        let formatter = DateComponentsFormatter()
+        formatter.allowedUnits = [.minute]
+        formatter.unitsStyle = .short
+        return formatter
+    }()
 
     public init(
         preferences: Preferences = Preferences.standard,
@@ -87,6 +94,17 @@ public final class SwapSceneViewModel {
     var errorTitle: String { Localized.Errors.errorOccured }
 
     var providerField: String { Localized.Common.provider }
+
+    var swapEstimationTitle: String { Localized.Swap.EstimatedTime.title }
+    var swapEstimationText: String? {
+        guard
+            let estimation = selectedSwapQuote?.etaInSeconds, estimation > 60,
+            let estimationTime = Self.timeFormatter.string(from: TimeInterval(estimation))
+        else {
+            return nil
+        }
+        return String(format: "%@ %@", "≈", estimationTime)
+    }
 
     var providerText: String? { selectedProvderModel?.providerText }
     var providerImage: AssetImage? { selectedProvderModel?.providerImage }

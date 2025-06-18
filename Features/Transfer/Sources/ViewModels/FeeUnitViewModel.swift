@@ -3,6 +3,7 @@
 import Foundation
 import Localization
 import Primitives
+import Formatters
 
 public struct FeeUnitViewModel {
     private let unit: FeeUnit

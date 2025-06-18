@@ -3,6 +3,7 @@
 import SwiftUI
 import Style
 import Components
+import Validators
 
 public struct CurrencyInputValidationView: View {
     @Binding private var model: InputValidationViewModel
@@ -23,7 +24,7 @@ public struct CurrencyInputValidationView: View {
                 config: config
             )
 
-            if let error = model.error {
+            if let error = model.error, !(error is SilentValidationError) {
                 Text(error.localizedDescription)
                     .textStyle(TextStyle(font: .footnote, color: Colors.red))
                     .transition(.opacity)
