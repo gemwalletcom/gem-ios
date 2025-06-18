@@ -59,4 +59,14 @@ public extension Chain {
     func isValidAddress(_ address: String) -> Bool {
         AnyAddress.isValid(string: address, coin: coinType)
     }
+    
+    func checksumAddress(_ address: String) -> String {
+        if let chain = EVMChain(rawValue: self.rawValue) {
+            if let address = AnyAddress(string: address, coin: .ethereum) {
+                return address.description
+            }
+            return address
+        }
+        return address
+    }
 }

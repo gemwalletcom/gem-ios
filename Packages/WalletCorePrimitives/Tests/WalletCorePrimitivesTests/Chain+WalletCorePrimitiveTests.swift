@@ -4,6 +4,7 @@ import WalletCorePrimitives
 import Primitives
 import WalletCore
 import Testing
+import PrimitivesTestKit
 
 final class Chain_WalletCorePrimitiveTests {
     @Test(arguments: Chain.allCases)
@@ -62,5 +63,28 @@ final class Chain_WalletCorePrimitiveTests {
         }
 
         #expect(chain.coinType == expected)
+    }
+    
+    @Test
+    func testIsValidAddress() {
+        // Expect addresses to be valid
+        #expect(Chain.mock(.ethereum).isValidAddress("0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5"))
+        #expect(Chain.mock(.ethereum).isValidAddress("0x95222290DD7278Aa3Ddd389Cc1E1d165CC4BAfe5"))
+
+        // Expect addresses to be invalid
+        #expect(!Chain.mock(.ethereum).isValidAddress("0x123"))
+        #expect(!Chain.mock(.ethereum).isValidAddress("0x123"))
+    }
+
+    @Test
+    func testChecksumAddress() {
+        let bitocoinAddress = "bc1qr6f065nr70x4gl6ja9lm5wfj7xkhdv2sq04q23"
+        let evmAddress = "0xd41fdb03ba84762dd66a0af1a6c8540ff1ba5dfb"
+        let evmChecksumAddress = "0xD41FDb03Ba84762dD66a0af1a6C8540FF1ba5dfb"
+        
+        #expect(Chain.mock(.ethereum).checksumAddress(evmAddress) == evmChecksumAddress)
+        #expect(Chain.mock(.smartChain).checksumAddress(evmAddress) == evmChecksumAddress)
+        #expect(Chain.mock(.ethereum).checksumAddress(evmChecksumAddress) == evmChecksumAddress)
+        #expect(Chain.mock(.bitcoin).checksumAddress(bitocoinAddress) == bitocoinAddress)
     }
 }
