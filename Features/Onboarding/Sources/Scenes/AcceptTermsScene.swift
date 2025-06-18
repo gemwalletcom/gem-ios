@@ -17,9 +17,9 @@ struct AcceptTermsScene: View {
     var body: some View {
         VStack(spacing: .medium) {
             List {
-                OnboardingHeaderTitle(title: model.message, alignment: .center)
+                CalloutView(style: .header(title: model.message))
                     .cleanListRow()
-                
+
                 ForEach($model.items) { $item in
                     Section {
                         Toggle(isOn: $item.isConfirmed) {

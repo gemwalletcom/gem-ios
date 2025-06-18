@@ -15,13 +15,10 @@ struct ShowSecretDataScene: View {
     var body: some View {
         VStack {
             List {
-                Section {
-                    CalloutView.error(
-                        title: Localized.SecretPhrase.DoNotShare.title,
-                        subtitle: Localized.SecretPhrase.DoNotShare.description
-                    )
+                if let calloutViewStyle = model.calloutViewStyle {
+                    CalloutView(style: calloutViewStyle)
+                        .cleanListRow()
                 }
-                .cleanListRow()
 
                 Section {
                     SecretDataTypeView(
@@ -30,17 +27,25 @@ struct ShowSecretDataScene: View {
                 }
                 .cleanListRow()
 
-                Section {
-                    Button {
-                        isPresentingCopyToast = true
-                    } label: {
-                        Text(Localized.Common.copy)
-                    }
-                }
+                ListButton(
+                    title: Localized.Common.copy,
+                    image: Images.System.copy,
+                    action: copy
+                )
+                .frame(maxWidth: .infinity, alignment: .center)
                 .cleanListRow()
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
             .listSectionSpacing(.custom(.medium))
+            
+            if model.continueAction != nil {
+                StateButton(
+                    text: Localized.Common.continue,
+                    styleState: .normal,
+                    action: continueAction
+                )
+                .frame(maxWidth: .scene.button.maxWidth)
+            }
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
@@ -49,5 +54,13 @@ struct ShowSecretDataScene: View {
             model: model.copyModel,
             isPresenting: $isPresentingCopyToast
         )
+    }
+    
+    private func copy() {
+        isPresentingCopyToast = true
+    }
+    
+    func continueAction() {
+        model.continueAction?()
     }
 }

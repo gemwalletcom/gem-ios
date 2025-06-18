@@ -4,22 +4,24 @@ import Foundation
 import Primitives
 import Localization
 import PrimitivesComponents
+import Style
+import Components
 
-struct ShowPrivateKeyViewModel {
+struct ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     let text: String
 
     init(text: String) {
         self.text = text
     }
-}
+    
+    var calloutViewStyle: CalloutViewStyle? {
+        .secretDataWarning()
+    }
+    
+    var continueAction: VoidAction = nil
 
-extension ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     var title: String {
         Localized.Common.privateKey
-    }
-
-    var presentWarning: Bool {
-        true
     }
 
     var copyModel: CopyTypeViewModel {
