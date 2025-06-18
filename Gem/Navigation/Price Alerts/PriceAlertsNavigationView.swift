@@ -5,6 +5,8 @@ import SwiftUI
 import Style
 import PriceAlerts
 import Assets
+import Localization
+import Primitives
 
 struct PriceAlertsNavigationView: View {
     @Environment(\.dismiss) private var dismiss
@@ -15,6 +17,7 @@ struct PriceAlertsNavigationView: View {
     @Environment(\.walletService) private var walletService
 
     @State private var isPresentingAddAsset: Bool = false
+    @State private var isPresentingToastMessage: String?
     @State private var assetPriceAlertsNavigationPath = NavigationPath()
 
     let model: PriceAlertsViewModel
@@ -32,17 +35,24 @@ struct PriceAlertsNavigationView: View {
         }
         .sheet(isPresented: $isPresentingAddAsset) {
             AddAssetPriceAlertsNavigationStack(
-                model: AddAssetPriceAlertsViewModel(
-                    priceAlertService: priceAlertService
-                ),
                 selectAssetModel: SelectAssetViewModel(
                     wallet: walletService.currentWallet!,
                     selectType: .priceAlert,
                     assetsService: assetsService,
                     walletsService: walletsService,
-                    priceAlertService: priceAlertService
+                    priceAlertService: priceAlertService,
+                    selectAssetAction: onSelectAsset
                 )
             )
         }
+        .toast(
+            message: $isPresentingToastMessage,
+            systemImage: SystemImage.bellFill
+        )
+    }
+    
+    private func onSelectAsset(asset: Asset) {
+        isPresentingAddAsset = false
+        isPresentingToastMessage = Localized.PriceAlerts.enabledFor(asset.name)
     }
 }
