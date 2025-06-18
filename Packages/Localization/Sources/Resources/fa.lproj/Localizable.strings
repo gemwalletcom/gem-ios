@@ -42,7 +42,7 @@
 "errors.transfer" = "خطای انتقال: %s";
 "errors.validation" = "خطای اعتبارسنجی: %s";
 "errors.create_wallet" = "خطا هنگام ساخت کیف پول جدید: %s";
-"wallet.manage_token_list" = "مدیریت فهرست توکن ها";
+"wallet.manage_token_list" = "مدیریت توکن‌ها";
 "wallet.scan_qr_code" = "کد QR را اسکن کنید";
 "buy.providers.title" = "ارائه دهندگان";
 "buy.rate" = "نرخ";
@@ -412,3 +412,5 @@
 "filter.has_balance" = "تعادل دارد";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "قرارداد یا شناسه توکن";
+"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

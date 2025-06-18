@@ -42,7 +42,7 @@
 "errors.transfer" = "Ошибка перевода: %s";
 "errors.validation" = "Ошибка проверки: %s";
 "errors.create_wallet" = "Ошибка создания кошелька: %s";
-"wallet.manage_token_list" = "Управление списком токенов";
+"wallet.manage_token_list" = "Управление токенами";
 "wallet.scan_qr_code" = "Сканировать QR-код";
 "buy.providers.title" = "Провайдеры";
 "buy.rate" = "Курс";
@@ -412,3 +412,5 @@
 "filter.has_balance" = "Имеет баланс";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "Контракт или токен ID";
+"info.asset_status.unverified.description" = "Неподтверждённые токены не прошли проверку Gem Wallet или доверенными сторонними сервисами. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";
+"info.asset_status.suspicious.description" = "Подозрительные или спам‑токены помечаются как потенциальные мошеннические или вредоносные активы. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";

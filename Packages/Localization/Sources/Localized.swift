@@ -451,6 +451,16 @@ public enum Localized {
     public static let types = Localized.tr("Localizable", "filter.types", fallback: "Types")
   }
   public enum Info {
+    public enum AssetStatus {
+      public enum Suspicious {
+        /// Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.
+        public static let description = Localized.tr("Localizable", "info.asset_status.suspicious.description", fallback: "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+      }
+      public enum Unverified {
+        /// Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.
+        public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+      }
+    }
     public enum LockTime {
       /// Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.
       public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
@@ -1094,8 +1104,8 @@ public enum Localized {
     }
     /// Import an Existing Wallet
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
-    /// Manage Token List
-    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Token List")
+    /// Manage Tokens
+    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Tokens")
     /// More
     public static let more = Localized.tr("Localizable", "wallet.more", fallback: "More")
     /// Multi-Coin
