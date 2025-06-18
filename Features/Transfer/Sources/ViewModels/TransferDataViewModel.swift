@@ -101,8 +101,8 @@ struct TransferDataViewModel {
 
     var shouldShowMemo: Bool {
         switch type {
-        case .transfer, .transferNft, .stake: chain.isMemoSupported
-        case .swap, .tokenApprove, .generic, .account: false
+        case .transfer, .transferNft: chain.isMemoSupported
+        case .swap, .tokenApprove, .generic, .account, .stake: false
         }
     }
 

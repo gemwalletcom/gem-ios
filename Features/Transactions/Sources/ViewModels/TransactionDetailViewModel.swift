@@ -168,17 +168,16 @@ struct TransactionDetailViewModel {
 
     var showMemoField: Bool {
         switch model.transaction.transaction.type {
-        case .transfer,
-                .transferNFT,
-                .stakeDelegate,
-                .stakeUndelegate,
-                .stakeRedelegate: model.transaction.asset.chain.isMemoSupported
+        case .transfer, .transferNFT: model.transaction.asset.chain.isMemoSupported
         case .swap,
                 .tokenApproval,
                 .assetActivation,
                 .smartContractCall,
                 .stakeRewards,
-                .stakeWithdraw: false
+                .stakeWithdraw,
+                .stakeDelegate,
+                .stakeUndelegate,
+                .stakeRedelegate: false
         }
     }
 
