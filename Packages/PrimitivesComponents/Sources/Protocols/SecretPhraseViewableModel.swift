@@ -3,7 +3,6 @@
 import Foundation
 import Components
 import Primitives
-import SwiftUI
 
 public protocol SecretPhraseViewableModel {
     var title: String { get }
