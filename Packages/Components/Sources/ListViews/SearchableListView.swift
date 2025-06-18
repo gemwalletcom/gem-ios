@@ -1,6 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import SwiftUI
+import Style
 
 public struct SearchableListView<Item: Identifiable & Hashable, Content: View, EmptyContent: View>: View {
     let items: [Item]
@@ -23,21 +24,25 @@ public struct SearchableListView<Item: Identifiable & Hashable, Content: View, E
     }
 
     public var body: some View {
-        ListView(
-            items: filteredItems,
-            content: content
-        )
+        VStack {
+            ListView(
+                items: filteredItems,
+                content: content
+            )
+            .searchable(
+                text: $searchQuery,
+                placement: .navigationBarDrawer(displayMode: .always)
+            )
+        }
+        .autocorrectionDisabled(true)
+        .scrollDismissesKeyboard(.interactively)
+        .scrollContentBackground(.hidden)
+        .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .overlay {
             if filteredItems.isEmpty {
                 emptyContent()
             }
         }
-        .searchable(
-            text: $searchQuery,
-            placement: .navigationBarDrawer(displayMode: .always)
-        )
-        .autocorrectionDisabled(true)
-        .scrollDismissesKeyboard(.interactively)
     }
 }
 
@@ -55,7 +60,7 @@ extension SearchableListView {
 #Preview {
     enum Fruit: String, Identifiable, CaseIterable {
         var id: Self { self }
-        
+
         case grape
         case honeydew
         case kiwi

@@ -364,7 +364,7 @@
 "assets.tags.stablecoins" = "Stablecoins";
 "nft.state.empty.title" = "Your NFTs will appear here️";
 "nft.state.empty.description" = "Receive your first NFT";
-"price_alerts.state.empty.title" = "Your alerts will appear here️";
+"price_alerts.state.empty.title" = "Your price alerts will appear here️";
 "price_alerts.state.empty.description" = "Enable them by adding coins to track";
 "asset.state.empty.title" = "Your transactions will appear here️";
 "asset.state.empty.description" = "Receive, swap or buy %@";

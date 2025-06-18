@@ -13,6 +13,10 @@ let package = Package(
             name: "SwapService",
             targets: ["SwapService"]
         ),
+        .library(
+            name: "SwapServiceTestKit",
+            targets: ["SwapServiceTestKit"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -34,6 +38,15 @@ let package = Package(
                 "NativeProviderService",
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "SwapServiceTestKit",
+            dependencies: [
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                "SwapService",
+                "Gemstone"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "SwapServiceTests",

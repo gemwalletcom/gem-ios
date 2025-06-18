@@ -4,6 +4,7 @@ import Primitives
 import Localization
 import Style
 import UIKit
+import Formatters
 
 public struct CopyTypeViewModel: Equatable, Hashable, Sendable {
     public let type: CopyType

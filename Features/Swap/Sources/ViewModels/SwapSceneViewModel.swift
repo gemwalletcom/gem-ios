@@ -14,6 +14,7 @@ import Style
 import SwapService
 import WalletsService
 import struct Gemstone.SwapQuote
+import Formatters
 
 @MainActor
 @Observable
@@ -48,7 +49,7 @@ public final class SwapSceneViewModel {
     private let preferences: Preferences
     private let swapService: SwapService
     private let formatter = SwapValueFormatter(valueFormatter: .full)
-    private let toValueFormatter = SwapValueFormatter(valueFormatter: .short)
+    private let toValueFormatter = SwapValueFormatter(valueFormatter: ValueFormatter(style: .auto))
     private static let timeFormatter: DateComponentsFormatter = {
         let formatter = DateComponentsFormatter()
         formatter.allowedUnits = [.minute]

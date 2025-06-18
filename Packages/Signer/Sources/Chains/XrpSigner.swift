@@ -6,6 +6,7 @@ import WalletCorePrimitives
 import Blockchain
 import Primitives
 import BigInt
+import Formatters
 
 public struct XrpSigner: Signable {
     enum Operation {

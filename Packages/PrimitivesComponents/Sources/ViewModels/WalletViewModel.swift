@@ -4,6 +4,7 @@ import Components
 import SwiftUI
 import Style
 import Localization
+import Formatters
 
 public struct WalletViewModel: Sendable {
     public let wallet: Wallet

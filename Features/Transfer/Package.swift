@@ -15,6 +15,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Components", path: "../../Packages/Components"),
@@ -25,6 +26,7 @@ let package = Package(
         .package(name: "Signer", path: "../../Packages/Signer"),
         .package(name: "Preferences", path: "../../Packages/Preferences"),
         .package(name: "Validators", path: "../../Packages/Validators"),
+        .package(name: "Store", path: "../../Packages/Store"),
 
         .package(name: "Staking", path: "../Staking"),
         .package(name: "QRScanner", path: "../QRScanner"),
@@ -48,6 +50,7 @@ let package = Package(
             name: "Transfer",
             dependencies: [
                 "Primitives",
+                "Formatters",
                 "Localization",
                 "Style",
                 "Components",
@@ -83,6 +86,9 @@ let package = Package(
             dependencies: [
                 "Transfer",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "StakeServiceTestKit", package: "StakeService"),
+                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
+                .product(name: "StoreTestKit", package: "Store"),
             ],
             path: "Tests"
         ),

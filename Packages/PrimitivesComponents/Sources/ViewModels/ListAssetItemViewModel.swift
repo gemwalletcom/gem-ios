@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Style
 import SwiftUI
+import Formatters
 
 public struct ListAssetItemViewModel: ListAssetItemViewable {
     let assetDataModel: AssetDataViewModel
