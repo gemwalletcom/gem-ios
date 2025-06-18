@@ -46,7 +46,7 @@ struct TransferDataViewModel {
 
     var recipientTitle: String {
         switch type {
-        case .swap: Localized.Swap.provider
+        case .swap: Localized.Common.provider
         case .stake: Localized.Stake.validator
         default: Localized.Transfer.to
         }

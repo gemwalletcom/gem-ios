@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Rewards";
 "wallet.title" = "Wallet";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Add Token";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Unable to fetch token information: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "Procent";
 "price_alerts.set_alert.current_price" = "Preț curent";
 "price_alerts.added_for" = "Setează alertă de preț %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "În tendințe";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "New";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "Efectuați prima tranzacție";
 "stake.state.empty.title" = "Mizele tale vor apărea aici";
 "stake.state.empty.description" = "Mizează primul tău %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Conexiunile tale vor apărea aici️";
 "wallet_connect.state.empty.description" = "Scanați sau lipiți codul pentru a vă conecta la DApp";
 "assets.state.empty.search_description" = "Poți încerca să-l adaugi manual";
 "activity.state.empty.search_description" = "Ștergeți filtrele pentru a vă reîmprospăta activitățile";
 "search.state.empty.description" = "Verificați ortografia sau încercați o căutare nouă.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Nu s-au găsit active";
 "networks.state.empty.search_title" = "Nu s-au găsit rețele";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Datele dvs. de piață vor apărea aici";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Are echilibru";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Contract sau ID token";
+"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

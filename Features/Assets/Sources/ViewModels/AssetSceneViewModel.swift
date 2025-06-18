@@ -275,6 +275,10 @@ extension AssetSceneViewModel {
     public func onSelectOptions() {
         isPresentingOptions = true
     }
+    
+    public func onSelectTokenStatus() {
+        isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
+    }
 }
 
 // MARK: - Private

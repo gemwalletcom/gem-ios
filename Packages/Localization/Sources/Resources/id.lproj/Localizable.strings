@@ -134,7 +134,6 @@
 "swap.you_receive" = "Kamu Menerima";
 "swap.approve_token" = "Setujui %@ untuk Penukaran";
 "swap.approve_token_permission" = "Setujui %@ token untuk akses penukaran";
-"swap.provider" = "Penyedia";
 "common.phrase" = "Frasa";
 "stake.active" = "Aktif";
 "stake.pending" = "Tertunda";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "Tampilkan alamat di %@";
 "transfer.rewards.title" = "Hadiah";
 "wallet.title" = "Dompet";
-"wallet.import.contract_address_field" = "Alamat Kontrak atau ID Token";
 "wallet.add_token.title" = "Tambahkan Token";
 "errors.token.invalid_id" = "ID Token Tidak Valid";
 "errors.token.unable_fetch_token_information" = "Gagal mengambil informasi token: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "Persentase";
 "price_alerts.set_alert.current_price" = "Harga saat ini";
 "price_alerts.added_for" = "Tetapkan peringatan harga %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "Sedang tren";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "Baru";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "Lakukan transaksi pertama Anda";
 "stake.state.empty.title" = "Taruhan Anda akan muncul di sini";
 "stake.state.empty.description" = "Pasang taruhan %@ pertama Anda";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Koneksi Anda akan muncul di sini️";
 "wallet_connect.state.empty.description" = "Pindai atau tempel kode untuk terhubung ke DApp";
 "assets.state.empty.search_description" = "Anda dapat mencoba menambahkannya secara manual";
 "activity.state.empty.search_description" = "Hapus filter untuk menyegarkan aktivitas Anda";
 "search.state.empty.description" = "Periksa ejaan atau coba pencarian baru.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Tidak ada aset yang ditemukan";
 "networks.state.empty.search_title" = "Tidak ada jaringan yang ditemukan";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Data pasar Anda akan muncul di sini";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Memiliki keseimbangan";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Kontrak atau Token ID";
+"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
