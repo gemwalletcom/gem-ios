@@ -42,7 +42,7 @@
 "errors.transfer" = "送金エラー：%s";
 "errors.validation" = "検証エラー: %s";
 "errors.create_wallet" = "ウォレット作成エラー：%s";
-"wallet.manage_token_list" = "トークンリストの管理";
+"wallet.manage_token_list" = "トークンの管理";
 "wallet.scan_qr_code" = "QRコードをスキャン";
 "buy.providers.title" = "プロバイダー";
 "buy.rate" = "レート";

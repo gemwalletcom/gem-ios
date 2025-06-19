@@ -42,7 +42,7 @@
 "errors.transfer" = "Transfer Error: %s";
 "errors.validation" = "Validation Error: %s";
 "errors.create_wallet" = "Create Wallet Error: %s";
-"wallet.manage_token_list" = "토큰 목록 관리";
+"wallet.manage_token_list" = "토큰 관리";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
 "buy.rate" = "Rate";

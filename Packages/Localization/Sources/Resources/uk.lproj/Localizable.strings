@@ -42,7 +42,7 @@
 "errors.transfer" = "Помилка Переказу: %s";
 "errors.validation" = "Помилка Перевірки: %s";
 "errors.create_wallet" = "Помилка Створення Гаманця: %s";
-"wallet.manage_token_list" = "Керування Списком Токенів";
+"wallet.manage_token_list" = "Керування токенами";
 "wallet.scan_qr_code" = "Сканувати QR-код";
 "buy.providers.title" = "Провайдери";
 "buy.rate" = "Курс";

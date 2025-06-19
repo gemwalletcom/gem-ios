@@ -1104,8 +1104,8 @@ public enum Localized {
     }
     /// Import an Existing Wallet
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
-    /// Manage Token List
-    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Token List")
+    /// Manage Tokens
+    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Tokens")
     /// More
     public static let more = Localized.tr("Localizable", "wallet.more", fallback: "More")
     /// Multi-Coin

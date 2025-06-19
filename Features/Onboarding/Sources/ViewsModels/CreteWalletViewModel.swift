@@ -5,6 +5,7 @@ import SwiftUI
 import Localization
 import PrimitivesComponents
 import Formatters
+import GemstonePrimitives
 
 class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
     private let walletService: WalletService
@@ -33,6 +34,10 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
             type: .secretPhrase,
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
+    }
+
+    var docsUrl: URL {
+        Docs.url(.howToSecureSecretPhrase)
     }
 
     func generateWords() {

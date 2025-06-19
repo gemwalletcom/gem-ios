@@ -42,7 +42,7 @@
 "errors.transfer" = "转账错误：%s";
 "errors.validation" = "验证错误：%s";
 "errors.create_wallet" = "创建钱包错误: %s";
-"wallet.manage_token_list" = "代币列表";
+"wallet.manage_token_list" = "管理代币";
 "wallet.scan_qr_code" = "扫描二维码";
 "buy.providers.title" = "服务商";
 "buy.rate" = "汇率";

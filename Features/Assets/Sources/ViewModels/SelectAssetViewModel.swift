@@ -134,6 +134,13 @@ public final class SelectAssetViewModel {
 
 extension SelectAssetViewModel {
     func selectAsset(asset: Asset) {
+        switch selectType {
+        case .priceAlert:
+            Task {
+                await setPriceAlert(assetId: asset.id, enabled: true)
+            }
+            case .manage, .send, .receive, .buy, .swap: break
+        }
         onSelectAssetAction?(asset)
     }
 
@@ -153,9 +160,7 @@ extension SelectAssetViewModel {
         switch selectType {
         case .manage:
             await walletsService.enableAssets(walletId: wallet.walletId, assetIds: [assetId], enabled: enabled)
-        case .priceAlert:
-            await setPriceAlert(assetId: assetId, enabled: enabled)
-        case .send, .receive, .buy, .swap: break
+        case .send, .receive, .buy, .swap, .priceAlert: break
         }
     }
 

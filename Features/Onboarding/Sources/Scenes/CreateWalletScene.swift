@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Style
 import Primitives
@@ -51,6 +53,7 @@ struct CreateWalletScene: View {
             model: model.copyModel,
             isPresenting: $isPresentingCopyToast
         )
+        .toolbarInfoButton(url: model.docsUrl)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationBarTitle(model.title)

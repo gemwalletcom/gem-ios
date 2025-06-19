@@ -42,7 +42,7 @@
 "errors.transfer" = "خطای انتقال: %s";
 "errors.validation" = "خطای اعتبارسنجی: %s";
 "errors.create_wallet" = "خطا هنگام ساخت کیف پول جدید: %s";
-"wallet.manage_token_list" = "مدیریت فهرست توکن ها";
+"wallet.manage_token_list" = "مدیریت توکن‌ها";
 "wallet.scan_qr_code" = "کد QR را اسکن کنید";
 "buy.providers.title" = "ارائه دهندگان";
 "buy.rate" = "نرخ";

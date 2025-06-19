@@ -42,7 +42,7 @@
 "errors.transfer" = "Kesalahan Pengiriman: %s";
 "errors.validation" = "Kesalahan Validasi: %s";
 "errors.create_wallet" = "Kesalahan Membuat Dompet: %s";
-"wallet.manage_token_list" = "Kelola Daftar Token";
+"wallet.manage_token_list" = "Kelola Token";
 "wallet.scan_qr_code" = "Pindai Kode QR";
 "buy.providers.title" = "Penyedia";
 "buy.rate" = "Harga";
