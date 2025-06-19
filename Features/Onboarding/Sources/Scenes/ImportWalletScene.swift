@@ -94,7 +94,7 @@ struct ImportWalletScene: View {
             Spacer()
             StateButton(
                 text: Localized.Wallet.Import.action,
-                styleState: model.buttonState,
+                kind: .primary(model.buttonState),
                 action: onImportWallet
             )
             .frame(maxWidth: .scene.button.maxWidth)

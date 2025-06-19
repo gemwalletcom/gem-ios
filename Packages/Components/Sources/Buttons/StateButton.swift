@@ -9,7 +9,7 @@ public struct StateButton: View {
     public let textValue: TextValue
     public let image: Image?
     public let infoTextValue: TextValue?
-    public let styleState: StateButtonStyle.State
+    public let kind: StateButtonStyle.Kind
 
     private let action: () -> Void
 
@@ -44,7 +44,7 @@ public struct StateButton: View {
 
         self.init(text: text,
                   textStyle: textStyle,
-                  styleState: styleState,
+                  kind: .primary(styleState),
                   image: image,
                   infoTitle: infoTitle,
                   infoTitleStyle: infoTitleStyle,
@@ -55,21 +55,24 @@ public struct StateButton: View {
     public init(
         text: String,
         textStyle: TextStyle = StateButton.defaultTextStyle,
-        styleState: StateButtonStyle.State,
+        kind: StateButtonStyle.Kind,
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
         action: @escaping () -> Void
     ) {
         self.textValue = TextValue(text: text, style: textStyle)
-        self.styleState = styleState
+        self.kind = kind
         self.infoTextValue = infoTitle.map({ TextValue(text: $0, style: infoTitleStyle) })
         self.action = action
         self.image = image
     }
 
     private var isDisabled: Bool {
-        styleState != .normal
+        switch kind {
+        case .primary(let state): state != .normal
+        case .secondary: false
+        }
     }
 
     public var body: some View {
@@ -94,7 +97,7 @@ public struct StateButton: View {
                 }
             )
             .disabled(isDisabled)
-            .buttonStyle(.statefulBlue(state: styleState))
+            .buttonStyle(.statefull(kind: kind))
         }
     }
 }
@@ -103,26 +106,48 @@ public struct StateButton: View {
 
 #Preview {
     List {
+        // Primary
         Section(header: Text("Normal State")) {
-            StateButton(text: "Submit", styleState: .normal, action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
+            StateButton(text: "Submit", kind: .primary(.normal), action: {})
+            StateButton(text: "Submit", kind: .primary(.normal), image: Images.System.faceid, action: {})
         }
 
         Section(header: Text("Normal State with info")) {
-            StateButton(text: "Submit", styleState: .normal, infoTitle: "Approve token", action: {})
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
+            StateButton(text: "Submit", kind: .primary(.normal), infoTitle: "Approve token", action: {})
+            StateButton(text: "Submit", kind: .primary(.normal), image: Images.System.faceid, infoTitle: "Big info titleBig info titleBig info titleBig info titleBig info titleBig info titleBig info title", action: {})
         }
 
         Section(header: Text("Loading State")) {
-            StateButton(text: "Submit", styleState: .loading(showProgress: true), image: Images.System.faceid, action: {})
+            StateButton(
+                text: "Submit",
+                kind: .primary(.loading(showProgress: true)),
+                image: Images.System.faceid,
+                action: {}
+            )
         }
 
         Section(header: Text("Disabled State")) {
-            StateButton(text: "Submit", styleState: .normal, image: Images.System.faceid, action: {})
-                .disabled(true)
-
-            StateButton(text: "Submit", styleState: .disabled, action: {})
+            StateButton(
+                text: "Submit",
+                kind: .primary(.normal),
+                image: Images.System.faceid, action: {}
+            )
+            .disabled(true)
+            StateButton(text: "Submit", kind: .primary(.disabled), action: {})
         }
+
+        // Secondary
+        StateButton(
+            text: "Insufficient Balance",
+            kind: .secondary,
+            action: {}
+        )
+        StateButton(
+            text: "Insufficient Balance",
+            kind: .secondary,
+            image: Images.System.faceid,
+            action: {}
+        )
     }
     .padding()
 }

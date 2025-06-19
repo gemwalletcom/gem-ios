@@ -207,6 +207,11 @@ extension ButtonStyle where Self == ClearButtonStyle {
 public struct StateButtonStyle: ButtonStyle {
     public static let maxButtonHeight: CGFloat = 50
 
+    public enum Kind {
+        case primary(State)
+        case secondary
+    }
+
     public enum State: Hashable, Equatable {
         case normal
         case loading(showProgress: Bool)
@@ -290,8 +295,9 @@ public struct StateButtonStyle: ButtonStyle {
 // MARK: - StatefulButtonStyle Static
 
 extension ButtonStyle where Self == StateButtonStyle {
-    public static func statefulBlue(state: StateButtonStyle.State) -> StateButtonStyle {
-        StateButtonStyle(
+    public static func statefull(kind: StateButtonStyle.Kind) -> StateButtonStyle {
+        switch kind {
+        case .primary(let state): StateButtonStyle(
             state: state,
             foregroundStyle: Colors.whiteSolid,
             foregroundStylePressed: Colors.whiteSolid,
@@ -299,28 +305,41 @@ extension ButtonStyle where Self == StateButtonStyle {
             backgroundPressed: Colors.blueDark,
             backgroundDisabled: Colors.blueDark.opacity(0.6)
         )
+        case .secondary: StateButtonStyle(
+            state: .normal,
+            foregroundStyle: Colors.whiteSolid,
+            foregroundStylePressed: Colors.whiteSolid,
+            background: Colors.blueSecondary,
+            backgroundPressed: Colors.blueSecondaryHover,
+            backgroundDisabled: Colors.blueSecondary
+        )
+        }
     }
 }
-
 
 // MARK: - Previews
 
 #Preview {
     struct StatefulButtonPreviewWrapper: View {
         let text: String
-        @State var state: StateButtonStyle.State
+        @State var kind: StateButtonStyle.Kind
 
         var body: some View {
             Button(action: {
-                state = .loading(showProgress: state.showProgress)
-                Task {
-                    try await Task.sleep(nanoseconds: 1000000000 * 3)
-                    state = .normal
+                switch kind {
+                case .primary(let state):
+                    kind = .primary(.loading(showProgress: state.showProgress))
+                    Task {
+                        try await Task.sleep(nanoseconds: 1000000000 * 3)
+                        kind = .primary(.normal)
+                    }
+                case .secondary:
+                    break
                 }
             }) {
                 Text(text)
             }
-            .buttonStyle(.statefulBlue(state: state))
+            .buttonStyle(.statefull(kind: kind))
         }
     }
 
@@ -375,19 +394,21 @@ extension ButtonStyle where Self == StateButtonStyle {
         }
 
         Section(header: Text("Stateful Buttons")) {
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .normal)
+            StatefulButtonPreviewWrapper(text: "Stateful Button", kind: .primary(.normal))
 
-            StatefulButtonPreviewWrapper(text: "BIG TEXT Disabled Button BIG TEXT Disabled Button", state: .normal)
+            StatefulButtonPreviewWrapper(text: "BIG TEXT Disabled Button BIG TEXT Disabled Button", kind: .primary(.normal))
                 .disabled(true)
 
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .disabled)
+            StatefulButtonPreviewWrapper(text: "Stateful Button", kind: .primary(.disabled))
                 .disabled(true)
 
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: true))
+            StatefulButtonPreviewWrapper(text: "Stateful Button", kind: .primary(.loading(showProgress: true)))
                 .disabled(false)
 
-            StatefulButtonPreviewWrapper(text: "Stateful Button", state: .loading(showProgress: false))
+            StatefulButtonPreviewWrapper(text: "Stateful Button", kind: .primary(.loading(showProgress: false)))
                 .disabled(false)
+
+            StatefulButtonPreviewWrapper(text: "Secondary State Button", kind: .secondary)
         }
     }
     .padding()

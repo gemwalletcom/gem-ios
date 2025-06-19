@@ -94,7 +94,7 @@ struct RecipientScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                styleState: model.actionButtonState,
+                kind: .primary(model.actionButtonState),
                 action: model.onContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)
