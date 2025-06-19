@@ -78,7 +78,9 @@ public final class ConnectionsService: Sendable {
     }
     
     private func setupConnector() async throws {
-        isWalletConnectActivated = true
+        if !isWalletConnectActivated {        
+            isWalletConnectActivated = true
+        }
         await connector.setup()
     }
 }
