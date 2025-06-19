@@ -24,6 +24,7 @@ public final class Preferences: @unchecked Sendable {
         static let isHideBalanceEnabled = "is_balance_privacy_enabled"
         static let isAcceptTermsCompleted = "is_accepted_terms"
         static let skippedReleaseVersion = "skipped_release_version"
+        static let isWalletConnectActivated = "is_walletconnect_activated"
     }
 
     @ConfigurableDefaults(key: Keys.currency, defaultValue: Currency.usd.rawValue)
@@ -82,6 +83,9 @@ public final class Preferences: @unchecked Sendable {
     
     @ConfigurableDefaults(key: Keys.skippedReleaseVersion, defaultValue: nil)
     public var skippedReleaseVersion: String?
+    
+    @ConfigurableDefaults(key: Keys.isWalletConnectActivated, defaultValue: false)
+    public var isWalletConnectActivated: Bool
 
     public static let standard = Preferences()
     private let defaults: UserDefaults
@@ -114,6 +118,7 @@ public final class Preferences: @unchecked Sendable {
         configure(\._isHideBalanceEnabled, key: Keys.isHideBalanceEnabled, defaultValue: false)
         configure(\._isAcceptTermsCompleted, key: Keys.isAcceptTermsCompleted, defaultValue: false)
         configure(\._skippedReleaseVersion, key: Keys.skippedReleaseVersion, defaultValue: nil)
+        configure(\._isWalletConnectActivated, key: Keys.isWalletConnectActivated, defaultValue: false)
     }
 
     public func incrementLaunchesCount() {

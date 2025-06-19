@@ -10,6 +10,10 @@ let package = Package(
             name: "WalletConnectorService",
             targets: ["WalletConnectorService"]
         ),
+        .library(
+            name: "WalletConnectorServiceTestKit",
+            targets: ["WalletConnectorServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -36,6 +40,11 @@ let package = Package(
                 .product(name: "Starscream", package: "Starscream"),
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "WalletConnectorServiceTestKit",
+            dependencies: ["WalletConnectorService"],
+            path: "TestKit"
         ),
         .testTarget(
             name: "WalletConnectorServiceTests",
