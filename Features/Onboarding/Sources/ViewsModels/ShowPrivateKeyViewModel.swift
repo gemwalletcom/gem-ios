@@ -9,6 +9,7 @@ import Components
 
 struct ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     let text: String
+    let continueAction: VoidAction = nil
 
     init(text: String) {
         self.text = text
@@ -17,8 +18,6 @@ struct ShowPrivateKeyViewModel: SecretPhraseViewableModel {
     var calloutViewStyle: CalloutViewStyle? {
         .secretDataWarning()
     }
-    
-    var continueAction: VoidAction = nil
 
     var title: String {
         Localized.Common.privateKey

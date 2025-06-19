@@ -18,7 +18,7 @@ struct CreateWalletViewModel: SecretPhraseViewableModel {
         .header(title: Localized.SecretPhrase.savePhraseSafely)
     }
 
-    var continueAction: Primitives.VoidAction {
+    var continueAction: VoidAction {
         { onCreateWallet(words) }
     }
 

@@ -9,6 +9,7 @@ import Components
 
 struct ShowSecretPhraseViewModel: SecretPhraseViewableModel {
     private let words: [String]
+    let continueAction: Primitives.VoidAction = nil
 
     init(words: [String]) {
         self.words = words
@@ -17,8 +18,6 @@ struct ShowSecretPhraseViewModel: SecretPhraseViewableModel {
     var calloutViewStyle: CalloutViewStyle? {
         .secretDataWarning()
     }
-
-    var continueAction: Primitives.VoidAction = nil
     
     var title: String {
         Localized.Common.secretPhrase
