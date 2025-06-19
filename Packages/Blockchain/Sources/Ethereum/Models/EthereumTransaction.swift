@@ -5,25 +5,29 @@
 import Foundation
 
 public struct EthereumFeeHistory: Codable, Sendable {
-	public let reward: [[String]]
-	public let baseFeePerGas: [String]
+    public let reward: [[String]]
+    public let baseFeePerGas: [String]
+    public let gasUsedRatio: [Double]
+    public let oldestBlock: String
 
-	public init(reward: [[String]], baseFeePerGas: [String]) {
-		self.reward = reward
-		self.baseFeePerGas = baseFeePerGas
-	}
+    public init(reward: [[String]], baseFeePerGas: [String], gasUsedRatio: [Double], oldestBlock: String) {
+        self.reward = reward
+        self.baseFeePerGas = baseFeePerGas
+        self.gasUsedRatio = gasUsedRatio
+        self.oldestBlock = oldestBlock
+    }
 }
 
 public struct EthereumTransactionReciept: Codable, Sendable {
-	public let status: String
-	public let gasUsed: String
-	public let effectiveGasPrice: String
-	public let l1Fee: String?
+    public let status: String
+    public let gasUsed: String
+    public let effectiveGasPrice: String
+    public let l1Fee: String?
 
-	public init(status: String, gasUsed: String, effectiveGasPrice: String, l1Fee: String?) {
-		self.status = status
-		self.gasUsed = gasUsed
-		self.effectiveGasPrice = effectiveGasPrice
-		self.l1Fee = l1Fee
-	}
+    public init(status: String, gasUsed: String, effectiveGasPrice: String, l1Fee: String?) {
+        self.status = status
+        self.gasUsed = gasUsed
+        self.effectiveGasPrice = effectiveGasPrice
+        self.l1Fee = l1Fee
+    }
 }
