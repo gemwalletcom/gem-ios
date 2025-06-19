@@ -457,8 +457,8 @@ public enum Localized {
         public static let description = Localized.tr("Localizable", "info.asset_status.suspicious.description", fallback: "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
       public enum Unverified {
-        /// Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.
-        public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+        /// Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.
+        public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
       }
     }
     public enum LockTime {

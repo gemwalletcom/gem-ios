@@ -412,5 +412,5 @@
 "filter.has_balance" = "ব্যালেন্স আছে";
 "swap.estimated_time.title" = "Estimated Time";
 "wallet.import.contract_address_field" = "কনট্রাক্ট বা টোকেন আইডি";
-"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
 "info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

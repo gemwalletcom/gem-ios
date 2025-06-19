@@ -44,7 +44,12 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .stakeLockTime: Localized.Stake.lockTime
         case .priceImpact: Localized.Info.PriceImpact.title
         case .slippage: Localized.Swap.slippage
-        case .assetStatus: Localized.Transaction.status
+        case .assetStatus(let status):
+            switch status {
+            case .verified: .empty // verified token status isn't displayed on the asset screen.
+            case .suspicious: Localized.Asset.Verification.suspicious
+            case .unverified: Localized.Asset.Verification.unverified
+            }
         }
     }
 
