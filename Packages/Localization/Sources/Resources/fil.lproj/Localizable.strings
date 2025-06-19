@@ -42,7 +42,7 @@
 "errors.transfer" = "Transfer Error: %s";
 "errors.validation" = "Validation Error: %s";
 "errors.create_wallet" = "Create Wallet Error: %s";
-"wallet.manage_token_list" = "Manage Token List";
+"wallet.manage_token_list" = "Pamahalaan ang mga Token";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
 "buy.rate" = "Rate";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Rewards";
 "wallet.title" = "Wallet";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Add Token";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Unable to fetch token information: %@";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "Gawin ang iyong unang transaksyon";
 "stake.state.empty.title" = "Lalabas dito ang iyong mga stake";
 "stake.state.empty.description" = "Ipusta ang iyong unang %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Lalabas dito ang iyong mga koneksyon";
 "wallet_connect.state.empty.description" = "I-scan o i-paste ang code para kumonekta sa DApp";
 "assets.state.empty.search_description" = "Maaari mong subukang idagdag ito nang manu-mano";
 "activity.state.empty.search_description" = "I-clear ang mga filter para i-refresh ang iyong mga aktibidad";
 "search.state.empty.description" = "Suriin ang spelling o subukan ang isang bagong paghahanap.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Walang nakitang asset";
 "networks.state.empty.search_title" = "Walang nakitang mga network";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Lalabas dito ang data ng iyong mga market";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "May balanse";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Kontrata o Token ID";
+"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

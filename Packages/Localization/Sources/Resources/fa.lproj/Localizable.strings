@@ -42,7 +42,7 @@
 "errors.transfer" = "خطای انتقال: %s";
 "errors.validation" = "خطای اعتبارسنجی: %s";
 "errors.create_wallet" = "خطا هنگام ساخت کیف پول جدید: %s";
-"wallet.manage_token_list" = "مدیریت فهرست توکن ها";
+"wallet.manage_token_list" = "مدیریت توکن‌ها";
 "wallet.scan_qr_code" = "کد QR را اسکن کنید";
 "buy.providers.title" = "ارائه دهندگان";
 "buy.rate" = "نرخ";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "شما دریافت میکنید";
 "swap.approve_token" = "برای مبادله دسترسی %@ را دهید.";
 "swap.approve_token_permission" = "برای مبادله توکن %@ دسترسی دهید.";
-"swap.provider" = "ارائه دهنده";
 "common.phrase" = "عبارت";
 "stake.active" = "فعال";
 "stake.pending" = "در انتظار";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "آدرس را در %@ مشاهده کنید.";
 "transfer.rewards.title" = "پاداش ها";
 "wallet.title" = "کیف پول";
-"wallet.import.contract_address_field" = "ادرس قرارداد هوشمند و یا شناسه توکن";
 "wallet.add_token.title" = "افزودن توکن.";
 "errors.token.invalid_id" = "شناسه توکن نامعتبر است.";
 "errors.token.unable_fetch_token_information" = "خطا در واکشی اطلاعات توکن: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "درصد";
 "price_alerts.set_alert.current_price" = "قیمت فعلی";
 "price_alerts.added_for" = "تنظیم هشدار قیمت %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "پرطرفدار";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "جدید";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "اولین تراکنش خود را انجام دهید";
 "stake.state.empty.title" = "شرط‌های شما اینجا نمایش داده می‌شوند";
 "stake.state.empty.description" = "اولین %@ خود را شرط بندی کنید";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "ارتباطات شما اینجا نمایش داده می‌شود️";
 "wallet_connect.state.empty.description" = "برای اتصال به DApp، کد را اسکن یا جای‌گذاری کنید";
 "assets.state.empty.search_description" = "می‌توانید سعی کنید آن را به صورت دستی اضافه کنید";
 "activity.state.empty.search_description" = "فیلترها را پاک کنید تا فعالیت‌هایتان را به‌روزرسانی کنید";
 "search.state.empty.description" = "املای صحیح را بررسی کنید یا جستجوی جدیدی را امتحان کنید.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "هیچ دارایی یافت نشد";
 "networks.state.empty.search_title" = "هیچ شبکه‌ای یافت نشد";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "داده‌های بازار شما اینجا نمایش داده می‌شود";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "تعادل دارد";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "قرارداد یا شناسه توکن";
+"info.asset_status.unverified.description" = "Unverified tokens have not been vetted by Gem Wallet or trusted third parties. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
