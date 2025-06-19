@@ -47,6 +47,7 @@ struct ShowSecretDataScene: View {
                 .frame(maxWidth: .scene.button.maxWidth)
             }
         }
+        .toolbarInfoButton(url: model.docsUrl)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)

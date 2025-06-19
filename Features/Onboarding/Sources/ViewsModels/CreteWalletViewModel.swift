@@ -45,8 +45,4 @@ struct CreateWalletViewModel: SecretPhraseViewableModel {
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
     }
-
-    var docsUrl: URL {
-        Docs.url(.howToSecureSecretPhrase)
-    }
 }

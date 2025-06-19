@@ -3,6 +3,7 @@
 import Foundation
 import Components
 import Primitives
+import GemstonePrimitives
 
 public protocol SecretPhraseViewableModel {
     var title: String { get }
@@ -10,4 +11,9 @@ public protocol SecretPhraseViewableModel {
     var type: SecretPhraseDataType { get }
     var copyModel: CopyTypeViewModel { get }
     var continueAction: VoidAction { get }
+    var docsUrl: URL { get }
+}
+
+public extension SecretPhraseViewableModel {
+    var docsUrl: URL { Docs.url(.howToSecureSecretPhrase) }
 }
