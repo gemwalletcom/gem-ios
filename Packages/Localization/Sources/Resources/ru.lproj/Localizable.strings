@@ -23,7 +23,7 @@
 "common.continue" = "Продолжить";
 "common.secret_phrase" = "Секретная фраза";
 "application.name" = "Gem";
-"common.provider" = "Поставщик";
+"common.provider" = "Провайдер";
 "wallet.new.backup_confirm_warning" = "Прежде чем продолжить, подтвердите, что вы записали и сохранили свой Секретная фраза в безопасном месте, так как это имеет решающее значение для будущего доступа к кошельку и его восстановления.";
 "common.loading" = "Загрузка";
 "wallet.multicoin" = "Мультимонетный";
@@ -42,7 +42,7 @@
 "errors.transfer" = "Ошибка перевода: %s";
 "errors.validation" = "Ошибка проверки: %s";
 "errors.create_wallet" = "Ошибка создания кошелька: %s";
-"wallet.manage_token_list" = "Управление списком токенов";
+"wallet.manage_token_list" = "Управление токенами";
 "wallet.scan_qr_code" = "Сканировать QR-код";
 "buy.providers.title" = "Провайдеры";
 "buy.rate" = "Курс";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "Вы получаете";
 "swap.approve_token" = "Одобрить %@ на обмен";
 "swap.approve_token_permission" = "Одобрите токен %@ для доступа к обмену.";
-"swap.provider" = "Провайдер";
 "common.phrase" = "Фраза";
 "stake.active" = "Active";
 "stake.pending" = "В ожидании";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "Посмотреть адрес на %@";
 "transfer.rewards.title" = "Награды";
 "wallet.title" = "Кошелек";
-"wallet.import.contract_address_field" = "Адрес контракта или идентификатор токена";
 "wallet.add_token.title" = "Добавить токен";
 "errors.token.invalid_id" = "Неверный идентификатор токена";
 "errors.token.unable_fetch_token_information" = "Не удается получить информацию о токене: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "Процент";
 "price_alerts.set_alert.current_price" = "Текущая цена";
 "price_alerts.added_for" = "Установить ценовое оповещение %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "В тренде";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "Новый";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "Совершите свою первую транзакцию";
 "stake.state.empty.title" = "Ваши ставки будут отображаться здесь";
 "stake.state.empty.description" = "Сделайте свою первую ставку %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Ваши связи появятся здесь️";
 "wallet_connect.state.empty.description" = "Отсканируйте или вставьте код для подключения к DApp";
 "assets.state.empty.search_description" = "Вы можете попробовать добавить его вручную.";
 "activity.state.empty.search_description" = "Очистите фильтры, чтобы обновить ваши действия";
 "search.state.empty.description" = "Проверьте орфографию или попробуйте новый поиск.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Активы не найдены";
 "networks.state.empty.search_title" = "Сети не найдены";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Ваши рыночные данные появятся здесь";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Имеет баланс";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Контракт или токен ID";
+"info.asset_status.unverified.description" = "Неподтверждённые токены не прошли достаточную проверку со стороны надёжных сторонних сервисов. Они могут появиться в вашем кошельке в результате airdrop’ов, переводов или ручного импорта.";
+"info.asset_status.suspicious.description" = "Подозрительные или спам‑токены помечаются как потенциальные мошеннические или вредоносные активы. Они могут появиться в вашем кошельке в результате airdrop‑раздач, переводов или ручного добавления.";

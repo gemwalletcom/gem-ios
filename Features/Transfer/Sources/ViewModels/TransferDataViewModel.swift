@@ -46,7 +46,7 @@ struct TransferDataViewModel {
 
     var recipientTitle: String {
         switch type {
-        case .swap: Localized.Swap.provider
+        case .swap: Localized.Common.provider
         case .stake: Localized.Stake.validator
         default: Localized.Transfer.to
         }
@@ -102,7 +102,7 @@ struct TransferDataViewModel {
     var shouldShowMemo: Bool {
         switch type {
         case .transfer, .transferNft: chain.isMemoSupported
-        case .swap, .tokenApprove, .generic, .stake, .account: false
+        case .swap, .tokenApprove, .generic, .account, .stake: false
         }
     }
 

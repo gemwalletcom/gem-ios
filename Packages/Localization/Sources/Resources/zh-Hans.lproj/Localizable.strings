@@ -42,7 +42,7 @@
 "errors.transfer" = "转账错误：%s";
 "errors.validation" = "验证错误：%s";
 "errors.create_wallet" = "创建钱包错误: %s";
-"wallet.manage_token_list" = "代币列表";
+"wallet.manage_token_list" = "管理代币";
 "wallet.scan_qr_code" = "扫描二维码";
 "buy.providers.title" = "服务商";
 "buy.rate" = "汇率";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "将收到";
 "swap.approve_token" = "授权 %@ 进行兑换";
 "swap.approve_token_permission" = "授权 %@ 代币进行兑换";
-"swap.provider" = "服务商";
 "common.phrase" = "助记词";
 "stake.active" = "已激活";
 "stake.pending" = "待确认";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "在 %@ 上查看地址";
 "transfer.rewards.title" = "奖励";
 "wallet.title" = "钱包";
-"wallet.import.contract_address_field" = "合约地址或者代币 ID";
 "wallet.add_token.title" = "添加代币";
 "errors.token.invalid_id" = "代币 ID 无效";
 "errors.token.unable_fetch_token_information" = "无法获取代币信息： %@";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "有余额";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "合约或代币ID";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";
