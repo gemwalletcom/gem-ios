@@ -9,22 +9,18 @@ import Preferences
 public final class ConnectionsService: Sendable {
     private let store: ConnectionsStore
     private let signer: any WalletConnectorSignable
-    private let connector: WalletConnectorService
+    private let connector: WalletConnectorServiceable
     private let preferences: Preferences
     
-    private var hasSessions: Bool {
-        (try? store.getSessions().isNotEmpty) == true
-    }
-    
     public var isWalletConnectActivated: Bool {
-        get { preferences.isWalletConnectActivated }
+        get { preferences.isWalletConnectActivated == true }
         set { preferences.isWalletConnectActivated = newValue }
     }
     
     public init(
         store: ConnectionsStore,
         signer: any WalletConnectorSignable,
-        connector: WalletConnectorService,
+        connector: WalletConnectorServiceable,
         preferences: Preferences = .standard
     ) {
         self.store = store
@@ -41,7 +37,7 @@ public final class ConnectionsService: Sendable {
         self.init(
             store: store,
             signer: signer,
-            connector: WalletConnectorServiceImpl(signer: signer),
+            connector: WalletConnectorService(signer: signer),
             preferences: preferences
         )
     }
@@ -49,8 +45,9 @@ public final class ConnectionsService: Sendable {
     // MARK: - Public methods
 
     public func setup() async throws {
+        checkExistSessions()
         try connector.configure()
-        if isWalletConnectActivated || hasSessions {
+        if isWalletConnectActivated {
             try await setupConnector()
         }
     }
@@ -82,5 +79,13 @@ public final class ConnectionsService: Sendable {
             isWalletConnectActivated = true
         }
         await connector.setup()
+    }
+    
+    // TODO: - Remove migration 08.2025
+    
+    private func checkExistSessions() {
+        if preferences.isWalletConnectActivated == nil {
+            isWalletConnectActivated = (try? store.getSessions().isNotEmpty) == true
+        }
     }
 }

@@ -3,7 +3,7 @@
 import Foundation
 import WalletConnectorService
 
-public actor WalletConnectorServiceMock: WalletConnectorService {
+public actor WalletConnectorServiceMock: WalletConnectorServiceable {
     public var isSetup: Bool = false
     
     public init() {}
