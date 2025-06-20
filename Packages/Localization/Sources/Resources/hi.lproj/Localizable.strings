@@ -42,7 +42,7 @@
 "errors.transfer" = "Transfer Error: %s";
 "errors.validation" = "Validation Error: %s";
 "errors.create_wallet" = "Create Wallet Error: %s";
-"wallet.manage_token_list" = "Manage Token List";
+"wallet.manage_token_list" = "टोकन प्रबंधित करें";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
 "buy.rate" = "Rate";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Rewards";
 "wallet.title" = "Wallet";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Add Token";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Unable to fetch token information: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "को PERCENTAGE";
 "price_alerts.set_alert.current_price" = "वर्तमान मूल्य";
 "price_alerts.added_for" = "मूल्य अलर्ट सेट करें %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "रुझान";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "नया";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "अपना पहला लेनदेन करें";
 "stake.state.empty.title" = "आपके दांव यहां दिखाई देंगे";
 "stake.state.empty.description" = "अपना पहला दांव %@ लगाएं";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "आपके कनेक्शन यहां दिखाई देंगे️";
 "wallet_connect.state.empty.description" = "DApp से कनेक्ट करने के लिए कोड स्कैन करें या पेस्ट करें";
 "assets.state.empty.search_description" = "आप इसे मैन्युअल रूप से जोड़ने का प्रयास कर सकते हैं";
 "activity.state.empty.search_description" = "अपनी गतिविधियों को ताज़ा करने के लिए फ़िल्टर साफ़ करें";
 "search.state.empty.description" = "वर्तनी की जाँच करें या नई खोज का प्रयास करें।";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "कोई संपत्ति नहीं मिली";
 "networks.state.empty.search_title" = "कोई नेटवर्क नहीं मिला";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "आपका बाज़ार डेटा यहाँ दिखाई देगा";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "संतुलन है";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "कॉन्ट्रैक्ट या टोकन ID";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

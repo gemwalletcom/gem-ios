@@ -9,8 +9,6 @@ import Localization
 
 public struct AssetScene: View {
     private let model: AssetSceneViewModel
-    
-    @State private var isPresentingUrl: URL?
 
     public init(model: AssetSceneViewModel) {
         self.model = model
@@ -52,14 +50,12 @@ public struct AssetScene: View {
                     networkView
                 }
                 if model.showStatus {
-                    let view = ListItemImageView(
+                    ListItemImageView(
                         title: Localized.Transaction.status,
                         subtitle: model.scoreViewModel.status,
-                        assetImage: model.scoreViewModel.assetImage
+                        assetImage: model.scoreViewModel.assetImage,
+                        infoAction: { model.onSelectTokenStatus() }
                     )
-                    NavigationCustomLink(with: view) {
-                        isPresentingUrl = model.scoreViewModel.docsUrl
-                    }
                 }
             }
 
@@ -101,7 +97,6 @@ public struct AssetScene: View {
                 .cleanListRow()
             }
         }
-        .safariSheet(url: $isPresentingUrl)
         .refreshable {
             await model.fetch()
         }
