@@ -23,7 +23,7 @@ public extension AssetData {
         )
     ) -> AssetData {
         AssetData(
-            asset: .mock(),
+            asset: asset,
             balance: balance,
             account: account,
             price: price,

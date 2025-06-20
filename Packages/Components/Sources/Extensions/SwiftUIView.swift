@@ -100,7 +100,7 @@ public extension View {
 
 // MARK: - Syntactic sugar
 
-extension View {
+public extension View {
     func frame(size: CGFloat, alignment: Alignment = .center) -> some View {
         frame(width: size, height: size, alignment: alignment)
     }

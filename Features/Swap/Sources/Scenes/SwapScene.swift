@@ -174,11 +174,20 @@ extension SwapScene {
             }
             
             if let rateText = model.rateText {
-                ListItemImageView(
-                    title: model.rateTitle,
-                    subtitle: rateText,
-                    assetImage: .none
-                )
+                Button(action: model.switchRateDirection) {
+                    HStack {
+                        ListItemImageView(
+                            title: model.rateTitle,
+                            subtitle: rateText
+                        )
+
+                        Images.Actions.swap
+                            .resizable()
+                            .renderingMode(.template)
+                            .frame(size: .list.image)
+                            .foregroundStyle(Colors.gray)
+                    }
+                }
             }
 
             if let viewModel = model.priceImpactModel {
