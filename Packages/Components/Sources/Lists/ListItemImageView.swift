@@ -14,7 +14,7 @@ public struct ListItemImageView: View {
     public init(
         title: String,
         subtitle: String,
-        assetImage: AssetImage?,
+        assetImage: AssetImage? = nil,
         imageSize: CGFloat = .list.image,
         infoAction: (() -> Void)? = nil
     ) {

@@ -5,6 +5,10 @@ import BigInt
 import Primitives
 
 public struct AssetRateFormatter {
+    public enum Direction {
+        case direct
+        case inverse
+    }
     
     private let formatter: ValueFormatter
     
@@ -13,17 +17,28 @@ public struct AssetRateFormatter {
     ) {
         self.formatter = formatter
     }
-    
-    //TODO: Add rate direction. from/to
-    public func rate(fromAsset: Asset, toAsset: Asset, fromValue: BigInt, toValue: BigInt) throws -> String {
-        let fromAmount = try formatter.double(from: fromValue, decimals: fromAsset.decimals.asInt)
-        let toAmount = try formatter.double(from: toValue, decimals: toAsset.decimals.asInt)
-        let amount = toAmount / fromAmount
-        
-        let amountString = CurrencyFormatter(type: .currency).string(
-            double: amount,
-            symbol: toAsset.symbol
-        )
-        return String("1 \(fromAsset.symbol) ≈ \(amountString)")
+
+    public func rate(
+        fromAsset: Asset,
+        toAsset: Asset,
+        fromValue: BigInt,
+        toValue: BigInt,
+        direction: Direction = .direct
+    ) throws -> String {
+        let (baseAsset, quoteAsset, baseValue, quoteValue): (Asset, Asset, BigInt, BigInt) = {
+            switch direction {
+            case .direct: (fromAsset, toAsset, fromValue, toValue)
+            case .inverse: (toAsset, fromAsset, toValue, fromValue)
+            }
+        }()
+
+        let baseAmount  = try formatter.double(from: baseValue,  decimals: baseAsset.decimals.asInt)
+        let quoteAmount = try formatter.double(from: quoteValue, decimals: quoteAsset.decimals.asInt)
+
+        let amount = quoteAmount / baseAmount
+        let amountString = CurrencyFormatter(type: .currency)
+            .string(double: amount, symbol: quoteAsset.symbol)
+
+        return "1 \(baseAsset.symbol) ≈ \(amountString)"
     }
 }
