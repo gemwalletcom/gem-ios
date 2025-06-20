@@ -6,7 +6,16 @@ import Foundation
 import Primitives
 import struct Gemstone.SignMessage
 
-public final class WalletConnectorService: Sendable {
+public protocol WalletConnectorServiceable: Sendable {
+    func configure() throws
+    func setup() async
+    func pair(uri: String) async throws
+    func disconnect(sessionId: String) async throws
+    func disconnectAll() async throws
+    func updateSessions()
+}
+
+public final class WalletConnectorService {
     private let interactor = WCConnectionsInteractor()
     private let signer: WalletConnectorSignable
 
@@ -15,9 +24,9 @@ public final class WalletConnectorService: Sendable {
     }
 }
 
-// MARK: - Public
+// MARK: - WalletConnectorService
 
-extension WalletConnectorService {
+extension WalletConnectorService: WalletConnectorServiceable {
     public func configure() throws {
         Networking.configure(
             groupIdentifier: "group.com.gemwallet.ios",
@@ -38,10 +47,10 @@ extension WalletConnectorService {
             ),
             crypto: DefaultCryptoProvider()
         )
-        Events.instance.setTelemetryEnabled(false)
     }
 
     public func setup() async {
+        Events.instance.setTelemetryEnabled(false)
         await withTaskGroup(of: Void.self) { group in
             group.addTask { [weak self] in
                 guard let self else { return }

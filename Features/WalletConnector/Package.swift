@@ -50,6 +50,7 @@ let package = Package(
                 .product(name: "StoreTestKit", package: "Store"),
                 .product(name: "PreferencesTestKit", package: "Preferences"),
                 .product(name: "WalletSessionServiceTeskKit", package: "WalletSessionService"),
+                .product(name: "WalletConnectorServiceTestKit", package: "WalletConnectorService"),
                 "WalletConnector",
                 "Gemstone"
             ],
