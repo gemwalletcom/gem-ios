@@ -18,10 +18,10 @@ import protocol Gemstone.GemSwapperProtocol
 struct SwapSceneViewModelTests {
     @Test
     func toValue() async {
-        #expect(await model().toValue == "2,500.00")
-        #expect(await model(toValueMock: "1000000").toValue == "0.01")
-        #expect(await model(toValueMock: "10000").toValue == "0.0001")
-        #expect(await model(toValueMock: "12").toValue == "0.00000012")
+        #expect(await model().toValue == "250,000.00")
+        #expect(await model(toValueMock: "1000000").toValue == "1.00")
+        #expect(await model(toValueMock: "10000").toValue == "0.01")
+        #expect(await model(toValueMock: "12").toValue == "0.000012")
     }
     
     @Test
