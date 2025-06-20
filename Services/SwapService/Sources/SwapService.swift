@@ -53,7 +53,7 @@ public final class SwapService: Sendable {
             options: GemSwapOptions(
                 slippage: getDefaultSlippage(chain: fromAsset.id.chain.rawValue),
                 fee: getReferralFees(),
-                preferredProviders: []
+                preferredProviders: [.aerodrome]
             )
         )
         let quotes = try await swapper.fetchQuote(request: swapRequest)
