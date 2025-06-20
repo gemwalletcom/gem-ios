@@ -64,7 +64,7 @@ public struct SwapScene: View {
             interval: .none,
             action: model.onAssetIdsChange
         )
-        .onChange(of: model.fromValue, model.onChangeFromValue)
+        .onChange(of: model.amountInputModel.text, model.onChangeFromValue)
         .onChange(of: model.pairSelectorModel, model.onChangePair)
         .onChange(of: model.selectedSwapQuote, model.onChangeSwapQuoute)
         .onChange(of: model.focusField, onChangeFocus)
@@ -99,7 +99,7 @@ extension SwapScene {
             if let swapModel = model.swapTokenModel(type: .pay) {
                 SwapTokenView(
                     model: swapModel,
-                    text: $model.fromValue,
+                    text: $model.amountInputModel.text,
                     onBalanceAction: model.onSelectFromMaxBalance,
                     onSelectAssetAction: model.onSelectAssetPay
                 )
