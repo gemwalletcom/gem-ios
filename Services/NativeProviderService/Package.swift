@@ -16,6 +16,7 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "ChainService", path: "../ChainService"),
+        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(7, 5, 0))
     ],
     targets: [
         .target(
@@ -29,7 +30,10 @@ let package = Package(
         ),
         .testTarget(
             name: "NativeProviderServiceTests",
-            dependencies: ["NativeProviderService"]
+            dependencies: [
+                "NativeProviderService",
+                .product(name: "GRDB", package: "GRDB.swift"),
+            ]
         ),
     ]
 )
