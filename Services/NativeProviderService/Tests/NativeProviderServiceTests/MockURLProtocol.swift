@@ -2,7 +2,6 @@
 
 import ChainService
 import Foundation
-import NodeService
 import Primitives
 
 class MockURLProtocol: URLProtocol {
