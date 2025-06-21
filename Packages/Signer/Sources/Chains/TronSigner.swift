@@ -135,7 +135,9 @@ public struct TronSigner: Signable {
         }
 
         if let approval = quoteData.approval {
-            let spender = WalletCore.Base58.decodeNoCheck(string: approval.spender)?.dropFirst() ?? Data()
+            guard let spender = WalletCore.Base58.decodeNoCheck(string: approval.spender)?.dropFirst() else {
+                throw AnyError("Invalid spender address")
+            }
 
             let function = EthereumAbiFunction(name: "approve")
             function.addParamAddress(val: spender, isOutput: false)

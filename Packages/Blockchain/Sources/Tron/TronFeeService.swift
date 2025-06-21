@@ -11,14 +11,14 @@ struct TronFeeService: Sendable {
         accountUsage: TronAccountUsage,
         parameters: [TronChainParameter],
         isNewAccount: Bool
-    ) throws -> BigInt {
+    ) throws -> Fee {
         let newAccountFee = try parameters.value(for: .getCreateAccountFee)
         let newAccountFeeInSmartContract = try parameters.value(for: .getCreateNewAccountFeeInSystemContract)
 
         let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
         let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
 
-        return isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
+        return .makeFinal(fee: isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee)
     }
 
     func trc20TransferFee(
@@ -26,7 +26,7 @@ struct TronFeeService: Sendable {
         parameters: [TronChainParameter],
         gasLimit: BigInt,
         isNewAccount: Bool
-    ) throws -> BigInt {
+    ) throws -> Fee {
         let energyFee = try parameters.value(for: .getEnergyFee)
         let newAccountFeeInSmartContract = try parameters.value(for: .getCreateNewAccountFeeInSystemContract)
 
@@ -34,7 +34,7 @@ struct TronFeeService: Sendable {
         let energyShortfall = max(BigInt.zero, gasLimit.increase(byPercent: 20) - availableEnergy)
         let tokenTransferFee = BigInt(energyFee) * energyShortfall
 
-        return isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
+        return .makeFinal(fee: isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee)
     }
 
     func stakeFee(
@@ -42,20 +42,36 @@ struct TronFeeService: Sendable {
         type: StakeType,
         totalStaked: BigInt,
         inputValue: BigInt
-    ) -> BigInt {
+    ) -> Fee {
         let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
         switch type {
         case .stake:
-            return availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2)
+            return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
         case .unstake:
             if totalStaked > inputValue {
-                return availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2)
+                return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
             } else {
-                return availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
+                return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
             }
         case .rewards, .withdraw, .redelegate:
-            return availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
+            return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
         }
+    }
+    
+    func swapFee(
+        estimatedEnergy: BigInt,
+        accountEnergy: UInt64,
+        parameters: [TronChainParameter]
+    ) throws -> Fee {
+        let energyFee = try parameters.value(for: .getEnergyFee)
+        let gasLimit = (estimatedEnergy - BigInt(accountEnergy)).increase(byPercent: 10)
+        let gasPrice = BigInt(energyFee)
+
+        return Fee(
+            fee: gasLimit * gasPrice,
+            gasPriceType: .regular(gasPrice: gasPrice),
+            gasLimit: gasLimit
+        )
     }
 }
 
@@ -65,5 +81,15 @@ extension Collection where Element == TronChainParameter {
             throw AnyError("Unknown Tron chain parameter key: \(key)")
         }
         return value
+    }
+}
+
+private extension Fee {
+    static func makeFinal(fee: BigInt) -> Fee {
+        Fee(
+            fee: fee,
+            gasPriceType: .regular(gasPrice: fee),
+            gasLimit: 1
+        )
     }
 }

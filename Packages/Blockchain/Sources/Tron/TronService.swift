@@ -287,16 +287,6 @@ extension TronService: ChainBalanceable {
     }
 }
 
-private extension Fee {
-    static func makeFinal(fee: BigInt) -> Fee {
-        return Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
-            gasLimit: 1
-        )
-    }
-}
-
 public extension TronService {
     func fee(input: FeeInput) async throws -> Fee {
         return try await {
@@ -313,11 +303,11 @@ public extension TronService {
 
                 switch asset.type {
                 case .native:
-                    return try .makeFinal(fee: feeService.nativeTransferFee(
+                    return try feeService.nativeTransferFee(
                         accountUsage: accountUsage,
                         parameters: parameters,
                         isNewAccount: isNewAccount
-                    ))
+                    )
                 default:
                     let gasLimit = try await estimateTRC20Transfer(
                         ownerAddress: input.senderAddress,
@@ -326,12 +316,12 @@ public extension TronService {
                         value: input.value
                     )
 
-                    return try .makeFinal(fee: feeService.trc20TransferFee(
+                    return try feeService.trc20TransferFee(
                         accountUsage: accountUsage,
                         parameters: parameters,
                         gasLimit: gasLimit,
                         isNewAccount: isNewAccount
-                    ))
+                    )
                 }
             case .transferNft:
                 fatalError()
@@ -341,22 +331,16 @@ public extension TronService {
 
                 let (accountUsage, totalStaked) = try await (getAccountUsage, getBalance.staked)
 
-                return .makeFinal(fee: feeService.stakeFee(
+                return feeService.stakeFee(
                     accountUsage: accountUsage,
                     type: type,
                     totalStaked: totalStaked,
                     inputValue: input.value
-                ))
+                )
             case let .swap(_, _, quote, quoteData):
                 async let getParameters = parameters()
                 async let getAccountEnergy = accountEnergy(address: input.senderAddress)
                 let (parameters, accountEnergy) = try await (getParameters, getAccountEnergy)
-                guard
-                    let swapEnergy = quoteData.gasLimit,
-                    let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value
-                else {
-                    throw AnyError("Unable to fetch gas limit or energy fee")
-                }
 
                 let estimatedEnergy: BigInt
                 if let approval = quoteData.approval {
@@ -366,15 +350,16 @@ public extension TronService {
                         contractAddress: approval.token
                     )
                 } else {
+                    guard let swapEnergy = quoteData.gasLimit else {
+                        throw AnyError("Unable to fetch gas limit or energy fee")
+                    }
                     estimatedEnergy = BigInt(stringLiteral: swapEnergy)
                 }
-                let gasLimit = (estimatedEnergy - BigInt(accountEnergy)).increase(byPercent: 10)
-                let gasPrice = BigInt(energyFee)
-                
-                return Fee(
-                    fee: gasLimit * gasPrice,
-                    gasPriceType: .regular(gasPrice: gasPrice),
-                    gasLimit: gasLimit
+
+                return try feeService.swapFee(
+                    estimatedEnergy: estimatedEnergy,
+                    accountEnergy: accountEnergy,
+                    parameters: parameters
                 )
             case .generic, .tokenApprove, .account:
                 fatalError()
