@@ -73,6 +73,16 @@ struct TronFeeService: Sendable {
             gasLimit: gasLimit
         )
     }
+    
+    func accountEnergy(usage: TronAccountUsage) -> UInt64 {
+        guard
+            let energyLimit = usage.EnergyLimit,
+            let energyUsed = usage.EnergyUsed
+        else {
+            return .zero
+        }
+        return max(energyLimit - energyUsed, 0)
+    }
 }
 
 extension Collection where Element == TronChainParameter {

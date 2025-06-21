@@ -110,16 +110,16 @@ extension TronService {
         )
     }
 
-    private func accountEnergy(address: String) async throws -> UInt64 {
-        let usage = try await accountUsage(address: address)
-        guard
-            let energyLimit = usage.EnergyLimit,
-            let energyUsed = usage.EnergyUsed
-        else {
-            return 0
-        }
-        return max(energyLimit - energyUsed, 0)
-    }
+//    private func accountEnergy(address: String) async throws -> UInt64 {
+//        let usage = try await accountUsage(address: address)
+//        guard
+//            let energyLimit = usage.EnergyLimit,
+//            let energyUsed = usage.EnergyUsed
+//        else {
+//            return 0
+//        }
+//        return max(energyLimit - energyUsed, 0)
+//    }
 
     private func votes(address: String) async throws -> [TronVote] {
         try await account(address: address).votes ?? []
@@ -170,7 +170,7 @@ extension TronService {
     private func estimateTRC20Approve(
         ownerAddress: String,
         spender: String,
-        contractAddress: String,
+        contractAddress: String
     ) async throws -> BigInt {
         let address = try addressHex(address: spender)
         let parameter = [address, BigInt.MAX_256.magnitude.serialize().hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
@@ -338,10 +338,6 @@ public extension TronService {
                     inputValue: input.value
                 )
             case let .swap(_, _, quote, quoteData):
-                async let getParameters = parameters()
-                async let getAccountEnergy = accountEnergy(address: input.senderAddress)
-                let (parameters, accountEnergy) = try await (getParameters, getAccountEnergy)
-
                 let estimatedEnergy: BigInt
                 if let approval = quoteData.approval {
                     estimatedEnergy = try await estimateTRC20Approve(
@@ -356,10 +352,11 @@ public extension TronService {
                     estimatedEnergy = BigInt(stringLiteral: swapEnergy)
                 }
 
+                let accountEnergy = feeService.accountEnergy(usage: try await accountUsage(address: input.senderAddress))
                 return try feeService.swapFee(
                     estimatedEnergy: estimatedEnergy,
                     accountEnergy: accountEnergy,
-                    parameters: parameters
+                    parameters: try await parameters()
                 )
             case .generic, .tokenApprove, .account:
                 fatalError()
