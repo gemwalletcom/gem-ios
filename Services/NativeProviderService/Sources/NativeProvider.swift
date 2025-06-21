@@ -37,42 +37,50 @@ extension NativeProvider: AlienProvider {
     }
 
     public func batchRequest(targets: [AlienTarget]) async throws -> [Data] {
-        return try await withThrowingTaskGroup(of: Data.self) { group in
-            var results = [Data]()
+        do {
+            return try await withThrowingTaskGroup(of: Data.self) { group in
+                var results = [Data]()
 
-            for target in targets {
-                group.addTask {
-                    print("==> handle request:\n\(target)")
+                for target in targets {
+                    group.addTask {
+                        print("==> handle request:\n\(target)")
 
-                    if let data = await self.cache.get(key: target.cacheKey) {
+                        if let data = await self.cache.get(key: target.cacheKey) {
+                            return data
+                        }
+
+
+                        let (data, response) = try await self.session.data(for: target.asRequest())
+                        let statusCode = (response as? HTTPURLResponse)?.statusCode
+                        if statusCode != 200 && data.isEmpty {
+                            throw AlienError.ResponseError(msg: "Invalid HTTP status code: \(String(describing: statusCode))")
+                        }
+                        print("<== response body size:\(data.count)")
+#if DEBUG
+                        if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
+                            let pretty = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
+                            print("<== response json: \(pretty)")
+                        }
+#endif
+
+                        // save cache
+                        if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
+                            await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
+                        }
+
                         return data
                     }
-
-                    let (data, response) = try await self.session.data(for: target.asRequest())
-                    let statusCode = (response as? HTTPURLResponse)?.statusCode
-                    if statusCode != 200 && data.isEmpty {
-                        throw AlienError.ResponseError(msg: "Invalid HTTP status code: \(String(describing: statusCode))")
-                    }
-                    print("<== response body size:\(data.count)")
-                    #if DEBUG
-                    if let json = try? JSONSerialization.jsonObject(with: data, options: []) as? [String: Any] {
-                        let pretty = try JSONSerialization.data(withJSONObject: json, options: [.prettyPrinted])
-                        print("<== response json: \(pretty)")
-                    }
-                    #endif
-
-                    // save cache
-                    if let ttl = target.headers?["x-cache-ttl"], let duration = Int(ttl) {
-                        await self.cache.set(key: target.cacheKey, value: data, ttl: Duration.seconds(duration))
-                    }
-
-                    return data
                 }
+                for try await result in group {
+                    results.append(result)
+                }
+                return results
             }
-            for try await result in group {
-                results.append(result)
+        } catch let error {
+            if (error as NSError).domain == NSURLErrorDomain {
+                throw AlienError.ResponseError(msg: error.localizedDescription)
             }
-            return results
+            throw error
         }
     }
 }
