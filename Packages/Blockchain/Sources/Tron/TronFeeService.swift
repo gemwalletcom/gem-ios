@@ -1,12 +1,12 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
-import Foundation
 import BigInt
+import Foundation
 import Primitives
 
 struct TronFeeService: Sendable {
     private static let baseFee = BigInt(280_000)
-    
+
     func nativeTransferFee(
         accountUsage: TronAccountUsage,
         parameters: [TronChainParameter],
@@ -20,7 +20,7 @@ struct TronFeeService: Sendable {
 
         return isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
     }
-    
+
     func trc20TransferFee(
         accountUsage: TronAccountUsage,
         parameters: [TronChainParameter],
@@ -29,14 +29,14 @@ struct TronFeeService: Sendable {
     ) throws -> BigInt {
         let energyFee = try parameters.value(for: .getEnergyFee)
         let newAccountFeeInSmartContract = try parameters.value(for: .getCreateNewAccountFeeInSystemContract)
-        
+
         let availableEnergy = BigInt(accountUsage.EnergyLimit ?? 0) - BigInt(accountUsage.EnergyUsed ?? 0)
         let energyShortfall = max(BigInt.zero, gasLimit.increase(byPercent: 20) - availableEnergy)
         let tokenTransferFee = BigInt(energyFee) * energyShortfall
 
         return isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
     }
-    
+
     func stakeFee(
         accountUsage: TronAccountUsage,
         type: StakeType,
