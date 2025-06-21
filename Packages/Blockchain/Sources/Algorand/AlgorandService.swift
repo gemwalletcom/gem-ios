@@ -73,7 +73,7 @@ extension AlgorandService: ChainBalanceable {
         return tokenIds.map { assetId in
             let (balance, isActive): (BigInt, Bool) = {
                 if let value = assets.first(where: { String($0.asset_id) == assetId.tokenId  })?.amount {
-                    return (BigInt(value), false)
+                    return (BigInt(value), true)
                 }
                 return (.zero, false)
             }()
@@ -113,9 +113,9 @@ extension AlgorandService: ChainTransactionPreloadable {
     }
 }
 
-extension AlgorandService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
-        TransactionLoad(
+extension AlgorandService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
+        TransactionData(
             sequence: input.preload.sequence,
             block: SignerInputBlock(hash: input.preload.blockHash),
             chainId: input.preload.chainId,

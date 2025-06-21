@@ -13,6 +13,7 @@ public struct WalletService: Sendable {
     private let walletStore: WalletStore
     private let avatarService: AvatarService
     private let walletSessionService: any WalletSessionManageable
+    private let preferences: ObservablePreferences
 
     public init(
         keystore: any Keystore,
@@ -24,13 +25,10 @@ public struct WalletService: Sendable {
         self.walletStore = walletStore
         self.avatarService = avatarService
         self.walletSessionService = WalletSessionService(walletStore: walletStore, preferences: preferences)
+        self.preferences = preferences
     }
 
-    public func nextWalletIndex() throws -> Int {
-        try walletStore.nextWalletIndex()
-    }
-
-    public var currentWaletId: WalletId? {
+    public var currentWalletId: WalletId? {
         walletSessionService.currentWalletId
     }
     
@@ -41,6 +39,14 @@ public struct WalletService: Sendable {
     public var wallets: [Wallet] {
         walletSessionService.wallets
     }
+    
+    public var isAcceptTermsCompleted: Bool {
+        preferences.isAcceptTermsCompleted
+    }
+    
+    public func nextWalletIndex() throws -> Int {
+        try walletStore.nextWalletIndex()
+    }
 
     public func setCurrent(for index: Int) {
         walletSessionService.setCurrent(index: index)
@@ -48,6 +54,10 @@ public struct WalletService: Sendable {
 
     public func setCurrent(for walletId: WalletId) {
         walletSessionService.setCurrent(walletId: walletId)
+    }
+    
+    public func acceptTerms() {
+        preferences.isAcceptTermsCompleted = true
     }
 
     public func createWallet() -> [String] {
@@ -70,7 +80,11 @@ public struct WalletService: Sendable {
         try avatarService.remove(for: wallet.id)
         try keystore.deleteKey(for: wallet)
         try walletStore.deleteWallet(for: wallet.id)
-        walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+
+
+        if currentWalletId == wallet.walletId {
+            walletSessionService.setCurrent(walletId: wallets.first?.walletId)
+        }
 
         // TODO: - enable once will be enabled in CleanUpService
         /*

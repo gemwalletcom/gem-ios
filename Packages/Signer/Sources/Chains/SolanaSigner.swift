@@ -1,14 +1,14 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
+import BigInt
+import Blockchain
 import Foundation
-import WalletCore
-import WalletCorePrimitives
 import Keystore
 import Primitives
-import BigInt
+import WalletCore
+import WalletCorePrimitives
 
 public struct SolanaSigner: Signable {
-    
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let coinType = input.coinType
         let type = SolanaSigningInput.OneOf_TransactionType.transferTransaction(.with {
@@ -41,7 +41,7 @@ public struct SolanaSigner: Signable {
                 $0.memo = input.memo.valueOrEmpty
                 $0.tokenProgramID = tokenProgram
             })
-            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
+            return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
         case .none:
             let walletAddress = SolanaAddress(string: destinationAddress)!
             let recipientTokenAddress = switch input.token.tokenProgram {
@@ -60,7 +60,7 @@ public struct SolanaSigner: Signable {
                 $0.memo = input.memo.valueOrEmpty
                 $0.tokenProgramID = tokenProgram
             })
-            return try sign(input: input, type:  type, coinType: coinType, privateKey: privateKey)
+            return try sign(input: input, type: type, coinType: coinType, privateKey: privateKey)
         }
     }
     
@@ -111,7 +111,7 @@ public struct SolanaSigner: Signable {
         // read all the signatures
         var signatures: [Data] = []
         for _ in 0..<Int(numRequiredSignatures) {
-            signatures.append(Data(bytes[offset..<offset+64]))
+            signatures.append(Data(bytes[offset..<offset + 64]))
             offset += 64
         }
 
@@ -144,22 +144,9 @@ public struct SolanaSigner: Signable {
         }
     }
     
-    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
-        guard 
-            case .swap(_, _, _, let swapData) = input.type else {
-            throw AnyError("not swap SignerInput")
-        }
-        let price = input.fee.priorityFee
-        let limit = input.fee.gasLimit
-        
-        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
-            throw AnyError("Unable to set compute unit price")
-        }
-        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
-            throw AnyError("Unable to set compute unit limit")
-        }
+    func signRawTransaction(transaction: String, privateKey: Data) throws -> String {
         guard let transactionData = Base64.decode(string: transaction) else {
-            throw AnyError("not swap SignerInput")
+            throw AnyError("unable to decode base64 string")
         }
         let decodeOutputData = TransactionDecoder.decode(coinType: .solana, encodedTx: transactionData)
         let decodeOutput = try SolanaDecodingTransactionOutput(serializedBytes: decodeOutputData)
@@ -174,8 +161,24 @@ public struct SolanaSigner: Signable {
         if !output.errorMessage.isEmpty {
             throw AnyError(output.errorMessage)
         }
+        return output.encoded
+    }
+    
+    public func signSwap(input: SignerInput, privateKey: Data) throws -> [String] {
+        let (_, _, _, swapData) = try input.type.swap()
+        let price = input.fee.priorityFee
+        let limit = input.fee.gasLimit
         
-        return [output.encoded]
+        guard let transaction = SolanaTransaction.setComputeUnitPrice(encodedTx: swapData.data, price: price.description) else {
+            throw AnyError("Unable to set compute unit price")
+        }
+        guard let transaction = SolanaTransaction.setComputeUnitLimit(encodedTx: transaction, limit: limit.description) else {
+            throw AnyError("Unable to set compute unit limit")
+        }
+    
+        return try [
+            signRawTransaction(transaction: transaction, privateKey: privateKey),
+        ]
     }
     
     public func signStake(input: SignerInput, privateKey: Data) throws -> [String] {
@@ -189,6 +192,23 @@ public struct SolanaSigner: Signable {
                 $0.validatorPubkey = validator.id
                 $0.value = input.value.asUInt
             })
+            let encoded = try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey)
+            let memo = input.memo ?? ""
+            let instruction = try SolanaInstruction(
+                programId: "MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr",
+                accounts: [
+                    SolanaAccountMeta(pubkey: input.senderAddress, isSigner: true, isWritable: true),
+                ],
+                data: Base58.encodeNoCheck(data: memo.encodedData())
+            )
+            let data = try JSONEncoder().encode(instruction)
+            let instructionJson = try data.encodeString()
+            guard let transaction = SolanaTransaction.insertInstruction(encodedTx: encoded, insertAt: -1, instruction: instructionJson) else {
+                throw AnyError("Unable to add instruction")
+            }            
+            return try [
+                signRawTransaction(transaction: transaction, privateKey: privateKey),
+            ]
         case .unstake(let delegation):
             transactionType = .deactivateStakeTransaction(.with {
                 $0.stakeAccount = delegation.base.delegationId
@@ -199,11 +219,11 @@ public struct SolanaSigner: Signable {
                 $0.value = delegation.base.balanceValue.asUInt
             })
         case .redelegate,
-            .rewards:
+             .rewards:
             fatalError()
         }
-        return [
-            try sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),
+        return try [
+            sign(input: input, type: transactionType, coinType: input.coinType, privateKey: privateKey),
         ]
     }
     
@@ -219,9 +239,9 @@ public struct SolanaSigner: Signable {
 }
 
 extension String {
-  var paddded: Self {
-    let offset = count % 4
-    guard offset != 0 else { return self }
-    return padding(toLength: count + 4 - offset, withPad: "=", startingAt: 0)
-  }
+    var paddded: Self {
+        let offset = count % 4
+        guard offset != 0 else { return self }
+        return padding(toLength: count + 4 - offset, withPad: "=", startingAt: 0)
+    }
 }

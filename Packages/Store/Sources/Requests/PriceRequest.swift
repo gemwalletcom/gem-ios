@@ -9,9 +9,9 @@ import Primitives
 public struct PriceRequest: ValueObservationQueryable {
     public static var defaultValue: PriceData { fatalError() }
 
-    public var assetId: String
+    public var assetId: AssetId
 
-    public init(assetId: String) {
+    public init(assetId: AssetId) {
         self.assetId = assetId
     }
 
@@ -20,7 +20,7 @@ public struct PriceRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.price)
             .including(all: AssetRecord.priceAlerts)
             .including(all: AssetRecord.links)
-            .filter(Columns.Asset.id == assetId)
+            .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: PriceRecordInfo.self)
             .fetchOne(db)
             .map { $0.priceData }!

@@ -89,11 +89,11 @@ extension BitcoinService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension BitcoinService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension BitcoinService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         let utxos = input.preload.utxos
         let fee = try fee(input: input.feeInput, utxos: utxos)
-        return TransactionLoad(
+        return TransactionData(
             fee: fee,
             utxos: utxos
         )

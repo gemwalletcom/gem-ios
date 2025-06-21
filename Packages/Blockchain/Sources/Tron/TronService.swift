@@ -8,14 +8,16 @@ import WalletCore
 
 public struct TronService: Sendable {
     let chain: Chain
-    let provider: Provider<TronProvider>
+    let provider: Provider<TronTarget>
+    let feeService: TronFeeService
 
     public init(
         chain: Chain,
-        provider: Provider<TronProvider>
+        provider: Provider<TronTarget>
     ) {
         self.chain = chain
         self.provider = provider
+        self.feeService = TronFeeService()
     }
 }
 
@@ -165,6 +167,22 @@ extension TronService {
         )
     }
 
+    private func estimateTRC20Approve(
+        ownerAddress: String,
+        spender: String,
+        contractAddress: String,
+    ) async throws -> BigInt {
+        let address = try addressHex(address: spender)
+        let parameter = [address, BigInt.MAX_256.magnitude.serialize().hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
+        return try await estimateContractCall(
+            ownerAddress: ownerAddress,
+            contractAddress: contractAddress,
+            value: 0,
+            function: "approve(address,uint256)",
+            parameter: parameter
+        )
+    }
+
     private func parameters() async throws -> [TronChainParameter] {
         try await provider
             .request(.chainParams)
@@ -282,8 +300,6 @@ private extension Fee {
 public extension TronService {
     func fee(input: FeeInput) async throws -> Fee {
         return try await {
-            let baseFee = BigInt(280_000)
-
             switch input.type {
             case let .transfer(asset):
                 async let getParameters = parameters()
@@ -295,20 +311,13 @@ public extension TronService {
                     getAccountUsage
                 )
 
-                guard
-                    let newAccountFeeInSmartContract = parameters.first(where: { $0.key == TronChainParameterKey.getCreateNewAccountFeeInSystemContract.rawValue })?.value,
-                    let newAccountFee = parameters.first(where: { $0.key == TronChainParameterKey.getCreateAccountFee.rawValue })?.value,
-                    let energyFee = parameters.first(where: { $0.key == TronChainParameterKey.getEnergyFee.rawValue })?.value
-                else {
-                    throw AnyError("unknown key")
-                }
-
                 switch asset.type {
                 case .native:
-                    let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
-                    let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee)
-                    let fee = isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee
-                    return .makeFinal(fee: fee)
+                    return try .makeFinal(fee: feeService.nativeTransferFee(
+                        accountUsage: accountUsage,
+                        parameters: parameters,
+                        isNewAccount: isNewAccount
+                    ))
                 default:
                     let gasLimit = try await estimateTRC20Transfer(
                         ownerAddress: input.senderAddress,
@@ -316,29 +325,28 @@ public extension TronService {
                         contractAddress: asset.getTokenId(),
                         value: input.value
                     )
-                    let tokenTransferFee = BigInt(energyFee) * gasLimit.increase(byPercent: 20)
 
-                    let fee = isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee
-                    return .makeFinal(fee: fee)
+                    return try .makeFinal(fee: feeService.trc20TransferFee(
+                        accountUsage: accountUsage,
+                        parameters: parameters,
+                        gasLimit: gasLimit,
+                        isNewAccount: isNewAccount
+                    ))
                 }
+            case .transferNft:
+                fatalError()
             case let .stake(_, type):
                 async let getAccountUsage = accountUsage(address: input.senderAddress)
                 async let getBalance = accountBalance(address: input.senderAddress)
 
-                let (accountUsage, totalVotes) = try await (getAccountUsage, getBalance.staked)
-                let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
-                switch type {
-                case .stake:
-                    return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2))
-                case .unstake:
-                    if totalVotes > input.value {
-                        return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(baseFee * 2))
-                    } else {
-                        return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee))
-                    }
-                case .rewards, .withdraw, .redelegate:
-                    return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(baseFee))
-                }
+                let (accountUsage, totalStaked) = try await (getAccountUsage, getBalance.staked)
+
+                return .makeFinal(fee: feeService.stakeFee(
+                    accountUsage: accountUsage,
+                    type: type,
+                    totalStaked: totalStaked,
+                    inputValue: input.value
+                ))
             case let .swap(_, _, quote, quoteData):
                 async let getParameters = parameters()
                 async let getAccountEnergy = accountEnergy(address: input.senderAddress)
@@ -352,27 +360,23 @@ public extension TronService {
 
                 let estimatedEnergy: BigInt
                 if let approval = quoteData.approval {
-                    let address = try addressHex(address: approval.spender)
-                    let parameter = [address, BigInt.MAX_256.magnitude.serialize().hexString].map { $0.addPadding(number: 64, padding: "0") }.joined(separator: "")
-                    estimatedEnergy = try await estimateContractCall(
+                    estimatedEnergy = try await estimateTRC20Approve(
                         ownerAddress: quote.request.walletAddress,
-                        contractAddress: approval.token,
-                        value: 0,
-                        function: "approve(address,uint256)",
-                        parameter: parameter
+                        spender: approval.spender,
+                        contractAddress: approval.token
                     )
                 } else {
                     estimatedEnergy = BigInt(stringLiteral: swapEnergy)
                 }
-
                 let gasLimit = (estimatedEnergy - BigInt(accountEnergy)).increase(byPercent: 10)
                 let gasPrice = BigInt(energyFee)
+                
                 return Fee(
                     fee: gasLimit * gasPrice,
                     gasPriceType: .regular(gasPrice: gasPrice),
                     gasLimit: gasLimit
                 )
-            case .generic, .tokenApprove, .account, .transferNft:
+            case .generic, .tokenApprove, .account:
                 fatalError()
             }
         }()
@@ -393,8 +397,8 @@ extension TronService: ChainTransactionPreloadable {
 
 // MARK: - ChainTransactionPreloadable
 
-extension TronService: ChainTransactionLoadable {
-    public func load(input: TransactionInput) async throws -> TransactionLoad {
+extension TronService: ChainTransactionDataLoadable {
+    public func load(input: TransactionInput) async throws -> TransactionData {
         async let getBlock = latestBlock().block_header.raw_data
         async let getFee = fee(input: input.feeInput)
         async let getVotes: [TronVote]? = {
@@ -430,7 +434,7 @@ extension TronService: ChainTransactionLoadable {
             return .vote(result.filter { $1 > 0 })
         }()
 
-        return TransactionLoad(
+        return TransactionData(
             block: SignerInputBlock(
                 number: Int(block.number),
                 version: Int(block.version),

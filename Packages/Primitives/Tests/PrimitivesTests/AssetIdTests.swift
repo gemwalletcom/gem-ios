@@ -67,6 +67,6 @@ final class AssetIdTests {
         let json = #"{"chain":"ethereum","tokenId":"0xabc123"}"#.data(using: .utf8)!
         let decoded = try JSONDecoder().decode(AssetId.self, from: json)
         
-        #expect(AssetId(chain: .ethereum, tokenId: "0xabc123") == asset)
+        #expect(asset == decoded)
     }
 }

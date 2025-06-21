@@ -1,5 +1,9 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import Foundation
-@preconcurrency import GRDB
+import Primitives
+import GRDB
+import os
 
 public struct DB: Sendable {
     private static let ignoreMethods = ["COMMIT TRANSACTION", "PRAGMA query_only", "BEGIN DEFERRED TRANSACTION"].asSet()
@@ -10,18 +14,25 @@ public struct DB: Sendable {
         configuration: GRDB.Configuration = DB.defaultConfiguration
     ) {
         do {
-            let fileManager = FileManager.default
-            let oldFileUrl = try fileManager.url(for: .documentDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
-            let newFileUrl = try fileManager.url(for: .applicationSupportDirectory, in: .userDomainMask, appropriateFor: nil, create: true).appending(path: fileName)
-            
-            // Migrate db from documents to support.
-            if fileManager.fileExists(atPath: oldFileUrl.path()) {
-                try fileManager.moveItem(at: oldFileUrl, to: newFileUrl)
-            }
-            dbQueue = try DatabaseQueue(path: newFileUrl.path(percentEncoded: false), configuration: configuration)
+            // TODO: - remove the logic FileMigrator in 2026
+            let fileMigrator = FileMigrator()
+            let databaseURL = try fileMigrator.migrate(
+                name: fileName,
+                fromDirectory: .documentDirectory,
+                toDirectory: .applicationSupportDirectory,
+                isDirectory: false
+            )
+            dbQueue = try DatabaseQueue(path: databaseURL.path(percentEncoded: false), configuration: configuration)
         } catch {
-            fatalError("db initialization error: \(error)")
+            os_log(
+                "DB Initialization error: %{public}@",
+                log: .default,
+                type: .fault,
+                error.localizedDescription
+            )
+            fatalError("DB Initialization error: \(error)")
         }
+
         do {
             var migrations = Migrations()
             try migrations.run(dbQueue: dbQueue)
@@ -29,7 +40,13 @@ public struct DB: Sendable {
                 try migrations.runChanges(dbQueue: dbQueue)
             }
         } catch {
-            fatalError("db migrations error: \(error)")
+            os_log(
+                "DB Migration error: %{public}@",
+                log: .default,
+                type: .fault,
+                error.localizedDescription
+            )
+            fatalError("DB Migration error: \(error)")
         }
     }
 

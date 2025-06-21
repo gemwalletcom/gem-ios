@@ -24,6 +24,7 @@ let package = Package(
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "InfoSheet", path: "../InfoSheet"),
         .package(name: "PrimitivesComponents", path: "../../Packages/PrimitivesComponents"),
+        .package(name: "Formatters", path: "../../Packages/Formatters")
 
     ],
     targets: [
@@ -39,7 +40,8 @@ let package = Package(
                 "Preferences",
                 "Store",
                 "InfoSheet",
-                "PrimitivesComponents"
+                "PrimitivesComponents",
+                "Formatters"
             ],
             path: "Sources"
         ),

@@ -14,21 +14,21 @@ public struct PriceAlertService: Sendable {
     private let store: PriceAlertStore
     private let apiService: any GemAPIPriceAlertService
     private let deviceService: any DeviceServiceable
-    private let priceService: PriceService
     private let preferences: Preferences
     private let pushNotificationService: PushNotificationEnablerService
-
+    private let priceObserverService: PriceObserverService
+    
     public init(
         store: PriceAlertStore,
         apiService: any GemAPIPriceAlertService = GemAPIService(),
         deviceService: any DeviceServiceable,
-        priceService: PriceService,
+        priceObserverService: PriceObserverService,
         preferences: Preferences = .standard
     ) {
         self.store = store
         self.apiService = apiService
         self.deviceService = deviceService
-        self.priceService = priceService
+        self.priceObserverService = priceObserverService
         self.preferences = preferences
         self.pushNotificationService = PushNotificationEnablerService(preferences: preferences)
     }
@@ -73,6 +73,7 @@ public struct PriceAlertService: Sendable {
     public func add(priceAlert: PriceAlert) async throws {
         try store.addPriceAlerts([priceAlert])
         try await add(priceAlerts: [priceAlert])
+        try await priceObserverService.addAssets(assets: [priceAlert.assetId])
     }
     
     public func add(priceAlerts: [PriceAlert]) async throws {
@@ -89,10 +90,5 @@ public struct PriceAlertService: Sendable {
     public func delete(priceAlerts: [PriceAlert]) async throws {
         try store.deletePriceAlerts(priceAlerts.ids )
         try await apiService.deletePriceAlerts(deviceId: try deviceService.getDeviceId(), priceAlerts: priceAlerts)
-    }
-    
-    public func updatePrices(for currency: String) async throws   {
-        let assetIds = try store.getPriceAlerts().map { $0.assetId }.unique()
-        try await priceService.updatePrices(assetIds: assetIds, currency: currency)
     }
 }

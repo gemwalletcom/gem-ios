@@ -5,11 +5,26 @@ import Primitives
 import GRDB
 
 public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
-    
     public static let databaseTableName: String = "prices"
+    
+    public enum Columns {
+        static let assetId = Column("assetId")
+        static let price = Column("price")
+        static let priceUsd = Column("priceUsd")
+        static let priceChangePercentage24h = Column("priceChangePercentage24h")
+        static let marketCap = Column("marketCap")
+        static let marketCapFdv = Column("marketCapFdv")
+        static let marketCapRank = Column("marketCapRank")
+        static let totalVolume = Column("totalVolume")
+        static let circulatingSupply = Column("circulatingSupply")
+        static let totalSupply = Column("totalSupply")
+        static let maxSupply = Column("maxSupply")
+        static let updatedAt = Column("updatedAt")
+    }
 
-    public var assetId: String
+    public var assetId: AssetId
     public var price: Double
+    public var priceUsd: Double
     public var priceChangePercentage24h: Double
     
     public var marketCap: Double?
@@ -19,30 +34,40 @@ public struct PriceRecord: Codable, FetchableRecord, PersistableRecord  {
     public var circulatingSupply: Double?
     public var totalSupply: Double?
     public var maxSupply: Double?
+    
+    public var updatedAt: Date?
 }
 
 extension PriceRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.Price.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .primaryKey()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.Price.price.name, .numeric)
-            $0.column(Columns.Price.priceChangePercentage24h.name, .numeric)
+            $0.column(Columns.price.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
+            $0.column(Columns.priceUsd.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
+            $0.column(Columns.priceChangePercentage24h.name, .numeric)
+                .notNull()
+                .defaults(to: 0)
             
-            $0.column(Columns.Price.marketCap.name, .double)
-            $0.column(Columns.Price.marketCapFdv.name, .double)
-            $0.column(Columns.Price.marketCapRank.name, .integer)
-            $0.column(Columns.Price.totalVolume.name, .double)
-            $0.column(Columns.Price.circulatingSupply.name, .double)
-            $0.column(Columns.Price.totalSupply.name, .double)
-            $0.column(Columns.Price.maxSupply.name, .double)
+            $0.column(Columns.marketCap.name, .double)
+            $0.column(Columns.marketCapFdv.name, .double)
+            $0.column(Columns.marketCapRank.name, .integer)
+            $0.column(Columns.totalVolume.name, .double)
+            $0.column(Columns.circulatingSupply.name, .double)
+            $0.column(Columns.totalSupply.name, .double)
+            $0.column(Columns.maxSupply.name, .double)
+            $0.column(Columns.updatedAt.name, .date)
         }
     }
 }
 
 extension PriceRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension AssetPrice {
@@ -50,6 +75,7 @@ extension AssetPrice {
         return PriceRecord(
             assetId: assetId,
             price: price,
+            priceUsd: price,
             priceChangePercentage24h: priceChangePercentage24h
         )
     }
@@ -59,7 +85,8 @@ extension PriceRecord {
     func mapToPrice() -> Price {
         return Price(
             price: price,
-            priceChangePercentage24h: priceChangePercentage24h
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt ?? .now
         )
     }
     
@@ -67,7 +94,8 @@ extension PriceRecord {
         return AssetPrice(
             assetId: assetId,
             price: price,
-            priceChangePercentage24h: priceChangePercentage24h
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt ?? .now
         )
     }
     

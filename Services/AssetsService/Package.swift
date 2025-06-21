@@ -10,13 +10,21 @@ let package = Package(
     products: [
         .library(
             name: "AssetsService",
-            targets: ["AssetsService"]),
+            targets: ["AssetsService"]
+        ),
+        .library(
+            name: "AssetsServiceTestKit",
+            targets: ["AssetsServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Store", path: "../../Packages/Store"),
         .package(name: "GemAPI", path: "../../Packages/GemAPI"),
-        .package(name: "ChainService", path: "../ChainService")
+        .package(name: "ChainService", path: "../ChainService"),
+        .package(name: "NodeService", path: "../NodeService"),
+        .package(name: "Preferences", path: "../../Packages/Preferences"),
+        .package(name: "GemstonePrimitives", path: ".../GemstonePrimitives")
     ],
     targets: [
         .target(
@@ -25,13 +33,37 @@ let package = Package(
                 "Primitives",
                 "Store",
                 "GemAPI",
-                "ChainService"
+                "ChainService",
+                "NodeService",
+                "Preferences",
+                "GemstonePrimitives"
             ],
             path: "Sources"
         ),
+        .target(
+            name: "AssetsServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                "AssetsService",
+                "Primitives",
+                "Preferences",
+                "GemstonePrimitives"
+            ],
+            path: "TestKit"
+        ),
         .testTarget(
             name: "AssetsServiceTests",
-            dependencies: ["AssetsService"]
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "GemAPITestKit", package: "GemAPI"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                "Primitives",
+                "AssetsService",
+                "AssetsServiceTestKit"
+            ]
         ),
     ]
 )

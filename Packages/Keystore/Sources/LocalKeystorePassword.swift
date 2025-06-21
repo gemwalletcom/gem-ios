@@ -1,7 +1,7 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
-@preconcurrency import KeychainAccess
+import Keychain
 import LocalAuthentication
 import Primitives
 
@@ -13,7 +13,7 @@ public final class LocalKeystorePassword: KeystorePassword {
         static let passwordAuthenticationPrivacyLock = "password_authentication_privacy_lock"
     }
     
-    private let keychain = Keychain()
+    private let keychain: Keychain = KeychainDefault()
     
     public init() {}
     
@@ -62,6 +62,8 @@ public final class LocalKeystorePassword: KeystorePassword {
             }
         case false:
             try changeAuthentication(authentication: .none, context: context)
+            try setPrivacyLockStatus(.disabled)
+            try setAuthenticationLockPeriod(period: .default)
         }
     }
     

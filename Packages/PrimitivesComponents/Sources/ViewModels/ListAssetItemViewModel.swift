@@ -5,6 +5,7 @@ import Primitives
 import Components
 import Style
 import SwiftUI
+import Formatters
 
 public struct ListAssetItemViewModel: ListAssetItemViewable {
     let assetDataModel: AssetDataViewModel
@@ -51,11 +52,11 @@ public struct ListAssetItemViewModel: ListAssetItemViewable {
     public var symbol: String? {
         switch type {
         case .wallet,
-            .view,
-            .price:
+            .view:
             return .none
         case .manage,
-            .copy:
+            .copy,
+            .price:
             if name == assetDataModel.symbol {
                 return .none
             }

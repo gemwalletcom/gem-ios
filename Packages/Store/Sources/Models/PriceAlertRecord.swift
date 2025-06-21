@@ -5,11 +5,20 @@ import Primitives
 import GRDB
 
 public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
-
     public static let databaseTableName: String = "price_alerts"
+    
+    public enum Columns {
+        static let id = Column("id")
+        static let assetId = Column("assetId")
+        static let currency = Column("currency")
+        static let priceDirection = Column("priceDirection")
+        static let price = Column("price")
+        static let pricePercentChange = Column("pricePercentChange")
+        static let lastNotifiedAt = Column("lastNotifiedAt")
+    }
 
     public var id: String
-    public var assetId: String
+    public var assetId: AssetId
     public var currency: String
     public var priceDirection: PriceAlertDirection?
     public var price: Double?
@@ -21,15 +30,15 @@ public struct PriceAlertRecord: Codable, FetchableRecord, PersistableRecord  {
 extension PriceAlertRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.PriceAlert.id.name, .text)
+            $0.column(Columns.id.name, .text)
                 .primaryKey()
-            $0.column(Columns.PriceAlert.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.PriceAlert.currency.name, .text)
-            $0.column(Columns.PriceAlert.priceDirection.name, .text)
-            $0.column(Columns.PriceAlert.price.name, .double)
-            $0.column(Columns.PriceAlert.pricePercentChange.name, .double)
-            $0.column(Columns.PriceAlert.lastNotifiedAt.name, .date)
+            $0.column(Columns.currency.name, .text)
+            $0.column(Columns.priceDirection.name, .text)
+            $0.column(Columns.price.name, .double)
+            $0.column(Columns.pricePercentChange.name, .double)
+            $0.column(Columns.lastNotifiedAt.name, .date)
         }
     }
 }
@@ -37,7 +46,7 @@ extension PriceAlertRecord: CreateTable {
 extension PriceAlertRecord {
     func map() -> PriceAlert {
         PriceAlert(
-            assetId: try! AssetId(id: assetId),
+            assetId: assetId,
             currency: currency,
             price: price,
             pricePercentChange: pricePercentChange,
@@ -51,7 +60,7 @@ extension PriceAlert {
     func mapToRecord() -> PriceAlertRecord {
         PriceAlertRecord(
             id: id,
-            assetId: assetId.identifier,
+            assetId: assetId,
             currency: currency,
             priceDirection: priceDirection,
             price: price,

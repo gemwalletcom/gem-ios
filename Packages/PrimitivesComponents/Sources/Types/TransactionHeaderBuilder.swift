@@ -67,9 +67,10 @@ public struct TransactionHeaderTypeBuilder {
                     )
                 }
             case .swap(let fromAsset, let toAsset, let quote, _):
-                let assetPrices: [AssetPrice] = (metadata?.assetPrices ?? [:]).map { (key, price) in
-                    AssetPrice(assetId: key, price: price.price, priceChangePercentage24h: price.priceChangePercentage24h)
+                let assetPrices = (metadata?.assetPrices ?? [:]).map { (assetId, price) in
+                    price.mapToAssetPrice(assetId: assetId)
                 }
+                
                 let model = SwapMetadataViewModel(
                     metadata: SwapMetadata(
                         assets: [fromAsset, toAsset],

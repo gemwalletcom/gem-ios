@@ -13,8 +13,9 @@ public struct AssetMetaData: Codable, Equatable, Hashable, Sendable {
 	public let isPinned: Bool
 	public let isActive: Bool
 	public let stakingApr: Double?
+	public let rankScore: Int32
 
-	public init(isEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, isActive: Bool, stakingApr: Double?) {
+	public init(isEnabled: Bool, isBuyEnabled: Bool, isSellEnabled: Bool, isSwapEnabled: Bool, isStakeEnabled: Bool, isPinned: Bool, isActive: Bool, stakingApr: Double?, rankScore: Int32) {
 		self.isEnabled = isEnabled
 		self.isBuyEnabled = isBuyEnabled
 		self.isSellEnabled = isSellEnabled
@@ -23,5 +24,6 @@ public struct AssetMetaData: Codable, Equatable, Hashable, Sendable {
 		self.isPinned = isPinned
 		self.isActive = isActive
 		self.stakingApr = stakingApr
+		self.rankScore = rankScore
 	}
 }

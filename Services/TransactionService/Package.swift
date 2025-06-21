@@ -10,7 +10,12 @@ let package = Package(
     products: [
         .library(
             name: "TransactionService",
-            targets: ["TransactionService"]),
+            targets: ["TransactionService"]
+        ),
+        .library(
+            name: "TransactionServiceTestKit",
+            targets: ["TransactionServiceTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -21,6 +26,7 @@ let package = Package(
         .package(name: "BalanceService", path: "../BalanceService"),
         .package(name: "NFTService", path: "../NFTService"),
         .package(name: "GemstonePrimitives", path: "../../Packages/GemstonePrimitives"),
+        .package(name: "JobRunner", path: "../../Packages/JobRunner"),
     ],
     targets: [
         .target(
@@ -33,9 +39,22 @@ let package = Package(
                 "StakeService",
                 "BalanceService",
                 "NFTService",
-                "GemstonePrimitives"
+                "GemstonePrimitives",
+                "JobRunner"
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "TransactionServiceTestKit",
+            dependencies: [
+                .product(name: "StoreTestKit", package: "Store"),
+                .product(name: "StakeServiceTestKit", package: "StakeService"),
+                .product(name: "NFTServiceTestKit", package: "NFTService"),
+                .product(name: "ChainServiceTestKit", package: "ChainService"),
+                .product(name: "BalanceServiceTestKit", package: "BalanceService"),
+                "TransactionService"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "TransactionServiceTests",

@@ -2,15 +2,24 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 
     public static let databaseTableName: String = "banners"
+    
+    public enum Columns {
+        static let id = Column("id")
+        static let state = Column("state")
+        static let event = Column("event")
+        static let assetId = Column("assetId")
+        static let chain = Column("chain")
+        static let walletId = Column("walletId")
+    }
 
     public var id: String
     public var walletId: String?
-    public var assetId: String?
+    public var assetId: AssetId?
     public var chain: String?
     public var event: BannerEvent
     public var state: BannerState
@@ -23,26 +32,26 @@ public struct BannerRecord: Codable, FetchableRecord, PersistableRecord  {
 extension BannerRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.primaryKey(Columns.Banner.id.name, .text)
+            $0.primaryKey(Columns.id.name, .text)
                 .notNull()
                 .indexed()
-            $0.column(Columns.Banner.walletId.name, .text)
+            $0.column(Columns.walletId.name, .text)
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.Banner.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.Banner.chain.name, .text)
+            $0.column(Columns.chain.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.Banner.event.name, .text)
+            $0.column(Columns.event.name, .text)
                 .notNull()
-            $0.column(Columns.Banner.state.name, .text)
+            $0.column(Columns.state.name, .text)
                 .notNull()
             $0.uniqueKey(
                 [
-                    Columns.Banner.walletId.name,
-                    Columns.Banner.assetId.name,
-                    Columns.Banner.chain.name,
-                    Columns.Banner.event.name
+                    Columns.walletId.name,
+                    Columns.assetId.name,
+                    Columns.chain.name,
+                    Columns.event.name
                 ]
             )
         }
@@ -54,7 +63,7 @@ extension Banner {
         BannerRecord(
             id: id,
             walletId: wallet?.id,
-            assetId: asset?.id.identifier,
+            assetId: asset?.id,
             chain: chain?.id,
             event: event,
             state: state

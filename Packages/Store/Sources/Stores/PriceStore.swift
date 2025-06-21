@@ -12,36 +12,56 @@ public struct PriceStore: Sendable {
         self.db = db.dbQueue
     }
     
-    public func updatePrice(price: AssetPrice) throws {
-        try updatePrices(prices: [price])
+    public func updatePrice(price: AssetPrice, currency: String) throws {
+        try updatePrices(prices: [price], currency: currency)
     }
     
-    public func updatePrices(prices: [AssetPrice]) throws {
+    public func getRate(currency: String) throws -> FiatRateRecord {
+        try db.read { db in
+            guard let rate = try FiatRateRecord.filter(key: currency).fetchOne(db) else {
+                throw AnyError("unknown currency: \(currency)")
+            }
+            return rate
+        }
+    }
+    
+    public func updatePrices(prices: [AssetPrice], currency: String) throws {
+        let rate = try getRate(currency: currency)
         try db.write { db in
             for assetPrice in prices {
-                try assetPrice.record.insert(db, onConflict: .ignore)
-                try PriceRecord
-                    .filter(Columns.Price.assetId == assetPrice.assetId)
-                    .updateAll(db,
-                        Columns.Price.price.set(to: assetPrice.price),
-                        Columns.Price.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h)
-                    )
+                let _ = try assetPrice.record.upsertAndFetch(
+                    db,
+                    onConflict: [],
+                    doUpdate: { _ in [
+                        PriceRecord.Columns.price.set(to: assetPrice.price * rate.rate),
+                        PriceRecord.Columns.priceUsd.set(to: assetPrice.price),
+                        PriceRecord.Columns.priceChangePercentage24h.set(to: assetPrice.priceChangePercentage24h),
+                        PriceRecord.Columns.updatedAt.set(to: Date()),
+                        PriceRecord.Columns.marketCap.noOverwrite,
+                        PriceRecord.Columns.marketCapFdv.noOverwrite,
+                        PriceRecord.Columns.marketCapRank.noOverwrite,
+                        PriceRecord.Columns.totalVolume.noOverwrite,
+                        PriceRecord.Columns.circulatingSupply.noOverwrite,
+                        PriceRecord.Columns.totalSupply.noOverwrite,
+                        PriceRecord.Columns.maxSupply.noOverwrite,
+                    ] })
             }
         }
     }
     
     @discardableResult
-    public func updateMarket(assetId: String, market: AssetMarket) throws -> Int {
-        try db.write { db in
+    public func updateMarket(assetId: String, market: AssetMarket, rate: Double) throws -> Int {
+        return try db.write { db in
             try PriceRecord
-                .filter(Columns.Price.assetId == assetId)
-                .updateAll(db,
-                    Columns.Price.marketCap.set(to: market.marketCap),
-                    Columns.Price.marketCapRank.set(to: market.marketCapRank),
-                    Columns.Price.totalVolume.set(to: market.totalVolume),
-                    Columns.Price.circulatingSupply.set(to: market.circulatingSupply),
-                    Columns.Price.totalSupply.set(to: market.totalSupply),
-                    Columns.Price.maxSupply.set(to: market.maxSupply)
+                .filter(PriceRecord.Columns.assetId == assetId)
+                .updateAll(
+                    db,
+                    PriceRecord.Columns.marketCap.set(to: market.marketCap ?? 0 * rate),
+                    PriceRecord.Columns.totalVolume.set(to: market.totalVolume ?? 0 * rate),
+                    PriceRecord.Columns.marketCapRank.set(to: market.marketCapRank),
+                    PriceRecord.Columns.circulatingSupply.set(to: market.circulatingSupply),
+                    PriceRecord.Columns.totalSupply.set(to: market.totalSupply),
+                    PriceRecord.Columns.maxSupply.set(to: market.maxSupply)
                 )
         }
     }
@@ -49,9 +69,32 @@ public struct PriceStore: Sendable {
     public func getPrices(for assetIds: [String]) throws -> [AssetPrice] {
         try db.read { db in
             try PriceRecord
-                .filter(assetIds.contains(Columns.Price.assetId))
+                .filter(assetIds.contains(PriceRecord.Columns.assetId))
                 .fetchAll(db)
                 .map { $0.mapToAssetPrice() }
+        }
+    }
+    
+    public func enabledPriceAssets() throws -> [AssetId] {
+        try db.read { db in
+            let priceAlertsAssets = try PriceAlertRecord.fetchAll(db).map { $0.assetId }
+            let enabledAssets = try BalanceRecord
+                .filter(BalanceRecord.Columns.isEnabled == true)
+                .fetchAll(db)
+                .compactMap { $0.assetId }
+            
+            return priceAlertsAssets + enabledAssets.asSet().asArray()
+        }
+    }
+    
+    @discardableResult
+    public func updateCurrency(currency: String) throws -> Int {
+        let rate = try getRate(currency: currency)
+        return try db.write { db in
+            try PriceRecord.updateAll(db, [
+                PriceRecord.Columns.price
+                    .set(to: PriceRecord.Columns.priceUsd * rate.rate)
+            ])
         }
     }
     

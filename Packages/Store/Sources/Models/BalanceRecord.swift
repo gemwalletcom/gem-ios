@@ -8,8 +8,34 @@ import BigInt
 public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "balances"
+    
+    public enum Columns {
+        static let assetId = Column("assetId")
+        static let walletId = Column("walletId")
+        static let isEnabled = Column("isEnabled")
+        static let isHidden = Column("isHidden")
+        static let isPinned = Column("isPinned")
+        static let isActive = Column("isActive")
+        static let available = Column("available")
+        static let availableAmount = Column("availableAmount")
+        static let frozen = Column("frozen")
+        static let frozenAmount = Column("frozenAmount")
+        static let locked = Column("locked")
+        static let lockedAmount = Column("lockedAmount")
+        static let staked = Column("staked")
+        static let stakedAmount = Column("stakedAmount")
+        static let pending = Column("pending")
+        static let pendingAmount = Column("pendingAmount")
+        static let rewards = Column("rewards")
+        static let rewardsAmount = Column("rewardsAmount")
+        static let reserved = Column("reserved")
+        static let reservedAmount = Column("reservedAmount")
+        static let totalAmount = Column("totalAmount")
+        static let lastUsedAt = Column("lastUsedAt")
+        static let updatedAt = Column("updatedAt")
+    }
 
-    public var assetId: String
+    public var assetId: AssetId
     public var walletId: String
     
     public var available: String
@@ -47,48 +73,48 @@ public struct BalanceRecord: Codable, FetchableRecord, PersistableRecord  {
 extension BalanceRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.Balance.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column(Columns.Balance.walletId.name, .text)
+            $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
             
             // balances
-            $0.column(Columns.Balance.available.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.availableAmount.name, .numeric).defaults(to: 0)
+            $0.column(Columns.available.name, .text).defaults(to: "0")
+            $0.column(Columns.availableAmount.name, .numeric).defaults(to: 0)
             
-            $0.column(Columns.Balance.frozen.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.frozen.name, .text).defaults(to: "0")
+            $0.column(Columns.frozenAmount.name, .double).defaults(to: 0)
             
-            $0.column(Columns.Balance.locked.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.locked.name, .text).defaults(to: "0")
+            $0.column(Columns.lockedAmount.name, .double).defaults(to: 0)
             
-            $0.column(Columns.Balance.staked.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.stakedAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.staked.name, .text).defaults(to: "0")
+            $0.column(Columns.stakedAmount.name, .double).defaults(to: 0)
             
-            $0.column(Columns.Balance.pending.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.pending.name, .text).defaults(to: "0")
+            $0.column(Columns.pendingAmount.name, .double).defaults(to: 0)
             
-            $0.column(Columns.Balance.rewards.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.rewards.name, .text).defaults(to: "0")
+            $0.column(Columns.rewardsAmount.name, .double).defaults(to: 0)
             
-            $0.column(Columns.Balance.reserved.name, .text).defaults(to: "0")
-            $0.column(Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
+            $0.column(Columns.reserved.name, .text).defaults(to: "0")
+            $0.column(Columns.reservedAmount.name, .double).defaults(to: 0)
             
             $0.column(sql: totalAmountSQlCreation)
             
-            $0.column(Columns.Balance.isEnabled.name, .boolean).defaults(to: true).indexed()
-            $0.column(Columns.Balance.isHidden.name, .boolean).defaults(to: false).indexed()
-            $0.column(Columns.Balance.isPinned.name, .boolean).defaults(to: false).indexed()
-            $0.column(Columns.Balance.isActive.name, .boolean).defaults(to: true).indexed()
+            $0.column(Columns.isEnabled.name, .boolean).defaults(to: true).indexed()
+            $0.column(Columns.isHidden.name, .boolean).defaults(to: false).indexed()
+            $0.column(Columns.isPinned.name, .boolean).defaults(to: false).indexed()
+            $0.column(Columns.isActive.name, .boolean).defaults(to: true).indexed()
             
-            $0.column(Columns.Balance.lastUsedAt.name, .date)
-            $0.column(Columns.Balance.updatedAt.name, .date)
+            $0.column(Columns.lastUsedAt.name, .date)
+            $0.column(Columns.updatedAt.name, .date)
             $0.uniqueKey([
-                Columns.Balance.assetId.name,
-                Columns.Balance.walletId.name,
+                Columns.assetId.name,
+                Columns.walletId.name,
             ])
         }
     }
@@ -97,7 +123,7 @@ extension BalanceRecord: CreateTable {
 }
 
 extension BalanceRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension BalanceRecord {
@@ -114,7 +140,7 @@ extension BalanceRecord {
     
     func mapToAssetBalance() -> AssetBalance {
         return AssetBalance(
-            assetId: try! AssetId(id: assetId),
+            assetId: assetId,
             balance: mapToBalance()
         )
     }

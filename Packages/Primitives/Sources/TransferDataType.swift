@@ -92,4 +92,12 @@ public enum TransferDataType: Hashable, Equatable, Sendable {
         default: .encodedTransaction
         }
     }
+    
+    public func swap() throws -> (Asset, Asset, SwapQuote, SwapQuoteData) {
+        guard
+            case .swap(let fromAsset, let toAsset, let quote, let swapData) = self else {
+            throw AnyError("not swap SignerInput")
+        }
+        return (fromAsset, toAsset, quote, swapData)
+    }
 }

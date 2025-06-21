@@ -4,7 +4,7 @@
 
 import Foundation
 
-public struct NameRecord: Codable, Sendable {
+public struct NameRecord: Codable, Hashable, Sendable {
 	public let name: String
 	public let chain: Chain
 	public let address: String
@@ -32,5 +32,6 @@ public enum NameProvider: String, Codable, Sendable {
 	case injective
 	case icns
 	case lens
-	case bns
+	case basenames
+	case hyperliquid
 }

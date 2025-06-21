@@ -2,14 +2,7 @@
 
 import Foundation
 
-public struct PriceImpactValue: Equatable {
+public struct PriceImpactValue: Equatable, Sendable {
     let type: PriceImpactType
     let value: String
-}
-
-public enum PriceImpactType: Equatable {
-    case low
-    case medium
-    case high
-    case positive
 }

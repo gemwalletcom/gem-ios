@@ -10,7 +10,12 @@ let package = Package(
     products: [
         .library(
             name: "WalletTab",
-            targets: ["WalletTab"]),
+            targets: ["WalletTab"]
+        ),
+        .library(
+            name: "WalletTabTestKit",
+            targets: ["WalletTabTestKit"]
+        )
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -47,6 +52,18 @@ let package = Package(
                 "WalletService"
             ],
             path: "Sources"
+        ),
+        .target(
+            name: "WalletTabTestKit",
+            dependencies: [
+                .product(name: "WalletsServiceTestKit", package: "WalletsService"),
+                .product(name: "BannerServiceTestKit", package: "BannerService"),
+                .product(name: "PreferencesTestKit", package: "Preferences"),
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+                .product(name: "WalletServiceTestKit", package: "WalletService"),
+                "WalletTab"
+            ],
+            path: "TestKit"
         ),
         .testTarget(
             name: "WalletTabTests",

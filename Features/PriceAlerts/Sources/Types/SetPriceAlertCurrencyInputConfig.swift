@@ -7,6 +7,7 @@ import Primitives
 import Preferences
 import Style
 import Localization
+import Formatters
 
 struct SetPriceAlertCurrencyInputConfig: CurrencyInputConfigurable {
     let type: SetPriceAlertType

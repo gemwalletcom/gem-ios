@@ -16,6 +16,7 @@ let package = Package(
         .package(name: "Primitives", path: "../../Packages/Primitives"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Localization", path: "../../Packages/Localization"),
+        .package(name: "PriceService", path: "../../Services/PriceService"),
     ],
     targets: [
         .target(
@@ -23,13 +24,17 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "Components",
-                "Localization"
+                "Localization",
+                "PriceService",
             ],
             path: "Sources"
         ),
         .testTarget(
             name: "CurrencyTests",
-            dependencies: ["Currency"]
+            dependencies: [
+                "Currency",
+                .product(name: "PriceServiceTestKit", package: "PriceService"),
+            ]
         ),
     ]
 )

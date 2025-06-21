@@ -20,9 +20,11 @@ public struct Migrations {
             try BalanceRecord.create(db: db)
 
             // asset
+            try FiatRateRecord.create(db: db)
             try PriceRecord.create(db: db)
             try AssetLinkRecord.create(db: db)
             try AssetSearchRecord.create(db: db)
+            //TODO: Market. try MarketAssetRecord.create(db: db)
             
             // transactions
             try TransactionRecord.create(db: db)
@@ -52,16 +54,21 @@ public struct Migrations {
     }
     
     mutating func runChanges(dbQueue: DatabaseQueue) throws {
+        migrator.registerMigration("Delete missing assetId in \(PriceRecord.databaseTableName), \(BalanceRecord.databaseTableName)") {
+            try? $0.execute(sql: "DELETE FROM prices WHERE assetId NOT IN (SELECT id FROM assets)")
+            try? $0.execute(sql: "DELETE FROM balances WHERE assetId NOT IN (SELECT id FROM assets)")
+        }
+        
         migrator.registerMigration("Add isPinned to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: Columns.Wallet.isPinned.name, .boolean).defaults(to: false)
+                $0.add(column: WalletRecord.Columns.isPinned.name, .boolean).defaults(to: false)
             }
         }
 
         migrator.registerMigration("Set order as index in \(WalletRecord.databaseTableName)") { db in
             try? db.execute(sql: "UPDATE wallets SET \"order\" = \"index\"")
         }
-
+        
         migrator.registerMigration("Create \(PriceAlertRecord.databaseTableName)") { db in
             try? PriceAlertRecord.create(db: db)
         }
@@ -73,60 +80,60 @@ public struct Migrations {
         
         migrator.registerMigration("Add balances value to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) {
-                $0.add(column: Columns.Balance.availableAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.frozenAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.lockedAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.stakedAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.pendingAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.rewardsAmount.name, .double).defaults(to: 0)
-                $0.add(column: Columns.Balance.reservedAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.availableAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.frozenAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.lockedAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.stakedAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.pendingAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.rewardsAmount.name, .double).defaults(to: 0)
+                $0.add(column: BalanceRecord.Columns.reservedAmount.name, .double).defaults(to: 0)
                 $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
             }
         }
         
         migrator.registerMigration("Add rewards to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: Columns.Balance.rewards.name, .text)
+                t.add(column: BalanceRecord.Columns.rewards.name, .text)
                     .defaults(to: "0")
             }
         }
         
         migrator.registerMigration("Add reserved to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: Columns.Balance.reserved.name, .text)
+                t.add(column: BalanceRecord.Columns.reserved.name, .text)
                     .defaults(to: "0")
             }
         }
         
         migrator.registerMigration("Add updatedAt to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: Columns.Balance.updatedAt.name, .date)
+                t.add(column: BalanceRecord.Columns.updatedAt.name, .date)
             }
         }
         
         migrator.registerMigration("Add isSellable to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: Columns.Asset.isSellable.name, .boolean)
+                t.add(column: AssetRecord.Columns.isSellable.name, .boolean)
                     .defaults(to: false)
             }
         }
         
         migrator.registerMigration("Add isStakeable to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: Columns.Asset.isStakeable.name, .boolean)
+                t.add(column: AssetRecord.Columns.isStakeable.name, .boolean)
                     .defaults(to: false)
             }
         }
         
         migrator.registerMigration("Add rank to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) { t in
-                t.add(column: Columns.Asset.rank.name, .numeric).defaults(to: 0)
+                t.add(column: AssetRecord.Columns.rank.name, .numeric).defaults(to: 0)
             }
         }
         
         migrator.registerMigration("Add isHidden to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: Columns.Balance.isHidden.name, .boolean)
+                t.add(column: BalanceRecord.Columns.isHidden.name, .boolean)
                     .defaults(to: false)
                     .indexed()
             }
@@ -134,7 +141,7 @@ public struct Migrations {
         
         migrator.registerMigration("Add lastUsedAt to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) { t in
-                t.add(column: Columns.Balance.lastUsedAt.name, .date)
+                t.add(column: BalanceRecord.Columns.lastUsedAt.name, .date)
             }
         }
         
@@ -144,37 +151,37 @@ public struct Migrations {
         
         migrator.registerMigration("Add market values to prices table \(PriceRecord.databaseTableName)") { db in
             try? db.alter(table: PriceRecord.databaseTableName) {
-                $0.add(column: Columns.Price.marketCap.name, .double)
-                $0.add(column: Columns.Price.marketCapRank.name, .integer)
-                $0.add(column: Columns.Price.totalVolume.name, .double)
-                $0.add(column: Columns.Price.circulatingSupply.name, .double)
-                $0.add(column: Columns.Price.totalSupply.name, .double)
-                $0.add(column: Columns.Price.maxSupply.name, .double)
+                $0.add(column: PriceRecord.Columns.marketCap.name, .double)
+                $0.add(column: PriceRecord.Columns.marketCapRank.name, .integer)
+                $0.add(column: PriceRecord.Columns.totalVolume.name, .double)
+                $0.add(column: PriceRecord.Columns.circulatingSupply.name, .double)
+                $0.add(column: PriceRecord.Columns.totalSupply.name, .double)
+                $0.add(column: PriceRecord.Columns.maxSupply.name, .double)
             }
         }
         
         migrator.registerMigration("Add stakingApr to \(AssetRecord.databaseTableName)") { db in
             try? db.alter(table: AssetRecord.databaseTableName) {
-                $0.add(column: Columns.Asset.stakingApr.name, .double)
+                $0.add(column: AssetRecord.Columns.stakingApr.name, .double)
             }
         }
         
-        migrator.registerMigration("Update \(Columns.Balance.totalAmount.name) column") { db in
+        migrator.registerMigration("Update \(BalanceRecord.Columns.totalAmount.name) column") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) {
-                $0.drop(column: Columns.Balance.totalAmount.name)
+                $0.drop(column: BalanceRecord.Columns.totalAmount.name)
                 $0.addColumn(sql: BalanceRecord.totalAmountSQlCreation)
             }
         }
         
         migrator.registerMigration("Add isActive to \(BalanceRecord.databaseTableName)") { db in
             try? db.alter(table: BalanceRecord.databaseTableName) {
-                $0.add(column: Columns.Balance.isActive.name, .boolean).defaults(to: true)
+                $0.add(column: BalanceRecord.Columns.isActive.name, .boolean).defaults(to: true)
             }
         }
       
         migrator.registerMigration("Add marketCapFdv table \(PriceRecord.databaseTableName)") { db in
             try? db.alter(table: PriceRecord.databaseTableName) {
-                $0.add(column: Columns.Price.marketCapFdv.name, .double)
+                $0.add(column: PriceRecord.Columns.marketCapFdv.name, .double)
             }
         }
       
@@ -196,27 +203,27 @@ public struct Migrations {
         
         migrator.registerMigration("Add links to \(NFTCollectionRecord.databaseTableName)") { db in
             try? db.alter(table: NFTCollectionRecord.databaseTableName) {
-                $0.add(column: Columns.NFTCollection.links.name, .jsonText)
+                $0.add(column: NFTCollectionRecord.Columns.links.name, .jsonText)
             }
         }
         
         migrator.registerMigration("Add attributes to \(NFTAssetRecord.databaseTableName)") { db in
             try? db.drop(table: "nft_attributes")
             try? db.alter(table: NFTAssetRecord.databaseTableName) {
-                $0.add(column: Columns.NFTAsset.attributes.name, .jsonText)
+                $0.add(column: NFTAssetRecord.Columns.attributes.name, .jsonText)
             }
         }
         
         migrator.registerMigration("Add contractAddress to \(NFTAssetRecord.databaseTableName)") { db in
             try? db.alter(table: NFTAssetRecord.databaseTableName) {
-                $0.add(column: Columns.NFTAsset.contractAddress.name, .text)
+                $0.add(column: NFTAssetRecord.Columns.contractAddress.name, .text)
             }
         }
 
         migrator.registerMigration("Add imageUrl to \(WalletRecord.databaseTableName)") { db in
             try? db.alter(table: WalletRecord.databaseTableName) {
-                $0.add(column: Columns.Wallet.imageUrl.name, .text)
-                $0.add(column: Columns.Wallet.updatedAt.name, .date)
+                $0.add(column: WalletRecord.Columns.imageUrl.name, .text)
+                $0.add(column: WalletRecord.Columns.updatedAt.name, .date)
             }
         }
       
@@ -226,7 +233,7 @@ public struct Migrations {
         
         migrator.registerMigration("Add currency to \(PriceAlertRecord.databaseTableName)") { db in
             try? db.alter(table: PriceAlertRecord.databaseTableName) {
-                $0.add(column: Columns.PriceAlert.currency.name, .text).defaults(to: "USD")
+                $0.add(column: PriceAlertRecord.Columns.currency.name, .text).defaults(to: "USD")
             }
         }
         
@@ -239,7 +246,30 @@ public struct Migrations {
             try NFTAssetRecord.create(db: db)
             try NFTAssetAssociationRecord.create(db: db)
         }
+        
+        migrator.registerMigration("Add fiat rates") { db in
+            try? FiatRateRecord.create(db: db)
+        }
+        
+        migrator.registerMigration("Add priceUsd to prices table \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.priceUsd.name, .double)
+                    .notNull()
+                    .defaults(to: 0)
+            }
+        }
+        
+//        TODO: Market.
+//        migrator.registerMigration("Add markets_assets table") { db in
+//            try? MarketAssetRecord.create(db: db)
+//        }
 
+        migrator.registerMigration("Add updatedAt to \(PriceRecord.databaseTableName)") { db in
+            try? db.alter(table: PriceRecord.databaseTableName) {
+                $0.add(column: PriceRecord.Columns.updatedAt.name, .date)
+            }
+        }
+        
         try migrator.migrate(dbQueue)
     }
 }

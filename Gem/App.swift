@@ -1,5 +1,6 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
-import Keystore
 import Style
 import Store
 import Primitives
@@ -10,13 +11,14 @@ import LockManager
 import Preferences
 import AssetsService
 import WalletService
+import AppService
 
 @main
 struct GemApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-
-    private let resolver: AppResolver = AppResolver()
-
+    
+    private let resolver: AppResolver = .main
+    
     init() {
         UNUserNotificationCenter.current().delegate = appDelegate
     }
@@ -26,11 +28,11 @@ struct GemApp: App {
             RootScene(
                 model: RootSceneViewModel(
                     walletConnectorPresenter: resolver.services.walletConnectorManager.presenter,
-                    onstartService: resolver.services.onstartService,
+                    onstartAsyncService: resolver.services.onstartAsyncService,
                     transactionService: resolver.services.transactionService,
                     connectionsService: resolver.services.connectionsService,
                     deviceObserverService: resolver.services.deviceObserverService,
-                    notificationService: resolver.services.notificationService,
+                    notificationHandler: resolver.services.notificationHandler,
                     lockWindowManager: LockWindowManager(lockModel: LockSceneViewModel()),
                     walletService: resolver.services.walletService,
                     walletsService: resolver.services.walletsService
@@ -44,9 +46,9 @@ struct GemApp: App {
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
         
-        // set cache
         URLCache.shared.memoryCapacity = 256_000_000 // ~256 MB memory space
         URLCache.shared.diskCapacity = 1_000_000_000 // ~1GB disk cache space
         
@@ -64,34 +66,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         } catch {
             NSLog("addSkipBackupAttributeToItemAtURL error \(error)")
         }
-
-        let keystore = LocalKeystore.main
-        
-        // debug
-        #if DEBUG
-        
-        NSLog("Keystore directory: \(keystore.configration.directory)")
-        //NSLog("Keystore currentWallet: \(String(describing: keystore.currentWallet))")
-        //NSLog("keystore numbers of wallets: \(keystore.wallets.count)")
-        
-        //NSLog("User Defaults: \(UserDefaults.standard.dictionaryRepresentation())")
-        
-        #endif
-
-        let service = OnstartService(
-            assetsService: AssetsService(
-                assetStore: .main,
-                balanceStore: .main,
-                chainServiceFactory: .init(nodeProvider: NodeService.main)
-            ),
-            assetStore: AssetStore(db: .main),
-            nodeStore: NodeStore(db: .main),
-            preferences: Preferences.standard,
-            walletService: WalletService.main
-        )
-        service.migrations()
-        
-        Preferences.standard.incrementLaunchesCount()
+        AppResolver.main.services.onstartService.migrations()
+        AppResolver.main.storages.observablePreferences.preferences.incrementLaunchesCount()
 
         let device = UIDevice.current
         if !device.isSimulator && (device.isJailBroken || device.isFridaDetected) {
@@ -105,8 +81,8 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
         
         Task {
-            let _ = try SecurePreferences().set(value: token, key: .deviceToken)
-            try await DeviceService(deviceProvider: GemAPIService.shared, subscriptionsService: .main).update()
+            let _ = try SecurePreferences.standard.set(value: token, key: .deviceToken)
+            try await AppResolver.main.services.deviceService.update()
         }
     }
 
@@ -115,16 +91,12 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) {
-        NotificationService.main.handleUserInfo(userInfo)
+        AppResolver.main.services.notificationHandler.handleUserInfo(userInfo)
     }
 
     func application(_ application: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey : Any] = [:]) -> Bool {
         NSLog("url \(url)")
         return true
-    }
-    
-    func scene(_ scene: UIScene, didUpdate userActivity: NSUserActivity) {
-        
     }
     
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
@@ -136,13 +108,17 @@ class AppDelegate: NSObject, UIApplicationDelegate, UIWindowSceneDelegate {
     }
 }
 
-extension AppDelegate: UNUserNotificationCenterDelegate {
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+extension AppDelegate: @preconcurrency UNUserNotificationCenterDelegate {
+    func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.badge, .banner, .list, .sound])
     }
     
-    nonisolated func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        NotificationService.main.handleUserInfo(response.notification.request.content.userInfo)
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        AppResolver.main.services.notificationHandler.handleUserInfo(response.notification.request.content.userInfo)
         completionHandler()
     }
 }

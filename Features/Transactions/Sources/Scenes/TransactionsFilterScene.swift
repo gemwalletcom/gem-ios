@@ -28,6 +28,7 @@ public struct TransactionsFilterScene: View {
                 action: onSelectTypesFilter
             )
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .navigationTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
@@ -57,7 +58,7 @@ public struct TransactionsFilterScene: View {
                 model: model.typesModel,
                 onFinishSelection: onFinishSelection(value:),
                 listContent: {
-                    ListItemView(title: TransactionTypeViewModel(type: $0).title)
+                    ListItemView(title: TransactionFilterTypeViewModel(type: $0).title)
                 }
             )
         }
@@ -83,7 +84,7 @@ extension TransactionsFilterScene {
         }
     }
 
-    private func onFinishSelection(value: SelectionResult<TransactionType>) {
+    private func onFinishSelection(value: SelectionResult<TransactionFilterType>) {
         model.transactionTypesFilter.selectedTypes = value.items
         if value.isConfirmed {
             dismiss()

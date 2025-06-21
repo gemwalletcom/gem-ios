@@ -7,12 +7,21 @@ import Preferences
 import GemstonePrimitives
 import Components
 import PrimitivesComponents
+import AppService
+import Primitives
 
-public struct AboutUsViewModel {
+@Observable
+@MainActor
+public final class AboutUsViewModel: Sendable {
     private let preferences: ObservablePreferences
+    private let releaseService: AppReleaseService
 
-    public init(preferences: ObservablePreferences) {
+    public init(
+        preferences: ObservablePreferences,
+        releaseService: AppReleaseService
+    ) {
         self.preferences = preferences
+        self.releaseService = releaseService
     }
 
     var title: String { Localized.Settings.aboutus }
@@ -43,7 +52,6 @@ public struct AboutUsViewModel {
     }
     var contextDeveloperImage: String { SystemImage.info }
 
-
     var contextMenuItems: [ContextMenuItemType] {
         [
             .copy(value: versionTextValue),
@@ -54,10 +62,30 @@ public struct AboutUsViewModel {
             )
         ]
     }
+    
+    var release: Release?
+    var releaseVersion: String? {
+        release?.version
+    }
+    var releaseImage: AssetImage {
+        AssetImage.image(Images.Settings.gem)
+    }
 }
 
 extension AboutUsViewModel {
     func toggleDeveloperMode() {
         preferences.isDeveloperEnabled.toggle()
+    }
+    
+    func fetch() async {
+        do {
+            release = try await releaseService.getNewestRelease()
+        } catch {
+            NSLog("Release fetch failed: \(error)")
+        }
+    }
+    
+    func onUpdate() {
+        UIApplication.shared.open(PublicConstants.url(.appStore))
     }
 }

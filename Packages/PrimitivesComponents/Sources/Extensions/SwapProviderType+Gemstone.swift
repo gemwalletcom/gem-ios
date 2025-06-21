@@ -2,8 +2,8 @@
 
 import Foundation
 import Primitives
-import SwiftUI
 import Style
+import SwiftUI
 
 import struct Gemstone.SwapProviderType
 
@@ -18,11 +18,13 @@ public extension Gemstone.SwapProviderType {
         case .across: Images.SwapProviders.across
         case .oku: Images.SwapProviders.oku
         case .wagmi: Images.SwapProviders.wagmi
-        case .cetus: Images.SwapProviders.cetus
+        case .cetus, .cetusAggregator: Images.SwapProviders.cetus
         case .stonfiV2: Images.SwapProviders.stonfi
         case .mayan: Images.SwapProviders.mayan
         case .reservoir: Images.SwapProviders.reservoir
         case .symbiosis: Images.SwapProviders.symbiosis
+        case .chainflip: Images.SwapProviders.chainflip
+        case .relay: Images.SwapProviders.relay
         }
     }
 }

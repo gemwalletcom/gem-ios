@@ -63,7 +63,7 @@ public struct CurrencyInputView: View {
     }
 
     public var body: some View {
-        VStack(alignment: .center, spacing: 0) {
+        VStack(alignment: .center, spacing: .small) {
             HStack(spacing: .small) {
                 if let actionStyle, actionStyle.position == .amount {
                     actionButton(for: actionStyle.position)
@@ -88,6 +88,9 @@ public struct CurrencyInputView: View {
             } else {
                 secondaryTextView
             }
+        }
+        .onAppear {
+            UITextField.appearance().clearButtonMode = .never
         }
     }
 

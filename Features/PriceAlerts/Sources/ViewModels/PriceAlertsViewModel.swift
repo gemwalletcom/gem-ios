@@ -64,7 +64,6 @@ extension PriceAlertsViewModel {
     public func fetch() async {
         do {
             try await priceAlertService.update()
-            try await priceAlertService.updatePrices(for: preferences.preferences.currency)
         } catch {
             NSLog("getPriceAlerts error: \(error)")
         }

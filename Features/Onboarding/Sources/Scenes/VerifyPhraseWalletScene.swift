@@ -11,50 +11,56 @@ struct VerifyPhraseWalletScene: View {
     @StateObject var model: VerifyPhraseViewModel
 
     @State private var isPresentingErrorMessage: String?
-    @Binding private var isPresentingWallets: Bool
 
-    init(
-        model: VerifyPhraseViewModel,
-        isPresentingWallets: Binding<Bool>
-    ) {
+    init(model: VerifyPhraseViewModel) {
         _model = StateObject(wrappedValue: model)
-        _isPresentingWallets = isPresentingWallets
     }
 
     var body: some View {
         VStack(spacing: .medium) {
-            OnboardingHeaderTitle(title: Localized.SecretPhrase.Confirm.QuickTest.title, alignment: .center)
-            
-            SecretPhraseGridView(rows: model.rows, highlightIndex: model.wordsIndex)
-                .padding(.top, .small)
-            
-            Grid(alignment: .center) {
-                ForEach(model.rowsSections, id: \.self) { section in
-                    GridRow(alignment: .center) {
-                        ForEach(section) { row in
-                            if model.isVerified(index: row) {
-                                Button { } label: {
-                                    Text(row.word)
+            List {
+                CalloutView(style: .header(title: Localized.SecretPhrase.Confirm.QuickTest.title))
+                    .cleanListRow()
+                
+                Section {
+                    SecretPhraseGridView(
+                        rows: model.rows,
+                        highlightIndex: model.wordsIndex
+                    )
+                }
+                .cleanListRow()
+                
+                Section {
+                    Grid(alignment: .center) {
+                        ForEach(model.rowsSections, id: \.self) { section in
+                            GridRow(alignment: .center) {
+                                ForEach(section) { row in
+                                    if model.isVerified(index: row) {
+                                        Button { } label: {
+                                            Text(row.word)
+                                        }
+                                        .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .tiny))
+                                        .disabled(true)
+                                        .fixedSize()
+                                    } else {
+                                        Button {
+                                            model.pickWord(index: row)
+                                        } label: {
+                                            Text(row.word)
+                                        }
+                                        .buttonStyle(.blueGrayPressed(paddingHorizontal: .small, paddingVertical: .tiny))
+                                        .fixedSize()
+                                    }
                                 }
-                                .buttonStyle(.lightGray(paddingHorizontal: .small, paddingVertical: .tiny))
-                                .disabled(true)
-                                .fixedSize()
-                            } else {
-                                Button {
-                                    model.pickWord(index: row)
-                                } label: {
-                                    Text(row.word)
-                                }
-                                .buttonStyle(.blueGrayPressed(paddingHorizontal: .small, paddingVertical: .tiny))
-                                .fixedSize()
                             }
                         }
                     }
                 }
+                .cleanListRow()
             }
-            .padding(.top, .small)
-            
-            Spacer()
+            .contentMargins([.top], .extraSmall, for: .scrollContent)
+            .listSectionSpacing(.custom(.medium))
+
             StateButton(
                 text: Localized.Common.continue,
                 styleState: model.buttonState,
@@ -63,6 +69,7 @@ struct VerifyPhraseWalletScene: View {
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
+        .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .alert(item: $isPresentingErrorMessage) {
             Alert(title: Text(Localized.Errors.createWallet("")), message: Text($0))
@@ -81,8 +88,7 @@ extension VerifyPhraseWalletScene {
             try await Task.sleep(for: .milliseconds(50))
             do {
                 try await MainActor.run {
-                    let _ = try model.importWallet()
-                    isPresentingWallets = false
+                    try model.importWallet()
                 }
             } catch {
                 await MainActor.run {

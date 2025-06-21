@@ -40,13 +40,11 @@ public struct CollectionsScene: View {
             }
         }
         .padding(.horizontal, .medium)
-        .background(Colors.insetGroupedListStyle)
+        .background { Colors.insetGroupedListStyle.ignoresSafeArea() }
         .navigationBarTitleDisplayMode(.inline)
         .navigationTitle(model.title)
         .refreshable(action: model.fetch)
-        .task {
-            await model.fetch()
-        }
+        .task { await model.fetch() }
     }
 }
 

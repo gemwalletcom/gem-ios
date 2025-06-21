@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Components", path: "../../Packages/Components"),
         .package(name: "Style", path: "../../Packages/Style"),
         .package(name: "Localization", path: "../../Packages/Localization"),
@@ -21,7 +22,7 @@ let package = Package(
         .package(name: "NameResolver", path: "../NameResolver"),
         .package(name: "QRScanner", path: "../QRScanner"),
         .package(name: "Keystore", path: "../../Packages/Keystore"),
-        .package(name: "WalletService", path: "../../Services/WalletService"),
+        .package(name: "WalletService", path: "../../Services/WalletService")
     ],
     targets: [
         .target(
@@ -35,9 +36,15 @@ let package = Package(
                 "NameResolver",
                 "QRScanner",
                 "Keystore",
-                "WalletService"
+                "WalletService",
+                "Formatters"
             ],
             path: "Sources"
         ),
+        .testTarget(
+            name: "OnboardingTest",
+            dependencies: ["Onboarding"],
+            path: "Tests"
+        )
     ]
 )

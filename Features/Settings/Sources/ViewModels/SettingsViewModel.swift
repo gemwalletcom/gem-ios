@@ -104,11 +104,3 @@ public final class SettingsViewModel {
     var developerModeTitle: String { Localized.Settings.developer }
     var developerModeImage: AssetImage { AssetImage.image(Images.Settings.developer) }
 }
-
-// MARK: - Business Logic
-
-extension SettingsViewModel {
-    func fetch() async throws {
-        try await walletsService.changeCurrency(for: walletId)
-    }
-}

@@ -4,12 +4,21 @@ import Foundation
 
 extension AssetPrice {
     public func mapToPrice() -> Price {
-        return Price(price: price, priceChangePercentage24h: priceChangePercentage24h)
+        Price(
+            price: price,
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt
+        )
     }
 }
 
 extension Price {
-    public func mapToAssetPrice(assetId: String) -> AssetPrice {
-        return AssetPrice(assetId: assetId, price: price, priceChangePercentage24h: priceChangePercentage24h)
+    public func mapToAssetPrice(assetId: AssetId) -> AssetPrice {
+        AssetPrice(
+            assetId: assetId,
+            price: price,
+            priceChangePercentage24h: priceChangePercentage24h,
+            updatedAt: updatedAt
+        )
     }
 }

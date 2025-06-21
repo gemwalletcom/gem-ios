@@ -2,9 +2,9 @@
 
 import Foundation
 import Primitives
-import Combine
 import Store
 import ChainService
+import Formatters
 
 public struct BalanceService: BalancerUpdater, Sendable {
     private let balanceStore: BalanceStore
@@ -110,7 +110,7 @@ extension BalanceService {
             walletId: wallet.id,
             balances: missingBalancesAssetIds.map {
                 AddBalance(
-                    assetId: $0.identifier,
+                    assetId: $0,
                     isEnabled: AssetConfiguration.enabledByDefault.contains($0) || !wallet.isMultiCoins
                 )
             }

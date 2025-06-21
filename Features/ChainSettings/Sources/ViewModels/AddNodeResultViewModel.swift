@@ -4,6 +4,7 @@ import Foundation
 import Primitives
 import Style
 import Localization
+import Formatters
 
 public struct AddNodeResultViewModel: Sendable {
     static let valueFormatter = ValueFormatter.full_US

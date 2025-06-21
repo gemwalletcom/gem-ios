@@ -1,5 +1,5 @@
 {
-  "originHash" : "b7387c79edb376dfebea674f84319964f4015720476e640e5971ef835877f906",
+  "originHash" : "7e86c1463048e449ea80a7d136179637bf2fca79c5da8654b56470177fe18bb0",
   "pins" : [
     {
       "identity" : "bigint",
@@ -15,8 +15,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDB.swift.git",
       "state" : {
-        "revision" : "2cf6c756e1e5ef6901ebae16576a7e4e4b834622",
-        "version" : "6.29.3"
+        "revision" : "a5a1be26b4513dc7ec360eb56bc08a345bac6649",
+        "version" : "7.5.0"
       }
     },
     {
@@ -24,35 +24,17 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/groue/GRDBQuery.git",
       "state" : {
-        "revision" : "a6c46dd38ecf11a5c37732870dc03a384d582fba",
-        "version" : "0.9.0"
-      }
-    },
-    {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/KeychainAccess",
-      "state" : {
-        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
-        "version" : "4.2.2"
-      }
-    },
-    {
-      "identity" : "qrcode",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/WalletConnect/QRCode",
-      "state" : {
-        "revision" : "263f280d2c8144adfb0b6676109846cfc8dd552b",
-        "version" : "14.3.1"
+        "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
+        "version" : "0.11.0"
       }
     },
     {
       "identity" : "reown-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/reown-com/reown-swift",
+      "location" : "https://github.com/gemwalletcom/reown-swift.git",
       "state" : {
-        "revision" : "193fe47626608b1f77de127adf9af5859f84bc1a",
-        "version" : "1.5.2"
+        "branch" : "f061a10",
+        "revision" : "f061a10b12e3d4d76c5017250aa9f369a8e47404"
       }
     },
     {
@@ -62,42 +44,6 @@
       "state" : {
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"
-      }
-    },
-    {
-      "identity" : "swift-qrcode-generator",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/swift-qrcode-generator",
-      "state" : {
-        "revision" : "5ca09b6a2ad190f94aa3d6ddef45b187f8c0343b",
-        "version" : "1.0.3"
-      }
-    },
-    {
-      "identity" : "swiftimagereadwrite",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/SwiftImageReadWrite",
-      "state" : {
-        "revision" : "5596407d1cf61b953b8e658fa8636a471df3c509",
-        "version" : "1.1.6"
-      }
-    },
-    {
-      "identity" : "wallet-mobile-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MobileWalletProtocol/wallet-mobile-sdk",
-      "state" : {
-        "revision" : "4aa89e682f8d7ab1515d85d0797f0d25306bb56a",
-        "version" : "1.0.5"
-      }
-    },
-    {
-      "identity" : "yttrium",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/reown-com/yttrium",
-      "state" : {
-        "revision" : "331244f5a569787452be5ec05b5699927c646878",
-        "version" : "0.8.35"
       }
     }
   ],

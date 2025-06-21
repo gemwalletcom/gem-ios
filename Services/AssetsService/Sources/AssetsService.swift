@@ -91,7 +91,7 @@ public final class AssetsService: Sendable {
     public func addBalanceIfMissing(walletId: WalletId, assetId: AssetId) throws {
         let exist = try balanceStore.isBalanceExist(walletId: walletId.id, assetId: assetId.identifier)
         if !exist {
-            let balance = AddBalance(assetId: assetId.identifier, isEnabled: false)
+            let balance = AddBalance(assetId: assetId, isEnabled: false)
             try balanceStore.addBalance([balance], for: walletId.id)
         }
     }
@@ -103,7 +103,7 @@ public final class AssetsService: Sendable {
     public func updateAsset(assetId: AssetId) async throws {
         let asset = try await getAsset(assetId: assetId)
         try assetStore.add(assets: [asset.basic])
-        try assetStore.updateLinks(assetId: assetId.identifier, asset.links)
+        try assetStore.updateLinks(assetId: assetId, asset.links)
     }
 
     public func getAsset(assetId: AssetId) async throws -> AssetFull {

@@ -3,11 +3,13 @@
 import Foundation
 import BigInt
 import Primitives
+import Formatters
 
 public struct TransactionInfoViewModel: Sendable {
     private let asset: Asset
     private let assetPrice: Price?
     private let value: BigInt
+    private let direction: TransactionDirection?
 
     private let feeAsset: Asset
     private let feeAssetPrice: Price?
@@ -24,7 +26,8 @@ public struct TransactionInfoViewModel: Sendable {
         feeAsset: Asset,
         feeAssetPrice: Price?,
         value: BigInt,
-        feeValue: BigInt?
+        feeValue: BigInt?,
+        direction: TransactionDirection?
     ) {
         self.currencyFormatter = CurrencyFormatter(type: .currency, currencyCode: currency)
         self.asset = asset
@@ -33,6 +36,7 @@ public struct TransactionInfoViewModel: Sendable {
         self.feeAssetPrice = feeAssetPrice
         self.value = value
         self.feeValue = feeValue
+        self.direction = direction
     }
     
     public var isZero: Bool {
@@ -40,6 +44,13 @@ public struct TransactionInfoViewModel: Sendable {
     }
 
     public var amountValueText: String {
+        switch direction {
+        case .outgoing, .selfTransfer: String(format: "-%@", amountValue)
+        case .incoming, .none: amountValue
+        }
+    }
+
+    public var amountValue: String {
         fullFormatter.string(
             value,
             decimals: asset.decimals.asInt,

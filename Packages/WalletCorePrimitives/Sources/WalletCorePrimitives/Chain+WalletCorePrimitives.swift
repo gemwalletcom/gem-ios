@@ -55,4 +55,18 @@ public extension Chain {
         case .cardano: .cardano
         }
     }
+    
+    func isValidAddress(_ address: String) -> Bool {
+        AnyAddress.isValid(string: address, coin: coinType)
+    }
+    
+    func checksumAddress(_ address: String) -> String {
+        if let chain = EVMChain(rawValue: self.rawValue) {
+            if let address = AnyAddress(string: address, coin: chain.chain.coinType) {
+                return address.description
+            }
+            return address
+        }
+        return address
+    }
 }

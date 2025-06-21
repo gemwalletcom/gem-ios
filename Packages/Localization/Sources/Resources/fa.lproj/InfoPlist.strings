@@ -1,0 +1,4 @@
+"NSCameraUsageDescription" = "کیف پول Gem برای اسکن کدهای QR به دسترسی به دوربین شما نیاز دارد.";
+"NSPhotoLibraryAddUsageDescription" = "این برنامه برای ذخیره NFTها نیاز به دسترسی به کتابخانه عکس شما دارد.";
+"NSFaceIDUsageDescription" = "فعال کردن Face ID به کیف پول Gem کمک می‌کند تا دارایی‌های شما را ایمن نگه دارد.";
+"NSPhotoLibraryUsageDescription" = "برای انتخاب عکس‌ها، باید به کتابخانه عکس شما دسترسی داشته باشیم.";

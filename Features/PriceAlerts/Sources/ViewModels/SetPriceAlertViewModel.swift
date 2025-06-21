@@ -8,6 +8,7 @@ import Components
 import PriceAlertService
 import Style
 import Localization
+import Formatters
 
 @MainActor
 @Observable
@@ -38,7 +39,7 @@ public final class SetPriceAlertViewModel {
     var assetRequest: AssetRequest {
         AssetRequest(
             walletId: wallet.id,
-            assetId: assetId.identifier
+            assetId: assetId
         )
     }
     

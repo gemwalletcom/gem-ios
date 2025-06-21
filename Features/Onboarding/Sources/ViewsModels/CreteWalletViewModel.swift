@@ -4,19 +4,31 @@ import Primitives
 import SwiftUI
 import Localization
 import PrimitivesComponents
+import Formatters
+import Components
+import Style
 
-class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
+struct CreateWalletViewModel: SecretPhraseViewableModel {
+    
     private let walletService: WalletService
-    private let onCreateWallet: (([String]) -> Void)?
+    private let onCreateWallet: (([String]) -> Void)
+    let words: [String]
+    
+    var calloutViewStyle: CalloutViewStyle? {
+        .header(title: Localized.SecretPhrase.savePhraseSafely)
+    }
 
-    @Published var words: [String] = []
+    var continueAction: VoidAction {
+        { onCreateWallet(words) }
+    }
 
     init(
         walletService: WalletService,
-        onCreateWallet: (([String]) -> Void)? = nil
+        onCreateWallet: @escaping (([String]) -> Void)
     ) {
         self.walletService = walletService
         self.onCreateWallet = onCreateWallet
+        self.words = walletService.createWallet()
     }
 
     var title: String {
@@ -32,17 +44,5 @@ class CreateWalletViewModel: SecretPhraseViewableModel, ObservableObject {
             type: .secretPhrase,
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
-    }
-
-    func generateWords() -> [String] {
-        walletService.createWallet()
-    }
-    
-    var presentWarning: Bool {
-        true
-    }
-
-    func continueAction() {
-        onCreateWallet?(words)
     }
 }

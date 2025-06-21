@@ -31,6 +31,8 @@ let package = Package(
         .package(name: "TransactionsService", path: "../../Services/TransactionsService"),
         .package(name: "NotificationService", path: "../../Services/NotificationService"),
         .package(name: "DeviceService", path: "../../Services/DeviceService"),
+        .package(name: "PriceService", path: "../../Services/PriceService"),
+        .package(name: "AppService", path: "../../AppService")
     ],
     targets: [
         .target(
@@ -53,6 +55,8 @@ let package = Package(
                 "TransactionsService",
                 "NotificationService",
                 "DeviceService",
+                "PriceService",
+                "AppService"
             ],
             path: "Sources"
         ),

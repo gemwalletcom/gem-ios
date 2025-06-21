@@ -4,8 +4,9 @@ import Components
 import SwiftUI
 import Style
 import Localization
+import Formatters
 
-public struct WalletViewModel {
+public struct WalletViewModel: Sendable {
     public let wallet: Wallet
 
     public init(wallet: Wallet) {
@@ -41,6 +42,10 @@ public struct WalletViewModel {
         case .multicoin, .single, .privateKey: .none
         case .view: Images.Wallets.watch
         }
+    }
+    
+    public var hasAvatar: Bool {
+        imageUrl() != nil
     }
     
     public var avatarImage: AssetImage {

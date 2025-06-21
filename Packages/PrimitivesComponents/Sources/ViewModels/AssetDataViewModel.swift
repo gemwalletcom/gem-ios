@@ -5,8 +5,10 @@ import Primitives
 import SwiftUI
 import Style
 import Components
+import Localization
+import Formatters
 
-public struct AssetDataViewModel {
+public struct AssetDataViewModel: Sendable {
     private let assetData: AssetData
     private let balanceViewModel: BalanceViewModel
 
@@ -16,12 +18,14 @@ public struct AssetDataViewModel {
     public init(
         assetData: AssetData,
         formatter: ValueFormatter,
-        currencyCode: String
+        currencyCode: String,
+        currencyFormatterType: CurrencyFormatterType = .abbreviated
     ) {
         self.assetData = assetData
         self.priceViewModel = PriceViewModel(
             price: assetData.price,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            currencyFormatterType: currencyFormatterType
         )
         self.balanceViewModel = BalanceViewModel(
             asset: assetData.asset,
@@ -30,6 +34,9 @@ public struct AssetDataViewModel {
         )
         self.currencyCode = currencyCode
     }
+
+    public var availableBalanceTitle: String { Localized.Asset.Balances.available }
+    public var reservedBalanceTitle: String { Localized.Asset.Balances.reserved }
 
     // asset
 
@@ -106,7 +113,10 @@ public struct AssetDataViewModel {
     }
 
     public var fiatBalanceText: String {
-        guard let price = priceViewModel.price else {
+        guard
+            let price = priceViewModel.price,
+            balanceViewModel.balanceAmount > 0
+        else {
             return .empty
         }
         let value = balanceViewModel.balanceAmount * price.price
@@ -154,5 +164,9 @@ public struct AssetDataViewModel {
     
     public var isPriceAlertsEnabled: Bool {
         assetData.isPriceAlertsEnabled
+    }
+    
+    public var assetAddress: AssetAddress {
+        assetData.assetAddress
     }
 }

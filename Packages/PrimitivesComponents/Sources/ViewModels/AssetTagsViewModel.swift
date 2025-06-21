@@ -2,19 +2,20 @@
 
 import Foundation
 import Primitives
-import SwiftUICore
+import SwiftUI
 import Style
 
 public struct AssetTagsViewModel {
     public let selectType: SelectAssetType
-    public var selectedTag: AssetTag?
-    
-    public init(selectType: SelectAssetType) {
+    public var selectedTag: AssetTagSelection
+
+    public init(selectType: SelectAssetType, selectedTag: AssetTagSelection = .all) {
         self.selectType = selectType
+        self.selectedTag = selectedTag
     }
     
-    public var items: [AssetTagViewModel] {
-        let tags: [AssetTag] = switch selectType {
+    public var tags: [AssetTag] {
+        switch selectType {
         case .receive(let type):
             switch type {
             case .asset: [.stablecoins]
@@ -22,29 +23,22 @@ public struct AssetTagsViewModel {
             }
         case .manage,
             .priceAlert,
-            .swap: [.stablecoins, .trending]
-        case .buy: [.stablecoins, .trendingFiatPurchase]
+            .swap: [.trending, .stablecoins]
+        case .buy: [.trendingFiatPurchase, .stablecoins]
         case .send: [.stablecoins]
         }
-        return tags.map { AssetTagViewModel(tag: $0, isSelected: selectedTag == $0) }
+    }
+    
+    public var items: [AssetTagViewModel] {
+        let tagViewModels = tags.map { AssetTagViewModel(tag: .tag($0), isSelected: selectedTag == .tag($0)) }
+        return tags.isEmpty ? [] : [AssetTagViewModel(tag: .all, isSelected: selectedTag == .all)] + tagViewModels
     }
     
     public var query: String? {
-        selectedTag?.rawValue
-    }
-    
-    public var hasSelected: Bool {
-        selectedTag != nil
-    }
-    
-    public func foregroundColor(for tag: AssetTag) -> Color {
-        if tag == selectedTag {
-            return .primary
+        switch selectedTag {
+        case .all: nil
+        case let .tag(assetTag):
+            assetTag.rawValue
         }
-        return Colors.secondaryText
-    }
-
-    public mutating func setSelectedTag(_ tag: AssetTag?) {
-        selectedTag = selectedTag == tag ? nil : tag
     }
 }

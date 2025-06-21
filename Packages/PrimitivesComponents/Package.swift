@@ -17,9 +17,12 @@ let package = Package(
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
         .package(name: "GemstonePrimitives", path: "../GemstonePrimitives"),
+        .package(name: "WalletCorePrimitives", path: "../WalletCorePrimitives"),
         .package(name: "Localization", path: "../Localization"),
         .package(name: "Components", path: "../Components"),
-        .package(name: "Style", path: "../Style")
+        .package(name: "Style", path: "../Style"),
+        .package(name: "Validators", path: "../Validators"),
+        .package(name: "Formatters", path: "../Formatters")
     ],
     targets: [
         .target(
@@ -27,9 +30,12 @@ let package = Package(
             dependencies: [
                 "Primitives",
                 "GemstonePrimitives",
+                "WalletCorePrimitives",
                 "Localization",
                 "Components",
-                "Style"
+                "Style",
+                "Validators",
+                "Formatters"
             ],
             path: "Sources"
         ),

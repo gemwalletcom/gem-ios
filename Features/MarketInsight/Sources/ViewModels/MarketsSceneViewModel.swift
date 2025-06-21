@@ -29,8 +29,8 @@ public final class MarketsSceneViewModel: Sendable  {
         do {
             let markets = try await service.getMarkets()
             let assets = [markets.assets.gainers, markets.assets.losers, markets.assets.trending]
+                .compactMap { $0 }
                 .flatMap { $0 }
-                .compactMap { try? AssetId(id: $0) }
             
             try await assetsService.prefetchAssets(assetIds: assets)
             

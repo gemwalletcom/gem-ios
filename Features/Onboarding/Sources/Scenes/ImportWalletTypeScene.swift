@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Components
 import Primitives
@@ -24,7 +26,6 @@ struct ImportWalletTypeScene: View {
                         imageStyle: .asset(assetImage: AssetImage.image(Images.Logo.logo))
                     )
                 }
-                .accessibilityIdentifier("multicoin")
             }
             .listRowInsets(.assetListRowInsets)
             
@@ -44,6 +45,7 @@ struct ImportWalletTypeScene: View {
                 .listRowInsets(.assetListRowInsets)
             }
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .navigationBarTitle(model.title)
         .navigationBarTitleDisplayMode(.inline)
         .searchable(

@@ -9,12 +9,12 @@ import Primitives
 public struct AssetRequest: ValueObservationQueryable {
     public static var defaultValue: AssetData { AssetData.empty }
     
-    public var assetId: String
+    public var assetId: AssetId
     private let walletId: String
 
     public init(
         walletId: String,
-        assetId: String
+        assetId: AssetId
     ) {
         self.walletId = walletId
         self.assetId = assetId
@@ -26,16 +26,16 @@ public struct AssetRequest: ValueObservationQueryable {
             .including(optional: AssetRecord.balance)
             .including(optional: AssetRecord.account)
             .including(all: AssetRecord.priceAlerts)
-            .joining(optional: AssetRecord.balance.filter(Columns.Balance.walletId == walletId))
-            .joining(optional: AssetRecord.account.filter(Columns.Account.walletId == walletId))
-            .filter(Columns.Asset.id == assetId)
+            .joining(optional: AssetRecord.balance.filter(BalanceRecord.Columns.walletId == walletId))
+            .joining(optional: AssetRecord.account.filter(AccountRecord.Columns.walletId == walletId))
+            .filter(AssetRecord.Columns.id == assetId.identifier)
             .asRequest(of: AssetRecordInfo.self)
             .fetchOne(db)
             .map { $0.assetData } ?? .empty
     }
 }
 
-// MARK: - Models Exttensions
+// MARK: - Models Extensions
 
 //TODO: Find a way to remove .empty
 
@@ -60,8 +60,35 @@ extension AssetData {
                 isStakeEnabled: false,
                 isPinned: false,
                 isActive: true,
-                stakingApr: .none
+                stakingApr: .none,
+                rankScore: 0
             )
         )
     }()
+
+    public static func with(asset: Asset) -> AssetData {
+        AssetData(
+            asset: asset,
+            balance: .zero,
+            account: Account(
+                chain: asset.chain,
+                address: .empty,
+                derivationPath: .empty,
+                extendedPublicKey: .none
+            ),
+            price: .none,
+            price_alerts: [],
+            metadata: AssetMetaData(
+                isEnabled: false,
+                isBuyEnabled: false,
+                isSellEnabled: false,
+                isSwapEnabled: false,
+                isStakeEnabled: false,
+                isPinned: false,
+                isActive: true,
+                stakingApr: .none,
+                rankScore: 0
+            )
+        )
+    }
 }

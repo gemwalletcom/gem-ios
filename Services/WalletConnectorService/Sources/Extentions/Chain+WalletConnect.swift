@@ -24,6 +24,15 @@ extension Chain {
     }
 }
 
+extension Blockchain {
+    public var chain: Chain? {
+        guard let chain = WalletConnectNamespace.shared.getChain(caip2: namespace, caip10: reference) else {
+            return .none
+        }
+        return Chain(rawValue: chain)
+    }
+}
+
 extension WalletConnectNamespace {
     static let shared = WalletConnectNamespace()
 }

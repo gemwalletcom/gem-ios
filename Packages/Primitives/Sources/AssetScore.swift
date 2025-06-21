@@ -17,7 +17,6 @@ public enum AssetRank: String, Codable, CaseIterable, Equatable, Sendable {
 	case medium
 	case low
 	case trivial
-	case unknown
 	case inactive
 	case abandoned
 	case suspended
@@ -25,4 +24,11 @@ public enum AssetRank: String, Codable, CaseIterable, Equatable, Sendable {
 	case deprecated
 	case spam
 	case fradulent
+	case unknown
+}
+
+public enum AssetScoreType: String, Codable, Equatable, Sendable {
+	case verified
+	case unverified
+	case suspicious
 }

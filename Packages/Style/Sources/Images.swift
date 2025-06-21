@@ -74,6 +74,8 @@ public enum Images {
         public static let wagmi = Image(.wagmi)
         public static let reservoir = Image(.reservoir)
         public static let symbiosis = Image(.symbiosis)
+        public static let chainflip = Image(.chainflip)
+        public static let relay = Image(.relay)
     }
 
     public enum Fiat {
@@ -182,6 +184,15 @@ public enum Images {
 
     public enum ErrorConent {
         public static let error = Image(.error)
+    }
+
+    public enum Filters {
+        public static let balance = Image(.filtersBalance)
+	}
+    
+    public enum TokenStatus {
+        public static let warning = Image(.verificationOrange)
+        public static let risk = Image(.verificationRed)
     }
 }
 

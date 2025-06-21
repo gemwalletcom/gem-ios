@@ -6,32 +6,27 @@ import GemAPI
 import Store
 
 public struct PriceService: Sendable {
-    private let apiService: any GemAPIPriceService
     private let priceStore: PriceStore
-    
+    private let fiatRateStore: FiatRateStore
+
     public init(
-        apiService: any GemAPIPriceService = GemAPIService(),
-        priceStore: PriceStore
+        priceStore: PriceStore,
+        fiatRateStore: FiatRateStore
     ) {
-        self.apiService = apiService
         self.priceStore = priceStore
+        self.fiatRateStore = fiatRateStore
     }
 
-    public func updatePrices(assetIds: [AssetId], currency: String) async throws {
-        let prices = try await fetchPrices(for: assetIds.ids, currency: currency)
-        try updatePrices(prices: prices)
+    public func updatePrices(_ prices: [AssetPrice], currency: String) throws {
+        try priceStore.updatePrices(prices: prices, currency: currency)
     }
 
-    public func updatePrices(prices: [AssetPrice]) throws {
-        try priceStore.updatePrices(prices: prices)
-    }
-
-    public func updatePrice(price: AssetPrice) throws {
-        try priceStore.updatePrice(price: price)
-    }
-
-    public func updateMarketPrice(assetId: AssetId, market: AssetMarket) throws {
-        try priceStore.updateMarket(assetId: assetId.identifier, market: market)
+    public func updateMarketPrice(assetId: AssetId, market: AssetMarket, currency: String) throws {
+        try priceStore.updateMarket(
+            assetId: assetId.identifier,
+            market: market,
+            rate: try getRate(currency: currency)
+        )
     }
 
     public func getPrice(for assetId: AssetId) throws -> AssetPrice? {
@@ -42,9 +37,26 @@ public struct PriceService: Sendable {
         try priceStore.getPrices(for: assetIds.map { $0.identifier })
     }
     
-    public func fetchPrices(for assetIds: [String], currency: String) async throws -> [AssetPrice] {
-        guard !assetIds.isEmpty else { return [] }
-        return try await apiService.getPrice(assetIds: assetIds, currency: currency)
+    public func observableAssets() throws -> [AssetId] {
+        let priceAssets = try priceStore.enabledPriceAssets()
+        if priceAssets.isEmpty {
+            return [Chain.bitcoin, Chain.ethereum, Chain.smartChain, Chain.solana].map { $0.assetId }
+        }
+        return priceAssets
+    }
+    
+    public func changeCurrency(currency: String) throws {
+        try priceStore.updateCurrency(currency: currency)
+    }
+    
+    public func getRate(currency: String) throws -> Double {
+        try priceStore.getRate(currency: currency).rate
+    }
+    
+    public func addRates(_ rates: [FiatRate]) throws {
+        guard rates.isNotEmpty else { return }
+        
+        try fiatRateStore.add(rates)
     }
     
     @discardableResult

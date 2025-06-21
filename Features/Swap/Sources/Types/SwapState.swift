@@ -3,7 +3,6 @@
 import Foundation
 import Components
 import Primitives
-
 import struct Gemstone.SwapQuote
 
 public struct SwapState {

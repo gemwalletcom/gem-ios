@@ -16,13 +16,13 @@ public struct CollectibleScene: View {
     @State private var isPresentingErrorMessage: String?
     @State private var isPresentingSaveToPhotosToast = false
     @State private var isPresentingSetAsAvatarToast = false
-    @Binding private var isPresentingCollectibleOptions: Bool
+    @Binding private var isPresentingCollectibleOptions: Bool?
     
     let model: CollectibleViewModel
     
     public init(
         model: CollectibleViewModel,
-        isPresentingCollectibleOptions: Binding<Bool>
+        isPresentingCollectibleOptions: Binding<Bool?>
     ) {
         self.model = model
         _isPresentingCollectibleOptions = isPresentingCollectibleOptions
@@ -67,7 +67,7 @@ public struct CollectibleScene: View {
             title: Localized.Nft.setAsAvatar,
             systemImage: SystemImage.checkmark
         )
-        .confirmationDialog("", isPresented: $isPresentingCollectibleOptions, titleVisibility: .hidden) {
+        .confirmationDialog(model.title, presenting: $isPresentingCollectibleOptions) {_ in
             Button(Localized.Nft.saveToPhotos, action: onSelectSaveToGallery)
             Button(Localized.Nft.setAsAvatar, action: onSelectSetAsAvatar)
         }
@@ -91,13 +91,18 @@ extension CollectibleScene {
         .textCase(nil)
         .listRowSeparator(.hidden)
         .listRowInsets(EdgeInsets())
-        .contextMenu(
+        .contextMenu([
             .custom(
                 title: Localized.Nft.saveToPhotos,
                 systemImage: SystemImage.gallery,
+                action: onSelectSaveToGallery
+            ),
+            .custom(
+                title: Localized.Nft.setAsAvatar,
+                systemImage: SystemImage.emoji,
                 action: onSelectSetAsAvatar
             )
-        )
+        ])
     }
     
     private var assetInfoSectionView: some View {

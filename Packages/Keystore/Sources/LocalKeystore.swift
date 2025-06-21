@@ -3,17 +3,28 @@ import Primitives
 import WalletCore
 
 public struct LocalKeystore: Keystore {
-    public let configration: LocalKeystoreConfiguration
-
     private let walletKeyStore: WalletKeyStore
     private let keystorePassword: KeystorePassword
 
     public init(
-        configuration: LocalKeystoreConfiguration = LocalKeystoreConfiguration(),
+        directory: String = "keystore",
         keystorePassword: KeystorePassword = LocalKeystorePassword()
     ) {
-        self.configration = configuration
-        self.walletKeyStore = WalletKeyStore(directory: configuration.directory)
+        do {
+            // migrate keystore from documents directory to applocation support directory
+            // TODO: delete in 2026
+            let fileMigrator = FileMigrator()
+            let keystoreURL = try fileMigrator.migrate(
+                name: directory,
+                fromDirectory: .documentDirectory,
+                toDirectory: .applicationSupportDirectory,
+                isDirectory: true
+            )
+            self.walletKeyStore = WalletKeyStore(directory: keystoreURL)
+        } catch {
+            fatalError("keystore initialization error: \(error)")
+        }
+
         self.keystorePassword = keystorePassword
     }
 
@@ -54,22 +65,23 @@ public struct LocalKeystore: Keystore {
     }
     
     public func setupChains(chains: [Chain], for wallets: [Primitives.Wallet]) throws -> [Primitives.Wallet] {
+        let wallets = wallets.filter {
+            let enabled = Set($0.accounts.map(\.chain)).intersection(chains).map { $0 }
+            let missing = Set(chains).subtracting(enabled)
+            return missing.isNotEmpty
+        }
+        guard wallets.isNotEmpty else {
+            return []
+        }
         let password = try keystorePassword.getPassword()
-        let updatedWallets: [Primitives.Wallet] = try {
-            var updatedWallets: [Primitives.Wallet] = []
-            for wallet in wallets {
-                let enableChains = Set(wallet.accounts.map { $0.chain })
-                let missingChains = Set(chains).subtracting(enableChains)
-                guard !missingChains.isEmpty else { continue }
-
-                updatedWallets.append(
-                    try walletKeyStore.addChains(chains: chains, wallet: wallet, password: password)
+        return try wallets
+            .map {
+                try walletKeyStore.addChains(
+                    chains:   chains,
+                    wallet:   $0,
+                    password: password
                 )
             }
-            return updatedWallets
-        }()
-
-        return updatedWallets
     }
     
     public func deleteKey(for wallet: Primitives.Wallet) throws {
@@ -115,9 +127,9 @@ public struct LocalKeystore: Keystore {
         try keystorePassword.getAuthentication()
     }
     
-    public func sign(wallet: Primitives.Wallet, message: SignMessage, chain: Chain) throws -> Data {
+    public func sign(hash: Data, wallet: Primitives.Wallet, chain: Chain) throws -> Data {
         try walletKeyStore.sign(
-            message: message,
+            hash: hash,
             walletId: wallet.id,
             type: wallet.type,
             password: try keystorePassword.getPassword(),

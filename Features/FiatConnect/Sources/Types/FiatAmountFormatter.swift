@@ -2,6 +2,7 @@
 
 import Foundation
 import Primitives
+import Formatters
 
 struct FiatAmountFormatter {
     let valueFormatter: ValueFormatter

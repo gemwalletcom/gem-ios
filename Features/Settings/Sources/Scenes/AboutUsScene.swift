@@ -3,12 +3,14 @@
 import SwiftUI
 import Components
 import PrimitivesComponents
+import Localization
+import Style
 
 public struct AboutUsScene: View {
-    private let model: AboutUsViewModel
+    @State private var model: AboutUsViewModel
 
     public init(model: AboutUsViewModel) {
-        self.model = model
+        _model = State(initialValue: model)
     }
 
     public var body: some View {
@@ -24,6 +26,8 @@ public struct AboutUsScene: View {
                     ListItemView(title: model.websiteTitle)
                 }
             }
+            .listRowInsets(.assetListRowInsets)
+
             Section {
                 ListItemView(
                     title: model.versionTextTitle,
@@ -31,10 +35,24 @@ public struct AboutUsScene: View {
                     imageStyle: .settings(assetImage: model.versionTextImage)
                 )
                 .contextMenu(model.contextMenuItems)
+
+                if let version = model.releaseVersion {
+                    NavigationCustomLink(
+                        with: ListItemView(
+                            title: Localized.UpdateApp.title,
+                            subtitle: version,
+                            imageStyle: .settings(assetImage: model.releaseImage)
+                        ),
+                        action: model.onUpdate
+                    )
+                }
             }
+            .listRowInsets(.assetListRowInsets)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .listStyle(.insetGrouped)
         .listSectionSpacing(.compact)
         .navigationTitle(model.title)
+        .taskOnce { Task { await model.fetch() }}
     }
 }

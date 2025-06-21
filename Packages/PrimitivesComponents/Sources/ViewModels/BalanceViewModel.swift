@@ -4,6 +4,7 @@ import Foundation
 import SwiftUI
 import Primitives
 import Style
+import Formatters
 
 public struct BalanceViewModel: Sendable {
     private static let fullFormatter = ValueFormatter(style: .full)

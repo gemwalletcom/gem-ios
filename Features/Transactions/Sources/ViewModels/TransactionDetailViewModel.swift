@@ -45,7 +45,7 @@ struct TransactionDetailViewModel {
         return ListItemImageValue(
             title: Localized.Common.provider,
             subtitle: config.name,
-            assetImage: AssetImage.image(config.image)
+            assetImage: nil
         )
     }
     
@@ -99,7 +99,7 @@ struct TransactionDetailViewModel {
         return AddressListItemViewModel(
             title: title,
             account: account,
-            style: .full,
+            mode: .auto(addressStyle: .full),
             explorerService: ExplorerService.standard
         )
     }
@@ -167,17 +167,28 @@ struct TransactionDetailViewModel {
     }
 
     var showMemoField: Bool {
-        model.transaction.asset.chain.isMemoSupported
+        switch model.transaction.transaction.type {
+        case .transfer, .transferNFT: model.transaction.asset.chain.isMemoSupported
+        case .swap,
+                .tokenApproval,
+                .assetActivation,
+                .smartContractCall,
+                .stakeRewards,
+                .stakeWithdraw,
+                .stakeDelegate,
+                .stakeUndelegate,
+                .stakeRedelegate: false
+        }
     }
-    
+
     var memo: String? {
         model.transaction.transaction.memo
     }
-    
+
     var transactionExplorerUrl: URL {
         model.transactionExplorerUrl
     }
-    
+
     var transactionExplorerText: String {
         model.viewOnTransactionExplorerText
     }
@@ -215,7 +226,8 @@ struct TransactionDetailViewModel {
             feeAsset: model.transaction.feeAsset,
             feeAssetPrice: model.transaction.feePrice,
             value: model.transaction.transaction.valueBigInt,
-            feeValue: model.transaction.transaction.feeBigInt
+            feeValue: model.transaction.transaction.feeBigInt,
+            direction: model.transaction.transaction.type == .transfer ? model.transaction.transaction.direction : nil
         )
     }
 }

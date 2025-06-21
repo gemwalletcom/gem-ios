@@ -25,6 +25,8 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .watchWallet: Docs.url(.whatIsWatchWallet)
         case .stakeLockTime: Docs.url(.stakingLockTime)
         case .priceImpact: Docs.url(.priceImpact)
+        case .slippage: Docs.url(.slippage)
+        case .assetStatus: Docs.url(.tokenVerification)
         }
     }
 
@@ -41,6 +43,13 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .watchWallet: Localized.Info.WatchWallet.title
         case .stakeLockTime: Localized.Stake.lockTime
         case .priceImpact: Localized.Info.PriceImpact.title
+        case .slippage: Localized.Swap.slippage
+        case .assetStatus(let status):
+            switch status {
+            case .verified: .empty // verified token status isn't displayed on the asset screen.
+            case .suspicious: Localized.Asset.Verification.suspicious
+            case .unverified: Localized.Asset.Verification.unverified
+            }
         }
     }
 
@@ -56,6 +65,13 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
         case .watchWallet: Localized.Info.WatchWallet.description
         case .stakeLockTime: Localized.Info.LockTime.description
         case .priceImpact: Localized.Info.PriceImpact.description
+        case .slippage: Localized.Info.Slippage.description
+        case .assetStatus(let status):
+            switch status {
+            case .verified: .empty // verified token status isn't displayed on the asset screen.
+            case .unverified: Localized.Info.AssetStatus.Unverified.description
+            case .suspicious: Localized.Info.AssetStatus.Suspicious.description
+            }
         }
     }
 
@@ -91,6 +107,14 @@ extension InfoSheetViewModel: InfoSheetModelViewable {
             ))
         case .priceImpact:
             return .image(Images.Logo.logo)
+        case .slippage:
+            return .image(Images.Logo.logo)
+        case .assetStatus(let status):
+            switch status {
+            case .verified: return .image(Images.Logo.logo)
+            case .unverified: return .image(Images.TokenStatus.warning)
+            case .suspicious: return .image(Images.TokenStatus.risk)
+            }
         }
     }
     

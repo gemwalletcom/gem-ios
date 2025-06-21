@@ -2,9 +2,10 @@
 
 import Foundation
 import Store
+import Primitives
 
-public extension AssetStore {
-    static func mock(db: DB) -> Self {
+extension AssetStore {
+    public static func mock(db: DB = .mock()) -> Self {
         AssetStore(db: db)
     }
 }

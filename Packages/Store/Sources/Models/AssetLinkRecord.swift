@@ -9,31 +9,37 @@ public struct AssetLinkRecord: Codable, FetchableRecord, PersistableRecord  {
     
     public static let databaseTableName: String = "assets_links"
     
-    public var assetId: String
+    public enum Columns {
+        static let assetId = Column("assetId")
+        static let name = Column("name")
+        static let url = Column("url")
+    }
+    
+    public var assetId: AssetId
     public var name: String
     public var url: String
 }
 
 extension AssetLinkRecord: Identifiable {
-    public var id: String { assetId }
+    public var id: String { assetId.identifier }
 }
 
 extension AssetLinkRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName, ifNotExists: true) {
-            $0.column(Columns.AssetLink.assetId.name, .text)
+            $0.column(Columns.assetId.name, .text)
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
 
-            $0.column(Columns.AssetLink.name.name, .text)
-            $0.column(Columns.AssetLink.url.name, .text)
+            $0.column(Columns.name.name, .text)
+            $0.column(Columns.url.name, .text)
             
-            $0.uniqueKey([Columns.AssetLink.assetId.name, Columns.AssetLink.name.name])
+            $0.uniqueKey([Columns.assetId.name, Columns.name.name])
         }
     }
 }
 
 extension AssetLink {
-    func record(assetId: String) -> AssetLinkRecord {
+    func record(assetId: AssetId) -> AssetLinkRecord {
         AssetLinkRecord(
             assetId: assetId,
             name: name,

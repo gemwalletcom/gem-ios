@@ -7,6 +7,7 @@ import GemstonePrimitives
 import Style
 import Localization
 import Components
+import Formatters
 
 public struct BannerViewModel {
     public  let banner: Banner
@@ -44,10 +45,7 @@ public struct BannerViewModel {
             }
             return Localized.Banner.Stake.title(asset.name)
         case .accountActivation:
-            guard let asset = asset else {
-                return .none
-            }
-            return Localized.Banner.AccountActivation.title(asset.name)
+            return Localized.Banner.AccountActivation.title
         case .enableNotifications: 
             return Localized.Banner.EnableNotifications.title
         case .accountBlockedMultiSignature:

@@ -7,6 +7,7 @@ import SwiftUI
 import Style
 import BigInt
 import Localization
+import Formatters
 
 public struct TransactionViewModel: Sendable {
     public let transaction: TransactionExtended
@@ -289,10 +290,14 @@ public struct TransactionViewModel: Sendable {
     }
 
     private var transactionLink: BlockExplorerLink {
-        explorerService.transactionUrl(
+        let swapProvider: String? = switch transaction.transaction.type {
+            case .swap: transaction.transaction.metadata?.swap?.provider
+            default: .none
+        }
+        return explorerService.transactionUrl(
             chain: assetId.chain,
             hash: transaction.transaction.hash,
-            swapProvider: transaction.transaction.metadata?.swap?.provider
+            swapProvider: swapProvider
         )
     }
 

@@ -31,6 +31,7 @@ let package = Package(
         .target(
             name: "GemAPITestKit",
             dependencies: [
+                "GemAPI",
                 "SwiftHTTPClient",
                 .product(name: "PrimitivesTestKit", package: "Primitives"),
             ],
@@ -38,7 +39,9 @@ let package = Package(
         ),
         .testTarget(
             name: "GemAPITests",
-            dependencies: ["GemAPI"]
+            dependencies: [
+                "GemAPI",
+            ]
         ),
     ]
 )

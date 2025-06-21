@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Primitives
 import Style
@@ -13,7 +15,7 @@ struct ImportWalletScene: View {
         case name, input
     }
     @State private var name: String = ""
-    @State private var wordSuggestion: String? = .none
+    @State private var wordsSuggestion: [String] = []
 
     @State private var importType: WalletImportType = .phrase
     @State private var input: String = ""
@@ -54,15 +56,15 @@ struct ImportWalletScene: View {
                                 .keyboardType(.asciiCapable)
                                 .frame(minHeight: 80, alignment: .top)
                                 .focused($focusedField, equals: .input)
-                                .accessibilityIdentifier(importType.id.lowercased())
                                 .toolbar {
                                     if importType.showToolbar {
                                         ToolbarItem(placement: .keyboard) {
-                                            WordSuggestionView(word: $wordSuggestion, selectWord: selectWord)
+                                            WordSuggestionView(words: wordsSuggestion, selectWord: selectWord)
                                         }
                                     }
                                 }
                                 .padding(.top, .small + .tiny)
+                            
                                 if let chain = model.chain, importType == .address {
                                     NameRecordView(
                                         model: NameRecordViewModel(chain: chain),
@@ -97,9 +99,9 @@ struct ImportWalletScene: View {
                 styleState: model.buttonState,
                 action: onImportWallet
             )
-            .accessibilityIdentifier("import_wallet")
             .frame(maxWidth: .scene.button.maxWidth)
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .alert(item: $isPresentingErrorMessage) {
@@ -109,7 +111,7 @@ struct ImportWalletScene: View {
             ScanQRCodeNavigationStack(action: onHandleScan(_:))
         }
         .onChange(of: input) { oldValue, newValue in
-            wordSuggestion = model.wordSuggestionCalculate(value: newValue)
+            wordsSuggestion = model.wordSuggestionCalculate(value: newValue)
         }
         .onChange(of: importType) { (_, _) in
             input = ""
@@ -226,7 +228,10 @@ extension ImportWalletScene {
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
             }
-            try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
+            let chain = model.chain!
+            let address = chain.checksumAddress(recipient.address)
+            
+            try model.importWallet(name: recipient.name, keystoreType: .address(chain: chain, address: address))
         }
     }
 }

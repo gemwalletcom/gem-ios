@@ -36,7 +36,7 @@ public final class ChartsViewModel {
     }
 
     var priceRequest: PriceRequest {
-        PriceRequest(assetId: assetModel.asset.id.identifier)
+        PriceRequest(assetId: assetModel.asset.id)
     }
 
     var title: String { assetModel.name }
@@ -64,21 +64,19 @@ extension ChartsViewModel {
         do {
             let values = try await service.getCharts(
                 assetId: assetModel.asset.id,
-                period: currentPeriod,
-                currency: preferences.currency
+                period: currentPeriod
             )
-            if let price = values.price {
-                try priceService.updatePrice(price: price.mapToAssetPrice(assetId: assetModel.asset.id.identifier))
-            }
             if let market = values.market {
-                try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market)
+                try priceService.updateMarketPrice(assetId: assetModel.asset.id, market: market, currency: preferences.currency)
             }
-
             let price = try priceService.getPrice(for: assetModel.asset.id)
+            let rate = try priceService.getRate(currency: preferences.currency)
+            
             var charts = values.prices.map {
-                ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value))
+                ChartDateValue(date: Date(timeIntervalSince1970: TimeInterval($0.timestamp)), value: Double($0.value) * rate)
             }
-            if let price {
+            
+            if let price = price, let last = charts.last, price.updatedAt > last.date {
                 charts.append(ChartDateValue(date: .now, value: price.price))
             }
 

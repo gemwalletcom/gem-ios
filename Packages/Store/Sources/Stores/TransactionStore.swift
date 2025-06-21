@@ -15,7 +15,7 @@ public struct TransactionStore: Sendable {
     public func getTransactions(state: TransactionState) throws -> [Transaction] {
         try db.read { db in
             try TransactionRecord
-                .filter(Columns.Transaction.state == state.rawValue)
+                .filter(TransactionRecord.Columns.state == state.rawValue)
                 .fetchAll(db)
                 .compactMap { $0.mapToTransaction() }
         }
@@ -24,7 +24,7 @@ public struct TransactionStore: Sendable {
     public func getTransactionRecord(transactionId: String) throws -> TransactionRecord {
         try db.read { db in
             guard let transaction = try TransactionRecord
-                .filter(Columns.Transaction.transactionId == transactionId)
+                .filter(TransactionRecord.Columns.transactionId == transactionId)
                 .fetchOne(db) else {
                 throw AnyError("getTransaction transaction not found \(transactionId)")
             }
@@ -35,7 +35,7 @@ public struct TransactionStore: Sendable {
     public func getWalletIds(for transactionId: String) throws -> [String] {
         return try db.read { db in
             return try TransactionRecord
-                .filter(Columns.Transaction.transactionId == transactionId)
+                .filter(TransactionRecord.Columns.transactionId == transactionId)
                 .fetchAll(db)
                 .map { $0.walletId }
         }
@@ -47,7 +47,7 @@ public struct TransactionStore: Sendable {
                 let record = try transaction.record(walletId: walletId).upsertAndFetch(db, as: TransactionRecord.self)
                 if let id = record.id {
                     try transaction.assetIds.forEach {
-                        try TransactionAssetAssociationRecord(transactionId: id, assetId: $0.identifier).upsert(db)
+                        try TransactionAssetAssociationRecord(transactionId: id, assetId: $0).upsert(db)
                     }
                 }
             }
@@ -55,19 +55,19 @@ public struct TransactionStore: Sendable {
     }
     
     public func updateState(id: String, state: TransactionState) throws {
-        try updateValues(id: id, values: [Columns.Transaction.state.set(to: state.rawValue)])
+        try updateValues(id: id, values: [TransactionRecord.Columns.state.set(to: state.rawValue)])
     }
     
     public func updateNetworkFee(transactionId: String, networkFee: String) throws {
-        try updateValues(id: transactionId, values: [Columns.Transaction.fee.set(to: networkFee)])
+        try updateValues(id: transactionId, values: [TransactionRecord.Columns.fee.set(to: networkFee)])
     }
     
     public func updateBlockNumber(transactionId: String, block: Int) throws {
-        try updateValues(id: transactionId, values: [Columns.Transaction.blockNumber.set(to: block)])
+        try updateValues(id: transactionId, values: [TransactionRecord.Columns.blockNumber.set(to: block)])
     }
     
     public func updateCreatedAt(transactionId: String, date: Date) throws {
-        try updateValues(id: transactionId, values: [Columns.Transaction.createdAt.set(to: date)])
+        try updateValues(id: transactionId, values: [TransactionRecord.Columns.createdAt.set(to: date)])
     }
     
     public func updateTransactionId(oldTransactionId: String, transactionId: String, hash: String) throws {
@@ -77,10 +77,10 @@ public struct TransactionStore: Sendable {
         } else {
             return try db.write { db in
                 try TransactionRecord
-                    .filter(Columns.Transaction.transactionId == oldTransactionId)
+                    .filter(TransactionRecord.Columns.transactionId == oldTransactionId)
                     .updateAll(db, [
-                        Columns.Transaction.transactionId.set(to: transactionId),
-                        Columns.Transaction.hash.set(to: hash),
+                        TransactionRecord.Columns.transactionId.set(to: transactionId),
+                        TransactionRecord.Columns.hash.set(to: hash),
                     ]
                 )
             }
@@ -90,7 +90,7 @@ public struct TransactionStore: Sendable {
     public func isExist(transactionId: String) throws -> Bool {
         return try db.read { db in
             try TransactionRecord
-                .filter(Columns.Transaction.transactionId == transactionId)
+                .filter(TransactionRecord.Columns.transactionId == transactionId)
                 .fetchCount(db) > 0
         }
     }
@@ -98,7 +98,7 @@ public struct TransactionStore: Sendable {
     public func deleteTransactionId(ids: [String]) throws {
         return try db.write { db in
             try TransactionRecord
-                .filter(ids.contains(Columns.Transaction.transactionId))
+                .filter(ids.contains(TransactionRecord.Columns.transactionId))
                 .deleteAll(db)
         }
     }
@@ -106,7 +106,7 @@ public struct TransactionStore: Sendable {
     private func updateValues(id: String, values: [ColumnAssignment]) throws {
         return try db.write { db in
             try TransactionRecord
-                .filter(Columns.Transaction.transactionId == id)
+                .filter(TransactionRecord.Columns.transactionId == id)
                 .updateAll(db, values)
         }
     }

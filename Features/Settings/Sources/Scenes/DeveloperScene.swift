@@ -39,6 +39,14 @@ public struct DeveloperScene: View {
                     action: model.clearPendingTransactions
                 )
                 NavigationCustomLink(
+                    with: ListItemView(title: "Clear Transactions Timestamp"),
+                    action: model.clearTransactionsTimestamp
+                )
+                NavigationCustomLink(
+                    with: ListItemView(title: "Clear Wallet Preferences"),
+                    action: model.clearWalletPreferences
+                )
+                NavigationCustomLink(
                     with: ListItemView(title: "Clear Assets"),
                     action: model.clearAssets
                 )
@@ -53,6 +61,10 @@ public struct DeveloperScene: View {
                 NavigationCustomLink(
                     with: ListItemView(title: "Clear Banners"),
                     action: model.clearBanners
+                )
+                NavigationCustomLink(
+                    with: ListItemView(title: "Clear Prices"),
+                    action: model.clearPrices
                 )
                 #if DEBUG
                 NavigationCustomLink(

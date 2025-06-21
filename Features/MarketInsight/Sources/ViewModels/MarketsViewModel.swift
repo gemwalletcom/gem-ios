@@ -7,6 +7,7 @@ import PrimitivesComponents
 import Components
 import Style
 import Localization
+import Formatters
 
 public struct MarketsViewModel {
     let markets: Markets
@@ -27,7 +28,8 @@ public struct MarketsViewModel {
             model: PriceViewModel(
                 price: Price(
                     price: Double(markets.marketCap),
-                    priceChangePercentage24h: Double(markets.marketCapChangePercentage24h)
+                    priceChangePercentage24h: Double(markets.marketCapChangePercentage24h),
+                    updatedAt: .now
                 ),
                 currencyCode: currencyFormatter.currencyCode
             )

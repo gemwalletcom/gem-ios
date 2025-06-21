@@ -4,16 +4,21 @@ import Foundation
 import SwiftUI
 import Primitives
 import Style
+import Formatters
 
-public struct PriceViewModel {
+public struct PriceViewModel: Sendable {
     public let price: Price?
 
     private let currencyFormatter: CurrencyFormatter
     static let percentFormatter = CurrencyFormatter.percent
 
-    public init(price: Price?, currencyCode: String) {
+    public init(
+        price: Price?,
+        currencyCode: String,
+        currencyFormatterType: CurrencyFormatterType = .abbreviated
+    ) {
         self.price = price
-        self.currencyFormatter = CurrencyFormatter(type: .abbreviated, currencyCode: currencyCode)
+        self.currencyFormatter = CurrencyFormatter(type: currencyFormatterType, currencyCode: currencyCode)
     }
 
     public var isPriceAvailable: Bool {

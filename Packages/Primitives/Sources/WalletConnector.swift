@@ -4,23 +4,6 @@
 
 import Foundation
 
-public enum SignDigestType: String, Codable, Sendable {
-	case sign
-	case eip191
-	case eip712
-	case base58
-}
-
-public struct SignMessage: Codable, Sendable {
-	public let type: SignDigestType
-	public let data: Data
-
-	public init(type: SignDigestType, data: Data) {
-		self.type = type
-		self.data = data
-	}
-}
-
 public enum WalletConnectionState: String, Codable, Hashable, Sendable {
 	case started
 	case active
@@ -108,4 +91,5 @@ public enum WalletConnectionMethods: String, Codable, CaseIterable, Sendable {
 	case solanaSignMessage = "solana_signMessage"
 	case solanaSignTransaction = "solana_signTransaction"
 	case solanaSignAndSendTransaction = "solana_signAndSendTransaction"
+	case solanaSignAllTransactions = "solana_signAllTransactions"
 }

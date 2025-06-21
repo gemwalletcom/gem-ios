@@ -11,6 +11,9 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
     case stakeLockTime(Image?)
     // swaps
     case priceImpact
+    case slippage
+    // asset
+    case assetStatus(AssetScoreType)
 
     public var id: String {
         switch self {
@@ -19,6 +22,8 @@ public enum InfoSheetType: Identifiable, Sendable, Equatable {
         case .watchWallet: "watchWallet"
         case .stakeLockTime: "stakeLockTime"
         case .priceImpact: "priceImpact"
+        case .slippage: "slippage"
+        case .assetStatus(let status): "assetStatus_\(status.rawValue)"
         }
     }
 }

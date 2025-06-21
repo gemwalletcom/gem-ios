@@ -16,8 +16,8 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(6, 29, 3)),
-        .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 9, 0)),
+        .package(url: "https://github.com/groue/GRDB.swift.git", exact: Version(7, 5, 0)),
+        .package(url: "https://github.com/groue/GRDBQuery.git", exact: Version(0, 11, 0)),
     ],
     targets: [
         .target(
@@ -32,6 +32,7 @@ let package = Package(
         .target(
             name: "StoreTestKit",
             dependencies: [
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
                 "Store",
             ],
             path: "TestKit"
@@ -41,6 +42,7 @@ let package = Package(
             dependencies: [
                 "Store",
                 "StoreTestKit",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
             ]
         ),
     ]

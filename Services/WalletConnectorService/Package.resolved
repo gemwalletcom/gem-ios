@@ -1,4 +1,5 @@
 {
+  "originHash" : "13d517094e4ba64da1920eacb8f7cf97c804daaedb921af385a6dfb78c434801",
   "pins" : [
     {
       "identity" : "bigint",
@@ -10,21 +11,12 @@
       }
     },
     {
-      "identity" : "qrcode",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/WalletConnect/QRCode",
-      "state" : {
-        "revision" : "263f280d2c8144adfb0b6676109846cfc8dd552b",
-        "version" : "14.3.1"
-      }
-    },
-    {
       "identity" : "reown-swift",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/reown-com/reown-swift",
+      "location" : "https://github.com/gemwalletcom/reown-swift.git",
       "state" : {
-        "revision" : "193fe47626608b1f77de127adf9af5859f84bc1a",
-        "version" : "1.5.2"
+        "branch" : "f061a10",
+        "revision" : "f061a10b12e3d4d76c5017250aa9f369a8e47404"
       }
     },
     {
@@ -35,43 +27,7 @@
         "revision" : "a063fda2b8145a231953c20e7a646be254365396",
         "version" : "3.1.2"
       }
-    },
-    {
-      "identity" : "swift-qrcode-generator",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/swift-qrcode-generator",
-      "state" : {
-        "revision" : "5ca09b6a2ad190f94aa3d6ddef45b187f8c0343b",
-        "version" : "1.0.3"
-      }
-    },
-    {
-      "identity" : "swiftimagereadwrite",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/dagronf/SwiftImageReadWrite",
-      "state" : {
-        "revision" : "5596407d1cf61b953b8e658fa8636a471df3c509",
-        "version" : "1.1.6"
-      }
-    },
-    {
-      "identity" : "wallet-mobile-sdk",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/MobileWalletProtocol/wallet-mobile-sdk",
-      "state" : {
-        "revision" : "4aa89e682f8d7ab1515d85d0797f0d25306bb56a",
-        "version" : "1.0.5"
-      }
-    },
-    {
-      "identity" : "yttrium",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/reown-com/yttrium",
-      "state" : {
-        "revision" : "331244f5a569787452be5ec05b5699927c646878",
-        "version" : "0.8.35"
-      }
     }
   ],
-  "version" : 2
+  "version" : 3
 }

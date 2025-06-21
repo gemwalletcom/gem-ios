@@ -11,7 +11,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../Primitives"),
-        .package(name: "WalletCore", path: "../WalletCore"),
+        .package(name: "WalletCore", path: "../WalletCore")
     ],
     targets: [
         .target(
@@ -24,6 +24,9 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletCorePrimitivesTests",
-            dependencies: ["WalletCorePrimitives"]),
+            dependencies: [
+                "WalletCorePrimitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]),
     ]
 )

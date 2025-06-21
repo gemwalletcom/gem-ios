@@ -26,7 +26,7 @@ public struct ConnectionsStore: Sendable {
                 .including(required: WalletRecord.connection)
                 .asRequest(of: WalletConnectionInfo.self)
                 .filter(
-                    TableAlias(name: WalletConnectionRecord.databaseTableName)[Columns.Connection.sessionId] == id
+                    TableAlias(name: WalletConnectionRecord.databaseTableName)[WalletConnectionRecord.Columns.sessionId] == id
                 )
                 .fetchOne(db)
             guard let connection = result else {
@@ -54,7 +54,7 @@ public struct ConnectionsStore: Sendable {
     public func delete(ids: [String]) throws {
         return try db.write { db in
             try WalletConnectionRecord
-                .filter(ids.contains(Columns.Connection.id) || ids.contains(Columns.Connection.sessionId) )
+                .filter(ids.contains(WalletConnectionRecord.Columns.id) || ids.contains(WalletConnectionRecord.Columns.sessionId) )
                 .deleteAll(db)
         }
     }
@@ -70,7 +70,7 @@ public struct ConnectionsStore: Sendable {
     private func getConnection(id: String) throws -> WalletConnectionRecord {
         try db.read { db in
             guard let connection = try WalletConnectionRecord
-                .filter(Columns.Connection.id == id || Columns.Connection.sessionId == id)
+                .filter(WalletConnectionRecord.Columns.id == id || WalletConnectionRecord.Columns.sessionId == id)
                 .fetchOne(db)
             else {
                 throw AnyError("wallet connection record not found")

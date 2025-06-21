@@ -2,11 +2,35 @@
 
 import Foundation
 import Primitives
-@preconcurrency import GRDB
+import GRDB
 
 public struct TransactionRecord: Codable, TableRecord, FetchableRecord, PersistableRecord  {
-    
     public static let databaseTableName: String = "transactions_v23"
+    
+    public enum Columns {
+        static let id = Column("id")
+        static let walletId = Column("walletId")
+        static let transactionId = Column("transactionId")
+        static let hash = Column("hash")
+        static let from = Column("from")
+        static let to = Column("to")
+        static let contract = Column("contract")
+        static let type = Column("type")
+        static let chain = Column("chain")
+        static let assetId = Column("assetId")
+        static let blockNumber = Column("blockNumber")
+        static let value = Column("value")
+        static let fee = Column("fee")
+        static let feeAssetId = Column("feeAssetId")
+        static let sequence = Column("sequence")
+        static let date = Column("date")
+        static let state = Column("state")
+        static let memo = Column("memo")
+        static let metadata = Column("metadata")
+        static let direction = Column("direction")
+        static let createdAt = Column("createdAt")
+        static let updatedAt = Column("updatedAt")
+    }
 
     public var id: Int? = .none
     public var walletId: String
@@ -17,11 +41,11 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
     public var to: String
     public var contract: String?
     public var chain: Chain
-    public var assetId: String
+    public var assetId: AssetId
     public var blockNumber: Int
     public var value: String
     public var fee: String
-    public var feeAssetId: String
+    public var feeAssetId: AssetId
     public var sequence: Int
     public var date: Date
     public var state: String
@@ -51,64 +75,65 @@ public struct TransactionRecord: Codable, TableRecord, FetchableRecord, Persista
 extension TransactionRecord: CreateTable {
     static func create(db: Database) throws {
         try db.create(table: Self.databaseTableName) {
-            $0.autoIncrementedPrimaryKey("id")
+            $0.autoIncrementedPrimaryKey(Columns.id.name)
                 .indexed()
-            $0.column("walletId", .text)
+            $0.column(Columns.walletId.name, .text)
                 .notNull()
                 .indexed()
                 .references(WalletRecord.databaseTableName, onDelete: .cascade)
-            $0.column("transactionId", .text)
+            $0.column(Columns.transactionId.name, .text)
                 .notNull()
                 .indexed()
-            $0.column("hash", .text)
+            $0.column(Columns.hash.name, .text)
                 .indexed()
                 .notNull()
-            $0.column("from", .text)
+            $0.column(Columns.from.name, .text)
                 .notNull()
-            $0.column("to", .text)
+            $0.column(Columns.to.name, .text)
                 .notNull()
-            $0.column("contract", .text)
-            $0.column("type", .text)
+            $0.column(Columns.contract.name, .text)
+            $0.column(Columns.type.name, .text)
                 .notNull()
-            $0.column("chain", .text)
+            $0.column(Columns.chain.name, .text)
                 .notNull()
-            $0.column("assetId", .text)
+            $0.column(Columns.assetId.name, .text)
                 .notNull()
                 .indexed()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("blockNumber", .numeric)
+            $0.column(Columns.blockNumber.name, .numeric)
                 .notNull()
-            $0.column("value", .text)
+            $0.column(Columns.value.name, .text)
                 .notNull()
-            $0.column("fee", .text)
+            $0.column(Columns.fee.name, .text)
                 .notNull()
-            $0.column("feeAssetId", .text)
+            $0.column(Columns.feeAssetId.name, .text)
                 .notNull()
                 .references(AssetRecord.databaseTableName, onDelete: .cascade)
-            $0.column("sequence", .numeric)
+            $0.column(Columns.sequence.name, .numeric)
                 .notNull()
-            $0.column("date", .date)
+            $0.column(Columns.date.name, .date)
                 .indexed()
                 .notNull()
-            $0.column("state", .text)
+            $0.column(Columns.state.name, .text)
                 .notNull()
-            $0.column("memo", .text)
-            $0.column("metadata", .jsonText)
-            $0.column("direction", .text)
+            $0.column(Columns.memo.name, .text)
+            $0.column(Columns.metadata.name, .jsonText)
+            $0.column(Columns.direction.name, .text)
                 .notNull()
-            $0.column("createdAt", .date)
+            $0.column(Columns.createdAt.name, .date)
                 .notNull()
-            $0.column("updatedAt", .date)
+            $0.column(Columns.updatedAt.name, .date)
                 .notNull()
-            $0.uniqueKey(["walletId", "transactionId"])
+            $0.uniqueKey([
+                Columns.walletId.name,
+                Columns.transactionId.name
+            ])
         }
     }
 }
 
 extension TransactionRecord {
     func mapToTransaction() -> Transaction {
-        let assetId = try! AssetId(id: assetId)
-        let feeAssetId = try! AssetId(id: feeAssetId)
         return Transaction(
             id: Transaction.id(chain: assetId.chain, hash: hash),
             hash: hash,
@@ -144,11 +169,11 @@ extension Transaction {
             to: to,
             contract: contract,
             chain: assetId.chain,
-            assetId: assetId.identifier,
+            assetId: assetId,
             blockNumber: Int(blockNumber) ?? 0,
             value: value,
             fee: fee,
-            feeAssetId: feeAssetId.identifier,
+            feeAssetId: feeAssetId,
             sequence: Int(sequence) ?? 0,
             date: createdAt,
             state: state.rawValue,

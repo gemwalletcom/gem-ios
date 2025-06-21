@@ -4,10 +4,12 @@ import Foundation
 import Primitives
 import Components
 import Localization
+import PriceService
 
 @Observable
 public final class CurrencySceneViewModel {
     private var currencyStorage: CurrencyStorable
+    private let priceService: PriceService
     private let defaultCurrencies: [Currency] = [.usd, .eur, .gbp, .cny, .jpy, .inr, .rub]
     
     private(set) var currency: Currency {
@@ -22,8 +24,12 @@ public final class CurrencySceneViewModel {
         }
     }
 
-    public init(currencyStorage: CurrencyStorable) {
+    public init(
+        currencyStorage: CurrencyStorable,
+        priceService: PriceService
+    ) {
         self.currencyStorage = currencyStorage
+        self.priceService = priceService
     }
 
     public var selectedCurrencyValue: String {
@@ -54,8 +60,9 @@ public final class CurrencySceneViewModel {
         ]
     }
     
-    func setCurrency(_ currency: Currency) {
+    func setCurrency(_ currency: Currency) throws {
         self.currency = currency
+        try self.priceService.changeCurrency(currency: currency.rawValue)
     }
 }
 

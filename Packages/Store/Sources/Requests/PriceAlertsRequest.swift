@@ -15,7 +15,7 @@ public struct PriceAlertsRequest: ValueObservationQueryable {
         try AssetRecord
             .including(required: AssetRecord.priceAlert)
             .including(optional: AssetRecord.price)
-            .order(Columns.Asset.rank.desc)
+            .order(AssetRecord.Columns.rank.desc)
             .asRequest(of: PriceAlertInfo.self)
             .fetchAll(db)
             .map { $0.data }

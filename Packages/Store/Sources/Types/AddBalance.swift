@@ -1,12 +1,13 @@
 // Copyright (c). Gem Wallet. All rights reserved.
 
 import Foundation
+import Primitives
 
 public struct AddBalance {
-    public let assetId: String
+    public let assetId: AssetId
     public let isEnabled: Bool
     
-    public init(assetId: String, isEnabled: Bool) {
+    public init(assetId: AssetId, isEnabled: Bool) {
         self.assetId = assetId
         self.isEnabled = isEnabled
     }

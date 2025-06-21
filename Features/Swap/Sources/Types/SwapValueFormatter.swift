@@ -2,6 +2,7 @@
 
 import Primitives
 import BigInt
+import Formatters
 
 public struct SwapValueFormatter {
     private let formatter: ValueFormatter

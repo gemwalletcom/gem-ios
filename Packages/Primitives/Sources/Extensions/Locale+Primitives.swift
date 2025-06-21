@@ -17,6 +17,7 @@ extension Locale {
     public static let ZH_Simplifier = Locale(identifier: "zh-Hans")
     public static let ZH_Singapore = Locale(identifier: "zh_SG")
     public static let ZH_Traditional = Locale(identifier: "zh-Hant")
+    public static let AR_SA = Locale(identifier: "ar_SA")
 
     public func usageLanguageIdentifier() -> String {
         guard let languageCode = language.languageCode else {

@@ -10,27 +10,30 @@ import AssetsService
 import TransactionsService
 import Primitives
 import BigInt
+import PriceService
 
-@MainActor
-public struct DeveloperViewModel {
+public struct DeveloperViewModel: Sendable {
     private let walletId: WalletId
     private let transactionsService: TransactionsService
     private let assetService: AssetsService
     private let stakeService: StakeService
     private let bannerService: BannerService
+    private let priceService: PriceService
 
     public init(
         walletId: WalletId,
         transactionsService: TransactionsService,
         assetService: AssetsService,
         stakeService: StakeService,
-        bannerService: BannerService
+        bannerService: BannerService,
+        priceService: PriceService
     ) {
         self.walletId = walletId
         self.transactionsService = transactionsService
         self.assetService = assetService
         self.stakeService = stakeService
         self.bannerService = bannerService
+        self.priceService = priceService
     }
 
     var title: String {
@@ -83,6 +86,15 @@ public struct DeveloperViewModel {
         } catch { }
     }
     
+    func clearTransactionsTimestamp() {
+        let store = WalletPreferences(walletId: walletId.id)
+        store.transactionsTimestamp = 0
+    }
+    
+    func clearWalletPreferences() {
+        WalletPreferences(walletId: walletId.id).clear()
+    }
+    
     func clearAssets() {
         do {
             try assetService.assetStore.clearTokens()
@@ -104,6 +116,12 @@ public struct DeveloperViewModel {
     func clearBanners() {
         do {
             try bannerService.clearBanners()
+        } catch { }
+    }
+    
+    func clearPrices() {
+        do {
+            try priceService.clear()
         } catch { }
     }
     
@@ -258,7 +276,7 @@ public struct DeveloperViewModel {
     }
     
     func deeplink(deeplink: DeepLink) {
-        Task {
+        Task { @MainActor in
             await UIApplication.shared.open(deeplink.localUrl, options: [:])
         }
     }

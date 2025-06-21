@@ -441,6 +441,46 @@
                ReferencedContainer = "container:Services/StakeService">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "AppServiceTests"
+               BuildableName = "AppServiceTests"
+               BlueprintName = "AppServiceTests"
+               ReferencedContainer = "container:Services/AppService">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "WalletServiceTests"
+               BuildableName = "WalletServiceTests"
+               BlueprintName = "WalletServiceTests"
+               ReferencedContainer = "container:Services/WalletService">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "OnboardingTest"
+               BuildableName = "OnboardingTest"
+               BlueprintName = "OnboardingTest"
+               ReferencedContainer = "container:Features/Onboarding">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "KeychainTests"
+               BuildableName = "KeychainTests"
+               BlueprintName = "KeychainTests"
+               ReferencedContainer = "container:Packages/Keychain">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction

@@ -4,31 +4,31 @@ import Foundation
 import SwiftUI
 import Style
 import Components
+import Localization
+import Primitives
 
 struct SecurityReminderScene: View {
     @State private var model: SecurityReminderViewModel
-    @State private var isPresentingUrl: URL? = nil
     
-    init(model: SecurityReminderCreateWalletViewModel) {
+    init(model: SecurityReminderViewModel) {
         self.model = model
     }
     
     var body: some View {
         VStack(spacing: .medium) {
             List {
-                OnboardingHeaderTitle(title: model.message, alignment: .center)
+                CalloutView(style: .header(title: model.message))
                     .cleanListRow()
                 
                 ForEach(model.items) { item in
                     Section {
                         ListItemView(
-                            title: item.title,
-                            titleStyle: .headline,
-                            titleExtra: item.subtitle,
-                            titleStyleExtra: .bodySecondary,
+                            title: TextValue(text: item.title, style: .headline),
+                            titleExtra: TextValue(text: item.subtitle, style: .bodySecondary),
                             imageStyle: item.image
                         )
                     }
+                    .listRowInsets(.assetListRowInsets)
                 }
             }
             .contentMargins([.top], .extraSmall, for: .scrollContent)
@@ -36,35 +36,26 @@ struct SecurityReminderScene: View {
             
             Spacer()
             
-            VStack(alignment: .leading) {
-                Toggle(isOn: $model.isConfirmed) {
-                    OnboardingHeaderTitle(title: model.checkmarkTitle, alignment: .center)
-                }
-                .toggleStyle(CheckboxStyle())
-                
-                StateButton(
-                    text: model.buttonTitle,
-                    viewState: model.buttonState,
-                    action: model.onNext
-                )
-            }
+            StateButton(
+                text: Localized.Common.continue,
+                styleState: .normal,
+                action: model.onNext
+            )
             .frame(maxWidth: .scene.button.maxWidth)
         }
         .padding(.bottom, .scene.bottom)
         .background(Colors.grayBackground)
         .navigationTitle(model.title)
         .toolbarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
-                Button("", systemImage: SystemImage.info) {
-                    isPresentingUrl = model.docsUrl
-                }
-            }
-        }
-        .safariSheet(url: $isPresentingUrl)
+        .toolbarInfoButton(url: model.docsUrl)
     }
 }
 
-#Preview(body: {
-    SecurityReminderScene(model: SecurityReminderCreateWalletViewModel(onNext: {}))
-})
+#Preview {
+    SecurityReminderScene(
+        model: SecurityReminderViewModelDefault(
+            title: Localized.Wallet.New.title,
+            onNext: {}
+        )
+    )
+}

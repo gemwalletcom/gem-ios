@@ -18,6 +18,7 @@ public struct NotificationsScene: View {
             )
             .toggleStyle(AppToggleStyle())
         }
+        .contentMargins(.top, .scene.top, for: .scrollContent)
         .onChange(of: model.isEnabled) { (_, newValue) in
             Task {
                 try await model.enable(isEnabled: newValue)

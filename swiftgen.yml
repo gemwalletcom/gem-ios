@@ -1,6 +1,6 @@
 # localized
 strings:
-  inputs: Gem/Resources/en.lproj
+  inputs: Packages/Localization/Sources/Resources/en.lproj/Localizable.strings
   outputs:
     - templateName: structured-swift5
       output: Packages/Localization/Sources/Localized.swift

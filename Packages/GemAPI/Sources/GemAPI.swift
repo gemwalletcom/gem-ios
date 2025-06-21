@@ -5,16 +5,13 @@ import SwiftHTTPClient
 import Primitives
 
 public enum GemAPI: TargetType {
-    case getIpAddress
-    case getPrice(AssetId, currency: String)
-    case getPrices(AssetPricesRequest)
     case getFiatOnRampAssets
     case getFiatOffRampAssets
     case getFiatQuotes(Asset, FiatQuoteRequest)
     case getSwapAssets
     case getConfig
     case getNameRecord(name: String, chain: String)
-    case getCharts(AssetId, currency: String, period: String)
+    case getCharts(AssetId, period: String)
     
     case getDevice(deviceId: String)
     case addDevice(device: Device)
@@ -48,9 +45,7 @@ public enum GemAPI: TargetType {
     
     public var method: HTTPMethod {
         switch self {
-        case .getIpAddress,
-            .getPrice,
-            .getFiatQuotes,
+        case .getFiatQuotes,
             .getFiatOnRampAssets,
             .getFiatOffRampAssets,
             .getSwapAssets,
@@ -67,8 +62,7 @@ public enum GemAPI: TargetType {
             .getNFTAssets,
             .markets:
             return .GET
-        case .getPrices,
-            .addSubscriptions,
+        case .addSubscriptions,
             .addDevice,
             .getAssets,
             .addPriceAlerts,
@@ -85,12 +79,6 @@ public enum GemAPI: TargetType {
 
     public var path: String {
         switch self {
-        case .getIpAddress:
-            return "/v1/ip_address"
-        case .getPrice(let assetId, _):
-            return "/v1/prices/\(assetId.identifier)"
-        case .getPrices:
-            return "/v1/prices"
         case .getFiatOnRampAssets:
             return "/v1/fiat/on_ramp/assets"
         case .getFiatOffRampAssets:
@@ -103,7 +91,7 @@ public enum GemAPI: TargetType {
             return "/v1/config"
         case .getNameRecord(let name, let chain):
             return "/v1/name/resolve/\(name)?chain=\(chain)"
-        case .getCharts(let assetId, _, _):
+        case .getCharts(let assetId, _):
             return "/v1/charts/\(assetId.identifier)"
         case .getSubscriptions(let deviceId):
             return "/v1/subscriptions/\(deviceId)"
@@ -140,8 +128,7 @@ public enum GemAPI: TargetType {
     
     public var data: RequestData {
         switch self {
-        case .getIpAddress,
-            .getFiatOnRampAssets,
+        case .getFiatOnRampAssets,
             .getFiatOffRampAssets,
             .getSwapAssets,
             .getConfig,
@@ -155,12 +142,6 @@ public enum GemAPI: TargetType {
             .getNFTAssets,
             .markets:
             return .plain
-        case .getPrice(_, let currency):
-            return .params([
-                "currency": currency
-            ])
-        case .getPrices(let value):
-            return .encodable(value)
         case .getAssets(let value):
             return .encodable(value.map { $0.identifier })
         case let .getFiatQuotes(_, value):
@@ -173,10 +154,9 @@ public enum GemAPI: TargetType {
             ].compactMapValues { $0 }
             
             return .params(params)
-        case .getCharts(_, let currency, let period):
+        case .getCharts(_, let period):
             return .params([
-                "period": period,
-                "currency": currency
+                "period": period
             ])
         case .addSubscriptions(_, let subscriptions),
             .deleteSubscriptions(_, let subscriptions):

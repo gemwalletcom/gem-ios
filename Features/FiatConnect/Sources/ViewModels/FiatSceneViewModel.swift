@@ -9,6 +9,7 @@ import Style
 import Localization
 import Store
 import PrimitivesComponents
+import Formatters
 
 @MainActor
 @Observable
@@ -53,7 +54,7 @@ public final class FiatSceneViewModel {
         )
 
         // TODO: - move asset request and query observing on top, just inject AssetData
-        self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id.identifier)
+        self.assetRequest = AssetRequest(walletId: walletId, assetId: assetAddress.asset.id)
     }
 
     var title: String {
@@ -112,8 +113,9 @@ public final class FiatSceneViewModel {
         assetData.balance.available > 0 && assetData.metadata.isSellEnabled
     }
 
-    var assetBalance: String {
-        balanceModel.availableBalanceText
+    var assetBalance: String? {
+        let text = balanceModel.availableBalanceText
+        return text == .zero ? nil : text
     }
 
     var fiatProviderViewModel: FiatProvidersViewModel {
@@ -261,10 +263,10 @@ extension FiatSceneViewModel {
         }
     }
 
-    private var fiatProvidersViewModelState: StateViewType<[FiatQuoteViewModel]> {
+    private var fiatProvidersViewModelState: StateViewType<SelectableListType<FiatQuoteViewModel>> {
         switch state {
         case .error(let error): .error(error)
-        case .data(let items): .data(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) })
+        case .data(let items): .data(.plain(items.map { FiatQuoteViewModel(asset: asset, quote: $0, selectedQuote: input.quote, formatter: currencyFormatter) }))
         case .loading: .loading
         case .noData: .noData
         }

@@ -12,7 +12,7 @@ public protocol DeviceServiceable: Sendable {
     func update() async throws
 }
 
-public final class DeviceService: DeviceServiceable {
+public struct DeviceService: DeviceServiceable {
 
     private let deviceProvider: any GemAPIDeviceService
     private let subscriptionsService: SubscriptionService

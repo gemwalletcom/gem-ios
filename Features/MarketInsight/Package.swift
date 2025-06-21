@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
+        .package(name: "Formatters", path: "../../Packages/Formatters"),
         .package(name: "Localization", path: "../../Packages/Localization"),
         .package(name: "Gemstone", path: "../../Packages/Gemstone"),
         .package(name: "Store", path: "../../Packages/Store"),
@@ -29,6 +30,7 @@ let package = Package(
             name: "MarketInsight",
             dependencies: [
                 "Primitives",
+                "Formatters",
                 "Localization",
                 "Gemstone",
                 "Store",
