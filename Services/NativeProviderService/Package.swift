@@ -10,7 +10,8 @@ let package = Package(
     products: [
         .library(
             name: "NativeProviderService",
-            targets: ["NativeProviderService"]),
+            targets: ["NativeProviderService"]
+        ),
     ],
     dependencies: [
         .package(name: "Primitives", path: "../../Packages/Primitives"),
@@ -29,7 +30,9 @@ let package = Package(
         ),
         .testTarget(
             name: "NativeProviderServiceTests",
-            dependencies: ["NativeProviderService"]
+            dependencies: [
+                "NativeProviderService",
+            ]
         ),
     ]
 )
