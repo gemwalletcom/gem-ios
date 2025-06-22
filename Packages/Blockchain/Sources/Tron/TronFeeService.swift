@@ -18,7 +18,7 @@ struct TronFeeService: Sendable {
         let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
         let coinTransferFee = availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee)
 
-        return .makeFinal(fee: isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee)
+        return .fee(value: isNewAccount ? coinTransferFee + BigInt(newAccountFee + newAccountFeeInSmartContract) : coinTransferFee)
     }
 
     func trc20TransferFee(
@@ -34,7 +34,7 @@ struct TronFeeService: Sendable {
         let energyShortfall = max(BigInt.zero, gasLimit.increase(byPercent: 20) - availableEnergy)
         let tokenTransferFee = BigInt(energyFee) * energyShortfall
 
-        return .makeFinal(fee: isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee)
+        return .fee(value: isNewAccount ? tokenTransferFee + BigInt(newAccountFeeInSmartContract) : tokenTransferFee)
     }
 
     func stakeFee(
@@ -46,15 +46,15 @@ struct TronFeeService: Sendable {
         let availableBandwidth = (accountUsage.freeNetLimit ?? 0) - (accountUsage.freeNetUsed ?? 0)
         switch type {
         case .stake:
-            return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
+            return .fee(value: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
         case .unstake:
             if totalStaked > inputValue {
-                return .makeFinal(fee: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
+                return .fee(value: availableBandwidth >= 580 ? BigInt.zero : BigInt(Self.baseFee * 2))
             } else {
-                return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
+                return .fee(value: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
             }
         case .rewards, .withdraw, .redelegate:
-            return .makeFinal(fee: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
+            return .fee(value: availableBandwidth >= 300 ? BigInt.zero : BigInt(Self.baseFee))
         }
     }
     
@@ -95,10 +95,10 @@ extension Collection where Element == TronChainParameter {
 }
 
 private extension Fee {
-    static func makeFinal(fee: BigInt) -> Fee {
+    static func fee(value: BigInt) -> Fee {
         Fee(
-            fee: fee,
-            gasPriceType: .regular(gasPrice: fee),
+            fee: value,
+            gasPriceType: .regular(gasPrice: value),
             gasLimit: 1
         )
     }
