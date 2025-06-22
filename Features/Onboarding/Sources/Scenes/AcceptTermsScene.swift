@@ -39,7 +39,7 @@ struct AcceptTermsScene: View {
             
             StateButton(
                 text: Localized.Onboarding.AcceptTerms.continue,
-                viewState: model.buttonState,
+                variant: .primary(model.state),
                 action: { model.onNext?() }
             )
             .frame(maxWidth: .scene.button.maxWidth)

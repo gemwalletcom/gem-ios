@@ -37,8 +37,7 @@ public struct FiatScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.state,
-                showProgressIndicator: false,
+                variant: .primary(model.state, showProgress: false),
                 action: model.onSelectContinue
             )
             .frame(maxWidth: .scene.button.maxWidth)

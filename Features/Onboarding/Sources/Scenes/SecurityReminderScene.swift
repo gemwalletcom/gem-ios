@@ -40,7 +40,6 @@ struct SecurityReminderScene: View {
             
             StateButton(
                 text: Localized.Common.continue,
-                kind: .primary(.normal),
                 action: model.onNext
             )
             .frame(maxWidth: .scene.button.maxWidth)

@@ -72,7 +72,7 @@ struct AmountScene: View {
             Spacer()
             StateButton(
                 text: model.continueTitle,
-                kind: .primary(model.actionButtonState),
+                variant: .primary(model.actionButtonState),
                 action: model.onSelectNextButton
             )
             .frame(maxWidth: .scene.button.maxWidth)

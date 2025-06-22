@@ -42,7 +42,6 @@ struct CreateWalletScene: View {
 
             StateButton(
                 text: Localized.Common.continue,
-                kind: .primary(.normal),
                 action: continueAction
             )
             .frame(maxWidth: .scene.button.maxWidth)

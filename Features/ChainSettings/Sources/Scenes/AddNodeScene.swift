@@ -33,7 +33,7 @@ public struct AddNodeScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.state,
+                variant: .primary(model.state),
                 action: onSelectImport
             )
             .frame(maxWidth: .scene.button.maxWidth)

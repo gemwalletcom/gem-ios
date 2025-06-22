@@ -68,7 +68,7 @@ public final class SetPriceAlertViewModel {
         return true
     }
     
-    var confirmButtonState: StateButtonStyle.State {
+    var confirmButtonState: ButtonState {
         isEnabledConfirmButton ? .normal : .disabled
     }
 

@@ -48,7 +48,6 @@ public struct InfoSheetScene: View {
     private var learnMoreButton: some View {
         StateButton(
             text: model.buttonTitle,
-            kind: .primary(.normal),
             action: onLearnMore
         )
         .frame(maxWidth: .scene.button.maxWidth)
