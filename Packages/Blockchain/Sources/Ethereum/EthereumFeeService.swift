@@ -42,18 +42,12 @@ extension EthereumService {
         case .swap(_, _, _, let data):
             switch data.approval {
             case .some(let approvalData):
-                let function = EthereumAbiFunction(name: "approve")
-                function.addParamAddress(val: try Data.from(hex: approvalData.spender), isOutput: false)
-                function.addParamUInt256(val: BigInt.MAX_256.magnitude.serialize(), isOutput: false)
-                return EthereumAbi.encode(fn: function)
+                return EthereumAbi.approve(spender: try Data.from(hex: approvalData.spender), value: .MAX_256)
             case .none:
                 return Data(fromHex: data.data)
             }
         case .tokenApprove(_, let data):
-            let function = EthereumAbiFunction(name: "approve")
-            function.addParamAddress(val: try Data.from(hex: data.spender), isOutput: false)
-            function.addParamUInt256(val: BigInt.MAX_256.magnitude.serialize(), isOutput: false)
-            return EthereumAbi.encode(fn: function)
+            return EthereumAbi.approve(spender: try Data.from(hex: data.spender), value: .MAX_256)
         case .generic(_, _, let extra):
             return extra.data
         case .stake(_, let stakeType):

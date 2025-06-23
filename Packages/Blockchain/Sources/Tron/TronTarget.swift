@@ -3,7 +3,7 @@
 import Foundation
 import SwiftHTTPClient
 
-public enum TronProvider: TargetType {
+public enum TronTarget: TargetType {
     case account(address: String)
     case accountUsage(address: String)
     case latestBlock
@@ -18,7 +18,7 @@ public enum TronProvider: TargetType {
     public var baseUrl: URL {
         return URL(string: "")!
     }
-    
+
     public var path: String {
         switch self {
         case .account: "/wallet/getaccount"
@@ -39,24 +39,24 @@ public enum TronProvider: TargetType {
         case .chainParams, .listwitnesses:
             return .GET
         case .account,
-            .accountUsage,
-            .latestBlock,
-            .transaction,
-            .transactionReceipt,
-            .triggerSmartContract,
-            .broadcast,
-            .getReward:
+             .accountUsage,
+             .latestBlock,
+             .transaction,
+             .transactionReceipt,
+             .triggerSmartContract,
+             .broadcast,
+             .getReward:
             return .POST
         }
     }
-    
+
     public var data: RequestData {
         switch self {
         case .account(let address), .accountUsage(let address), .getReward(let address):
             return .encodable(TronAccountRequest(address: address, visible: true))
         case .latestBlock,
-            .chainParams,
-            .listwitnesses:
+             .chainParams,
+             .listwitnesses:
             return .plain
         case .transaction(let id), .transactionReceipt(let id):
             return .encodable(["value": id])
@@ -66,7 +66,7 @@ public enum TronProvider: TargetType {
             return .data(Data(data.utf8))
         }
     }
-    
+
     public var contentType: String {
         return ContentType.json.rawValue
     }

@@ -122,7 +122,7 @@ public struct TronSigner: Signable {
             case let .swap(_, _, quote, quoteData) = input.type,
             let data = Data(fromHex: quoteData.data),
             let callValue = Int64(quoteData.value),
-            let feeLimit = quoteData.gasLimit
+            let gasLimit = quoteData.gasLimit
         else {
             throw AnyError("Invalid input type for swapping")
         }
@@ -133,9 +133,30 @@ public struct TronSigner: Signable {
             $0.data = data
             $0.callValue = callValue
         }
-        return try [
-            sign(input: input, contract: .triggerSmartContract(contract), feeLimit: Int(feeLimit), privateKey: privateKey)
-        ]
+
+        if let approval = quoteData.approval {
+            guard let spender = WalletCore.Base58.decodeNoCheck(string: approval.spender)?.dropFirst() else {
+                throw AnyError("Invalid spender address")
+            }
+
+            let callData = EthereumAbi.approve(spender: spender, value: .MAX_256)
+            let approvalContract = TronTriggerSmartContract.with {
+                $0.ownerAddress = quote.request.walletAddress
+                $0.contractAddress = approval.token
+                $0.data = callData
+            }
+
+            let swapFee = BigInt(stringLiteral: gasLimit) * input.fee.gasPrice
+
+            return try [
+                sign(input: input, contract: .triggerSmartContract(approvalContract), feeLimit: Int(input.fee.fee), privateKey: privateKey),
+                sign(input: input, contract: .triggerSmartContract(contract), feeLimit: Int(swapFee), privateKey: privateKey)
+            ]
+        } else {
+            return try [
+                sign(input: input, contract: .triggerSmartContract(contract), feeLimit: Int(input.fee.fee), privateKey: privateKey)
+            ]
+        }
     }
 }
 
