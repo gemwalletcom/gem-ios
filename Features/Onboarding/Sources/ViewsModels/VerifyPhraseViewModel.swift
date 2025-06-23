@@ -8,6 +8,7 @@ import Style
 import Localization
 import PrimitivesComponents
 
+// TODO: - migrate to @observable macro
 class VerifyPhraseViewModel: ObservableObject {
     
     private let words: [String]
@@ -17,7 +18,7 @@ class VerifyPhraseViewModel: ObservableObject {
 
     @Published var wordsVerified: [String]
     @Published var wordsIndex: Int = 0
-    @Published var buttonState = StateButtonStyle.State.disabled
+    @Published var buttonState = ButtonState.disabled
     private var selectedIndexes = Set<WordIndex>()
 
     init(

@@ -5,6 +5,7 @@ import Localization
 import WalletService
 import enum Keystore.KeystoreImportType
 
+// TODO: - migrate to @observable macro
 class ImportWalletViewModel: ObservableObject {
 
     let type: ImportWalletType
@@ -12,7 +13,7 @@ class ImportWalletViewModel: ObservableObject {
     let wordSuggester = WordSuggester()
     let onFinish: (() -> Void)?
 
-    @Published var buttonState = StateButtonStyle.State.normal
+    @Published var buttonState = ButtonState.normal
 
     init(
         type: ImportWalletType,

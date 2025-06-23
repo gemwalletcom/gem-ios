@@ -60,7 +60,6 @@ public struct SelectableSheet<ViewModel: SelectableSheetViewable, Content: View>
                     
                     StateButton(
                         text: model.confirmButtonTitle,
-                        styleState: .normal,
                         action: onConfirm
                     )
                     .frame(maxWidth: .scene.button.maxWidth)

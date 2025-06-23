@@ -136,7 +136,7 @@ public final class SwapSceneViewModel {
         }
     }
 
-    var shouldDisableActionButton: Bool {
+    var isButtonDisabled: Bool {
         guard let asset = fromAsset?.asset else { return false }
         do {
             return try formatter.format(inputValue: fromValue, decimals: asset.decimals.asInt) <= 0

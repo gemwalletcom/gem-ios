@@ -194,8 +194,7 @@ extension SwapScene {
         VStack {
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.actionButtonState,
-                disabledRule: model.shouldDisableActionButton,
+                type: .primary(model.actionButtonState, isDisabled: model.isButtonDisabled),
                 action: model.onSelectActionButton
             )
         }
