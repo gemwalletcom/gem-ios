@@ -33,7 +33,6 @@ public final class AssetSceneViewModel: Sendable {
 
     private var isPresentingAssetSelectedInput: Binding<SelectedAssetInput?>
 
-    public var isPresentingOptions: Bool?
     public var isPresentingToastMessage: String?
     public var isPresentingAssetSheet: AssetSheetType?
 
@@ -65,13 +64,7 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     public var title: String { assetModel.name }
-    public var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
-    public var viewTokenOnTitle: String? {
-        if let link = tokenLink {
-            return Localized.Asset.viewTokenOn(link.name)
-        }
-        return .none
-    }
+
     var balancesTitle: String { Localized.Asset.Balances.available }
     var networkTitle: String { Localized.Transfer.network }
     var stakeTitle: String { Localized.Wallet.stake }
@@ -83,8 +76,6 @@ public final class AssetSceneViewModel: Sendable {
     var showTransactions: Bool { transactions.isNotEmpty }
 
     var reservedBalanceUrl: URL? { assetModel.asset.chain.accountActivationFeeUrl }
-
-    public var tokenExplorerUrl: URL? { tokenLink?.url }
 
     var networkText: String { assetModel.networkFullName }
     var stakeAprText: String {
@@ -146,8 +137,6 @@ public final class AssetSceneViewModel: Sendable {
     }
 
     public var shareAssetUrl: URL { DeepLink.asset(assetDataModel.asset.id).url }
-    public var addressExplorerUrl: URL { addressLink.url }
-
     public var assetModel: AssetViewModel { AssetViewModel(asset: assetData.asset) }
     public var walletModel: WalletViewModel { WalletViewModel(wallet: input.wallet) }
 
@@ -157,10 +146,17 @@ public final class AssetSceneViewModel: Sendable {
     public var priceAlertsImage: Image { Image(systemName: priceAlertsSystemImage) }
 
     public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
-    
+
+    public var menuItems: [ActionMenuItemType] {
+        [.button(title: viewAddressOnTitle, action: { self.onSelect(url: self.addressExplorerUrl) }),
+         viewTokenOnTitle.map { .button(title: $0, action: { self.onSelect(url: self.tokenExplorerUrl) })},
+         .button(title: Localized.Common.share, action: onSelectShareAsset)].compactMap { $0 }
+    }
+
     var scoreViewModel: AssetScoreViewModel {
         AssetScoreViewModel(score: assetData.metadata.rankScore)
     }
+
     var showStatus: Bool {
         scoreViewModel.hasWarning
     }
@@ -250,11 +246,6 @@ extension AssetSceneViewModel {
         isPresentingAssetSheet = .share
     }
 
-    public func onSelect(url: URL?) {
-        guard let url else { return }
-        isPresentingAssetSheet = .url(url)
-    }
-
     public func onTransferComplete() {
         isPresentingAssetSheet = .none
     }
@@ -279,10 +270,6 @@ extension AssetSceneViewModel {
             }
         }
     }
-
-    public func onSelectOptions() {
-        isPresentingOptions = true
-    }
     
     public func onSelectTokenStatus() {
         isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
@@ -292,6 +279,16 @@ extension AssetSceneViewModel {
 // MARK: - Private
 
 extension AssetSceneViewModel {
+    private var addressExplorerUrl: URL { addressLink.url }
+    private var viewAddressOnTitle: String { Localized.Asset.viewAddressOn(addressLink.name) }
+    private var viewTokenOnTitle: String? {
+        if let link = tokenLink {
+            return Localized.Asset.viewTokenOn(link.name)
+        }
+        return .none
+    }
+
+    private var tokenExplorerUrl: URL? { tokenLink?.url }
     private var tokenLink: BlockExplorerLink? {
         guard let tokenId = assetModel.asset.tokenId else {
             return .none
@@ -301,6 +298,11 @@ extension AssetSceneViewModel {
 
     private var addressLink: BlockExplorerLink {
         explorerService.addressUrl(chain: assetModel.asset.chain, address: assetDataModel.address)
+    }
+
+    private func onSelect(url: URL?) {
+        guard let url else { return }
+        isPresentingAssetSheet = .url(url)
     }
 
     private func fetchTransactions() async throws {
