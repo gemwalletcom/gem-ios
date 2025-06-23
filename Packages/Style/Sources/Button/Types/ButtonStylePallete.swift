@@ -106,4 +106,55 @@ extension ButtonStylePalette {
         backgroundPressed: Colors.grayVeryLight,
         backgroundDisabled: .clear
     )
+
+}
+// MARK: – Preview
+private struct PaletteSwatch: View {
+    let palette: ButtonStylePalette
+    let title: String
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Text(title)
+                .frame(width: 90, alignment: .leading)
+
+            // normal
+            RoundedRectangle(cornerRadius: 4)
+                .fill(palette.background)
+                .frame(width: 32, height: 20)
+
+            // pressed / hover
+            RoundedRectangle(cornerRadius: 4)
+                .fill(palette.backgroundPressed)
+                .frame(width: 32, height: 20)
+
+            // disabled (only visible for primary/secondary)
+            RoundedRectangle(cornerRadius: 4)
+                .fill(palette.backgroundDisabled)
+                .frame(width: 32, height: 20)
+        }
+        .font(.caption)
+    }
+}
+
+#Preview {
+    List {
+        Section("State-button palettes") {
+            PaletteSwatch(palette: .primary, title: "Primary")
+            PaletteSwatch(palette: .secondary, title: "Secondary")
+        }
+
+        Section("Color-button palettes") {
+            PaletteSwatch(palette: .blue, title: "Blue")
+            PaletteSwatch(palette: .blueGrayPressed, title: "BlueGray")
+            PaletteSwatch(palette: .gray, title: "Gray")
+            PaletteSwatch(palette: .lightGray, title: "LightGray")
+            PaletteSwatch(palette: .white, title: "White")
+            PaletteSwatch(palette: .empty, title: "Empty")
+            PaletteSwatch(palette: .amount, title: "Amount")
+            PaletteSwatch(palette: .listStyleColor, title: "ListStyle")
+        }
+    }
+    .listStyle(.plain)
+    .padding()
 }
