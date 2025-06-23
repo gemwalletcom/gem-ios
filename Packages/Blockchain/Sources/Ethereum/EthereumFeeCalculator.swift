@@ -9,7 +9,7 @@ import BigInt
 public protocol EthereumFeeCalculetable: Sendable {
     func basePriorityFees(
         chain: EVMChain,
-        feeHistory: EthereumFeeHistory,
+        feeHistory: EthereumFeeHistory
     ) throws -> (base: BigInt, priority: [FeePriority: BigInt])
 }
 
