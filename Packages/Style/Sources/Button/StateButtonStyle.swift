@@ -49,7 +49,7 @@ public struct StateButtonStyle: ButtonStyle {
     }
 }
 
-// MARK: - ButtonStyle
+// MARK: - ButtonStyle Static
 
 extension ButtonStyle where Self == StateButtonStyle {
     public static func primary(_ state: ButtonState = .normal) -> Self {
