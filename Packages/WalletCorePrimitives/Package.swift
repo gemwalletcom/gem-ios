@@ -24,6 +24,9 @@ let package = Package(
         ),
         .testTarget(
             name: "WalletCorePrimitivesTests",
-            dependencies: ["WalletCorePrimitives"]),
+            dependencies: [
+                "WalletCorePrimitives",
+                .product(name: "PrimitivesTestKit", package: "Primitives"),
+            ]),
     ]
 )

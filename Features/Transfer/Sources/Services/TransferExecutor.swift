@@ -59,6 +59,7 @@ struct TransferExecutor: TransferExecutable {
                         for: input.wallet.walletId,
                         assetIds: transaction.assetIds
                     )
+                    await walletsService.enableAssets(walletId: input.wallet.walletId, assetIds: transaction.assetIds, enabled: true)
                 }
 
                 if signedData.count > 1, transactionData != signedData.last {

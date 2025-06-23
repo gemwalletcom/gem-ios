@@ -42,7 +42,7 @@
 "errors.transfer" = "Transfer Error: %s";
 "errors.validation" = "Validation Error: %s";
 "errors.create_wallet" = "Create Wallet Error: %s";
-"wallet.manage_token_list" = "Gerenciar lista de tokens";
+"wallet.manage_token_list" = "Gerenciar Tokens";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
 "buy.rate" = "Rate";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "Tu recebes";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Fornecedor";
 "common.phrase" = "Frase";
 "stake.active" = "Ativo";
 "stake.pending" = "Pending";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "Ver endereço em %@";
 "transfer.rewards.title" = "Recompensas";
 "wallet.title" = "Carteira";
-"wallet.import.contract_address_field" = "Endereço do contrato ou ID do token";
 "wallet.add_token.title" = "Adicionar token";
 "errors.token.invalid_id" = "ID de token inválido";
 "errors.token.unable_fetch_token_information" = "Não foi possível buscar informações do token: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "Percentagem";
 "price_alerts.set_alert.current_price" = "Preço atual";
 "price_alerts.added_for" = "Definir alerta de preço %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "Tendências";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "Novo";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "Faça sua primeira transação";
 "stake.state.empty.title" = "Suas apostas aparecerão aqui";
 "stake.state.empty.description" = "Aposte seu primeiro %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "Suas conexões aparecerão aqui️";
 "wallet_connect.state.empty.description" = "Escaneie ou cole o código para conectar ao DApp";
 "assets.state.empty.search_description" = "Você pode tentar adicioná-lo manualmente";
 "activity.state.empty.search_description" = "Limpe os filtros para atualizar suas atividades";
 "search.state.empty.description" = "Verifique a ortografia ou tente uma nova pesquisa.";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "Nenhum ativo encontrado";
 "networks.state.empty.search_title" = "Nenhuma rede encontrada";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "Os dados do seu mercado aparecerão aqui";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "Tem equilíbrio";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "Сontrato ou ID do token";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

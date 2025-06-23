@@ -1,3 +1,5 @@
+// Copyright (c). Gem Wallet. All rights reserved.
+
 import SwiftUI
 import Primitives
 import Style
@@ -226,7 +228,10 @@ extension ImportWalletScene {
             guard try validateForm(type: importType, address: recipient.address, words: []) else {
                 return
             }
-            try model.importWallet(name: recipient.name, keystoreType: .address(chain: model.chain!, address: recipient.address))
+            let chain = model.chain!
+            let address = chain.checksumAddress(recipient.address)
+            
+            try model.importWallet(name: recipient.name, keystoreType: .address(chain: chain, address: address))
         }
     }
 }

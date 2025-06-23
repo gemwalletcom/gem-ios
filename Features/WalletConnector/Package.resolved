@@ -1,5 +1,5 @@
 {
-  "originHash" : "bbbefbae674761269d5ae2c1df3bb4cab65f5ebde55f47d2a986a38ba6274e01",
+  "originHash" : "7e86c1463048e449ea80a7d136179637bf2fca79c5da8654b56470177fe18bb0",
   "pins" : [
     {
       "identity" : "bigint",
@@ -26,15 +26,6 @@
       "state" : {
         "revision" : "540dc48e86af2972b4f1815616aa1ed8ac97845a",
         "version" : "0.11.0"
-      }
-    },
-    {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/gemwalletcom/KeychainAccess",
-      "state" : {
-        "revision" : "84e546727d66f1adc5439debad16270d0fdd04e7",
-        "version" : "4.2.2"
       }
     },
     {
