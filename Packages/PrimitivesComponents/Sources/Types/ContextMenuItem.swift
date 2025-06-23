@@ -32,6 +32,6 @@ public struct ContextMenuItem: View {
                 Text(title)
             }
         }
-.tint(role == .destructive ? Colors.red : defaultColor)
+        .tint(role == .destructive ? Colors.red : defaultColor)
     }
 }
