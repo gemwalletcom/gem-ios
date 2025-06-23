@@ -12,7 +12,7 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
     case broadcast(data: String)
     case call([String: String])
     case transactionReceipt(id: String)
-    case feeHistory(blocks: Int, rewardPercentiles: [Int])
+    case feeHistory(blocks: Int, rewardPercentiles: [Int], blockParameter: EthereumBlockParameter)
     case maxPriorityFeePerGas
     case syncing
     case latestBlock
@@ -99,10 +99,10 @@ public enum EthereumTarget: TargetType, BatchTargetType, Hashable {
                     params: json
                 )
             )
-        case .feeHistory(let blocks, let rewardPercentiles):
+        case let .feeHistory(blocks, rewardPercentiles, param):
             let params: [JSON] = [
                 .string("\(blocks)"),
-                .string("latest"),
+                .string(param.rawValue),
                 .array(rewardPercentiles.map { .value($0) })
             ]
             return .encodable(

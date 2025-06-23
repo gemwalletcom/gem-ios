@@ -203,16 +203,16 @@ extension EthereumService: ChainFeeRateFetchable {
 
     private func getBasePriorityFees(config: EvmChainConfig) async throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
         let feeHistory = try await provider
-            .request(.feeHistory(
-                blocks: Int(config.feeHistoryBlocks),
-                rewardPercentiles: config.rewardsPercentiles.all)
+            .request(
+                .feeHistory(
+                    blocks: Int(config.feeHistoryBlocks),
+                    rewardPercentiles: config.rewardsPercentiles.all,
+                    blockParameter: .pending
+                )
             )
             .map(as: JSONRPCResponse<EthereumFeeHistory>.self).result
 
-        return try calculator.basePriorityFees(
-            feeHistory: feeHistory,
-            defaultMinPriorityFee: config.minPriorityFee
-        )
+        return try calculator.basePriorityFees(chain: chain, feeHistory: feeHistory)
     }
 }
 
