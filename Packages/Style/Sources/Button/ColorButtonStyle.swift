@@ -46,7 +46,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func blue(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .blue,
@@ -59,7 +59,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func blueGrayPressed(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .blueGrayPressed,
@@ -73,7 +73,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func gray(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .gray,
@@ -86,7 +86,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func lightGray(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .lightGray,
@@ -99,7 +99,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func white(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .white,
@@ -138,7 +138,7 @@ extension ButtonStyle where Self == ColorButtonStyle {
     public static func listStyleColor(
         paddingHorizontal: CGFloat = .medium,
         paddingVertical: CGFloat = .medium,
-        cornerRadius: CGFloat = 12
+        cornerRadius: CGFloat = Sizing.space12
     ) -> ColorButtonStyle {
         ColorButtonStyle(
             palette: .listStyleColor,

@@ -20,7 +20,7 @@ public struct ConfirmTransferScene: View {
             Spacer()
             StateButton(
                 text: model.buttonTitle,
-                variant: .primary(model.state, disabledRule: model.shouldDisableButton),
+                type: .primary(model.state, isDisabled: model.isButtonDisabled),
                 image: statefullButtonImage,
                 action: model.onSelectConfirmButton
             )

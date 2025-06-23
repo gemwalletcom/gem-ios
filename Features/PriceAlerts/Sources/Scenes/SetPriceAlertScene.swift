@@ -50,7 +50,7 @@ public struct SetPriceAlertScene: View {
             
             StateButton(
                 text: Localized.Transfer.confirm,
-                variant: .primary(model.confirmButtonState),
+                type: .primary(model.confirmButtonState),
                 action: confirm
             )
             .frame(maxWidth: Spacing.scene.button.maxWidth)

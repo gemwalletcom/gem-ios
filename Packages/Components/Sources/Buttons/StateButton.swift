@@ -9,21 +9,21 @@ public struct StateButton: View {
     public let textValue: TextValue
     public let image: Image?
     public let infoTextValue: TextValue?
-    public let variant: ButtonVariant
+    public let type: ButtonType
 
     private let action: () -> Void
 
     public init(
         text: String,
         textStyle: TextStyle = StateButton.defaultTextStyle,
-        variant: ButtonVariant = .primary(),
+        type: ButtonType = .primary(),
         image: Image? = nil,
         infoTitle: String? = nil,
         infoTitleStyle: TextStyle = .calloutSecondary,
         action: @escaping () -> Void
     ) {
         self.textValue = TextValue(text: text, style: textStyle)
-        self.variant = variant
+        self.type = type
         self.infoTextValue = infoTitle.map({ TextValue(text: $0, style: infoTitleStyle) })
         self.action = action
         self.image = image
@@ -47,31 +47,31 @@ public struct StateButton: View {
                 }
                 .font(textValue.style.font)
             }
-            .buttonStyle(.variant(variant))
+            .buttonStyle(.variant(type))
             .disabled(isDisabled)
         }
     }
     
     private var isDisabled: Bool {
-        switch variant {
+        switch type {
         case .primary(let state): state != .normal
         case .secondary: false
         }
     }
 }
 
-public extension ButtonVariant {
+public extension ButtonType {
     static func primary<T>(
         _ viewState: StateViewType<T>,
         showProgress: Bool = true,
-        disabledRule: Bool? = nil
+        isDisabled: Bool? = nil
     ) -> Self {
         switch viewState {
         case .loading: return .primary(.loading(showProgress: showProgress))
         case .noData: return .primary(.disabled)
         case .data: return .primary(.normal)
         case .error:
-            if let disabledRule, !disabledRule {
+            if let isDisabled, !isDisabled {
                 return .primary(.normal)
             }
             return .primary(.disabled)
@@ -85,21 +85,21 @@ public extension ButtonVariant {
     List {
         Section(header: Text("Primary · normal")) {
             StateButton(text: "Submit",
-                        variant: .primary(),
+                        type: .primary(),
                         action: {})
             StateButton(text: "Submit",
-                        variant: .primary(),
+                        type: .primary(),
                         image: Images.System.faceid,
                         action: {})
         }
 
         Section(header: Text("Primary · normal + info")) {
             StateButton(text: "Submit",
-                        variant: .primary(),
+                        type: .primary(),
                         infoTitle: "Approve token",
                         action: {})
             StateButton(text: "Submit",
-                        variant: .primary(),
+                        type: .primary(),
                         image: Images.System.faceid,
                         infoTitle: "Long info title Long info title Long info title",
                         action: {})
@@ -107,29 +107,29 @@ public extension ButtonVariant {
 
         Section(header: Text("Primary · loading")) {
             StateButton(text: "Submit",
-                        variant: .primary(.loading()),
+                        type: .primary(.loading()),
                         image: Images.System.faceid,
                         action: {})
         }
 
         Section(header: Text("Primary · disabled")) {
             StateButton(text: "Submit",
-                        variant: .primary(),
+                        type: .primary(),
                         image: Images.System.faceid,
                         action: {})
                 .disabled(true)
 
             StateButton(text: "Submit",
-                        variant: .primary(.disabled),
+                        type: .primary(.disabled),
                         action: {})
         }
 
         Section(header: Text("Secondary")) {
             StateButton(text: "Insufficient Balance",
-                        variant: .secondary,
+                        type: .secondary,
                         action: {})
             StateButton(text: "Insufficient Balance",
-                        variant: .secondary,
+                        type: .secondary,
                         image: Images.System.faceid,
                         action: {})
         }

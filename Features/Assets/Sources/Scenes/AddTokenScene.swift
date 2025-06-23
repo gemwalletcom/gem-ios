@@ -32,7 +32,7 @@ public struct AddTokenScene: View {
             Spacer()
             StateButton(
                 text: model.actionButtonTitle,
-                variant: .primary(model.state),
+                type: .primary(model.state),
                 action: onSelectImportToken
             )
             .frame(maxWidth: .scene.button.maxWidth)

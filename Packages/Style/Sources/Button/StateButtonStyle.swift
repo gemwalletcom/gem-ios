@@ -4,17 +4,17 @@ import SwiftUI
 
 public struct StateButtonStyle: ButtonStyle {
     public static let maxHeight: CGFloat = 50
-    private let variant: ButtonVariant
+    private let variant: ButtonType
     private let palette: ButtonStylePalette
 
-    public init(_ variant: ButtonVariant, palettee: ButtonStylePalette) {
+    public init(_ variant: ButtonType, palettee: ButtonStylePalette) {
         self.variant = variant
         self.palette = palettee
     }
 
     public func makeBody(configuration: Configuration) -> some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 12)
+            RoundedRectangle(cornerRadius: Sizing.space12)
                 .fill(background(configuration: configuration))
                 .frame(maxHeight: Self.maxHeight)
 
@@ -60,7 +60,7 @@ extension ButtonStyle where Self == StateButtonStyle {
         .init(.secondary, palettee: .secondary)
     }
 
-    public static func variant(_ variant: ButtonVariant) -> Self {
+    public static func variant(_ variant: ButtonType) -> Self {
         switch variant {
         case .primary(let state): .primary(state)
         case .secondary: .secondary()

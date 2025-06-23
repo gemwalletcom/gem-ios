@@ -2,7 +2,7 @@
 
 import Foundation
 
-public enum ButtonVariant: Hashable {
+public enum ButtonType: Hashable {
     case primary(_ buttonState: ButtonState = .normal)
     case secondary
 
