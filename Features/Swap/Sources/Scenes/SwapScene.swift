@@ -174,20 +174,11 @@ extension SwapScene {
             }
             
             if let rateText = model.rateText {
-                Button(action: model.switchRateDirection) {
-                    HStack {
-                        ListItemImageView(
-                            title: model.rateTitle,
-                            subtitle: rateText
-                        )
-
-                        Images.Actions.swap
-                            .resizable()
-                            .renderingMode(.template)
-                            .frame(size: .list.image)
-                            .foregroundStyle(Colors.gray)
-                    }
-                }
+                ListItemRotateView(
+                    title: model.rateTitle,
+                    subtitle: rateText,
+                    action: model.switchRateDirection
+                )
             }
 
             if let viewModel = model.priceImpactModel {

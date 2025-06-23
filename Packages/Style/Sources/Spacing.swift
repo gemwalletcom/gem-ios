@@ -94,6 +94,8 @@ public extension Sizing {
     }
 
     struct list {
+        /// 16
+        public static let accessory: CGFloat = 16
         /// 22
         public static let image: CGFloat = 22
         /// 28
