@@ -139,11 +139,7 @@ public struct TronSigner: Signable {
                 throw AnyError("Invalid spender address")
             }
 
-            let function = EthereumAbiFunction(name: "approve")
-            function.addParamAddress(val: spender, isOutput: false)
-            function.addParamUInt256(val: BigInt.MAX_256.magnitude.serialize(), isOutput: false)
-            let callData = EthereumAbi.encode(fn: function)
-
+            let callData = EthereumAbi.approve(spender: spender, value: .MAX_256)
             let approvalContract = TronTriggerSmartContract.with {
                 $0.ownerAddress = quote.request.walletAddress
                 $0.contractAddress = approval.token
