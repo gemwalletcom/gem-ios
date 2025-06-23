@@ -5,6 +5,7 @@ import Components
 import SwiftUI
 import PrimitivesComponents
 import Style
+import Formatters
 
 import enum Gemstone.GemSwapProvider
 import struct Gemstone.SwapQuote

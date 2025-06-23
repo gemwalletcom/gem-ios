@@ -4,17 +4,21 @@ import Foundation
 import Primitives
 import Localization
 import PrimitivesComponents
+import Formatters
+import Components
 
-class ShowSecretPhraseViewModel {
-    
+struct ShowSecretPhraseViewModel: SecretPhraseViewableModel {
     private let words: [String]
+    let continueAction: Primitives.VoidAction = nil
 
     init(words: [String]) {
         self.words = words
     }
-}
 
-extension ShowSecretPhraseViewModel: SecretPhraseViewableModel {
+    var calloutViewStyle: CalloutViewStyle? {
+        .secretDataWarning()
+    }
+    
     var title: String {
         Localized.Common.secretPhrase
     }
@@ -28,9 +32,5 @@ extension ShowSecretPhraseViewModel: SecretPhraseViewableModel {
             type: .secretPhrase,
             copyValue: MnemonicFormatter.fromArray(words: words)
         )
-    }
-
-    var presentWarning: Bool {
-        false
     }
 }

@@ -5,6 +5,7 @@ import Localization
 import PrimitivesComponents
 import WalletsService
 import Components
+import Formatters
 
 public struct ReceiveViewModel: Sendable {
     let qrWidth: CGFloat = 300

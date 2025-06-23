@@ -8,6 +8,7 @@ import Style
 import Preferences
 import ExplorerService
 import GemstonePrimitives
+import Formatters
 
 public struct StakeDelegationViewModel {
     

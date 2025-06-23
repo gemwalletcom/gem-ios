@@ -46,7 +46,8 @@ extension OnstartAsyncService {
             assetsService: .mock(),
             deviceService: .mock(),
             bannerSetupService: .mock(),
-            configService: GemAPIConfigServiceMock(config: .mock())
+            configService: GemAPIConfigServiceMock(config: .mock()),
+            releaseService: AppReleaseService(configService: GemAPIConfigServiceMock(config: .mock()))
         )
     }
 }

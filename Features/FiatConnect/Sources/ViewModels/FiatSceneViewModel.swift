@@ -9,6 +9,7 @@ import Style
 import Localization
 import Store
 import PrimitivesComponents
+import Formatters
 
 @MainActor
 @Observable

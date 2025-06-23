@@ -10,18 +10,12 @@ import Assets
 struct AddAssetPriceAlertsNavigationStack: View {
     @Environment(\.dismiss) private var dismiss
 
-    @State private var model: AddAssetPriceAlertsViewModel
     @State private var selectAssetModel: SelectAssetViewModel
 
-    init(
-        model: AddAssetPriceAlertsViewModel,
-        selectAssetModel: SelectAssetViewModel
-    ) {
-        self.model = model
+    init(selectAssetModel: SelectAssetViewModel) {
         self.selectAssetModel = selectAssetModel
     }
 
-    // TODO: - review logic with self.selectAssetModel.selectAssetAction
     var body: some View {
         NavigationStack {
             SelectAssetScene(
@@ -36,12 +30,6 @@ struct AddAssetPriceAlertsNavigationStack: View {
                 }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .task {
-                self.selectAssetModel.onSelectAssetAction = {
-                    model.onSelectAsset($0)
-                    dismiss()
-                }
-            }
         }
     }
 }

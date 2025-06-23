@@ -14,6 +14,7 @@ import TransactionsService
 import WalletsService
 import PriceService
 import BannerService
+import Formatters
 
 @Observable
 @MainActor
@@ -115,7 +116,15 @@ public final class AssetSceneViewModel: Sendable {
     }
     
     var allBanners: [Banner] {
-        let allBanners = (assetDataModel.isActive ? [] : [
+        let allBanners = (assetDataModel.isActive ? [
+//            Banner(
+//                wallet: .none,
+//                asset: assetDataModel.asset,
+//                chain: .none,
+//                event: .activateAsset,
+//                state: .alwaysActive
+//            )
+        ] : [
             Banner(
                 wallet: .none,
                 asset: assetDataModel.asset,
@@ -273,6 +282,10 @@ extension AssetSceneViewModel {
 
     public func onSelectOptions() {
         isPresentingOptions = true
+    }
+    
+    public func onSelectTokenStatus() {
+        isPresentingAssetSheet = .info(.assetStatus(scoreViewModel.scoreType))
     }
 }
 

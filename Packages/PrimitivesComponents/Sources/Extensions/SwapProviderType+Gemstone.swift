@@ -25,6 +25,7 @@ public extension Gemstone.SwapProviderType {
         case .symbiosis: Images.SwapProviders.symbiosis
         case .chainflip: Images.SwapProviders.chainflip
         case .relay: Images.SwapProviders.relay
+        case .aerodrome: Images.SwapProviders.aerodrome
         }
     }
 }

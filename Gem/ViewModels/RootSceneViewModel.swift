@@ -16,7 +16,7 @@ import AppService
 @Observable
 @MainActor
 final class RootSceneViewModel {
-    private let onstartService: OnstartAsyncService
+    private let onstartAsyncService: OnstartAsyncService
     private let transactionService: TransactionService
     private let connectionsService: ConnectionsService
     private let deviceObserverService: DeviceObserverService
@@ -47,7 +47,7 @@ final class RootSceneViewModel {
 
     init(
         walletConnectorPresenter: WalletConnectorPresenter,
-        onstartService: OnstartAsyncService,
+        onstartAsyncService: OnstartAsyncService,
         transactionService: TransactionService,
         connectionsService: ConnectionsService,
         deviceObserverService: DeviceObserverService,
@@ -57,7 +57,7 @@ final class RootSceneViewModel {
         walletsService: WalletsService
     ) {
         self.walletConnectorPresenter = walletConnectorPresenter
-        self.onstartService = onstartService
+        self.onstartAsyncService = onstartAsyncService
         self.transactionService = transactionService
         self.connectionsService = connectionsService
         self.deviceObserverService = deviceObserverService
@@ -72,13 +72,15 @@ final class RootSceneViewModel {
 
 extension RootSceneViewModel {
     func setup() {
-        onstartService.releaseAction = { [weak self] in
+        onstartAsyncService.releaseAction = { [weak self] in
             guard let self else { return }
             self.availableRelease = $0
         }
-        onstartService.setup()
+        onstartAsyncService.setup()
         transactionService.setup()
-        connectionsService.setup()
+        Task {
+            try await connectionsService.setup()
+        }
         Task {
             try await deviceObserverService.startSubscriptionsObserver()
         }
@@ -114,7 +116,7 @@ extension RootSceneViewModel {
     
     func skipRelease() {
         guard let version = availableRelease?.version else { return }
-        onstartService.skipRelease(version)
+        onstartAsyncService.skipRelease(version)
     }
 }
 
@@ -123,7 +125,7 @@ extension RootSceneViewModel {
 extension RootSceneViewModel {
 
     private func setup(wallet: Wallet) {
-        onstartService.setup(wallet: wallet)
+        onstartAsyncService.setup(wallet: wallet)
         do {
             try walletsService.setup(wallet: wallet)
         } catch {

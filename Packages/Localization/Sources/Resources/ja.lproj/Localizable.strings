@@ -42,7 +42,7 @@
 "errors.transfer" = "送金エラー：%s";
 "errors.validation" = "検証エラー: %s";
 "errors.create_wallet" = "ウォレット作成エラー：%s";
-"wallet.manage_token_list" = "トークンリストの管理";
+"wallet.manage_token_list" = "トークンの管理";
 "wallet.scan_qr_code" = "QRコードをスキャン";
 "buy.providers.title" = "プロバイダー";
 "buy.rate" = "レート";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "受け取るもの";
 "swap.approve_token" = "%@ をスワップするために承認してください";
 "swap.approve_token_permission" = "スワップのために%@トークンの承認を行ってください。";
-"swap.provider" = "プロバイダー";
 "common.phrase" = "フレーズ";
 "stake.active" = "アクティブ";
 "stake.pending" = "確認待ち";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "%@ でアドレスを見る";
 "transfer.rewards.title" = "リワード";
 "wallet.title" = "ウォレット";
-"wallet.import.contract_address_field" = "コントラクトアドレスまたはトークンID";
 "wallet.add_token.title" = "トークンを追加";
 "errors.token.invalid_id" = "無効なトークンID";
 "errors.token.unable_fetch_token_information" = "トークン情報を取得できません: %@";
@@ -404,12 +402,15 @@
 "onboarding.accept_terms.item2.message" = "Gemは銀行や取引所ではなく、違法目的での使用は禁止されていることを理解しています。";
 "onboarding.accept_terms.item3.message" = "ウォレットへのアクセスを失った場合、Gemは責任を負わず、支援もできないことを理解しています。";
 "onboarding.accept_terms.continue" = "理解しました。続行します。";
-"errors.required" = "%@ is required";
+"errors.required" = "%@は必須です";
 "asset.verification.unverified" = "Unverified";
-"asset.verification.suspicious" = "Suspicious";
+"asset.verification.suspicious" = "疑わしい";
 "asset.verification.warning_title" = "Know What You’re Adding";
 "asset.verification.warning_message" = "Anyone can create one - including fake or malicious tokens.";
 "transfer.smart_contract.title" = "Smart Contract";
 "transfer.other.title" = "Other";
 "filter.has_balance" = "バランスがある";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "契約またはトークンID";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

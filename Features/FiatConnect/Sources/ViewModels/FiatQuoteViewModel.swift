@@ -4,6 +4,7 @@ import SwiftUI
 import Primitives
 import Style
 import Components
+import Formatters
 
 public struct FiatQuoteViewModel {
     let quote: FiatQuote

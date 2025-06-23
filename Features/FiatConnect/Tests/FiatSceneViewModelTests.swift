@@ -4,6 +4,7 @@ import Foundation
 import Testing
 import GemAPI
 import Primitives
+import Formatters
 
 @testable import FiatConnect
 

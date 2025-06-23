@@ -9,8 +9,6 @@ import Localization
 
 public struct AssetScene: View {
     private let model: AssetSceneViewModel
-    
-    @State private var isPresentingUrl: URL?
 
     public init(model: AssetSceneViewModel) {
         self.model = model
@@ -36,6 +34,21 @@ public struct AssetScene: View {
                     closeAction: model.onCloseBanner
                 )
             }
+            if model.showStatus {
+                Section {
+                    NavigationCustomLink(with:
+                        ListItemImageView(
+                            title: Localized.Transaction.status,
+                            subtitle: model.scoreViewModel.status,
+                            assetImage: model.scoreViewModel.assetImage,
+                            infoAction: { model.onSelectTokenStatus() }
+                        )
+                    ) {
+                        model.onSelectTokenStatus()
+                    }
+                }
+            }
+            
             Section {
                 NavigationLink(
                     value: Scenes.Price(asset: model.assetModel.asset),
@@ -51,16 +64,7 @@ public struct AssetScene: View {
                 } else {
                     networkView
                 }
-                if model.showStatus {
-                    let view = ListItemImageView(
-                        title: Localized.Transaction.status,
-                        subtitle: model.scoreViewModel.status,
-                        assetImage: model.scoreViewModel.assetImage
-                    )
-                    NavigationCustomLink(with: view) {
-                        isPresentingUrl = model.scoreViewModel.docsUrl
-                    }
-                }
+                
             }
 
             if model.showBalances {
@@ -101,7 +105,6 @@ public struct AssetScene: View {
                 .cleanListRow()
             }
         }
-        .safariSheet(url: $isPresentingUrl)
         .refreshable {
             await model.fetch()
         }

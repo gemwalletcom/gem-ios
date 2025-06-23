@@ -220,9 +220,3 @@ extension PushNotification {
         }
     }
 }
-
-// MARK: - Previews
-
-#Preview {
-    return MainTabView(model: MainTabViewModel(wallet: .main))
-}

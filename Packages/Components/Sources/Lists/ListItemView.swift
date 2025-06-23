@@ -48,11 +48,11 @@ public struct ListItemView: View {
         placeholders: [ListItemViewPlaceholderType] = [],
         infoAction: (() -> Void)? = nil
     ) {
-        let titleValue = title.map { TextValue(text: $0, style: titleStyle) }
-        let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra) }
-        let titleTagValue = titleTag.map { TextValue(text: $0, style: titleTagStyle) }
-        let subtitleValue = subtitle.map { TextValue(text: $0, style: subtitleStyle) }
-        let subtitleExtraValue = subtitleExtra.map { TextValue(text: $0, style: subtitleStyleExtra) }
+        let titleValue = title.map { TextValue(text: $0, style: titleStyle, lineLimit: 1) }
+        let titleExtraValue = titleExtra.map { TextValue(text: $0, style: titleStyleExtra, lineLimit: nil) }
+        let titleTagValue = titleTag.map { TextValue(text: $0, style: titleTagStyle, lineLimit: 1) }
+        let subtitleValue = subtitle.map { TextValue(text: $0, style: subtitleStyle, lineLimit: 1) }
+        let subtitleExtraValue = subtitleExtra.map { TextValue(text: $0, style: subtitleStyleExtra, lineLimit: 1) }
 
         self.init(
             title: titleValue,
@@ -68,15 +68,15 @@ public struct ListItemView: View {
     }
 
     public init(
-        title: TextValue?,
-        titleExtra: TextValue?,
-        titleTag: TextValue?,
-        titleTagType: TitleTagType,
-        subtitle: TextValue?,
-        subtitleExtra: TextValue?,
-        imageStyle: ListItemImageStyle?,
+        title: TextValue? = nil,
+        titleExtra: TextValue? = nil,
+        titleTag: TextValue? = nil,
+        titleTagType: TitleTagType = .none,
+        subtitle: TextValue? = nil,
+        subtitleExtra: TextValue? = nil,
+        imageStyle: ListItemImageStyle? = nil,
         showInfo: Bool = false,
-        placeholders: [ListItemViewPlaceholderType],
+        placeholders: [ListItemViewPlaceholderType] = [],
         infoAction: (() -> Void)? = nil
     ) {
         self.title = title
@@ -172,7 +172,7 @@ extension ListItemView {
                 HStack(spacing: .tiny) {
                     Text(title.text)
                         .textStyle(title.style)
-                        .lineLimit(1)
+                        .lineLimit(title.lineLimit)
                         .truncationMode(.middle)
 
                     if let infoAction {
@@ -192,6 +192,7 @@ extension ListItemView {
                 if let extra = titleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)
+                        .lineLimit(extra.lineLimit)
                 }
             }
             .padding(.trailing, .small)
@@ -210,7 +211,7 @@ extension ListItemView {
             HStack(spacing: .tiny) {
                 Text(titleTag.text)
                     .textStyle(titleTag.style)
-                    .lineLimit(1)
+                    .lineLimit(titleTag.lineLimit)
                     .minimumScaleFactor(0.8)
 
                 switch titleTagType {
@@ -243,14 +244,14 @@ extension ListItemView {
                 Text(subtitle.text)
                     .textStyle(subtitle.style)
                     .multilineTextAlignment(.trailing)
-                    .lineLimit(1)
+                    .lineLimit(subtitle.lineLimit)
                     .truncationMode(.middle)
 
                 if let extra = subtitleExtra {
                     Text(extra.text)
                         .textStyle(extra.style)
                         .multilineTextAlignment(.trailing)
-                        .lineLimit(1)
+                        .lineLimit(extra.lineLimit)
                         .truncationMode(.middle)
                 }
             }

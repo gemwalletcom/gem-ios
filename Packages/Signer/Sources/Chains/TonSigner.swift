@@ -11,7 +11,7 @@ public struct TonSigner: Signable {
     public func signTransfer(input: SignerInput, privateKey: Data) throws -> String {
         let transfer = TheOpenNetworkTransfer.with {
             $0.dest = input.destinationAddress
-            $0.amount = input.value.asUInt
+            $0.amount = input.value.serialize()
             if let memo = input.memo {
                 $0.comment = memo
             }
@@ -29,17 +29,17 @@ public struct TonSigner: Signable {
 
         let transfer = TheOpenNetworkTransfer.with {
             $0.dest = input.token.senderTokenAddress // My Jetton Wallet address
-            $0.amount = jettonCreationFee.asUInt
+            $0.amount = jettonCreationFee.serialize()
             if let memo = input.memo {
                 $0.comment = memo
             }
             $0.mode = UInt32(TheOpenNetworkSendMode.payFeesSeparately.rawValue | TheOpenNetworkSendMode.ignoreActionPhaseErrors.rawValue)
             $0.bounceable = true
             $0.jettonTransfer = .with {
-                $0.jettonAmount = input.value.asUInt
+                $0.jettonAmount = input.value.serialize()
                 $0.toOwner = input.destinationAddress
                 $0.responseAddress = input.senderAddress
-                $0.forwardAmount = 1
+                $0.forwardAmount = BigInt(1).serialize()
             }
         }
 
@@ -69,7 +69,7 @@ public struct TonSigner: Signable {
         }
         let transfer = try TheOpenNetworkTransfer.with {
             $0.dest = data.to
-            $0.amount = try BigInt.from(string: data.value).asUInt
+            $0.amount = try BigInt.from(string: data.value).serialize()
             if let memo = input.memo {
                 $0.comment = memo
             }

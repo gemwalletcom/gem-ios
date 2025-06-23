@@ -451,6 +451,16 @@ public enum Localized {
     public static let types = Localized.tr("Localizable", "filter.types", fallback: "Types")
   }
   public enum Info {
+    public enum AssetStatus {
+      public enum Suspicious {
+        /// Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.
+        public static let description = Localized.tr("Localizable", "info.asset_status.suspicious.description", fallback: "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+      }
+      public enum Unverified {
+        /// Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.
+        public static let description = Localized.tr("Localizable", "info.asset_status.unverified.description", fallback: "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.")
+      }
+    }
     public enum LockTime {
       /// Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.
       public static let description = Localized.tr("Localizable", "info.lock_time.description", fallback: "Lock time, also known as the unbonding or unfreezing period, is the duration during which staked assets are inaccessible after you decide to unstake them.")
@@ -687,8 +697,8 @@ public enum Localized {
       public enum Empty {
         /// Enable them by adding coins to track
         public static let description = Localized.tr("Localizable", "price_alerts.state.empty.description", fallback: "Enable them by adding coins to track")
-        /// Your alerts will appear here️
-        public static let title = Localized.tr("Localizable", "price_alerts.state.empty.title", fallback: "Your alerts will appear here️")
+        /// Your price alerts will appear here️
+        public static let title = Localized.tr("Localizable", "price_alerts.state.empty.title", fallback: "Your price alerts will appear here️")
       }
     }
   }
@@ -902,8 +912,6 @@ public enum Localized {
     }
     /// Price Impact
     public static let priceImpact = Localized.tr("Localizable", "swap.price_impact", fallback: "Price Impact")
-    /// Provider
-    public static let provider = Localized.tr("Localizable", "swap.provider", fallback: "Provider")
     /// Quote includes a %@ Gem fee.
     public static func quoteFee(_ p1: Any) -> String {
       return Localized.tr("Localizable", "swap.quote_fee", String(describing: p1), fallback: "Quote includes a %@ Gem fee.")
@@ -1096,8 +1104,8 @@ public enum Localized {
     }
     /// Import an Existing Wallet
     public static let importExistingWallet = Localized.tr("Localizable", "wallet.import_existing_wallet", fallback: "Import an Existing Wallet")
-    /// Manage Token List
-    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Token List")
+    /// Manage Tokens
+    public static let manageTokenList = Localized.tr("Localizable", "wallet.manage_token_list", fallback: "Manage Tokens")
     /// More
     public static let more = Localized.tr("Localizable", "wallet.more", fallback: "More")
     /// Multi-Coin
@@ -1131,8 +1139,8 @@ public enum Localized {
       public static let action = Localized.tr("Localizable", "wallet.import.action", fallback: "Import")
       /// Address or Name
       public static let addressField = Localized.tr("Localizable", "wallet.import.address_field", fallback: "Address or Name")
-      /// Contract Address or Token ID
-      public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract Address or Token ID")
+      /// Contract or Token ID
+      public static let contractAddressField = Localized.tr("Localizable", "wallet.import.contract_address_field", fallback: "Contract or Token ID")
       /// %@ encoded private key
       public static func privateKey(_ p1: Any) -> String {
         return Localized.tr("Localizable", "wallet.import.private_key", String(describing: p1), fallback: "%@ encoded private key")

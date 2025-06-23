@@ -2,7 +2,7 @@
 
 import Foundation
 import Primitives
-import KeychainAccess
+import Keychain
 
 public final class SecurePreferences: Sendable {
     public enum Keys: String, CaseIterable {
@@ -14,7 +14,7 @@ public final class SecurePreferences: Sendable {
 
     private let keychain: any KeychainPreferenceStorable
     
-    public init(keychain: any KeychainPreferenceStorable = Keychain()) {
+    public init(keychain: any KeychainPreferenceStorable = KeychainDefault()) {
         self.keychain = keychain
     }
     
@@ -46,8 +46,7 @@ public final class SecurePreferences: Sendable {
     }
 }
 
-extension Keychain: @retroactive @unchecked Sendable {}
-extension Keychain: KeychainPreferenceStorable {
+extension KeychainDefault: KeychainPreferenceStorable {
     public func set(value: String, key: String) throws {
         try set(value, key: key, ignoringAttributeSynchronizable: true)
     }

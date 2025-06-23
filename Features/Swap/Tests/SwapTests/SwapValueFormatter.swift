@@ -3,6 +3,8 @@
 import Testing
 import BigInt
 import Primitives
+import Formatters
+
 @testable import Swap
 
 struct SwapValueFormatterTests {
