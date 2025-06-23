@@ -8,7 +8,7 @@ import Components
 import Style
 
 public struct AssetScoreViewModel {
-    private let scoreType: AssetScoreType
+    public let scoreType: AssetScoreType
 
     public init(score: Int32) {
         switch score {

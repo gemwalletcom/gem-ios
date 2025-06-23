@@ -42,7 +42,7 @@
 "errors.transfer" = "Transfer Error: %s";
 "errors.validation" = "Validation Error: %s";
 "errors.create_wallet" = "Create Wallet Error: %s";
-"wallet.manage_token_list" = "Manage Token List";
+"wallet.manage_token_list" = "จัดการโทเค็น";
 "wallet.scan_qr_code" = "Scan QR Code";
 "buy.providers.title" = "Providers";
 "buy.rate" = "Rate";
@@ -134,7 +134,6 @@
 "swap.you_receive" = "You Receive";
 "swap.approve_token" = "Approve %@ to Swap";
 "swap.approve_token_permission" = "Approve %@ token for swap access.";
-"swap.provider" = "Provider";
 "common.phrase" = "Phrase";
 "stake.active" = "Active";
 "stake.pending" = "Pending";
@@ -169,7 +168,6 @@
 "asset.view_address_on" = "View address on %@";
 "transfer.rewards.title" = "Rewards";
 "wallet.title" = "Wallet";
-"wallet.import.contract_address_field" = "Contract Address or Token ID";
 "wallet.add_token.title" = "Add Token";
 "errors.token.invalid_id" = "Invalid Token ID";
 "errors.token.unable_fetch_token_information" = "Unable to fetch token information: %@";
@@ -357,7 +355,7 @@
 "common.percentage" = "เปอร์เซ็นต์";
 "price_alerts.set_alert.current_price" = "ราคาปัจจุบัน";
 "price_alerts.added_for" = "ตั้งค่าการแจ้งเตือนราคา %@";
-"assets.tags.trending" = "Trending";
+"assets.tags.trending" = "กำลังเป็นที่นิยม";
 "assets.tags.gainers" = "Gainers";
 "assets.tags.losers" = "Losers";
 "assets.tags.new" = "ใหม่";
@@ -372,12 +370,12 @@
 "activity.state.empty.description" = "ทำธุรกรรมครั้งแรกของคุณ";
 "stake.state.empty.title" = "เงินเดิมพันของคุณจะปรากฏที่นี่";
 "stake.state.empty.description" = "วางเดิมพันครั้งแรกของคุณ %@";
-"wallet_connect.state.empty.title" = "Your connections will appear here️";
+"wallet_connect.state.empty.title" = "การเชื่อมต่อของคุณจะปรากฏที่นี่";
 "wallet_connect.state.empty.description" = "สแกนหรือวางรหัสเพื่อเชื่อมต่อกับ DApp";
 "assets.state.empty.search_description" = "คุณสามารถลองเพิ่มมันด้วยตนเองได้";
 "activity.state.empty.search_description" = "ล้างตัวกรองเพื่อรีเฟรชกิจกรรมของคุณ";
 "search.state.empty.description" = "ตรวจสอบการสะกดคำหรือลองค้นหาใหม่";
-"assets.state.empty.search_title" = "No assets found";
+"assets.state.empty.search_title" = "ไม่พบทรัพย์สิน";
 "networks.state.empty.search_title" = "ไม่พบเครือข่าย";
 "activity.state.empty.search_title" = "No activities found";
 "markets.state.empty.title" = "ข้อมูลตลาดของคุณจะปรากฏที่นี่";
@@ -413,3 +411,6 @@
 "transfer.other.title" = "Other";
 "filter.has_balance" = "มีความสมดุล";
 "swap.estimated_time.title" = "Estimated Time";
+"wallet.import.contract_address_field" = "สัญญาหรือรหัสโทเคน";
+"info.asset_status.unverified.description" = "Unverified tokens have not been sufficiently verified by trusted third-party services. They may appear in your wallet due to airdrops, transfers, or manual imports.";
+"info.asset_status.suspicious.description" = "Suspicious or spam tokens are identified as potential scams or harmful assets. They may appear in your wallet due to airdrops, transfers, or manual imports.";

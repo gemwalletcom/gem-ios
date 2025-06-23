@@ -51,15 +51,18 @@ public struct FloatTextField<TrailingView: View>: View {
     }
 
     public var body: some View {
-        ZStack(alignment: .leading) {
-            placeholderView
-            HStack {
+        HStack {
+            ZStack(alignment: .leading) {
+                placeholderView
                 textField
+            }
+            HStack {
                 if shouldShowSpacer {
                     Spacer(minLength: .small)
                 }
                 trailingContent
             }
+            .fixedSize()
         }
         .padding(.vertical, .small)
         .onAppear {
@@ -91,6 +94,7 @@ extension FloatTextField {
                     color: text.isEmpty ? style.placeholderColor : style.activePlaceholderColor
                 )
             )
+            .lineLimit(1)
             .scaleEffect(text.isEmpty ? 1 : style.placeholderScale, anchor: .leading)
             .offset(y: text.isEmpty ? .zero : -.small - .extraSmall)
             .animation(.smooth(duration: 0.15), value: text.isEmpty)

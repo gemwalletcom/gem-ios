@@ -46,7 +46,7 @@ public struct CreateWalletNavigationStack: View {
                 )
             }
             .navigationDestination(for: Scenes.CreateWallet.self) { _ in
-                CreateWalletScene(
+                ShowSecretDataScene(
                     model: CreateWalletViewModel(
                         walletService: walletService,
                         onCreateWallet: {

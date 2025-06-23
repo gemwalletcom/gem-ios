@@ -78,7 +78,9 @@ extension RootSceneViewModel {
         }
         onstartAsyncService.setup()
         transactionService.setup()
-        connectionsService.setup()
+        Task {
+            try await connectionsService.setup()
+        }
         Task {
             try await deviceObserverService.startSubscriptionsObserver()
         }

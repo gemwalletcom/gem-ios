@@ -17,16 +17,14 @@ struct SecurityReminderScene: View {
     var body: some View {
         VStack(spacing: .medium) {
             List {
-                OnboardingHeaderTitle(title: model.message, alignment: .center)
+                CalloutView(style: .header(title: model.message))
                     .cleanListRow()
                 
                 ForEach(model.items) { item in
                     Section {
                         ListItemView(
-                            title: item.title,
-                            titleStyle: .headline,
-                            titleExtra: item.subtitle,
-                            titleStyleExtra: .bodySecondary,
+                            title: TextValue(text: item.title, style: .headline),
+                            titleExtra: TextValue(text: item.subtitle, style: .bodySecondary),
                             imageStyle: item.image
                         )
                     }

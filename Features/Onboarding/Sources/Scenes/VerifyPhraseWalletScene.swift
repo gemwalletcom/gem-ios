@@ -19,13 +19,8 @@ struct VerifyPhraseWalletScene: View {
     var body: some View {
         VStack(spacing: .medium) {
             List {
-                Section {
-                    OnboardingHeaderTitle(
-                        title: Localized.SecretPhrase.Confirm.QuickTest.title,
-                        alignment: .center
-                    )
-                }
-                .cleanListRow()
+                CalloutView(style: .header(title: Localized.SecretPhrase.Confirm.QuickTest.title))
+                    .cleanListRow()
                 
                 Section {
                     SecretPhraseGridView(

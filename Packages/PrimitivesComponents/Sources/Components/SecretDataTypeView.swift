@@ -14,10 +14,8 @@ public struct SecretDataTypeView: View {
         switch type {
         case .words(let rows):
             SecretPhraseGridView(rows: rows)
-                .padding(.top, .scene.top)
         case .privateKey(let key):
             Text(key)
-                .padding(.top, .scene.top)
         }
     }
 }
