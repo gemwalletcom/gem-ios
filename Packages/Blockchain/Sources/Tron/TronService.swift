@@ -110,17 +110,6 @@ extension TronService {
         )
     }
 
-//    private func accountEnergy(address: String) async throws -> UInt64 {
-//        let usage = try await accountUsage(address: address)
-//        guard
-//            let energyLimit = usage.EnergyLimit,
-//            let energyUsed = usage.EnergyUsed
-//        else {
-//            return 0
-//        }
-//        return max(energyLimit - energyUsed, 0)
-//    }
-
     private func votes(address: String) async throws -> [TronVote] {
         try await account(address: address).votes ?? []
     }
