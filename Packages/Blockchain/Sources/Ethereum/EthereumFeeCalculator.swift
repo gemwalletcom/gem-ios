@@ -26,7 +26,7 @@ public struct EthereumFeeCalculator: Sendable {
 extension EthereumFeeCalculator: EthereumFeeCalculetable {
     public func basePriorityFees(
         chain: EVMChain,
-        feeHistory: EthereumFeeHistory,
+        feeHistory: EthereumFeeHistory
     ) throws -> (base: BigInt, priority: [FeePriority: BigInt]) {
 
         guard let baseFeeHex = feeHistory.baseFeePerGas.last,
