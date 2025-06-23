@@ -3,25 +3,6 @@
 import SwiftUI
 import Style
 
-public extension ButtonVariant {
-    static func primary<T>(
-        _ viewState: StateViewType<T>,
-        showProgress: Bool = true,
-        disabledRule: Bool? = nil
-    ) -> Self {
-        switch viewState {
-        case .loading: return .primary(.loading(showProgress: showProgress))
-        case .noData: return .primary(.disabled)
-        case .data: return .primary(.normal)
-        case .error:
-            if let disabledRule, !disabledRule {
-                return .primary(.normal)
-            }
-            return .primary(.disabled)
-        }
-    }
-}
-
 public struct StateButton: View {
     public static let defaultTextStyle = TextStyle(font: .body.weight(.semibold), color: Colors.whiteSolid)
 
@@ -78,11 +59,30 @@ public struct StateButton: View {
         }
     }
 }
+
+public extension ButtonVariant {
+    static func primary<T>(
+        _ viewState: StateViewType<T>,
+        showProgress: Bool = true,
+        disabledRule: Bool? = nil
+    ) -> Self {
+        switch viewState {
+        case .loading: return .primary(.loading(showProgress: showProgress))
+        case .noData: return .primary(.disabled)
+        case .data: return .primary(.normal)
+        case .error:
+            if let disabledRule, !disabledRule {
+                return .primary(.normal)
+            }
+            return .primary(.disabled)
+        }
+    }
+}
+
 // MARK: - Previews
 
 #Preview {
     List {
-        // ───────── Primary ─────────
         Section(header: Text("Primary · normal")) {
             StateButton(text: "Submit",
                         variant: .primary(),
@@ -124,7 +124,6 @@ public struct StateButton: View {
                         action: {})
         }
 
-        // ───────── Secondary ─────────
         Section(header: Text("Secondary")) {
             StateButton(text: "Insufficient Balance",
                         variant: .secondary,
