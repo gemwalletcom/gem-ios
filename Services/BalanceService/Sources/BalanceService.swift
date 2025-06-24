@@ -59,7 +59,8 @@ extension BalanceService {
         }
     }
 
-    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws {
+    @discardableResult
+    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
         switch asset.type {
         case .native:
             await updateCoinBalance(walletId: walletId, asset: asset, address: address)
@@ -68,8 +69,9 @@ extension BalanceService {
         }
     }
 
-    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async {
-        await withTaskGroup(of: Void.self) { group in
+    @discardableResult
+    public func updateBalance(for wallet: Wallet, assetIds: [AssetId]) async -> [AssetBalanceChange] {
+        await withTaskGroup(of: [AssetBalanceChange].self) { group in
             for account in wallet.accounts {
                 let chain = account.chain
                 let address = account.address
@@ -96,7 +98,11 @@ extension BalanceService {
                 }
             }
 
-            for await _ in group { }
+            var changes: [AssetBalanceChange] = []
+            for await change in group {
+                changes.append(contentsOf: change)
+            }
+            return changes
         }
     }
 
@@ -127,9 +133,9 @@ extension BalanceService {
         try balanceStore.getBalances(assetIds: assetIds)
     }
 
-    private func updateCoinBalance(walletId: String, asset: AssetId, address: String) async {
+    private func updateCoinBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
-        await updateBalanceAsync(
+        return await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
             fetchBalance: { [try await getCoinBalance(chain: chain, address: address).coinChange] },
@@ -137,9 +143,9 @@ extension BalanceService {
         )
     }
 
-    private func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async {
+    private func updateCoinStakeBalance(walletId: String, asset: AssetId, address: String) async -> [AssetBalanceChange] {
         let chain = asset.chain
-        await updateBalanceAsync(
+        return await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
             fetchBalance: { [try await getCoinStakeBalance(chain: chain, address: address)?.stakeChange] },
@@ -147,7 +153,7 @@ extension BalanceService {
         )
     }
 
-    private func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async {
+    private func updateTokenBalances(walletId: String, chain: Chain, tokenIds: [AssetId], address: String) async -> [AssetBalanceChange] {
         await updateBalanceAsync(
             walletId: walletId,
             chain: chain,
@@ -162,12 +168,14 @@ extension BalanceService {
         chain: Chain,
         fetchBalance: () async throws -> [T],
         mapBalance: (T) -> AssetBalanceChange?
-    ) async {
+    ) async -> [AssetBalanceChange] {
         do {
             let balances = try await fetchBalance().compactMap { mapBalance($0) }
             try storeBalances(balances: balances, walletId: walletId)
+            return balances
         } catch {
             NSLog("update balance error: chain: \(chain.id): \(error.localizedDescription)")
+            return []
         }
     }
 

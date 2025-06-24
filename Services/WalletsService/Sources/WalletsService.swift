@@ -37,7 +37,6 @@ public struct WalletsService: Sendable {
         balanceService: BalanceService,
         priceService: PriceService,
         priceObserver: PriceObserverService,
-        chainService: ChainServiceFactory,
         transactionService: TransactionService,
         bannerSetupService: BannerSetupService,
         addressStatusService: AddressStatusService,
@@ -57,10 +56,7 @@ public struct WalletsService: Sendable {
             priceUpdater: priceUpdater
         )
         let processor = DiscoveryAssetsProcessor(
-            discoverAssetService: DiscoverAssetsService(
-                balanceService: balanceService,
-                chainServiceFactory: chainService
-            ),
+            discoverAssetService: DiscoverAssetsService(balanceService: balanceService),
             assetsService: assetsService,
             assetsEnabler: assetsEnabler,
             walletSessionService: walletSessionService

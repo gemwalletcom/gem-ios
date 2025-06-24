@@ -6,5 +6,7 @@ import Primitives
 
 public struct BalancerUpdaterMock: BalancerUpdater {
     public init() {}
-    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws {}
+    public func updateBalance(walletId: String, asset: AssetId, address: String) async throws -> [AssetBalanceChange] {
+        []
+    }
 }

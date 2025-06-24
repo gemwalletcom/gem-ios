@@ -5,5 +5,5 @@ import Primitives
 
 public struct AssetUpdate: Sendable {
     public let walletId: WalletId
-    public let assets: [String]
+    public let assetIds: [AssetId]
 }
