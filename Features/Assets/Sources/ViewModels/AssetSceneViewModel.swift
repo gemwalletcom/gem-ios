@@ -140,9 +140,9 @@ public final class AssetSceneViewModel: Sendable {
     public var isDeveloperEnabled: Bool { preferences.isDeveloperEnabled }
 
     public var menuItems: [ActionMenuItemType] {
-        [.button(title: viewAddressOnTitle, action: { self.onSelect(url: self.addressExplorerUrl) }),
-         viewTokenOnTitle.map { .button(title: $0, action: { self.onSelect(url: self.tokenExplorerUrl) })},
-         .button(title: Localized.Common.share, action: onSelectShareAsset)].compactMap { $0 }
+        [.button(title: viewAddressOnTitle, systemImage: SystemImage.globe, action: { self.onSelect(url: self.addressExplorerUrl) }),
+         viewTokenOnTitle.map { .button(title: $0, systemImage: SystemImage.globe, action: { self.onSelect(url: self.tokenExplorerUrl) })},
+         .button(title: Localized.Common.share, systemImage: SystemImage.share, action: onSelectShareAsset)].compactMap { $0 }
     }
 
     var scoreViewModel: AssetScoreViewModel {
