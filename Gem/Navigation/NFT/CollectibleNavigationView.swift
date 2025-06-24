@@ -28,7 +28,7 @@ struct CollectibleNavigationView: View {
                 assetData: model.assetData,
                 avatarService: avatarService,
                 headerButtonAction: onHeaderButtonAction(type:)
-            ),
+            )
         )
         .sheet(item: $isPresentingSelectedAssetInput) {
             SelectedAssetNavigationStack(
