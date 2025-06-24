@@ -33,6 +33,14 @@ public struct AssetScoreViewModel {
         }
     }
     
+    public var statusStyle: TextStyle {
+        switch scoreType {
+        case .verified: .calloutSecondary
+        case .unverified: TextStyle(font: .callout, color: Colors.orange)
+        case .suspicious: TextStyle(font: .callout, color: Colors.red)
+        }
+    }
+    
     public var assetImage: AssetImage? {
         switch scoreType {
         case .verified: nil
