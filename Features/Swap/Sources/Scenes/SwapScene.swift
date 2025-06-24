@@ -174,10 +174,10 @@ extension SwapScene {
             }
             
             if let rateText = model.rateText {
-                ListItemImageView(
+                ListItemRotateView(
                     title: model.rateTitle,
                     subtitle: rateText,
-                    assetImage: .none
+                    action: model.switchRateDirection
                 )
             }
 
@@ -194,8 +194,7 @@ extension SwapScene {
         VStack {
             StateButton(
                 text: model.actionButtonTitle,
-                viewState: model.actionButtonState,
-                disabledRule: model.shouldDisableActionButton,
+                type: .primary(model.actionButtonState, isDisabled: model.isButtonDisabled),
                 action: model.onSelectActionButton
             )
         }

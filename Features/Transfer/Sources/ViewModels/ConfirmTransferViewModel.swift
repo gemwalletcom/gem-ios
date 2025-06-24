@@ -215,7 +215,7 @@ public final class ConfirmTransferViewModel {
         }
     }
 
-    var shouldDisableButton: Bool {
+    var isButtonDisabled: Bool {
         if let result = state.value?.transferAmountResult, case .error = result {
             return true
         }

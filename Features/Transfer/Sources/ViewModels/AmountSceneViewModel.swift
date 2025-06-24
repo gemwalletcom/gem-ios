@@ -71,7 +71,7 @@ public final class AmountSceneViewModel {
     var isBalanceViewEnabled: Bool { !isInputDisabled }
     var isNextEnabled: Bool { actionButtonState == .normal }
 
-    var actionButtonState: StateButtonStyle.State {
+    var actionButtonState: ButtonState {
         amountInputModel.text.isNotEmpty && amountInputModel.isValid ? .normal : .disabled
     }
 

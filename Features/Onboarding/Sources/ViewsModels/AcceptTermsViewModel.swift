@@ -31,7 +31,7 @@ final class AcceptTermsViewModel {
         items.allSatisfy { $0.isConfirmed }
     }
     
-    var buttonState: StateViewType<Bool> {
+    var state: StateViewType<Bool> {
         isConfirmed ? .data(true) : .noData
     }
 }

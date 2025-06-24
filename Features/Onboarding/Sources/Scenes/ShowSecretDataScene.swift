@@ -41,7 +41,6 @@ struct ShowSecretDataScene: View {
             if model.continueAction != nil {
                 StateButton(
                     text: Localized.Common.continue,
-                    styleState: .normal,
                     action: continueAction
                 )
                 .frame(maxWidth: .scene.button.maxWidth)
