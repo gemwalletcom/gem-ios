@@ -149,6 +149,10 @@ public final class SwapSceneViewModel {
     var isSwitchAssetButtonDisabled: Bool {
         swapState.isLoading
     }
+    
+    var shouldShowAdditionalInfo: Bool {
+        swapState.quotes.isLoading == false
+    }
 
     var isLoading: Bool {
         swapState.quotes.isLoading
