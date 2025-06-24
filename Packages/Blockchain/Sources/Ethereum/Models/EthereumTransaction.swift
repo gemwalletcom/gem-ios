@@ -7,10 +7,14 @@ import Foundation
 public struct EthereumFeeHistory: Codable, Sendable {
 	public let reward: [[String]]
 	public let baseFeePerGas: [String]
+	public let gasUsedRatio: [Double]
+	public let oldestBlock: String
 
-	public init(reward: [[String]], baseFeePerGas: [String]) {
+	public init(reward: [[String]], baseFeePerGas: [String], gasUsedRatio: [Double], oldestBlock: String) {
 		self.reward = reward
 		self.baseFeePerGas = baseFeePerGas
+		self.gasUsedRatio = gasUsedRatio
+		self.oldestBlock = oldestBlock
 	}
 }
 
