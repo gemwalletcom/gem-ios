@@ -7,6 +7,7 @@ import Style
 public struct ListItemImageView: View {
     public let title: String
     public let subtitle: String
+    public let subtitleStyle: TextStyle
     public let assetImage: AssetImage?
     public let imageSize: CGFloat
     public let infoAction: (() -> Void)?
@@ -14,12 +15,14 @@ public struct ListItemImageView: View {
     public init(
         title: String,
         subtitle: String,
-        assetImage: AssetImage?,
+        subtitleStyle: TextStyle = .calloutSecondary,
+        assetImage: AssetImage? = nil,
         imageSize: CGFloat = .list.image,
         infoAction: (() -> Void)? = nil
     ) {
         self.title = title
         self.subtitle = subtitle
+        self.subtitleStyle = subtitleStyle
         self.assetImage = assetImage
         self.imageSize = imageSize
         self.infoAction = infoAction
@@ -27,7 +30,12 @@ public struct ListItemImageView: View {
     
     public var body: some View {
         HStack {
-            ListItemView(title: title, subtitle: subtitle, infoAction: infoAction)
+            ListItemView(
+                title: title,
+                subtitle: subtitle,
+                subtitleStyle: subtitleStyle,
+                infoAction: infoAction
+            )
             if let assetImage {
                 AssetImageView(assetImage: assetImage, size: imageSize)
             }
