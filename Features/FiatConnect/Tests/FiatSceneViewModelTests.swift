@@ -14,13 +14,15 @@ final class FiatSceneViewModelTests {
         service: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = .init(locale: Locale.US, currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress = .mock(),
-        walletId: String = UUID().uuidString
+        walletId: String = UUID().uuidString,
+        allowOnlyBuy: Bool = false
     ) -> FiatSceneViewModel {
         FiatSceneViewModel(
             fiatService: service,
             currencyFormatter: currencyFormatter,
             assetAddress: assetAddress,
-            walletId: walletId
+            walletId: walletId,
+            allowOnlyBuy: allowOnlyBuy
         )
     }
 

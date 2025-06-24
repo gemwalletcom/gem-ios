@@ -21,6 +21,7 @@ public final class FiatSceneViewModel {
     private let amountFormatter: FiatAmountFormatter
 
     let currencyFormatter: CurrencyFormatter
+    let allowOnlyBuy: Bool
 
     var assetData: AssetData = .empty
     var assetRequest: AssetRequest
@@ -37,12 +38,14 @@ public final class FiatSceneViewModel {
         fiatService: any GemAPIFiatService = GemAPIService(),
         currencyFormatter: CurrencyFormatter = CurrencyFormatter(currencyCode: Currency.usd.rawValue),
         assetAddress: AssetAddress,
-        walletId: String
+        walletId: String,
+        allowOnlyBuy: Bool = false
     ) {
         self.fiatService = fiatService
         self.currencyFormatter = currencyFormatter
         self.assetAddress = assetAddress
         self.walletId = walletId
+        self.allowOnlyBuy = allowOnlyBuy
 
         let buyAmount = FiatQuoteTypeViewModel(type: .buy).defaultAmount
         self.input = FiatInput(type: .buy, buyAmount: buyAmount)
@@ -110,7 +113,8 @@ public final class FiatSceneViewModel {
     }
     
     var showFiatTypePicker: Bool {
-        assetData.balance.available > 0 && assetData.metadata.isSellEnabled
+        guard !allowOnlyBuy else { return false }
+        return assetData.balance.available > 0 && assetData.metadata.isSellEnabled
     }
 
     var assetBalance: String? {

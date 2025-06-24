@@ -3,10 +3,12 @@
 import Foundation
 
 public extension Result {
-    var isFailure: Bool {
-        if case .failure = self {
+    var isSuccess: Bool {
+        if case .success = self {
             return true
         }
         return false
     }
+
+    var isFailure: Bool { !isSuccess }
 }

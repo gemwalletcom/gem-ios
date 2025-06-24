@@ -6,6 +6,7 @@ import Style
 import Localization
 import InfoSheet
 import PrimitivesComponents
+import FiatConnect
 
 public struct ConfirmTransferScene: View {
     @State private var model: ConfirmTransferViewModel
@@ -20,7 +21,7 @@ public struct ConfirmTransferScene: View {
             Spacer()
             StateButton(
                 text: model.buttonTitle,
-                type: .primary(model.state, isDisabled: model.isButtonDisabled),
+                type: model.buttonType,
                 image: statefullButtonImage,
                 action: model.onSelectConfirmButton
             )
@@ -49,6 +50,22 @@ public struct ConfirmTransferScene: View {
                 NavigationStack {
                     NetworkFeeScene(model: model.feeModel)
                         .presentationDetentsForCurrentDeviceSize(expandable: true)
+                }
+            case let .fiatConnect(assetAddress, walletId):
+                // TODO: - review the offset to navigation, when presenting
+                NavigationStack {
+                    FiatConnectNavigationView(
+                        model: FiatSceneViewModel(
+                            assetAddress: assetAddress,
+                            walletId: walletId.id
+                        )
+                    )
+                    .toolbar {
+                        ToolbarDismissItem(
+                            title: .done,
+                            placement: .topBarLeading
+                        )
+                    }
                 }
             }
         }

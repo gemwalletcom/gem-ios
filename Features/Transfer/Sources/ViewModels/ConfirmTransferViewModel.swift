@@ -15,6 +15,7 @@ import WalletsService
 import InfoSheet
 import Signer
 import Validators
+import Style
 
 @Observable
 @MainActor
@@ -160,16 +161,18 @@ public final class ConfirmTransferViewModel {
         //        }
     }
 
-    var isButtonDisabled: Bool { state.isNoData || (state.value?.transferAmount?.isFailure ?? true) }
-
     var buttonTitle: String {
         // try again on failed data load
         if state.isError { return Localized.Common.tryAgain }
 
         switch state.value?.transferAmount {
         case .success, .none: return Localized.Transfer.confirm
-        case .failure(let error): return error.localizedDescription
+        case .failure: return "Insufficient funds"
         }
+    }
+
+    var buttonType: ButtonType {
+        isPrimaryButtonState ? .primary(state, isDisabled: state.isNoData) : .secondary
     }
 
     var buttonImage: String? {
@@ -233,16 +236,13 @@ extension ConfirmTransferViewModel {
         if state.isError {
             fetch()
         } else {
-            onSelectConfirmTransfer()
+            switch buttonType {
+            case .primary:
+                onSelectConfirmTransfer()
+            case .secondary:
+                isPresentingSheet = .fiatConnect(assetAddress: assetAddress, waletId: wallet.walletId)
+            }
         }
-    }
-
-    func onSelectConfirmTransfer() {
-        guard let value = state.value,
-              let transactionData = value.transactionData,
-              case .success(let amount) = value.transferAmount
-        else { return }
-        confirmTransfer(transactionData: transactionData, amount: amount)
     }
 
     func fetch() {
@@ -255,6 +255,14 @@ extension ConfirmTransferViewModel {
 // MARK: - Private
 
 extension ConfirmTransferViewModel {
+    private func onSelectConfirmTransfer() {
+        guard let value = state.value,
+              let transactionData = value.transactionData,
+              case .success(let amount) = value.transferAmount
+        else { return }
+        confirmTransfer(transactionData: transactionData, amount: amount)
+    }
+
     private func confirmTransfer(
         transactionData: TransactionData,
         amount: TransferAmount
@@ -365,4 +373,12 @@ extension ConfirmTransferViewModel {
     private var dataModel: TransferDataViewModel { TransferDataViewModel(data: data) }
     private var availableValue: BigInt { dataModel.availableValue(metadata: metadata) }
     private var senderLink: BlockExplorerLink { explorerService.addressUrl(chain: dataModel.chain, address: senderAddress) }
+    
+    private var isPrimaryButtonState: Bool {
+        switch state {
+        case .noData, .loading, .error: true
+        case let .data(value): value.transferAmount?.isSuccess ?? false
+        }
+    }
+    private var assetAddress: AssetAddress { AssetAddress(asset: dataModel.asset, address: senderAddress)}
 }
