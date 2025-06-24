@@ -16,7 +16,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: .amount(TransferAmount(value: 200, networkFee: 1, useMaxAmount: false))
+            transferAmount: .success(TransferAmount(value: 200, networkFee: 1, useMaxAmount: false))
         )
         
         #expect(viewModel.value == BigInt(200))
@@ -28,7 +28,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: .error(nil, TransferAmountCalculatorError.insufficientBalance(.mock()))
+            transferAmount: .failure( TransferAmountCalculatorError.insufficientBalance(.mock()))
         )
         
         #expect(viewModel.value == BigInt(100))
@@ -40,7 +40,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.value == BigInt(100))
@@ -52,7 +52,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: .mock(),
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeText == "0.00000001 BTC")
@@ -71,7 +71,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: .mock(),
             metaData: metaData,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeFiatText == "$0.000000015")
@@ -83,7 +83,7 @@ struct TransactionInputViewModelTests {
             data: .mock(),
             transactionData: nil,
             metaData: nil,
-            transferAmountResult: nil
+            transferAmount: nil
         )
         
         #expect(viewModel.networkFeeText == "-")

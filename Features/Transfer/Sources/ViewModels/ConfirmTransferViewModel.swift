@@ -160,49 +160,21 @@ public final class ConfirmTransferViewModel {
         //        }
     }
 
+    var isButtonDisabled: Bool { state.isNoData || (state.value?.transferAmount?.isFailure ?? true) }
+
     var buttonTitle: String {
         // try again on failed data load
-        if state.isError {
-            return Localized.Common.tryAgain
-        }
+        if state.isError { return Localized.Common.tryAgain }
 
-        // error message on success data load and calculator
-        if let result = state.value?.transferAmountResult,
-           case .error(_, let error) = result {
-            let title: String = {
-                switch error {
-                case let tranferError as TransferAmountCalculatorError:
-                    switch tranferError {
-                    case .insufficientBalance(let asset):
-                        return Localized.Transfer.insufficientBalance(AssetViewModel(asset: asset).title)
-                    case .insufficientNetworkFee(let asset):
-                        return Localized.Transfer.insufficientNetworkFeeBalance(AssetViewModel(asset: asset).title)
-                    case .minimumAccountBalanceTooLow(let asset, _):
-                        return Localized.Transfer.minimumAccountBalance(AssetViewModel(asset: asset).title)
-                    }
-                default:
-                    return Localized.Errors.unknown
-                }
-            }()
-            return title
+        switch state.value?.transferAmount {
+        case .success, .none: return Localized.Transfer.confirm
+        case .failure(let error): return error.localizedDescription
         }
-
-        // confirm on success data load
-        return Localized.Transfer.confirm
     }
 
     var buttonImage: String? {
-        if state.isError {
-            return nil
-        }
-
-        if let result = state.value?.transferAmountResult, case .error(_, let error) = result {
-            switch error as? TransferAmountCalculatorError {
-            case .insufficientBalance,
-                    .insufficientNetworkFee,
-                    .minimumAccountBalanceTooLow, .none: return nil
-            }
-        }
+        guard !state.isError else { return nil }
+        if state.value?.transferAmount?.isFailure ?? true { return nil }
 
         let authentication = (try? keystore.getPasswordAuthentication()) ?? .none
         return KeystoreAuthenticationViewModel(authentication: authentication).authenticationImage
@@ -215,13 +187,6 @@ public final class ConfirmTransferViewModel {
         }
     }
 
-    var isButtonDisabled: Bool {
-        if let result = state.value?.transferAmountResult, case .error = result {
-            return true
-        }
-        return state.isNoData
-    }
-
     var headerType: TransactionHeaderType {
         if let value = state.value {
             return value.headerType
@@ -230,7 +195,7 @@ public final class ConfirmTransferViewModel {
             data: dataModel.data,
             transactionData: nil,
             metaData: metadata,
-            transferAmountResult: nil
+            transferAmount: nil
         ).headerType
     }
 }
@@ -274,9 +239,10 @@ extension ConfirmTransferViewModel {
 
     func onSelectConfirmTransfer() {
         guard let value = state.value,
-              let TransactionData = value.transactionData,
-              case .amount(let amount) = value.transferAmountResult else { return }
-        confirmTransfer(transactionData: TransactionData, amount: amount)
+              let transactionData = value.transactionData,
+              case .success(let amount) = value.transferAmount
+        else { return }
+        confirmTransfer(transactionData: transactionData, amount: amount)
     }
 
     func fetch() {
@@ -330,8 +296,6 @@ extension ConfirmTransferViewModel {
                     metaData: metadata
                 )
             )
-        } catch let error as TransferAmountCalculatorError {
-            updateState(with: transactionInputViewModel(transferAmount: .error(nil, error)))
         } catch {
             if !error.isCancelled {
                 state = .error(error)
@@ -370,8 +334,8 @@ extension ConfirmTransferViewModel {
         assetBalance: Balance,
         assetFeeBalance: Balance,
         fee: BigInt
-    ) -> TransferAmountResult {
-        let calculatorInput = TransferAmountInput(
+    ) -> TransferAmountValidation {
+        let input = TransferAmountInput(
             asset: dataModel.asset,
             assetBalance: assetBalance,
             value: dataModel.data.value,
@@ -382,11 +346,11 @@ extension ConfirmTransferViewModel {
             canChangeValue: dataModel.data.canChangeValue,
             ignoreValueCheck: dataModel.data.ignoreValueCheck
         )
-        return TransferAmountCalculator().calculateResult(input: calculatorInput)
+        return TransferAmountCalculator().validate(input: input)
     }
 
     private func transactionInputViewModel(
-        transferAmount: TransferAmountResult,
+        transferAmount: TransferAmountValidation,
         input: TransactionData? = nil,
         metaData: TransferDataMetadata? = nil
     ) -> TransactionInputViewModel {
@@ -394,7 +358,7 @@ extension ConfirmTransferViewModel {
             data: data,
             transactionData: input,
             metaData: metaData,
-            transferAmountResult: transferAmount
+            transferAmount: transferAmount
         )
     }
 
