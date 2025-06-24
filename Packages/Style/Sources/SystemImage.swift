@@ -29,7 +29,7 @@ public struct SystemImage {
     public static let searchNoResults = "exclamationmark.magnifyingglass"
     public static let exclamationmarkTriangleFill = "exclamationmark.triangle.fill"
     public static let exclamationmarkTriangle = "exclamationmark.triangle"
-    public static let gallery = "photo.artframe"
+    public static let gallery = "photo.on.rectangle.angled"
     public static let photo = "photo"
     public static let xmarkCircle = "xmark.circle.fill"
     public static let xmark = "xmark"

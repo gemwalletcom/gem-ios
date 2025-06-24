@@ -9,6 +9,7 @@ import Components
 import InfoSheet
 import PriceAlerts
 import Assets
+import PrimitivesComponents
 
 struct AssetNavigationView: View {
     @State private var model: AssetSceneViewModel
@@ -25,42 +26,25 @@ struct AssetNavigationView: View {
         .observeQuery(request: $model.input.bannersRequest, value: $model.banners)
         .observeQuery(request: $model.input.transactionsRequest, value: $model.transactions)
         .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                HStack {
-                    if model.isDeveloperEnabled {
-                        Button(action: model.onSelectSetPriceAlerts) {
-                            model.addImage
-                        }
+            ToolbarItemGroup(placement: .topBarTrailing) {
+                if model.isDeveloperEnabled {
+                    Button(action: model.onSelectSetPriceAlerts) {
+                        model.addImage
                     }
-                    Button(action: model.onTogglePriceAlert) {
-                        model.priceAlertsImage
-                    }
-                    Button(action: model.onSelectOptions) {
-                        model.optionsImage
-                    }
+                }
+
+                Button(action: model.onTogglePriceAlert) {
+                    model.priceAlertsImage
+                }
+
+                ActionMenu(items: model.menuItems) {
+                    model.optionsImage
                 }
             }
         }
         .toast(
             message: $model.isPresentingToastMessage,
             systemImage: model.priceAlertsSystemImage
-        )
-        .confirmationDialog(
-            model.title,
-            presenting: $model.isPresentingOptions,
-            actions: { _ in
-                Button(model.viewAddressOnTitle) {
-                    model.onSelect(url: model.addressExplorerUrl)
-                }
-                if let title = model.viewTokenOnTitle {
-                    Button(title) {
-                        model.onSelect(url: model.tokenExplorerUrl)
-                    }
-                }
-                Button(Localized.Common.share) {
-                    model.onSelectShareAsset()
-                }
-            }
         )
         .sheet(item: $model.isPresentingAssetSheet) {
             switch $0 {
