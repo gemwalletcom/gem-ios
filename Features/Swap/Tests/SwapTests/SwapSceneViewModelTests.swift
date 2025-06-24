@@ -48,6 +48,17 @@ struct SwapSceneViewModelTests {
         #expect(model.rateText == "1 USDT ≈ 0.000004 ETH")
     }
     
+    @Test
+    func additionalInfoVisibility() async {
+        let model = SwapSceneViewModel.mock()
+
+        model.swapState.quotes = .loading
+        #expect(model.shouldShowAdditionalInfo == false)
+
+        model.swapState.quotes = .data([.mock()])
+        #expect(model.shouldShowAdditionalInfo)
+    }
+    
     // MARK: - Private methods
     
     private func model(
