@@ -162,8 +162,12 @@ extension ConfirmTransferScene {
                 }
             }
 
-            if case let .error(error) = model.state {
-                ListItemErrorView(errorTitle: Localized.Errors.errorOccured, error: error)
+            if let listError = model.listError {
+                ListItemErrorView(
+                    errorTitle: model.listErrorTitle,
+                    error: listError,
+                    infoAction: model.shouldShowListErrorInfo ? { model.onSelectNetworkFeeInfo() } : nil
+                )
             }
         }
         .contentMargins([.top], .small, for: .scrollContent)

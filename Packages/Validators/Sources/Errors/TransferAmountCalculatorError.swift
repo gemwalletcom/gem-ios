@@ -22,6 +22,13 @@ extension TransferAmountCalculatorError: LocalizedError {
             Localized.Transfer.minimumAccountBalance(Self.title(asset: asset))
         }
     }
+    
+    public var isInfoSupported: Bool {
+        switch self {
+        case .insufficientBalance, .minimumAccountBalanceTooLow: false
+        case .insufficientNetworkFee: true
+        }
+    }
 
     static private func title(asset: Asset) -> String {
         String(format: "%@ (%@)", asset.name, asset.symbol)

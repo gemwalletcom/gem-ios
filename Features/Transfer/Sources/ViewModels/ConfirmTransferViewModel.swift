@@ -161,13 +161,32 @@ public final class ConfirmTransferViewModel {
         //        }
     }
 
+    var listError: Error? {
+        if case let .error(error) = state {
+            return error
+        }
+        if case let .failure(error) = state.value?.transferAmount {
+            return error
+        }
+
+        return nil
+    }
+    var listErrorTitle: String { Localized.Errors.errorOccured }
+    var shouldShowListErrorInfo: Bool {
+        guard case .failure(let error) = state.value?.transferAmount else { return false }
+        return error.isInfoSupported
+    }
+
     var buttonTitle: String {
         // try again on failed data load
         if state.isError { return Localized.Common.tryAgain }
 
         switch state.value?.transferAmount {
         case .success, .none: return Localized.Transfer.confirm
-        case .failure: return "Insufficient funds"
+        case .failure:
+            // TODO: - integrate different title for error = minimumAccountBalanceTooLow
+            // provide info - https://docs.gemwallet.com/faq/account-minimal-balance/
+            return "Insufficient funds"
         }
     }
 
@@ -226,6 +245,12 @@ extension ConfirmTransferViewModel {
 
     func onSelectFeePicker() {
         isPresentingSheet = .networkFeeSelector
+    }
+
+    func onSelectInfoButton(error: TransferAmountCalculatorError) {
+        if case error = .insufficientNetworkFee(dataModel.asset) {
+            onSelectNetworkFeeInfo()
+        }
     }
 
     func onChangeFeePriority(_ priority: FeePriority) async {

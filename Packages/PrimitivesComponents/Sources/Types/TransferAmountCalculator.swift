@@ -19,9 +19,9 @@ public struct TransferAmountCalculator {
     }
 
     func calculate(input: TransferAmountInput) throws(TransferAmountCalculatorError) -> TransferAmount {
-        throw TransferAmountCalculatorError.insufficientBalance(input.asset)
-        throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
-        throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
+//        throw TransferAmountCalculatorError.insufficientBalance(input.asset)
+//        throw TransferAmountCalculatorError.insufficientNetworkFee(input.assetFee)
+//        throw TransferAmountCalculatorError.minimumAccountBalanceTooLow(input.asset, required: input.asset.chain.minimumAccountBalance)
 
 
         if input.assetBalance.available == 0 && !input.ignoreValueCheck {
